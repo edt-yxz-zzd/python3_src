@@ -1,0 +1,187 @@
+binary for machine; text for human; int for math
+we use symbol name to make our intent clear.
+    so why we need comment????
+    to descript the purpose of a scoped statements
+
+
+assert state
+warning special case
+explain the whole view: i.e. name rule; abbr names; ...
+
+
+ext:
+    xxx.u8 ==>> utf-8
+    xxx.gb ==>> gb18030
+
+coding style
+    once upon the time, I use "xxx_yyy_t" as class name, xx_yy as variable/function name. C-style
+    then "XxxYyy" as class name, and 'xxYyy' as variable/function name. Java-style
+    now "XxxYyy" as class name, and 'xx_yy' as variable/function name. Python-style
+
+
+
+core_API / std_API / optimized_API / os_API
+    num_core_APIs < num_std_APIs = num_optimized_API < num_os_API
+    exists a portable mixin s.t. core2std_mixin<core_APIs> == std_APIs
+    user should use std_APIs instead of core_APIs
+    because std_APIs can be optimized by third-party
+    optional: 
+        third_party_mixin<std_APIs> == optimized_APIs
+        os_API # system depended API
+    
+    abstract_APIs | mixin_APIs | fasten_APIs | subclass_APIs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+subclassing
+    # cls = __class__ if not protected else type(self)
+        xxx are methods from cls.xxx
+        "xxx" are methods from getattr(cls, "xxx")
+    (__xxx - __xxx__) are "_{typname}__xxx"
+    __xxx__ = "__xxx__"
+    (_xxx - __xxx) are "_xxx"
+    
+    (xxx - _xxx + _xxx_ - __xxx + "__xxx" - "__xxx__" - "___xxx") are public:
+        wrap _xxx
+        never overrided by subclass # can be covered
+            so private method can only call them via cls to avoid called covered ones
+        to hold constaints
+        non-subclass can only call them
+        subclass can only call them and protected
+        __class__.public:
+            can call __class__.private 
+                 and derivemost.protected
+                 and __class__/super.public
+                 and otherclass.public
+
+    (__xxx - __xxx__) are private:
+        worker
+        no other class can call them
+        never overrided by subclass
+        they cannot call any subclass methods
+            except derivemost proteced method
+        cls.public/private_method(self, ...)
+        type(self).protected_method(self, ...)
+        __class__.private:
+            can call __class__.private 
+                 and derivemost.protected
+                 and super.public # no __class__.public
+                 and otherclass.public
+    (_xxx - __xxx - _xxx_ + __xxx__ + "___xxx") are protected:
+        subclass can only override them
+        __class__.protected:
+            can call super.protected/public
+                 and __class__.protected # no derivemost.protected, no __class__.public
+                 and otherclass.public
+
+
+method call relationship:
+    call from:
+        other.friend # which call __xxx__
+        __class__.public             # Axx, _AxA_
+            # covert not override ; non-virtual
+        __class__.protected          # _AxA, __xxx__
+            # override ; virtual ; only protected are virtual
+            # for staticmethod : derivemost is __class__
+            # global function which call __xxx__ is friend function
+            # should avoid too many such friends.
+            __class__.protected__public      # __xxx__ # other.friend
+            __class__.protected__protected   # _AxA
+            # __class__.protected__private   # _V_Axx_P__
+                # C++ private virtual method
+                # subclass can overrided it, but can not call it
+                # only the defining function can call it
+        __class__.private__public    # __D_xxA
+            # D:derivemost # not covert or override
+            # to implement __class__.public
+            #    to avoid too many useless public name
+        __class__.private__protected # __S_xxA 
+            # S:super      # not covert or override
+            # to implement __class__.protected
+            # since __class__.protected cannot call __class__.protected
+            #    to avoid too many useless protected name
+        __class__.private__private   # __T_xxA
+            # T:this
+            # to implement common tasks of both private__public, private__protected
+            # since them can not call each other
+
+    call to:
+        other.xxxx # not sub/super/__class__
+        other.friend # iff derivemost.protected
+        derivemost.protected
+        __class__.public
+        __class__.protected__public
+        __class__.protected__protected
+        __class__.private__public
+        __class__.private__protected
+        __class__.private__private
+        super.public
+        super.protected
+    
+    __class__.private__private -> __class__.private__private
+    
+    # only [private__public, public, other.friend] 
+    #      call derivemost.protected
+    __class__.private__public -> __class__.private__public
+    __class__.private__public -> derivemost.protected
+    __class__.private__public -> __class__.private__private
+    
+    __class__.public -> __class__.public
+    __class__.public -> __class__.private__public
+    __class__.public -> derivemost.protected
+    __class__.public -> __class__.private__private
+    
+    # only [other.xxxx] call derivemost.public
+    other.friend -> derivemost.protected__public # __xxx__
+    other.xxxx -> derivemost.public
+    # no : __class__.xxxx -> other.friend
+    
+    # only [private__protected, protected] call super.protected
+    __class__.private__protected -> __class__.private__protected
+    __class__.private__protected -> super.protected # diff with private__public
+    __class__.private__protected -> __class__.private__private
+    
+    __class__.protected -> __class__.private__protected
+    __class__.protected -> super.protected # no super.public 
+        # since super.public may call derivemost.protected
+    __class__.protected -> __class__.private__private
+    
+    # no : __class__.private__public -> __class__.private__protected
+    # no : __class__.private__protected -> __class__.private__public
+    # no : __class__.protected -> __class__.protected
+    #    since protected is intended to be overrided
+    
+    case [self/cls, ]:
+        self ==>> cls = type(self)
+        () ==>> cls = __class__
+        cls ==>> cls = cls
+Axx/_AxA_
+_AxA/__xxx__
+__D_xxA
+__S_xxA
+__T_xxA
+    [@classmethod/staticmethod]
+    def Axx/_AxA_([self/cls, ]...):
+        __class__.Axx/_AxA_(self, ...)
+        __class__.__D_xxA([self/cls, ]...)
+            [self/cls/__class__].__D_xxA(...)
+        self/cls._AxA/__xxx__(...)

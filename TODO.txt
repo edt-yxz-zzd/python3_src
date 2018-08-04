@@ -1,0 +1,11 @@
+
+7z:
+    avoid __pycache__
+    7z a -t7z target.7z PySrcFolder -xr!__pycache__ -xr!*.pyc
+
+
+sington_class
+    pickle __getnewargs__
+    hash
+    done
+
