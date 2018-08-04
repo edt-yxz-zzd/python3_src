@@ -1,0 +1,310 @@
+#: src/HexEditorGui.cpp:1862 src/HexEditorGui.cpp:1914
+msgid "Select a file"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1056 src/HexEditorGui.cpp:1063
+#: src/HexEditorGui.cpp:1218 src/HexEditorGui.cpp:1862
+#: src/HexEditorGui.cpp:1914
+msgid "*"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1059
+msgid "File #2"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1070
+msgid "Search For"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1072
+msgid "Different bytes"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1076
+msgid "Same bytes"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1085
+msgid "Stop comparison after"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1093
+msgid "hits"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1103
+msgid "Merge sections if close as"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1111
+msgid "bytes"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1121
+msgid "Save Results to File"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1124
+msgid "*.txt"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1135
+msgid "Connect files for scrolling"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1136
+msgid ""
+"With this option enabled, compared files will always show same address "
+"location."
+msgstr ""
+
+#: src/HexEditorGui.cpp:1149
+msgid "Compare"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1206
+msgid "File To Hash:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1213
+msgid "Current File"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1231
+msgid "MD"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1233
+msgid "MD2 (slow!)"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1236
+msgid "MD4"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1239
+msgid "MD5"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1246
+msgid "SHA"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1248
+msgid "SHA1"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1251
+msgid "SHA224"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1254
+msgid "SHA256"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1257
+msgid "SHA384"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1260
+msgid "SHA512"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1267
+msgid "RipeMD"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1269
+msgid "RipeMD128"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1272
+msgid "RipeMD160"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1275
+msgid "RipeMD256"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1278
+msgid "RipeMD320"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1285
+msgid "HAVAL"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1287
+msgid "HAVAL128"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1290
+msgid "HAVAL160"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1293
+msgid "HAVAL192"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1296
+msgid "HAVAL224"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1299
+msgid "HAVAL256"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1306
+msgid "TIGER"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1308
+msgid "TIGER128"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1311
+msgid "TIGER160"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1314
+msgid "TIGER192"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1321
+msgid "Others"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1323
+msgid "ADLER32"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1326
+msgid "CRC32"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1329
+msgid "CRC32B"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1332
+msgid "WHIRLPOOL"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1335
+msgid "GOST"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1338
+msgid "SNEFRU128"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1341
+msgid "SNEFRU256"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1356
+msgid "Calculate"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1456
+msgid "Copy As :"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1460
+msgid "Full Text"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1460
+msgid "Special Hex"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1460
+msgid "Internet"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1460
+msgid "C/C++ Source"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1460
+msgid "Assembler Source"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1466
+msgid "Option:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1486
+msgid "As BigEndian"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1492
+msgid "Bytes Per Line"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1494
+msgid "16"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1506
+msgid "Include Offset Part"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1510
+msgid "Include Hex Part"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1514
+msgid "Include Text Part"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1569
+msgid ""
+"For switching XORView Thru mode, all Undo&Redo buffer will reset and non-"
+"saved changes will discarded.\n"
+"Also you can't use methods that changes file size (like delete and inject) "
+"with XORView Thru mode enabled."
+msgstr ""
+
+#: src/HexEditorGui.cpp:1576
+msgid "Please enter XOR key as "
+msgstr ""
+
+#: src/HexEditorGui.cpp:1580
+msgid "ASCII"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1600 src/HexEditorGui.cpp:2041
+msgid "OK"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1638
+msgid "Colours"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1645
+msgid "Hex Colors:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1650
+msgid "Foreground Colour"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1655
+msgid "Background Colour"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1660
+msgid "Zebra Colour"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1664
+msgid "Selection Colours:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1669
+msgid "Selection Foreground Colour"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1674
+msgid "Selection Colour"

@@ -1,0 +1,26 @@
+Archimedean_solid
+Archimedean_solid__which::Archimedean_solid2info, solids
+Archimedean_solid__transform::truncate_to, mid_truncate_to, truncate_topo_to, snub3_topo_to
+Archimedean_solid__faces::solid2faces, calc_faces_44v, calc_faces_333v
+
+Archimedean_solid__L_div_R
+  Archimedean_solid__L_div_R_using_sympy::??
+    __calc_L_div_R::solid2zero_expr, calc_L_div_R
+    __classify_ASRP::verify_G, solid2zeroexpr, sorted_Cs2solids
+    __erase_asin_in_sum::sum_asin2zero_radical_expr
+    __calc_Platonic_g::Platonic_solid2g
+    __calc_truncated_g::truncated_solid2g
+    __calc_mid_truncated_g::mid_truncated_solid2g
+    __calc_zero_poly_K0K1W_of_Cs_half_2::calc_zero_poly_K0K1W_of_Cs_half_2
+      __calc_g33334_g33335_of_Cs_half_2::ASRP33334_33335_to_g
+    __calc_zero_poly_K0K1K2W_of_Cs_half_half_half
+      __calc_g468_g4610_of_Cs_half_half_half::ASRP468_4610_to_g
+    __calc_zero_poly_K0K1K2W_of_Cs_half_half_1
+      __calc_g3444_g3454_of_Cs_half_half_1::ASRP3444_3454_to_g
+    __calc_g333v_g44v::ASRP333v_44v_to_g
+      
+
+    __solid2zero_poly_GG
+    __solid2g::solid2g  // final answer
+
+

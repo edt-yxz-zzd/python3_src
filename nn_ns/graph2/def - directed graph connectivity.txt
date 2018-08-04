@@ -1,0 +1,12 @@
+directed graph connectivity
+
+weakly connected
+    undirected underlying graph
+strongly connected
+
+
+
+
+https://en.wikipedia.org/wiki/Directed_graph
+A directed graph is weakly connected (or just connected) if the undirected underlying graph obtained by replacing all directed edges of the graph with undirected edges is a connected graph. A directed graph is strongly connected or strong if it contains a directed path from x to y and a directed path from y to x for every pair of vertices {x, y}. The strong components are the maximal strongly connected subgraphs.
+

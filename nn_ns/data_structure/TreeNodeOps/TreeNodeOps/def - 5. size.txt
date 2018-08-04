@@ -1,0 +1,10 @@
+
+
+size
+    1) num_nodes_of_subtree
+    2) num_children_of_node
+
+    3) num_entities_of_subtree
+        # used in index_entity_at # not get_entity_at
+    4) num_entities_of_node
+

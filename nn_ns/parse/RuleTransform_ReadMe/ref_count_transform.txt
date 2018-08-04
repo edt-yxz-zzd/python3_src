@@ -1,0 +1,63 @@
+ref[start:stop:step]
+ref[len] # is unpack(ref[len:len+1]) instead of ref[len:len+1] when in concate
+xx = ... ref[len] ... = ... *ref[len:len+1] ...
+&ref[len] = ref ref ... of length len
+
+
+# since my unger method return ONE parse tree (right-baised)
+# if ambiguous, then greedy may yield unexpected result.
+
+ref? = ref[1:-1:-1]
+ref* = ref[:-1:-1]
+ref+ = ref[:0:-1]
+ref?? = ref[0:2:1]
+ref*? = ref[0::1]
+ref+? = ref[1::1]
+... ref ... = ... ref[1] ...
+... ref[a] ref[b] ... = ref[a+b] # since they unpack into THE concat list
+
+
+
+ref[start=None:stop=None:step] # step no default
+    # if step > 0: (start, stop) default to (0, inf)
+    # else: (inf, -1)
+    # assert start >= 0, step != 0
+    | step == 0 = error
+    | stop == start =  # stop
+    | step > 0 = * non_greedy<ref>[start:stop:step]
+    | step < 0 = * greedy<ref>[start:stop:step]
+
+
+non_greedy<ref>[start:stop:step]
+    # step > 0
+    # (start, stop) default to (0, inf)
+    | stop <= start =
+    | otherwise = ref[start] *non_greedy_impl<ref[step]>[0:L:1]
+  where L = (stop-start+step-1)//step
+
+non_greedy_impl<ref[step]>[0:L:1]
+    # assert L > 0
+    | L == 1 =
+    | otherwise :
+        small = 
+        big = ref[step] *non_greedy_impl<ref[step]>[0:L-1] # inf-1 == inf
+
+
+
+greedy<ref>[start:stop:step]
+    # step < 0
+    # (start, stop) default to (inf, -1)
+    | stop >= start =
+    | otherwise = ref[real_stop-step] *greedy_impl<ref[-step]>[L:-1:-1]
+  where real_stop = start + step*L
+        L = (-stop--start+-step-1)//-step
+
+greedy_impl<ref[-step]>[L:-1:-1]
+    # assert L >= 0
+    | L == 0 =
+    | otherwise :
+        big = ref[-step] *greedy_impl<ref[-step]>[L-1:-1:-1] # inf-1 == inf
+        small = 
+
+
+

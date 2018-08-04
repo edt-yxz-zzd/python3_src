@@ -1,0 +1,8 @@
+
+
+bipartite_graph<V,U, AEdge>
+hypergraph<V,AEdge> = bipartite_graph<V,AEdge,HEdge>
+    requires:
+        aedge is a nonempty subset of V
+        i.e. no-loose_edges, no two aedge connect to same subset of V
+

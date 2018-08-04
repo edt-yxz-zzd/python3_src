@@ -1,0 +1,43 @@
+
+
+bucket
+
+
+char_bucket = group SA by the leading char
+    = L-bucket + S-bucket
+    = L_0_bucket + L_1_bucket + ... + L_n_bucket + S_m_bucket + ... S_1_bucket + S_0_bucket
+        where
+            n<leading_L_char=ch> = -1+max (map len {ch*n | ch*n in string and ch is L_char})
+            m<leading_S_char=ch> = -1+max (map len {ch*n | ch*n in string and ch is S_char})
+
+L bucket = group of SA by leading L-char
+S bucket = group of SA by leading S-char
+
+depth bucket = group SA by the leading same chars
+L depth bucket = group of SA by the leading same L-chars
+S depth bucket = group of SA by the leading same S-chars
+
+
+example:
+    idx high    =  000000000011111111112222222222
+    idx low     =  012345678901234567890123456789
+                   |         |         |
+    string      = "222200011122211110001"
+    S/L-char    =  LLLLSSSSSSLLLLLLLSSSL
+    SA high     =  101010211110000101010
+    SA low      =  748596065437893221100
+                   |     |       |
+    char_bucket =  000000111111112222222
+    L/S bucket  =  SSSSSSLLLLLSSSLLLLLLL
+    depth       =  221100001232100011223
+
+
+why?
+    to simplify LCP-eval
+    eval LCP-RMQ in the "sort LMS-substring-isuffices" step
+        for each depth-bucket if its size >= 3 (hence has more than 2 neighbor len_lcp).
+    1) scan from left to right, handle previous L-isuffix
+        when we scan into a new L-depth-bucket, this whole bucket is sorted and we can eval LCP-RMQ of it now.
+    2) scan from right to left, handle previous S-isuffix
+        when we scan into a new S-depth-bucket, this whole bucket is sorted and we can eval LCP-RMQ of it now.
+

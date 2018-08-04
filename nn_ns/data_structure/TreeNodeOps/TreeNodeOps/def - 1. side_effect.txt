@@ -1,0 +1,4 @@
+to illustrate the side effect,
+    I use "y.parent_info = parent_info" to represent a python statement
+    and "-- y.parent_info = parent_info" to side effect in concept
+

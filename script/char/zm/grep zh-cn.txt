@@ -1,0 +1,7 @@
+# grep "zh-cn" "find zm.txt"
+# amd64_microsoft-windows-*31bf3856ad364e35*zh-cn
+c:/windows\winsxs\amd64_microsoft-windows-a..managerui.resources_31bf3856ad364e35_6.1.7600.16385_zh-cn_ffe2bb5615f91fea\azman.msc
+c:/windows\winsxs\amd64_microsoft-windows-s..-checkers.resources_31bf3856ad364e35_6.1.7600.16385_zh-cn_bae3e3d37bacdd65\chkrzm.exe.mui
+c:/windows\winsxs\amd64_microsoft-windows-s..ackgammon.resources_31bf3856ad364e35_6.1.7600.16385_zh-cn_21e7f183d170afa1\bckgzm.exe.mui
+c:/windows\winsxs\amd64_microsoft-windows-s..es-spades.resources_31bf3856ad364e35_6.1.7601.17514_zh-cn_15700f87b1014b51\shvlzm.exe.mui
+c:/windows\winsxs\x86_microsoft-windows-a..managerui.resources_31bf3856ad364e35_6.1.7600.16385_zh-cn_a3c41fd25d9baeb4\azman.msc

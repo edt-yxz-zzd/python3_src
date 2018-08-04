@@ -1,0 +1,20 @@
+
+
+optionaledge_bgraph
+    a bgraph which a qedge correspond to at most one aedge per aedge type:
+        qedge
+        ()
+            - at most one ledge; loose_edge
+        (v,bool)
+            - "v->" at most one ihedge
+            - "v<-" at most one ehedge
+        (v,bool, bool,u)   # (v==u or v!=u)
+            - v -><- u : at most one uedge
+            - v ->-> u : at most one dedge from v to u
+            - v <-<- u : at most one dedge from u to v
+            - v <--> u : at most one oedge
+
+    simple xgraph is optionaledge_bgraph
+        and has no (), (v,b), (v,b,b',v)
+        and ((all (v-><-u)) | (all (v->->u)))
+

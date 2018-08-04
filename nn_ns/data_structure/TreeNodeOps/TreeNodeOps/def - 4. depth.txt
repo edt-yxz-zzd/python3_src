@@ -1,0 +1,15 @@
+
+
+depth as subtree
+    node, depth ==>> subtree
+    the_subtree(node, depth) =[def]=
+        | depth == -inf or node is root = the whole tree
+        | depth == 0                    = subtree whose root is node
+        | depth > 0 and node is not root = the_subtree(node.parent, depth-1)
+        | otherwise = raise # -inf < depth < 0
+used in:
+    IBinaryTreeNodeOps
+        nonleaf_to_inorder_succ_leaf
+    IKeyOrderedUnbalancedMultiWayTreeNodeOps
+        leaf_to_inorder_iter_node_entity_position_pairs
+

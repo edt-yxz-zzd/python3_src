@@ -1,0 +1,9 @@
+
+prefer cls.__mro__ then cls.mro()
+    since when cls is a metaclass, cls.mro() miss the self_cls
+    should type(cls).__getattribute__(cls, '__mro__')???
+
+space usage: __slots__ < tuple < namedtuple < __dict__
+    https://stackoverflow.com/questions/45123238/python-class-vs-tuple-huge-memory-overhead
+    but __slots__ is mutable, namedtuple is immutable
+

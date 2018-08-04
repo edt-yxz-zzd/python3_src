@@ -1,0 +1,167 @@
+see: "Decomposition of 3-Connected Graphs (L. Leslie Gardner)[slides].pdf"
+
+why - no 4-connected decomposition?
+    can I?
+    SPQR:
+        cut and then put a new virtual edge which is K[2]
+        S-P2-S ==[merge]=>> S
+        P2.join(K[3]...) ==>> S
+        S is polygon
+    3- to 4-connected??
+        * cut and then put a K[3]
+            D-T2-D ==[merge]=>> D
+            # T2_merge_rule
+            ??T2.join(K[4]...) ==>> D
+            ??or T2.join(D...) ==>> D # see below "g2"
+            D is polyhedron
+                # ?? see below "g1", which is not a polyhedron
+
+        * cut and then put a K[4] # yeah, new vertex
+
+    ??[triconnected ugraph G][if two seperation triples cross each other] ==>> [T2_merge_rule must apply on them]
+    proof: ???????????? fail ?????????????????
+        if they have two common vertices, then not cross each other.
+        if they have one common vertex, then after remove the common vertex:
+            the ugraph become biconnected ==>> SPQR-tree
+            the four remain vertices must belong to an S in the SPQR-tree
+        if they have no common vertices:
+            assume they are:{{a,b,c}, {1,2,3}}
+            assume cut by abc, 1 is seperated out with {2,3}.
+            let ABC1 be the new component contains {abc1}
+            let ABC23 be the new component contains {abc23}
+            NOTE:
+                ABC1 may contains three new virtual edges: {a-b-c-}
+                ABC1 is triconnected
+            remove {1,2,3} from ABC1 and ABC23
+            both are connected.
+                ABC1-{1} is biconnected
+                ABC23-{2,3} is connected
+            let G' = G + {a-b-c-}
+            G'-{1,2,3} is connected # == ABC1+ABC23 - {1,2,3}
+            G-{1,2,3} is disconnected
+                i.e. after removed the 3 virtual edges {a-b-c-}:
+                    G'-{1,2,3} will be disconnected,
+                    one of abc must be seperated out with the other two.
+            G-{2,3} is connected, 1 is a cut vertex
+                remove 1, one of abc must be seperated out with the other two.
+                assume the one is a
+                consider the block B[a:1] between 1 and a.
+                1) in G, B[a:1] except a donot connect to ABC23(hence {2,3}), since abc split them.
+                2) in G, B[a:1] except 1 donot connect to {b,c}, since 1 is cut vertex in G-{2,3}
+                if there is another vertex other than {a,1} in B[a:1], then
+                    {a, 1} is a cut set of G, G is biconnected, ERROR
+                    ==>> there is a edge (a,1)
+                    ==>> B[a:1] = {a-1}
+                ==>> {a,2,3}, {1,b,c} are seperation triples
+            ==>> G = a23X ~a23~ B[a23:1bc] ~1bc~ 1bcY
+            ==>> B[a23:1bc] = a231 ~123~ B[23:bc]+{2-3-1-, b-c-1-}
+            ????????
+            g2 = {a-2-3-, 1-b-c-, a-1, 2-b, 3-c, x-[23bc]}
+                = (K[4], OO[1,4,1])
+                = (K[4]{a231}, OO[1,4,1]{1,23bc,x})
+                or: (K[4]{abc1}, OO[1,4,1]{a,23bc,x})
+            see: "Decomposition of 3-Connected Graphs (L. Leslie Gardner)[slides].pdf"
+                cut and then put a K[4] # yeah, new vertex
+
+
+
+
+
+
+n-polytope
+     # two-dimensional
+     polygon = 2-polytope
+        n-gon = polygon with n sides
+            # 3 sides
+            triangle = 3-gon
+     # three-dimensional
+     polyhedron = 3-polytope
+
+
+
+
+# StarO - 棱锥
+# OO[n,n] - 棱柱
+# StarO[n] =[def]= OO[n,1]
+OO[1,4,1] is 4-connected
+    {0-[1-2-3-4-]-5}
+C[4] v.s. StarO[4]
+    C[4] = {0-1-2-3-0}
+        seperation pairs = {{0,2}, {1,3}}
+        they split each other
+        # S
+    StarO[4] = {0-1-2-3-0, 4-[0123]}
+        seperation triples = {{0,2,4}, {1,3,4}}
+        they split each other
+
+
+# using T2_merge_rule, the answer to below questions will be:
+#   need not discompose
+#   but g1 is not a polyhedron
+how to discompose a StarO[n]?
+how to discompose a cube/OO[n,n]?
+    each vertex should be sperated out.
+how to discompose g1? # see below for "g1" definition.
+
+
+
+def g1 =
+    start from StarO[4]{0-[1-2-3-4-]}
+    insert vtx 5 into 1-4
+    add edge 5-? s.t. new graph become triconnected and not StarO[5]
+        # ==>> not 5-0
+        # ==>> 5-2 or 5-3
+g1 = {0-[1234], 1-2-3-4, 5-[124]}
+   = {2-[3015], 3-0-1-5, 4-[305]}
+    seperation triples = \
+        # remove 0:
+        #   C[3]{2-1-5-} - {2,5} - C[4]{2-3-4-5-}
+        # remove 2:
+        #   {0-[134], 3-4, 5-[14]}
+        #   {0-3-4-, 5-[14]-0}
+        #   C[3]{0-3-4-} - {0,4} - C[4]{0-1-5-4-}
+        #
+        # not remove 0
+        {{1,2,4} # ==>> {3-0, 5}
+        # not remove 2
+        ,{0,3,5} # ==>> {1-2, 4}
+        # remove 0/2:
+        ,{0,2,5} # ==>> {1, 3-4}
+        ,{0,2,4} # ==>> {3, 1-5}
+        }
+# 0,4,3 <-> 2,5,1
+# a,b,c <-> 1,2,3
+g1 = {a-b-c-, 1-2-3-, 3-a-1-c, b-2}
+    # remove 1, but not a
+    {1,3,b}
+    # remove a, but not 1
+    {a,c,2} # ==>> {3-1, b}
+            # ==>> ({a-c, 1-2-3-, 3-a-1-c}, {a-b-c-, b-2})
+            # add {a-c-2-}
+            # ==>> ({a-2-c-, 1-2-3-, 3-a-1-c}, {b-[ac2], a-c-2-})
+            # ==>> ({c-[a12], 3-[a12], a-1-2-}, {b-[ac2], a-c-2-})
+            # .fst <==> g1.{2-b} merge to 2 <==> K[5] delete one edge
+            #       <==> OO[1,3,1]
+            # .snd <==> K[4]{bac2} <==> StarO[3]
+            # decompose .fst
+            #   cut {a,1,2} ==>> (K[4]{ca12}, K[4]{3a12})
+            # g1 ==>> (K[4]{bac2}, K[4]{ca12}, K[4]{3a12})
+            #                   ac2         a12
+    # remove both a and 1
+    {a,1,b}
+    {a,1,2} # ==>> {c-b, 3}
+            # ==>> ({a-b-c-, 1-2, a-1-c, b-2}, {1-2-3-, 3-a-1})
+            # add {a-1-2-}
+            # ==>> ({a-[bc12], b-c-1-2-}, {3-[a12], a-1-2-})
+            # .fst <==> StarO[4]
+            # .snd <==> K[4] <==> StarO[3]
+            # g1 ==>> (K[4]{ac2b}, K[4]{ac21}, K[4]{3a12}) # <==> above
+            #                   ac2         a12
+            #     or: (K[4]{ab1c}, K[4]{ab12}, K[4]{3a12}) # <=xx=> above
+            #                   ab1         a12
+    see T2_merge_rule
+        maybe g1 should not be seperated at all!!!!
+
+
+
+

@@ -1,0 +1,47 @@
+
+LMS_char
+LMS_char_ex
+LMS_substring
+
+
+let L = len(array)
+LMS_char = left most S-char
+is_LMS_ichar ichar = is_S_char ichar && (ichar==0 or is_L_char (ichar-1))
+is_LMS_ichar_ex i = i == L or is_LMS_ichar i
+
+
+LMS_substring = substring between two LMS_char
+is_LMS_substring substr[i..j] = is_LMS_substring substr[i:j+1]
+        = 0 <= i < i+1 <= j-1 < j <= L
+        && is_LMS_ichar i
+        && is_LMS_ichar_ex j
+        && not any is_LMS_ichar [i+1..j-1]
+
+
+NOTE:
+    LMS_substring include 2 LMS_char, except the last LMS_substring
+        ==>> LMS_substring overlap at LMS_char
+    LMS_substring include at least one LMS_char and one L_char
+        ==>> len(LMS_substring) >= 2
+    all LMS_substrings of array may leave some leading L_chars not be covered.
+
+    # assume num LMS_substrings >= 1
+    len(array) = num leading L_chars + sum (map len LMS_substrings) - num overlaped LMS_chars
+            = num leading L_chars + sum (map len LMS_substrings) - (num LMS_substrings - 1)
+            >= 0 + (num LMS_substrings)*3-1 - (num LMS_substrings - 1)
+            = (num LMS_substrings)*2
+        e.g. when array = [0,1,0,1,0,1]
+
+example:
+    array = [1,0,1,0,1,0,1,2,2,3,2,1,1,0,1] $
+    -------- L,S,L,S,L,S,S,S,S,L,L,L,L,S,L  |
+    --------   |   |   |               |    |
+    --------  LMS LMS LMS             LMS  LMS  # LMS_chars
+    --------   =====
+    --------       =====
+    --------           =================        # LMS_substrings
+    --------                           ======   # LMS_substrings
+
+    LMS_substrings = [010, 010, 012232110, 01]
+
+

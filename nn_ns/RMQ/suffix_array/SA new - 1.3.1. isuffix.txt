@@ -1,0 +1,18 @@
+
+isuffix
+isuffix_ex
+
+
+
+isuffix<array> - array idx as suffix
+    i.e. treat array idx as suffix
+
+isuffix<array> =[def]= array[isuffix:]
+[isuffixA<array> < isuffixB<array>] =[def]= [array[isuffixA:] < array[isuffixB:]]
+
+SA = sorted_isuffices
+
+let L = len(array)
+int(isuffix<array>) <- [0..L-1] # nonempty suffix
+isuffix_ex <- [0..L] # maybe empty suffix
+

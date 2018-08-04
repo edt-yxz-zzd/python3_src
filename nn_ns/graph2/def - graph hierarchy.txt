@@ -1,0 +1,29 @@
+
+graph hierarchy
+
+bipartite_xgraph
+    bipartite_ugraph
+    bipartite_dgraph
+bgraph (multiedge; loops)
+    optionaledge_bgraph
+        simple_bgraph
+    loopless_bgraph
+        simple_bgraph
+    simple_bgraph
+
+    xgraph
+        # ugraph + dgraph
+        ugraph
+        dgraph
+
+#with properties
+#move to graph_ops!!
+rooted
+    rooted_vertices
+        rooted_vertex
+    rooted_aedges
+        rooted_aedge
+
+colored
+weighted
+

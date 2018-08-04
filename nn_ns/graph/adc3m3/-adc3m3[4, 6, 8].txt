@@ -1,0 +1,4 @@
+4 bcd,adc,abd,acb
+6 bcd,aef,afd,ace,bdf,bec
+8 bcd,aef,afg,agh,bhf,bec,chd,dge
+8 bcd,aef,afg,age,bdh,bhc,chd,egf

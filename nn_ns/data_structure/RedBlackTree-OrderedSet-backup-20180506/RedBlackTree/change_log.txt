@@ -1,0 +1,29 @@
+
+
+2018-5-4
+    MutableRedBlackTreeNodeABC.from_entities
+        # O(n*log(n))
+        #   insert_entity_at_leaf + get_last_leaf/get_first_leaf
+        #       OrientedTreeNode_PositiveNumChildren_ABC.get_first_leaf
+        #       OrientedTreeNode_PositiveNumChildren_ABC.get_last_leaf
+        #       MutableRedBlackTreeNodeABC.insert_entity_at_leaf
+    OrderedTreeNodeABC.key_le
+    OrderedMutableRedBlackTreeNodeABC.from_sorted_entities
+        TODO:
+        # O(n)?
+        #   make_nonleaf_root_with_leaves(entities[L//2], [from_sorted_entities(entities[:L//2]), from_sorted_entities(entities[L//2+1:]])
+        #   but what about the color???
+        # curr impl: O(n*log(n))
+        #   MutableRedBlackTreeNodeABC.from_entities
+
+    bug:
+        _remove.py:
+            subtree_root.parent_info = subtree_root.new_ROOT_PARENT_INFO
+            ==>> subtree_root.parent_info = subtree_root.new_ROOT_PARENT_INFO()
+2018-5-4
+    backup-20160810
+    TreeNodeABC.copy # abstractmethod
+        RBT_Node_AllSelf_ABC.copy
+        RBT_Node_ImmutablePlain_MutableParentedSelf_ABC.copy
+        RBT_Node_XTupleBothPlainParented_ABC.copy
+

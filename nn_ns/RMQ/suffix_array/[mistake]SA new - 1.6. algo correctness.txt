@@ -1,0 +1,59 @@
+
+
+SA = isuffix_bucket<char>*
+isuffix_bucket<char> = L_isuffix_bucket<char> + S_isuffix_bucket<char>
+L_isuffix_bucket<char> = L_isuffix<char>*
+S_isuffix_bucket<char> = S_isuffix<char>*
+is_L_isuffix<char> i = is_L_char i && array[i] == char
+is_S_isuffix<char> i = is_S_char i && array[i] == char
+
+why L_isuffix_bucket before S_isuffix_bucket?
+    L_suffixA = L_charA : smaller_char : _
+    S_suffixB = S_charB : larger_char : _
+    since in same suffix_bucket<charX>
+        ==>> L_charA == S_charB == charX
+        ==>> L_suffixA < S_suffixB
+
+if LMS_isuffices_ex are sorted:
+    # "_ex" - means the $ suffix should be sorted
+    #   i.e. below algo, iter i begin from L
+    #   i.e. the first L_ichar be pushed, will be (L-1) if L >= 1
+    "scan from left to right, append_right (i-1) into L_isuffix_bucket<array[i-1]> if is_L_ichar(i-1)"
+        will sort all L_isuffices
+    why?
+        from left to right
+        <==> from left bucket to right bucket
+        <==> from small bucket to large bucket
+        <==> for each isuffix, all smaller isuffices have been sorted
+        <==> for each L_ichar ichar, isuffix(ichar)+1 (may be LMS_ichar_ex) have been sorted
+        <==> go up the L-phase from right to left. (right most is LMS_ichar_ex)
+
+if L_isuffices are sorted:
+    # S_isuffixA   ==> h:h:h:(h+1):...
+    # S_isuffixA+1 ==> h:h:(h+1):...
+    # S_isuffixA < S_isuffixA+1
+    #
+    # S_isuffixB   ==> h:h:h:(h-1):... # last h is L_char
+    # S_isuffixB+1 ==> h:h:(h-1):...
+    # S_isuffixB > S_isuffixB+1
+    #
+    "scan from right to left, append_left (i-1) into S_isuffix_bucket<array[i-1]> if is_S_ichar(i-1)"
+        will sort all S_isuffices
+    why?
+        from right to left
+        <==> from right bucket to left bucket
+        <==> from large bucket to small bucket
+        <==>
+        <==> for each isuffix, all larger isuffices have been sorted
+        <==> for each S_ichar ichar, isuffix(ichar)+1 (may be L_ichar) have been sorted
+        <==> go down the S-phase from right to left. (right most is L_isuffix, left most is LMS_isuffix)
+
+
+sort LMS_strings to name LMS_strings, i.e. make big_chars
+sort isuffices of LMS_strings and eval its LCP to eval LCP<array>
+
+
+
+
+
+

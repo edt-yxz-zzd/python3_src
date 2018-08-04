@@ -1,0 +1,51 @@
+
+tree node = tree node iterator
+    node is a temp obj, so, "binary_node.left is not binary_node.left"
+        e.g. node is a wrapper node for some existed tree, created on fly
+            (wrapper tree for filesystem/other trees)
+        e.g. node is immutable, node==(parent_info, plain_node)
+            parent_info goes up (iterator info, [ancestor])
+            plain_node goes down (subtree, [child_plain_node])
+            since node is immutable, it cannot contain both stable parent and stable children
+            ==>> node is unstable ==>> created when iter/on fly
+
+TreeNode a  = LeafNode
+                -- e.g. filesystem.file
+                { parent_info :: ParentInfo a
+                , leaf_usr_data :: LeafData a
+                , leaf_impl_data :: LeafData a -- constant??
+                , bottomup_auto_data :: ?? -- in concept; constant
+                }
+            | NonLeafNode
+                -- e.g. filesystem.directory
+                { parent_info :: ParentInfo a
+                , children :: [TreeNode a] # maybe empty!!
+                , nonleaf_impl_data
+                    -- e.g. "Red/Black" for red_black_tree
+                , nonleaf_usr_data :: NonLeafData a
+                    -- e.g. nonleaf_multiway_usr_data :: [??]
+                    --      len nonleaf_multiway_usr_data == num_children - 1
+                    --          * require children are oriented
+                    --          * require nonleaf is math nonleaf instead directory
+                    --              i.e. num_children > 0
+                , bottomup_auto_data :: ??
+                    -- e.g. subtree_size = num_nodes of whole subtree
+                    --                  = 1 + sum(map subtree_size children)
+                    --              used in index node: tree[i] == ith node
+                    --              why not call "size"?
+                    --                  to avoid confusing with num_children
+                    -- e.g. min/max height = 1 + min/max child min/max height
+                }
+
+
+leaf_node vs nonleaf_node
+    children
+        leaf_node has no children
+        nonleaf_node may have no children
+    data
+        leaf_node and nonleaf_node has data of diff type
+        leaf_node may have no payload
+
+
+
+

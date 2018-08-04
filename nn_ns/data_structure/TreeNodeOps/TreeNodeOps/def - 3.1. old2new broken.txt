@@ -1,0 +1,6 @@
+
+
+old2new broken
+    new_child ==>> parent_info ==>> parent + innode_position
+    parent + innode_position ==>> old_child
+

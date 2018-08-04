@@ -1,0 +1,10 @@
+rule type:
+    user recognize function??
+        e.g. "[0-9]", "\s"
+
+
+
+
+
+
+

@@ -1,0 +1,164 @@
+see: "rmq - 2.0. common.txt"
+
+array -> normal_blocks = B
+    normal_blocks[i] = B[i]
+    # all normal_blocks but last are complete normal_block
+    def s
+    def complete_normal_block_size = s = log2(p)/(2+delta_y)
+        # the smaller delta_y, the bigger s
+        # , the smaller normal_blocks/normal_min_array/M
+        # , the faster to fill M
+        [p>=2] ==>> s < log2(p)/2
+        # s = max{s<-PInt | s < log2(p)/2}
+        where
+            delta_y > 0
+            def 2_y = 2+delta_y
+    to make complete_normal_block_size a PInt
+        s = log2(p)/2_y >= 1
+        <==> log2(p)/2 > log2(p)/2_y >= 1
+        <==> log2(p) > 2
+        <==> p > 4
+        <==> p >= 5
+        def min_array_length__at_least5 = 5
+            # s = log2(p)/2_y >= 1
+            # if p < min_array_length__at_least5:
+            #   we may let s = 1 >= log2(p)/2 > log2(p)/2_y
+    to make complete_normal_block_size < log2(p)/2
+        s = log2(p)/2_y < log2(p)/2
+        <==> log2(p)*2 < log2(p)*2_y
+        <==> 0 < log2(p)*y
+        <==> 0 < log2(p)
+        <==> p >= 2
+        def min_array_length__at_least6 = 2
+            # s < log2(p)/2
+            # if p < min_array_length__at_least6:
+            #   we may let s = 1 >= log2(p)/2 > log2(p)/2_y
+    to make complete_normal_block_size <= complete_super_block_size:
+        lhs = ceil(log2(p)/2+?) <= s = log2(p)/2_y <= s_ = min(p, log2(p)**2_x)
+        # in complete_super_block_size's black era: s_ = p  [may]<= log2(p)**2
+        1) lhs <= p
+            <<== log2(p)/2+1 <= p
+            <==> log2(p) <= 2*(p-1)
+            <<== p >= 1
+        2) lhs <= log2(p)**2_x
+            <<== log2(p)/2+1 <= log2(p)**2
+            <<== p >= 3
+        ==>> require [p>=3]
+        def min_array_length__at_least7 = 3
+    how to compute a complete_normal_block_size?
+      [p>=5]
+        if p == 2**(2*half_power):
+            [log2(p)/2 is int]
+            [log2(p)/2 == half_power]
+            complete_normal_block_size = half_power-1 = log2(p)/2 - 1
+            # [s >= 1] ==>> half_power >= 2 > 1 ==>> power > 2
+            #   ==>> p > 2**2 = 4 ==>> p>=5
+        else:
+            [log2(p)/2 is not int]
+            complete_normal_block_size = floor(log2(p)/2)
+                # floor(z/2) = z//2 = floor(z)//2
+                = floor_log2(p)//2
+        # see below: delta_y__upper_bound
+        #               for this complete_normal_block_size definition
+
+        # calc:
+        def complete_normal_block_size(p) # use int operation only
+            # require: min_array_length >= min_array_length__at_least5 == 5
+            | p < min_array_length  = undefined # use other method to do RMQ
+            | p == 2**(2*half_power)= log2(p)/2 - 1 = floor_log2(p)//2-1
+            | p >= min_array_length = floor_log2(p)//2
+
+        # calc:
+        def complete_normal_block_size__ver2(p) # use int operation only
+            # black era
+            | p < min_array_length__at_least5  = 1 # may >= log2(p)/2
+            # white era: s < log2(p)/2
+            | p == 2**(2*half_power)= log2(p)/2 - 1 = floor_log2(p)//2-1
+            | otherwise             = floor_log2(p)//2
+            #   p == 2**(2*half_power)-1 ==>> half_power-1
+            #   p == 2**(2*half_power)   ==>> half_power-1 # seems useless
+            #   p == 2**(2*half_power)+1 ==>> half_power
+
+# to calc delta_y__upper_bound
+why?
+    see: M ==>> delta_y should have a upper_bound independant with p
+        bit_size_of M
+            = ...
+            = O(p/s * log(log2(p))**2)
+            = O(p/log2(p) *2_y * log(log2(p))**2) # here 2_y should have a upper_bound
+            = O(p)*1_x*2_y
+        ==>> delta_y should have a upper_bound independant with p
+
+calc delta_y__upper_bound:
+    def delta_y__upper_bound(min_array_length):
+        # "?" a small number
+        = ? + max {delta_y(p) | p <- [min_array_length..]}
+        = delta_y__upper_bound__at_least__p_ge(min_array_length)
+    # recall:
+    #   s = complete_normal_block_size(p) # use int operation only
+    #       # require: min_array_length >= min_array_length__at_least5 == 5
+    #       | p < min_array_length  = undefined # use other method to do RMQ
+    #       | p == 2**(2*half_power)= log2(p)/2 -1      (*c1_s*)
+    #       | p >= min_array_length = floor_log2(p)//2  (*c2_s*)
+    # does this definition yield a upper_bound of delta_y??
+    for *c1_s* :
+        s = log2(p)/2_y = log2(p)/2 -1
+        delta_y = power/(half_power-1) -2
+            = 2/(half_power-1)
+            = 2/(log2(p)/2-1)
+            = 4/(log2(p)-2)
+            <= 4/(log2(min_array_length)-2)
+        delta_y__upper_bound__at_least1(min_array_length)
+            = 4/(ceil_log2(min_array_length)-2)
+
+    for *c2_s* :
+        s = floor_log2(p)//2 = log2(p)/2_y
+        delta_y = log2(p)/(floor_log2(p)//2) - 2
+                = log2(p)/(log2(p)//2) - 2
+                = log2(p)/(log2(p)/2 - z) - 2
+                # z <- [0,1)
+                # z <- (0,1) since p != 2**(2*half_power)
+                # log2(p)/2 > 1 > z for p >= 5
+                < log2(p)/(log2(p)/2 - 1) - 2
+                = 2*log2(p)/(log2(p) - 2) - 2
+                = 4/(log2(p) - 2)
+                <= 4/(log2(min_array_length) - 2)
+        delta_y__upper_bound__at_least2(min_array_length)
+            # donot care whether min_array_length == 2**power
+            = 4/(log2(min_array_length)-2)
+            # when min_array_length == 2**(2*half_power)
+            # = 4/(2*half_power-2)
+            # = 4/(ceil_log2(min_array_length)-2)
+            # = delta_y__upper_bound__at_least1(min_array_length)
+            # same as delta_y__upper_bound__at_least1!!
+
+    ==>> delta_y__upper_bound__at_least__p_ge(min_array_length)
+        # = ? + max {delta_y(p) | p <- [min_array_length..]}
+        # min_array_length >= min_array_length__at_least5
+        = max(delta_y__upper_bound__at_least1(min_array_length)
+            , delta_y__upper_bound__at_least2(min_array_length)
+            )
+        = delta_y__upper_bound__at_least2(min_array_length)
+        = 4/(log2(min_array_length)-2)
+
+
+
+    # see: "rmq - 2.1.1. complete_super_block_size.txt" :: min_array_length
+    delta_y__upper_bound = delta_y__upper_bound__at_least__p_ge(min_array_length)
+        for complete_super_block_size__ver1
+            min_array_length = 40
+            delta_y__upper_bound = 1.2041199826559246
+        for complete_super_block_size__ver2
+            min_array_length = 20
+            delta_y__upper_bound = 1.722706232293572
+    def delta_y__upper_bound__for_complete_super_block_size_ver3_golden_era
+        # for super...ver3 or 2
+        = delta_y__upper_bound
+        = 1.722706232293572
+    def min_array_length__for_complete_normal_block_size_ver2_white_era
+        # for normal...ver2
+        = min_array_length__at_least5
+        = 5
+
+    # see: complete_normal_block_size__ver2
+

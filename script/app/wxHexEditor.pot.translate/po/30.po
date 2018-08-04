@@ -1,0 +1,257 @@
+#: src/HexEditor.cpp:1297
+msgid "Block Size: %"
+msgstr ""
+
+#: src/HexEditor.cpp:1370
+#, c-format
+msgid ""
+"Notice!: This command will increase the file size and will generate too much "
+"overhead on file save.\n"
+"How many bytes do you want to inject to location to offset location %lld?"
+msgstr ""
+
+#: src/HexEditor.cpp:1371
+msgid "Bytes"
+msgstr ""
+
+#: src/HexEditor.cpp:1371
+msgid "Injection!"
+msgstr ""
+
+#: src/HexEditor.cpp:1430
+msgid ""
+"WARNING:\n"
+"The text you are copying includes a null character\n"
+"(00 in the hex pane) and will be truncated!\n"
+"\n"
+"If copying to another file in wxHexEditor you\n"
+"should copy from the Hex pane, not the text pane"
+msgstr ""
+
+#: src/HexEditor.cpp:1435
+msgid "Warning"
+msgstr ""
+
+#: src/HexEditor.cpp:1441
+msgid "You have no RAM to copy this data."
+msgstr ""
+
+#: src/HexEditor.cpp:1446
+msgid ""
+"You are tried to copy data more than 10 MB.\n"
+"Copying above 10 MB to clipboard is not allowed.\n"
+"Only internal copy buffer used!"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:188
+msgid "License Agreement"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:282
+msgid "New File"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:282
+msgid "New file"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:283
+msgid "Open File"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:283
+msgid "Open"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:284
+msgid "Save File"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:284 src/HexEditorGui.cpp:1795
+#: src/HexEditorCtrl/wxHexCtrl/TagDialogGui.cpp:56
+msgid "Save"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:285
+msgid "SaveAs File"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:285
+msgid "Save as"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:286
+msgid "Close File"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:286
+msgid "Close"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:289
+msgid "Find and replace"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:290
+msgid "GoTo"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:290
+msgid "Go to offset"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:292
+msgid "Undo"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:293
+msgid "Redo"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:295
+msgid "Copy Block"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:296
+msgid "Paste Block"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:298
+msgid "Cut Block"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:298
+msgid "Cuts selected block and copies to clipboard"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:299
+msgid "Delete Block"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:299
+msgid "Deletes selected block"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:300
+msgid "Insert Block"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:313 src/HexEditorGui.cpp:155
+msgid "Toolbar"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:320
+msgid "TagPanel"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:331 src/HexEditorGui.cpp:167
+msgid "Disassembler Panel"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:343
+msgid "Search Results"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:355
+msgid "Comparison Results"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:366
+msgid "DataInterpreter"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:377 src/HexEditorGui.cpp:159
+msgid "InfoPanel"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:460
+msgid "MD5 File detected. Do you request MD5 verification?"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:460 src/HexEditorFrame.cpp:463
+#: src/HexEditorFrame.cpp:466
+msgid "Checksum File Detected"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:463
+msgid "SHA1 File detected. Do you request SHA1 verification?"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:466
+msgid "SHA256 File detected. Do you request SHA256 verification?"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:490
+msgid "Please indicate file size in decimal."
+msgstr ""
+
+#: src/HexEditorFrame.cpp:491
+msgid "Enter File Size:"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:498
+#, c-format
+msgid "Wrong input: %d please retry..."
+msgstr ""
+
+#: src/HexEditorFrame.cpp:502 src/HexEditorFrame.cpp:555
+msgid "Choose a file for save as"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:514
+msgid "File cannot create!"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:531
+msgid "Choose a file for editing"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:563
+msgid "File cannot save as "
+msgstr ""
+
+#: src/HexEditorFrame.cpp:576
+msgid "Choose a file for import TAGs"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:584
+msgid "TAGS cannot imported from "
+msgstr ""
+
+#: src/HexEditorFrame.cpp:600
+msgid "TAGs cannot exported to "
+msgstr ""
+
+#: src/HexEditorFrame.cpp:604
+msgid "There is no TAGs to Export in current active file!"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:667
+msgid "Please enter process identification number."
+msgstr ""
+
+#: src/HexEditorFrame.cpp:667
+msgid "Enter PID:"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:667 src/HexEditorGui.cpp:232
+msgid "Open Process RAM"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:697
+msgid "Please restart program for changes."
+msgstr ""
+
+#: src/HexEditorFrame.cpp:718
+msgid "This mode will write changes every change to file DIRECTLY."
+msgstr ""
+
+#: src/HexEditorFrame.cpp:718
+msgid "Warning!"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:746
+msgid "Error on quit!"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:817

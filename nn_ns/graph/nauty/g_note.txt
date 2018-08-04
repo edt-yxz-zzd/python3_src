@@ -1,0 +1,74 @@
+If MAXN is defined as 0, the limit on the order of a graph is given in (1){(2) above and objects are dynamically allocated. Of course, if you don't have enough memory, dynamic allocation may fail. This is the default
+
+derfine MAXN to be the name WORDSIZE.
+
+
+setword is an unsigned integer type of either 16, 32 or 64 bits
+WORDSIZE = bitsizeof setword
+setword = byte[WORDSIZE/8]
+set = setword[m] // one row
+n = order(G) <= bitsizeof set = WORDSIZE * m
+workspace = setword[worksize] = set[worksize/m]
+          = byte[worksize * WORDSIZE/8]
+A value of worksize >= 50m is recommended. workspace >= 50 row???
+
+WORDSIZE = 64 bit
+int = 32 bit
+if s = 1 => p=1/s = 1.0 => degree = n-1 => edges = n*(n-1)/2
+    packed form: n*set = n*m*WORDSIZE/8 ~=>=~ n*n/8 (Byte)
+                 = 8 n*m
+    sparse form: int[n]*2 + int[nedges] = sizeof(int) * (2*n + n*(n-1)/2)
+                 = sizeof(int) * (3*n + n*n)/2
+                 = 2 n*n + 6 n
+                 = 4 ne + 8 nv (Byte)
+    2 GB = 2**33 ~ n = 2**16 = 65536
+workspace doesnot consume as many as graph!!!
+
+-------------------------------------
+WORDSIZE = 64
+intsize = 4
+m = lambda: (WORDSIZE-1+n)//WORDSIZE
+s1 = lambda: n*m()*WORDSIZE//8
+s2 = lambda: intsize*(n*n + 3*n)//2
+ss = lambda:(s1(), s2())
+
+n =  1000, pack=   128,000 B =   125.0 KB = 0.12207 MB, sparse= 2,006,000 B =  1959.0 KB =  1.9131 MB
+n =  2000, pack=   512,000 B =   500.0 KB = 0.48828 MB, sparse= 8,012,000 B =  7824.2 KB =  7.6408 MB
+n =  3000, pack= 1,128,000 B =  1101.6 KB =  1.0757 MB, sparse=18,018,000 B = 1.7596e+04 KB =  17.183 MB
+n =  4000, pack= 2,016,000 B =  1968.8 KB =  1.9226 MB, sparse=32,024,000 B = 3.1273e+04 KB =   30.54 MB
+n =  5000, pack= 3,160,000 B =  3085.9 KB =  3.0136 MB, sparse=50,030,000 B = 4.8857e+04 KB =  47.712 MB
+n =  6000, pack= 4,512,000 B =  4406.2 KB =   4.303 MB, sparse=72,036,000 B = 7.0348e+04 KB =  68.699 MB
+n =  7000, pack= 6,160,000 B =  6015.6 KB =  5.8746 MB, sparse=98,042,000 B = 9.5744e+04 KB =    93.5 MB
+n =  8000, pack= 8,000,000 B =  7812.5 KB =  7.6294 MB, sparse=128,048,000 B = 1.2505e+05 KB =  122.12 MB
+n =  9000, pack=10,152,000 B =  9914.1 KB =  9.6817 MB, sparse=162,054,000 B = 1.5826e+05 KB =  154.55 MB
+n = 10000, pack=12,560,000 B = 1.2266e+04 KB =  11.978 MB, sparse=200,060,000 B = 1.9537e+05 KB =  190.79 MB
+n = 60000, pack=450,240,000 B = 4.3969e+05 KB =  429.38 MB, sparse=7,200,360,000 B = 7.0316e+06 KB =  6866.8 MB
+n = 90000, pack=1,013,040,000 B = 9.893e+05 KB =  966.11 MB, sparse=16,200,540,000 B = 1.5821e+07 KB = 1.545e+04 MB
+n = 120000, pack=1,800,000,000 B = 1.7578e+06 KB =  1716.6 MB, sparse=28,800,720,000 B = 2.8126e+07 KB = 2.7467e+04 MB
+n = 150000, pack=2,812,800,000 B = 2.7469e+06 KB =  2682.5 MB, sparse=45,000,900,000 B = 4.3946e+07 KB = 4.2916e+04 MB
+
+-------------------------------------
+n = 10000 m=157 worksize = 18840 s=1 used_mem = 12MB = 12 * 2**20 = 12582912
+157 * 64 bit == 10048 > n
+workspace = 18840 * 8 Byte = 150720?????
+12MB/workspace = 201326592/150720 = 1336.
+2 n*n + 6 n = 2,0006,0000 > 125,82912
+n*n/8 = 1250,0000 ~ 1258,2912
+-------------------------------------
+n = 1000 m=16 worksize = 1920 s=1 used_mem = 712-564KB = 151552
+2 n*n + 6 n = 2,006,000 > 151,552
+n*n/8 = 125,000 ~ 151,552
+8 nm = 128000
+-------------------------------------
+n = 2000 s=1 used_mem = 1096-564KB = 544768
+3000 1708-564KB = 1144KB
+4000 2568- = 2000KB
+5000 3693- = 3130KB
+60000 441,192- = 
+...
+dreatnaut using packed form graph
+worksize = 120*m in dreatnaut
+
+
+
+

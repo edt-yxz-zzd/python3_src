@@ -1,0 +1,10 @@
+
+arrow = dqedge = (head, tail)
+(direct predecessor, direct successor)
+inverted arrow
+
+
+https://en.wikipedia.org/wiki/Directed_graph
+An arrow (x, y) is considered to be directed from x to y; y is called the head and x is called the tail of the arrow; y is said to be a direct successor of x and x is said to be a direct predecessor of y. If a path leads from x to y, then y is said to be a successor of x and reachable from x, and x is said to be a predecessor of y. The arrow (y, x) is called the inverted arrow of (x, y).
+
+

@@ -1,0 +1,211 @@
+
+-------------- encode good_path with fixed begin/end points
+encode<(p,q),(x0,y0),key> :: let gs = good_paths((p,q),(x0,y0)) in
+                        @path<-gs. UInt
+encode<(p,q),(x0,y0),key> path = let gs = good_paths((p,q),(x0,y0)) in
+                        sort(gs, key=key).index(path)
+"key" acts as encoding
+how to define "key"?
+    below will talk about two keys: keyPQ, keyQP
+
+Path = [Point]{1..} s.t. made up from [NegMove]
+Path<(p,q),(x0,y0)> = Path s.t. (path[0],path[-1]) == ((p,q),(x0,y0))
+NegMove = NegPMove | NegQMove
+    NegQMove = (0,-1)
+    NegPMove = (-1,0)
+    NegMoves = [NegMove] = [NegMove]{0..}
+
+    path2neg_moves :: Path -> [NegMove]
+    path2neg_moves [(x0,y0)] = []
+    path2neg_moves ((p,q):tail@((a,b):_)) = (a-p,b-q) : path2neg_moves tail
+    neg_moves_begin_point2path :: [NegMove] -> Point -> Path # bad
+    #neg_moves_begin_point2path neg_moves (x0,y0) = ??
+    neg_moves_begin_point2path [] (x0,y0) = [(x0,y0)]
+    neg_moves_begin_point2path ((dp,dq):neg_moves) neg_begin_pt@(x0,y0)
+        = (p-dp,q-dp):tail where
+        tail@((p,q):_) = neg_moves_begin_point2path neg_moves neg_begin_pt
+    neg_moves_end_point2path :: [NegMove] -> Point -> Path
+    #neg_moves_end_point2path neg_moves (p,q) = ??
+    neg_moves_end_point2path [] (p,q) = [(p,q)]
+    neg_moves_end_point2path ((dp,dq):neg_moves) end@(p,q)
+        = end : neg_moves_end_point2path neg_moves (p+dp,q+dq)
+
+* keyPQ: NegPMove before NegQMove
+    sorted_good_paths<(p,q),(x0,y0), keyPQ>
+        = [[(p,q), (p-1,q)...(x0,y0)]...] # total ballot((p-1,q),(x0,y0))
+        + [[(p,q), (p,q-1)...(x0,y0)]...]
+    global_offset(the first part) = 0
+    global_offset(the second part) = ballot((p-1,q),(x0,y0))
+    encode<(p,q),(x0,y0),keyPQ> good_path = f good_path where
+        f [(x0,y0)] = 0
+        f ((p,q):tail@((p-1,q):_)) = 0 + encode<(p-1,q),(x0,y0),keyPQ> tail
+        f ((p,q):tail@((p,q-1):_)) = ballot((p-1,q),(x0,y0))
+                                   + encode<(p,q-1),(x0,y0),keyPQ> tail
+* keyQP: NegQMove before NegPMove
+    sorted_good_paths<(p,q),(x0,y0), keyQP>
+        = [[(p,q), (p,q-1)...(x0,y0)]...] # total ballot((p,q-1),(x0,y0))
+        + [[(p,q), (p-1,q)...(x0,y0)]...]
+    global_offset(the first part) = 0
+    global_offset(the second part) = ballot((p,q-1),(x0,y0))
+    encode<(p,q),(x0,y0),keyQP> good_path = f good_path where
+        f [(x0,y0)] = 0
+        f ((p,q):tail@((p,q-1):_)) = 0 + encode<(p,q-1),(x0,y0),keyQP> tail
+        f ((p,q):tail@((p-1,q):_)) = ballot((p,q-1),(x0,y0))
+                                   + encode<(p-1,q),(x0,y0),keyQP> tail
+
+NOTE:
+    each move/edge is weighted
+    encode path = sum . map weight_of<(x0,y0), key> $ path2edges path
+    weight_of<(x0,y0), key> :: (Point, Point) -> UInt
+    # weight_of<path_begin, key> (begin_pt_of_neg_move, end_pt_of_neg_move) = weight
+    #   where exist neg_move, s.t. begin_pt_of_neg_move+neg_move == end_pt_of_neg_move
+    * keyPQ
+        weight_of<(x0,y0), keyPQ> ((p,q),(p-1,q)) = 0
+        weight_of<(x0,y0), keyPQ> ((p,q),(p,q-1)) = ballot((p-1,q),(x0,y0))
+    * keyQP
+        weight_of<(x0,y0), keyQP> ((p,q),(p,q-1)) = 0
+        weight_of<(x0,y0), keyQP> ((p,q),(p-1,q)) = ballot((p,q-1),(x0,y0))
+
+
+def balanced_good_paths(Q, (x0,y0)) = good_paths((x0+Q,y0+Q),(x0,y0))
+balanced_neg_moves<Q,(x0,y0)>
+    = []
+    # beginswith NegPMove and endswith NegQMove
+    | [NegPMove]{1..} ++ NegQMove : neg_moves<(x0+Q-1-?,y0+Q-1), (x0,y0)>
+    # neg_moves = maybe_unbalanced_neg_moves
+
+group neg_moves:
+    let gp be a good_path<(p,q),(x0,y0)>
+    num_pmoves gp == p-x0 <= q-y0 == num_qmoves gp
+    NOTE:
+        the last neg_move if any must be neg_qmove
+        neg_moves[i:].count(NegPMove) <= neg_moves[i:].count(NegQMove)
+
+    splitP_counts = map(len, neg_moves.split(NegPMove)) :: [UInt]{1..}
+        <<== neg_moves.split(NegPMove) :: [[NegQMove]{0..}]{1..}
+    len(splitP_counts[i:]) <= sum(splitP_counts[i:])
+        proof:
+          len(splitP_counts[i:])
+            == neg_moves[j:].count(NegPMove)
+            <= neg_moves[j:].count(NegQMove)
+            == sum(splitP_counts[i:])
+            where
+                j = 0 if i == 0 else
+                    the index of the (i-1)-th NegPMove in neg_moves
+    if 0<=i<=len(splitP_counts):
+        i <= sum(reversed_splitP_counts[:i])
+
+    splitQ_counts = map(len, neg_moves.split(NegQMove)) :: [UInt]{1..}
+    if 0<=i<splitQ_counts: # "i<" not "i<="
+        # below "<" not "<="
+        sum(splitQ_counts[i:]) < len(splitQ_counts[i:])
+        lhs = num of NegPMove if i==0 else
+                num of NegPMove after (i-1)-th NegQMove
+        rhs = 1+num of NegQMove if i==0 else
+                1+num of NegQMove after (i-1)-th NegQMove
+    if i > 0:
+        sum(reversed_splitQ_counts[:i]) < i
+    accumulate_reversed_splitQ_counts
+        = accumulate reversed_splitQ_counts
+        = [sum(reversed_splitQ_counts[:i+1]) for i in range(len ...)]
+    len(accumulate_reversed_splitQ_counts) == len(reversed_splitQ_counts)
+
+
+    # see: "Catalan_number.py" :: "Non-Decreasing Parking Function"
+    #  accumulate_reversed_splitQ_counts is a non-decreasing parking function
+
+good_path <==> reversed_good_path
+    good_path
+        <==> neg_moves
+        <==> reversed_neg_moves
+        <==> pos_moves
+        <==> reversed_good_path
+    PosMove = PosPMove | PosQMove
+    PosPMove = (1, 0)
+    PosQMove = (0, 1)
+
+    good_path beginswith a neg_begin_pt, endswith a neg_end_pt
+        neg_begin_pt = begin_pt_of_neg_move
+        neg_end_pt = end_pt_of_neg_move
+    reversed_good_path beginswith a pos_begin_pt, endswith a pos_end_pt
+        pos_begin_pt = begin_pt_of_pos_move
+        pos_end_pt = end_pt_of_pos_move
+
+-- encode Dyck_word # maybe unbalanced
+good_path<(p,q),(x0,y0)> <==> Dyck_word with (p-x0)'s close and (q-y0)'s open
+    neg_moves[-1] if any is NegQMove
+    but neg_moves[0] if any is NegQMove or NegPMove
+    so, must use reversed_neg_moves
+
+    good_path
+        <==> neg_moves
+        <==> reversed_neg_moves
+        <==> pos_moves
+        <=[by{PosQMove:open, PosPMove:close}]=> Dyck_word
+
+-- encode canonical_Cartesian_tree
+balanced_Dyck_word <==> canonical_Cartesian_tree
+    canonical_Cartesian_tree
+        <==> canonical_Cartesian_right_open_tree
+        <==> balanced[(append|pop)]
+        <==> balanced_Dyck_word
+
+    -- def canonical_Cartesian_right_open_tree <==> [(append|pop)]
+    "Right Open" - see: "canonical_Cartesian_tree_definition.py"
+    when we construct a CanonicalCartesianRightOpenTree:
+        feed array_element one by one
+            right_open_tree.feed(array_element) -> new right_open_tree
+        # below consider the changes of the list of right_most_roots
+        right_most_roots definition:
+            right_most_roots
+                = []
+                | [global_root]
+                | [global_root, global_root.right_child]
+                | ...
+                | [global_root, global_root.right_child, ...
+                    ,global_root.right_child*,...]
+            right_child is a temp right_child
+            if final tree, p.temp_right_child is p.final_right_child.left_child*
+            if right_most_roots:
+                right_most_roots[-1] is the last feed array_element
+            right_most_roots[i] <= right_most_roots[i+1]
+
+        when we insert the first array_element:
+            there are nothing to be popped from right_most_roots
+        when we insert array_element:
+            while right_most_roots and array_element < right_most_roots[-1]:
+                right_most_roots.pop()
+            right_most_roots.append(array_element)
+        when we finish, i.e. no more array_element to be insert:
+            while right_most_roots: right_most_roots.pop()
+        see the changes of len(right_most_roots):
+            (pop 0, append 1)
+            ...
+            (pop pop_num::UInt, append 1)
+            # above total = len(array)
+            # when finished:
+            (pop pop_num::UInt, append 0)
+            # sum pop_nums == len(array)
+            # sum pop_nums[:i] < i for i <- [1..len(array)+1]
+        remove the first (pop 0) and the last (append 0), restruct:
+            (append 1, pop ??pop_num)
+            ...
+            (append 1, pop ??pop_num)
+            # last one:
+            (append 1, pop ??pop_num)
+            # total = len(array)
+            # sum pop_nums == len(array)
+            # sum pop_nums[:i] <= i for i <- [0..len(array)]
+        remove (append 1), we get:
+            pop_nums = [pop ??pop_num, ...] :: [UInt]{0..}
+            # sum pop_nums == len(pop_nums) == len(array)
+            # sum pop_nums[:i] <= i for i <- [0..len(array)]
+
+    reversed_neg_moves <-> [(append|pop)] <-> right_open_pop_nums
+        * NegQMove as append/open/"("/1
+            neg_moves[-1] if any is NegQMove
+            reversed_neg_moves[0] if any is NegQMove
+        * NegPMove as pop/close/")"/0
+            reversed_neg_moves[-1] if any is NegPMove
+
+

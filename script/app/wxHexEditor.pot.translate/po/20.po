@@ -1,0 +1,265 @@
+msgid "WARNING!"
+msgstr ""
+
+#: src/HexDialogs.cpp:3233
+msgid "ERROR!: Disk space is smaller than the image file."
+msgstr ""
+
+#: src/HexDialogs.cpp:3238
+msgid ""
+"WARNING!: Disk space is bigger than the image file. \n"
+"Remaining space will remain untouched."
+msgstr ""
+
+#: src/HexDialogs.cpp:3242
+msgid "Please wait while restoring disk/partition."
+msgstr ""
+
+#: src/HexDialogs.cpp:3244
+msgid "Disk/Partition Restore"
+msgstr ""
+
+#: src/HexDialogs.cpp:3266
+msgid "Restore Speed : "
+msgstr ""
+
+#: src/HexDialogs.cpp:3274
+msgid "Restore operation completed."
+msgstr ""
+
+#: src/HexDialogs.cpp:3294
+msgid "Please wait while erasing disk/partition image."
+msgstr ""
+
+#: src/HexDialogs.cpp:3296
+msgid "Disk/Partition Erase"
+msgstr ""
+
+#: src/HexDialogs.cpp:3329
+msgid "Erase Speed : "
+msgstr ""
+
+#: src/HexDialogs.cpp:3336
+msgid "Erase operation completed."
+msgstr ""
+
+#: src/HexEditor.cpp:145
+msgid "Cannot read hash file!"
+msgstr ""
+
+#: src/HexEditor.cpp:189
+msgid "File Corrupt!"
+msgstr ""
+
+#: src/HexEditor.cpp:189
+msgid "File Hash:"
+msgstr ""
+
+#: src/HexEditor.cpp:192
+msgid "Hash File:"
+msgstr ""
+
+#: src/HexEditor.cpp:193 src/HexEditor.cpp:197
+msgid "Hash Result"
+msgstr ""
+
+#: src/HexEditor.cpp:197
+msgid "File Verified."
+msgstr ""
+
+#: src/HexEditor.cpp:204
+msgid "Critical Error. File pointer is not empty!"
+msgstr ""
+
+#: src/HexEditor.cpp:226 src/HexEditorFrame.cpp:518
+msgid "File cannot open!"
+msgstr ""
+
+#: src/HexEditor.cpp:319
+msgid ""
+"For switching XORView Thru mode, all Undo&Redo buffer will be reset and non-"
+"saved changes will discarded."
+msgstr ""
+
+#: src/HexEditor.cpp:319
+msgid "XORView Thru Warning"
+msgstr ""
+
+#: src/HexEditor.cpp:339
+msgid "File in Read Only mode. Cannot save file."
+msgstr ""
+
+#: src/HexEditor.cpp:339 src/HexEditor.cpp:348 src/HexEditor.cpp:364
+msgid "File Save"
+msgstr ""
+
+#: src/HexEditor.cpp:343
+msgid ""
+"File has some insertion/deletions. You cannot save this file-self (yet). "
+"Please use SaveAs."
+msgstr ""
+
+#: src/HexEditor.cpp:343
+msgid "File Save Error."
+msgstr ""
+
+#: src/HexEditor.cpp:348
+msgid "Do you want to save this file?"
+msgstr ""
+
+#: src/HexEditor.cpp:353
+msgid "File cannot saved. Operation Cancelled"
+msgstr ""
+
+#: src/HexEditor.cpp:353
+msgid "File Save Error"
+msgstr ""
+
+#: src/HexEditor.cpp:364
+msgid "File is not changed. Nothing to save.\n"
+msgstr ""
+
+#: src/HexEditor.cpp:375
+msgid "File save in progress"
+msgstr ""
+
+#: src/HexEditor.cpp:377
+msgid "Saving file"
+msgstr ""
+
+#: src/HexEditor.cpp:394
+msgid "Write Speed : "
+msgstr ""
+
+#: src/HexEditor.cpp:415
+msgid "Do you want to save file?\n"
+msgstr ""
+
+#: src/HexEditor.cpp:415
+msgid "File Has Changed!"
+msgstr ""
+
+#: src/HexEditor.cpp:430
+msgid ""
+"TAG file cannot save to default location.\n"
+"Do you want to Export TAGs file?"
+msgstr ""
+
+#: src/HexEditor.cpp:430
+msgid "TAGs Cannot Saved!!"
+msgstr ""
+
+#: src/HexEditor.cpp:432 src/HexEditorFrame.cpp:592
+msgid "Choose a file for export TAGs"
+msgstr ""
+
+#: src/HexEditor.cpp:442
+msgid "TAGs cannot exported to file : "
+msgstr ""
+
+#: src/HexEditor.cpp:546
+msgid "Enter hex value(s) for fill"
+msgstr ""
+
+#: src/HexEditor.cpp:546
+msgid "Fill Dialog"
+msgstr ""
+
+#: src/HexEditor.cpp:547
+msgid "Fill"
+msgstr ""
+
+#: src/HexEditor.cpp:565
+msgid "Choose a file for saving dump"
+msgstr ""
+
+#: src/HexEditor.cpp:586
+msgid "Dump cannot saved as "
+msgstr ""
+
+#: src/HexEditor.cpp:598 src/HexEditor.cpp:1285
+msgid "Showing Page: %"
+msgstr ""
+
+#: src/HexEditor.cpp:615
+msgid "File cannot read!"
+msgstr ""
+
+#: src/HexEditor.cpp:1000 src/HexEditor.cpp:1292
+msgid "Selected Block: N/A"
+msgstr ""
+
+#: src/HexEditor.cpp:1001 src/HexEditor.cpp:1293
+msgid "Block Size: N/A"
+msgstr ""
+
+#: src/HexEditor.cpp:1049 src/HexEditorFrame.cpp:295 src/HexEditorGui.cpp:91
+#: src/HexEditorGui.cpp:1530
+msgid "Copy"
+msgstr ""
+
+#: src/HexEditor.cpp:1050
+msgid "CopyAs"
+msgstr ""
+
+#: src/HexEditor.cpp:1051 src/HexEditorFrame.cpp:296 src/HexEditorGui.cpp:111
+msgid "Paste"
+msgstr ""
+
+#: src/HexEditor.cpp:1054 src/HexEditorGui.cpp:106
+msgid "Cut"
+msgstr ""
+
+#: src/HexEditor.cpp:1055 src/HexEditorGui.cpp:121
+msgid "Delete"
+msgstr ""
+
+#: src/HexEditor.cpp:1056 src/HexEditorFrame.cpp:300 src/HexEditorGui.cpp:126
+msgid "Insert"
+msgstr ""
+
+#: src/HexEditor.cpp:1065 src/HexEditorGui.cpp:101
+msgid "Save As Dump"
+msgstr ""
+
+#: src/HexEditor.cpp:1066
+msgid "Fill Selecton"
+msgstr ""
+
+#: src/HexEditor.cpp:1068
+msgid "Set Selection Block Start"
+msgstr ""
+
+#: src/HexEditor.cpp:1070
+msgid "Set Selection Block End"
+msgstr ""
+
+#: src/HexEditor.cpp:1072
+msgid "Quick Tag"
+msgstr ""
+
+#: src/HexEditor.cpp:1072
+msgid "Creates empty tag with Random Color."
+msgstr ""
+
+#: src/HexEditor.cpp:1073
+msgid "New Tag"
+msgstr ""
+
+#: src/HexEditor.cpp:1074
+msgid "Tag Edit"
+msgstr ""
+
+#: src/HexEditor.cpp:1286
+msgid "Cursor Offset: "
+msgstr ""
+
+#: src/HexEditor.cpp:1290
+#, c-format
+msgid "Cursor Value: %u"
+msgstr ""
+
+#: src/HexEditor.cpp:1296
+msgid "Selected Block: %"
+msgstr ""
+

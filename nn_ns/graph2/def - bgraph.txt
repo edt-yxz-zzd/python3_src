@@ -1,0 +1,7 @@
+
+see: "def - bidirected graph.txt" :: half_edge
+bgraph = bidirected graph
+    -- this is the base graph
+xgraph <: bgraph
+xgraph = ugraph | dgraph
+

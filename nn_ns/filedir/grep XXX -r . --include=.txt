@@ -1,0 +1,3 @@
+#grep XXX -r . --include=*.py
+
+(printf "\"%s\"\0" "class \|__slots__ =" && find -name "*.py" -and -not -path *-* -print0) | xargs -0 grep

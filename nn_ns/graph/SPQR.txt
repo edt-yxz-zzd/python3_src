@@ -1,0 +1,98 @@
+﻿
+Let G=(V,E) be a biconnected graph(undirected, multiedges, without self-loops), 
+Let T is a spanning tree of G, ordering children of each node by (lowpt1, lowpt2).
+relabel vertices of T in reversed postfix order. 
+so root be 0, farest first descendant of root that is left corner be |V|-1.
+Let P be a palm tree of (G,T), that is T equits back edges(that is front edges).
+
+tree edge ->; back edge ~>;
+-*-> descendants(maybe self); 
+-+-> proper descendants; 
+-+[0]-> first descendants(yeah, proper!);
+~0~> lowpt1(maybe self);
+~1~> lowpt2(maybe self);
+first child of x: x[0]
+farest first descendant of x: x[0+]
+
+
+Let a, b be two vertices in G with a < b. 
+Then {a, b} is a separation pair if and only if one of the following 
+conditions holds.
+Type-1 Case: (subtree-case)(cut one subtree of b)
+    There are distinct vertices r,s, |{r,s,a,b}| == 4, b->r
+    such that lowpt1(r)=a, lowpt2(r)>=b  // so cut a,b, tree(r) move out
+              s is not a descendant of r // so cut a,b, there at least two subgraph
+Type-2 Case: (middle-case)(slice middle section and some subtrees of b)
+    exists r: s.t 0-+-> a -> r -+[0]-> b 
+            // root section [0:a), nonempty +
+            // middle section [r:b), nonempty + // otherwise be Type-1
+            // right subtrees of b (b:r[0+]]
+            // left subtrees section (r[0+]:b[0+]]
+            // right subtrees and middle section move out
+            // why [0] in r-+->b???
+            // if not first descendant, assume r-+->b'
+            // then middle will be larger than [r:b')
+            // middle contains left part of r-+->b' in which contains b
+            // since lowpt1(b) <= lowpt(b'), max possible of a reduce to lowpt1(b)
+            // after all, we go back to case of first descendant
+    each r <= x < b, x~>y ==>> y >= a (middle back to middle)
+    each a < y < b, b->w-*->~>y ==>> lowpt1(w) >= a (subtree BIND to middle or root)
+        a subtree of b rooted by w should
+        1) lowpt1(w) >= b, impossible since biconnected, otherwise b a cut pt. 
+        2) lowpt1(w) == a, lowpt2(w) >= b, Type-1
+        3) lowpt1(w) > a or lowpt1(w) == a and lowpt2(w) < b, bind to middle section: back to self or to middle
+        4) lowpt1(w) < a and all w[-*->~>] <= a, bind to root section: back to self or to root
+        5) lowpt1(w) < a and exists w[-*->~>] > a, bind root and middle, so NOT Type-2
+
+Multiple Edge Case: (multiedge-case)
+    (a; b) is a multiple edge of G and G contains at least four edges.
+
+
+
+/////////////////////////////////
+Let path(b) be (y[i!=0]->z|0)-*[0]->b-*[0]->~>x or b~>x if b=y[0]
+
+middle-case:
+    possible_b2:
+    min_a2(possible_b2) = head(path(possible_b2))
+    if possible_b2->w2:
+        let w2 bind to middle:
+            max_a2(w2) = lowpt1(w2)
+            min_b2(w2) = lowpt2(w2) + 1
+            if min_b2 <= possible_b2 and min_a2 <= max_a2:
+                M2 = slice(
+                            subtrees = {tree(w2)}, 
+                            min_a2 = min_a2(possible_b2), 
+                            max_a2(w2), 
+                            possible_b2)
+                
+            
+    union:
+    if possible_b2->k2:
+        if k2 back to M2:
+            update M2:
+            max_a2 = min(max_a2, max_a2(k2))
+            subtrees += {tree(k2)}
+    if M2 back to root section:
+        update M2:
+        max_a2 = min lowpt1(x) for x in M2
+    NOTE:
+    decrease max_a2 in M2 will lead to more subtrees of possible_b2 back to M2
+    and new vtcs in M2 will back to root again.
+    subtrees of possible_b2 back to only path(possible_b2)
+    on PATH, records all back edges to each node of it.
+        records min lowpt1(head(back-edge))
+        records min lowpt1(node[i!=0])
+        
+    
+
+
+
+
+
+
+
+
+
+
+

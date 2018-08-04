@@ -1,0 +1,1 @@
+py LifeGameGui.py %* >> output.txt

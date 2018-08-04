@@ -1,0 +1,12 @@
+
+
+ichar<array> - array idx as char
+    i.e. treat array idx as char
+
+ichar<array> =[def]= array[ichar:]
+[icharA<array> < icharB<array>] =[def]= [array[icharA] < array[icharB]]
+
+
+isuffix(ichar<array>) = array[ichar:]
+
+

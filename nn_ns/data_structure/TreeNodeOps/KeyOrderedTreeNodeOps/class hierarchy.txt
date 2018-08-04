@@ -1,0 +1,15 @@
+
+'ITreeNodeRelated
+    ITotalOrderingOps
+
+    'ITreeNodeOps
+        'IOrientedTreeNodeOps
+            IKeyOrderedTreeNodeOps
+                IKeyOrderedTreeNodeOps__constructor__from_sorted_entities
+                IKeyOrderedTreeNodeOps__num_entities_of_subtree
+
+                IKeyOrderedUnbalancedMultiWayTreeNodeOps
+                    <<== 'IUnbalancedMultiWayTreeNodeOps
+                    IKeyOrderedBinaryTreeNodeOps
+                        <<== 'IBinaryTreeNodeOps
+

@@ -1,0 +1,48 @@
+
+ERROR
+    cannot merge!!!!!!
+
+
+SA =[def]= suffix_array<array> = sorted(range(L), key=\i->array[i:])
+    where
+        L = len(array)
+
+# when element of array is UInt
+# calc UIntSA:
+def uint_array_to_suffix_array(alphabet_size, string):
+    0) handle basic case
+    1) recur calc odd position suffix array SA_ODD
+    2) calc even position suffix array SA_EVEN by radix_sort key=\i0->(string[2*i0], inv<SA_ODD>[i])
+    3) merge SA_EVEN and SA_ODD # like merge_sort
+
+def uint_array_to_suffix_array(alphabet_size, string):
+    assert all(0 <= ch < alphabet_size for ch in string)
+    L = len(string)
+    if L == 0: return []
+    # optional detect whether all chars are different
+    #   and use one bucket_sort to do the work
+    if optional:
+        ...
+
+    #BEGIN make_array_idx2group_idx of odd position pairs
+    # by sort may exclude last odd idx if it is the last idx
+    #   i.e. sort pairs; no singleton
+    key = \i1->string[i:i+2]
+    tmp = radix_sort([alphabet_size, alphabet_size], range(1,L-1, 2), key=key)
+    may_last_i1 = [L-1] if even(L) and L > 0 else []
+    Lx = L//2 # len of odd_positon_idx2group_idx
+    odd_positon_idx2group_idx = [None] * Lx
+    kgs = groupby(chain(may_last_i1, range(1,L-1, 2)), key=key)
+    group_idx = -1
+    for group_idx, (_, g) in enumerate(kgs):
+        for odd in g:
+            assert odd_positon_idx2group_idx[odd] is None
+            odd_positon_idx2group_idx[odd] = group_idx
+    group_idx__upper_bound = group_idx+1
+    assert all(group_idx is not None for group_idx in odd_positon_idx2group_idx)
+    assert 0 <= group_idx__upper_bound <= Lx
+    assert 0 <= group_idx__upper_bound <= alphabet_size**2 + 1
+    #END make_array_idx2group_idx of odd position pairs
+
+    SA_ODD = recur this (group_idx__upper_bound, odd_positon_idx2group_idx)
+

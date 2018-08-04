@@ -1,0 +1,32 @@
+
+1) typing!!
+2) with parameters
+    e.g.
+        @all_parameter_domains@
+            Bool = True | False
+            Mod3 = 0 | 1 | 2
+        @all_global_parameters@
+            Odd : Bool      # name and domain
+            K = 2 : Mod3    # name and default value and domain
+        S :: @nonterminal@
+        S = A(False) B(&Odd) C C(True) A(_) A(Odd=_)
+        A :: local Odd -> @nonterminal@ # force to offer a value, v.s. C
+        A(Odd)
+        A True = ...
+        A _ = ... # otherwise
+        B :: new Odd -> @nonterminal@ # will affect later nonterminal
+        B(&Odd) = ...(Odd=...)...
+        C :: global Odd -> @nonterminal@ # will read global Odd if no input
+        C(?Odd)
+        C True = ...
+        C _ = ...
+    parse_main = parse(S)
+    def parse(nonterminal, *kwargs):
+        if nonterminal == 'S':
+            parse('A', Odd=False, *(kwargs\\Odd)) >> parse('B',*kwargs)
+        elif nonterminal = 'A':
+            odd = kwargs['Odd']
+            if odd: ...
+            else:...
+        el...
+

@@ -1,0 +1,14 @@
+
+
+set of all dict_keys SHOULD BE nonemtpy
+(Eq dict_value, Ord dict_key) => Map dict_key dict_value
+
+when two dict_keys are neighbours(i.e. succ(k1) == k2), dict_values are equal, then we merge them into (block_key, dict_value)
+
+block_key = range = (left_bound, right_bound)
+    left_bound = TheKey key | More key | -inf
+    right_bound = TheKey key | Less key | +inf
+        # More/Less/-inf/+inf are optional
+
+
+

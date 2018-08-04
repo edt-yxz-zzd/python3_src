@@ -1,0 +1,66 @@
+
+see: "def - bidirected graph.txt"
+
+
+aedge = access edge :: AEdge
+exist and unique
+
+
+v -[aedge]- u
+v -[aedge]- v
+v -[aedge]- None
+None-[aedge]-None
+
+
+# implicit_graph may not have vertex_eq, hence may not have aedge_eq
+# explicit_graph may not have aedge_eq, too!
+#   e.g. (vtc, edges :: UnstableReIter (Vtx, Vtx)) as multiedge ugraph
+#       unstable means the order of each iterate pass
+#   e.g. (vtc, vtx2neighbors :: {vtx:[vtx]}) as multiedge ugraph
+#       if we update to (vtc, vtx2neighbors :: {vtx:[(vtx,idx)]})
+#           then we have aedge=(u, idx_u2v, idx_v2u, v)
+bgraph.aedge_eq(aedgeA, aedgeB)
+
+# some graph (e.g. dgraph), aedge may not access to both ends
+bgraph.aedge2unstable_iter_at_most_two_vertices(aedge)
+    # may duplicated
+    (v,u)
+    (v,v)
+    (v,)
+    ()
+
+bgraph.is_ledge(aedge)      # is_loose_edge
+bgraph.is_ehedge(aedge)
+bgraph.is_ihedge(aedge)
+    bgraph.is_hhedge(aedge) # is_half_edge # hhedge not hedge!!!
+bgraph.is_oedge(aedge)      # is_extraverted_edge
+bgraph.is_uedge(aedge)
+bgraph.is_dedge(aedge)
+    bgraph.is_fedge(aedge)  # is_ordinary_edge
+bgraph.is_loop(aedge)
+
+bgraph.vtx2unstable_iter_hhedges(v)
+bgraph.vtx2unstable_iter_ledges(v)
+bgraph.vtx2unstable_iter_loops(v)
+bgraph.outgo_vtx2unstable_iter_nonloop_fedges(v)
+bgraph.income_vtx2unstable_iter_nonloop_fedges(v)
+    bgraph.vtx2unstable_iter_nonloop_fedges(v)
+        bgraph.vtx2unstable_iter_fedges(v)
+            bgraph.vtx2unstable_iter_aedges(v)
+
+
+
+xgraph.aedge2unstable_iter_two_vertices(aedge) # may duplicated
+xgraph.aedge2unstable_iter_one_or_two_vertices(aedge) # no duplicate
+
+
+dgraph.aedge2src_vtx(aedge)
+dgraph.aedge2dst_vtx(aedge)
+
+
+
+
+see also:
+    "def - hedge.txt"
+
+

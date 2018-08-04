@@ -1,0 +1,64 @@
+
+SA = suffix array
+
+SA<array> :: [ArrayBeginIdx]
+SA<array> = sorted(range(L), key=lambda i: array[i:])
+  where
+    L = len(array)
+    nonempty_suffices = [array[i] for i in range(len(array))]
+
+    assert len(nonempty_suffices) == L
+    ArrayBeginIdx = UInt[0..L-1] # may have no instances
+    assert len(SA<array>) == L
+
+    see:
+        # both def are the same
+        [Range_Minimum_Query_2007]A_New_Succinct_Representation_of_RMQ_Information_and_Improvements_in_the_Enhanced_Suffix_Array.pdf
+            :: SA
+
+        [String_Suffix_Tree_2003]Simple_Linear_Work_Suffix_Array_Construction.pdf
+            :: SA
+
+
+#####################
+example:
+    [Range_Minimum_Query_2007]A_New_Succinct_Representation_of_RMQ_Information_and_Improvements_in_the_Enhanced_Suffix_Array.pdf
+        [page7] Fig. 3. The suffix tree (top) and the suffix- and LCP-array (bottom) for string t = "aababaa$".
+    bug: the suffix tree was wrong!
+        suffix_tree_root
+            -> $
+            -> a
+                ...
+            -> b # ERROR here, should be "ba"
+                ...
+
+string = rex'[^\0]*\0'
+or string = ([PInt], 0)
+    i.e. end by a special char which is smaller than others
+
+assert len(string)
+assert all(string[-1] < c for c in string[:-1])
+
+suffix_array = sort(range(len(string)), key=lambda i: string[i:])
+    # NOTE: len(string[i:]) > 0
+    string = 'aababaa$'
+    #suffix_array = suffix_begin_array = [8, 7, 6, 1, 4, 2, 5, 3]
+    suffix_array = suffix_begin_array =  [7, 6, 5, 0, 3, 1, 4, 2]
+    #suffix_string_array = [$, a$, aa$, aababaa$, abaa$, ababaa$, baa$, babaa$]
+    suffix_tree =
+        ''
+            -> $,7                  == "aababaa$"[7:]
+            -> a
+                -> $,6              == "aababaa$"[6:]
+                -> a
+                    -> $,5          == "aababaa$"[5:]
+                    -> babaa$,0     == "aababaa$"[0:]
+                -> ba
+                    -> a$,3         == "aababaa$"[3:]
+                    -> baa$,1       == "aababaa$"[1:]
+
+            -> ba
+                -> a$,4             == "aababaa$"[4:]
+                -> baa$,2           == "aababaa$"[2:]
+
+

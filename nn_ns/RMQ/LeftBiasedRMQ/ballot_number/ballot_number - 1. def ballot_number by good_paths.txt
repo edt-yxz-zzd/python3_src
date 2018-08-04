@@ -1,0 +1,70 @@
+-- C(n,i) = n choose i
+------------------- def ballot_number by good_paths
+def ballot_number by good_paths:
+    ballot(p,q)
+        =[def]= number of good path from (p,q) to (0,0)
+        = |good_paths((p,q), (0,0))|
+        # move = (-1,0) | (0,-1)
+
+    good_paths :: ((int, int), (int, int)) -> {[(int, int)]}
+    good_paths, bad_paths, paths
+        :: (Pt, Pt) -> {[Pt]} where Pt = (Int, Int)
+        # :: (from, to) -> Set path
+        # :: (from, to) -> Set [point]
+
+    good_paths((p,q),(x0,y0)) =[def]=
+        = {(p,q):path | 0<=p-x0<=q-y0, p>x0, q>=y0, path <- good_paths((p-1,q),(x0,y0))}
+        + {(p,q):path | 0<=p-x0<=q-y0, p>=x0, q>y0, path <- good_paths((p,q-1),(x0,y0))}
+        + {[(x0,y0)] | p==x0, q==y0}
+        # good_paths == {} if not (0<=p-x0<=q-y0)
+    paths((p,q),(x0,y0)) =[def]=
+        = {(p,q):path | p>x0, q>=y0, path <- paths((p-1,q),(x0,y0))}
+        + {(p,q):path | p>=x0, q>y0, path <- paths((p,q-1),(x0,y0))}
+        + {[(x0,y0)] | p==x0, q==y0}
+        # paths == {} if not (0<=p-x0 and 0<=q-y0)
+
+    bad_paths((p,q),(x0,y0)) =[def]=
+        | 0<=p-x0<=q-y0 = paths((p,q),(x0,y0)) - good_paths((p,q),(x0,y0))
+        | otherwise = {}
+
+    * any bad_path bp from (p>=x0,q>=y0&&p-x0<=q-y0) to (x0,y0)):
+        must cross or touch line "x-x0=y-y0+1"
+        let pt = the nearest point on bad_path bp to (x0,y0)
+        let us reflect partial bad_path section: bp[pt..(x0,y0)]
+            then we get a path from (p,q) to (x0+1,y0-1)
+            # (x0,y0) -> {(x0,y0-1),(x0+1,y0)} -> (x0+1,y0-1)
+    * any path ph from (p>=x0,q>=y0&&p-x0<=q-y0) to (x0+1,y0-1):
+        must cross line "x-x0=y-y0+1"
+        let pt = the nearest point on path ph to (x0+1,y0-1)
+        let us reflect partial path section: ph[pt..(x0+1,y0-1)]
+            then we get a bad_path from (p,q) to (x0,y0)
+    ==>> [bad_path from (p>=x0,q>=y0&&p-x0<=q-y0) to (x0,y0))
+            <==> path from (p>=x0,q>=y0&&p-x0<=q-y0) to (x0+1,y0-1)]
+
+    |paths((p,q),(x0,y0))| =
+        | p-x0>=0 && q-y0>=0 = C(p-x0 + q-y0, p-x0)
+        | otherwise = 0
+    |bad_paths((p,q),(x0,y0))|
+        = [0<=p-x0<=q-y0]*|paths((p,q),(x0+1,y0-1))| =
+        | 0<=p-x0<=q-y0 = C(p-x0 + q-y0, p-x0-1)
+        | otherwise = 0
+    |good_paths((p,q),(x0,y0))|
+        = [0<=p-x0<=q-y0]*|paths((p,q),(x0,y0))| - |bad_paths((p,q),(x0,y0))| =
+        | 0<=p-x0<=q-y0 = C(p-x0 + q-y0, p-x0) - C(p-x0 + q-y0, p-x0-1)
+                            = C(P+Q,P)-C(P+Q,P-1)
+                            = (P+Q)!/P!/Q! - (P+Q)!/(P-1)!/(Q+1)!
+                            = (P+Q)!/P!/(Q+1)! * (Q+1 - P)
+                            = C(P+Q,P)/(Q+1) * (Q+1 - P)
+                            = C(P+Q,P) * (Q+1 - P)/(Q+1)
+                            # P=p-x0, Q=q-y0
+        | otherwise = 0
+
+
+    ballot(P,Q) = |good_paths((p,q),(x0,y0))|
+        | 0<=P<=Q   = C(P+Q,P) * (Q+1 - P)/(Q+1)
+        | otherwise = 0
+            where
+                P=p-x0
+                Q=q-y0
+
+

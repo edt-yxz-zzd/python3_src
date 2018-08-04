@@ -1,0 +1,203 @@
+mapping_ops
+
+
+in this file, "XXX" means vertex/aedge/hedge/...
+    require Graph_XXX_eq since XXX is mapping key
+    class Graph_XXX_eq
+        .XXX_eq(xxx, xxx)
+
+
+Maybe Value = Nothing | Value
+mapping example:
+    full_mapping:
+        [Value]                 for XXXInverseIndexableGraph
+        {XXX:Value}             for hashable XXX
+        space_key               if XXX is FreeSpace
+        defaultdict<XXX,Value>  for hashable XXX
+            compare:
+                [[] for _ in iter_full_keys_XXX()]
+                defaultdict(list)
+    partial_mapping:
+        # pseudo_partial_mapping = (full_mapping, Nothing)
+        ([Maybe Value], Nothing) for XXXInverseIndexableGraph
+            donot know number of partial keys
+
+        # true_partial_mapping
+        ({XXX:Value}, Nothing)  for hashable XXX
+            know number of partial keys
+        (space_key, Nothing)    if XXX is FreeSpace
+            donot know number of partial keys
+
+
+    class FreeSpace
+        .weakref_dict :: WeakKeyDictionary
+    class ExplicitGraph(FiniteGraph)
+    class XXXIndexableGraph(Graph_XXX_eq, ExplicitGraph)
+        .idx2XXX(idx) -> XXX # idx:[0..size-1]
+    class XXXInverseIndexableGraph(XXXIndexableGraph)
+        .index_of_XXX(xxx) -> [0..size-1]
+
+
+mapping_ops usage:
+    mapping_ops.weakref_dict_of_XXX(xxx)
+        return xxx.weakref_dict
+    mapping_ops.iter_full_keys_XXX() -> Iter XXX
+
+    # constructor
+    mapping_ops.new_full_mapping_XXX(key2value) -> full_mapping<XXX, Value>
+        list(map(key2value . index_of_XXX, range(size(XXX))))
+        {xxx: key2value(xxx) for xxx in mapping_ops.iter_full_keys_XXX()}
+        space_key = object():
+            for xxx in mapping_ops.iter_full_keys_XXX():
+                mapping_ops.weakref_dict_of_XXX(xxx)[space_key] = key2value(xxx)
+    mapping_ops.new_full_mapping_from_XXX_factory(factory) -> full_mapping<XXX, Value>
+        # diff with new_full_mapping_XXX: allow defaultdict
+        for list/dict/space_key:
+            new_full_mapping_XXX(lambda xxx: factory())
+        defaultdict(factory)
+
+    mapping_ops.new_partial_mapping_XXX(Nothing)
+        [Nothing] * size(XXX)
+        ({}, Nothing)
+        (object(), Nothing)
+
+    # access
+    mapping_ops.full_mapping_at_XXX(fm, xxx) -> Value
+        if xxx is not in iter_full_keys_XXX: undefined # raise LookupError
+        ls[index_of_XXX(xxx)]                       if fm is list
+        d[xxx]                                      if fm is dict/defaultdict
+        mapping_ops.weakref_dict_of_XXX(xxx)[sp]    if fm is space_key
+    mapping_ops.partial_mapping_get_XXX(pm, xxx) -> Maybe Value
+        if xxx is not in iter_full_keys_XXX: undefined # raise LookupError
+        ls[index_of_XXX(xxx)]               if pm is (list, Nothing)
+        d.get(xxx, Nothing)                 if pm is (dict, Nothing)
+        mapping_ops.weakref_dict_of_XXX(xxx).get(sp, Nothing)
+                                            if pm is (space_key, Nothing)
+    mapping_ops.partial_mapping_get_Nothing_XXX(pm) -> Nothing
+        pm[1]
+
+    # access all
+    #   only partial_mapping
+    mapping_ops.partial_mapping_iter_partial_items_filterout_all_Nothing(pm)
+        -> Iter (Key, Value)
+        ((xxx, val) for xxx, val in mapping_ops.partial_mapping_iter_partial_items_filterout_some_Nothing(pm) if val is not Nothing)
+    mapping_ops.partial_mapping_iter_partial_items_filterout_some_Nothing(pm)
+        -> Iter (Key, Maybe Value)
+        # really filterout Nothing
+        d.items()
+
+        # donot filterout
+        ((idx2XXX(i), ls[i]) for i in range(size(XXX)))
+        ((xxx, mapping_ops.weakref_dict_of_XXX(xxx).get(sp, Nothing))
+            for xxx in mapping_ops.iter_full_keys_XXX())
+
+    # set
+    mapping_ops.full_mapping_overwrite_at_XXX(fm, xxx, val)
+        if xxx is not in iter_full_keys_XXX: undefined # raise LookupError
+        ls[index_of_XXX(xxx)] = val                 if fm is list
+        d[xxx] = val                                if fm is dict/defaultdict
+        mapping_ops.weakref_dict_of_XXX(xxx)[sp] = val  if fm is space_key
+    mapping_ops.partial_mapping_modify_item_XXX(pm, xxx, maybe_val)
+        # insert new key | overwrite old key | del old key
+        # if maybe_val is Nothing
+        #   implemented: insert Nothing | overwrite Nothing | del old key
+        ls[index_of_XXX(xxx)] = maybe_val     if pm is (list, Nothing)
+
+        maybe: del d[xxx]/d.discard(xxx) if Nothing
+        d[xxx] = maybe_val                        if pm is (dict, Nothing)
+
+        maybe: del mapping_ops.weakref_dict_of_XXX(xxx)[sp] or discard if Nothing
+        mapping_ops.weakref_dict_of_XXX(xxx)[sp] = maybe_val
+                                            if pm is (space_key, Nothing)
+
+    # clear
+    #   only partial_mapping
+    mapping_ops.partial_mapping_clear_XXX(pm)
+        ls[:] = repeat(Nothing, size(XXX))
+        d.clear()
+        del mapping_ops.weakref_dict_of_XXX(xxx)[sp]
+
+
+
+
+
+
+
+
+
+#################### here the final definition #######################
+MappingOpsRelated
+MappingOps(MappingOpsRelated)
+OptionalMappingOps(MappingOps)
+    # optional
+    weakref_dict_of(key) -> WeakKeyDictionary<Key, ...>
+
+KnownFullKeys(MappingOps)
+    # require
+    iter_full_keys()
+    full_size()
+CommonMappingOps(KnownFullKeys)
+FullMappingOps(CommonMappingOps)
+    new_full_mapping(key2value)
+    new_full_mapping_from_factory(value_factory)
+
+    at(fm, key)->Value
+    overwrite_at(fm, key, value)
+    iter_full_items(fm) -> Iter (Key, Value)
+
+PartialMappingOps(CommonMappingOps)
+    new_partial_mapping(may_key2value)
+    new_partial__mapping_from_factory(value_factory)
+
+    get(pm, key) -> Maybe Value
+    get_Nothing(pm) -> Nothing
+
+    iter_partial_items_filterout_all_Nothing(pm) -> Iter (Key, Value)
+    iter_partial_items_filterout_some_Nothing(pm) -> Iter (Key, Maybe Value)
+    iter_partial_values_filterout_all_Nothing(pm) -> Iter Value
+    iter_partial_values_filterout_some_Nothing(pm) -> Iter (Maybe Value)
+    iter_partial_keys_filterout_all_Nothing(pm) -> Iter Key
+        # O(full_size)
+    iter_partial_keys_filterout_some_Nothing(pm) -> Iter Key
+        # O(full_size)
+    iter_full_may_items(pm) -> Iter (Key, Maybe Value)
+        # O(full_size)
+
+    partial_size_filterout_all_Nothing(pm) -> UInt
+        # O(full_size)
+    unstable_partial_size_upper_bound(pm) -> UInt
+        # O(1)
+        # default to full_size(pm)
+        # not the same as len(iter_partial_keys_filterout_some_Nothing(pm))
+
+    modify_item(pm, key, maybe_val)
+    clear(pm)
+KnownPartialSize(PartialMappingOps)
+    exact_partial_size(pm) # <==> partial_size_filterout_all_Nothing(pm)
+        # O(1)
+KnownPartialKeys(PartialMappingOps)
+    iter_partial_items(pm)
+    iter_partial_values(pm)
+    iter_partial_keys(pm) # <==> iter_partial_keys_filterout_all_Nothing(pm)
+        # O(exact_partial_size)
+        # maynot know partial_size; e.g. double_linked_list
+
+exact??
+PartialMappingOps2FullMappingOps
+
+
+
+
+
+GraphRelated
+GraphOps(GraphRelated)
+    get_graph_mapping_ops_collection(g) -> GraphMappingOpsCollection
+GraphMappingOpsCollection(GraphRelated)
+    # correspond to a graph
+    # e.g. graph_ops.get_graph_mapping_ops_collection(g) -> GraphMappingOpsCollection
+HasFullMappingOpsXXX(GraphMappingOpsCollection)
+    get_full_mapping_ops_XXX() -> FullMappingOps<XXX,Value>
+HasPartialMappingOpsXXX(GraphMappingOpsCollection)
+    get_partial_mapping_ops_XXX() -> PartialMappingOps<XXX,Value>
+
+

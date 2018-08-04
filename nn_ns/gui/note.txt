@@ -1,0 +1,2 @@
+grep -r C:\Python33\tcl -l "<Enter>"
+will get good info

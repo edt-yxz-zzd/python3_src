@@ -1,0 +1,4 @@
+
+SA<array> where array :: Ord a => [a]
+UIntSA<array> where array :: [UInt[0..alphabet_size-1]]
+

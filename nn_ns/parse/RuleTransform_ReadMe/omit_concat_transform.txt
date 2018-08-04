@@ -1,0 +1,30 @@
+
+normal concat : [=] that is =
+    xx [=] y y z t
+left omit concat : [?=]
+    right island
+right : [=?]
+    left island
+left right : [?=?]
+    middle island
+multi_island : regex"\[\??=(\?=)*\??\]"
+
+right_island<> =
+right_island<a, args...> :
+    big [=] a, args...
+    small [?=] args...
+    
+left_island<> =
+left_island<args..., a> :
+    big [=] args..., a
+    small [=?] args...
+
+middle_island<> =
+middle_island<a> : left_island<a>
+middle_island<a, args..., b> :
+    big [=] a, args..., b
+    left [?=?] a, args...
+    right [?=?] args..., b
+
+
+

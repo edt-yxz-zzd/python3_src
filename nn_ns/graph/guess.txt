@@ -1,0 +1,22 @@
+triconnected planar graph is a polyhedron? although, automophism groups are different.
+
+I proved that every cubic triconnected planar graph except K4 can be reduce to another cubic triconnected planar graph by erase some a edge.
+prove: 
+    transform: exists two such edges and their ends are different.
+    basic case: 
+        num_vertices = 6, triangular-prism, one edge in top triangle and another in bottom one.
+        since if exists a triangle face, one edge of it is fine.
+    induction:
+        if exists two triangle faces, they can't have common edges or vertices.
+        there are at least 3 edges that are not edges of triangle faces.
+        in those edges, if we find a edge that make graph biconnected if be erased.
+        then the remain subgraph can be decomposed to SPQR-tree which has two leaves.
+        S nodes of 4-cycle connect other nodes in that tree.
+        choose two real parallel edges of one such S node.
+        those two edges plus the edge which detriconnects original graph are 3-cut-edges.
+        they seperate the graph in two subgraphs.
+        we can replace one subgraph by a virtual vertex at one time.
+        then we can two new smaller graph which is triconnected and planar.
+        beside the 3-cut-edges, each new graph has a edge we want by induction.
+        so the original graph has two edges we find.
+    

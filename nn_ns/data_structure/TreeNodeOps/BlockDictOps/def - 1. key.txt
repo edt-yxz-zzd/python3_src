@@ -1,0 +1,10 @@
+
+key :: Key
+key == dict_key = basic_key
+total ordering:
+    total_total_key_ops = total_key_ops :: ITotalOrderingOps
+
+
+block_dict_key_ops :: IBlockDictKeyOps
+    wrap key into key_ex
+

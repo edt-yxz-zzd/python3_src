@@ -1,0 +1,36 @@
+if &cp | set nocp | endif
+let s:cpo_save=&cpo
+set cpo&vim
+map! <S-Insert> *
+vmap  "*d
+vmap gx <Plug>NetrwBrowseXVis
+nmap gx <Plug>NetrwBrowseX
+vnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
+nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())
+vmap <C-Del> "*d
+vmap <S-Del> "*d
+vmap <C-Insert> "*y
+vmap <S-Insert> "-d"*P
+nmap <S-Insert> "*P
+let &cpo=s:cpo_save
+unlet s:cpo_save
+set autoindent
+set backspace=indent,eol,start
+set directory=E:/temp_output/vim_swap_file
+set encoding=utf-8
+set expandtab
+set fileencodings=utf-8,gbk,ucs-bom,cp936,prc,chinese,gb18030,utf-16le
+set guifont=KaiXinSong:h24,HanaMinA:h24,HanaMinB:h12,unifont:h24,KaiXinSong:h24,Anonymous_Pro:h24:cANSI
+set helplang=Ch
+set hlsearch
+set listchars=tab:>-,trail:-,eol:$
+set ruler
+set shiftwidth=4
+set showbreak=........
+set smarttab
+set softtabstop=4
+set tabstop=7
+set termencoding=utf-8
+set wildignore=*.pyc
+set window=18
+" vim: set ft=vim :

@@ -1,0 +1,7 @@
+HC parser - write a new version using PLY
+
+to fix bug in compiler: Note that \b is used to represent word boundaries, and means ¡°backspace¡± only inside character classes
+
+
+
+std encoding name in html // utf_16_le is invalid!!

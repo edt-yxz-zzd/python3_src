@@ -1,0 +1,109 @@
+characters of nature languages are not easy to be recognized since the size, the direction, the fonttype and the similar ones.
+use simple planar graph to represent information.
+for error tolerant, degree 1&2 is forbidden, large degree leads to small angle and is hard recovered.
+choose cubic graph, and then orthogonal drawings benefited.
+
+because graph can be decomposed into BC/SPQR-tree, we get 3-connected components.
+since 3-connected planar graph has only one embedding(or flip), use them as characters.
+there are infinite triconnected cubic planar graphs, so we impose some restrictions on them.
+should be Hamiltonian, to make it easy: let G.order<38, total 66499743932(36 bit)
+    Extended LCF notation: the representation(not unique) of cubic graphs that are Hamiltonian
+total number of characters >= 256 (8bit) => order <= 16
+
+
+character : triconnected cubic planar graph with order <= 16, total 306 (151 has non-trivial autoisomorphism)
+
+
+
+The numbers of connected cubic nonhamiltonian graphs on , 12, ... are 2, 5, 35, 219, 1666, ... (Sloane's A164919)
+Tutte (1956) A 4-connected planar graph has a Hamiltonian cycle.
+[1986]The smallest non-hamiltonian 3-connected cubic planar graphs have 38 vertices
+
+[Planarity_Testing_2004]On_the_Cutting_Edge_Simplified_O(n)_Planarity_by_Edge_Addition[GOOD]
+[planar_graph][grid_embedding][1989]A Linear-time Algorithm for Drawing a Planar Graph on a Grid[good]
+[1993]Algorithms for drawing planar graphs
+    BC-tree  SPQR-tree
+    Triconnecting While Minimizing The Maximum Degree
+    Triangulating While Minimizing the Maximum Degree
+    Convex Drawings
+    Orthogonal Drawings of 3-Planar Graphs
+    Rectangular Duals / Visibility Representations
+
+[2001]A linear time implementation of SPQR-trees
+[1973]Dividing a Graph into Triconnected Components
+
+A V log V algorithm for isomorphism of triconnected planar graphs
+[HW74] J. E. Hopcroft and J. K. Wong. Linear time algorithm for isomorphism of planar graphs (preliminary report). In STOC ¡¯74: Proceedings of the sixth annual ACM sym-posium on Theory of computing, pages 172¨C184, 1974
+
+
+plantri45   Brendan McKay 
+plantri -a [-u] [-V] -d -v -c3m3 <cubic_graph_order>d [output_file]
+   ----------------------------------------------------------------
+
+  3-connected planar triangulations (plantri).
+
+   nv  ne  nf            all            O-P  
+             
+    4   6   4 |              1              1
+    5   9   6 |              1              1
+    6  12   8 |              2              2
+    7  15  10 |              5              6
+    8  18  12 |             14             17
+    9  21  14 |             50             73
+   10  24  16 |            233            389
+   11  27  18 |           1249           2274
+   12  30  20 |           7595          14502
+   13  33  22 |          49566          97033
+   14  36  24 |         339722         672781
+   15  39  26 |        2406841        4792530
+   16  42  28 |       17490241       34911786
+   17  45  30 |      129664753      259106122
+   18  48  32 |      977526957     1954315346
+   19  51  34 |     7475907149    14949368524
+   20  54  36 |    57896349553   115784496932
+   21  57  38 |   453382272049   906736988527
+   22  60  40 |  3585853662949  7171613842488
+   23  63  42 | 28615703421545 57231089062625
+
+
+
+n = 4, total = 1, 1 bit
+n = 6, total = 2, 2 bit
+n = 8, total = 4, 3 bit
+n = 10, total = 9, 4 bit
+n = 12, total = 23, 5 bit
+n = 14, total = 73, 7 bit
+n = 16, total = 306, 9 bit
+n = 18, total = 1555, 11 bit
+n = 20, total = 9150, 14 bit
+n = 22, total = 58716, 16 bit
+n = 24, total = 398438, 19 bit
+n = 26, total = 2805279, 22 bit
+n = 28, total = 20295520, 25 bit
+n = 30, total = 149960273, 28 bit
+n = 32, total = 1127487230, 31 bit
+n = 34, total = 8603394379, 34 bit
+n = 36, total = 66499743932, 36 bit
+n = 38, total = 519882015981, 39 bit
+n = 40, total = 4105735678930, 42 bit
+n = 42, total = 32721439100475, 45 bit
+
+
+decode
+recognize the graph from picture(or grid)
+decompose graph into BC/SPQR-tree
+canonize R and identify characters
+organize characters to respect the tree structure
+
+
+encode
+text stream => BC/SPQR-tree
+BC/SPQR-tree => graph
+graph => embedding
+embedding => ordering
+BC/SPQR-tree + ordering + embedding => picture
+
+
+
+
+

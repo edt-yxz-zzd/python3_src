@@ -1,0 +1,174 @@
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1678
+msgid“复位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1679
+msgid“将颜色值重置为默认值”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1692
+msgid“语言：
+msgstr“”
+
+＃：src / HexEditorGui.cp：1707
+msgid“字符编码系列：”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1722
+msgid“字符编码：”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1731 src / HexPanels.cpp：215
+msgid“大小：
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1742
+msgid“自定义十六进制格式”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1750
+msgid“xx”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1751
+msgid“xxxx”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1752
+msgid“xx xx xx xx xx xx xx xx”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1753
+msgid“xxxx xxxx xxxx xxxx”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1755
+msgid“递归自定义十六进制格式模式”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1759
+msgid“启用”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1768
+msgid“每行字节数限制”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1785
+msgid“如果检测到标签，则显示自动显示标签面板”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1849 src / HexEditorGui.cpp：1910
+msgid“来源：
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1858 src / HexEditorGui.cpp：1917
+＃：src / HexEditorGui.cpp：1971
+msgid“目标：”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1983
+msgid“0x00”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1983
+msgid“0xFF”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1983
+msgid“0xRANDOM”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1985
+msgid“擦除与”
+msgstr“”
+
+＃：src / HexPanels.cpp：213
+msgid“Name：”
+msgstr“”
+
+＃：src / HexPanels.cpp：214
+msgid“路径：”
+msgstr“”
+
+＃：src / HexPanels.cpp：216
+msgid“访问：”
+msgstr“”
+
+＃：src / HexPanels.cpp：217
+msgid“设备：”
+msgstr“”
+
+＃：src / HexPanels.cpp：217
+msgid“FILE”
+msgstr“”
+
+＃：src / HexPanels.cpp：218
+msgid“DIRECTORY”
+msgstr“”
+
+＃：src / HexPanels.cpp：219
+msgid“CHARACTER”
+msgstr“”
+
+＃：src / HexPanels.cpp：220
+msgid“BLOCK”
+msgstr“”
+
+＃：src / HexPanels.cpp：221
+msgid“FIFO”
+msgstr“”
+
+＃：src / HexPanels.cpp：223
+msgid“LINK”
+msgstr“”
+
+＃：src / HexPanels.cpp：224
+msgid“SOCKET”
+msgstr“”
+
+＃：src / HexPanels.cpp：237
+msgid“扇区大小：
+msgstr“”
+
+＃：src / HexPanels.cpp：238
+msgid“扇区数：
+msgstr“”
+
+＃：src / HexPanels.cpp：242
+msgid“XORKey：”
+msgstr“”
+
+＃：src / HexEditorCtrl / HexEditorCtrlGui.cpp：35
+＃：src / HexEditorCtrl / HexEditorCtrlGui.cpp：41
+＃：src / HexEditorCtrl / HexEditorCtrlGui.cpp：47
+＃：src / HexEditorCtrl / HexEditorCtrlGui.cpp：56
+＃：src / HexEditorCtrl / HexEditorCtrlGui.cpp：67
+msgid“sans”
+msgstr“”
+
+＃：src / HexEditorCtrl / HexEditorCtrlGui.cpp：39
+msgid“地址”
+msgstr“”
+
+＃：src / HexEditorCtrl / HexEditorCtrlGui.cpp：45
+msgid“字节视图”
+msgstr“”
+
+＃：src / HexEditorCtrl / wxHexCtrl / TagDialogGui.cpp：37
+msgid“字体颜色：”
+msgstr“”
+
+＃：src / HexEditorCtrl / wxHexCtrl / TagDialogGui.cpp：44
+msgid“注意颜色：
+msgstr“”
+
+＃：src / HexEditorCtrl / wxHexCtrl / TagDialogGui.cpp：60
+msgid“删除”
+msgstr“”
+
+＃：src / HexEditorCtrl / wxHexCtrl / TagDialogGui.h：49
+msgid“Tag对话框”
+msgstr“”

@@ -1,0 +1,29 @@
+
+# ambiguity cause implement-defined behave
+
+
+normal concat : [=] that is =
+    xx [=] y y z t
+unordered concat : {=}
+    xx {=} y y z t?
+    ==>> xx {=} y[2] z t?
+    <==> xx {=} z t? y[2]
+    <==> xx {=} t? y z y # any order
+
+
+unordered_concat<args...> # but left-first???? No, too heavy
+    | ... a ... : this<... a[1] ...>
+    | ... a[x] ... a[y] ... : this<... a[x+y] ...>
+    | otherwise : unordered_concat_impl<sorted(args...)>
+
+unordered_concat_impl<args...>
+    # assert is_sorted(args...)
+    # assert all_unique(args...)
+    | <> =
+    | <a..., b[0], c...> : this<a..., c...>
+    | for all b :
+        | <a..., b[L], c...> = b *this<a..., b[L-1], c...>
+
+
+
+

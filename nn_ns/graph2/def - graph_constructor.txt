@@ -1,0 +1,25 @@
+
+make xgraph and graph_cw
+
+what type of vertex?
+
+
+class GraphConstructor: # the constructor itself may not be xgraph
+    # dqedges :: [(vertex, vertex)]
+    def xgraph_from_dqedges(is_directed, vertices, dqedges)-> xgraph
+    # colored_vertices :: [(vertex, color)]
+    # weighted_dqedges :: [((vertex, vertex), weight)]
+    def graph_cw_from_dqedges(is_directed, colored_vertices, weighted_dqedges)-> graph_cw
+
+    # aedge_dqedge_pairs :: [(aedge, (vertex, vertex))]
+    def xgraph_from_aedges(is_directed, vertices, aedge_dqedge_pairs)-> xgraph
+    # weighted_aedge_dqedge_pairs :: [((aedge, (vertex, vertex)), weight)]
+    def graph_cw_from_aedges(is_directed, colored_vertices, weighted_aedge_dqedge_pairs)-> graph_cw
+
+    # ordered_hedge_infos :: [(hedge, (vertex, aedge))]
+    # if is_directed, then hedge occur first be the src_hedge
+    def xgraph_from_aedges(is_directed, vertices, ordered_hedge_infos)-> xgraph
+    # weighted_aedges :: [(aedge, weight)]
+    def graph_cw_from_aedges(is_directed, colored_vertices, weighted_aedges, ordered_hedge_infos)-> graph_cw
+
+

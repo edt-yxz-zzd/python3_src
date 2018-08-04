@@ -1,0 +1,15 @@
+
+simple directed graphs ::=
+    directed
+    no loops
+    no multiple arrows with same source and target nodes
+    may disconnected
+directed multigraph ::=
+    directed
+    no loops
+    may disconnected
+
+
+https://en.wikipedia.org/wiki/Directed_graph
+Simple directed graphs are directed graphs that have no loops (arrows that connect vertices to themselves) and no multiple arrows with same source and target nodes. As already introduced, in case of multiple arrows the entity is usually addressed as directed multigraph. Some authors describe digraphs with loops as loop-digraphs.
+

@@ -1,0 +1,17 @@
+
+array_to_idx2left_biased_rmq_control_range
+    # use to test RMQ result in O(1)
+    # see: VerifyLeftBiasedRMQ
+
+canonical_Cartesian_tree
+    # encode array in RMQ
+array_to_idx2depth_in_canonical_Cartesian_tree
+    # use to replace original array
+    #   so that "<" can be faster since use uint."<"
+
+
+encode_canonical_Cartesian_tree_of_array_of_fixed_length
+canonical_Cartesian_tree_of_array_to_balanced_Dyck_word
+encode_Dyck_word
+    # encode encode_canonical_Cartesian_tree
+

@@ -1,0 +1,8 @@
+
+xedge = uedge | dedge
+uedge = uaedge = ugraph aedge
+dedge = daedge = dgraph aedge
+
+not qedge!!!
+    uqedge/dqedge has other sense!
+

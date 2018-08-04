@@ -1,0 +1,99 @@
+
+
+RedBlackTreeNodeTest text
+
+test_data_text = ('=====' case_text)*
+case_text = initial_text ('-----' action_text result_text)*
+initial_text = tree_description_text
+action_text = action_description_text
+result_text = tree_description_text
+tree_description_text = ?????
+action_description_text = ?????
+
+
+
+each test case contains:
+    1) initial tree description
+    2) modifying action description
+    3) result tree description
+test framework:
+    1) use build initial/result tree (of user class) from their description
+    2) modify it
+    3) compare
+
+
+
+# data_form of tree_description
+tree_description = tree_node
+tree_node   = ()
+            | (is_black::bool, entity::Entity, left::tree_node, right::tree_node)
+
+# data_form of action_description
+action_description :: [action_stmt]
+action_stmt     = ('remove_leaf', leaf_path)
+                | ('remove_nonleaf', nonleaf_path, options)
+                | ('insert', entity, leaf_path)
+                | ('replace', entity, nonleaf_path)
+
+# text form of tree description
+tree_description_text:
+    RBTreeDescription ::= Node
+    Node ::= Leaf | Nonleaf
+    Leaf ::= '(' ')'
+    Nonleaf ::= '(' Color ',' Entity ',' Node ',' Node ')'
+    Color ::= 'red' | 'black'
+    # Entity see below
+
+
+# text_form of action_description
+action_description_text:
+    ActionDescription ::= (ActionStatement (newline ActionStatement)*)?
+    ActionStatement ::= LeafPath '=' Entity # insert
+                      | 'del' LeafPath
+                      | EntityPath '=' Entity # replace
+                      | 'del' EntityPath
+                      | SetOption
+                      | OptionScope
+    OptionScope ::= '{' newline ActionDescription newline '}'
+        # seperate the effect of options
+    SetOption ::= [+-] Option+
+    Option ::= 'ChildLeafFirst' | 'PreferSuccLeaf' # default turn on
+    Path ::= 'root' ('.left' | '.right')*
+    LeafPath ::= Path
+    NonleafPath ::= Path
+    EntityPath ::= NonleafPath '.entity'
+    Entity ::= IntLiteral | StringLiteral
+    IntLiteral ::= [+-]?(0|[1-9][0-9]*)
+    StringLiteral ::= \"([^\"\s]| )*\"
+
+
+    # path = ... where path should be a leaf - create a nonleaf to replace leaf
+    # del path where path should be a leaf - remove leaf and its parent
+    #    since remove nonleaf is a more complex operation
+
+    e.g.
+
+    root = 4
+        ==>> ('insert', 4, []) # root should be leaf
+    root.left = 3
+    root.right = 5
+        ==>> ('insert', 5, ['right']) # root.right should be leaf
+    del root.left.right
+        ==>> ('remove_leaf', ['left', 'right'])
+
+    root.entity = 4
+        ==>> ('replace', 4, []) # root should be nonleaf
+    del root.entity # root should be nonleaf
+        ==>> ('remove_nonleaf', [])
+
+    ==>>
+        begin with an empty tree
+            (though not required in general,
+            in the above example, "root=3" ==>> must begin with an empty tree)
+        end up with (black, 4, (), (red, 5, (), ()))
+
+
+        Tree a = () | (bool, a, Tree a, Tree a)
+        i.e. empty tuple () - leaf
+             4-tuple     (is_black, entity, left_child, right_child)
+

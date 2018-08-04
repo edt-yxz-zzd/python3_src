@@ -1,0 +1,41 @@
+
+height/depth/level
+
+
+[rooted unordered tree]
+    -- has a root
+    -- children have no order
+
+[rooted tree]
+    subtree node tree = a rooted subtree of tree, rooted at node
+    root tree = the root
+    parent node tree = the parent of node
+    children node tree = the children of node
+
+    path_to_root node tree
+        | node == root tree = []
+        | otherwise = (node, p) : path_to_root p tree
+            where p = parent node tree
+    [path_to_root (root tree) tree) == []]
+
+    leafs tree = all leafs of tree
+    is_leaf node tree = null $ children node tree -- node `elem` leafs tree
+
+    # depth
+    depth node tree = length (path_to_root node tree)
+    [depth (root tree) tree == 0]
+
+    # level
+    level node tree = 1 + depth node tree
+
+    # height
+    -- root_height tree = max [depth leaf tree | leaf <- leafs tree]
+    -- height node tree = root_height (subtree node tree)
+    height node tree
+        | is_leaf node tree = 0
+        | otherwise = 1 + max . map (flip height tree) $ children node tree
+    [is_leaf node tree] <==> [height node tree == 0]
+    root_height tree = height (root tree) tree
+
+
+

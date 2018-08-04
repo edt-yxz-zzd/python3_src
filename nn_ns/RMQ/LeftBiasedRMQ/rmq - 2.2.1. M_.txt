@@ -1,0 +1,58 @@
+
+see: "rmq - 2.0. defines common.txt"
+
+
+def M_ # multiple-super_blocks_query_table
+super_blocks_query_table = super_block_idx2powerx2min_element_super_block_idx = M_ = M'
+    # super_block_idx to powerx to min_element_super_block_idx
+    # min_element_super_array_idx == min_element_super_block_idx
+        :: [[SuperArrayIdx]]
+        :: [[SuperBlockIdx]]
+        SuperArrayIdx == SuperBlockIdx
+    = make_left_biased_range_minimum_query_power_table(super_min_array, num_super_blocks, offset=False)
+
+
+super_block_idx2powerx2min_element_super_block_idx[super_block_idx][power_sub_1]
+    = min_element_super_array_idx of super_min_array[super_block_idx:super_block_idx+2**(power_sub_1+1)]
+    # to super_array_idx/super_block_idx not to array_idx
+
+    # see: make_left_biased_range_minimum_query_power_table
+    len(M_[super_block_idx])
+        = power_sub_1__upper_bound<super_block_idx>
+        = max_power_sub_1__add_1<super_block_idx>
+        = max_power<super_block_idx>
+    len(M_) == len(super_min_array)-1 >= 0
+    here:
+        0 <= super_block_idx <= len(super_min_array)-2
+        0 <= super_block_idx <= num_super_blocks-2
+        # may have none!! if M_ is empty
+
+    [super_block_idx + 2**power == end_of_a_super_array_range <= len(super_min_array)]
+    ==>> 0 < 2**power <= len(super_min_array) - super_block_idx
+    ==>> power <= log2(len(super_min_array) - super_block_idx)
+    ==>> max_power<super_block_idx> = floor_log2(len(super_min_array) - super_block_idx)
+    len(M_[super_block_idx])
+        = max_power<super_block_idx>
+        = floor_log2(len(super_min_array) - super_block_idx)
+        = floor_log2(num_super_blocks - super_block_idx)
+
+    len(M_) <= len(super_min_array) = num_super_blocks
+    len(M_[super_block_idx]) <= floor_log2(num_super_blocks)
+    bit_size_of(SuperArrayIdx/SuperBlockIdx) = ceil_log2(num_super_blocks)
+    bit_size_of(M_)
+        <= num_super_blocks*floor_log2(num_super_blocks)*ceil_log2(num_super_blocks)
+        # recall: complete_super_block_size = s_ = log2(p)**2_x <= p
+        #   complete_super_block_size = power**2 + 1    if p == 2**power
+        #   complete_super_block_size = ceil_log2(p)**2 otherwise
+        # recall: num_super_blocks = ceil(p/s_)
+        = ceil(p/s_) * floor_log2(ceil(p/s_)) * ceil_log2(ceil(p/s_))
+        = ceil(p/s_) * floor_log2(ceil(p/s_)) * ceil_log2(p/s_)
+        = O(p/s_ * log2(p/s_)**2)
+        = O(p/log2(p)**2_x * log2(p/log2(p)**2_x)**2)
+        = O(p/log2(p)**2_x * (log2(p) - 2_x*log2log2(p))**2)
+        = O(p/log2(p)**2_x * log2(p)**2)
+        = O(p/log2(p)**delta_x)
+        # here, delta_x: the bigger, the better
+        = O(p)
+
+

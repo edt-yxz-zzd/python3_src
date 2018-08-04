@@ -1,0 +1,18 @@
+
+see:
+    build_rbt.check_red_black_tree_properties
+
+'''
+    Root Property:
+        The root is black.
+    External Property:
+        Every external node is black.
+    Internal Property:
+        The children of a red node are black.
+    Depth Property:
+        All the external nodes have the same black depth,
+        defined as the number of black ancestors minus one.
+        (Recall that a node is an ancestor of itself.)
+'''
+
+

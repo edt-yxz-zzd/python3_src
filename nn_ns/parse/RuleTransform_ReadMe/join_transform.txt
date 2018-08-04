@@ -1,0 +1,35 @@
+
+1) "f(...)" => <NONE> | (a ',')* a
+2) "a... = xxx" => (a ',')* a ','?
+3) "[a...]" => (a ',')* a?
+
+JOINx(first; repeat; last; one)
+    | for L in [0..x-2]: first repeat[L] last
+    | if x == 1 : one
+
+1) => JOIN*(; a ',' ; a ; a) == JOIN*(a ; ',' a ; ; a)
+2) => JOIN+(; a ',' ; a ; a) ','? == JOIN+(a ; ',' a ; ; a) ','?
+3) => JOIN*(; a ',' ; a ','? ; a ','?) == JOIN*(a ; ',' a ; ','? ; a ','?)
+
+joinx(repeat; last) = JOINx(; repeat; last; last)
+    = * repeat/x-1 last
+
+# useless
+    join(repeat; last) = last
+    join?(repeat; last) = last?
+
+join*(repeat; last)
+    = join+(repeat; last)?
+
+join+(repeat...; last...)
+    = * * repeat...*   * last...
+
+
+
+
+
+
+
+
+
+

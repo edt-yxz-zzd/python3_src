@@ -1,0 +1,199 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-02-23 10:20+0800\n"
+"PO-Revision-Date: 2017-02-23 10:26+0800\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.12\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
+
+#: src/HexDialogs.h:69 src/HexEditorGui.h:298 src/HexEditorFrame.cpp:288
+#: src/HexEditorGui.cpp:133 src/HexEditorGui.cpp:916
+msgid "Find"
+msgstr "查找(&F)"
+
+#: src/HexDialogs.h:99
+msgid "Find & Replace"
+msgstr "查找和替换"
+
+#: src/HexEditorGui.h:121
+msgid "wxHexEditor Alpha Development version"
+msgstr "wxHexEditor Alpha 开发版本"
+
+#: src/HexEditorGui.h:261 src/HexEditorGui.cpp:143
+msgid "Go to Offset"
+msgstr "跳转至地址"
+
+#: src/HexEditorGui.h:322
+msgid "New wxHexEditor Version!"
+msgstr "新的 wxHexEditor 版本 ！"
+
+#: src/HexEditorGui.h:361 src/HexEditorGui.cpp:209
+msgid "Compare Files"
+msgstr "比较文件"
+
+#: src/HexEditorGui.h:414 src/HexEditorGui.cpp:205
+msgid "Calculate Checksum"
+msgstr "计算校验和"
+
+#: src/HexEditorGui.h:445
+msgid "Copy Selected Block As"
+msgstr "复制选中块为..."
+
+#: src/HexEditorGui.h:472
+msgid "XORView Thru Warning!"
+msgstr ""
+
+#: src/HexEditorGui.h:519 src/HexEditorGui.cpp:276
+msgid "Preferences"
+msgstr ""
+
+#: src/HexEditorGui.h:545
+msgid "Disk/Partition Backup Tool"
+msgstr ""
+
+#: src/HexEditorGui.h:571
+msgid "Disk/Partition Restore Tool"
+msgstr ""
+
+#: src/HexEditorGui.h:596
+msgid "Disk/Partition Erase Tool"
+msgstr ""
+
+#: src/HexEditor.h:203 src/HexEditor.h:223
+msgid "Clipboard could not be opened."
+msgstr ""
+
+#: src/HexEditor.h:203 src/HexEditor.h:223 src/HexEditor.cpp:1441
+msgid "Operation cancelled!"
+msgstr ""
+
+#: src/HexEditor.h:203 src/HexEditor.h:223 src/HexEditor.cpp:1441
+msgid "Copy To Clipboard Error"
+msgstr ""
+
+#: src/FAL.cpp:140 src/FAL.cpp:177 src/FAL.cpp:236
+msgid "File is not readable by permissions."
+msgstr ""
+
+#: src/FAL.cpp:140 src/FAL.cpp:178
+msgid "Please change file permissons or run this program with root privileges."
+msgstr ""
+
+#: src/FAL.cpp:140 src/FAL.cpp:159 src/FAL.cpp:171 src/FAL.cpp:180
+#: src/FAL.cpp:191 src/FAL.cpp:225 src/FAL.cpp:236 src/FAL.cpp:252
+#: src/FAL.cpp:313 src/FAL.cpp:321 src/HexDialogs.cpp:669
+#: src/HexDialogs.cpp:2154 src/HexDialogs.cpp:2158 src/HexDialogs.cpp:2605
+#: src/HexEditor.cpp:226 src/HexEditor.cpp:442 src/HexEditor.cpp:586
+#: src/HexEditor.cpp:615 src/HexEditorFrame.cpp:563 src/HexEditorFrame.cpp:584
+#: src/HexEditorFrame.cpp:600 src/HexEditorFrame.cpp:604
+#: src/HexEditorFrame.cpp:1137
+msgid "Error"
+msgstr ""
+
+#: src/FAL.cpp:159 src/FAL.cpp:225
+msgid "Process cannot open."
+msgstr ""
+
+#: src/FAL.cpp:171
+msgid "File does not exists at path:"
+msgstr ""
+
+#: src/FAL.cpp:179
+msgid ""
+"You can also try to own the file temporarily (requires root's password.)"
+msgstr ""
+
+#: src/FAL.cpp:180
+msgid "Do you want to own the file?"
+msgstr ""
+
+#: src/FAL.cpp:191
+msgid "Unknown error on \"stat -c %U"
+msgstr ""
+
+#: src/FAL.cpp:236
+msgid "Please change file permissons or run this program with root privileges"
+msgstr ""
+
+#: src/FAL.cpp:252
+msgid "File cannot open."
+msgstr ""
+
+#: src/FAL.cpp:313
+msgid ""
+"File load error!.\n"
+"File closed but not opened while access change. For avoid corruption close "
+"the program"
+msgstr ""
+
+#: src/FAL.cpp:321
+msgid "File cannot open in this mode : "
+msgstr ""
+
+#: src/FAL.cpp:336
+msgid "Access Invalid"
+msgstr ""
+
+#: src/FAL.cpp:350 src/FAL.cpp:360 src/FAL.cpp:370
+msgid "Not Enought RAM"
+msgstr ""
+
+#: src/FAL.cpp:455
+msgid "Error on Write operation to Process RAM"
+msgstr ""
+
+#: src/FAL.cpp:455
+msgid "FATAL ERROR"
+msgstr ""
+
+#: src/HexDialogs.cpp:73
+msgid "Value is not hexadecimal!"
+msgstr ""
+
+#: src/HexDialogs.cpp:73 src/HexDialogs.cpp:79
+msgid "Format Error!"
+msgstr ""
+
+#: src/HexDialogs.cpp:79
+msgid "Value must be even digit!"
+msgstr ""
+
+#: src/HexDialogs.cpp:161 src/HexEditorGui.cpp:713 src/HexEditorGui.cpp:719
+#: src/HexEditorCtrl/HexEditorCtrl.cpp:44
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:33
+msgid "Offset"
+msgstr ""
+
+#: src/HexDialogs.cpp:167 src/HexEditorGui.cpp:719
+msgid "Sector"
+msgstr ""
+
+#: src/HexDialogs.cpp:448
+msgid "Finding Some Bytes..."
+msgstr ""
+
+#: src/HexDialogs.cpp:450 src/HexDialogs.cpp:677
+msgid "wxHexEditor Searching"
+msgstr ""
+
+#: src/HexDialogs.cpp:485 src/HexDialogs.cpp:836 src/HexDialogs.cpp:1031
+#: src/HexDialogs.cpp:1121
+msgid "Search Speed : "
+msgstr ""
+
+#: src/HexDialogs.cpp:485 src/HexDialogs.cpp:836 src/HexDialogs.cpp:936
+#: src/HexDialogs.cpp:1031 src/HexDialogs.cpp:1121 src/HexDialogs.cpp:2353
+#: src/HexDialogs.cpp:2714 src/HexDialogs.cpp:3174 src/HexDialogs.cpp:3266
+#: src/HexDialogs.cpp:3329 src/HexEditor.cpp:176 src/HexEditor.cpp:394

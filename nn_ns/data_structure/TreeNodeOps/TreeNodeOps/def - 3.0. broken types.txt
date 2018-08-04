@@ -1,0 +1,37 @@
+
+3 broken types:
+    1) tree struct changed
+        ???dangling broken???
+        e.g. child set new parent_info ==>> dangling broken below old_parent
+    2) tree struct keeping
+        e.g. parent -> me -> child
+        me = tree_struct_keeping update
+        2-1) old2new broken
+            between parent and me
+            parent = fix_broken_above(me)
+            # but now yield a new2old broken between parent and me
+            # see below
+        2-2) new2old broken
+            between me and child
+            child = me.get_child(child.innode_position)
+
+
+example:
+    set_parent_info
+        # -- y.parent_info := parent_info
+        # postcondition:
+        #    assume y.parent_info and parent_info are both not ROOT_PARENT_INFO
+        #    assume y is not leaf
+        #    do not update y's new_parent
+        #       old2new broken above self
+        #    do not update y's old_parent
+        #       dangling broken below y's old_parent
+        #    do not update y's children
+        #       new2old broken below self
+    set_child_at
+        # -- y.children[direction] := child
+        # postcondition:
+        #   child.parent may not be y
+        #   child.direction may not be direction
+        #   y -[new2old broken]-> child
+

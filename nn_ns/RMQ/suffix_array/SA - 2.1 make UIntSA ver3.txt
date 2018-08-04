@@ -1,0 +1,234 @@
+
+mainly diff ver2 at require all be pairs except last i1/i2
+
+
+'''
+
+ver2 is a wrong impl!!!!!!!!!!!!!!!!
+fire:
+    assert [3,2,1,0] == uint_array2suffix_array(None, None, [1,1,1,0])
+
+[1] < [1,0]
+but [1,1,0] > [1,0]
+we simply can treat unequal triples as a big char!!
+    except those at last
+
+
+string
+    [1, 1, 1, 0]
+big_string
+    [[1], [1, 0]]
+tmp_half_1round
+    []
+sorted_indices_of_big_string
+    [0, 1]
+SA_1_2
+    [0, 1]
+SA_0
+    [1, 0]
+SA
+    [3, 0, 1, 2]
+
+
+'''
+
+
+see:
+    "SA - 2.1 make UIntSA ver1.txt"
+mainly diff at the def of SA_1_2/suffices_1_2, other many defs updated
+  # recall:
+  SA_1_2 ver1
+    SA_1_2 = sorted(range(len(suffices_1_2)), key=\i->suffices_1_2[i])
+        where
+            suffices_1_2 = suffices_1 + suffices_2
+                = [string[i:] for i in range(L) if i==3*_+1]
+                + [string[i:] for i in range(L) if i==3*_+2]
+  SA_1_2 ver2
+    SA_1_2 = sorted(range(len(suffices_1_2)), key=\i->suffices_1_2[i])
+        = sorted(range(len(suffices_1_2)), key=\i->string[3*(i//2)+1+bool(i&1)])
+        where
+            suffices_1_2 = [string[i:] for i in range(L) if i!=3*_]
+
+
+
+
+
+
+
+
+##################
+UIntSA<string> = sorted_string_idc_by_suffix = sorted_suffix_position2suffix_begin_idx
+invUIntSA<string> = suffix_begin_idx2sorted_suffix_position
+
+
+input:
+    alphabet_size :: UInt
+    string :: [UInt[0..alphabet_size-1]]
+output:
+    UIntSA<string>
+
+let L = len(string)
+let a = UInt[0..alphabet_size-1]
+
+
+1) basic case detect
+    see below L_at_least
+    [L == 0] ==>> basic case
+2) make SA_1_2
+    def SA_1_2
+
+    SA_1_2 = sorted(range(len(suffices_1_2)), key=\i->suffices_1_2[i])
+        = sorted(range(len(suffices_1_2)), key=\i->string[3*(i//2)+1+bool(i&1)])
+        where
+            suffices_1_2 = [string[i:] for i in range(L) if i!=3*_]
+        # NOTE:
+        #   !!!not SA<[string[i] for i in range(L) if i!=3*_]>!!!
+        #       this def remove char at string[3*_], hence is wrong
+
+
+    # big_char = singleton_or_pair :: (a,)|(a,a) = BigChar
+    # big_string = singleton_or_pair_ls
+    # :: [BigChar]
+    big_string = [string[i:i+2] # last one maybe singleton
+                            for i in range(L) if i != 3*_]
+
+    # why the len is 2 except last???
+    #   to keep the internal continuous as the original string
+    #   and has same length make them a BigChar
+    #       diff length cannot
+
+    # big_string's uint form will be the input of recur call
+    #   so, len(big_string) is important
+    let Lx = len(big_string)
+    Lx = L - ceil_div(L,3) # remove 3*_
+
+    # L == 0: Lx = 0 # bad
+    # L == 1: Lx = 0
+    # L == 2: Lx = 1
+    # L == 3: Lx = 2
+    # L == 4: Lx = 2
+    # L == 5: Lx = 3
+    # L == 6: Lx = 4
+    # L == 7: Lx = 4
+    [L > Lx] ==>> L > 0 # L_at_least
+
+    is_last_pair
+    <==> the last idx must be 3*i0
+    <==> divs(3, L-1)
+
+
+    ######################
+    # calc:
+    SA_1_2 = recur calc SA<big_string>
+        by UIntSA<make_array_idx2group_idx(big_string)>
+        # calc make_array_idx2group_idx: by radix sort on big_string
+        # NOTE: if make_array_idx2group_idx(big_string) is_strict_sorted:
+        #   then done!!
+        #   since all chars are different, the suffix tree = the root + its direct children
+        #   i.e. one bucket_sort on the first char of all suffices finish the work.
+
+
+        # but we should handle the indices carefully
+        #
+        # bucket_sort all snd of pairs exclude the last singleton if any
+        #   i.e. all snd of string[3z+2:...+2]
+        #   i.e. string[3z+3]
+        i_xy_to_i_str i_xy = i_xy//2*3+1 +bool(i_xy&1)
+        i_xy_to_char i_xy = string[i_xy_to_i_str i_xy]
+        i_xy_to_next_char i_xy = string[1+i_xy_to_i_str i_xy]
+        #bug:tmp = bucket_sort(range(Lx- not is_last_pair), key=i_xy_to_char)
+        tmp = bucket_sort(range(Lx- not is_last_pair), key=i_xy_to_next_char)
+
+        may_last_i_xy = [] if is_last_pair else [Lx-1]
+        # bucket_sort all singletons and all fst of pairs
+        sorted_indices_of_big_string =
+            bucket_sort(may_last_i_xy +tmp, key=i_xy_to_char)
+
+        i_xy_to_big_char i_xy = string[i_xy_to_i_str i_xy:...+1]
+        ... = groupby(sorted_indices_of_big_string, key=i_xy_to_big_char)
+        ...
+        big_string_idx2group_idx = ...
+        group_idx__upper_bound = ... # maybe 0
+        if group_idx__upper_bound == Lx:
+            # each group contains only one char
+            # i.e. all chars are different
+            assert is_strict_sorted(sorted_indices_of_big_string, key=i_xy_to_big_char)
+            SA_1_2 = sorted_indices_of_big_string
+        else:
+            SA_1_2 = ...
+
+
+3) make SA_0
+    def SA_0
+    SA_0 = sorted(range(len(suffices_0)), key=\i->suffices_0[i])
+        = sorted(range(len(suffices_0)), key=\i->string[3*i])
+        where suffices_0 = [string[i:] for i in range(L) if i==3*_]
+    def SA_1
+    SA_1 = sorted(range(len(suffices_1)), key=\i->suffices_1[i])
+        = sorted(range(len(suffices_1)), key=\i->string[3*i+1])
+        where suffices_1 = [string[i:] for i in range(L) if i==3*_+1]
+
+    invSA_1_2 = invUIntSA<big_string> = invSA<SA_1_2>
+        # calc invSA is easy
+
+    # calc:
+    SA_1 = [i_xy//2 | i_xy <- SA_1_2, i_xy&1==0]
+    # calc:
+    SA_0
+        = radix_sort range(0,L, 3) with key=\i->(string[3*i], invSA_1_2[3*i+1])
+
+        # can save the first bucket_sort (i.e. with key[-1])
+        #   since SA_1 has known
+        = [may last i0 if ...] + bucket_sort(SA_1, key=\i0->string[i0*3])
+            # if last i0 not follow a i1
+            #   i.e. L = 3*i0+1
+            #   i.e. Lx = 2*i0
+
+4) merge SA_0 and SA_1_2
+    like merge_sort does
+
+    def merge :: (left->right->Bool) -> [left] -> [right] -> [Either left right]
+    merge le (l:lefts) (r:rights) = if le l r
+                                    then Left l : merge lefts (r:rights)
+                                    else Right r : merge (l:lefts) rights
+    merge _ [] rights = map Right rights
+    merge _ lefts [] = map Left lefts
+
+    # calc:
+    SA = merge le (map (3*) SA_0) (map i_xy_to_i_str SA_1_2)
+        where
+            Left = Right = id
+
+            ##### !!!!!!! take care of overflow/IndexError!!!!!!!!!!
+            #le i_str_0 i_str_1_2
+            le (3*i0) (3*i1+1) =
+                (string[3*i0], invSA_1_2[i_str_1_2_to_i_xy(3*i0+1)])
+                <=
+                (string[3*i1+1], invSA_1_2[i_str_1_2_to_i_xy(3*i1+2)])
+            le (3*i0) (3*i2+2) =
+                (string[3*i0], string[3*i0+1]
+                    , invSA_1_2[i_str_1_2_to_i_xy(3*i0+2)])
+                <=
+                (string[3*i2+2], string[3*i2+3], invSA_1_2[i_str_1_2_to_i_xy(3*i2+4)])
+            i_str_1_2_to_i_xy i_str = # inverse i_xy_to_i_str
+                if i_str == 3*i0+1 then 2*i0
+                elif i_str == 3*i0+2 then 2*i0+1
+                else undefined
+
+
+    DONE!!
+
+
+5) time
+
+    T(n) = A*n + T((1-D)*n)
+        let T(n) = X*n
+        X*n = A*n + X*(1-D)*n
+        D*X*n = A*n
+        X = A/D
+
+    here (1-D) = 2/3
+        ==>> X = 3A
+
+
+

@@ -1,0 +1,306 @@
+import _frozen_importlib # frozen
+import _imp # builtin
+import sys # builtin
+import '_warnings' # <class '_frozen_importlib.BuiltinImporter'>
+import '_thread' # <class '_frozen_importlib.BuiltinImporter'>
+import '_weakref' # <class '_frozen_importlib.BuiltinImporter'>
+import '_frozen_importlib_external' # <class '_frozen_importlib.FrozenImporter'>
+import '_io' # <class '_frozen_importlib.BuiltinImporter'>
+import 'marshal' # <class '_frozen_importlib.BuiltinImporter'>
+import 'nt' # <class '_frozen_importlib.BuiltinImporter'>
+import _thread # previously loaded ('_thread')
+import '_thread' # <class '_frozen_importlib.BuiltinImporter'>
+import _weakref # previously loaded ('_weakref')
+import '_weakref' # <class '_frozen_importlib.BuiltinImporter'>
+import 'winreg' # <class '_frozen_importlib.BuiltinImporter'>
+# installing zipimport hook
+import 'zipimport' # <class '_frozen_importlib.BuiltinImporter'>
+# installed zipimport hook
+# C:\Python36\lib\encodings\__pycache__\__init__.cpython-36.pyc matches C:\Python36\lib\encodings\__init__.py
+# code object from 'C:\\Python36\\lib\\encodings\\__pycache__\\__init__.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\codecs.cpython-36.pyc matches C:\Python36\lib\codecs.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\codecs.cpython-36.pyc'
+import '_codecs' # <class '_frozen_importlib.BuiltinImporter'>
+import 'codecs' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000050AF98>
+# C:\Python36\lib\encodings\__pycache__\aliases.cpython-36.pyc matches C:\Python36\lib\encodings\aliases.py
+# code object from 'C:\\Python36\\lib\\encodings\\__pycache__\\aliases.cpython-36.pyc'
+import 'encodings.aliases' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000022F6C18>
+import 'encodings' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000050A4E0>
+# C:\Python36\lib\encodings\__pycache__\utf_8.cpython-36.pyc matches C:\Python36\lib\encodings\utf_8.py
+# code object from 'C:\\Python36\\lib\\encodings\\__pycache__\\utf_8.cpython-36.pyc'
+import 'encodings.utf_8' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002307CC0>
+import '_signal' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python36\lib\encodings\__pycache__\latin_1.cpython-36.pyc matches C:\Python36\lib\encodings\latin_1.py
+# code object from 'C:\\Python36\\lib\\encodings\\__pycache__\\latin_1.cpython-36.pyc'
+import 'encodings.latin_1' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000230C160>
+# C:\Python36\lib\__pycache__\io.cpython-36.pyc matches C:\Python36\lib\io.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\io.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\abc.cpython-36.pyc matches C:\Python36\lib\abc.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\abc.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\_weakrefset.cpython-36.pyc matches C:\Python36\lib\_weakrefset.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\_weakrefset.cpython-36.pyc'
+import '_weakrefset' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002313048>
+import 'abc' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000230C6D8>
+import 'io' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000230C320>
+# C:\Python36\lib\__pycache__\_bootlocale.cpython-36.pyc matches C:\Python36\lib\_bootlocale.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\_bootlocale.cpython-36.pyc'
+import '_locale' # <class '_frozen_importlib.BuiltinImporter'>
+import '_bootlocale' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000023187B8>
+# C:\Python36\lib\encodings\__pycache__\gbk.cpython-36.pyc matches C:\Python36\lib\encodings\gbk.py
+# code object from 'C:\\Python36\\lib\\encodings\\__pycache__\\gbk.cpython-36.pyc'
+import '_codecs_cn' # <class '_frozen_importlib.BuiltinImporter'>
+import '_multibytecodec' # <class '_frozen_importlib.BuiltinImporter'>
+import 'encodings.gbk' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002318C50>
+# C:\Python36\lib\__pycache__\site.cpython-36.pyc matches C:\Python36\lib\site.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\site.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\os.cpython-36.pyc matches C:\Python36\lib\os.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\os.cpython-36.pyc'
+import 'errno' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python36\lib\__pycache__\stat.cpython-36.pyc matches C:\Python36\lib\stat.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\stat.cpython-36.pyc'
+import '_stat' # <class '_frozen_importlib.BuiltinImporter'>
+import 'stat' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000233A320>
+# C:\Python36\lib\__pycache__\ntpath.cpython-36.pyc matches C:\Python36\lib\ntpath.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\ntpath.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\genericpath.cpython-36.pyc matches C:\Python36\lib\genericpath.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\genericpath.cpython-36.pyc'
+import 'genericpath' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002349278>
+import 'ntpath' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000233A9E8>
+# C:\Python36\lib\__pycache__\_collections_abc.cpython-36.pyc matches C:\Python36\lib\_collections_abc.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\_collections_abc.cpython-36.pyc'
+import '_collections_abc' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000023497F0>
+import 'os' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000023292B0>
+# C:\Python36\lib\__pycache__\_sitebuiltins.cpython-36.pyc matches C:\Python36\lib\_sitebuiltins.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\_sitebuiltins.cpython-36.pyc'
+import '_sitebuiltins' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002329668>
+# C:\Python36\lib\__pycache__\sysconfig.cpython-36.pyc matches C:\Python36\lib\sysconfig.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\sysconfig.cpython-36.pyc'
+import 'sysconfig' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002329B38>
+# C:\Python36\lib\__pycache__\types.cpython-36.pyc matches C:\Python36\lib\types.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\types.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\functools.cpython-36.pyc matches C:\Python36\lib\functools.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\functools.cpython-36.pyc'
+import '_functools' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python36\lib\collections\__pycache__\__init__.cpython-36.pyc matches C:\Python36\lib\collections\__init__.py
+# code object from 'C:\\Python36\\lib\\collections\\__pycache__\\__init__.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\operator.cpython-36.pyc matches C:\Python36\lib\operator.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\operator.cpython-36.pyc'
+import '_operator' # <class '_frozen_importlib.BuiltinImporter'>
+import 'operator' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000264B390>
+# C:\Python36\lib\__pycache__\keyword.cpython-36.pyc matches C:\Python36\lib\keyword.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\keyword.cpython-36.pyc'
+import 'keyword' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002655668>
+# C:\Python36\lib\__pycache__\heapq.cpython-36.pyc matches C:\Python36\lib\heapq.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\heapq.cpython-36.pyc'
+import '_heapq' # <class '_frozen_importlib.BuiltinImporter'>
+import 'heapq' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002655E80>
+import 'itertools' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python36\lib\__pycache__\reprlib.cpython-36.pyc matches C:\Python36\lib\reprlib.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\reprlib.cpython-36.pyc'
+import 'reprlib' # <_frozen_importlib_external.SourceFileLoader object at 0x000000000264D470>
+import '_collections' # <class '_frozen_importlib.BuiltinImporter'>
+import 'collections' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002628A90>
+# C:\Python36\lib\__pycache__\weakref.cpython-36.pyc matches C:\Python36\lib\weakref.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\weakref.cpython-36.pyc'
+import 'weakref' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002628F98>
+import 'functools' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000025BB278>
+# C:\Python36\lib\collections\__pycache__\abc.cpython-36.pyc matches C:\Python36\lib\collections\abc.py
+# code object from 'C:\\Python36\\lib\\collections\\__pycache__\\abc.cpython-36.pyc'
+import 'collections.abc' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000026220B8>
+import 'types' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000025B2550>
+# C:\Python36\lib\importlib\__pycache__\__init__.cpython-36.pyc matches C:\Python36\lib\importlib\__init__.py
+# code object from 'C:\\Python36\\lib\\importlib\\__pycache__\\__init__.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\warnings.cpython-36.pyc matches C:\Python36\lib\warnings.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\warnings.cpython-36.pyc'
+import 'warnings' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002622DD8>
+import 'importlib' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000025B27B8>
+# C:\Python36\lib\importlib\__pycache__\util.cpython-36.pyc matches C:\Python36\lib\importlib\util.py
+# code object from 'C:\\Python36\\lib\\importlib\\__pycache__\\util.cpython-36.pyc'
+# C:\Python36\lib\importlib\__pycache__\abc.cpython-36.pyc matches C:\Python36\lib\importlib\abc.py
+# code object from 'C:\\Python36\\lib\\importlib\\__pycache__\\abc.cpython-36.pyc'
+# C:\Python36\lib\importlib\__pycache__\machinery.cpython-36.pyc matches C:\Python36\lib\importlib\machinery.py
+# code object from 'C:\\Python36\\lib\\importlib\\__pycache__\\machinery.cpython-36.pyc'
+import 'importlib.machinery' # <_frozen_importlib_external.SourceFileLoader object at 0x00000000026922B0>
+import 'importlib.abc' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002697BA8>
+# C:\Python36\lib\__pycache__\contextlib.cpython-36.pyc matches C:\Python36\lib\contextlib.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\contextlib.cpython-36.pyc'
+import 'contextlib' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002692F28>
+import 'importlib.util' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002622470>
+# possible namespace for C:\Python36\lib\site-packages\sphinxcontrib
+import 'site' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002318CC0>
+# C:\Python36\lib\__pycache__\runpy.cpython-36.pyc matches C:\Python36\lib\runpy.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\runpy.cpython-36.pyc'
+# C:\Python36\lib\__pycache__\pkgutil.cpython-36.pyc matches C:\Python36\lib\pkgutil.py
+# code object from 'C:\\Python36\\lib\\__pycache__\\pkgutil.cpython-36.pyc'
+import 'pkgutil' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002A369E8>
+import 'runpy' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002A365C0>
+# E:\my_data\program_source\python3_src\nn_ns\__pycache__\__init__.cpython-36.pyc matches E:\my_data\program_source\python3_src\nn_ns\__init__.py
+# code object from 'E:\\my_data\\program_source\\python3_src\\nn_ns\\__pycache__\\__init__.cpython-36.pyc'
+import 'nn_ns' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002A420F0>
+# E:\my_data\program_source\python3_src\nn_ns\app\__pycache__\__init__.cpython-36.pyc matches E:\my_data\program_source\python3_src\nn_ns\app\__init__.py
+# code object from 'E:\\my_data\\program_source\\python3_src\\nn_ns\\app\\__pycache__\\__init__.cpython-36.pyc'
+import 'nn_ns.app' # <_frozen_importlib_external.SourceFileLoader object at 0x0000000002A42A58>
+# E:\my_data\program_source\python3_src\nn_ns\app\__pycache__\runpy_script_as_module.cpython-36.pyc matches E:\my_data\program_source\python3_src\nn_ns\app\runpy_script_as_module.py
+# code object from 'E:\\my_data\\program_source\\python3_src\\nn_ns\\app\\__pycache__\\runpy_script_as_module.cpython-36.pyc'
+Traceback (most recent call last):
+  File "C:\Python36\lib\runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "C:\Python36\lib\runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "E:\my_data\program_source\python3_src\nn_ns\app\runpy_script_as_module.py", line 13, in <module>
+    from sand import script_fname2module_name
+  File "<frozen importlib._bootstrap>", line 961, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 948, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'sand'
+# clear builtins._
+# clear sys.path
+# clear sys.argv
+# clear sys.ps1
+# clear sys.ps2
+# clear sys.last_type
+# clear sys.last_value
+# clear sys.last_traceback
+# clear sys.path_hooks
+# clear sys.path_importer_cache
+# clear sys.meta_path
+# clear sys.__interactivehook__
+# clear sys.flags
+# clear sys.float_info
+# restore sys.stdin
+# restore sys.stdout
+# restore sys.stderr
+# cleanup[2] removing builtins
+# cleanup[2] removing sys
+# cleanup[2] removing _frozen_importlib
+# cleanup[2] removing _imp
+# cleanup[2] removing _warnings
+# cleanup[2] removing _thread
+# cleanup[2] removing _weakref
+# cleanup[2] removing _frozen_importlib_external
+# cleanup[2] removing _io
+# cleanup[2] removing marshal
+# cleanup[2] removing nt
+# cleanup[2] removing winreg
+# cleanup[2] removing zipimport
+# cleanup[2] removing encodings
+# destroy encodings
+# cleanup[2] removing codecs
+# cleanup[2] removing _codecs
+# cleanup[2] removing encodings.aliases
+# cleanup[2] removing encodings.utf_8
+# cleanup[2] removing _signal
+# cleanup[2] removing __main__
+# destroy __main__
+# cleanup[2] removing encodings.latin_1
+# cleanup[2] removing io
+# destroy io
+# cleanup[2] removing abc
+# cleanup[2] removing _weakrefset
+# destroy _weakrefset
+# cleanup[2] removing _bootlocale
+# destroy _bootlocale
+# cleanup[2] removing _locale
+# cleanup[2] removing encodings.gbk
+# cleanup[2] removing _codecs_cn
+# cleanup[2] removing _multibytecodec
+# cleanup[2] removing site
+# destroy site
+# cleanup[2] removing os
+# cleanup[2] removing errno
+# cleanup[2] removing stat
+# cleanup[2] removing _stat
+# cleanup[2] removing ntpath
+# cleanup[2] removing genericpath
+# cleanup[2] removing os.path
+# cleanup[2] removing _collections_abc
+# cleanup[2] removing _sitebuiltins
+# cleanup[2] removing sysconfig
+# destroy sysconfig
+# cleanup[2] removing types
+# cleanup[2] removing functools
+# cleanup[2] removing _functools
+# cleanup[2] removing collections
+# cleanup[2] removing operator
+# destroy operator
+# cleanup[2] removing _operator
+# cleanup[2] removing keyword
+# destroy keyword
+# cleanup[2] removing heapq
+# cleanup[2] removing _heapq
+# cleanup[2] removing itertools
+# cleanup[2] removing reprlib
+# destroy reprlib
+# cleanup[2] removing _collections
+# cleanup[2] removing weakref
+# destroy weakref
+# cleanup[2] removing collections.abc
+# cleanup[2] removing importlib
+# cleanup[2] removing importlib._bootstrap
+# cleanup[2] removing importlib._bootstrap_external
+# cleanup[2] removing warnings
+# cleanup[2] removing importlib.util
+# cleanup[2] removing importlib.abc
+# cleanup[2] removing importlib.machinery
+# cleanup[2] removing contextlib
+# destroy contextlib
+# cleanup[2] removing sphinxcontrib
+# destroy sphinxcontrib
+# cleanup[2] removing runpy
+# destroy runpy
+# cleanup[2] removing pkgutil
+# destroy pkgutil
+# cleanup[2] removing nn_ns
+# destroy nn_ns
+# cleanup[2] removing nn_ns.app
+# destroy nn_ns.app
+# destroy _signal
+# destroy _locale
+# destroy _sitebuiltins
+# destroy errno
+# destroy ntpath
+# destroy _stat
+# destroy genericpath
+# destroy stat
+# destroy _functools
+# destroy heapq
+# destroy collections.abc
+# destroy importlib
+# destroy os
+# destroy zipimport
+# destroy _operator
+# destroy _heapq
+# destroy _collections
+# destroy collections
+# destroy itertools
+# destroy importlib.util
+# destroy importlib.abc
+# destroy functools
+# destroy types
+# destroy warnings
+# destroy importlib.machinery
+# destroy abc
+# destroy _collections_abc
+# cleanup[3] wiping _frozen_importlib
+# destroy _frozen_importlib_external
+# cleanup[3] wiping _imp
+# cleanup[3] wiping _warnings
+# cleanup[3] wiping _thread
+# cleanup[3] wiping _weakref
+# cleanup[3] wiping _io
+# cleanup[3] wiping marshal
+# cleanup[3] wiping nt
+# cleanup[3] wiping winreg
+# cleanup[3] wiping codecs
+# cleanup[3] wiping _codecs
+# cleanup[3] wiping encodings.aliases
+# cleanup[3] wiping encodings.utf_8
+# cleanup[3] wiping encodings.latin_1
+# cleanup[3] wiping encodings.gbk
+# cleanup[3] wiping _codecs_cn
+# destroy _codecs_cn
+# cleanup[3] wiping _multibytecodec
+# cleanup[3] wiping importlib._bootstrap
+# cleanup[3] wiping sys
+Python 3.6.2 (v3.6.2:5fd33b5, Jul  8 2017, 04:57:36) [MSC v.1900 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+# cleanup[3] wiping builtins

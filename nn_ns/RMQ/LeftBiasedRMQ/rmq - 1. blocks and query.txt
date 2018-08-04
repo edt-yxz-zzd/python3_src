@@ -1,0 +1,141 @@
+---------------------- blocks
+
+normal blocks: |--0--|--1--|............|--i--|--i+1--|...
+super  blocks: |---0---|---1---|..|---k---|------k+1-----|...
+
+assume:
+    * block.being < block.end # i.e. nonempty block
+        len(block) == block.end - block.begin
+        block = array[block.begin : block.end]
+    * len(normal_block) <= len(super_block)
+        but a normal_block may overlap with two super_blocks
+        compare normal_blocks[i] with normal_blocks[i+1]
+
+in the above configure:
+    # inside super_blocks[k]
+    let inside_k = [super_blocks[k].begin..super_blocks[k].end-1]
+    normal_blocks[i].begin      <- inside_k
+
+    # inside super_blocks[k+1]
+    let inside_k1 = [super_blocks[k+1].begin..super_blocks[k+1].end-1]
+    normal_blocks[i].end        <- inside_k1
+    normal_blocks[i+1].begin    <- inside_k1
+    normal_blocks[i+1].end      <- inside_k1
+
+if begin of a normal_block in a super_block:
+    then the normal_block belong to the super_block
+        i to k; i+1 to k+1;
+    but array_idx j which in normal block i, may be in super block k+1
+
+
+
+
+--------------- query
+0 < complete_normal_block_size <= complete_super_block_size <= len(array)
+
+user_query biggest_case
+user query = super blocks query + normal blocks query + in-normal-block query
+          <=======================================================>
+super blocks query
+                            <--------------------->
+normal blocks query
+              <---------------->              <----------------->
+in-normal-block query
+          <--->                                                 <->
+...-|-----------------------|----|-|-|...|-|------|----------------------|--|..
+..-|--|-------|-|-|..|-|-------|--|-|...|-|---|------|-|-|...|--|-----|----|..
+    # first line is super blocks view
+    # second line is normal blocks view
+
+
+
+
+user_query
+    * user_query_range inside 2 normal_blocks
+        * user_query_range inside 1 normal_block
+            in_normal_block_query
+        * user_query_range overlap 2 normal_blocks
+            2*in_normal_block_query
+    * user_query_range overlap at least 3 normal_blocks
+        * user_query_range <= complete_super_block_size
+            # may overlap 2 super_blocks
+            2*in_normal_block_query + normal_blocks_query
+        * complete_super_block_size < user_query_range <= 2*complete_super_block_size
+            # may overlap 3 super_blocks
+            2*in_normal_block_query + 2*normal_blocks_query
+        * user_query_range > 2*complete_super_block_size
+            # ==>> user_query_range overlap at least 3 super_block
+            # biggest_case
+            #
+            # normal_blocks_query requires:
+            #   1) normal_min_array__up_to_length = ceil(s_/s)
+            #   2) at least one middle super_blocks for protection
+            2*in_normal_block_query + 2*normal_blocks_query + super_blocks_query
+
+    ############# another form
+    # "leftcomplete" means overlapped block_range<block>.begin = block.begin
+    # "empty" means overlapped block_range<block>.end = block.begin
+    the_head_mayleftcomplete_notempty_normal_block_idx = begin//s
+        # maybe leftcomplete, but never empty
+    the_last_notleftcomplete_mayempty_normal_block_idx = end//s
+        # maybe leftempty, but never complete
+
+    normal_blocks_begin = (begin-1)//s + 1
+    normal_blocks_end = end//s
+        # maybe normal_blocks_begin >= normal_blocks_end
+    super_blocks_begin = (begin-1)//s_ + 1
+    super_blocks_end = end//s_
+        # maybe super_blocks_begin >= super_blocks_end
+
+
+    # pseudo_in_normal_block_queries use array_idx
+    # pseudo_normal_blocks_queries use normal_block_idx
+    # pseudo_super_blocks_queries use super_block_idx
+    mid1 = normal_blocks_begin*s
+    mid2 = normal_blocks_end*s
+    if mid2 < mid1
+        # 1 in_normal_block_query
+        assert begin < end
+        pseudo_in_normal_block_queries = [(begin, end)]
+    else:
+        # may both empty
+        assert begin <= mid1 <= mid2 <= end and begin < end
+        pseudo_in_normal_block_queries = [(begin, mid1), (mid2, end)]
+
+        uptoN = normal_min_array__up_to_length # == ceil(s_/s)
+        normal_blocks_mid1 = normal_blocks_begin + uptoN
+        normal_blocks_mid2 = normal_blocks_end - uptoN
+        if normal_blocks_end <= normal_blocks_mid1:
+            # may empty
+            assert normal_blocks_begin <= normal_blocks_end
+            pseudo_normal_blocks_queries = [(normal_blocks_begin, normal_blocks_end)]
+        else:
+            # may normal_blocks_mid1 >= normal_blocks_mid2
+            assert normal_blocks_begin < normal_blocks_mid1 < normal_blocks_end
+            assert normal_blocks_begin < normal_blocks_mid2 < normal_blocks_end
+            pseudo_normal_blocks_queries = [(normal_blocks_begin, normal_blocks_mid1), (normal_blocks_mid2, normal_blocks_end)]
+
+        # NOET: super_blocks_begin+1 == super_blocks_end
+        #       split into two cases
+        if normal_blocks_mid2 <= normal_blocks_mid1:
+            assert super_blocks_begin+1 >= super_blocks_end
+            pseudo_super_blocks_queries = []
+        else:
+            assert super_blocks_begin+1 <= super_blocks_end
+            pseudo_super_blocks_queries = [(super_blocks_begin, super_blocks_end)]
+
+    #for beign, end in queries: if begin >= end: delete it
+    for queries in [pseudo_in_normal_block_queries, pseudo_normal_blocks_queries, pseudo_super_blocks_queries]:
+        queries[:] = [(begin, end) for begin, end in queries if begin < end]
+
+    in_normal_block_queries = pseudo_in_normal_block_queries
+    normal_blocks_queries = pseudo_normal_blocks_queries
+    super_blocks_queries = pseudo_super_blocks_queries
+    array_indices = chain(
+        starmap(in_normal_block_query, in_normal_block_queries)
+        ,starmap(normal_blocks_query, normal_blocks_queries)
+        ,starmap(super_blocks_query, super_blocks_queries)
+        )
+
+    assert len(array_indices) <= 5
+    return combine_array_indices(array_indices)

@@ -1,0 +1,6 @@
+what book has I owned?
+which tags were assign to it?
+what's the relationship of two tags?
+
+what notes of a book? unread/reading/finish/throw
+what bugs of a program?

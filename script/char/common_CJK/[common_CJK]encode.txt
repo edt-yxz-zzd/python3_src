@@ -1,0 +1,295 @@
+
+
+class CipherBase cipher where
+    type ClearText cipher :: *
+    type CipherText cipher :: *
+class (CipherBase cipher, Monad m) => Cipher m cipher where
+    -- cipher = cipher_name key_value salt
+    -- encrypt : 1 -> 1+
+    -- decrypt : many -> 1/0
+    encrypt :: cipher -> ClearText cipher -> m (CipherText cipher)
+    decrypt :: cipher -> CipherText cipher -> m (ClearText cipher)
+    -- return == decrypt cipher . encrypt cipher
+    ---not required: return == encrypt cipher . decrypt cipher
+
+
+
+data ChainCipher outer inner = CC outer inner
+    -- a: outer, b: inner; like []
+instance (CipherBase a, CipherBase b, CipherText a ~ ClearText b)
+    => CipherBase (ChainCipher a b) where
+    type ClearText (ChainCipher a b) = ClearText a
+    type CipherText (ChainCipher a b) = CipherText b
+instance (Cipher m a, Cipher m b, CipherText a ~ ClearText b)
+    => Cipher m (ChainCipher a b) where
+    encrypt (CC a b) t = encrypt a t >>= encrypt b
+    decrypt (CC a b) t = decrypt b t >>= decrypt a
+
+data Salt salt a = Salt salt a
+
+add_salt :: (Cipher m a, ClearText a ~ Salt salt t)
+        => a -> salt -> t -> m (CipherText a)
+add_salt a salt = encrypt a . Salt salt
+
+remove_salt_ex :: (Cipher m a, ClearText a ~ Salt salt t)
+        => a -> (CipherText a) -> m (salt, t)
+remove_salt :: (Cipher m a, ClearText a ~ Salt salt t)
+        => a -> (CipherText a) -> m t
+remove_salt a data = remove_salt_ex a data >>= return . snd
+remove_salt_ex a data = do
+    Salt salt t <- decrypt a data
+    return (salt, t)
+
+
+
+class CipherBase cipher => PureCipher cipher where
+    type PureCipherError cipher :: *
+    pure_encrypt :: cipher -> ClearText cipher -> CipherText cipher
+    pure_decrypt :: cipher -> CipherText cipher
+                -> Either (PureCipherError cipher) (ClearText cipher)
+    -- Right == pure_decrypt a . pure_encrypt a
+instance (PureCipher cipher, Monad m, PureCipherError cipher ~ String)
+    => Cipher m cipher where
+    encrypt a = return . pure_encrypt a
+    decrypt a data = case pure_decrypt a data of
+        Right t -> return t
+        Left err -> fail err
+
+
+
+
+
+------------------------------ deprecaded
+
+data EncryptBy by -- the only value is 'undefined'
+encrypt_by_obj :: EncryptBy by
+encrypt_by_obj = undefined
+label :: name -> a -> Label name a
+label _ = box
+unlabel :: name -> Label name a -> a
+unlabel _ = unbox
+
+class Encrypt from to by where
+    encrypt :: from -> Label (EncryptBy by) to
+    encrypt = let e = encrypt_by_obj in label e . encrypt_by e
+    decrypt :: Label (EncryptBy by) to -> from
+    decrypt = let e = encrypt_by_obj in decrypt_by e . unlabel e
+    encrypt_by :: EncryptBy by -> from -> to
+    encrypt_by by = unlabel by . encrypt
+    decrypt_by :: EncryptBy by -> to -> from
+    decrypt_by by = decrypt . label by
+
+type Bytes = [Uint8]
+data Phase a b c = Phase a b c
+instance Encrypt Bytes Bytes (Phase toUInt uint2uint fromUInt) where
+    encrypt_by _ = p3 . p2 . p1 where
+        p1 = encrypt_by (encrypt_by_obj::EncryptBy toUInt) :: Bytes -> UInt
+        p2 = encrypt_by (encrypt_by_obj::EncryptBy uint2uint) :: UInt -> UInt
+        p3 = encrypt_by (encrypt_by_obj::EncryptBy fromUInt) :: UInt -> Bytes
+    decrypt_by _ = p1 . p2 . p3 where
+        p1 = decrypt_by (encrypt_by_obj::EncryptBy fromUInt) :: Bytes -> UInt
+        p2 = decrypt_by (encrypt_by_obj::EncryptBy uint2uint) :: UInt -> UInt
+        p3 = decrypt_by (encrypt_by_obj::EncryptBy toUInt) :: UInt -> Bytes
+
+class (Encrypt a a inner_by, Encrypt a a outer_by) =>
+    AddSalt a inner_by outer_by where
+class (Encrypt a a inner_by, Encrypt a a outer_by) =>
+    AddSalt a inner_by outer_by where
+
+
+
+
+
+
+
+
+------------------------------ deprecaded
+class Encrypt a where
+    encrypt :: a -> [Han]
+instance Encrypt String where
+    encrypt = add_salt__hans . encode . encrypt__uints2bytes
+                . add_salt__uints . map toUInt
+
+add_salt__uints :: [UInt] -> [UInt] -- add uint >..> 0x11_0000
+add_salt__hans :: [Han] -> [Han] -- add unused Han
+
+
+encrypt__uints2bytes :: [UInt] -> [Uint8]
+encrypt__uints2bytes = to_bytes__little_endian . encrypt__uint
+                    . uints2uint__cf
+
+uints2uint__cf :: [UInt] -> UInt
+uints2uint__cf = fraction2uint__concat_bytes . continued_franction2fraction
+                    . uints_as_continued_fraction
+    -- continued franction, first+0, middle+1, last+2
+
+encrypt__uint :: UInt -> UInt
+encrypt__uint = uints2uint__cf . uint2uints__split_bytes
+
+
+
+
+
+
+-------------- encode not encrypt
+
+class Encode a where
+    encode :: a -> [Han]
+instance Encode String where
+    encode = list . fmap (encode . toInteger)
+instance Encode Integer where
+    encode = encode . to_bytes__little_endian
+instance Encode Bytes where
+    encode = map byte2han
+
+byte2han :: Uint8 -> Han
+byte2han = flip lookup $ zip [0..] han_bytes
+list :: [[a]] -> [a]
+list = enclose opener ender . join comma
+join :: a -> [[a]] -> [a]
+join a [] = []
+join a ls@(h:[]) = h
+join a (h:ts) = h ++ a : join a ts
+
+enclose :: a -> a -> [a] -> [a]
+enclose opener ender ls = opener : ls ++ [ender]
+
+opener, comma, ender :: Han
+han_bytes :: [Han]
+comma = ',' -- act as ','
+opener = '['
+ender = ']'
+han_bytes = '...'
+
+
+
+
+---------------------------
+since there 82+256 chars in use
+    we have some control chars not in bytes
+
+    5) required
+        white space ' '
+        escape '\'
+        "[,]"
+        page // to support encrypt with dynamic length block
+    256) bytes
+    ":="
+    line seperator
+    word comment beginner
+    line comment beginner
+    comment beginner/ender
+    constant values / contructor/type name/keyword???
+        seperated by '\' ended by ' '
+            '\constructor(\<name>)+ '
+            '\type_constructor(\<name>)+ '
+            '\keyword(\<name>)+ '
+            name is a string, that is list of uint
+            '\word_comment_begin '
+            '\line_comment_begin '
+            '\comment_begin '
+            '\comment_end '
+    噪声加盐
+
+comment and white space
+    '{-' '-}'
+    '-- ' .. '\n'
+    '---'\S*
+    \S
+
+primitive data type
+    bytes
+    string
+    int/uint/pint
+    mod_uint
+    offseted_mod_uint -- e.g. radix digits allow leading 0s
+    bool - True False
+    tribool - True False Yet
+    fbool - TrueUnknown/UnknownFalse/TrueFalse/UnknownUnknown
+    undefined
+    fail??
+    null
+    -- () is tuple!
+
+
+    --------------------
+    type_name
+    constructor
+    reference
+
+
+    combinator // SKICBWY
+        S - (S x y z) = ((x z) (y z))
+        K - (K x y) = x // const
+        I - (I x) = x // id
+        C - (C f x y) = (f y x) // flip
+        B - (B f g x) = (f (g x)) // .
+        W - (W x y = x y y)
+        Y - Y = \f (\x f (x x)) (\x f (x x)) === \f f(f(f...))
+                = \f (\z z z) (\x f (x x))
+            Y = S (K (S I I)) (S (S (K S) K) (K (S I I)))
+            Y' = S S K (S (K (S S (S (S S K)))) K)
+            Y' = (\x \y x y x) (\y \x y (x y x))
+        --------------
+        [S K] ==>> [B C K W]
+            B = S (K S) K
+            C = S (S (K (S (K S) K)) S) (K K)
+            K = K
+            W = S S (S K)
+        [B C K W] ==>> [S K I]
+            I = W K
+            K = K
+            S = B (B (B W) C) (B B) = B (B W) (B B C)
+
+complex data type
+    fraction = (int, pint)
+    float = (fraction, +error, -error)
+    list
+    tuple
+    Eq k => set k
+    Eq k => dict k v
+    args
+
+    ----------------
+    type // type Xxx = X...
+    dynamic = (type, obj) // to support duck type / union type / any type
+    record = dict string dynamic
+    namespace = dict reference dynamic // to support cycle
+
+
+    // Eq
+    rooted_tree
+    simple_graph
+    simple_digraph
+    DAG // directed acyclic graph
+
+
+    FSG // regex // extract? match? substitute?
+        // tokenizer??
+    CFG // need parser combinator (Monad)??
+
+encode:
+    pure without type_name/length/bound:
+        bytes -> one-to-one
+        string -> array of uint
+        uint -> little-endian bytes
+        int -> bool * uint
+            // * is not tuple, since tuple contains seperator ','
+            // here bool has fixed length
+        pint -> uint+1
+        bool/null -> True/False/null
+
+        list/tuple/set -> '['/','/']'
+        dict -> [:,] // . < := < , < ;
+        args -> [,=;]
+    typed form (e.g. when output to outside world)
+        dynamic = type_name * obj
+
+        // outside, surrounded, instead of type_name * obj
+        (type_name, args...)
+        (protocol, args...)
+
+
+
+
+

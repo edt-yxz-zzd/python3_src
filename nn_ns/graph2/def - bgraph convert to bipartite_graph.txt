@@ -1,0 +1,4 @@
+
+
+bgraph<V,AEdge, HEdge> = bipartite_dgraph<V,AEdge, HEdge>
+

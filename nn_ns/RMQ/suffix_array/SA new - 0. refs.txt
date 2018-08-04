@@ -1,0 +1,7 @@
+
+[SA][LCP][2011]Inducing the LCP-Array (Johannes Fischer).pdf
+[SA][2009]Linear Suffix Array Construction by Almost Pure Induced-Sorting (Ge Nong).pdf
+[SA][2004]Space efficient linear time construction of suffix arrays (Pang Ko).pdf
+
+
+[SA][RMQ][2009]Optimal Succinctness for Range Minimum Queries (Johannes Fischer)(ver3).pdf

@@ -1,0 +1,88 @@
+
+# to define P/T
+
+
+def P # precomputed in-normal-block query table
+in_normal_block_query_table = P
+    # [bad]= normal_block_type2normal_block_square_matrix
+    #       see below, bit_size_of(P) too large
+    = normal_block_type2normal_block_power_table
+    # recall:
+    #   s = complete_normal_block_size
+    #   p = array_length
+    1) normal_block_type :: [0..Catalan_number(s)-1]
+        # see: canonical_Cartesian_tree
+        # see: ballot_number
+        Catalan_number(s) = 4^s /(sqrt(pi)*s^(3/2)) * (1+ O(1/s))
+        Catalan_number(s) <= O(num_normal_blocks) = O(p/s)
+            <<== 4^s <= O(p/s)
+            <<== log(4^s) <= O(log(p/s))
+            <<== s <= O(log(p/s))
+            <<== s <= O(log(p))
+            <<== s = log2(p)/2_y
+        [s = log2(p)/2_y] ==>> Catalan_number(s) <= p
+
+
+    # at first, I try normal_block_type2normal_block_square_matrix
+    #   but fail:
+    #2) normal_block_square_matrix :: [[uint[:s]]]
+    #   a square matrix of size s*s
+    #
+    #   bit_size_of P = len(P)*bit_size_of(matrix)
+    #       = Catalan_number(s) * s*s * bit_size_of(uint[:s])
+    #       = O(4^s/s^(3/2) * s*s * log2(s))
+    #       = O(p*s(1/2) * log2(s))
+
+    2) normal_block_power_table is a power_table
+        # see: make_left_biased_range_minimum_query_power_table
+        # recall:
+        #   time O(n*log(n)) * (a.'<=' + uint[:n].'+-')
+        #   space bit size O(n*log(n)**2)
+
+        bit_size_of(normal_block_power_table) = O(s*log(s)**2)
+        bit_size_of P = len(P)*bit_size_of(normal_block_power_table)
+            = Catalan_number(s) * O(s*log(s)**2)
+            = O(4^s/s^(3/2) * s*log(s)**2)
+            = O(4^s/s^(1/2) * log(s)**2)
+            = O(4^s)  # independent with p
+            ########### if s = log2(p)/2_y
+            = O(p)
+
+        time(P) = Catalan_number(s)*O(s*log(s))*(a.'<=' + uint[:s].'+-')
+                = O(4^s/s^(3/2) * s*log(s))*(a.'<=' + uint[:s].'+-')
+                = O(4^s/s^(1/2) * log(s))*(a.'<=' + uint[:s].'+-')
+                = O(4^s)*(a.'<=' + uint[:s].'+-')  # independent with p
+                ########### if s = log2(p)/2_y
+                = O(p)*(a.'<=' + uint[:s].'+-')
+
+
+
+def T # normal_block_types
+normal_block_idx2normal_block_type = T
+    normal_block_idx2normal_block_type :: [uint[..Catalan_number(s)-1]]
+    len(normal_block_idx2normal_block_type) == num_normal_blocks
+
+    how to compute normal_block_type?
+        # calc
+        def calc_normal_block_type(normal_block) -> normal_block_type
+        # see: encode_canonical_Cartesian_tree_of_array_of_fixed_length
+        #       time (O(L^2) if table not cached else O(L)) * Catalan_number(L).'+'
+        #       = time O(L^3) if table not cached else O(L^2)
+    if Catalan_number(s) <= p/s <= MAX_ARRAY_LEN <= MACHINE_WORD_MAX:
+        ==>> Catalan_number(s).'+' ~ time O(1) instead of O(s)
+        ==>> s <= WORD_BITS/2
+        # complete_normal_block_size is very small, e.g. <= 32
+
+    time(T) = O(p/s * encode + table_init)
+        = O(p/s * s + s^2) * Catalan_number(s).'+'
+        = O(p + s^2) * Catalan_number(s).'+'
+        ###### if s = log2(p)/2_y
+        = O(p) * Catalan_number(s).'+'
+        <= O(p) * uint[..p].'+'
+
+    bit_size_of T = num_normal_blocks * bit_size_of Catalan_number(s)
+        ~ p/s * 2*s
+        ~ 2p
+
+
+

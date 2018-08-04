@@ -1,0 +1,17 @@
+LMS-isuffix vs LMS-substring-isuffix
+
+
+let L = len(array)
+LMS_isuffix vs LMS_substring_isuffix
+    although both in [0..L-1]
+    suffix(LMS_isuffix) == array[LMS_isuffix:]
+    suffix(LMS_substring_isuffix) = array[LMS_substring_isuffix:next_LMS_isuffix]
+
+sort LMS_isuffices
+    <<== from big_string SA
+
+sort LMS_substring_isuffices and eval LCP
+    sort <<== from sorted_LMS_isuffices
+    LCP <<== require LCP-RMQ; see: "SA new - 1.5.4. depth bucket[mine].txt"
+
+

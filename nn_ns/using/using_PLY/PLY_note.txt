@@ -1,0 +1,39 @@
+
+# both token_rules module and productions module require "tokens"
+# the first production in productions module is of the Start Symbol
+
+# token_rules module
+tokens = [...]
+states = [('state', 'exclusive'|'inclusive'), ...]
+# 4.18 Conditional lexing and start conditions
+# def t[_state]_TOKENTYPE()...
+# _state = _state* | _ANY | _INITIAL | _ignore | _error
+def t_XXX(t): 
+    r'...'
+    t.lexer.??? # for global_states
+    t.lexpos # input[:t.lexpos] # input is lexer.lexdata
+    t.lexer.lineno
+    t.lexer.lexmatch # result of re.match()
+    t.value = ?? # output result
+    
+    t.lexer.begin('state')  # jump to state
+    t.lexer.push_state('state')
+    t.lexer.pop_state()
+    
+    return t # if return None then discard this token
+
+# productions module
+start = 'start_symbol'
+def p_XXX(p):
+    '...'
+    p.parser.??? # for global_states
+    p[i] # if rule[i] is a terminal, then p[i] is token.value
+    p[0] = ?? # output result
+    return None
+    
+# using
+import ply.lex
+import ply.yacc
+lexer  = ply.lex.lex(module = token_rules)     # token_rules.t_...
+parser = ply.yacc.yacc(module = productions, start='start_symbol')   # productions.p_...
+parser.parse(text,lexer=lexer)

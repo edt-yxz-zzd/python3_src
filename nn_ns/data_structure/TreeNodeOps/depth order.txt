@@ -1,0 +1,12 @@
+
+node, depth
+nonleaf, innode_position, depth
+    innode_position is of nonleaf
+    depth is of nonleaf
+    if innode_position != innode_position_end:
+        entity_position = innode_position
+        (nonleaf, entity_position) std for an entity
+
+node[, may_innode_position], depth[, key|entity][, last|end]
+node, depth, idx
+

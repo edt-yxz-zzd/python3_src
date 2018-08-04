@@ -1,0 +1,6 @@
+
+
+bipartite graph
+bipartite_ugraph<V1,V2, AEdge> = ({V1}, {V2}, {AEdge:(V1,V2)})
+bipartite_dgraph<V1,V2, AEdge> = ({V1}, {V2}, {AEdge:(V1,bool,V2)})
+

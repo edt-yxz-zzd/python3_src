@@ -1,0 +1,9 @@
+
+TODO:
+    relationship:
+        begin beginN beginN+1 beginS beginS+1
+        end ...
+
+        how many cases for query?
+        how too enumerate all cases for testing?
+

@@ -1,0 +1,23 @@
+range minimum query (RMQ)
+
+RMQ<array>(i,j) ::= snd $ min [(array[k], k) | k <- [i..j-1]]
+    # leftbiased_RMQ
+
+[Range_Minimum_Query_2007]A_New_Succinct_Representation_of_RMQ_Information_and_Improvements_in_the_Enhanced_Suffix_Array.pdf
+
+
+---------------------- overview
+1. blocks and query
+2. defines
+    common
+    complete_super_block_size, complete_normal_block_size
+    B_, B  # min indices
+    M_, M  # multiple blocks query table
+    P, T   # precomputed in-normal-block query table, normal_block_types
+3. types
+4. std_funcs
+    # some function to standardize data
+
+
+
+

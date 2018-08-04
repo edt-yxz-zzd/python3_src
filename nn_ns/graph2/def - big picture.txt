@@ -1,0 +1,40 @@
+mapping_ops in big-picture
+    # finest dfs, datatype are offered by user
+    def dfs_3color__oriented(
+        graph_ops__without_mapping_ops_collection, oriented_graph
+        , vtx2tricolor_ops, vtx2tricolor # offer mapping_ops directly
+        , ancestor_stack
+        ):pass
+    def dfs_3color__unoriented(
+        graph_ops__without_mapping_ops_collection, graph
+        , vtx2tricolor_ops, vtx2tricolor # offer mapping_ops directly
+        , ancestor_stack
+        , iterator_stack
+        ):pass
+
+    # coarser
+    # dfs depended on IGraphOps interface
+    #   implictly offer graph_mapping_ops via graph_ops
+    def dfs(graph_ops:IGraphOpsWithMappingOps, graph):pass
+    # dfs depended on concrete ops class
+    def dfs(graph_ops:XXX_GraphOps, graph):pass
+
+    # coarsest
+    # dfs depended on IGraph interface
+    def dfs(graph:IGraph):pass
+    # dfs depended on concrete graph class
+    def dfs(graph:XXX_Graph):pass
+
+    # dfs with special requirement
+    def preordering_dfs(...):pass
+
+    # using dfs instead of graph!
+    #   depended on IXXX_DFS interface
+    #   DFS are classified by its output format
+    #       e.g. dfs_obj :: Iter<(Case, Payload)>
+    #       what are the cases?? which case to which payload??
+    #       which content will uniquely appear in Payload?
+    def is_connected(dfs:IXXX_DFS):pass
+    def is_connected(dfs_output_explain_ops, dfs_iter):pass
+
+

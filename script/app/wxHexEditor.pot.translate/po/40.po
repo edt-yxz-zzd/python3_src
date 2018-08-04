@@ -1,0 +1,309 @@
+msgid "wxHexEditor is a hex editor for HUGE files and devices."
+msgstr ""
+
+#: src/HexEditorFrame.cpp:917
+msgid "You needed administration privileges to see available devices"
+msgstr ""
+
+#: src/HexEditorFrame.cpp:1137
+msgid "Cannot open dropped file: "
+msgstr ""
+
+#: src/HexEditorFrame.cpp:1156 src/HexEditorGui.cpp:1010
+#, c-format
+msgid "New wxHexEditor version %s is available!"
+msgstr ""
+
+#: src/HexEditorGui.cpp:29
+msgid "&New"
+msgstr ""
+
+#: src/HexEditorGui.cpp:29
+msgid "CTRL+N"
+msgstr ""
+
+#: src/HexEditorGui.cpp:29
+msgid "Creates a new file"
+msgstr ""
+
+#: src/HexEditorGui.cpp:33
+msgid "&Open"
+msgstr ""
+
+#: src/HexEditorGui.cpp:33
+msgid "CTRL+O"
+msgstr ""
+
+#: src/HexEditorGui.cpp:33
+msgid "Open a file"
+msgstr ""
+
+#: src/HexEditorGui.cpp:38
+msgid "No Recent File"
+msgstr ""
+
+#: src/HexEditorGui.cpp:42
+msgid "Open &Recent"
+msgstr ""
+
+#: src/HexEditorGui.cpp:45
+msgid "&Save"
+msgstr ""
+
+#: src/HexEditorGui.cpp:45
+msgid "CTRL+S"
+msgstr ""
+
+#: src/HexEditorGui.cpp:45
+msgid "Save modifications"
+msgstr ""
+
+#: src/HexEditorGui.cpp:50
+msgid "Save &As"
+msgstr ""
+
+#: src/HexEditorGui.cpp:50
+msgid "SHIFT+CTRL+S"
+msgstr ""
+
+#: src/HexEditorGui.cpp:50
+msgid "Save current file as..."
+msgstr ""
+
+#: src/HexEditorGui.cpp:55
+msgid "&Close"
+msgstr ""
+
+#: src/HexEditorGui.cpp:55
+msgid "CTRL+W"
+msgstr ""
+
+#: src/HexEditorGui.cpp:55
+msgid "Close current file"
+msgstr ""
+
+#: src/HexEditorGui.cpp:62
+msgid "Import TAGs"
+msgstr ""
+
+#: src/HexEditorGui.cpp:66
+msgid "Export TAGs"
+msgstr ""
+
+#: src/HexEditorGui.cpp:72
+msgid "&Quit"
+msgstr ""
+
+#: src/HexEditorGui.cpp:72
+msgid "CTRL+Q"
+msgstr ""
+
+#: src/HexEditorGui.cpp:72
+msgid "Quit the application"
+msgstr ""
+
+#: src/HexEditorGui.cpp:75
+msgid "&File"
+msgstr ""
+
+#: src/HexEditorGui.cpp:79
+msgid "&Undo"
+msgstr ""
+
+#: src/HexEditorGui.cpp:79
+msgid "CTRL+Z"
+msgstr ""
+
+#: src/HexEditorGui.cpp:79
+msgid "Undo last operation"
+msgstr ""
+
+#: src/HexEditorGui.cpp:84
+msgid "&Redo"
+msgstr ""
+
+#: src/HexEditorGui.cpp:84
+msgid "CTRL+Y"
+msgstr ""
+
+#: src/HexEditorGui.cpp:84
+msgid "Reverts last undo"
+msgstr ""
+
+#: src/HexEditorGui.cpp:91
+msgid "CTRL+C"
+msgstr ""
+
+#: src/HexEditorGui.cpp:91
+msgid "Copies selection"
+msgstr ""
+
+#: src/HexEditorGui.cpp:96
+msgid "Copy As"
+msgstr ""
+
+#: src/HexEditorGui.cpp:96
+msgid "CTRL+SHIFT+C"
+msgstr ""
+
+#: src/HexEditorGui.cpp:96
+msgid "Copies selection in special format"
+msgstr ""
+
+#: src/HexEditorGui.cpp:101
+msgid "CTRL+ALT+S"
+msgstr ""
+
+#: src/HexEditorGui.cpp:101
+msgid "Save selections as a file"
+msgstr ""
+
+#: src/HexEditorGui.cpp:106
+msgid "CTRL+X"
+msgstr ""
+
+#: src/HexEditorGui.cpp:106
+msgid "Cuts a selection"
+msgstr ""
+
+#: src/HexEditorGui.cpp:111
+msgid "CTRL+V"
+msgstr ""
+
+#: src/HexEditorGui.cpp:111
+msgid "Paste clipboard to cursor location"
+msgstr ""
+
+#: src/HexEditorGui.cpp:116
+msgid "Fill Selection"
+msgstr ""
+
+#: src/HexEditorGui.cpp:116
+msgid "Fill selection blocks"
+msgstr ""
+
+#: src/HexEditorGui.cpp:121
+msgid "Deletes selection"
+msgstr ""
+
+#: src/HexEditorGui.cpp:126
+msgid "Inserts new bytes to cursor location"
+msgstr ""
+
+#: src/HexEditorGui.cpp:133
+msgid "CTRL+F"
+msgstr ""
+
+#: src/HexEditorGui.cpp:138
+msgid "CTRL+R"
+msgstr ""
+
+#: src/HexEditorGui.cpp:143
+msgid "CTRL+G"
+msgstr ""
+
+#: src/HexEditorGui.cpp:143
+msgid "Branches the given location"
+msgstr ""
+
+#: src/HexEditorGui.cpp:147
+msgid "&Edit"
+msgstr ""
+
+#: src/HexEditorGui.cpp:151
+msgid "Data Interpreter"
+msgstr ""
+
+#: src/HexEditorGui.cpp:163
+msgid "TAG Panel"
+msgstr ""
+
+#: src/HexEditorGui.cpp:171
+msgid "Search Panel"
+msgstr ""
+
+#: src/HexEditorGui.cpp:175
+msgid "Comparison Panel"
+msgstr ""
+
+#: src/HexEditorGui.cpp:181
+msgid "Zebra Striping"
+msgstr ""
+
+#: src/HexEditorGui.cpp:187
+msgid "Offset Control"
+msgstr ""
+
+#: src/HexEditorGui.cpp:192
+msgid "Hex Control"
+msgstr ""
+
+#: src/HexEditorGui.cpp:197
+msgid "Text Control"
+msgstr ""
+
+#: src/HexEditorGui.cpp:201
+msgid "&View"
+msgstr ""
+
+#: src/HexEditorGui.cpp:213
+msgid "XORView Thru"
+msgstr ""
+
+#: src/HexEditorGui.cpp:213
+msgid "View your XOR encrypted file without decrypting!"
+msgstr ""
+
+#: src/HexEditorGui.cpp:216
+msgid "Tools"
+msgstr ""
+
+#: src/HexEditorGui.cpp:220
+msgid "Open RAM Device"
+msgstr ""
+
+#: src/HexEditorGui.cpp:226
+msgid "N/A on this OS (yet)"
+msgstr ""
+
+#: src/HexEditorGui.cpp:229
+msgid "Open Disk Device"
+msgstr ""
+
+#: src/HexEditorGui.cpp:240 src/HexEditorGui.cpp:1871
+msgid "Backup"
+msgstr ""
+
+#: src/HexEditorGui.cpp:244 src/HexEditorGui.cpp:1932
+msgid "Restore"
+msgstr ""
+
+#: src/HexEditorGui.cpp:248 src/HexEditorGui.cpp:1992
+msgid "Erase"
+msgstr ""
+
+#: src/HexEditorGui.cpp:251
+msgid "Device Image Tools"
+msgstr ""
+
+#: src/HexEditorGui.cpp:253
+msgid "Devices"
+msgstr ""
+
+#: src/HexEditorGui.cpp:258
+msgid "Read Only"
+msgstr ""
+
+#: src/HexEditorGui.cpp:264
+msgid "Writeable"
+msgstr ""
+
+#: src/HexEditorGui.cpp:269
+msgid "Direct Write"
+msgstr ""
+
+#: src/HexEditorGui.cpp:273
+msgid "File Mode"
+msgstr ""
+
+#: src/HexEditorGui.cpp:279 src/HexEditorGui.cpp:890

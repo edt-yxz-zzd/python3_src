@@ -1,0 +1,46 @@
+
+def M # multiple-normal_blocks_query_table
+normal_blocks_query_table = normal_block_idx2powerx2min_element_offseted_normal_block_idx = M
+    :: [[NormalBlockIdx]]
+    # normal_block_idx to powerx to min_element_normal_block_idx
+    # diff with super_block_idx2powerx2min_element_super_block_idx:
+    #   only up to s_/2 not to p/2
+    = make_left_biased_range_minimum_query_power_table(normal_min_array, normal_min_array__up_to_length, offset=True)
+    normal_min_array__up_to_length
+        = ceil(complete_super_block_size/complete_normal_block_size)
+        = ceil(s_/s)
+        # see: "rmq - 1. blocks and query.txt" :: biggest_case
+normal_block_idx2powerx2min_element_offseted_normal_block_idx[normal_block_idx][power_sub_1]
+    = min_element_array_idx of
+        array[normal_blocks[normal_block_idx].begin
+             :normal_blocks[normal_block_idx+2**(power_sub_1+1)-1].end]
+     - normal_blocks[normal_block_idx].begin # offset
+    # to offseted_normal_block_idx not to normal_block_idx/array_idx
+
+    # see: make_left_biased_range_minimum_query_power_table
+    len(M) = len(array) - 1
+    len(M[normal_block_idx])
+        = floor_log2(min(normal_min_array__up_to_length, num_normal_blocks - normal_block_idx))
+        = floor_log2(min(ceil(s_/s), num_normal_blocks - normal_block_idx))
+    bit_size_of(M) = O(num_normal_blocks * log(normal_min_array__up_to_length)**2)
+        = O(num_normal_blocks * log(s_/s)**2)
+        = O(ceil(p/s) * log(s_/s)**2)
+        = O(p/s * log(s_/s)**2)
+        # recall: complete_super_block_size = s_ = log2(p)**(2+delta_x)
+        # recall: complete_normal_block_size = s = log2(p)/(2+delta_y)
+        # s_/s = (2+delta_y) * log2(p)**(1+delta_x)
+        # s_/s = 2_y * log2(p)**1_x
+        = O(p/s * log(2_y*log2(p)**1_x)**2)
+        = O(p/s * log(log2(p)**1_x)**2)
+        = O(p/s * (1_x*log(log2(p)))**2)    # here 1_x should have a upper_bound
+        # here, delta_x: the smaller, the better
+        # compare with above: for M_: delta_x the bigger the better!!
+        = O(p/s * log(log2(p))**2)
+        = O(p/log2(p) *2_y * log(log2(p))**2) # here 2_y should have a upper_bound
+        # here, delta_y: the smaller, the better
+        = O(p)*1_x*2_y
+
+    ==>> delta_x should have a upper_bound independant with p
+    ==>> delta_y should have a upper_bound independant with p
+
+

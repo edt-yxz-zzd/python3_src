@@ -1,0 +1,26 @@
+
+L_ichar
+S_ichar
+
+see:
+    ichar
+    isuffix
+    isuffix_ex
+
+len L = len(array)
+L-ichar = will go down char
+        = the last char(if any) | isuffix(self.ichar) > isuffix(self.ichar+1)
+        = ichar == (L-1) or isuffix(ichar) > isuffix(ichar)+1
+S-ichar = will go up char
+        = isuffix(ichar) < isuffix(ichar)+1
+NOTE: isuffix != isuffix+1
+
+
+is_L_ichar<array> ichar = ichar == L-1 or isuffix(ichar) > isuffix(ichar)+1
+is_S_ichar<array> ichar = ichar != L-1 and isuffix(ichar) < isuffix(ichar)+1
+
+
+NOTE:
+    last char if any is L_char
+
+

@@ -1,0 +1,13 @@
+
+all chars same
+    v.s diff
+
+
+
+encode/enumerate problem for SA/LCP
+    num_SA<n> = |{SA<string> | @string. len(string)==n}|
+    num_LCP<SA> = |{LCP<string> | @string. SA == SA<string>}|
+
+bucket sort noduplicate
+
+

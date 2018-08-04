@@ -1,0 +1,197 @@
+
+see:
+    [String_Suffix_Tree_2003]Simple_Linear_Work_Suffix_Array_Construction.pdf
+
+UIntSA<string> = sorted_string_idc_by_suffix = sorted_suffix_position2suffix_begin_idx
+invUIntSA<string> = suffix_begin_idx2sorted_suffix_position
+
+
+input:
+    alphabet_size :: UInt
+    string :: [UInt[0..alphabet_size-1]]
+output:
+    UIntSA<string>
+
+let L = len(string)
+let a = UInt[0..alphabet_size-1]
+
+
+#Nothing < Just _
+1) basic case detect
+    see below L_at_least
+    [L < 2] ==>> basic case
+2) make SA_1_2
+    def SA_1_2
+    SA_1_2 = sorted(range(len(suffices_1_2)), key=\i->suffices_1_2[i])
+        where
+            suffices_1_2 = suffices_1 + suffices_2
+                = [string[i:] for i in range(L) if i==3*_+1]
+                + [string[i:] for i in range(L) if i==3*_+2]
+        # NOTE:
+        #   !!!not SA<[string[i] for i in range(L) if i!=3*_]>!!!
+        #       this def remove char at string[3*_], hence is wrong
+        #   !!!not suffices_1_2 = [string[i:] for i in range(L) if i!=3*_]!!!
+        #       mix up 1 and 2 ==>> broken the internal continuous
+        #       ??? really, I think it is fine, this make the version2!!!
+        #           and neednot triple but use singletion/pair instead
+        #               3x+1 ==>> singletion string[3x+1:3x+1+1]
+        #               3x+2 ==>> pair string[3x+2:3x+2+2]
+
+
+    mstring = map(Just, string) ++ [Nothing]*2
+        :: [Maybe a]
+        # len(mstring) == L+2
+    mstring1 = mstring[1:] and pop Nothing while not [3 divs len(mstring1)]
+        # len(mstring1) == len(mstring)-1 -[0|1|2] # <<== L >= 1
+        #                                          # L_at_least
+        #                                          # for mstring[1:]
+        #               == L+1 -[0|1|2]
+    mstring2 = mstring[2:] and pop Nothing while not [3 divs len(mstring2)]
+        # len(mstring2) == len(mstring)-2 -[0|1|2] # <<== L >= 2
+        #                                          # L_at_least
+        #                                          # for mstring[2:]
+        #               == L -[0|1|2] <= len(mstring1)
+    [L >= 1]
+        consider mstring1 and mstring2 together:
+            pop out at least one Nothing # always
+            at least one Nothing remain  # <==> L >= 1 # here
+            i.e. (mstring1+mstring2).count(Nothing) == [1|2|3]
+            i.e. (num of popped Nothing) == [1|2|3]
+    [len(mstring1)==0]
+        ==>> len(string)==0
+    [len(mstring2)==0]
+        ==>> len(string)<=1
+    if len(string) < 2: jump to basic case
+        # see L_at_least above and below
+
+    now assume 0 < len(mstring2) <= len(mstring1)
+
+    def mstring_x_y
+    if mstring1[-1] is Nothing:
+        mstring_x_y = mstring1 + mstring2
+
+        # index of triples_x_y to index of string
+        i_xy_to_i_str = range(1,L, 3) + range(2,L, 3)
+            # see triples_x_y below
+
+        # index of string (==3z+1) in triples_x_y[xy_begin:xy_end]
+        i_str_1__xy_begin = 0
+        i_str_1__xy_end = len(range(1,L, 3)) = ceil_div(L-1, 3) = (L+1)//3
+            # = i_str_2__xy_begin
+    else:
+        assert mstring2[-1] is Nothing
+        mstring_x_y = mstring2 + mstring1
+        i_xy_to_i_str = range(2,L, 3) + range(1,L, 3)
+        i_str_1__xy_begin = i_str_2__xy_end = len(range(2,L, 3))
+                        = ceil_div(L-2,3) = L//3
+        i_str_1__xy_end
+            1) = i_str_1__xy_begin + len(range(1,L, 3))
+               = L//3 + (L+1)//3 = ???
+            2) = len(triples_x_y) = (2*L)//3 # see below
+
+
+    #### it is important that Nothing is the minimum
+    ####    and its occur in middle sperate the two new_string_1/2
+    triples_x_y = cut_to_blocks 3 mstring_x_y
+        # [(Maybe a, Maybe a, Maybe a)]
+    len(mstring_x_y) == len(mstring1)+len(mstring2)
+        = (L+1)+L  - (num of popped Nothing)
+        = 2*L+1 - [1|2|3]
+        = 2*L - [0|1|2]
+        <= 2*L
+    len(triples_x_y) = len(mstring_x_y)/3 # divs
+        #[... <= (2*L)/3] ==>>
+        = (2*L-[0|1|2])/3 # divs
+        = (2*L)//3
+    # triples_x_y will be the string as input of recur call
+    #   that is: reduce L into (2*L)//3
+    #   require: L > (2*L)//3
+    #       <==> L > 2*L/3
+    #       <==> L >= 1     # L_at_least
+
+    # L == 2: len(mstring_x_y) = (1+2)+(0+0) = 3+0 = 3 <= 4 = 2*2
+    #           len(triples_x_y) = 1 < 2 = L
+    # L == 3: len(mstring_x_y) = (2+1)+(1+2) = 3+3 = 6 <= 6 = 2*3
+    #           len(triples_x_y) = 2 < 3 = L
+    # L == 4: len(mstring_x_y) = (3+0)+(2+1) = 3+3 = 6 <= 8 = 2*4
+    #           len(triples_x_y) = 2 < 4 = L
+    # L == 5: len(mstring_x_y) = (4+2)+(3+0) = 6+3 = 9 <= 10 = 2*5
+    #           len(triples_x_y) = 3 < 5 = L
+
+
+    ######################
+    # calc:
+    SA_1_2 = recur calc SA<triples_x_y> by UIntSA<make_array_idx2group_idx(triples_x_y)>
+        # calc make_array_idx2group_idx: by radix sort on triples_x_y
+        # NOTE: if make_array_idx2group_idx(triples_x_y) is_strict_sorted:
+        #   then done!!
+        #   since all chars are different, the suffix tree = the root + its direct children
+        #   i.e. one bucket_sort on the first char of all suffices finish the work.
+
+3) make SA_0
+    def SA_0
+    SA_0 = sorted(range(len(suffices_0)), key=\i->suffices_0[i])
+        = sorted(range(len(suffices_0)), key=\i->string[3*i])
+        where suffices_0 = [string[i:] for i in range(L) if i==3*_]
+    def SA_1
+    SA_1 = sorted(range(len(suffices_1)), key=\i->suffices_1[i])
+        = sorted(range(len(suffices_1)), key=\i->string[3*i+1])
+        where suffices_1 = [string[i:] for i in range(L) if i==3*_+1]
+
+    invSA_1_2 = invUIntSA<triples_x_y> = invSA<SA_1_2>
+        # calc invSA is easy
+
+    # calc:
+    SA_1 = [(i_str-1)//3 | i_xy <- SA_1_2, let i_str=i_xy_to_i_str[i_xy], i_str==3*_+1]
+    # calc:
+    SA_0
+        = radix_sort range(0,L, 3) with key=\i->(string[3*i], invSA_1_2[3*i+1])
+
+        # can save the first bucket_sort (i.e. with key[-1])
+        #   since SA_1 has known
+        = [may last i0 if ...] + bucket_sort(SA_1, key=\i0->string[i0*3])
+            # if last i0 not follow a i1
+            #   i.e. L = i0+1 = 3z+1
+
+4) merge SA_0 and SA_1_2
+    like merge_sort does
+
+    def merge :: (left->right->Bool) -> [left] -> [right] -> [Either left right]
+    merge le (l:lefts) (r:rights) = if le l r
+                                    then Left l : merge lefts (r:rights)
+                                    else Right r : merge (l:lefts) rights
+    merge _ [] rights = map Right rights
+    merge _ lefts [] = map Left lefts
+
+    # calc:
+    SA = merge le (map (3*) SA_0) (map i_xy_to_i_str SA_1_2)
+        where
+            Left = Right = id
+            #le i_str_0 i_str_1_2
+            le (3*i0) (3*i1+1) =
+                (string[3*i0], invSA_1_2[i_str_1_2_to_i_xy(3*i0+1)])
+                <=
+                (string[3*i1+1], invSA_1_2[i_str_1_2_to_i_xy(3*i1+2)])
+            le (3*i0) (3*i2+2) =
+                (string[3*i0], string[3*i0+1]
+                    , invSA_1_2[i_str_1_2_to_i_xy(3*i0+2)])
+                <=
+                (string[3*i2+2], string[3*i2+3], invSA_1_2[i_str_1_2_to_i_xy(3*i2+4)])
+            i_str_1_2_to_i_xy = ... # inverse i_xy_to_i_str
+
+    DONE!!
+
+
+5) time
+
+    T(n) = A*n + T((1-D)*n)
+        let T(n) = X*n
+        X*n = A*n + X*(1-D)*n
+        D*X*n = A*n
+        X = A/D
+
+    here (1-D) = 2/3
+        ==>> X = 3A
+
+
+

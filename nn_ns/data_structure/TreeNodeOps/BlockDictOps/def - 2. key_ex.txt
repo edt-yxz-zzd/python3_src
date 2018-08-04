@@ -1,0 +1,12 @@
+
+key_ex used to repr left_bound and right_bound of range
+
+[1/2, 4/5] == (TheKey 1/2, TheKey 4/5)
+(1/2, 4/5] == (More 1/2, TheKey 4/5)
+(1/2, 4/5) == (More 1/2, Less 4/5)
+(-oo, 4/5) == (-inf, Less 4/5)
+(-oo, +oo) == (-inf, +inf)
+
+lkey_ex = left_bound = TheKey key | More key | -inf
+rkey_ex = right_bound = TheKey key | Less key | +inf
+

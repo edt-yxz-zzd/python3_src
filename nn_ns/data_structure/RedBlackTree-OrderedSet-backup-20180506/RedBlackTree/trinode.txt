@@ -1,0 +1,91 @@
+## need not "key"; searching should be another class
+
+
+
+same direction:
+    x
+    g
+    u  p
+       s  m
+    
+        x
+        p
+      g   m
+    u s
+    
+    x<->g<->p<->s ==>> x<->p<->g<->s
+    expand:
+        x->g ==>> x->p
+        g->p ==>> g->s
+        p->s ==>> p->g
+        x<-g ==>> p<-g
+        g<-p ==>> x<-p
+        p<-s ==>> g<-s
+        
+    
+    order by time:
+        assume .children is built bottom-up; .parent is top-down
+        g->p ==>> g->s # g.child := s
+        p->s ==>> p->g # p.child := g
+        x->g ==>> x->p # x.child := p
+        
+        g<-p ==>> x<-p # p.parent := x
+        x<-g ==>> p<-g # g.parent := p
+        p<-s ==>> g<-s # s.parent := g
+
+    but we copy parent from other's include direction!!!
+        p.parent := x == g.parent
+        g.parent := p == s.parent # not m.parent
+        s.parent := g == p.parent
+        not a DAG!!!
+        we need to keep a temp copy!!
+        e.g.
+            tmp := g.parent
+            g.parent := s.parent
+            s.parent := p.parent
+            p.parent := tmp
+    
+different direction
+    x
+    g
+    u  p
+       m   s
+       l r
+    
+          x
+          m
+      g      p
+    u  l    r s
+    
+    x<->g<->p<->m<->l ; m<->r
+    expand:
+        x->g ==>> x->m
+        g->p ==>> g->l
+        p->m ==>> p->r
+        m->l ==>> m->g
+        m->r ==>> m->p
+
+                     m.parent := g.parent
+                     l.parent := p.parent
+                     r.parent := m.parent
+                     g.parent := l.parent
+                     p.parent := r.parent
+    ordered by time:
+        g->p ==>> g->l
+        p->m ==>> p->r
+        m->l ==>> m->g
+        m->r ==>> m->p
+        x->g ==>> x->m
+
+                     tmp := g.parent
+                     g.parent := l.parent
+                     l.parent := p.parent
+                     p.parent := r.parent
+                     r.parent := m.parent
+                     m.parent := g.parent
+
+
+
+
+
+    

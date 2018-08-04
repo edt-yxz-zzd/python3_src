@@ -1,0 +1,47 @@
+
+triconnected simple planar graph
+<==> the edge-graph of convex polyhedron
+<==> the skeleton of a convex polyhedron
+<==> polyhedral graph
+<==> c-net
+<==> 3-vertex-connected simple planar ugraph
+
+http://mathworld.wolfram.com/PolyhedralGraph.html
+    * Every convex polyhedron can be represented in the plane or on the surface of a sphere by a 3-connected planar graph.
+    * Every 3-connected planar graph can be realized as a convex polyhedron.
+        # Steinitz Theorem (1922)
+
+    * Through duality, each polyhedral graph on V=n nodes corresponds to a graph with F=n faces. So the polyhedral graphs on n nodes are isomorphic to the convex polyhedra with n faces.
+        ??# n-nodes polyhedral graph <-[dual]-> n-faces polyhedral graph
+
+
+There is only one topological embedding of a triconnected planar graph (on the sphere).
+    # Whitney Theorem (1933)
+    # embedding or image embedding
+
+
+cubic 3-vertex-connected simple planar ugraph
+<==> simple polyhedron
+<==> 3-dimensional simple polytope
+    (d-dimensional simple polytope: degree v == d; num_facets v == d)
+<-[dual]-> plane triangulation <==> maximal planar graph
+    # maximal planar graph is triconnected
+    # maximal planar graph is triangulation
+    # maximal planar graph: 3V==E+6 # 2V==F+4; 2E==3F
+    # planar graph: V+F==E+2 # Euler formula
+
+https://en.wikipedia.org/wiki/Tutte_embedding
+Tutte embedding
+    Tutte_embedding = barycentric_embedding =[def]=
+        1) a straight-line planar embedding of a simple 3-vertex-connected planar graph
+        2) all (\v -> position v == sum (map position $ neighbors v) / length (neighbors v)) (interiors_of embedding)
+
+    In graph drawing and geometric graph theory, a Tutte embedding or barycentric embedding of a simple 3-vertex-connected planar graph is a crossing-free straight-line embedding with the properties that the outer face is a convex polygon and that each interior vertex is at the average (or barycenter) of its neighbors' positions.
+    If the outer polygon is fixed, this condition on the interior vertices determines their position uniquely as the solution to a system of linear equations. Solving the equations geometrically produces a planar embedding.
+    Tutte's spring theorem, proven by W. T. Tutte (1963), states that this unique solution is always crossing-free, and more strongly that every face of the resulting planar embedding is convex. It is called the spring theorem because such an embedding can be found as the equilibrium position for a system of springs representing the edges of the graph.
+
+
+
+
+
+

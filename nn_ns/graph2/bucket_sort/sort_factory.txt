@@ -1,0 +1,6 @@
+
+sort_factory(..., *, key, reverse=False, ...) -> sort_func
+bare_sort_factory(*, key, reverse=False) -> sort_func
+
+sort_func :: iter<obj> -> [obj] # list
+

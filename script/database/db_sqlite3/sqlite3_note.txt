@@ -1,0 +1,98 @@
+TO SHOW: 
+    stat = 'SELECT * FROM sqlite_master;'
+    cur.execute(stat)
+    for row in cur.fetchall():
+        print(row)
+
+
+DONT WORK   ----->   USING INSTEAD
+    PK   ----->   PRIMARY KEY
+    FK   ----->   FOREIGN KEY
+    CONSTRAINT name FOREIGN KEY (col_name..) 
+        REFERENCES table_name (col_name...) 
+        1) name is not unique, but no error!! ??????
+        2) the ref key does not exist, but insert success!!
+    
+    
+reference_definition:
+    REFERENCES tbl_name(index_col_name,...)
+    [MATCH FULL | MATCH PARTIAL | MATCH SIMPLE]
+    [ON DELETE reference_option]
+    [ON UPDATE reference_option]
+reference_option:
+    RESTRICT | CASCADE | SET NULL | NO ACTION
+
+If the CONSTRAINT symbol clause is given, the symbol value, if used, must be unique in the database. A duplicate symbol will result in an error similar to: ERROR 1022 (2300): Can't write; duplicate key in table '#sql- 464_1'. If the clause is not given, or a symbol is not included following the CONSTRAINT keyword, a name for the constraint is created automatically.
+
+For storage engines supporting foreign keys, MySQL rejects any INSERT or UPDATE operation that attempts to create a foreign key value in a child table if there is no a matching candidate key value in the parent table.
+
+RESTRICT: Rejects the delete or update operation for the parent table. Specifying RESTRICT(or NO ACTION) is the same as omitting the ON DELETE or ON UPDATE clause.
+
+
+SELECT TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, CONSTRAINT_NAME
+    FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+    WHERE REFERENCED_TABLE_SCHEMA IS NOT NULL;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

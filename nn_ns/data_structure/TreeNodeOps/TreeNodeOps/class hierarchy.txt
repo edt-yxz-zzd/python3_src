@@ -1,0 +1,20 @@
+
+ITreeNodeRelated
+    IParentInfoOps
+        IParentInfoOps__constructor
+
+    ITreeNodeOps
+        ITreeNodeOps__constructor
+        ITreeNodeOps__mutable
+
+        IOrientedTreeNodeOps
+            IOrientedTreeNodeOps__constant_num_children
+            IOrientedTreeNodeOps__positive_num_children
+                IOrientedTreeNodeOps__inorder
+                    IUnbalancedMultiWayTreeNodeOps
+                IOrientedTreeNodeOps__positive_constant_num_children
+                    <<== IOrientedTreeNodeOps__constant_num_children
+                    IBinaryTreeNodeOps
+                        <<== IUnbalancedMultiWayTreeNodeOps
+
+

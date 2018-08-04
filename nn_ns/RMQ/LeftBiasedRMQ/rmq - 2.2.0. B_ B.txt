@@ -1,0 +1,36 @@
+
+recall:
+    super_block_idx2min_element_array_idx = B_ # the paper is B
+    normal_block_idx2min_element_array_idx = B
+    complete_super_block_size = s_
+    complete_normal_block_size = s
+
+B_ = super_min_indices :: [ArrayIdx]
+    # Map SuperBlockIdx ArrayIdx
+    # to the index of the left-biased-min-element in a super_block
+B = normal_min_indices :: [ArrayIdx]
+    # Map NormalBlockIdx ArrayIdx
+    # to the index of the left-biased-min-element in a normal_block
+
+# calc:
+B_ = calc_left_biased_array_min_idx_per_block(array, s_)
+B = calc_left_biased_array_min_idx_per_block(array, s)
+    # recall:
+    # calc_left_biased_array_min_idx_per_block(array<L>, B)
+    #   time O(L) * (a.'<' + uint[..L].'+') + O(1) * elements.'iter'
+    #   output ~ space bit size O(L/B * log(L))
+* B_
+    time calc B_ = O(p) * (a.'<' + uint[..p].'+') + O(1) * array.'iter'
+                 = O(p) * (a.'<' + uint[..p].'+')
+    bit_size_of B_ = O(p/s_ * log(p)) * bit
+                   = O(p/log(p)**2_x * log(p)) * bit
+                   = O(p/log(p)**1_x) * bit
+                   = O(p) * bit
+* B
+    time calc B = O(p) * (a.'<' + uint[..p].'+') + O(1) * array.'iter'
+                = O(p) * (a.'<' + uint[..p].'+')
+    bit_size_of B = O(p/s * log(p)) * bit
+                  = O(p/(log(p)/2_y) * log(p)) * bit
+                  = O(p*2_y)) * bit
+                  = O(p)) * bit
+

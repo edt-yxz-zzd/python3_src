@@ -1,0 +1,56 @@
+
+qedge - query edge :: QEdge
+    qdedge :: QDEdge = PEdge
+    quedge :: QUEdge
+
+
+may not exist
+may not unique
+
+
+for bgraph:
+    there are 3 bqedge types:
+        bqedge
+            = ()                # ledge
+            = (v, bool)         # ihedge | ehedge
+            = (v,bool, bool,u)  # oedge, v->u, v<-u, uedge
+for dgraph:
+    there are two qedge types:
+        qdedge = (src_vtx, dst_vtx) # src_vtx -> dst_vtx
+        quedge = {v, u} # len == 1 or 2
+for ugraph:
+    there is only one qedge type:
+        quedge = {v, u} # len == 1 or 2
+
+
+bgraph.make_qledge()
+bgraph.make_qhhedge(v, bool)
+bgraph.make_qbedge(v, bool, bool, u)
+    bgraph.unstable_qbedge2tuple(qbedge) -> () | (v,bool) | (v,bool,bool,u)
+        # unstable: (v, bv, bu, u) or (u, bu, bv, v)
+
+
+
+xgraph.make_quedge(v, u)
+xgraph.quedge2unstable_iter_one_or_two_vertices(quedge)
+    xgraph.quedge2unstable_iter_two_vertices(quedge) # may duplicated
+xgraph.quedge2unstable_iter_aedges(quedge)
+
+dgraph.make_qdedge(v, u)
+dgraph.qdedge2unstable_iter_two_vertices(qdedge) # may duplicated
+dgraph.qdedge2unstable_iter_src_hedges(qdedge)
+    dgraph.qdedge2unstable_iter_dst_hedges(qdedge)
+    dgraph.qdedge2unstable_iter_aedges(qdedge)
+
+
+'''???????????
+sqedge - std qedge :: SQEdge
+    = qdedge for dgraph
+    = quedge for ugraph
+xgraph.make_sqedge(v, u)
+xgraph.sqedge2unstable_iter_two_vertices(sqedge) # may duplicated
+xgraph.sqedge2unstable_iter_aedges(sqedge)
+'''
+
+
+

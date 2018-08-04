@@ -1,0 +1,106 @@
+
+use ops to offer arbitrary operations for any object
+    better than wrapper: the object's type is leaving unchanged
+
+by the datastructure side
+    e.g. the Ops class designer
+    we will distinguish IMutableOps and IPseudoImmutableOps
+
+but by the user side
+    we dont really want two different interfaces!
+    we can easily wrap IMutableOps to IPseudoImmutableOps
+        and leave the user to handle pseudo immutable obj
+        but, IPseudoImmutableOps is hard for usages:
+            * use instance_inplace_method
+                every stmt:
+                    "obj, ... = ops.f(obj,...)"
+                inside container:
+                    "d[k], ... = ops.f(d[k], ...)"
+                slow!
+
+    wrap IPseudoImmutableOps into IMutableOps??
+        not easy
+        first we should create an wrapper
+        second we if the pseudo immutable obj were inside container, we should replace them all.
+        if the container is immutable, we should create an new container!!
+
+    conclusion:
+        we cannot have an uniform api
+        but that is not a problem
+        if the sink require a mutable api,
+            then we offer an IMutableOps
+                or convert IPseudoImmutableOps to IMutableOps
+
+        if the sink require a immutable api,
+            then we offer an IPseudoImmutableOps
+                or convert IMutableOps to IPseudoImmutableOps
+
+        convert IPseudoImmutableOps to IMutableOps
+            assume there is a Bottom of IPseudoImmutableOps
+            m_ops__impl = PIm2M_bottom_wrapper(i_ops)
+                donot consider the type of i_ops
+            wrap(i_ops, IXXXMutableOps...):
+                check whether i_ops can convert to IXXXMutableOps
+                if yes:
+                    class New(IXXXMutableOps):
+                        def __init__(m_ops__impl):
+                            self.__obj = m_ops__impl
+                        def __getattribute__(self, name):
+                            if hasattr(IXXXMutableOps, name):
+                                # forbid user's misuse
+                                return getattr(self.__obj)
+                    return New(m_ops__impl)
+                else:raise
+
+
+
+
+
+# ops :: Ops
+# obj :: Obj
+class IOps<Obj>:
+    def obj_classmethod(ops, ...) -> ...
+        def obj_constructor(ops, ...) -> Obj
+    #def instance_method(ops, obj, ...) -> ...
+    def instance_inplace_method(ops, obj, ...) -> ...
+        def instance_inplace_stmt(ops, obj, ...) -> None
+    #def instance_pseudo_inplace_method(ops, obj, ...) -> (obj, ...)|obj
+    def instance_pseudo_inplace_eval(ops, obj, ...) -> (obj, ...)
+    def instance_pseudo_inplace_stmt(ops, obj, ...) -> obj
+
+
+
+class IConstOps<Obj>:
+    # Obj := stack
+    #   stack_ops.from_iterable :: Iter x -> stack
+    def obj_classmethod(ops, ...) -> ...
+        def obj_constructor(ops, ...) -> Obj
+
+    #   stack_ops.len :: stack -> int
+    def instance_const_method(ops, obj, ...) -> ...
+
+class IMutableOps(IConstOps<Obj>):
+    # to handle mutable obj
+    #   or to offer constructor and const method for immutable obj
+
+    # Obj := mstack
+    #def instance_inplace_method(ops, obj, ...) -> ...
+        #   mstack_ops.ipop :: mstack -> x
+        def instance_inplace_eval(ops, obj, ...) -> ...
+        #   mstack_ops.ipush :: mstack -> None
+        def instance_inplace_stmt(ops, obj, ...) -> None
+
+class IPseudoImmutableOps(IConstOps<Obj>):
+    # when we use ops to wrap around immutable obj,
+    #   we must use IPseudoImmutableOps
+
+    # Obj := istack
+    #   istack_ops.ipop :: istack -> (istack, x)
+    def instance_pseudo_inplace_eval(ops, obj, ...) -> (obj, ...)
+
+    #   istack_ops.ipush :: istack -> x -> istack
+    def instance_pseudo_inplace_stmt(ops, obj, ...) -> obj
+
+
+
+

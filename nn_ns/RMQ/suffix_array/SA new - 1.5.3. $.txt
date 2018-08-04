@@ -1,0 +1,4 @@
+
+$ = the last pass 1 non-exist char
+    = char(ichar=L)
+

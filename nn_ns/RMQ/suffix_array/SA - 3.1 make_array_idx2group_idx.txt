@@ -1,0 +1,18 @@
+
+
+def array_idx2group_idx<array> = make_array_idx2group_idx array
+
+def make_array_idx2group_idx
+make_array_idx2group_idx :: Ord a => [a] -> [GroupIdx]
+
+len(make_array_idx2group_idx array) == len(array)
+make_array_idx2group_idx array = map snd sorted([
+        (array_idx, group_idx)
+        for group_idx, (group_key__array_element, group__array_indices) in
+            enumerate(groupby(sorted(range(L), key=key), key=key))
+        for array_idx in group__array_indices
+    ])
+    where
+        L = len(array)
+        key=\i->array[i]
+

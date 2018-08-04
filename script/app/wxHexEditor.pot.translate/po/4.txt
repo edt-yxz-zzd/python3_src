@@ -1,0 +1,309 @@
+msgid“wxHexEditor是HUGE文件和设备的十六进制编辑器。
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：917
+msgid“您需要管理权限才能查看可用的设备”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：1137
+msgid“无法打开删除文件：”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：1156 src / HexEditorGui.cpp：1010
+＃，c-format
+msgid“新建wxHexEditor版本％s可用！
+msgstr“”
+
+＃：src / HexEditorGui.cpp：29
+msgid“＆New”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：29
+msgid“CTRL + N”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：29
+msgid“创建新文件”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：33
+msgid“＆打开”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：33
+msgid“CTRL + O”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：33
+msgid“打开文件”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：38
+msgid“无最近文件”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：42
+msgid“打开和最近”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：45
+msgid“＆保存”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：45
+msgid“CTRL + S”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：45
+msgid“保存修改”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：50
+msgid“另存为”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：50
+msgid“SHIFT + CTRL + S”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：50
+msgid“将当前文件另存为...”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：55
+msgid“＆关闭”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：55
+msgid“CTRL + W”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：55
+msgid“关闭当前文件”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：62
+msgid“导入标签”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：66
+msgid“导出TAG”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：72
+msgid“退出”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：72
+msgid“CTRL + Q”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：72
+msgid“退出应用程序”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：75
+msgid“＆File”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：79
+msgid“＆Undo”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：79
+msgid“CTRL + Z”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：79
+msgid“撤消上次操作”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：84
+msgid“重做”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：84
+msgid“CTRL + Y”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：84
+msgid“还原上次撤消”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：91
+msgid“CTRL + C”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：91
+msgid“副本选择”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：96
+msgid“复制为”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：96
+msgid“CTRL + SHIFT + C”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：96
+msgid“以特殊格式复制选择”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：101
+msgid“CTRL + ALT + S”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：101
+msgid“将选择另存为文件”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：106
+msgid“CTRL + X”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：106
+msgid“剪切选择”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：111
+msgid“CTRL + V”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：111
+msgid“将剪贴板粘贴到光标位置”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：116
+msgid“填充选择”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：116
+msgid“填充选择块”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：121
+msgid“删除选择”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：126
+msgid“将新字节插入到光标位置”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：133
+msgid“CTRL + F”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：138
+msgid“CTRL + R”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：143
+msgid“CTRL + G”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：143
+msgid“分支给定位置”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：147
+msgid“＆编辑”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：151
+msgid“数据解释器”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：163
+msgid“TAG面板”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：171
+msgid“搜索面板”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：175
+msgid“比较面板”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：181
+msgid“斑马条纹”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：187
+msgid“偏移控制”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：192
+msgid“十六进制控制”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：197
+msgid“文本控制”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：201
+msgid“＆View”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：213
+msgid“XORView Thru”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：213
+msgid“查看您的XOR加密文件而不解密！
+msgstr“”
+
+＃：src / HexEditorGui.cpp：216
+msgid“工具”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：220
+msgid“开放RAM设备”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：226
+msgid“N / A在此操作系统（尚未）”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：229
+msgid“打开磁盘设备”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：240 src / HexEditorGui.cpp：1871
+msgid“备份”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：244 src / HexEditorGui.cpp：1932
+msgid“还原”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：248 src / HexEditorGui.cpp：1992
+msgid“擦除”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：251
+msgid“设备图像工具”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：253
+msgid“设备”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：258
+msgid“只读”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：264
+msgid“可写”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：269
+msgid“直接写入”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：273
+msgid“文件模式”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：279 src / HexEditorGui.cpp：890

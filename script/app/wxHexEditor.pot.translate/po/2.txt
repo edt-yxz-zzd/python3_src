@@ -1,0 +1,264 @@
+msgid“警告！
+msgstr“”
+
+＃：src / HexDialogs.cpp：3233
+msgid“错误！：磁盘空间小于映像文件。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3238
+msgid“”
+“警告！：磁盘空间大于图像文件。\ n”
+“剩余的空间将保持不变。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3242
+msgid“请等待还原磁盘/分区。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3244
+msgid“磁盘/分区恢复”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3266
+msgid“恢复速度：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3274
+msgid“恢复操作完成。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3294
+msgid“擦除磁盘/分区映像时请稍候。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3296
+msgid“磁盘/分区擦除”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3329
+msgid“擦除速度：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3336
+msgid“擦除操作完成。
+msgstr“”
+
+＃：src / HexEditor.cpp：145
+msgid“无法读取哈希文件！
+msgstr“”
+
+＃：src / HexEditor.cpp：189
+msgid“文件损坏！
+msgstr“”
+
+＃：src / HexEditor.cpp：189
+msgid“File Hash：”
+msgstr“”
+
+＃：src / HexEditor.cpp：192
+msgid“哈希文件：”
+msgstr“”
+
+＃：src / HexEditor.cpp：193 src / HexEditor.cpp：197
+msgid“散列结果”
+msgstr“”
+
+＃：src / HexEditor.cpp：197
+msgid“文件已验证”。
+msgstr“”
+
+＃：src / HexEditor.cpp：204
+msgid“严重错误。文件指针不为空！
+msgstr“”
+
+＃：src / HexEditor.cpp：226 src / HexEditorFrame.cpp：518
+msgid“文件无法打开！”
+msgstr“”
+
+＃：src / HexEditor.cpp：319
+msgid“”
+“对于切换XORView Thru模式，所有撤消和重做缓冲区将被复位，非”
+“保存的更改将被丢弃。
+msgstr“”
+
+＃：src / HexEditor.cpp：319
+msgid“XORView Thru Warning”
+msgstr“”
+
+＃：src / HexEditor.cpp：339
+msgid“文件在只读模式下，无法保存文件。
+msgstr“”
+
+＃：src / HexEditor.cpp：339 src / HexEditor.cpp：348 src / HexEditor.cpp：364
+msgid“文件保存”
+msgstr“”
+
+＃：src / HexEditor.cpp：343
+msgid“”
+“文件有一些插入/删除，你不能保存这个文件自己（还）。
+“请使用SaveAs。
+msgstr“”
+
+＃：src / HexEditor.cpp：343
+msgid“文件保存错误”。
+msgstr“”
+
+＃：src / HexEditor.cpp：348
+msgid“您要保存此文件吗？
+msgstr“”
+
+＃：src / HexEditor.cpp：353
+msgid“无法保存文件。操作已取消”
+msgstr“”
+
+＃：src / HexEditor.cpp：353
+msgid“文件保存错误”
+msgstr“”
+
+＃：src / HexEditor.cpp：364
+msgid“文件未更改，无需保存。\ n”
+msgstr“”
+
+＃：src / HexEditor.cpp：375
+msgid“文件保存进行中”
+msgstr“”
+
+＃：src / HexEditor.cpp：377
+msgid“保存文件”
+msgstr“”
+
+＃：src / HexEditor.cpp：394
+msgid“写速度：”
+msgstr“”
+
+＃：src / HexEditor.cpp：415
+msgid“您要保存文件吗？\ n”
+msgstr“”
+
+＃：src / HexEditor.cpp：415
+msgid“文件已更改！
+msgstr“”
+
+＃：src / HexEditor.cpp：430
+msgid“”
+“标签文件无法保存到默认位置。\ n”
+“您要导出TAG文件吗？
+msgstr“”
+
+＃：src / HexEditor.cpp：430
+msgid“标签无法保存！
+msgstr“”
+
+＃：src / HexEditor.cpp：432 src / HexEditorFrame.cpp：592
+msgid“选择要导出TAG的文件”
+msgstr“”
+
+＃：src / HexEditor.cpp：442
+msgid“标签无法导出到文件：”
+msgstr“”
+
+＃：src / HexEditor.cpp：546
+msgid“输入十六进制值填充”
+msgstr“”
+
+＃：src / HexEditor.cpp：546
+msgid“填充对话框”
+msgstr“”
+
+＃：src / HexEditor.cpp：547
+msgid“Fill”
+msgstr“”
+
+＃：src / HexEditor.cpp：565
+msgid“选择用于保存转储的文件”
+msgstr“”
+
+＃：src / HexEditor.cpp：586
+msgid“转储不能保存为”
+msgstr“”
+
+＃：src / HexEditor.cpp：598 src / HexEditor.cpp：1285
+msgid“显示页面：％”
+msgstr“”
+
+＃：src / HexEditor.cpp：615
+msgid“文件无法读取！
+msgstr“”
+
+＃：src / HexEditor.cpp：1000 src / HexEditor.cpp：1292
+msgid“选择块：N / A”
+msgstr“”
+
+＃：src / HexEditor.cpp：1001 src / HexEditor.cpp：1293
+msgid“块大小：N / A”
+msgstr“”
+
+＃：src / HexEditor.cpp：1049 src / HexEditorFrame.cpp：295 src / HexEditorGui.cpp：91
+＃：src / HexEditorGui.cpp：1530
+msgid“复制”
+msgstr“”
+
+＃：src / HexEditor.cpp：1050
+msgid“CopyAs”
+msgstr“”
+
+＃：src / HexEditor.cpp：1051 src / HexEditorFrame.cpp：296 src / HexEditorGui.cpp：111
+msgid“粘贴”
+msgstr“”
+
+＃：src / HexEditor.cpp：1054 src / HexEditorGui.cpp：106
+msgid“剪切”
+msgstr“”
+
+＃：src / HexEditor.cpp：1055 src / HexEditorGui.cpp：121
+msgid“删除”
+msgstr“”
+
+＃：src / HexEditor.cpp：1056 src / HexEditorFrame.cpp：300 src / HexEditorGui.cpp：126
+msgid“插入”
+msgstr“”
+
+＃：src / HexEditor.cpp：1065 src / HexEditorGui.cpp：101
+msgid“另存为转储”
+msgstr“”
+
+＃：src / HexEditor.cpp：1066
+msgid“填充选择”
+msgstr“”
+
+＃：src / HexEditor.cpp：1068
+msgid“设置选择块开始”
+msgstr“”
+
+＃：src / HexEditor.cpp：1070
+msgid“设置选择块结束”
+msgstr“”
+
+＃：src / HexEditor.cpp：1072
+msgid“快速标记”
+msgstr“”
+
+＃：src / HexEditor.cpp：1072
+msgid“使用随机颜色创建空标签。
+msgstr“”
+
+＃：src / HexEditor.cpp：1073
+msgid“新标签”
+msgstr“”
+
+＃：src / HexEditor.cpp：1074
+msgid“标签编辑”
+msgstr“”
+
+＃：src / HexEditor.cpp：1286
+msgid“光标偏移：”
+msgstr“”
+
+＃：src / HexEditor.cpp：1290
+＃，c-format
+msgid“游标值：％u”
+msgstr“”
+
+＃：src / HexEditor.cpp：1296
+msgid“选择块：％”
+msgstr“”

@@ -1,0 +1,10 @@
+
+dt { font-size: 2em; }
+p { color:black; }
+p { font-size: 3em; }
+p { font-weight: bold; }
+dt { text-align: right; }
+
+dd { display: none; }
+body, dl { padding:0; background-color: gray; list-style-type: none; }
+

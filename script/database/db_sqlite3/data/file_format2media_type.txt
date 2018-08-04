@@ -1,0 +1,14 @@
+("utf8", "book")
+("utf16le", "book")
+("gbk", "book")
+("pdf", "book")
+("html", "book")
+("chm", "book")
+("epub", "book")
+("djvu", "book")
+
+("ogg", "audio")
+("mp3", "audio")
+
+("exe", "software")
+("src", "software")

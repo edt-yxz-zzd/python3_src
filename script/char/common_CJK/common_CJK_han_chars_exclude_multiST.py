@@ -1,0 +1,21 @@
+# -*- coding: gb2312 -*-
+
+from pprint import pprint
+from all_chars_has_multiST_variants_obj import all_chars_has_multiST_variants
+from common_CJK_chars_exclude_nonHanzi import common_CJK_chars_exclude_nonHanzi
+
+def _make():
+    s = set(common_CJK_chars_exclude_nonHanzi) - set(all_chars_has_multiST_variants)
+    return ''.join(sorted(s))
+
+if 0:
+    common_CJK_han_chars_exclude_multiST = _make()
+    print(len(common_CJK_han_chars_exclude_multiST))
+    print(common_CJK_han_chars_exclude_multiST)
+L = 2340
+common_CJK_han_chars_exclude_multiST = \
+    'Ò»¶¡ÆßÕÉÈýÉÏÏÂ²»ÇÒØ§ÊÀÇð±ûØ©ÖÐ´®Íèµ¤Ö÷¾ÃÖ®Õ§ºõ·¦¹Ô³ËÒÒ¾ÅÆòÒ²ÈéÓèÊÂ¶þ»¥Îå¾®Ð©Íö¿º½»º¥ÒàºàÏí¾©Í¤ÁÁÈËÊ²ÈÊØÆ½ñ½éÈÔ×ÐÊËÕÌ¸¶ÏÉÙÚÇª´úÁîÒÔÑöÖÙ¼þÈÎÆóØøÒÁÎé¼¿·ü·¥ÐÝ²®°éÁæÉìËÅËÆÙ¤µèµ«Î»µÍ×¡×ôÓÓºÎØý·ð×÷ÅåÑð°Û¼ÑÙ¥Ê¹Ù©³ÞÀýÊÌÙªÙ§¹©ÒÀÎêºîÇÖ±ã´Ù¶í¿¡ÙÞÙ¸Ë×Ùµ±£Ù¹ÐÅÐÞ¸©Ù½Ùº°³±¶µ¹ºòÒÐ³«¾ëÙÆÄßÙ¾ÙÁÙÈ¼ÙÙÊÆ«ÙÉ×öÍ£½¡Å¼¿þ¸µ°ø´ß°ÁÙÒÁÅÉ®ÙÔÆ§ÈåÀÜØ£ÔÊÔªÐÖ³äÕ×ÏÈ¹âÃâ¶µ¾¤ÈëÈ«°Ë¹«ÁùÙâ¹²±øÆä¾ßµä¼æ¼½ÔÙÃ°ÃáÈß¹ÚÚ¤Ò±ÀäÙýµòÄý·²»ËÍ¹°¼º¯µ¶ÈÐ·ÖÇÐØ×¿¯ØØÐÌÁÐ³õÅÐÀûµ½Ë¢È¯´Ì¿ÌÏ÷ØÝÇ°ÌÞÆÊ¼ô¸±¸îØâ½ËÅüÁ¦¹¦¼ÓÁÓÅ¬½ÙÛÀ²ªÓÂÃãÀÕ¿±Ä¼É×¹´Îð°üÐÙÙéÞËÙëØ°»¯±±³×½³Ï»·ËÆ¥ÄäÊ®Îç»Ü°ë±°×ä×¿ÄÏ²©±åØÔÃ®Ó¡Î£ÂÑÇä¶òºñÔ­ØÊÈ¥ÓÖ²æ¼°ÓÑ·´ÊåÈ¡ÊÜÅÑ¿Ú¹Å¾äßµ½ÐÕÙ°È¿Éß³Ê·ÓÒË¾¸÷¼ªÃûÀôÍÂ¾ýÁßÒ÷·Í·ñ·Ôº¬Îü´µÎÇºðÎá³Ê¸æßÉÎ¶ºÇÉëÃü¾×ÅØºÍ¾Ì¸À×ÉåëÒ§¿È°§Æ·¹þÔÕ¸çÉÚ¿ÞÏøÕÜ²¸ËôÌÆÎ¨³ªÍÙ×ÄÉÌÌä¿¦ÉÆÀ®ºíº°´­à¹Ï²ºÈÐáàÁÊÈàµËÃàÍËÔàÕ¼Î³°×ìË»Æ÷àæàã½ÀÇôËÄÒòàò¹ÌÆÔàôÈ¦ÍÁÔÚµØÛßÖ·¾ù·»¿²×ø¿ÓÆÂÀ¤Ì¹Æº´¹ÐÍÛòÛó¹¸Ô«°£Âñ³ÇÓò²ºÛúÅà»ùÜ¥ÌÃ¶Ñ±¤µÌ¿°Ñß¶ÂËÜËþÌÁÈûÛÓ¾³ÊûÄ¹ÐæÄ«±ÚÛÕÛÖº¾ÈÀÊ¿ÈÉÒ¼ÏÄÏ¦ÍâÙí¶àÒ¹´óÌìÌ«ÑëÊ§ÒÄÑÙÆæÄÎ·î¿ü×àÆõ±¼ÞÈÌ×ÞÉµìÉÝÅ®Å«ºÃÈçåúÍýÈÑ¼ËÑýÃîÍ×·ÁÃÃÆÞæªÄ·Ê¼½ã¹ÃÐÕÎ¯Ò¦ÒÌÒö×ËÍþÍÞæ¶ÄÈ¾êÉï¶ðÃäÈ¢æ½ÆÅÍñ»éæ¾Ã½ÃÄæÂ¼ÞÉ©¼µÏÓµÕæÏÄÛæÒæÔæ××ÓæÝ¿×ÔÐ×Ö´ææÚ×ÎÐ¢ÃÏ¼¾¹Âº¢Êëåî·õÈæÕ¬ÓîÊØ°²ËÎÍêºêå´×Ú¹ÙÖæ¶¨ÍðÒË¿ÍÐûÊÒå¶»ÂÔ×º¦Ïüå·ÈÝËÞ¼Å¼ÄÒúÃÜ¿Ü¸»ÃÂº®Ô¢Ä¯²ì¹Ñå»ÁÈÕ¯å¼ËÂ·âÉäÎ¾×ðÐ¡ÉÙ¼âÓÈ¾ÍÒüåêÄáÎ²Äò¾ÓÇüÎÝÊºÐ¼Õ¹ÍÀÂÄÍÍÉ½ÒÙáªá¯á¶áµá·áº°¶ÖÅ¶ë·å¾þ³ç´ÞÑÂ±ÀáÒÇ¶áÔáÍáÏáØÎ¡´¨ÖÝÑ²¹¤×óÇÉ¾ÞÎ×²î¼ºÒÑËÈ°ÍÏïÙã½íÊÐ·«Ï£àûÌûàù²¯µÛ³£Ã±á¢·ù»ÏÄ»Æ½Äê»ÃÓ×ÓÄ±ÓÐòµ×µê¸ý¸®âÔ¶È×ùÍ¥Êü¿µÓ¹Á®ÀÈÀªÁÎâÜÑÓÍ¢½¨ÛÍÅª±×Ê½¹­Òý¸¥ºë³ÚµÜ»¡åóÈõåöåèÐÎ±ë±òÅíÕÃÓ°áÝÒÛ±ËÍù´ýáß»²ÂÉÐìÍ½µÃÅÇáãáåÑ­Î¢»ÕÐÄ±Ø¼ÉÈÌââÍüÃ¦ÖÒ¿ìºö·ÞâóÅ­²ÀË¼µ¡âù¼±ÐÔÔ¹¹ÖÇÓí¥âþÊÑ»Ð¿ÖË¡í¦»Öí§ÐôºÞ¶÷ã¡Ìñ¹§Ï¢Ç¡Ï¤ã©º·»Úã£ã¤ãªÎòÓÆ»¼±¯ã²¼Âµ¿Çé»óã±Ï§Î©»Ý¶èÏë»ÌÈÇÐÊ³îí©Óäíªã¹ÒâãµÓÞ¸Ð´Èã»»ÅÄ½í«Âý»Û¿®Î¿¿¶Ô÷ã¾ã¿í¬ã½º¶Ð¸°Ãí®Å³Ü²¸êÎìÐçÊùÈÖ³ÉÎÒ½ä»òêªê¬½ØÂ¾´÷·¿Ëù±âÉÈìèìéÊÖ´ò°ç·öÅú¶ó³Ð¼¼³­¾ñ°ÑÒÖÊãÍ¶¿¹Åû±§Ä¨Ñº³é·÷Ä´À­°èÅÄ¹Õ¾ÜÍØ°ÎÞÖ¾Ð×¾ÕÐ°ÝÀ¨ÊÃÞ×Õü¹°È­¿½Ê°ÄÃ³ÖÖ¸°´Ìô´ìÕñÍ¦×½°ÆÄó¾è²¶Åõ½ÝÞàÄíÊÚµôÕÆÅÅÒ´¾òÂÓÌ½½Ó¿ØÍÆÑÚ´ëÞíÞñÃèÌáÒ¾ÎÕÔ®ÞÞ²«°á´îÕªÄ¦ÃþÈö×²³·²¥´é×«ÉÃ²ÙÇÜë¢ßª²ÁÅÊÈÁ¾ðÖ§ÊÕØü¸Ä¹¥·ÅÕþ¹ÊÃô¾È°½³¨¸ÒÉ¢¶Ø¾´ÇÃÕû·óÎÄ±óì³°ßÁÏõúÐ±ÕåÎÓ½ï³â¸«í½Ë¹ÐÂ·½Ê©ÅÔÂÃìº×åì¼ÆìÈÕµ©Ö¼ÔçÑ®ÐñºµÍúê»²ýÃ÷»èÒ×ÎôÐÇÓ³´ºÃÁ×òÕÑÊÇêÄêÆêË»ÎêÌêÉÎî»Þ³¿ÆÕ¾°Çç¾§ÖÇêÑÏ¾ÊîÅ¯êÔÄº±©åßêÕÊïê×ÆØêØÔ»Ò·¸üêÂ²ÜÂüÔøÌæ×îÔÂÓÐÅó·þË·ëÞÀÊÍû³¯ÆÚëüÄ¾Î´Ä©±¾»úÐà¸ËÉ¼ÀîÐÓ²Äè¼ÕÈ¶Åè½Êøº¼èÃèÆèËèÁÍ÷èÊÎöÕíÁÖÃ¶¹ûÖ¦¿Ýè×¼Ü¼ÏèÛ±ú°ØÄ³¸ÌÈ¾ÈáèÖèØèÑ¼í¿ÂÖùÁø²ñË¨Ð£Öê¸ù¸ñÔÔèîèì¹ðÌÒ°¸èäÍ©É£»¸½ÛÍ°Ã·èôè÷¹£ÉÒÎàÀæËóÌÝÐµÊáèóÃÞÆå¹÷°ô×Ø¼¬ÅïÌÄÉ­¹×ÒÎÖ²×µ½·Ò¬´ª´»Ð¨³þÀãéªé®èú¿¬é±éºéÅé»°ñé¼Áñé½éÂé³»±²ÛéÈ·®éËÕÁÄ£éÔé×éÏéÙ³ÈÏðÌ´Ï­éÕéÞÇ·´ÎÐÀÆÛ¿îÐª¸èÖ¹Õý´ËÎäÍáËÀÑêéå´ùÑ³ÊâÖ³¶ÎµîÒãÄ¸¶¾Ø¹±ÈÃ«ºÁÊÏÃñÃ¥Ë®ÓÀÍ¡Ö­ÇóÏ«ÉÇº¹Èê¹¯½­³ØãèÍôÌ­¼³Æû·ÚÇßÒÊÎÖãçãåí³É³ÅæÄ­¾ÚºÓ·ÐÓÍÖÎÕÓ¹ÁÕ´ÑØÈª²´ÃÚãü·¨ãôÅÝ²¨ÆüÄàãýÌ©Ó¾Ñóä£Ï´ä¨Âå¶´½òºéÖÞä­»îÇ¢ÅÉÁ÷Õã¿£ä½ÆÖÀË¸¡Ô¡º£½þÄùÏûÏÑä¸ÌéÑÄÒºº­äÀÏýä¿ÁÜÊçÌÔäÈäÁµ­Òù»´Éî´¾»ìÑÍÌíä¾Çþ¶ÉÔü²³ä×äÍÎ¼¸ÛÃìÅÈÍÄºþÏæÕ¿äÒäÐäÎÔ´ÁïäéÒçäßËÝÈÜÄçäè×Ì»¬×ÒÌÏµÎÆ¯ÆáÂ©äîÄ®ÂþÊþÅËÌ¶³±äýäü³ÎÅì°Äå£¼¤å¥å©å¦åªÆÙå«å­¹à»ð»Ò¾Ä×Æ´¶Ñ×³´ÖË¾æÌ¿¾¼±þÕ¨ÁÒÀÓÅë·éÑÉ±º·Ù½¹È»»Í¼åÃºìãÕÕÖóÉ¿Ï¨ÐÜÈÛÎõÊì°¾ìäÈ¼ÁÇìÜÑàÔïìÝÛÆ±¬×¦ÅÀë¼¾ô¸¸Ø³Ë¬Æ¬°æÅÆëºÑÀÅ£êòÄ²ÄµÀÎÄÁÎïÉüÌØÏ¬ÀçÈ®·¸¿ñµÒáòºü¹·¾Ñ½Æá÷ÀêÀÇâ¥²þÃÍ²Ââ§â«ÐÉéà»«Ô³â±ÐþÂÊÓñÍõ¾ÁÍæÁáçéçêçæÉºÕäçóÖéçí°àÇòÀíÁð×ÁçúÁÕÇÙÅýÅÃè£è¦è§º÷çøè¤ÈðÉªèªÁ§è°è±èµ¹Ïð­Æ°°êÍßÎÍ´ÉÕçêµ¸ÊÉõÉúÉûÓÃ¸¦ð®ÌïÓÉ¼×ÉêÄÐµéî®½çÎ·ÅÏÁôî³ÐóÂÔÆè·¬»ûçÜ½®ñâÊèÒÉðÞ½êÒßÆ£ðá´ÃðãÕîÌÛ¾Ò¼²ðè²¡ðêÑ÷ÖÌºÛ¶»Í´Á¡ÌµðóÎÁñ¤ñ£Áö°©ñ±¹ïµÇ°×°ÙµÄ½Ô»Êð¨ð©Æ¤ÃóÓÛÅèÓ¯ÒæºÐÊ¢ÃËÄ¿Ã¤Ö±Ïà¶ÜÊ¡íííñÃ¼¿´ÃßÑ£¾ìíøÌ÷ÑÛ¾¦Ë¯¶½ÄÀ½Þ¶ÃØºî£î¨Æ³Ë²î«Í«Õ°öÄ´£Ã¬ñæÊ¸ÒÓÖª¾Ø¶Ì°«Ê¯É°ÅøíÆíÎÕèÆÆÏõÁòÓ²ÅðíÖÂµËé±®ÍëíÙ±Ì´Å°õÀÚ´èÅÍÄ¥íà½¸Ê¾ÉçìëÆîÆíìí×æìóìñ×£ÉñìôÏéÆ±¼Àì÷½û¸£ìûìüÓíÇÝºÌÐãË½±ü¿ÆÃëïõ×â³ÓÇØÑíÖÈÒÆÏ¡³ÌÉÔïþ°ÞÖÉ³íð¢µ¾¼Ú»ü¸åÄÂËëð¦Ñ¨¾¿ñ·¿Õ´©Í»Õ­ñºÖÏñ»¾½¿ßÁ¢Õ¾¾¹ÕÂ¿¢Í¯½ß¶ËÖñóÃ¸ÍóËÐ¦óÏµÑó×óÒ·ûµÚµÈ½îóÜ·¤¿ðÍ²²ßóßóÛ²­»þËãóé¹Ü¼ýÏäóðóçóò×­Æª´Ø»Éô¢²¾¼®Ã×·ÛÁ£ÆÉÕ³ËÚÖàÁ»ôÓ¾¬´â¾«ºýÌÇ¿·ÎÉËØË÷×ÏÐõ·±×ëôîó¾¸×È±Øèº±×ïÖÃÊðî¾ÑòÇ¼ÃÀ¸áÁçÐßÈºôËÙú¸þÓðÎÌ³áñ´ÒîÏèôâ´äôäôæº²ÒíÒ«ÀÏ¿¼ÕßêÈ¶øÄÍ¸ûºÄÔÅ¶úÒ®µ¢¹¢ñöÁÄÆ¸¾Ûí²ÒÞËÁÕØÈâÀß¼¡Ð¤¸Ø¸Î¹ÉÖ«·Ê¼ç·¾¿ÏëÅÓý·ÎÎ¸ëÐÌ¥ÅßëÎ°ûØ·ñãë×ëØÐØÄÜÖ¬´à¼¹¸¬Æ¢Ò¸¸¯¸­Ç»ÍóÐÈÑüëì¸¹ÏÙÍÈ°òëõ²²¸àÄ¤Ï¥ëùÅòÉÅâßÍÎ±ÛÒÜ³¼ê°×Ô³ôÖÁÕé¾Êô§¾ËÉàÊæâ¶Ë´ÎèÖÛº½ô³°ã¶æ²°ÏÏ´¬Í§ôÞÁ¼É«°¬ÓóÉÖÃ¢Ü½Ö¥ÜÏ½æ·Ò°ÅÐ¾»¨·¼ÇÛÑ¿Ô·ÜÛÌ¦Ãç¿Á°ú¹¶ÜÓÈô¿àÓ¢Ã¯ÇÑÃ©ÜÔÜø´ÄÃ£ÜòÜïÜîÒð²èÈ×ÈãÜ÷²ÝÜó»ÄºÉÝ¶ÀòÉ¯Ý¸Ý­ÄªÃ§Ý¼ÝÑ¾Õ¾úÝÅ²ËÆÐÝÔÁâ·ÆÝÄÝÍÌÑÃÈÆ¼Î®ÝæÝÇÂä¸ðÆÏ¶­ºùÔá¿ûÝÝËâÝòÆÑÕôÝïÐîÈØÝéÅîÞ¤ÂûÕáÎµ²ÌÊß±ÎÞ¬½¶Þ§±¡Þ±Ñ¦Þ°Ð½Êí²ØÅºÞ¼·ªÔå»¢Å°ò¯ÓÝºçÎÃ°öò¾ò¼Ôéò¿Éßµ°»×ÍÜÖëòÔ¸òòÎ¶êÊñ·äò×òÚÖ©òãÃÛ»ÈºûµûòëÈÚÃøó«ÂÝó´Ð·ó¸´ÀÑªÐÐÑÜ½ÖÑÃºâáéÒÂÉÀË¥ñÄÖÔôÀñÆÔ¬ñÇôÂ´üÅÛÌ»Ðä±»²ÃÁÑÒáÔ£È¹ôÄñÔÉÑÅáÂãºÖ°ýñÙÈìÍÊñÞñßÏå½óÎ÷Òªñû½Ç½âÑÔÊÄ¾¯Æ©»í¶¹Íãõ¹ëàºÀÔ¥±ª²òõõõöÃ²³àÉâºÕ×ßôñ¸°Æð³¬Ô½È¤×ãõÃÖº°ÏµøõÊõË¾àõÐ¿çÂ·ÌøÌ¤¾áõàõåÌãå¿µ¸õãõèõ¾õíõêÔê³ùÉí¹ªÐÁ¹¼À±±æ³½ÈèÓØÑ¸Ó­½ü·µåÈµÏÆÈµüÊöÃÔ×·ÍËËÍÌÓåËÄæåÍåÐÍ¸ÖðåÏÍ¾¶ºÍ¨ÊÅ³ÑËÙÔìåÒ·ê´þåÓÒÝ±Æ¶ÝËìÓö±éåÚåØµÀÇ²ÔâÕÚ×ñåá±ÜÑûåâåäÒØÄÇ°îÐ°ºªÇñÉÛÛ¡½¼¿¤²¿¹ù¶¼¶õ±ÉÓÏôúÇõ×ÃÅäôü¾Æõ¡õ¤ÀÒ½Í¿á´¼×í´×õ®ÐÑõµõ·õ¶ÓÔÖØÒ°Á¿½ð¸ª¸·ÚäÚæÈî·À×è°¢ÍÓÚé¸½ÂªÄ°½µÏÞ±ÝÚìÔº³ýÅãÁêÌÕÏÝÓçÂ¡ËåÚò¸ô°¯Ï¶ÕÏËíÈ¸ÑãÐÛÑÅ¼¯ïô´ÆÓºöÂÓêÑ©ÁãÀ×±¢ÐèöªÕðÄÞÁØËªÏ¼ö±Â¶Åù¾¸·ÇÃÒ¸ïÑ¥Ð¬°°¾Ï÷¶±ÞÒôÉØÊ³²ÍÊ×Ïãð¥Ü°¹Çº¡Ëè¸ß¹í¿ý»ê÷ÉÆÇ÷ÈÎºÄ§Â¹÷èÂ´÷ê÷ë÷âÊòÀèÇ­Ä¬÷ì÷í¶¦¹ÄÊó±Ç'
+assert len(common_CJK_han_chars_exclude_multiST) == L
+if __name__ == '__main__':
+    print(len(common_CJK_han_chars_exclude_multiST))
+

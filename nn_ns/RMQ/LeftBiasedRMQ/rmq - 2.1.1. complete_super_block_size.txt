@@ -1,0 +1,396 @@
+see: "rmq - 2.0. common.txt"
+
+def MOST = delta_x__upper_bound_at_most__p_ge
+def LEAST = delta_x__upper_bound_at_least__p_ge__ver2
+
+array -> super_blocks = B_ = B'
+    super_blocks[i] = B'[i]
+    # all super_blocks but last are complete super_block
+    def s_
+    def complete_super_block_size = s_ = s' = log2(p)**(2+delta_x)
+        <==> s_ > log2(p)**2
+        # the bigger delta_x, the bigger s_
+        # , the smaller super_blocks/super_min_array/M_
+        # , the faster to fill M_
+        where
+            delta_x > 0
+            def 2_x = 2+delta_x
+    to make complete_super_block_size a PInt
+        s_ = log2(p)**2_x >= 1
+        <<== log2(p) >= 1
+        <==> p >= 2
+        def min_array_length__at_least1 = 2
+    to make complete_super_block_size > log2(p)**2
+        <<== log2(p) >= 2
+        <==> p >= 4
+        def min_array_length__at_least2 = 4
+    to make complete_super_block_size <= p
+        ###### really?? do we need "s_ <= p"??
+        ######  if "s_ > p":
+        ######      can we treat the only super_block
+        ######          be the last incomplete super_block?????
+        s_ = log2(p)**2_x <= p
+        # log2(4)**(2+0) == 4   # (delta_x, p) == (0, 4)
+        # log2(16)**(2+0) == 16 # (delta_x, p) == (0, 16)
+
+        <<== 0 < delta_x <= log<log2(p)>(p)-2 = at_most(p)
+        def delta_x__at_most_for_p(p) = at_most(p)
+            # s_ = log2(p)**2_x <= p
+            # if delta_x(p) > delta_x__at_most_for_p(p):
+            #   ==>> [s_ > p]  (*f1*)
+
+        d/dz at_most(z) = d/dz (log<log2(z)>(z)-2) = d/dz log(z)/log(log2(z))
+            = 1/z/log(log2(z)) - log(z)/log(log2(z))**2 * d/dz log(log2(z))
+            = 1/z/log(log2(z)) - log(z)/log(log2(z))**2/log2(z)/z/log(2)
+            = 1/z/log(log2(z)) - 1/z/log(log2(z))**2
+            = 1/z/log(log2(z)) * (1 - 1/log(log2(z)))
+            # here log = ln
+            # [result > 0] <<== [log(log2(z)) > 1] <==> z > 2**e = 6.58
+            # at_most(2**e) = log(e)(2**e)-2 = e * log(2) -2
+            ==>> for p >= 7, at_most(p) is growing
+
+        [p>=7]
+            delta_x__upper_bound_at_most__p_ge(min_array_length)
+                = min {delta_x__at_most_for_p(p) | p <- [min_array_length..]}
+                # p>=7, at_most(p) growing
+                = delta_x__at_most_for_p(min_array_length)
+                = log<log2(min_array_length)>(min_array_length)-2
+                #
+                # delta_x__at_most_for_p(p) <= MOST(p) (*f3*)
+                # [s_ <= p]
+                #   ==>> delta_x(p) <= delta_x__at_most_for_p(p) (using *f1*)
+                #   ==>> delta_x(p) <= MOST(p) (using *f3*) (*f4*)
+                # if [p >= min_array_length][delta_x(p) > MOST(min_array_length)]:
+                #   [p >= min_array_length]
+                #       ==>> MOST(min_array_length) >= delta_x__at_most_for_p(p)
+                #   ==>> delta_x(p) > delta_x__at_most_for_p(p)
+                #   ==>> [s_ > p]   (using *f1*)
+                # [s_ <= p]
+                #   ==>> [p < min_array_length] or [delta_x(p) <= MOST(min_array_length)] (*f2*)
+
+            [delta_x__upper_bound_at_most__p_ge(min_array_length) > 0]
+                ==>> min_array_length >= 17
+                def min_array_length__at_least3 = 17
+                    # log2(p)**2 < s_ <= p
+                    # if p < min_array_length__at_least3,
+                    #   we may simply let s_ = p <= log2(p)**2
+
+how to compute a complete_super_block_size?
+  [p>=17]
+    # p>=17 ==>> delta_x__at_most_for_p(p) > 0
+    if p == 2**power:
+        ==>> power = log2(p)
+        ==>> log2(p)**2 == power**2 < power**2 + 1
+        ==>> exist delta_x > 0, s.t. log2(p)**2_x = power**2 + 1
+        complete_super_block_size = log2(p)**2_x = power**2 + 1
+            = log2(p)**2 + 1
+    else:
+        # best: complete_super_block_size = floor_or_ceil(log2(p)**2)
+        # almost best: complete_super_block_size = ceil(log2(p)**2)
+        # but: if restrict to int operation without float
+        #       then we may try (ceil_log2(p))**2 >= ceil(log2(p)**2)
+        try define s_ as:
+            complete_super_block_size = ceil_log2(p)**2
+                                      = (floor_log2(p)+1)**2
+            <<== log2(p)**2 < _s = ceil_log2(p)**2 <= p
+            1) [p != 2**power]
+                ==>> log2(p)**2 < ceil_log2(p)**2
+            2) [p >= 36]
+                ==>> ceil_log2(p)**2 <= p
+            # NOTE: ceil_log2(p)**2 is very larger than ceil(log2(p)**2)
+            #       but see below, ver2 is the same as ver1
+        ==>> require [p >= 36] to make the above definition work
+        def min_array_length__at_least4 = 36
+            # under the above definition, to make s_ <= p
+            # we may redefine
+            #   s_ = min(p, ceil_log2(p)**2)
+
+    # calc:
+    def complete_super_block_size__ver1_int(p) # use int operation only
+        # require: min_array_length >= min_array_length__at_least4 == 36
+            ## black era
+            #| p < min_array_length__at_least3   = p # may <= log2(p)**2
+            #| p < min_array_length__at_least4   = p # may < ceil_log2(p)**2
+        | p < min_array_length  = undefined # use other method to do RMQ
+        | p == 2**power         = log2(p)**2 + 1 = ceil_log2(p)**2 + 1
+        | p >= min_array_length = ceil_log2(p)**2 = (floor_log2(p)+1)**2
+
+    # calc:
+    def complete_super_block_size__ver2_float(p) # use float operation
+        # require: min_array_length >= min_array_length__at_least3 == 17
+        | p < min_array_length  = undefined # use other method to do RMQ
+        | p == 2**power         = log2(p)**2 + 1    = floor(log2(p)**2)+1
+        | p >= min_array_length = ceil(log2(p)**2)  = floor(log2(p)**2)+1
+
+    # calc: see rewrite version of complete_super_block_size__ver3_float below
+    def complete_super_block_size__ver3_float(p) # use float operation
+        # black era
+        | p < min_array_length__at_least3   = p # may <= log2(p)**2
+
+        # using ver2 definition
+        # p >= min_array_length__at_least3
+        #   log2(p)**2 <= ceil(log2(p)**2) <= s_ <= p
+        #
+        #   recall:
+        #       delta_x__upper_bound_at_least__p_ge__ver1(p)
+        #           = ?+max {delta_x(p') | p' <- [p..]}
+        #       delta_x__upper_bound_at_most__p_ge(p) # min max
+        #           = min {delta_x__at_most_for_p(p') | p' <- [p..]}
+        #       def min_array_length
+        #           = min {p | p <-[min_array_length__at_least3..]
+        #               , delta_x__upper_bound_at_least__p_ge__ver1(p)
+        #                 < delta_x__upper_bound_at_most__p_ge(p)
+        #               }
+        #
+        #   [p < p']
+        #       ==>> MOST(p) <= MOST(p')    (by MOST def)   (*f6*)
+        #       ==>> LEAST(p) >= LEAST(p')  (by LEAST def)  (*f7*)
+        #   [min_array_length__at_least3 <= p < min_array_length]
+        #       ==>> LEAST(p) >= MOST(p) (by min_array_length def) (*f8*)
+        #   LEAST(min_array_length) < MOST(min_array_length) (by min_array_length def) (*f9*)
+        #
+        #   [s_ <= p]
+        #       ==>> [p < min_array_length] or [delta_x(p) <= MOST(min_array_length)] (using *f2*)
+        #   [s_ <= p]
+        #       ==>> delta_x(p) <= MOST(p) (using *f4*)
+        #
+        #   delta_x(p) <= MOST(p)
+        #   delta_x(p) <= LEAST(p)  (by LEAST def) (*f5*)
+        #   [p < min_array_length] or [delta_x(p) <= MOST(min_array_length)]
+        #
+        #   white era: p < min_array_length
+        #       MOST(p) <= MOST(min_array_length)   (using *f6*)
+        #       LEAST(p) >= LEAST(min_array_length) (using *f7*)
+        #       LEAST(p) >= MOST(p)                 (using *f8*)
+        #
+        #   golden era: p >= min_array_length
+        #       LEAST(min_array_length) < MOST(min_array_length) (using *f9*)
+        #       MOST(min_array_length) <= MOST(p)   (using *f6*)
+        #       LEAST(min_array_length) >= LEAST(p) (using *f7*)
+        #       ==>> [LEAST(p) <= LEAST(min_array_length) < MOST(min_array_length) <= MOST(p)]
+        #       ==>> [LEAST(p) < MOST(p)]
+        #       NOTE: LEAST(min_array_length) is the constant upper_bound
+        #
+        | p == 2**power         = log2(p)**2 + 1    = floor(log2(p)**2)+1
+        | p >= min_array_length = ceil(log2(p)**2)  = floor(log2(p)**2)+1
+
+
+
+    # rewrite complete_super_block_size__ver3_float
+    # calc:
+    def complete_super_block_size__ver3_float(p) # use float operation
+        # black era
+        | p < min_array_length__at_least3   = p # may <= log2(p)**2
+
+        # using ver1 definition
+        # p >= min_array_length__at_least3
+        #   log2(p)**2 <= ceil(log2(p)**2) <= s_ <= p
+        #
+        #   delta_x(p) <= MOST(p)
+        #   delta_x(p) <= LEAST(p)
+        #   [p < min_array_length] or [delta_x(p) <= MOST(min_array_length)]
+        #
+        #   white era: p < min_array_length
+        #       LEAST(p) >= MOST(p)
+        #   golden era: p >= min_array_length
+        #       [LEAST(p) <= LEAST(min_array_length) < MOST(min_array_length) <= MOST(p)]
+        #       NOTE: MOST(min_array_length) is the constant
+        #
+        | p == 2**power         = log2(p)**2 + 1    = floor(log2(p)**2)+1
+        | p >= min_array_length = ceil(log2(p)**2)  = floor(log2(p)**2)+1
+
+
+    # see below: delta_x__upper_bound
+    #       for the above complete_super_block_size ver1/ver2 definition
+
+
+
+
+# to calc delta_x__upper_bound
+why?
+    see: M ==>> delta_x should have a upper_bound independant with p
+        bit_size_of M
+            = ...
+            = O(p/s * (1_x*log(log2(p)))**2) # here 1_x should have a upper_bound
+            = O(p/s * log(log2(p))**2)
+            = ...
+            = O(p)*1_x*2_y
+
+        ==>> delta_x should have a upper_bound independant with p
+
+calc delta_x__upper_bound:
+    def delta_x__upper_bound(min_array_length)
+        # "?" a small number
+        = ? + max {delta_x(p') | p' <- [p..]}
+        = delta_x__upper_bound_at_least__p_ge(min_array_length)
+
+    # recall:
+    #   s_ = complete_super_block_size__ver1_int(p) = log2(p)**2_x =
+    #       # require: min_array_length >= min_array_length__at_least4 == 36
+    #       | p < min_array_length  = undefined # use other method to do RMQ
+    #       | p == 2**power         = log2(p)**2 + 1
+    #           (*c1_s_*)
+    #       | p >= min_array_length = ceil_log2(p)**2 = (floor_log2(p)+1)**2
+    #           (*c2_s_*)
+    # does this definition yield a upper_bound of delta_x??
+    for *c1_s_* :
+        ==>> power == log2(p)
+        ==>> power**2_x == p == power**2 + 1
+        ==>> delta_x = log<power>(power**2+1) - 2
+                     = log<power>(1+ 1/power**2)
+                     # let b = power = log2(p)
+                     = log<b>(1+ 1/b**2)
+                     # the bigger b, the smaller delta_x
+                     #   min b get the max delta_x, i.e. least upper_bound
+                     # let min_b = min_power = ceil_log2(min_array_length)
+                     = log<min_b>(1+ 1/min_b**2)
+
+        ==>> delta_x__upper_bound_at_least1__p_ge(min_array_length)
+            = delta_x(p == min {p|p <- [min_array_length..], p==2**power})
+            = delta_x(p == 2**ceil_log2(min_array_length))
+            = log<min_b>(1+1/min_b**2)
+            = log<ceil_log2(min_array_length)>(1+1/ceil_log2(min_array_length)**2)
+        delta_x__upper_bound_at_least__p_gt_36__1
+            = delta_x__upper_bound_at_least1__p_ge(36)
+            <= delta_x(p==64) # 32 then 64
+            == 0.015291658650989949
+
+    for *c2_s_* ver1:
+        s_ = log2(p)**2_x = ceil_log2(p)**2
+        delta_x = log<log2(p)>(ceil_log2(p))*2-2
+                < log<log2(p)>(log2(p)+1)*2-2
+                # let b = log2(p) >= log2(36)
+                = log<b>(b+1) * 2 - 2
+                = 2 * log<b>(1+1/b)
+                # the bigger b, the smaller result
+                #   min b get the max delta_x, i.e. least upper_bound
+                # let min_b = log2(min_array_length)
+                <= 2 * log<min_b>(1+1/min_b)
+        ==>> delta_x__upper_bound_at_least2__p_ge__ver1(min_array_length)
+            # donot care whether min_array_length == 2**power
+            = 2*log<log2(min_array_length)>(1+1/log2(min_array_length))
+            # when min_array_length == 2**power
+            # = 2*log<power>(1+1/power)
+            # = log<power>(1+1/power**2 + 2/power)
+            # > log<power>(1+1/power**2)
+            # = log<ceil_log2(min_array_length)>(1+1/ceil_log2(min_array_length)**2)
+            # = delta_x__upper_bound_at_least1__p_ge(min_array_length)
+
+
+    ==>> delta_x__upper_bound_at_least__p_ge__ver1(min_array_length)
+        # delta_x__upper_bound_at_least__p_ge__ver1(p)
+        #   = ? + max {delta_x(p') | p' <- [p..]}
+        = max delta_x__upper_bound_at_least1__p_ge(min_array_length)
+              delta_x__upper_bound_at_least2__p_ge__ver1(min_array_length)
+        = delta_x__upper_bound_at_least2__p_ge__ver1(min_array_length)
+        = 2*log<log2(min_array_length)>(1+1/log2(min_array_length))
+        #
+        # delta_x(p) <= delta_x__upper_bound_at_least__p_ge__ver1(p) (*f5*)
+
+    # now we have:
+    #   delta_x__upper_bound_at_most__p_ge
+    #   delta_x__upper_bound_at_least__p_ge__ver1
+    #   min_array_length__at_least1
+    #   min_array_length__at_least2
+    #   min_array_length__at_least3
+    #   min_array_length__at_least4
+    #
+    # what is the value of min_array_length?
+    # what is the value of delta_x__upper_bound?
+
+    min_array_length__at_least__from1234__ver1 = max(
+        min_array_length__at_least1
+        ,min_array_length__at_least2
+        ,min_array_length__at_least3
+        ,min_array_length__at_least4
+        )
+
+    # calc:
+    min_array_length__ver1
+        = min {p | p <- [min_array_length__at_least__from1234__ver1..]
+                , delta_x__upper_bound_at_least__p_ge__ver1(p)
+                  < delta_x__upper_bound_at_most__p_ge(p)
+              }
+    # calc:
+    # error: delta_x__upper_bound__ver1 = delta_x__upper_bound_at_most__p_ge(min_array_length)
+    def delta_x__upper_bound__ver1 = delta_x__upper_bound_at_least__p_ge__ver1(min_array_length)
+
+    # finally, we get:
+    min_array_length__ver1 = 40
+    delta_x__upper_bound__ver1 = 0.20598744524062695
+        # NOTE:
+        #   this result depends on the complete_super_block_size calc method
+        #       i.e. complete_super_block_size__ver1_int
+
+    #   we can improve it by changing the (*c2_s_*)
+    #       now we introduce version2 complete_super_block_size__ver2_float
+    #       whose (*c2_s_*) is "s_(p) = ceil(log2(p)**2) for p != 2**power"
+
+    for *c2_s_* ver2:
+        s_ = log2(p)**2_x = ceil(log2(p)**2)
+        delta_x = log<log2(p)>(ceil(log2(p)**2))-2
+                < log<log2(p)>(log2(p)**2+1)-2
+                = log<log2(p)>(1+1/log2(p)**2)
+                <= log<log2(min_p)>(1+1/log2(min_p)**2)
+
+        ==>> delta_x__upper_bound_at_least2__p_ge__ver2(min_array_length)
+            # donot care whether min_array_length == 2**power
+            = log<log2(min_array_length)>(1+1/log2(min_array_length)**2)
+            # when min_array_length == 2**power
+            # = log<power>(1+1/power**2)
+            # = log<ceil_log2(min_array_length)>(1+1/ceil_log2(min_array_length)**2)
+            # = delta_x__upper_bound_at_least1__p_ge(min_array_length)
+
+    ==>> delta_x__upper_bound_at_least__p_ge__ver2(min_array_length)
+        = max delta_x__upper_bound_at_least1__p_ge(min_array_length)
+              delta_x__upper_bound_at_least2__p_ge__ver2(min_array_length)
+        = delta_x__upper_bound_at_least2__p_ge__ver2(min_array_length)
+        = log<log2(min_array_length)>(1+1/log2(min_array_length)**2)
+        #
+        # recall:
+        # delta_x__upper_bound_at_least__p_ge__ver1(min_array_length)
+        #   = 2*log<log2(min_array_length)>(1+1/log2(min_array_length))
+        #   # let b = log2(min_array_length)
+        #   = 2*log<b>(1+1/b)
+        #   = log<b>(1+1/b^2 +2/b)
+        # delta_x__upper_bound_at_least__p_ge__ver2(min_array_length)
+        #   = log<log2(min_array_length)>(1+1/log2(min_array_length)**2)
+        #   = log<b>(1+1/b^2)
+        #   = log<b>(1+1/b^2)
+        # ver1/ver2 = log<b>(1+1/b^2 +2/b)/log<b>(1+1/b^2)
+        #           = log(1+1/b^2 +2/b)/log(1+1/b^2)
+        #           -> 2/b / (1/b^2) = 2b -> +oo
+        # ver1-ver2 = log<b>(1+1/b^2 +2/b)-log<b>(1+1/b^2)
+        #           = log<b>((1+1/b^2 +2/b)/(1+1/b^2))
+        #           = log<b>(1+ (2/b)/(1+1/b^2))
+        #           = log<b>(1+ (b^2+2b)/(b^2+1))
+        #           -> 0
+        # not much different!!!!!
+
+    min_array_length__at_least__from123__ver2 = max(
+        min_array_length__at_least1
+        ,min_array_length__at_least2
+        ,min_array_length__at_least3
+        # without min_array_length__at_least4
+        )
+
+    # replace min_array_length__at_least__from1234__ver1
+    #         delta_x__upper_bound_at_least__p_ge__ver1
+    # then we get:
+    min_array_length__ver2 = 20
+        < min_array_length__ver1 = 40
+    delta_x__upper_bound__ver2 = 0.03563021895229108
+        < delta_x__upper_bound__ver1 = 0.20598744524062695
+
+    def min_array_length__for_complete_super_block_size_ver3_white_era
+        = min_array_length__at_least3
+        = 17
+    def min_array_length__for_complete_super_block_size_ver3_golden_era
+        = min_array_length__ver2
+        = 20
+    def delta_x__upper_bound__for_complete_super_block_size_ver3_golden_era
+        = delta_x__upper_bound__ver2
+        = 0.03563021895229108
+
+    # now complete_super_block_size__ver3_float comes
+

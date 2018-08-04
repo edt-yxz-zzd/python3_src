@@ -1,0 +1,3 @@
+("Ronald L. Graham", "Concrete Mathematics - 2ed 1994 - Ronald L. Graham")
+("Donald E. Knuth", "Concrete Mathematics - 2ed 1994 - Ronald L. Graham")
+("Oren Patashnik", "Concrete Mathematics - 2ed 1994 - Ronald L. Graham")

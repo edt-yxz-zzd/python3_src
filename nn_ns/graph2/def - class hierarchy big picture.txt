@@ -1,0 +1,223 @@
+
+
+consider instance method only # donot consider classmethod/staticmethod now
+consider method override hierarchy instead of class hierarchy
+
+incompatible override
+compatible override
+    single override
+    non_diamond override
+    named override
+    cooperative multiple override
+
+    #how? compatible api
+    #   since the use will call f as the basic class api
+    #   required parameters should be lesser
+    #       e.g. make same required args, kwargs default
+    #           add new default args, kwargs
+
+a+b =[def]= a /\ b == {}
+[a,b] =[def]= a \/ b == whole_set
+[a|b] =[def]= a+b && [a,b]
+
+
+
+def super as:
+    class Meta:
+        __class_super_getattr__(cls, superclass, name)
+        __object_super_getattr__(cls, obj, superclass, name)
+
+    super(superclass, cls_or_obj).f =[def]=
+        if cls_or_obj <: superclass:
+            cls = cls_or_obj
+            return type(cls).__class_super_getattr__(cls, superclass, 'f')
+        if cls_or_obj in superclass
+            obj = cls_or_obj
+            cls = type(obj)
+            return type(cls).__class_super_getattr__(cls, obj, superclass, 'f')
+        raise
+method
+    # let parentmethod = super().this_func
+    # no parentmethod - no parent have same name method
+    # forbid parentmethod - no parentmethod or more than 1 parentmethods or unknown parentmethod signature or parentmethod is virtualmethod
+    # allow parentmethod - has excactly one parentmethod an known its signature and not virtualmethod
+
+    [finalmethod | overridable]
+        * finalmethod # can not be overrided by subclass
+        * overridable
+            * overridable_finalmethod
+                # use @override_final to override overridable_finalmethod
+                #       the result is again an overridable_finalmethod
+                # def override_final(pre, post)
+                #   def decorator(wrapped):
+                #       @overridable_finalmethod
+                #       def wrapper(*args, **kwargs):
+                #           r = get_result_or_Exception(lambda:pre(*args, **kwargs))
+                #           o = wrapped(*args, **kwargs)
+                #           ignore_Exception(lambda:post(r, *args, **kwargs))
+                #           return o
+                #       return wrapper
+                #   return decorator
+    * rootmethod
+        # there are many roots
+        # [newmethod, incompatible]
+        # [newmethod&global_compatible | newmethod&incompatible | override&incompatible]
+    [newmethod | override]
+        * newmethod       # no parentmethod
+            # except @mixins_required
+            #   but mixins should inherit the class with new_XXX_method if possible
+            # newmethod <: rootmethod
+        * override        # has parentmethods
+            [without_designated_parentmethod | with_designated_parentmethod]
+            * without_designated_parentmethod
+            * with_designated_parentmethod
+                # known the cls of which the method is overrided
+
+                [named_override | cooperative_override]
+                * cooperative_override - dynamic known
+                    # [cooperative_override + rootmethod]
+                    # cooperative_override override cooperative_override or rootmethod (which is global_compatible or incompatible)
+                    # cooperative_override <: compatible
+                    # cooperative_override <: topmostonly_callable
+                    # cooperative_override <: call_all_implement_once <: all_concretemethod
+                    # since ancestors are unordered,
+                    #   to call one is to call each one,
+                    #   to call the topmost once is to call others once too,
+                    #   to call parentmethod without topmost is bad-idea.
+                    # we may implement each cooperative_override method by two: pre+post
+                    #   and define the only one method to override root
+                    #       this method call (pre,post) from the topmost to root.
+                    # user should know the mostderived class to call topmostonly_callable
+                    #   and use the signature of the method of the mostderived class
+
+                    - to set more parentmethod parameter with default value in signature
+                        # argument producer
+                        #       or consume_then_reproduce
+
+                    - to add new keywordonly parameter
+                        # parameter consumer producer
+                        # forbid to add new positional/positional_or_keyword parameter
+                * named_override - static known
+                    # known before the cls created; __prepare__
+                    [explicit_named_override | auto_named_override]
+                    * explicit_named_override # known before __prepare__
+                    * auto_named_override     # known after __prepare__
+                        # auto_named_override.parentmethod <: compatible
+    [virtualmethod | concretemethod]
+        * purevirtualmethod
+            # subclass forbid parentmethod
+            # make this_class abstract
+            # call it purevirtualmethod to distinguish with @abc.abstractmethod
+            * mixins_required
+        * concretemethod
+            * abstractconcretemethod
+                # make this_class abstract
+                # though have an implement
+                # @abc.abstractmethod(concretemethod)
+
+            [definemethod | redefinemethod]
+            * definemethod    # forbid parentmethod
+            * redefinemethod  # allow parentmethod
+                # redefinemethod <: override
+            [defaultmethod | nondefaultmethod]
+            # or use a defaultlevel? and partial_ordering in same defaultlevel?
+            * defaultmethod   # auto be overrided by nondefaultmethod
+            * nondefaultmethod# cannot
+    [incompatible | compatible]
+        * incompatible
+            # incompatible <: rootmethod
+            # signature is incompatible with parentmethods if any
+            # incompatible override rooted_compatible or incompatible or nothing
+
+            assert self in Root
+            self.f(Root, ...) =[def]=
+                # diff with signature of Root.original_f by the 'Root' arg
+                topmost_compatible(type(self), Root).original_f(self, ...)
+        * compatible
+            # signature is compatible with parentmethods
+            [rooted_compatible | global_compatible]
+            * rooted_compatible
+                # rooted_compatible <: override
+                # rooted_compatible override rooted_compatible or incompatible
+                self.f(Root, ...)
+            * global_compatible
+                # global_compatible override global_compatible if any
+                assert self in B
+                self.f(...) # using signature of B.f
+
+
+new_root_method(..., signature=None, name=None):
+    # should no parent have same name method
+    # except @mixins_required_abstractmethod
+    #   but mixins should inherit the class with new_XXX_method if possible
+    # forbid: super().this_func
+    #   since there are none in ancestors
+    * new_single_root_method
+        @new_single_root_abstractmethod
+            # declare a new method; no implement
+        @new_single_root_defaultmethod
+            # declare a new method and implement it
+
+single_override(..., signature=None) # name come from newmethod
+    # the root method should be new_single_root_method
+    # signature should be compatible with all parent's
+    @new_definition_single_override
+    @new_default_single_override
+        # forbid: super().this_func
+        #   since there are none or many in ancestors
+    @new_abstract_single_override
+        # new compatible declare; no implement
+    @single_override
+        # allow: super().this_func
+        # there exists topmost implement in parent's same name methods
+        #   or: excatly one parent with nondefault implement
+        # NOTE: virtualmethod is not an implement
+        user:
+            assert self in B
+            self.f(...) # signature of B.f
+    @new_incompatible_single_root_method(signature=None, name=None)
+        # declare a new method which will be incompatible_single_overrided
+        # should no parent have same name method
+    @incompatible_single_override(signature=None, name=None)
+
+
+
+
+
+single inheritance
+    new method
+    override method with same api
+    override method with compatible api
+    #not: override method with arbitrary api
+    #   otherwise we can not use obj.f(...) # since the api is diff
+
+
+    override incompatible api
+        # not allow super().f
+        self.f(C, ...) instead of self.f(...)
+
+        # def wrapped_f(self, C,...): return C.f(self,...)
+        @incompatible_method
+        def f(self, ...):
+            # no super().f # same name
+            # but may allow super().g
+            pass
+
+    override parital compatible api
+        self.f(ROOT, ...) instead of self.f(...)
+
+        # def wrapped_f(self, ROOT, *args, **kwargs):
+        #     return topmost_compatible(type(self), ROOT)\
+        #            .f(self, *args, super=???, **kwargs)
+        @parital_compatible_method(ROOT)
+        def f(self, ..., *, super, ...):
+            self.f(C, a...) # call directly
+            super().f(b...) # up to ROOT
+        # ROOT <: __class__ and ROOT is not __class__
+
+single inheritance with interfaces
+non-diamond inheritance
+non-diamond inheritance with interfaces
+cooperative multiple inheritance
+cooperative multiple inheritance with interfaces
+

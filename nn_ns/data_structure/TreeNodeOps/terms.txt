@@ -1,0 +1,122 @@
+
+terms:
+    rb tree
+    multiway search tree
+    inorder
+    
+    broken point: new2old, old2new, structure-changed
+    dangling
+    
+    store form
+    extract form
+    
+    sized/parented/directed
+    
+    parent_info
+    
+    ops
+    wrapper
+
+
+
+
+################ from old
+'''
+inorder:
+    R -> {A, B, C}
+    ==>> inorder(R) = inorder(A) + [(R,1)] + inorder(B) + [(R,2)] + inorder(C)
+    inorder(leaf) = [leaf]
+
+nonleaf_entity_pos = (nonleaf, entity_pos)
+entity_ptr: # entity_pointer
+    (prev_leaf, (curr_nonleaf, curr_innode_entity_pos), succ_leaf)
+    (last_tree_leaf,) 
+'''
+
+
+
+
+'''
+support both mutable and immutable nodes
+
+direction:
+    for nonroot node, direction means the node is a left child or right one
+broken point:
+    see "refresh_proper_descendants"
+        structure changed
+        old2new
+        new2old
+    
+fixed node:
+    no broken point above it's ancestors (include itself)
+node type:
+    plain_node - store form
+        assume plain-node do not know its parent # not required
+    node - extract form
+        should know parent and direction
+        assume extract a new obj each time call .to_left/right() # not required
+        so allow to_left(parent) is not to_left(parent) 
+        
+
+
+'''
+
+
+
+'''
+
+Node - concrete object - plain node
+node - abstract object - argued node
+
+node should contain parent and left/right info
+
+if exists Node.parent:
+    # mutable tree
+    node = Node
+else:
+    node = {proper_ancestors::[(Node, Direction)], this::Node}
+
+store form and extract form:
+    e.g.
+        use None as leaf, but we require .to_parent
+        None is store form
+        (Leaf parent) is extract form as result of to_children
+
+store form : IsMutable? HasParent? IsNullLeaf?
+    if not IsNullLeaf:
+        ==>> HasParent ==>> IsMutable
+        StoreNode e = StoreLeaf (StoreNode e) | StoreNode (StoreNode e) e (StoreNode e) (StoreNode e)
+        ExtractNode e = ExtractNode (StoreNode e)
+    if IsNullLeaf and HasParent:
+        ==>> IsMutable
+        StoreNode e = StoreLeaf | StoreNode (StoreNode e) e (StoreNode e) (StoreNode e)
+        ExtractNode e = ExtractLeaf {parent::StoreNode e} | ExtractNode (StoreNode e)
+
+    if not HasParent:
+        ==>> IsNullLeaf
+        StoreNode e = StoreLeaf | StoreNode e (StoreNode e) (StoreNode e)
+        ExtractNode e = NoParent {root::StoreNode e} | ExtractNode {broken_parent::ExtractNode e, this::StoreNode e}
+        no matter whether StoreNode e is mutable, we can modify ExtractNode e
+        so, we assume (ExtractNode e) is a broken tree,
+            # plain - i.e. donot know parent
+            it contains a plain subtree (StoreNode e) and a broken_parent (ExtractNode e)
+            since the subtree may not be a child of the "parent"
+
+        how to implement .is_left?
+            we should contains Direction information!!
+            ExtractNode e = {proper_ancestors::[(StoreNode e, Direction)],
+                             this::(StoreNode e)}
+
+    if not IsMutable:
+        ==>> not HasParent ==>> IsNullLeaf
+
+
+let's call (StoreNode e) plain_node and (ExtractNode e) broken_node
+
+(ExtractNode e) carry parent information is indeed a Monad
+
+
+'''
+
+
+

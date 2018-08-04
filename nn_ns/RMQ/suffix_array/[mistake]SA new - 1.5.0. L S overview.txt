@@ -1,0 +1,20 @@
+
+
+array = string = L_char* (S_char+ L_char+)
+
+example:
+# repr each char as height:
+                     /---\
+\                   /     \
+ \            /----/       \
+  \-----\    /              \
+         \  /
+          \/
+L-
+  --S---
+        -L
+          --------S------
+                         -L-
+  --LMS---
+         ---------LMS-------
+

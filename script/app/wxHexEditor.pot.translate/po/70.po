@@ -1,0 +1,174 @@
+msgstr ""
+
+#: src/HexEditorGui.cpp:1678
+msgid "Reset"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1679
+msgid "Reset Colour Values to Default"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1692
+msgid "Language:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1707
+msgid "Character Encoding Family:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1722
+msgid "Character Encoding:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1731 src/HexPanels.cpp:215
+msgid "Size:"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1742
+msgid "Custom Hex Formating"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1750
+msgid "xx "
+msgstr ""
+
+#: src/HexEditorGui.cpp:1751
+msgid "xxxx "
+msgstr ""
+
+#: src/HexEditorGui.cpp:1752
+msgid "xx xx xx xx xx xx xx xx  "
+msgstr ""
+
+#: src/HexEditorGui.cpp:1753
+msgid "xxxx xxxx xxxx xxxx  "
+msgstr ""
+
+#: src/HexEditorGui.cpp:1755
+msgid "Recursive custom hex format pattern"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1759
+msgid "Enable"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1768
+msgid "Bytes Per Line Limit"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1785
+msgid "Auto show tag panel if tags detected"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1849 src/HexEditorGui.cpp:1910
+msgid "Source :"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1858 src/HexEditorGui.cpp:1917
+#: src/HexEditorGui.cpp:1971
+msgid "Destination :"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1983
+msgid "0x00"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1983
+msgid "0xFF"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1983
+msgid "0xRANDOM"
+msgstr ""
+
+#: src/HexEditorGui.cpp:1985
+msgid "Erase With "
+msgstr ""
+
+#: src/HexPanels.cpp:213
+msgid "Name:"
+msgstr ""
+
+#: src/HexPanels.cpp:214
+msgid "Path:"
+msgstr ""
+
+#: src/HexPanels.cpp:216
+msgid "Access:"
+msgstr ""
+
+#: src/HexPanels.cpp:217
+msgid "Device:"
+msgstr ""
+
+#: src/HexPanels.cpp:217
+msgid "FILE"
+msgstr ""
+
+#: src/HexPanels.cpp:218
+msgid "DIRECTORY"
+msgstr ""
+
+#: src/HexPanels.cpp:219
+msgid "CHARACTER"
+msgstr ""
+
+#: src/HexPanels.cpp:220
+msgid "BLOCK"
+msgstr ""
+
+#: src/HexPanels.cpp:221
+msgid "FIFO"
+msgstr ""
+
+#: src/HexPanels.cpp:223
+msgid "LINK"
+msgstr ""
+
+#: src/HexPanels.cpp:224
+msgid "SOCKET"
+msgstr ""
+
+#: src/HexPanels.cpp:237
+msgid "Sector Size: "
+msgstr ""
+
+#: src/HexPanels.cpp:238
+msgid "Sector Count: "
+msgstr ""
+
+#: src/HexPanels.cpp:242
+msgid "XORKey:"
+msgstr ""
+
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:35
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:41
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:47
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:56
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:67
+msgid "sans"
+msgstr ""
+
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:39
+msgid "Address"
+msgstr ""
+
+#: src/HexEditorCtrl/HexEditorCtrlGui.cpp:45
+msgid "Byte View"
+msgstr ""
+
+#: src/HexEditorCtrl/wxHexCtrl/TagDialogGui.cpp:37
+msgid "Font Color :"
+msgstr ""
+
+#: src/HexEditorCtrl/wxHexCtrl/TagDialogGui.cpp:44
+msgid "Note Color :"
+msgstr ""
+
+#: src/HexEditorCtrl/wxHexCtrl/TagDialogGui.cpp:60
+msgid "Remove"
+msgstr ""
+
+#: src/HexEditorCtrl/wxHexCtrl/TagDialogGui.h:49
+msgid "Tag Dialog"
+msgstr ""

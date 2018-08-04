@@ -1,0 +1,16 @@
+
+
+x (<<=) a b c ==>> x = a b c | b c a | c a b
+x (>>=) a b c ==>> x = a b c | c a b | b c a
+
+
+left_cyclic_shift_concat<> =
+left_cyclic_shift_concat<a, args...>
+    normal = this<a, args...>
+    shifted = this<args..., a>
+
+right_cyclic_shift_concat<> =
+right_cyclic_shift_concat<args..., a>
+    normal = this<args..., a>
+    shifted = this<a, args...>
+

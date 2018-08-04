@@ -1,0 +1,61 @@
+
+
+import RecognizeSystemGrammar
+RS = (Rule EOL | TurnOffNoiseBlock EOL)*
+Rule = IDBase '==' RefID
+Rule = ('*'|'&')? AltID ('='|'=*') LeftPart
+Rule = ('@token_set@'
+        |'@nullable_recognizer@'
+        |'@nonnull_recognizer@'
+        |'@noise@'
+        |'@predicator@')
+       IDBase+
+TurnOffNoiseBlock = '@turnoff_noise__begin@' EOL
+                    (TurnOffNoise_Rule EOL)*
+                    '@turnoff_noise__end@'
+
+TurnOffNoise_Rule = ('*'|'&')? AltID ('='|'=*') TurnOffNoise_LeftPart
+
+
+LeftPart = ('~'|Item)* '$$' ('~'|Item)*
+LeftPart = ('~'|Item)* '$$/' ('~'|Item)+
+LeftPart = ('~'|Item)* '$[' ('~'|Item)* ']$' ('~'|Item)*
+LeftPart = ('~'|Item)+
+
+TurnOffNoise_LeftPart = TurnOffNoise_Item* '$$' TurnOffNoise_Item*
+TurnOffNoise_LeftPart = TurnOffNoise_Item* '$$/' TurnOffNoise_Item+
+TurnOffNoise_LeftPart = TurnOffNoise_Item*
+                        '$[' TurnOffNoise_Item* ']$'
+                        TurnOffNoise_Item*
+TurnOffNoise_LeftPart = TurnOffNoise_Item+
+
+
+Item                = '?' RefID | '!' RefID
+                    | '-'? RefID RefIDEx '&'?
+TurnOffNoise_Item   = '?' RefID | '!' RefID
+                    | '-'? RefID TurnOffNoise_RefIDEx '&'?
+
+RefIDEx = (  (('/'|'//') '~'? RefID '~'?)?
+            ('$' RefID)?
+            ('?'|'*'|'+'|'{' UInt ',' UInt? '}')
+         )?
+TurnOffNoise_RefIDEx
+      = (  (('/'|'//') RefID)?
+            ('$' RefID)?
+            ('?'|'*'|'+'|'{' UInt ',' UInt? '}')
+         )?
+
+RefID = '@noise@'|'@any@'|'@pass@'|'@dead@'|IDBase
+AltID = IDBase ('-' Suffix)?
+
+##################
+EOL     # newline or eof
+UInt    # [0-9]+ | 0x[0-9a-fA-F]+
+IDBase  # [0-9a-zA-Z_]+
+Suffix  # [0-9a-zA-Z]+
+
+
+
+
+
+

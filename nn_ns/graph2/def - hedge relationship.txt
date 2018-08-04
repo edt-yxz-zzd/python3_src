@@ -1,0 +1,34 @@
+
+hedge relationship
+    e.g. planar embedding of a graph
+        the hedges of a vtx has a cyclic relationship
+    since graph is use to represent relationship
+    we introduce a graph to represent hedge relationship
+        vertices of this new graph =
+            hedges of old graph
+            [+ may old graph vertices]
+            [+ may other new vertices]
+    we can merge old and new graph to big graph:
+        vertices of this big graph =
+            hedges of old graph
+            + old graph vertices
+            [+ may other new vertices]
+        edges of this big graph =
+            new graph edges
+            # no old graph edges!!
+            big edge from hedge to its old vtx
+            big edge of 2 adj hedges
+
+        color of big vtx =
+            (VTX_tag, old color of vtx, maybe new color of vtx) if vtx is old graph vertex
+            (HEdeg_tag, new color of hedge) if big vtx is hedge
+            (NewVTX_tag, new color of vtx) otherwise
+        weight of big edge =
+            (NewEdge_tag, weight[aedge]) if aedge is new graph edge
+            (HEdge2Vtx_tag,) if big edge from hedge to its old vtx
+            (AdjHEdge_tag,) if big edge of 2 adj hedges
+
+
+
+
+

@@ -1,0 +1,73 @@
+
+
+see: "def - bidirected graph.txt" :: half_edge
+    NOTE: half_edge = hhedge not hedge
+
+
+hedge = the link between vtx and aedge :: HEdge
+    v -[aedge]- u
+        v -[hedge]-[aedge]-[hedge]- u
+
+    v -[aedge]- None
+        v -[hedge]-[aedge]-{}
+
+    None -[aedge]- None
+        {}-[aedge]-{}
+
+exist and unique
+
+vtxA <- hedgeA -> aedge <- hedgeB -> vtxB
+    aedge <-[0..many:0..2]-> vertex
+    so, we use hedge to name per link between aedge and vertex
+    aedge <-[1:0..2]-> hedge <-[0..many:1]->vertex
+
+hedge can use to represent the begin half of a virtual directed aedge in xgraph
+    sometimes ugraph may want to assign a direction for aedge
+    sometimes dgraph may want to assign arbitrary direction for aedge
+    we call this hedge "dhedge"
+
+
+bgraph.hedge_eq(hedgeA, hedgeB)
+
+bgraph.hedge2vtx(hedge)
+bgraph.hedge2aedge(hedge)
+bgraph.is_hedge_vtx2aedge(hedge)
+    # hedge is either vtx->aedge or vtx<-aedge
+
+bgraph.vtx2unstable_iter_hedges(vtx)
+bgraph.aedge2unstable_iter_at_most_two_hedges(aedge)
+bgraph.hedge2maybe_another(hedge) # () | (another_hedge,)
+
+
+
+
+xgraph.aedge2unstable_iter_two_hedges(aedge)
+    xgraph.aedge2unstable_hedge(aedge)
+    xgraph.hedge2another(hedge)
+
+
+
+
+dgraph.vtx2unstable_iter_src_hedges(vtx)
+dgraph.vtx2unstable_iter_dst_hedges(vtx)
+dgraph.is_src_hedge(hedge)
+    dgraph.aedge2hedge_pair(aedge)
+    dgraph.aedge2src_hedge(aedge)
+    dgraph.aedge2dst_hedge(aedge)
+
+
+
+
+v -aedge- u
+V <-hedgeV<-aedgeVU->hedgeU-> U
+    color[V] == (VtxColor_tag, color[v])
+    color[U] == (VtxColor_tag, color[u])
+    color[aedgeVU] == (AEdgeColor_tag, weight[aedge])
+    no weight for new edges
+
+    ugraph:
+        color[hedgeV] == (UHEdgeColor_tag,) == color[hedgeU]
+    dgraph
+        v >-aedge-> u
+        color[hedgeV] == (DHEdgeBeginColor,) < (DHEdgeEndColor,) == color[hedgeU]
+

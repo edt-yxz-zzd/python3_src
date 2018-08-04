@@ -1,0 +1,251 @@
+
+dfs = depth-first search
+iddfs = iterative deepening depth-first search
+
+
+
+dfs_edge = tree_edge | back_edge | cross_edge | forward_edge
+    #           target vertex state
+    tree_edge   - unvisited
+    back_edge   - visiting # include loops
+    cross_edge  - visited & preorder[target] < preorder[self]
+    forward_edge- visited & preorder[target] > preorder[self]
+
+explicit_graph | implicit_graph
+
+{A->0, A->1, 0->Z, 1->Z}
+preordering <==> lexicographic order
+    A,0,Z,1
+postordering
+    Z,0,1,A  # Z<-0 -<<- 1<-A
+reverse preordering
+    1,Z,0,A
+reverse postordering <==> a topological ordering
+    A,1,0,Z
+    topological sorting
+    Reverse postordering produces a topological sorting of any directed acyclic graph.
+
+
+
+implicitly_oriented_graph
+    # implicitly_oriented graph may not implicit graph
+    e.g. # the order should be compatible
+        unstable_vtx2may_first_incidence_hedge(vtx)
+        stable_get_next_hedge(vtx-child_hedge)
+        stable_get_may_next_sibling_hedge(parent_hedge-vtx-child_hedge)
+            # avoid parent_hedge
+            n = stable_get_next_hedge(child_hedge)
+            if hedge_eq(n, parent_hedge): return ()
+            return (n,)
+
+        unstable_iter_incidence_hedges(vtx)
+            parent_hedge = unstable_vtx2may_first_incidence_hedge(vtx)
+            yield parent_hedge
+            yield from stable_parent_hedge2iter_child_hedges(parent_hedge)
+        stable_parent_hedge2iter_child_hedges(parent_hedge)
+            h = parent_hedge
+            while True:
+                may = stable_get_may_next_sibling_hedge(h)
+                if not may: return
+                [h] = may
+                yield h
+
+        stable ==>> implicitly_oriented
+    when dfs:
+        # parent_hedge need to be identitied
+        if parent_hedge is 2-colored:
+            Unvisited, Visited(==Visiting)
+            next_sibling_hedge is visiting ==>> next_sibling_hedge is parent_hedge
+        elif graph is a parented tree:
+            stable_get_may_parent_hedge(vtx)
+        else:
+            need ancestor_stack<parent_hedge> to get parent_hedge
+
+        pseudo_face_walk
+
+
+# vtx2color?
+#   no-color | 2-color | 3-color | n-color
+#       <unvisited|visiting|visited|preorder>
+#   full_mapping:O(V)
+#       to detect tree_edge, need 2-color
+#       to detect back_edge need is_ancestor or 3-color
+#       to detect cross_edge need n-color # the visit-order
+# parent_hedge2weight???????????TODO
+#   no-weight | 2-weight | 3-weight | 4-weight | n-weight
+#       <unvisited|to_visit|visiting|visited|preorder>
+#   full_mapping:O(E)
+#   vary_mapping:O(max_depth) if 3-weight
+# ancestor_stack? # visiting_set? # O(max_depth)
+# iterator_stack? O(max_depth)
+# 12 possibles
+# no iterator_stack ==>> implicitly_oriented
+# cross_edge or forward_edge ==>> 2-color
+# back_edge ==>> is_ancestor # is_visiting
+when need no ancestor_stack and no color and no iterator_stack?
+    # O(1)
+    # or static_ancestor_stack for each vertex
+    * [explicit|implicit] forest & rooted & implicitly_parented & implicitly_oriented
+        # rooted ==>> implicitly_directed
+
+        #stable_get_may_parent_hedge(vtx)
+        #stable_get_may_next_sibling_hedge(parent_hedge, child_hedge)
+        unstable_iter_root_vertices()
+        #SHOULD_NOT:
+        #   unstable_vtx2may_first_incidence_hedge(vtx)
+        #   unstable_iter_incidence_hedges(vtx)
+        #since the last child_hedge will mark the next_hedge as next_sibling_hedge or parent_hedge
+        #so, the first child_hedge should be stable
+        stable_vtx2may_first_incidence_hedge(vtx)
+        stable_get_may_either_next_sibling_hedge_or_parent_hedge(child_hedge)
+
+        # forest node example:
+        #   forest = Node* may_first_root
+        #   Node{Node* may_ptr
+        #       # to parent or next sibling;
+        #       # null_ptr this is the last root
+        #       ,bool to_sibling
+        #       ,Node* may_first_child
+        #       }
+
+
+when need an ancestor_stack and no color and no iterator_stack?
+    # ancestor_stack - O(max_depth) <= O(V) = vtx2color
+    # directed | undirected
+    # cross_edge or forward_edge requires 2-color
+    # undirected has no cross_edge and no forward_edge
+    * [explicit|implicit] implicitly_oriented & no cross_edge & no forward_edge
+        unstable_iter_incidence_hedges(vtx)
+        hedge2maybe_another(hedge)
+        stable_get_next_hedge(vtx-child_hedge)
+        stable_get_may_next_sibling_hedge(parent_hedge, child_hedge)
+        * [explicit|implicit] forest & rooted & implicitly_DAG
+            <==> only tree_edge
+            ==>> implicitly_DAG
+            ==>> implicitly_directed
+            # need not implicitly_parented, unlike the above parented tree
+            # maybe undirected
+            # we can treat any DAG as an implicit_forest
+            #   dfs will repeat some hedges/vertices
+            #   iddfs is ok
+        * undirected & is_ancestor(vtx) # to detect back_edge
+        * directed & sourced
+            & how to avoid forward_edge/cross_edge?
+            & is_ancestor(vtx) # to detect back_edge
+            # how to avoid forward_edge/cross_edge?
+            # we may treat any directed graph as no forward_edge/cross_edge
+            #   dfs will repeat some hedges/vertices
+            #   iddfs is ok
+
+when need no ancestor_stack and 2-color and no iterator_stack?
+    # if unvisited|visited:
+    #   distinguish (tree_edge | non_tree_edge) only
+    #   but how to distinguish parent_hedge?
+    # if unvisited|visiting:
+    #   use visiting to identify parent_hedge, then must be
+    #       tree or rooted forest
+    * [explicit|implicit] implicitly_oriented & forest & rooted
+        unstable_iter_root_vertices()
+        stable_vtx2may_first_incidence_hedge()
+        stable_get_may_next_sibling_hedge(parent_hedge, child_hedge)
+        #if target vtx is not unvisited, then is parent_hedge
+
+when need no ancestor_stack and 2-weight and no iterator_stack?
+    # to identify parent_hedge ==>> unvisited | visiting
+    # use 2-color instead
+when need no ancestor_stack and 3-color and no iterator_stack?
+    # cannot distinguish cross_edge, forward_edge
+    * [explicit|implicit] implicitly_oriented
+        unstable_iter_vertices()
+        stable_vtx2may_first_incidence_hedge()
+        stable_get_may_next_sibling_hedge(parent_hedge, child_hedge)
+
+# iterator_stack
+when need no ancestor_stack and no color and an iterator_stack?
+    TODO
+
+
+
+
+
+
+input:
+    # isolated_vtx/loose_edge/root_sink/hhedge/oedge - handled seperately
+    #
+    # call dfs many times for multi-roots
+    #   using the same pseudo_vtx2color
+    #
+    # pseudo_hedge = hedge | other
+    #
+    # here we consider vtx parent hedge only
+    #   aedge - parent_hedge - vtx # point to root_vtx
+    #   not hedge in "vtx - child_hedge - aedge"
+    root_parent_pseudo_hedge # ? - root_parent_pseudo_hedge - root_vtx
+    pseudo_ancestor_stack_ex # pseudo ancestor_stack and vtx_coloring
+
+    parent_pseudo_hedge2vtx :: pseudo_hedge -> vtx
+    iter_child_vtx_parent_hedges :: pseudo_hedge -> Iter hedge
+        # the_input_pseudo_hedge - vtx - child_hedge - child_aedge - child_vtx_parent_hedge - child_vtx
+        #   where the_input_pseudo_hedge is not child_hedge
+        #   i.e. to avoid go back through pseudo_hedge
+    iter_child_hhedge :: pseudo_hedge -> Iter hhedge
+
+pseudo_ancestor_stack :: stack<parent_hedge>
+    possible:
+        * node.parent := parent
+            @private
+            s.size():
+                return s.__size
+            s.is_empty():
+                return bool(s.__size)
+            s.push(node):
+                # if tree, then neednot this line and __size
+                node.parent = s.node
+
+                s.node = node
+                s.__size += 1
+            s.pop():
+                node = s.top()
+                s.node = node.parent
+                s.__size -= 1
+                return node
+            s.top():
+                if s.is_empty(): raise
+                return s.node
+        * explicit stack
+        * no stack at all
+            implicit tree/DAG
+pseudo_ancestor_stack_ex # pseudo ancestor_stack and vtx_coloring
+    # Color = Unvisited | Visiting | Visited
+    # pseudo_parent_hedge2color :: {parent_hedge : color}
+    # pseudo_ancestor_stack :: stack<parent_hedge>
+    s.is_unvisited(node):
+        return s.get_visit_info(node) == Unvisited
+    s.is_visiting(node):
+        return s.get_visit_info(node) == Visiting
+    s.is_visited(node):
+        return s.get_visit_info(node) == Visited
+    s.get_visit_info(node) -> Color
+        # if tree/implicit DAG/iddfs, then maybe always return Unvisited
+    s.set_visiting(node)
+        # precondition: s.is_unvisited(node)
+        # postcondition:
+        #   * s.is_visiting(node)   # normal
+        #   * s.is_unvisited(node)  # iddfs/tree/implicit_DAG
+    s.set_visited(node)
+    s.push_and_color(node): # push unvisited
+        assert s.is_unvisited(node)
+        s.set_visiting(node)
+        assert s.is_visiting(node)
+        super().push(node)
+    s.pop_and_color():    # pop visited
+        node = super().pop()
+        assert s.is_visiting(node)
+        s.set_visited(node)
+        assert s.is_visited(node)
+        return node
+
+
+
+
+

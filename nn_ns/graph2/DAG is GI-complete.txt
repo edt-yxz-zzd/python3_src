@@ -1,0 +1,5 @@
+
+GI - graph isomorphism
+DAG is GI-complete
+    i.e. DAG is the hardest GI problem
+

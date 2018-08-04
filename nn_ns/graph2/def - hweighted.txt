@@ -1,0 +1,23 @@
+
+hweighted = hedge weighted
+
+colored:
+    vertex2color
+weighted:
+    aedge2weight
+hweighted:
+    hedge2hweight
+
+they should be a speration function
+    i.e. should not be a part of graph
+    like the planar embedding of planar graph
+
+why?
+    hedge2weight instead of aedge2weight
+        e.g. in SPQR-tree:
+                a non-rooted R have a parent-importer aedge e
+                for each direction of e, we compute the weight of e
+                    from color of vertices in R and R structure
+                then e has two weights, one weight per direction.
+
+

@@ -1,0 +1,38 @@
+
+
+all names should be unique, since each repr a node
+
+
+# nodes progma
+# indicates which name is allowed, and assign an index to it
+    --nodes = name1 name2
+# or
+    --nodes = [x..y]
+
+# color progma
+    --colors = color1 c2 ... # all color names
+    --colors = [a..b]
+    --node2color = c1 cX ... # a list of length equal length of nodes list
+# weight progma
+    --weights = w1 w2
+    --weights of int/real/complex/...
+    # using:
+    #   succ_node / weight : ...
+    # edge index by the order it defined.
+1) tree/forest
+    # no duplicated names
+    parent :
+        child1 : ...
+        leaf
+        
+2) digraph/graph (simple - no multiedges, no self-loops)
+    # like above, but allowed duplicated names in different block/layer
+    prev :
+        succ1 : ...
+        succ2
+3) digraph/graph (multiedges, self-loops)
+4) udgraph (mixed-edges: both directed and undireted)
+    prev :
+        succ1 : ...
+        succ2
+    prev <: ... # undirected

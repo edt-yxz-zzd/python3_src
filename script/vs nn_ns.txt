@@ -1,0 +1,5 @@
+
+
+nn_ns is library
+script is collections of apps/scripts and temp/incomplete library
+

@@ -1,0 +1,235 @@
+
+
+'''
+see: "def - graph isomorphism reduce.txt"
+    isomorphism == canon_map == old_vtx2new_vtx
+    colored weighted ugraph ==[reduce]=>> colored simple ugraph
+        qedge -> new vertex with the virtual color
+        nonloop multi-edges -> loops of new vertex
+        # now no nonloop multi-edges
+        color -> weights of loops -> new color
+        # now no loops; no weights
+        ==>> colored simple ugraph
+    canon:
+        bucket_sortable_canon
+            BucketSortableTV
+        linear_canon
+            upper_bound = ?V+?E+?
+            max_length = ?V+?E+?
+    vtx2color :: vtx -> color # need not g; need not ops.color_of
+    aedge2weight :: aedge -> weight # need not g; need not ops.weight_of
+
+assume:
+    ugraph
+        # maybe disconnected
+        # with loops
+        # with multi-edge
+        # colored vertex -- L
+        # weighted edge  -- M
+conclusion:
+    bicomponent <-> SPQR-tree
+    connected_component <-> LB-tree <-> LMSPR-tree
+        B - M or O; O-block;
+        L - actual vertex and loops
+        M - nonloop multi-edges
+        S - S in SPQR
+        P - separation pair
+        R - R in SPQR
+
+
+
+
+
+
+ugraph:
+    vertex_idx
+    vertex_idx <- [0..V-1]
+    aedge_idx <- [0..E-1]
+connected components:
+    component_vertex = (component_idx, component_vertex_idx) <-> vertex_idx
+    component_edge = (component_idx, component_aedge_idx) <-> aedge_idx
+
+    component_vertex_idx <- [0..component_num_vertices(component_idx)-1]
+    component_aedge_idx <- [0..component_num_aedges(component_idx)-1]
+
+biconnected components/[L|B]:
+    -- biconnected components contains all virtual vertices.
+    -- the orignial vertices be leaves or cut vertices
+    -- leaf = isolated vertex | non-isolated non-cut vertex
+
+    -- vertex, color, loops, weights
+    actual_vertex_with_loops/L=[I|C|N]
+        = isolated_vertex/I
+        | cut_vertex/C
+        | block_inner_vertex/N
+    biconnected_component/B=[M|O]
+        -- multi-edges, weights
+        = bridge/M
+        | block/O
+
+    -- bi_XXX_vertex = (component_idx, pseudo_bicomponent_idx, pseudo_bicomponent_idx)
+    bi_virtual_big_vertex/B=[M|O]
+        = (component_idx, bicomponent_idx, -1)
+            -- nonleaf
+    bi_virtual_small_vertex/[C|N]
+        = (component_idx, bicomponent_idx, bicomponent_vertex_idx)
+            -- -> (non-isolated leaf | cut)
+    bi_actual_vertex/L=[I|C|N]
+        = (component_idx, -1, component_vertex_idx)
+            -- isolated leaf root or non-isolated leaf or cut
+
+    bi_virtual_small_vertex2bi_actual_vertex
+        :: bi_virtual_small_vertex -> component_vertex_idx
+        -- :: bi_virtual_small_vertex -> bi_actual_vertex
+        -- many <-> 1
+
+    bi_tree_vertex = bi_actual_vertex | bi_virtual_big_vertex
+        -- [I|C|N|M|O]
+    bi_tree_edge
+        = bi_actual_vertex-bi_virtual_big_vertex
+        -- no: bi_actual_vertex-bi_actual_vertex
+        --      since bridge/M is bi_virtual_big_vertex
+    bi_tree is a free tree
+        but we can identify center or bicenter
+    bicomponent is a maybe-vertex-rooted colored graph
+        has no root vertex <==> bicomponent is center
+        root is a special color
+
+
+    bi_small_edge
+        -- nonloops
+        = (component_idx, bicomponent_idx, bicomponent_aedge_idx)
+        -- loops
+        | (component_idx, -1, component_aedge_idx)
+        <-> component_edge
+        <-> edge
+
+    rooted:
+        * center, root L/O
+        * bicenter, root M
+        at same connected_component:
+            same level are all L or all B
+        but L-rooted connected_components and B-rooted connected_components
+            same level are diff types
+            we can move L-rooted connected_components one level down
+            and finally treat these two types diff as two subgraphs
+
+        non-root B:
+            has parent_importer_virtual_small_vertex: pv
+                root ->* L -> (pv of B)
+                has no color
+                or assign color 0, other color+=1
+
+            # B_vtx.linear_color
+                pv.linear_color = []
+                other_B_vtx.linear_color = to_L_vtx(other_B_vtx).linear_color
+
+            # L_vtx.linear_color
+                f = same_level_recolored . vtx2color
+                I_vtx = [f(I_vtx)]
+                N_vtx = [f(N_vtx)]
+                C_vtx = [f(C_vtx), child_recolored...]
+                    child_recolored... is collected from children
+                # ancestor descendant
+
+triconnected components/[L|M|S|P|R]:
+    -- triconnected components contains all virtual vertices.
+    -- triconnected components except [L|M] contains all virtual edges.
+    -- originally, Q is [a-b, a-b] i.e. P2
+    --  here, no Q, but M
+    -- and here P = separation pair, not P in SPQR
+
+    -- isolated_vertex/I
+    -- cut_vertex/C
+    -- block_inner_vertex/N
+    -- bridge/M_not_connected_to_P
+    -- block_inner_edge/M_connected_to_P
+    -- P-S; P-R; P-M;
+    --      no: S-P2-S; P-P; M-P-M; P0; P1
+    --      has: P2
+
+    tri_virtual_big_vertex/T=[M|S|P|R]
+        = (component_idx, bicomponent_idx, tricomponent_idx, -1)
+            -- -> tricomponent_case  ### i.e. 'M'/'S'/'P'/'R'
+    tri_virtual_small_vertex/[C|N]
+        = (component_idx, bicomponent_idx, tricomponent_idx, tricomponent_vertex_idx)
+            -- -> bi_virtual_small_vertex ### many <-> 1
+    tri_actual_vertex/L=[I|C|N]
+        = (component_idx, -1, -1, component_vertex_idx)
+
+    tri_virtual_small_vertex
+    -[many:1]-> bi_virtual_small_vertex
+    -[many:1]-> bi_actual_vertex
+
+    tri_actual_vertex
+    <-> bi_actual_vertex
+    <-> component_vertex
+    <-> vertex
+
+    tri_virtual_small_vertex <-[many:0..1]-> tri_actual_vertex
+        # see "tri_tree_edge"
+
+    tri_virtual_small_edge/in [R|S]
+        # nonloops; non-multi-edge
+        = (component_idx, bicomponent_idx, tricomponent_idx, tricomponent_aedge_idx)
+        | (component_idx, bicomponent_idx, tri_tree_edge_idx, 0..1)
+            -- 1) P-[M|S|R]: two virtual small edges
+            -- 2) partial[P|M|S|R]-L: one virtual small edge
+            -- -> tri_tree_edge_idx
+    tri_actual_small_edge/in [L|M]
+        # multi-edge; maybe loops
+        -- nonloops
+        = (component_idx, bicomponent_idx, -1, bicomponent_aedge_idx)
+        -- loops
+        | (component_idx, -1, -1, component_aedge_idx)
+    tri_separation_pair/P
+        -> Pair<tri_actual_vertex>
+    tri_tree_vertex = tri_virtual_big_vertex | tri_actual_vertex
+    tri_tree_edge
+        -- no: P-L; ### otherwise not a tree
+        -- no: P0; P1; P-P; M-P-M; S-P2-S
+        = P-[M|S|R]
+        | partial[M|S|R|P]-L
+            ### -[many:0..1]-
+            # "many" from LB-tree
+            # "0..1" from partial
+        -- ver2: fine!!!!
+            but only partial virtual vertex are allowed to link to actual one.
+            for each actual vtx v:
+                all tri_components contains virtual small vertex map to v form a subtree which has a center (i.e. not bicenter)
+                the correspone virtual v in the center link to v
+            e.g. # X=[S|R]
+                M: M
+                X: M-P-X-P-M
+                P: M-P-X-P-X-P-M
+                ... M-P-X-P[-X-P]*-M
+        -- ver1: ERROR!!!!!
+            P may not link to tri_actual_vertex/L
+            but must link to bi cut vertex!!
+            cause to be non-tree!!
+
+
+
+    rooted:
+        first find root L/B
+        if B-rooted, find root M/S/P/R
+        for P child:
+            for both assume direction of the parent import virtual small aedge:
+                calc direction2linear_weight
+            for S:
+                two cycles, collect weight of children Ps with the correspone direction
+            for R if planar:
+                only two planar embeddings
+        for root R/S:
+            S - two directions
+                ==>> 2 cycles
+            R - two planar embeddings * two directions
+                ==>> 4 cycles (i.e. 4 pseudo-walk)
+            search the smallest periods
+                let C2 = cycle + cycle
+                let L = len(cycle)
+                find i s.t. C2[i:i+L] = min C2[j:j+L] for j in [0..L-1]
+'''
+
+
+

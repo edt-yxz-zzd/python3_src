@@ -1,0 +1,17 @@
+
+grammar is sth like:
+    S = a S
+    S = b
+    S =
+
+    y = xx
+
+grammar:
+    no comments
+    allow empty lines
+    '=' is the only keyword, but can be used as rule name
+    using str.split to split out words
+    nonemptyline should be: '\s*(\S+)\s*(=)(\s*\S+)*\s*'
+    rule with same name are alterantives
+
+

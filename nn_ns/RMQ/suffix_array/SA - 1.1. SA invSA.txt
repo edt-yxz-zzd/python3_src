@@ -1,0 +1,11 @@
+
+def SA # suffix array
+sorted_suffix_begin_indices = sorted_suffix_position2suffix_begin_idx
+= SA<array> = sorted(range(len(array)), key=\i->array[i:])
+
+def invSA
+suffix_begin_idx2sorted_suffix_position
+= invSA<array> = inv_uint_bijection_array SA<array>
+
+
+

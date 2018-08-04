@@ -1,0 +1,15 @@
+
+
+each concrete graph type, should have different underlying data
+another information like is_connected is_DAG should not be an attribute
+    or reason for subclassing
+
+we can use free function to compute and cache:
+def __is_connected__(g):
+    ...
+@cache # weakref key dict
+def is_connected(g):
+    return __is_connected__(g)
+
+
+

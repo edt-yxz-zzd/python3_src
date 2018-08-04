@@ -1,0 +1,35 @@
+
+1) forgot:
+    iter_refresh_downs
+2) order error:
+    node, innode_position, depth, key|entity, last|end
+3) empty iterator
+    # bug: always empty iterator
+    # def __iter(RBT_Node, tree, *, reverse):
+    #   f = ...
+    #   return f(...)
+    #   # old version
+    #   ...
+    #   yield ...
+    #
+4) API wrong ==>> impl wrong
+    class PlainOps:
+        #bug: def is_RED(ops, plain):
+        def is_RED(ops, color):
+            ...
+5) forgot stop/break
+    for entity in Node.leaf_to_iter_entities_of_subtree(leaf, neg_inf):
+        ((succ_left_bound, succ_right_bound), dict_value) = entity
+        if touch_or_cross(right_bound, succ_left_bound):
+            block_items.append(entity)
+        else:
+            break # bug: forgot break
+6) IBlockDict setdefault
+    #bug:
+    #   1) default must be dict_value, not None
+    #   2) should return dict_value
+    #def setdefault(self, dict_key, default=None):
+    #   self.set_fdefault(dict_key, lambda:default)
+    def setdefault(self, dict_key, default):
+        return self.set_fdefault(dict_key, lambda:default)
+

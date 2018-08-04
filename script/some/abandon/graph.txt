@@ -1,0 +1,20 @@
+
+
+vertex_number
+uedge_number/dedge_number
+
+vtx_label2vertex_number // and vertex_number2vtx_label too!
+vertex_number2vtx_info<vtx_label, vtx_color>
+
+uedge_label2uedge_number
+uedge_number2uedge_info<uedge_label, uedge_weight>
+
+vertex_number2dedges
+uedge_number2ends
+
+parallel_uedges(uedge)
+parallel_uedges(u, v)
+
+
+
+

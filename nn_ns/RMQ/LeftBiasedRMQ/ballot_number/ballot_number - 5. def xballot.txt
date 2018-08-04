@@ -1,0 +1,36 @@
+
+--------------- def xballot
+xballot(q,p) = ballot(p,q)
+why?
+    since xballot_table[q][p] is easier than ballot_table[p][q] where 0<=p<=q
+
+    * xballot_table
+        len(xballot_table<Q>) == Q
+        for q in range(Q):
+            for p in range(q+1):
+                xballot_table<Q>[q][p]
+
+    * ballot_table
+        len(ballot_table<Q>) == Q
+        for p in range(Q):
+            for q in range(p,Q): ######## not startswith 0!!!!
+                ballot_table<Q>[q][p]
+
+
+
+
+
+
+xballot(0,0) = 1
+xballot(q,p) | 0<=p<=q=/=0 = xballot(q,p-1) + xballot(q-1,p)
+xballot(q,q) = xballot(q,q-1) = sum xballot(q-1,p) for all p , if q > 0
+xballot(q,q) = Catalan_number[q] ~ uint O(4^q) ~ space bit size O(q)
+
+calc xballot_table of size Q
+    ~ space bit size O(sum q*q for q <- [1..Q])
+    ~ space bit size O(Q^3)
+    ~ time O(Q^3)
+        very slow!!!
+
+
+

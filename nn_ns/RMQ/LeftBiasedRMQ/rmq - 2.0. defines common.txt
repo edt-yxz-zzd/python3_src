@@ -1,0 +1,107 @@
+---------------------- defines
+to define:
+    floor_log2
+    left_biased_range_minimum_query_definition
+    array
+        p
+        min_array_length
+    super_blocks
+        complete_super_block_size = s_ = s'
+            delta_x
+            ==>> calc complete_super_block_size
+    normal_blocks
+        complete_normal_block_size = s
+            delta_y
+            ==>> calc complete_normal_block_size
+    calc_num_blocks
+        num_super_blocks
+        num_normal_blocks
+    super_block_idx2min_element_array_idx = B_ # the paper is B
+    normal_block_idx2min_element_array_idx = B
+        bit_size_of B_ B
+    super_min_array # virtual
+    normal_min_array # virtual
+    super_block_idx2powerx2min_element_super_block_idx = M_ = M'
+        bit_size_of M_
+    normal_block_idx2powerx2min_element_offseted_normal_block_idx = M
+        normal_min_array__up_to_length
+        bit_size_of M
+    ==>> calc delta_x__upper_bound
+    ==>> calc delta_y__upper_bound
+
+
+
+
+
+
+
+
+
+def floor_log2(pint):
+    # floor_log2(p) = floor(log2(p)) where p > 0
+    assert pint > 0
+    # u < 2**u.bit_length()
+    # 2**(p.bit_length()-1) <= p < 2**p.bit_length()
+    return pint.bit_length()-1
+
+################
+
+def left_biased_range_minimum_query_definition(array, begin, end):
+    # array :: Ord a => [a]{1..}
+    assert array
+    assert 0 <= begin < end <= len(array)
+    m = min(array[begin:end])
+    return array.index(m, begin, end) # left-biased
+
+
+def array :: Ord a => [a]
+let n = len(array)
+
+def p
+let p = n = len(array) >= 1
+    <<== log2(p) defined
+    ==>> log2(p) >= 0
+
+let min_array_length be min p such that args of this algorithm will satisify conditions introducing.
+
+see:
+    "rmq - 2.1.1. complete_super_block_size.txt"
+    "rmq - 2.1.2. complete_normal_block_size.txt"
+
+
+assume p >= min_array_length
+==>> 1 <= complete_normal_block_size <= complete_super_block_size <= p >= min_array_length
+
+
+
+
+
+
+
+################
+def calc_num_blocks(array_length, block_size):
+    # ceil(array_length/block_size)
+    assert array_length >= 0
+    assert block_size > 0
+    return (array_length+block_size-1) // block_size
+
+def num_super_blocks = calc_num_blocks(p, complete_super_block_size)
+    = ceil(p/s_)
+def num_normal_blocks = calc_num_blocks(p, complete_normal_block_size)
+    = ceil(p/s)
+
+
+
+
+
+################
+super_block_idx2min_element_array_idx :: [ArrayIdx]
+super_block_idx2min_element_array_idx = B
+    # = [min_element_array_idx of sb for sb in super_blocks]
+    = [left_biased_range_minimum_query_definition(array, sb.begin, sb.end) for sb in super_blocks]
+super_min_array :: Ord a => [a] # virtual
+super_min_array = [array[super_block_idx2min_element_array_idx[i]] for i in range(len(super_blocks))]
+normal_min_array :: Ord a => [a] # virtual
+normal_min_array = [array[normal_block_idx2min_element_array_idx[i]] for i in range(len(normal_blocks))]
+
+

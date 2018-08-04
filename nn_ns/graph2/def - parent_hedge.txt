@@ -1,0 +1,13 @@
+
+
+parent_hedge is a hedge
+    let vtx = hedge2vtx(hedge)
+    parent_hedge is parent of vtx in a dynamic implicit tree
+        e.g. in a dfs tree
+child_hedge
+
+
+NOTE: not to confuse with income_hedge and outgo_hedge
+    income_hedge/outgo_hedge is determined by the graph
+    but parent_hedge/child_hedge is determined by a dynamic implicit tree
+

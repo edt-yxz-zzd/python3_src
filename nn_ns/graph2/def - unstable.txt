@@ -1,0 +1,10 @@
+
+
+unstable
+e.g. unstable_iter_XXXs()
+    normally the output objects are the same
+    normally means the order of each iterate pass may be different
+    like: iter(set)
+e.g. unstable_get_XXX()
+    maybe result depend on other unstable method
+

@@ -1,0 +1,21 @@
+
+big_char - split array into blocks
+    may overlap each other
+    may not cover some leading elements
+
+let L = len(array)
+example:
+    split into triples:
+        i2big_char i m = array[i:i+m]
+        triples_mod k m = [i2big_char(i,m) for i in range(k, L, m)]
+        array ==>> triples_mod 1 3 + triples_mod 2 3
+            leave the head element
+
+    split into pairs:
+        array ==>> [i2big_char(i,2) for i in range(L) if i%3]
+
+
+    split into LMS-substrings:
+        see: LMS-substring
+
+

@@ -1,0 +1,36 @@
+
+---------------------- types
+a - array element type
+SuperBlock  = [a]{1..} with (begin, end)
+NormalBlock = [a]{1..} with (begin, end)
+    # begin < end
+ArrayIdx
+    array :: [a]
+    array :: ArrayIdx -> a
+SuperArrayIdx
+    super_min_array :: [a]
+    super_min_array :: SuperArrayIdx -> a
+SuperBlockIdx
+    super_blocks :: [SuperBlock]
+    super_blocks :: SuperBlockIdx -> SuperBlock
+NormalBlockIdx
+    normal_blocks :: [NormalBlock]
+    normal_blocks :: NormalBlockIdx -> NormalBlock
+super_block_idx2powerx2min_element_super_block_idx
+    :: [[SuperArrayIdx]]
+    :: SuperBlockIdx -> PowerSub1 -> SuperArrayIdx
+# power-1 :: PowerSub1 where power >= 1
+# begin :: ArrayNonEmptyRangeBeginIdx where begin+1 :: ArrayIdx
+# end :: ArrayNonEmptyRangeEndIdx where end-1 :: ArrayIdx
+# idx :: ArrayIdx where 0 <= idx <= len(array)
+
+power_table
+    see: make_left_biased_range_minimum_query_power_table
+         LeftBiasedRangeMinimumQuery__via_power_table
+control_range
+    see: array_to_idx2left_biased_rmq_control_range
+canonical_Cartesian_tree
+balanced_Dyck_word
+    canonical_Cartesian_tree_of_array_to_balanced_Dyck_word
+Dyck_word
+

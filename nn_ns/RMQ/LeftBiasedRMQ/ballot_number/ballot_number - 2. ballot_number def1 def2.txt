@@ -1,0 +1,15 @@
+-------------- ballot_number def1 def2
+def1:ballot_def1__direct_calc:
+    ballot(p,q)
+        | 0 <= p <= q = C(q+p,p)*(q-p+1)/(q+1)
+        | otherwise = 0
+
+def2:ballot_def2__recur_calc:
+    ballot(p,q)
+        | (0,0)             = 1
+        | 0 <= p <= q =/=0  = ballot(p,q-1) + ballot(p-1,q)
+        | otherwise         = 0
+
+    ==>> ballot(0, q>=0) = 1
+    ==>> ballot(1, q>=0) = n
+

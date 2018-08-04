@@ -1,0 +1,29 @@
+
+graph_cw is not a graph!
+
+graph_cw = graph_cw
+            { .xgraph :: xgraph
+            , .may_vtx2color_ex :: None | (mapping_ex vtx color)
+            , .may_aedge2weight_ex :: None | (mapping_ex aedge weight)
+            }
+#graph_c / graph_w
+
+
+mapping_ex K V = mapping_ex
+                { .__getitem__ :: K -> V
+                , .may_valueTV :: None | IBucketSortableTV
+                # None - means V cannot sorted by bucket_sort
+                }
+
+
+
+.is_colored()
+.color_of(vtx) -> None | color
+.get_may_colorTV() -> None | IBucketSortableTV
+    # None - means cannot sorted by bucket sort
+.is_weighted()
+.weight_of(aedge) -> None | color
+.get_may_weight() -> None | IBucketSortableTV
+
+
+

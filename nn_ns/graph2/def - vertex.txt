@@ -1,0 +1,31 @@
+
+
+vtx = vertex :: Vertex == Vtx
+exist and unique
+normally, Vertex = BoundedUInt
+outvtx ->-> invtx
+outvtx -><- invtx
+
+
+bgraph.unstable_iter_vertices()
+bgraph.vertex_eq(v, u) # implicit_graph may not have vertex_eq!!!
+
+bgraph.vtx2unstable_iter_vertices(v)
+    -- if:  v ->-> u; v -><- u; v <-<- u; v <--> u
+
+# prefix:
+#   outgo/income <==> outany/inany
+#   outout/outin/inin/inout/anyout/anyin/outany/inany/anyany
+# some graph may only access to special type of neighbors
+bgraph.outgo_vtx2unstable_iter_vertices(v)
+    -- if:  v ->-> u; v -><- u
+    -- not: v <-<- u; v <--> u
+bgraph.income_vtx2unstable_iter_vertices(v)
+    -- if:  v <-<- u; v <--> u
+    -- not: v ->-> u; v -><- u
+
+
+
+see also:
+    "def - hedge.txt"
+

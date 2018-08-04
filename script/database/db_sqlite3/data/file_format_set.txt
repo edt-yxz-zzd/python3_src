@@ -1,0 +1,14 @@
+utf8
+utf16le
+gbk
+pdf
+html
+chm
+epub
+djvu
+
+ogg
+mp3
+
+exe
+src

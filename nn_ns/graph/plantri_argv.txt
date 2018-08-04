@@ -1,0 +1,181 @@
+plantri generates triangulation planar graph
+what I want is cubic planar graph with imbedding and 2/3-connected
+    // why I want them?
+    // for grid drawing: 'cubic planar' is important
+    // Steinitz's theorem: convex polyhedron = 3-connected planar graph
+    // so, 3-connected cubic planar graph = Cubic Polyhedral Graph
+    // '2-connected' for compare
+
+the dual of triangulation planar graph is cubic planar, and vice versa
+but the vertex connectivity may not hold
+but for 2/3, it holds!!!
+
+
+       -c3m3 (default)  3-connected planar triangulation.  
+               The dual is a 3-connected planar cubic graph.
+               Both primal and dual graphs are simple.
+
+       -c2  2-connected planar triangulation with minimum degree at least 3.
+            There may be parallel edges (but remember it is a triangulation
+            so there must be things between each pair of them).  There are
+            no loops.  The dual is a 2-connected simple planar cubic graph. .
+
+       -c2x  Same as -c2 except that there must be at least one pair of
+            parallel edges.  In the dual, at least one cutset of size 2.
+
+        -c2 = -c3 + -c2x
+parallel edges: but not edge of same face; 
+    planar triangulation of connectitivity 2 must contain parallel edges
+
+
+
+plantri -a [-u] [-V] -d -v -<c2x|c3>m3 <cubic_graph_order>d [output_file]
+
+
+
+-a // for imbedding !!!! 
+  ASCII CODE is a human-readable version of planar code.  The vertices of
+     the graph are named by ASCII characters starting with 'a'.  Example:
+        7 bcdefg,agfdc,abd,acbfe,adf,aedbg,afb
+     This is a graph with 7 vertices a,b,c,d,e,f,g.  The neighbours of
+     'a' in clockwise order are b,c,d,e,f,g; and so on.  Each graph occupies
+     one line of output.  Ascii code is convenient if you just want to draw
+     a few graphs by hand.
+     To select ascii code use -a.
+
+-u
+  If you only want to count the graphs and not write them, use -u to 
+  select no output.
+
+
+
+  An example of a plantri run is:  
+      plantri -d 16
+  which makes the duals (because -d is present) of the 3-connected
+  triangulations with 16 vertices.  In other words, it makes the
+  3-connected cubic planar graphs with 28 vertices.
+
+  The only compulsory parameter is the number of vertices ("16" in the
+  example).  This can also be given as "28d" (the suffix 'd' means 'dual')
+  in which case it is converted by adding 4 then dividing by 2:
+  (28+4)/2 = 16.  In the case of triangulations, this calculation yields
+  the number of faces, which is the number of vertices in the dual cubic
+  graph.
+
+  -d   causes the dual graph to be written instead of the original graph.
+       Note that it is applied only at the output stage.  All other switches
+       refer to the original graph before the dual is taken.  For example,
+       -m4 (minimum degree at least 4) refers to the original graph and
+       not to the dual. 
+
+  -V   Only output graphs with non-trivial group.  If -o is given, the
+       O-P group is used.  Otherwise, the full group.  Implies -G.
+
+  -v   plantri will always tell you (by a message to standard error) the
+       number of graphs that were produced.  If you specify -v, it might
+       tell you some additional statistical information.  For example, if
+       you use -o, -v will cause it to also inform you of the number of
+       isomorphism classes as well as the number of isomorphism classes
+       which are O-P isomorphic to their mirror images.
+
+
+
+
+  The character # refers to a non-negative integer.
+
+  We begin with a few switches available in multiple circumstances.
+
+  -m#  Specify a lower bound on the minimum degree.  In the dual graph this
+       means a lower bound on the minimum face size.  The default is -m3.
+
+  -c#  Specify a lower bound on the connectivity.  The meaning in the dual
+       graph will be explained in each case.  The default is -c3.
+       (-c4 has a slightly weaker meaning with -q, see below.)
+
+  -x   When used in combination with -c#, the connectivity must be exactly #,
+       rather than at least #.  (Some exceptions are noted below.)
+
+
+
+
+  If all the faces of an imbedded graph are triangles (i.e. bounded by 3
+  edges) the imbedded graph is called a TRIANGULATION.  The literature
+  is divided over whether the outside face must be a triangle, but we will
+  take it that ALL faces are triangles.  The dual of a triangulation is an
+  imbedded cubic (trivalent) graph.   A triangulation with n vertices has
+  exactly 3n-6 edges and 2n-4 faces.
+
+  A graph (imbedded or not) is k-CONNECTED if it cannot be disconnected by
+  removing k or fewer vertices.  It is convenient to revise the definition
+  slightly for the complete graph K4: it is 3-connected but not 4-connected.
+  A standard theorem says that a triangulation is 3-connected if and only
+  if it has no loops or parallel edges.  It is impossible for a planar
+  graph to be k-connected for k greater than 5.
+
+  A SIMPLE graph is one with no parallel edges or loops.
+
+  An ISOMORPHISM from G to H is either an O-P isomorphism or an O-R isomorphism.
+
+
+
+
+
+   ----------------------------------------------------------------
+
+  3-connected planar triangulations (plantri).
+
+   nv  ne  nf            all            O-P  
+             
+    4   6   4 |              1              1
+    5   9   6 |              1              1
+    6  12   8 |              2              2
+    7  15  10 |              5              6
+    8  18  12 |             14             17
+    9  21  14 |             50             73
+   10  24  16 |            233            389
+   11  27  18 |           1249           2274
+   12  30  20 |           7595          14502
+   13  33  22 |          49566          97033
+   14  36  24 |         339722         672781
+   15  39  26 |        2406841        4792530
+   16  42  28 |       17490241       34911786
+   17  45  30 |      129664753      259106122
+   18  48  32 |      977526957     1954315346
+   19  51  34 |     7475907149    14949368524
+   20  54  36 |    57896349553   115784496932
+   21  57  38 |   453382272049   906736988527
+   22  60  40 |  3585853662949  7171613842488
+   23  63  42 | 28615703421545 57231089062625
+
+[1, 1, 2, 5, 14, 50, 233, 1249, 7595, 49566, 339722, 2406841, 17490241, 129664753, 977526957, 7475907149, 57896349553, 453382272049, 3585853662949, 28615703421545, ]
+
+
+   ----------------------------------------------------------------
+
+  planar triangulations without 3-connectivity requirement:
+  2-connected with minimum degree at least 3 (plantri -c2)
+
+                   c2 
+ 
+   nv          all            O-P
+
+    4 |             1              1
+    5 |             1              1
+    6 |             3              3
+    7 |             8              9
+    8 |            32             37
+    9 |           131            183
+   10 |           723           1156
+   11 |          4360           7713
+   12 |         29632          55436
+   13 |        213168         412193
+   14 |       1606633        3158392
+   15 |      12473723       24736138
+   16 |      99141919      197448348
+   17 |     802392930     1601481238
+   18 |    6593377305    13173471151
+   19 |   54883010885   109712447949
+   20 |  462038444588   923858502128
+   21 | 3928893849911  7856893675780
+
+

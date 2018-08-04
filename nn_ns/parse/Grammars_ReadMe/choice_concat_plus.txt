@@ -1,0 +1,69 @@
+
+grammar is sth like:
+    # this is a comment
+    
+    # token pragma
+    --tokens = ',' sfas adfs
+    --undefined_ntokens = xxxxxx
+    
+    -- these are marks for xx
+    xx : -- We, too
+    yy : xx xx
+    z = x xx
+    q =
+    t : 
+        yy
+        xx : ...
+        kk :
+            ...
+        uu = ...
+        --^ valid marks for uu
+        -- invalid marks at end of block
+
+    a =join+: # join+ join*
+        e ',' # repeat
+        e     # last
+    b [?=] e f g # left omit concat ; right island; [=?] [?=?]
+    c {=} e f g # unordered concat
+    d (<<=) e f g # left cyclic shift concat; (>>=)
+    
+    --^ valid marks for d
+    -- invalid marks at end of file
+grammar:
+    single line comment : # ...
+    allow emptylines
+    indent = 4 ascii spaces
+    no strings
+    no line joining rules; physical line is logical line
+    cannot access XX.XXX ; since '.' is part of name
+    can only refer to toplevel names
+    no nongreedy:
+        only '? * +' ; no '?? *? +?'
+    in one block, names can not duplicate
+    '[^\S]--[^\S]' begins a sequences of mark words
+        they will be passed into parse tree
+        mark should have a target name to bind to.
+    '=join+:' <==> repeat* last # but the result will be unpacked
+
+
+    name is '\S+'
+    keyword is '=join\+:|=join\*:|\[\?=\]..andothers..|{=}|(<<=)|(>>=)|[=:;]|--|--^|--tokens|--undefined_ntokens'
+    if name[-1] in '?+*', then ref = name[:-1],
+        so, a valid id should not ends with these chars
+    nonemptyline should be : <indent>* <name> (<keyword> <name>*)? <spaces-comment>? <newline>
+
+NOTE:
+    'xx =' and 'xx :' are allowed; empty concat and empty choice
+    NOT 'xx=' or 'xx:'; they are names
+    
+    'xxx*', 'xxx?' and 'xxx+' are name followed by count
+    NOT 'xxx *', 'xxx ?' or 'xxx +'
+    
+    regex'(?<!\S)#[ #].*' is a comment
+    NOT '#xxx' or 'xx# ...' or 'xxx##...'
+
+
+NOTE:
+    one choice is the same as 'is'
+    now, there is no 'is' command, using 'xxx : xxx' instead
+

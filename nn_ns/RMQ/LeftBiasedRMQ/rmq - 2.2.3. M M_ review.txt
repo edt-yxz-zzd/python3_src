@@ -1,0 +1,25 @@
+
+recall:
+    let make = make_left_biased_range_minimum_query_power_table
+    M_ = make(super_min_array, num_super_blocks, offset=False)
+        = make(..., ceil(p/s_), False)
+    M = make(normal_min_array, normal_min_array__up_to_length, offset=True)
+        = make(..., ceil(s_/s), True)
+
+how to set s_ and s, so that bit_size_of M/M_ are O(p)??
+  * M_
+    make(array<n>, upto, False) ==>> O(n*log(upto)*log(n))
+    bit_size_of(M_) = O(p/s_ * log(p/s_)**2) <= O(p)
+        <<== log(p/s_)**2 <= O(s_)
+        <<== log(p)**2 <= O(s_)
+        <<== s_ = log2(p)**2_x
+  * M
+    make(array<n>, upto, True) ==>> O(n*log(upto)**2)
+    bit_size_of(M) = O(p/s * log(s_/s)**2) <= O(p)
+        <<== log(s_/s)**2 <= O(s)
+        <<== log(s_)**2 <= O(s)
+        <<== log(log(p)**2_x)**2 <= O(s)
+        <<== log(log(p))**2 <= O(s)
+        <<== log(p) <= O(s)
+        <<== s = log2(p)/2_y
+

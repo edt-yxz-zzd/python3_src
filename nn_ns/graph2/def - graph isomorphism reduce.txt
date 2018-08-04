@@ -1,0 +1,46 @@
+
+xgraph[multiedge, self-loop, colored vertex, weighted aedge, hedge relationship]
+    -> simple colored ugraph
+    -> simple colored dgraph
+
+assume color/weight is BucketSortable
+    see: "BucketSortableSort.py"
+
+xgraph[multiedge, self-loop, colored vertex, weighted aedge, hedge relationship]
+1) remove hedge relationship
+    see: "def - hedge relationship.txt"
+
+xgraph[multiedge, self-loop, colored vertex, weighted aedge]
+2) remove multiedge wtih same weight and same direction
+    new weight = (multi, old weight)
+or 2) remove multiedge wtih same direction
+    new weight = sorted[(old weight, multi)]
+2') remove self-loop and multiedge and weight and direction
+    split aedge by 3 new vertices
+
+    # new vertices
+    new vtx = (Vtx_tag, old vtx)
+    mid1 = (HEdge_tag, hedge1)
+    mid2 = (AEdge_tag, aedge)
+    mid3 = (HEdge_tag, hedge2)
+
+    # no new weights
+    # new colors
+    color[new vtx] = (Vtx_tag, color[old vtx])
+    color[mid2] = (Edge_tag, weight[aedge])
+    if xgraph is ugraph:
+        color[mid1] = (HEdge_tag, 0)
+        color[mid3] = (HEdge_tag, 0)
+    else:
+        # if mid1 -> mid2 -> mid3
+        color[mid1] = (HEdge_tag, 0)
+        color[mid3] = (HEdge_tag, 1)
+        # now no directions
+
+simple ugraph[colored vertex]
+3) add direction
+    ugraph -> dgraph
+    v-u -> {v->u, u->v}
+simple dgraph[colored vertex]
+
+

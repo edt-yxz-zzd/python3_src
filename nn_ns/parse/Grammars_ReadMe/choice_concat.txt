@@ -1,0 +1,50 @@
+
+grammar is sth like:
+    # this is a comment
+    xx :
+    yy : xx xx
+    z = x xx
+    q =
+    t : 
+        yy
+        xx : ...
+        kk :
+            ...
+        uu = ...
+
+
+
+grammar:
+    single line comment : # ...
+    allow emptylines
+    indent = 4 ascii spaces
+    no strings
+    no line joining rules; physical line is logical line
+    cannot access XX.XXX ; since '.' is part of name
+    can only refer to toplevel names
+    no nongreedy:
+        only '? * +' ; no '?? *? +?'
+    in one block, names can not duplicate
+
+
+    name is '\S+'
+    keyword is '[=:]'
+    if name[-1] in '?+*', then ref = name[:-1],
+        so, a valid id should not ends with these chars
+    nonemptyline should be : <indent>* <name> (<keyword> <name>*)? <spaces-comment>? <newline>
+
+NOTE:
+    'xx =' and 'xx :' are allowed; empty concat and empty choice
+    NOT 'xx=' or 'xx:'; they are names
+    
+    'xxx*', 'xxx?' and 'xxx+' are name followed by count
+    NOT 'xxx *', 'xxx ?' or 'xxx +'
+    
+    regex'(?<!\S)#[ #].*' is a comment
+    NOT '#xxx' or 'xx# ...' or 'xxx##...'
+
+
+NOTE:
+    one choice is the same as 'is'
+    now, there is no 'is' command, using 'xxx : xxx' instead
+

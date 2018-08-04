@@ -1,0 +1,4 @@
+
+will change XXX_ABC class to IXXX_Ops class
+since classmethod is hard to be redefined
+

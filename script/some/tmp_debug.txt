@@ -1,0 +1,336 @@
+import _frozen_importlib # frozen
+import imp # builtin
+import sys # builtin
+# installing zipimport hook
+import 'zipimport' # <class '_frozen_importlib.BuiltinImporter'>
+# installed zipimport hook
+# C:\Python33\lib\encodings\__pycache__\__init__.cpython-33.pyc matches C:\Python33\lib\encodings\__init__.py
+# code object from C:\Python33\lib\encodings\__pycache__\__init__.cpython-33.pyc
+# C:\Python33\lib\__pycache__\codecs.cpython-33.pyc matches C:\Python33\lib\codecs.py
+# code object from C:\Python33\lib\__pycache__\codecs.cpython-33.pyc
+import '_codecs' # <class '_frozen_importlib.BuiltinImporter'>
+import 'codecs' # <_frozen_importlib.SourceFileLoader object at 0x00000000028FB470>
+# C:\Python33\lib\encodings\__pycache__\aliases.cpython-33.pyc matches C:\Python33\lib\encodings\aliases.py
+# code object from C:\Python33\lib\encodings\__pycache__\aliases.cpython-33.pyc
+import 'encodings.aliases' # <_frozen_importlib.SourceFileLoader object at 0x00000000029107B8>
+import 'encodings' # <_frozen_importlib.SourceFileLoader object at 0x00000000028EFD30>
+# C:\Python33\lib\encodings\__pycache__\mbcs.cpython-33.pyc matches C:\Python33\lib\encodings\mbcs.py
+# code object from C:\Python33\lib\encodings\__pycache__\mbcs.cpython-33.pyc
+import 'encodings.mbcs' # <_frozen_importlib.SourceFileLoader object at 0x00000000029432E8>
+import 'signal' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python33\lib\encodings\__pycache__\utf_8.cpython-33.pyc matches C:\Python33\lib\encodings\utf_8.py
+# code object from C:\Python33\lib\encodings\__pycache__\utf_8.cpython-33.pyc
+import 'encodings.utf_8' # <_frozen_importlib.SourceFileLoader object at 0x00000000029436A0>
+# C:\Python33\lib\encodings\__pycache__\latin_1.cpython-33.pyc matches C:\Python33\lib\encodings\latin_1.py
+# code object from C:\Python33\lib\encodings\__pycache__\latin_1.cpython-33.pyc
+import 'encodings.latin_1' # <_frozen_importlib.SourceFileLoader object at 0x00000000029438D0>
+# C:\Python33\lib\__pycache__\io.cpython-33.pyc matches C:\Python33\lib\io.py
+# code object from C:\Python33\lib\__pycache__\io.cpython-33.pyc
+# C:\Python33\lib\__pycache__\abc.cpython-33.pyc matches C:\Python33\lib\abc.py
+# code object from C:\Python33\lib\__pycache__\abc.cpython-33.pyc
+# C:\Python33\lib\__pycache__\_weakrefset.cpython-33.pyc matches C:\Python33\lib\_weakrefset.py
+# code object from C:\Python33\lib\__pycache__\_weakrefset.cpython-33.pyc
+import '_weakrefset' # <_frozen_importlib.SourceFileLoader object at 0x00000000029466D8>
+import 'abc' # <_frozen_importlib.SourceFileLoader object at 0x0000000002943E80>
+import 'io' # <_frozen_importlib.SourceFileLoader object at 0x0000000002943BA8>
+# C:\Python33\lib\encodings\__pycache__\gbk.cpython-33.pyc matches C:\Python33\lib\encodings\gbk.py
+# code object from C:\Python33\lib\encodings\__pycache__\gbk.cpython-33.pyc
+import '_codecs_cn' # <class '_frozen_importlib.BuiltinImporter'>
+import '_multibytecodec' # <class '_frozen_importlib.BuiltinImporter'>
+import 'encodings.gbk' # <_frozen_importlib.SourceFileLoader object at 0x0000000002950D68>
+# C:\Python33\lib\__pycache__\locale.cpython-33.pyc matches C:\Python33\lib\locale.py
+# code object from C:\Python33\lib\__pycache__\locale.cpython-33.pyc
+# C:\Python33\lib\__pycache__\re.cpython-33.pyc matches C:\Python33\lib\re.py
+# code object from C:\Python33\lib\__pycache__\re.cpython-33.pyc
+# C:\Python33\lib\__pycache__\sre_compile.cpython-33.pyc matches C:\Python33\lib\sre_compile.py
+# code object from C:\Python33\lib\__pycache__\sre_compile.cpython-33.pyc
+import '_sre' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python33\lib\__pycache__\sre_parse.cpython-33.pyc matches C:\Python33\lib\sre_parse.py
+# code object from C:\Python33\lib\__pycache__\sre_parse.cpython-33.pyc
+# C:\Python33\lib\__pycache__\sre_constants.cpython-33.pyc matches C:\Python33\lib\sre_constants.py
+# code object from C:\Python33\lib\__pycache__\sre_constants.cpython-33.pyc
+import 'sre_constants' # <_frozen_importlib.SourceFileLoader object at 0x0000000002A08860>
+import 'sre_parse' # <_frozen_importlib.SourceFileLoader object at 0x0000000002A04128>
+import 'sre_compile' # <_frozen_importlib.SourceFileLoader object at 0x000000000295BF60>
+# C:\Python33\lib\__pycache__\functools.cpython-33.pyc matches C:\Python33\lib\functools.py
+# code object from C:\Python33\lib\__pycache__\functools.cpython-33.pyc
+import '_functools' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python33\lib\collections\__pycache__\__init__.cpython-33.pyc matches C:\Python33\lib\collections\__init__.py
+# code object from C:\Python33\lib\collections\__pycache__\__init__.cpython-33.pyc
+# C:\Python33\lib\collections\__pycache__\abc.cpython-33.pyc matches C:\Python33\lib\collections\abc.py
+# code object from C:\Python33\lib\collections\__pycache__\abc.cpython-33.pyc
+import 'collections.abc' # <_frozen_importlib.SourceFileLoader object at 0x0000000002A33198>
+import '_collections' # <class '_frozen_importlib.BuiltinImporter'>
+import 'operator' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python33\lib\__pycache__\keyword.cpython-33.pyc matches C:\Python33\lib\keyword.py
+# code object from C:\Python33\lib\__pycache__\keyword.cpython-33.pyc
+import 'keyword' # <_frozen_importlib.SourceFileLoader object at 0x0000000002AA3048>
+# C:\Python33\lib\__pycache__\heapq.cpython-33.pyc matches C:\Python33\lib\heapq.py
+# code object from C:\Python33\lib\__pycache__\heapq.cpython-33.pyc
+import 'itertools' # <class '_frozen_importlib.BuiltinImporter'>
+import '_heapq' # <class '_frozen_importlib.BuiltinImporter'>
+import 'heapq' # <_frozen_importlib.SourceFileLoader object at 0x0000000002AA30F0>
+# C:\Python33\lib\__pycache__\weakref.cpython-33.pyc matches C:\Python33\lib\weakref.py
+# code object from C:\Python33\lib\__pycache__\weakref.cpython-33.pyc
+import 'weakref' # <_frozen_importlib.SourceFileLoader object at 0x0000000002AA3CF8>
+# C:\Python33\lib\__pycache__\reprlib.cpython-33.pyc matches C:\Python33\lib\reprlib.py
+# code object from C:\Python33\lib\__pycache__\reprlib.cpython-33.pyc
+import 'reprlib' # <_frozen_importlib.SourceFileLoader object at 0x0000000002AB38D0>
+import 'collections' # <_frozen_importlib.SourceFileLoader object at 0x0000000002A15A58>
+import 'functools' # <_frozen_importlib.SourceFileLoader object at 0x0000000002A08710>
+# C:\Python33\lib\__pycache__\copyreg.cpython-33.pyc matches C:\Python33\lib\copyreg.py
+# code object from C:\Python33\lib\__pycache__\copyreg.cpython-33.pyc
+import 'copyreg' # <_frozen_importlib.SourceFileLoader object at 0x0000000002A15160>
+import 're' # <_frozen_importlib.SourceFileLoader object at 0x000000000295B278>
+import '_locale' # <class '_frozen_importlib.BuiltinImporter'>
+import 'locale' # <_frozen_importlib.SourceFileLoader object at 0x000000000295B160>
+# C:\Python33\lib\__pycache__\site.cpython-33.pyc matches C:\Python33\lib\site.py
+# code object from C:\Python33\lib\__pycache__\site.cpython-33.pyc
+# C:\Python33\lib\__pycache__\os.cpython-33.pyc matches C:\Python33\lib\os.py
+# code object from C:\Python33\lib\__pycache__\os.cpython-33.pyc
+import 'errno' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python33\lib\__pycache__\stat.cpython-33.pyc matches C:\Python33\lib\stat.py
+# code object from C:\Python33\lib\__pycache__\stat.cpython-33.pyc
+import 'stat' # <_frozen_importlib.SourceFileLoader object at 0x0000000002CF9438>
+# C:\Python33\lib\__pycache__\ntpath.cpython-33.pyc matches C:\Python33\lib\ntpath.py
+# code object from C:\Python33\lib\__pycache__\ntpath.cpython-33.pyc
+# C:\Python33\lib\__pycache__\genericpath.cpython-33.pyc matches C:\Python33\lib\genericpath.py
+# code object from C:\Python33\lib\__pycache__\genericpath.cpython-33.pyc
+import 'genericpath' # <_frozen_importlib.SourceFileLoader object at 0x0000000002CFDA90>
+import 'ntpath' # <_frozen_importlib.SourceFileLoader object at 0x0000000002CFD4E0>
+import 'os' # <_frozen_importlib.SourceFileLoader object at 0x0000000002CE4EF0>
+# C:\Python33\lib\__pycache__\sysconfig.cpython-33.pyc matches C:\Python33\lib\sysconfig.py
+# code object from C:\Python33\lib\__pycache__\sysconfig.cpython-33.pyc
+import 'sysconfig' # <_frozen_importlib.SourceFileLoader object at 0x0000000002CEB358>
+# C:\Python33\lib\encodings\__pycache__\cp437.cpython-33.pyc matches C:\Python33\lib\encodings\cp437.py
+# code object from C:\Python33\lib\encodings\__pycache__\cp437.cpython-33.pyc
+import 'encodings.cp437' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D40390>
+# zipimport: found 147 names in 'C:\\Python33\\lib\\site-packages\\setuptools-5.2-py3.3.egg'
+# zipimport: found 15 names in 'C:\\Python33\\lib\\site-packages\\ply-3.4-py3.3.egg'
+# C:\Python33\lib\__pycache__\types.cpython-33.pyc matches C:\Python33\lib\types.py
+# code object from C:\Python33\lib\__pycache__\types.cpython-33.pyc
+import 'types' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D40BA8>
+import 'site' # <_frozen_importlib.SourceFileLoader object at 0x000000000297BEB8>
+# C:\Python33\lib\__pycache__\runpy.cpython-33.pyc matches C:\Python33\lib\runpy.py
+# code object from C:\Python33\lib\__pycache__\runpy.cpython-33.pyc
+# C:\Python33\lib\importlib\__pycache__\__init__.cpython-33.pyc matches C:\Python33\lib\importlib\__init__.py
+# code object from C:\Python33\lib\importlib\__pycache__\__init__.cpython-33.pyc
+import 'importlib' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D696A0>
+# C:\Python33\lib\importlib\__pycache__\machinery.cpython-33.pyc matches C:\Python33\lib\importlib\machinery.py
+# code object from C:\Python33\lib\importlib\__pycache__\machinery.cpython-33.pyc
+import 'importlib.machinery' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D69898>
+# C:\Python33\lib\__pycache__\imp.cpython-33.pyc matches C:\Python33\lib\imp.py
+# code object from C:\Python33\lib\__pycache__\imp.cpython-33.pyc
+# C:\Python33\lib\__pycache__\tokenize.cpython-33.pyc matches C:\Python33\lib\tokenize.py
+# code object from C:\Python33\lib\__pycache__\tokenize.cpython-33.pyc
+# C:\Python33\lib\__pycache__\token.cpython-33.pyc matches C:\Python33\lib\token.py
+# code object from C:\Python33\lib\__pycache__\token.cpython-33.pyc
+import 'token' # <_frozen_importlib.SourceFileLoader object at 0x0000000002DC34A8>
+import 'tokenize' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D69A90>
+# C:\Python33\lib\__pycache__\warnings.cpython-33.pyc matches C:\Python33\lib\warnings.py
+# code object from C:\Python33\lib\__pycache__\warnings.cpython-33.pyc
+# C:\Python33\lib\__pycache__\linecache.cpython-33.pyc matches C:\Python33\lib\linecache.py
+# code object from C:\Python33\lib\__pycache__\linecache.cpython-33.pyc
+import 'linecache' # <_frozen_importlib.SourceFileLoader object at 0x0000000002DC6908>
+import 'warnings' # <_frozen_importlib.SourceFileLoader object at 0x0000000002DBB128>
+import 'imp' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D69B00>
+# C:\Python33\lib\__pycache__\pkgutil.cpython-33.pyc matches C:\Python33\lib\pkgutil.py
+# code object from C:\Python33\lib\__pycache__\pkgutil.cpython-33.pyc
+import 'pkgutil' # <_frozen_importlib.SourceFileLoader object at 0x0000000002DC6DA0>
+import 'runpy' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D69048>
+# code object from .\Archimedean_solid.py
+# created '.\\__pycache__\\Archimedean_solid.cpython-33.pyc'
+# wrote '.\\__pycache__\\Archimedean_solid.cpython-33.pyc'
+# C:\Python33\lib\__pycache__\pprint.cpython-33.pyc matches C:\Python33\lib\pprint.py
+# code object from C:\Python33\lib\__pycache__\pprint.cpython-33.pyc
+import 'pprint' # <_frozen_importlib.SourceFileLoader object at 0x0000000002D69128>
+# C:\Python33\lib\__pycache__\fractions.cpython-33.pyc matches C:\Python33\lib\fractions.py
+# code object from C:\Python33\lib\__pycache__\fractions.cpython-33.pyc
+# C:\Python33\lib\__pycache__\decimal.cpython-33.pyc matches C:\Python33\lib\decimal.py
+# code object from C:\Python33\lib\__pycache__\decimal.cpython-33.pyc
+# C:\Python33\lib\__pycache__\copy.cpython-33.pyc matches C:\Python33\lib\copy.py
+# code object from C:\Python33\lib\__pycache__\copy.cpython-33.pyc
+import 'copy' # <_frozen_importlib.SourceFileLoader object at 0x0000000002EFF8D0>
+import 'math' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python33\lib\__pycache__\numbers.cpython-33.pyc matches C:\Python33\lib\numbers.py
+# code object from C:\Python33\lib\__pycache__\numbers.cpython-33.pyc
+import 'numbers' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F170F0>
+# C:\Python33\lib\__pycache__\threading.cpython-33.pyc matches C:\Python33\lib\threading.py
+# code object from C:\Python33\lib\__pycache__\threading.cpython-33.pyc
+import 'time' # <class '_frozen_importlib.BuiltinImporter'>
+# C:\Python33\lib\__pycache__\traceback.cpython-33.pyc matches C:\Python33\lib\traceback.py
+# code object from C:\Python33\lib\__pycache__\traceback.cpython-33.pyc
+import 'traceback' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F3BBA8>
+import 'threading' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F25470>
+# extension module loaded from 'C:\\Python33\\DLLs\\_decimal.pyd'
+import '_decimal' # <_frozen_importlib.ExtensionFileLoader object at 0x0000000002F57470>
+import 'decimal' # <_frozen_importlib.SourceFileLoader object at 0x0000000002ECB0B8>
+import 'fractions' # <_frozen_importlib.SourceFileLoader object at 0x0000000002DEAEF0>
+# E:\my_data\program_source\python3_src\nn_ns\__pycache__\__init__.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\__init__.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\__pycache__\__init__.cpython-33.pyc
+import 'nn_ns' # <_frozen_importlib.SourceFileLoader object at 0x0000000002EFF390>
+# E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\__init__.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\graph\__init__.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\__init__.cpython-33.pyc
+import 'nn_ns.graph' # <_frozen_importlib.SourceFileLoader object at 0x0000000002EFF5C0>
+# E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\planar_embedding.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\graph\planar_embedding.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\planar_embedding.cpython-33.pyc
+# E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\Boyer_Myrvold_planarity_test.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\graph\Boyer_Myrvold_planarity_test.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\Boyer_Myrvold_planarity_test.cpython-33.pyc
+# E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\DFS.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\graph\DFS.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\DFS.cpython-33.pyc
+# E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\fake_face.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\graph\fake_face.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\fake_face.cpython-33.pyc
+import 'nn_ns.graph.fake_face' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F76438>
+import 'nn_ns.graph.DFS' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F6ACF8>
+# E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\bucket_sort.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\graph\bucket_sort.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\bucket_sort.cpython-33.pyc
+# E:\my_data\program_source\python3_src\nn_ns\sort\__pycache__\__init__.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\sort\__init__.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\sort\__pycache__\__init__.cpython-33.pyc
+# E:\my_data\program_source\python3_src\nn_ns\sort\__pycache__\bucket_sort.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\sort\bucket_sort.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\sort\__pycache__\bucket_sort.cpython-33.pyc
+import 'nn_ns.sort.bucket_sort' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F769E8>
+import 'nn_ns.sort' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F76860>
+import 'nn_ns.graph.bucket_sort' # <_frozen_importlib.SourceFileLoader object at 0x0000000002F765C0>
+# E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\simple_undirected_graph.cpython-33.pyc matches E:\my_data\program_source\python3_src\nn_ns\graph\simple_undirected_graph.py
+# code object from E:\my_data\program_source\python3_src\nn_ns\graph\__pycache__\simple_undirected_graph.cpython-33.pyc
+Traceback (most recent call last):
+  File "C:\Python33\lib\runpy.py", line 160, in _run_module_as_main
+    "__main__", fname, loader, pkg_name)
+  File "C:\Python33\lib\runpy.py", line 73, in _run_code
+    exec(code, run_globals)
+  File ".\Archimedean_solid.py", line 298, in <module>
+    from nn_ns.graph.planar_embedding import polyhedra_embedding2faces, \
+  File "<frozen importlib._bootstrap>", line 1565, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1532, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 584, in _check_name_wrapper
+  File "<frozen importlib._bootstrap>", line 1022, in load_module
+  File "<frozen importlib._bootstrap>", line 1003, in load_module
+  File "<frozen importlib._bootstrap>", line 560, in module_for_loader_wrapper
+  File "<frozen importlib._bootstrap>", line 868, in _load_module
+  File "<frozen importlib._bootstrap>", line 313, in _call_with_frames_removed
+  File "E:\my_data\program_source\python3_src\nn_ns\graph\planar_embedding.py", line 8, in <module>
+    from .Boyer_Myrvold_planarity_test import \
+  File "<frozen importlib._bootstrap>", line 1565, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1532, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 584, in _check_name_wrapper
+  File "<frozen importlib._bootstrap>", line 1022, in load_module
+  File "<frozen importlib._bootstrap>", line 1003, in load_module
+  File "<frozen importlib._bootstrap>", line 560, in module_for_loader_wrapper
+  File "<frozen importlib._bootstrap>", line 868, in _load_module
+  File "<frozen importlib._bootstrap>", line 313, in _call_with_frames_removed
+  File "E:\my_data\program_source\python3_src\nn_ns\graph\Boyer_Myrvold_planarity_test.py", line 4, in <module>
+    from .simple_undirected_graph import graph
+  File "<frozen importlib._bootstrap>", line 1565, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1532, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 584, in _check_name_wrapper
+  File "<frozen importlib._bootstrap>", line 1022, in load_module
+  File "<frozen importlib._bootstrap>", line 1003, in load_module
+  File "<frozen importlib._bootstrap>", line 560, in module_for_loader_wrapper
+  File "<frozen importlib._bootstrap>", line 868, in _load_module
+  File "<frozen importlib._bootstrap>", line 313, in _call_with_frames_removed
+  File "E:\my_data\program_source\python3_src\nn_ns\graph\simple_undirected_graph.py", line 74, in <module>
+    from .bucket_sort import inner_sort_ints_list
+ImportError: cannot import name inner_sort_ints_list
+# clear builtins._
+# clear sys.path
+# clear sys.argv
+# clear sys.ps1
+# clear sys.ps2
+# clear sys.last_type
+# clear sys.last_value
+# clear sys.last_traceback
+# clear sys.path_hooks
+# clear sys.path_importer_cache
+# clear sys.meta_path
+# clear sys.flags
+# clear sys.float_info
+# restore sys.stdin
+# restore sys.stdout
+# restore sys.stderr
+# cleanup __main__
+# cleanup[1] sre_constants
+# cleanup[1] nn_ns
+# cleanup[1] nn_ns.graph
+# cleanup[1] _weakrefset
+# cleanup[1] decimal
+# cleanup[1] types
+# cleanup[1] nn_ns.graph.bucket_sort
+# cleanup[1] keyword
+# cleanup[1] nn_ns.sort
+# cleanup[1] mpl_toolkits
+# cleanup[1] nn_ns.graph.fake_face
+# cleanup[1] reprlib
+# cleanup[1] traceback
+# cleanup[1] io
+# cleanup[1] runpy
+# cleanup[1] fractions
+# cleanup[1] token
+# cleanup[1] sysconfig
+# cleanup[1] copy
+# cleanup[1] pkgutil
+# cleanup[1] pprint
+# cleanup[1] nn_ns.sort.bucket_sort
+# cleanup[1] threading
+# cleanup[1] site
+# cleanup[1] weakref
+# cleanup[1] nn_ns.graph.DFS
+# cleanup[1] numbers
+# cleanup[1] abc
+# cleanup[1] imp
+# cleanup[1] importlib
+# cleanup[1] warnings
+# cleanup[1] importlib.machinery
+# cleanup[1] linecache
+# cleanup[1] tokenize
+# cleanup[2] signal
+# cleanup[2] os
+# cleanup[2] locale
+# cleanup[2] encodings.cp437
+# cleanup[2] encodings.aliases
+# cleanup[2] encodings.latin_1
+# cleanup[2] encodings
+# cleanup[2] _thread
+# cleanup[2] _multibytecodec
+# cleanup[2] sre_parse
+# cleanup[2] _weakref
+# cleanup[2] _codecs_cn
+# cleanup[2] errno
+# cleanup[2] copyreg
+# cleanup[2] stat
+# cleanup[2] _locale
+# cleanup[2] collections
+# cleanup[2] operator
+# cleanup[2] encodings.gbk
+# cleanup[2] importlib._bootstrap
+# cleanup[2] winreg
+# cleanup[2] ntpath
+# cleanup[2] _codecs
+# cleanup[2] _frozen_importlib
+# cleanup[2] time
+# cleanup[2] _decimal
+# cleanup[2] _sre
+# cleanup[2] codecs
+# cleanup[2] heapq
+# cleanup[2] os.path
+# cleanup[2] re
+# cleanup[2] itertools
+# cleanup[2] encodings.utf_8
+# cleanup[2] _functools
+# cleanup[2] genericpath
+# cleanup[2] marshal
+# cleanup[2] _warnings
+# cleanup[2] zipimport
+# cleanup[2] encodings.mbcs
+# cleanup[2] _collections
+# cleanup[2] _heapq
+# cleanup[2] nt
+# cleanup[2] _imp
+# cleanup[2] sre_compile
+# cleanup[2] functools
+# cleanup[2] collections.abc
+# cleanup[2] _io
+# cleanup[2] math
+# cleanup sys
+Python 3.3.3 (v3.3.3:c3896275c0f6, Nov 18 2013, 21:19:30) [MSC v.1600 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+# cleanup builtins

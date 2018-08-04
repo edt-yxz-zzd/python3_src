@@ -1,0 +1,64 @@
+
+multigraph
+
+simple graph is connected? No
+connected can be empty? Yes
+
+
+meta: mutual exclusivity, collective exclusivity
+    (at the concrete subclass)
+    ==>> finalclass
+haskell type sys:
+    * auto insert mixins
+        new concrete methods!
+    * auto insert mixins
+        override abstractmethods
+
+IGraphBase is not a graph
+    IGraphBase = Graph | GraphProxy | ...
+graph_proxy # itself should not be a graph!
+    graph_proxy(self, g, Ts:[GraphType])
+        if g is graph_proxy:
+            assert g.types <: Ts
+            g = g.g
+        else:
+            assert g :: Ts
+        self.g = g
+        self.types = Ts
+        __dir__ = map(dir, Ts)
+        __getattr__ = ...
+    usage:
+        def f(g, ...):
+            g = graph_proxy(g, ...) # 
+graph type
+    finite?
+    mutable?
+        immutable graph (only graph part immutable!) allow to compute and cache result
+            __cached__ :: {(method_name, source_declaration_cls, args, kwargs): result}
+    explicit?
+        unknown all vtc/aedge at once
+        game state
+        grammar # sentence <==> non-outgo-vertex
+    * num_vertices:
+        game state: unknown, even is finite
+        infinite
+        finite & num_vertices
+        finite & unknown num_vertices & calc_num_vertices
+            game state graph
+        may_finite:
+            static_unknown(is finite?)
+                a proxy graph
+            dynamic_unknown
+                compute stop??
+    * vtx_eq # compact vtx
+        DAG_as_compact_forest
+            DAG vtx or Tree vtx (rooted DAG path)
+        {a->b, b->a}
+            * 2 vtc
+            * infinite vtc
+                * use path[(a|b)] as vtc
+                * use {a, b} as vtc
+                    then we cannot have vtx_eq
+
+
+

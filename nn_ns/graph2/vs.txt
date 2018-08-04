@@ -1,0 +1,78 @@
+
+vertex is bounded_int
+    why consecutive unoffseted vertices?
+
+    bucket sort
+    vertex2real_vertex
+        e.g. this is a subgraph
+            or original vertex is not int
+        but how real_vertex2vertex???
+            e.g. original graph -> decomposed subgraphs
+            each vertex in original graph <-[1:many]-> vertices in subgraphs
+            mid vertex = (original vertex, subgraph_idx)
+            number mid vertex -> idx
+    offseted vertex??
+        for subtrees or connected components
+        but not nessesary
+graph <-> [bounded_int]
+    bucket sort
+    support there are many graphs, we can sort them and number them in order
+
+rooted tree
+    rooted tree is a directed graph
+    why rooted tree?
+        decompose a graph into super graph
+        a super vertex is a subgraph of the original graph
+            such subgraph has colored vertices and weighted edges
+            since vertices linked with foreign
+        isomorphism ==>> rooted tree
+
+    -- unrooted tree can dfs a any vertex
+    unrooted tree ==>> center c or bicenter c1 c2
+        add virtual root vr:
+        c:
+            add edge (vr->c)
+        c1 c2:
+            add edge (vr->c1), (vr->c2)
+            del edge (c1-c2)
+        undirected edges convert to directed edges
+
+    unordered/unorientated tree...
+
+colored weighted graph
+    isomorphism problem of original graph while we have:
+        original subgraph <-[1:1]-> vertex in super decomposed graph
+
+dfs:
+    offer what info?
+    dfs tree/forest:
+        pre-order property:
+            ancestors?? depth/level?
+                if unrooted tree, then should offer ancestors view
+                    seq or linked_list??
+                if rooted tree, may not offer ancestors:
+                    we can test is_root/is_leaf
+        post-order property:
+            height?
+            low_pt?
+        case:
+            enter/exit_root/node/leaf/edge??
+            since root may be leaf, enter/exit_root/leaf is not a good idea
+            we add a virtual root to uniform root and nonroot, tree and forest
+
+    since there are many properties we may require
+        dfs should not be a free function(or a method of another class) instead of a method of graph
+
+
+tree children orientation
+    unorientated
+
+    left_right_cyclic_orientated
+    ordered_cyclic_orientated
+
+    # the (may virtual) parent edge appear in the cycle
+    left_right_linear_orientated
+    ordered_linear_orientated
+
+
+

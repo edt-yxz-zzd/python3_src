@@ -1,0 +1,462 @@
+
+parser design
+1) [Char] -> ?
+    why Char
+2) [Token] -> ?
+    to offer a grammar
+3) [Token] -> CFG -> Tree ?
+    why Tree?
+    output should be same kind of input, 
+        so that we can filter the data
+4) [Token] -> CFG -> CFG ?
+    we know that FS & CFG = CFG
+    stream is a subclass of nfsm
+5) NFSM Pos Token -> CFG -> CFG ?
+    CFG = ?
+5-1) CFG = CFG  { start :: Sym
+                , terminals :: {Sym}
+                , rules :: {Sym : {Name:[Sym]}}
+                } ?
+  5-1-1) one start symbol?
+    what is the output grammar?
+        output symbol :: (Pos, Sym, Pos)
+    what is the start symbol of output?
+        if token nfsm has only one initial and final state, then
+            there is only one start symbol of output
+        else
+            the CFG type cannot represent output -- fail
+            or we have to add a new symbols in output -- bad
+            or we transform the token nfsm -- ??
+                i.e. wrap Pos to add two new states:
+                    WState pos = Initial | Final | UserState pos
+                    and then add null transitions...
+  5-1-2) rule : Sym -> {Name:[Sym]}?
+    it is a special nfsm, too.
+  5-1-3) ternimals?
+    NOTE: we input Token, not Sym.
+    Token may carry more data than Sym
+    let Token = (Sym, Data)
+    should Sym in Token be terminal?
+    weren't it better if we can offer 
+        some compiled data directly to nonterminals?
+    we treat each Sym nonterminal and Token terminal.
+        i.e. if exist tokenA.sym == symA, then
+            we add rule "symA = tokenA;" implicitly.
+
+5-2) CFG = CFG  { starts :: {Sym}
+                , rules :: {Sym : NFSM St Sym}
+                } ?
+    -- (begin state, begin position; left symbol, end position)
+    --      0 and 1 are extra states
+    output symbol :: (0, Pos; Sym, Pos) -- ?? | (1, Pos; Token, Pos)
+    output rule state :: (St, Pos; Sym, Pos)
+
+    now, what is NFSM?
+5-3) NFSM = NFSM{ initials :: {St}
+                , finals :: {St}
+                , transitions :: [(St, Sym, St)] -- {St : {Sym:St}}
+                , null_transitions :: [(St, St)] -- {St : {St}}
+                }?
+
+  5-3-1) input rule:
+    (0, sym) = (sym.rule_nfsm.initial, sym)
+    (st, sym) = (0, next) (st', sym)
+    (st, sym) = (st', sym)
+    (final_st, sym) = ;
+
+  5-3-2) output rule:
+    (st, pos; sym, endpos)
+        = (0, pos; next, pos') (st', pos'; sym, endpos)
+    compare with (5-3-1)
+    can we have:
+        output st :: (st|0, pos)?
+        output symbol :: (sym, endpos)?
+        No!
+    can we have:
+        output st :: (pos, st|0, endpos)?
+        output symbol :: (pos, sym, endpos)?
+        No! (pos, st, endpos) + sym makes a complete output state.
+
+  assume st is unique, i.e. st knows sym
+  5-3-3) input rule:
+    sym = sym.initial
+    st = next st'
+    st = st'
+    final_st = ;
+    token.sym = token
+  5-3-4) output rule:
+    (pos, sym, endpos) = (pos, sym.initial, endpos)
+    (pos, st, endpos) = (pos, next, pos') (pos', st', endpos)
+    (pos, st, endpos) = (pos', st', endpos)
+    (endpos, final_st, endpos) = ;
+
+    now we have:
+        output st :: (pos, st, endpos)
+        output symbol :: (pos, sym, endpos)
+    since we assume input st knows sym, we desire
+        output st knows output symbol?
+        No!
+        there exist two output symbol
+            (pos1, sym, endpos) and (pos2, sym, endpos)
+            both come to (pos3, st, endpos)
+    we note that (pos, st, endpos) is a regex about sym,
+        relax the "knows" relation
+
+  assume st represent a regex about sym
+    instead of "knows", two rule nfsm may share a same st as a tail regex
+    now output has the same property!!
+    so we merge all rule nfsm's into one big nfsm
+5-4) CFG = CFG  { starts :: {Sym}
+                , big_nfsm :: CFG_NFSM St Sym
+                , sym2initials :: {Sym : {St}} -- [(Sym, St)]
+                }
+     CFG_NFSM = CFG_NFSM{ finals :: {St} -- need not initials
+                        , transitions :: [(St, Sym, St)]
+                        , null_transitions :: [(St, St)]
+                        } ?
+    we omit the implicit input rules above:
+        (0, token.sym) = (1, token)
+    which yield output rules:
+        (pos, token.sym, endpos) = (pos, token, endpos)
+        NOTE: 
+            if (pos, token, endpos) and (pos', pos) 
+                are in the input token nfsm, then
+                (pos', token, endpos) in it too.
+            if (pos, final_pos) in token nfsm:
+                then pos is final too.
+
+    output st :: (pos, st, endpos)
+    output symbol :: (pos, sym, endpos)
+    output teriminal rules :: {(pos, sym, endpos):[(pos, token, endpos)]}
+    but this terminal rules are not presented in input CFG,
+    should it be an seperate output or merged into output's big_nfsm??
+        maybe we simply provide [Sym] as [Token], 
+        so makes no sense to merge the terminal rules into grammar
+
+6) NFSM Pos Token -> (Token->Sym) -> CFG -> (TerminalRules, CFG) ?
+    token nfsm :: NFSM?
+    we may use 5-3)
+    NOTE:
+        both input (i.e. nfsm and cfg) can be torn down into pieces
+        we can input tokens/input grammer/parse incrementally!!
+7) Msg -> Parsing -> Parsing
+    Parsing = Parsing   { token_nfsm :: NFSM Pos Token
+                        , token2sym :: Token -> Sym
+                        , cfg :: CFG St Sym
+                        , output_cfg :: CFG (Pos,St,Pos) (Pos,Sym,Pos)
+                        , output_terminal_rules :: ...
+                        , queue :: [Msg]
+                        , ...
+                        }
+    Msg = TokenNFSM_Initial Pos
+        | TokenNFSM_Final Pos
+        | TokenNFSM_Transition Pos Token Pos
+        | TokenNFSM_NullTransition Pos Pos
+        | CFG_Start Sym
+        | CFG_SymInitial Sym St
+        | CFG_NFSM_Final St
+        | CFG_NFSM_Transition St Sym St
+        | CFG_NFSM_NullTransition St St
+        -- above messages - how to build TokenNFSM and CFG
+        | ... -- other messages generated while parsing
+
+    Parsing = ?
+7-1) Parsing = Parsing { ..., queue :: Q Msg, old_msgs :: {Msg}, ...}?
+    push_msg :: Msg -> Parsing -> Parsing
+    push msg into queue and old_msgs, if msg not in old_msgs.
+    pull_msg :: Parsing -> Maybe (Msg, Parsing)
+    pull out a msg in queue
+    class MsgBuffer msg a where
+        push_msg :: msg -> a -> a
+        pull_msg :: a -> Maybe (msg, a)
+    instance MsgBuffer Msg Parsing
+
+    how to process Msg?
+    7-1-1) TokenNFSM_Initial pos
+        forall cfg.start, (pos, start, ?) is wanted
+        yield a new msg : WantedSym_After pos start
+    want/after - inteface/message:
+        wanted - means a poster/interface
+        after - means the wanted has been add to internal data
+        interface is not message, it will add to internal data immediately
+        but message will put into queue, and be processed later
+        naming:
+            WantedXxxx is interface
+            WantedXxxx_After is message
+            other names like OutputRule_Xxx are messages
+    7-1-2) CFG_Start sym
+        forall token_nfsm.initial, (initial, sym, ?) is wanted
+        a same wanted type as 7-1-1)
+    ...
+    NOTE: {token_nfsm.initial} * {cfg.start} --> {wanted_pos_sym}
+        the pattern: {a}*{b} --> {c}
+        {importer} -< interface <- {exporter} --> {output_msg}
+        {token_nfsm.initial} -< MainWanted <- {cfg.start} --> ...
+        MainWanted is an interface to connect left set and right set
+    TokenNFSM_Initial pos
+        -< MainWanted <- CFG_Start sym
+        --> WantedSym_After pos sym
+    7-1-3) WantedSym_After pos sym
+        forall sym.initial, (pos, initial_st, ?) is wanted
+        yield WantedSt_After pos initial_st
+    WantedSym_After pos sym -- (pos, sym, ?) = (pos, st?, ?);
+        -< WantedSym2St sym <- CFG_SymInitial sym inital_st
+            --> WantedSt_After pos st
+        -< WantedSt pos st <- StInstance pos st pos'
+            --> SymInstance pos sym pos' + OutputRule_Sym2St
+        NOTE: TokenNFSM_Transition pos token endpos --> SymInstance ...
+    WantedSt_After pos st -- (pos, st, ?) = (pos, next, pos?) (...);
+        -< WantedSt2Next st <- CFG_NFSM_Transition st next st'
+            --> WantedNextSt_After pos st next st'
+        -< FinalSt st <- CFG_NFSM_Final st
+            --> StInstance pos st pos + OutputRule_St2Null ...
+        -- -< WantedSt2St st <- CFG_NFSM_NullTransition st st'
+        -- no OutputRule_St2St
+    WantedNextSt_After pos st next st' -- (pos,next,pos'?)(pos'?,st',?)
+        -< WantedNextPos pos next <- SymInstance pos next pos'
+        --> WantedNextPos_After pos st pos' st'
+    WantedNextPos_After pos st next pos' st' -- (...)(pos',st',?)
+        -< WantedSt pos' st' <- StInstance pos' st' pos''
+        --> StInstance pos st pos'' + OutputRule_St2NextSt ...
+
+    let's extract the message processing framework
+7-2) instance MsgProcess Msg Parsing
+    class MsgBuffer msg a => MsgProcess i msg a where
+        -- i - interface
+        process1 :: msg -> a -> a -- implemented by step_process1
+        process2 :: i -> msg -> msg -> a -> a -- by step_process2
+
+        step_process1 :: MonadState a m => msg -> m ([i], [i], [msg])
+        -- in_msg -> ({i_import}, {i_export}, [out_msg])
+        -- the framework will set:
+        --      i_export <- in_msg -< i_import
+        -- and put [out_msg] into queue
+        -- what about ?? Writer [msg] m ??
+        --    but that will harden debug, I think.
+
+        step_process2 :: MonadState a m => i -> msg -> msg -> m [msg]
+        -- (i, importer_msg, exporter_msg) -> [out_msg]
+        --      precondition: importer_msg -< i <- exporter_msg
+        -- the framework will put [out_msg] into queue
+
+    there are so many cases such that we are likely to miss sth
+        1) step_process1:
+            case in_msg of
+                ... -- many msg types
+                    -- and foreach msg type:
+                    -- many: i_export <- in_msg
+                    -- many: in_msg -< i_import
+                    -- many: in_msg --> out_msg
+        2) step_process2:
+            case (i, importer, exporter) of
+                ... -- many cases: foreach i: {im-<i}*{i-<ex}
+    we use a mini-language MsgMiniL to descript cases
+        and then translate it into outlines about step_process1/2:
+        format:
+        -- msg = msg_type arg*
+        -- interface = i_type arg*
+        output1 = msg out_msgs
+        out_msgs = "-->" msg ("," msg)*
+        import_view = importer import_stmt*
+        import_stmt = "-<" interface implement_stmt*
+        implement_stmt = "<-" exporter out_msgs?
+        interface_decl = interface "<-" exporter ("," exporter)*
+                                  (">-" importer ("," importer)*)?
+        source_msg_decl = out_msgs "-->"
+        top_stmt = output1 | import_view
+                 | interface_decl | source_msgs_decl
+        main = (";" top_stmt)*
+
+        msg = expr          -- "Mxxx"
+        interface = expr    -- "Ixxx"
+        importer = msg
+        exporter = msg
+        expr = atom+
+        atom = word | group
+        group = "(" expr ")" | "[" expr "]"
+
+    verify MsgMiniL source:
+        same interface type SHOULD be always followed same exporter set
+            the exporters in interface_decl
+            those in any importer view about the same interface type
+            ==>> forall i: {importer-<i} * {i<-exporter} will be handled
+        interface_decl's importers subclaus if presented:
+            each importer in subclaus SHOULD import the interface type
+        all msg types SHOULD be reachable by source msg types
+            msg is reachable if
+                at least one of the following conditions holds:
+            1) msg is source msg
+            2) reachable_msg1 --> msg
+            3) reachable_msg1 -< i <- reachable_msg2 --> msg
+    outline step_process1:
+    case in_msg of
+        -- each msg type Mxxx occur in MsgMiniL source
+        --    no matter occurs as importer/exporter/out_msg
+        -- Mxxx ... ->
+            -- list all msgs Mxxx directly output:
+            -- Mxxx ... --> Myyy ..., Mzzz ..., ...
+            -- list all i_import imported by Mxxx:
+            -- Mxxx ... -< Iaaa ..., Ibbb ..., ...
+            -- list all i_export exported by Mxxx:
+            -- Iccc ..., Iddd ..., ... <- Mxxx
+    outline step_process2:
+    case i of:
+        -- each interface type Ixxx occur in MsgMiniL
+        -- Ixxx ... ->
+        case (importer, exporter) of
+            -- forall Myyy -< Ixxx, forall Ixxx -< Mzzz
+            -- (Myyy ..., Mzzz ...) ->
+                -- list all msgs output by (Myyy..., Mzzz...)
+                -- (Myyy..., Mzzz...) --> Maaa..., Mbbb..., ...
+7-3) Parsing = Parsing{..., i2import,i2export::{i:[msg]},...}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+assume st be unique, or st := (sym, name, st)
+
+input_nfsm
+cfg = [main_symbol] + {symbol : [rule_nfsm]} + implis symbol=token if token.sym = symbol
+    ==>> main_symbol + {symbol : rule_nfsm} + ...
+nfsm = ([initial], [final], [transition], [nulltransition])
+    ==>> (initial, final, [transition], [nulltransition])
+
+
+-- wrapped version, so only one MainSym/Initial/Final
+--     and Initial /= Final /= other states
+cfg = input_cfg | output_cfg
+symbol  = MainSym           -- () = Sym1 | Sym2 | ...
+        | UserSym Sym       -- Sym = (Sym, Name1) | (Sym, Name2) | ...
+        | RuleName Sym Name -- RN = nfsm
+
+Sym = input_cfg.symbol | input_nfsm.token
+
+
+nfsm    = input_token_nfsm | user_rule_nfsm
+        | main_rule_nfsm | alternative_rule_nfsm
+        | output_rule_nfsm
+
+U_NFSM st sym = (st, st, [Transition st sym], [NullTransition st])
+G_NFSM st sym = ([st], [st], [Transition st sym], [NullTransition st])
+Transition st sym = T st sym st
+NullTransition st = N st st
+
+WState st   = Initial | Final
+            | UserState st
+
+G_NFSM st sym -> U_NFSM (WState st) sym 
+    = (Initial, Final, [Transition (WState st) sym], [NullTransition (WState st)])
+
+-- nfsm s.t. no st->initial or st-[sym]->initial
+-- ==>> when track back to initial, we sure back to beginning
+NonTargetInitial_NFSM st sym = (NonTargetInitial, ...)
+
+
+-- P - pair; i.e. rule right part is null or pair or unit??
+-- st = ; st = sym st; st = st;
+-- if st = st; <==> null transition
+--    exist s=s', forall s'=sym t: s=sym t; -- head extend
+
+input rule nfsm -> p_nfsm
+    (lsym, NonTargetInitial) = any initial: (lsym, lsym.rule_nfsm.initial);
+    (lsym, st) = (next, NonTargetInitial) (lsym, st'); -- lsym.st--[next]->lsym.st'
+    (lsym, st) = (lsym, st');
+    (lsym, final_st) = ;
+    
+    if st -[unique]-> lsym:
+        lsym = lsym.initial
+        st = next st'
+        st = st'
+        final_st = ;
+        
+        relax unique requirement:
+            "forall sym1, sym2, st: sym1.st == sym2.st ==>> sym1.rule_nfsm[st:] == sym2.rule_nfsm[st:]"
+
+output rule nfsm -> p_nfsm
+    (lsym, NonTargetInitial, pos, endpos) = (Instance pos lsym endpos)
+    (lsym, NonTargetInitial, pos, endpos) = any initial: (lsym, lsym.rule_nfsm.initial, pos, endpos);
+    (lsym, st, pos, endpos) = (next, NonTargetInitial, pos, pos') (lsym, st', pos', endpos);
+    -- (sym, st, pos, endpos) = (sym, st', pos, endpos);
+    (lsym, final_st, endpos, endpos) = ; 
+
+    -- merge endpos into sym in output cfg : sym -> (endpos, sym)
+    -- merge pos into st in output cfg : st -> (st, pos)
+
+    if st -[unique]-> lsym:
+        out_sym: (pos, lsym, endpos) = (pos, lsym.initial, endpos)
+        out_st:  (pos, st, endpos) = (pos, next, pos') (pos' st' endpos)
+        
+        if want out_st-[unique]->out_sym: hard
+    if st -[relax unique]-> cfg:
+        out cfg auto s.t. the relaxed requirement
+
+
+
+
+-- why many main_symbols? <<== OutputCFG
+-- but if we std input cfg and input token nfsm s.t. 
+--     one main symbol and one initial and one final
+-- then the output cfg will have only one output main_symbol!
+-- sym name -> st
+-- G - many main_symbols; U - one main_symbol
+-- W - Wrapped
+-- I merge name into st ==>> st' = (name, st)
+G_CFG st sym name = ([sym], {sym : {name : NFSM st sym}}) -- any NFSM
+    ==>> ([sym], {sym : G_NFSM (name, st) sym}) -- G_NFSM
+G_ParserState pos token st sym name
+    = (token->sym, G_CFG st sym name, NFSM pos token) -- any NFSM
+G_OutputCFG pos token st sym = G_CFG (st,pos) (Instance pos (sym|token) pos) name
+
+U_CFG st sym name = (sym, {sym : {name : NFSM st sym}}) -- any NFSM
+    ==>> ([sym], {sym : G_NFSM (name, st) sym}) -- G_NFSM
+U_ParserState pos token st sym name
+    = (token->sym, U_CFG st sym name, U_NFSM pos token) -- U_NFSM
+U_OutputCFG pos token st sym = U_CFG (st,pos) (Instance pos (sym|token) pos) name
+
+
+
+WCFG st sym name = {WCfgSym sym name  : WNFSM st (WCfgSym sym name)}
+WCfgSym sym name 
+            = MainSym           -- () = Sym1 | Sym2 | ...
+            | UserSym sym       -- Sym = (Sym, Name1) | (Sym, Name2) | ...
+            | RuleName sym name -- RN = nfsm
+
+
+G_ParserState -> U_ParserState
+    G_CFG st sym name -> U_CFG st (MainSym|sym) name
+    G_NFSM pos token -> U_NFSM (WState pos) token
+
+
+
+GP_CFG st sym = ([sym], {sym:[]})
+
+
+
+
+
+
+
+
+WParserState pos token st sym name
+    = (token->sym, WCFG st sym name, WNFSM pos token)
+
+
+
+
+
+
+ -- i : input
+

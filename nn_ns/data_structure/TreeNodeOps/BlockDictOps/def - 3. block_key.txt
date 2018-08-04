@@ -1,0 +1,4 @@
+
+block_key = range = (left_bound, right_bound)
+    may be empty: (4, 1]
+

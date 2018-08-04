@@ -1,0 +1,28 @@
+DictTV(KeyTV, ValueTV, min, max)
+EnumTV(values)
+Set/Dict/Enum/ChoiceKey Bijection
+    !!
+
+UInt <-> (Digit, UInt)
+UInt <-> <Digit | UInt>
+
+
+
+# seperate __repr__ and get_construct_info
+
+
+
+to complete:
+    RecordBijection
+    RecordTV
+    ChoiceTV
+    SetTV
+
+    is_idBJ()
+
+rng
+    IntRanges
+descript
+    get_ImplSpec -- BJ
+choice/record
+    to support int?? NO!!!!!!!!!

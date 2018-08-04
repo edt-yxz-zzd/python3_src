@@ -1,0 +1,41 @@
+
+BoundedUnorderedArray
+    e.g. ugraph<V,AEdge> = ({V},{AEdge:{V}<1..2>})
+
+useful datatype:
+    int/IntGe<int>/BoundedUInt<UInt>
+        UInt = IntGe<0>
+        PInt = IntGe<1>
+        bool = BoundedUInt<2>
+    <a|b|c...> - enum
+    <a=A | b=B...> - Choice
+    {a=A, b=B...} = {...}[len..]
+    {a=A, b=B...}[UInt..] - Record # at_least
+
+    container
+        vary-length
+            [T] = [T][0..]
+            [T][UInt..] - OrderedArray<T>
+            [T]<UInt..> - SortedArray<T> # Ordered
+            [T]{UInt..} - UnorderedArray<T> # Collection?
+            [T][UInt..UInt] - BoundedOrderedArray<T,UInt,UInt>
+            [T]<UInt..UInt> - BoundedSortedArray<T>
+            [T]{UInt..UInt} - BoundedUnorderedArray<T,UInt,UInt>
+
+            {T} = {T}<0..>
+            {T}<UInt..> - Set<T> = OrderedSet<T> | UnorderedSet<T>
+            {T}[UInt..] - OrderedSet<T>
+            {T}{UInt..} - UnorderedSet<T>
+            {T}<UInt..UInt> - BoundedSet<T,UInt>
+            {T}[UInt..UInt] - BoundedOrderedSet<T,UInt>
+            {T}{UInt..UInt} - BoundedUnorderedSet<T,UInt>
+
+            {T:PInt} - Multiset<T>
+            {K:V} - Map<K,V>
+            {K:(V,PInt)} - Multimap<K,V>
+            ...
+        fix-length
+            [T][UInt] - Array<T,UInt>; Array<t,u> = BoundedArray<t,u,u>
+            ()
+            (a,b...) = (a, (b...)) - Tuple
+

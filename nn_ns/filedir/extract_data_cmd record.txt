@@ -1,0 +1,67 @@
+'''#for extract_txt ver3
+glob_cmd | line_filter_cmd | sort_lines_cmd | extract_data_cmd _extractor_example
+
+
+glob_pattern -> paths
+    or: stdin -> paths
+regex.group -> key -> sorted_paths
+    # key = int for str idx
+    # stable sort
+    # (?P<key>...) what if multiple keys?
+unique :: sorted_paths -> sorted_paths
+extract_one :: Monad Output => fin -> Output ()
+extract_all :: Monad Output => sorted_paths -> encoding -> Output ()
+'''
+
+
+############## test output:
+
+
+
+epub>py glob_cmd.py ./a/ch*.html
+./a\chapter1.html
+./a\chapter10.html
+./a\chapter2.html
+./a\chapter3.html
+
+
+epub>py glob_cmd.py ./a/ch*.html | py line_filter_cmd.py chapter(\d+)\.html
+./a\chapter1.html
+./a\chapter10.html
+./a\chapter2.html
+./a\chapter3.html
+
+epub>py glob_cmd.py ./a/ch*.html | py line_filter_cmd.py chapter(\d+)\.html --group_names 1
+(('1',), './a\\chapter1.html')
+(('10',), './a\\chapter10.html')
+(('2',), './a\\chapter2.html')
+(('3',), './a\\chapter3.html')
+
+
+epub>py glob_cmd.py ./a/ch*.html | py line_filter_cmd.py chapter(\d+)\.html --group_names 1 --INT_GROUP
+((1,), './a\\chapter1.html')
+((10,), './a\\chapter10.html')
+((2,), './a\\chapter2.html')
+((3,), './a\\chapter3.html')
+
+epub>py glob_cmd.py ./a/ch*.html | py line_filter_cmd.py chapter(\d+)\.html --group_names 1 --INT_GROUP | py sort_lines_cmd.py
+((1,), './a\\chapter1.html')
+((10,), './a\\chapter10.html')
+((2,), './a\\chapter2.html')
+((3,), './a\\chapter3.html')
+
+
+epub>py glob_cmd.py ./a/ch*.html | py line_filter_cmd.py chapter(\d+)\.html --group_names 1 --INT_GROUP | py sort_lines_cmd.py --line_type=KEY_LINE
+./a\chapter1.html
+./a\chapter2.html
+./a\chapter3.html
+./a\chapter10.html
+
+
+epub>py glob_cmd.py ./a/ch*.html | py line_filter_cmd.py chapter(\d+)\.html --group_names 1 --INT_GROUP | py sort_lines_cmd.py --line_type=KEY_LINE | py extract_data_cmd.py nn_ns.filedir._extractor_example.main --encoding=utf8
+### success!
+
+
+
+
+

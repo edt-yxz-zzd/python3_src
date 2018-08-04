@@ -1,0 +1,71 @@
+
+
+seq or mapping with key type are Vertex/AEdge/HEdge...
+see: mapping/mapping_ops.py
+    finally, I choose mapping_ops instead of mapping
+    the only mutable method is "overwrite"
+    static_keys
+
+
+default_mapping
+    if miss then default(key)
+nothing_mapping
+    if miss then the_nothing
+filled_mapping
+    init with all items
+    do not allow alter keys
+    allow alter value
+
+
+allow __contain__??
+
+
+concrete implement:
+    *) list
+    *) dict
+    *) each mapping alloc a location in KEY
+        KEY was a node which alloc/free idx to store data
+    *) tmp_buffer KEY VAL
+        # tmp_buffer wrap filled list to be mapping!!
+        tmp_buffer KEY VAL
+            # assume buffer were filled with Nothing initially
+            buffer :: Map KEY (Maybe (IDX, VAL))
+            indices :: [KEY]
+            iter_keys = iter indices
+            get key = do
+                (i, v) <- buffer[key]
+                k <- indices[i]
+                when (k == key) $ return v
+            put key val
+            discard key
+            may_pop key
+            clear
+
+
+1) readonly
+    require: __getitem__(key) -> val | Error
+    possible:
+        case_get(key, fthen, felse) -> fthen(val) | felse(key)
+            has_key
+                default_mapping need case_get to support has_key
+        iter_keys
+            iter_values
+            iter_items
+        len
+        bool
+2) mutable
+    require:
+        overwrite(key, val)
+            list/dict
+    possible:
+        insert_new_key(key, val)
+        del_key
+            dict
+        stack_pop
+        stack_append
+
+
+
+
+
+

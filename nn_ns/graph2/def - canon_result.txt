@@ -1,0 +1,15 @@
+
+canon_result = (canon_method_info, graph_info)
+
+canon_method_info = (canon_method_name, input_graph_type, canon_method_args)
+    input_graph_type:
+        e.g. DAG, tree
+        this type is depended on canon_method precondition only
+            (the input graph parameter insead of argument)
+    canon_method_args: e.g. vtx2color, aedge2weight
+
+if canon_method_info differ, then two canon_result cannot compare
+
+graph_cw -> canon_result
+
+

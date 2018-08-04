@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>to show funny chars on brower</title>
+
+    <script type="text/javascript">
+    function processdata()
+    {
+    var un=document.getElementById('uname1');
+    alert("hI " + un.value);
+    }
+    </script>
+</head>
+
+<body>
+    <form action="/process-form" method="post">
+        <p>
+            Username:
+                <input type="text" name="uname" value=" " id="uname1" />
+                <input type="button" name="sub" value="Submit" />
+        </p>
+        <p>
+            <textarea name="comment" id="comment"
+                rows="10" tabindex="4"
+                onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();return false};">
+            </textarea>
+        </p>
+        <p>
+            <input name="submit" id="submit"
+                    tabindex="5" value="点击发布 / Ctrl+Enter" type="submit" />
+        </p>
+    </form>
+</body>
+</html>

@@ -1,0 +1,10 @@
+solid polyhedron polyhedra
+
+solid
+n 2 (geometry 几) figure of three dimensions, having length, breadth and thickness 立体图形: A cube is a solid. 正方体是立体图形.
+
+polyhedron
+n (pl ~s or  -hedra) solid figure with many (usu seven or more) faces 多面体（通常指至少有七面）.
+
+polyhedra - plural of polyhedron
+

@@ -1,0 +1,26 @@
+
+
+array = string = L_char* (S_char+ L_char+)
+
+example:
+# repr each char as height:
+                     /---\      /
+\                   /     \    /
+ \            /----/       \  /
+  \-----\    /              \/
+         \  /
+          \/
+----L-----
+          ------S-----
+                      ---L--
+                            -S-
+                               L-
+         =========LMS========
+                            =LMS=
+
+
+NOTE:
+    1) the last nonexisting char '$' ensures last L_char+ if len(array)
+    2) leading L_char+ does not belong to any LMS-substring
+    3) neighbor LMS-substrings overlay at the LMS_char
+

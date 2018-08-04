@@ -1,0 +1,74 @@
+# to merge two epub
+#   《六朝清羽记》1-68含图精校版.ePub
+#       https://bbs.feng.com/read-htm-tid-11192855.html
+#   13778158_六朝云龙吟38-39.epub
+#       https://bbs.feng.com/forum.php?fromguid=hot&mod=viewthread&tid=11384417
+
+background:
+    1(1-31)六朝清羽记
+    2(1-37)六朝云龙吟
+    3(1-??)六朝燕歌行
+
+input:
+    A: 1(1-31)+2(1-37).epub
+    B: 2(38-39).epub
+output:
+    # C: 1(1-31)+2(1-39)
+    1+2.txt
+    六朝1_70.htm
+unzip:
+    1(1-31)+2(1-37).epub/
+        css/
+            main.css
+        images/
+            cover.jpg
+            *.jpg[1]
+        coverpage.html
+        chapter[1-756].html
+    2(38-39).epub
+        css/
+            main.css
+        images/
+            cover.jpg
+            *.jpg[1]
+        coverpage.html
+        chapter[1-17].html
+        chapter[19-20].html
+        # order:
+        #   1 20 2-9 19 10-17   # see: fb.ncx or fb.opf
+
+offset htmls of B:
+    # --dry_run
+    rename coverpage.html to chapter0.html
+    rename chapter19.html to _chapter0767.html
+    rename chapter20.html to _chapter0759.html
+
+    py -m nn_ns.filedir.file_rename_cmd . "chapter\d+.html" "\d+" "offset_number(4,0,757)"
+
+    py -m nn_ns.filedir.file_rename_cmd . "chapter\d+.html" "\d+" "offset_number(4,0, 1, min=767)"
+    rename _chapter0767.html to chapter0767.html
+
+    py -m nn_ns.filedir.file_rename_cmd . "chapter\d+.html" "\d+" "offset_number(4,0, 1, min=759)"
+    rename _chapter0759.html to chapter0759.html
+
+merge A and B:
+    main.css are the same
+    rename B/images/cover.jpg to cover2.jpg
+    modify chapter0757.html: cover.jpg -> cover2.jpg
+
+full_width htmls of A:
+    rename A/coverpage.html -> chapter0.html
+    py -m nn_ns.filedir.file_rename_cmd . "chapter\d+.html" "\d+" "offset_number(4,0,0)"
+    # now 4 digits: chapter\d{4}\.html
+
+extract html to txt:
+    glob_cmd ./*.html | line_filter_cmd chapter(\d+)\.html --group_names 1 --INT_GROUP | sort_lines_cmd --line_type=KEY_LINE | extract_data_cmd -oe gbk -o ./1+2.txt nn_ns.filedir._extractor_example.main --encoding=utf8
+
+split txt to html:
+    novel2htm "1+2.txt" 六朝1_70.htm -e gbk -rs  "(?m)(?<=(?:\n{3}^================$))\n+^(.+)" -H
+
+copy utils:
+    jquery-1.4.2.min.js
+    action.js
+    style.css
+

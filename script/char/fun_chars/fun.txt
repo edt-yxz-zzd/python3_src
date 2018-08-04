@@ -1,0 +1,91 @@
+
+Sm|So
+arrows:
+    https://unicode-table.com/en/blocks/arrows/
+    https://unicode-table.com/en/2190/
+    Arrows 2190—21FF
+    U+2190 ... 10
+        Unicode version: 1.1.5
+        first half (5 chars) <- Sm
+        second half (5 chars) <- So
+
+
+
+
+
+So
+/*
+box drawing
+    https://unicode-table.com/en/blocks/box-drawing/
+    Box Drawing 2500—257F
+    Unicode version: 1.1.5
+    # too many similar
+*/
+
+
+dice
+    https://unicode-table.com/en/blocks/miscellaneous-symbols/
+    https://unicode-table.com/en/2680/
+    Miscellaneous Symbols 2600—26FF
+    Die Face
+    U+2680 ... 6
+        Unicode version: 3.2.0
+
+/*
+braille
+    https://unicode-table.com/en/blocks/braille-patterns/
+    https://unicode-table.com/en/2800/
+    Braille Patterns 2800—28FF
+    Braille Pattern Dots
+    U+2800 ... 256
+        Unicode version: 3.0.0
+    # one like whitespace
+*/
+
+Ideographic Description Characters
+    https://unicode-table.com/en/blocks/ideographic-description-characters/
+    https://unicode-table.com/en/2FF0/
+    Ideographic Description Characters 2FF0—2FFF
+    U+2FF0 ... 12
+        Unicode version: 3.0.0
+
+Tai Xuan Jing
+    https://unicode-table.com/en/blocks/tai-xuan-jing-symbols/
+    https://unicode-table.com/en/1D300/
+    Tai Xuan Jing Symbols 1D300—1D35F
+    U+1D300 ... 87
+        Unicode version: 4.1.0
+
+
+Mahjong
+    https://unicode-table.com/en/blocks/mahjong-tiles/
+    https://unicode-table.com/en/1F000/
+    Mahjong Tiles 1F000—1F02F
+    U+1F000 ... 43
+        Unicode version: 5.2.0
+
+/*
+playing cards
+    https://unicode-table.com/en/blocks/playing-cards/
+    https://unicode-table.com/en/1F0A1/
+    Playing Cards 1F0A0—1F0FF
+    U+1F0A0 ... 14
+    U+1F0A1 ... 14+1
+    U+1F0A2 ... 14+1
+    U+1F0A3 ... 14+1
+        Unicode version: 6.0.0
+    # too many holes
+    # what is C (Knight) between J and Q??? WTF
+    #   which make it 14 instead of 13
+*/
+
+
+
+clock
+    https://unicode-table.com/en/blocks/miscellaneous-symbols-and-pictographs/
+    https://unicode-table.com/en/1F550/
+    Miscellaneous Symbols and Pictographs 1F300—1F5FF
+    Clock Face
+    U+1F550 ... 24
+        Unicode version: 6.0.0
+

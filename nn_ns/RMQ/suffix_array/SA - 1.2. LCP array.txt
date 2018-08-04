@@ -1,0 +1,38 @@
+
+LCP array
+
+see: "def - suffix array[SA].txt" :: SA
+
+let L = len(array)
+LCP_array__def1<array> = [-1] + LCP_array__def2<array>
+    where
+        assert len(LCP_array__def1<array>) == L
+        see:
+            [Range_Minimum_Query_2007]A_New_Succinct_Representation_of_RMQ_Information_and_Improvements_in_the_Enhanced_Suffix_Array.pdf
+                :: LCP
+
+LCP_array__def2<array> :: [UInt]
+LCP_array__def2<array>
+    = [lcp_def2<array>(SA[i], SA[i+1]) for i in range(L-1)]
+    = [lcp_def2(i, j) for i, j in zip(sa, sa[1:])]
+    = [lcp_f(array[i:], array[j:]) for i, j in zip(sa, sa[1:])]
+    where
+        sa = suffix_array<array>
+        assert len(LCP_array__def2<array>) == L-1
+        see:
+            [String_Suffix_Tree_2003]Simple_Linear_Work_Suffix_Array_Construction.pdf
+                :: LCP
+
+lcp_def2<array> :: ArrayIdx -> ArrayIdx -> UInt
+lcp_def2<array> i j = lcp_f(array[i:], array[j:])
+        see:
+            [String_Suffix_Tree_2003]Simple_Linear_Work_Suffix_Array_Construction.pdf
+                :: lcp
+
+
+
+lcp_f :: Ord a => [a] -> [a] -> UInt
+lcp_f (_:ta) (_:tb) = 1 + lcp_f ta tb
+lcp_f _ _ = 0
+
+

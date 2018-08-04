@@ -1,0 +1,257 @@
+＃：src / HexEditor.cpp：1297
+msgid“块大小：％”
+msgstr“”
+
+＃：src / HexEditor.cpp：1370
+＃，c-format
+msgid“”
+“注意！：这个命令会增加文件大小，会产生太多的”
+“文件保存开销。\ n”
+“您要注入多少字节到位置以偏移位置％lld？”
+msgstr“”
+
+＃：src / HexEditor.cpp：1371
+msgid“字节”
+msgstr“”
+
+＃：src / HexEditor.cpp：1371
+msgid“注入！
+msgstr“”
+
+＃：src / HexEditor.cpp：1430
+msgid“”
+“警告：\ n”
+“您要复制的文本包含空字符\ n”
+“（十六进制窗格中的00），将被截断！\ n”
+“\ n”
+“如果复制到wxHexEditor中的另一个文件你\ n”
+“应该从Hex窗格复制，而不是文本窗格”
+msgstr“”
+
+＃：src / HexEditor.cpp：1435
+msgid“警告”
+msgstr“”
+
+＃：src / HexEditor.cpp：1441
+msgid“您没有RAM来复制此数据。
+msgstr“”
+
+＃：src / HexEditor.cpp：1446
+msgid“”
+“您尝试复制超过10 MB的数据。\ n”
+“不允许将10 MB以上的副本复制到剪贴板。\ n”
+“只有内部复制缓冲区使用！
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：188
+msgid“许可协议”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：282
+msgid“新文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：282
+msgid“新文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：283
+msgid“打开文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：283
+msgid“打开”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：284
+msgid“保存文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：284 src / HexEditorGui.cpp：1795
+＃：src / HexEditorCtrl / wxHexCtrl / TagDialogGui.cpp：56
+msgid“保存”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：285
+msgid“SaveAs文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：285
+msgid“另存为”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：286
+msgid“关闭文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：286
+msgid“关闭”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：289
+msgid“查找和替换”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：290
+msgid“GoTo”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：290
+msgid“转到偏移量”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：292
+msgid“撤消”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：293
+msgid“重做”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：295
+msgid“复制块”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：296
+msgid“粘贴块”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：298
+msgid“剪切块”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：298
+msgid“将所选块和副本剪切到剪贴板”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：299
+msgid“删除块”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：299
+msgid“删除所选块”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：300
+msgid“插入块”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：313 src / HexEditorGui.cpp：155
+msgid“工具栏”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：320
+msgid“TagPanel”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：331 src / HexEditorGui.cpp：167
+msgid“反汇编面板”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：343
+msgid“搜索结果”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：355
+msgid“比较结果”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：366
+msgid“DataInterpreter”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：377 src / HexEditorGui.cpp：159
+msgid“InfoPanel”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：460
+msgid“检测到MD5文件。您请求MD5验证？
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：460 src / HexEditorFrame.cpp：463
+＃：src / HexEditorFrame.cpp：466
+msgid“检测到校验和文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：463
+msgid“SHA1检测到文件，您要求SHA1验证吗？
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：466
+msgid“SHA256检测到文件，您是否请求SHA256验证？
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：490
+msgid“请以十进制表示文件大小。
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：491
+msgid“输入文件大小：”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：498
+＃，c-format
+msgid“输入错误：％d请重试...”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：502 src / HexEditorFrame.cpp：555
+msgid“选择一个文件保存为”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：514
+msgid“文件无法创建！
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：531
+msgid“选择要编辑的文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：563
+msgid“文件不能保存为”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：576
+msgid“选择要导入TAG的文件”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：584
+msgid“标签无法从”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：600
+msgid“标签无法导出为”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：604
+msgid“当前活动文件中没有要导出的TAG！
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：667
+msgid“请输入过程识别号。
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：667
+msgid“输入PID：”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：667 src / HexEditorGui.cpp：232
+msgid“打开进程RAM”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：697
+msgid“请重新启动程序以进行更改。
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：718
+msgid“此模式将每次更改文件DIRECTLY写入更改。
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：718
+msgid“警告！
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：746
+msgid“退出时出错！”
+msgstr“”
+
+＃：src / HexEditorFrame.cpp：817

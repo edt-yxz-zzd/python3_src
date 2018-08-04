@@ -1,0 +1,179 @@
+time and space complexity
+
+assume
+    n*m         ~ time O(log(n)*log(m))
+    divmod(n,m) ~ time O(log(n)*log(m))
+
+overview:
+    * factorial:
+        factorial(n)        ~ space bit size O(n*log(n))
+        factorial_list<n>   ~ space bit size O(n^2 * log(n))
+        factorial(n)        ~ time O(n^2 * log(n)^2)
+        factorial_list(n)   ~ time O(n^2 * log(n)^2)
+    * choose:
+        choose(n,i)         ~ space bit size O(n)
+        choose_table<n>     ~ space bit size O(n^3)
+        choose(n,i)         ~ time O(n^2 * log(n))
+        choose_table<n>     ~ time O(n^3)
+    * Catalan_number:
+        Catalan_number(n)   ~ space bit size O(n)
+        Catalan_list<n>     ~ space bit size O(n^2)
+        Catalan_number(n)   ~ time O(n^2 * log(n))
+        Catalan_list(n)     ~ time O(n^2 * log(n))
+    * ballot_number:
+        ballot_number(p,q)  ~ space bit size O(q)
+        ballot_table<Q>     ~ space bit size O(Q^3)
+        ballot_number(p,q)  ~ time O(q^2 * log(q))
+        ballot_table<Q>     ~ time O(Q^3)
+
+
+
+
+* factorial:
+    n >= 0
+    let n! = factorial(n)
+    * space complexity
+        n! ~ uint O(n^n)
+        ==>> factorial(n) ~ space bit size O(n*log(n))
+        ==>> factorial_list<n> ~ space bit size O(n^2 * log(n))
+
+    * time complexity
+        * multiplicative_formula:
+            factorial(n)
+                | n == 0 = 1
+                | n >= 1 = factorial(n-1) * n
+            n! ~ space bit size O(n*log(n))
+            ==>> mul_iter ~ time O(n * log(n)^2)
+            ==>> factorial(n) ~ time O(n^2 * log(n)^2)      # here
+            ==>> factorial_list<n> ~ time O(n^2 * log(n)^2) # here
+
+        ==>> factorial(n) ~ time O(n^2 * log(n)^2)
+        ==>> factorial_list(n) ~ time O(n^2 * log(n)^2)
+
+* choose:
+    choose(n,i)
+        # n::int; i::int
+        | n-i < i   = choose(n, n-i)            # (n-i) may < 0
+        | i < 0     = 0
+        | n < 0     = C((i-1)-n,i) * (-1)**i    # i>=0; -n-1>=0
+        | 0 <= i <= n//2 <= n = ...             # see below
+
+    assume 0 <= i <= n//2
+
+    * space complexity
+        sum` choose(n,i) `{i<-[0..n]} == 2^n
+        ==>> choose(n,i) ~ uint O(2^n)
+        ==>> choose(n,i) ~ space bit size O(n)
+        ==>> choose_table<n> ~ space bit size O(n^3)
+
+    * time complexity
+        * recursive_formula
+            choose(n,i) = choose(n-1,i) + choose(n-1,i-1)
+            choose(n,i) ~ space bit size O(n)
+            ==>> add_iter ~ time O(n)
+            ==>> choose_table<n> ~ time O(n^3) # here
+
+        * factorial_formula
+            choose(n,i)
+                = n!/(n-i)!/i!
+                = II` k `{k<-[n-i+1..n]} / i!
+
+            ==>> choose(n,i) ~[time]~ n! ~ time O(n^2 * log(n)^2)
+            ==>> choose_table<n> ~ time O(n^4 * log(n)^2)
+
+        * multiplicative_formula:
+            choose(n,i)
+                | i == 0    = 1
+                | otherwise = choose(n-1, i-1) * n / i
+
+            choose(n,i) ~ space bit size O(n)
+            ==>> mul_div_iter ~ time O(n * log(n))
+            ==>> choose(n,i) ~ time O(n^2 * log(n)) # here
+            ==>> choose_table<n> ~ time O(n^4 * log(n))
+
+        ==>> choose_table<n> ~ time O(n^3)
+        ==>> choose(n,i) ~ time O(n^2 * log(n))
+
+
+* Catalan_number
+    n >= 0
+    let Catalan(n) = Catalan_number(n)
+    # sum Catalan(i)z**i = f(z) = 1 + z*f*f = [1-sqrt(1-4z)]/(2z)
+
+    * space complexity
+        Catalan(n) = choose(2n,n)/(n+1) = O(4**n/(pi*n**3)**.5 (1+O(1/n)))
+        ==>> Catalan_number(n) ~ uint O(4^n)
+        ==>> Catalan_number(n) ~ space bit size O(n)
+        ==>> Catalan_list<n> ~ space bit size O(n^2)
+
+    * time complexity
+        * via_choose
+            Catalan(n) = choose(2n,n)/(n+1)
+            choose(n,i) ~ time O(n^2 * log(n))
+            ==>> Catalan_number(n) ~ time O(n^2 * log(n)) # here
+            ==>> Catalan_list<n> ~ time O(n^3 * log(n))
+
+        * recursive_formula
+            Catalan(n)
+                | n == 0    = 0
+                | n >= 1    = sum` Catalan(i)*Catalan(n-1-i) `{i<-[0..n-1]}
+
+            Catalan_number(n) ~ space bit size O(n)
+            ==>> sum_iter ~ time O(n^3)
+            ==>> Catalan_list<n> ~ time O(n^4)
+            ==>> Catalan_number(n) ~ time O(n^4)
+
+        * multiplicative_formula:
+            Catalan(n)
+                | n == 0    = 0
+                | n >= 1    = Catalan(n-1) * 2*(2n-1)/(n+1)
+
+            Catalan_number(n) ~ space bit size O(n)
+            ==>> mul_div_iter ~ time O(n*log(n))
+            ==>> Catalan_list(n) ~ time O(n^2 * log(n))   # here
+            ==>> Catalan_number(n) ~ time O(n^2 * log(n)) # here
+
+        ==>> Catalan_list(n) ~ time O(n^2 * log(n))
+        ==>> Catalan_number(n) ~ time O(n^2 * log(n))
+
+
+
+* ballot_number
+    let ballot(p,q) = ballot_number(p,q)
+    ballot(p,q)
+        | 0 <= p <= q   = ... # see below
+        | otherwise     = 0
+
+    assume 0 <= p <= q
+
+    * space complexity
+        ballot(q,q) = Catalan_number(q) ~ space bit size O(q)
+        ==>> ballot_number(p,q) ~ space bit size O(q)
+        ==>> ballot_table<Q> ~ space bit size O(Q^3)
+
+    * time complexity
+        * via_choose:
+            ballot(p,q)
+                | 0 <= p <= q = choose(q+p,p)*(q-p+1)/(q+1)
+                | otherwise = 0
+
+            choose(n,i) ~ time O(n^2 * log(n))
+            ==>> ballot_number(p,q) ~ time O(q^2 * log(q)) # here
+            ==>> ballot_table<Q> ~ time O(Q^4 * log(Q))
+
+        * recursive_formula
+            ballot(p,q)
+                | (0,0)             = 1
+                | 0 <= p <= q =/=0  = ballot(p,q-1) + ballot(p-1,q)
+                | otherwise         = 0
+
+            ballot(p,q) ~ space bit size O(q)
+            ==>> add_iter ~ time O(q)
+            ==>> ballot_table<Q> ~ time O(Q^3) # here
+            ==>> ballot_number(p,q) ~ time O(q^3)
+
+        ==>> ballot_number(p,q) ~ time O(q^2 * log(q))
+        ==>> ballot_table<Q> ~ time O(Q^3)
+
+
+

@@ -1,0 +1,92 @@
+
+xgraph = ugraph | dgraph
+ugraph = undirected graph
+    UTree - free tree
+dgraph = directed graph
+    DAG - directed acyclic graph
+    DTree - rooted tree
+ugraph<V,AEdge> = ({V}, {AEdge: unorder(V,V)})
+dgraph<V,AEdge> = ({V}, {AEdge: (V,V)})
+
+xgraph.is_empty() # no vertices
+xgraph.num_vertices()
+xgraph.num_aedges()
+
+# () -> None | IBucketSortableTV
+#   if not None, then detect whether BoundedUInt
+get_may_vertexTV()
+get_may_aedgeTV()
+get_may_hedgeTV()
+    is_vertex_bounded_uint()
+    is_aedge_bounded_uint()
+    is_hedge_bounded_uint()
+
+    get_may_vertex_upper_bound() -> None | uint
+
+
+
+
+
+# dgraph should not be ugraph
+#   i.e. not "class DGraph(UGraph)"
+#   why?
+#       simple dgraph's underlying ugraph may have multiedge
+xgraph.is_directed()
+
+dgraph.erase_direction() -> ugraph
+dgraph.reverse_direction() -> dgraph
+ugraph.to_symmetric_directed_graph() -> dgraph
+
+
+
+xgraph.get_may_edge_relationship() -> None | (xgraph, explain_new_vtc)
+    e.g. planar embedding
+
+    explain_new_vtc :: Map new_vtx explain
+    explain = (OLD_Vtx_tag, old_vtx)
+            | (OLD_AEdge_tag, aedge)
+            | (OLD_HEdge_tag, hedge)
+
+
+
+
+
+# compute and cache
+xgraph.has_multiedges()
+xgraph.has_self_loops()
+    xgraph.is_simple()
+
+
+xgraph.has_cycles() # not "is forest"
+xgraph.has_isolated_vertices()
+xgraph.is_weak_connected()
+xgraph.is_weak_biconnected()
+xgraph.is_weak_triconnected()
+
+dgraph.is_strong_connected()
+dgraph.is_strong_biconnected()
+dgraph.is_strong_triconnected()
+
+ugraph.is_free_forest()
+    == not is_directed() and not has_cycles()
+ugraph.is_free_tree()
+    == is_free_forest() and is_weak_connected()
+dgraph.has_one_parent_per_nonroot()
+dgraph.has_exactly_one_root()
+dgraph.is_DAG()                 # DAG= multi-srcs; multi-parents
+    == is_directed() and not has_cycles()
+    == dgraph.is_rooted_compact_forest()
+dgraph.is_rooted_compact_tree() # DAG; single src; multi-parents
+    == is_DAG() and has_exactly_one_root()
+dgraph.is_rooted_forest()       # DAG; multi-srcs; all maybe parent
+    == is_DAG() and has_one_parent_per_nonroot()
+dgraph.is_rooted_tree()         # DAG; single src; all maybe parent
+    == is_DAG() and has_exactly_one_root() and has_one_parent_per_nonroot()
+DAG.DAG_sources()
+DAG.DAG_sinks()
+DForest.roots()
+DTree.root()
+
+
+
+

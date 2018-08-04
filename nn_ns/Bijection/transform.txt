@@ -1,0 +1,58 @@
+
+Set Int <-> Maybe (Int, [PInt])     <-> Maybe Rational
+    sorted -> head -> sub           -> cf
+Set PInt <-> [PInt]                 <-> Rational>=1
+    sorted -> head -> sub           -> cf
+
+let UInts[m..M] = UInts{m<=len(.)<=M}
+UInt <-> Digits
+    # via little/big-endian offseted digits
+    # bijective numeration
+    # https://en.wikipedia.org/wiki/Bijective_numeration
+Digits <-> UInt1s
+    # split all (radix-1) if using Digits
+    # or split all 0 if using BiDigits
+Digits <-> UInts[1..M]
+    # split first (M-1) (radix-1)
+    # or split first (M-1) 0 if using BiDigits
+
+UInt[L] <-> UInts[0..L]
+    # by remove tailing 0s
+    # L = 3:
+    #   (7,5,3) <-> (7,5,3-1)
+    #   (7,5,0) <-> (7,5-1)
+    #   (7,0,0) <-> (7-1,)
+    #   (0,0,0) <-> ()
+(UInt[L] <-> UInts[0..L]) -> (UInt[m+L..M] <-> UInts[m..M])
+(UInt <-> UInts[1..L]) -> (UInts[m..M] <-> UInts[m..M-1+L])
+    # when UInt[M], expand last UInt
+(UInt <-> UInt1s) -> (UInts[m..M] <-> UInts[m..])
+    # when UInt[M], expand last UInt
+(UInt[L] <-> UInts[1..L]) -> (UInts[L+m..M] <-> UInts[1+m..M])
+    # when UInt[L+m], op first L UInt
+
+
+
+
+
+
+
+##################3
+UInt <-> UInt
+    UInt <-> Int <-> Int <-> UInt
+                +const
+        generalize:
+            UInt -> <UInt | UInt | UInt ...> by (Mod X)
+            some channels -const
+            some channels +const
+
+    UInt <-> Digits <-> Digits <-> UInt
+                # reverse/perm
+                # fmap (Digit<->Digit)
+    UInt <-> UInts <-> UInts <-> UInt
+                # fmap (UInt<->UInt)
+                # reverse/perm
+
+
+
+

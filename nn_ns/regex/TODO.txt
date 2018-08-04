@@ -1,0 +1,21 @@
+
+
+
+
+astate
+    .eq instead of __eq__
+terminal set
+    contains
+    is_empty
+
+    set ops?
+
+with terminal_block_dict
+    total_terminal_ops
+    terminal_set :: sorted[range]
+    Map astate (block_dict terminal (Set astate))
+    Map astate (Set astate) # null transition
+    Map astate (Map astate variable) # null transition with tag
+
+
+

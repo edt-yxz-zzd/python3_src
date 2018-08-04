@@ -1,0 +1,14 @@
+body { background-color:gray; }
+p { color:black; }
+p { font-size: 3em; }
+p { font-weight: bold; }
+a { font-weight: 900; }
+a { font-weight: bolder; }
+.txt { color:black; }
+.txt { font-size: 3em; }
+.txt { font-weight: bold; }
+dt { text-align: right; }
+
+
+dd { display: none; }
+body, dl { padding:0; background-color: #eee; list-style-type: none; }

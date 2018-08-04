@@ -1,0 +1,58 @@
+
+cmd:
+    grep "class \|__slots__ =" -r .
+    (printf "\"%s\"\0" "class \|__slots__ =" && find -name "*.py" -and -not -path *-* -print0) | xargs -0 grep
+always:
+    move test_....py to ..._test/
+    export app's class to toplayer
+
+    for all IXXX:
+        __slots__ = ()
+    verify output are the same: # hence override
+        grep "def why_not_subtree_ok(" -r . -l
+        grep "def why_not" -r . -l
+
+    test all methods at least once
+        IBlockDict
+            BlockDict
+        IBlockDictKeyOps
+            3 theXXX
+        KeyOrderedRedBlackTreeNodeOps__sized_immutable
+
+IBlockDictOps__modify
+    # close to IBlockDict
+    vs IBlockDictOps__imodify
+
+test BlockDictOps__for_BlockDict
+test BlockDictOps__constructor__for_BlockDict
+add BlockDictOps__for_BlockDict__mutable
+
+
+BlockDict from sorted items:
+    compress_sorted_items
+IBlockDict
+    mkBlockDictOps
+
+immutable seq ops by rbt or fringer-tree
+
+
+
+
+see: NOTE/re/note.txt
+regex
+    feed
+    FSM = DFSM | NFSM
+    reverse DFSM
+    NFSM
+        jointer
+            or/and/at_least/at_most... jointer
+    named_position ==>> callback
+    named_position = UserNamed is_or_jointer pos | ImplementNamed is_or_jointer pos
+    terminal == dict_key of BlockDict
+    IBlockDictKeyOps<terminal> ==>> ITotalOrderingOps<terminal>
+    atom = terminal | Range<terminal>
+        = Terminal terminal | Range KeyEx<terminal>
+
+    Atom = Range<terminal> # neednot (Terminal terminal)
+    Chain = [(atom | named_position)]
+

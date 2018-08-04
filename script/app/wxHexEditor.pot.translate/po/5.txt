@@ -1,0 +1,260 @@
+msgid“选项”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：283
+msgid“捐赠”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：283
+msgid“捐一些钱作为回报！
+msgstr“”
+
+＃：src / HexEditorGui.cpp：287
+msgid“错误报告”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：287
+msgid“报告粉碎他们的错误！
+msgstr“”
+
+＃：src / HexEditorGui.cpp：291
+msgid“＆About”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：291
+msgid“F1”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：291
+msgid“显示有关此应用程序的信息”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：294
+msgid“＆Help”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：450
+msgid“无符号”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：451
+msgid“Sans”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：455
+msgid“Big Endian”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：468
+msgid“二进制”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：477
+msgid“00000000”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：480
+msgid“按Enter键进行更改！
+msgstr“”
+
+＃：src / HexEditorGui.cpp：484
+msgid“编辑”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：486
+msgid“允许通过数据解释器面板编辑”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：493
+msgid“8位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：499 src / HexEditorGui.cpp：510 src / HexEditorGui.cpp：521
+＃：src / HexEditorGui.cpp：532 src / HexEditorGui.cpp：543 src / HexEditorGui.cpp：554
+msgid“0”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：504
+msgid“16位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：515
+msgid“32位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：526
+msgid“64位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：537
+msgid“Float”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：548
+msgid“双”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：603
+msgid“清除”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：652 src / HexEditorGui.cpp：661
+msgid“INTEL”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：652
+msgid“AMD”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：657
+msgid“CPU供应商”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：661
+msgid“AT＆T”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：665
+msgid“装配类型”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：669
+msgid“16位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：669
+msgid“32位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：669
+msgid“64位”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：673
+msgid“反汇编位模式”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：726 src / HexEditorGui.cpp：727 src / HexEditorGui.cpp：728
+＃：src / HexEditorGui.cpp：729 src / HexEditorGui.cpp：730 src / HexEditorGui.cpp：731
+＃：src / HexEditorGui.cpp：732 src / HexEditorGui.cpp：733 src / HexEditorGui.cpp：734
+＃：src / HexEditorGui.cpp：735 src / HexEditorGui.cpp：841 src / HexEditorGui.cpp：842
+＃：src / HexEditorGui.cpp：843 src / HexEditorGui.cpp：844 src / HexEditorGui.cpp：845
+＃：src / HexEditorGui.cpp：846 src / HexEditorGui.cpp：847 src / HexEditorGui.cpp：848
+＃：src / HexEditorGui.cpp：849 src / HexEditorGui.cpp：850 src / HexEditorGui.cpp：860
+＃：src / HexEditorGui.cpp：861 src / HexEditorGui.cpp：862 src / HexEditorGui.cpp：863
+＃：src / HexEditorGui.cpp：864 src / HexEditorGui.cpp：865 src / HexEditorGui.cpp：866
+＃：src / HexEditorGui.cpp：867 src / HexEditorGui.cpp：868 src / HexEditorGui.cpp：869
+msgid“”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：738
+msgid“十进制”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：742 src / HexEditorGui.cpp：883 src / HexEditorGui.cpp：1584
+msgid“Hex”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：751
+msgid“上一个扇区”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：756
+msgid“下一个扇区”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：767
+msgid“从开始”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：767
+msgid“从这里”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：767
+msgid“从结束”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：769
+msgid“分支类型”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：773
+msgid“Go！”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：836
+msgid“搜索：”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：853
+msgid“Replace：”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：883
+msgid“文本”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：885
+msgid“搜索为”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：892
+msgid“Match Case”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：895
+msgid“向后搜索”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：898
+msgid“Wrap around”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：901
+msgid“作为UTF-8”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：920
+msgid“查找全部”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：923
+msgid“查找一些字节”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：924
+msgid“”
+“此函数在文件中找到一些不同的值。有用的查找非”
+“磁盘上的空段”。
+msgstr“”
+
+＃：src / HexEditorGui.cpp：938
+msgid“全部替换”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：943 src / HexEditorGui.cpp：1146 src / HexEditorGui.cpp：1353
+＃：src / HexEditorGui.cpp：1527 src / HexEditorGui.cpp：1597
+＃：src / HexEditorGui.cpp：1798 src / HexEditorGui.cpp：1874
+＃：src / HexEditorGui.cpp：1935 src / HexEditorGui.cpp：1995
+msgid“取消”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1014
+msgid“下载新的wxHexEditor”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1014
+msgid“http://wxhexeditor.sourceforge.net”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1017
+msgid“不再显示此。
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1052
+msgid“File＃1”
+msgstr“”
+
+＃：src / HexEditorGui.cpp：1056 src / HexEditorGui.cpp：1063
+＃：src / HexEditorGui.cpp：1124 src / HexEditorGui.cpp：1218

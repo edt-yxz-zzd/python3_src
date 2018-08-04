@@ -1,0 +1,14 @@
+
+embed lambda into Python
+    "\x.x" = "lambda x: x"
+    " .attr" = "lambda self: getattr(self, 'attr')"
+        = "operator.attrgetter('attr')"
+    " .[key]" = "operator.itemgetter(key)"
+    "x.f" = "x.f"
+    "f *x" = "f(*x)"
+    "f x" = "f x"
+
+    data / ::
+    case of / let in / where
+
+

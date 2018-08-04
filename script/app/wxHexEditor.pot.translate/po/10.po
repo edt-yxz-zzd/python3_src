@@ -1,0 +1,258 @@
+msgid "MB/s"
+msgstr ""
+
+#: src/HexDialogs.cpp:527 src/HexDialogs.cpp:1173
+msgid "Search"
+msgstr ""
+
+#: src/HexDialogs.cpp:544 src/HexDialogs.cpp:1181
+msgid "Search value not found"
+msgstr ""
+
+#: src/HexDialogs.cpp:544 src/HexDialogs.cpp:1181
+msgid "Nothing found!"
+msgstr ""
+
+#: src/HexDialogs.cpp:675
+msgid "Finding matches..."
+msgstr ""
+
+#: src/HexDialogs.cpp:936
+msgid "Search Speed :"
+msgstr ""
+
+#: src/HexDialogs.cpp:1191
+#, c-format
+msgid "Found %d matches."
+msgstr ""
+
+#: src/HexDialogs.cpp:1191
+msgid "Find All Done!"
+msgstr ""
+
+#: src/HexDialogs.cpp:1595 src/HexDialogs.cpp:1620
+msgid ""
+"Search and Replace sizes are not equal!\n"
+"Replacing with different size are not supported yet."
+msgstr ""
+
+#: src/HexDialogs.cpp:1595 src/HexDialogs.cpp:1620 src/HexDialogs.cpp:1954
+#: src/HexEditor.cpp:145
+msgid "Error!"
+msgstr ""
+
+#: src/HexDialogs.cpp:1603 src/HexDialogs.cpp:1641 src/HexEditorFrame.cpp:289
+#: src/HexEditorGui.cpp:138 src/HexEditorGui.cpp:933
+msgid "Replace"
+msgstr ""
+
+#: src/HexDialogs.cpp:1662
+#, c-format
+msgid "%d records changed."
+msgstr ""
+
+#: src/HexDialogs.cpp:1662 src/HexEditor.cpp:1449 src/HexEditorFrame.cpp:697
+msgid "Info"
+msgstr ""
+
+#: src/HexDialogs.cpp:1710
+msgid "Not Available"
+msgstr ""
+
+#: src/HexDialogs.cpp:1716
+msgid "Raw Hex"
+msgstr ""
+
+#: src/HexDialogs.cpp:1717
+msgid "With Space"
+msgstr ""
+
+#: src/HexDialogs.cpp:1718
+msgid "Quad Hex"
+msgstr ""
+
+#: src/HexDialogs.cpp:1719
+msgid "with 0x"
+msgstr ""
+
+#: src/HexDialogs.cpp:1720
+msgid "with 0x and period"
+msgstr ""
+
+#: src/HexDialogs.cpp:1727
+msgid "HTML format"
+msgstr ""
+
+#: src/HexDialogs.cpp:1728
+msgid "HTML with TAGs"
+msgstr ""
+
+#: src/HexDialogs.cpp:1729
+msgid "phpBB forum style"
+msgstr ""
+
+#: src/HexDialogs.cpp:1730
+msgid "WiKi format"
+msgstr ""
+
+#: src/HexDialogs.cpp:1731
+msgid "WiKi with TAGs"
+msgstr ""
+
+#: src/HexDialogs.cpp:1737
+msgid "8bit - Byte "
+msgstr ""
+
+#: src/HexDialogs.cpp:1738
+msgid "16bit - Words"
+msgstr ""
+
+#: src/HexDialogs.cpp:1739
+msgid "32bit - Dwords"
+msgstr ""
+
+#: src/HexDialogs.cpp:1740
+msgid "64bit - Qwords"
+msgstr ""
+
+#: src/HexDialogs.cpp:1954
+msgid "Selected block bigger than limit."
+msgstr ""
+
+#: src/HexDialogs.cpp:2154
+msgid "File #1 is not readable."
+msgstr ""
+
+#: src/HexDialogs.cpp:2158
+msgid "File #2 is not readable."
+msgstr ""
+
+#: src/HexDialogs.cpp:2174
+msgid "Error, File #1 cannot open."
+msgstr ""
+
+#: src/HexDialogs.cpp:2178
+msgid "Error, File #2 cannot open."
+msgstr ""
+
+#: src/HexDialogs.cpp:2184
+msgid "Error, Save File cannot open."
+msgstr ""
+
+#: src/HexDialogs.cpp:2187
+msgid "Comparing files..."
+msgstr ""
+
+#: src/HexDialogs.cpp:2189
+msgid "wxHexEditor Comparing"
+msgstr ""
+
+#: src/HexDialogs.cpp:2343
+msgid "Sorry, this program supports up to 500K differences."
+msgstr ""
+
+#: src/HexDialogs.cpp:2343
+msgid "Remaining differences not shown."
+msgstr ""
+
+#: src/HexDialogs.cpp:2343
+msgid "Error on Comparison"
+msgstr ""
+
+#: src/HexDialogs.cpp:2353
+msgid "Comparison Speed : "
+msgstr ""
+
+#: src/HexDialogs.cpp:2375
+msgid "File #1 : "
+msgstr ""
+
+#: src/HexDialogs.cpp:2375
+msgid "File #2 : "
+msgstr ""
+
+#: src/HexDialogs.cpp:2416 src/HexDialogs.cpp:2420
+msgid "This part doesn't exist at compared file"
+msgstr ""
+
+#: src/HexDialogs.cpp:2463
+msgid "Error, Save File is not selected."
+msgstr ""
+
+#: src/HexDialogs.cpp:2605
+msgid "Cannot calculate checksum of an empty file."
+msgstr ""
+
+#: src/HexDialogs.cpp:2611
+msgid "File: "
+msgstr ""
+
+#: src/HexDialogs.cpp:2612
+msgid "Notice: Checksum includes non-saved changes."
+msgstr ""
+
+#: src/HexDialogs.cpp:2630
+msgid "Results copied to the clipboard."
+msgstr ""
+
+#: src/HexDialogs.cpp:2630
+msgid "Checksum Results"
+msgstr ""
+
+#: src/HexDialogs.cpp:2651 src/HexEditor.cpp:154
+msgid "Please wait while calculating checksum."
+msgstr ""
+
+#: src/HexDialogs.cpp:2653 src/HexEditor.cpp:156
+msgid "Calculating Checksum"
+msgstr ""
+
+#: src/HexDialogs.cpp:2714 src/HexEditor.cpp:176
+msgid "Hash Speed : "
+msgstr ""
+
+#: src/HexDialogs.cpp:3099
+msgid "Do you sure about resetting colours?"
+msgstr ""
+
+#: src/HexDialogs.cpp:3099
+msgid "Resetting Hex Colours"
+msgstr ""
+
+#: src/HexDialogs.cpp:3146
+msgid "Please wait while backing up disk/partition image."
+msgstr ""
+
+#: src/HexDialogs.cpp:3148
+msgid "Disk/Partition Backup"
+msgstr ""
+
+#: src/HexDialogs.cpp:3166
+msgid "Error on writing to backup image."
+msgstr ""
+
+#: src/HexDialogs.cpp:3166 src/HexDialogs.cpp:3233
+msgid "ERROR!"
+msgstr ""
+
+#: src/HexDialogs.cpp:3174
+msgid "Backup Speed : "
+msgstr ""
+
+#: src/HexDialogs.cpp:3203
+msgid "Backup operation completed."
+msgstr ""
+
+#: src/HexDialogs.cpp:3203 src/HexDialogs.cpp:3274 src/HexDialogs.cpp:3336
+msgid "Operation Complete"
+msgstr ""
+
+#: src/HexDialogs.cpp:3229 src/HexDialogs.cpp:3291
+msgid "WARNING! THIS OPERATION WILL DESTROY EVERY INFORMATION AT :\n"
+msgstr ""
+
+#: src/HexDialogs.cpp:3229 src/HexDialogs.cpp:3291
+msgid "ARE YOU SURE?"
+msgstr ""
+
+#: src/HexDialogs.cpp:3229 src/HexDialogs.cpp:3238 src/HexDialogs.cpp:3291

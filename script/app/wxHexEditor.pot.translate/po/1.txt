@@ -1,0 +1,258 @@
+msgid“MB / s”
+msgstr“”
+
+＃：src / HexDialogs.cpp：527 src / HexDialogs.cpp：1173
+msgid“搜索”
+msgstr“”
+
+＃：src / HexDialogs.cpp：544 src / HexDialogs.cpp：1181
+msgid“找不到搜索值”
+msgstr“”
+
+＃：src / HexDialogs.cpp：544 src / HexDialogs.cpp：1181
+msgid“找不到任何东西！
+msgstr“”
+
+＃：src / HexDialogs.cpp：675
+msgid“查找匹配...”
+msgstr“”
+
+＃：src / HexDialogs.cpp：936
+msgid“搜索速度：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1191
+＃，c-format
+msgid“找到％d个匹配项。
+msgstr“”
+
+＃：src / HexDialogs.cpp：1191
+msgid“全部完成！”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1595 src / HexDialogs.cpp：1620
+msgid“”
+“搜索和替换大小不等！\ n”
+“尚不支持使用不同大小的替换。
+msgstr“”
+
+＃：src / HexDialogs.cpp：1595 src / HexDialogs.cpp：1620 src / HexDialogs.cpp：1954
+＃：src / HexEditor.cpp：145
+msgid“错误！”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1603 src / HexDialogs.cpp：1641 src / HexEditorFrame.cpp：289
+＃：src / HexEditorGui.cpp：138 src / HexEditorGui.cpp：933
+msgid“Replace”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1662
+＃，c-format
+msgid“％d条记录已更改。
+msgstr“”
+
+＃：src / HexDialogs.cpp：1662 src / HexEditor.cpp：1449 src / HexEditorFrame.cpp：697
+msgid“信息”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1710
+msgid“不可用”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1716
+msgid“原始Hex”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1717
+msgid“带空格”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1718
+msgid“Quad Hex”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1719
+msgid“与0x”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1720
+msgid“与0x和周期”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1727
+msgid“HTML格式”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1728
+msgid“HTML with TAGs”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1729
+msgid“phpBB论坛风格”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1730
+msgid“WiKi格式”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1731
+msgid“带标签的WiKi”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1737
+msgid“8bit - Byte”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1738
+msgid“16bit - Words”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1739
+msgid“32bit - Dwords”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1740
+msgid“64bit - Qwords”
+msgstr“”
+
+＃：src / HexDialogs.cpp：1954
+msgid“所选块大于limit。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2154
+msgid“文件＃1不可读。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2158
+msgid“文件＃2不可读。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2174
+msgid“错误，文件＃1无法打开。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2178
+msgid“错误，文件＃2无法打开。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2184
+msgid“错误，保存文件无法打开。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2187
+msgid“比较文件...”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2189
+msgid“wxHexEditor比较”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2343
+msgid“对不起，这个程序支持多达500K的差异。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2343
+msgid“剩余差异未显示。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2343
+msgid“比较错误”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2353
+msgid“比较速度：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2375
+msgid“File＃1：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2375
+msgid“文件2：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2416 src / HexDialogs.cpp：2420
+msgid“此部分不存在于比较文件”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2463
+msgid“错误，未选择保存文件。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2605
+msgid“无法计算空文件的校验和。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2611
+msgid“文件：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2612
+msgid“注意：校验和包括未保存的更改。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2630
+msgid“结果复制到剪贴板。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2630
+msgid“检查结果”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2651 src / HexEditor.cpp：154
+msgid“请等待计算校验和。
+msgstr“”
+
+＃：src / HexDialogs.cpp：2653 src / HexEditor.cpp：156
+msgid“计算校验和”
+msgstr“”
+
+＃：src / HexDialogs.cpp：2714 src / HexEditor.cpp：176
+msgid“散列速度：
+msgstr“”
+
+＃：src / HexDialogs.cpp：3099
+msgid“你确定要重置颜色吗？
+msgstr“”
+
+＃：src / HexDialogs.cpp：3099
+msgid“重置六角形颜色”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3146
+msgid“请等待备份磁盘/分区映像。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3148
+msgid“磁盘/分区备份”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3166
+msgid“写入备份映像时出错。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3166 src / HexDialogs.cpp：3233
+msgid“错误！”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3174
+msgid“备份速度：”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3203
+msgid“备份操作完成。
+msgstr“”
+
+＃：src / HexDialogs.cpp：3203 src / HexDialogs.cpp：3274 src / HexDialogs.cpp：3336
+msgid“操作完成”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3229 src / HexDialogs.cpp：3291
+msgid“警告！此操作将破坏每个信息：\ n”
+msgstr“”
+
+＃：src / HexDialogs.cpp：3229 src / HexDialogs.cpp：3291
+msgid“你确定吗？
+msgstr“”
+
+＃：src / HexDialogs.cpp：3229 src / HexDialogs.cpp：3238 src / HexDialogs.cpp：3291

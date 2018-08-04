@@ -1,0 +1,104 @@
+
+------------ verify ballot def1 == def2
+verify ballot def1 == def2:
+    if def1:
+        ballot(p,q) =[def]=
+            | 0<=p<=q   = C(p+q,p) * (q+1-p)/(q+1)
+            | otherwise = 0
+    then def2:
+        ?? ballot(0,0) = 1
+            yes!
+        ?? ballot(p,q) | (p,q)!=(0,0) && not (0<p==q+1) = ballot(p-1,q) + ballot(p,q-1)
+
+    proof:
+        if not (0<=p<=q): #N
+            # (0<=p-1<=q)?
+            if not (0<=p<=q) && (0<=p-1<=q): #NY
+            if not (0<=p<=q) && not (0<=p-1<=q): #NN
+        if 0<=p<=q: #Y
+            # q-1<0
+            if p-1<=q-1<0<=p<=q: #YY
+            # q-1>=0 && (p-1<0? * q-1<p?)
+            if 0<=p-1<p<=q-1<q: #YNNN
+            if 0<=p-1<=q-1<p<=q: #YNNY
+            if p-1<0<=p<=q-1<q: #YNYN
+            if p-1<0<=q-1<p<=q: #YNYY
+
+        if not (0<=p<=q): #N
+            ballot(p,q)   = 0
+            ballot(p-1,q) = ?
+            ballot(p,q-1) = 0
+            if not (0<=p<=q) && not (0<=p-1<=q): #NN
+                ==>> not (0<=p<=q || 0<=p-1<=q)
+                ==>> not (0<=p<=q+1)
+                ballot(p-1,q) = 0
+                ballot(p-1,q) + ballot(p,q-1) = 0+0 = ballot(p,q)
+            if not (0<=p<=q) && (0<=p-1<=q): #NY
+                ==>> 0<=q<p==q+1
+                ballot(p-1,q) = ballot(q,q) = Catalan_number(q) > 0
+                ballot(p-1,q) + ballot(p,q-1) = 0+Catalan_number(q) > 0 =/= 0 = ballot(p,q)
+                    except 0<p==q+1
+        if p-1<=q-1<0<=p<=q: #YY
+            ==>> p-1==q-1<0==p==q
+            ballot(p,q)   = C(p+q,p) * (q+1-p)/(q+1)
+                          = C(0,0) * (0+1-0)/(0+1)
+                          = 1
+            ballot(p-1,q) = 0
+            ballot(p,q-1) = 0
+            ballot(p-1,q) + ballot(p,q-1) = 0+0 =/= 1 = ballot(p,q)
+                except (p,q) == (0,0)
+        if p-1<0<=q-1<p<=q: #YNYY
+            ==>> p-1<0<p ==>> 0<p<1 ==>> impossible
+        if p-1<0<=p<=q-1<q: #YNYN
+            ==>> p-1<0==p<=q-1<q
+            ballot(p,q)   = C(p+q,p) * (q+1-p)/(q+1)
+                          = C(q,0) * (q+1)/(q+1)
+                          = 1
+            ballot(p-1,q) = 0
+            ballot(p,q-1) = C(p+q-1,p) * (q-1+1-p)/(q-1+1)
+                          = C(q-1,0) * q/q
+                          = 1
+            ballot(p-1,q) + ballot(p,q-1) = 0+1 = ballot(p,q)
+
+        if 0<=p-1<=q-1<p<=q: #YNNY
+            ==>> 0<=p-1==q-1<p==q
+            ballot(p,q)   = C(p+q,p) * (q+1-p)/(q+1)
+                          = C(2p,p) * (p+1-p)/(p+1)
+                          = C(2p,p)/(p+1)
+            ballot(p-1,q) = C(p-1+q,p-1) * (q+1-(p-1))/(q+1)
+                          = C(2p-1,p-1)*2/(p+1)
+                          = C(2p-1,p-1)*(2p/p)/(p+1)
+                          = C(2p,p)/(p+1)
+            ballot(p,q-1) = 0
+            ballot(p-1,q) + ballot(p,q-1) = C(2p,p)/(p+1) + 0 = ballot(p,q)
+
+        if 0<=p-1<p<=q-1<q: #YNNN
+            ballot(p,q)   = C(p+q,p) * (q+1-p)/(q+1)
+            ballot(p-1,q) = C(p-1+q,p-1) * (q+1-(p-1))/(q+1)
+                = C(p-1+q,p-1) * (q+2-p)/(q+1)
+                = (p-1+q)!/(p-1)!/q! * (q+2-p)/(q+1)
+                = (p+q)!/p!/q! * p/(p+q) * (q+2-p)/(q+1)
+                = C(p+q,p) * p/(p+q) * (q+2-p)/(q+1)
+                = C(p+q,p) * p*(q+2-p)/(q+1)/(p+q)
+            ballot(p,q-1) = C(p+q-1,p) * (q-1+1-p)/(q-1+1)
+                = C(p+q-1,p) * (q-p)/q
+                = (p+q-1)!/p!/(q-1)! * (q-p)/q
+                = (p+q)!/p!/q! * q/(p+q) * (q-p)/q
+                = C(p+q,p) * q/(p+q) * (q-p)/q
+                = C(p+q,p) * (q-p)/(p+q)
+            ballot(p-1,q) + ballot(p,q-1)
+                = C(p+q,p) * p*(q+2-p)/(q+1)/(p+q)
+                + C(p+q,p) * (q-p)/(p+q)
+                = C(p+q,p) * (p*(q+2-p)/(q+1)/(p+q) + (q-p)/(p+q))
+                = C(p+q,p) * (p*(q+2-p) + (q-p)*(q+1))/(q+1)/(p+q)
+                = C(p+q,p) * (pq+2p-pp + qq-pq+q-p)/(q+1)/(p+q)
+                = C(p+q,p) * (p-pp + qq+q)/(q+1)/(p+q)
+                = C(p+q,p) * (p+q + qq-pp)/(q+1)/(p+q)
+                = C(p+q,p) * (p+q + (q-p)*(q+p))/(q+1)/(p+q)
+                = C(p+q,p) * (1 + (q-p))/(q+1)
+                = C(p+q,p) * (q+1-p)/(q+1)
+                = ballot(p,q)
+    ------------ end of proof
+
+
+

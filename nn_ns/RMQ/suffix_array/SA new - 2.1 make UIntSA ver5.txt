@@ -1,0 +1,134 @@
+
+
+let L = len(string)
+input:
+    alphabet_size :: UInt
+    string :: [Char]
+    makeRMQ :: Ord a => [a] -> RMQ
+        RMQ<input>(begin, end) = min_idx
+            = RMQ<input>(begin:end) # standard
+            = RMQ<input>(begin..end-1)
+        0 <= begin < end <= L-1
+        min_idx = min(range(begin, end), key=\i->input[i]) # arbitrary min_idx
+output:
+    # SA, LCP, LCP_RMQ
+    SA :: [ArrayIdx] or [ISufffix]
+        sorted_isuffices
+        len(SA) == L
+        to_suffix(SA[i]) < to_suffix(SA[i+1])
+    LCP :: [UInt]
+        len(LCP) == L-1
+        LCP[i] == len_lcp(SA[i], SA[i+1])
+    optional:
+        LCP_RMQ :: RMQ<LCP>
+            # LCP_BeginIdx -> LCP_EndIdx -> LCP_BeginIdx
+
+
+types:
+    Char = [0..alphabet_size-1]
+    ArrayIdx = ISufffix = [0..L-1]
+    depth_ibucket is the idx of some a depth_bucket
+    Sorted_SA_BeginIdx = [0..L-1]
+    Sorted_SA_EndIdx = [1..L]
+    LMS_SubstringISuffix = [0..L-1]
+    LCP_BeginIdx = [0..L-2]
+    LCP_EndIdx = [1..L-1]
+    RMQ__inv<SA,invSA>(begin_isuffix:end_isuffix)
+        # invSA[begin_isuffix] < invSA[end_isuffix]
+        = RMQ(invSA[begin_isuffix]:invSA[end_isuffix])
+        = RMQ(invSA[begin_isuffix]..invSA[end_isuffix]-1)
+    RMQ__inv__may_flip<SA,invSA>(begin_isuffix:end_isuffix)
+        # begin_isuffix != end_isuffix
+        = RMQ__inv(begin_isuffix:end_isuffix | end_isuffix:begin_isuffix)
+1-1) eval isuffix2type and isuffix2is_LMS_isuffix and isuffix2depth
+    isuffix2type :: [Bool] or [('L' | 'S')]
+        # False - 'L'
+        # True - 'S'
+    isuffix2is_LMS_isuffix :: [Bool]
+    isuffix2type_ex :: [(0|1|2)] or [('L' | 'S' | 'LMS')]
+        # 0 - 'L'
+        # 1 - 'S' # S but not LMS
+        # 2 - 'LMS'
+        Map ArrayIdx type_ex
+    isuffix2depth :: [UInt]
+        # see: "SA new - 1.5.4. depth bucket[mine].txt"
+        Map ArrayIdx depth
+1-2) isuffix2depth_ibucket and depth_ibucket2begin_sorted_idx and depth_ibucket2end_sorted_idx and depth_ibucket2size
+    isuffix2depth_ibucket :: [DepthBucketIdx]
+        # Map ArrayIdx DepthBucketIdx
+    depth_ibucket2size :: [UInt]
+        # Map DepthBucketIdx bucket_size
+    depth_ibucket2begin_sorted_idx :: [Sorted_SA_BeginIdx]
+        # Map DepthBucketIdx Sorted_SA_BeginIdx
+    depth_ibucket2end_sorted_idx :: [Sorted_SA_EndIdx]
+        # Map DepthBucketIdx Sorted_SA_EndIdx
+
+    # relationship of last 3
+    depth_ibucket2size[ib]  = depth_ibucket2end_sorted_idx[ib]
+                            - depth_ibucket2begin_sorted_idx[ib]
+    if depth_ibucket are assigned (+1) from left to right:
+        depth_ibucket2end_sorted_idx[ib]
+            = L if ib is last depth_ibucket
+              else depth_ibucket2begin_sorted_idx[ib+1]
+        i.e. depth_ibucket2begin_sorted_idx
+            ==>> depth_ibucket2end_sorted_idx and depth_ibucket2size
+
+2) eval sorted_LMS_substring_isuffices(LMS_SA) and depth_ibucket2maybe_LCP_RMQ
+    #sort LMS_substring_isuffices and eval LCP-RMQ for depth bucket of size >= 3
+    sorted_LMS_substring_isuffices :: [LMS_SubstringISuffix]
+        # initially include sorted size 1 suffices
+        # finally donot include size 1 suffices, since they are useless
+        #   and can be replaced by whole LMS_substring(i.e. begin idx of LMS_substring)
+        1) sorted size 1 suffices
+        2) scan from left to right, handle previous L isuffices
+        3) scan from right to left, handle previous S isuffices
+    depth_ibucket2maybe_LCP_RMQ :: [(None|LCP_RMQ)]
+        given i,j :: ArrayIdx / LMS_SubstringISuffix
+        assume
+            invLMS_SA = inv of sorted_LMS_substring_isuffices
+            invLMS_SA[i] < invLMS_SA[j]
+            ib = isuffix2depth_ibucket[i] == isuffix2depth_ibucket[j]
+        let begin = depth_ibucket2begin_sorted_idx[ib]
+        minLCP(i..j) = LMS_LCP[LCP_RMQ(invLMS_SA[i]-begin, invLMS_SA[j]-begin)+begin]
+    LMS_LCP :: [UInt]
+        Map [0..maxDepthBucketIdx-1] UInt
+    LMS_LCP_RMQ(i..j)
+        | i, j in diff char_ibucket = 0
+        | i, j in diff depth_ibucket = min depth(i) depth(j)
+        | i, j in same depth_ibucket of size 2 = LMS_LCP(invLMS_SA[i])
+        | i, j in same depth_ibucket of size >=3 = LMS_LCP[depth_ibucket2maybe_LCP_RMQ[isuffix2depth_ibucket[i]](inv[i]-begin, inv[j]-begin)+begin]
+3) make big_string
+    big_ichar2LMS_isuffix :: [LMS_SubstringISuffix]
+        Map BigStringIdx LMS_SubstringISuffix
+    big_ichar2size[bch] = (len(string) or big_ichar2LMS_isuffix[bch+1]) - big_ichar2LMS_isuffix[bch]
+4-1) eval big_stringSA and big_stringLCP
+    recur handle big_string or basic case handle (all diff and all same and all L and all S except last)
+4-2) make big_stringLCP_RMQ and big_stringLCP_RMQ__inv
+    big_stringLCP_RMQ = makeRMQ(big_stringLCP)
+
+    big_string_invSA = inv(big_stringSA)
+    big_stringLCP_RMQ__inv = \i,j->
+        big_stringLCP_RMQ(big_string_invSA[i]:big_string_invSA[j])
+5) SA
+    1) sorted LMS_isuffices
+    2) scan from left to right, handle previous L isuffices
+    3) scan from right to left, handle previous S isuffices
+6) LCP
+    # see: above RMQ__inv, RMQ__inv__may_flip
+    LCP(i) = len_lcp(I=SA[i], J=SA[i+1])
+        let LCP0 = LMS_LCP_RMQ__inv__may_flip(I:J | J:I)
+        | LCP0 < max(remain_ibucket_size(I), remain_ibucket_size(J)) = LCP0
+        | otherwise = LCP0-1 + LCP1 + LCP2
+        where
+            big_LCP1 = big_stringLCP_RMQ__inv__map_flip(big_beginI:big_beginJ)
+            big_beginI = next_big_isuffix(I)
+            big_beginJ = next_big_isuffix(J)
+            big_endI = big_beginI+big_LCP1
+            big_endJ = big_beginJ+big_LCP1
+            LCP1 = big_ichar2LMS_isuffix[big_endI]-big_ichar2LMS_isuffix[big_beginI]
+            LCP2 = LMS_LCP_RMQ__inv(I_:J_) # assert I_ before J_
+            I_ = big_ichar2LMS_isuffix[big_endI]
+            J_ = big_ichar2LMS_isuffix[big_endJ]
+7) optional: LCP_RMQ
+    LCP_RMQ = makeRMQ(LCP)
+

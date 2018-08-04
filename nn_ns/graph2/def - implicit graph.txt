@@ -1,0 +1,14 @@
+explicit graph
+    vertex_eq
+    maybe infinite
+        e.g. 0->1->2->...
+implicit graph
+    may no num_vertices
+    may no vertex_eq/aedge_eq
+
+    e.g.
+        Internet
+        game state graph # AI
+
+
+

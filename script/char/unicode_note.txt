@@ -1,0 +1,35 @@
+unicode - range(0, 0x110000)
+but unifont only defines the BMP(Basic Multilingual Plane) - range(0, 0x10000)
+
+    The  Unicode  Basic Multilingual Plane  covers 2^16 = 65,536 code points. Of this number, 2048 are reserved for special use as surrogate pairs and 6,400 are reserved for private use. This leaves approximately 57,000 code points to which glyphs can be assigned. Some of these code points are special values that do not have an assigned glyph, but most do have assigned glyphs.
+
+
+    Unicode started out using 16-bit characters instead of 8-bit characters. 16 bits means you have 2^16 = 65,536 distinct values available, making it possible to represent many different characters from many different alphabets; an initial goal was to have Unicode contain the alphabets for every single human language. It turns out that even 16 bits isn¡¯t enough to meet that goal, and the modern Unicode specification uses a wider range of codes, 0 through 1,114,111 ( 0x10FFFF in base 16).
+
+(0xd800, 0xe000) = '0xd[8-f]..'
+    2048 are reserved for special use as surrogate pairs
+(0xe000, 0xf900)
+    6,400 are reserved for private use
+
+
+
+
+[UTF-8]
+    The marker bits are a sequence of zero to four 1 bits followed by a 0 bit. Unicode characters are encoded like this (with x being payload bits, which when concatenated give the Unicode character):
+    
+    Range                     Encoding 
+    U-00000000 ... U-0000007F 0xxxxxxx 
+    U-00000080 ... U-000007FF 110xxxxx 10xxxxxx 
+    U-00000800 ... U-0000FFFF 1110xxxx 10xxxxxx 10xxxxxx 
+    U-00010000 ... U-0010FFFF 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx 
+    
+    The least significant bit of the Unicode character is the rightmost x bit.
+
+
+
+
+
+
+
+
+

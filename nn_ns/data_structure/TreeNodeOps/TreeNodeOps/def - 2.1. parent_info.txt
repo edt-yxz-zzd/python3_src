@@ -1,0 +1,26 @@
+
+                # ROOT_PARENT_INFO may not be hashable
+                # but LEFT/RIGHT/BLACK/RED is hashable
+ParentInfo a = ROOT_PARENT_INFO
+                { topdown_auto_data :: ??  -- in concept; constant
+                }
+             | NonrootParentInfo
+                { parent :: TreeNode a
+                , innode_position :: TreeNodePos a
+                , topdown_auto_data :: ??
+                    -- e.g. depth = 0 if self is root else parent.depth+1
+                }
+
+innode_position
+    ???????  [0..num_children-1] or [0..num_children-2]????????
+        when get child [0..num_children-1]
+        when get multiway_data [0..num_children-2]
+    e.g.
+        [0..num_children-1]
+        for binary tree: then "Left | Right"
+        but innode_position can be very complicate
+            e.g. a small tree in a big tree node
+                ==>> innode_position is a small tree position iterator
+
+
+

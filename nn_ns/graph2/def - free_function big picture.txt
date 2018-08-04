@@ -1,0 +1,17 @@
+free_function big picture
+    # free_function - e.g. dfs
+    # ops - proxy methods
+    finest (bare)
+        require ops to handle obj
+        require containers and its ops (itself donot generate any container depends on input size)
+            e.g. if recur should require a stack
+    finer
+        require ops to handle obj
+        require container_ops_with_factory instead of container directly
+            e.g. if recur should require a stack factory
+    coarser
+        require obj_ops with container_ops_with_factory
+    coarsest
+        require obj of known type instead of obj_ops
+
+

@@ -1,0 +1,1 @@
+py -v -m Archimedean_solid 2>tmp_debug.txt

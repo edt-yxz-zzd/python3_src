@@ -1,0 +1,30 @@
+
+-------------------- overview
+def ballot_number
+    ballot_number = num of good_paths
+    def good_paths
+
+ballot_number def1 def2
+    # def1 is ballot_def1__direct_calc
+    # def2 is ballot_def2__recur_calc
+
+verify ballot_number def1 == def2
+
+encode good_path # maybe unbalanced
+    given neg_begin_pt, neg_end_pt:
+        encode good_path
+    two encoding:
+        keyPQ, keyQP
+    good_path <==> neg_moves
+        neg_move = neg_pmove | neg_qmove
+    reversed_good_path <==> pos_moves
+        pos_move = pos_pmove | pos_qmove
+    def [neg/pos]_[begin/end]_pt
+
+    encode Dyck_word # maybe unbalanced
+    encode canonical_Cartesian_tree
+
+
+def xballot_table<Q>
+
+

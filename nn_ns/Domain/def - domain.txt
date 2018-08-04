@@ -1,0 +1,97 @@
+
+why?
+    example:
+        from seed.tiny.ECHO import x,y, arbitrary_alaljgag
+        assert x == 'x'
+        assert arbitrary_alaljgag == 'arbitrary_alaljgag'
+
+        any attr of ECHO is str, hence it cannot be a module
+        can it act as a module? (e.g. hasattr .__package__, .__name__, ...)
+        if we define a module protocol:
+            type(ECHO).__as_module__(ECHO) -> pseudo_module
+        then we are possible to let ECHO be an legal module.
+        more general,
+            type(ECHO).__as_module__(ECHO) -> module_ops
+            module_ops are operations that module should support.
+            e.g.
+                module_ops.get_name(ECHO) == 'seed.tiny.ECHO'
+                module_ops.get_pkg(ECHO) == 'seed.tiny'
+                module_ops.get_loader(ECHO)
+
+domain = (ops, {obj})
+
+pseudo_domain_obj = (ops, obj)
+    obj :: T
+    ops :: DomainOps<T>
+
+true_domain_obj = obj
+    obj :: T
+    T <: DomainBase
+
+    class DomainOpsBase
+        ___dir___ :: {(DomainOpsType_which_def_the_following_attr, attr): obj}
+    class DomainBase
+        ___as_domains___(self, *Opss : [Ops<:DomainOpsBase])->Maybe DomainOpsBase
+
+    class require complete all its abstractmethods
+    but any op in DomainOps is optional
+    and at the sink side, we can hidden as many operation as possible
+        the ___dir___ determine which ops are allowed to be used
+
+ops should be immutable and hashable!
+    we seperate immutable(ops) and mutable(obj)
+
+problem:
+    an obj can have many ways to be in the same domain
+    e.g. (Ord Int); Int can be total ordered by reversed order
+    so, generally, two ops can not be merged.
+        ops can shrink but not grow
+    but when they are in diff domain (diff DomainOpsBase), then we can union them.
+
+
+
+
+# ops is role
+# an object can play two roles:
+#   * instance
+#       instance.attr use metaobject@.__getattr__
+#   * metaobject
+#       metaobject@.attr donot call meta-metaobject@.__getattr__
+#       but use a "physic"-metaobject (or call it data-protocol) to get "@.attr"
+#           by so, break down the infinite recursive
+#   so, instance has indeed two metaobject at least
+#       where it play two roles: as instance or as metaobject in "attr system"
+#       we can let it plays more role with more metaobjects
+#           via different attrget
+#           xxx$^#$^.yyy
+#           xxx.[afg$$^].yyy
+#           xxx.[afg$$^, a345gh$^$hd, ...].yyy
+#           xxx.{afg$$^, a345gh$^$hd, ...}.yyy
+#   function are first-class citizen
+#       we can do any thing without using "attr system"
+#       if the "physic"-metaobject donot exists, than we use
+#           builtins function to get __getattr__ in metaobject not via meta-metaobject.
+#           if not exists, then builtins function to get "attr" directly from instance itself.
+https://en.wikipedia.org/wiki/Role-oriented_programming
+Roles allow objects to evolve over time, they enable independent and concurrently existing views (interfaces) of the object, explicating the different contexts of the object, and separating concerns. Generally roles are a natural element of human daily concept-forming. Roles in programming languages enable objects to have changing interfaces, as we see in real life - things change over time, are used differently in different contexts, etc.
+
+
+
+
+# hence type(obj) is physic metaobject
+#   ops is dynamic metaobject
+https://en.wikipedia.org/wiki/Metaobject
+In computer science, a metaobject is an object that manipulates, creates, describes, or implements objects (including itself). The object that the metaobject pertains to is called the base object. Some information that a metaobject might define includes the base object's type, interface, class, methods, attributes, parse tree, etc. Metaobjects are examples of the computer science concept of reflection, where a system has access (usually at run time) to its own internal structure. Reflection enables a system to essentially rewrite itself on the fly, to alter its own implementation as it executes.
+
+Metaobject protocol
+
+A metaobject protocol (MOP) provides the vocabulary (protocol) to access and manipulate the structure and behaviour of systems of objects. Typical functions of a metaobject protocol include:[2]
+
+    Create or delete a new class
+    Create a new property or method
+    Cause a class to inherit from a different class ("change the class structure")
+    Generate or change the code defining the methods of a class
+
+Metaobject protocol is contrary to the "closed" aspect of Bertrand Meyer's open/closed principle, which holds that software object systems should be open for extension but closed for modification. Metaobject protocol, by contrast, transparently exposes the internal composition of objects and the entire object system in terms of the system itself. A metaobject protocol is not merely an interface to an "underlying" implementation; rather, through metaobject protocol the object system is recursively implemented in terms of a meta-object system, which itself is theoretically implemented in terms of a meta-metaobject system, and so on until an arbitrary base case (a consistent state of the object system) is determined, with the protocol as such being the recursive functional relationship between these implementation levels.
+
+

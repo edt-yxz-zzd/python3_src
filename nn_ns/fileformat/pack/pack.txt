@@ -1,0 +1,15 @@
+stream
+.read n
+.write bytes[n]
+.tell
+.seek n
+.get n     [where=.tell] // read but not seek
+.set bytes [where=.tell] // write but not seek
+
+DataType
+.encode() -> bytes[n]
+.encode(ostream) -> n      // write bytes[n]
+.decode(istream) static -> object // read bytes[n]
+.decode(bytes[n]) static -> object
+
+

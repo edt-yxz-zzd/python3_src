@@ -1,0 +1,19 @@
+
+Monad
+
+@alias(case, {k:v}) # to be used location, and then modify this function
+def f():
+    ...
+@decorator # modify all methods
+class ...
+
+class ...:
+    with xxx: # affect the block
+        ....
+    try:
+        ...
+    except:
+        ...
+
+
+In computing, aspect-oriented programming (AOP) is a programming paradigm that aims to increase modularity by allowing the separation of cross-cutting concerns. It does so by adding additional behavior to existing code (an advice) without modifying the code itself, instead separately specifying which code is modified via a "pointcut" specification, such as "log all function calls when the function's name begins with 'set'". This allows behaviors that are not central to the business logic (such as logging) to be added to a program without cluttering the code, core to the functionality. AOP forms a basis for aspect-oriented software development.
