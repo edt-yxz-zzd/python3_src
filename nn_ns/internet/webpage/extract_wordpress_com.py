@@ -111,6 +111,12 @@ def main(argv=None):
     parser.exit(0)
     return 0
 
+'''
+https://txt20180801.wordpress.com/2018/08/03/another-v3/
+https://txt20180801.wordpress.com/2018/08/01/email-blog-psw/
+https://bug20180101jieshenrenchong.wordpress.com/
+
+'''
 
 if __name__ == "__main__":
     main()
