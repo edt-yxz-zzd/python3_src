@@ -55,7 +55,12 @@ Tai Xuan Jing
     Tai Xuan Jing Symbols 1D300—1D35F
     U+1D300 ... 87
         Unicode version: 4.1.0
-
+    fonts:
+        Code2001
+        DejaVu fonts
+        GNU Unifont
+        Sun-ExtB
+        WenQuanYi Zen Hei
 
 Mahjong
     https://unicode-table.com/en/blocks/mahjong-tiles/
@@ -88,4 +93,6 @@ clock
     Clock Face
     U+1F550 ... 24
         Unicode version: 6.0.0
+    fonts:
+        GNU Unifont
 

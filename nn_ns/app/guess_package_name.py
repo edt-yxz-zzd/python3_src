@@ -84,8 +84,11 @@ return _pkg_; if not _pkg_, means fail to find one
     return _pkg_
 
 def script_fname2module_name(script_fname):
-    pkg = guess_package_name(script_fname)
-    base = inspect.getmodulename(script_fname)
+    fname = os.path.abspath(script_fname)
+    if os.path.isdir(fname):
+        fname = os.path.join(fname, '__main__.py')
+    pkg = guess_package_name(fname)
+    base = inspect.getmodulename(fname)
     if base is None:
         return None
         raise ValueError('not a legal module_name')

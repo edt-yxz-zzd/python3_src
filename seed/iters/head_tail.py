@@ -52,7 +52,7 @@ def mk_fdefault(default):
     return lambda: default
 def with_default(iterable, default):
     # the result iterable will be nonempty
-    return with_fdefault(iterable, mk_fdefault(default)):
+    return with_fdefault(iterable, mk_fdefault(default))
 
 
 def forward1_fdefault(f1, iterable, fdefault):
