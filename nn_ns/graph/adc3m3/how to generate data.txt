@@ -1,0 +1,28 @@
+see:
+python script: "../gen.py"
+
+cmdline:
+    #"../plantri45.exe" -adc3m3 <n>d > -adc3m3[<n>].txt
+    #"../plantri45.exe" -adc3m3 <n>d >> -adc3m3.txt
+
+    "../plantri45.exe" -adc3m3 4d
+        ../plantri45.exe -adc3m3 4d
+        4 bcd,adc,abd,acb
+        1 cubic graphs written to stdout
+    "../plantri45.exe" -adc3m3 4d > -adc3m3[4].txt
+        ../plantri45.exe -adc3m3 4d
+        1 cubic graphs written to stdout
+
+    "../plantri45.exe" -adc3m3 26d >> -adc3m3[26].txt
+        ../plantri45.exe -adc3m3 26d
+        2406841 cubic graphs written to stdout
+
+output file:
+    -adc3m3[26].txt
+        247 MB (259,938,828 bytes)
+        2406841 cubic graphs
+    -adc3m3[4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24].txt
+        37.4 MB (39,285,084 bytes)
+        398438 cubic graphs
+
+

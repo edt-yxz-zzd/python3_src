@@ -121,9 +121,43 @@ constructor:
 
 
 
+class IFiniteGraphOps(ABC):
+    '''
+infinite graph - e.g. state space of same a game
+    we donot know size
+    we may not know whether a state is a vertex (or maybe we should treat invalid state as an unreachable vertex from initial state)
+    we are not able to iter all hedges # maybe not countable
+finite graph - len(Vertex), len(Edge), len(HEdge)
+'''
+    __slots__ = ()
+    ## s::Set ==>> len(s), iter(s), x in s
+    @abstractmethod
+    def get_vertex_set(self, g):
+        # -> V; Vertex
+        pass
+    @abstractmethod
+    def get_edge_set(self, g):
+        # -> E; Edge
+        pass
+    @abstractmethod
+    def get_hedge_set(self, g):
+        # -> HEdge; half edge set
+        # a vertex may connect to 0~many hedges
+        # an edge may connect to 0~many hedges (normally, 2)
+        pass
+    @abstractmethod
+    def explain_hedge2DVE(self, g, hedge):
+        # hedge -> (direction::Bool, vertex::V, edge::E)
+        # direction=True <==> vertex->edge  # vertex can see edge
+        # direction=False <==> vertex<-edge # vertex cannot see edge
+        pass
 
 
 
+
+
+
+############### TODO: remove has_vertex by testing (v in V)
 __all__ = '''
     inside
     total__ON
@@ -621,7 +655,7 @@ class IUnstableIterOutgoAdjacentAEdges(IDGraph):
         return self.unstable_iter_aedges__speed()
 
 
-                
+
 
 class IUnstableIterAdjacentVertices(IUnstableIterAdjacentPAEdges):
     # no duplicate vertices

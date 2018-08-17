@@ -1,5 +1,31 @@
 
+r'''
+>pym some_triconnected_cubic_planar_graphs.py -2D -i ".\adc3m3\-adc3m3[4, 6, 8].txt"
+>pym some_triconnected_cubic_planar_graphs.py -2D -3D -i "E:\my_data\program_output\py3\nn_ns\graph\adc3m3\-adc3m3[4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24].txt" 0 10
 
+
+###
+plt.gca()
+    get current axes
+plt.sca(ax)
+    set current axes
+plt.gcf()
+    get current figure
+plt.figure(fig.number)
+    set current figure
+plt.figure()
+    make new figure
+
+# return axes
+plt.subplot
+plt.subplots
+fig.add_subplot
+    (num_rows, num_columns, idx, ...)
+    "projection=..."
+        affect the type of the result axes
+        cannot alter after an axes created
+
+'''
 
 from .simple_undirected_graph import graph
 from .graph_format_ascii_embedding import str2embedding
@@ -11,7 +37,11 @@ import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import math
+from itertools import islice
 
+# from aVdc3m3_from4to16d.txt and adc3m5_from20to22d.txt
+#              55              +        1
+#   "-V" - have non-trival automorphism
 graph_format_ascii_embedding_strs = [\
         '4 bcd,adc,abd,acb',\
         '6 bcd,aef,afd,ace,bdf,bec',\
@@ -85,29 +115,43 @@ def graph_format_ascii_embedding_str2networkx_graph(graph_format_ascii_embedding
 ##    g = graph(embedding)
 ##    n = g.order()
 ##    edges = g.edges()
-    g = v2neighbors_to_networkx_graph(embedding)
-    return g
+    gx = v2neighbors_to_networkx_graph(embedding)
+    return gx
 
 
-def show_graph_format_ascii_embedding_by_networkx(graph_format_ascii_embedding_str):
+def show_graph_format_ascii_embedding_by_networkx(
+    graph_format_ascii_embedding_str, *, title='None'):
+    #title = graph_format_ascii_embedding_str
 
-    g = graph_format_ascii_embedding_str2networkx_graph(graph_format_ascii_embedding_str)
-    nx.draw(g)
+    gx = graph_format_ascii_embedding_str2networkx_graph(graph_format_ascii_embedding_str)
+
+    fig = plt.figure()
+    nx.draw(gx)
+    fig.canvas.set_window_title(title)
     plt.show()
 
 
 
 
 
-def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
+def show_triconnected_cubic_graph_in_3D(
+    graph_format_ascii_embedding_str, *, title='None'):
+    #title = graph_format_ascii_embedding_str
     gx = graph_format_ascii_embedding_str2networkx_graph(graph_format_ascii_embedding_str)
+
+    fig = plt.figure()
+    fig.canvas.set_window_title(title)
+    ax = fig.gca(projection='3d')
+    show_triconnected_cubic_graph_in_3D_impl(gx, ax)
+    plt.show()
+def show_triconnected_cubic_graph_in_3D_impl(gx, ax):
     n = gx.order()
     assert n >= 4
 
     source = 0
     target2distance = single_source_shortest_distances(gx, source)
     target2parent = one_single_source_shortest_path_target2parent(gx, source)
-    
+
     max_distance = max(target2distance.values())
     distance2targets = [[] for _ in range(max_distance+1)]
     for target, distance in target2distance.items():
@@ -118,14 +162,11 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
 ##    plt.show()
 ##    return
     def draw_edges(v2xyz, edges):
-        fig = plt.figure()
-        ax = fig.gca(projection='3d')
         for u,v in edges:
             x,y,z = (np.linspace(ux, vx, 100) for ux, vx in zip(v2xyz[u], v2xyz[v]))
             ax.plot(x, y, z)
-        
-        plt.show()
-    
+
+
     v2xyz = [tuple(pos[i]) for i in range(len(pos))]
     draw_edges(v2xyz, gx.edges())
     return
@@ -133,8 +174,8 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
     x = [x for x,y,z in xyz]
     y = [y for x,y in xyz]
     m = max(max(x)-min(x), max(y)-min(y))
-    
-    
+
+
 
     string = graph_format_ascii_embedding_str
     embedding = str2embedding(string)
@@ -142,7 +183,7 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
     v2angle = [None] * n
     v2angle[source] = 0
     first_layer_angle = 0
-    
+
     for v in g.neighbors(source):
         v2angle[v] = first_layer_angle
         first_layer_angle += 120
@@ -187,7 +228,7 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
             v2left_bound[v] = middle(v2angle[left], v2angle[v])
             v2right_bound[v] = middle(v2angle[v], v2angle[right])
             print(v2left_bound[v], v2angle[v], v2right_bound[v])
-        
+
         return
 
     def adjust(level):
@@ -218,8 +259,8 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
                 d = (v2angle[v] - v2angle[u]) % 360
                 assert d <= 120
 
-            
-        
+
+
     for level in range(1, len(distance2targets)-1):
         adjust(level)
         fill_bound(level)
@@ -229,7 +270,7 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
                 parents = [v for v in g.neighbors(child)
                            if level == target2distance[v]]
                 assert 1 <= len(parents) <= 3
-                
+
                 if len(parents) == 2:
                     p1, p2 = parents
                     v2angle[child] = middle(v2angle[p1], v2angle[p2])
@@ -242,8 +283,8 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
                     v2angle[child] = middle(bound, v2angle[parent])
                 else:
                     v2angle[child] = v2angle[parent]
-                
-                    
+
+
     num_layers = len(distance2targets)
     if len(distance2targets[-1]) > 1:
         num_layers += 1
@@ -261,7 +302,7 @@ def show_triconnected_cubic_graph_in_3D(graph_format_ascii_embedding_str):
 
     draw_edges(v2xyz, g.edges())
     assert 3*n//2 == len(g.edges())
-            
+
 
 
 
@@ -274,10 +315,10 @@ def one_single_source_shortest_path_target2parent(G, source, weight=None):
 def one_single_source_shortest_path_tree(G, source, weight=None):
     target2parent = one_single_source_shortest_path_target2parent(G, source, weight)
     edges = target2parent.items()
-    g = nx.Graph()
-    g.add_nodes_from(g.nodes())
-    g.add_edges_from(edges)
-    return g
+    gx = nx.Graph()
+    gx.add_nodes_from(gx.nodes())
+    gx.add_edges_from(edges)
+    return gx
 def single_source_shortest_distances(G, source, weight=None):
     target2path = nx.shortest_path(G, source, weight=weight)
     assert len(target2path) == G.order()
@@ -296,35 +337,110 @@ def single_source_shortest_distances(G, source, weight=None):
 
     def path2distance(path):
         return sum(get_weight(u,v) for u,v in zip(path, path[1:]))
-                   
+
     target2distance = {}
     for target, _ in target_len_ls:
         target2distance[target] = path2distance(target2path[target])
-        
-    
+
+
     assert len(target2distance) == G.order()
     return target2distance
 
 
-def _test(begin=None, end=None, step=None):
-    for embedding_str in graph_format_ascii_embedding_strs[begin:end:step]:
-        show_triconnected_cubic_graph_in_3D(embedding_str)
+def main_impl(begin=None, end=None, step=None
+            , *, using2D=True, using3D=True, input=None):
+    def nop_show(graph_str, *, title):pass
+    show3D = show_triconnected_cubic_graph_in_3D if using3D else nop_show
+    show2D = show_graph_format_ascii_embedding_by_networkx if using2D else nop_show
+    def show(graph_str, *, title):
+        show2D(graph_str, title=title)
+        show3D(graph_str, title=title)
+    def show(graph_str, *, title):
+        gx = graph_format_ascii_embedding_str2networkx_graph(graph_str)
+        if 1:
+            fig = plt.figure()
+            fig.canvas.set_window_title(title)
+            ax2D = fig.add_subplot(1,2,1)#, projection='2d')
+            ax3D = fig.add_subplot(1,2,2, projection='3d')
+            width, height = fig.get_size_inches()
+            fig.set_size_inches(width*1.8, height)
+        else:
+            fig, (ax2D, ax3D) = plt.subplots(2, 1)
+            #cannot change projection now!!
+        if using2D:
+            ax2D.set_title('2D')
+            plt.sca(ax2D)
+            nx.draw(gx)
+        if using3D:
+            #ax = plt.subplot(2, 1, 1, projection='3d')
+            ax3D.set_title('3D')
+            plt.sca(ax3D)
+            show_triconnected_cubic_graph_in_3D_impl(gx, ax3D)
+        plt.show()
+
+    ver = 2
+    if ver == 0:
+        if input is None:
+            graph_strs = graph_format_ascii_embedding_strs
+        else:
+            with open(input, 'rt', encoding='ascii') as fin:
+                graph_strs = [line.strip() for line in fin]
+        for embedding_str in graph_strs[begin:end:step]:
+            show(embedding_str)
+    elif ver == 1:
+        if input is None:
+            graph_strs = iter(graph_format_ascii_embedding_strs)
+        else:
+            def mk_graph_strs():
+                with open(input, 'rt', encoding='ascii') as fin:
+                    for line in fin:
+                        yield line.strip()
+            graph_strs = mk_graph_strs()
+        for embedding_str in islice(graph_strs, begin, end, step):
+            show(embedding_str, title=embedding_str)
+    elif ver == 2:
+        if input is None:
+            idx_graph_strs = enumerate(graph_format_ascii_embedding_strs)
+        else:
+            def mk_idx_graph_strs():
+                with open(input, 'rt', encoding='ascii') as fin:
+                    for line in fin:
+                        yield line.strip()
+            idx_graph_strs = enumerate(mk_idx_graph_strs())
+        for idx, embedding_str in islice(idx_graph_strs, begin, end, step):
+            show(embedding_str, title=f'{idx}:{embedding_str}')
+    else:
+        raise logic-error
+
+
 
 
 def main(args=None):
     import argparse
 
     parser = argparse.ArgumentParser(description='show graphs')
-    parser.add_argument('begin', type=int, nargs='?', default=None,
-                       help='show graphs[begin:end:step]')
-    parser.add_argument('end', type=int, nargs='?', default=None,
-                       help='show graphs[begin:end:step]')
-    parser.add_argument('step', type=int, nargs='?', default=None,
-                       help='show graphs[begin:end:step]')
+    parser.add_argument('begin', type=int, nargs='?', default=None
+                       ,help='show graphs[begin:end:step]')
+    parser.add_argument('end', type=int, nargs='?', default=None
+                       ,help='show graphs[begin:end:step]')
+    parser.add_argument('step', type=int, nargs='?', default=None
+                       ,help='show graphs[begin:end:step]')
+    parser.add_argument('-2D', '--using2D', action='store_true'
+                       , default=False
+                       , help='show in 2D')
+    parser.add_argument('-3D', '--using3D', action='store_true'
+                       , default=False
+                       , help='show in 3D')
+
+    parser.add_argument('-i', '--input', type=str, nargs='?', default=None
+                       ,help=r'input file. line format="\d+ \w+(,\w+)*\n"')
 
 
     args = parser.parse_args()
-    _test(args.begin, args.end, args.step)
+    main_impl(args.begin, args.end, args.step
+            , using2D=args.using2D
+            , using3D=args.using3D
+            , input=args.input)
 
 if __name__ == '__main__':
     main()
