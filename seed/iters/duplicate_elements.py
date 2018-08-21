@@ -43,7 +43,7 @@ def iter_duplicate_representative_elements(iterable, *, key = None):
                iter_duplicate_element_groups(iterable, key))
 
 def find_maybe_duplicate_element1(iterable, *, key = None):
-    'find one duplicate_element; returm maybe_elem'
+    'find one duplicate_element; returm () or (elem,)'
     key = echo if key is None else key
     s = set()
     for i, x in enumerate(1, iterable):

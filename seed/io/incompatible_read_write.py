@@ -28,8 +28,8 @@ def free_write(file, data):
 
 
 def incompatible_read(
-        may_file, read=None, binary=False
-        , encoding, **kwargs):
+        may_file, *, encoding
+        , read=None, binary=False, **kwargs):
     # incompatible with write
     # read :: fin -> R
     # kwargs:
@@ -45,8 +45,9 @@ def incompatible_read(
 
 
 def incompatible_write(
-        may_file, data, write=None, binary=False, force=False, append=False
-        , encoding, **kwargs):
+        may_file, data, *, encoding
+        , write=None, binary=False, force=False, append=False
+        , **kwargs):
     # incompatible with read
     # write :: fout -> data -> R
     # kwargs:

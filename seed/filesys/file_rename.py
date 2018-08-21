@@ -1,16 +1,22 @@
 
 
 __all__ = '''
-    replace_file, rename_file, is_empty_file, swap_file, write_force
-    rename_files__left_shift1
-    swap_files__left_cyclic1
     rename_files
 
-    '''.replace(',', ' ').split()
+    replace_file
+    rename_file
+    swap_file
+
+    rename_files__left_shift1
+    swap_files__left_cyclic1
+    '''.split()
+    #is_empty_file
+    #write_force
+
 
 
 from seed.filesys.to_abspath import where, to_abspath
-from seed.iters.duplicate_elements import duplicate_element1
+from seed.iters.duplicate_elements import find_maybe_duplicate_element1
 
 
 import os # replace remove
@@ -32,23 +38,26 @@ def rename_file(src, dst):
     return
 
 
+'''
 def is_empty_file(fname):
     with open(fname, 'rb') as fin:
         b = fin.read1(1)
         return len(b) == 0
+'''
+
 def swap_file(src, dst):
     src = path.abspath(src)
     dst = path.abspath(dst)
     if src == dst:
         return
-    
+
     outdir = where(dst)
     with _nTempFile(mode='wb', delete=False, \
                     suffix=_suffix, prefix=_prefix, dir=outdir) as fout:
-        tmp = fout.name
-    os.replace(dst, tmp)
+        tmp_dst = fout.name
+    os.replace(dst, tmp_dst)
     rename_file(src, dst)
-    rename_file(tmp, src)
+    rename_file(tmp_dst, src)
     return
 
 def normalize_fnames(fnames):
@@ -68,7 +77,7 @@ def rename_files__left_shift1(fnames):
         return
     if len(frozenset(fnames)) != L:
         raise ValueError('duplicate path : {!r}'
-                         .format(duplicate_element1(fnames)[0]))
+                         .format(find_maybe_duplicate_element1(fnames)[0]))
     for i in range(1, L):
         # fnames[i-1] not exists
         rename_file(fnames[i], fnames[i-1])
@@ -84,7 +93,7 @@ def swap_files__left_cyclic1(fnames):
         return
     if len(frozenset(fnames)) != L:
         raise ValueError('duplicate path : {!r}'
-                         .format(duplicate_element1(fnames)[0]))
+                         .format(find_maybe_duplicate_element1(fnames)[0]))
 
     dst = fnames[-1]
     outdir = where(dst)
@@ -92,7 +101,7 @@ def swap_files__left_cyclic1(fnames):
                     suffix=_suffix, prefix=_prefix, dir=outdir) as fout:
         tmp = fout.name
     os.replace(dst, tmp) # del tmp
-    
+
     for i in range(L-1):
         # fnames[i-1] not exists
         rename_file(fnames[i], fnames[i-1])
@@ -109,13 +118,15 @@ def rename_files(srcs, dsts):
         raise ValueError('len(srcs) != len(dsts)')
     if not all(map(path.exists, srcs)):
         raise ValueError('not all(map(path.exists, srcs))')
-    
+
     L = len(srcs)
     src_set = frozenset(srcs)
     dst_set = frozenset(dsts)
-    if len(src_set) != L:
+    if len(dsts) != len(srcs):
+        raise ValueError('len(dsts) != len(srcs)')
+    if len(src_set) != len(srcs):
         raise ValueError('len(srcs) != len(src_set)')
-    if len(dst_set) != L:
+    if len(dst_set) != len(dsts):
         raise ValueError('len(dsts) != len(dst_set)')
 
     existing_dsts = frozenset(filter(path.exists, dsts))
@@ -126,7 +137,7 @@ def rename_files(srcs, dsts):
     src2src_idx = dict(map(reversed, enumerate(srcs)))
     dst_idx2real_idx = {i: src2src_idx.get(dsts[i-L], i) for i in range(L, 2*L)}
     src_idx2real_dst_idx = [dst_idx2real_idx[i+L] for i in range(L)]
-    
+
 ##    path2idx = dict(map(reversed, enumerate(L, dsts)))
 ##    path2idx.update(src2idx)
 
@@ -134,7 +145,7 @@ def rename_files(srcs, dsts):
     nondst_srcs = src_set - existing_dsts
     assert len(existing_dsts) + len(nondst_srcs) == len(src_set)
 
-    
+
     rename_lsls = []
     for i in map(lambda fname: src2src_idx[fname], nondst_srcs):
         ls = [i]
@@ -143,7 +154,7 @@ def rename_files(srcs, dsts):
             ls.append(i)
         rename_lsls.append(ls)
 
-    
+
     rename_idcs = tuple(chain_iters(rename_lsls))
     rename_idx_set = frozenset(idcs)
     assert len(rename_idcs) == len(rename_idx_set)
@@ -173,11 +184,12 @@ def rename_files(srcs, dsts):
     return
 
 
-    
-def write_force(fname, data, encoding=None):
+
+'''
+def write_force(fname, data, *, encoding=None):
     if encoding:
         data = data.encode(encoding)
-        
+
     outdir = where(fname)
     with _nTempFile(mode='wb', delete=False, \
                     suffix=_suffix, prefix=_prefix, dir=outdir) as fout:
@@ -185,5 +197,5 @@ def write_force(fname, data, encoding=None):
         fout.write(data)
     replace_file(tmp, fname)
     return
-    
-    
+'''
+

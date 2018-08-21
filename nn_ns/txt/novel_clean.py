@@ -91,8 +91,53 @@ class FullWidthRegexPatternInsideBracket:
     puncts = r"‘’“”々～‖∶＂＇｀｜〃〔〕〈〉《》「」『』．〖〗【】（）［］｛｝。，、；：？！…—·ˉˇ¨"
 
 
-html_tag_spam_pattern = r"<[^</>][^<>]{,50}>[^<>]{,100}</[^<>]{,20}>|<!--(?:(?!-->).){,100}-->"
-html_tag_pattern = r"<[^</>][^<>]*>[^<>]*</[^<>]*>|<!--.*?-->"
+#html_element_spam_pattern = r"<[^</>][^<>]{,50}>[^<>]{,100}</[^<>]{,20}>|<!--(?:(?!-->).){,100}-->"
+#html_element_pattern = r"<[^</>][^<>]*>[^<>]*</[^<>]*>|<!--.*?-->"
+_html_void_tag_pattern = r'area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr|command|basefont|bgsound|frame|isindex'
+html_void_tag_pattern = r'\s*(?:{})\s*'.format(_html_void_tag_pattern)
+
+html_tag_pattern = r'\s*\b\w+\b\s*'
+html_tag_attrs_pattern = r'[^<>]*'
+html_element_text_pattern = r'[^<>]*'
+html_comment_text_pattern = r'.*?'
+
+
+html_tag_spam_pattern = r'\s*\b\w{1,10}\b\s*'
+html_tag_attrs_spam_pattern = r'[^<>]{,50}'
+html_element_text_spam_pattern = r'[^<>]{,100}'
+html_comment_text_spam_pattern = r'(?:(?!-->).){,100}'
+
+## "_" means need ".format()" once
+_html_void_element_pattern = r'<{void_tag}{attrs}/?>'
+_html_start_end_element_pattern = r'<{tag}{attrs}>{text}</{tag}>'
+_html_self_closing_pattern = r'<{tag}{attrs}/>'
+_html_comment_pattern = r'<!--{comment_text}-->'
+
+## "__" means need ".format()" twice
+__html_element_pattern = r"{start_end_element}|{comment}|{self_closing}|{void_element}"
+_html_element_pattern = __html_element_pattern.format(
+                    start_end_element=_html_start_end_element_pattern
+                    ,comment=_html_comment_pattern
+                    ,self_closing=_html_self_closing_pattern
+                    ,void_element=_html_void_element_pattern)
+
+html_element_pattern = _html_element_pattern.format(
+                    void_tag=html_void_tag_pattern
+                    ,tag=html_tag_pattern
+                    ,attrs=html_tag_attrs_pattern
+                    ,text=html_element_text_pattern
+                    ,comment_text=html_comment_text_pattern
+                    )
+html_element_spam_pattern = _html_element_pattern.format(
+                    void_tag=html_void_tag_pattern
+                    ,tag=html_tag_pattern
+                    ,attrs=html_tag_attrs_pattern
+                    ,text=html_element_text_pattern
+                    ,comment_text=html_comment_text_spam_pattern
+                    )
+
+
+############################# end of html pattern
 bracket_spam_pattern = r"[\[［][^\[\]［］]{,100}[］\]]"
 bracket_pattern = r"[\[［][^\[\]［］]*[］\]]"
 spam_line_pattern = r"[wWｗＷ]{3}|[tTｔＴ][xXｘＸ][tTｔＴ]|[cCｃＣ][oOｏＯ][mMｍＭ]|[.．][cCｃＣ][cCｃＣ]|&amp;|&gt;|&lt;|amp;|gt;|lt;|&amp|&gt|&lt|&#"
@@ -101,14 +146,44 @@ maybe_spam_line_pattern = rf"[\[\](){{}}（）［］〖〗【】｛｝.#&<>]|{sp
 parenthesis_pattern = r"[(（][^(（）)]*[）)]|【[^【】]*】|〖[^〖〗]*〗"
 
 
-html_tag_and_bracket_and_parenthesis_maybespam_pattern = f"({html_tag_pattern}|{bracket_pattern}|{parenthesis_pattern})"
-html_tag_and_bracket_spam_pattern = f"({html_tag_spam_pattern}|{bracket_spam_pattern})"
-html_tag_and_bracket_and_parenthesis_maybespam_rex = re.compile(html_tag_and_bracket_and_parenthesis_maybespam_pattern)
-html_tag_and_bracket_spam_rex = re.compile(html_tag_and_bracket_spam_pattern)
+html_element_and_bracket_and_parenthesis_maybespam_pattern = f"({html_element_pattern}|{bracket_pattern}|{parenthesis_pattern})"
+html_element_and_bracket_spam_pattern = f"({html_element_spam_pattern}|{bracket_spam_pattern})"
+html_element_and_bracket_and_parenthesis_maybespam_rex = re.compile(html_element_and_bracket_and_parenthesis_maybespam_pattern)
+html_element_and_bracket_spam_rex = re.compile(html_element_and_bracket_spam_pattern)
     # split: require capture"()"
 maybe_spam_line_rex = re.compile(maybe_spam_line_pattern)
     # search: whether contains
 spam_line_rex = re.compile(spam_line_pattern)
+
+
+def _test():
+    html_start_end_elements = \
+        ['< a href="//afa"> 34334 </ a >'
+        ,'<A href="http://www.taobar8.com">www.taobar8.com</A>'
+        ]
+    html_self_closing_elements = ['< a href="//afa" />']
+    html_void_elements = ['< br >', '<br>', '<img afksljdg />']
+    html_comments = ['<!-- afsg><- -- -> afsf---->']
+
+    txts =  [*html_comments
+            ,*html_void_elements
+            ,*html_self_closing_elements
+            ,*html_start_end_elements
+            ]
+    rexs =  [html_element_and_bracket_spam_rex
+            ,html_element_and_bracket_and_parenthesis_maybespam_rex
+            ]
+    for rex in rexs:
+        for txt in txts:
+            try:
+                assert rex.fullmatch(txt)
+            except:
+                print(f'pattern={rex.pattern!r}')
+                print(f'text={txt}')
+                raise
+    return
+_test(); del _test
+
 
 def find_spam(line):
     # String -> (spam_line_score:UInt, [(Score, SpamSubstring)])
@@ -129,7 +204,7 @@ def find_spam(line):
 
     spam_line_score = 1 + (spam_line_rex.search(line) is not None)
 
-    ls = html_tag_and_bracket_and_parenthesis_maybespam_rex.split(line)
+    ls = html_element_and_bracket_and_parenthesis_maybespam_rex.split(line)
     assert ls
     L = len(ls)
     assert L & 1 # odd
@@ -143,7 +218,7 @@ def find_spam(line):
     for maybe_spam in maybe_spams:
         assert maybe_spam
         head = maybe_spam[0]
-        if html_tag_and_bracket_spam_rex.fullmatch(maybe_spam):
+        if html_element_and_bracket_spam_rex.fullmatch(maybe_spam):
             spam = maybe_spam
             if head == '<':
                 score = 6
@@ -184,7 +259,7 @@ def classify_spams(lineno_line_pairs):
         if not score_spam_pairs or spam_line_score > 1:
             #print(f'{lineno}#{line!r}', file=fout)
             score2lineno_line_pairs[spam_line_score].append((lineno, line))
-            continue
+            #bug: continue
 
         for score, spam in score_spam_pairs:
             #print(f'{lineno}:{spam!r}', file=fout)

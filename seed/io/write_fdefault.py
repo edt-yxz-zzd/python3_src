@@ -78,7 +78,7 @@ def write_fdefault(fdefault, path
     #   read_xwrite:    fdefault is not None and writeonly==False
     #   xwriteonly:     fdefault is not None and writeonly==True and overwrite==False
     #   overwriteonly:  fdefault is not None and writeonly==True and overwrite=True
-    mode = 'b' if binary else 'r'
+    mode = 'b' if binary else 't'
     if eq is None:
         eq = operator.eq
 

@@ -1,7 +1,10 @@
 
-'''
+r'''
 under same dir
 
+example:
+    # rename xx.svg to xx.svg.png
+    file_rename_cmd svg_as_png "^.*\.svg$" ".*" "r""\g<0>.png"""
 example:
     # offset
     py -m nn_ns.filedir.file_rename_cmd --dry_run . "chapter\d+.html" "\d+" "lambda m: '{:0>4}'.format(int(m.group(0))+757)"
@@ -110,7 +113,10 @@ def main(argv=None):
     matchobj2str = "lambda m: '{:0>4}'.format(int(m.group(0))+757)"
     ###############################4######################0###757#
     matchobj2str = "offset_number(4, 0, 757)"
-''')
+'''
+        , formatter_class=argparse.RawDescriptionHelpFormatter
+        )
+
     add_argument = parser.add_argument
 
     add_argument('folder', type=str
