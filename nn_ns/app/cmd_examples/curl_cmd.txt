@@ -1,0 +1,51 @@
+goto start
+rem curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o %*
+rem required: outfname and url; "&" ==>> "^&"
+
+
+
+rem input=http://dl3.libgen.io/get.php?md5=82CF4941977DE1F10CFA5F604A593DFB&key=ZKVMREVJ17S0Z3TX
+rem curl -C - -L --retry 100 --retry-delay 16 -O http://dl3.libgen.io/get.php?md5=82CF4941977DE1F10CFA5F604A593DFB^&key=ZKVMREVJ17S0Z3TX
+rem & ==>> ^&
+rem curl2.bat http://dl3.libgen.io/get.php?md5=82CF4941977DE1F10CFA5F604A593DFB^^^&key=ZKVMREVJ17S0Z3TX
+
+rem done! curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "Professional C++.pdf_" http://dl3.libgen.io/get.php?md5=82CF4941977DE1F10CFA5F604A593DFB^&key=IM6H7V4DGN4N2OD4
+rem done! curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "Beginning C++17 From Novice to Professional.pdf_" http://dl3.libgen.io/get.php?md5=DB8A8EC0AAC7B304567AA68775F613B0^&key=KII108ZHT97EKED8
+rem done! curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "Professional C++.epub_" http://dl3.libgen.io/get.php?md5=102D4E981EF87AD6E3B77D8EF854D3F2^&key=GUWKBKKO7ZGFGIR9
+rem done! curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "C++ Templates -- The Complete Guide (2ed)(2017).epub" http://dl3.libgen.io/get.php?md5=29648400792818628BEAE22C665A5726^&key=THQNS5HAGHQN8S4Y
+rem done! curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "C++ Templates -- The Complete Guide (2ed)(2017).pdf" http://dl3.libgen.io/get.php?md5=0D5072D8203DCAF6EF50E76A3D9A3203^&key=ANPVQFFTBC2HC04Z
+rem done! curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "Boost C++ Application Development Cookbook (2ed)(2017)(Antony Polukhin).epub.0" http://dl3.libgen.io/get.php?md5=7D962636A0EEAFE24E8F810E007FCE09^&key=JG7M96FJ78FR4MO4
+rem done! curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "The Boost C++ Libraries (2ed)(2014)(Boris).epub.0" http://dl3.libgen.io/get.php?md5=5D3AC424EF1B63F37CA7B58134DBEA97^&key=1202757YSFN7GPVY
+rem https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/Git-2.18.0-32-bit.exe
+
+
+
+curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o Git-2.18.0-64-bit.exe https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/Git-2.18.0-64-bit.exe
+curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o gtk3-runtime-3.22.30-2018-08-01-ts-win64.exe_ https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/download/2018-08-01/gtk3-runtime-3.22.30-2018-08-01-ts-win64.exe
+
+:start
+
+
+
+
+curl -C - -O http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20161025.exe
+
+
+py -m nn_ns.bin.parse_torrent -pp  r_2213000.torrent -o r_2213000.torrent.txt
+py -m nn_ns.bin.parse_torrent -pp  r_1467000.torrent -o r_1467000.torrent.txt
+py -m nn_ns.bin.parse_torrent -pp  r_1396000.torrent -o r_1396000.torrent.txt
+py -m nn_ns.bin.parse_torrent -pp  r_1294000.torrent -o r_1294000.torrent.txt
+
+py -m nn_ns.txt.lower_cmd -i md5s__upper.txt
+py -m nn_ns.txt.lower_cmd -i md5s__upper.txt --sep " "
+py -m nn_ns.txt.lower_cmd -i md5s__upper.txt -o md5s__lower.txt
+py -m nn_ns.txt.lower_cmd -i md5s__upper.txt --sep " " -o md5s__2columns.txt
+
+
+grep a07c4549eecb7a57b56356d5879cc356 ./*.txt
+grep "1c5c744850af249f0a5be6e956d84fb2" .\r_1467000.torrent.txt
+
+
+
+
+
