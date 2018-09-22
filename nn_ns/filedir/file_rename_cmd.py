@@ -17,6 +17,7 @@ example:
     py -m nn_ns.filedir.file_rename_cmd . "chapter\d+.html" "\d+" "offset_number(4,0, 1, min=767)" --dry_run
     py -m nn_ns.filedir.file_rename_cmd . "chapter\d+.html" "\d+" "offset_number(4,0, 1, min=759)" --dry_run
 '''
+epilog_str2 = __doc__
 
 __all__ = '''
     file_rename
@@ -108,12 +109,16 @@ def main(argv=None):
     import argparse, sys
 
     parser = argparse.ArgumentParser(description='rename_under_same_folder'
-        , epilog='''if matchobj2str_case==ReplPyObj:
+        , epilog='''\
+----------------------------------------------
+if matchobj2str_case==ReplPyObj:
     # example
     matchobj2str = "lambda m: '{:0>4}'.format(int(m.group(0))+757)"
     ###############################4######################0###757#
     matchobj2str = "offset_number(4, 0, 757)"
-'''
+
+----------------------------------------------
+''' + epilog_str2
         , formatter_class=argparse.RawDescriptionHelpFormatter
         )
 

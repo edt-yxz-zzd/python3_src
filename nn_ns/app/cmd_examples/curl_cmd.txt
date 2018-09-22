@@ -23,8 +23,8 @@ rem https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/G
 curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o Git-2.18.0-64-bit.exe https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/Git-2.18.0-64-bit.exe
 curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o gtk3-runtime-3.22.30-2018-08-01-ts-win64.exe_ https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/download/2018-08-01/gtk3-runtime-3.22.30-2018-08-01-ts-win64.exe
 
+curl -C - -L --retry 100 --retry-delay 16 -A "Mozilla" -o "fundamental problems in algorithmic algebra (2000).pdf.0" http://dl4.libgen.io/get.php?md5=6A799F63C06D2B36312EA9D2E2319F3E^&key=XUJOMO31466L0YE7
 :start
-
 
 
 
