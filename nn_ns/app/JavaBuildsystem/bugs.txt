@@ -1,0 +1,31 @@
+
+
+1. using classpath as sourcepath # javac
+
+2. make_executable_jarfile
+    MyClass.java/
+        class UnexportedClass{} // non-public top-level class
+        class MyClass{
+            class Inner{}
+            MyClass(){
+                new Object(){}; // anonymous
+            }
+        }
+
+    donot include below .class file
+        anonymous classes:
+            MyClass$1.class
+        inner classes
+            MyClass$Inner.class
+        unexported classes # non-public top-level class
+            UnexportedClass.class
+
+    see:
+        "NOTE/Java/howto/non-public top-level class[multiple top level classes in a single file].txt"
+    conclusion:
+        make_executable_jarfile cannot handle UnexportedClass
+        we should add UnexportedClass nane into DependsFile
+
+
+
+

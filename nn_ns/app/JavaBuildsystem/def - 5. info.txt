@@ -1,0 +1,10 @@
+
+info :: (DependsInfo, (String, String))
+info = (depends_info, (dependsfile_path, foundfile_path))
+
+
+result of qname2ordered_info_to_sorted_qname_info_pairs:
+    qname2ordered_info_to_sorted_qname_info_pairs
+        :: dict<qname, ordered_info> -> [(qname, info)]
+
+

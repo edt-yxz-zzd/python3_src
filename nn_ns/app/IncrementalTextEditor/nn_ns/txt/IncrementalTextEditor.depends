@@ -1,0 +1,8 @@
++main
+toplevels:
+modules:
+    nn_ns.txt.ClipboardHandler
+    nn_ns.txt.TinyTextReadWriter
+    nn_ns.gui.Dialogs
+resources:
+

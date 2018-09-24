@@ -10,6 +10,7 @@ command:
     root/nn_ns/txt>java -cp ../.. nn_ns.txt.IncrementalTextEditor ../../test.txt utf8 "Anonymous Pro PLAIN 24"
 
     root>javac -cp . nn_ns/txt/ClipboardHandler.java
+    root>javac -cp . nn_ns/txt/ToInputStream.java
     root>javac -cp . nn_ns/txt/TinyTextReadWriter.java
     root>javac -cp . nn_ns/txt/IncrementalTextEditor.java
     root>java -cp . nn_ns.txt.IncrementalTextEditor test.txt utf8 "Anonymous Pro PLAIN 24"
@@ -40,15 +41,25 @@ window:
 menu:
     File
         Save
+        Quit
         Save & Quit
         Quit without Save
     Edit
         Copy
         Cut
         Paste
+        ----------          # JMenu::addSeparator()
         Select All
     Font
-        ...
+        Choose Font Family  # -> JOptionPane.showInputDialog
+        Font Style
+            PLAIN           # -> JRadioButtonMenuItem+ButtonGroup
+            BOLD            # -> JRadioButtonMenuItem::setSelected(true)
+            ITALIC
+            BOLD+ITALIC
+                            #"PLAIN", "BOLD", "BOLDITALIC", or "ITALIC"
+        Choose Font Size    # -> JOptionPane.showConfirmDialog(message=JSpinner)
+
 
 */
 
@@ -86,7 +97,10 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
 
-class IncrementalTextEditor extends JFrame implements ActionListener
+import nn_ns.gui.Dialogs;
+
+
+public class IncrementalTextEditor extends JFrame implements ActionListener
 {
     // Text component
     JTextArea area_to_show;
@@ -125,6 +139,13 @@ class IncrementalTextEditor extends JFrame implements ActionListener
     static final String str_SelectAll = "Select All";
 
     static final String str_ChooseFontFamily = "Choose Font Family";
+    static final String str_FontStyle = "Font Style";
+        static final String str_style_prefix = "style ";
+        static final String str_style_PLAIN = "style PLAIN";
+        static final String str_style_BOLD = "style BOLD";
+        static final String str_style_ITALIC = "style ITALIC";
+        static final String str_style_BOLDITALIC = "style BOLD+ITALIC";
+    static final String str_ChooseFontSize = "Choose Font Size";
 
     JMenuBar make_menu()
     {
@@ -159,6 +180,7 @@ class IncrementalTextEditor extends JFrame implements ActionListener
         menu_Edit.add(menu_item_Cut);
         menu_Edit.add(menu_item_Copy);
         menu_Edit.add(menu_item_Paste);
+        menu_Edit.addSeparator();
         menu_Edit.add(menu_item_SelectAll);
 
         // menu listeners
@@ -209,9 +231,52 @@ class IncrementalTextEditor extends JFrame implements ActionListener
         */
 
         JMenuItem menu_item_ChooseFontFamily = new JMenuItem(str_ChooseFontFamily);
-        menu_Font.add(menu_item_ChooseFontFamily);
-        menu_item_ChooseFontFamily.addActionListener(this);
+        JMenu submenu_FontStyle = new JMenu(str_FontStyle);
+            JRadioButtonMenuItem menu_item_style_PLAIN
+                = new JRadioButtonMenuItem(str_style_PLAIN);
+            JRadioButtonMenuItem menu_item_style_BOLD
+                = new JRadioButtonMenuItem(str_style_BOLD);
+            JRadioButtonMenuItem menu_item_style_ITALIC
+                = new JRadioButtonMenuItem(str_style_ITALIC);
+            JRadioButtonMenuItem menu_item_style_BOLDITALIC
+                = new JRadioButtonMenuItem(str_style_BOLDITALIC);
+        JMenuItem menu_item_ChooseFontSize = new JMenuItem(str_ChooseFontSize);
 
+        menu_Font.add(menu_item_ChooseFontFamily);
+        menu_Font.add(submenu_FontStyle);
+            submenu_FontStyle.add(menu_item_style_PLAIN);
+            submenu_FontStyle.add(menu_item_style_BOLD);
+            submenu_FontStyle.add(menu_item_style_ITALIC);
+            submenu_FontStyle.add(menu_item_style_BOLDITALIC);
+        menu_Font.add(menu_item_ChooseFontSize);
+
+        ButtonGroup group_FontStyle = new ButtonGroup();
+            group_FontStyle.add(menu_item_style_PLAIN);
+            group_FontStyle.add(menu_item_style_BOLD);
+            group_FontStyle.add(menu_item_style_ITALIC);
+            group_FontStyle.add(menu_item_style_BOLDITALIC);
+
+        menu_item_ChooseFontFamily.addActionListener(this);
+        menu_item_ChooseFontSize.addActionListener(this);
+
+        menu_item_style_PLAIN.addActionListener(this);
+        menu_item_style_BOLD.addActionListener(this);
+        menu_item_style_ITALIC.addActionListener(this);
+        menu_item_style_BOLDITALIC.addActionListener(this);
+
+
+        // selected style
+        final int style = this._font.getStyle();
+        JRadioButtonMenuItem selected = null;
+        switch (style){
+        case Font.PLAIN: selected = menu_item_style_PLAIN; break;
+        case Font.BOLD: selected = menu_item_style_BOLD; break;
+        case Font.ITALIC: selected = menu_item_style_ITALIC; break;
+        case Font.BOLD+Font.ITALIC: selected = menu_item_style_BOLDITALIC; break;
+        default:
+            throw new RuntimeException("unknown style:" + style);
+        }
+        selected.setSelected(true);
         return menu_bar;
     }
 
@@ -266,7 +331,7 @@ class IncrementalTextEditor extends JFrame implements ActionListener
         area_to_show.setForeground(color_show_fg);
         area_to_edit.setBackground(color_edit_bg);
         area_to_edit.setForeground(color_edit_fg);
-        this.setTextFont(font);
+        this.setTextFont(font); // before make_menu!
 
         assert area_to_show.isFocusable();
         FocusAdapter aFocusAdapter = new FocusAdapter(){
@@ -347,12 +412,18 @@ class IncrementalTextEditor extends JFrame implements ActionListener
             this.on_SelectAll();
         else if (s.equals(str_ChooseFontFamily))
             this.on_ChooseFontFamily();
+        else if (s.equals(str_ChooseFontSize))
+            this.on_ChooseFontSize();
+        else if (s.startsWith(str_style_prefix))
+            this.on_ChooseFontStyle(s);
         else {
+            System.err.println("logic error: menu event: " + s);
             assert "logic error".isEmpty();
+            return;
             // font
             //System.err.println("font_name: " + s);
-            final String font_name = s;
-            update_font_family(font_name);
+            //final String font_name = s;
+            //update_font_family(font_name);
         }
 
     }
@@ -370,6 +441,14 @@ class IncrementalTextEditor extends JFrame implements ActionListener
             this.setTextFont(new_font);
             //System.err.println("here");
         }
+    }
+    void update_font_style(final int style){
+        if (this._font.getStyle() == style) return;
+        this.setTextFont(this._font.deriveFont(style));
+    }
+    void update_font_size(final float size){
+        if (this._font.getSize2D() == size) return;
+        this.setTextFont(this._font.deriveFont(size));
     }
 
     void on_Save()
@@ -485,6 +564,34 @@ class IncrementalTextEditor extends JFrame implements ActionListener
         update_font_family(maybe_font_name);
     }
 
+    void on_ChooseFontStyle(final String s){
+        int style = 0;
+        if (s.equals(str_style_PLAIN))
+            style = Font.PLAIN;
+        else if (s.equals(str_style_BOLD))
+            style = Font.BOLD;
+        else if (s.equals(str_style_ITALIC))
+            style = Font.ITALIC;
+        else if (s.equals(str_style_BOLDITALIC))
+            style = Font.BOLD + Font.ITALIC;
+        else {
+            System.err.println("logic error: menu event: unknown font style : " + s);
+            assert "logic error".isEmpty();
+            return;
+        }
+
+        update_font_style(style);
+    }
+    void on_ChooseFontSize(){
+        final Integer may_n = Dialogs.askMaybeIntByJSpinner(
+                frame
+                ,"Ask Font Size"
+                ,"input font size:"
+                , this._font.getSize(), 4, 10000, 2);
+        if (may_n != null)
+            update_font_size(may_n);
+    }
+
     // Main class
     public static void main(String args[])
     throws IOException
@@ -544,15 +651,15 @@ class IncrementalTextEditor extends JFrame implements ActionListener
                 ,JOptionPane.YES_NO_CANCEL_OPTION
                 ,JOptionPane.QUESTION_MESSAGE
                 );
-        if (n == 0){
+        if (n == JOptionPane.YES_OPTION){
             // save & quit
             on_SaveAndQuit();
         }
-        else if (n == 1){
+        else if (n == JOptionPane.NO_OPTION){
             // quit without save
             on_QuitWithoutSave();
         }
-        else if (n == 2){
+        else if (n == JOptionPane.CANCEL_OPTION){
             // neither save nor quit
             // no-op; pass
         }
@@ -561,4 +668,6 @@ class IncrementalTextEditor extends JFrame implements ActionListener
         }
     }
 } // class IncrementalTextEditor
+
+
 

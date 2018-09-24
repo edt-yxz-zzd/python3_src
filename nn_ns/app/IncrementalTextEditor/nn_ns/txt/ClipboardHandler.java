@@ -15,7 +15,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
 
-class ClipboardHandler {
+public class ClipboardHandler {
 
 static public void setClipboardContents(final String string){
     if (string == null) return;

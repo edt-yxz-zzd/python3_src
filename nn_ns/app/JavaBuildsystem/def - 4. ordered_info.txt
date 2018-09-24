@@ -1,0 +1,7 @@
+ordered_info :: (UInt, DependsInfo, (String, String))
+ordered_info = (order, depends_info, (dependsfile_path, foundfile_path)
+
+result of read_all_dependencies:
+    read_all_dependencies
+        :: [path] -> qname -> ext -> dict<qname, ordered_info>
+

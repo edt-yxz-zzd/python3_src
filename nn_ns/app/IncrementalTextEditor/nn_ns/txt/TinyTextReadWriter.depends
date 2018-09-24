@@ -1,0 +1,6 @@
+-main
+toplevels:
+modules:
+    nn_ns.txt.ToInputStream
+resources:
+

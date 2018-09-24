@@ -1,0 +1,8 @@
+qname = qualified_module_name
+    <qname> = (<pkg> '.')* <module>
+    regex"\w+(\.\w+)*"
+
+example:
+    "java.lang.String"
+
+

@@ -1,0 +1,14 @@
+depends_info
+    :: (Bool, [String], [String], [String])
+depends_info = (has_main, toplevels, modules, resources)
+
+result of read_DependsFile:
+    read_DependsFile :: (File|Path) -> DependsInfo
+
+example:
+    (True
+    , ['UnexportedClass', 'Another']
+    , ['xxx.yyy.XClass']
+    , ['/xxx/yyy/images/1.png', 'sound/2.ogg']
+    )
+
