@@ -18,5 +18,12 @@ class StdVertexEchoMap(Mapping):
         raise KeyError
 
     def __iter__(self):
-        return range(len(self))
+        return iter(range(len(self)))
+
+if __name__ == '__main__':
+    m = StdVertexEchoMap(3)
+    assert len(m) == 3
+    assert dict(m) == {i:i for i in range(3)}
+    assert m[2] == 2
+    for k,v in m.items(): print(k,v)
 
