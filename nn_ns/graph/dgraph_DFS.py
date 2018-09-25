@@ -2,6 +2,8 @@
 
 '''
 vertex = std_vertex :: UInt[0..num_vertices]
+u2vtc :: [[StdVertex<num_vertices>]]{len=num_vertices}
+
 dgraph = u2vtc
 
 
