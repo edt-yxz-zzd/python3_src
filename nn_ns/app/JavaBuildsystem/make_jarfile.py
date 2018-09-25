@@ -49,6 +49,7 @@ from .resolve_mayDependsFile import find_mayClassFile
 from .read_all_dependencies import read_all_dependencies
 from .common import DependsFileExt, JavaFileExt, ClassFileExt
 from .replace_path_basename import replace_path_basename
+from .common import make_make_iter_classpaths
 
 from seed.mapping_tools.reverse_mapping import reverse_mapping
 from seed.exec.cmd_call import basic_cmd_call
@@ -257,7 +258,7 @@ def _verify_library_root2paths(library_root2paths):
     _reverse_root2relative_paths(_to_root2relative_paths(library_root2paths))
 
 def make_jarfile(
-    classpaths, main_qname, qualified_module_names
+    make_iter_classpaths, main_qname, qualified_module_names
     , *
     , verbose:bool
     , executable:bool
@@ -277,7 +278,7 @@ def make_jarfile(
     # make qname2info
     qualified_module_names = chain([main_qname], qualified_module_names)
     qname2info = read_all_dependencies(
-        classpaths, qualified_module_names, finding_ext=JavaFileExt)
+        make_iter_classpaths, qualified_module_names, finding_ext=JavaFileExt)
     del qualified_module_names
 
     # verify has_main
@@ -331,7 +332,7 @@ def main(argv=None):
     common_parser.add_argument(
                         '-cp', '--classpaths', type=str
                         , default=[], action='append'
-                        , help='java classpaths')
+                        , help='java classpath glob patterns')
     common_parser.add_argument(
                         '-v', '--verbose'
                         , action='store_true'
@@ -376,7 +377,7 @@ def main(argv=None):
 
     args = main_parser.parse_args(argv)
 
-    classpaths = args.classpaths
+    classpath_glob_patterns = args.classpaths
     verbose = args.verbose
     output_jarfile_path = args.output
     subcommand = args.subcommand
@@ -390,7 +391,8 @@ def main(argv=None):
         assert qnames
         [main_qname, *qnames] = qnames
 
-    make_jarfile(classpaths, main_qname, qnames
+    make_iter_classpaths = make_make_iter_classpaths(classpath_glob_patterns)
+    make_jarfile(make_iter_classpaths, main_qname, qnames
         , executable=executable
         , verbose=verbose
         , output_jarfile_path=output_jarfile_path

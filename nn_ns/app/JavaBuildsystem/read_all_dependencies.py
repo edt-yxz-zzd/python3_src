@@ -18,10 +18,12 @@ from nn_ns.graph_tools.u2vtc\
 from nn_ns.graph_tools.u2vtc.incomplete_u2vtc_to_vertice_set \
     import incomplete_u2vtc_to_vertice_set
 
+from .common import is_qname
+
 import os.path
 from itertools import chain
 
-def topological_sort_qname2info(qname2info, *, reverse):
+def topological_sort_qname2info(qname2info, *, reverse:bool):
     # depends_info = (has_main, toplevels, modules, resources)
     # info = (depends_info, (dependsfile_path, foundfile_path))
     # {qname:info} -> bool -> topo_sorted[(qname, info)]
@@ -49,16 +51,22 @@ def topological_sort_qname2info(qname2info, *, reverse):
     return sorted_qname_info_pairs
 
 
-def read_all_dependencies(classpaths, qualified_module_names
+def read_all_dependencies(make_iter_classpaths, qualified_module_names
     , *, finding_ext):
+    # verify qnames
     # depends_info = (has_main, toplevels, modules, resources)
     # info = (depends_info, (dependsfile_path, foundfile_path))
-    # [path] -> Iter qname -> ext -> dict<qname, info>|raise
+    # (()->Iter path) -> Iter qname -> ext -> dict<qname, info>|raise
+    qnames = {*qualified_module_names}
+    nonqnames = [n for n in qnames if not is_qname(n)]
+    if nonqnames:
+        raise TypeError(f'not qnames: {nonqnames}')
+
     (qname2info
     ,qname_set__not_found_DependsFile
     ,qname_set__not_found_foundfile
     ) =  read_all_dependencies_ex(
-        classpaths, {*qualified_module_names}, {}, finding_ext=finding_ext)
+        make_iter_classpaths, qnames, {}, finding_ext=finding_ext)
 
 
     if qname_set__not_found_DependsFile or qname_set__not_found_foundfile:
@@ -67,13 +75,13 @@ def read_all_dependencies(classpaths, qualified_module_names
 
 
 def read_all_dependencies_ex(
-    classpaths:"seq<str>"
+    make_iter_classpaths:"() -> Iter str"
     , qname_set:"set<str>"
     , qname2info:"dict<str, (int, (bool, [str], [str]), (str, str))>"
     , *, finding_ext):
+    # donot verify qnames; since used to increasingly update data
     # depends_info = (has_main, toplevels, modules, resources)
-    # [path] -> set<qname> -> dict<qname, info> -> ext -> (dict<qname, info>, set<qname>, set<qname>)
-    len(classpaths)
+    # (()->Iter path) -> set<qname> -> dict<qname, info> -> ext -> (dict<qname, info>, set<qname>, set<qname>)
 
     for qname in list(qname_set):
         if qname in qname2info:
@@ -85,7 +93,7 @@ def read_all_dependencies_ex(
         qname = qname_set.pop()
         (may_dependsfile_path, may_foundfile_path) = \
             resolve_mayDependsFile_via_ex(
-                classpaths, qname, finding_ext=finding_ext)
+                make_iter_classpaths(), qname, finding_ext=finding_ext)
 
         if may_foundfile_path is None:
             assert may_dependsfile_path is None

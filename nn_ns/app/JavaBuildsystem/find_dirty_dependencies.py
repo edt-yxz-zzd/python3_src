@@ -16,10 +16,10 @@ from .common import JavaFileExt, ClassFileExt
 import os.path
 
 
-def find_dirty_dependencies(classpaths, qualified_module_names):
+def find_dirty_dependencies(make_iter_classpaths, qualified_module_names):
     # [path] -> Iter qname -> [dirty_javafile_path]
     qname2info = read_all_dependencies(
-        classpaths, qualified_module_names, finding_ext=JavaFileExt)
+        make_iter_classpaths, qualified_module_names, finding_ext=JavaFileExt)
 
     dirty_qname_javafile_path_pairs = find_dirty_dependencies_ex(qname2info)
     dirty_javafile_paths = [javafile_path

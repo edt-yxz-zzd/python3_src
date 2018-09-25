@@ -1,0 +1,11 @@
+
+classpaths :: [Path]
+    Path = String
+    java -cp <classpaths> ...
+
+make_iter_classpaths :: () -> Iter classpath
+    i.e. make_iter_classpaths() :: Iter classpath
+    for classpath in make_iter_classpaths():
+        ...
+    e.g. make_iter_classpaths = lambda: iter(classpaths)
+

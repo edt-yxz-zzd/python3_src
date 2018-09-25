@@ -1,3 +1,6 @@
 
 distinguish sourcepath classpath # javac
+handle "-cp xxx.jar" # now, only "-cp <dir>"
+
+
 
