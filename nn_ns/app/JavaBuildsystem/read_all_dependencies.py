@@ -10,12 +10,12 @@ __all__ = '''
 
 from .read_DependsFile import read_DependsFile
 from .resolve_mayDependsFile import resolve_mayDependsFile_via_ex
-from nn_ns.graph_utils.u2vtc\
+from nn_ns.graph_tools.u2vtc\
     .u2vtc_to_reversed_topological_ordered_strong_connected_components \
     import \
     u2vtc_to_reversed_topological_ordered_strong_connected_components \
     as u2vtc_to_rtopo_components
-from nn_ns.graph_utils.u2vtc.incomplete_u2vtc_to_vertice_set \
+from nn_ns.graph_tools.u2vtc.incomplete_u2vtc_to_vertice_set \
     import incomplete_u2vtc_to_vertice_set
 
 import os.path

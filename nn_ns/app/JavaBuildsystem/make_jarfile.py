@@ -50,6 +50,7 @@ from .read_all_dependencies import read_all_dependencies
 from .common import DependsFileExt, JavaFileExt, ClassFileExt
 from .replace_path_basename import replace_path_basename
 
+from seed.mapping_tools.reverse_mapping import reverse_mapping
 from seed.exec.cmd_call import basic_cmd_call
 
 import sys, os.path, re
@@ -147,7 +148,7 @@ def _make_args(
     #jar cfe IncrementalTextEditor.jar nn_ns.txt.IncrementalTextEditor nn_ns
     _,_,base_main_name = main_qname.rpartition('.')
     def iter_args__library_root2paths(library_root2paths):
-        for library_root, paths in library_root2paths.items():
+        for library_root, paths in sorted(library_root2paths.items()):
             for path in paths:
                 path = os.path.relpath(path, start=library_root)
                 yield '-C'
@@ -177,7 +178,7 @@ def _make_args(
     return args
 
 
-def _make_two_root2paths(qname2info):
+def _make_two_root2paths_dicts(qname2info):
     # -> (library_root2resource_paths, library_root2nonresource_paths)
 
     library_root2resource_paths = defaultdict(set)
@@ -227,7 +228,33 @@ def _make_two_root2paths(qname2info):
 
 
 
+def _to_root2relative_paths(root2paths):
+    root2relative_paths = {
+        root : [os.path.relpath(path, start=root) for path in paths]
+        for root, paths in root2paths.items()
+        }
+    return root2relative_paths
+def _reverse_root2relative_paths(root2relative_paths):
+    # raise if one relative_path map to multi-library_roots
+    # root2relative_paths -> relative_path2root
+    relative_path2roots = reverse_mapping(root2relative_paths, iter)
 
+    duplicated_relative_path2roots = {
+        relative_path : roots
+        for relative_path, roots in relative_path2roots.items()
+        if len(roots) != 1
+        }
+    if duplicated_relative_path2roots:
+        raise Exception(f'same relative_path correspondent to multi-library_roots: {duplicated_relative_path2roots}')
+
+    relative_path2root = {
+        relative_path : root
+        for relative_path, [root] in relative_path2roots.items()
+        }
+    return relative_path2root
+def _verify_library_root2paths(library_root2paths):
+    # does avoid duplicated relative path?
+    _reverse_root2relative_paths(_to_root2relative_paths(library_root2paths))
 
 def make_jarfile(
     classpaths, main_qname, qualified_module_names
@@ -265,7 +292,11 @@ def make_jarfile(
 
     # make args
     (library_root2resource_paths, library_root2nonresource_paths
-    ) = _make_two_root2paths(qname2info)
+    ) = _make_two_root2paths_dicts(qname2info)
+
+    # verify library_root2resource_paths, library_root2nonresource_paths
+    _verify_library_root2paths(library_root2resource_paths)
+    _verify_library_root2paths(library_root2nonresource_paths)
 
     args = _make_args(
                 main_qname

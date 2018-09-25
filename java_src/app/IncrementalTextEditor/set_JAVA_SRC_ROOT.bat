@@ -1,0 +1,2 @@
+:set_JAVA_SRC_ROOT
+set JAVA_SRC_ROOT=../..
