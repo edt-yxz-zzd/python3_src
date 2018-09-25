@@ -2,12 +2,12 @@
 
 __all__ = '''
     reverse_mapping
-    iter_singleton
+    make_iter_singleton
     '''.split()
 from collections import defaultdict
 
 
-def iter_singleton(x):
+def make_iter_singleton(x):
     yield x
 def reverse_mapping(mapping, value2iter_new_keys=None):
     r'''
@@ -16,17 +16,17 @@ reverse_mapping(mapping, value2iter_new_keys=None)
     value2iter_new_keys :: Maybe (v -> Iter k')
     result :: Map k' [k]
 
-def iter_singleton(x):
+def make_iter_singleton(x):
     yield x
 
 reverse_mapping(mapping)
     <==> reverse_mapping(mapping, None)
-    <==> reverse_mapping(mapping, iter_singleton)
+    <==> reverse_mapping(mapping, make_iter_singleton)
 
 #####################################
 reverse_mapping
     :: Ord k, Ord k' => (v -> Iter k') -> Map k v -> Map k' [k]
-reverse_mapping iter_singleton
+reverse_mapping make_iter_singleton
     :: Ord k, Ord k' => Map k k' -> Map k' [k]
 
 reverse_mapping iter
@@ -43,7 +43,7 @@ example:
 '''
     d = defaultdict(list)
     if value2iter_new_keys is None:
-        value2iter_new_keys = iter_singleton
+        value2iter_new_keys = make_iter_singleton
     for k, v in mapping.items():
         for _k in value2iter_new_keys(v):
             d[_k].append(k)
