@@ -3,58 +3,80 @@
 __all__ = '''
     read_all_dependencies
     read_all_dependencies_ex
-    qname2ordered_info_to_sorted_qname_info_pairs
+    topological_sort_qname2info
     '''.split()
 
 
 
 from .read_DependsFile import read_DependsFile
 from .resolve_mayDependsFile import resolve_mayDependsFile_via_ex
+from nn_ns.graph_utils.u2vtc\
+    .u2vtc_to_reversed_topological_ordered_strong_connected_components \
+    import \
+    u2vtc_to_reversed_topological_ordered_strong_connected_components \
+    as u2vtc_to_rtopo_components
+from nn_ns.graph_utils.u2vtc.incomplete_u2vtc_to_vertice_set \
+    import incomplete_u2vtc_to_vertice_set
+
 import os.path
+from itertools import chain
 
-def qname2ordered_info_to_sorted_qname_info_pairs(qname2ordered_info, *, reverse=False):
-    # ordered_info = (order, depends_info, (dependsfile_path, foundfile_path))
+def topological_sort_qname2info(qname2info, *, reverse):
+    # depends_info = (has_main, toplevels, modules, resources)
     # info = (depends_info, (dependsfile_path, foundfile_path))
-    # {qname:ordered_info} -> [(qname, info)]
-    #   sorted by reverse "order" field
-    def get_order(item):
-        qname, (order, depends_info, _) = item
-        return order
-    ls = sorted(qname2ordered_info.items(), key=get_order, reverse=reverse)
-    ls = [(qname, (depends_info, two_paths)) for qname, (order, depends_info, two_paths) in ls]
-    qname_info_pairs = ls
-    return qname_info_pairs
+    # {qname:info} -> bool -> topo_sorted[(qname, info)]
+    #   sorted by topological_order or reversed_topological_order
+    #   default to reversed_topological_order
+
+    incomplete_u2vtc = {
+        qname : modules
+        for qname, ((has_main, toplevels, modules, resources), _)
+        in qname2info.items()
+        }
+    vertices = incomplete_u2vtc_to_vertice_set(incomplete_u2vtc)
+    vertices = vertices - set(incomplete_u2vtc)
+    incomplete_u2vtc.update((v, []) for v in vertices)
+    u2vtc = incomplete_u2vtc; del incomplete_u2vtc
+
+    components = u2vtc_to_rtopo_components(u2vtc, using_std_vertex=False)
+    if not reverse:
+        # since components is reversed already
+        components.reverse()
+
+    sorted_qnamess = components
+    sorted_qnames = chain.from_iterable(sorted_qnamess)
+    sorted_qname_info_pairs = [(qname, qname2info[qname]) for qname in sorted_qnames]
+    return sorted_qname_info_pairs
 
 
-def read_all_dependencies(classpaths, qualified_module_name
+def read_all_dependencies(classpaths, qualified_module_names
     , *, finding_ext):
     # depends_info = (has_main, toplevels, modules, resources)
-    # ordered_info = (order, depends_info, (dependsfile_path, foundfile_path)
-    # [path] -> qname -> ext -> dict<qname, ordered_info>
-    (qname2ordered_info
+    # info = (depends_info, (dependsfile_path, foundfile_path))
+    # [path] -> Iter qname -> ext -> dict<qname, info>|raise
+    (qname2info
     ,qname_set__not_found_DependsFile
     ,qname_set__not_found_foundfile
     ) =  read_all_dependencies_ex(
-        classpaths, {qualified_module_name}, {}, finding_ext=finding_ext)
+        classpaths, {*qualified_module_names}, {}, finding_ext=finding_ext)
 
 
     if qname_set__not_found_DependsFile or qname_set__not_found_foundfile:
         raise Exception(f'qualified_module_names not found {finding_ext!r} files: {qname_set__not_found_foundfile}\nqualified_module_names not found correspondent DependsFile: {qname_set__not_found_DependsFile}')
-    return qname2ordered_info
+    return qname2info
 
 
 def read_all_dependencies_ex(
     classpaths:"seq<str>"
     , qname_set:"set<str>"
-    , qname2ordered_info:"dict<str, (int, (bool, [str], [str]), (str, str))>"
+    , qname2info:"dict<str, (int, (bool, [str], [str]), (str, str))>"
     , *, finding_ext):
     # depends_info = (has_main, toplevels, modules, resources)
-    # ordered_info = (order, depends_info, (dependsfile_path, foundfile_path)
-    # [path] -> set<qname> -> dict<qname, ordered_info> -> ext -> (dict<qname, ordered_info>, set<qname>, set<qname>)
+    # [path] -> set<qname> -> dict<qname, info> -> ext -> (dict<qname, info>, set<qname>, set<qname>)
     len(classpaths)
 
     for qname in list(qname_set):
-        if qname in qname2ordered_info:
+        if qname in qname2info:
             qname_set.remove(qname)
 
     qname_set__not_found_DependsFile = set()
@@ -88,12 +110,8 @@ def read_all_dependencies_ex(
         except:
             raise Exception(f"qname={qname!r}; path={dependsfile_path!r}")
 
-        ordered_info = \
-            (len(qname2ordered_info)
-            ,depends_info
-            ,(dependsfile_path, foundfile_path)
-            )
-        qname2ordered_info[qname] = ordered_info
+        info = (depends_info, (dependsfile_path, foundfile_path))
+        qname2info[qname] = info
 
         #may_pkg, may_sep, basename = qname.rpartition('.')
             # bug: pkg = basename if not may_pkg else may_pkg
@@ -101,9 +119,9 @@ def read_all_dependencies_ex(
 
         (has_main, toplevels, modules, resources) = depends_info
         for qname in modules:
-            if qname not in qname2ordered_info:
+            if qname not in qname2info:
                 qname_set.add(qname)
-    return qname2ordered_info, qname_set__not_found_DependsFile, qname_set__not_found_foundfile
+    return qname2info, qname_set__not_found_DependsFile, qname_set__not_found_foundfile
 
 
 

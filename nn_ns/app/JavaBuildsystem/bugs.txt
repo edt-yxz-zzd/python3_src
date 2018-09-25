@@ -25,6 +25,7 @@
     conclusion:
         make_executable_jarfile cannot handle UnexportedClass
         we should add UnexportedClass nane into DependsFile
+    fixed by update DependsFile version1->version2
 
 
 

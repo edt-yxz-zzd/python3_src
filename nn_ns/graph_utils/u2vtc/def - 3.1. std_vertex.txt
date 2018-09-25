@@ -1,0 +1,6 @@
+
+type StdVertex :: UInt -> *
+type StdVertex num_vertices = UInt[0..num_vertices-1]
+std_vertex :: StdVertex<num_vertices>
+
+

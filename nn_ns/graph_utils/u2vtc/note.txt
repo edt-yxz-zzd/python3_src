@@ -1,0 +1,6 @@
+nn_ns.graph.dgraph_DFS
+    assumes std_vertex
+    inside it:
+        u2vtc :: [[std_vertex]]
+
+

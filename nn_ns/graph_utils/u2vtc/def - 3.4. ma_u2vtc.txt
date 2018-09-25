@@ -1,0 +1,3 @@
+ma_u2vtc = u2vtc | array_u2vtc
+    mapping or sequence
+

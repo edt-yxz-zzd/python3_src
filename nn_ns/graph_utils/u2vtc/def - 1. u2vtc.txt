@@ -1,0 +1,17 @@
+
+# NOTE: vertex is hashable
+u2vtc :: {vertex : [vertex]}
+    multiedge directed graph with loops
+    len(u2vtc) == num_vertices
+        # i.e. complete; keys include all vertices without outgoing dedges
+
+[v in u2vtc[u]] ==>> [(u->v) is a dedge in dgraph]
+
+Hashable Vertex =>
+    # Vertex neednot be UInt[0..num_vertices-1]
+    type Vertex
+    type U2VTC vertex = {vertex : [vertex]} = Map vertex [vertex]
+    u2vtc :: U2VTC Vertex
+
+
+

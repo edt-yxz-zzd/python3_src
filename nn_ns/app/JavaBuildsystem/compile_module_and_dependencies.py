@@ -13,18 +13,19 @@ __all__ = '''
     '''.split()
 
 
-from .find_outdate_dependencies import find_outdate_dependencies
+from .find_dirty_dependencies import find_dirty_dependencies
 from seed.exec.cmd_call import basic_cmd_call
 import sys
 #import os, subprocess
 
-def compile_module_and_dependencies(classpaths, qualified_module_name, *, verbose=False):
+def compile_module_and_dependencies(classpaths, qualified_module_names, *, verbose):
     len(classpaths) # Iter Path # need not Seq Path
-    dirty_javafile_paths = find_outdate_dependencies(classpaths, qualified_module_name)
+
+    dirty_javafile_paths = find_dirty_dependencies(classpaths, qualified_module_names)
     compile_javafiles(classpaths, dirty_javafile_paths, verbose=verbose)
     return
 
-def compile_javafiles(classpaths, javafile_paths, *, verbose=False):
+def compile_javafiles(classpaths, javafile_paths, *, verbose):
     javafile_paths = tuple(javafile_paths)
     if not javafile_paths: return
 
@@ -58,8 +59,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description='compile_module_and_dependencies'
         )
-    parser.add_argument('qualified_main_module_name', type=str
-                        , help='program entry point; the main module')
+    parser.add_argument('qualified_module_names', type=str
+                        , default=[], action='append'
+                        , help='qualified module names') # may be empty
     parser.add_argument('-cp', '--classpaths', type=str
                         , default=[], action='append'
                         , help='java classpaths')
@@ -71,10 +73,15 @@ def main(argv=None):
 
     args = parser.parse_args(argv)
     classpaths = args.classpaths
-    main_qname = args.qualified_main_module_name
+    qnames = args.qualified_module_names
     verbose = args.verbose
 
-    compile_module_and_dependencies(classpaths, main_qname, verbose=verbose)
+    if verbose:
+        print(
+            'compile_module_and_dependencies'
+            f'(classpaths={classpaths}, qnames={qnames}, verbose={verbose})'
+            )
+    compile_module_and_dependencies(classpaths, qnames, verbose=verbose)
     parser.exit(0)
 
 if __name__ == "__main__":

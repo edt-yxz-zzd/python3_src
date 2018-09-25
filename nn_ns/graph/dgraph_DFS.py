@@ -1,6 +1,7 @@
 
 
 '''
+vertex = std_vertex :: UInt[0..num_vertices]
 dgraph = u2vtc
 
 
@@ -17,10 +18,27 @@ color change of v when visiting edge (u,v):
     red -> black : exit - EXIT
     grey -> grey : forward or cross edge, not finished - HFORWARD HCROSS
     grey -> black : forward or cross edge, finished - FORWARD CROSS
-    
+
 '''
 
-from sand import is_main
+__all__ = '''
+    dgraph_DFS
+
+    ENTER
+    BACK
+    LOOP
+    HEXIT
+    EXIT
+    HFORWARD
+    HCROSS
+    FORWARD
+    CROSS
+
+    WHITE
+    RED
+    GREY
+    BLACK
+    '''.split()
 
 
 # H stands for half
@@ -45,13 +63,13 @@ def dgraph_DFS(u2vtc, roots=None):
     _roots = roots
     roots = []
     roots_to_try = range(n) if _roots == None else _roots
-        
+
 ##    u2hexit_order = [None]*n
 ##    hexit_order = 0
 
     u2enter_order = [None]*n
     enter_order = 0
-    
+
     nRemainIncomeEdges = [0]*n
     nEdges = 0
     for vtc in u2vtc:
@@ -62,31 +80,31 @@ def dgraph_DFS(u2vtc, roots=None):
     nEdgesEnter = 0
     nEdgesExit = 0
     nEdgesEnterExit = 0
-    
-            
+
+
     color = [WHITE] * n
     for u in roots_to_try:
         c = color[u]
         assert c != RED
         if c != WHITE:
             continue
-        
+
         root = u
         roots.append(root)
 
-        
+
         stack = [iter((root,))] # a virtual income edge here
         nRemainIncomeEdges[root] += 1
         nEdgesEnter -= 1
         nEdgesExit -= 1
-        
+
         path = []
         stack_pop = False
         while stack:
             if stack_pop:
                 stack_pop = False
                 assert 0 < len(path) == len(stack)
-                
+
                 nEdgesExit += 1
                 node = path[-1]
                 assert nRemainIncomeEdges[node]
@@ -96,13 +114,13 @@ def dgraph_DFS(u2vtc, roots=None):
                 else:
                     case = EXIT
                     color[node] = BLACK
-                    
+
                 if len(path) == 1:
                     assert node == roots[-1]
                 yield case, path, node
                 nRemainIncomeEdges[node] -= 1
                 path.pop()
-                
+
             assert len(path) + 1 == len(stack)
             # node = next(stack[-1])
             for node in stack[-1]:
@@ -134,7 +152,7 @@ def dgraph_DFS(u2vtc, roots=None):
                 stack.append(iter(u2vtc[node]))
                 continue
 
-            
+
             if c == RED:
                 #color[node] = RED
                 assert len(path) > 1
@@ -162,24 +180,24 @@ def dgraph_DFS(u2vtc, roots=None):
                     case = 'H' + case
                 else:
                     color[node] = BLACK
-                    
+
                 yield case, path, node
-            
+
             nEdgesEnterExit += 1
             nRemainIncomeEdges[node] -= 1
             path.pop()
         else:
             assert not path
-                
-    
+
+
     if _roots == None:
         #assert hexit_order == n
         assert enter_order == n
         assert not any(nRemainIncomeEdges)
         for c in color: assert c == BLACK
         assert nEdges == nEdgesEnterExit + nEdgesExit == nEdgesEnterExit + nEdgesEnter
-    
-def test_dgraph_DFS():
+
+def _test_dgraph_DFS():
     dg = [[1, 2], [2], [], [0,1,2,3,4], [2,3,4]]
     dgs = [[], dg]
     for dg in dgs:
@@ -187,6 +205,6 @@ def test_dgraph_DFS():
             print(a)
     return
 
-if is_main(__name__):
-    test_dgraph_DFS()
-    
+if '__main__' == __name__:
+    _test_dgraph_DFS()
+

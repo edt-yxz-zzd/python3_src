@@ -1,0 +1,5 @@
+
+std_u2vtc :: U2VTC StdVertex<num_vertices>
+    std_u2vtc <: u2vtc
+    std_u2vtc.vertices == set(range(len(std_u2vtc)))
+

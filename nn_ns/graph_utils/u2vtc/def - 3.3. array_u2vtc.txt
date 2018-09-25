@@ -1,0 +1,9 @@
+
+array_u2vtc :: [StdVertex<num_vertices>]{len=num_vertices}
+    std_u2vtc, u2vtc are mapping
+    but array_u2vtc is array!!!
+    array_u2vtc is not u2vtc!!!
+
+    array_u2vtc == nn_ns.graph.dgraph_DFS.u2vtc
+
+

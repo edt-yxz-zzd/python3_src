@@ -1,0 +1,25 @@
+
+incomplete_u2vtc :: {vertex : [vertex]}
+    multiedge directed graph with loops
+    but its key may not include vertices without outgoing dedges
+    i.e.
+        [m is an incomplete_connected_u2vtc][not m[u]]
+            ==>> [(Map.remove u m) is an incomplete_connected_u2vtc]
+incomplete_u2vtc vs u2vtc
+    len(u2vtc) == num_vertices
+    len(incomplete_u2vtc) may be not num_vertices
+
+    u2vtc.keys include all vertices without outgoing dedges
+    incomplete_u2vtc.keys may not include vertices without outgoing dedges
+
+
+incomplete_u2vtc_without_isolated_vertices <: incomplete_u2vtc
+    multiedge directed graph with loops without isolated_vertices
+
+    [m is an incomplete_u2vtc_without_isolated_vertices]
+        # since has no isolated_vertices
+        #   , any vertex must have an outgoing or incoming dedge
+        ==>> [len(m.keys()\-/ \-/~ m.values()) == num_vertices]
+
+
+
