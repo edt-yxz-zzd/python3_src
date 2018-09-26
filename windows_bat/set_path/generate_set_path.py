@@ -1,4 +1,9 @@
 
+'''
+run_as_main = '__run_as_main__'
+if __name__ in ('__main__', run_as_main) or __name__.endswith('.' + run_as_main):
+    main()
+'''
 
 from pathlib import Path
 import winreg
@@ -17,10 +22,13 @@ class Global:
     set_path_bat_basename = 'set_path.bat'
     set_path_bat_tpl_basename = f'{set_path_bat_basename}.tpl'
 
-    command_tpl = r"c:\\windows\\System32\\cmd.exe /k @cd %1 & @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
-    reg_paths = [
-        r'HKEY_CLASSES_ROOT\Folder\shell\MS-DOS into\command'
-        ,r'HKEY_CLASSES_ROOT\*\shell\MS-DOS\command'
+    into_folder_command_tpl = r"c:\\windows\\System32\\cmd.exe /k @cd %1 & @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
+    same_folder_command_tpl = r"c:\\windows\\System32\\cmd.exe /k @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
+    reg_path_command_tpl_pairs = [
+        (r'HKEY_CLASSES_ROOT\Folder\shell\MS-DOS into\command'
+            , into_folder_command_tpl)
+        ,(r'HKEY_CLASSES_ROOT\*\shell\MS-DOS\command'
+            , same_folder_command_tpl)
         ]
 
     # use value_table instead
@@ -62,12 +70,17 @@ def update_windows_registry(windows_bat_folder):
     ) = mk_tpl_vars(windows_bat_folder)
     del tpl_var_bats_path
 
-    command = Global.command_tpl.format(
-        tpl_var_bats_path_double_backslash=tpl_var_bats_path_double_backslash)
-    command = command.replace('\\'*2, '\\')
+    def mk_command(command_tpl):
+        command = command_tpl.format(
+            tpl_var_bats_path_double_backslash
+                =tpl_var_bats_path_double_backslash
+            )
+        command = command.replace('\\'*2, '\\')
+        return command
 
-    value_table = {'': (winreg.REG_SZ, command)}
-    for path in Global.reg_paths:
+    for path, command_tpl in Global.reg_path_command_tpl_pairs:
+        command = mk_command(command_tpl)
+        value_table = {'': (winreg.REG_SZ, command)}
         reg_update_from_value_table(path, value_table)
 
 def genearate_set_path_bat(windows_bat_folder):
@@ -95,7 +108,8 @@ def main():
     genearate_set_path_bat(windows_bat_folder)
 
 
-if __name__ == '__main__':
+run_as_main = '__run_as_main__'
+if __name__ in ('__main__', run_as_main) or __name__.endswith('.' + run_as_main):
     main()
 
 

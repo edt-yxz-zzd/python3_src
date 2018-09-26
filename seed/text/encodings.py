@@ -68,13 +68,13 @@ register_virtual_module_from_name2attr(_encoding2encoding, 'known', __name__,
 
 
 #############  collect encoding info ##############
-
-sys_encoding = sys.getfilesystemencoding()
-text_encoding = locale.getpreferredencoding(False)
+sys_encoding = sys.getfilesystemencoding()          # utf8
+text_encoding = locale.getpreferredencoding(False)  # cp936
 # sys.stdout.reconfigure(encoding='utf-8') # since Python 3.7
-shell_out_encoding = sys.stdout.encoding
-shell_err_encoding = sys.stderr.encoding
-shell_in_encoding = sys.stdin.encoding
+shell_out_encoding = sys.stdout.encoding            # utf8
+shell_err_encoding = sys.stderr.encoding            # utf8
+shell_in_encoding = sys.stdin.encoding              # utf8
+
 
 
 name2BOM = {name : getattr(codecs, name)
