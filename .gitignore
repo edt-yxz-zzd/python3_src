@@ -4,4 +4,5 @@
 #    /foo/*
 #    !/foo/bar
 /**/__pycache__
+/java_src/**/*.class
 
