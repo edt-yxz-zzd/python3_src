@@ -30,6 +30,7 @@ from distutils.sysconfig import get_python_lib
 import os.path
 from pathlib import Path
 from runpy import run_path
+import sys
 
 class Global:
     site_packages_path = get_python_lib()
@@ -67,6 +68,7 @@ def run_generate_set_path():
             , run_name = '<runpy>.__run_as_main__')
 
 if __name__ == '__main__':
+    sys.path.append(Global.user_py_src_root)
     generate_path_configuration_file(Global.pth_prime_basename_without_ext)
-    d = run_generate_set_path()
+    run_generate_set_path()
 
