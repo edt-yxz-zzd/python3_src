@@ -20,7 +20,8 @@ __all__ = '''
     '''.split()
 from torrent_parser import BEncoder #, TorrentFileCreator
 from .parse_torrent import parse_torrent
-from seed.for_libs.for_os_path import split_path_into_parts
+from seed.for_libs.for_os_path.split_path_into_parts import \
+    split_path_into_parts
 #from seed.io.may_open import may_open_stdout
 from logging import warning
 warning(DeprecationWarning, 'the module is useless, since change the info_hash; but we can use it to detect which file_paths are not in the input torrent file')

@@ -1,0 +1,66 @@
+
+# env
+set svn_repos_basename=svn_repository
+set svn_repos=D:/software/media/control/%svn_repos_basename%
+set svn_repos_url=file:///%svn_repos%
+set svn_working_copy_parent=E:\my_data\program_source\svn_working_copy_parent
+set svn_working_copy=%svn_working_copy_parent%/%svn_repos_basename%
+set svnhome=C:\Program Files (x86)\Subversion
+set svn_server=%svnhome%\bin\svnserve.exe
+
+
+# setup
+svnadmin create --fs-type fsfs svn_repos
+cat %svn_repos%/db/fsfs.conf
+cat %svn_repos%/conf/svnserve.conf
+
+
+# file:///c:/... ÎÞÐèserver!!!!!
+# server
+svnserve -d -r %svn_repos%
+ctrl+c
+# or
+sc create svn binpath= "\"%svn_server%\" --service -r \"%svn_repos%\"" displayname= "Subversion Server" depend= Tcpip start= auto
+net stop svn
+sc delete svn
+
+        
+goto skip_svn_server
+###########################################################################
+svn-book
+Chapter 6. Server Configuration
+svnserve, a Custom Server
+svnserve as a Windows service
+First, notice that the svnserve.exe program must always be invoked with the --service option. Any other options to svnserve must then be specified on the same line, but you cannot add conflicting options such as --daemon (-d), --tunnel, or --inetd (-i). Options such as -r or --listen-port are fine, though. Second, be careful about spaces when invoking the SC.EXE command: the key= value patterns must have no spaces between key= and must have exactly one space before the value. Lastly, be careful about spaces in your command line to be invoked. If a directory name contains spaces (or other characters that need escaping), place the entire inner value of binpath in double quotes, by escaping them:
+
+C:\> sc create svn
+        binpath= "\"C:\program files\svn\bin\svnserve.exe\" --service -r C:\repos"
+        displayname= "Subversion Server"
+        depend= Tcpip
+        start= auto
+Also note that the word binpath is misleading¡ªits value is a command line, not the path to an executable. That's why you need to surround it with quotes if it contains embedded spaces.
+
+Once the service is defined, it can be stopped, started, or queried using standard GUI tools (the Services administrative control panel), or at the command line:
+
+C:\> net stop svn
+C:\> net start svn
+The service can also be uninstalled (i.e., undefined) by deleting its definition: sc delete svn. Just be sure to stop the service first! The SC.EXE program has many other subcommands and options; run sc /? to learn more about it.
+###########################################################################
+
+:skip_svn_server
+
+
+
+# working-copy
+svn ls %svn_repos_url%
+svn checkout %svn_repos_url% %svn_working_copy_parent%
+cd /D %svn_working_copy%
+svn mkdir trunk
+svn commit -m "mkdir trunk"
+svn ls %svn_repos_url%
+ls
+svn mkdir trunk/python3_src trunk/cpp03_src trunk/cpp11_src trunk/java_src
+svn mkdir trunk/plain_tex_src trunk/html_src trunk/windows_bat_src
+svn mkdir trunk/swig_src trunk/renpy_src trunk/key_elf_src
+svn mkdir trunk/haskell_src
+svn commit -m "mkdir multiple source folders"

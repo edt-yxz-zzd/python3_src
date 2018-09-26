@@ -1,0 +1,1 @@
+find %mathematica_home% -path *%1.nb | py -m nn_ns.fileformat.Mathematica.open_nb %mathematica_home%

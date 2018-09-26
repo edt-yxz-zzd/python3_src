@@ -1,0 +1,1 @@
+@py -m nn_ns.app.runpy_script_as_module %*

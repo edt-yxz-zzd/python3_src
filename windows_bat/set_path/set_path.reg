@@ -1,0 +1,12 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Folder\shell\MS-DOS方式]
+
+[HKEY_CLASSES_ROOT\Folder\shell\MS-DOS方式\command]
+@="c:\\windows\\System32\\cmd.exe /k @cd %1 & @E:\\my_data\\program_source\\windows_bat\\set_path\\set_path.bat"
+
+
+[HKEY_CLASSES_ROOT\*\shell\MS-DOS]
+
+[HKEY_CLASSES_ROOT\*\shell\MS-DOS\command]
+@="c:\\windows\\System32\\cmd.exe /k @E:\\my_data\\program_source\\windows_bat\\set_path\\set_path.bat"

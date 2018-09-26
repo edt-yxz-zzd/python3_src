@@ -1,0 +1,1 @@
+py -m nn_ns.internet.curl_wrapper.download_from_Library_Genesis %*

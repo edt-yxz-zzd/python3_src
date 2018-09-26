@@ -1,0 +1,1 @@
+D:\software\Internet\download_tool\curl_x64\src\curl %*

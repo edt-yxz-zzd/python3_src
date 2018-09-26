@@ -1,0 +1,1 @@
+py -m nn_ns.app.retry 56 35 18 --cmd curl --continue-at - --retry 99 -O %*

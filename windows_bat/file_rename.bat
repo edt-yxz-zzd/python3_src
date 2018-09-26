@@ -1,0 +1,1 @@
+ls -c -r -1 | py -m nn_ns.filedir.file_rename2 %*

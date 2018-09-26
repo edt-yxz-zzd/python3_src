@@ -1,0 +1,1 @@
+py -3.3 -m nn_ns.gui.show_pic -f ·½ÕýÐÐ¿¬_GBK -s 40 -B -H E:/temp_output/config/show_pic.history_file.utf8.txt E:\multimedia\picture E:\multimedia\picture\beauty E:\temp_output\comic E:\download\comic\  %*
