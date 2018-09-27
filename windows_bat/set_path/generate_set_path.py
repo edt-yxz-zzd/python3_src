@@ -1,5 +1,13 @@
 
 '''
+genearate_set_path_bat
+    genearate set_path.bat and other <name>.bat if <name>.bat.tpl exists
+update_windows_registry
+    right-click on file or directory will show a new menuitem named "MS-DOS" or "MS-DOS into"
+
+
+
+
 run_as_main = '__run_as_main__'
 if __name__ in ('__main__', run_as_main) or __name__.endswith('.' + run_as_main):
     main()
@@ -7,6 +15,7 @@ if __name__ in ('__main__', run_as_main) or __name__.endswith('.' + run_as_main)
 
 from pathlib import Path
 import winreg
+import sys, os
 from seed.windows.winreg_helper import reg_update_from_value_table
 '''
 import os.path
@@ -22,8 +31,8 @@ class Global:
     set_path_bat_basename = 'set_path.bat'
     set_path_bat_tpl_basename = f'{set_path_bat_basename}.tpl'
 
-    into_folder_command_tpl = r"c:\\windows\\System32\\cmd.exe /k @cd %1 & @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
-    same_folder_command_tpl = r"c:\\windows\\System32\\cmd.exe /k @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
+    into_folder_command_tpl = fr"c:\\windows\\System32\\cmd.exe /k @cd %1 & @{{tpl_var_bats_path_double_backslash}}\\{set_path_bat_dirname}\\{set_path_bat_basename}"
+    same_folder_command_tpl = fr"c:\\windows\\System32\\cmd.exe /k @{{tpl_var_bats_path_double_backslash}}\\{set_path_bat_dirname}\\{set_path_bat_basename}"
     reg_path_command_tpl_pairs = [
         (r'HKEY_CLASSES_ROOT\Folder\shell\MS-DOS into\command'
             , into_folder_command_tpl)
@@ -57,18 +66,27 @@ def mk_windows_bat_folder():
     return windows_bat_folder
 
 def mk_tpl_vars(windows_bat_folder):
+    tpl_var_sys = sys
+    tpl_var_NOTE = 'donot edit this generated file'
+
     tpl_var_bats_path = windows_bat_folder.resolve()
     tpl_var_bats_path = str(tpl_var_bats_path).replace('/', '\\')
 
     tpl_var_bats_path_double_backslash = \
         tpl_var_bats_path.replace('\\', '\\'*2)
-    return tpl_var_bats_path, tpl_var_bats_path_double_backslash
+    return dict(
+        tpl_var_sys=tpl_var_sys
+        , tpl_var_NOTE=tpl_var_NOTE
+        , tpl_var_bats_path=tpl_var_bats_path
+        , tpl_var_bats_path_double_backslash
+            =tpl_var_bats_path_double_backslash
+        )
 
 
 def update_windows_registry(windows_bat_folder):
-    (tpl_var_bats_path, tpl_var_bats_path_double_backslash
-    ) = mk_tpl_vars(windows_bat_folder)
-    del tpl_var_bats_path
+    tpl_vars = mk_tpl_vars(windows_bat_folder)
+    tpl_var_bats_path_double_backslash = tpl_vars[
+        'tpl_var_bats_path_double_backslash']
 
     def mk_command(command_tpl):
         command = command_tpl.format(
@@ -84,22 +102,24 @@ def update_windows_registry(windows_bat_folder):
         reg_update_from_value_table(path, value_table)
 
 def genearate_set_path_bat(windows_bat_folder):
+    tpl_vars = mk_tpl_vars(windows_bat_folder)
 
     set_path_bat_folder = Path(windows_bat_folder, Global.set_path_bat_dirname)
-    tpl_fname = Path(set_path_bat_folder, Global.set_path_bat_tpl_basename)
-    set_path_bat_tpl = tpl_fname.read_text(encoding=Global.encoding)
 
-    (tpl_var_bats_path, tpl_var_bats_path_double_backslash
-    ) = mk_tpl_vars(windows_bat_folder)
+    tpl_basenames = {Global.set_path_bat_tpl_basename}
+    for basename in os.listdir(set_path_bat_folder):
+        if basename.endswith('.bat.tpl'):
+            tpl_basenames.add(basename)
+    for tpl_basename in tpl_basenames:
+        tpl_fname = Path(set_path_bat_folder, tpl_basename)
+        bat_tpl_content = tpl_fname.read_text(encoding=Global.encoding)
+        bat_content = bat_tpl_content.format(**tpl_vars)
 
-    set_path_bat_content = set_path_bat_tpl.format(
-        tpl_var_NOTE = 'donot edit this generated file'
-        ,tpl_var_bats_path=tpl_var_bats_path
-        ,tpl_var_bats_path_double_backslash=tpl_var_bats_path_double_backslash
-        )
-
-    set_path_bat_fname = Path(set_path_bat_folder, Global.set_path_bat_basename)
-    set_path_bat_fname.write_text(set_path_bat_content, encoding=Global.encoding)
+        #bug: bat_fname = Path(set_path_bat_folder, tpl_basename)
+        #   == tpl_fname
+        bat_fname = tpl_fname.with_suffix('')
+        assert bat_fname.suffix == '.bat'
+        bat_fname.write_text(bat_content, encoding=Global.encoding)
 
 def main():
     windows_bat_folder = mk_windows_bat_folder()

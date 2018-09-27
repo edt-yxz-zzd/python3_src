@@ -92,4 +92,7 @@ def main(argv=None):
 if __name__ == "__main__":
     main()
 
+from seed.tiny import does_run_as_main
+if does_run_as_main(__name__):
+    main()
 

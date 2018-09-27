@@ -48,7 +48,6 @@ c:\python33;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTE
 
 set bats_path={tpl_var_bats_path}
 set set_bat_path=%bats_path%\set_path
-set src_py=E:\my_data\program_source\python3_src
 set 7z=py -m nn_ns.fileformat.zip_by_7z
 
 

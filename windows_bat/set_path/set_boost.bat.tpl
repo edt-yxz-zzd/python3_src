@@ -8,7 +8,7 @@ rem setboost should not be before setpython since using py_XXX in "cl_py" defini
 
 set boost=D:\software\programming\library\boost\boost_1_55_0
 ::: boost_build_stagedir=%boost%\binary_lib\x86_64_py33
-set boost_build_stagedir=%boost%\binary_lib\x86_64_py36
+set boost_build_stagedir=%boost%\binary_lib\x86_64_py{tpl_var_sys.version_info.major}{tpl_var_sys.version_info.minor}
 set boost_lib=%boost_build_stagedir%\lib
 set path=%boost%\tools\build\v2;%path%
 

@@ -29,6 +29,10 @@ __all__ = str2__all__('''
     py_cmp              # :: Ord a => a -> a -> -> (-1|0|+1)
     int2cmp             # :: int -> (-1|0|+1)
 
+    does_run_as_main    # :: String -> Bool
+                        # does_run_as_main(__name__)
+                        # does_run_as_main.alter_main_name :: String
+
     # seed.tiny.ECHO is a virtual module
     # from seed.tiny.ECHO import x,y,z
     ''')
@@ -76,7 +80,27 @@ def int2cmp(i):
         return 0
     return -1 if i < 0 else +1
 
+def does_run_as_main(__name__):
+    '''to replace '__name__ == "__main__"'
 
+usage:
+    if __name__ == '__main__':
+        ...
+    # now become:
+    if does_run_as_main(__name__):
+        ...
+why?
+    # is this valid: runpy.run_path(py_fname, run_name = '__main__')
+    runpy.run_path(py_fname, run_name = '<runpy>.__run_as_main__')
+
+why '.__run_as_main__' instead of '.__main__'
+    since '__main__.py' exists
+    and we assume __run_as_main__ does not exist
+'''
+    return (__name__ in ('__main__', '__run_as_main__')
+            or __name__.endswith('.__run_as_main__')
+            )
+does_run_as_main.alter_main_name = '__run_as_main__'
 
 
 
