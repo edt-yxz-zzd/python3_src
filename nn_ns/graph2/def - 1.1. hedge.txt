@@ -24,7 +24,12 @@ vtxA <- hedgeA -> aedge <- hedgeB -> vtxB
 hedge can use to represent the begin half of a virtual directed aedge in xgraph
     sometimes ugraph may want to assign a direction for aedge
     sometimes dgraph may want to assign arbitrary direction for aedge
-    we call this hedge "dhedge"
+    we call such hedge "dhedge"
+    e.g.
+        vtxA <- hedgeA -> aedge <- hedgeB -> vtxB
+        hedgeA =[dhedge]= virtual(vtxA->vtxB)
+        hedgeB =[dhedge]= virtual(vtxB->vtxA)
+        no matter whether aedge's type is (->->) or (<-<-) or (-><-) ...
 
 
 bgraph.hedge_eq(hedgeA, hedgeB)

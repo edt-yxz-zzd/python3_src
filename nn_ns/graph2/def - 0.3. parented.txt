@@ -1,0 +1,12 @@
+
+parented tree <: parented forest <: sourced forest
+parented tree <: rooted tree     <: sourced forest
+    directed or undirected
+
+.get_may_parent :: Graph -> Vertex -> Maybe Vertex
+
+unparented
+
+see also:
+    "tree/concept.txt"
+

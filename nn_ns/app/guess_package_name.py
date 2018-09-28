@@ -12,7 +12,7 @@ __all__ = '''
 
 
 
-from .is_valid_python_id import is_valid_python_id
+from seed.lang.is_valid_python_id import is_valid_python_id
 import os.path
 import inspect
 

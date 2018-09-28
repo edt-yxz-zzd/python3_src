@@ -15,8 +15,25 @@ implicit graph
         # since cannot color vertices
         * sourced finite uforest with vertex_eq
             # need vertex_eq to avoid parent since undirected
+            # no get_may_parent since undirected
+            #   we have to store ancestor_stack
+            #
+            # if is_local_outgo_hedges_circlic_ordered:
+            #   has outgo_hedge2next_outgo_hedge and hedge_eq
+            #   we neednot to store ancestor_children_iterator_stack
+
         * sourced finite DAG_as_compact_forest
             # need not vertex_eq to avoid parent since DAG
+            # no get_may_parent since many parents
+            #   we have to store ancestor_stack
+            #
+            # if is_parented:
+            #   has get_may_parent
+            #   we neednot to store parent!!!
+            #
+            # if is_local_outgo_hedges_linear_ordered:
+            #   has outgo_hedge2may_next_outgo_hedge and get_may_first_outgo_hedge
+            #   we neednot to store ancestor_children_iterator_stack
 
     e.g.
         Internet
@@ -25,13 +42,12 @@ implicit graph
 
 finite graph:
 infinite graph:
-    # using iterative bdfs instead
-    # using iterative bfs/dfs instead
+    # using iterative deepening widening bdfs instead
 
     when doing dfs, only below graphs supported:
         * finite graph
             # * out_rooted finite depth finite fanout forest
-    when doing iterative dfs, only below graphs supported:
+    when doing iterative deepening dfs, only below graphs supported:
         * finite sourced finite fanout infinite uforest with vertex_eq
             # need vertex_eq to avoid parent since undirected
         * finite sourced finite fanout infinite DAG_as_compact_forest

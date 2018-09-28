@@ -90,15 +90,19 @@ usage:
     if does_run_as_main(__name__):
         ...
 why?
-    # is this valid: runpy.run_path(py_fname, run_name = '__main__')
+    # is this valid?: runpy.run_path(py_fname, run_name = '__main__')
     runpy.run_path(py_fname, run_name = '<runpy>.__run_as_main__')
 
 why '.__run_as_main__' instead of '.__main__'
     since '__main__.py' exists
     and we assume __run_as_main__ does not exist
 '''
-    return (__name__ in ('__main__', '__run_as_main__')
-            or __name__.endswith('.__run_as_main__')
+    #return (__name__ in ('__main__', '__run_as_main__')
+    return (__name__ == '__main__'
+            or (__name__.endswith('.__run_as_main__')
+                and '<' in __name__
+                and '>' in __name__
+                )
             )
 does_run_as_main.alter_main_name = '__run_as_main__'
 

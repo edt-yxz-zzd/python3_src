@@ -5,11 +5,14 @@ iddfs = iterative deepening depth-first search
 
 
 dfs_edge = tree_edge | back_edge | cross_edge | forward_edge
-    #           target vertex state
+    # edge = (self_vtx->target)
+    # root = current dfs tree root
+    #
+    # dfs_edge  - target vertex state
     tree_edge   - unvisited
     back_edge   - visiting # include loops
-    cross_edge  - visited & preorder[target] < preorder[self]
-    forward_edge- visited & preorder[target] > preorder[self]
+    cross_edge  - visited & preorder[target] < preorder[root]
+    forward_edge- visited & preorder[target] > preorder[root]
 
 explicit_graph | implicit_graph
 
