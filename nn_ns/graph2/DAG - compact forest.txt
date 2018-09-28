@@ -1,8 +1,0 @@
-
-we can treat DAG as a compact forest
-forest node = a path begin at any DAG source vertex
-forest edge of n1 and n2 = DAG edge of target(n1 path) and target (n2 path)
-
-
-
-

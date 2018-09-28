@@ -1,0 +1,8 @@
+
+see: "def - 2.2.2. bidirected graph.txt"
+
+# now MUST use: aedge laedge haedge oaedge  ehaedge ihaedge eoaedge ioaedge doaedge         loop_oaedge nonloop_oaedge
+#
+# deprecated:   edge  ledge  hhedge [fedge] ehaedge ihedge  oedge   [uedge] [dedge] [xedge] [loop]      [nonloop_fedge]
+#   [xxx] are OK, not deprecated
+

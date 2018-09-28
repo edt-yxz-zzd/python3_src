@@ -1,0 +1,39 @@
+explicit graph
+    vertex_eq
+        so we can have an inefficient Map<Vertex, color> by [(Vertex, color)]
+    maybe infinite
+        e.g. 0->1->2->...
+implicit graph
+    may no num_vertices
+        # infinite or not explicit
+    may no vertex_eq/aedge_eq
+        # not algorithm
+        # vertex = graph | knot | lambda_expr | group_repr | ...
+        # vertex_eq = GI | knot iso | formal system isomorphism | ...
+
+    when doing dfs, only below graphs supported:
+        # since cannot color vertices
+        * sourced finite uforest with vertex_eq
+            # need vertex_eq to avoid parent since undirected
+        * sourced finite DAG_as_compact_forest
+            # need not vertex_eq to avoid parent since DAG
+
+    e.g.
+        Internet
+        game state graph # AI
+        filesystem
+
+finite graph:
+infinite graph:
+    # using iterative bdfs instead
+    # using iterative bfs/dfs instead
+
+    when doing dfs, only below graphs supported:
+        * finite graph
+            # * out_rooted finite depth finite fanout forest
+    when doing iterative dfs, only below graphs supported:
+        * finite sourced finite fanout infinite uforest with vertex_eq
+            # need vertex_eq to avoid parent since undirected
+        * finite sourced finite fanout infinite DAG_as_compact_forest
+            # need not vertex_eq to avoid parent since DAG
+

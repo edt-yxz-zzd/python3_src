@@ -1,0 +1,16 @@
+
+xaedge = uaedge | daedge
+xaedge = xgraph aedge
+uaedge = ugraph aedge
+daedge = dgraph aedge
+
+old:
+    # now should not use xedge,uedge,dedge
+    xedge = uedge | dedge
+    xedge = xaedge = xgraph aedge
+    uedge = uaedge = ugraph aedge
+    dedge = daedge = dgraph aedge
+
+not qedge!!!
+    uqedge/dqedge has other sense!
+

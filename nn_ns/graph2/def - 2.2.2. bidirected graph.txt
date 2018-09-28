@@ -1,6 +1,17 @@
+# now MUST use:
+#   aedge laedge haedge oaedge[faedge]
+#   ehaedge ihaedge eoaedge ioaedge[uedge] doaedge[dedge]
+#   loop_oaedge[loop] nonloop_oaedge[nonloop_fedge]
+
+# now many hedges the aedge connect to?
+# l - loose : 0
+# h - half  : 1
+# f - full  : 2
+# o - ordinary == full
 
 bidirected graph
 bidirected_graph<V,AEdge, HEdge> = ({V}, {AEdge}, {HEdge:(V,bool,AEdge)})
+    #deprecated:
     # edge, aedge
     # ledge, hhedge, fedge
     # loop, nonloop_fedge

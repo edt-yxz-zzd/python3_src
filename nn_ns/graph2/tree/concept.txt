@@ -1,6 +1,32 @@
 
 height/depth/level
 
+unrooted tree
+    No!!!! ??MUST be undirected??
+        directed linear graph but donot know in_tree or out_tree
+    may have explicit parent if directed
+
+rooted tree
+    out_rooted tree
+    in_rooted tree
+    have implicit parent
+
+out_tree
+    out_rooted
+    vtx has outgoings
+    self outgoing: self->child
+in_tree
+    in_rooted
+    vtx has incomes
+    self income: child->self
+
+undirected tree
+    no explicit parent
+    may have implicit parent if rooted
+directed tree
+    vtx has parent
+    out_tree has no child->parent
+    in_tree has no parent->child
 
 [rooted unordered tree]
     -- has a root

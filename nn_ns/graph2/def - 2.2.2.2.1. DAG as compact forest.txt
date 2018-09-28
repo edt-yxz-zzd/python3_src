@@ -1,0 +1,12 @@
+
+we can treat DAG as a compact forest
+forest node = a path (may empty) begin at any DAG source vertex
+forest edge =[logical_eq]= a nonempty path begin at any DAG source vertex
+forest edge (n1->n2) =[logical_eq]= to_DAG_path(n2)
+    assert to_DAG_path(n2)[:-1] == to_DAG_path(n1)
+
+why?
+    used when we try to canon unlabelled unrooted undirected forest to [labelled] rooted directed compact forest.
+    the result rooted directed compact forest is represented by a DAG.
+
+

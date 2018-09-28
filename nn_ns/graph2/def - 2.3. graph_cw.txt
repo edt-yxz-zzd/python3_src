@@ -1,5 +1,7 @@
 
 graph_cw is not a graph!
+    graph with color weight info
+    to offer extra info into spec algo
 
 graph_cw = graph_cw
             { .xgraph :: xgraph

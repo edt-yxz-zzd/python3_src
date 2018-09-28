@@ -1,7 +1,8 @@
 
 see: "def - hedge.txt" :: dhedge
     # ugraph or dgraph
-    dhedge = aedge + arbitray_direction
+    dhedge is hedge
+        named by logical_usage
 
 see: "def - bidirected graph.txt"
     which bidirected graph is undirected graph

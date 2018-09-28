@@ -1,0 +1,15 @@
+
+# graph may not be dgraph
+#   e.g. utree
+rooted graph = (in_rooted, root, graph) :: (Bool, Vertex, Graph)
+    #in_rooted or out_rooted
+    out_rooted is sourced graph
+    in_rooted is sinked graph
+
+in_rooted graph = (root, graph) :: (Vertex, Graph)
+out_rooted graph = (root, graph) :: (Vertex, Graph)
+sourced graph = (sources, graph) :: ([Vertex], Graph)
+sinked graph = (sinked, graph) :: ([Vertex], Graph)
+
+see also:
+    "tree/concept.txt"
