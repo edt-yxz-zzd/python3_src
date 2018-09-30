@@ -1,0 +1,7 @@
+-main
+toplevels:
+modules:
+    seed.abc.IConsumerExc
+    seed.abc.IBiConsumerExc
+resources:
+

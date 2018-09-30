@@ -1,0 +1,10 @@
+-main
+toplevels:
+modules:
+    seed.tuples.Pair
+    seed.collection_util.CollectionUtil
+    seed.collection_util.Repr
+    nn_ns.abc.IParser
+    nn_ns.parsers.IChoiceParser
+resources:
+

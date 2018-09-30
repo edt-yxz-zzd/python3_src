@@ -1,0 +1,8 @@
+
+graph2.dfs/
+    dfs.set(dfs_color_manager, dfs_ancestor_manager, dfs_childiter_manager)
+    dfs_color_manager.set(dfs_obj)
+    dfs_ancestor_manager.set(dfs_obj)
+    dfs_childiter_manager.set(dfs_obj)
+
+

@@ -1,0 +1,7 @@
+-main
+toplevels:
+modules:
+    seed.collection_util.CollectionUtil
+    seed.tuples.Pair
+resources:
+

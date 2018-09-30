@@ -1,0 +1,9 @@
+jc_all -cp . nn_ns.cli.argparser.ParseAllPrefixedArguments
+jc_all -cp . seed.collection_util.CollectionUtil
+javac -cp . seed/collection_util/CollectionUtil.java -Xlint:unchecked
+jc_all -cp . seed.collection_util.PairsBuilder
+javac -cp . seed/collection_util/PairsBuilder.java -Xlint:unchecked
+javac -cp . seed/collection_util/ArrayListBuilder.java -Xlint:unchecked
+jc_all -cp . nn_ns.txt.IncrementalTextEditor
+javac -cp . nn_ns/txt/IncrementalTextEditor.java -Xlint:unchecked
+

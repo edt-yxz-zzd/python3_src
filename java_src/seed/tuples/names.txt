@@ -1,0 +1,18 @@
+The unique 0-tuple is called the null tuple.
+a 1-tuple is called a singleton
+a 2-tuple is called an ordered pair
+a 3-tuple is a triple or triplet
+
+Empty|Void|Nullple, Singleton, Pair, Triple, Quadruple, Quintuple, ...
+    Unit - Empty or Singleton??
+
+https://en.wikipedia.org/wiki/List_of_multiple_births
+1 Cases by number
+    1.1 Twins (2)
+    1.2 Triplets (3)
+    1.3 Quadruplets (4)
+    1.4 Quintuplets (5)
+    1.5 Sextuplets (6)
+    1.6 Septuplets (7)
+    1.7 Octuplets (8)
+    1.8 Nonuplets (9)

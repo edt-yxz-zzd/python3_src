@@ -1,0 +1,97 @@
+
+
+parameters:
+    # positional_parameter
+    positional_option = {'name': 'output', ...}
+        usage:
+            '-:<path>'
+
+            if not path.startsWith('-'):
+                '<path>'
+
+            # num_args='+'
+            '-[:]:<path>:<path>'
+
+    # optional_parameters
+    keyword_option = {'flags': {'-i', '--input'}, ...}
+        usage:
+            '-i=<path>'
+            '-i <path>'
+
+            # num_args='+'
+            '-i[:]=<path>:<path>'
+            '-i[;]=<path>;<path>'
+
+        error:
+            '-i:<path>'
+            '-i<path>'
+
+type/choices:
+    option = {'type'=T.class
+        # S <: T
+        , 'parser'=Parser<S>.class # Parser<S>::parse(String)->S
+        }
+help/default:
+    option = {'help'=String
+            #, 'required'=Boolean
+            , 'default'=Maybe String # used to show and parse
+            , 'choices'=String[]
+            # if default==null then required=true
+            # if this_option in required_positionals, then required=true
+            }
+action:
+    option = {'action':??}
+        # appear only once
+        'store_final'
+            # if num_args==null, then result_type=T
+            # if num_args!=null, then result_type=ArrayList<T>
+
+        # appear many times
+            'overwrite'     # default
+                # if num_args==null, then result_type=T
+                # if num_args!=null, then result_type=ArrayList<T>
+
+            # default==null
+                'store_true'
+                    # result_type=Boolean
+                'append'
+                    # if num_args==null, then result_type=ArrayList<T>
+                    # if num_args!=null, then result_type=ArrayList<ArrayList<T> >
+                'count'
+                    # result_type=UInt
+
+num_args:
+    option = {'num_args'=Maybe String}
+        # regex"\d+(,\*)?|[*+]|{\d*:}"
+        # null: result_type = T
+        # else: result_type = ArrayList<T>
+        #
+        # '0' '1' '2' ...   # 'n' == '{n:n:}'
+        # '*', '+'          # '*' == '{::}', '+' == '{1::}'
+        # '5,*'             # '5,*' == {5::}
+        #
+        # '{[min]:[max]:[step]}'
+        # more=min+step
+        # '{[min[,more]]..[max]}
+        #
+
+parser(add_help=true, ...)
+parser.add_options(...)
+    required_positional_options :: [Option]
+    default_positional_options :: [Option]
+    remaining_positional_option :: Option
+
+    required_keyword_options :: [Option]
+    default_keyword_options :: [Option]
+    dynamic_keyword_option_alias_namess :: [[String]]
+        # regex "(-\w|--\w+):([^=]+)=(.*)"
+        #
+        # {{'-D', '--define'}, ...}
+        # -D:xxx=xxxx
+        # --define:xxx=xxxx
+
+
+parser(argument_prefix='-:', remaining_all_arguments_sep='--', ...)
+    see:
+        "NOTE/shell/howto/how to avoid recognizing argument as option[cli].txt"
+

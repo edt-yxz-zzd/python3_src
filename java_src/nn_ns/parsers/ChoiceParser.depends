@@ -1,0 +1,7 @@
+-main
+toplevels:
+modules:
+    nn_ns.abc.IParser
+    nn_ns.parsers.IChoiceParser
+resources:
+

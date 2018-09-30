@@ -1,0 +1,4 @@
+java.util.Optional
+immutable
+<==> Maybe
+https://stackoverflow.com/questions/34553034/why-are-java-optionals-immutable

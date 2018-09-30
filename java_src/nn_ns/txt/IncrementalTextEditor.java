@@ -65,6 +65,25 @@ menu:
 
 package nn_ns.txt;
 
+import nn_ns.txt.ClipboardHandler;
+import nn_ns.txt.TinyTextReadWriter;
+import nn_ns.gui.Dialogs;
+
+import nn_ns.cli.argparser.ParseAllPrefixedArguments;
+import static nn_ns.cli.argparser.ParseAllPrefixedArguments.parse_all_prefixed_arguments;
+import static nn_ns.cli.argparser.ParseAllPrefixedArguments.mkOptionArgs;
+import static nn_ns.cli.argparser.ParseAllPrefixedArguments.make_help_string;
+import static nn_ns.cli.argparser.ParseAllPrefixedArguments.OptionArgs;
+import static nn_ns.cli.argparser.ParseAllPrefixedArguments.ParseAllPrefixedArgumentsException;
+
+import nn_ns.parsers.EchoParser;
+import nn_ns.parsers.ChoiceParser;
+import nn_ns.abc.IParser;
+import seed.collection_util.CollectionUtil;
+import seed.collection_util.PairsBuilder;
+import seed.tuples.Pair;
+
+
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;
@@ -87,26 +106,35 @@ import java.awt.Color;
 
 import javax.swing.JOptionPane;
 
-import nn_ns.txt.ClipboardHandler;
-import nn_ns.txt.TinyTextReadWriter;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
-import nn_ns.gui.Dialogs;
 
 
-public class IncrementalTextEditor extends JFrame implements ActionListener
+public class IncrementalTextEditor extends JFrame
+    implements ActionListener
+    //, ParseAllPrefixedArguments
+    //  //can access to its static classes!!
+    //  //cannot access to its static methods!!
 {
     // Text component
     JTextArea area_to_show;
+        // does_scroll_to_last_row
+        //
+        // getCaretPosition
+        // setCaretPosition
+        // moveCaretPosition ==>> select text
+        // modelToView
     JTextArea area_to_edit;
     JTextArea saved_last_focus_area;
     Font _font;
+    final boolean does_scroll_to_last_row;
 
     // Frame
     JFrame frame;
@@ -303,9 +331,13 @@ public class IncrementalTextEditor extends JFrame implements ActionListener
     }
 
     // Constructor
-    IncrementalTextEditor(final Path txt_path, final Charset encoding, final Font font)
+    IncrementalTextEditor(
+        final Path txt_path
+        , final Charset encoding, final Font font
+        , final boolean does_scroll_to_last_row)
     throws IOException
     {
+        this.does_scroll_to_last_row = does_scroll_to_last_row;
         init(txt_path.normalize().toString(), font);
         open(txt_path, encoding);
     }
@@ -384,6 +416,9 @@ public class IncrementalTextEditor extends JFrame implements ActionListener
             on_QuitWithoutSave();
             throw e;
         }
+        assert area_to_show.getCaretPosition() == 0;
+        if (this.does_scroll_to_last_row)
+            area_to_show.setCaretPosition(area_to_show.getText().length());
 
         this._txt_path = txt_path;
         this._encoding = encoding;
@@ -435,7 +470,7 @@ public class IncrementalTextEditor extends JFrame implements ActionListener
 
         //System.err.println(font_name);
         //System.err.println(new_font.getFamily());
-        //bug: if (new_font.getFamily() == font_name) {
+        //bug: if (new_font.getFamily() == font_name)
         if (new_font.getFamily().equals(font_name)) {
             // new_font may be "Dialog" if font_name not exists
             this.setTextFont(new_font);
@@ -594,35 +629,98 @@ public class IncrementalTextEditor extends JFrame implements ActionListener
 
     // Main class
     public static void main(String args[])
-    throws IOException
+    throws Exception // IOException
     {
-        final String usage = "usage:\n\t<this_program> <input_text_path> [encoding [font]]";
-        final String example = "example:\n\tjava -cp . IncrementalTextEditor IncrementalTextEditor.java utf8 \"Anonymous Pro PLAIN 24\"";
-        if (args.length == 0){
-            System.err.println("error:\n\ttoo few args!");
-            System.err.println(usage);
-            System.err.println(example);
+        final String example = "example:\n\tjava -cp . nn_ns.txt.IncrementalTextEditor -i=\"test.txt\" -e=\"utf8\" --font=\"Anonymous Pro PLAIN 24\"";
+        final String description = "IncrementalTextEditor: text grows only";
+
+        Map<String, String> prefix2option_name =
+            new PairsBuilder<String,String>()
+                .iadd("-i=", "input_text_path")
+                .iadd("--input=", "input_text_path")
+                .iadd("-e=", "encoding")
+                .iadd("--encoding=", "encoding")
+                .iadd("--font=", "font")
+                .iadd("--scroll_to_last_row=", "does_scroll_to_last_row")
+                .iadd("-h=", "does_show_help")
+                .iadd("--help=", "does_show_help")
+                .mkHashMap();
+
+
+        IParser<String> echo_parser = new EchoParser();
+        IParser<Boolean> bool_parser = new ChoiceParser<>(
+                //bug:(s)->(s=="true"), Arrays.asList("false", "true"));
+                (s)->s.equals("true"), Arrays.asList("false", "true"));
+
+        Map<String, OptionArgs> option_name2option_args =
+            new PairsBuilder<String,OptionArgs>(
+            ).iadd("input_text_path"
+                ,mkOptionArgs(null, echo_parser
+                    , "input_text_path, show in upper window")
+            ).iadd("encoding"
+                ,mkOptionArgs("utf8", echo_parser
+                    , "encoding of input_text_path")
+            ).iadd("font"
+                ,mkOptionArgs("", echo_parser
+                    , "font family")
+             ).iadd("does_scroll_to_last_row"
+                ,mkOptionArgs("false", bool_parser
+                    , "scroll upper windows to last row")
+           ).iadd("does_show_help"
+                ,mkOptionArgs("false", bool_parser
+                    , "show help and exit")
+            ).mkHashMap();
+
+        final boolean override = false;
+
+        Pair<Map<String, Object>, ArrayList<String>> result_pair = null;
+        try{
+            result_pair = parse_all_prefixed_arguments
+                (CollectionUtil.to_iterator(args)
+                ,prefix2option_name
+                ,option_name2option_args
+                ,override
+                );
+            if (!result_pair.snd().isEmpty()){
+                throw new ParseAllPrefixedArgumentsException(
+                    String.format("unknown arguments: %s"
+                                , result_pair.snd()
+                                )
+                    );
+            }
+        } catch(Exception e){
+            System.err.println(make_help_string(
+                prefix2option_name
+                , option_name2option_args
+                , description
+            ));
+            throw e;
+        }
+
+        Map<String, Object> option_name2result = result_pair.fst();
+        boolean does_show_help = (Boolean)(option_name2result
+                .get("does_show_help"));
+        if (does_show_help) {
+            System.out.println(make_help_string(
+                prefix2option_name
+                , option_name2option_args
+                , description
+            ));
             return;
         }
-        else if (args.length > 3){
-            System.err.println("error: too many args!");
-            System.err.println(usage);
-            System.err.println(example);
-            return;
-        }
 
-        Path txt_path = Paths.get(args[0]);
-        Charset encoding = StandardCharsets.UTF_8;
-        String font_description = null;
+        boolean does_scroll_to_last_row = (Boolean)(option_name2result
+                .get("does_scroll_to_last_row"));
 
-        if (args.length >= 2)
-            encoding = Charset.forName(args[1]);
-        if (args.length >= 3)
-            font_description = args[2];
+        Path txt_path = Paths.get((String)(option_name2result
+                .get("input_text_path")));
+        Charset encoding = Charset.forName((String)(option_name2result
+                .get("encoding")));
+        Font font = Font.decode((String)(option_name2result
+                .get("font")));
 
-        Font font = Font.decode(font_description);
-
-        IncrementalTextEditor editer = new IncrementalTextEditor(txt_path, encoding, font);
+        IncrementalTextEditor editer = new IncrementalTextEditor(
+            txt_path, encoding, font, does_scroll_to_last_row);
         //editer.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         editer.frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         editer.frame.addWindowListener(new WindowAdapter() {
