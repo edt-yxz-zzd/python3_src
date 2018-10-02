@@ -1,0 +1,10 @@
+
+classpaths
+    :: Iter Path
+    or [Path]
+    it depends.
+
+Path = DirPath | JarFilePath
+
+
+

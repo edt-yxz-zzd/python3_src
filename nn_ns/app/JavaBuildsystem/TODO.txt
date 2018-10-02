@@ -2,5 +2,7 @@
 distinguish sourcepath classpath # javac
 handle "-cp xxx.jar" # now, only "-cp <dir>"
 
-
+-o <dir/file>
+    ==>>
+        "-o <file>" or "-d <dir>"
 

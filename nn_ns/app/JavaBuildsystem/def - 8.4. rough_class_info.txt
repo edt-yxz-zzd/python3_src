@@ -1,0 +1,10 @@
+rough_class_info
+    = (source_javafile_path, depended_iqnames)
+    :: (FileName, Set IQName)
+    :: (String, Set String)
+
+result of classfile_xpaths2rough_class_infos:
+    classfile_xpaths2rough_class_infos
+        :: [Path] -> [ClassfileXPath] -> [(FileName, Set IQName)]
+        # [classpath] -> [classfile_xpath] -> [rough_class_info]
+

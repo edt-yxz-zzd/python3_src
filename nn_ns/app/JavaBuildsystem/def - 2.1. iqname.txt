@@ -1,0 +1,5 @@
+
+iqname = inner_qname
+e.g.
+    pkg.MyClass$1
+    pkg.MyClass$InnerClass$InnerClass2

@@ -1,0 +1,6 @@
+dynamic_option
+
+{String:[String]}
+
+-D:xxx=yyy -D:aaa=bbb
+

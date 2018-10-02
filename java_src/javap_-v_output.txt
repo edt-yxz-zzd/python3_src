@@ -1,0 +1,46 @@
+Classfile /E:/my_data/program_source/github/edt-yxz-zzd/python3_src/java_src/_try/javap_public_whether_show_toplevel.class
+  Last modified 2018-10-1; size 1677 bytes
+  MD5 checksum 99a2c7e2e0fc163c292e913896b9be5b
+  Compiled from "javap_public_whether_show_toplevel.java"
+public class _try.javap_public_whether_show_toplevel
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #17.#34        // java/lang/Object."<init>":()V
+   #2 = Fieldref           #16.#35        // _try/javap_public_whether_show_toplevel.i:I
+   #3 = String             #36            // ////////
+   <...>
+   #16 = Class              #58            // _try/javap_public_whether_show_toplevel
+  #17 = Class              #59            // java/lang/Object
+  #18 = Class              #60            // _try/javap_public_whether_show_toplevel$inner
+  #19 = Utf8               inner
+  <...>
+  #58 = Utf8               _try/javap_public_whether_show_toplevel
+  #59 = Utf8               java/lang/Object
+  #60 = Utf8               _try/javap_public_whether_show_toplevel$inner
+  <...>
+  #98 = Utf8               java/lang/invoke/MethodHandles
+{
+<...>
+}
+SourceFile: "javap_public_whether_show_toplevel.java"
+InnerClasses:
+     static #19= #18 of #16; //inner=class _try/javap_public_whether_show_toplevel$inner of class _try/javap_public_whether_show_toplevel
+     public static final #91= #90 of #96; //Lookup=class java/lang/invoke/MethodHandles$Lookup of class java/lang/invoke/MethodHandles
+BootstrapMethods:
+  0: #44 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+    Method arguments:
+      #45 (Ljava/lang/Object;)V
+      #46 invokevirtual _try/javap_public_whether_show_toplevel$inner.consumer1:()V
+      #47 (L_try/javap_public_whether_show_toplevel$inner;)V
+  1: #44 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+    Method arguments:
+      #45 (Ljava/lang/Object;)V
+      #51 invokevirtual _try/javap_public_whether_show_toplevel$inner.consumer2:()V
+      #47 (L_try/javap_public_whether_show_toplevel$inner;)V
+  2: #44 invokestatic java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+    Method arguments:
+      #45 (Ljava/lang/Object;)V
+      #52 invokevirtual _try/javap_public_whether_show_toplevel$inner.consumer3:()V
+      #47 (L_try/javap_public_whether_show_toplevel$inner;)V

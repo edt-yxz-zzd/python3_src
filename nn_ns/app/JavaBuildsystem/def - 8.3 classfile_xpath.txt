@@ -1,0 +1,10 @@
+classfile_xpath
+    = iqname | classfile_path | classfile_path_via_jarfile
+    = iqname | classfile_path_may_via_jarfile
+    * path to existing classfile
+        e.g. "path/to/<module>.class"
+    * module_iqname
+        "pkg1.pkg2.module"
+    * classfile_path_via_jarfile
+        "jar:file:path/to/<jar_name>.jar!/path/to/<module>.class"
+

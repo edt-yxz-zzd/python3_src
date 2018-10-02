@@ -1,0 +1,41 @@
+Classfile /E:/my_data/program_source/github/edt-yxz-zzd/python3_src/java_src/seed/abc/IBiConsumerExc$1.class
+  Last modified 2018-10-1; size 796 bytes
+  MD5 checksum 08b41e538a48a3b04e87670c1a24aaee
+  Compiled from "IBiConsumerExc.java"
+class seed.abc.IBiConsumerExc$1 extends java.lang.Object implements seed.abc.IBiConsumerExc<T, U>
+  minor version: 0
+  major version: 52
+  flags: ACC_SUPER
+Constant pool:
+   #1 = Fieldref           #6.#27         // seed/abc/IBiConsumerExc$1.this$0:Lseed/abc/IBiConsumerExc;
+  <...>
+  #38 = Utf8               ()V
+{
+ <...>
+}
+Signature: #22                          // Ljava/lang/Object;Lseed/abc/IBiConsumerExc<TT;TU;>;
+SourceFile: "IBiConsumerExc.java"
+EnclosingMethod: #8.#26                 // seed.abc.IBiConsumerExc.andThen
+InnerClasses:
+     #6; //class seed/abc/IBiConsumerExc$1
+Classfile /E:/my_data/program_source/github/edt-yxz-zzd/python3_src/java_src/seed/abc/IConsumerExc.class
+  Last modified 2018-10-1; size 702 bytes
+  MD5 checksum 81a0ee85c7385000595d25e01b9dd013
+  Compiled from "IConsumerExc.java"
+public interface seed.abc.IConsumerExc<T extends java.lang.Object>
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_INTERFACE, ACC_ABSTRACT
+Constant pool:
+   #1 = Class              #22            // seed/abc/IConsumerExc$1
+  <...>
+  #28 = Utf8               (Lseed/abc/IConsumerExc;Lseed/abc/IConsumerExc;)V
+{
+ <...>
+}
+Signature: #17                          // <T:Ljava/lang/Object;>Ljava/lang/Object;
+SourceFile: "IConsumerExc.java"
+RuntimeVisibleAnnotations:
+  0: #21()
+InnerClasses:
+     #1; //class seed/abc/IConsumerExc$1

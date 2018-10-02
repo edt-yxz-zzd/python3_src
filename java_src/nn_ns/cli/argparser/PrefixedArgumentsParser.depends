@@ -3,7 +3,7 @@ toplevels:
 modules:
     seed.tuples.Pair
     seed.collection_util.CollectionUtil
-    seed.collection_util.Repr
+    seed.repr.Repr
     nn_ns.abc.IParser
     nn_ns.parsers.IChoiceParser
 resources:

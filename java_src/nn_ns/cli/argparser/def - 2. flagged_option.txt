@@ -1,0 +1,18 @@
+flagged_option
+
+[String]
+
+# but I allow "=" only, forbid "\s+" and ":"
+#   ':' reserved for switch
+#   ' ' seperate arguments not good
+-e=utf8
+--encoding:utf8
+-e gbk
+
+-cp . -cp /classes -cp xxx
+action='append'
+    setAllowMultipleDeclarations?
+    not "nargs='*'"
+
+
+

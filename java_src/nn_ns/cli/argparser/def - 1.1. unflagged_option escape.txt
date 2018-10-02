@@ -1,0 +1,22 @@
+
+unflagged_option escape and unescape
+
+we seperate unflagged_option from other strings to distinguish them.
+since unflagged_option can be any string, we must escape it.
+
+we have below functions:
+    is_unflagged_option :: String -> Bool
+    EscapedString <: String
+        EscapedString = {s<-String | is_unflagged_option s}
+
+    escape :: String -> EscapedString
+        All s<-String. is_unflagged_option (escape s)
+    unescaped :: EscapedString -> String
+        All s<-String. unescaped (escape s) == s
+
+e.g.
+    is_unflagged_option s = not s.startswith('-') or s.startswith('-:')
+    escape s = s if not s.startswith('-') else '-:' + s
+    unescape s = s if not s.startswith('-') else (s[2:] if s.startswith('-:) else error "{s!r} is not an escaped string")
+
+

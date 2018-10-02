@@ -1,0 +1,20 @@
+
+tuples -> IReprable Iterable<Object> #List<Object>
+seed.tuples
+    Tuples.mk
+    T4ple
+    T5ple
+    T6ple
+    _<I>_
+    get<I>()
+    Triple extends Pair?? No!! confuse
+Either:
+    Unions.mk
+    U3ion.mk
+    U4ion
+    U5ion
+
+    idx, obj
+    left, right
+    get<I>()
+

@@ -1,7 +1,10 @@
 
 from .helper.str2__all__ import str2__all__
 __all__ = str2__all__('''
+    no_op               # :: (*args, **kwargs) -> None
+    echo_args_kwargs    # :: (*args, **kwargs) -> (args, kwargs)
     echo_args           # :: *args -> args
+    echo_kwargs         # :: (**kwargs) -> kwargs
     echo                # :: a -> a
     theEcho             # .__getattribute__ :: str -> str
     ifNone              # :: (None|a) -> default -> (a|default)
@@ -45,6 +48,9 @@ from .debug.print_err import print_err
 from .debug.lazy_raise import lazy_raise
 from .func_tools.not_dot import __not__, not_dot
 
+no_op = lambda *args, **kwargs:None
+echo_args_kwargs = lambda *args, **kwargs:(args, kwargs)
+echo_kwargs = lambda **kwargs:kwargs
 echo_args = lambda *args: args
 echo = lambda x:x
 null_iter = iter(())

@@ -1,0 +1,74 @@
+
+let option_prefix = "-"
+    option_prefix_exclude = "-:"
+    assert option_prefix_exclude.startswith(option_prefix)
+    assign_op = "="
+    append_op = "+="
+    case_op = ":"
+    sep_begin = "["
+    sep_end = "]"
+
+
+unflagged_option
+    # String
+    xxx         =[unescape]=>> xxx
+    -:-xxx      =[unescape]=>> -xxx
+
+flagged_option
+    -x=xxx
+
+    * assign
+        # String
+        --xx=xxx
+
+        # [String]
+        --xx[,]=xxx,yyy,zzz
+
+    * append
+        # [String]
+        --xx+=xxx
+
+        # [[String]]
+        --xx[,]+=xxx,yyy,zzz
+        --xx[:]+=xxx:yyy:zzz
+switch
+    # Bool
+    -x
+    --xx:on
+    --xx:off
+
+qualified_switch
+    # [String]
+    -x:xxx
+
+dynamic_option
+    # {String:[String]}
+    -x:xx=xxx
+
+
+regex"--?[-_\w]+(:[-_\w]+)?(\[\S+\]\+?=.*)?"
+########## 1 ###### 2 ######## 3 ## 4 # 5 ##
+    1. option_name/option_title?
+    2. option_case
+    3. list_seperator
+    4. append_op
+    5. payload
+
+
+option_name2may_case2uint_strings_pair
+  * option_name2may_case2uint :: Map String (Map String UInt)
+    * switch ==>> option_name2uint
+    * qualified_switch ==>> option_name2case2uint
+  * option_name2may_case2strings :: Map String (Map String [String])
+    // option_name2may_case2payload
+    // nonsence and useless the order is missing:
+    /*
+    data Payload =  {may_assign ::Maybe String
+                    ,assign_list::[String]
+                    ,append     ::[String]
+                    ,append_list::[[String]]
+                    }
+    */
+
+chain mappings so that "-h" > "-v" > ... have higher priority.
+

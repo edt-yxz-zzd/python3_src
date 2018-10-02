@@ -1,0 +1,17 @@
+switch
+
+-h
+--help
+
+-v
+--version
+
+-xx:on
+-xx:off
+
+-xx:yes
+-xx:no
+
+-xx:true
+-xx:false
+

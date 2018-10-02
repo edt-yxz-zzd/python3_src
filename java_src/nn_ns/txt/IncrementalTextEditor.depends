@@ -5,11 +5,11 @@ modules:
     nn_ns.txt.TinyTextReadWriter
     nn_ns.gui.Dialogs
 
-    nn_ns.cli.argparser.ParseAllPrefixedArguments
+    nn_ns.cli.argparser.PrefixedArgumentsParser
     nn_ns.parsers.EchoParser
     nn_ns.parsers.ChoiceParser
     nn_ns.abc.IParser
-    seed.collection_util.CollectionUtil
+
     seed.collection_util.PairsBuilder
     seed.tuples.Pair
 resources:

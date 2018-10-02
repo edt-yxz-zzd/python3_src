@@ -1,0 +1,12 @@
+
+qualified_switch
+
+Maybe (Maybe String)
+    present?
+    take argument?
+    what argument?
+
+--verbose
+--verbose:class
+
+

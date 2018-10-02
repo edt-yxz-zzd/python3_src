@@ -1,0 +1,60 @@
+>jdeps -cp . seed
+seed -> D:\software\programming\Java\jdk8u25\jre\lib\rt.jar
+   seed.abc (seed)
+      -> java.lang
+   seed.collection_util (seed)
+      -> java.lang
+      -> java.lang.invoke
+      -> java.util
+      -> java.util.function
+   seed.repr (seed)
+      -> java.lang
+      -> java.util
+   seed.tuples (seed)
+      -> java.lang
+
+>jdeps -cp . seed/abc
+seed\abc -> D:\software\programming\Java\jdk8u25\jre\lib\rt.jar
+   seed.abc (abc)
+      -> java.lang
+
+>jdeps -cp . seed\abc\IBiConsumerExc.class
+seed\abc\IBiConsumerExc.class -> D:\software\programming\Java\jdk8u25\jre\lib\rt.jar
+seed\abc\IBiConsumerExc.class -> .
+   seed.abc (IBiConsumerExc.class)
+      -> java.lang
+      -> seed.abc                                           .
+
+>jdeps -cp . nn_ns\cli
+nn_ns\cli -> D:\software\programming\Java\jdk8u25\jre\lib\rt.jar
+nn_ns\cli -> .
+   nn_ns.cli.argparser (cli)
+      -> java.lang
+      -> java.lang.invoke
+      -> java.util
+      -> java.util.function
+      -> nn_ns.abc                                          .
+      -> nn_ns.parsers                                      .
+      -> seed.abc                                           .
+      -> seed.collection_util                               .
+      -> seed.repr                                          .
+      -> seed.tuples                                        .
+
+
+>jdeps -cp . -apionly -P -R nn_ns\cli
+nn_ns\cli -> .
+nn_ns\cli -> D:\software\programming\Java\jdk8u25\jre\lib\rt.jar (compact1)
+   nn_ns.cli.argparser (cli)
+      -> java.lang                                          compact1
+      -> java.util                                          compact1
+      -> nn_ns.abc                                          .
+      -> seed.tuples                                        .
+. -> D:\software\programming\Java\jdk8u25\jre\lib\rt.jar (compact1)
+   nn_ns.abc (.)
+      -> java.lang                                          compact1
+   seed.tuples (.)
+      -> java.lang                                          compact1
+
+
+
+

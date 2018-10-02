@@ -1,0 +1,4 @@
+javac -cp .. static_import_nested_class_members.java
+    OK!!
+
+

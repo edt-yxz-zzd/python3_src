@@ -1,9 +1,16 @@
-jc_all -cp . nn_ns.cli.argparser.ParseAllPrefixedArguments
+jc_all -cp . nn_ns.cli.argparser.PrefixedArgumentsParser
 jc_all -cp . seed.collection_util.CollectionUtil
 javac -cp . seed/collection_util/CollectionUtil.java -Xlint:unchecked
 jc_all -cp . seed.collection_util.PairsBuilder
 javac -cp . seed/collection_util/PairsBuilder.java -Xlint:unchecked
 javac -cp . seed/collection_util/ArrayListBuilder.java -Xlint:unchecked
+javac -cp . seed/repr/Repr.java -Xlint:unchecked
 jc_all -cp . nn_ns.txt.IncrementalTextEditor
 javac -cp . nn_ns/txt/IncrementalTextEditor.java -Xlint:unchecked
+
+java -cp . nn_ns.txt.IncrementalTextEditor -i=../nn_ns/app/cmd_examples/novel_split_cmd.txt -e=gb18030 --font="宋体 BOLD 48" --scroll_to_last_row=true
+javac -cp . nn_ns/cli/argparser/PrefixedArgumentsParser.java -Xlint:unchecked
+
+javac -cp . seed/unions/Either.java -Xlint:unchecked
+javac -cp . seed/abc/IFunctionExc.java
 

@@ -7,6 +7,11 @@ __all__ = '''
     is_ext
     is_qname
     make_make_iter_classpaths
+
+
+    java_pseudo_iqname2iqname
+    is_java_pseudo_iqname
+    is_java_iqname
     '''.split()
 
 import re
@@ -36,4 +41,32 @@ def make_make_iter_classpaths(classpath_glob_patterns):
     def make_iter_classpaths():
         return chain.from_iterable(map(iglob, classpath_glob_patterns))
     return make_iter_classpaths
+
+
+
+
+
+
+
+
+###################
+def java_pseudo_iqname2iqname(pseudo_iqname):
+    return pseudo_iqname.replace('/', '.')
+
+positive_digits_pattern = r'(?:[1-9][0-9]*)'
+java_identity_char_pattern = r'[0-9a-zA-Z_]'
+java_identity_pattern = fr'(?:[a-zA-Z]{java_identity_char_pattern}*|_{java_identity_char_pattern}+)'
+java_inner_identity_pattern = fr'(?:{positive_digits_pattern}|{java_identity_pattern})'
+java_iqname_regex = re.compile(
+    #r'(?a)\w+(?:\.\w+)*(?:\$(?:\w+|\d+))*'
+    fr'(?a){java_identity_pattern}(?:\.{java_identity_pattern})*(?:\${java_inner_identity_pattern})*'
+    )
+
+def is_java_pseudo_iqname(pseudo_iqname):
+    iqname = pseudo_iqname.replace('/', '.')
+    return is_java_iqname(iqname)
+def is_java_iqname(iqname):
+    m = java_iqname_regex.fullmatch(iqname)
+    return bool(m)
+
 

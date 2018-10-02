@@ -1,0 +1,1 @@
+path_via_jarfile = "jar:file:path/to/<jar_name>.jar!/path/to/<module>.class"

@@ -1,0 +1,123 @@
+
+recommend:
+    javap -cp <xxx.jar> -verbose pkg.module
+    javap -cp <xxx.jar> -v pkg.module
+    javap -v path/to/module.class pkg.module pkg2.module2
+
+###############################
+NOTE: jar:file:/path/to/<...>.jar!/...
+>javap -v -cp IncrementalTextEditor.jar seed.repr.IReprable > javap_-v_output4.txt
+Classfile jar:file:/E:/my_data/program_source/github/edt-yxz-zzd/python3_src/java_src/app/IncrementalTextEditor/IncrementalTextEditor.jar!/seed/repr/IReprable.class
+...
+
+// not-found
+>javap -v -cp IncrementalTextEditor.jar seed/repr/IReprable.class
+错误: 找不到类: seed/repr/IReprable.class
+>javap -v -cp IncrementalTextEditor.jar /seed/repr/IReprable.class
+错误: 找不到类: /seed/repr/IReprable.class
+>javap -v ./IBiConsumerExc.depends
+错误: 找不到类: ./IBiConsumerExc.depends
+
+// multi-files+
+>javap -v ./IBiConsumerExc.depends
+>javap -v IBiConsumerExc$1.class IConsumerExc.class > javap_-v_out3.txt
+Classfile /E:/my_data/program_source/github/edt-yxz-zzd/python3_src/java_src/seed/abc/IBiConsumerExc$1.class
+...
+Classfile /E:/my_data/program_source/github/edt-yxz-zzd/python3_src/java_src/seed/abc/IConsumerExc.class
+...
+
+>javap -cp . -v seed.abc.IBiConsumerExc$1 | more
+Classfile /E:/my_data/program_source/github/edt-yxz-zzd/python3_src/java_src/seed/abc/IBiConsumerExc$1.class
+...
+
+
+###############################
+
+javap -c *.class
+javap -c -cp *.jar xxx.yyy.zzz.M
+    refer to which module??
+        _try.javap_public_whether_show_toplevel__private_toplevel x;
+        ... // class java/lang/Integer
+        ... // Method java/lang/Object."<init>":()V
+        ... // Method _try/javap_public_whether_show_toplevel$inner.f:()V
+    but miss "instance method": "cls::instance_method"
+
+javap -verbose *.class
+    look into "Constant pool:" for regex"^\s+#\d+ = Class\s+#\d+\s+// (P<class_name_path>.*)$"
+    '''
+    Compiled from "javap_public_whether_show_toplevel.java"
+    Constant pool:
+        ...
+        #18 = Class              #60            // _try/javap_public_whether_show_toplevel$inner
+        ...
+    {
+        ...
+    }
+    SourceFile: "javap_public_whether_show_toplevel.java"
+    ...
+    '''
+
+>javap -c -cp app/IncrementalTextEditor/IncrementalTextEditor.jar nn_ns.txt.IncrementalTextEditor
+
+
+
+>javac _try\javap_public_whether_show_toplevel.java
+
+javap -public vs -private
+    // NOTE: the toplevel "class javap_public_whether_show_toplevel__private_toplevel"
+    //          was not show!!!
+    //      it is in "javap_public_whether_show_toplevel__private_toplevel.class" file
+    >javap -public _try\javap_public_whether_show_toplevel.class
+    Compiled from "javap_public_whether_show_toplevel.java"
+    public class _try.javap_public_whether_show_toplevel {
+      public _try.javap_public_whether_show_toplevel();
+    }
+
+    >javap -private _try\javap_public_whether_show_toplevel.class
+    Compiled from "javap_public_whether_show_toplevel.java"
+    public class _try.javap_public_whether_show_toplevel {
+      int i;
+      public _try.javap_public_whether_show_toplevel();
+    }
+
+
+javap -c
+
+>javap -c _try\javap_public_whether_show_toplevel.class
+Compiled from "javap_public_whether_show_toplevel.java"
+public class _try.javap_public_whether_show_toplevel {
+  int i;
+
+  java.lang.String s;
+
+  public _try.javap_public_whether_show_toplevel();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: sipush        2132
+       8: putfield      #2                  // Field i:I
+      11: aload_0
+      12: ldc           #3                  // String ////////
+      14: putfield      #4                  // Field s:Ljava/lang/String;
+      17: return
+
+  static {};
+    Code:
+       0: iconst_2
+       1: anewarray     #5                  // class java/lang/Integer
+       4: dup
+       5: iconst_0
+       6: iconst_1
+       7: invokestatic  #6                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      10: aastore
+      11: dup
+      12: iconst_1
+      13: iconst_2
+      14: invokestatic  #6                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      17: aastore
+      18: invokestatic  #7                  // Method java/util/Arrays.asList:([Ljava/lang/Object;)Ljava/util/List;
+      21: pop
+      22: invokestatic  #8                  // Method _try/javap_public_whether_show_toplevel$inner.f:()V
+      25: return
+}

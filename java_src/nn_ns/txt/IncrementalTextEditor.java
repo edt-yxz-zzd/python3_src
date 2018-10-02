@@ -69,17 +69,16 @@ import nn_ns.txt.ClipboardHandler;
 import nn_ns.txt.TinyTextReadWriter;
 import nn_ns.gui.Dialogs;
 
-import nn_ns.cli.argparser.ParseAllPrefixedArguments;
-import static nn_ns.cli.argparser.ParseAllPrefixedArguments.parse_all_prefixed_arguments;
-import static nn_ns.cli.argparser.ParseAllPrefixedArguments.mkOptionArgs;
-import static nn_ns.cli.argparser.ParseAllPrefixedArguments.make_help_string;
-import static nn_ns.cli.argparser.ParseAllPrefixedArguments.OptionArgs;
-import static nn_ns.cli.argparser.ParseAllPrefixedArguments.ParseAllPrefixedArgumentsException;
+import nn_ns.cli.argparser.PrefixedArgumentsParser;
+import static nn_ns.cli.argparser.PrefixedArgumentsParser.mkOptionArgs;
+import static nn_ns.cli.argparser.PrefixedArgumentsParser.make_help_string;
+import static nn_ns.cli.argparser.PrefixedArgumentsParser.OptionArgs;
+import static nn_ns.cli.argparser.PrefixedArgumentsParser.ParseAllPrefixedArgumentsException;
 
 import nn_ns.parsers.EchoParser;
 import nn_ns.parsers.ChoiceParser;
 import nn_ns.abc.IParser;
-import seed.collection_util.CollectionUtil;
+//import seed.collection_util.CollectionUtil;//to_iterator
 import seed.collection_util.PairsBuilder;
 import seed.tuples.Pair;
 
@@ -119,7 +118,7 @@ import java.util.Map;
 
 public class IncrementalTextEditor extends JFrame
     implements ActionListener
-    //, ParseAllPrefixedArguments
+    //, PrefixedArgumentsParser
     //  //can access to its static classes!!
     //  //cannot access to its static methods!!
 {
@@ -633,6 +632,7 @@ public class IncrementalTextEditor extends JFrame
     {
         final String example = "example:\n\tjava -cp . nn_ns.txt.IncrementalTextEditor -i=\"test.txt\" -e=\"utf8\" --font=\"Anonymous Pro PLAIN 24\"";
         final String description = "IncrementalTextEditor: text grows only";
+        final String help_option_name = "does_show_help";
 
         Map<String, String> prefix2option_name =
             new PairsBuilder<String,String>()
@@ -642,8 +642,8 @@ public class IncrementalTextEditor extends JFrame
                 .iadd("--encoding=", "encoding")
                 .iadd("--font=", "font")
                 .iadd("--scroll_to_last_row=", "does_scroll_to_last_row")
-                .iadd("-h=", "does_show_help")
-                .iadd("--help=", "does_show_help")
+                .iadd("-h=", help_option_name)
+                .iadd("--help=", help_option_name)
                 .mkHashMap();
 
 
@@ -666,46 +666,39 @@ public class IncrementalTextEditor extends JFrame
              ).iadd("does_scroll_to_last_row"
                 ,mkOptionArgs("false", bool_parser
                     , "scroll upper windows to last row")
-           ).iadd("does_show_help"
+           ).iadd(help_option_name
                 ,mkOptionArgs("false", bool_parser
                     , "show help and exit")
             ).mkHashMap();
 
         final boolean override = false;
+        PrefixedArgumentsParser parser = new PrefixedArgumentsParser
+                (prefix2option_name
+                ,option_name2option_args
+                ,help_option_name
+                ,description
+                ,example
+                ,override
+                );
 
         Pair<Map<String, Object>, ArrayList<String>> result_pair = null;
         try{
-            result_pair = parse_all_prefixed_arguments
-                (CollectionUtil.to_iterator(args)
-                ,prefix2option_name
-                ,option_name2option_args
-                ,override
-                );
-            if (!result_pair.snd().isEmpty()){
-                throw new ParseAllPrefixedArgumentsException(
-                    String.format("unknown arguments: %s"
-                                , result_pair.snd()
-                                )
-                    );
+            result_pair = parser.parse_args(args);
+            ArrayList<String> remaining_args = result_pair.snd();
+            if (!remaining_args.isEmpty()){
+                throw new ParseAllPrefixedArgumentsException(String
+                    .format("unknown arguments: %s", remaining_args));
             }
         } catch(Exception e){
-            System.err.println(make_help_string(
-                prefix2option_name
-                , option_name2option_args
-                , description
-            ));
+            System.err.println(parser.the_help_string);
             throw e;
         }
 
         Map<String, Object> option_name2result = result_pair.fst();
         boolean does_show_help = (Boolean)(option_name2result
-                .get("does_show_help"));
+                .get(help_option_name));
         if (does_show_help) {
-            System.out.println(make_help_string(
-                prefix2option_name
-                , option_name2option_args
-                , description
-            ));
+            System.out.println(parser.the_help_string);
             return;
         }
 

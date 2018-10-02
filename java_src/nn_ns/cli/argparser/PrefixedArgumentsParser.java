@@ -42,11 +42,12 @@ package nn_ns.cli.argparser;
 
 import seed.tuples.Pair;        // fst
 import seed.collection_util.CollectionUtil;
-import seed.collection_util.Repr;
+import seed.repr.Repr;
 import nn_ns.abc.IParser;
 import nn_ns.parsers.IChoiceParser;
 
 import java.util.Collections; // unmodifiableMap,  binarySearch
+import java.util.Collection;
 import java.util.Iterator;
 //import java.util.Comparator;
 import java.util.ArrayList;
@@ -55,8 +56,40 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-public interface ParseAllPrefixedArguments{
+public class PrefixedArgumentsParser{
 
+private final Map<String, String>       prefix2option_name;
+private final Map<String, OptionArgs>   option_name2option_args;
+private final String                    may_help_option_name; // null
+private final String                    description;
+private final String                    extra_description;
+private final boolean                   override;
+
+private final ArrayList<String>         sorted_prefixes;
+public  final String                    the_help_string;
+
+public PrefixedArgumentsParser
+    (Map<String, String>        prefix2option_name
+    ,Map<String, OptionArgs>    option_name2option_args
+    ,String                     may_help_option_name
+    ,String                     description
+    ,String                     extra_description
+    ,boolean                    override
+    ) throws ParseAllPrefixedArgumentsException {
+    this.prefix2option_name = prefix2option_name;
+    this.option_name2option_args = option_name2option_args;
+    this.may_help_option_name = may_help_option_name;
+    this.override = override;
+
+    this.sorted_prefixes = CollectionUtil
+            .py_sorted(prefix2option_name.keySet().iterator(), false);
+    this.description = description;
+    this.extra_description = extra_description;
+    this.the_help_string = make_help_string(
+        prefix2option_name, option_name2option_args
+        , description, extra_description
+        );
+}
 
 public static OptionArgs
 mkOptionArgs(String may_default, IParser<?> parser, String help){
@@ -87,6 +120,7 @@ make_help_string
     ,Map<String, OptionArgs>
         option_name2option_args
     ,String description
+    ,String extra_description
     )throws ParseAllPrefixedArgumentsException{
     Map<String, ArrayList<String>>
         option_name2prefixes = make_option_name2prefixes(prefix2option_name);
@@ -106,35 +140,47 @@ make_help_string
     String indent = "\t";
     String endl = "\n";
 
-    CollectionUtil.appendln(help, "Description:");
-    CollectionUtil.appendln(help, indent, description);
-    CollectionUtil.appendln(help);
+    if (!description.isEmpty()){
+        CollectionUtil.appendln(help, "Description:");
+        CollectionUtil.appendln(help, indent, description);
+        CollectionUtil.appendln(help);
+    }
 
     CollectionUtil.appendln(help, "Options:");
-    for (String option_name : option_names){
+    for (final String option_name : option_names){
         ArrayList<String> prefixes
             = option_name2prefixes.get(option_name);
         OptionArgs option_args
             = option_name2option_args.get(option_name);
 
-        if (null==option_args.may_default) {
-            CollectionUtil.append(help, indent, option_name); // no endl
-        }
-        else {
-            String default_result_str = option_args.may_default;
-            String s = String.format("%s=%s"
-                , option_name, Repr.repr(default_result_str));
-            CollectionUtil.append(help, indent, s); // no endl
+        // <title>[={default!r}][ from {choices!r}]
+        final String option_title = String.format("<%s>", option_name);
+        String may_assign_default_str = "";
+        if (null != option_args.may_default) {
+            may_assign_default_str = "=" + Repr.repr(option_args.may_default);
         }
 
+        String may_from_choices_str = "";
         if (option_args.parser instanceof IChoiceParser){
             IChoiceParser parser = (IChoiceParser)option_args.parser;
-            CollectionUtil.append(help, " from ", parser.get_choices());
+            Collection __choices = parser.get_choices();
+            @SuppressWarnings("unchecked")
+                Collection<String> choices = parser.get_choices();
+            String choices_str = Repr.repr(
+                CollectionUtil.mkArrayList(choices));
+            may_from_choices_str = " from " + choices_str;
         }
-        help.append(endl);
+        CollectionUtil.appendln(help, indent
+            , option_title, may_assign_default_str, may_from_choices_str);
 
-        CollectionUtil.append(help, indent, indent, prefixes, endl);
-        CollectionUtil.append(help, indent, indent, "# ", option_args.help, endl);
+        CollectionUtil.appendln(help, indent, indent, Repr.repr(prefixes));
+        CollectionUtil.appendln(help, indent, indent, "# ", option_args.help);
+    }
+
+    if (!extra_description.isEmpty()){
+        CollectionUtil.append(help
+            , endl, endl, "-----------------", endl);
+        CollectionUtil.appendln(help, extra_description);
     }
     return help.toString();
 }
@@ -156,33 +202,27 @@ make_option_name2prefixes(Map<String, String> prefix2option_name){
     return option_name2prefixes;
 }
 
-public static
-Pair<Map<String, Object>, ArrayList<String>>
-parse_all_prefixed_arguments
-    (Iterator<String>
-        args
-    ,Map<String, String>
-        prefix2option_name
-    ,Map<String, OptionArgs>
-        option_name2option_args
-    ,boolean override
+public Pair<Map<String, Object>, ArrayList<String>>
+parse_args(String... args) throws Exception {
+    return parse_args(CollectionUtil.to_iterator(args));
+}
+public Pair<Map<String, Object>, ArrayList<String>>
+parse_args(Iterator<String> args) throws Exception {
+    return __parse_all_prefixed_arguments(args
+        ,this.prefix2option_name
+        ,this.option_name2option_args
+        ,this.sorted_prefixes
+        ,this.override
+        );
+}
+private static Pair<Map<String, Object>, ArrayList<String>>
+__parse_all_prefixed_arguments
+    (Iterator<String>           args
+    ,Map<String, String>        prefix2option_name
+    ,Map<String, OptionArgs>    option_name2option_args
+    ,ArrayList<String>          sorted_prefixes
+    ,boolean                    override
     ) throws Exception {
-    /*
-    TreeMap<String, String> _prefix2option_name_ =
-        // to avoid non-natural-ordering
-        //  TreeMap(Map) not TreeMap(SortedMap)
-        new TreeMap<>(prefix2option_name);
-        prefix2option_name = null;
-    ArrayList<String> _args_ = CollectionUtil.py_sorted(args, false);
-        args = null;
-
-    final ArrayList<String> sorted_prefixes = CollectionUtil
-            .mkArrayList(_prefix2option_name_.keySet());
-    */
-
-    final ArrayList<String> sorted_prefixes = CollectionUtil
-            .py_sorted(prefix2option_name.keySet().iterator(), false);
-
     ArrayList<String> remaining_args = new ArrayList<>();
     Map<String, Object> option_name2result = new HashMap<>();
 
