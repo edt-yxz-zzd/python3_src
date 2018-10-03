@@ -1,5 +1,6 @@
 -main
 toplevels:
 modules:
+    seed.collection_util.CollectionUtil
 resources:
 

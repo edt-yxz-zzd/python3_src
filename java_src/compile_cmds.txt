@@ -1,3 +1,5 @@
+more < compile_cmds.txt
+
 jc_all -cp . nn_ns.cli.argparser.PrefixedArgumentsParser
 jc_all -cp . seed.collection_util.CollectionUtil
 javac -cp . seed/collection_util/CollectionUtil.java -Xlint:unchecked

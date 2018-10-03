@@ -1,5 +1,16 @@
 
+/*
+bug fixed:
+    make_prefixes_regex_pattern()
+        fixed: sort the prefixes before construct regex
+        #The Pattern engine performs traditional NFA-based matching with ordered alternation as occurs in Perl 5.
+        # !!!!!!!!!!!!!!!!"ordered alternation"!!!!!!!!!!!!!!!!!
+
+*/
 package seed.txt;
+
+import seed.collection_util.CollectionUtil;
+
 
 import java.util.Iterator;
 import java.util.regex.MatchResult;
@@ -20,6 +31,8 @@ public static class PrefixesRegex{
     public static String
     make_prefixes_regex_pattern(Iterator<String> prefixes){
         // "(?:<prefix0>|<prefix1>|...)"
+        prefixes = CollectionUtil.py_sorted(prefixes, true).iterator();
+
         StringBuilder sb = new StringBuilder();
         sb.append("(?:");
         while (prefixes.hasNext()){

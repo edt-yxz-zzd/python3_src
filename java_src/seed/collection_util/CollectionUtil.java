@@ -1,4 +1,17 @@
 
+/*
+__all__:
+    addAll
+    py_sorted
+    mkArrayList
+    to_iterator
+    to_iterable
+    forEachExc
+    append
+    appendln
+    string_repeat
+
+*/
 package seed.collection_util;
 
 import seed.abc.IConsumerExc;
