@@ -3,6 +3,8 @@ BUG:
     cli.<the parser>
         searching longest prefix of "12" in ['1', '11']
             will have wrong result
+    fixed by using regex
+
 String -> List<Character> # View readonly like Arrays.asList
 istream <-> iterator <-> iterable
     IPyIterator extends Iterable, Iterator

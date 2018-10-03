@@ -46,7 +46,11 @@ import seed.repr.Repr;
 import nn_ns.abc.IParser;
 import nn_ns.parsers.IChoiceParser;
 
-import java.util.Collections; // unmodifiableMap,  binarySearch
+//import java.util.Collections; // unmodifiableMap,  binarySearch
+//  bug: binarySearch cannot be used to find longest prefix
+//      now use regex instead
+import seed.txt.TextUtil;
+
 import java.util.Collection;
 import java.util.Iterator;
 //import java.util.Comparator;
@@ -226,10 +230,15 @@ __parse_all_prefixed_arguments
     ArrayList<String> remaining_args = new ArrayList<>();
     Map<String, Object> option_name2result = new HashMap<>();
 
+    //System.out.println(sorted_prefixes);
+    TextUtil.PrefixesRegex regex = new TextUtil.PrefixesRegex(
+            sorted_prefixes.iterator());
+
     // bug: for (String arg : args) # iterator not in "for"
     // args.forEachRemaining(arg -> # action donot throw
     // for (String arg : CollectionUtil.mkArrayList(args))
     CollectionUtil.forEachExc(args, arg -> {
+        /* bug:
         int i = Collections.binarySearch(sorted_prefixes, arg);
         if (i >= 0)
             // good
@@ -259,6 +268,17 @@ __parse_all_prefixed_arguments
             // maybe arg.startsWith(sorted_prefixes[i-1]);
             // but we find the longest prefix
             final String prefix = sorted_prefixes.get(i);
+            ...
+        }*/
+        String maybe_longest_prefix = regex.find_maybe_longest_prefix(arg);
+        if (maybe_longest_prefix == null){
+            // bad
+            remaining_args.add(arg);
+        }
+        else {
+            // good
+            assert arg.startsWith(maybe_longest_prefix);
+            final String prefix = maybe_longest_prefix;
             final String option_name = prefix2option_name.get(prefix);
             if (!override && option_name2result.containsKey(option_name)){
                 throw new ParseAllPrefixedArgumentsException(

@@ -4,6 +4,7 @@ modules:
     seed.tuples.Pair
     seed.collection_util.CollectionUtil
     seed.repr.Repr
+    seed.txt.TextUtil
     nn_ns.abc.IParser
     nn_ns.parsers.IChoiceParser
 resources:
