@@ -16,6 +16,8 @@ from seed.tiny import print_err
 from seed.filesys.to_absolute_posix_path import to_absolute_posix_path
 from seed.helper.make_print_on import make_print_on
 from seed.algo.search_prefixes.get_may_longest_prefix_idx_in_sorted_prefixes import contains_any_prefix_in_sorted_prefixes
+from nn_ns.Trie.Trie import CharTrie
+import re
 
 from zipfile import ZipFile
 
@@ -37,9 +39,39 @@ NOTE:
         raise Exception(f'required_iqnames={required_iqnames}')
     return None
 
+def __make_string_alternatives_regex(strings):
+    return re.compile('(?:{})'.format('|'.join(map(re.escape, strings))))
+def __make_versioned_to_exclude_test(excluding_iqname_prefixes, *, version):
+    if version == 'native':
+        #ver1:bug; cannot use binary search; normal search O(N)
+        sorted_excluding_iqname_prefixes = sorted(excluding_iqname_prefixes)
+        def to_exclude(depended_iqname):
+            return contains_any_prefix_in_sorted_prefixes(
+                    depended_iqname, sorted_excluding_iqname_prefixes)
+    elif version == 'trie':
+        #ver2:Trie, but I feel not fast enough
+        excluding_iqname_prefix_trie = CharTrie(
+            (excluding, excluding) for excluding in excluding_iqname_prefixes)
+        def to_exclude(depended_iqname):
+            may_size_value_pair =  excluding_iqname_prefix_trie\
+                .query_maybe_longest_prefix_item(depended_iqname)
+                # may_size_value_pair :: None|(UInt, excluding_iqname_prefix)
+            return bool(may_size_value_pair)
+
+    elif version == 'regex':
+        #ver3:regex, but it seems no faster than ver2
+        excluding_iqname_prefixes_regex = __make_string_alternatives_regex(
+        excluding_iqname_prefixes)
+        def to_exclude(depended_iqname):
+            m = excluding_iqname_prefixes_regex.match(depended_iqname)
+            return bool(m)
+    else:
+        raise Exception('unknown version: {version!r} not in "native,trie,regex"')
+    return to_exclude
+
 def query_jarfile_class_dependences(
-    jarfile_path,excluding_iqname_prefixes, *, verbose:bool
-    ):
+    jarfile_path, excluding_iqname_prefixes, *, verbose:bool
+    , version:'native trie regex'):
     ''':: Path -> Set String -> (Set IQName, Set IQName, Set IQName)
 
 NOTE:
@@ -57,7 +89,9 @@ postcondition:
     #zip_file_info
     #<ZipInfo filename='META-INF/' compress_type=deflate compress_size=2>
     #<ZipInfo filename='seed/repr/Repr.depends' compress_type=deflate file_size=68 compress_size=62>
-    sorted_excluding_iqname_prefixes = sorted(excluding_iqname_prefixes)
+
+    to_exclude = __make_versioned_to_exclude_test(
+        excluding_iqname_prefixes, version=version)
     del excluding_iqname_prefixes
 
     abs_jarfile_path = to_absolute_posix_path(jarfile_path)
@@ -91,7 +125,10 @@ postcondition:
         required_iqnames, excluded_iqnames = __handle_classfiles(
                     existing_classfile_paths_via_jarfile
                     , existing_iqnames
-                    , sorted_excluding_iqname_prefixes
+                    #, sorted_excluding_iqname_prefixes
+                    #, excluding_iqname_prefix_trie
+                    #, excluding_iqname_prefixes_regex
+                    , to_exclude
                     , verbose=verbose
                     )
     #bug:assert len(all_iqnames) == sum(map(len, [
@@ -108,7 +145,10 @@ postcondition:
 def __handle_classfiles(
     existing_classfile_paths_via_jarfile
     , existing_iqnames
-    , sorted_excluding_iqname_prefixes
+    #, sorted_excluding_iqname_prefixes
+    #, excluding_iqname_prefix_trie
+    #, excluding_iqname_prefixes_regex
+    , to_exclude
     , *, verbose:bool
     ):
     oprint = make_print_on(verbose)
@@ -139,8 +179,7 @@ def __handle_classfiles(
             if depended_iqname in known_iqnames: continue
             known_iqnames.add(depended_iqname)
 
-            if contains_any_prefix_in_sorted_prefixes(
-                    depended_iqname, sorted_excluding_iqname_prefixes):
+            if to_exclude(depended_iqname):
                 excluded_iqnames.add(depended_iqname)
             else:
                 required_iqnames.add(depended_iqname)
@@ -189,12 +228,18 @@ NOTE:
     parser.add_argument('-v', '--verbose', action='store_true'
                         , default = False
                         , help='show details')
+    parser.add_argument('-mm', '--prefix_match_method'
+                        , default='trie'
+                        , choices='native trie regex'.split()
+                        , help='how to match excluding_iqname_prefixes?'
+                        )
 
     args = parser.parse_args(argv)
     jarfile_paths = args.input_jarfiles
     excluding_iqname_prefixes = sorted(args.exclude_prefixes)
     verbose = args.verbose
     oprint = make_print_on(verbose)
+    version = args.prefix_match_method
 
     jarfile_paths = sorted(set(map(os.path.abspath, jarfile_paths)))
     for jarfile_path in jarfile_paths:
@@ -203,7 +248,11 @@ NOTE:
 
         (existing_iqnames, required_iqnames, excluded_iqnames
             ) = query_jarfile_class_dependences(
-                jarfile_path, excluding_iqname_prefixes, verbose=verbose)
+                jarfile_path
+                , excluding_iqname_prefixes
+                , verbose=verbose
+                , version=version
+                )
         if required_iqnames:
             print_err(f'error: {jarfile_path!r}')
             print_err(f'required_iqnames={required_iqnames!r}')
