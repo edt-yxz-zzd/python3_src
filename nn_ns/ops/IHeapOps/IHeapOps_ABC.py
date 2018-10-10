@@ -47,6 +47,7 @@ new_methods:
     to_parent_idx
     to_child_idc
     basic__make_heap_inplace
+    basic__verify_heap
     basic__move_backward_at
     basic__move_forward_at
     xobj2wrapped_obj
@@ -57,6 +58,7 @@ new_methods:
     basic__pop
     basic__push
     basic__delete_at
+    basic__peek_at
 
     is_empty
     get_size
@@ -72,6 +74,7 @@ new_methods:
     pop
     push
     delete_at
+    peek_at
 
 '''
     __slots__ = ()
@@ -120,7 +123,59 @@ n = (N-1)//2
 
 
     def basic__make_heap_inplace(ops, wrapped_obj_seq):
-        '''heapify'''
+        '''heapify using sift_down; O(N)
+
+https://stackoverflow.com/questions/9755721/how-can-building-a-heap-be-on-time-complexity
+heapify using sift_down instead of sift_up
+
+N = sum 2**i {i=0..n} = 2**(n+1)-1
+floor_log2(N) = n
+O(heapify-using-sift_down)
+    = sum max-sift_down-steps[level] * num_nodes[level] {level}
+    = sum max-distance-to-leaf[level] * num_nodes[level] {level}
+    = sum (n - level) * 2**level {level=0..n}
+    = sum n * 2**level {level=0..n}
+    - sum level * 2**level {level=0..n}
+    = n*N - sum level * 2**level {level=0..n}
+    # D(x*e**x)/Dx = e**x + x*e**x
+    # Integral (D(x*e**x)/Dx - e**x) Dx == Integral x*e**x Dx
+    # x*e**x - e**x + C == Integral x*e**x Dx
+    # let n*2**n *A - 2**n *B + C == sum level * 2**level {level=0..n}
+    #   -B + C == 0
+    #   2*A - 2*B + C == 2 == 2A-B
+    #   8*A - 4*B + C == 10 == 8A-3B
+    #   A=B=C=2
+    # f(n) = (n-1)*2**(n+1) + 2 == sum level * 2**level {level=0..n}
+    # f(0) = 0
+    # f(n+1) - f(n) = 2*n*2**(n+1) - (n-1)*2**(n+1) = (n+1)*2**(n+1)
+    = n*N - ((n-1)*2**(n+1) + 2)
+    = n*N - ((n-1)*(N+1) + 2)
+    = n*N - (n*N+n -N-1 + 2)
+    = N-n-1
+    = O(N)
+
+O(heapify-using-sift_up)
+    = sum max-sift_up-steps[level] * num_nodes[level] {level}
+    = sum max-distance-to-root[level] * num_nodes[level] {level}
+    = sum level * 2**level {level=0..n}
+    = (n-1)*2**(n+1) + 2
+    = (n-1)*(N+1) + 2
+    = O(N*logN)
+'''
+        # ver2
+        L = len(wrapped_obj_seq)
+        if L < 2: return
+        # L >= 2
+        # L-1 >= 1
+        max_child_idx = L-1
+        assert max_child_idx > 0
+        max_parent_idx = ops.to_parent_idx(max_child_idx)
+        for parent_idx in range(max_parent_idx, -1, -1):
+            ops.basic__move_backward_at(wrapped_obj_seq, parent_idx)
+        assert ops.basic__verify_heap(wrapped_obj_seq)
+        return
+
+        # ver1 bug: forgot sift_down!!!!
         #for i in reversed(range(len(wrapped_obj_seq))) if i > 0:
         for child_idx in range(len(wrapped_obj_seq)-1, 0, -1):
             parent_idx = ops.to_parent_idx(child_idx)
@@ -128,12 +183,21 @@ n = (N-1)//2
             if not ops.basic__can_be_parent_idx_of(wrapped_obj_seq
                 , parent_idx, child_idx):
                 ops.basic__swap(wrapped_obj_seq, parent_idx, child_idx)
+        assert ops.basic__verify_heap(wrapped_obj_seq)
 
+    def basic__verify_heap(ops, wrapped_obj_seq):
+        for child_idx in range(len(wrapped_obj_seq)-1, 0, -1):
+            parent_idx = ops.to_parent_idx(child_idx)
+            if not ops.basic__can_be_parent_idx_of(wrapped_obj_seq
+                , parent_idx, child_idx):
+                return False
+        return True
 
     ####################
 
     def basic__move_backward_at(ops, wrapped_obj_seq, idx):
         # -> new_idx
+        # sift_down
         assert 0 <= idx < len(wrapped_obj_seq)
         L = len(wrapped_obj_seq)
         if L < 2:
@@ -154,7 +218,7 @@ n = (N-1)//2
             fst_child_idx, snd_child_idx = ops.to_child_idc(parent_idx)
             idc = [parent_idx, fst_child_idx, snd_child_idx]
             #idc.sort(key=)
-            keys = [key(wrapped_obj_seq[i]) for i in idc]
+            keys = [ops.wrapped_obj2key(wrapped_obj_seq[i]) for i in idc]
             [parent_key, fst_child_key, snd_child_key] = keys
             (next_parent_key, next_parent_idx) = (
                 (fst_child_key, fst_child_idx)
@@ -194,9 +258,12 @@ n = (N-1)//2
 
     def basic__move_forward_at(ops, wrapped_obj_seq, idx):
         # -> new_idx
+        # sift_up
         assert 0 <= idx < len(wrapped_obj_seq)
         child_idx = idx; del idx
+        #rint(f'wrapped_obj_seq={wrapped_obj_seq}')
         while child_idx:
+            #rint(f'child_idx={child_idx}')
             parent_idx = ops.to_parent_idx(child_idx)
             if ops.basic__can_be_parent_idx_of(wrapped_obj_seq, parent_idx, child_idx):
                 break
@@ -283,21 +350,18 @@ n = (N-1)//2
         # -> xobj
         assert wrapped_obj_seq
         last_wrapped_obj = wrapped_obj_seq.pop()
-        if wrapped_obj_seq:
-            head_xobj = ops.basic__pop_then_push(wrapped_obj_seq
-                                , last_wrapped_obj, wrapped=wrapped)
-        else:
-            # assert not wrapped_obj_seq
-            head_wrapped_obj = last_wrapped_obj
-            head_xobj = ops.wrapped_obj2xobj(head_wrapped_obj, wrapped=wrapped)
+        head_wrapped_obj = ops.basic__push_then_pop(
+            wrapped_obj_seq, last_wrapped_obj, wrapped=True)
+        head_xobj = ops.wrapped_obj2xobj(head_wrapped_obj, wrapped=wrapped)
         return head_xobj
 
 
     def basic__push(ops, wrapped_obj_seq, xobj, *, wrapped):
+        # -> new_idx
         idx = len(wrapped_obj_seq)
         wrapped_obj = ops.xobj2wrapped_obj(xobj, idx, wrapped=wrapped)
         wrapped_obj_seq.append(wrapped_obj)
-        ops.basic__move_forward_at(wrapped_obj_seq, idx)
+        return ops.basic__move_forward_at(wrapped_obj_seq, idx)
 
     #################
 
@@ -313,6 +377,13 @@ n = (N-1)//2
             pass
         else:
             ops.basic__replace_at(wrapped_obj_seq, idx, last_wrapped_obj, wrapped=True)
+        return result_xobj
+
+    def basic__peek_at(ops, wrapped_obj_seq, idx, *, wrapped):
+        # -> xobj
+        assert 0 <= idx < len(wrapped_obj_seq)
+        result_wrapped_obj = wrapped_obj_seq[idx]
+        result_xobj = ops.wrapped_obj2xobj(result_wrapped_obj, wrapped=wrapped)
         return result_xobj
 
 
@@ -391,6 +462,7 @@ n = (N-1)//2
         return ops.basic__pop(wrapped_obj_seq, wrapped=wrapped)
 
     def push(ops, heap, xobj, *, wrapped):
+        # -> new_idx
         wrapped_obj_seq = ops.wrap_heap(heap)
         return ops.basic__push(wrapped_obj_seq, xobj, wrapped=wrapped)
 
@@ -400,6 +472,12 @@ n = (N-1)//2
         # -> xobj
         wrapped_obj_seq = ops.wrap_heap(heap)
         return ops.basic__delete_at(wrapped_obj_seq, idx, wrapped=wrapped)
+
+    def peek_at(ops, heap, idx, *, wrapped):
+        # -> xobj
+        wrapped_obj_seq = ops.wrap_heap(heap)
+        return ops.basic__peek_at(wrapped_obj_seq, idx, wrapped=wrapped)
+
 
 
 

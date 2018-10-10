@@ -25,6 +25,7 @@ class IHeapOps(IOps):
     pop
     push
     delete_at
+    peek_at
 '''
     __slots__ = ()
     #################
@@ -58,8 +59,10 @@ class IHeapOps(IOps):
 
 
     #################
+    @not_implemented
     def is_empty(ops, heap):
         # -> bool
+        raise NotImplementedError
         return not ops.get_size(heap)
     @not_implemented
     def get_size(ops, heap):
@@ -103,6 +106,7 @@ class IHeapOps(IOps):
 
     @not_implemented
     def push(ops, heap, xobj, *, wrapped):
+        # -> new_idx
         raise NotImplementedError
 
     ###############
@@ -111,6 +115,12 @@ class IHeapOps(IOps):
     def delete_at(ops, heap, idx, *, wrapped):
         # -> xobj
         raise NotImplementedError
+
+    @not_implemented
+    def peek_at(ops, heap, idx, *, wrapped):
+        # -> xobj
+        raise NotImplementedError
+
 
 
 

@@ -85,6 +85,11 @@ new_methods:
         # -> xobj
         return ops.get_user_heap_ops().delete_at(heap, idx, wrapped=wrapped)
 
+    def peek_at(ops, heap, idx, *, wrapped):
+        # -> xobj
+        return ops.get_user_heap_ops().peek_at(heap, idx, wrapped=wrapped)
+
+
 
 if __name__ == '__main__':
     XXX = IUserHeapOps
