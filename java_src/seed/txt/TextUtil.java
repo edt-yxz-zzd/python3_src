@@ -1,14 +1,21 @@
 
 /*
-bug fixed:
+bug1 fixed:
+    PrefixesRegex
     make_prefixes_regex_pattern()
         fixed: sort the prefixes before construct regex
         #The Pattern engine performs traditional NFA-based matching with ordered alternation as occurs in Perl 5.
         # !!!!!!!!!!!!!!!!"ordered alternation"!!!!!!!!!!!!!!!!!
-
+bug2 fixed:
+    PrefixesRegex
+    make_prefixes_regex_pattern()
+        len(prefixes) may be 0
+        using dead_regex when 0
 */
 package seed.txt;
 
+import seed.collection_util.StringUtil;
+import seed.collection_util.FunctionalMapUtil;
 import seed.collection_util.CollectionUtil;
 
 
@@ -21,6 +28,7 @@ import java.util.regex.PatternSyntaxException;
 
 
 public class TextUtil {
+private static final Pattern dead_regex = Pattern.compile("(?:(?!1)1)");
 
 public static class PrefixesRegex{
     private Pattern regex;
@@ -32,18 +40,29 @@ public static class PrefixesRegex{
     make_prefixes_regex_pattern(Iterator<String> prefixes){
         // "(?:<prefix0>|<prefix1>|...)"
         prefixes = CollectionUtil.py_sorted(prefixes, true).iterator();
+        if (!prefixes.hasNext()){
+            return TextUtil.dead_regex.pattern();
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append("(?:");
-        while (prefixes.hasNext()){
+        if (true)
+            StringUtil.join(sb, "|", FunctionalMapUtil.map(Pattern::quote, prefixes));
+        else{
+        sb.append(Pattern.quote(prefixes.next()));
+        /*
+        if (prefixes.hasNext()){
             sb.append(Pattern.quote(prefixes.next()));
-            // bug: continue
-            break;
+            // bug: once using "while" instead of "if" and forgot "break"
         }
+        */
+
         while (prefixes.hasNext()){
             sb.append('|');
             sb.append(Pattern.quote(prefixes.next()));
         }
+        }//else
+
         sb.append(")");
         String pattern = sb.toString();
         return pattern;

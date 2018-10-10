@@ -1,6 +1,8 @@
 -main
 toplevels:
 modules:
+    seed.collection_util.StringUtil
+    seed.collection_util.FunctionalMapUtil
     seed.collection_util.CollectionUtil
 resources:
 

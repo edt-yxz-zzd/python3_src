@@ -3,5 +3,8 @@ toplevels:
 modules:
     seed.abc.IConsumerExc
     seed.abc.IBiConsumerExc
+    seed.collection_util.ToIterUtil
+    seed.collection_util.StringUtil
+    seed.collection_util.FunctionalMapUtil
 resources:
 

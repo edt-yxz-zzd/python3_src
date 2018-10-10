@@ -9,6 +9,8 @@ from ..abc import override
 
 class StdMaybeOps(IMaybeOps):
     '()|(value,)'
+    __slots__ = ()
+
     @override
     def mkJust(ops, value):
         # value -> Just value
@@ -38,10 +40,12 @@ class StdMaybeOps(IMaybeOps):
         return maybe
 
 
+    @override
     def __eq__(ops, other):
         if isinstance(other, __class__):
             return True
         return NotImplemented
+    @override
     def __hash__(ops):
         return hash(__class__)
 

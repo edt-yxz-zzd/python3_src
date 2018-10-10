@@ -16,7 +16,7 @@ from seed.tiny import print_err
 from seed.filesys.to_absolute_posix_path import to_absolute_posix_path
 from seed.helper.make_print_on import make_print_on
 from seed.algo.search_prefixes.get_may_longest_prefix_idx_in_sorted_prefixes import contains_any_prefix_in_sorted_prefixes
-from nn_ns.Trie.Trie import CharTrie
+from .import_CharTrie import CharTrie
 import re
 
 from zipfile import ZipFile

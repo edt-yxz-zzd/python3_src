@@ -184,6 +184,7 @@ __all__ = '''
 
 from .abc import ABC, abstractmethod, override, not_implemented, ABCMeta
 from collections import namedtuple
+from collections.abc import MutableMapping
 
 from seed.iters.calc_common_prefix_length import calc_common_prefix_length
 from seed.types.view.SeqSliceView import SeqSliceView
@@ -289,7 +290,7 @@ class TrieNonEmptyRoot(IOpGetMaybeSymbol2Child, ITrieNullableRoot):
         return self.maybe_symbol2child__ge1
 
 
-class ITrie(ABC):
+class ITrie(MutableMapping, ABC):
     '''
 nn_ns.ops.IMaybeOps
 nn_ns.ops.IMappingOps
@@ -479,6 +480,9 @@ def query_maybe_longest_prefix_item(self, symbols):
         '''
         return ans
     def __query_maybe_longest_prefix_item__(self, symbols):
+        # bug: forgot TrieEmptyRoot
+        if not self: return None
+
         (total_ancestor_symbols, remain_common_prefix_length
             , ancestors, xnode) = self.find(symbols)
 
@@ -518,7 +522,7 @@ def query_maybe_longest_prefix_item(self, symbols):
                 longest_prefix_length = sum(
                     len(branch.get_symbols_segment())
                     for branch in ancestors)
-                return (longest_prefix_length, leaf, value)
+                return (longest_prefix_length, leaf.value)
         return None
 
     def find(self, symbols):

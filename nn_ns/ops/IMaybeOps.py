@@ -1,8 +1,9 @@
 
 __all__ = ['IMaybeOps']
 from .abc import ABC, abstractmethod, override, not_implemented, ABCMeta
+from .IOps import IOps
 
-class IMaybeOps:
+class IMaybeOps(IOps):
     '''
 use cases:
     for value in ops.iter(maybe):
@@ -11,6 +12,8 @@ use cases:
     else:
         ...
 '''
+    __slots__ = ()
+
     @not_implemented
     def mkJust(ops, value):
         # value -> Just value

@@ -15,4 +15,6 @@ javac -cp . nn_ns/cli/argparser/PrefixedArgumentsParser.java -Xlint:unchecked
 
 javac -cp . seed/unions/Either.java -Xlint:unchecked
 javac -cp . seed/abc/IFunctionExc.java
+javac -cp . seed/collection_util/FunctionalMapUtil.java -Xlint:unchecked
+javac -cp . seed/collection_util/StringUtil.java -Xlint:unchecked
 

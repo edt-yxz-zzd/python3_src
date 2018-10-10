@@ -42,6 +42,8 @@ package nn_ns.cli.argparser;
 
 import seed.tuples.Pair;        // fst
 import seed.collection_util.CollectionUtil;
+import seed.collection_util.ToIterUtil;
+import seed.collection_util.StringUtil;
 import seed.repr.Repr;
 import nn_ns.abc.IParser;
 import nn_ns.parsers.IChoiceParser;
@@ -145,12 +147,12 @@ make_help_string
     String endl = "\n";
 
     if (!description.isEmpty()){
-        CollectionUtil.appendln(help, "Description:");
-        CollectionUtil.appendln(help, indent, description);
-        CollectionUtil.appendln(help);
+        StringUtil.appendln(help, "Description:");
+        StringUtil.appendln(help, indent, description);
+        StringUtil.appendln(help);
     }
 
-    CollectionUtil.appendln(help, "Options:");
+    StringUtil.appendln(help, "Options:");
     for (final String option_name : option_names){
         ArrayList<String> prefixes
             = option_name2prefixes.get(option_name);
@@ -174,17 +176,17 @@ make_help_string
                 CollectionUtil.mkArrayList(choices));
             may_from_choices_str = " from " + choices_str;
         }
-        CollectionUtil.appendln(help, indent
+        StringUtil.appendln(help, indent
             , option_title, may_assign_default_str, may_from_choices_str);
 
-        CollectionUtil.appendln(help, indent, indent, Repr.repr(prefixes));
-        CollectionUtil.appendln(help, indent, indent, "# ", option_args.help);
+        StringUtil.appendln(help, indent, indent, Repr.repr(prefixes));
+        StringUtil.appendln(help, indent, indent, "# ", option_args.help);
     }
 
     if (!extra_description.isEmpty()){
-        CollectionUtil.append(help
+        StringUtil.append(help
             , endl, endl, "-----------------", endl);
-        CollectionUtil.appendln(help, extra_description);
+        StringUtil.appendln(help, extra_description);
     }
     return help.toString();
 }
@@ -208,7 +210,7 @@ make_option_name2prefixes(Map<String, String> prefix2option_name){
 
 public Pair<Map<String, Object>, ArrayList<String>>
 parse_args(String... args) throws Exception {
-    return parse_args(CollectionUtil.to_iterator(args));
+    return parse_args(ToIterUtil.to_iterator(args));
 }
 public Pair<Map<String, Object>, ArrayList<String>>
 parse_args(Iterator<String> args) throws Exception {

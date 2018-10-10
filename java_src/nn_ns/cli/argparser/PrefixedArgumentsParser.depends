@@ -2,6 +2,8 @@
 toplevels:
 modules:
     seed.tuples.Pair
+    seed.collection_util.ToIterUtil
+    seed.collection_util.StringUtil
     seed.collection_util.CollectionUtil
     seed.repr.Repr
     seed.txt.TextUtil
