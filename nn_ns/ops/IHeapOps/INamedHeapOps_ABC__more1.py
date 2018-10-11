@@ -38,7 +38,7 @@ wrapped_obj :: WrappedObj
     def set_idx_of_wrapped_obj(ops, wrapped_obj, idx):
         wrapped_obj.idx = idx
     @override
-    def get_idx_of_wrapped_obj(ops, wrapped_obj, idx):
+    def get_idx_of_wrapped_obj(ops, wrapped_obj):
         return wrapped_obj.idx
 
 

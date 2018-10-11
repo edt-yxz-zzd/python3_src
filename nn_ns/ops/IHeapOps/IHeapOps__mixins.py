@@ -10,6 +10,7 @@ class IHeapOps__mixins(IHeapOps):
     '''
 
     is_empty
+    verify_heap
     xobj2wrapped_obj
     wrapped_obj2xobj
     push_then_pop
@@ -20,6 +21,17 @@ class IHeapOps__mixins(IHeapOps):
     def is_empty(ops, heap):
         # -> bool
         return not ops.get_size(heap)
+    @override
+    def verify_heap(ops, heap):
+        # -> Bool
+        # True if OK
+        try:
+            ops.check_heap(heap)
+        except ValueError:
+            return False
+        return True
+
+
     @override
     def xobj2wrapped_obj(ops, xobj, maybe_inner_pointer, *, wrapped):
         # -> wrapped_obj
@@ -54,7 +66,7 @@ class IHeapOps__mixins(IHeapOps):
         if ops.can_be_parent_key_of(input_key, head_key):
             return input_xobj
 
-        head_xobj = ops.pop_then_push(input_xobj, wrapped=wrapped)
+        head_xobj = ops.pop_then_push(heap, input_xobj, wrapped=wrapped)
         return head_xobj
 
 

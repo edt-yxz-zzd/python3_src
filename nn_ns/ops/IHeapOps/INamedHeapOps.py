@@ -25,6 +25,10 @@ new_methods:
     `is_empty
     `get_size
     `exists
+    `verify_named_heap
+    `check_named_heap
+    `make_unwrapped_obj_list
+    `check_and_make_unwrapped_obj_list
     ##`make_heap_from_iterable
     `add_name
     `update_name
@@ -65,6 +69,24 @@ new_methods:
         # -> Bool
         raise NotImplementedError
 
+    @not_implemented
+    def verify_named_heap(ops, heap):
+        # -> Bool
+        # True if OK
+        raise NotImplementedError
+    @not_implemented
+    def check_named_heap(ops, heap):
+        # -> (None|raise ValueError)
+        raise NotImplementedError
+    @not_implemented
+    def make_unwrapped_obj_list(ops, heap):
+        # -> [unwrapped_obj]
+        # -> [(name, key, payload)]
+        raise NotImplementedError
+    @not_implemented
+    def check_and_make_unwrapped_obj_list(ops, heap):
+        # -> ([unwrapped_obj]|raise ValueError)
+        raise NotImplementedError
     ####################
 
 

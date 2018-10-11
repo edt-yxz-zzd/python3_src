@@ -20,6 +20,8 @@ class IHeapOps(IOps):
 
     `is_empty
     `get_size
+    `verify_heap
+    `check_heap
 
     `xobj2wrapped_obj
     `wrapped_obj2xobj
@@ -72,6 +74,15 @@ class IHeapOps(IOps):
         # -> UInt
         raise NotImplementedError
 
+    @not_implemented
+    def verify_heap(ops, heap):
+        # -> bool
+        # True if OK
+        raise NotImplementedError
+    @not_implemented
+    def check_heap(ops, heap):
+        # -> (None|raise ValueError)
+        raise NotImplementedError
 
     ################
 

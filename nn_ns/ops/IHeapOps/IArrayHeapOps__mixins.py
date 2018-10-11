@@ -12,11 +12,24 @@ from .IHeapOps__mixins import IHeapOps__mixins
 class IArrayHeapOps__mixins(IHeapOps__mixins, IArrayHeapOps):
     '''
 
+make_unwrapped_obj_list
+check_and_make_unwrapped_obj_list
 peek
 pop_then_push
 pop
 '''
     __slots__ = ()
+    #################
+    @override
+    def make_unwrapped_obj_list(ops, heap):
+        # -> [unwrapped_obj]
+        L = ops.get_size(heap)
+        return [ops.peek_at(heap, i, wrapped=False) for i in range(L)]
+    @override
+    def check_and_make_unwrapped_obj_list(ops, heap):
+        # -> ([unwrapped_obj]|raise ValueError)
+        ops.check_heap(heap)
+        return ops.make_unwrapped_obj_list(heap)
     ##############
 
     @override
@@ -34,7 +47,7 @@ pop
     @override
     def pop(ops, heap, *, wrapped):
         # -> xobj
-        return ops.delete_at(ops, heap, 0, wrapped=wrapped)
+        return ops.delete_at(heap, 0, wrapped=wrapped)
 
 
 if __name__ == '__main__':

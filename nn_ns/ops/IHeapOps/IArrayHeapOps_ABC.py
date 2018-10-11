@@ -51,6 +51,7 @@ new_methods:
     to_child_idc
     basic__make_array_heap_inplace
     basic__verify_heap
+    basic__check_heap
     basic__move_backward_at
     basic__move_forward_at
     #xobj2wrapped_obj
@@ -65,6 +66,7 @@ new_methods:
 
     is_empty
     get_size
+    check_heap
 
     #peek
     #pop_then_push
@@ -192,12 +194,21 @@ O(heapify-using-sift_up)
         assert ops.basic__verify_heap(wrapped_obj_seq)
 
     def basic__verify_heap(ops, wrapped_obj_seq):
+        # -> Bool
+        # True if OK
+        try:
+            ops.basic__check_heap(wrapped_obj_seq)
+        except ValueError:
+            return False
+        return True
+    def basic__check_heap(ops, wrapped_obj_seq):
+        # -> (None|raise ValueError)
         for child_idx in range(len(wrapped_obj_seq)-1, 0, -1):
             parent_idx = ops.to_parent_idx(child_idx)
             if not ops.basic__can_be_parent_idx_of(wrapped_obj_seq
                 , parent_idx, child_idx):
-                return False
-        return True
+                raise ValueError(f'wrapped_obj_seq: key@{parent_idx} is not possible parent key of key@{child_idx}')
+        return None
 
     ####################
 
@@ -344,6 +355,12 @@ O(heapify-using-sift_up)
         # -> UInt
         wrapped_obj_seq = ops.wrap_heap(heap)
         return len(wrapped_obj_seq)
+    @override
+    def check_heap(ops, heap):
+        # -> bool
+        # True if OK
+        wrapped_obj_seq = ops.wrap_heap(heap)
+        return ops.basic__check_heap(wrapped_obj_seq)
     def can_be_parent_idx_of(ops, heap, parent_idx, child_idx):
         # assert 0 <= parent_idx == to_parent_idx(child_idx) < child_idx < len(wrapped_obj_seq)
         wrapped_obj_seq = ops.wrap_heap(heap)

@@ -1,12 +1,12 @@
 
 from ..abc import abstractmethod, override, not_implemented
-from .IHeapOps_ABC import IHeapOps_ABC
+from .IArrayHeapOps_ABC import IArrayHeapOps_ABC
 
 import unittest
 from unittest import TestCase
 
 
-class Try_IHeapOps_ABC(IHeapOps_ABC):
+class Try_IArrayHeapOps_ABC(IArrayHeapOps_ABC):
     '''
 
 override:
@@ -65,9 +65,9 @@ data:
     def __hash__(ops):
         return hash((type(ops),))
 
-class Test_IHeapOps_ABC(TestCase):
+class Test_IArrayHeapOps_ABC(TestCase):
     def __init__(self, *args, **kwargs):
-        self.heap_ops = Try_IHeapOps_ABC()
+        self.heap_ops = Try_IArrayHeapOps_ABC()
         self.heap = {}
         super().__init__(*args, **kwargs)
 
@@ -102,7 +102,7 @@ class Test_IHeapOps_ABC(TestCase):
         get_size = heap_ops.get_size
 
         self.wrapped_obj_seq = []
-        heap_ops.make_heap_inplace(heap)
+        heap_ops.make_array_heap_inplace(heap)
         self.assertTrue(is_empty(heap))
         self.assertEqual(get_size(heap), 0)
         self.assertEqual(self.wrapped_obj_seq, [])
@@ -111,14 +111,14 @@ class Test_IHeapOps_ABC(TestCase):
         def make_wrapped_obj_seq(ls):
             return [(None, x) for x in ls]
         self.wrapped_obj_seq = make_wrapped_obj_seq([1,2,3,4])
-        heap_ops.make_heap_inplace(heap)
+        heap_ops.make_array_heap_inplace(heap)
         self.assertFalse(is_empty(heap))
         self.assertEqual(get_size(heap), 4)
         self.assertEqual(self.wrapped_obj_seq, make_wrapped_obj_seq([4,2,3,1]))
 
 
         self.wrapped_obj_seq = make_wrapped_obj_seq([1,2,[1],4])
-        heap_ops.make_heap_inplace(heap)
+        heap_ops.make_array_heap_inplace(heap)
         self.assertFalse(is_empty(heap))
         self.assertEqual(get_size(heap), 4)
         self.assertEqual(self.wrapped_obj_seq, make_wrapped_obj_seq([4,2,[1],1]))

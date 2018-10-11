@@ -15,6 +15,7 @@ class IArrayHeapOps(IHeapOps):
 
     is_empty
     `get_size
+    `verify_heap
 
     peek
     pop_then_push
@@ -22,12 +23,23 @@ class IArrayHeapOps(IHeapOps):
     pop
     `push
 
+    `make_unwrapped_obj_list
+    `check_and_make_unwrapped_obj_list
     `make_array_heap_inplace
     `peek_at
     `delete_at
     `replace_at
 '''
     __slots__ = ()
+    #################
+    @not_implemented
+    def make_unwrapped_obj_list(ops, heap):
+        # -> [unwrapped_obj]
+        raise NotImplementedError
+    @not_implemented
+    def check_and_make_unwrapped_obj_list(ops, heap):
+        # -> ([unwrapped_obj]|raise ValueError)
+        raise NotImplementedError
     #################
 
     @not_implemented

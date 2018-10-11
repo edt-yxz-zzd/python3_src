@@ -20,6 +20,8 @@ override:
     push_then_pop
 
     is_empty
+    verify_named_heap
+    check_and_make_unwrapped_obj_list
     add_or_update_name
     push_then_pop_ex
     pop
@@ -73,13 +75,13 @@ methods:
         return ops.push_then_pop_ex(heap, name, key, payload)
     @override
     def push(ops, heap, unwrapped_obj):
-        # -> None
+        # -> new_inner_pointer
         name, key, payload = unwrapped_obj
-        ops.add_name(heap, name, key, payload)
+        return ops.add_name(heap, name, key, payload)
     @override
     def push_ex(ops, heap, name, key, payload):
-        # -> None
-        ops.add_name(heap, name, key, payload)
+        # -> new_inner_pointer
+        return ops.add_name(heap, name, key, payload)
 
 
 
@@ -90,6 +92,21 @@ methods:
     def is_empty(ops, heap):
         # -> bool
         return not ops.get_size(heap)
+    @override
+    def verify_named_heap(ops, heap):
+        # -> Bool
+        # True if OK
+        try:
+            ops.check_named_heap(heap)
+        except ValueError:
+            return False
+        return True
+
+    @override
+    def check_and_make_unwrapped_obj_list(ops, heap):
+        # -> ([unwrapped_obj]|raise ValueError)
+        ops.check_named_heap(heap)
+        return ops.make_unwrapped_obj_list(heap)
 
     @override
     def add_or_update_name(ops, heap, name, key, payload):
@@ -104,7 +121,7 @@ methods:
     @override
     def push_then_pop_ex(ops, heap, name, key, payload):
         # -> unwrapped_obj
-        assert not ops.exists(heap, name)
+        #ssert not ops.exists(heap, name)
 
         unwrapped_obj = (name, key, payload)
         if ops.is_empty(heap):
@@ -120,7 +137,8 @@ methods:
     @override
     def pop(ops, heap):
         # -> unwrapped_obj
-        assert not ops.is_empty(heap)
+        #ssert not ops.is_empty(heap)
+        if ops.is_empty(heap): raise KeyError('pop empty heap')
         name, key, payload = unwrapped_obj = ops.peek(heap)
         return ops.pop_name(heap, name)
 

@@ -160,11 +160,14 @@ class INamedHeapOps_ABC(INamedHeapOps__mixins):
         if new_name in name2wrapped_obj:
             # we have no "name_eq"
             #   , so cannot compare (old_name, new_name) at beginning
+            #
+            # rollback
+            # restore
             old_wrapped_obj = ops.get_inner_array_heap_ops().peek(
                 wrapped_obj_seq, wrapped=True)
             name2wrapped_obj[old_name] = old_wrapped_obj
             assert len(wrapped_obj_seq) == len(name2wrapped_obj)
-            raise KeyError(f'key exists: {name!r} and not head name')
+            raise KeyError(f'key exists: {new_name!r} and not head name')
 
 
         new_unwrapped_obj = new_name, key, payload
@@ -176,6 +179,38 @@ class INamedHeapOps_ABC(INamedHeapOps__mixins):
         return result_unwrapped_obj
 
 
+    @override
+    def check_named_heap(ops, heap):
+        # -> (None|raise ValueError)
+        wrapped_obj_seq = ops.get_idx2wrapped_obj(heap)
+        name2wrapped_obj = ops.get_name2wrapped_obj(heap)
+        if len(wrapped_obj_seq) != len(name2wrapped_obj): raise ValueError('seq and dict have diff sizes')
+        for i, wrapped_obj in enumerate(wrapped_obj_seq):
+            if i != ops.get_idx_of_wrapped_obj(wrapped_obj): raise ValueError('idx2wrapped_obj: wrapped_obj.idx is wrong')
+            name, key, payload = ops.unwrap(wrapped_obj)
+            _wrapped_obj = name2wrapped_obj[name]
+            if i != ops.get_idx_of_wrapped_obj(_wrapped_obj): raise ValueError('name2wrapped_obj: wrapped_obj.idx is wrong')
+
+
+        # compare two wrapped_obj sets
+        idc = list(map(ops.get_idx_of_wrapped_obj, name2wrapped_obj.values()))
+        L = len(name2wrapped_obj)
+        if not all(0 <= i < L for i in idc): raise ValueError('name2wrapped_obj: wrapped_obj.idx out-of-range; name2wrapped_obj and idx2wrapped_obj contain diff wrapped_objs')
+        idx2count = [0]*L
+        for i in idc:
+            idx2count[i] += 1
+        if not all(count==1 for count in idx2count): raise ValueError('name2wrapped_obj: wrapped_obj.idx out-of-range; name2wrapped_obj and idx2wrapped_obj contain diff wrapped_objs')
+        if set(range(L)) != set(idc): raise ValueError('name2wrapped_obj: wrapped_obj.idx out-of-range; name2wrapped_obj and idx2wrapped_obj contain diff wrapped_objs')
+
+        ops.get_inner_array_heap_ops().check_heap(wrapped_obj_seq)
+        return None
+
+    @override
+    def make_unwrapped_obj_list(ops, heap):
+        # -> [unwrapped_obj]
+        # -> [(name, key, payload)]
+        wrapped_obj_seq = ops.get_idx2wrapped_obj(heap)
+        return list(map(ops.unwrap, wrapped_obj_seq))
 
 
 
@@ -194,7 +229,7 @@ class InnerArrayHeapOps(IArrayHeapOps_ABC):#(, IHeapOps__with_IWrappedObjectOps)
 
 
     def set_idx_of_wrapped_obj(ops, wrapped_obj, idx):
-        return self.__outer_ops.set_idx_of_wrapped_obj(wrapped_obj, idx)
+        return ops.__outer_ops.set_idx_of_wrapped_obj(wrapped_obj, idx)
     @override
     def wrap_heap(ops, heap):
         # -> wrapped_obj_seq/idx2wrapped_obj
@@ -213,10 +248,10 @@ class InnerArrayHeapOps(IArrayHeapOps_ABC):#(, IHeapOps__with_IWrappedObjectOps)
     else:
         @override
         def wrap(ops, unwrapped_obj, idx):
-            return self.__outer_ops.wrap(unwrapped_obj, idx)
+            return ops.__outer_ops.wrap(unwrapped_obj, idx)
         @override
         def unwrap(ops, wrapped_obj):
-            return self.__outer_ops.unwrap(wrapped_obj)
+            return ops.__outer_ops.unwrap(wrapped_obj)
         @override
         def wrapped_obj2key(ops, wrapped_obj):
             return ops.unwrap(wrapped_obj)[KEY_IDX]

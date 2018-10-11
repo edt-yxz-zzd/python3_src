@@ -7,6 +7,7 @@ __all__ = '''
 from ..abc import abstractmethod, override, not_implemented
 from .INamedHeapOps__from_iterable import INamedHeapOps__from_iterable
 from .INamedHeapOps_ABC import INamedHeapOps_ABC
+#from seed.tiny import print_err
 
 
 
@@ -32,9 +33,11 @@ class INamedHeapOps_ABC__from_iterable(INamedHeapOps_ABC, INamedHeapOps__from_it
     @override
     def make_heap_from_iterable(ops, iter_unwrapped_objs):
         # Iter (name, key, payload) -> Heap
+        it = iter(iter_unwrapped_objs); del iter_unwrapped_objs
+
         idx2wrapped_obj = wrapped_obj_seq = []
         name2wrapped_obj = ops.make_new_name_dict()
-        for idx, (name, key, payload) in enumerate(iter_unwrapped_objs):
+        for idx, (name, key, payload) in enumerate(it):
             wrapped_obj = ops.wrap((name, key, payload), idx)
 
             name2wrapped_obj[name] = wrapped_obj
@@ -43,7 +46,9 @@ class INamedHeapOps_ABC__from_iterable(INamedHeapOps_ABC, INamedHeapOps__from_it
                 raise KeyError(f'key duplicated in make_heap_from_iterable: {name!r}')
         assert len(name2wrapped_obj) == len(idx2wrapped_obj)
 
-        ops.get_inner_heap_ops().make_array_heap_inplace(wrapped_obj_seq)
+        #print_err(list(map(ops.unwrap, wrapped_obj_seq)))
+        ops.get_inner_array_heap_ops().make_array_heap_inplace(wrapped_obj_seq)
+        #print_err(list(map(ops.unwrap, wrapped_obj_seq)))
         return ops.make_heap_from_parts(idx2wrapped_obj, name2wrapped_obj)
 
 
