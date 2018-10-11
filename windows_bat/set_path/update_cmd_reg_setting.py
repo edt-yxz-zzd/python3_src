@@ -1,6 +1,14 @@
 
 
 r'''
+update1:
+    "ScreenBufferSize"=dword:00460060
+    ==>> "ScreenBufferSize"=dword:012c0060
+    ; 0x46 ==>> 70 lines
+    ; at most 70 lines can occur on screen
+    ; 0x12c ==>> 300 lines
+
+######################## prototype baseline
 #see: HKEY_CURRENT_USER__Console[comment][20180927].reg
 
 Windows Registry Editor Version 5.00
@@ -176,7 +184,7 @@ def make_value_table_HKCU_Console_SystemRoot_system32_cmd_exe():
         {"ScreenColors":"dword:00000002"
 
         ,"FullScreen":"dword:00000001"
-        ,"ScreenBufferSize":"dword:00460060"
+        ,"ScreenBufferSize":"dword:012c0060"
         ,"WindowSize":"dword:00190060"
         }
 
@@ -189,7 +197,7 @@ def make_value_table_HKCU_Console_cmd_exe():
         {"ScreenColors":"dword:00000002"
 
         ,"FullScreen":"dword:00000001"
-        ,"ScreenBufferSize":"dword:00460060"
+        ,"ScreenBufferSize":"dword:012c0060"
         ,"WindowSize":"dword:00190060"
         }
 

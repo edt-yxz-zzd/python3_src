@@ -18,6 +18,28 @@ data NamedHeap seq map name key payload =
 data WrappedObj name key payload = (UnWrappedObj name key payload, mutable UInt)
 data UnWrappedObj name key payload = (name, key, payload)
 
+
+
+new_methods:
+    `can_be_parent_key_of
+    `is_empty
+    `get_size
+    `exists
+    ##`make_heap_from_iterable
+    `add_name
+    `update_name
+    `add_or_update_name
+    `pop_name
+    `delete_name
+    `discard_name
+    `peek
+    `pop_then_push_ex
+    `push_then_pop_ex
+    `pop_then_push
+    `push_then_pop
+    `pop
+    `push
+    `push_ex
 '''
     __slots__ = ()
     #################
@@ -45,23 +67,22 @@ data UnWrappedObj name key payload = (name, key, payload)
 
     ####################
 
-    @not_implemented
-    def make_heap_from_iterable(ops, iter_unwrapped_objs):
-        # Iter (name, key, payload) -> Heap
-        raise NotImplementedError
 
     @not_implemented
     def add_name(ops, heap, name, key, payload):
+        # -> new_inner_pointer
         # add non-existing name
         assert not ops.exists(heap, name)
         raise NotImplementedError
     @not_implemented
     def update_name(ops, heap, name, key, payload):
+        # -> new_inner_pointer
         # update existing name
         assert ops.exists(heap, name)
         raise NotImplementedError
     @not_implemented
     def add_or_update_name(ops, heap, name, key, payload):
+        # -> new_inner_pointer
         # add non-existing name or update existing name
         raise NotImplementedError
 
@@ -70,20 +91,31 @@ data UnWrappedObj name key payload = (name, key, payload)
         # -> unwrapped_obj
         assert ops.exists(heap, name)
         raise NotImplementedError
+    @not_implemented
     def delete_name(ops, heap, name):
-        return ops.pop_name(heap, name)
+        # -> None
+        raise NotImplementedError
+    @not_implemented
     def discard_name(ops, heap, name):
+        # -> Bool
+        # return True if existed
         # delete_name if existing
-        if ops.exists(heap, name):
-            ops.delete_name(heap, name)
+        raise NotImplementedError
 
 
     ##############
 
     @not_implemented
+    def peek(ops, heap):
+        # -> unwrapped_obj
+        assert not ops.is_empty(heap)
+        raise NotImplementedError
+
+    @not_implemented
     def pop_then_push_ex(ops, heap, name, key, payload):
         # -> unwrapped_obj
-        assert not ops.exists(heap, name)
+        assert not ops.is_empty(heap)
+        assert not ops.exists(heap, name) or ops.NOT-EXIST.name_eq(ops.peek(heap)[0], name)
         raise NotImplementedError
 
     @not_implemented
@@ -92,14 +124,14 @@ data UnWrappedObj name key payload = (name, key, payload)
         assert not ops.exists(heap, name)
         raise NotImplementedError
 
+    @not_implemented
     def pop_then_push(ops, heap, unwrapped_obj):
         # -> unwrapped_obj
-        name, key, payload = unwrapped_obj
-        return ops.pop_then_push_ex(heap, name, key, payload)
+        raise NotImplementedError
+    @not_implemented
     def push_then_pop(ops, heap, unwrapped_obj):
         # -> unwrapped_obj
-        name, key, payload = unwrapped_obj
-        return ops.push_then_pop_ex(heap, name, key, payload)
+        raise NotImplementedError
     #################
 
 
@@ -110,11 +142,14 @@ data UnWrappedObj name key payload = (name, key, payload)
         assert not ops.is_empty(heap)
         raise NotImplementedError
 
+    @not_implemented
     def push(ops, heap, unwrapped_obj):
-        name, key, payload = unwrapped_obj
-        ops.add_name(heap, name, key, payload)
+        # -> new_inner_pointer
+        raise NotImplementedError
+    @not_implemented
     def push_ex(ops, heap, name, key, payload):
-        ops.add_name(heap, name, key, payload)
+        # -> new_inner_pointer
+        raise NotImplementedError
 
 
 if __name__ == '__main__':

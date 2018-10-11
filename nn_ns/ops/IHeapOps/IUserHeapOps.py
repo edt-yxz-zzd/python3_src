@@ -50,14 +50,18 @@ new_methods:
 
     ################
 
-    def make_heap_inplace(ops, heap):
-        '''heapify'''
-        return ops.get_user_heap_ops().make_heap_inplace(heap)
+    def xobj2wrapped_obj(ops, xobj, idx, *, wrapped):
+        # -> wrapped_obj
+        return ops.get_user_heap_ops().xobj2wrapped_obj(xobj, idx, wrapped=wrapped)
 
-    def replace_at(ops, heap, idx, xobj, *, wrapped:bool):
-        # xobj = unwrapped_obj|wrapped_obj
-        # -> new_idx
-        return ops.get_user_heap_ops().replace_at(heap, idx, xobj, wrapped=wrapped)
+    def wrapped_obj2xobj(ops, wrapped_obj, *, wrapped):
+        # -> xobj
+        return ops.get_user_heap_ops().wrapped_obj2xobj(xobj, wrapped=wrapped)
+
+    @override
+    def peek(ops, heap, *, wrapped):
+        # -> xobj
+        return ops.get_user_heap_ops().peek(heap, wrapped=wrapped)
 
 
     ##############
@@ -78,16 +82,6 @@ new_methods:
 
     def push(ops, heap, xobj, *, wrapped):
         return ops.get_user_heap_ops().push(heap, xobj, wrapped=wrapped)
-
-    ###############
-
-    def delete_at(ops, heap, idx, *, wrapped):
-        # -> xobj
-        return ops.get_user_heap_ops().delete_at(heap, idx, wrapped=wrapped)
-
-    def peek_at(ops, heap, idx, *, wrapped):
-        # -> xobj
-        return ops.get_user_heap_ops().peek_at(heap, idx, wrapped=wrapped)
 
 
 

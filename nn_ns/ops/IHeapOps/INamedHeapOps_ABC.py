@@ -1,16 +1,20 @@
 
 __all__ = '''
     INamedHeapOps_ABC
-    InnerHeapOps
 
     NAME_IDX
     KEY_IDX
     PAYLOAD_IDX
+
+    InnerArrayHeapOps
+    InnerSeq
     '''.split()
 
 from ..abc import abstractmethod, override, not_implemented
-from .INamedHeapOps import INamedHeapOps
-from .IHeapOps_ABC import IHeapOps_ABC
+from .INamedHeapOps__mixins import INamedHeapOps__mixins
+from .IArrayHeapOps_ABC import IArrayHeapOps_ABC
+from .IHeapOps__with_IWrappedObjectOps import IHeapOps__with_IWrappedObjectOps
+from .IWrappedObjectOpsEx import IWrappedObjectOpsEx
 
 from collections import UserList
 
@@ -20,7 +24,7 @@ from collections import UserList
 
 NAME_IDX, KEY_IDX, PAYLOAD_IDX = range(3)
 
-class INamedHeapOps_ABC(INamedHeapOps):
+class INamedHeapOps_ABC(INamedHeapOps__mixins):
     __slots__ = ()
     #################
     @not_implemented
@@ -49,10 +53,7 @@ class INamedHeapOps_ABC(INamedHeapOps):
         raise NotImplementedError
 
     #################
-    @override
-    def is_empty(ops, heap):
-        # -> bool
-        return not ops.get_idx2wrapped_obj(heap)
+
     @override
     def get_size(ops, heap):
         # -> UInt
@@ -64,11 +65,13 @@ class INamedHeapOps_ABC(INamedHeapOps):
 
     ####################
 
-    def get_inner_heap_ops(ops):
+    def get_inner_array_heap_ops(ops):
         # -> IHeapOps
-        return InnerHeapOps(ops)
+        return InnerArrayHeapOps(ops)
     @override
     def add_name(ops, heap, name, key, payload):
+        # -> new_idx
+        # -> new_inner_pointer
         # add existing name
         if ops.exists(heap, name): raise KeyError(f'key exists: {name!r}')
         wrapped_obj_seq = ops.get_idx2wrapped_obj(heap)
@@ -78,13 +81,16 @@ class INamedHeapOps_ABC(INamedHeapOps):
 
         unwrapped_obj = name, key, payload
         wrapped_obj = ops.wrap(unwrapped_obj, L)
-        ops.get_inner_heap_ops().push(
+        new_idx = ops.get_inner_array_heap_ops().push(
             wrapped_obj_seq, wrapped_obj, wrapped=True)
         name2wrapped_obj[name] = wrapped_obj
         assert len(wrapped_obj_seq) == len(name2wrapped_obj)
+        return new_idx
 
     @override
     def update_name(ops, heap, name, key, payload):
+        # -> new_idx
+        # -> new_inner_pointer
         # update existing name
         if not ops.exists(heap, name): raise KeyError(f'key not exists: {name!r}')
 
@@ -99,20 +105,12 @@ class INamedHeapOps_ABC(INamedHeapOps):
 
         new_unwrapped_obj = name, key, payload
         new_wrapped_obj = ops.wrap(new_unwrapped_obj, idx)
-        ops.get_inner_heap_ops().replace_at(
+        new_idx = ops.get_inner_array_heap_ops().replace_at(
             wrapped_obj_seq, idx, new_wrapped_obj, wrapped=True)
         name2wrapped_obj[name] = new_wrapped_obj
         assert len(wrapped_obj_seq) == len(name2wrapped_obj)
+        return new_idx
 
-
-    @override
-    def add_or_update_name(ops, heap, name, key, payload):
-        # add non-existing name or update existing name
-        if ops.exists(heap, name):
-            f = ops.update_name
-        else:
-            f = ops.add_name
-        f(heap, name, key, payload)
 
     @override
     def pop_name(ops, heap, name):
@@ -126,7 +124,7 @@ class INamedHeapOps_ABC(INamedHeapOps):
         old_wrapped_obj = name2wrapped_obj[name]
         idx = ops.get_idx_of_wrapped_obj(old_wrapped_obj)
 
-        old_unwrapped_obj = ops.get_inner_heap_ops().delete_at(
+        old_unwrapped_obj = ops.get_inner_array_heap_ops().delete_at(
                     wrapped_obj_seq, idx, wrapped=False)
         del name2wrapped_obj[name]
         assert len(wrapped_obj_seq) == len(name2wrapped_obj)
@@ -136,103 +134,64 @@ class INamedHeapOps_ABC(INamedHeapOps):
     ##############
 
     @override
-    def pop_then_push_ex(ops, heap, name, key, payload):
+    def peek(ops, heap):
         # -> unwrapped_obj
-        if ops.exists(heap, name): raise KeyError(f'key exists: {name!r}')
+        if ops.is_empty(heap): raise KeyError('peek empty heap')
         wrapped_obj_seq = ops.get_idx2wrapped_obj(heap)
-        name2wrapped_obj = ops.get_name2wrapped_obj(heap)
-        assert len(wrapped_obj_seq) == len(name2wrapped_obj)
-
-        new_unwrapped_obj = name, key, payload
-        new_wrapped_obj = ops.wrap(new_unwrapped_obj, 0)
-        old_wrapped_obj = ops.get_inner_heap_ops().pop_then_push(
-            wrapped_obj_seq, new_wrapped_obj, wrapped=True)
-
-        result = old_unwrapped_obj = ops.unwrap(old_wrapped_obj)
-        old_name = old_unwrapped_obj[NAME_IDX]
-        new_name = name
-        del name2wrapped_obj[old_name]
-        name2wrapped_obj[new_name] = new_wrapped_obj
-        assert len(wrapped_obj_seq) == len(name2wrapped_obj)
-        return result
-
-    @override
-    def push_then_pop_ex(ops, heap, name, key, payload):
-        # -> unwrapped_obj
-        if ops.exists(heap, name): raise KeyError(f'key exists: {name!r}')
-        wrapped_obj_seq = ops.get_idx2wrapped_obj(heap)
-        name2wrapped_obj = ops.get_name2wrapped_obj(heap)
-        assert len(wrapped_obj_seq) == len(name2wrapped_obj)
-
-        new_unwrapped_obj = name, key, payload
-        new_wrapped_obj = ops.wrap(new_unwrapped_obj, 0)
-        old_wrapped_obj = ops.get_inner_heap_ops().push_then_pop(
-            wrapped_obj_seq, new_wrapped_obj, wrapped=True)
-
-        if old_wrapped_obj is new_wrapped_obj:
-            result = new_unwrapped_obj
-        else:
-            result = old_unwrapped_obj = ops.unwrap(old_wrapped_obj)
-            old_name = old_unwrapped_obj[NAME_IDX]
-            new_name = name
-            del name2wrapped_obj[old_name]
-            name2wrapped_obj[new_name] = new_wrapped_obj
-        assert len(wrapped_obj_seq) == len(name2wrapped_obj)
-        return result
-
-
-    #################
-
-    @override
-    def pop(ops, heap):
-        # -> unwrapped_obj
-        if ops.is_empty(heap): raise KeyError('pop empty heap')
-
-        wrapped_obj_seq = ops.get_idx2wrapped_obj(heap)
-        name2wrapped_obj = ops.get_name2wrapped_obj(heap)
-        assert len(wrapped_obj_seq) == len(name2wrapped_obj)
-
-        old_unwrapped_obj = ops.get_inner_heap_ops().pop(
+        return ops.get_inner_array_heap_ops().peek(
             wrapped_obj_seq, wrapped=False)
 
+    @override
+    def pop_then_push_ex(ops, heap, name, key, payload):
+        # -> unwrapped_obj
+        if ops.is_empty(heap): raise KeyError('pop empty heap')
+        #name_eq?????
+        #if ops.peek(heap)[NAME_IDX] != name and ops.exists(heap, name):
+        #    raise KeyError(f'key exists: {name!r} and not head name')
+        new_name = name; del name
+
+        wrapped_obj_seq = ops.get_idx2wrapped_obj(heap)
+        name2wrapped_obj = ops.get_name2wrapped_obj(heap)
+        assert len(wrapped_obj_seq) == len(name2wrapped_obj)
+
+        result_unwrapped_obj = old_unwrapped_obj = ops.peek(heap)
         old_name = old_unwrapped_obj[NAME_IDX]
         del name2wrapped_obj[old_name]
+        if new_name in name2wrapped_obj:
+            # we have no "name_eq"
+            #   , so cannot compare (old_name, new_name) at beginning
+            old_wrapped_obj = ops.get_inner_array_heap_ops().peek(
+                wrapped_obj_seq, wrapped=True)
+            name2wrapped_obj[old_name] = old_wrapped_obj
+            assert len(wrapped_obj_seq) == len(name2wrapped_obj)
+            raise KeyError(f'key exists: {name!r} and not head name')
+
+
+        new_unwrapped_obj = new_name, key, payload
+        new_wrapped_obj = ops.wrap(new_unwrapped_obj, 0)
+        name2wrapped_obj[new_name] = new_wrapped_obj
+        old_wrapped_obj = ops.get_inner_array_heap_ops().pop_then_push(
+            wrapped_obj_seq, new_wrapped_obj, wrapped=True)
         assert len(wrapped_obj_seq) == len(name2wrapped_obj)
-        return old_unwrapped_obj
+        return result_unwrapped_obj
 
 
 
+
+
 ########################################################################
 ########################################################################
-#############################InnerHeapOps###############################
+########################InnerArrayHeapOps###############################
+############################InnerSeq####################################
 ########################################################################
 ########################################################################
-class InnerHeapOps(IHeapOps_ABC):
+class InnerArrayHeapOps(IArrayHeapOps_ABC):#(, IHeapOps__with_IWrappedObjectOps):
     # non-static inner class inside INamedHeapOps_ABC
-    def __init__(ops, outer_ops:INamedHeapOps_ABC):
+    typeof_outer_ops = INamedHeapOps_ABC
+    #typeof_outer_ops = IWrappedObjectOpsEx
+    def __init__(ops, outer_ops:typeof_outer_ops):
         ops.__outer_ops = outer_ops
 
-    class InnerSeq(UserList):
-        def __init__(self, outer_self, seq):
-            super().__init__()
-            self.data = seq
-            assert self.data is seq
-            self.__outer_self = outer_self
-        def __setitem__(self, i, v):
-            # donot consider slice
-            #assert isinstance(i, int)
-            #assert isinstance(v, WrappedObj)
-            #assert type(i) is int, TypeError
-            #assert type(v) is WrappedObj, TypeError
-            self.data[i] = v
-            #v.idx = i
-            self.__outer_self.set_idx_of_wrapped_obj(v, i)
-        def append(self, v):
-            #assert type(v) is WrappedObj, TypeError
-            self.data.append(v)
-            i = len(self) - 1
-            #v.idx = i
-            self.__outer_self.set_idx_of_wrapped_obj(v, i)
 
     def set_idx_of_wrapped_obj(ops, wrapped_obj, idx):
         return self.__outer_ops.set_idx_of_wrapped_obj(wrapped_obj, idx)
@@ -241,21 +200,64 @@ class InnerHeapOps(IHeapOps_ABC):
         # -> wrapped_obj_seq/idx2wrapped_obj
         #return ops.InnerSeq(ops, ops.outer_ops.get_idx2wrapped_obj(heap))
         #assume heap is wrapped_obj_seq
-        return ops.InnerSeq(ops, heap)
-    @override
-    def wrap(ops, unwrapped_obj, idx):
-        return self.__outer_ops.wrap(unwrapped_obj, idx)
-    @override
-    def unwrap(ops, wrapped_obj):
-        return self.__outer_ops.unwrap(wrapped_obj)
-    @override
-    def wrapped_obj2key(ops, wrapped_obj):
-        return ops.unwrap(wrapped_obj)[KEY_IDX]
+        return InnerSeq(ops, heap)
     @override
     def can_be_parent_key_of(ops, parent_wrapped_key, child_wrapped_key):
         return ops.__outer_ops.can_be_parent_key_of(
             parent_wrapped_key, child_wrapped_key)
 
+    if typeof_outer_ops is IWrappedObjectOpsEx:
+        @override
+        def get_wrapped_obj_ops(ops):
+            return ops.__outer_ops
+    else:
+        @override
+        def wrap(ops, unwrapped_obj, idx):
+            return self.__outer_ops.wrap(unwrapped_obj, idx)
+        @override
+        def unwrap(ops, wrapped_obj):
+            return self.__outer_ops.unwrap(wrapped_obj)
+        @override
+        def wrapped_obj2key(ops, wrapped_obj):
+            return ops.unwrap(wrapped_obj)[KEY_IDX]
+
+
+    def get_hash_state(ops):
+        return type(ops), ops.__outer_ops
+    @override
+    def __eq__(ops, other):
+        if type(ops) is not type(other):
+            return False
+            return NotImplemented
+        return ops.__outer_ops == other.__outer_ops
+    @override
+    def __hash__(ops):
+        return hash(ops.get_hash_state())
+
+class InnerSeq(UserList):
+    # non-static inner class inside INamedHeapOps_ABC.InnerArrayHeapOps
+    def __init__(self, outer_self:InnerArrayHeapOps, seq):
+        super().__init__()
+        self.data = seq
+        assert self.data is seq
+        self.__outer_self = outer_self
+    def __setitem__(self, i, v):
+        # donot consider slice
+        #assert isinstance(i, int)
+        #assert isinstance(v, WrappedObj)
+        #assert type(i) is int, TypeError
+        #assert type(v) is WrappedObj, TypeError
+        self.data[i] = v
+        #v.idx = i
+        self.__outer_self.set_idx_of_wrapped_obj(v, i)
+    def append(self, v):
+        #assert type(v) is WrappedObj, TypeError
+        self.data.append(v)
+        i = len(self) - 1
+        #v.idx = i
+        self.__outer_self.set_idx_of_wrapped_obj(v, i)
+
+InnerArrayHeapOps(None)
 
 if __name__ == '__main__':
     XXX = INamedHeapOps_ABC

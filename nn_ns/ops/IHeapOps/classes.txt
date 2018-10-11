@@ -1,0 +1,34 @@
+# dir /b *.py
+# grepr "^class" # and then find ", "
+
+IHeapOps
+    IHeapOps__mixins
+    IHeapOps__with_IWrappedObjectOps
+    IUserHeapOps
+
+    IArrayHeapOps
+        IArrayHeapOps__mixins <: IHeapOps__mixins
+            IArrayHeapOps_ABC
+        IUserArrayHeapOps <: IUserHeapOps
+
+
+
+INamedHeapOps
+    INamedHeapOps__mixins
+        INamedHeapOps_ABC
+            INamedHeapOps_ABC__more1
+    INamedHeapOps__from_iterable
+        INamedHeapOps_ABC__from_iterable <: INamedHeapOps_ABC
+            INamedHeapOps_ABC__more2 <: INamedHeapOps_ABC__more1
+                PlainNamedMinHeapOps
+                    #thePlainNamedMinHeapOps <-
+
+IWrappedObjectOps
+    IWrappedObjectOpsEx
+
+#@INamedHeapOps_ABC
+    InnerArrayHeapOps <: IArrayHeapOps_ABC
+    InnerSeq <: UserList
+#@INamedHeapOps_ABC__more1
+    WrappedObj
+

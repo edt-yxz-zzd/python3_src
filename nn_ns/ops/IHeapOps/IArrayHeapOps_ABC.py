@@ -2,13 +2,13 @@
 
 
 __all__ = '''
-    IHeapOps_ABC
+    IArrayHeapOps_ABC
     '''.split()
 
 from ..abc import abstractmethod, override, not_implemented
-from .IHeapOps import IHeapOps
+from .IArrayHeapOps__mixins import IArrayHeapOps__mixins
 
-class IHeapOps_ABC(IHeapOps):
+class IArrayHeapOps_ABC(IArrayHeapOps__mixins):
     '''
 
 types:
@@ -20,6 +20,8 @@ types:
         used to compare by can_be_parent_key_of # __le__
     idx :: UInt # not allow negative integer
         0 <= idx < len(wrapped_obj_seq)
+        idx is inner_pointer
+        maybe_inner_pointer = None | idx
     heap
         the heap obj
     wrapped_obj_seq :: INOUT [w]
@@ -36,6 +38,7 @@ types:
 
 
 new_methods:
+    ############# '#' moved to baseclass; '##' removed method
     `wrap_heap
     `wrap
     `unwrap
@@ -46,16 +49,16 @@ new_methods:
     basic__swap
     to_parent_idx
     to_child_idc
-    basic__make_heap_inplace
+    basic__make_array_heap_inplace
     basic__verify_heap
     basic__move_backward_at
     basic__move_forward_at
-    xobj2wrapped_obj
+    #xobj2wrapped_obj
     basic__replace_at
-    wrapped_obj2xobj
-    basic__pop_then_push
-    basic__push_then_pop
-    basic__pop
+    #wrapped_obj2xobj
+    ##basic__pop_then_push
+    ##basic__push_then_pop
+    ##basic__pop
     basic__push
     basic__delete_at
     basic__peek_at
@@ -63,18 +66,21 @@ new_methods:
     is_empty
     get_size
 
+    #peek
+    #pop_then_push
+    #push_then_pop
+    #pop
+
     can_be_parent_idx_of
     swap
-    make_heap_inplace
     move_backward_at
     move_forward_at
-    replace_at
-    pop_then_push
-    push_then_pop
-    pop
+
+    make_array_heap_inplace
     push
-    delete_at
     peek_at
+    delete_at
+    replace_at
 
 '''
     __slots__ = ()
@@ -122,7 +128,7 @@ n = (N-1)//2
         return (first_child_idx, second_child_idx)
 
 
-    def basic__make_heap_inplace(ops, wrapped_obj_seq):
+    def basic__make_array_heap_inplace(ops, wrapped_obj_seq):
         '''heapify using sift_down; O(N)
 
 https://stackoverflow.com/questions/9755721/how-can-building-a-heap-be-on-time-complexity
@@ -274,15 +280,6 @@ O(heapify-using-sift_up)
 
     ##############
 
-    def xobj2wrapped_obj(ops, xobj, idx, *, wrapped):
-        assert idx >= 0
-        if wrapped:
-            wrapped_obj = xobj
-        else:
-            unwrapped_obj = xobj
-            wrapped_obj = ops.wrap(unwrapped_obj, idx)
-        return wrapped_obj
-
     def basic__replace_at(ops, wrapped_obj_seq, idx, xobj, *, wrapped:bool):
         # xobj = unwrapped_obj|wrapped_obj
         # -> new_idx
@@ -301,61 +298,6 @@ O(heapify-using-sift_up)
 
     ##############
 
-    def wrapped_obj2xobj(ops, wrapped_obj, *, wrapped):
-        # -> xobj
-        if wrapped:
-            xobj = wrapped_obj
-        else:
-            unwrapped_obj = ops.unwrap(wrapped_obj)
-            xobj = unwrapped_obj
-        return xobj
-
-
-    def basic__pop_then_push(ops, wrapped_obj_seq, xobj, *, wrapped):
-        # -> xobj
-        assert wrapped_obj_seq
-        wrapped = bool(wrapped)
-        idx = 0
-        result_wrapped_obj = wrapped_obj_seq[idx]
-        result_xobj = ops.wrapped_obj2xobj(result_wrapped_obj, wrapped=wrapped)
-
-        ops.basic__replace_at(wrapped_obj_seq, idx, xobj, wrapped=wrapped)
-        return result_xobj
-
-    def basic__push_then_pop(ops, wrapped_obj_seq, xobj, *, wrapped):
-        # -> xobj
-        wrapped = bool(wrapped)
-        if not wrapped_obj_seq:
-            return xobj
-
-        idx = 0
-        wrapped_obj = ops.xobj2wrapped_obj(xobj, idx, wrapped=wrapped)
-
-        head_wrapped_obj = wrapped_obj_seq[idx]
-        if ops.can_be_parent_wrapped_obj_of(wrapped_obj, head_wrapped_obj):
-            result_wrapped_obj = wrapped_obj
-        else:
-            result_wrapped_obj = ops.basic__pop_then_push(
-                        wrapped_obj_seq, wrapped_obj, wrapped=True)
-            assert result_wrapped_obj is head_wrapped_obj
-
-        result_xobj = ops.wrapped_obj2xobj(result_wrapped_obj, wrapped=wrapped)
-        return result_xobj
-
-    #################
-
-
-
-    def basic__pop(ops, wrapped_obj_seq, *, wrapped):
-        # -> xobj
-        assert wrapped_obj_seq
-        last_wrapped_obj = wrapped_obj_seq.pop()
-        head_wrapped_obj = ops.basic__push_then_pop(
-            wrapped_obj_seq, last_wrapped_obj, wrapped=True)
-        head_xobj = ops.wrapped_obj2xobj(head_wrapped_obj, wrapped=wrapped)
-        return head_xobj
-
-
     def basic__push(ops, wrapped_obj_seq, xobj, *, wrapped):
         # -> new_idx
         idx = len(wrapped_obj_seq)
@@ -368,15 +310,15 @@ O(heapify-using-sift_up)
     def basic__delete_at(ops, wrapped_obj_seq, idx, *, wrapped):
         # -> xobj
         assert 0 <= idx < len(wrapped_obj_seq)
-        result_wrapped_obj = wrapped_obj_seq[idx]
-        result_xobj = ops.wrapped_obj2xobj(result_wrapped_obj, wrapped=wrapped)
 
         last_wrapped_obj = wrapped_obj_seq.pop()
         if idx == len(wrapped_obj_seq):
-            assert last_wrapped_obj is result_wrapped_obj
-            pass
+            result_wrapped_obj = last_wrapped_obj
         else:
+            result_wrapped_obj = wrapped_obj_seq[idx]
             ops.basic__replace_at(wrapped_obj_seq, idx, last_wrapped_obj, wrapped=True)
+
+        result_xobj = ops.wrapped_obj2xobj(result_wrapped_obj, wrapped=wrapped)
         return result_xobj
 
     def basic__peek_at(ops, wrapped_obj_seq, idx, *, wrapped):
@@ -413,25 +355,45 @@ O(heapify-using-sift_up)
 
     ####################
 
-    def make_heap_inplace(ops, heap):
-        '''heapify'''
-        wrapped_obj_seq = ops.wrap_heap(heap)
-        return ops.basic__make_heap_inplace(wrapped_obj_seq)
-
-
-    ####################
-
     def move_backward_at(ops, heap, idx):
         # -> new_idx
+        # sift_down
         wrapped_obj_seq = ops.wrap_heap(heap)
         return ops.basic__move_backward_at(wrapped_obj_seq, idx)
 
     def move_forward_at(ops, heap, idx):
         # -> new_idx
+        # sift_up
         wrapped_obj_seq = ops.wrap_heap(heap)
         return ops.basic__move_forward_at(wrapped_obj_seq, idx)
 
+    ####################
+
+    def make_array_heap_inplace(ops, heap):
+        '''heapify'''
+        wrapped_obj_seq = ops.wrap_heap(heap)
+        return ops.basic__make_array_heap_inplace(wrapped_obj_seq)
+
+    #################
+
+    def push(ops, heap, xobj, *, wrapped):
+        # -> new_idx
+        wrapped_obj_seq = ops.wrap_heap(heap)
+        return ops.basic__push(wrapped_obj_seq, xobj, wrapped=wrapped)
+
+
     ##############
+
+    def peek_at(ops, heap, idx, *, wrapped):
+        # -> xobj
+        wrapped_obj_seq = ops.wrap_heap(heap)
+        return ops.basic__peek_at(wrapped_obj_seq, idx, wrapped=wrapped)
+
+    def delete_at(ops, heap, idx, *, wrapped):
+        # -> xobj
+        wrapped_obj_seq = ops.wrap_heap(heap)
+        return ops.basic__delete_at(wrapped_obj_seq, idx, wrapped=wrapped)
+
 
     def replace_at(ops, heap, idx, xobj, *, wrapped:bool):
         # xobj = unwrapped_obj|wrapped_obj
@@ -440,51 +402,12 @@ O(heapify-using-sift_up)
         return ops.basic__replace_at(wrapped_obj_seq, idx, xobj, wrapped=wrapped)
 
 
-    ##############
-
-    def pop_then_push(ops, heap, xobj, *, wrapped):
-        # -> xobj
-        wrapped_obj_seq = ops.wrap_heap(heap)
-        return ops.basic__pop_then_push(wrapped_obj_seq, xobj, wrapped=wrapped)
-
-    def push_then_pop(ops, heap, xobj, *, wrapped):
-        # -> xobj
-        wrapped_obj_seq = ops.wrap_heap(heap)
-        return ops.basic__push_then_pop(wrapped_obj_seq, xobj, wrapped=wrapped)
-
-    #################
-
-
-
-    def pop(ops, heap, *, wrapped):
-        # -> xobj
-        wrapped_obj_seq = ops.wrap_heap(heap)
-        return ops.basic__pop(wrapped_obj_seq, wrapped=wrapped)
-
-    def push(ops, heap, xobj, *, wrapped):
-        # -> new_idx
-        wrapped_obj_seq = ops.wrap_heap(heap)
-        return ops.basic__push(wrapped_obj_seq, xobj, wrapped=wrapped)
-
-    ###############
-
-    def delete_at(ops, heap, idx, *, wrapped):
-        # -> xobj
-        wrapped_obj_seq = ops.wrap_heap(heap)
-        return ops.basic__delete_at(wrapped_obj_seq, idx, wrapped=wrapped)
-
-    def peek_at(ops, heap, idx, *, wrapped):
-        # -> xobj
-        wrapped_obj_seq = ops.wrap_heap(heap)
-        return ops.basic__peek_at(wrapped_obj_seq, idx, wrapped=wrapped)
-
-
 
 
 
 
 if __name__ == '__main__':
-    XXX = IHeapOps_ABC
+    XXX = IArrayHeapOps_ABC
 
     from seed.helper.print_methods import wrapped_print_methods
     wrapped_print_methods(XXX)

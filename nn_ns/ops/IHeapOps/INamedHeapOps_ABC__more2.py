@@ -6,15 +6,23 @@ __all__ = '''
 
 from ..abc import abstractmethod, override, not_implemented
 from .INamedHeapOps_ABC__more1 import INamedHeapOps_ABC__more1
+from .INamedHeapOps_ABC__from_iterable import INamedHeapOps_ABC__from_iterable
 
 
 
 
+ARRAY_IDX, MAPPING_IDX = range(2)
 
-class INamedHeapOps_ABC__more2(INamedHeapOps_ABC__more1):
+class INamedHeapOps_ABC__more2(INamedHeapOps_ABC__more1, INamedHeapOps_ABC__from_iterable):
     '''
 
 heap = (idx2wrapped_obj, name2wrapped_obj)
+
+abstract_methods:
+    `__eq__
+    `__hash__
+    `can_be_parent_key_of
+    `make_new_name_dict
 '''
     __slots__ = ()
     ####################
@@ -28,11 +36,11 @@ heap = (idx2wrapped_obj, name2wrapped_obj)
     @override
     def get_idx2wrapped_obj(ops, heap):
         # heap -> wrapped_obj_seq
-        return heap[0]
+        return heap[ARRAY_IDX]
     @override
     def get_name2wrapped_obj(ops, heap):
         # heap -> Map name wrapped_obj
-        return heap[1]
+        return heap[MAPPING_IDX]
 
 
 if __name__ == '__main__':

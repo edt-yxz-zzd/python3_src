@@ -8,30 +8,34 @@ __all__ = '''
 from ..abc import abstractmethod, override, not_implemented
 from ..IOps import IOps
 
+
+
 class IHeapOps(IOps):
     '''
+
     `wrap
     `unwrap
     `wrapped_obj2key
     `can_be_parent_key_of
 
-    is_empty
-    get_size
+    `is_empty
+    `get_size
 
-    make_heap_inplace
-    replace_at
-    pop_then_push
-    push_then_pop
-    pop
-    push
-    delete_at
-    peek_at
+    `xobj2wrapped_obj
+    `wrapped_obj2xobj
+    `peek
+
+    `pop_then_push
+    `push_then_pop
+    `pop
+    `push
+
 '''
     __slots__ = ()
     #################
     @not_implemented
-    def wrap(ops, unwrapped_obj, idx):
-        # unwrapped_obj -> UInt -> wrapped_obj
+    def wrap(ops, unwrapped_obj, maybe_inner_pointer):
+        # unwrapped_obj -> Maybe InnerPointer -> wrapped_obj
         # echo
         raise NotImplementedError
         wrapped_obj = unwrapped_obj
@@ -63,27 +67,30 @@ class IHeapOps(IOps):
     def is_empty(ops, heap):
         # -> bool
         raise NotImplementedError
-        return not ops.get_size(heap)
     @not_implemented
     def get_size(ops, heap):
         # -> UInt
         raise NotImplementedError
 
+
+    ################
+
+    @not_implemented
+    def xobj2wrapped_obj(ops, xobj, maybe_inner_pointer, *, wrapped):
+        # -> wrapped_obj
+        raise NotImplementedError
+
+    @not_implemented
+    def wrapped_obj2xobj(ops, wrapped_obj, *, wrapped):
+        # -> xobj
+        raise NotImplementedError
+
+    @not_implemented
+    def peek(ops, heap, *, wrapped):
+        # -> xobj
+        raise NotImplementedError
+
     ####################
-
-    @not_implemented
-    def make_heap_inplace(ops, heap):
-        '''heapify'''
-        raise NotImplementedError
-
-    @not_implemented
-    def replace_at(ops, heap, idx, xobj, *, wrapped:bool):
-        # xobj = unwrapped_obj|wrapped_obj
-        # -> new_idx
-        raise NotImplementedError
-
-
-    ##############
 
     @not_implemented
     def pop_then_push(ops, heap, xobj, *, wrapped):
@@ -97,8 +104,6 @@ class IHeapOps(IOps):
 
     #################
 
-
-
     @not_implemented
     def pop(ops, heap, *, wrapped):
         # -> xobj
@@ -106,26 +111,8 @@ class IHeapOps(IOps):
 
     @not_implemented
     def push(ops, heap, xobj, *, wrapped):
-        # -> new_idx
+        # -> new_inner_pointer
         raise NotImplementedError
-
-    ###############
-
-    @not_implemented
-    def delete_at(ops, heap, idx, *, wrapped):
-        # -> xobj
-        raise NotImplementedError
-
-    @not_implemented
-    def peek_at(ops, heap, idx, *, wrapped):
-        # -> xobj
-        raise NotImplementedError
-
-
-
-
-
-
 
 if __name__ == '__main__':
     XXX = IHeapOps
