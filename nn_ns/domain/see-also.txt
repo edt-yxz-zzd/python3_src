@@ -1,0 +1,8 @@
+
+see
+    "NOTE\Python\typing\my PEP483 review.txt"
+    "NOTE\design\language\ops+data.txt"
+    "NOTE\other\subclass multi inheritance.txt"
+    "NOTE\other\mutable_or_immutable_method.txt"
+    "NOTE\other\collision.txt"
+    "python3_src\seed\meta\Override_Meta.py"

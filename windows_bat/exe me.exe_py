@@ -1,0 +1,4 @@
+# see "set_path/let_exe_py_file_executable.bat"
+print('running "exe me.exe_py"')
+import sys
+print(sys.argv)

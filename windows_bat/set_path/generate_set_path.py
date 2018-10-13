@@ -3,8 +3,10 @@
 genearate_set_path_bat
     genearate set_path.bat and other <name>.bat if <name>.bat.tpl exists
 update_windows_registry
-    right-click on file or directory will show a new menuitem named "MS-DOS" or "MS-DOS into"
-
+    * register_right_click_menu__open_cmd_and_set_path
+        right-click on file or directory will show a new menuitem named "MS-DOS" or "MS-DOS into"
+    * register_right_click_menu__copy_path
+        right-click on file or directory will show a new menuitem named "copy_path"
 
 
 
@@ -26,24 +28,41 @@ from seed.io.incompatible_universal_read_write_txt import \
 
 
 class Global:
+    #"tpl_var_bats_path_double_backslash should not contains spaces"
     encoding = 'gb18030'
     set_path_bat_dirname = 'set_path'
     set_path_bat_basename = 'set_path.bat'
     set_path_bat_tpl_basename = f'{set_path_bat_basename}.tpl'
+    save_input_path_to_clipboard_bat_basename = 'save_input_path_to_clipboard.bat'
 
     into_folder_command_tpl = fr"c:\\windows\\System32\\cmd.exe /k @cd %1 & @{{tpl_var_bats_path_double_backslash}}\\{set_path_bat_dirname}\\{set_path_bat_basename}"
     same_folder_command_tpl = fr"c:\\windows\\System32\\cmd.exe /k @{{tpl_var_bats_path_double_backslash}}\\{set_path_bat_dirname}\\{set_path_bat_basename}"
+    copy_path_command_tpl = fr'c:\\windows\\System32\\cmd.exe /c @{{tpl_var_bats_path_double_backslash}}\\{save_input_path_to_clipboard_bat_basename} "%1"'
+
     reg_path_command_tpl_pairs = [
         (r'HKEY_CLASSES_ROOT\Folder\shell\MS-DOS into\command'
             , into_folder_command_tpl)
+        #,(r'HKEY_CLASSES_ROOT\Folder\shell\MS-DOS\command'
+        #    , same_folder_command_tpl)
+        #   fail for driver
         ,(r'HKEY_CLASSES_ROOT\*\shell\MS-DOS\command'
             , same_folder_command_tpl)
+
+        ,(r'HKEY_CLASSES_ROOT\Folder\shell\copy_path\command'
+            , copy_path_command_tpl)
+        ,(r'HKEY_CLASSES_ROOT\*\shell\copy_path\command'
+            , copy_path_command_tpl)
         ]
 
     # use value_table instead
     #   reg_update_from_value_table
     old_reg_file = r'''
 Windows Registry Editor Version 5.00
+
+; update_windows_registry
+
+; ====================================================
+; register_right_click_menu__open_cmd_and_set_path
 
 [HKEY_CLASSES_ROOT\Folder\shell\MS-DOS into]
 
@@ -55,6 +74,29 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\*\shell\MS-DOS\command]
 @="c:\\windows\\System32\\cmd.exe /k @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
+
+
+
+
+
+; ====================================================
+; register_right_click_menu__copy_path
+
+[HKEY_CLASSES_ROOT\Folder\shell\copy_path]
+
+[HKEY_CLASSES_ROOT\Folder\shell\copy_path\command]
+; bug: @="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat %1"
+; bug: @="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat %*"
+; bug: @="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat \"%*\""
+@="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat \"%1\""
+    ; but OK:
+    ;   [HKEY_CLASSES_ROOT\Folder\shell\MS-DOS into\command]
+    ;   @="c:\\windows\\System32\\cmd.exe /k @cd %1 & @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
+
+
+[HKEY_CLASSES_ROOT\*\shell\copy_path]
+[HKEY_CLASSES_ROOT\*\shell\copy_path\command]
+@="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat \"%1\""
 '''
 
 def mk_windows_bat_folder():
@@ -87,6 +129,7 @@ def update_windows_registry(windows_bat_folder):
     tpl_vars = mk_tpl_vars(windows_bat_folder)
     tpl_var_bats_path_double_backslash = tpl_vars[
         'tpl_var_bats_path_double_backslash']
+    if ' ' in tpl_var_bats_path_double_backslash: raise NotImplementedError
 
     def mk_command(command_tpl):
         command = command_tpl.format(

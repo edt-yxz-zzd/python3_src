@@ -1,0 +1,286 @@
+
+## all base_domains are unordered unless "<:"
+
+class BaseDomain:
+    new_method_names :: Set String = ?
+        #whenever refer to <name> in new_method_names:
+        #   ops.at(BaseDomain).<name>
+        #   ops.at(BaseDomain, "<name>")
+        #   ops.at(BaseDomain).<name>(...)
+        #       <==> ops.at(BaseDomain, "<name>)(...)
+        #       <==> cls["name"](ops, ...)
+        #
+        #   not:
+        #       ops.at(SubDomain).<name>
+
+    .all_method_names :: Set String = auto()
+        # refer to new_method_names and all super domains new_method_names
+
+class SubDomain({BaseDomain, OtherDomain}):
+    required_method_namess :: Set (Set String)
+    banned_method_namess :: Set (Set String)
+        # banned_set <- banned_method_namess
+        #   assert not any(banned_set <= get_all_method_names_at(subclass, BaseDomain) for banned_set in banned_method_namess)
+        #   assert all(banned_set <= SubDomain.all_method_names for banned_set in banned_method_namess)
+    new_method_names :: Set String
+        # SubDomain.new_method_names & BaseDomain.new_method_names == {}
+        # BaseDomain.new_method_names & OtherDomain.new_method_names may not be empty
+
+    @at(BaseDomain)
+    def <method_name in BaseDomain.new_method_names>(...)
+        # SubDomain.__dict__[(BaseDomain, <method_name>)] = this_func
+
+
+    @at(BaseDomain, OtherDomain)
+    def <method_name in both BaseDomain./OtherDomain.new_method_names>(...)
+        # SubDomain.__dict__[(BaseDomain, <method_name>)] = this_func
+        # SubDomain.__dict__[(OtherDomain, <method_name>)] = this_func
+
+domainA | domainB
+    UnionDomain(domains)
+    #Java "throws" exception list is a UnionDomain
+    we can use common super domain attrs
+domainA & domainB
+    IntersectionDomain(domains)
+    class SubDomain({domainA, domainB})
+        # NOTE: SubDomain != (domainA & domainB)!!!
+        #   but SubDomain <: (domainA & domainB)!!!
+    we can register auto derived mixins
+    class domain_auto_minxins1(domainA & domainB):
+        def f(...)
+        def h(...)
+    class domain_auto_minxins2(domainA & domainB):
+        def f(...)
+        def g(...)
+
+    class SubDomain({domainA, domainB})
+        ...
+        # ops.at(domain_auto_minxins1).f(...)
+        # ops.at(domain_auto_minxins1).h(...)
+        # ops.at(domain_auto_minxins2).f(...)
+        # ops.at(domain_auto_minxins2).g(...)
+
+
+opsA + opsB :: domainA & domainB
+(ops >> SuperDomain) :: SuperDomain
+
+
+
+all classes user defined should be abstract
+    all_classes_user_defined_should_be_abstract
+    cls.the_concrete_class
+    for concrete_class:
+        collect __later_slots__ and define __slots__
+method:
+    # positional_only_argument name SHOULD be __xxx...
+    #   __self??
+
+    classify @xxx_method:
+        #* set state flags from now on
+        #   BOOL: most_derived_method/once_method
+        #* set state flags from now on util next root_method; redeclared
+        #   BOOL: single_inheritance_method/choose_on_conflict/once_method/cooperative_method
+        #* set state flags for this method
+        #   BOOL: implemented_method/abstractmethod/levelled_default/final_method/new_method/force_new_method/root_method
+
+        * set state flags from now on
+            * most_derived_method
+                : most_derived_method=True
+            * once_method
+                : once_method=True
+        * set state flags from now on util next root_method; redeclared
+            * single_inheritance_method
+                : single_inheritance_method=True
+                * conflict_free_single_inheritance_method
+                    : single_inheritance_method=True, choose_on_conflict=False
+                * choose_on_conflict_single_inheritance_method
+                    : single_inheritance_method=True, choose_on_conflict=True
+            * cooperative_multiple_inheritance_method
+                : single_inheritance_method=False, once_method=True, cooperative_method=True
+        * set state flags for this method
+            * concretemethod
+                : implemented_method=True, abstractmethod=False
+                * levelled_default_concretemethod
+                    : implemented_method=True, abstractmethod=False, levelled_default=True
+            * abstractmethod
+                : abstractmethod=True
+                * implemented_abstractmethod
+                    : implemented_method=True, abstractmethod=True
+                * not_implemented_method
+                    : implemented_method=False, abstractmethod=True
+            * implemented_method
+                : implemented_method=True
+            * final_method
+                : final_method=True
+            * new_method
+                : new_method=True
+                * force_new_method
+                    : force_new_method=True
+            * override_method
+                : new_method=False
+            * root_method
+                : root_method=True
+    * concretemethod
+        method = concretemethod | abstractmethod
+    * abstractmethod
+        let the class be abstract
+        * implemented_abstractmethod
+        * not_implemented_method
+            not_implemented_method <: abstractmethod
+    * implemented_method
+        * concretemethod
+        * implemented_abstractmethod
+
+    * final_method
+        for simple transparent framework
+        final_method is public transparent like constant value
+        if final_method & abstractmethod:
+            then the class has no instances
+        if cooperative_multiple_inheritance_method & final_method:
+            then auto changed to conflict_free_single_inheritance_method & final_method
+    * most_derived_method
+        concrete-subclass must override such method by itself
+        otherwise the class be abstract
+        OR: if using the all_classes_user_defined_should_be_abstract protocal
+            cls.the_concrete_class
+                where cls override such method
+
+    * single_inheritance_method
+        super.this_method is not resolved via MRO
+            each class remember a super per such method
+
+        * conflict_free_single_inheritance_method
+            subclass cannot have two non-comparable base classes which both defines such method
+                otherwise called "confliction"
+            allow "super.this_method" if super one is implemented_method
+        * choose_on_conflict_single_inheritance_method
+            can be declared to be conflict_free_single_inheritance_method
+                conflict_free_single_inheritance_method means:
+                    enable "super.this_method"
+                    limit subclass behavior from now on instead of superclass behavior
+            if subclass have two non-comparable base classes which both defines such method:
+                * enable "super.this_method"
+                    * choose which super class for this_method
+                        optional override this_method
+                * disable "super.this_method"
+                    * be abstract class since exist confliction
+                    * override this_method
+                        call super implement via BaseClass.this_method
+                                             not super.this_method
+
+
+    * once_method
+        called one and only once each time subclass.this_method called
+        similar to constructor of C++ virtual base class
+        once_method cannot be redeclared to be non-once_method
+
+        SHOULD be implemented_method
+        the base class who instroduce such method SHOULD given a default definiton
+        disable "super.this_method"
+        if subclasses overrided this_method:
+            * declare it as single_inheritance_method & once_method
+                can change API by:
+                    * add more default arguments (positional-if-no-star-args or keyword-only)
+                    * extend input argument value range
+                    * narrow output argument value and return value range
+                call or not call super.this_method
+            * declare it as cooperative_multiple_inheritance_method
+                then subclasses MUST keep the same API:
+                    but can extract/insert/peek some kwargs
+                    see below: "* cooperative_multiple_inheritance_method"
+        subclass.this_method MUST call super.this_method
+            super.this_method is arbitrary
+                calling_order may not be the same as MRO
+                but subclass.this_method must be called after super.this_method
+            this_method was implemented by two parts:
+                * preprocess
+                    old_arguments -> new_arguments
+                * postprocess
+                    old_arguments -> new_arguments -> super.this_method.result -> this_method.result
+            implemented like @contextlib.contextmanager
+                @override
+                def this_method(...):
+                    ... # should not return before yield
+                    <super.this_method.result> = yield <new_arguments>
+                    ... # should not yield more than once
+                    return <this_method.result>
+
+    * cooperative_multiple_inheritance_method
+        cooperative_multiple_inheritance_method <: once_method
+        can redeclare to single_inheritance_method&once_method
+        handle input arguments:
+                * keyword-only-arguments types:
+                    * otherwise_bypass
+                    * readonly_then_bypass
+                    * optional readonly_then_bypass
+                    * modify_then_bypass
+                    * optional modify_then_bypass
+                    * sink
+                    * optional sink
+                    * source
+                    * optional source
+                    * sink_then_source
+                    * [optional] sink then [optional] source
+                    ###########
+                    "sink then source" vs "modify then bypass"
+                        "bypass" means "will be the same object"
+                        "sink-then-source" means "may be not the same object"
+                * positional-arguments types:
+                    # positional-only or positional-keyword-arguments
+                    * otherwise_bypass
+                    * readonly_then_bypass
+                    * modify_then_bypass
+                    * sink_then_source
+    * levelled_default_concretemethod
+        used with choose_on_conflict_single_inheritance_method
+        levelled_default_concretemethod <: concretemethod
+        to solve confliction:
+            if all are levelled_default_concretemethod:
+                choose arbitrary highest level one
+            if one and only one non-default implemented method:
+                choose it
+            if more than one:
+                conflict!
+            ??using "ordinal number" as level??
+                level type was defined per method
+                partial-ordering neednot total-ordering
+    # new_method vs override_method vs root_method
+    * new_method
+        new_method <: root_method
+        has no super.this_method
+        * force_new_method
+            override super.this_method
+            why force_new_method <: new_method??
+                the super.this_method is out_of_control (outside this domain-system)
+                i.e.
+                    object.__eq__
+                    class BaseDomain(...):
+                        @force_new_method
+                        def __eq__(...)
+            but force_new_method SHOULD be very useless
+                we neednot __xxx__ or other out_of_control method_name
+                    , since domain are to define ops
+
+    * override_method
+        method = new_method | override_method
+        method is either new_method or override_method, but not both
+        # force_new_method is not override_method
+    * root_method
+        to redeclare freely
+        non-root_method redeclare restriction:
+            * cooperative_multiple_inheritance_method
+                =[redeclare]=>> single_inheritance_method & once_method
+            * choose_on_conflict_single_inheritance_method
+                =[redeclare]=>> conflict_free_single_inheritance_method
+        root_method redeclare freely:
+            * cooperative_multiple_inheritance_method
+                <<=[redeclare]=>> single_inheritance_method & once_method
+            * choose_on_conflict_single_inheritance_method
+                <<=[redeclare]=>> conflict_free_single_inheritance_method
+
+
+        overrided via nearest_define_it_as_root_class.root_method
+        called via first_define_it_class.root_method
+
+
+handle? dir()/help()

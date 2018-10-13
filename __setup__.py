@@ -28,6 +28,10 @@ run me before using these packages
 3. exec update_cmd_reg_setting.py
     # update [HKEY_CURRENT_USER\Console]
     set cmd.exe: color/quick-edit/font/...
+
+4. exec let_exe_py_file_executable.bat
+    ".exe_py" instead of ".py"
+    executable vs open_with_editor
 r'''
 
 
@@ -36,6 +40,7 @@ import os.path
 from pathlib import Path
 from runpy import run_path
 import sys
+import subprocess
 
 def _mk_Global():
     site_packages_path = get_python_lib()
@@ -49,6 +54,7 @@ def _mk_Global():
     windows_bat_relative_path = 'windows_bat'
     generate_set_path_py_basename = 'generate_set_path.py'
     update_cmd_reg_setting_py_basename = 'update_cmd_reg_setting.py'
+    let_exe_py_file_executable_bat_basename = 'let_exe_py_file_executable.bat'
     middle_folders = 'set_path'
 
     def _mk_path(basename):
@@ -57,6 +63,7 @@ def _mk_Global():
         return str(path)
     generate_set_path_py_path = _mk_path(generate_set_path_py_basename)
     update_cmd_reg_setting_py_path = _mk_path(update_cmd_reg_setting_py_basename)
+    let_exe_py_file_executable_bat_path = _mk_path(let_exe_py_file_executable_bat_basename)
     del _mk_path
     return dict(locals())
 
@@ -91,10 +98,16 @@ def run_generate_set_path():
 def run_update_cmd_reg_setting():
     return run_path(Global.update_cmd_reg_setting_py_path
             , run_name = '<runpy>.__run_as_main__')
+def run_let_exe_py_file_executable():
+    subprocess.run('assoc .exe_py="executable python script"', shell=True, check=True)
+    subprocess.run('ftype "executable python script"=py "%1" %*', shell=True, check=True)
+    return
+    return subprocess.run([Global.let_exe_py_file_executable_bat_basename], check=True)
 
 if __name__ == '__main__':
     sys.path.append(Global.user_py_src_root)
     generate_path_configuration_file(Global.pth_prime_basename_without_ext)
     run_generate_set_path()
     run_update_cmd_reg_setting()
+    run_let_exe_py_file_executable()
 

@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Folder\shell\copy_path]
+
+[HKEY_CLASSES_ROOT\Folder\shell\copy_path\command]
+; bug: @="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat %1"
+; bug: @="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat %*"
+; bug: @="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat \"%*\""
+@="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat \"%1\""
+    ; but OK:
+    ;   [HKEY_CLASSES_ROOT\Folder\shell\MS-DOS into\command]
+    ;   @="c:\\windows\\System32\\cmd.exe /k @cd %1 & @{tpl_var_bats_path_double_backslash}\\set_path\\set_path.bat"
+
+
+[HKEY_CLASSES_ROOT\*\shell\copy_path]
+[HKEY_CLASSES_ROOT\*\shell\copy_path\command]
+@="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat \"%1\""
