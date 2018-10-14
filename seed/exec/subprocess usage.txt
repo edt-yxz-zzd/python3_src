@@ -1,0 +1,26 @@
+
+copy from python3_src\seed\exec\ShellCmd\CallSetting.py
+======================================
+see:
+    subprocess module
+usage:
+    * to ignore output
+        * echo to user:
+            CallSetting(stdout=None, stderr=None, ...).call_shell_cmd(...)
+        * shut up/be quiet:
+            CallSetting(stdout=DEVNULL, stderr=DEVNULL, ...).call_shell_cmd(...)
+    to capture output and be quiet:
+        CallSetting(stdout=PIPE, stderr=(PIPE|STDOUT), ...).call_shell_cmd(...)
+
+result:
+    #CompletedProcess
+    result.args/returncode/stdout/stderr
+
+    #if check=True & error
+    #CalledProcessError
+    exception.cmd/returncode/stdout/stderr
+        where returncode != 0
+
+    ###### .stdout/.stderr :: None | bytes | str
+    ######      <<== PIPE, "encoding", ...
+======================================

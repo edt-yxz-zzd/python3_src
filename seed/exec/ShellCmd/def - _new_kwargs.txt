@@ -1,0 +1,5 @@
+_new_kwargs
+    :: Map kw (str|bool)
+    kw - see IShellCmd.keyword2flag/keyword2flag__GNU
+        a valid python identifier
+

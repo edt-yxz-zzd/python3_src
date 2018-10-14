@@ -1,0 +1,4 @@
+options/new_options/old_options/oldold_options/__old_options
+    :: Map flag (str|bool)
+    flag - see IShellCmd.keyword2flag/keyword2flag__GNU
+
