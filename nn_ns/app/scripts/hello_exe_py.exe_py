@@ -1,0 +1,35 @@
+
+from seed.exec.ShellCmd.GNU_Cmd         import GNU_Cmd
+from seed.exec.ShellCmd.CallSetting     import CallSetting
+from seed.exec.ShellCmd.CallTheShellCmd import CallTheShellCmd
+from seed.exec.ShellCmd.ToCallTheShellCmd import ToCallTheShellCmd
+from subprocess import CalledProcessError, CompletedProcess, PIPE, STDOUT, DEVNULL
+
+import sys
+import os.path
+from pathlib import Path
+this_file = Path(__file__)
+this_folder = this_file.parent
+
+
+README = this_folder / '__README__.txt'
+#print(README.read_text(encoding='utf8'))
+
+caller = CallSetting()
+cmd_cat = GNU_Cmd(False, 'cat', [], {})
+cat = CallTheShellCmd(cmd_cat, caller)
+assert cat == ToCallTheShellCmd(GNU_Cmd, caller).cat
+
+print('hello')
+print('='*70)
+print('__README__.txt')
+print('='*70)
+cat([str(README)])
+print()
+print('='*70)
+print(this_file.name)
+print('='*70)
+print()
+cat([__file__])
+
+

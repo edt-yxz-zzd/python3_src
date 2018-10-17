@@ -2,6 +2,7 @@
 from .GNU_Cmd import GNU_Cmd
 from .CallSetting import CallSetting
 from .CallTheShellCmd import CallTheShellCmd
+from .ToCallTheShellCmd import ToCallTheShellCmd
 from subprocess import CalledProcessError, CompletedProcess, PIPE, STDOUT, DEVNULL
 
 __doc__ = r'''
@@ -89,6 +90,44 @@ True
 CompletedProcess(args=['ls', '-1', '--', 'non exist driver:/'], returncode=1)
 >>> ls(_1=False, _A=True)
 CompletedProcess(args=['ls', '-A', '--', 'non exist driver:/'], returncode=1)
+
+
+
+############# ireplace_ex
+
+>>> default_caller.ireplace_ex(__capture__=False, __quiet__=False, __merge__=False)
+CallSetting(stderr = None, stdout = None)
+>>> default_caller.ireplace_ex(__capture__=False, __quiet__=False, __merge__=True) == CallSetting(stderr = STDOUT, stdout = None)
+True
+>>> default_caller.ireplace_ex(__capture__=False, __quiet__=True, __merge__=False) == CallSetting(stderr = DEVNULL, stdout = DEVNULL)
+True
+>>> default_caller.ireplace_ex(__capture__=False, __quiet__=True, __merge__=True) == CallSetting(stderr = DEVNULL, stdout = DEVNULL)
+True
+
+>>> default_caller.ireplace_ex(__capture__=True, __quiet__=False, __merge__=False) #doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+    ...
+NotImplementedError
+>>> default_caller.ireplace_ex(__capture__=True, __quiet__=False, __merge__=True) #doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+    ...
+NotImplementedError
+>>> default_caller.ireplace_ex(__capture__=True, __quiet__=True, __merge__=False) == CallSetting(stderr = PIPE, stdout = PIPE)
+True
+>>> default_caller.ireplace_ex(__capture__=True, __quiet__=True, __merge__=True) == CallSetting(stderr = STDOUT, stdout = PIPE)
+True
+
+
+
+
+
+
+################ ToCallTheShellCmd
+>>> to_cmd = ToCallTheShellCmd(GNU_Cmd, default_caller)
+>>> to_cmd #doctest: +ELLIPSIS
+ToCallTheShellCmd(<class 'seed.exec.ShellCmd.GNU_Cmd.GNU_Cmd'>, CallSetting())
+>>> to_cmd.ls
+CallTheShellCmd(GNU_Cmd(False, 'ls', [], {}), CallSetting())
 
 '''
 

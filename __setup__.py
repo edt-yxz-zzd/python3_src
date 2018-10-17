@@ -32,13 +32,18 @@ run me before using these packages
 4. exec let_exe_py_file_executable.bat
     ".exe_py" instead of ".py"
     executable vs open_with_editor
+5. exec nn_ns.app.scripts.__startup__register__exe_py__
+    let ".exe_py" be a python source suffix like ".py" and ".pyw"
+    # inject "import nn_ns.app.scripts" to 'sitecustomize.py'
+    # nn_ns.app.scripts.__init__ will append '.exe_py' to importlib.machinery.SOURCE_SUFFIXES
+
 r'''
 
 
 from distutils.sysconfig import get_python_lib
 import os.path
 from pathlib import Path
-from runpy import run_path
+from runpy import run_path, run_module
 import sys
 import subprocess
 
@@ -86,6 +91,7 @@ def generate_path_configuration_file(pth_prime_basename_without_ext):
 # cannot recognize encoding declaration: -*- coding: utf-8 -*-
 # spaces are OK; should not in inside "" and ''
 {Global.user_py_src_root!s}
+{Global.user_py_src_root!s}/nn_ns/app/scripts
 ''' # user_py_src_root!s not !r
 
     # bug: Path(pth_fname).write_text(path_configuration_file_content, encoding='utf8') # may not be utf8
@@ -103,11 +109,21 @@ def run_let_exe_py_file_executable():
     subprocess.run('ftype "executable python script"=py "%1" %*', shell=True, check=True)
     return
     return subprocess.run([Global.let_exe_py_file_executable_bat_basename], check=True)
+def run_startup__register__exe_py():
+    return run_module('nn_ns.app.scripts.__startup__register__exe_py__'
+        , run_name='<runpy>.__run_as_main__')
 
 if __name__ == '__main__':
     sys.path.append(Global.user_py_src_root)
+        # now can "import nn_ns"
+        # now can "import nn_ns.app.scripts.XXX" # XXX.exe_py
+    import nn_ns.app.scripts
+        # now can "import xxx.yyy.zzz.XXX" # XXX.exe_py
+
+    run_startup__register__exe_py()
     generate_path_configuration_file(Global.pth_prime_basename_without_ext)
     run_generate_set_path()
     run_update_cmd_reg_setting()
     run_let_exe_py_file_executable()
+
 

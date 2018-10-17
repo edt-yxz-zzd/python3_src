@@ -24,7 +24,7 @@ from .common import (
 #from subprocess import run, CalledProcessError, CompletedProcess, PIPE, STDOUT, DEVNULL
 #   subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, timeout=None, check=False, encoding=None, errors=None)
 import subprocess # run
-from subprocess import CompletedProcess
+from subprocess import CompletedProcess, DEVNULL, PIPE, STDOUT
 from typing import Tuple, List
 
 class CallSetting(IReprImmutableHelper):
@@ -68,9 +68,59 @@ result:
         # keyword arguments of subprocess.run
         self.__subprocess_run_kwargs=MappingProxyType(__subprocess_run_kwargs)
 
-    def ireplace(self, **__subprocess_run_kwargs:SubprocessRun_KwargsValueType):
+    def _from_subprocess_run_kwargs_(self
+        , **__subprocess_run_kwargs:SubprocessRun_KwargsValueType
+        ) -> 'CallSetting':
+        # not classmethod
+        return type(self)(**__subprocess_run_kwargs)
+
+    def ireplace(self
+        , **__subprocess_run_kwargs:SubprocessRun_KwargsValueType
+        ) -> 'CallSetting':
         #bug: return type(self)(**self.__subprocess_run_kwargs, **__subprocess_run_kwargs)
-        return type(self)(**{**self.__subprocess_run_kwargs, **__subprocess_run_kwargs})
+        return self._from_subprocess_run_kwargs_(
+            **{**self.__subprocess_run_kwargs
+              , **__subprocess_run_kwargs}
+              # replace instead of raise if conflict
+            )
+    def explain_ireplace_ex_args(self, *
+        , __capture__:bool
+        , __quiet__:bool
+        , __merge__:bool
+        ) -> SubprocessRun_KwargsType:
+        if not __capture__:
+            if not __quiet__:
+                # echo only
+                stdout = stderr = None
+                if __merge__:
+                    stderr = STDOUT
+            else:
+                # discard
+                del __merge__
+                stdout = stderr = DEVNULL
+        elif not __quiet__:
+            # capture and not quiet
+            raise NotImplementedError('? capture output and echo output to user')
+        else:
+            # capture and quiet
+            stdout = stderr = PIPE
+            if __merge__:
+                stderr = STDOUT
+        return dict(stdout=stdout, stderr=stderr)
+
+    def ireplace_ex(self, *
+        , __capture__:bool #= False
+        , __quiet__:bool #= False
+        , __merge__:bool #= False
+        , **__subprocess_run_kwargs:SubprocessRun_KwargsValueType
+        ) -> 'CallSetting':
+        "__subprocess_run_kwargs should not contain 'stdout', 'stderr'"
+        d = self.explain_ireplace_ex_args(
+                    __capture__=__capture__
+                    , __quiet__=__quiet__
+                    , __merge__=__merge__
+                    )
+        return self.ireplace(**d, **__subprocess_run_kwargs)
 
     def call_shell_cmd(self, __shell_cmd:IShellCmd) -> CompletedProcess:
         # -> CompletedProcess | raise CalledProcessError

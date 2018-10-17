@@ -13,6 +13,7 @@ template variables:
     tpl_var_bats_path_double_backslash
         tpl_var_bats_path_double_backslash == tpl_var_bats_path.replace('\\', '\\'*2)
 
+    tpl_var_nn_ns_app_scripts_path
 
 
 
@@ -73,12 +74,15 @@ call %set_bat_path%\set_haskell8
 
 rem set path=%path%;D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin
 rem to override C:\Windows\System32\find.exe
-set usrbin_path=D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin
-set path=%usrbin_path%;%path%;%usrbin_path%\pkg-config
+    set usrbin_path=D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin
+    set path=%usrbin_path%;%path%;%usrbin_path%\pkg-config
+rem to override DOS command MKDIR
+    doskey mkdir=%usrbin_path%\mkdir.exe
 set path=%path%;%set_bat_path%\cmdline_tool_link
 set path=%path%;%bats_path%
 set path=%path%;D:\software\programming\develop tools\cmake\cmake-3.7.2-win64-x64\bin
 set path=%path%;D:\software\cmdline_tool_link
+set path=%path%;{tpl_var_nn_ns_app_scripts_path}
 
 goto end
 

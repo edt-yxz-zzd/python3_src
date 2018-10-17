@@ -8,4 +8,4 @@ IMappingOps
 AI
 domain
 python3_src\nn_ns\app\simple_script\parse_args.py
-seed\exec\Call_GNU_Util
+

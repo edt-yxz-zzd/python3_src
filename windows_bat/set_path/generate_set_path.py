@@ -19,6 +19,7 @@ from pathlib import Path
 import winreg
 import sys, os
 from seed.windows.winreg_helper import reg_update_from_value_table
+import nn_ns.app
 '''
 import os.path
 from seed.io.incompatible_universal_read_write_txt import \
@@ -99,15 +100,32 @@ Windows Registry Editor Version 5.00
 @="c:\\windows\\System32\\cmd.exe /c @E:\\my_data\\program_source\\windows_bat\\save_input_path_to_clipboard.bat \"%1\""
 '''
 
-def mk_windows_bat_folder():
+def mk_windows_bat_folder()->Path:
     this_fname = Path(__file__).resolve()
     this_folder = this_fname.parent
     if this_folder.name != Global.set_path_bat_dirname:
         raise Exception(f'this folder name != {Global.set_path_bat_dirname}')
     windows_bat_folder = this_folder.parent
     return windows_bat_folder
+def mk_nn_ns_folder()->Path:
+    nn_ns_init_file = Path(nn_ns.__file__).resolve()
+    assert nn_ns_init_file.is_file()
+    assert nn_ns_init_file.name == '__init__.py'
+    nn_ns_folder = nn_ns_init_file.parent
+    return nn_ns_folder
 
-def mk_tpl_vars(windows_bat_folder):
+def mk_tpl_vars_ex(windows_bat_folder:Path):
+    nn_ns_folder = mk_nn_ns_folder()
+    nn_ns_app_scripts_path = nn_ns_folder/'app'/'scripts'
+    tpl_var_nn_ns_app_scripts_path = str(nn_ns_app_scripts_path)
+    tpl_vars = mk_tpl_vars(windows_bat_folder)
+    tpl_vars_ex = dict(tpl_var_nn_ns_app_scripts_path
+                            =tpl_var_nn_ns_app_scripts_path
+                        , **tpl_vars
+                        )
+    return tpl_vars_ex
+
+def mk_tpl_vars(windows_bat_folder:Path):
     tpl_var_sys = sys
     tpl_var_NOTE = 'donot edit this generated file'
 
@@ -116,6 +134,9 @@ def mk_tpl_vars(windows_bat_folder):
 
     tpl_var_bats_path_double_backslash = \
         tpl_var_bats_path.replace('\\', '\\'*2)
+
+    del windows_bat_folder
+    #return dict(locals())
     return dict(
         tpl_var_sys=tpl_var_sys
         , tpl_var_NOTE=tpl_var_NOTE
@@ -145,7 +166,7 @@ def update_windows_registry(windows_bat_folder):
         reg_update_from_value_table(path, value_table)
 
 def genearate_set_path_bat(windows_bat_folder):
-    tpl_vars = mk_tpl_vars(windows_bat_folder)
+    tpl_vars_ex = mk_tpl_vars_ex(windows_bat_folder)
 
     set_path_bat_folder = Path(windows_bat_folder, Global.set_path_bat_dirname)
 
@@ -156,7 +177,7 @@ def genearate_set_path_bat(windows_bat_folder):
     for tpl_basename in tpl_basenames:
         tpl_fname = Path(set_path_bat_folder, tpl_basename)
         bat_tpl_content = tpl_fname.read_text(encoding=Global.encoding)
-        bat_content = bat_tpl_content.format(**tpl_vars)
+        bat_content = bat_tpl_content.format(**tpl_vars_ex)
 
         #bug: bat_fname = Path(set_path_bat_folder, tpl_basename)
         #   == tpl_fname
