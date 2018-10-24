@@ -1,0 +1,67 @@
+# "def - min_ max_ color weight hweight[isomorphism reduce].txt"
+# "def - graph isomorphism reduce.txt"
+
+color/weight/hweight
+min_/max_ color/weight/hweight
+
+vertex2color    # colored vertex
+aedge2weight    # weighted edge; include loose_edge
+hedge2hweight   # hweighted hedge; loose_edge has no hedge
+
+
+why min_/max_ color/weight/hweight?
+    since some algorithm may need to add extra color/weight/hweight
+    and the input graph is a subgraph (e.g. a connected component of some a graph)
+
+
+
+
+colored weighted hweighted graph with multiedges, self_loops, loose_edges (directed/undirected)
+==[isomorphism reduce]=>>
+    # remove self_loops ==>> extra color
+    colored' weighted hweighted graph with multiedges, loose_edges without self_loops(directed/undirected)
+    color' = (color, multi_set<(weight, sorted_pair<hweight>)>)
+           = (color, sorted[(weight, sorted_pair<hweight>)])
+==[isomorphism reduce]=>>
+    # remove multiedges ==>> extra weight/hweight
+    colored' weighted' hweighted' graph with loose_edges without multiedges, self_loops(directed/undirected)
+    weight' = [weight]
+    hweight' = [hweight]
+    how?
+        #all (v->u) ==>> multi_set{(hweight, weight, hweight)}
+        mset v u = multi_set{(hweight[v,aedge], weight[aedge], hweight[u,aedge])|@aedge. (v-aedge-u) <- g}
+        sort_split v u = (map fst ls, map snd ls, map thrd ls)
+            where ls = sorted $ mset v u
+        rsort_split v u = reverse (sorted u v)
+        @(v->u)<-g. min [sorted v u, rsort_split v u]
+==[isomorphism reduce]=>>
+    # color' weight' ==>> extra hweight
+    hweighted'' graph with colored_isolated_vertices, weighted_loose_edges without multiedges, self_loops(directed/undirected)
+    hweight'' = (color', hweight', weight')
+
+==[isomorphism reduce]=>>
+    # dedge direction ==>> extra hweight
+    hweighted''' undirected graph with colored_isolated_vertices without multiedges, self_loops
+    hweight'''  | v->aedge = hweight''
+                | v<-aedge = 2*min_hweight'' - 1 - hweight''
+
+######################### bad idea
+==[isomorphism reduce]=>>
+    # remove degree_2_vertices and multiedges and circle and self_loops
+    # remove degree_2_vertices
+    #   1) introduce multiedges again
+    #       to remove multiedges will introduce degree_2_vertices
+    #   2) isolated circle -> loose_edge
+    #   3) hair circle ==>> self_loops
+    hweighted'''' undirected graph with multiedges, colored_isolated_vertices without self_loops, degree_2_vertices
+    hweight'''' = [hweight''']
+    how?
+        new(u<->w) from (u<->v<->...<->w)
+        pair_hweight''''[u,w] = split [pair_hweight'''[u,v], pair_hweight''''[v,...], ..., pair_hweight'''[...,w]]
+
+==[isomorphism reduce]=>>
+    # remove hair trees and isolated trees
+    # remove degree_1_vertices
+    #   introduce degree_1_vertices
+    #   introduce degree_2_vertices
+

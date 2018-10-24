@@ -1,3 +1,5 @@
+# "def - graph isomorphism reduce.txt"
+# "def - min_ max_ color weight hweight[isomorphism reduce].txt"
 
 xgraph[multiedge, self-loop, colored vertex, weighted aedge, hedge relationship]
     -> simple colored ugraph

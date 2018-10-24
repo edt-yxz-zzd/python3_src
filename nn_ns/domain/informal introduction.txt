@@ -282,5 +282,16 @@ method:
         overrided via nearest_define_it_as_root_class.root_method
         called via first_define_it_class.root_method
 
+short hands:
+    class SubDomain({BaseDomain, ...}):
+        #### Haskell import BaseDomain (f, g)
+        from BaseDomain import f, g
+        # not: import BaseDomain
+        # not: from BaseDomain import f, g as g2
+        # not: from BaseDomain import *
+        #
+        #from now on
+        #   ops.at.f <==> ops.at(BaseDomain).f
 
 handle? dir()/help()
+

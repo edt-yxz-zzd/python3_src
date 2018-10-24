@@ -1,0 +1,60 @@
+
+method
+domain_ops_cls/
+    # hash(domain_ops_cls) <==> id(domain_ops_cls)
+    # (==) <==> 'is'
+
+    .__dict__/
+        all_methods :: Set String
+        old_methods :: Set String
+        new_methods :: Set String
+        banned_methods :: Set String
+
+        methods :: Map (domain_ops_cls, attr) method
+            methods_cache :: Map (domain_ops_cls, attr) (Maybe method)
+        imported_methods :: Map attr domain_ops_cls
+        at :: domain_ops_cls -> proxy<obj, domain_ops_cls>
+            at(Domain).method
+            at.imported_method
+        data
+            data[arg_idx]
+            data.kwarg_name
+        auxiliary_data
+            auxiliary_data[arg_idx]
+            auxiliary_data.kwarg_name
+
+    # for ops_obj
+    .__repr__
+    .___get_usr_hash_states___
+    .___eval_hash_value___ <==> hash((type(self)??, ___get_states___(self))
+    .__hash__
+        try:    return cached_hash_value
+        except: ___eval_hash_value___ and save then return
+    .__eq__
+        type eq?
+        hash eq?
+        states eq?
+
+
+    @final
+    .__new__(cls, *args, **kwargs)
+        args, kwargs = .___std_input_args___(...)
+        au_args, au_kwargs = .___calc_derived_args___(...)
+        ...
+    @final
+    .__init__(ops, ...): pass # do nothing
+    .___std_input_args___(cls, ...)
+    .___calc_derived_args___(cls, ...)
+
+    #@private_python_method
+    #__xxxx(...) # not domain method, no override/super...
+
+
+ops_obj/
+    .__dict__/
+        "\0 domain data \0"/
+            "cached_hash_value" :: int
+        "\0 domain usr hash states \0"/
+        "\0 domain usr derived states \0"/
+
+

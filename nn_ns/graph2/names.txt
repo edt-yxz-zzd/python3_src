@@ -1,0 +1,12 @@
+
+connected component
+    -> UTree<vertex = articulation point | bridge | biconnected component
+            ,edge = (articulation point, bridge | biconnected component)>
+    articulation point :: Vertex
+biconnected component
+    -> UTree<vertex = separating pair | circle | parallel edges | triconnected component
+            ,edge = (separating pair, circle | parallel edges | triconnected component)>
+    # i.e. SPQR tree
+    separating pair :: UnorderedPair Vertex
+    parallel edges :: [Edge]{1..} # not 2; 1 means exist an edge but not parallel edges
+

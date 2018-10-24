@@ -1,0 +1,111 @@
+
+#planar undirected graph with loops, multiedges(parallel edges)
+#see: tree canonization algorithm
+
+planar_ugraph -> connected_components
+PlanarUGraph -> [ConnectedComponent]
+    Count = PInt
+    ConnectedComponentClassIndex :: UInt
+
+    Canonization<PlanarUGraph> =
+        (component_idx2count
+            :: [Count]
+        ,component_idx2component_repr
+            :: sorted_and_unique[Canonization<ConnectedComponent>]
+        )
+    sorted_and_unique = O(V) ; using bucket_sort
+    Canonization<ConnectedComponent> = ?
+
+connected_component -> biconnected_component_tree
+ConnectedComponent -> UTree<BiconnectedComponent>
+    UTree<BiconnectedComponent>
+    DTree<BiconnectedComponent>
+    RootVertex = Vertex
+    DTreeBiWithRoot = (DTree<BiconnectedComponent>, RootVertex)
+        # DTree is a super tree whose super vertex is a BiconnectedComponent
+        # RootVertex is a vertex, not a BiconnectedComponent
+    Color = UInt
+    ColoredBiconnectedComponent =
+        (bicomponent :: BiconnectedComponent
+        ,vtx2color :: [Color]
+        )
+
+    ConnectedComponent
+        = Unicenter BiconnectedComponent [DTreeBiWithRoot]
+        | Bicenter SortedPair<DTreeBiWithRoot>
+
+    Canonization<ConnectedComponent>
+        = CanonizationUnicenter
+            {center_repr :: Canonization<ColoredBiconnectedComponent>
+            ,color2tree_repr :: sorted_and_unique[Canonization<DTreeBiWithRoot>]
+            }
+        | CanonizationBicenter (Either Canonization<DTreeBiWithRoot> SortedPair<Canonization<DTreeBiWithRoot>>)
+
+    Canonization<ColoredBiconnectedComponent> = ?
+    Canonization<DTreeBiWithRoot> = ?
+
+BiconnectedComponent -> TreeSPQR<TriconnectedComponent>
+    RootUEdge = SortedPair Vertex
+    TreeSPQR_with_RootUEdge = (TreeSPQR, RootUEdge)
+    HWeight = UInt
+    HWeightedTriconnectedComponent =
+        (tricomponent :: TriconnectedComponent
+        ,hedge2hweight :: [HWeight]
+        )
+    Canonization<BiconnectedComponent> = case TreeSPQR of
+        Bicenter -->> Pair<TreeSPQR_with_RootUEdge>
+        Unicenter and center is P/Q -->> (P/Q, Pair<TreeSPQR_with_RootUEdge>)
+        Unicenter and center is S -->> (S, Pair<TreeSPQR_with_RootUEdge>)
+        Unicenter and center is R
+            -->> (R, [TreeSPQR_with_RootUEdge])
+            -->> (center_repr :: Canonization<HWeightedTriconnectedComponent>
+                ,hweight2tree_repr :: sorted_and_unique[Canonization<TreeSPQR_with_RootUEdge>]
+                )
+    Canonization<HWeightedTriconnectedComponent> = ?
+    Canonization<TreeSPQR_with_RootUEdge> = ? # easy
+
+DTreeBiWithRoot -> TreeSPQR<TriconnectedComponent>
+    SubtreeSPQR<TriconnectedComponent>
+        # tricomponents that contains RootVertex form a subtree
+    RootDEdge = (Vertex, Vertex)
+    TreeSPQR_with_RootDEdge = (TreeSPQR, RootDEdge)
+
+    Canonization<DTreeBiWithRoot> = case SubtreeSPQR of
+        Bicenter -->> Pair<TreeSPQR_with_RootDEdge>
+            # two subtrees -->> Pair
+        Unicenter and center is P/Q -->> (P/Q, Pair<TreeSPQR_with_RootDEdge>)
+            # two subtrees -->> Pair
+        Unicenter and center is S -->> (S, Pair [TreeSPQR_with_RootDEdge])
+            # two directions -->> Pair
+        Unicenter and center is R
+            # compare with S
+            # (R, [[TreeSPQR_with_RootDEdge]])
+            #   length of outer list == degree of RootVertex >= 3
+            #   # degree of RootVertex in S == 2 -->> Pair
+            #
+            # color RootVertex 0
+            # color non-RootVertex 1
+            -->> ColoredBiconnectedComponent
+    Canonization<ColoredBiconnectedComponent> = ?
+    Canonization<TreeSPQR_with_RootDEdge> = ? # easy
+
+ColoredBiconnectedComponent -> HWeightedBiconnectedComponent
+    HWeightedBiconnectedComponent =
+        (bicomponent :: BiconnectedComponent
+        ,hedge2hweight :: [HWeight]
+        )
+
+    Canonization<ColoredBiconnectedComponent>
+        -->> Canonization<HWeightedBiconnectedComponent>
+    Canonization<HWeightedBiconnectedComponent> = ?
+
+HWeightedBiconnectedComponent -> HWeighted<TreeSPQR> -> f(HWeightedTriconnectedComponent)
+    Canonization<HWeightedBiconnectedComponent>
+        -->> f(Canonization<HWeightedTriconnectedComponent>)
+    Canonization<HWeightedTriconnectedComponent> = ?
+
+now:
+    Canonization<TreeSPQR_with_RootDEdge> = ? # easy
+    Canonization<TreeSPQR_with_RootUEdge> = ? # easy
+    Canonization<HWeightedTriconnectedComponent> = ?
+
