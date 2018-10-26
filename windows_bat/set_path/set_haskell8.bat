@@ -3,11 +3,11 @@ rem SHOULD set this file after "set_mingw.bat"
 rem since haskell comes with its mingw
 
 
-set haskell_home=C:\Program Files\Haskell Platform\8.0.2\
+set "haskell_home=C:\Program Files\Haskell Platform\8.0.2\"
 rem set haskell_admin_home=C:\Program Files (x86)\Haskell\
 rem set haskell_prev_path=%haskell_admin_home%\bin;%haskell_home%\lib\extralibs\bin;%haskell_home%\bin;
 rem set haskell_succ_path=%haskell_home%\mingw\bin
-set haskell_Roaming=C:\Users\Administrator\AppData\Roaming
+set "haskell_Roaming=C:\Users\Administrator\AppData\Roaming"
 
 goto end_of_comment
     Administrator user var/path
@@ -32,11 +32,11 @@ goto end_of_comment
 :end_of_comment
 rem set path=%haskell_prev_path%;%path%;%haskell_succ_path%
 rem set haskell_bins=%haskell_home%\bin;%haskell_home%\lib\bin;%haskell_home%\lib\extralibs\bin;%haskell_home%\mingw\bin;%haskell_home%\mingw\x86_64-w64-mingw32\bin;%haskell_home%\msys\usr\bin
-set haskell_bins_prev=%haskell_home%\lib\extralibs\bin;%haskell_home%\bin
+set "haskell_bins_prev=%haskell_home%\lib\extralibs\bin;%haskell_home%\bin"
 
-set haskell_bins_succ=%haskell_home%\mingw\bin;%haskell_Roaming%\cabal\bin;%haskell_Roaming%\local\bin
-set path=%haskell_bins_prev%;%path%;%haskell_bins_succ%
-rem call C:\Program Files\Haskell Platform\8.0.2\msys\msys2_shell.cmd
+set "haskell_bins_succ=%haskell_home%\mingw\bin;%haskell_Roaming%\cabal\bin;%haskell_Roaming%\local\bin"
+set "path=%haskell_bins_prev%;%path%;%haskell_bins_succ%"
+rem call "C:\Program Files\Haskell Platform\8.0.2\msys\msys2_shell.cmd"
 
 
 

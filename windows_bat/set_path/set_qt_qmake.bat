@@ -10,10 +10,10 @@ goto start
 
 :start
 
-set qt_home=D:\software\programming\Qt\Qt_1_2_1\
-set qt_mingw_bin=%qt_home%\Desktop\Qt\4.7.4\mingw\bin\
-set qt_msvc_bin=%qt_home%\Desktop\Qt\4.8.1\msvc2010\bin\
-set path=%path%;%qt_msvc_bin%
+set "qt_home=D:\software\programming\Qt\Qt_1_2_1\"
+set "qt_mingw_bin=%qt_home%\Desktop\Qt\4.7.4\mingw\bin\"
+set "qt_msvc_bin=%qt_home%\Desktop\Qt\4.8.1\msvc2010\bin\"
+set "path=%path%;%qt_msvc_bin%"
 
 
 

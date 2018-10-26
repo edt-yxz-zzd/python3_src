@@ -1,0 +1,66 @@
+# this line is a comment
+    # comment too
+    # the below empty line is ignored
+
+>>> {}: # tail comment
+key = None
+'xxx xxx' : True
+"xx yy" : -1
+34a$fba@af*+-24./\_\ = -34/-343
+
+inline_string = 'afs afsf\n\0'
+raw_inline_string = r'afs af\s\f\'
+
+inline_bytes = b'afs afsf\n\0'
+raw_inline_bytes = rb'afs af\s\f\'
+
+multiline_string = '':
+    # block start from here:
+    #   |
+    #   |
+    #   V
+    |   escaped \0 \t af ba
+    \   not a new line, escaped \n \\ dsf
+
+    ;   raw \ \0 \t af ba
+    ,   not a new line, raw \ \n \\ dsf
+
+    # new empty line
+    ;
+    # new empty line
+    |
+multiline_bytes = b'':
+    |   escaped \0 \t af ba
+    \   not a new line, escaped \n \\ dsf
+    ;   raw \ \0 \t af ba
+    ,   not a new line, raw \ \n \\ dsf
+    ;
+    |
+
+
+empty_tuple = ()
+tuple2 = (1, False)
+tuple8 = ():
+    # len = 8
+    []
+    {}
+    ()
+    1/-3
+    False
+    None
+    ''
+    b''
+empty_list = []
+list2 = ['ab', ()]
+list1 = []:
+    # like ():
+    1
+
+empty_dict = {}
+dict2 = {abs = 35, 'afs f' : []}
+dict = {}:
+    # like the main body
+    key = 0x34
+    'af ' : {}
+
+

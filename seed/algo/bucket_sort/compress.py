@@ -33,7 +33,7 @@ input:
         why need min_old_key, max_old_key?
             since assume max_old_key is very large
                 should avoid max_old_key."< -"
-        see: minmax/minmax_default
+        see: seed.iters.minmax :: maybe_minmax/minmax_default
     key :: None | (a -> OldKey)
     with_element :: bool = False
         affect output

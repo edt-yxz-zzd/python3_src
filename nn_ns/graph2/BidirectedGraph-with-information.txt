@@ -1,0 +1,36 @@
+hedge who_initializer information_settings...
+    bidirected graph
+
+
+
+BidirectedGraph
+    {vertices :: Set Vertex
+    ,aedges :: Set AEdge
+    ,hedge2information :: Map HEdge (Vertex, Bool, AEdge)
+        ####
+        #,hedges :: Set HEdge
+        #,is_outgoing_hedge :: HEdge -> Bool
+            # (vtx->aedge) if True else (vtx<-aedge)
+        #,hedge2vertex :: HEdge -> Vertex
+        #,hedge2aedge :: HEdge -> AEdge
+
+    , mutable_auxiliary_query_information
+        :: Mutable (Map String (who::object, Bool))
+        # is_directed
+        # is_connected
+        # is_planar_graph
+        # is_colored/is_weighted/is_hweighted...
+        # has_loose_edges
+        # has_loops
+        # has_multiedges
+        # is_simple_graph
+        # ...
+        #
+    , mutable_auxiliary_data
+        :: Mutable (Mutable String (who::object, data::object))
+        # aedge2iter_hedges :: AEdge -> Iter HEdge
+        # vertex2iter_hedges :: Vertex -> Iter HEdge
+        # ...
+        #
+    }
+    # ??Vertex = AEdge = HEdge = UInt

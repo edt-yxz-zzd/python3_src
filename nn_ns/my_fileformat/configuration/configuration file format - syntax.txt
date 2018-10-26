@@ -1,0 +1,189 @@
+configuration file format
+like json, but allow:
+    comment
+    multi-line string
+    fraction # no float number
+
+#################################################################
+#################################################################
+#################################################################
+WholeFileText
+    = IgnoreTailMultiLines0 Repr_TheMainObject IgnoreTailMultiLines0
+Repr_TheMainObject
+    = Repr_Object<''>
+    | '>>> {}:' IgnoreTailMultiLines0 '\n'
+        MultiLineRepr_DictBody<''>
+    | '>>> ():' IgnoreTailMultiLines0 '\n'
+        MultiLineRepr_ListBody<''>
+    | '>>> []:' IgnoreTailMultiLines0 '\n'
+        MultiLineRepr_ListBody<''>
+    | ">>> '':" IgnoreTailMultiLines0 '\n'
+        MultiLineRepr_StringBody<''>
+    | ">>> b'':" IgnoreTailMultiLines0 '\n'
+        MultiLineRepr_ByteArrayBody<''>
+
+
+
+#################################################################
+#################################################################
+#################################################################
+Object = Dict | ObjectArray | ObjectTuple | String | ByteArray | Fraction | Bool | None
+    Dict = Map String Object
+    ObjectArray = [Object]
+    Bool = False | True
+    None = None
+
+    String
+    ByteArray
+    Fraction
+
+repr:
+    SingleLineRepr_Basic_Object
+        = Repr_Bool
+        | Repr_None
+        | Repr_Fraction
+    Repr_Bool = "False" | "True"
+    Repr_None = "None"
+    Repr_Fraction = Repr_Integer (Ignores0 '/' Ignores0 Repr_NonZeroInteger)?
+    Repr_Integer = Repr_Zero | Repr_NonZeroInteger
+    Repr_Zero = "0" # not "-0" "0x0"...
+    Repr_NonZeroInteger = regex"[+-]?" Repr_PInt # "-3" not "- 3"
+    Repr_PInt
+        = HexRepr_PInt
+        | BinRepr_PInt
+        | DecRepr_PInt
+    HexRepr_PInt = regex"(?:0x[_0]*(?![_0])[_\<xdigit>]+)" # not "0X"
+    BinRepr_PInt = regex"(?:0b[_0]*1[_01]*)" # not "0B"
+    DecRepr_PInt = regex"(?:(?![_0])[_\<digit>]+)"
+
+    digit = regex'[0-9]' # not include [a-f]
+    xdigit = regex'[0-9A-F]' # not include [a-f]
+    text_byte = regex'(?:(?=[\x00-\x7F])[\x20\S])'
+    string_byte = regex'(?:(?![\'\"\\])\<text_byte>)'
+    escaped_byte_sequence = regex'(?:\\\\|\\\"|\\\'|\\n|\\r|\\t|\\0|\\x\<xdigit>{2})'
+    text_char = regex'(?:[\x20\u3000\S])'
+    string_char = regex'(?:(?![\'\"\\])\<text_char>)'
+    escaped_char_sequence = regex'(?:\\\\|\\\"|\\\'|\\n|\\r|\\t|\\0|\\x\<xdigit>{2}|\\u&\<xdigit>{4};|\\U&\<xdigit>{4}_\<xdigit>{4};)'
+
+    SingleLineRepr_ByteArray
+        = regex"r?b'(\"|\<string_byte>|\<escaped_byte_sequence>)*'"
+        | regex'r?b"(\'|\<string_byte>|\<escaped_byte_sequence>)*"'
+    SingleLineRepr_String
+        = regex"r?'(\"|\<string_char>|\<escaped_char_sequence>)*'"
+        | regex'r?"(\'|\<string_char>|\<escaped_char_sequence>)*"'
+    SingleLineRepr_ObjectTuple = '(' SingleLineRepr_Objects1? ')'
+    SingleLineRepr_ObjectArray = '[' SingleLineRepr_Objects1? ']'
+    SingleLineRepr_Objects1 = SingleLineRepr_Object (',' SingleLineRepr_Object)*
+    SingleLineRepr_Dict = '{' Ignores0 (SingleLineRepr_DictItems1 Ignores0)? '}'
+    SingleLineRepr_DictItems1 = SingleLineRepr_DictItem (Ignores0 ',' Ignores1 SingleLineRepr_DictItem)*
+    SingleLineRepr_DictItem
+        = SingleLineRepr_String Ignores1 ':' Ignores1 SingleLineRepr_Object
+        | RawRepr_DictKey Ignores1 '=' Ignores1 SingleLineRepr_Object
+    RawRepr_DictKey = regex"(?:(?:(?![\'\":=#(){}\[\]\s])\<string_char>)+)"
+
+    SingleLineRepr_Object
+        = SingleLineRepr_ByteArray
+        | SingleLineRepr_String
+        | SingleLineRepr_ObjectTuple
+        | SingleLineRepr_ObjectArray
+        | SingleLineRepr_Dict
+        | SingleLineRepr_Basic_Object
+
+    ignore_char = regex' '
+    tail_comment = regex"# \<text_char>*$"
+
+    # ignore single line
+    Ignores0 = regex'\<ignore_char>*'
+    Ignores1 = regex'\<ignore_char>+'
+    IgnoreTail = regex'\<ignore_char>*\<tail_comment>?$'
+    IgnoreLine = regex'^\<ignore_char>*\<tail_comment>?$'
+    # ignore multiple lines
+    IgnoreMultiLines0 = ('\n' IgnoreLine)*
+    IgnoreTailMultiLines0 = IgnoreTail IgnoreMultiLines0
+
+    Indent = regex' {4}'
+    Repr_Object<Indents>
+        = SingleLineRepr_Object
+        | MultiLineRepr_Object<Indents>
+
+    MultiLineRepr_Dict<Indents>
+        = '{}:' IgnoreTailMultiLines0 '\n'
+            MultiLineRepr_DictBody<Indents+Indent>
+        # no "?" at last
+    MultiLineRepr_DictBody<Indents>
+        = MultiLineRepr_DictItem<Indents>
+            (IgnoreTailMultiLines0 '\n' MultiLineRepr_DictItem<Indents>)*
+    MultiLineRepr_DictItem<Indents>
+        = Indents SingleLineRepr_String Ignores1 ':' Ignores1 Repr_Object<Indents>
+        | Indents RawRepr_DictKey Ignores1 '=' Ignores1 Repr_Object<Indents>
+    MultiLineRepr_ObjectTuple<Indents>
+        = '():' IgnoreTailMultiLines0 '\n'
+            MultiLineRepr_ListBody<Indents+Indent>
+        # no "?" at last
+    MultiLineRepr_ObjectArray<Indents>
+        = '():' IgnoreTailMultiLines0 '\n'
+            MultiLineRepr_ListBody<Indents+Indent>
+        # no "?" at last
+    MultiLineRepr_ListBody<Indents>
+        = MultiLineRepr_ListItem<Indents>
+            (IgnoreTailMultiLines0 '\n' MultiLineRepr_ListItem<Indents>)*
+    MultiLineRepr_ListItem<Indents> = Indents Repr_Object<Indents>
+    MultiLineRepr_String<Indents>
+        = "'':" IgnoreTailMultiLines0 '\n'
+            MultiLineRepr_StringBody<Indents+Indent>
+    MultiLineRepr_StringBody<Indents>
+        = MultiLineRepr_StringHeadLine<Indents>
+            (IgnoreMultiLines0 '\n' MultiLineRepr_StringLine<Indents>)*
+            # not IgnoreTailMultiLines0
+    Repr_IndentedEscapedString
+        = regex"(?:([\'\"]|\<string_char>|\<escaped_char_sequence>)*$)"
+        # NOTE: '$' at last
+        #   so, when follow IgnoreTailMultiLines0, equivalence to IgnoreMultiLines0
+    MultiLineRepr_StringHeadLine<Indents>
+        # = Indents regex'[|;] {3}\<text_char>*$'
+        = Indents regex'; {3}\<text_char>*$'
+        | Indents regex'\| {3}' Repr_IndentedEscapedString regex'$'
+        | Indents regex'[|;]$'
+    MultiLineRepr_StringLine<Indents>
+        # = Indents regex'[|\\;,] {3}\<text_char>*$'
+        = Indents regex'[;,] {3}\<text_char>*$'
+        | Indents regex'[|\\] {3}' Repr_IndentedEscapedString regex'$'
+        | Indents regex'[|;]$'
+        #
+        # | \
+        #   to escape, using SingleLineRepr_String format
+        # ; ,
+        #   raw text
+        # | ;
+        #   begining or newline
+        # \ ,
+        #   continue last line # not begining
+        #
+    MultiLineRepr_ByteArray<Indents>
+        = "b'':" IgnoreTailMultiLines0 '\n'
+            MultiLineRepr_ByteArrayBody<Indents+Indent>
+    MultiLineRepr_ByteArrayBody<Indents>
+        = MultiLineRepr_ByteArrayHeadLine<Indents>
+            (IgnoreMultiLines0 '\n' MultiLineRepr_ByteArrayLine<Indents>)*
+            # not IgnoreTailMultiLines0
+    Repr_IndentedEscapedByteArray
+        = regex"(?:([\'\"]|\<string_byte>|\<escaped_byte_sequence>)*$)"
+    MultiLineRepr_ByteArrayHeadLine<Indents>
+        = Indents regex'; {3}\<text_byte>*$'
+        | Indents regex'\| {3}' Repr_IndentedEscapedByteArray regex'$'
+        | Indents regex'[|;]$'
+    MultiLineRepr_ByteArrayLine<Indents>
+        = Indents regex'[;,] {3}\<text_char>*$'
+        | Indents regex'[|\\] {3}' Repr_IndentedEscapedByteArray regex'$'
+        | Indents regex'[|;]$'
+
+    MultiLineRepr_Object<Indents>
+        = MultiLineRepr_ByteArray<Indents>
+        | MultiLineRepr_String<Indents>
+        | MultiLineRepr_ObjectTuple<Indents>
+        | MultiLineRepr_ObjectArray<Indents>
+        | MultiLineRepr_Dict<Indents>
+        #| SingleLineRepr_Basic_Object
+        #| SingleLineRepr_Object
+
+

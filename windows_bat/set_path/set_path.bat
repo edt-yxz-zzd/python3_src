@@ -47,42 +47,47 @@ c:\python33;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTE
 
 :start
 
-set bats_path=E:\my_data\program_source\github\edt-yxz-zzd\python3_src\windows_bat
-set set_bat_path=%bats_path%\set_path
-set 7z=py -m nn_ns.fileformat.zip_by_7z
+set "bats_path=E:\my_data\program_source\github\edt-yxz-zzd\python3_src\windows_bat"
+
+set "set_bat_path=%bats_path%\set_path\"
+if "%set_bat_path%" NEQ "%~dp0" goto error__tpl_var_bats_path
+
+set "7z=py -m nn_ns.fileformat.zip_by_7z"
 
 
 rem choose set_msvc, set_gcc or set_clang
-call %set_bat_path%\set_msvc
-call %set_bat_path%\set_gcc
-call %set_bat_path%\set_clang
-rem call %set_bat_path%\set_haskell2012
+rem set_msvc is too slow
+rem call "%set_bat_path%\set_msvc"
+call "%set_bat_path%\set_gcc"
+call "%set_bat_path%\set_clang"
+rem call "%set_bat_path%\set_haskell2012"
 =======
-call %set_bat_path%\set_plain_tex
-call %set_bat_path%\set_swig
-call %set_bat_path%\set_python
+call "%set_bat_path%\set_plain_tex"
+call "%set_bat_path%\set_swig"
+call "%set_bat_path%\set_python"
 rem set_boost should be after set_python
-call %set_bat_path%\set_boost
-call %set_bat_path%\set_mysql
-call %set_bat_path%\set_java
-call %set_bat_path%\set_svn
-rem call %set_bat_path%\set_perl
-call %set_bat_path%\set_mathematica
-call %set_bat_path%\set_qt_qmake
-call %set_bat_path%\set_git
-call %set_bat_path%\set_haskell8
+call "%set_bat_path%\set_boost"
+call "%set_bat_path%\set_mysql"
+call "%set_bat_path%\set_java"
+call "%set_bat_path%\set_svn"
+rem call "%set_bat_path%\set_perl"
+call "%set_bat_path%\set_mathematica"
+call "%set_bat_path%\set_qt_qmake"
+call "%set_bat_path%\set_git"
+call "%set_bat_path%\set_haskell8"
+call "%set_bat_path%\set_ffmpeg"
 
 rem set path=%path%;D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin
 rem to override C:\Windows\System32\find.exe
-    set usrbin_path=D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin
-    set path=%usrbin_path%;%path%;%usrbin_path%\pkg-config
+set "usrbin_path=D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin"
+set "path=%usrbin_path%;%path%;%usrbin_path%\pkg-config"
 rem to override DOS command MKDIR
     doskey mkdir=%usrbin_path%\mkdir.exe
-set path=%path%;%set_bat_path%\cmdline_tool_link
-set path=%path%;%bats_path%
-set path=%path%;D:\software\programming\develop tools\cmake\cmake-3.7.2-win64-x64\bin
-set path=%path%;D:\software\cmdline_tool_link
-set path=%path%;E:\my_data\program_source\github\edt-yxz-zzd\python3_src\nn_ns\app\scripts
+set "path=%path%;%set_bat_path%\cmdline_tool_link"
+set "path=%path%;%bats_path%"
+set "path=%path%;D:\software\programming\develop tools\cmake\cmake-3.7.2-win64-x64\bin"
+set "path=%path%;D:\software\cmdline_tool_link"
+set "path=%path%;E:\my_data\program_source\github\edt-yxz-zzd\python3_src\nn_ns\app\scripts"
 
 goto end
 
@@ -95,6 +100,12 @@ rem
 REM pause
 
 
+:error__tpl_var_bats_path
+    echo error__tpl_var_bats_path
+    echo E:\my_data\program_source\github\edt-yxz-zzd\python3_src\windows_bat\set_path\
+    echo %~dp0
+    pause
+    exit
 :end
 
 @echo on

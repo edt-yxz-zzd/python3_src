@@ -14,7 +14,7 @@ __all__ = '''
     sort_ints
     sort_seqs_by_key_at
     '''.split()
-from seed.iters.minmax import minmax
+from seed.iters.minmax import maybe_minmax
 from seed.algo.bucket_sort import bucket_sort
 from seed.special_funcs import identity
 
@@ -29,7 +29,7 @@ def sort_ints(ints, *, key=None):
     if N < 2:
         return ints
     _key = identity if key is None else key
-    min, max = minmax(ints, key=key)
+    min, max = maybe_minmax(ints, key=key)
     minN, maxN = _key(min), _key(max)
     R = maxN - minN
     assert R >= 0
