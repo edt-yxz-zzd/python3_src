@@ -1,0 +1,18 @@
+# iappendright
+
+XOA XOT
+
+X - + plus
+O - 0 * star
+A - 'a'/'an' one element
+    # always A* = A+ | Empty
+    XOA
+        X = O A
+        A+ = A* A
+    XAO
+        X = A O
+        A+ = A A*
+
+A - a element
+T - the special tail elements
+

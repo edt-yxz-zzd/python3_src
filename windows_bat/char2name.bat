@@ -1,1 +1,1 @@
-py -m nn_ns.char.char2name %*
+py -m nn_ns.app.char2name %*

@@ -1,0 +1,20 @@
+E:\my_data\program_source\github\edt-yxz-zzd\python3_src\nn_ns\using\using_PLY\PLY_note.txt
+D:/software/programming/Python/_compile/PLY/ply-3.11/doc/ply.html
+D:\software\programming\Python\_compile\PLY\ply-3.11\example\GardenSnake\GardenSnake.py
+    # python-like language
+
+utils.
+.utils.LexPostprocessors.LexPostprocessor.LexPostprocessor
+    .__doc__
+    .__init__.__doc__
+.utils.Lexers.EchoLexer.EchoLexer
+    .__doc__
+
+
+### avoid ' ' directly
+### avoid '#' directly
+def t_comment(t):
+    r"[ ]*\043[^\n]*"  # \043 is '#'
+    pass
+
+

@@ -51,6 +51,12 @@ True
 [1]
 
 
+>>> bgraph.is_edgeless_graph()
+False
+>>> bgraph.is_vertexless_graph()
+False
+>>> bgraph.is_nothing_graph()
+False
 
 '''
 
@@ -482,6 +488,83 @@ class HyperGraph:
         return __self.__get_may_mM('get_maybe_minmax_aedge_degree', 0)
     def get_maybe_max_aedge_degree(__self):
         return __self.__get_may_mM('get_maybe_minmax_aedge_degree', 1)
+    #######################################
+
+
+    #######################################
+    #edgeless_graph, vertexless_graph
+    #nothing_graph
+    #avoid using: order_zero_graph/empty_graph/null_graph
+    #######################################
+    # A graph is connected when there is a path between every pair of vertices.
+    #   edgeless_graph
+    #   order_zero_graph |<=| edgeless_graph
+    #       # but since thare are maybe loose_aedges
+    #       # I define nothing_graph = edgeless order_zero graph
+    #   empty_graph = edgeless_graph
+    #   null_graph =[ambiguous]= edgeless_graph |ambiguous-or| order_zero_graph
+    def is_edgeless_graph(__self):
+        return not len(__self.aedge2hedges)
+    def is_vertexless_graph(__self):
+        return not len(__self.vertex2hedges)
+    def is_nothing_graph(__self):
+        return __self.is_edgeless_graph() and __self.is_vertexless_graph()
+
+    #######################################
+    #undirected/directed:
+    #   is_weak_[tree|path|cycle|wheel|star]
+    #   is_weak_[forest|paths|cycles|wheels|stars]
+    #       num_connected_components_of
+    #   is_weak_bipartite_graph
+    #   is_weak_complete_graph
+    #   is_weak_series_parallel_graph # with 2 terminals
+    #directed:
+    #   DAG, in_tree, out_tree
+    #   series_parallel_graph
+    #######################################
+
+    #######################################
+    #
+    #######################################
+
+    #######################################
+    #is_weak_connected
+    #   underlying undirected graph
+    #is_strong_connected
+    #   treat (<-->) as an non-existing aedge
+    #   treat (-><-) as two parallel directed aedge
+    #num_weak_connected_components_of
+    #weak_connected_component_idx2vertices
+    #weak_connected_component_idx2aedges
+    #vertex2weak_connected_component_idx
+    #aedge2weak_connected_component_idx
+    #######################################
+
+    #######################################
+    #connectivity_of
+    #connectivity_ge # is_<k>_connected
+    #   #how??
+    #######################################
+
+    #######################################
+    #should move to BidirectedGraph
+    #has_weak_loops # self_loop
+    #   is (<-->) an existing aedge???
+    #   what if aedge_degree > 2???
+    #       aedge incident to a vertex at least twice
+    #has_weak_multiedges, has_weak_multiloops
+    #   underlying undirected graph
+    #has_strong_multiedges, has_strong_multiloops
+    #   multiedges distinguish by (->->)|(<-<-)|(-><-)|(<-->)
+    #######################################
+
+
+    #######################################
+    #
+    #######################################
+
+    #######################################
+    #
     #######################################
 
 class BidirectedGraph(HyperGraph):

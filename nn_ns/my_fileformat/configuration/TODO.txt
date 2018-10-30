@@ -1,0 +1,5 @@
+
+MyConfiguration2_yacc.py
+    use below to generate a baseline:
+        utils\parses\parse__grammar_units.py
+        utils\parses\parse__grammar_*.py

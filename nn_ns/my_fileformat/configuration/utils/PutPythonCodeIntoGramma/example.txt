@@ -1,0 +1,16 @@
+
+# why take out from example.py?
+#   to test __main__.py:
+#       pym __main__.py -i example.txt
+#
+Args
+    arg comma Args | arg semicolon Args
+        p[0] = put_before(p[1], p[3])
+        # or: p[0] = put_before(arg, Args)
+        # or: return put_before(arg, Args)
+    empty
+        pass
+empty
+    <>
+        p[0] = LeftListEmpty
+
