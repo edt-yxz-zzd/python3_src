@@ -3,3 +3,11 @@ MyConfiguration2_yacc.py
     use below to generate a baseline:
         utils\parses\parse__grammar_units.py
         utils\parses\parse__grammar_*.py
+
+assert seed.lang.has_no_nonlocals
+    dectect all unbound names
+set at line begin
+    format_doc(**kwargs)
+
+你在忧虑什么？我们还有敌人么？还有人比我们更强么？
+将来的我们。

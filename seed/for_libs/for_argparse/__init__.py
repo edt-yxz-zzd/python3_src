@@ -8,7 +8,8 @@ __all__ = '''
     str2pint
 '''.split()
 
-from sand.big.safe_eval import safe_eval
+#from sand.big.safe_eval import safe_eval
+from seed.helper.safe_eval import safe_eval
 from argparse import ArgumentTypeError
 
 

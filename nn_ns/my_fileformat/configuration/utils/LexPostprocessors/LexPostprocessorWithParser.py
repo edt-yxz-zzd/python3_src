@@ -3,7 +3,7 @@
 __all__ = '''
     LexPostprocessorWithParser
     '''.split()
-from ..make_pseudo_yacc_module_obj import make_pseudo_yacc_module_obj
+from ..make_yacc_LRParser import make_yacc_LRParser
 from .ILexPostprocessorWithParser import ILexPostprocessorWithParser
 from .UserLexPostprocessor import UserLexPostprocessor
 from .abc import override
@@ -25,9 +25,7 @@ class LexPostprocessorWithParser(
 see: LexPostprocessor for the input args
 '''
         x = XXX_yacc__module_or_class_or_dict
-        XXX_pseudo_yacc_module = make_pseudo_yacc_module_obj(x)
-        lrparser = ply.yacc.yacc(module=XXX_pseudo_yacc_module, **XXX_yacc_kwargs)
-
+        lrparser = make_yacc_LRParser(x, **XXX_yacc_kwargs)
         #self.XXX_pseudo_yacc_module = XXX_pseudo_yacc_module
         return cls(lex_postprocessor, lrparser)
 

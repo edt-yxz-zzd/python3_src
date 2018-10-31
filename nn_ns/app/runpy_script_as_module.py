@@ -1,6 +1,6 @@
 
 '''
-runpy_script_as_module [--py options] path/script.py [args...]
+runpy_script_as_module [--py options] -- path/script.py [args...]
 ==>> py options -m pkg.script [args...]
 
 PEP 366 - Main module explicit relative imports ???????
@@ -8,20 +8,40 @@ PEP 366 - Main module explicit relative imports ???????
 
 pym.bat:
     py -m nn_ns.runpy_script_as_module %*
+
+pym -- <cmd> args...
+if -h/--help/-jq/--just_show_module_qname not in [<cmd>, args...]:
+    pym <cmd> args...
+
+
+
+##################
+argv = [this, *args]
 '''
 
-#from sand import script_fname2module_name
 from .guess_package_name import script_fname2module_name
+from seed.for_libs.for_argparse.seperate_all_front_switches import \
+    seperate_all_front_switches
 from seed.filesys.glob1 import glob1
 import runpy, sys, os
+import argparse
 
 def runpy_script_as_module(script_argv):
     '''[script.py, args...] ==>> py pkg.script args...
 
 script_fname = script_argv[0]
 '''
+    runpy_script_as_module_ex(script_argv
+        , just_show_module_qname=False
+        )
+def runpy_script_as_module_ex(script_argv
+    , *, just_show_module_qname:bool):
     script_fname = script_argv[0]
     module_name = script_fname2module_name(script_fname)
+    if just_show_module_qname:
+        print(module_name)
+        return
+
     if not module_name:
         raise ValueError('not a legal module_name:{!r}'.format(script_fname))
     top_pkg, _, tail = module_name.partition('.')
@@ -73,80 +93,58 @@ script_fname = script_argv[0]
     runpy.run_module
     runpy.run_path
 
-def main(argv=None):
-    '''this help: "this -h ..."
+
+class __Main:
+    description = 'runpy_script_as_module'
+    @classmethod
+    def main(cls, args=None):
+        '''this help: "this -h ..."
 running_script help: "this script_name_pattern ... -h ..."
+
+running_script -h/--help -- ...
+running_script -jq/--just_show_module_qname -h/--help -- ...
+running_script -- script args...
+
 '''
-    import argparse, sys
-    if argv is None:
-        # sys.argv == [this, ...]
-        assert sys.argv
-        argv = sys.argv[1:]
-        # print(argv)
 
-    #print(argv)
-    if argv:# and len(argv) >= 2:
-        # [__name__.py] : xxx.py [args...]
-        # [__name__.py] : -h [args...]
-        cmd = argv[0]
-        if cmd in ['-h', '--help']:
-            cmd = ''
-        else:
-            cmd = glob1(cmd) # scripts
-    else:
-        cmd = None
+        parser = cls.make_parser()
+        fine_args = seperate_all_front_switches(args)
+        args = parser.parse_args(fine_args) # may exit here!
 
-    #argv = sys.argv if argv is None else argv
-    parser = top_parser = argparse.ArgumentParser(description='runpy_script_as_module')
-    #subparsers = top_parser.add_subparsers(help='sub-commands')
-    #parser = subparsers.add_parser('py', help='call *.py file as module')
+        just_show_module_qname = bool(args.just_show_module_qname)
+        script_argv = script_and_args = [args.script, *args.args]
 
-    # this help:
-    parser.add_argument('script', type=str, help='script file name pattern')
-    parser.add_argument('args', type=str, metavar='arg',
-                        nargs='*', default=[],
-                        help='arguments for script')
+        runpy_script_as_module_ex(
+            script_argv
+            , just_show_module_qname=just_show_module_qname
+            )
+        #parser.exit(0)
 
-    if not cmd:
-        # should print help and exit!!!
-        args = parser.parse_args(argv)
-        print(argv, args, file=sys.stderr)
-        raise logic-error
-        script = glob1(args.script)
-        args = args.args
 
-    script = cmd
-    args = argv[1:] # cmd is argv[0]; skip it
 
-    script_argv = [script] + args
-    runpy_script_as_module(script_argv)
-    parser.exit(0)
-    raise logic-error
+    @classmethod
+    def add__script_and_args(cls, parser):
+        parser.add_argument('script', type=str
+                            ,help='glob pattern of the input script file path')
+        parser.add_argument('args', type=str, metavar='arg'
+                            ,nargs='*', default=[]
+                            ,help='arguments for script')
 
+    @classmethod
+    def add__just_show_module_qname(cls, parser):
+        parser.add_argument('-jq', '--just_show_module_qname'
+                            ,action='store_true'
+                            ,help='just show module fullname, donot run')
+
+    @classmethod
+    def make_parser(cls):
+        parser = argparse.ArgumentParser(description=cls.description)
+        cls.add__just_show_module_qname(parser)
+        cls.add__script_and_args(parser)
+        return parser
+
+main = __Main.main
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

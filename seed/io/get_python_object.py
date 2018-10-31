@@ -172,7 +172,8 @@ def get_dot_attrs(moudle_object, may_dot_attrs):
 
     dot_attrs = may_dot_attrs
     if dot_attrs[0] != '.': raise ValueError
-    return attrgetter(moudle_object, dot_attrs[1:])
+    attrs = dot_attrs[1:]
+    return attrgetter(attrs)(moudle_object)
 
 via_case2get_python_object = \
     {ViaCase.ModuleSystem: get_python_object_via_module_system

@@ -1,5 +1,13 @@
 
 
+r'''
+pym -jq parse__grammar_units.py
+pym show_yacc_productions.py M -m nn_ns.my_fileformat.configuration.utils.parses.parse__grammar_units -da .P
+
+pym show_yacc_productions.py S -p nn_ns.my_fileformat.configuration.utils.parses -np parse__grammar_units@E:\my_data\program_source\github\edt-yxz-zzd\python3_src\nn_ns\my_fileformat\configuration\utils\parses\parse__grammar_units.py -da .P
+
+'''
+
 __all__ = '''
     show_extracted_yacc_rules
 
@@ -11,6 +19,12 @@ __all__ = '''
     show_yacc_productions_from_lex_postprocessor_with_parser
     '''.split()
 
+from ..make_yacc_LRParser import make_yacc_LRParser
+from ..LexPostprocessors.ILexPostprocessorWithParser import \
+    ILexPostprocessorWithParser
+
+from seed.pkg_tools.get_python_object import GetPythonObjectHelper
+import ply.yacc
 from collections import defaultdict
 
 def show_extracted_yacc_rules(rules):
@@ -49,7 +63,7 @@ rules = name_body_pairs
 def extract_rules_from_yacc_lrparser(lrparser):
     '''ply.yacc.LRParser -> [(name, [[name]])]'''
     productions = lrparser.productions
-    return extract_rules_from_yacc_lrparser(productions)
+    return extract_rules_from_yacc_productions(productions)
 def extract_rules_from_lex_postprocessor_with_parser(
     lex_postprocessor_with_parser):
     '''LexPostprocessorWithParser -> [(name, [[name]])]'''
@@ -68,12 +82,21 @@ def show_yacc_productions_from_lex_postprocessor_with_parser(
     rules = extract_rules_from_lex_postprocessor_with_parser(lex_postprocessor_with_parser)
     show_extracted_yacc_rules(rules)
 
-def main(argv=None)
-    #seed.io.get_python_object.get_python_object
-    from seed.pkg_tools.get_python_object import (
-        get_python_object, ViaCase, GetPythonObjectHelper
-        )
-'''
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+#############################################
+def main(argv=None):
+    #seed.io.get_python_object.get_python_object/GetPythonObjectHelper
+    '''
     ModuleSystem
         --module x.y.z --dot_attrs .XXX.YYY
     ScriptAsModule # to set the __name__
@@ -93,30 +116,42 @@ def main(argv=None)
         , help='sub-command help')
 
     parser_ModuleSystem = subparsers_main.add_parser('ModuleSystem'
-        , aliases='m'.split()
+        , aliases='M'.split()
         , help='via ModuleSystem')
     parser_ScriptAsModule = subparsers_main.add_parser('ScriptAsModule'
-        , aliases='s'.split()
+        , aliases='S'.split()
         , help='via ScriptAsModule')
     parser_Exec = subparsers_main.add_parser('Exec'
-        , aliases='x'.split()
+        , aliases='X'.split()
         , help='via Exec')
     parser_Eval = subparsers_main.add_parser('Eval'
-        , aliases='v'.split()
+        , aliases='V'.split()
         , help='via Eval')
 
     init_parser_ModuleSystem(parser_ModuleSystem)
     init_parser_ScriptAsModule(parser_ScriptAsModule)
     init_parser_Exec_or_Eval(parser_Exec)
     init_parser_Exec_or_Eval(parser_Eval)
+    #init_parser__dot_attrs(parser_main)
 
 
 
 
     ################
-    args = parser_main.parser_args(argv)
-    dot_attrs = args.dot_attrs
-    cmd = parser_main.sub_command_name__level1 # the 'dest'
+    args = parser_main.parse_args(argv)
+    #dot_attrs = args.dot_attrs
+    #cmd = parser_main.sub_command_name__level1 # the 'dest'
+
+    x = the_object = args._handler_1_(args)
+    if isinstance(x, ILexPostprocessorWithParser):
+        rules = extract_rules_from_lex_postprocessor_with_parser(x)
+    elif isinstance(x, ply.yacc.LRParser):
+        rules = extract_rules_from_yacc_lrparser(x)
+    else:
+        #assume it is an module/class required by yacc
+        lrparser = make_yacc_LRParser(x)
+        rules = extract_rules_from_yacc_lrparser(lrparser)
+    show_extracted_yacc_rules(rules)
 
 
 def init_parser__level1(_handler_1_, parser_level1):
@@ -125,7 +160,7 @@ def init_parser__level1(_handler_1_, parser_level1):
 def init_parser__level1__without_dot_attrs(_handler_1_, parser_level1):
     parser_level1.set_defaults(_handler_1_=_handler_1_)
 def init_parser__level2(_handler_2_, parser_level2):
-    init_parser__dot_attrs(parser_level1)
+    init_parser__dot_attrs(parser_level2)
     parser_level2.set_defaults(_handler_2_=_handler_2_)
 
 def init_parser_ModuleSystem(parser_ModuleSystem):
@@ -145,11 +180,10 @@ def init_parser_ScriptAsModule(parser_ScriptAsModule):
         , help='normal package fullname; qname; x.y.z'
         )
     parser_ScriptAsModule.add_argument('-np', '--name_path_pairs'
-        , type=str, actions = 'append', default = []
+        , type=str, action = 'append', default = []
         #not required#, required=True
         , help='bare module name with path to its source file; aaa@path/to/aaa.py'
         )
-    init_parser__dot_attrs(parser_ScriptAsModule)
     def _handler_1_(args):
         return GetPythonObjectHelper.ScriptAsModule(
             parent=args.parent
@@ -211,7 +245,7 @@ def init_parser_Exec_or_Eval_stdin(parser_E_stdin):
     init_parser__level2(_handler_2_, parser_E_stdin)
 def init_parser_Exec_or_Eval_arg(parser_E_arg):
     parser_E_arg.add_argument('python_source', type=str
-        , required=True
+        #, required=True
         , help='python source code'
         )
     def _handler_2_(E, args):
