@@ -24,7 +24,8 @@ from .imports import (
     LexPostprocessor
     ,lex_error_handle
     , token_error_handle
-    ,let_be_all_staticmethod
+    ,let_be_all_staticmethods
+    ,useful_regex_patterns_decorator
 
     ,make_rule_inject_to
     ,make_rule_action_for_all_many01_XOAs_iappendright
@@ -44,15 +45,10 @@ def _eval_grammar_discards():
     return d['grammar_discards']
 _grammar_discards = _eval_grammar_discards()
 del _eval_grammar_discards
+_grammar_discards_parse_result = [('MaybeNullIndent', [['NullIndent'], ['EMPTY']]), ('Ignores0', [['Ignores1'], ['EMPTY']]), ('middle_open', [['OP_MIDDLE_OPEN', 'Ignores0']]), ('middle_close', [['Ignores0', 'OP_MIDDLE_CLOSE']])]
 
 
 
-
-inline_space = r'((?!\n)\s)'
-not_at_line_begin = r'(?<=[^\n])'
-at_line_begin = r'(?<![^\n])'
-not_at_line_end = r'(?=[^\n])'
-at_line_end = r'(?![^\n])'
 
 tokens_only = '''
     newline
@@ -66,18 +62,20 @@ commons = '''
     OP_COLON
     OP_BAR
     '''.split()
-@let_be_all_staticmethod('t_')
+@let_be_all_staticmethods('t_')
 class T:
     states = []
     tokens = tokens_only + commons
     terminals = terminals_only + commons
     def t_error(t):
         raise lex_error_handle(t, '')
+    @useful_regex_patterns_decorator
     def t_ignores1(t):
-        r'(?<=[^\n])((?!\n)\s)+'
+        r'{non_indent_spaces1}'
         # not_at_line_begin
+    @useful_regex_patterns_decorator
     def t_spaces1_line(t):
-        r'(?<![^\n])((?!\n)\s)+(?![^\n])'
+        r'{spaces1_line}'
         # at_line_begin, at_line_end
         # discard
     def t_newline(t):
@@ -85,13 +83,14 @@ class T:
         t.lexer.lineno += 1
         # discard
 
+    @useful_regex_patterns_decorator
     def t_def_name(t):
-        r'(?<![^\n])\w+'
+        r'{at_line_begin}\w+'
         # at_line_begin
         return t
-
+    @useful_regex_patterns_decorator
     def t_ref_name(t):
-        r'(?<=[^\n])\w+'
+        r'{not_at_line_begin}\w+'
         # not_at_line_begin
         return t
 
@@ -113,7 +112,7 @@ lex_postprocessor = LexPostprocessor(
 #######################################################
 
 
-@let_be_all_staticmethod('p_')
+@let_be_all_staticmethods('p_')
 class P:
     '''
 Main
@@ -180,13 +179,6 @@ parse__grammar_discards = lex_postprocessor_with_parser.parse_source_string
 
 
 if __name__ == "__main__":
-    for t in lex_postprocessor.tokenize(_grammar_discards):
-        print(t)
-        del t
-    print()
-    print()
-    print(parse__grammar_discards(_grammar_discards))
-
-    from .example__grammar_discards import grammar_discards
-    print(parse__grammar_discards(grammar_discards))
+    from ._main import _main
+    _main(__name__)
 

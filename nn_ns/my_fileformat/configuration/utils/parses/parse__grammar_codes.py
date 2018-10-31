@@ -52,17 +52,12 @@ def _eval_grammar_codes():
     return d['grammar_codes']
 _grammar_codes = _eval_grammar_codes()
 del _eval_grammar_codes
+_grammar_codes_parse_result = [('ByteStringBody', [([['CharStringBody']], ['# CharStringBody ==>> ByteStringBody', "return CharStringBody.encode('ascii')"])]), ('Inline_ObjectArray', [([['middle_open', 'Inline_ListItems0', 'middle_close']], ['return list(Inline_ListItems0)'])]), ('a', [([['an_alternative']], ['pass']), ([['other_alternative'], ['more']], ['pass'])])]
 
 parse__grammar_codes = lex_postprocessor_with_parser.parse_source_string
 
 
 if __name__ == "__main__":
-    for t in lex_postprocessor.tokenize(_grammar_codes):
-        print(t)
-        del t
-    print()
-    print()
-    print(parse__grammar_codes(_grammar_codes))
+    from ._main import _main
+    _main(__name__)
 
-    from .example__grammar_codes import grammar_codes
-    print(parse__grammar_codes(grammar_codes))

@@ -8,9 +8,11 @@ __all__ = '''
     '''.split()
 
 
-from ..LexPostprocessors.LexPostprocessor import LexPostprocessor
-from ..lex_error_handle import lex_error_handle, token_error_handle
-from ..all_decorated_by_if import let_be_all_staticmethod
+from .imports import (
+    let_be_all_staticmethods
+    ,LexPostprocessor
+    ,lex_error_handle, token_error_handle
+    )
 
 import re
 
@@ -34,7 +36,7 @@ terminals = terminals_only + common_of_terminals_and_raw_tokens
 
 
 
-@let_be_all_staticmethod('t_')
+@let_be_all_staticmethods('t_')
 class PLY_YACC_Helper_LexRules:
     START_STATE = 'INITIAL'
     tokens = raw_tokens

@@ -37,6 +37,8 @@ usage:
         if not m: raise Exception('__doc__ should contain a name!!')
         suffix = m.group('name')
         func_name = f.__name__
+        if not func_name.startswith('p_'):
+            raise ValueError('func_name donot startswith "p_": {func_name}')
         func_name = f'{func_name}{suffix}'
 
         if func_name in locals:

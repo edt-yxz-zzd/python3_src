@@ -28,15 +28,13 @@ from .imports import (
     LexPostprocessor
     ,lex_error_handle
     , token_error_handle
-    ,let_be_all_staticmethod
+    ,let_be_all_staticmethods
+    ,useful_regex_patterns_decorator
 
     ,make_rule_inject_to
     ,make_rule_action_for_all_many01_XOAs_iappendright
     ,make_rule_action_for_all_many1_XOTs_iappendright
     )
-
-
-
 import re
 
 regex_flags = re.MULTILINE|re.VERBOSE
@@ -50,15 +48,9 @@ def _eval_grammar_units():
     return d['grammar_units']
 _grammar_units = _eval_grammar_units()
 del _eval_grammar_units
+_grammar_units_parse_result = [('WholeFile', [(1, ['MaybeNullIndent', 'TheMainObject'])]), ('TheMainObject', [0, ['Object'], (2, ['OP_UNINDENT_DictHead', 'NullIndent', 'DictBody']), (2, ['OP_UNINDENT_ObjectArrayHead', 'NullIndent', 'ObjectArrayBody']), (2, ['OP_UNINDENT_ObjectTupleHead', 'NullIndent', 'ObjectTupleBody']), (2, ['OP_UNINDENT_CharStringHead', 'NullIndent', 'CharStringBody']), (2, ['OP_UNINDENT_ByteStringHead', 'NullIndent', 'ByteStringBody'])]), ('Object', [(0, ['Inline_Object']), (0, ['MultiLine_Object'])])]
 
 
-
-
-inline_space = r'((?!\n)\s)'
-not_at_line_begin = r'(?<=[^\n])'
-at_line_begin = r'(?<![^\n])'
-not_at_line_end = r'(?=[^\n])'
-at_line_end = r'(?![^\n])'
 
 tokens_only = '''
     newline
@@ -74,18 +66,20 @@ commons = '''
     OP_EQ
     OP_BAR
     '''.split()
-@let_be_all_staticmethod('t_')
+@let_be_all_staticmethods('t_')
 class T:
     states = []
     tokens = tokens_only + commons
     terminals = terminals_only + commons
     def t_error(t):
         raise lex_error_handle(t, '')
+    @useful_regex_patterns_decorator
     def t_ignores1(t):
-        r'(?<=[^\n])((?!\n)\s)+'
+        r'{non_indent_spaces1}'
         # not_at_line_begin
+    @useful_regex_patterns_decorator
     def t_spaces1_line(t):
-        r'(?<![^\n])((?!\n)\s)+(?![^\n])'
+        r'{spaces1_line}'
         # at_line_begin, at_line_end
         # discard
     def t_newline(t):
@@ -93,20 +87,24 @@ class T:
         t.lexer.lineno += 1
         # discard
 
+    @useful_regex_patterns_decorator
     def t_def_name(t):
-        r'(?<![^\n])\w+'
+        r'{at_line_begin}\w+'
         # at_line_begin
         return t
+    @useful_regex_patterns_decorator
     def t_ref_xname(t):
-        r'(?<=[^\n])[+]\w+'
+        r'{not_at_line_begin}[+]\w+'
         # not_at_line_begin
         return t
+    @useful_regex_patterns_decorator
     def t_ref_name(t):
-        r'(?<=[^\n])\w+'
+        r'{not_at_line_begin}\w+'
         # not_at_line_begin
         return t
+    @useful_regex_patterns_decorator
     def t_indent(t):
-        r'(?<![^\n])[ ]{4}(?=[^\n])'
+        r'{at_line_begin}[ ]{{4}}{not_at_line_end}'
         # at_line_begin
         return t
     def t_OP_EQ(t):
@@ -127,7 +125,7 @@ lex_postprocessor = LexPostprocessor(
 #######################################################
 
 
-@let_be_all_staticmethod('p_')
+@let_be_all_staticmethods('p_')
 class P:
     '''
 Main
@@ -288,75 +286,8 @@ lex_postprocessor_with_parser = lex_postprocessor.with_parser_from_args(P)
 
 parse__grammar_units = lex_postprocessor_with_parser.parse_source_string
 
-
-"""
-_raw_legal_chars = r'\s\w=|+'
-
-_line_sep_regex = re.compile(r'\n(?=\S)')
-_all_chars_regex = re.compile(fr'[{_raw_legal_chars}]*')
-_illegal_char_regex = re.compile(fr'[^{_raw_legal_chars}]')
-_name = r'(?:\w+)'
-
-#_names0 = fr'(?:(?:{_name}(?: {_name})*)?)'
-_xname = fr'(?:\+{_name})'
-_xnames1 = fr'(?:(?:{_name} )*{_xname}(?: {_name})*|{_name})'
-_xnames1s1 = fr'(?:{_xnames1}(?: \| {_xnames1})*)'
-_line = fr'(?P<name>\w+) = (?P<xnamess>{_xnames1s1})'
-
-
-_line_regex = re.compile(_line)
-print(_line)
-
-def parse__grammar_units(grammar_units):
-    'str -> [(name, [(idx, [name])])]'
-    #assert '#' not in grammar_units
-    #assert ':' not in grammar_units
-    for m in _illegal_char_regex.finditer(grammar_units):
-        ch = m.group(0)
-        u = ord(ch)
-        i = m.start()
-        raise SyntaxError(f'contains bad char at {i}: U+{u:0>8X}={ch!r} :: {_illegal_char_regex.pattern!r}')
-    lines = _line_sep_regex.split(grammar_units)
-    name__idx_names_pairs__pairs = []
-    for line in lines:
-        if not line or line.isspace(): continue
-
-        if line.count('=') != 1: raise SyntaxError(f'line: {line!r}')
-        line = ' '.join(line.split())
-        m = _line_regex.fullmatch(line)
-        if not m:
-            raise SyntaxError(f'line: {line!r}')
-
-        name = m.group('name')
-
-        xnamess = m.group('xnamess')
-        idx_names_pairs = []
-        for xnames in xnamess.split('|'):
-            _1_2 = [xnames.split() for xnames in xnames.split('+')]
-            L = len(_1_2)
-            if L == 1:
-                # no '+' ==>> single item
-                [[ref_name]] = _1_2
-                idx = 0
-                idx_names_pairs.append((idx, [ref_name]))
-            elif L == 2:
-                fst, snd = _1_2
-                idx = len(fst)
-                idx_names_pairs.append((idx, fst+snd))
-            else:
-                raise logic-error
-        name__idx_names_pairs__pairs.append((name, idx_names_pairs))
-    return name__idx_names_pairs__pairs
-
-"""
 if __name__ == "__main__":
+    from ._main import _main
+    _main(__name__)
 
-    for t in lex_postprocessor.tokenize(_grammar_units):
-        print(t)
-        del t
-    print()
-    print()
-    print(parse__grammar_units(_grammar_units))
 
-    from .example__grammar_units import grammar_units
-    print(parse__grammar_units(grammar_units))
