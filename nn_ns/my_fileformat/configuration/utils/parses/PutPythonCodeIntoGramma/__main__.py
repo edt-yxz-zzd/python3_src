@@ -1,4 +1,10 @@
 
+
+__all__ = '''
+    main
+    '''.split()
+
+
 from .example import __doc__ as example_doc
 from .PLY_YACC_Helper_YaccRules import parse_ex
 __doc__ = example_doc

@@ -3,8 +3,13 @@
 #    !/foo
 #    /foo/*
 #    !/foo/bar
-/**/__pycache__
+#/**/__pycache__
 /java_src/**/*.class
-/**/parsetab.py
-/**/parser.out
+#
+#ply PLY yacc output
+#/**/parsetab.py
+#/**/parser.out
+#
+#mypy - static typing information
+#/**/.mypy_cache
 
