@@ -1,0 +1,14 @@
+grammar_codes
+PutPythonCodeIntoGramma
+example__grammar_codes
+
+
+
+XXX_rule
+    alt1 | alt2_1 alt2_2
+        # python code
+        return ...
+    alt3
+        pass
+
+

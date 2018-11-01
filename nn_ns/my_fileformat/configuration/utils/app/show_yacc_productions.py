@@ -113,7 +113,10 @@ def main(argv=None):
     parser_main = argparse.ArgumentParser(prog='show_yacc_productions')
     subparsers_main = parser_main.add_subparsers(
         dest='sub_command_name__level1'
-        , help='sub-command help')
+        #, required=True
+        , help='level1 sub-command help'
+        )
+    subparsers_main.required=True
 
     parser_ModuleSystem = subparsers_main.add_parser('ModuleSystem'
         , aliases='M'.split()

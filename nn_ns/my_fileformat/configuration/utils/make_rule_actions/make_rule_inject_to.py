@@ -3,6 +3,7 @@ __all__ = '''
     make_rule_inject_to
     '''.split()
 
+from seed.lang.has_no_nonlocals import has_no_nonlocals
 import re
 
 _make_rule_inject_to__name_regex = re.compile('(?P<indents>\s*)(?P<name>\w+)')
@@ -32,6 +33,8 @@ usage:
 
 '''
     def decorator(f):
+        if not callable(f): raise TypeError
+        if not has_no_nonlocals(f): raise ValueError('should have no nonlocals; using kwargs to prevent locals: def f(..., *, a=..., ...)')
         __doc__ = f.__doc__
         m = _make_rule_inject_to__name_regex.match(__doc__)
         if not m: raise Exception('__doc__ should contain a name!!')

@@ -33,6 +33,6 @@ see:
                 #print(doc_fmt)
                 raise
             bad = m.group('bad')
-            raise IndexError(f'format string syntax error: {bad!r} from {doc_fmt!r} : ### {{1}} ==>> {{{{1}}}}')
+            raise IndexError(f'format string syntax error: {bad!r} from {doc_fmt!r} : ### hint example: {{1}} ==>> {{{{1}}}}')
         return f
     return decorator

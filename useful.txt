@@ -15,8 +15,9 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     #doctest: +ELLIPSIS
-    #doctest: +IGNORE_EXCEPTION_DETAIL
     #doctest: +NORMALIZE_WHITESPACE
+    #doctest: +IGNORE_EXCEPTION_DETAIL
+    #Traceback (most recent call last):
 
 
 if __name__ == '__main__':
