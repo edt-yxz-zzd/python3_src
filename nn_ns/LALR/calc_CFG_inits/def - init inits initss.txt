@@ -1,0 +1,25 @@
+
+see: calc_CFG_inits.__doc__
+
+# [head] ++ tail
+# init ++ [last]
+
+init :: tuple<terminal_set_name> # [terminal_set_name]
+    terminal_set_name should be Hashable
+
+inits :: {init}
+    python.set # hash_set
+    rule_name ~ inits
+
+initss :: [inits] = [{init}] = [{tuple<terminal_set_name>}]
+    alternative_name ~ initss
+
+    idx2inits
+        idx = [0..len(alternative_body)]
+        idx2inits[-1] = {()}
+        idx2inits[i] means inits after alternative_body[i]
+            i - the dot index
+
+    alternative_name ~ initss
+    alternative_name ~ production
+    production = alternative ~ alternative_name ~ (rule_name, alternative_body) = (rule_name, [ixsymbol])

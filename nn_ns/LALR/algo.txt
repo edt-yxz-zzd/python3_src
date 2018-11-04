@@ -1,0 +1,113 @@
+
+noises0
+noises1
+NBSP &nb;
+
+nn_ns.data_structure.BlockSet
+    theInt_as_BlockDictKeyOps
+    theUInt_as_BlockDictKeyOps
+    theChar_as_BlockDictKeyOps
+input:
+    #terminal/nonterminal can be complicate structure
+    #   i.e. name neednot be str
+    #       so that we can easily construct: (X Y)* tpl(X,Y)
+    #but at the same time, they can be easily translated to UInt to.
+    #   for char, we have 'ord'
+    #   for others, we can construct a list...
+    #
+    #assume terminal/nonterminal are all UInt
+    #below name is UInt, repr is user defined...
+    {rule_name: rule_repr}
+    {alternative_name: alternative_repr}
+    {nonterminal: nonterminal_repr}
+
+    #
+    #
+    #{terminal}
+    #{rule_name}#{nonterminal}
+    #
+    #{alternative_name: nonterminal}
+    {alternative_name: rule_name}
+    {alternative_name: [xsymbol]}
+    {alternative_name: [(False, terminal_set_name)|(True, nonterminal)]}
+        #nonterminal = rule_name
+        ###* xsymbol = nonterminal | terminal
+        * xsymbol = nonterminal | terminal_set_name
+    {terminal_set_name: terminal_set}
+        #consider using BlockSet
+        #terminal_set_name = BlockSet<terminal>
+    start_symbol
+        # rule_name # nonterminal
+    terminal_set_ops:
+        .contains
+        .is_empty
+        .is_disjoint
+        .difference
+    lookahead_length = 1
+        # 1 to allow empty alternative
+        # otherwise shift-reduce error
+
+    # grammar using terminal
+    # parse using token
+    #   token = (terminal, value, source_location_inforamtion)
+    token2terminal :: token -> terminal
+    token2value :: token -> object
+    {alternative_name: action_name}
+        # why? so we know which actions are the same
+    {action_name: action}
+
+
+construct:
+    state:
+        # (alternative, dot_idx)
+        A-1 = a b . c
+        A-2 = B .
+        B-1 = B . C
+
+    if dot_idx == len, dot at last
+        ==>> lookahead to see what follows
+
+    #each dot position has a follows of len L
+    {(alternative_name, dot_idx): expected_follows}
+        :: Map (AlternativeName, UInt) [Maybe Terminal]
+        Haskell-style List, infinite Nothing as tail
+            tail = Nothing : tail
+
+    {state: {terminal: state}}
+    {state: {nonterminal: state}}
+        # consider using BlockDict
+        {state: BlockDict{terminal: state}}
+        {state: BlockDict{nonterminal: state}}
+
+
+feed token:
+    terminal = token2terminal token
+    if no dot at last:
+        shift terminal
+    else:
+        put terminal into lookahead_FIFO
+        shift? reduce? error?
+
+LR1
+0
+    S = . A     > $
+    A = . A b   > $
+    A = . a     > $
+    A = . A b   > b
+    A = . a     > b
+0 =[A]=> 1
+    S = A .     > $
+    A = A . b   > $
+    A = A . b   > b
+0 =[a]=> 2
+    A = a .     > $
+    A = a .     > b
+1 @$==reduce==>> S !DONE
+1 =[b]=> 3
+    A = A b .   > $
+    A = A b .   > b
+2 @$==[reduce]==>> A
+2 @b==[reduce]==>> A
+3 @$==[reduce]==>> A
+3 @b==[reduce]==>> A
+

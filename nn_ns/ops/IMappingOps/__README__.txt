@@ -1,4 +1,5 @@
 
+### NOTE: object mapping =/= value mapping
 
 mappings
 value = obj[key]
@@ -39,6 +40,14 @@ IterableMappingOps
     # countable
     # finite ==>> sized
 
-
+methods:
+    # from calc_CFG_inits
+    static_make_fullmapping_from_fdefault
+    static_make_fullmapping_from_key2value
+    static_iter_keys
+    static_contains_key
+    key2value
+    iter_values
+    iter_items
 
 

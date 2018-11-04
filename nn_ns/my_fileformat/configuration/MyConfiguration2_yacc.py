@@ -210,9 +210,17 @@ __all__ = '''
     '''.split()
 
 from .MyConfiguration2_lex import terminals
-from .utils.EchoLexer import EchoLexer
-from .utils.set_attrs import set_attrs
-from .utils.LexPostprocess import LexPostprocess
+from nn_ns.ply_yacc_tools.Lexers.EchoLexer import EchoLexer
+from nn_ns.ply_yacc_tools.Lexers.LexPostprocess import LexPostprocess
+from seed.decorators.set_attrs import set_attrs
+from nn_ns.ply_yacc_tools.parses.exports import (
+    parse__grammar_codes
+    ,parse__grammar_units
+    ,parse__grammar_discards
+    ,parse__grammar_XOAs
+    ,parse__grammar_XOTs
+    )
+
 #from functools import wraps
 
 tokens = terminals

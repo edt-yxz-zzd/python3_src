@@ -1,0 +1,6 @@
+value set vs object set
+
+#INegableSetOps
+    NegableSet is value set, not object set
+    so it can not support biased-union/difference
+

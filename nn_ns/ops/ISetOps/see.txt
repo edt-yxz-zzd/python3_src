@@ -1,0 +1,5 @@
+
+nn_ns.data_structure.BlockSet
+    theInt_as_BlockDictKeyOps
+    theUInt_as_BlockDictKeyOps
+    theChar_as_BlockDictKeyOps

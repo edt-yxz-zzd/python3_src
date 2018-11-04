@@ -1,0 +1,144 @@
+
+# def_pos = def_name maybe_with_transform
+# maybe_with_transform = ('*' NBSP (transform_name NBSP '$')* )?
+# iter_def_pos = maybe_transform_from def_name
+# maybe_transform_from = transform_from |
+# #####NBSP non-breaking space#####
+# transform_from = def_name NBSP '*' NBSP transform_name '=' NBSP
+#
+# #def_name = X | X '(' Y ')' | ...
+# #ref_name = X | '(' X Y ')' | X '(' Y ')' | ...
+# def_name = name | tpl_name '(' (arg_name ',')* arg_name ')'
+# atom_ref_name = name | '(' ref_name+ ref_name ')' | tpl_name '(' (ref_name ',')* ref_name ')'
+# multi_ref_name = atom_ref_name | atom_ref_name NBSP '+' | atom_ref_name NBSP '*' | atom_ref_name NBSP '?'
+# ref_name = (transform_name NBSP '$')* multi_ref_name
+#
+#
+# NOTE: normal ply.lex ==>> t_XXX :: token -> token
+#   I now change ==>> ts_XXX :: token -> Iter token
+#   so that NBSP can be generated
+#
+# NOTE: special names
+#   * normal name:
+#       XXX => normal_1_{len(XXX)}_XXX
+#   * contain spaces:
+#       #(X Y)*
+#       "X Y" ==>> normal_2_{len(X)}_X_{len(Y)}_Y
+#       "(X Y)?" ==>> maybe_2_{len(X)}_X_{len(Y)}_Y
+#       "(X Y)*" ==>> many0_2_{len(X)}_X_{len(Y)}_Y
+#       "(X Y)+" ==>> many1_2_{len(X)}_X_{len(Y)}_Y
+#       "(X Y)*iter" ==>> iter_many0_2_{len(X)}_X_{len(Y)}_Y
+#       "f$(X Y)*" ==>> call_{len(f)}_f_many0_2_{len(X)}_X_{len(Y)}_Y
+#
+#       (X Y)? : "X Y" |
+#               # ':' - result will be a tuple
+#       (X Y)* *= iter(X Y)*
+#       (X Y)+ *= iter(X Y)+
+#       (X Y)*iter = (X Y)+iter | Empty_iappendright
+#       (X Y)+iter = (X Y)*iter "X Y"
+#
+#       "(X Y)*f" *f= iter(X Y)*
+#       "(X Y)+f" *= iter(X Y)+
+#           # (X Y)* <==> (X Y)*list
+#   * template # touch
+#       "XXX(A,B)" ==>> tpl_2_{len(XXX)}_XXX_{len(A)}_A_{len(B)}_B
+#   * unary template # touch
+#       "(A,B)\XXX"
+#       "XXX/(A,B)"
+#       "(A,B)!" where "!" is a user provided operator
+#       "^(A,B)" where "^" is a user provided operator
+#   * binary template # untouch
+#       "A \XXX B"
+#       "A XXX/ B"
+#   * unpack as list # not tuple!!! array<a> not tuple<a,b,c>
+#       XXX = *Y *Z +A -B
+#   xxx bad idea * called by name
+#       "transform_name$(a=XXX b=YYY c=ZZZ | a=TTT b=C)"
+#       "transform_name$a=XXX"
+#   transform_name take what??
+#       transform_name$X
+#       transform_name$(X Y)
+#       transform((valX,))
+#       transform((valX,valY))
+#       transform((valX,valY))
+#
+#       transform_name$=X
+#       transform_name$=(X)
+#       transform_name$(=X)
+#       transform_name$=(+X Y | X)
+#       transform_name$(= +X Y | X)
+#       transform(valX)
+#
+#       transform_name$=(+X *Y Z)
+#       transform_name$(= +X *Y Z)
+#       transform([valX, *valY])
+#
+#       tpl_name(= +X | +Y, = *X *Y)
+
+<XOA>*Empty_iappendright f1 f2
+# XOA_line = iter_def_pos iter_def_pos ref_name
+#
+itXXXs1 itXXXs0 XXX
+    # itXXXs1 : itXXXs0 XXX
+    #   p[0] = itXXXs0.iappendright(XXX)
+    # itXXXs0 : itXXXs1 | Empty_iappendright
+    #   p[0] = p[1]
+itXXXs1 XXXs0*=itXXXs0 XXX
+XXXs1*=itXXXs1 itXXXs0 XXX
+XXXs1*=itXXXs1 XXXs0*=itXXXs0 XXX
+    #...
+    # XXXs1 : itXXXs1
+    #   p[0] = list(p[1])
+    # XXXs0 : itXXXs0
+    #   p[0] = list(p[1])
+XXXs1*f1=itXXXs1 XXXs0*f2=itXXXs0 XXX
+    #...
+    # XXXs1 : itXXXs1
+    #   p[0] = f1(p[1])
+    # XXXs0 : itXXXs0
+    #   p[0] = f2(p[1])
+    # name2transform :: {str:(a->b)}
+    #   via **kwargs
+
+<XOT>*Empty_iappendright f1 f2
+# XOT_line  = iter_def_pos iter_def_pos ref_name ref_name
+#           | iter_def_pos ref_name ref_name
+itXXXs1 itXXX_OPs0 YYY
+    # itXXXs1 : itXXX_OPs0 YYY
+    #   p[0] = itXXX_OPs0.iappendright(YYY)
+itXXXs0 itXXXs1 itXXX_OPs0 YYY
+    #...
+    # itXXXs0 : itXXXs1 | Empty_iappendright
+    #   p[0] = p[1]
+XXXs0*f1=itXXXs0 XXXs1*f2=itXXXs1 itXXX_OPs0 YYY
+
+<tuple>
+# tuple_line= def_pos maybe_with_transform maybe_newline_indent ':' multiline_ref_tnames0s1s1
+# #multiline_ref_tnames0s1s1 = tpl_multiline_ref_tnames0s1s1 ref_tname
+# multiline_ref_tnames0s1s1 = inline_ref_tnames0s1_NI_BARs0 inline_ref_tnames0s1
+# inline_ref_tnames0s1_NI_BARs0 = (inline_ref_tnames0s1 newline_indent OP_BAR)*
+# inline_ref_tnames0s1 = inline_ref_tnames0_BARs0 inline_ref_tnames0
+# inline_ref_tnames0_BARs0 = (inline_ref_tnames0 OP_BAR)*
+# inline_ref_tnames0 = ref_tname*
+# ref_tname = ref_name | '+' NBSP ref_name | '-' NBSP ref_name
+#
+XXX : YYY | | YYY ZZZ | -YYY
+    | -YYY ZZZ | -YYY +ZZZ | -YYY +ZZZ
+XXX
+    : YYY | | YYY ZZZ | -YYY | -YYY ZZZ | -YYY +ZZZ | -YYY +ZZZ
+XXX*f : YYY | | YYY ZZZ | -YYY | -YYY ZZZ | -YYY +ZZZ | -YYY +ZZZ
+XXX*f
+    : YYY | | YYY ZZZ | -YYY | -YYY ZZZ | -YYY +ZZZ | -YYY +ZZZ
+    | XXX ...
+    | ...
+<unit>
+# unit_line= def_pos maybe_with_transform maybe_newline_indent '=' multiline_ref_xname1s0s1
+# ...
+#   ???ref_name | ref_names0 ref_xname ref_names0??? fail?????
+#   ref_name | ref_name ref_names0 ref_xname ref_names0 | ref_xname ref_names0
+# ref_xname = ref_name | '+' NBSP ref_name
+#
+<discard>
+# discard_line= def_name maybe_newline_indent ':' multiline_ref_tnames0
+<code>
+

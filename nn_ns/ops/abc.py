@@ -1,2 +1,3 @@
 
-from seed.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
+from seed.abc import ABC, abstractmethod, override, not_implemented, define
+

@@ -1,0 +1,32 @@
+
+S = A B
+S = C B
+B = A C
+
+
+here I ask:
+    1,0 . A B
+    1,1 . B
+    2,0 . C B
+    2,1 . B
+    3,0 . A C
+    3,1 . C
+    does above, which pair contains some common sentences?
+
+add diff contexts:
+    . A B   {0}
+    . B     {1}
+    . C B   {2}
+    . B     {3}
+    . A C   {4}
+    . C     {5}
+run!!
+    until we meet conflict:
+        * reduce/reduce conflict
+            then contexts1 /-\ contexts2 tell which pairs not disjoint
+        * reduce/shift conflict
+            ????
+            then contexts1 /-\ contexts2 tell which one is contains prefix of others
+
+
+

@@ -1,0 +1,7 @@
+used in ply_yacc_tools
+    all_decorated_by_if.py
+    format_docstring.py
+    let_be_all_staticmethods.py
+    original.txt
+    set_attrs.py
+    useful_regex_patterns_decorator.py

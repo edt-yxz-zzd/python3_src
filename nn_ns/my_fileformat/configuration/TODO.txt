@@ -8,7 +8,13 @@ StateTo
     like inject_to
     t_STATE_() ==>> t_STATE_pattern()
     since Pattern give the token name...
-天地无霜
-左手指月
-不染
+
+common - Empty / __may_set
+parse tuples like units
+exports+= to_...
+using:
+    nn_ns.ply_yacc_tools
+    seed.decorators
+example__grammar_tuples
+parse__grammar_ tuples
 

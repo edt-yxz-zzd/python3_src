@@ -10,16 +10,22 @@ __all__ = '''
     ABC
     not_implemented
     override
+    define
+    final
     abstractmethod
     '''.split()
 
-from abc import ABC as __error_ABC, abstractmethod, ABCMeta
-class ABC(metaclass=ABCMeta):
+from abc import ABC as __error_ABC, abstractmethod, ABCMeta as _ABCMeta
+class ABC(metaclass=_ABCMeta):
     __slots__ = ()
 
 
 
 def override(f):
+    return f
+def define(f):
+    return f
+def final(f):
     return f
 
 abstractmethod = abstractmethod
