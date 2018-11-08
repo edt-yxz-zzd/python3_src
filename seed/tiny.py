@@ -21,7 +21,8 @@ __all__ = str2__all__('''
     lazy_raise          # get_fdefault(d, key, lazy_raise(KeyError, ...))
     str2__all__         # :: str -> [word]
 
-    print_err           # file=sys.stderr
+    print_err           # file=sys.stderr; see: no_op/print_ferr
+    print_ferr          # file=sys.stderr; see: no_op/print_err
     __not__             # :: Testable a => a -> bool
     not_dot             # :: (a->bool) -> (a->bool)
     xor, nxor           # :: bool -> bool -> bool
@@ -44,7 +45,7 @@ from .helper.ifNone import ifNone, ifNonef
 from .helper.Echo import echo, theEcho
 from .helper.with_if import with_if
 from .debug.expectError import expectError
-from .debug.print_err import print_err
+from .debug.print_err import print_err, print_ferr
 from .debug.lazy_raise import lazy_raise
 from .func_tools.not_dot import __not__, not_dot
 

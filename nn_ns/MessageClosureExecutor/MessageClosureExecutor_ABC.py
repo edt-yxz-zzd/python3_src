@@ -6,44 +6,71 @@ __all__ = '''
     '''.split()
 
 #message interface action constructor
+from seed.helper.__SpecialMethodGetter__ import SpecialMethodGetter
+from ._debug_ import print_err, print_ferr
 from .abc import ABC, abstractmethod, final
 from types import MappingProxyType
 import itertools
 
+def _open_read(mapping, key):
+    return mapping.get(key, '')
+def _open_write(mapping, key):
+    try:
+        return mapping[key]
+    except KeyError:
+        return mapping.setdefault(key, [])
+
 class MessageClosureExecutor_TypeError(Exception):pass
 class MessageClosureExecutor_EmptyError(Exception):pass
 class MessageClosureExecutor_ABC(ABC):
-    # message/interface/action/constructor should be hashable
-    # xmessage = action | message
+    '''message/interface/action/constructor should be hashable
+xmessage = action | message
+auto_action(interface)
+
+
+'''
 
 
     def __init__(self):
         self.__init()
+
+    @property
+    @final
+    def auto_action_constructor2maker(self):
+        #:: {ActionConstructor: Interface -> Action}
+        # immutable
+        return MappingProxyType(SpecialMethodGetter(self).__get_auto_action_constructor2maker__())
+    @property
+    @final
+    def interface_constructor2auto_action_constructors(self):
+        #:: {InterfaceConstructor:{ActionConstructor}}
+        # immutable
+        return MappingProxyType(SpecialMethodGetter(self).__get_interface_constructor2auto_action_constructors__())
     @property
     @final
     def interface_constraint(self):
         #:: {InterfaceConstructor: MessageConstructor}
         # immutable
-        return MappingProxyType(self.__get_interface_constraint__())
+        return MappingProxyType(SpecialMethodGetter(self).__get_interface_constraint__())
     @property
     @final
     def action_constraint(self):
         #:: {ActionConstructor: (InterfaceConstructor,)*n}
         # immutable
-        return MappingProxyType(self.__get_action_constraint__())
+        return MappingProxyType(SpecialMethodGetter(self).__get_action_constraint__())
 
     @property
     @final
     def action_constructor2function(self):
         #:: {ActionConstructor: Action -> (Message,)*n -> Iter XMessage}
         #immutable
-        return MappingProxyType(self.__get_action_constructor2function__())
+        return MappingProxyType(SpecialMethodGetter(self).__get_action_constructor2function__())
     @property
     @final
     def message_constructor2function(self):
         #:: {MessageConstructor: Message->Iter Interface}
         # immutable
-        return MappingProxyType(self.__get_message_constructor2function__())
+        return MappingProxyType(SpecialMethodGetter(self).__get_message_constructor2function__())
 
 
 
@@ -53,7 +80,7 @@ class MessageClosureExecutor_ABC(ABC):
     def xmessage_queue(self):
         #:: Queue<XMessage>
         # mutable
-        return self.__get_xmessage_queue__()
+        return SpecialMethodGetter(self).__get_xmessage_queue__()
     '''
 
     # Action ~ (ActionConstructor, ActionArgs, (Interface,)*n)
@@ -62,31 +89,31 @@ class MessageClosureExecutor_ABC(ABC):
     def all_actions(self):
         #:: {Action}
         # mutable
-        return self.__get_all_actions__()
+        return SpecialMethodGetter(self).__get_all_actions__()
     @property
     @final
     def all_messages(self):
         #:: {Message}
         # mutable
-        return self.__get_all_messages__()
+        return SpecialMethodGetter(self).__get_all_messages__()
     @property
     @final
     def interface2messages(self):
         #:: {Interface: [Message]}
-        # mutable defaultdict
-        return self.__get_interface2messages__()
+        # mutable dict<list> should not be defaultdict<list>
+        return SpecialMethodGetter(self).__get_interface2messages__()
     @property
     @final
     def interface2actions(self):
         #:: {Interface: [Action]} # iff interface in action.interfaces
         # mutable
-        return self.__get_interface2actions__()
+        return SpecialMethodGetter(self).__get_interface2actions__()
 
 
     #initial_xmessages
     @final
     def iter_initial_xmessages(self):
-        return iter(self.__get_initial_xmessages__())
+        return iter(SpecialMethodGetter(self).__get_initial_xmessages__())
 
 
 
@@ -126,6 +153,61 @@ class MessageClosureExecutor_ABC(ABC):
 
 
 
+    @abstractmethod
+    def __get_auto_action_constructor2maker__(self):
+        #:: {ActionConstructor: Interface -> Action}
+        # immutable
+        pass
+    @abstractmethod
+    def __get_interface_constructor2auto_action_constructors__(self):
+        #:: {InterfaceConstructor:{ActionConstructor}}
+        # immutable
+        pass
+
+    def _verify_auto_action_defs(self):
+        self._verify_auto_action_defs__static(
+            auto_action_constructor2maker
+                =self.auto_action_constructor2maker
+            ,interface_constructor2auto_action_constructors
+                =self.interface_constructor2auto_action_constructors
+            ,action_constructor2function
+                =self.action_constructor2function
+            ,action_constraint
+                =self.action_constraint
+            )
+    @staticmethod
+    def _verify_auto_action_defs__static(*
+        ,auto_action_constructor2maker
+        ,interface_constructor2auto_action_constructors
+        ,action_constructor2function
+        ,action_constraint
+        ):
+        return (
+        # all be action_constructor
+        all(auto_action_constructor in action_constructor2function
+        for auto_action_constructor in auto_action_constructor2maker
+        ) and
+        # all constraint is unit
+        all(len(action_constraint[auto_action_constructor]) == 1
+        for auto_action_constructor in auto_action_constructor2maker
+        ) and
+        # auto_action_constructor -[action_constraint]-> interface_constructor
+        #   back to auto_action_constructor
+        all(auto_action_constructor in interface_constructor2auto_action_constructors.get(interface_constructor, ())
+        for auto_action_constructor in auto_action_constructor2maker
+        for interface_constructor in action_constraint[auto_action_constructor]
+        ) and
+        # interface_constructor2auto_action_constructors
+        #   back to interface_constructor
+        all(list(action_constraint[auto_action_constructor])
+            == [interface_constructor]
+        for interface_constructor, auto_action_constructors
+            in interface_constructor2auto_action_constructors.items()
+        for auto_action_constructor in auto_action_constructors
+        )
+            )
+
+
 
 
     '''
@@ -142,7 +224,7 @@ class MessageClosureExecutor_ABC(ABC):
         pass
     @abstractmethod
     def __get_interface2messages__(self):
-        #:: {Interface: [Message]} # defaultdict
+        #:: {Interface: [Message]} # should not be defaultdict<list>
         # mutable
         pass
     @abstractmethod
@@ -219,7 +301,7 @@ class MessageClosureExecutor_ABC(ABC):
     @final
     def restart(self):
         # -> None
-        self.__clear_xmessage_queue__()
+        SpecialMethodGetter(self).__clear_xmessage_queue__()
         self.__init()
     @final
     def __init(self):
@@ -250,7 +332,7 @@ class MessageClosureExecutor_ABC(ABC):
         if self.interface_constraint[cintf] != cmsg:
             raise MessageClosureExecutor_TypeError(
                 f'interface mismatch message: interface={interface!r}, message={message!r}')
-        self.__check_interface_message__(interface, message)
+        SpecialMethodGetter(self).__check_interface_message__(interface, message)
 
 
 
@@ -265,7 +347,7 @@ class MessageClosureExecutor_ABC(ABC):
         if interface_constructors != _interface_constructors:
             raise MessageClosureExecutor_TypeError(
                 f'action.action_constructor.interface_constructors={interface_constructors!r} != {_interface_constructors}=action.interfaces.interface_constructors; interfaces={interfaces!r}')
-        self.__check_action__(action)
+        SpecialMethodGetter(self).__check_action__(action)
 
     @final
     def check_message(self, message):
@@ -273,7 +355,7 @@ class MessageClosureExecutor_ABC(ABC):
         mfunc = self.message_constructor2function[message_constructor]
         for interface in mfunc(message):
             self.check_interface_message(interface, message)
-        self.__check_message__(message)
+        SpecialMethodGetter(self).__check_message__(message)
 
     @final
     def put_xmessages(self, xmessages):
@@ -292,7 +374,7 @@ class MessageClosureExecutor_ABC(ABC):
         if action in self.all_actions: return
         self.check_action(action)
         xmessage = self.action2xmessage(action)
-        self.__push_xmessage_into_queue__(xmessage)
+        SpecialMethodGetter(self).__push_xmessage_into_queue__(xmessage)
         self.all_actions.add(action)
     @final
     def put_message(self, message):
@@ -302,16 +384,16 @@ class MessageClosureExecutor_ABC(ABC):
         if message in self.all_messages: return
         self.check_message(message)
         xmessage = self.message2xmessage(message)
-        self.__push_xmessage_into_queue__(xmessage)
+        SpecialMethodGetter(self).__push_xmessage_into_queue__(xmessage)
         self.all_messages.add(message)
 
 
     @final
     def execute_until_closure(self):
-        #while not self.__is_xmessage_queue_empty__():
+        #while not SpecialMethodGetter(self).__is_xmessage_queue_empty__():
         try:
             while True:
-                xmessage = self.__pull_xmessage_outfrom_queue__()
+                xmessage = SpecialMethodGetter(self).__pull_xmessage_outfrom_queue__()
                 is_message, action_or_message = \
                     self.distinguish_xmessage(xmessage)
                 if is_message:
@@ -330,28 +412,52 @@ class MessageClosureExecutor_ABC(ABC):
             self.__execute_interface_message(interface, message)
 
     @final
+    def __on_new_interface(self, interface):
+        interface_constructor = self.interface2constructor(interface)
+        ctors = self.interface_constructor2auto_action_constructors.get(interface_constructor, '')
+        for auto_action_constructor in ctors:
+            maker = self.auto_action_constructor2maker[auto_action_constructor]
+            auto_action = maker(interface)
+            self.put_action(auto_action)
+
+
+    @final
     def __execute_interface_message(self, interface, message):
-        ls = self.interface2messages[interface]
+        print_ferr(lambda:f'store: interface={interface!r}; message={message!r}')
+        #assert self.interface_constraint[self.interface2constructor(interface)] == self.message2constructor(message)
+
+        #ls = _open_write(self.interface2messages, interface)
+        try:
+            ls = self.interface2messages[interface]
+        except KeyError:
+            ls = self.interface2messages.setdefault(interface, [])
+            if not ls:
+                # new interface
+                self.__on_new_interface(interface)
+            else:
+                raise logic-error
+
         begin_idx = len(ls)
         ls.append(message)
-        for action in self.interface2actions[interface]:
+        for action in _open_read(self.interface2actions, interface):
             self.__execute_action_from_interface_idx(
                 action, interface, begin_idx)
     @final
     def __execute_action(self, action):
         # register to all interfaces
+        print_ferr(lambda:f'register: action={action!r}')
         interfaces = self.action2interfaces(action)
         for interface in set(interfaces):
-            self.interface2actions[interface].append(action)
+            _open_write(self.interface2actions, interface).append(action)
 
         if not interfaces:
             messages = ()
             action_constructor = self.action2constructor(action)
             afunc = self.action_constructor2function[action_constructor]
-            self.__execute_action__function_messages(afunc, action, messages)
+            SpecialMethodGetter(self).__execute_action__function_messages(afunc, action, messages)
         else:
             def f(interface):
-                return len(self.interface2messages[interface])
+                return len(_open_read(self.interface2messages, interface))
             interface = min(interfaces, key=f)
             self.__execute_action_from_interface_idx(action, interface, 0)
 
@@ -361,7 +467,7 @@ class MessageClosureExecutor_ABC(ABC):
         ):
         action_constructor = self.action2constructor(action)
         afunc = self.action_constructor2function[action_constructor]
-        messages = self.interface2messages[interface]
+        messages = _open_read(self.interface2messages, interface)
         if len(messages) <= begin_idx: return
         del messages
 
@@ -370,7 +476,7 @@ class MessageClosureExecutor_ABC(ABC):
                 if interface == _interface]
         assert idc
 
-        messagess = [self.interface2messages[interface]
+        messagess = [_open_read(self.interface2messages, interface)
                     for interface in interfaces]
         lens = tuple(map(len, messagess))
         if any(L == 0 for L in lens): return
@@ -389,10 +495,11 @@ class MessageClosureExecutor_ABC(ABC):
                 # tuple messages not list messages
                 # tuple messages are args for action
                 # list messages are an interface storage
-                self.__execute_action__function_messages(afunc, action, messages)
+                SpecialMethodGetter(self).__execute_action__function_messages(afunc, action, messages)
 
     @final
     def __execute_action__function_messages(self, afunc, action, messages):
+        print_ferr(lambda:f'call: action={action!r}; messages={messages!r}')
         for xmessage in afunc(action, *messages):
             self.put_xmessage(xmessage)
 

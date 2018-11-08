@@ -17,6 +17,9 @@ class MessageClosureExecutor_ABC__with_data(MessageClosureExecutor_ABC):
         ,action_constructor2function
         ,message_constructor2function
         ,initial_xmessages
+        ,auto_action_constructor2maker
+        ,interface_constructor2auto_action_constructors
+
         ,xmessage_queue=None
         ,all_messages=None
         ,interface2messages=None
@@ -30,11 +33,13 @@ class MessageClosureExecutor_ABC__with_data(MessageClosureExecutor_ABC):
         if all_messages is None:
             all_messages = set()
         if interface2messages is None:
-            interface2messages = defaultdict(list)
+            interface2messages = {}# defaultdict(list)
         if all_actions is None:
             all_actions = set()
         if interface2actions is None:
-            interface2actions = defaultdict(list)
+            interface2actions = {}#defaultdict(list)
+        assert not isinstance(interface2messages, defaultdict)
+        assert not isinstance(interface2actions, defaultdict)
 
         self.__interface_constraint = interface_constraint
         self.__action_constraint = action_constraint
@@ -47,9 +52,20 @@ class MessageClosureExecutor_ABC__with_data(MessageClosureExecutor_ABC):
         self.__interface2messages = interface2messages
         self.__all_actions = all_actions
         self.__interface2actions = interface2actions
+        self.__auto_action_constructor2maker \
+            = auto_action_constructor2maker
+        self.__interface_constructor2auto_action_constructors \
+            = interface_constructor2auto_action_constructors
         super().__init__()
 
-
+    def __get_auto_action_constructor2maker__(self):
+        #:: {ActionConstructor: Interface -> Action}
+        # immutable
+        return self.__auto_action_constructor2maker
+    def __get_interface_constructor2auto_action_constructors__(self):
+        #:: {InterfaceConstructor:{ActionConstructor}}
+        # immutable
+        return self.__interface_constructor2auto_action_constructors
     def __get_interface_constraint__(self):
         #:: {InterfaceConstructor: MessageConstructor}
         # immutable

@@ -53,3 +53,8 @@ Message/Interface/Action has a Constructor
         but since interface has parameters
             , a particular msg will not be store to all interfaces.
 .execute_until_closure
+
+ver2:
+    add auto generated action
+    interface -> auto_action
+    auto_action take the interface as the only argument.

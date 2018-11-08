@@ -1,0 +1,90 @@
+
+CFG - context-free grammar
+
+nonterminal, terminal
+terminal_set = {terminal}
+ref_symbol = terminal_set | nonterminal
+    why terminal_set instead of terminal?
+        regex [0-9]
+        when num_terminals is very large (Unicode):
+            num_terminal_sets of this grammar may be small
+
+# no ref_symbol_idx
+ref_symbol_psidx = -terminal_set_idx-1 | nonterminal_idx
+ref_symbol_name + explain_ref_symbol_name
+explain_ref_symbol_name
+    :: ref_symbol_name -> (False, terminal_set_name)|(True, nonterminal_name)
+    :: ref_symbol_name -> (is_nonterminal, XXX_name)
+
+alternative = [ref_symbol]
+production
+    production_rhs = alternative
+    production_lhs = nonterminal
+    production
+        = (production_lhs, production_rhs)
+        = (nonterminal, alternative)
+        = (nonterminal, [ref_symbol])
+alternative_tail vs production_tail
+    ##alternative_tail donot include nonterminal
+    alternative_tail = [ref_symbol]
+    production_tail = (production, idx)
+        idx <- [0..len(production_rhs)]
+        alternative_tail = production_rhs[idx:]
+
+alternative_maybe_pair = () | (ref_symbol, alternative_tail_idx)
+alternative_idx_maybe_pair = () | (ref_symbol_psidx, alternative_tail_idx)
+
+XXX_idx/XXX_name
+    XXX_idx <- [0..len(all XXX)-1]
+    XXX_idx2XXX_name and XXX_name2XXX_idx form a bijection
+    XXX_name2XXX_idx is a mapping, may or may not be array
+    XXX_name may or may not be str
+    XXX_idx is UInt
+XXX_idx2...
+    is array
+
+CFG =
+    (production_idx2nonterminal_idx
+    ,production_idx2alternative_tail_idx
+    ,alternative_tail_idx2alternative_idx_maybe_pair
+        :: <->
+    ,num_nonterminals
+    ,num_terminal_sets
+    ,num_productions
+    ,num_alternative_tails
+
+    ,terminal_set_idx2terminal_set_name
+        :: <->
+    ,nonterminal_idx2nonterminal_name
+        :: <->
+    ,production_idx2production_name
+        :: <->
+    )
+
+    precondition:
+        num_terminal_sets is UInt
+        num_nonterminals is UInt
+
+        num_productions
+            = len(production_idx2nonterminal_idx)
+            = len(production_idx2alternative_tail_idx)
+        num_alternative_tails
+            = len(alternative_tail_idx2alternative_idx_maybe_pair)
+
+        production_idx2nonterminal_idx:
+            all(0 <= nonterminal_idx < num_nonterminals)
+        production_idx2alternative_tail_idx
+            all(0 <= alternative_tail_idx < num_alternative_tails)
+        alternative_tail_idx2alternative_idx_maybe_pair
+            is bijection
+            all(-num_nonterminals <= alternative_idx_maybe_pair[0] < num_terminals
+                and 0 <= alternative_idx_maybe_pair[1] < num_alternative_tails
+                for alternative_idx_maybe_pair in alternative_tail_idx2alternative_idx_maybe_pair
+                if alternative_idx_maybe_pair
+                )
+
+
+
+
+
+

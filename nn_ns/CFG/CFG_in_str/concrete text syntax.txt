@@ -1,0 +1,104 @@
+concrete text syntax
+
+@noise@ @no_noise@
+    '@noise@+' used as ref_name
+        # can not use '@noise@' without '+'
+    if no @no_noise@ between two ref_name then insert '@noise@*'
+@pass@
+    may be used if the whole alternative branch is empty
+    no other usage case
+@any@ @none@
+    used as terminal_set_name or case_set_name
+
+CFG = Definition+
+Definition = ';' DefinitionBody
+DefinitionBody
+    = Production
+    | NoiseDecl
+    | AtomicDisjointCaseSetDecl
+    | NonAtomicCaseSetDef
+    | EmptyDef
+    | TerminalSetDecl
+EmptyDef =   # nothing
+NoiseDecl = '@noise@' '=' terminal_set_name ('|' terminal_set_name)*
+TerminalSetDecl = '@terminal_set@' terminal_set_name+
+AtomicDisjointCaseSetDecl = '@atomic_case_set@' case_set_name+
+NonAtomicCaseSetDef
+    = '@case_set@' case_set_name '=' case_set_name ('|' case_set_name)*
+    | '@case_set@' case_set_name '=' '@any@'
+    | '@case_set@' case_set_name '=' '@none@'
+Production
+    # discard
+    = '-' def_name ':' ref_name*
+    | '-' def_name ':' '@pass@'
+    # unit
+    | filtered_def_name '=' filtered_ref_name
+    | filtered_def_name '=' filtered_ref_name* '+' filtered_ref_name filtered_ref_name*
+    # unit_unpack
+    | filtered_def_name '=' op2_filtered_ref_name* '*' filtered_ref_name op3_filtered_ref_name*
+    # tuple
+    | filtered_def_name ':' may_op2_filtered_ref_name*
+    | filtered_def_name ':' '@pass@'
+    # tuple_with_alias
+    | filtered_ex_def_name ':' decorated_ref_name*
+    | filtered_ex_def_name ':' '@pass@'
+
+
+filtered_def_name
+    # f$g$def_name
+filtered_ex_def_name
+    # f$g$h$$def_name
+
+filtered_ref_name
+    # f$g$ref_name
+op2_filtered_ref_name
+    # +f$g$ref_name
+    # -f$g$ref_name
+may_op2_filtered_ref_name
+    # +f$g$ref_name
+    # -f$g$ref_name
+    # f$g$ref_name
+
+op3_filtered_ref_name
+    # +f$g$ref_name
+    # -f$g$ref_name
+    # *f$g$ref_name
+decorated_ref_name
+    # +a@f$g$ref_name
+    # -a@f$g$ref_name
+    # a@f$g$ref_name
+    # ~@f$g$ref_name
+    # +f$g$ref_name
+    # -f$g$ref_name
+    # f$g$ref_name
+
+
+def_name
+    = nonterminal_name
+    | template_name '(' arg_name (',' arg_name)* ')'
+    | template_name '<' decl_case_var (',' decl_case_var)* '>' ( '(' arg_name (',' arg_name)* ')' )?
+ref_name
+    = '@noise@'
+    #| '@no_noise@' | '@pass@' ???????
+    #| @any@ | @none@ ????
+    | nonterminal_name
+    | terminal_set_name
+    | arg_name # if inside template define body
+    | ref_name multi_op
+    | template_name '(' ref_name (',' ref_name)* ')'
+    | template_name '<' case_set_ref_name (',' case_set_ref_name)* '>' ( '(' ref_name (',' ref_name)* ')' )?
+    | '!' external_template_name '(' ref_name (',' ref_name)* ')'
+multi_op
+    * + ?
+    {..}
+
+arg_name = '\' name
+case_set_ref_name
+    = '*' case_set_name
+    | '*' @any@ # vs '*' only
+    | '?' case_var_name ('<-' case_set_name)?
+    | '\' case_var_name
+decl_case_var
+    = '\' case_var_name '<-' case_set_name
+    | '\' case_var_name '<-' '@any@' # '*' vs '@any@'
+

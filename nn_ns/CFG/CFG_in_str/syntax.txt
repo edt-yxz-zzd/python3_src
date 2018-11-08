@@ -1,0 +1,100 @@
+
+CFG.py
+    CFG - datatype
+now we introduce a useful grammar to parse str to CFG
+
+
+normal task to reduce/eval a production:
+    discard
+        # -A : B C
+        return None
+    unit<i>
+        # '='
+        # A = B +C D
+        return children[i]
+    tuple<i...>
+        # ':'
+        # A : B +C +D
+        return children[i]...
+
+    # return a list
+    #   internal impl is linked list
+    star # repeat [0..]
+    plus # repeat [1..]
+    repeat_from<i>
+    repeat_between<i,j>
+        # decompose into sum 2^k {k}
+        # small first: 6 = 2+4
+
+    unpack
+        # '='
+        # A = *As B -C
+        # result will be [*As, B]
+
+before input:
+    filter:
+        children.replace(i, f(children[i]))
+        # A = B f$C ...
+        # g$f$A = B C
+    as kwargs:
+        # A : B ~@C ~@D
+        # use 'C' 'D' as variable name
+    alias:
+        # A : b1@B b2@f$B
+        # use 'b1' 'b2' as variable name
+    f$A : ...
+        # f(a)
+    f$A = ...
+        # f(a)
+    f$$A : ...
+        # f(args, kwargs)
+    f$$A = ...
+        # f(*args, **kwargs)
+
+
+template
+distinguish concrete text syntax and abstract syntax
+    concrete ==>> template name complicate struct
+    abstract ==>> name is only name; atom, no internal struct
+
+not allow template over template
+    NO: template :: (*->*) -> *
+allow template over case set
+    template<case>(a, b)
+    template<case> # no args
+    like C++, allow specialize beside general default one
+    atom_case
+    case_setB = atom_caseA | atom_caseB | case_setA | ...
+    A = f<case_setB> g<case_setB>
+        ==>> len(case_setB) * len(case_setB)
+    A = f<?a<-case_setB> g<?a<-case_setB>
+        ==>> len(case_setB)
+    (case_setB a, case_setB b) =>
+        A = f<a> g<b>
+        ==>> len(case_setB) * len(case_setB)
+    (case_setB a) =>
+        A = f<a> g<a>
+        ==>> len(case_setB)
+
+recur:
+    if f g in same recur level # e.g. g == f
+    level[h] < level[f] == level[g]
+    f(a,b):
+        g(a,b)
+        # not allow g(b,a)
+        g(a,h(a))
+        # not allow g(a, g(a,a))
+        # not allow g(h(b), b)
+    f(args...):
+        g(args[:k]..., h(args[:k]...))
+
+external template
+    !f(a,b)
+    require reduce name
+        ==>> merge same production with same reduce name
+        since external template may generate duplicate productions
+
+
+
+
+

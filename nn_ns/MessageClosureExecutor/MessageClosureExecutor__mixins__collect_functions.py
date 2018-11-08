@@ -22,6 +22,9 @@ assume:
         ,interface_constraint
         ,action_constraint
         ,initial_xmessages
+        ,auto_action_constructor2maker
+        ,interface_constructor2auto_action_constructors
+
         ,xmessage_queue=None
         ,all_messages=None
         ,interface2messages=None
@@ -42,6 +45,11 @@ assume:
             ,action_constructor2function=action_constructor2function
             ,message_constructor2function=message_constructor2function
             ,initial_xmessages=initial_xmessages
+            ,auto_action_constructor2maker
+                =auto_action_constructor2maker
+            ,interface_constructor2auto_action_constructors
+                =interface_constructor2auto_action_constructors
+
             ,xmessage_queue=xmessage_queue
             ,all_messages=all_messages
             ,interface2messages=interface2messages

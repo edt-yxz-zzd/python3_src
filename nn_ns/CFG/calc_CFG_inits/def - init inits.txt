@@ -1,0 +1,17 @@
+
+see: calc_CFG_inits.__doc__
+
+# [head] ++ tail
+# init ++ [last]
+
+max_init_length
+init :: tuple<terminal_set_idx> # [terminal_set_idx]
+    len(init) <= max_init_length
+inits :: {init}
+    python.set/frozenset
+    nonterminal_idx ~ inits
+    alternative_tail_idx ~ inits
+
+nonterminal_idx2inits
+alternative_tail_idx2inits
+
