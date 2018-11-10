@@ -10,6 +10,22 @@ concrete text syntax
 @any@ @none@
     used as terminal_set_name or case_set_name
 
+@start_nonterminal@
+    multi names
+@ambiguous_nonterminal@
+    avoid unit rule to avoid recur, i.e. avoid one child as large as parent, other children be empty
+    if empty then prefer "nothing"
+@maybedead_nonterminal@
+    may or may not defined nonterminal_name
+
+    why?
+        so, we can define simplified version
+        and the complete version extend simplified version directly by string concatation.
+
+        when without @none@
+
+
+
 CFG = Definition+
 Definition = ';' DefinitionBody
 DefinitionBody
@@ -19,18 +35,27 @@ DefinitionBody
     | NonAtomicCaseSetDef
     | EmptyDef
     | TerminalSetDecl
+    | StartNonterminalDecl
+    | AmbiguousNonterminalDecl
+    | MaybedeadNonterminalDecl
 EmptyDef =   # nothing
 NoiseDecl = '@noise@' '=' terminal_set_name ('|' terminal_set_name)*
-TerminalSetDecl = '@terminal_set@' terminal_set_name+
+TerminalSetDecl = '@terminal_set@' terminal_set_name*
+StartNonterminalDecl = '@start_nonterminal@' nonterminal_name*
+AmbiguousNonterminalDecl = '@ambiguous_nonterminal@' nonterminal_name*
+MaybedeadNonterminalDecl = '@maybedead_nonterminal@' nonterminal_name*
+
 AtomicDisjointCaseSetDecl = '@atomic_case_set@' case_set_name+
 NonAtomicCaseSetDef
     = '@case_set@' case_set_name '=' case_set_name ('|' case_set_name)*
+    | '@case_set@' case_set_name '=' case_set_name ('&' case_set_name)+
+    | '@case_set@' case_set_name '=' case_set_name ('-' case_set_name)+
     | '@case_set@' case_set_name '=' '@any@'
     | '@case_set@' case_set_name '=' '@none@'
 Production
     # discard
-    = '-' def_name ':' ref_name*
-    | '-' def_name ':' '@pass@'
+    = filter* '-' def_name ':' ref_name*
+    | filter* '-' def_name ':' '@pass@'
     # unit
     | filtered_def_name '=' filtered_ref_name
     | filtered_def_name '=' filtered_ref_name* '+' filtered_ref_name filtered_ref_name*
@@ -87,7 +112,7 @@ ref_name
     | ref_name multi_op
     | template_name '(' ref_name (',' ref_name)* ')'
     | template_name '<' case_set_ref_name (',' case_set_ref_name)* '>' ( '(' ref_name (',' ref_name)* ')' )?
-    | '!' external_template_name '(' ref_name (',' ref_name)* ')'
+    | external_template_name '!' '(' ref_name (',' ref_name)* ')'
 multi_op
     * + ?
     {..}

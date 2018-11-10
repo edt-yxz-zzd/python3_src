@@ -1,0 +1,3 @@
+__directly
+XXX__directly
+    means use subclass directly instead of use instance

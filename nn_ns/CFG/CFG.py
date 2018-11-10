@@ -7,6 +7,7 @@ Ts1 = Ts0 t
 Ts0 = Ts1
 Ts0 =
 
+>>> from .the_py_terminal_set_ops import the_py_terminal_set_ops
 >>> terminal_set_ops = the_py_terminal_set_ops
 >>> terminal_set_name2terminal_set = lambda a:{a}
 >>> make = lambda *args, **kwargs: CFG.make_CFG__hashable_name__less(
@@ -28,9 +29,6 @@ CFG(alternative_idx_maybe_pair2alternative_tail_idx = <...>, alternative_tail_id
 '''
 
 __all__ = '''
-    PyTerminalSetOps
-    the_py_terminal_set_ops
-
     CFG
     explain_ref_symbol_psidx
     nonterminal_idx2ref_symbol_psidx
@@ -38,7 +36,6 @@ __all__ = '''
     '''.split()
 
 
-from seed.abc.Ops.IOps import IOps
 from seed.abc.IReprHelper import IReprHelper
 from seed.verify.common_verify import (
     is_int, is_UInt, is_pair, is_tuple, is_Sequence
@@ -46,6 +43,7 @@ from seed.verify.common_verify import (
     )
 from seed.verify.VerifyType import VerifyType__static
 from seed.seq_tools.split_tuples import split_tuples
+from seed.types.Mapping2Callable import Mapping2Callable
 from collections import defaultdict
 
 def make_alternative_tail_idx_related_triple(
@@ -68,7 +66,7 @@ def make_alternative_tail_idx_related_triple(
             idx = put((ref_symbol_psidx, idx))
         production_idx2alternative_tail_idx.append(idx)
     alternative_tail_idx2alternative_idx_maybe_pair = idx2tail
-    alternative_idx_maybe_pair2alternative_tail_idx = tail2idx.__getitem__
+    alternative_idx_maybe_pair2alternative_tail_idx = Mapping2Callable(tail2idx)
     return (production_idx2alternative_tail_idx
             ,alternative_tail_idx2alternative_idx_maybe_pair
             ,alternative_idx_maybe_pair2alternative_tail_idx
@@ -85,7 +83,7 @@ def make_half_bijection__hashable_name(names):
         assert len(idx2name) == len(name2idx)
         return idx
     for name in names: put(name)
-    return idx2name, name2idx.__getitem__
+    return idx2name, Mapping2Callable(name2idx)
 
 
 
@@ -118,26 +116,6 @@ def explain_ref_symbol_psidx(ref_symbol_psidx):
         nonterminal_idx = ref_symbol_psidx
         return True, nonterminal_idx
 
-class PyTerminalSetOps(IOps):
-    __slots__ = ()
-    # terminal_set_ops for python.set
-    def is_empty(ops, self):
-        return not self
-    def is_disjoint(ops, self, other):
-        return self.isdisjoint(other)
-    def contains(ops, self, element):
-        return element in self
-    def intersection(ops, self, other):
-        return self & other
-    def union(ops, self, other):
-        return self | other
-
-    def get_args_for_eq_hash(ops):
-        return ()
-    def __repr__(self):
-        return '{}()'.format(type(self).__name__)
-
-the_py_terminal_set_ops = PyTerminalSetOps()
 
 class CFG(IReprHelper):
     '''

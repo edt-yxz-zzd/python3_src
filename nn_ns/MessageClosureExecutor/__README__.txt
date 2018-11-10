@@ -1,6 +1,15 @@
 Message Closure Executor
     used by:
         nn_ns.LALR.calc_CFG_inits.calc_CFG_inits__all_hashable__using_MessageClosureExecutor
+    loop:
+        if receive message:
+            then store it to interfaces:
+                for interface in .message_constructor2function[...](message):
+                    .interface2messages[interface].append(message)
+        if receive action:
+            then hook it to its interfaces
+        when store a message to an interface:
+            call actions hooked on that interface
 
 datatype:
     Message
@@ -55,6 +64,11 @@ Message/Interface/Action has a Constructor
 .execute_until_closure
 
 ver2:
-    add auto generated action
-    interface -> auto_action
-    auto_action take the interface as the only argument.
+    #add auto generated action
+    #interface -> auto_action
+    #auto_action take the interface as the only argument.
+
+    .auto_action_constructor2maker :: {ActionConstructor: Interface->Action}
+    .interface_constructor2auto_action_constructors :: {InterfaceConstructor: {ActionConstructor}}
+
+

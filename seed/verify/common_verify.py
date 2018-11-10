@@ -81,6 +81,7 @@ __all__ = '''
     is_tuple
     is_pair
     is_str
+    is_Hashable
 
     is_Sequence
     is_Set
@@ -94,7 +95,7 @@ __all__ = '''
 from .Verify import Verify
 from .VerifyType import VerifyType, VerifyType__static
 from .VerifyContainer import VerifyContainerType
-from collections.abc import Sequence, Set, Mapping
+from collections.abc import Sequence, Set, Mapping, Hashable
 
 class is_int(VerifyType__static):
     types = int
@@ -110,6 +111,8 @@ class is_pair(is_tuple):
         yield from super()._iter_verify_object_(obj)
 class is_str(VerifyType__static):
     types = str
+class is_Hashable(VerifyType__static):
+    types = Hashable
 
 
 class is_Sequence(VerifyContainerType):

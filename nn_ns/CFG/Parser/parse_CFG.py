@@ -1,6 +1,7 @@
 
 r'''
->>> from ..CFG import CFG, the_py_terminal_set_ops
+>>> from ..CFG import CFG
+>>> from ..the_py_terminal_set_ops import the_py_terminal_set_ops
 >>> terminal_set_ops = the_py_terminal_set_ops
 >>> terminal_set_name2terminal_set = lambda a:{a}
 >>> make = lambda *args, **kwargs: CFG.make_CFG__hashable_name__less(
@@ -16,14 +17,14 @@ r'''
 >>> explain_ref_symbol_name = lambda name: (name[0].isupper(), name)
 >>> cfg = make(__pairs)
 
->>> find_terminal_set_idc = lambda terminal_set_idx2terminal_set, terminal: [terminal_set_idx2terminal_set.index({terminal})]
+>>> find_terminal_set_idc = lambda terminal_set_idx2terminal_set, terminal_name: [terminal_set_idx2terminal_set.index({terminal_name})]
 >>> class t:pass
->>> token2terminal = lambda token: token.__name__
+>>> token2terminal_name = lambda token: token.__name__
 >>> start_nonterminal_name = 'S'
 >>> start_nonterminal_idx = cfg.nonterminal_name2nonterminal_idx(start_nonterminal_name)
 
 >>> tokens = [t]*4
->>> r = parse_CFG(cfg, iter(tokens), start_nonterminal_idx=start_nonterminal_idx, token2terminal=token2terminal, find_terminal_set_idc=find_terminal_set_idc)
+>>> r = parse_CFG(cfg, iter(tokens), start_nonterminal_idc=[start_nonterminal_idx], token2terminal_name=token2terminal_name, find_terminal_set_idc=find_terminal_set_idc, ambiguous_nonterminal_idc=())
 
 '''
 
@@ -32,7 +33,7 @@ __all__ = '''
     ParseTreeNonleafNode
     ParseTreeLeafNode
 
-    ParseError
+    ParseFailError
     NotTreeError
     NotExistsError
     ParserMessageClosureExecutor
@@ -46,12 +47,13 @@ from ..MessageClosureExecutor.MessageClosureExecutor_ABC__using_namedtuple__str 
     MessageClosureExecutor_ABC__using_namedtuple__str
 from ..MessageClosureExecutor.show_MessageClosureExecutor import \
     show_MessageClosureExecutor
+from ..errors import ParseFailError
 
 
-
-class ParseError(Exception):pass
-class NotTreeError(ParseError):pass
-class NotExistsError(ParseError):pass
+class NotExistsError(ParseFailError):pass
+class NotTreeError(ParseFailError):pass
+class NotTreeError__recur(NotTreeError):pass
+class NotTreeError__ambiguous(NotTreeError):pass
 ParseTreeNonleafNode = namedtuple('ParseTreeNonleafNode', '''
     nonterminal_idx
     production_idx
@@ -66,29 +68,35 @@ ParseTreeLeafNode = namedtuple('ParseTreeLeafNode', '''
     terminal_set_name
     terminal_position_begin
     terminal_position_end
-    terminal
+    terminal_name
     token
     '''.split())
 
 def parse_CFG(__cfg, __iter_tokens, *
-    , start_nonterminal_idx
-    , token2terminal
+    , start_nonterminal_idc
+    , token2terminal_name
     , find_terminal_set_idc
+    , ambiguous_nonterminal_idc
     ):
     '''
 
 input:
     cfg :: CFG
-    start_nonterminal_idx :: UInt
+    start_nonterminal_idc :: {nonterminal_idx}
         nonterminal_idx of the start symbol
-    token2terminal :: token -> terminal
-    find_terminal_set_idc :: terminal_set_idx2terminal_set -> terminal -> sorted[terminal_set_idx]
+    token2terminal_name :: token -> terminal_name
+    find_terminal_set_idc :: terminal_set_idx2terminal_set -> terminal_name -> sorted[terminal_set_idx]
+    ambiguous_nonterminal_idc :: {nonterminal_idx}
+        used in extract_parse_main_tree/extract_parse_local_tree
+        for ambiguous nonterminal_idx:
+            if match empty: then prefer the empty alternative
+            else: try avoid only one child not match empty
 
 output:
     parse_result_tree :: ParseTreeNonleafNode
-        parse_result_tree.nonterminal_idx == start_nonterminal_idx
+        parse_result_tree.nonterminal_idx <- start_nonterminal_idc
 exception:
-    ParseError
+    ParseFailError
         NotExistsError
             # parse fail
         NotTreeError
@@ -96,33 +104,34 @@ exception:
 
 '''
     e = ParserMessageClosureExecutor(__cfg
-        ,start_nonterminal_idx=start_nonterminal_idx
-        ,token2terminal=token2terminal
+        ,start_nonterminal_idc=start_nonterminal_idc
+        ,token2terminal_name=token2terminal_name
         ,find_terminal_set_idc=find_terminal_set_idc
+        ,ambiguous_nonterminal_idc=ambiguous_nonterminal_idc
         )
     try:
         e.execute_until_closure()
         if e.max_required_terminal_position != len(e.tokens):
-            raise ParseError('start_nonterminal is dead')
+            raise ParseFailError('start_nonterminal is dead')
         for token in __iter_tokens:
             e.feed(token)
             e.execute_until_closure()
             if e.max_required_terminal_position != len(e.tokens):
                 fail_position = len(e.tokens) - 1
                 assert fail_position >= 0
-                raise ParseError(f'fail_position={fail_position}; token={token!r}')
+                raise ParseFailError(f'fail_position={fail_position}; token={token!r}')
         return e.extract_parse_main_tree()
-    except ParseError:
+    except ParseFailError:
         show_MessageClosureExecutor(e)
         raise
 
 class ParserMessageClosureExecutor(
     MessageClosureExecutor_ABC__using_namedtuple__str):
     '''
-terminal = token2terminal(tokens[terminal_position])
-terminal_set_ops.contains(terminal_set_idx2terminal_set[terminal_set_idx], terminal)
+terminal_name = token2terminal_name(tokens[terminal_position])
+terminal_set_ops.contains(terminal_set_idx2terminal_set[terminal_set_idx], terminal_name)
 
-find_terminal_set_idc :: terminal_set_idx2terminal_set -> terminal -> sorted[terminal_set_idx]
+find_terminal_set_idc :: terminal_set_idx2terminal_set -> terminal_name -> sorted[terminal_set_idx]
 
 see: parse_CFG
 '''
@@ -231,19 +240,19 @@ see: parse_CFG
 
         '''
 
-    def token2terminal(self, token):
-        return self.__token2terminal(token)
-    def find_terminal_set_idc(self, terminal):
+    def token2terminal_name(self, token):
+        return self.__token2terminal_name(token)
+    def find_terminal_set_idc(self, terminal_name):
         terminal_set_idc = self.__find_terminal_set_idc(
             self.cfg.terminal_set_idx2terminal_set
-            ,terminal
+            ,terminal_name
             )
         prev = -1
         for terminal_set_idx in terminal_set_idc:
             if not prev < terminal_set_idx: raise Exception('bad find_terminal_set_idc')
         return terminal_set_idc
     def terminal_position2terminal(self, terminal_position):
-        return self.token2terminal(self.tokens[terminal_position])
+        return self.token2terminal_name(self.tokens[terminal_position])
 
     def MDownwardNonterminal_(self, message):
         #IDownwardNonterminal_
@@ -268,10 +277,10 @@ see: parse_CFG
         # MStoreTerminal terminal_position
         terminal_position = msgStoreTerminal.terminal_position
         token = self.tokens[terminal_position]
-        terminal = self.token2terminal(token)
-        terminal_set_idc = self.find_terminal_set_idc(terminal)
+        terminal_name = self.token2terminal_name(token)
+        terminal_set_idc = self.find_terminal_set_idc(terminal_name)
         if len(terminal_set_idc) == 0:
-            raise ParseError(f'unrecognize: terminal={terminal!r}, token={token!r}, position={terminal_position}')
+            raise ParseFailError(f'unrecognize: terminal_name={terminal_name!r}, token={token!r}, position={terminal_position}')
 
 
         for terminal_set_idx in terminal_set_idc:
@@ -546,19 +555,31 @@ see: parse_CFG
 
 
     def __init__(self, cfg, *
-        , start_nonterminal_idx
-        , token2terminal
+        , start_nonterminal_idc
+        , token2terminal_name
         , find_terminal_set_idc
+        , ambiguous_nonterminal_idc
         ):
-        if type(start_nonterminal_idx) is not int: raise TypeError
-        if not 0 <= start_nonterminal_idx < cfg.num_nonterminals: raise TypeError
+        def check_nonterminal_idx(idx):
+            if type(idx) is not int: raise TypeError
+            if not 0 <= idx < cfg.num_nonterminals: raise TypeError
+            return True
+        if not callable(token2terminal_name): raise TypeError
+        if not callable(find_terminal_set_idc): raise TypeError
 
-        it = self.__iter_initial_xmessages(start_nonterminal_idx, cfg)
+        ambiguous_nonterminal_idc = frozenset(ambiguous_nonterminal_idc)
+        start_nonterminal_idc = frozenset(start_nonterminal_idc)
+        all(map(check_nonterminal_idx, ambiguous_nonterminal_idc))
+        all(map(check_nonterminal_idx, start_nonterminal_idc))
+
+
+        it = self.__iter_initial_xmessages(start_nonterminal_idc, cfg)
         self.cfg = cfg
-        self.start_nonterminal_idx = start_nonterminal_idx
-        self.__token2terminal = token2terminal
+        self.start_nonterminal_idc = start_nonterminal_idc
+        self.__token2terminal_name = token2terminal_name
         self.__find_terminal_set_idc = find_terminal_set_idc
         self.__restart_init()
+        self.__ambiguous_nonterminal_idc = ambiguous_nonterminal_idc
         super().__init__(initial_xmessages = list(it))
 
     def restart(self):
@@ -580,14 +601,44 @@ see: parse_CFG
             self._MessageClosureExecutor_ABC__with_data__xmessage_queue.reverse()
         return
 
-    def __iter_initial_xmessages(self, start_nonterminal_idx, cfg):
+    def __iter_initial_xmessages(self, start_nonterminal_idc, cfg):
         terminal_position = 0
         #MDownwardNonterminal_
-        yield self.mk.MDownwardNonterminal_(start_nonterminal_idx, terminal_position)
+        for start_nonterminal_idx in start_nonterminal_idc:
+            yield self.mk.MDownwardNonterminal_(start_nonterminal_idx, terminal_position)
 
     def extract_parse_main_tree(self):
-        return self.extract_parse_local_tree(
-            self.start_nonterminal_idx, 0, len(self.tokens))
+        forest = []
+        for start_nonterminal_idx in self.start_nonterminal_idc:
+            try:
+                tree = self.extract_parse_local_tree(
+                        start_nonterminal_idx, 0, len(self.tokens))
+            except NotExistsError:
+                pass
+            else:
+                forest.append(tree)
+
+        cfg = self.cfg
+        def on_err(nonterminal_idc):
+            nonterminal_idc = sorted(set(nonterminal_idc))
+            nonterminal_names = [
+                cfg.nonterminal_idx2nonterminal_name[nonterminal_idx]
+                for nonterminal_idx in nonterminal_idc
+                ]
+            err_msg = f'nonterminal_idc={nonterminal_idc}; nonterminal_names={nonterminal_names}'
+            return err_msg
+        L = len(forest)
+        if L == 1:
+            [tree] = forest
+            return tree
+        elif not L:
+            err_msg = on_err(self.start_nonterminal_idc)
+            raise NotExistsError(f'no start_nonterminal success: {err_msg}')
+        else:
+            err_msg = on_err(node.nonterminal_idx for node in forest)
+            raise MultiStartNonterminalError(f'too many start_nonterminal success: {err_msg}')
+
+
     def extract_parse_local_tree(self, nonterminal_idx, terminal_position_begin, terminal_position_end):
         # if not exist then raise NotExistsError
         # if not a tree then raise NotTreeError
@@ -597,19 +648,114 @@ see: parse_CFG
         queries = set()
         return self._nonterminal2node(queries, iStoreNonterminalChoice)
 
-    def __to_tree_preprocess(self, queries, interface):
-        if interface in queries: raise NotTreeError(interface)
+    def __to_tree_preprocess(self, queries, interface
+        , *, allow_ambiguous
+        ):
+        if interface in queries:
+            # should not go here!!!
+            raise logic-error
+            raise NotTreeError__recur(interface)
         queries.add(interface)
 
         messages = self.interface2messages.get(interface, ())
         L = len(messages)
-        if not L: raise NotExistsError(interface)
-        if L > 1: raise NotTreeError(interface)
-        [message] = messages
+        if not L:
+            raise NotExistsError(interface)
+        elif L > 1:
+            if not allow_ambiguous:
+                # _terminal2node should be False
+                raise NotTreeError__ambiguous(interface)
+            message = self.__handle_ambiguous_nonterminal_idx(messages)
+        else:
+            #L == 1:
+            [message] = messages
         return message
 
+    def __is_empty_production(self, production_idx):
+        cfg = self.cfg
+        alternative_tail_idx = cfg.production_idx2alternative_tail_idx[production_idx]
+        return self.__is_empty_alternative_tail_idx(alternative_tail_idx)
+    def __is_empty_alternative_tail_idx(self, alternative_tail_idx):
+        cfg = self.cfg
+        may_pair = cfg.alternative_tail_idx2alternative_idx_maybe_pair[alternative_tail_idx]
+        return not may_pair
+    def __handle_ambiguous_nonterminal_idx(self, messages):
+        # -> message
+
+        assert len(messages) >= 2
+        a_message = messages[0]
+        message_constructor = self.message2constructor(a_message)
+        cfg = self.cfg
+
+        if message_constructor == 'MStoreProduction':
+        #_nonterminal2node#iStoreNonterminalChoice
+        # MStoreProduction production_idx terminal_position_begin terminal_position_end
+        #
+        #_production2children#iStoreProduction
+        # MStoreProduction production_idx terminal_position_begin terminal_position_end
+        #
+            if a_message.terminal_position_begin == a_message.terminal_position_end:
+                # empty ==>> try to find empty alternative
+                production_idc = set()
+                for message in messages:
+                    production_idx = message.production_idx
+                    if production_idx in production_idc: continue
+                    production_idc.add(production_idx)
+                    if self.__is_empty_production(production_idx):
+                        return message
+                else:
+                    return a_message # arbitrary
+            # not empty ==>> try to find at least two nonemtpy children
+            alternative_tail_idc = set()
+            for message in messages:
+                production_idx = message.production_idx
+                alternative_tail_idx = cfg.production_idx2alternative_tail_idx[production_idx]
+                if alternative_tail_idx in alternative_tail_idc: continue
+                alternative_tail_idc.add(alternative_tail_idx)
+                #IStoreNonNullAlternativeTailChoice
+                iStoreNonNullAlternativeTailChoice = \
+                    self.mk.IStoreNonNullAlternativeTailChoice(
+                        alternative_tail_idx
+                        ,message.terminal_position_begin
+                        ,message.terminal_position_end
+                    )
+                # MStoreNonNullAlternativeTailChoice alternative_tail_idx terminal_position_begin terminal_position_middle terminal_position_end
+                submessages = self.interface2messages.get(iStoreNonNullAlternativeTailChoice, ())
+                for submessage in submessages:
+                    if submessage.terminal_position_begin < submessage.terminal_position_middle < submessage.terminal_position_end:
+                        return message # not submessage
+            else:
+                return a_message # arbitrary
+        elif message_constructor == 'MStoreNonNullAlternativeTailChoice':
+        # MStoreNonNullAlternativeTailChoice alternative_tail_idx terminal_position_begin terminal_position_middle terminal_position_end
+        #   from _alternative_tail2linked_nodes
+        #
+            for message in messages:
+                if message.terminal_position_begin < message.terminal_position_middle < message.terminal_position_end:
+                    return message
+            else:
+                return a_message # arbitrary
+
+        else:
+            raise logic-error --unknown-message_constructor
+        #_terminal2node#iStoreTerminal
+        # MStoreTerminal terminal_position
+
+    def __is_allowed_ambiguous_production_idx(self, production_idx):
+        cfg = self.cfg
+        nonterminal_idx = cfg.production_idx2nonterminal_idx[production_idx]
+        return self.__is_allowed_ambiguous_nonterminal_idx(nonterminal_idx)
+    def __is_allowed_ambiguous_nonterminal_idx(self, nonterminal_idx):
+        allow_ambiguous = nonterminal_idx in self.__ambiguous_nonterminal_idc
+        return allow_ambiguous
     def _nonterminal2node(self, queries, iStoreNonterminalChoice):
-        message = self.__to_tree_preprocess(queries, iStoreNonterminalChoice)
+        allow_ambiguous = self.__is_allowed_ambiguous_nonterminal_idx(
+            iStoreNonterminalChoice.nonterminal_idx)
+        message = self.__to_tree_preprocess(
+                        queries, iStoreNonterminalChoice
+                        , allow_ambiguous=allow_ambiguous)
+        del allow_ambiguous
+
         # MStoreProduction production_idx terminal_position_begin terminal_position_end
 
         #IStoreProduction
@@ -636,7 +782,11 @@ see: parse_CFG
             )
     def _production2children(self, queries, iStoreProduction):
         # -> [Node]
-        message = self.__to_tree_preprocess(queries, iStoreProduction)
+        allow_ambiguous = self.__is_allowed_ambiguous_production_idx(
+                            iStoreProduction.production_idx)
+        message = self.__to_tree_preprocess(queries, iStoreProduction
+                        , allow_ambiguous=allow_ambiguous)
+        #del allow_ambiguous -- used below
         # MStoreProduction production_idx terminal_position_begin terminal_position_end
 
         cfg = self.cfg
@@ -647,7 +797,9 @@ see: parse_CFG
             ,message.terminal_position_begin
             ,message.terminal_position_end
             )
-        linked_list = self._alternative_tail2linked_nodes(queries, iStoreAlternativeTail)
+        linked_list = self._alternative_tail2linked_nodes(
+                                queries, iStoreAlternativeTail
+                                , allow_ambiguous=allow_ambiguous)
 
         children = []
         while linked_list:
@@ -655,7 +807,9 @@ see: parse_CFG
             children.append(child)
         return children
 
-    def _alternative_tail2linked_nodes(self, queries, iStoreAlternativeTail):
+    def _alternative_tail2linked_nodes(self
+        , queries, iStoreAlternativeTail, *, allow_ambiguous
+        ):
         # -> linked_list<Node>
         # -> (Node, linked_list<Node>) | ()
         cfg = self.cfg
@@ -670,7 +824,9 @@ see: parse_CFG
                 **iStoreAlternativeTail._asdict()
             )
 
-        message = self.__to_tree_preprocess(queries, iStoreNonNullAlternativeTailChoice)
+        message = self.__to_tree_preprocess(
+                        queries, iStoreNonNullAlternativeTailChoice
+                        , allow_ambiguous=allow_ambiguous)
         # MStoreNonNullAlternativeTailChoice alternative_tail_idx terminal_position_begin terminal_position_middle terminal_position_end
         #
         terminal_position_begin = message.terminal_position_begin
@@ -689,7 +845,9 @@ see: parse_CFG
             ,terminal_position_middle
             ,terminal_position_end
             )
-        rhs_linked_list = self._alternative_tail2linked_nodes(queries, rhs_iStoreAlternativeTail)
+        rhs_linked_list = self._alternative_tail2linked_nodes(
+                                    queries, rhs_iStoreAlternativeTail
+                                    , allow_ambiguous=allow_ambiguous)
         linked_list = node, rhs_linked_list
         return linked_list
 
@@ -712,20 +870,21 @@ see: parse_CFG
             return self._terminal2node(queries, iStoreTerminal)
     def _terminal2node(self, queries, iStoreTerminal):
         cfg = self.cfg
-        message = self.__to_tree_preprocess(queries, iStoreTerminal)
+        message = self.__to_tree_preprocess(queries, iStoreTerminal
+                        , allow_ambiguous=False)
         # MStoreTerminal terminal_position
         terminal_position = message.terminal_position
         terminal_set_idx = iStoreTerminal.terminal_set_idx
         terminal_set_name = cfg.terminal_set_idx2terminal_set_name[terminal_set_idx]
 
         token = self.tokens[terminal_position]
-        terminal = self.token2terminal(token)
+        terminal_name = self.token2terminal_name(token)
         return ParseTreeLeafNode(
             terminal_set_idx=terminal_set_idx
             ,terminal_set_name=terminal_set_name
             ,terminal_position_begin=terminal_position
             ,terminal_position_end=terminal_position+1
-            ,terminal=terminal
+            ,terminal_name=terminal_name
             ,token=token
             )
 
@@ -737,7 +896,8 @@ if __name__ == "__main__":
 
 def _t():
     from pprint import pprint
-    from ..CFG import CFG, the_py_terminal_set_ops
+    from ..CFG import CFG
+    from ..the_py_terminal_set_ops import the_py_terminal_set_ops
     terminal_set_ops = the_py_terminal_set_ops
     terminal_set_name2terminal_set = lambda a:{a}
     make = lambda *args, **kwargs: CFG.make_CFG__hashable_name__less(
@@ -752,14 +912,14 @@ def _t():
     explain_ref_symbol_name = lambda name: (name[0].isupper(), name)
     cfg = make(__pairs)
 
-    find_terminal_set_idc = lambda terminal_set_idx2terminal_set, terminal: [terminal_set_idx2terminal_set.index({terminal})]
+    find_terminal_set_idc = lambda terminal_set_idx2terminal_set, terminal_name: [terminal_set_idx2terminal_set.index({terminal_name})]
     class t:pass
-    token2terminal = lambda token: token.__name__
+    token2terminal_name = lambda token: token.__name__
     start_nonterminal_name = 'S'
     start_nonterminal_idx = cfg.nonterminal_name2nonterminal_idx(start_nonterminal_name)
 
     tokens = [t]*4
-    r = parse_CFG(cfg, iter(tokens), start_nonterminal_idx=start_nonterminal_idx, token2terminal=token2terminal, find_terminal_set_idc=find_terminal_set_idc)
+    r = parse_CFG(cfg, iter(tokens), start_nonterminal_idc=[start_nonterminal_idx], token2terminal_name=token2terminal_name, find_terminal_set_idc=find_terminal_set_idc, ambiguous_nonterminal_idc=())
     #pprint(r)#bad#one line!
     from nn_ns.lang.reformat_py_source import easy_print_for_namedtuple
     easy_print_for_namedtuple(r, indent=' '*4, depth=0, file=None)

@@ -1,0 +1,37 @@
+
+tokenize state_set
+biregex
+    .rough_regex
+    .precise_regex
+bipattern(biregex)
+    # user provide
+    .rough_pattern_fmt
+    .precise_pattern_fmt
+        '{xxx}(?!{xxx.flip})'
+            where xxx::Flippable
+
+    # auto generated:
+    .rough_pattern
+    .precise_pattern
+
+    .to_flippable() -> Flippable
+
+compile_bipatterns(bipatterns)
+    patterns should be ordered s.t. refered bipattern come before
+
+
+token_filter
+    # user provide
+    .biregex
+    .allow_empty:bool
+        # if match '', then will perform only once
+    .to_state
+        None        - not change state
+        callable    - .to_state(state, token) -> state
+        st          - result state
+    .iter_tokens(token) -> Iter token
+
+    # auto
+    .make_token(terminal_name, token_value, **token_named_values) -> token
+
+

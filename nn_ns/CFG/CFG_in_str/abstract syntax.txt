@@ -7,9 +7,9 @@ Ref filter_name = ([filter_name], ref_symbol_psidx)
     # f$g$A
     # no filter_ex_name: f$$A
 Production filter_name filter_ex_name
-    = Discard nonterminal_idx [Ref]
-        # -A : ...
-        # return None
+    = Discard [filter_name] nonterminal_idx [Ref]
+        # f$g$ -A : ...
+        # return f(g(None))
     | Unit [filter_name] nonterminal_idx [Ref] Ref [Ref]
         # f$g$A = ... +B ...
         # return f(g(B.value))

@@ -1,0 +1,36 @@
+
+from seed.ECHO import st...
+from nn_ns.Tokenizer.biregex.BiPatternABC__directly import \
+    (BiPatternABC__directly
+    ,BiPatternABC__directly__same
+    )
+from nn_ns.Tokenizer.with_state.RecognizerABC__using_biregex import \
+    (RecognizerABC__using_biregex
+    ,RecognizerABC__using_biregex__directly
+    )
+from nn_ns.Tokenizer.with_state.Tokenizer_with_state import \
+    Tokenizer_with_state
+from nn_ns.Tokenizer.with_state.errors import \
+    Tokenizer_with_state
+from nn_ns.Tokenizer.ITokenizer import \
+    TokenizerBaseError, TokenizerFailError
+
+==============================================================
+see:
+    nn_ns.CFG.CFG_in_str.tokenize__simplified_version
+==============================================================
+
+use BiPatternABC__directly to construct biregex
+    see: BiPatternABC__directly.__doc__ for example
+
+    subclass is a biregex object itself (not its instance)
+        although subclass <: IBiRegex; not subclass <- IBiRegex
+        biregex is ducktype
+
+
+use ECHO to define states
+    from seed.ECHO import state1, state2
+
+use RecognizerABC__using_biregex__directly to construct recognizer
+
+use Tokenizer_with_state to tokenize

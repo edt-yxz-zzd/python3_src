@@ -37,8 +37,6 @@ __all__ = str2__all__('''
                         # does_run_as_main(__name__)
                         # does_run_as_main.alter_main_name :: String
 
-    # seed.tiny.ECHO is a virtual module
-    # from seed.tiny.ECHO import x,y,z
     ''')
 
 from .helper.ifNone import ifNone, ifNonef
@@ -117,6 +115,8 @@ does_run_as_main.alter_main_name = '__run_as_main__'
 
 
 
+'''see: seed.ECHO
+
 ECHO = theEcho
 def __register(qname, pseudo_module):
     import sys
@@ -138,4 +138,6 @@ def __register_ECHO():
 __register_ECHO()
 del __register_ECHO, __register
 
-
+    # seed.tiny.ECHO is a virtual module
+    # from seed.tiny.ECHO import x,y,z
+'''

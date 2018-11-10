@@ -1,4 +1,17 @@
 
+__all__ = r'''
+    repr_helper_ex
+
+    repr_helper
+    repr_helper__str
+
+    repr_input_ex
+    repr_input
+
+    repr_args
+    repr_kwargs
+    repr_kwargs__ordered_pairs
+    '''.split()
 
 def get_class_name(obj):
     return type(obj).__name__
@@ -6,8 +19,29 @@ def repr_args(args):
     return ', '.join(map(repr, args))
 
 def repr_kwargs(kwargs):
-    return ', '.join('{!s} = {!r}'.format(key, val)
-                     for key, val in sorted(kwargs.items()))
+    return repr_kwargs__ordered_pairs(sorted(kwargs.items()))
+def repr_kwargs__ordered_pairs(pairs):
+    return ', '.join('{!s} = {!r}'.format(name, value) for name, value in pairs)
+
+def repr_input_ex(args, ordered_kwarg_pairs, kwargs):
+    a = repr_args(args)
+    o = repr_kwargs__ordered_pairs(ordered_kwarg_pairs)
+    k = repr_kwargs(kwargs)
+
+    return ', '.join(filter(None, [a, o, k]))
+
+def repr_helper_ex(self, args, ordered_kwarg_pairs, kwargs
+    , *, self_is_name=False
+    ):
+    if self_is_name:
+        assert isinstance(self, str)
+        constructor_name = self
+    else:
+        constructor_name = get_class_name(self)
+    s = repr_input_ex(args, ordered_kwarg_pairs, kwargs)
+    return '{}({})'.format(constructor_name, s)
+
+
 
 
 def repr_helper(self, *args, **kwargs):
@@ -40,7 +74,7 @@ e.g.:
 '''
     a = repr_args(args)
     k = repr_kwargs(kwargs)
-    
+
     return ', '.join(filter(None, [a, k]))
 
 

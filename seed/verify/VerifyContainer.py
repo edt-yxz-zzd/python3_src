@@ -21,6 +21,9 @@ class VerifyContainer(VerifyType):
 
 class VerifyContainerType(VerifyType__static):
     @classmethod
+    def of_type(cls, __obj, __types, __mkError=None):
+        return cls.of(__obj, lambda x: isinstance(x, __types), __mkError)
+    @classmethod
     def of(cls, __obj, element_verifier, __mkError=None):
         # usage: is_sorted_sequence.of(is_UInt)
         return (VerifyContainer(
