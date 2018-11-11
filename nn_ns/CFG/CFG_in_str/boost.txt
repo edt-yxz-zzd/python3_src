@@ -1,0 +1,50 @@
+
+Source<MoreSimplified> <: Source<Simplified> <: Source<Complete>
+
+tokenize__simplified_version
+    Source<Simplified> -->> [Token<Source<Simplified>>]
+make_CFG_ex
+    [Production] -->> CFG<Production>
+post_parse
+    (CFG<Production>, {Name:Filter}, [Token<CFG<Production>>]) -->> Value<CFG<Production>>
+
+more_simplified_version
+    #basic_parse__more_simplified_version
+    parse__more_simplified_version__ver2
+        Source<MoreSimplified> -->> CFG<Production>
+        step:
+            tokenize__simplified_version
+                Source<MoreSimplified> -->> [Token<Source>]
+            basic_parse__more_simplified_version
+                # use regex over super_string
+                [Token<Source>] -->> [Production]
+            make_CFG_ex
+                [Production] -->> CFG<Production>
+    post_parse
+        (CFG<Production>, {Name:Filter}, [Token<CFG<Production>>]) -->> Value<CFG<Production>>
+
+
+simplified_version
+    # simplified_in_more_simplified
+    # filters__simplified_in_more_simplified
+    #
+    parse__simplified_version__via_simplified_in_more_simplified
+        Source<Simplified> -->> CFG<Production>
+        step:
+            parse__more_simplified_version__ver2
+                # use the simplified_in_more_simplified
+                simplified_in_more_simplified -->> _CFG<Production>
+            tokenize__simplified_version
+                Source<Simplified> -->> [Token<Source>]
+            post_parse
+                # use filters__simplified_in_more_simplified
+                (_CFG<Production>
+                ,filters__simplified_in_more_simplified
+                ,[Token<Source>]
+                ) -> CFG<Production> (= Value<Simplified>)
+            # since simplified_in_more_simplified
+            # Value<Simplified> is CFG again
+    post_parse
+        (CFG<Production>, {Name:Filter}, [Token<CFG<Production>>]) -->> Value<CFG<Production>>
+
+

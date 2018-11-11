@@ -47,7 +47,11 @@ from ..MessageClosureExecutor.MessageClosureExecutor_ABC__using_namedtuple__str 
     MessageClosureExecutor_ABC__using_namedtuple__str
 from ..MessageClosureExecutor.show_MessageClosureExecutor import \
     show_MessageClosureExecutor
+from ..MessageClosureExecutor.dynamic_sizes_of_MessageClosureExecutor \
+    import dynamic_sizes_of_MessageClosureExecutor
+
 from ..errors import ParseFailError
+from ._debug_constant_ import _show_dynamic_sizes_of_MessageClosureExecutor
 
 
 class NotExistsError(ParseFailError):pass
@@ -77,6 +81,7 @@ def parse_CFG(__cfg, __iter_tokens, *
     , token2terminal_name
     , find_terminal_set_idc
     , ambiguous_nonterminal_idc
+    #, _show_dynamic_sizes_of_MessageClosureExecutor=False
     ):
     '''
 
@@ -120,9 +125,14 @@ exception:
                 fail_position = len(e.tokens) - 1
                 assert fail_position >= 0
                 raise ParseFailError(f'fail_position={fail_position}; token={token!r}')
+        if _show_dynamic_sizes_of_MessageClosureExecutor:
+            print('_show_dynamic_sizes_of_MessageClosureExecutor:on')
+            d = dynamic_sizes_of_MessageClosureExecutor(e)
+            d['tokens'] = len(e.tokens)
+            print(f'dynamic_sizes_of_MessageClosureExecutor: {d}')
         return e.extract_parse_main_tree()
     except ParseFailError:
-        show_MessageClosureExecutor(e)
+        #show_MessageClosureExecutor(e)
         raise
 
 class ParserMessageClosureExecutor(
@@ -243,6 +253,21 @@ see: parse_CFG
     def token2terminal_name(self, token):
         return self.__token2terminal_name(token)
     def find_terminal_set_idc(self, terminal_name):
+        may_cache = self.__maybe_cache_for_find_terminal_set_idc
+        if may_cache is not None:
+            cache = may_cache
+            may_idc = cache.get(terminal_name)
+            if may_idc is None:
+                idc = self.__call_directly__find_terminal_set_idc(terminal_name)
+                idc = tuple(idc)
+                cache[terminal_name] = idc
+            else:
+                idc = may_idc
+        else:
+            idc = self.__call_directly__find_terminal_set_idc(terminal_name)
+        return idc
+
+    def __call_directly__find_terminal_set_idc(self, terminal_name):
         terminal_set_idc = self.__find_terminal_set_idc(
             self.cfg.terminal_set_idx2terminal_set
             ,terminal_name
@@ -559,6 +584,7 @@ see: parse_CFG
         , token2terminal_name
         , find_terminal_set_idc
         , ambiguous_nonterminal_idc
+        , to_cache_find_terminal_set_idc:bool = False
         ):
         def check_nonterminal_idx(idx):
             if type(idx) is not int: raise TypeError
@@ -580,6 +606,7 @@ see: parse_CFG
         self.__find_terminal_set_idc = find_terminal_set_idc
         self.__restart_init()
         self.__ambiguous_nonterminal_idc = ambiguous_nonterminal_idc
+        self.__maybe_cache_for_find_terminal_set_idc = {} if to_cache_find_terminal_set_idc else None
         super().__init__(initial_xmessages = list(it))
 
     def restart(self):

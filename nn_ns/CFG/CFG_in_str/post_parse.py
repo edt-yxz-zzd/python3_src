@@ -152,6 +152,8 @@ if __name__ == "__main__":
     from ..the_py_terminal_set_ops import the_py_terminal_set_ops
     from .parse__more_simplified_version__ver2 import \
         parse__more_simplified_version__ver2
+    from .filters.to_unit import to_unit
+    from .filters.lnk2list import lnk2list
 
     grammar_in_more_simplified = r'''
         ; to_unit$
@@ -180,17 +182,6 @@ if __name__ == "__main__":
             ,maybedead_nonterminal_names=()
             )
     assert start_nonterminal_idc
-
-    def to_unit(ls):
-        [a] = ls
-        return a
-    def lnk2list(lnk):
-        ls = []
-        while lnk:
-            lnk, last = lnk
-            ls.append(last)
-        ls.reverse()
-        return ls
 
     tokens = 't'*6
     token2terminal_name=lambda t:t
