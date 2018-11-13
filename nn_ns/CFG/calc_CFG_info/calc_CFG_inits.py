@@ -4,11 +4,13 @@ __all__ = '''
     translate_inits
     '''.split()
 
-from ..CFG import CFG, the_py_terminal_set_ops
 from ..MessageClosureExecutor.MessageClosureExecutor_ABC__using_namedtuple__str import \
     MessageClosureExecutor_ABC__using_namedtuple__str
 #from ...MessageClosureExecutor__mixins__remove_checks import \
 #    MessageClosureExecutor__mixins__remove_checks
+from ..CFG import CFG
+from ..the_py_terminal_set_ops import the_py_terminal_set_ops
+
 
 class _M(MessageClosureExecutor_ABC__using_namedtuple__str):
     message_interface_action_definition_str = '''
@@ -33,11 +35,11 @@ class _M(MessageClosureExecutor_ABC__using_namedtuple__str):
         '''
 
     def MTerminalInit(self, message):
-        yield self.mkITerminalInit(message.terminal_set_idx)
+        yield self.mk.ITerminalInit(message.terminal_set_idx)
     def MNonterminalInit(self, message):
-        yield self.mkINonterminalInit(message.nonterminal_idx)
+        yield self.mk.INonterminalInit(message.nonterminal_idx)
     def MAlternativeTailInit(self, message):
-        yield self.mkIAlternativeTailInit(message.alternative_tail_idx)
+        yield self.mk.IAlternativeTailInit(message.alternative_tail_idx)
     def ABackwardT(self, action, msg_TerminalInit, msg_AlternativeTailInit):
         try:
             msg_TerminalInit.terminal_set_idx
@@ -52,15 +54,19 @@ class _M(MessageClosureExecutor_ABC__using_namedtuple__str):
         init0 = msg_NonterminalInit.init
         yield from self.__ABackwardX(action, init0, msg_AlternativeTailInit)
     def __ABackwardX(self, action, init0, msg_AlternativeTailInit):
-        init1 = msg_AlternativeTailInit.init
         L = self.max_init_length
-        init = init0 + init1[:L-len(init0)]
+        if not L:
+            init = ()
+        else:
+            init1 = msg_AlternativeTailInit.init
+            init = init0 + init1[:L-len(init0)]
+        assert len(init) <= L
         idx = action.alternative_tail_idx
-        yield self.mkMAlternativeTailInit(idx, init)
+        yield self.mk.MAlternativeTailInit(idx, init)
     def AUpward(self, action, msg_AlternativeTailInit):
         idx = action.nonterminal_idx
         init = msg_AlternativeTailInit.init
-        yield self.mkMNonterminalInit(idx, init)
+        yield self.mk.MNonterminalInit(idx, init)
 
     def __init__(self, max_init_length, cfg):
         assert max_init_length >= 0
@@ -71,20 +77,20 @@ class _M(MessageClosureExecutor_ABC__using_namedtuple__str):
 
     def __iter_initial_xmessages(self, max_init_length, cfg):
         for terminal_set_idx in range(cfg.num_terminal_sets):
-            yield self.mkMTerminalInit(terminal_set_idx)
+            yield self.mk.MTerminalInit(terminal_set_idx)
         if (max_init_length >= 0
             and len(cfg.alternative_tail_idx2alternative_idx_maybe_pair)
             ):
             idx = cfg.alternative_idx_maybe_pair2alternative_tail_idx(())
             init = ()
-            yield self.mkMAlternativeTailInit(idx, init)
+            yield self.mk.MAlternativeTailInit(idx, init)
 
         ####### action
         it = zip(cfg.production_idx2nonterminal_idx
                 , cfg.production_idx2alternative_tail_idx)
         for nonterminal_idx, alternative_tail_idx in it:
-            iAlternativeTailInit = self.mkIAlternativeTailInit(alternative_tail_idx)
-            yield self.mkAUpward(nonterminal_idx, iAlternativeTailInit)
+            iAlternativeTailInit = self.mk.IAlternativeTailInit(alternative_tail_idx)
+            yield self.mk.AUpward(nonterminal_idx, iAlternativeTailInit)
 
         it = enumerate(cfg.alternative_tail_idx2alternative_idx_maybe_pair)
         for lhs_alternative_tail_idx, may_pair in it:
@@ -94,15 +100,15 @@ class _M(MessageClosureExecutor_ABC__using_namedtuple__str):
                 cfg.explain_ref_symbol_psidx(ref_symbol_psidx)
             if is_nonterminal:
                 nonterminal_idx = idx
-                idx2intf = self.mkINonterminalInit
-                mkA = self.mkABackwardN
+                idx2intf = self.mk.INonterminalInit
+                mkA = self.mk.ABackwardN
             else:
                 terminal_set_idx = idx
-                idx2intf = self.mkITerminalInit
-                mkA = self.mkABackwardT
+                idx2intf = self.mk.ITerminalInit
+                mkA = self.mk.ABackwardT
 
             iAlternativeTailInit = \
-                self.mkIAlternativeTailInit(rhs_alternative_tail_idx)
+                self.mk.IAlternativeTailInit(rhs_alternative_tail_idx)
             yield mkA(lhs_alternative_tail_idx
                     , idx2intf(idx)
                     , iAlternativeTailInit
@@ -115,14 +121,14 @@ class _M(MessageClosureExecutor_ABC__using_namedtuple__str):
 
         nonterminal_idx2inits = []
         for nonterminal_idx in range(cfg.num_nonterminals):
-            interface = self.mkINonterminalInit(nonterminal_idx)
+            interface = self.mk.INonterminalInit(nonterminal_idx)
             messages = self.interface2messages.get(interface, ())
             inits = set(message.init for message in messages)
             nonterminal_idx2inits.append(inits)
 
         alternative_tail_idx2inits = []
         for alternative_tail_idx in range(cfg.num_alternative_tails):
-            interface = self.mkIAlternativeTailInit(alternative_tail_idx)
+            interface = self.mk.IAlternativeTailInit(alternative_tail_idx)
             messages = self.interface2messages.get(interface, ())
             inits = set(message.init for message in messages)
             alternative_tail_idx2inits.append(inits)
@@ -132,9 +138,9 @@ def _t():
     # collections.namedtuple
     # now change to seed.types.namedtuple
     from collections import defaultdict
-    IT = _M.mkITerminalInit(terminal_set_idx=0)
-    IA = _M.mkIAlternativeTailInit(alternative_tail_idx=0)
-    MA = _M.mkMAlternativeTailInit(alternative_tail_idx=0, init=())
+    IT = _M.mk.ITerminalInit(terminal_set_idx=0)
+    IA = _M.mk.IAlternativeTailInit(alternative_tail_idx=0)
+    MA = _M.mk.MAlternativeTailInit(alternative_tail_idx=0, init=())
     d = defaultdict(list)
     assert hash(IT) == hash(IA)
     assert IT == IA
@@ -164,9 +170,11 @@ output:
 
     executor = _M(maxL, cfg)
     (nonterminal_idx2inits, alternative_tail_idx2inits
-    ) = executor.collect()
+    ) = map(_xxx_idx2inits_to_immutable, executor.collect())
     return nonterminal_idx2inits, alternative_tail_idx2inits
 
+def _xxx_idx2inits_to_immutable(_xxx_idx2inits):
+    return tuple(map(frozenset, _xxx_idx2inits))
 def translate_inits(cfg, nonterminal_idx2inits, alternative_tail_idx2inits):
     # -> rule_name2inits, alternative_name2initss
     # -> nonterminal_name2inits, production_name2initss

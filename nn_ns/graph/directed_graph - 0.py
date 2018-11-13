@@ -52,7 +52,7 @@ def up2downs_to_u2vtc_ex(up2downs):
 
     n = len(vtx2up)
     u2vtc = [None] * n # [] for _ in range(n)]
-
+    
     for up, downs in up2downs.items():
         v = up2vtx[up]
         u2vtc[v] = [up2vtx[down] for down in downs]
@@ -66,13 +66,13 @@ def is_u2vtc(u2vtc, n = None):
 
     if not n == len(u2vtc) or n < 0:
         return False
-
+        
     return all((isinstance(v, int) and 0 <= v < n) for vtc in u2vtc for v in vtc)
 
 def is_u2sorted_vtc(u2vtc, n = None):
     if not is_u2vtc(u2vtc, n):
         return False
-
+    
     return all(is_sorted(vtc) for vtc in u2vtc)
 
 
@@ -115,7 +115,7 @@ def reverse_u2vtc(u2vtc):
     for u, vtc in enumerate(u2vtc):
         for v in vtc:
             ls[v].append(u)
-
+            
     return ls
 
 
@@ -133,7 +133,7 @@ def u2vtc_to_strong_connected_components(u2vtc):
             assert v2preorder_num[v] is None
             v2preorder_num[v] = curr_preorder_num
             curr_preorder_num += 1
-
+            
             ungrouped_vtx_stack.append(v)
             v2low_preorder_num[v] = v2preorder_num[v]
             continue
@@ -167,7 +167,7 @@ def u2vtc_to_strong_connected_components(u2vtc):
                 v2grouped[x] = True
 
     assert sum(map(len, components)) == n
-
+    
     return sorted_components(components)
 
 def components_to_v2std_stds(vtc_ls, vtc2std=lambda vtc:vtc[0]):
@@ -178,7 +178,7 @@ def components_to_v2std_stds(vtc_ls, vtc2std=lambda vtc:vtc[0]):
         assert vtc
         std = vtc2std(vtc)
         assert 0 <= std < n
-
+        
         stds.append(std)
         for v in vtc:
             assert v2std[v] is None
@@ -201,11 +201,11 @@ def sorted_components(vtc_ls):
     ls = [vtc for vtc in std2vtc if vtc is not None]
     return ls
 
-
+        
 def u2vtc_to_strong_connected_components_ex(u2vtc):
     vtc_ls = u2vtc_to_strong_connected_components(u2vtc)
     v2std, stds = components_to_v2std_stds(vtc_ls)
-
+    
     inter_edges = []
     intra_edges = []
     for e in u2vtc2dedges(u2vtc):
@@ -216,10 +216,9 @@ def u2vtc_to_strong_connected_components_ex(u2vtc):
             intra_edges.append(e)
     return vtc_ls, inter_edges, intra_edges
 
-if __name__ == '__main__':
-    u2vtc = [[], [], [7, 3], [6, 11], [], [6, 2, 12], [1, 9, 4], [], [], [8, 10], [0, 5], [], []]
-    #print(u2vtc_to_strong_connected_components(u2vtc))
-    assert u2vtc_to_strong_connected_components(u2vtc) == [[0], [1], [2, 3, 5, 6, 9, 10], [4], [7], [8], [11], [12]]
+u2vtc = [[], [], [7, 3], [6, 11], [], [6, 2, 12], [1, 9, 4], [], [], [8, 10], [0, 5], [], []]
+#print(u2vtc_to_strong_connected_components(u2vtc))
+assert u2vtc_to_strong_connected_components(u2vtc) == [[0], [1], [2, 3, 5, 6, 9, 10], [4], [7], [8], [11], [12]]
 
 
 def __old__u2vtc_to_strong_connected_components_ex(u2vtc):
@@ -228,8 +227,8 @@ def __old__u2vtc_to_strong_connected_components_ex(u2vtc):
 bug:
     A->B->C->B
     A->D->C # now D->C is CROSS/HCROSS
-'''
-
+'''  
+    
     n = len(u2vtc)
     ls = []
     depth = [None] * n
@@ -260,7 +259,7 @@ bug:
                     depth[p] = idx
             elif edge:
                 discarded_edges.append(edge)
-
+                
             depth[node] = None
         elif case == BACK or case == LOOP:
             assert depth[node] != None
@@ -268,7 +267,7 @@ bug:
             idx = depth[node]
             low_p = path[idx]
             assert depth[low_p] <= idx
-
+            
             p = path[-2]
             lowest_p2edges[low_p].append(edge)
             if depth[p] > idx:
@@ -282,7 +281,7 @@ bug:
     vtc_ls = parent2components(v2lowest_p)
     assert is_sorted(vtc_ls)
     assert all(is_sorted(vtc) for vtc in vtc_ls)
-
+    
     edges_ls = [[] for _ in vtc_ls]
     for edges, vtc in zip(edges_ls, vtc_ls):
         for v in vtc:
@@ -304,13 +303,12 @@ strong_connected_components = u2vtc_to_strong_connected_components_ex
 
 
 def to_reversed_topological_ordered_strong_connected_components(u2vtc):
-    print('here')
     from .directed_acyclic_graph import reversed_topological_ordering
 
     vtc_ls, edges_ls, discarded_edges = u2vtc_to_strong_connected_components_ex(u2vtc)
     n = len(u2vtc)
     super_n = len(vtc_ls)
-
+    
     v2super_v = [None] * n
     super_v2component = [None] * super_n
     for super_v, vtc in enumerate(vtc_ls):
@@ -338,7 +336,6 @@ def to_reversed_topological_ordered_strong_connected_components(u2vtc):
         raise
     return list(map(super_v2component.__getitem__, super_vtc))
 
-if __name__ == '__main__':
-    to_reversed_topological_ordered_strong_connected_components(u2vtc)
+to_reversed_topological_ordered_strong_connected_components(u2vtc)
 
-
+    

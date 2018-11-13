@@ -5,7 +5,7 @@ __all__ = '''
     '''.split()
 
 
-from .parse_CFG import ParseTreeNonleafNode, ParseTreeLeafNode
+from .ParseTreeNode import ParseTreeNonleafNode, ParseTreeLeafNode
 
 def eval_parse_result_node(*
     , node, cfg, token2value, production_idx2reduction

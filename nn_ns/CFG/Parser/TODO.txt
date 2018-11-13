@@ -1,5 +1,51 @@
 
+Earley
+nullable+nullable_tree+is_ambiguous
+CFG.calc.XXX
+    weakref<cfg> -> auto calc and cache
+calc_CFG_ nonterminal_idx2sorted_production_idc
 
-extract_tree(allow_ambiguous=False)
 
 
+eval_parse_result_node ==>> lazy_ eval_parse_result_node
+0: 3 =          # T* =
+1: 3 = 2        # T* = T+
+2: 0 = 1        # 0 = Ts1
+3: 1 = 2        # Ts1 = T+
+4: 2 = 3 -1     # T+ = T* t
+
+     = ((), (2,), (1,), (2,), (3, -1))
+production_idx2nonterminal_idx
+     = [3, 3, 0, 1, 2]
+production_idx2idxalternative
+     = ((), (2,), (1,), (2,), (3, -1))
+nonterminal_idx2sorted_production_idc
+     = ((2,), (3,), (4,), (0, 1))
+nonterminal_idx2is_nullable
+     = [False, False, False, True]
+start_nonterminal_idc
+     = frozenset({0})
+token2terminal_name
+     = <function <lambda> at 0x00000000029A4B70>
+terminal_set_ops
+     = PyTerminalSetOps()
+terminal_set_idx2terminal_set
+     = [{'t'}]
+nonterminal_idx2nonterminal_name
+     = ['S', 'Ts1', 'lnk_Ts1', 'lnk_Ts0']
+nonterminal_idx2maybe_one_null_tree
+     = ((), (), (), (False, 0))
+terminal_position2state2maybe_prev_positions
+     = [{EarleyState(terminal_position_begin_of_production=0, production_idx=2, dot_idx=0): None
+}]
+terminal_position2nonterminal_idx2states
+     = [{}]
+_BasicEarleyParser__maybe_terminal_set_states_pairs
+     = ()
+tokens
+     = []
+terminal_position2nonterminal_idx_begin_pair2complete_states
+     = [{}]
+terminal_position2state2maybe_first_prev_position
+     = [{EarleyState(terminal_position_begin_of_production=0, production_idx=2, dot_idx=0): None
+}]

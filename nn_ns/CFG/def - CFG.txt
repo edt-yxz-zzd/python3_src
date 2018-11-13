@@ -24,6 +24,15 @@ production
         = (production_lhs, production_rhs)
         = (nonterminal, alternative)
         = (nonterminal, [ref_symbol])
+idxalternative = [ref_symbol_psidx]
+idxproduction = (production_idx, [ref_symbol_psidx])
+production_idx2idxalternative = [idxalternative] = [[ref_symbol_psidx]]
+nonterminal_idx2sorted_production_idc = [[production_idx]]
+used_location = (production_idx, production_rhs_idx)
+nonterminal_idx2sorted_used_locations = [[used_location]]
+    nonterminal_idx to production_idx who use the nonterminal_idx and where
+
+
 alternative_tail vs production_tail
     ##alternative_tail donot include nonterminal
     alternative_tail = [ref_symbol]

@@ -10,6 +10,7 @@ class IXXX(metaclass=ABCMeta):
     __slots__ = ()
 class IXXX(ABC):
     __slots__ = ()
+    raise NotImplementedError
 
 if __name__ == "__main__":
     import doctest

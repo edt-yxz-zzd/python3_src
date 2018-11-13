@@ -22,9 +22,18 @@ Ts0 =
 >>> __pairs = [('S', ['t'])]
 >>> cfg = make(__pairs)
 >>> cfg #doctest: +ELLIPSIS
-CFG(alternative_idx_maybe_pair2alternative_tail_idx = <...>, alternative_tail_idx2alternative_idx_maybe_pair = [(), (-1, 0)], nonterminal_idx2nonterminal_name = ['S'], nonterminal_idx2sorted_production_idc = [[0]], nonterminal_name2nonterminal_idx = <...>, num_alternative_tails = 2, num_nonterminals = 1, num_productions = 1, num_terminal_sets = 1, production_idx2alternative_tail_idx = [1], production_idx2nonterminal_idx = [0], production_idx2production_name = [('S', 0)], production_name2production_idx = <...>, terminal_set_idx2terminal_set = [{'t'}], terminal_set_idx2terminal_set_name = ['t'], terminal_set_name2terminal_set_idx = <...>, terminal_set_ops = PyTerminalSetOps())
+CFG(production_idx2nonterminal_idx = [0], production_idx2alternative_tail_idx = [1], alternative_tail_idx2alternative_idx_maybe_pair = [(), (-1, 0)], num_nonterminals = 1, num_terminal_sets = 1, num_productions = 1, num_alternative_tails = 2, terminal_set_ops = PyTerminalSetOps(), terminal_set_idx2terminal_set = [{'t'}], terminal_set_idx2terminal_set_name = ['t'], nonterminal_idx2nonterminal_name = ['S'], production_idx2production_name = [('S', 0)], alternative_idx_maybe_pair2alternative_tail_idx = Mapping2Callable({(): 0, (-1, 0): 1}), terminal_set_name2terminal_set_idx = Mapping2Callable({'t': 0}), nonterminal_name2nonterminal_idx = Mapping2Callable({'S': 0}), production_name2production_idx = Mapping2Callable({('S', 0): 0}))
 
-
+>>> cfg.calc.nonterminal_idx2inits_of_max_length(0)
+(frozenset({()}),)
+>>> cfg.calc.nonterminal_idx2inits_of_max_length(1)
+(frozenset({(0,)}),)
+>>> cfg.calc.nonterminal_idx2inits_of_max_length(2)
+(frozenset({(0,)}),)
+>>> cfg.calc.alternative_tail_idx2inits_of_max_length(2)
+(frozenset({()}), frozenset({(0,)}))
+>>> cfg.calc.nonterminal_idx2sorted_production_idc
+((0,),)
 
 '''
 
@@ -36,7 +45,10 @@ __all__ = '''
     '''.split()
 
 
-from seed.abc.IReprHelper import IReprHelper
+from nn_ns.graph_tools.u2vtc.is_u2vtc_DAG import is_u2vtc_DAG
+#from seed.abc.IReprHelper import IReprHelper
+from seed.helper.repr_input import repr_helper_ex
+#see below: from .calc_CFG_info.Calc_CFG_Info import Calc_CFG_Info
 from seed.verify.common_verify import (
     is_int, is_UInt, is_pair, is_tuple, is_Sequence
     , is_strict_sorted_sequence, has_attrs
@@ -88,18 +100,6 @@ def make_half_bijection__hashable_name(names):
 
 
 
-def make_nonterminal_idx2sorted_production_idc(
-    num_nonterminals, production_idx2nonterminal_idx
-    ):
-    nonterminal_idx2sorted_production_idc = [
-        [] for _ in range(num_nonterminals)]
-    for production_idx, nonterminal_idx in enumerate(production_idx2nonterminal_idx):
-        nonterminal_idx2sorted_production_idc[nonterminal_idx].append(production_idx)
-
-    return nonterminal_idx2sorted_production_idc
-
-
-
 def terminal_set_idx2ref_symbol_psidx(terminal_set_idx):
     ref_symbol_psidx = -terminal_set_idx-1
     return ref_symbol_psidx
@@ -117,7 +117,8 @@ def explain_ref_symbol_psidx(ref_symbol_psidx):
         return True, nonterminal_idx
 
 
-class CFG(IReprHelper):
+#class CFG(IReprHelper):
+class CFG:
     '''
 see:
     "def - CFG.txt"
@@ -393,13 +394,53 @@ methods:
         num_alternative_tails = len(alternative_tail_idx2alternative_idx_maybe_pair)
 
 
-        nonterminal_idx2sorted_production_idc = \
-            make_nonterminal_idx2sorted_production_idc(
-                num_nonterminals, production_idx2nonterminal_idx)
 
         d = dict(locals())
         del d['cls']
         return d
+
+
+
+
+
+
+
+
+
+
+
+
+    all_CFG_attr_seq = '''
+        production_idx2nonterminal_idx
+        production_idx2alternative_tail_idx
+        alternative_tail_idx2alternative_idx_maybe_pair
+
+        num_nonterminals
+        num_terminal_sets
+        num_productions
+        num_alternative_tails
+
+        terminal_set_ops
+        terminal_set_idx2terminal_set
+        terminal_set_idx2terminal_set_name
+        nonterminal_idx2nonterminal_name
+        production_idx2production_name
+
+
+        alternative_idx_maybe_pair2alternative_tail_idx
+        terminal_set_name2terminal_set_idx
+        nonterminal_name2nonterminal_idx
+        production_name2production_idx
+        '''.split()
+    all_CFG_attr_seq = tuple(all_CFG_attr_seq)
+        # for __repr__
+    all_CFG_attr_set = frozenset(all_CFG_attr_seq)
+        # for calc_CFG_info.Calc_CFG_Info
+        #       cfg.calc.xxx
+    assert 'calc' not in all_CFG_attr_set
+    assert len(all_CFG_attr_seq) == len(all_CFG_attr_set)
+
+
 
     def __init__(self, *
         ,production_idx2nonterminal_idx
@@ -410,7 +451,6 @@ methods:
         ,num_terminal_sets
         ,num_productions
         ,num_alternative_tails
-        ,nonterminal_idx2sorted_production_idc
 
         ,terminal_set_ops
             # .is_empty(set)
@@ -427,6 +467,7 @@ methods:
 
         ########## bijection
         ########## callable, not container
+        ##########      can use Mapping2Callable
         ,alternative_idx_maybe_pair2alternative_tail_idx
         ,terminal_set_name2terminal_set_idx
         ,nonterminal_name2nonterminal_idx
@@ -446,8 +487,6 @@ methods:
             = num_productions
         self.num_alternative_tails \
             = num_alternative_tails
-        self.nonterminal_idx2sorted_production_idc \
-            = nonterminal_idx2sorted_production_idc
 
         self.terminal_set_idx2terminal_set_name \
             = terminal_set_idx2terminal_set_name
@@ -470,8 +509,28 @@ methods:
         self.terminal_set_idx2terminal_set = terminal_set_idx2terminal_set
 
         assert self.verify(AssertionError)
-    def ___get_args_kwargs___(self):
-        return (), dict(self.__dict__)
+        from .calc_CFG_info.Calc_CFG_Info import Calc_CFG_Info
+        assert type(self) is CFG
+        assert isinstance(self, CFG)
+        self.calc = Calc_CFG_Info(self)
+    def __setattr__(self, attr, obj):
+        if attr in __class__.all_CFG_attr_set or attr == 'calc':
+            # assume 'calc' is the last attr to be init
+            if hasattr(self, 'calc'):
+                # @property all_CFG_attr_set
+                raise AttributeError(attr)
+            # inside __init__()
+        super().__setattr__(attr, obj)
+
+    def __repr__(self):
+        all_CFG_attr_seq = __class__.all_CFG_attr_seq
+        assert len(self.__dict__)-1 == len(all_CFG_attr_seq)
+            # exclude 'calc'
+        return repr_helper_ex(self, (), all_CFG_attr_seq, {}, ordered_attrs_only=True)
+
+    #IReprHelper
+    #def ___get_args_kwargs___(self): return (), dict(self.__dict__)
+
     def verify(self, __mkError=None):
         return VerifyCFG(self, __mkError)
 
@@ -527,9 +586,9 @@ class VerifyCFG(VerifyType__static):
             ,('alternative_tail_idx2alternative_idx_maybe_pair'
                 , num_alternative_tails
                 , is_maybe_pair, is_alternative_idx_maybe_pair)
-            ,('nonterminal_idx2sorted_production_idc'
-                , num_nonterminals
-                , is_strict_sorted_uint_sequence, is_production_idx_seq)
+            #('nonterminal_idx2sorted_production_idc'
+            #   , num_nonterminals
+            #   , is_strict_sorted_uint_sequence, is_production_idx_seq)
             ]
         for attr, size, is_type, is_obj in triples:
             array = getattr(obj, attr)
@@ -587,6 +646,7 @@ class VerifyCFG(VerifyType__static):
 
 
 
+        '''
         ## more for nonterminal_idx2sorted_production_idc
         nonterminal_idx2sorted_production_idc = obj.nonterminal_idx2sorted_production_idc
         production_idx2nonterminal_idx = obj.production_idx2nonterminal_idx
@@ -607,6 +667,8 @@ class VerifyCFG(VerifyType__static):
                     - set(sum(nonterminal_idx2sorted_production_idc))
                     )
             )
+        ## end of nonterminal_idx2sorted_production_idc
+        '''
 
 
         attrs = '''
@@ -620,7 +682,17 @@ class VerifyCFG(VerifyType__static):
             , lambda: 'terminal_set_ops donot have enough methods: {}'
                 .format(attrs)
             )
+
+        # alternative_tail_idx form a DAG
+        u2vtc = [may_pair[-1:] if may_pair else () for may_pair
+                    in obj.alternative_tail_idx2alternative_idx_maybe_pair]
+        yield (is_u2vtc_DAG(u2vtc, using_std_vertex=True)
+            , lambda: 'alternative_tail_idx2alternative_idx_maybe_pair is not DAG'
+            )
 if __name__ == "__main__":
+    from .CFG import CFG
+        # nn_ns.CFG.CFG instead of __main__.CFG
+
     import doctest
     doctest.testmod()
     #doctest: +ELLIPSIS

@@ -1,3 +1,3 @@
 
 _show_dynamic_sizes_of_MessageClosureExecutor = False
-
+_show_rough_size_of_BasicEarleyParser = False
