@@ -68,9 +68,9 @@ class op_selected(BiPatternHereSame):
 class op_unpack(BiPatternHereSame):
     pattern_fmt = r'(?<!\S)[*](?=\S)(?![,)])'
 
-    # ((
+    # (({[
 class op_multi(BiPatternHereSame):
-    pattern_fmt = r'(?<=[\w)@])[?*+](?:(?!\S)|(?=[,)]))'
+    pattern_fmt = r'(?<=[\w)>\]}}@])[?*+](?:(?!\S)|(?=[,)]))'
 
 #print(op_multi.__abstractmethods__)
 assert biregex_dict

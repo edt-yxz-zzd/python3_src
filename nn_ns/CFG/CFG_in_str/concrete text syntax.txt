@@ -33,13 +33,16 @@ DefinitionBody
     | NoiseDecl
     | AtomicDisjointCaseSetDecl
     | NonAtomicCaseSetDef
+    | ExternalNoiseDecl
     | EmptyDef
     | TerminalSetDecl
     | StartNonterminalDecl
     | AmbiguousNonterminalDecl
     | MaybedeadNonterminalDecl
 EmptyDef =   # nothing
-NoiseDecl = '@noise@' '=' terminal_set_name ('|' terminal_set_name)*
+ExternalNoiseDecl = '@external_noise@' (@noise@|@no_noise@)? def_name (@noise@|@no_noise@)?
+#NoiseDecl = '@noise@' '=' terminal_set_name ('|' terminal_set_name)*
+NoiseDecl = '@noise@' '=' ref_name ('|' ref_name)*
 TerminalSetDecl = '@terminal_set@' terminal_set_name*
 StartNonterminalDecl = '@start_nonterminal@' nonterminal_name*
 AmbiguousNonterminalDecl = '@ambiguous_nonterminal@' nonterminal_name*
@@ -52,6 +55,33 @@ NonAtomicCaseSetDef
     | '@case_set@' case_set_name '=' case_set_name ('-' case_set_name)+
     | '@case_set@' case_set_name '=' '@any@'
     | '@case_set@' case_set_name '=' '@none@'
+    | '@case_set@' case_set_name '=' '(' case_set_name ')'
+
+!!!!!!!!!!!!!! to support noise !!!!!!!!!
+    ##decl before and after of use of def_name
+    @external_noise@ (@noise@|@no_noise@)? def_name (@noise@|@no_noise@)?
+    ### internal_noise:
+    ... [=:] ref_name ... (@noise@|@no_noise@)? ref_name (@noise@|@no_noise@)? ... ref_name
+    nonterminal constraint is the intersection of productions constraint and the decl one
+
+    sand = @noise@|@no_noise@
+    with/without noise version of ?*+ {...}
+        {xx..yy:@noise@}
+        {xx..yy:@no_noise@}
+        {xx..yy:sand? ref_name sand?}
+        # normal version {xx..yy} insert @no_noise@*
+        # no_noise version {xx..yy:@no_noise@} insert nothing
+        # noise version {xx..yy:@noise@} insert @no_noise@+
+    start_nonterminal with/without noise
+        @start_nonterminal@ = sand? nonterminal sand?
+        vs @start_nonterminal@ nonterminal*
+            for each nonterminal:
+                @start_nonterminal@ = nonterminal
+                # i.e. both "sand?" disappeared
+                # i.e. in concept
+                #       <==> @start_nonterminal@ = @noise@* nonterminal @noise@*
+
+
 Production
     # discard
     = filter* '-' def_name ':' ref_name*
@@ -112,7 +142,7 @@ ref_name
     | ref_name multi_op
     | template_name '(' ref_name (',' ref_name)* ')'
     | template_name '<' case_set_ref_name (',' case_set_ref_name)* '>' ( '(' ref_name (',' ref_name)* ')' )?
-    | external_template_name '!' '(' ref_name (',' ref_name)* ')'
+    | '!' external_template_name '(' ref_name (',' ref_name)* ')'
 multi_op
     * + ?
     {..}

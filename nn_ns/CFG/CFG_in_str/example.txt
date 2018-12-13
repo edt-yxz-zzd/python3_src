@@ -1,0 +1,47 @@
+
+; @terminal_set@
+    char            # r'(?<![<])(?:(?![<>&])\S)'
+    escaped_char    # r'&[^;]+;'
+    space           # r'\s'
+    op_lt           # r'<(?!!--|/)'
+    op_gt           # r'>'
+    op_lt_forward   # r'</'
+    #tag            # r'(?<=[<])\w+'
+    tag_html        # r'(?<=[<])html'
+    tag_head        # r'(?<=[<])head'
+    tag_body        # r'(?<=[<])body'
+    comment         # r'<!--.*?-->'
+
+; @start_nonterminal@
+    HTML
+
+; @atomic_case_set@
+; @case_set@
+
+; @noise@ : space+ | comment
+
+; HTML = node(tag_html, head_body)
+; head_body : head body
+; head = node(tag_head, word+)
+; body = node(tag_body, word+)
+
+; node(\tag, \body) =
+    op_lt @no_noise@ \tag @no_noise@ op_gt
+        +\body
+    op_lt_forward @no_noise@ \tag @no_noise@ op_gt
+
+; mk_str$
+    word = many1_no_noise(CHAR)
+; CHAR = char
+; escaped2char$
+    CHAR = escaped_char
+
+
+; many1_no_noise(x) = x{1..:@no_noise@}
+#; lnk2list$ many1_no_noise(x) = lnk_many1_no_noise(x)
+#; lnk_many1_no_noise(x) : lnk_many1_no_noise(x) @no_noise@ x
+#; lnk_many1_no_noise(x) : x
+
+
+
+

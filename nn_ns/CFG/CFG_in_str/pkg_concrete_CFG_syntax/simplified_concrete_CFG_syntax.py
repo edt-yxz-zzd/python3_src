@@ -1,7 +1,18 @@
+
+
+__all__ = '''
+    simplified_concrete_CFG_syntax
+    simplified_in_simplified
+    '''.split()
+
+from .terminal_set__simplified import terminal_set__simplified
+
+
 # simplified in simplified
 simplified_concrete_CFG_syntax \
-    = without_template_case_branch_count_noise = r'''
-# no count {..}; but has ?*+
+    = simplified_in_simplified \
+    = without_template_case_branch_count_noise = fr'''
+# no count {{..}}; but has ?*+
 # no no_noise/noise
 # no template:
 #   t<>; t<>(); t(); !t()
@@ -21,41 +32,7 @@ simplified_concrete_CFG_syntax \
     OR_TupleWithAliasBody
 ; @ambiguous_nonterminal@
 
-; @terminal_set@
-    # comment       # r'(?<!\S)[#][^\n]*'
-    # ignore        # r'\s+'
-    filter          # r'\b(?!\d)\w+[$](?![$])'
-    filter_ex       # r'\b(?!\d)\w+[$][$](?![$])'
-    decorator       # r'~@|(?<!@)\b\w+@'
-    name            # r'\b(?!\d)\w+\b(?![$@])'
-
-    # r'@\w+@'
-    kw_terminal_set             # '@terminal_set@'
-    kw_start_nonterminal        # '@start_nonterminal@'
-    kw_ambiguous_nonterminal    # '@ambiguous_nonterminal@'
-    kw_maybedead_nonterminal    # '@maybedead_nonterminal@'
-    kw_pass                     # '@pass@'
-    kw_any                      # '@any@'
-    kw_none                     # '@none@'
-    # '@none@?'
-    # '@noise@+'
-
-    op_semicolon    # ';'       # r'(?<!\S);(?!\S)'
-    op_colon        # ':'       # r'(?<!\S):(?!\S)'
-    op_eq           # '='       # r'(?<!\S)=(?!\S)'
-    # (((
-    op_discard      # '-'       # r'(?<!\S)[-](?=\S)(?![,)])'
-    op_selected     # '+'       # r'(?<!\S)[+](?=\S)(?![,)])'
-    op_unpack       # '*'       # r'(?<!\S)[*](?=\S)(?![,)])'
-
-    # ((
-    op_multi        # '[?*+]'   # r'(?<=[\w)@])[?*+](?:(?!\S)|(?=[,)]))'
-    # ((((((
-    #op_many0        # '*'       # r'(?<=[\w)@])*(?:(?!\S)|(?=[,)]))'
-    #op_many1        # '+'       # r'(?<=[\w)@])+(?:(?!\S)|(?=[,)]))'
-    #op_optional     # '?'       # r'(?<=[\w)@])?(?:(?!\S)|(?=[,)]))'
-
-
+{terminal_set__simplified!s}
 
 
 

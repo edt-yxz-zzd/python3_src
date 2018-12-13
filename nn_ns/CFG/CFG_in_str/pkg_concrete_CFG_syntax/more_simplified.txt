@@ -1,0 +1,15 @@
+#### more_simplified |<| simplified
+
+# subset of simplified
+# no filters/decorators inside rhs, no filter_ex in lhs
+#   only filters in lhs
+# no unit/unit_unpack/tuple_with_alias
+#   only tuple allowed
+# op_selected, op_discard is not optional
+#   they are MUST
+# no op_multi/op_eq/op_unpack
+# no kw_none/kw_any/kw_pass
+# no kw_start_nonterminal/kw_ambiguous_nonterminal/kw_maybedead_nonterminal
+# no EmptyDef
+# no StartNonterminalDecl/AmbiguousNonterminalDecl/MaybedeadNonterminalDecl
+

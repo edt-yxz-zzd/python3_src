@@ -1,0 +1,13 @@
+#### complete = simplified + complete__delta
+
+# @no_noise@/@noise@
+# count {{..}}
+# template:
+#   t<>; t<>(); t(); !t()
+#   @case_set@/@atomic_case_set@
+#       | & -
+#   ,
+# alternative branch in production
+#   op_bar '|'
+
+

@@ -1,0 +1,19 @@
+
+fface - fake_face
+
+fake embedding =
+    .hedge2clockwise_next_hedge
+    .hedge2clockwise_prev_hedge
+    # clockcenter per vertex
+
+    # outgo/income??
+
+
+hedges of fface = cycle[]
+    # num_vertices=1, num_hedges=0
+hedges of fface = cycle[h0]
+    # self_loop
+hedges of fface = cycle[h0, clockwise_prev_hedge[hedge2another_hedge[h0]], ...]
+    h0 is hedge
+
+

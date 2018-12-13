@@ -1,0 +1,12 @@
+#### simplified
+
+# no count {{..}}; but has ?*+
+# no no_noise/noise
+# no template:
+#   t<>; t<>(); t(); !t()
+#   ==>> no case_set
+# no alternative branch in production
+#   no op_bar '|'
+# allow comment: '(?<!\S)#.*'
+
+

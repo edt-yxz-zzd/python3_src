@@ -1,38 +1,18 @@
 
+__all__ = '''
+    simplified_in_more_simplified
+    '''.split()
+
+from .terminal_set__simplified import terminal_set__simplified
+
+
 #simplified in more_simplified
-simplified_in_more_simplified = r'''
+simplified_in_more_simplified = fr'''
 # see simplified_concrete_CFG_syntax for regex pattern
 #   use tokenize__simplified_version to tokenize more_simplified
 # see more_simplified_concrete_CFG_syntax for grammar of this string
 #
-; @terminal_set@
-    # comment
-    # ignore
-
-    filter
-    name
-
-    kw_terminal_set
-
-    op_semicolon
-    op_colon
-    op_discard
-    op_selected
-
-
-    filter_ex
-    decorator
-
-    kw_start_nonterminal
-    kw_ambiguous_nonterminal
-    kw_maybedead_nonterminal
-    kw_pass
-    kw_any
-    kw_none
-
-    op_eq
-    op_unpack
-    op_multi
+{terminal_set__simplified}
 
 
 ; mk_main_result$ remove_Nones$
@@ -134,7 +114,7 @@ simplified_in_more_simplified = r'''
 ; mk_multi_ref_name$
     ref_name : +ref_name +op_multi
     #ref_name : +(xsymbol_name|kw_any|kw_none) +op_multi
-        #since no {n}
+        #since no {{n}}
 
 ; to_unit$ xsymbol_name : +name
         #| nonterminal_name

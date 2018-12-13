@@ -1,6 +1,8 @@
 
 #more_simplified in more_simplified
-more_simplified_concrete_CFG_syntax = r'''
+more_simplified_concrete_CFG_syntax \
+    = more_simplified_in_more_simplified \
+    = r'''
 # subset of simplified_concrete_CFG_syntax
 # no filters/decorators inside rhs, no filter_ex in lhs
 #   only filters in lhs

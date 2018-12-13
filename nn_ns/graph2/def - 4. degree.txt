@@ -1,0 +1,18 @@
+
+XXX degree
+vertex degree of vtx:
+    vertex2num_hedges[vtx]
+    # [0..]
+    vertex2num_outgo_hedges
+    vertex2num_income_hedges
+aedge degree of ae:
+    aedge2num_hedges[ae]
+    # [0..2]
+fface degree of ff:
+    fface2num_hedges[vtx]
+    # [0..]
+    #   0 - e.g. num_vertices=1, num_aedges=0
+    #   1 - e.g. num_vertices=1, num_aedges=1, all vertex degrees are 2 # the only aedge is a self_loop
+    #   2 - e.g. num_vertices=2, num_aedges=1, all vertex degrees are 1
+    # fface size
+
