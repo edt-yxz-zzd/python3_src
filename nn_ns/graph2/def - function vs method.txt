@@ -1,0 +1,79 @@
+
+function vs method
+    function:
+        basic impl
+        requires:
+            ops
+            obj (to avoid using factory ops)
+    method:
+        override by a more efficient impl
+        or use function but fix parameter for the perticular impl
+
+
+function/method name:
+    <callable_name>__<output_format>__<input_format>__<impl_algo_name>
+
+e.g.
+    udfs__case_and_ancestor_hedges_and_vertex__???__???
+    callable_name:
+        undirected graph depth first search iterator
+    output_format:
+        Iter<(case
+             #,[outgo_hedge]
+             ,ancestor_hedges
+             ,vtx
+             )>
+    input_format:
+        # function
+            ugraph_ops
+                # another possible input:
+                #   using fake embedding # fake face
+                #       O(degree^2) per iter???
+                {.hedge2unstable_iter_hedges_around_vertex_except_self
+                ,.vertex2unstable_iter_hedges
+                #,.vertex2unstable_arbitrary_hedge
+                #,.hedge2fake_clockwise_next_hedge
+                ,.hedge2another_hedge
+                ,.hedge2vertex
+                ,.hedge_ops
+                    {.eq}
+                ,.vertex_ops
+                    {.eq}
+                }
+            ugraph
+            possible_dfs_roots :: Iter Vertex
+            vertex2color__full_mapping_ops
+                {.setitem
+                ,.getitem
+                }
+            vertex2color # initialized, may not be all BLACK
+                Map Vertex Color
+            ancestor_hedges__stack_ops
+                {.ipush # immutable_push or inplace_push
+                ,.ipop
+                ,.is_empty
+                ,.top
+                }
+            ancestor_hedges
+            color_ops
+                {.eq
+                ,.BLACK # unvisited yet
+                ,.WHITE # visiting or visited
+                }
+            case_ops
+                {.eq
+                ,.EnterRootVtx
+                ,.ExitRootVtx
+                ,.EnterTreeEdge
+                ,.ExitTreeEdge
+                ,.VisitBackEdge
+                }
+
+        # method
+            # since full_mapping_ops depends on the vertex i.e. ugraph heavily
+            #    the method version udfs will fixed all these arguments
+            possible_dfs_roots :: Iter Vertex
+            case_ops
+
+
+

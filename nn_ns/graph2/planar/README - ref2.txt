@@ -193,7 +193,7 @@ connected undirected planar graph with num_aedges >= 2 and simple embedding
     ==>> [O >= 3]
     ==>> [D < 6]
 
-    # "weir" means self_loop occurs
+    # "weir" means self_loop(but not min_loop) occurs
     #   except the regular_Veq1_regular_Feq2
     there exists "weir" regular vertex_degree embedding
         e.g. O-O : both vertices have degree 3; 2 self_loops
@@ -206,10 +206,11 @@ connected undirected planar graph with num_aedges >= 2 and simple embedding
             then G is nearly regular except:
                 one vertex has less degree: DD-2-k
                     other vertices has degree DD
-                    k >= 0
+                    k is the remain degree of the vertex on another half sphere
+                        k >= 1 # since no min_loop
                     V >= 1
                     DD > 2+k
-                        ==>> DD >= 3+k >= 3
+                        ==>> DD >= 3+k >= 4
                         # except the regular_Veq1_regular_Feq2
                         # which DD = 2
                 one face has degree: OO-1
@@ -245,39 +246,18 @@ connected undirected planar graph with num_aedges >= 2 and simple embedding
             [1/OO <= 1/3]
             [1/DD > 1/6]
             [DD < 6]
-            [3 <= DD <= 5]
-            [3 <= OO <= 5]
+            [4 <= DD <= 5]
+            [OO == 3]
             [DD=5][OO=3]
                 E = 25-3*(k+2)
-                k<-[0..2] # since DD >= 3+k
-                [k=0][E=19]
+                k<-[1..2] # since DD >= 3+k; k >= 1
                 [k=1][E=16]
                 [k=2][E=13]
             [DD=4][OO=3]
                 E = 10-3/2*(k+2)
-                k<-[0..1]
-                k=1 ==>> E not UInt error
-                [k=0][E=7]
-            [DD=3][OO=3]
-                E = 5-(k+2)
-                [k=0][E=3]
-            [DD=3][OO=4]
-                E = 21/2-2*(k+2)
-                k=0 ==>> E not UInt error
-            [DD=3][OO=5]
-                E = 27-5*(k+2)
-                [k=0][E=17]
+                k<-[1..1]
+                [k=1] ==>> E not UInt error
 
-            [DD=3][OO=3][k=0][E=3]
-                [V=8/3][F=7/3] error
-            [DD=4][OO=3][k=0][E=7][V=4][F=5]
-                vertex_degree[start v] = DD-2-k = 2
-                external_face_degree = OO-1 = 2
-                can not construct G
-            [DD=5][OO=3][k=0][E=19][V=8][F=13]
-                vertex_degree[start v] = DD-2-k = 3
-                external_face_degree = OO-1 = 2
-                can not construct G
             [DD=5][OO=3][k=1][E=16][V=7][F=11]
                 vertex_degree[start v] = DD-2-k = 2
                 external_face_degree = OO-1 = 2
@@ -285,10 +265,6 @@ connected undirected planar graph with num_aedges >= 2 and simple embedding
             [DD=5][OO=3][k=2][E=13][V=6][F=9]
                 vertex_degree[start v] = DD-2-k = 1
                 external_face_degree = OO-1 = 2
-                can not construct G
-            [DD=3][OO=5][k=0][E=17][V=12][F=7]
-                vertex_degree[start v] = DD-2-k = 1
-                external_face_degree = OO-1 = 4
                 can not construct G
         conclusion:
             no "weir" regular vertex_degree regular face_degree embedding

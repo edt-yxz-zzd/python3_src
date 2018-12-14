@@ -1,10 +1,49 @@
 
 fface - fake_face
+    planar face:
+        one face may incident to connected components0
+        face boundary are oriented cycles0 and isolated vertices0
+        face degree == num incident vertices
+            len(set(face2incident_vertices[face])) == face2degree[face]
+    fake_face:
+        one fface incident to one and only one connected component
+        fface boundary is a hedge cycle
+        fface degree >= num incident vertices
+            len(set(fface2incident_vertices[fface])) <= fface2degree[fface]
+            same vertices may occur many times
+    let clockwise_next_hedge_around_fface[hedge] = hedge2clockwise_next_hedge[hedge2another_hedge[hedge]]
+    let clockwise_prev_hedge_around_fface[hedge] = hedge2another_hedge[hedge2clockwise_prev_hedge[hedge]]
+    let min_n = min {n<-[1..] | hedge2vertex[hedge]==hedge2vertex[clockwise_next_hedge_around_fface^n[hedge]]}
+    for planar_face:
+        clockwise_next_hedge_around_fface^min_n[hedge] == hedge
+    but for fake_face:
+        may not!
+
 
 fake embedding =
-    .hedge2clockwise_next_hedge
-    .hedge2clockwise_prev_hedge
+    {.hedge2clockwise_next_hedge _around_vertex
+    ,.hedge2clockwise_prev_hedge _around_vertex
     # clockcenter per vertex
+    }
+    fake_embedding is embedding on some surface of genus >= 0
+        planar embedding is fake_embedding on surface of genus==0
+        consider ugraph: OO
+            vertices = {v0}
+            aedges = {e0,e1}
+            hedges = {h0,h1,h2,h3}
+            v0-h0-e0-h1-v0
+            v0-h2-e1-h3-v0
+        fake_embedding of genus=0:
+            #planar embedding
+            /-\ /-\
+            |  v  |
+            \-/ \-/
+            v0: ->h0->h1->h2->h3->
+            3 faces of size: 1,1,2
+        fake_embedding of genus=1:
+            v0: ->h0->h2->h1->h3->
+            1 face of size: 4
+
 
     # outgo/income??
 
