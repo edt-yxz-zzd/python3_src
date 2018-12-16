@@ -1,7 +1,7 @@
 
 # connected component
 # vertex aedge hedge
-# clockwise next prev around
+# fake_clockwise next prev around
 
 connected graph
     ??num_vertices >= 1??
@@ -38,8 +38,8 @@ UGraph =
     ,hedge2vertex
     ,hedge2aedge
     ######### generated dynamic on need or input ############
-    ,hedge2clockwise_next_hedge_around_vertex   # fake_embedding
-    ,hedge2clockwise_fface                      # named fface
+    ,hedge2fake_clockwise_next_hedge_around_vertex   # fake_embedding
+    ,hedge2fake_clockwise_fface                      # named fface
     ######### generated dynamic on need ############
     #,hedge2is_outgo # always True
     ,num_hedges
@@ -47,11 +47,11 @@ UGraph =
     ,num_ffaces
 
     ,hedge2another_hedge
-    ,hedge2clockwise_prev_hedge_around_vertex
-    ,hedge2clockwise_next_hedge_around_fface
-        = hedge2clockwise_next_hedge_around_vertex . hedge2another_hedge
-    ,hedge2clockwise_prev_hedge_around_fface
-        = hedge2another_hedge . hedge2clockwise_prev_hedge_around_vertex
+    ,hedge2fake_clockwise_prev_hedge_around_vertex
+    ,hedge2fake_clockwise_next_hedge_around_fface
+        = hedge2fake_clockwise_prev_hedge_around_vertex . hedge2another_hedge
+    ,hedge2fake_clockwise_prev_hedge_around_fface
+        = hedge2another_hedge . hedge2fake_clockwise_next_hedge_around_vertex
 
     ,vertex2degree
     ,fface2degree
@@ -60,7 +60,7 @@ UGraph =
     ,vertex2unstable_maybe_arbitrary_hedge # vertex degree may be 0
     ,aedge2unstable_arbitrary_hedge # aedge degree == 2 # ugraph
     ,fface2unstable_arbitrary_hedge # fface degree >= 1
-        # outgo hedges form clockwise cycles1
+        # outgo hedges form fake_clockwise cycles1
 
     ,unstable_isolated_vertices
     ,unstable_self_loop_aedges

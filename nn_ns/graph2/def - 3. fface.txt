@@ -1,29 +1,32 @@
+see: "planar/algo - is fake_embedding planar.txt"
 
 fface - fake_face
     planar face:
         one face may incident to connected components0
         face boundary are oriented cycles0 and isolated vertices0
-        face degree == num incident vertices
-            len(set(face2incident_vertices[face])) == face2degree[face]
+        error: # e.g. flower
+            face degree == num incident vertices
+                len(set(face2incident_vertices[face])) == face2degree[face]
     fake_face:
         one fface incident to one and only one connected component
         fface boundary is a hedge cycle
         fface degree >= num incident vertices
             len(set(fface2incident_vertices[fface])) <= fface2degree[fface]
             same vertices may occur many times
-    let clockwise_next_hedge_around_fface[hedge] = hedge2clockwise_next_hedge[hedge2another_hedge[hedge]]
-    let clockwise_prev_hedge_around_fface[hedge] = hedge2another_hedge[hedge2clockwise_prev_hedge[hedge]]
-    let min_n = min {n<-[1..] | hedge2vertex[hedge]==hedge2vertex[clockwise_next_hedge_around_fface^n[hedge]]}
+    let hedge2fake_clockwise_next_hedge_around_fface[hedge] = hedge2fake_clockwise_prev_hedge_around_vertex[hedge2another_hedge[hedge]]
+    let hedge2fake_clockwise_prev_hedge_around_fface[hedge] = hedge2another_hedge[hedge2fake_clockwise_next_hedge_around_vertex[hedge]]
+    let min_n = min {n<-[1..] | hedge2vertex[hedge]==hedge2vertex[hedge2fake_clockwise_next_hedge_around_fface^n[hedge]]}
     for planar_face:
-        clockwise_next_hedge_around_fface^min_n[hedge] == hedge
+        error:
+            hedge2fake_clockwise_next_hedge_around_fface^min_n[hedge] == hedge
     but for fake_face:
         may not!
 
 
 fake embedding =
-    {.hedge2clockwise_next_hedge _around_vertex
-    ,.hedge2clockwise_prev_hedge _around_vertex
-    # clockcenter per vertex
+    {.hedge2fake_clockwise_next_hedge_around_vertex
+    ,.hedge2fake_clockwise_prev_hedge_around_vertex
+    # fake_clockcenter per vertex
     }
     fake_embedding is embedding on some surface of genus >= 0
         planar embedding is fake_embedding on surface of genus==0
@@ -52,7 +55,7 @@ hedges of fface = cycle[]
     # num_vertices=1, num_hedges=0
 hedges of fface = cycle[h0]
     # self_loop
-hedges of fface = cycle[h0, clockwise_prev_hedge[hedge2another_hedge[h0]], ...]
+hedges of fface = cycle[h0, fake_clockwise_prev_hedge[hedge2another_hedge[h0]], ...]
     h0 is hedge
 
 

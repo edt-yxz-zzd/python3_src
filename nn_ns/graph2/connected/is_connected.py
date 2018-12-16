@@ -1,4 +1,8 @@
-
+'''
+nothing_graph
+edgeless_graph
+vertexless_graph
+'''
 
 
 def is_ugraph_connected(dfs, is_new_round)
@@ -9,7 +13,7 @@ input:
     is_new_round :: (case, payload) -> bool
         True for each connected component
 output:
-    null_graph is connected
+    nothing_graph is undefined!!!!
     K[1] is connected
     graph with (num_connected_components < 2) is connected
 '''
@@ -32,7 +36,7 @@ input:
 output:
 
 problem:
-    null_graph
+    nothing_graph
     loose_edge
     isolated_vtx
 '''

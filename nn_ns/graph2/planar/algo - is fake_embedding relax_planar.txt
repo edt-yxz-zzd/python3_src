@@ -1,0 +1,137 @@
+
+
+algo: is_fake_embedding_relax_planar?
+    for any ugraph
+    no shared plane faces between diff connected components
+    # normal planar_embedding requires some shared faces to glue connected components
+    #   circle A,B,C: A inside B, C outside B
+    #       4 faces:
+    #           f1 # A-inner
+    #           f2 # A-outer and B-inner # shared
+    #           f3 # B-outer and C-outer # shared
+    #           f4 # C-inner
+    #
+algo: is_fake_embedding_planar?
+    for connected ugraph with num_vertices >= 1
+
+ugraph_fake_embedding:
+    # ugraph may be not connected graph
+    # ugraph may has no edge
+    # allow self_loop and multiedge
+    hedge2fake_clockwise_next_hedge_around_vertex
+        not self reflect
+        hedge2fake_clockwise_next_hedge_around_vertex[hedge] != hedge
+
+    #### may be generated ###
+    hedge2fake_clockwise_prev_hedge_around_vertex
+    hedge2fake_clockwise_next_hedge_around_fface
+    hedge2fake_clockwise_prev_hedge_around_fface
+        # hedge2fake_clockwise_next_hedge_around_fface[hedge] = hedge2fake_clockwise_prev_hedge_around_vertex[hedge2another_hedge[hedge]]
+        # hedge2fake_clockwise_prev_hedge_around_fface[hedge] = hedge2another_hedge[hedge2fake_clockwise_next_hedge_around_vertex[hedge]]
+        # ugraph ==>> hedge outgo
+        # fface -> hedges which form a clockwise cycle
+    fface2degree
+        # >= 1
+        # donot consider isolated vertex
+        # diff connected components donot share same external ffaces
+    hedge2fake_clockwise_fface
+    fface2arbitrary_hedge
+
+what condition makes non-planar?
+    subgraph A B C
+    /-v-\
+    | \-|-\
+    A   B |
+    |   | C
+    \-v-/ |
+      \---/
+    the min non-planar fake_embedding:
+    # A is edge; (v-B-v) is a vertex v; C is edge
+    # i.e. 2 self_loops of the only vertex
+    /---\
+    | /-|-\
+    | | | |
+    \-v-/ |
+      \---/
+      #h1->h2->h3->h4[->h1]
+
+non_planar condition:
+    fake_clockwise hedges of fface:
+        hedge h1 h2 h3 h4:
+            e1 = hedge2aedge[h1] != hedge2aedge[h2] = e2
+            h3 = hedge2another_hedge[h1]
+            h4 = hedge2another_hedge[h2]
+        ... -> h1 -> ... -> h2 -> ... -> h3 -> ... -> h4 -> ... [-> h1]
+        # ...e1-->e2-->e1-->e2... [-->e1]
+    [h1 cannot occur twice]
+        <<== since the 2nd occur means restart of the cycle
+    [planar][h1,h3 both occur in hedges of same fface]
+        [e1 is cut edge]
+        [the 2 half of cycle seperated by h1,h3 donot contains same aedge]
+
+
+
+algo:
+    detect_ABAB_or_AAA
+input:
+    obj_eq_ops
+    objs # Iter obj
+        # aedges of a fface
+    buffer__obj_set
+        # e.g. seed.types.OneTime.OneTimeSet
+    buffer__forbidden_obj2obj
+        # e.g. seed.types.OneTime.OneTimeMap
+output:
+    ()|(obj,)|(obj,obj)
+    #no ABAB or AAA
+    #AAA
+    #ABAB
+
+    buffer__forbidden_obj2obj.clear()
+    buffer__obj_set.clear()
+    obj_stack = []
+    for obj in objs:
+        assert len(obj_stack) == len(buffer__obj_set)
+        #assert set(obj_stack) == set(buffer__obj_set)
+        if obj in buffer__forbidden_obj2obj:
+            A = buffer__forbidden_obj2obj[obj]
+            if obj_eq_ops.eq(A, obj):
+                return (A,) #AAA
+            B = obj
+            return (A, B) #ABAB
+        elif obj in buffer__obj_set:
+            while obj_stack:
+                _obj = obj_stack.pop()
+                buffer__obj_set.delete(_obj)
+                buffer__forbidden_obj2obj[_obj] = obj
+                if obj_eq_ops.eq(_obj, obj):
+                    break
+            else:
+                raise logic-error
+        else:
+            buffer__obj_set.add(obj)
+            obj_stack.append(obj)
+    return ()
+
+algo: iter_non_planar_aedge_pairs
+    # donot consider isolated vertex
+    # diff connected components donot share same external ffaces
+input:
+    ugraph
+    fake_embedding
+    some_hedges # Iter hedge
+    buffer # seq of len num_hedges
+output:
+    Iter (aedge, aedge)
+
+    for hedge in some_hedges:
+        aedges = (ugraph.hedge2aedge[h] for h in fake_embedding.iter_fake_clockwise_hedges_around_fface_from(hedge))
+        r = detect_ABAB_or_AAA(aedges)
+        if r:
+            assert len(r) == 2
+            yield r
+
+algo: is fake_embedding a planar_embedding?
+    <==> iter_non_planar_aedge_pairs output nothing?
+
+
