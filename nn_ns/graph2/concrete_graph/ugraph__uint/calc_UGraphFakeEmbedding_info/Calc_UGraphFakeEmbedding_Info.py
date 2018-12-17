@@ -1,12 +1,20 @@
 
+'''
+no is_relax_planar_embedding
+    using is_relax_planar_ugraph instead
+    see: "algo - is fake_embedding relax_planar[ver2].txt"
+        requires biconnected ugraph instead of just an embedding
+    version1 is error:
+        "algo - is fake_embedding relax_planar[ver1][error].txt"
+'''
 from ..UGraphFakeEmbedding import UGraphFakeEmbedding
-from .is_relax_planar_embedding import is_relax_planar_embedding
+#from .is_relax_planar_embedding import is_relax_planar_embedding
 
 _get = object.__getattribute__
 class Calc_UGraphFakeEmbedding_Info:
     all_attr_seq = '''
-        is_relax_planar_embedding
         '''.split()
+        #is_relax_planar_embedding
     all_attr_set = frozenset(all_attr_seq)
     def __init__(self, ugraph_fake_embedding):
         assert isinstance(ugraph_fake_embedding, UGraphFakeEmbedding)
@@ -28,9 +36,11 @@ class Calc_UGraphFakeEmbedding_Info:
             r = cache.setdefault(attr, r)
             return r
 
+    '''
     def is_relax_planar_embedding(self):
         ugraph_fake_embedding = _get(self, 'ugraph_fake_embedding')
         return is_relax_planar_embedding(ugraph_fake_embedding)
+    '''
 
 
 

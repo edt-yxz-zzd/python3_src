@@ -74,6 +74,8 @@ example:
 
 
 
+'''
+'''
     >>> edgeless_graph.calc.is_relax_planar_embedding
     True
     >>> single_loop_graph.calc.is_relax_planar_embedding

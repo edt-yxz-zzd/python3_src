@@ -1,0 +1,94 @@
+
+
+
+"algo - is fake_embedding relax_planar[ver2].txt"
+    why "algo - is fake_embedding relax_planar[ver1][error].txt" error?
+        it says the two_nonparallel_loops fake_embedding nonplanar
+        but fail for the biconnected_ugraph fake_embedding generated
+            from the two_nonparallel_loops fake_embedding
+            by the below method
+        i.e. the counterexample is:
+            8 vertices, 12 aedges
+
+                 ---------
+                /  ------ |
+               /  /      ||
+              v--v       ||
+             /    \      ||
+            v      v     ||
+           /|      |\    ||
+          / v      v \   ||
+         | / \    / \ |  ||
+         ||   v--v   ||  ||
+         ||    \  \  ||  ||
+         ||     \  --++--||
+         ||      ----++---|
+         ||----------||
+         |------------|
+
+
+ugraph -> fake_embedding -> Bool
+ugraph -> (relax_planar embedding | subgraph of minor K[3,3] or K[5])
+
+
+ugraph -> fake_embedding -> Bool
+0_ if ugraph is edgeless: return True
+1_ (nonedgeless_ugraph, fake_embedding) -> (biconnected_ugraph, fake_embedding2)
+    vertex_ver0 degree <- [0..]
+    1_1_ (ugraph, fake_embedding) -> (connected_ugraph, fake_embedding1)
+        1_1_1_ ugraph -> [connected_component]
+        1_1_2_ add new aedge between connected_components
+            add a new external fface which is maked up from many0 ffaces in fake_embedding
+        [vertex_ver1 degree <- [1..]]
+        [vertex_ver1 degree == 1] ==>> [vertex_ver0 degree <- [0,1]]
+        [vertex_ver0 degree == 0] ==>> [vertex_ver1 degree == [1..]]
+        [vertex_ver0 degree == n >= 1] ==>> [vertex_ver1 degree <- [n..]]
+
+    1_2_ (connected_ugraph, fake_embedding1) -> (biconnected_ugraph, fake_embedding2)
+        replace each edge_ver1 by rectangle, each vertex_ver1 by cycle of size 2*deg(vertex_ver1)
+            each edge_ver1 introduce a new fface
+            each vertex_ver1 introduce a new fface
+        [vertex_ver2 degree == 3] # regular-vertex-degree-3
+        [vertex_ver1 degree == 1] ==>> [2-bond/2-cycle]
+        no self_loop
+        may has multiedge, if any should be 2-bond
+            [regular-vertex_ver1degree==3][exist n-bond and n>2]
+                [n==3]
+                [whole biconnected_ugraph is a 3-bond]
+                [no fface is rectangle]
+                ==>> error
+
+2_ (biconnected_ugraph, fake_embedding2) -> Bool
+    precondition:
+        [no self_loop][not edgeless][vertex-degree >= 2]
+        # allow multiedge
+        # not allow 2 vertices with single nonloop aedge
+    ==>> [num_vertices >= 2][num_aedges >= 2][num_ffaces >= 1]
+    =xx=>> [all aedge2num_ffaces are 2]
+        e.g. 3-bond but only 1 fface
+            hedges of v1: v1e1->v1e2->v1e3->
+            hedges of v2: v2e1->v2e2->v2e3->
+            # vs 3-bond with 3 ffaces: hedges of v2: v2e3->v2e2->v2e1->
+    2_1_ if any aedge not incident to 2 diff ffaces: return False
+    2_2_ if any fface cycle contains duplicated vertices: return False
+        [planar embedding][exist fface cycle contains duplicated vertex v]
+            [v is a cut vertex]
+            [not biconnected ugraph]
+            ==>> error
+    2_3_ grow frontier_hedges until nothing or error
+        init: frontier_hedges = clockwise hedges of arbitrary fface
+        while frontier_hedges:
+            group frontier_hedges into [neighbor_block]
+                where
+                    counterclockwise ffaces of hedges in neighbor_block are the same # call it another_fface
+                    no neighbor neighbor_blocks shared same another_fface
+            try to find out a neighbor_block such that another_fface occur only once
+            if no such neighbor_block: return False
+            update frontier_hedges by merge the fface
+                # merge the fface into the frontier face
+        return True
+
+
+
+
+
