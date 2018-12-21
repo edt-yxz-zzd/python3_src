@@ -1,0 +1,16 @@
+"algo - is fake_embedding relax_planar[ver4].txt"
+
+see:
+    "def - 3.5. non_planar_condition.txt"
+    non_planar_condition = (simple_nonempty_path, simple_path, simple_nonempty_path)
+see:
+    "algo - is fake_embedding relax_planar[ver3].txt"
+        why [ver3] deprecated?
+            1) it is difficult to make partial_output-case-2
+            2) whole_output non_planar_condition are updated
+                see: "def - 3.5. non_planar_condition.txt"
+
+[ver4]
+    using dfs
+    see: "def - 3.5. non_planar_condition.txt"
+

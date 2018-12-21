@@ -1,0 +1,13 @@
+
+relax biconnected
+    see: relax planar embedding
+
+using fvertices instead of vertices
+    i.e. donot consider isolated vertices
+
+[g is relax biconnected] =[def]=
+    [g is ugraph][each connected component of g is isolated vertex or biconnected]
+[biconnected]
+    ==>> [no self_loop][vertex degree >= 2][num_vertices >= 2][num_aedges >= 2]
+    # allow multiedge
+

@@ -1,0 +1,37 @@
+
+
+clockwise path
+    why clockwise??
+        to distinguish external/internal(outer/inner) ffaces/hedges
+
+
+def path :: ([hedge], end_vertex)
+    @i <- [1..len(hedges)-1]. hedge2fvertex[hedge2another_hedge[hedges[i-1]]] == hedge2fvertex[hedges[i]]
+    [len(hedges) > 0]
+        hedge2fvertex[hedge2another_hedge[hedges[-1]]] == end_vertex
+def simple_path <==> path without crossing
+    simple_path <: path
+    len(fvertices__set) == len(hedges)
+        where
+            fvertices__seq = [hedge2fvertex[h] for h in hedges]
+            fvertices__set = set(fvertices__seq)
+            # allow end_vertex <- fvertices__set
+
+def nonempty_path :: nonempty[hedge]
+    len(hedges) >= 1
+    @i <- [1..len(hedges)-1]. hedge2fvertex[hedge2another_hedge[hedges[i-1]]] == hedge2fvertex[hedges[i]]
+def nonempty_cycle :: nonempty[hedge]
+    #???no empty cycle # ??laedge??
+    nonempty_cycle <: nonempty_path
+    begin_vertex == end_vertex
+        where
+            begin_vertex = fvertices__seq[0]
+            end_vertex = hedge2fvertex[hedge2another_hedge[hedges[-1]]]
+
+def simple_nonempty_path <==> path without crossing
+    simple_nonempty_path <: nonempty_path
+    len(fvertices__set) == len(hedges)
+def simple_nonempty_cycle <==> cycle without crossing
+    simple_nonempty_cycle <==> (simple_nonempty_path&nonempty_cycle)
+
+

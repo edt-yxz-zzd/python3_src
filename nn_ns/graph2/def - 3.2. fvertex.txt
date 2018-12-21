@@ -1,0 +1,19 @@
+
+fvertex - fake vertex
+    like fface
+
+used for fake embedding
+fake_embedding consider only hedges
+    so we use fvertex to repr non-isolated vertex # vertex of degree >= 1
+
+for fake_embedding
+    num_fvertices
+    fvertex2degree
+    hedge2fvertex
+    fvertex2arbitrary_hedge
+for ugraph
+    vertex2maybe_fvertex
+    fvertex2vertex
+
+
+

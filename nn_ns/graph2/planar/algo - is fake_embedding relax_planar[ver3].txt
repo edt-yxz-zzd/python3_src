@@ -1,0 +1,186 @@
+
+"algo - is fake_embedding relax_planar[ver3].txt"
+
+see: "algo - is fake_embedding relax_planar[ver2].txt"
+    like [ver2]
+    update "2_3_ grow frontier_hedges until nothing or error"
+    by find the next fface directly
+
+#partial algo
+#   for whole algo framework, see [ver2]
+#
+
+def path :: ([hedge], end_vertex)
+def nonempty_path :: nonempty[hedge]
+def nonempty_cycle :: nonempty[hedge]
+    nonempty_cycle <: nonempty_path
+    no empty cycle # ??laedge??
+def simple_path <==> path without crossing
+def simple_nonempty_path <==> path without crossing
+def simple_nonempty_cycle <==> cycle without crossing
+    simple_nonempty_cycle <: simple_nonempty_path
+
+
+frontier fverties: A-arc1->B-arc2->C-arc3->D-arc4->A
+fverties of two cross outer paths: A-arc5->C, B-arc6->D
+==>> non_relax_planar condition:
+    bug: path from outside to inside
+        cycle: A-arc1->B-arc6->D-arc4->A
+        path: A-arc5->C-arc3->D
+    correct:
+        cycle: A-arc5->C-arc3->D-arc4->A
+        path: A-arc1->B-arc6->D
+
+      -----arc5->
+     /           |
+    A -arc1-> B ----
+    ^         |  |  |
+    |         |  |  |
+    arc4    arc2 |  arc6
+    |         |  |  |
+    |         v  |  |
+    D <-arc3- C-/   |
+     \----------<---
+
+partial_input:
+    relax_biconnected_ugraph_fake_embedding
+        for each connected component cc:
+            * cc is isolated vertex with no edges
+            OR:
+            * cc is biconnected
+                [no self_loop] # allow multiedge
+                [vertex degree >= 2]
+                [num_fvertices >= 2]
+                [num_aedges >= 2]
+partial_output:
+    (case, result)
+        (0, [[fface]])
+            # relax_planar
+            ffaces :: [fface] for each biconnected subgraph
+            @i>0. ffaces[i] touch frontier(ffaces[:i]) only a single path
+        (1, (fface, duplicated_fvertex))
+            # non_relax_planar
+            [biconnected][duplicated_fvertex] ==>> [non_relax_planar]
+            proof:
+                [planar][duplicated_fvertex]
+                    ==>> [duplicated_fvertex is cut vertex]
+                    ==>> [not biconnected]
+                    ==>> error
+        (2, (simple_nonempty_cycle, simple_nonempty_path))
+            simple_nonempty_cycle is clockwise
+            simple_nonempty_path is clockwise
+            begin_vertex, end_vertex of simple_nonempty_path are on simple_nonempty_cycle
+            the common fverties of simple_nonempty_path and simple_nonempty_cycle are the two end-fverties of simple_nonempty_path
+
+            first_hedge of clockwise simple_nonempty_path is inside the clockwise simple_nonempty_cycle
+            hedge2another_hedge[last_hedge] of clockwise simple_nonempty_path is outside the clockwise simple_nonempty_cycle
+
+whole_input:
+    ugraph_fake_embedding
+whole_output:
+    #bug: () | (nonempty_cycle, nonempty_path) # may not simple
+    () | (simple_nonempty_cycle, simple_nonempty_path) # may not simple
+
+
+#partial algo
+#   for whole algo framework, see [ver2]
+#
+
+partial-algo:
+    select next fface to merge
+main-idea:
+    touched fverties and touched hedges outside a fface
+        * form many0 may-empty noncycle paths
+            # a special forest
+        * form a nonemtpy cycle
+    for each fface:
+        let numFV = fface2num_fvertices_on_or_inside_frontier[fface]
+        let numOH = fface2num_outer_hedges_inside_frontier[fface]
+
+        assert numFV >= numOH
+        [numFV == numOH] <==> [not touch]or[form a cycle]
+                         <==> [form 0 paths]or[form a cycle]
+        [numFV == numOH+1]
+            <==> [form a may-empty noncycle path]
+                proof:
+                    [form many0 noncycle paths] <<== not [form a cycle]
+                    ==>> [num_paths == numFV-numOH == 1]
+            =xx=>> [form a nonempty path]
+                # <<=xx= [biconnected]
+
+    onfface =[def]= fface which touch frontier but not inside
+    algo:
+        if not onffaces at all, then stop or try next connected component
+        try to choose a fface, s.t.
+            [not inside frontier][numFV-numOH==1][form a nonempty noncycle path]
+            <==>[not inside frontier][numFV-numOH==1][numOH >= 1]
+        else to choose the final fface, s.t.
+            [not inside frontier][form a cycle]
+            <==>[not inside frontier][numFV-numOH==0][numOH >= 1]
+    proof:
+        [len(onffaces) > 0][cannot choose a fface]
+            ==>> [there is not the final fface]
+            ==>> [at least 2 onffaces]
+        [not touch by a single nonempty path (cycle/noncycle)]
+            ==>> [onffaces touch by a single vertex (empty path) or many2 may-empty noncycle paths]
+        onffaces = onffaces__many2_paths | onffaces__1_empty_path
+        [len(frontier.hedges) > 0]
+            [not all onffaces__1_empty_path]
+            [len(onffaces__many2_paths) >= 1]
+            ?[no onffaces__many2_paths cross each other]
+                ==>> [each onfface2 split frontier.hedges into two parts, other onfface2.touch on one part]
+                let us split frontier.hedges smaller and smaller by onfface2, then we get error
+            ==>> [exist onffaces__many2_paths cross each other]or[exist onffaces__1_nonempty_path]
+        [exist onffaces__many2_paths cross each other]
+            ==>> non_relax_planar
+
+data:
+    ffacess :: [[fface]]
+        # case 0 output result
+
+    fvertex2is_on_or_inside_frontier :: [Bool]
+    fface2is_inside_frontier :: [Bool]
+        #hedge2is_inside_frontier :: [Bool]
+        #hedge2is_inside_frontier[h] == fface2is_inside_frontier[hedge2fake_clockwise_fface[h]]
+
+    fface2num_fvertices_on_or_inside_frontier :: [UInt]
+    fface2num_outer_hedges_inside_frontier :: [UInt]
+        # fface's inner hedges are clockwise
+        # outer hedges are another_hedges of inner hedges
+
+    # num_noncycle_paths = numFV-numOH
+    #   no matter whether [form a cycle] or [form many0 noncycle paths]
+    fface2num_touch_noncycle_paths :: [UInt]
+
+    updated_fface_set :: OneTimeSet
+    next_fface_set :: OneTimeSet
+        s.t. [not is_inside_frontier][num_noncycle_paths <= 1][numOH >= 1]
+        each time merge a fface into frontier:
+            1)  ffacess[-1].append(fface)
+                update fface2is_inside_frontier
+                update fvertex2is_on_or_inside_frontier
+
+                update fface2num_fvertices_on_or_inside_frontier
+                update fface2num_outer_hedges_inside_frontier
+                update updated_fface_set
+                    record which ffaces are affected
+            2) for affected ffaces:
+                update fface2num_touch_noncycle_paths
+                if s.t. the above condition
+                    add fface into next_fface_set
+                else:
+                    discard fface from next_fface_set
+
+
+
+[fail!]
+how to make case 2 result "simple" cycle/path?
+    [fail!]
+    eval all ears of frontier_hedges
+    ear =[def]= clockwise nonempty sub-path of a onfface s.t.
+        where
+            # first_hedge may be the last_hedge, hence len(ear) == 1
+            both end-fverties of ear on frontier
+            no other fverties of ear on frontier
+    ears shared some parts
+

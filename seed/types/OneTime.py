@@ -1,10 +1,10 @@
 
 from collections.abc import MutableMapping, MutableSet
 # does OrderedDict using such implement??
-    
-        
 
-class OneTimeMap(MutableMapping):
+
+
+class OneTimeBase:
     'NOTE: list is not a good mapping, since +i and L-i refer to same value'
     def __init__(self, key2anything):
         # key2anything is mapping or sequance; is a buffer
@@ -24,7 +24,7 @@ class OneTimeMap(MutableMapping):
     def _pack_pos_value(self, pos, value):
         return pos, value
 
-    
+
     def is_valid_witness_pos(self, witness_pos):
         return type(witness_pos) is int and 0 <= witness_pos < len(self.witnesses)
 
@@ -33,8 +33,8 @@ class OneTimeMap(MutableMapping):
             pos, value = self._unpack_pos_value(pos_value)
             return self.is_valid_witness_pos(pos)
         return False
-    
-    
+
+
     def get_witness_pos(self, key):
         # None or int
         pos_value = self._key2pos_value[key]
@@ -52,7 +52,7 @@ class OneTimeMap(MutableMapping):
         return len(self.witnesses)
     def __iter__(self):
         return iter(self.witnesses)
-    
+
     def __setitem__(self, key, value):
         pos = self.get_witness_pos(key)
         if pos is None:
@@ -62,7 +62,7 @@ class OneTimeMap(MutableMapping):
             self.witnesses[pos] = key # update key ??
         new_pos_value = self._pack_pos_value(pos, value)
         self._key2pos_value[key] = new_pos_value
-        
+
     def __delitem__(self, key):
         pos = self.get_witness_pos(key)
         if pos is None:
@@ -75,7 +75,7 @@ class OneTimeMap(MutableMapping):
             last_pos, last_value = self._unpack_pos_value(self._key2pos_value[last_key])
             assert last_pos == len(self.witnesses)-1
             self._key2pos_value[last_key] = self._pack_pos_value(pos, last_value)
-            
+
         self.witnesses.pop()
 
     def __getitem__(self, key):
@@ -84,16 +84,19 @@ class OneTimeMap(MutableMapping):
             raise KeyError(key)
         pos, value = self._unpack_pos_value(self._key2pos_value[key])
         return value
-    
+
     def get_key(self, key):
         pos = self.get_witness_pos(e)
         if pos is None:
             raise KeyError(e)
         return self.witnesses[pos]
 
-    
 
-class OneTimeSet(OneTimeMap, MutableSet):
+class OneTimeMap(OneTimeBase, MutableMapping):
+    pass
+
+#class OneTimeSet(OneTimeMap, MutableSet):
+class OneTimeSet(OneTimeBase, MutableSet):
     'value must be key'
     @classmethod
     def _from_iterable(cls, it):
@@ -115,7 +118,7 @@ class OneTimeSet(OneTimeMap, MutableSet):
             # key is not value!
             raise ValueError('value should be key')
         return pos
-    
+
 
 
     def add(self, key):
@@ -130,7 +133,8 @@ class OneTimeSet(OneTimeMap, MutableSet):
         if key is not value:
             raise ValueError('key is not value')
         super().__setitem__(key, value)
-        return 
+        return
+
 
 
 def show_OneTime(d):
@@ -184,5 +188,5 @@ def test_OneTimeSet():
 
 
 
-        
-            
+
+

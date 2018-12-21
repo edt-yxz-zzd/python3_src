@@ -55,18 +55,33 @@ example:
     # 2 non-parallel loop edges # non-planar
     >>> two_nonparallel_loops_graph = mk([2,3,1,0], [1,0,3,2])
 
+    # 3 parallel non-loop edges
+    >>> three_parallel_nonloops_graph = mk([2,5,4,1,0,3], [1,0,3,2,5,4])
+
+    # 3 non_parallel non-loop edges
+    >>> three_nonparallel_nonloops_graph = mk([2,3,4,5,0,1], [1,0,3,2,5,4])
+
+    # a loop and a nonloop disconnected
+    >>> one_loop_one_nonloop_disconnected_graph = mk([0,1,3,2], [1,0,3,2])
+
     >>> edgeless_graph
-    UGraphFakeEmbedding(num_hedges = 0, num_ffaces = 0, hedge2fake_clockwise_next_hedge_around_vertex = [], hedge2fake_clockwise_prev_hedge_around_vertex = (), hedge2fake_clockwise_next_hedge_around_fface = (), hedge2fake_clockwise_prev_hedge_around_fface = (), fface2degree = (), hedge2fake_clockwise_fface = (), fface2arbitrary_hedge = ())
+    UGraphFakeEmbedding(num_hedges = 0, num_ffaces = 0, num_fvertices = 0, hedge2fake_clockwise_next_hedge_around_vertex = [], hedge2fake_clockwise_prev_hedge_around_vertex = (), hedge2fake_clockwise_next_hedge_around_fface = (), hedge2fake_clockwise_prev_hedge_around_fface = (), fface2degree = (), hedge2fake_clockwise_fface = (), fface2arbitrary_hedge = (), fvertex2degree = (), hedge2fvertex = (), fvertex2arbitrary_hedge = ())
     >>> single_loop_graph
-    UGraphFakeEmbedding(num_hedges = 2, num_ffaces = 2, hedge2fake_clockwise_next_hedge_around_vertex = [1, 0], hedge2fake_clockwise_prev_hedge_around_vertex = (1, 0), hedge2fake_clockwise_next_hedge_around_fface = (0, 1), hedge2fake_clockwise_prev_hedge_around_fface = (0, 1), fface2degree = (1, 1), hedge2fake_clockwise_fface = (0, 1), fface2arbitrary_hedge = (0, 1))
+    UGraphFakeEmbedding(num_hedges = 2, num_ffaces = 2, num_fvertices = 1, hedge2fake_clockwise_next_hedge_around_vertex = [1, 0], hedge2fake_clockwise_prev_hedge_around_vertex = (1, 0), hedge2fake_clockwise_next_hedge_around_fface = (0, 1), hedge2fake_clockwise_prev_hedge_around_fface = (0, 1), fface2degree = (1, 1), hedge2fake_clockwise_fface = (0, 1), fface2arbitrary_hedge = (0, 1), fvertex2degree = (2,), hedge2fvertex = (0, 0), fvertex2arbitrary_hedge = (0,))
     >>> single_nonloop_graph
-    UGraphFakeEmbedding(num_hedges = 2, num_ffaces = 1, hedge2fake_clockwise_next_hedge_around_vertex = [0, 1], hedge2fake_clockwise_prev_hedge_around_vertex = (0, 1), hedge2fake_clockwise_next_hedge_around_fface = (1, 0), hedge2fake_clockwise_prev_hedge_around_fface = (1, 0), fface2degree = (2,), hedge2fake_clockwise_fface = (0, 0), fface2arbitrary_hedge = (0,))
+    UGraphFakeEmbedding(num_hedges = 2, num_ffaces = 1, num_fvertices = 2, hedge2fake_clockwise_next_hedge_around_vertex = [0, 1], hedge2fake_clockwise_prev_hedge_around_vertex = (0, 1), hedge2fake_clockwise_next_hedge_around_fface = (1, 0), hedge2fake_clockwise_prev_hedge_around_fface = (1, 0), fface2degree = (2,), hedge2fake_clockwise_fface = (0, 0), fface2arbitrary_hedge = (0,), fvertex2degree = (1, 1), hedge2fvertex = (0, 1), fvertex2arbitrary_hedge = (0, 1))
     >>> two_parallel_nonloops_graph
-    UGraphFakeEmbedding(num_hedges = 4, num_ffaces = 2, hedge2fake_clockwise_next_hedge_around_vertex = [2, 3, 0, 1], hedge2fake_clockwise_prev_hedge_around_vertex = (2, 3, 0, 1), hedge2fake_clockwise_next_hedge_around_fface = (3, 2, 1, 0), hedge2fake_clockwise_prev_hedge_around_fface = (3, 2, 1, 0), fface2degree = (2, 2), hedge2fake_clockwise_fface = (0, 1, 1, 0), fface2arbitrary_hedge = (0, 1))
+    UGraphFakeEmbedding(num_hedges = 4, num_ffaces = 2, num_fvertices = 2, hedge2fake_clockwise_next_hedge_around_vertex = [2, 3, 0, 1], hedge2fake_clockwise_prev_hedge_around_vertex = (2, 3, 0, 1), hedge2fake_clockwise_next_hedge_around_fface = (3, 2, 1, 0), hedge2fake_clockwise_prev_hedge_around_fface = (3, 2, 1, 0), fface2degree = (2, 2), hedge2fake_clockwise_fface = (0, 1, 1, 0), fface2arbitrary_hedge = (0, 1), fvertex2degree = (2, 2), hedge2fvertex = (0, 1, 0, 1), fvertex2arbitrary_hedge = (0, 1))
     >>> two_parallel_loops_graph
-    UGraphFakeEmbedding(num_hedges = 4, num_ffaces = 3, hedge2fake_clockwise_next_hedge_around_vertex = [2, 0, 3, 1], hedge2fake_clockwise_prev_hedge_around_vertex = (1, 3, 0, 2), hedge2fake_clockwise_next_hedge_around_fface = (3, 1, 2, 0), hedge2fake_clockwise_prev_hedge_around_fface = (3, 1, 2, 0), fface2degree = (2, 1, 1), hedge2fake_clockwise_fface = (0, 1, 2, 0), fface2arbitrary_hedge = (0, 1, 2))
+    UGraphFakeEmbedding(num_hedges = 4, num_ffaces = 3, num_fvertices = 1, hedge2fake_clockwise_next_hedge_around_vertex = [2, 0, 3, 1], hedge2fake_clockwise_prev_hedge_around_vertex = (1, 3, 0, 2), hedge2fake_clockwise_next_hedge_around_fface = (3, 1, 2, 0), hedge2fake_clockwise_prev_hedge_around_fface = (3, 1, 2, 0), fface2degree = (2, 1, 1), hedge2fake_clockwise_fface = (0, 1, 2, 0), fface2arbitrary_hedge = (0, 1, 2), fvertex2degree = (4,), hedge2fvertex = (0, 0, 0, 0), fvertex2arbitrary_hedge = (0,))
     >>> two_nonparallel_loops_graph
-    UGraphFakeEmbedding(num_hedges = 4, num_ffaces = 1, hedge2fake_clockwise_next_hedge_around_vertex = [2, 3, 1, 0], hedge2fake_clockwise_prev_hedge_around_vertex = (3, 2, 0, 1), hedge2fake_clockwise_next_hedge_around_fface = (2, 3, 1, 0), hedge2fake_clockwise_prev_hedge_around_fface = (3, 2, 0, 1), fface2degree = (4,), hedge2fake_clockwise_fface = (0, 0, 0, 0), fface2arbitrary_hedge = (0,))
+    UGraphFakeEmbedding(num_hedges = 4, num_ffaces = 1, num_fvertices = 1, hedge2fake_clockwise_next_hedge_around_vertex = [2, 3, 1, 0], hedge2fake_clockwise_prev_hedge_around_vertex = (3, 2, 0, 1), hedge2fake_clockwise_next_hedge_around_fface = (2, 3, 1, 0), hedge2fake_clockwise_prev_hedge_around_fface = (3, 2, 0, 1), fface2degree = (4,), hedge2fake_clockwise_fface = (0, 0, 0, 0), fface2arbitrary_hedge = (0,), fvertex2degree = (4,), hedge2fvertex = (0, 0, 0, 0), fvertex2arbitrary_hedge = (0,))
+    >>> three_parallel_nonloops_graph
+    UGraphFakeEmbedding(num_hedges = 6, num_ffaces = 3, num_fvertices = 2, hedge2fake_clockwise_next_hedge_around_vertex = [2, 5, 4, 1, 0, 3], hedge2fake_clockwise_prev_hedge_around_vertex = (4, 3, 0, 5, 2, 1), hedge2fake_clockwise_next_hedge_around_fface = (3, 4, 5, 0, 1, 2), hedge2fake_clockwise_prev_hedge_around_fface = (3, 4, 5, 0, 1, 2), fface2degree = (2, 2, 2), hedge2fake_clockwise_fface = (0, 1, 2, 0, 1, 2), fface2arbitrary_hedge = (0, 1, 2), fvertex2degree = (3, 3), hedge2fvertex = (0, 1, 0, 1, 0, 1), fvertex2arbitrary_hedge = (0, 1))
+    >>> three_nonparallel_nonloops_graph
+    UGraphFakeEmbedding(num_hedges = 6, num_ffaces = 1, num_fvertices = 2, hedge2fake_clockwise_next_hedge_around_vertex = [2, 3, 4, 5, 0, 1], hedge2fake_clockwise_prev_hedge_around_vertex = (4, 5, 0, 1, 2, 3), hedge2fake_clockwise_next_hedge_around_fface = (5, 4, 1, 0, 3, 2), hedge2fake_clockwise_prev_hedge_around_fface = (3, 2, 5, 4, 1, 0), fface2degree = (6,), hedge2fake_clockwise_fface = (0, 0, 0, 0, 0, 0), fface2arbitrary_hedge = (0,), fvertex2degree = (3, 3), hedge2fvertex = (0, 1, 0, 1, 0, 1), fvertex2arbitrary_hedge = (0, 1))
+    >>> one_loop_one_nonloop_disconnected_graph
+    UGraphFakeEmbedding(num_hedges = 4, num_ffaces = 3, num_fvertices = 3, hedge2fake_clockwise_next_hedge_around_vertex = [0, 1, 3, 2], hedge2fake_clockwise_prev_hedge_around_vertex = (0, 1, 3, 2), hedge2fake_clockwise_next_hedge_around_fface = (1, 0, 2, 3), hedge2fake_clockwise_prev_hedge_around_fface = (1, 0, 2, 3), fface2degree = (2, 1, 1), hedge2fake_clockwise_fface = (0, 0, 1, 2), fface2arbitrary_hedge = (0, 2, 3), fvertex2degree = (1, 1, 2), hedge2fvertex = (0, 1, 2, 2), fvertex2arbitrary_hedge = (0, 1, 2))
 
 
 
@@ -74,21 +89,26 @@ example:
 
 
 
-'''
-'''
-    >>> edgeless_graph.calc.is_relax_planar_embedding
+    >>> edgeless_graph.calc.is_ugraph_fake_embedding_relax_planar
     True
-    >>> single_loop_graph.calc.is_relax_planar_embedding
+    >>> single_loop_graph.calc.is_ugraph_fake_embedding_relax_planar
     True
-    >>> single_nonloop_graph.calc.is_relax_planar_embedding
+    >>> single_nonloop_graph.calc.is_ugraph_fake_embedding_relax_planar
     True
-    >>> two_parallel_nonloops_graph.calc.is_relax_planar_embedding
+    >>> two_parallel_nonloops_graph.calc.is_ugraph_fake_embedding_relax_planar
     True
-    >>> two_parallel_loops_graph.calc.is_relax_planar_embedding
+    >>> two_parallel_loops_graph.calc.is_ugraph_fake_embedding_relax_planar
     True
-    >>> two_nonparallel_loops_graph.calc.is_relax_planar_embedding
+    >>> two_nonparallel_loops_graph.calc.is_ugraph_fake_embedding_relax_planar
     False
+    >>> three_parallel_nonloops_graph.calc.is_ugraph_fake_embedding_relax_planar
+    True
+    >>> three_nonparallel_nonloops_graph.calc.is_ugraph_fake_embedding_relax_planar
+    False
+    >>> one_loop_one_nonloop_disconnected_graph.calc.is_ugraph_fake_embedding_relax_planar
+    True
 '''
+
 
 
 
@@ -107,11 +127,22 @@ __all__ = '''
 '''
     iter_cycle_from
     inverse_uint_bijection
+
+    make_hedge2another_hedge
+
     make_hedge2fake_clockwise_prev_hedge_around_fface
     make_hedge2fake_clockwise_fface_ex
     make_hedge2fake_clockwise_fface
     make_fface2degree
-    make_hedge2another_hedge
+
+    make_hedge2fvertex_ex
+    make_hedge2fvertex
+    make_fvertex2degree
+
+    make_XXX2degree
+    make_hedge2XXX
+    make_hedge2XXX_ex
+
     is_uint_injection
     is_uint_surjection
     is_uint_bijection
@@ -121,11 +152,20 @@ from .iter_cycle_from import iter_cycle_from
 from .inverse_uint_bijection import inverse_uint_bijection
 from .is_uint_bijection import (is_uint_injection, is_uint_bijection)
 from .makes_for_UGraphFakeEmbedding import (
-    make_hedge2fake_clockwise_prev_hedge_around_fface
+    make_hedge2another_hedge
+
+    ,make_hedge2fake_clockwise_prev_hedge_around_fface
     ,make_hedge2fake_clockwise_fface_ex
     ,make_hedge2fake_clockwise_fface
     ,make_fface2degree
-    ,make_hedge2another_hedge
+
+    ,make_hedge2fvertex_ex
+    ,make_hedge2fvertex
+    ,make_fvertex2degree
+
+    ,make_XXX2degree
+    ,make_hedge2XXX
+    ,make_hedge2XXX_ex
     )
 
 from seed.helper.repr_input import repr_helper_ex
@@ -147,17 +187,26 @@ methods:
     verify
     hedge2iter_fake_clockwise_hedges_around_vertex
     hedge2iter_fake_clockwise_hedges_around_fface
+
+    fvertex2iter_fake_clockwise_hedges
+    fface2iter_fake_clockwise_hedges
 '''
     all_UGraphFakeEmbedding_attr_seq = '''
         num_hedges
         num_ffaces
+        num_fvertices
         hedge2fake_clockwise_next_hedge_around_vertex
         hedge2fake_clockwise_prev_hedge_around_vertex
         hedge2fake_clockwise_next_hedge_around_fface
         hedge2fake_clockwise_prev_hedge_around_fface
+
         fface2degree
         hedge2fake_clockwise_fface
         fface2arbitrary_hedge
+
+        fvertex2degree
+        hedge2fvertex
+        fvertex2arbitrary_hedge
         '''.split()
     all_UGraphFakeEmbedding_attr_set = frozenset(all_UGraphFakeEmbedding_attr_seq)
 
@@ -166,6 +215,7 @@ methods:
         ,hedge2fake_clockwise_next_hedge_around_vertex
         ,hedge2another_hedge
         ,fface2arbitrary_hedge = None
+        ,fvertex2arbitrary_hedge = None
         ):
         hedge2fake_clockwise_prev_hedge_around_fface = \
             make_hedge2fake_clockwise_prev_hedge_around_fface(
@@ -180,12 +230,14 @@ methods:
             ,hedge2fake_clockwise_prev_hedge_around_fface
                 = hedge2fake_clockwise_prev_hedge_around_fface
             ,fface2arbitrary_hedge = fface2arbitrary_hedge
+            ,fvertex2arbitrary_hedge = fvertex2arbitrary_hedge
             )
     @classmethod
     def make_UGraphFakeEmbedding__simpler(cls, *
         ,hedge2fake_clockwise_next_hedge_around_vertex
         ,hedge2fake_clockwise_prev_hedge_around_fface
         ,fface2arbitrary_hedge = None
+        ,fvertex2arbitrary_hedge = None
         ):
         hedge2fake_clockwise_prev_hedge_around_vertex = \
             inverse_uint_bijection(
@@ -211,18 +263,43 @@ methods:
                     = fface2arbitrary_hedge
                 )
 
+
+        if fvertex2arbitrary_hedge is None:
+            (hedge2fvertex, fvertex2arbitrary_hedge
+            ) = make_hedge2fvertex_ex(
+                hedge2fake_clockwise_next_hedge_around_vertex
+                    = hedge2fake_clockwise_next_hedge_around_vertex
+                )
+        else:
+            (hedge2fvertex
+            ) = make_hedge2fvertex(
+                hedge2fake_clockwise_next_hedge_around_vertex
+                    = hedge2fake_clockwise_next_hedge_around_vertex
+                ,fvertex2arbitrary_hedge
+                    = fvertex2arbitrary_hedge
+                )
+
         fface2degree = make_fface2degree(
             hedge2fake_clockwise_next_hedge_around_fface
                 = hedge2fake_clockwise_next_hedge_around_fface
             ,fface2arbitrary_hedge
                 = fface2arbitrary_hedge
             )
+        fvertex2degree = make_fvertex2degree(
+            hedge2fake_clockwise_next_hedge_around_vertex
+                = hedge2fake_clockwise_next_hedge_around_vertex
+            ,fvertex2arbitrary_hedge
+                = fvertex2arbitrary_hedge
+            )
 
         num_hedges = len(hedge2fake_clockwise_next_hedge_around_vertex)
         num_ffaces = len(fface2arbitrary_hedge)
+        num_fvertices = len(fvertex2arbitrary_hedge)
         return __class__(
             num_hedges = num_hedges
             ,num_ffaces = num_ffaces
+            ,num_fvertices = num_fvertices
+
             ,hedge2fake_clockwise_next_hedge_around_vertex
                 = hedge2fake_clockwise_next_hedge_around_vertex
             ,hedge2fake_clockwise_prev_hedge_around_vertex
@@ -231,24 +308,38 @@ methods:
                 = hedge2fake_clockwise_next_hedge_around_fface
             ,hedge2fake_clockwise_prev_hedge_around_fface
                 = hedge2fake_clockwise_prev_hedge_around_fface
+
             ,fface2degree = fface2degree
             ,hedge2fake_clockwise_fface = hedge2fake_clockwise_fface
             ,fface2arbitrary_hedge = fface2arbitrary_hedge
+
+            ,fvertex2degree = fvertex2degree
+            ,hedge2fvertex = hedge2fvertex
+            ,fvertex2arbitrary_hedge = fvertex2arbitrary_hedge
             )
 
     def __init__(self, *
         ,num_hedges
         ,num_ffaces
+        ,num_fvertices
+
         ,hedge2fake_clockwise_next_hedge_around_vertex
         ,hedge2fake_clockwise_prev_hedge_around_vertex
         ,hedge2fake_clockwise_next_hedge_around_fface
         ,hedge2fake_clockwise_prev_hedge_around_fface
+
         ,fface2degree
         ,hedge2fake_clockwise_fface
         ,fface2arbitrary_hedge
+
+        ,fvertex2degree
+        ,hedge2fvertex
+        ,fvertex2arbitrary_hedge
         ):
         self.num_hedges = num_hedges
         self.num_ffaces = num_ffaces
+        self.num_fvertices = num_fvertices
+
         self.hedge2fake_clockwise_next_hedge_around_vertex \
             = hedge2fake_clockwise_next_hedge_around_vertex
         self.hedge2fake_clockwise_prev_hedge_around_vertex \
@@ -257,9 +348,14 @@ methods:
             = hedge2fake_clockwise_next_hedge_around_fface
         self.hedge2fake_clockwise_prev_hedge_around_fface \
             = hedge2fake_clockwise_prev_hedge_around_fface
+
         self.fface2degree = fface2degree
         self.hedge2fake_clockwise_fface = hedge2fake_clockwise_fface
         self.fface2arbitrary_hedge = fface2arbitrary_hedge
+
+        self.fvertex2degree = fvertex2degree
+        self.hedge2fvertex = hedge2fvertex
+        self.fvertex2arbitrary_hedge = fvertex2arbitrary_hedge
 
         assert self.verify_ugraph_fake_embedding(AssertionError)
 
@@ -289,13 +385,27 @@ methods:
         return repr_helper_ex(self, (), all_UGraphFakeEmbedding_attr_seq, {}, ordered_attrs_only=True)
 
 
-    def hedge2iter_fake_clockwise_hedges_around_vertex(self, hedge):
-        return iter_cycle_from(self.hedge2fake_clockwise_next_hedge_around_vertex, hedge)
-    def hedge2iter_fake_clockwise_hedges_around_fface(self, hedge):
-        return iter_cycle_from(self.hedge2fake_clockwise_next_hedge_around_fface, hedge)
     def hedge2another_hedge(self, hedge):
         return self.hedge2fake_clockwise_next_hedge_around_vertex[
                 self.hedge2fake_clockwise_next_hedge_around_fface[hedge]]
+    def hedge2iter_fake_clockwise_hedges_around_vertex(self, hedge, *, reverse=False):
+        if reverse:
+            hedge2next = self.hedge2fake_clockwise_prev_hedge_around_vertex
+        else:
+            hedge2next = self.hedge2fake_clockwise_next_hedge_around_vertex
+        return iter_cycle_from(hedge2next, hedge)
+    def hedge2iter_fake_clockwise_hedges_around_fface(self, hedge, *, reverse=False):
+        if reverse:
+            hedge2next = self.hedge2fake_clockwise_prev_hedge_around_fface
+        else:
+            hedge2next = self.hedge2fake_clockwise_next_hedge_around_fface
+        return iter_cycle_from(hedge2next, hedge)
+    def fvertex2iter_fake_clockwise_hedges(self, fvertex, *, reverse=False):
+        hedge = self.fvertex2arbitrary_hedge[fvertex]
+        return self.hedge2iter_fake_clockwise_hedges_around_vertex(hedge, reverse=reverse)
+    def fface2iter_fake_clockwise_hedges(self, fface, *, reverse=False):
+        hedge = self.fface2arbitrary_hedge[fface]
+        return self.hedge2iter_fake_clockwise_hedges_around_fface(hedge, reverse=reverse)
 
 
 class VerifyUGraphFakeEmbedding(VerifyType__static):
@@ -316,22 +426,30 @@ class VerifyUGraphFakeEmbedding(VerifyType__static):
 
         num_hedges = obj.num_hedges
         num_ffaces = obj.num_ffaces
+        num_fvertices = obj.num_fvertices
+
         #verify len of hedge2...
         #verify len of fface2...
+        #verify len of fvertex2...
+        d = {'hedge2': 'num_hedges'
+            ,'fface2':'num_ffaces'
+            ,'fvertex2':'num_fvertices'
+            }
         for attr in attrs:
-            value = getattr(obj, attr)
-            if attr.startswith('fface2'):
-                len_value = len(value)
-                yield (len_value == num_ffaces
-                    , lambda: f'len({attr}) != num_ffaces: {len_value} != {num_ffaces}'
-                    )
-            elif attr.startswith('hedge2'):
-                len_value = len(value)
-                yield (len_value == num_hedges
-                    , lambda: f'len({attr}) != num_hedges: {len_value} != {num_hedges}'
-                    )
-            else:
-                pass
+            attr_head = attr[:attr.find('2')+1]
+            if not attr_head: continue
+            attr__XXX2YYY = attr; del attr
+
+            XXX2YYY = getattr(obj, attr__XXX2YYY)
+            len_XXX2YYY = len(XXX2YYY)
+
+            attr__num_XXXs = d[attr_head]
+            num_XXXs = getattr(obj, attr__num_XXXs)
+
+            yield (len_XXX2YYY == num_XXXs
+                , lambda: f'len({attr__XXX2YYY!s}) != {attr__num_XXXs!s}: {len_XXX2YYY!r} != {num_XXXs!r}'
+                )
+        del d
 
 
 
@@ -359,13 +477,6 @@ class VerifyUGraphFakeEmbedding(VerifyType__static):
         hedge2fake_clockwise_prev_hedge_around_fface =\
             obj.hedge2fake_clockwise_prev_hedge_around_fface
 
-        fface2degree =\
-            obj.fface2degree
-        hedge2fake_clockwise_fface =\
-            obj.hedge2fake_clockwise_fface
-        fface2arbitrary_hedge =\
-            obj.fface2arbitrary_hedge
-
 
         (hedge2another_hedge
         ) = make_hedge2another_hedge(
@@ -379,86 +490,176 @@ class VerifyUGraphFakeEmbedding(VerifyType__static):
             )
 
 
+
+        fface2degree = obj.fface2degree
+        hedge2fake_clockwise_fface = obj.hedge2fake_clockwise_fface
+        fface2arbitrary_hedge = obj.fface2arbitrary_hedge
+
+        fvertex2degree = obj.fvertex2degree
+        hedge2fvertex = obj.hedge2fvertex
+        fvertex2arbitrary_hedge = obj.fvertex2arbitrary_hedge
+
+        #verify value range of XXX2...degree...
         #verify value range of XXX2...hedge...
         #verify value range of XXX2...fface...
-        yield (all(fface_degree >= 1 for fface_degree in fface2degree)
-            , lambda: f'not all(fface_degree >= 1 for fface_degree in fface2degree): {fface2degree!r}'
+        #verify value range of XXX2...fvertex...
+        d = {'hedge':'num_hedges'
+            ,'fface':'num_ffaces'
+            ,'fvertex':'num_fvertices'
+            }
+        s = '''
+            fface2degree
+            hedge2fake_clockwise_fface
+            fface2arbitrary_hedge
+
+            fvertex2degree
+            hedge2fvertex
+            fvertex2arbitrary_hedge
+            '''.split()
+        for attr__XXX2YYY in s:
+            XXX2YYY = getattr(obj, attr__XXX2YYY)
+
+            i = max(attr__XXX2YYY.rfind('2'), attr__XXX2YYY.rfind('_'))
+            assert i > 0
+            attr__YYY = attr__XXX2YYY[i+1:]
+            if attr__YYY == 'degree':
+                min_XXX2YYY = min(XXX2YYY, default=1)
+                yield (min_XXX2YYY >= 1
+                    , lambda: f'min({attr__XXX2YYY!s}) == {min_XXX2YYY!r} < 1: {XXX2YYY!r}'
+                    )
+            else:
+                attr__num_YYYs = d[attr__YYY]
+                num_YYYs = getattr(obj, attr__num_YYYs)
+                max_XXX2YYY = max(XXX2YYY, default=-1)
+                yield (max_XXX2YYY < num_YYYs
+                    , lambda: f'max({attr__XXX2YYY!s}) == {max_XXX2YYY!r} >= {num_YYYs!r} == {attr__num_YYYs!s}: {XXX2YYY!r}'
+                    )
+        del d, s
+
+        yield from _verify_3(obj
+            ,attr__XXX2degree = 'fface2degree'
+            ,attr__hedge2XXX = 'hedge2fake_clockwise_fface'
+            ,attr__XXX2arbitrary_hedge = 'fface2arbitrary_hedge'
+            ,attr__hedge2next_hedge_around_XXX = 'hedge2fake_clockwise_next_hedge_around_fface'
+            ,attr__num_XXXs = 'num_ffaces'
             )
-        yield (all(fface < num_ffaces for fface in hedge2fake_clockwise_fface)
-            , lambda: f'not all(fface < num_ffaces for fface in hedge2fake_clockwise_fface): {hedge2fake_clockwise_fface!r}'
-            )
-        yield (all(hedge < num_hedges for hedge in fface2arbitrary_hedge)
-            , lambda: f'not all(hedge < num_hedges for hedge in fface2arbitrary_hedge): {fface2arbitrary_hedge!r}'
-            )
-
-
-        #verify sum fface2degree == num_hedges
-        yield (sum(fface2degree) == num_hedges
-            , lambda: f'sum(fface2degree) != num_hedges: sum({fface2degree!r}) == {sum(fface2degree)} != {num_hedges}'
-            )
-
-        yield (is_uint_injection(fface2arbitrary_hedge, hedge2fake_clockwise_fface)
-            , lambda: f'not is_uint_injection(fface2arbitrary_hedge, hedge2fake_clockwise_fface)'
-            )
-
-        (hedge2fake_clockwise_fface__new, fface2arbitrary_hedge__new
-        ) = make_hedge2fake_clockwise_fface_ex(
-                hedge2fake_clockwise_next_hedge_around_fface
-                    = hedge2fake_clockwise_next_hedge_around_fface
-                )
-
-        #verify num_ffaces is the true size
-        num_ffaces__shouldbe = len(fface2arbitrary_hedge__new)
-        yield (num_ffaces__shouldbe == num_ffaces
-            , lambda: f'num_ffaces should be {num_ffaces__shouldbe}: num_ffaces == {num_ffaces} != {num_ffaces__shouldbe} == num_ffaces__shouldbe'
-            )
-
-        old_fface2new_fface = tuple(
-            hedge2fake_clockwise_fface__new[hedge]
-            for hedge in fface2arbitrary_hedge
-            )
-
-        new_fface2old_fface = [None]*num_ffaces
-        for old_fface, new_fface in enumerate(old_fface2new_fface):
-            new_fface2old_fface[new_fface] = old_fface
-        new_fface2old_fface = tuple(new_fface2old_fface)
-
-        yield (all(old_fface is not None for old_fface in new_fface2old_fface)
-            , lambda: f'bad fface2arbitrary_hedge: 2 fface idx map to a same fake face: {fface2arbitrary_hedge}'
-            )
-        assert is_uint_bijection(old_fface2new_fface, new_fface2old_fface)
-
-        del hedge2fake_clockwise_fface__new, fface2arbitrary_hedge__new
-        # now fface2arbitrary_hedge is collect
-        #verify make_fface2degree ==>> fface2degree
-        #verify make_hedge2fake_clockwise_fface ==>> hedge2fake_clockwise_fface
-
-        (hedge2fake_clockwise_fface__shouldbe
-        ) = make_hedge2fake_clockwise_fface(
-            hedge2fake_clockwise_next_hedge_around_fface
-                = hedge2fake_clockwise_next_hedge_around_fface
-            ,fface2arbitrary_hedge
-                = fface2arbitrary_hedge
-            )
-        (fface2degree__shouldbe
-        ) = make_fface2degree(
-            hedge2fake_clockwise_next_hedge_around_fface
-                = hedge2fake_clockwise_next_hedge_around_fface
-            ,fface2arbitrary_hedge
-                = fface2arbitrary_hedge
+        yield from _verify_3(obj
+            ,attr__XXX2degree = 'fvertex2degree'
+            ,attr__hedge2XXX = 'hedge2fvertex'
+            ,attr__XXX2arbitrary_hedge = 'fvertex2arbitrary_hedge'
+            ,attr__hedge2next_hedge_around_XXX = 'hedge2fake_clockwise_next_hedge_around_vertex'
+            ,attr__num_XXXs = 'num_fvertices'
             )
 
-        triples = [('hedge2fake_clockwise_fface'
-                    ,hedge2fake_clockwise_fface__shouldbe
-                    ,hedge2fake_clockwise_fface)
-                  ,('fface2degree'
-                    ,fface2degree__shouldbe
-                    ,fface2degree)
-                  ]
-        for attr, shouldbe, value in triples:
-            yield (all(old==new for old, new in zip(value, shouldbe))
-                , lambda: f'{attr} should be {shouldbe!r}: {attr} = {value!r}'
-                )
+
+def _verify_3(obj, *
+    ,attr__XXX2degree
+    ,attr__hedge2XXX
+    ,attr__XXX2arbitrary_hedge
+    ,attr__hedge2next_hedge_around_XXX
+    ,attr__num_XXXs
+    ):
+    '''
+output:
+    Iter ...
+input:
+    attr__XXX2degree
+    attr__hedge2XXX
+    attr__XXX2arbitrary_hedge
+    attr__hedge2next_hedge_around_XXX
+    attr__num_XXXs
+        fface2degree
+        hedge2fake_clockwise_fface
+        fface2arbitrary_hedge
+        hedge2fake_clockwise_next_hedge_around_fface
+        num_ffaces
+
+        OR:
+        fvertex2degree
+        hedge2fvertex
+        fvertex2arbitrary_hedge
+        hedge2fake_clockwise_next_hedge_around_vertex
+        num_fvertices
+
+precondition:
+    hedge2next_hedge_around_XXX, XXX2degree, hedge2XXX, XXX2arbitrary_hedge are seq<UInt>
+
+    len(hedge2next_hedge_around_XXX) == num_hedges
+    hedge2next_hedge_around_XXX is bijection
+
+    len(XXX2degree) == num_XXXs
+    len(hedge2XXX) == num_hedges
+    len(XXX2arbitrary_hedge) == num_XXXs
+
+    min(XXX2degree, default=1) >= 1
+    max(hedge2XXX, default=-1) < num_XXXs
+    max(XXX2arbitrary_hedge, default=-1) < num_hedges
+'''
+    XXX2degree = getattr(obj, attr__XXX2degree)
+    hedge2XXX = getattr(obj, attr__hedge2XXX)
+    XXX2arbitrary_hedge = getattr(obj, attr__XXX2arbitrary_hedge)
+    hedge2next_hedge_around_XXX = getattr(obj, attr__hedge2next_hedge_around_XXX)
+
+    num_hedges = len(hedge2XXX)
+    assert num_hedges == len(hedge2next_hedge_around_XXX)
+
+    #verify sum XXX2degree == num_hedges
+    sum_XXX2degree = sum(XXX2degree)
+    yield (sum_XXX2degree == num_hedges
+        , lambda: f'sum({attr__XXX2degree!s}) == {sum_XXX2degree!r} != {num_hedges!r} == num_hedges: {XXX2degree!r}'
+        )
+
+    yield (is_uint_injection(XXX2arbitrary_hedge, hedge2XXX)
+        , lambda: f'not is_uint_injection({attr__XXX2arbitrary_hedge!s}, {attr__hedge2XXX!s})'
+        )
+
+    (hedge2XXX__new, XXX2arbitrary_hedge__new) = make_hedge2XXX_ex(
+        hedge2next_hedge_around_XXX=hedge2next_hedge_around_XXX)
+        #make_hedge2fake_clockwise_fface_ex
+
+    #verify num_XXXs is the true size
+    num_XXXs__shouldbe = len(XXX2arbitrary_hedge__new)
+    num_XXXs = getattr(obj, attr__num_XXXs)
+    yield (num_XXXs__shouldbe == num_XXXs
+        , lambda: f'{attr__num_XXXs!s} should be {num_XXXs__shouldbe!r}: {attr__num_XXXs!s} == {num_XXXs!r} != {num_XXXs__shouldbe!r} == {attr__num_XXXs!s}__shouldbe'
+        )
+
+    old_XXX2new_XXX = tuple(hedge2XXX__new[hedge] for hedge in XXX2arbitrary_hedge)
+
+    new_XXX2old_XXX = [None]*num_XXXs
+    for old_XXX, new_XXX in enumerate(old_XXX2new_XXX):
+        new_XXX2old_XXX[new_XXX] = old_XXX
+    new_XXX2old_XXX = tuple(new_XXX2old_XXX)
+
+    yield (all(old_XXX is not None for old_XXX in new_XXX2old_XXX)
+        , lambda: f'bad {attr__XXX2arbitrary_hedge!s}: not an exact cycle'
+        )
+    assert is_uint_bijection(old_XXX2new_XXX, new_XXX2old_XXX)
+
+    del hedge2XXX__new, XXX2arbitrary_hedge__new
+    # now XXX2arbitrary_hedge is collect
+    #verify make_XXX2degree ==>> XXX2degree
+    #verify make_hedge2XXX ==>> hedge2XXX
+
+    hedge2XXX__shouldbe = make_hedge2XXX(
+        hedge2next_hedge_around_XXX=hedge2next_hedge_around_XXX
+        ,XXX2arbitrary_hedge = XXX2arbitrary_hedge
+        )
+        #make_hedge2fake_clockwise_fface
+    (XXX2degree__shouldbe
+    ) = make_XXX2degree(
+        hedge2next_hedge_around_XXX=hedge2next_hedge_around_XXX
+        ,XXX2arbitrary_hedge = XXX2arbitrary_hedge
+        )
+        #make_fface2degree
+
+    triples = [(attr__hedge2XXX, hedge2XXX__shouldbe, hedge2XXX)
+              ,(attr__XXX2degree, XXX2degree__shouldbe, XXX2degree)
+              ]
+    for attr, shouldbe, value in triples:
+        yield (all(old==new for old, new in zip(value, shouldbe))
+            , lambda: f'{attr!s} should be {shouldbe!r}: {attr!s} == {value!r} != {shouldbe!r} == {attr!s}__shouldbe'
+            )
 
 if __name__ == "__main__":
     from .UGraphFakeEmbedding import UGraphFakeEmbedding

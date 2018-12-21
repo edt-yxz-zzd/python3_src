@@ -30,6 +30,50 @@
 ugraph -> fake_embedding -> Bool
 ugraph -> (relax_planar embedding | subgraph of minor K[3,3] or K[5])
 
+ugraph -> fake_embedding -> ()|(cycle, path)
+    () - relax_planar
+    (cycle, path) - non-relax_planar
+        cycle :: nonempty[hedge]
+            # clockwise cycle
+            len(cycle) >= 1
+            may not be a fface
+            may be 1-cycle, i.e. a self_loop
+            # shouldnot be min_loop, otherwise relax_planar
+            let cycle_vertices = [hedge2vertex[hedge] | hedge <- cycle]
+            len(set(cycle_vertices)) == len(cycle)
+        path :: nonempty[hedge]
+            # inside/outside
+            #   defined if we treat clockwise cycle be the inner face
+            # begin_hedge inside clockwise cycle
+            # rbegin_hedge outside clockwise cycle
+
+            len(path) >= 1
+            let path_vertices = [hedge2vertex[hedge] | hedge <- path]
+            len(set(path_vertices)) == len(path)
+
+            let begin_hedge = path[0]
+                rbegin_hedge == hedge2another_hedge[path[-1]]
+            let begin_vertex = hedge2vertex[begin_hedge]
+                rbegin_vertex = hedge2vertex[rbegin_hedge]
+                # may be a cycle, i.e. begin_vertex == rend_vertex
+            begin_vertex <- cycle_vertices
+            rend_vertex <- cycle_vertices
+            @hedge <- path[1:]. hedge2vertex[hedge] <- cycle_vertices
+            let begin_idx = cycle_vertices.index(begin_vertex)
+                rbegin_idx = cycle_vertices.index(rend_vertex)
+
+            begin_vertex
+                # below hedges are clockwise around begin_vertex
+                cycle[begin_idx]
+                begin_hedge
+                hedge2another_hedge[cycle[(begin_idx-1)%len(cycle)]]
+            rbegin_vertex
+                # below hedges are clockwise around rbegin_vertex
+                hedge2another_hedge[cycle[(rbegin_idx-1)%len(cycle)]]
+                rbegin_hedge
+                cycle[rbegin_idx]
+
+
 
 ugraph -> fake_embedding -> Bool
 0_ if ugraph is edgeless: return True
@@ -76,16 +120,25 @@ ugraph -> fake_embedding -> Bool
             [not biconnected ugraph]
             ==>> error
     2_3_ grow frontier_hedges until nothing or error
-        init: frontier_hedges = clockwise hedges of arbitrary fface
-        while frontier_hedges:
-            group frontier_hedges into [neighbor_block]
-                where
-                    counterclockwise ffaces of hedges in neighbor_block are the same # call it another_fface
-                    no neighbor neighbor_blocks shared same another_fface
-            try to find out a neighbor_block such that another_fface occur only once
-            if no such neighbor_block: return False
-            update frontier_hedges by merge the fface
-                # merge the fface into the frontier face
+        # new fface incident to one frontier_hedges
+        #   by neighbor_blocks and vertices without common aedges
+        init: frontier_hedgess = [clockwise hedges of arbitrary fface]
+        while frontier_hedgess:
+            # each frontier_hedges is cycle
+            # frontier_hedgess are many cycles
+            new_frontier_hedgess = []
+            for frontier_hedges in frontier_hedgess:
+                group frontier_hedges into [neighbor_block]
+                    where
+                        counterclockwise ffaces of hedges in neighbor_block are the same # call it another_fface
+                        no neighbor neighbor_blocks shared same another_fface
+                try to find out a neighbor_block such that another_fface occur only once
+                if no such neighbor_block: return False
+                update frontier_hedges by merge the fface
+                    # merge the fface into the frontier face
+                if frontier_hedges:
+                    new_frontier_hedgess.append(frontier_hedges)
+            frontier_hedgess = new_frontier_hedgess
         return True
 
 

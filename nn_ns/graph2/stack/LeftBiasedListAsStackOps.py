@@ -1,15 +1,15 @@
 
 
 '''
-LeftBiasListAsStack
+LeftBiasedListAsStack
 
-LeftBiasList a = () | (LeftBiasList a, a)
-SizedLeftBiasList a = (Size, LeftBiasList a)
+LeftBiasedList a = () | (LeftBiasedList a, a)
+SizedLeftBiasedList a = (Size, LeftBiasedList a)
 
 '''
 __all__ = '''
-    the_left_bias_list_as_stack_ops
-    the_sized_left_bias_list_as_stack_ops
+    the_left_biased_list_as_stack_ops
+    the_sized_left_biased_list_as_stack_ops
 '''.split()
 
 from .IPseudoImmutableStackOps import\
@@ -17,7 +17,7 @@ from .IPseudoImmutableStackOps import\
     ,IStackOps__factory
     ,IPseudoImmutableTopStackOps
     )
-class LeftBiasListAsStackOps(IPseudoImmutableTopStackOps, IStackOps__factory):
+class LeftBiasedListAsStackOps(IPseudoImmutableTopStackOps, IStackOps__factory):
     # `is_empty, `top, top_or_fdefault, ipop_None, `ipop, `ipush, ipop_or_fdefault;
     #   `from_iterable
     __slots__ = ()
@@ -44,11 +44,11 @@ class LeftBiasListAsStackOps(IPseudoImmutableTopStackOps, IStackOps__factory):
         while s:
             s, x = s
             yield x
-the_left_bias_list_as_stack_ops = LeftBiasListAsStackOps()
+the_left_biased_list_as_stack_ops = LeftBiasedListAsStackOps()
 
 
 
-class SizedLeftBiasListAsStackOps(IPseudoImmutableCompleteStackOps):
+class SizedLeftBiasedListAsStackOps(IPseudoImmutableCompleteStackOps):
     # is_empty, `top, top_or_fdefault, ipop_None, `ipop, `ipush, ipop_or_fdefault;
     #   `len; `from_iterable
     __slots__ = ()
@@ -73,14 +73,14 @@ class SizedLeftBiasListAsStackOps(IPseudoImmutableCompleteStackOps):
         return x
     def reversed(self, ss):
         size, s = ss
-        return the_left_bias_list_as_stack_ops.reversed(s)
-the_sized_left_bias_list_as_stack_ops = SizedLeftBiasListAsStackOps()
+        return the_left_biased_list_as_stack_ops.reversed(s)
+the_sized_left_biased_list_as_stack_ops = SizedLeftBiasedListAsStackOps()
 
 def t():
-    opss = [the_left_bias_list_as_stack_ops, the_sized_left_bias_list_as_stack_ops]
+    opss = [the_left_biased_list_as_stack_ops, the_sized_left_biased_list_as_stack_ops]
     [*map(t1, opss)]
 def t1(ops):
-    #ops = the_left_bias_list_as_stack_ops
+    #ops = the_left_biased_list_as_stack_ops
     im = ops.from_iterable([1,2,3])
     assert not ops.is_empty(im)
     if False:
