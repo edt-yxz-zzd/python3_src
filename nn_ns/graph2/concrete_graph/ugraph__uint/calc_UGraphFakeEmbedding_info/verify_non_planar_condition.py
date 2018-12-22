@@ -7,9 +7,9 @@ see:
 
 
 __all__ = '''
-    verify_non_relax_planar_condition
+    verify_non_planar_condition
 
-    check_non_relax_planar_condition
+    check_non_planar_condition
     CheckNonPlanarConditionError
     CheckNonPlanarConditionTypeError
     CheckNonPlanarConditionValueError
@@ -28,14 +28,14 @@ from seed.types.OneTime import OneTimeSet
 class CheckNonPlanarConditionError(Exception):pass
 class CheckNonPlanarConditionTypeError(CheckNonPlanarConditionError):pass
 class CheckNonPlanarConditionValueError(CheckNonPlanarConditionError):pass
-def verify_non_relax_planar_condition(ugraph_fake_embedding, non_planar_condition):
+def verify_non_planar_condition(ugraph_fake_embedding, non_planar_condition):
     try:
-        check_non_relax_planar_condition(ugraph_fake_embedding, non_planar_condition)
+        check_non_planar_condition(ugraph_fake_embedding, non_planar_condition)
     except CheckNonPlanarConditionError:
         return False
     return True
 
-def check_non_relax_planar_condition(ugraph_fake_embedding, non_planar_condition):
+def check_non_planar_condition(ugraph_fake_embedding, non_planar_condition):
     path_ops = NonEmptyPathOps(ugraph_fake_embedding)
 
     buffer__fvertex2XXX = [None]*ugraph_fake_embedding.num_fvertices

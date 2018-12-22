@@ -7,19 +7,19 @@ __all__ = '''
 import operator
 
 if False:
-    from ..dfs.dfs__finite_explicit_ugraph import (
-        dfs__finite_explicit_ugraph
+    from ..dfs.dfs__finite_explicit_ugraph__two_color import (
+        dfs__finite_explicit_ugraph__two_color
         ,DFS_Case
         ,DFS_CaseParts
         ,Vertex2TwoColor__seq
         ,make_hedge2unstable_iter_other_hedges_around_another_vertex
         )
 else:
-    from .imports import dfs__finite_explicit_ugraph as _x
-    dfs__finite_explicit_ugraph = _x.dfs__finite_explicit_ugraph
+    from .imports import Vertex2TwoColor__seq
+    from .imports import dfs__finite_explicit_ugraph__two_color as _x
+    dfs__finite_explicit_ugraph__two_color = _x.dfs__finite_explicit_ugraph__two_color
     DFS_Case = _x.DFS_Case
     DFS_CaseParts = _x.DFS_CaseParts
-    Vertex2TwoColor__seq = _x.Vertex2TwoColor__seq
     make_hedge2unstable_iter_other_hedges_around_another_vertex = _x.make_hedge2unstable_iter_other_hedges_around_another_vertex
     del _x
 
@@ -53,7 +53,7 @@ def dfs__ugraph_fake_embedding(*
         )
         )
 
-    return dfs__finite_explicit_ugraph(
+    return dfs__finite_explicit_ugraph__two_color(
             source_vertices=all_fvertices
             ,vertex2color=vertex2color
             ,vertex2unstable_iter_hedges=vertex2iter_hedges

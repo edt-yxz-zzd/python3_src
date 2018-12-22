@@ -1,20 +1,41 @@
 
 '''
-dfs__finite_explicit_ugraph
+dfs__finite_explicit_ugraph__two_color
     common from:
         dfs__finite_explicit_xgraph
         dfs__sourced_finite_implicit_uforest_with_vertex_eq
 
 
-expected:
-    vs dfs__finite_explicit_xgraph
-        donot treat hedge2another_hedge[back_hedge] as forward_hedge
-but actually:
-    since using only 2 colors!
-    has forward_hedge
+NOTE: 4 hedge types
+    rback_hedge = hedge2another_hedge[back_hedge]
+        rback_hedge is not forward_hedge
+    expected:
+        vs dfs__finite_explicit_xgraph
+            dfs__finite_explicit_xgraph:
+                distinguish back_hedge and rback_hedge
+                back_hedge - EnterBackHEdge
+                rback_hedge in concept - ExitBackHEdge
+                i.e. in "ONE" EnterExitBackHEdge
+                    we visit both back_hedge and rback_hedge at same time
+            dfs__finite_explicit_ugraph__two_color:
+                donot distinguish back_hedge and rback_hedge
+                    since using only 2 colors!
+                back_hedge - DFS_EnterExitBackOrRBackHEdge
+                rback_hedge - DFS_EnterExitBackOrRBackHEdge
+                i.e. in "TWO" EnterExitBackOrRBackHEdge
+                    we visit back_hedge and rback_hedge seperately
+
     weired dfs:
-        hedge2another_hedge[tree_hedge] is not back_hedge
-        back_hedge pair with forward_hedge
+        hedge2another_hedge[tree_hedge] is not back_hedge/rback_hedge
+            we may call it rtree_hedge
+        back_hedge is paired with rback_hedge
+
+    4 hedge types:
+        tree_hedge - DFS_EnterTreeHEdge
+        rtree_hedge in concept - DFS_ExitTreeHEdge
+            actually ancestor_hedges.get_top() is tree_hedge
+        back_hedge/rback_hedge - DFS_EnterExitBackOrRBackHEdge
+
 '''
 
 
@@ -23,18 +44,23 @@ __all__ = '''
     DFS_CaseParts
 
     IVertex2TwoColor
-    dfs__finite_explicit_ugraph
+    dfs__finite_explicit_ugraph__two_color
 
+    make_hedge2unstable_iter_other_hedges_around_another_vertex
+    '''.split()
+
+'''
     Vertex2TwoColor__no_effect
     Vertex2TwoColor__seq
     Vertex2TwoColor__set
     the_vertex2two_color__no_effect
-    make_hedge2unstable_iter_other_hedges_around_another_vertex
-    '''.split()
 
+'''
 
 from .make_hedge2unstable_iter_other_hedges_around_another_vertex \
     import make_hedge2unstable_iter_other_hedges_around_another_vertex
+from .Vertex2TwoColor.IVertex2TwoColor import IVertex2TwoColor
+from .Vertex2TwoColor.Vertex2TwoColor__no_effect import Vertex2TwoColor__no_effect
 
 #from ..stack.ICompleteMutableStack import ICompleteMutableStack
 from ..stack.INearlyCompleteMutableStack import INearlyCompleteMutableStack
@@ -53,7 +79,7 @@ DFS_Case = enum.Enum('DFS_Case', '''
     DFS_EnterTreeHEdge
     DFS_ExitTreeHEdge
 
-    DFS_EnterExitBackOrForwardHEdge
+    DFS_EnterExitBackOrRBackHEdge
     '''.split()
     )
 """
@@ -78,9 +104,9 @@ def _fill_DFS_CaseParts():
     TreeHEdge
     EnterExit
     Back
-    Forward
+    RBack
     BackHEdge
-    ForwardHEdge
+    RBackHEdge
     '''.split()
     for name in attrs:
         setattr(DFS_CaseParts, name, name)
@@ -93,52 +119,11 @@ class DFS_Case(Enum__NoShowValue):
     DFS_EnterTreeHEdge = _mk_frozenset('DFS Enter Tree HEdge TreeHEdge')
     DFS_ExitTreeHEdge = _mk_frozenset('DFS Exit Tree HEdge TreeHEdge')
 
-    DFS_EnterExitBackOrForwardHEdge = _mk_frozenset('DFS Enter Exit EnterExit Back Forward HEdge BackHEdge ForwardHEdge')
+    DFS_EnterExitBackOrRBackHEdge = _mk_frozenset('DFS Enter Exit EnterExit Back RBack HEdge BackHEdge RBackHEdge')
 
 
-class IVertex2TwoColor(ABC):
-    @abstractmethod
-    def is_vertex_colored_WHITE(self, vertex):
-        # vertex -> bool
-        pass
-    @abstractmethod
-    def set_vertex_color_WHITE(self, vertex):
-        # vertex -> None
-        pass
 
-
-class Vertex2TwoColor__no_effect(IVertex2TwoColor):
-    @override
-    def is_vertex_colored_WHITE(self, vertex):
-        return False
-    @override
-    def set_vertex_color_WHITE(self, vertex):
-        pass
-the_vertex2two_color__no_effect = Vertex2TwoColor__no_effect()
-
-class Vertex2TwoColor__seq(IVertex2TwoColor):
-    def __init__(self, underlying_seq, WHITE):
-        self.underlying_seq = underlying_seq
-        self.WHITE = WHITE
-    @override
-    def is_vertex_colored_WHITE(self, vertex):
-        return self.underlying_seq[vertex] is self.WHITE
-    @override
-    def set_vertex_color_WHITE(self, vertex):
-        self.underlying_seq[vertex] = self.WHITE
-
-
-class Vertex2TwoColor__set(IVertex2TwoColor):
-    def __init__(self, underlying_set):
-        self.underlying_set = underlying_set
-    @override
-    def is_vertex_colored_WHITE(self, vertex):
-        return vertex in self.underlying_set
-    @override
-    def set_vertex_color_WHITE(self, vertex):
-        self.underlying_set.add(vertex)
-
-def dfs__finite_explicit_ugraph(*
+def dfs__finite_explicit_ugraph__two_color(*
     ,source_vertices
     ,vertex2color
     ,vertex2unstable_iter_hedges
@@ -149,11 +134,10 @@ def dfs__finite_explicit_ugraph(*
     ,maybe_ancestor_vertex_stack = None
     ):
     '''
-ugraph ==>> tree_edge|back_edge|forward_edge
-    no cross_edge...
-    # deprecated: no forward_edge/cross_edge...
+ugraph ==>> tree_edge|rtree_hedge|back_edge|rback_hedge
+    no forward_edge/cross_edge...
 
-    hedge2another_hedge[back_hedge] == forward_hedge
+    hedge2another_hedge[back_hedge] == rback_hedge
     use only 2-colors: BLACK/WHITE
 
 input:
@@ -203,7 +187,7 @@ output:
         (DFS_ExitRootVertex, Vertex)
         (DFS_EnterTreeHEdge, (HEdge, Vertex))
         (DFS_ExitTreeHEdge, None)
-        (DFS_EnterExitBackOrForwardHEdge, (HEdge, Vertex))
+        (DFS_EnterExitBackOrRBackHEdge, (HEdge, Vertex))
             where pair s.t. vertex = hedge2another_vertex(hedge)
 
 
@@ -211,7 +195,7 @@ example:
     vertex2unstable_iter_hedges :: Vertex -> Iter HEdge
     hedge2another_vertex :: HEdge -> Vertex
     hedge2unstable_iter_other_hedges_around_another_vertex
-    >>> this = dfs__finite_explicit_ugraph
+    >>> this = dfs__finite_explicit_ugraph__two_color
     >>> source_vertices = '0a1'
     >>> vertex2color = Vertex2TwoColor__no_effect()
     >>> d = {'a':'bc', 'b':'a', 'c':'ad', 'd':'c', '0':'1', '1':'0'}#tree
@@ -283,7 +267,7 @@ example:
                 # back_edge
                 ancestor_hedges.push(hedge)
                 ancestor_vertices.push(vertex)
-                yield DFS_Case.DFS_EnterExitBackOrForwardHEdge, (hedge, vertex)
+                yield DFS_Case.DFS_EnterExitBackOrRBackHEdge, (hedge, vertex)
                 ancestor_hedges.pop_None()
                 ancestor_vertices.pop_None()
                 continue

@@ -1,26 +1,25 @@
 
-'''
-no is_relax_planar_embedding
-    using is_relax_planar_ugraph instead
-    see: "algo - is fake_embedding relax_planar[ver2].txt"
-        requires biconnected ugraph instead of just an embedding
-    version1 is error:
-        "algo - is fake_embedding relax_planar[ver1][error].txt"
-'''
+__all__ = '''
+    Calc_UGraphFakeEmbedding_Info
+    '''.split()
+
 from ..UGraphFakeEmbedding import UGraphFakeEmbedding
 #from .is_relax_planar_embedding import is_relax_planar_embedding
-from .is_ugraph_fake_embedding_relax_planar_ex import is_ugraph_fake_embedding_relax_planar_ex
+#from .is_ugraph_fake_embedding_relax_planar_ex import is_ugraph_fake_embedding_relax_planar_ex
+from .ugraph_fake_embedding2maybe_non_planar_condition import ugraph_fake_embedding2maybe_non_planar_condition
 from .make_hedge2fake_aedge import make_hedge2fake_aedge
 from .make_hedge2fake_counterclockwise_fface import make_hedge2fake_counterclockwise_fface
 
 _get = object.__getattribute__
 class Calc_UGraphFakeEmbedding_Info:
     all_attr_seq = '''
-        is_ugraph_fake_embedding_relax_planar_ex
-        is_ugraph_fake_embedding_relax_planar
+        maybe_ugraph_fake_embedding_non_planar_condition
+        is_ugraph_fake_embedding_planar
         hedge2fake_counterclockwise_fface
         '''.split()
         #is_relax_planar_embedding
+        #is_ugraph_fake_embedding_relax_planar
+        #is_ugraph_fake_embedding_relax_planar_ex
     all_attr_set = frozenset(all_attr_seq)
     def __init__(self, ugraph_fake_embedding):
         assert isinstance(ugraph_fake_embedding, UGraphFakeEmbedding)
@@ -42,28 +41,14 @@ class Calc_UGraphFakeEmbedding_Info:
             r = cache.setdefault(attr, r)
             return r
 
-    '''
-    def is_relax_planar_embedding(self):
+    def is_ugraph_fake_embedding_planar(self):
+        return not self.maybe_ugraph_fake_embedding_non_planar_condition
+    def maybe_ugraph_fake_embedding_non_planar_condition(self):
         ugraph_fake_embedding = _get(self, 'ugraph_fake_embedding')
-        return is_relax_planar_embedding(ugraph_fake_embedding)
-    '''
-    def is_ugraph_fake_embedding_relax_planar(self):
-        return not self.is_ugraph_fake_embedding_relax_planar_ex
-    def is_ugraph_fake_embedding_relax_planar_ex(self):
-        ugraph_fake_embedding = _get(self, 'ugraph_fake_embedding')
-        return is_ugraph_fake_embedding_relax_planar_ex(
+        return ugraph_fake_embedding2maybe_non_planar_condition(
             ugraph_fake_embedding
             )
 
-        ### old version
-        hedge2fake_aedge = make_hedge2fake_aedge(
-            num_hedges=ugraph_fake_embedding.num_hedges
-            ,hedge2another_hedge=ugraph_fake_embedding.hedge2another_hedge
-            )
-        return is_ugraph_fake_embedding_relax_planar_ex(
-            ugraph_fake_embedding=ugraph_fake_embedding
-            ,hedge2aedge=hedge2fake_aedge
-            )
 
     def hedge2fake_counterclockwise_fface(self):
         ugraph_fake_embedding = _get(self, 'ugraph_fake_embedding')

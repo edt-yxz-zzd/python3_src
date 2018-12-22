@@ -12,7 +12,7 @@ xcycle =[def]= simple_nonemtpy_path__left_biased s.t. last hedge is back_hedge
 '''
 
 __all__ = '''
-    is_ugraph_fake_embedding_relax_planar_ex
+    ugraph_fake_embedding2maybe_non_planar_condition
     '''.split()
 
 from seed.tiny import print_err
@@ -30,19 +30,19 @@ from ..NonEmptyPathOps import (
     ,is_connected_hedges1__prime
     ,reverse_nonempty_path__basic
     )
-from .verify_non_relax_planar_condition import check_non_relax_planar_condition
+from .verify_non_planar_condition import check_non_planar_condition
 
 
-def is_ugraph_fake_embedding_relax_planar_ex(ugraph_fake_embedding):
+def ugraph_fake_embedding2maybe_non_planar_condition(ugraph_fake_embedding):
     '''
 input:
     ugraph_fake_embedding :: UGraphFakeEmbedding
 output:
     maybe_non_planar_condition = () | non_planar_condition
         ()
-            relax_planar fake_embedding
+            planar fake_embedding
         (simple_nonemtpy_path, simple_path, simple_nonemtpy_path)
-            non-relax_planar fake_embedding
+            non-planar fake_embedding
             simple_path may be empty, only a fvertex
 
             3 paths have same (begin_fvertex, end_fvertex)
@@ -54,7 +54,7 @@ output:
                 (first_hedgeX, first_hedgeY, reversed_last_hedgeX, reversed_last_hedgeY) in one clockwise-direction
 '''
     try:
-        _is_ugraph_fake_embedding_relax_planar_ex__impl(ugraph_fake_embedding)
+        _mk_maybe_non_planar_condition_impl(ugraph_fake_embedding)
     except _NonPlanarConditionException as e:
         return _handle_non_planar_condition(e)
     return ()
@@ -121,7 +121,7 @@ def _handle_non_planar_condition(e):
     path0_B2C = (arc0_B2C, C)
     non_planar_condition = (arc1_B2A2C, path0_B2C, arc1_B2C__from_C2B)
 
-    assert check_non_relax_planar_condition(ugraph_fake_embedding, non_planar_condition) or True
+    assert check_non_planar_condition(ugraph_fake_embedding, non_planar_condition) or True
     return non_planar_condition
 
 def _left_biased_list_to_seq(left_biased_list):
@@ -131,7 +131,7 @@ def _left_biased_list_to_seq(left_biased_list):
     return tuple(ls)
 
 
-def _is_ugraph_fake_embedding_relax_planar_ex__impl(ugraph_fake_embedding):
+def _mk_maybe_non_planar_condition_impl(ugraph_fake_embedding):
     ancestor_hedges = LeftBiasedListAsAsCompleteMutableStack()
     it = dfs__ugraph_fake_embedding(
         ugraph_fake_embedding=ugraph_fake_embedding
@@ -227,7 +227,7 @@ def _is_ugraph_fake_embedding_relax_planar_ex__impl(ugraph_fake_embedding):
 
     for case, payload in it:
         # update global_depth
-        #   NOTE: DFS_EnterExitBackOrForwardHEdge
+        #   NOTE: DFS_EnterExitBackOrRBackHEdge
         '''
         print_err(case._value_)
         if False and not ancestor_hedges.is_empty():
@@ -250,7 +250,7 @@ def _is_ugraph_fake_embedding_relax_planar_ex__impl(ugraph_fake_embedding):
         (DFS_ExitRootVertex, Vertex)
         (DFS_EnterTreeHEdge, (HEdge, Vertex))
         (DFS_ExitTreeHEdge, None)
-        (DFS_EnterExitBackOrForwardHEdge, (HEdge, Vertex))
+        (DFS_EnterExitBackOrRBackHEdge, (HEdge, Vertex))
         '''
 
         # len(ancestor_hedges)
@@ -324,7 +324,7 @@ def _is_ugraph_fake_embedding_relax_planar_ex__impl(ugraph_fake_embedding):
             # len(ancestor_hedges) == len(pair_stack)+0 == global_depth+1
             # will ancestor_hedges.pop_None()
             # len(ancestor_hedges) == len(pair_stack)-1 == global_depth
-        elif case == DFS_Case.DFS_EnterExitBackOrForwardHEdge:
+        elif case == DFS_Case.DFS_EnterExitBackOrRBackHEdge:
             # len(ancestor_hedges)
             #   == len(pair_stack) + 0
             #   == global_depth + 1

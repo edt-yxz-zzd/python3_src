@@ -89,23 +89,23 @@ example:
 
 
 
-    >>> edgeless_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> edgeless_graph.calc.is_ugraph_fake_embedding_planar
     True
-    >>> single_loop_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> single_loop_graph.calc.is_ugraph_fake_embedding_planar
     True
-    >>> single_nonloop_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> single_nonloop_graph.calc.is_ugraph_fake_embedding_planar
     True
-    >>> two_parallel_nonloops_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> two_parallel_nonloops_graph.calc.is_ugraph_fake_embedding_planar
     True
-    >>> two_parallel_loops_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> two_parallel_loops_graph.calc.is_ugraph_fake_embedding_planar
     True
-    >>> two_nonparallel_loops_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> two_nonparallel_loops_graph.calc.is_ugraph_fake_embedding_planar
     False
-    >>> three_parallel_nonloops_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> three_parallel_nonloops_graph.calc.is_ugraph_fake_embedding_planar
     True
-    >>> three_nonparallel_nonloops_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> three_nonparallel_nonloops_graph.calc.is_ugraph_fake_embedding_planar
     False
-    >>> one_loop_one_nonloop_disconnected_graph.calc.is_ugraph_fake_embedding_relax_planar
+    >>> one_loop_one_nonloop_disconnected_graph.calc.is_ugraph_fake_embedding_planar
     True
 '''
 
