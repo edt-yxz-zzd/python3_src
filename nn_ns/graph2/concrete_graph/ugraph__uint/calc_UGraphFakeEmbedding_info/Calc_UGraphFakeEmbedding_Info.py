@@ -6,14 +6,13 @@ __all__ = '''
 from ..UGraphFakeEmbedding import UGraphFakeEmbedding
 #from .is_relax_planar_embedding import is_relax_planar_embedding
 #from .is_ugraph_fake_embedding_relax_planar_ex import is_ugraph_fake_embedding_relax_planar_ex
-from .ugraph_fake_embedding2maybe_non_planar_condition import ugraph_fake_embedding2maybe_non_planar_condition
 from .make_hedge2fake_aedge import make_hedge2fake_aedge
 from .make_hedge2fake_counterclockwise_fface import make_hedge2fake_counterclockwise_fface
 
 _get = object.__getattribute__
 class Calc_UGraphFakeEmbedding_Info:
     all_attr_seq = '''
-        maybe_ugraph_fake_embedding_non_planar_condition
+        maybe_ugraph_fake_embedding_nonplanar_condition
         is_ugraph_fake_embedding_planar
         hedge2fake_counterclockwise_fface
         '''.split()
@@ -42,10 +41,10 @@ class Calc_UGraphFakeEmbedding_Info:
             return r
 
     def is_ugraph_fake_embedding_planar(self):
-        return not self.maybe_ugraph_fake_embedding_non_planar_condition
-    def maybe_ugraph_fake_embedding_non_planar_condition(self):
+        return not self.maybe_ugraph_fake_embedding_nonplanar_condition
+    def maybe_ugraph_fake_embedding_nonplanar_condition(self):
         ugraph_fake_embedding = _get(self, 'ugraph_fake_embedding')
-        return ugraph_fake_embedding2maybe_non_planar_condition(
+        return ugraph_fake_embedding2maybe_nonplanar_condition(
             ugraph_fake_embedding
             )
 

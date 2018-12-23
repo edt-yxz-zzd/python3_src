@@ -1,15 +1,15 @@
 
 '''
 see:
-    "def - 3.5. non_planar_condition.txt"
-        for non_planar_condition
+    "def - 3.5. nonplanar_condition.txt"
+        for ugraph_fake_embedding nonplanar_condition
 '''
 
 
 __all__ = '''
-    verify_non_planar_condition
+    verify_ugraph_fake_embedding_nonplanar_condition
 
-    check_non_planar_condition
+    check_ugraph_fake_embedding_nonplanar_condition
     CheckNonPlanarConditionError
     CheckNonPlanarConditionTypeError
     CheckNonPlanarConditionValueError
@@ -28,22 +28,22 @@ from seed.types.OneTime import OneTimeSet
 class CheckNonPlanarConditionError(Exception):pass
 class CheckNonPlanarConditionTypeError(CheckNonPlanarConditionError):pass
 class CheckNonPlanarConditionValueError(CheckNonPlanarConditionError):pass
-def verify_non_planar_condition(ugraph_fake_embedding, non_planar_condition):
+def verify_ugraph_fake_embedding_nonplanar_condition(ugraph_fake_embedding, nonplanar_condition):
     try:
-        check_non_planar_condition(ugraph_fake_embedding, non_planar_condition)
+        check_ugraph_fake_embedding_nonplanar_condition(ugraph_fake_embedding, nonplanar_condition)
     except CheckNonPlanarConditionError:
         return False
     return True
 
-def check_non_planar_condition(ugraph_fake_embedding, non_planar_condition):
+def check_ugraph_fake_embedding_nonplanar_condition(ugraph_fake_embedding, nonplanar_condition):
     path_ops = NonEmptyPathOps(ugraph_fake_embedding)
 
     buffer__fvertex2XXX = [None]*ugraph_fake_embedding.num_fvertices
     buffer__fvertex_set = OneTimeSet(buffer__fvertex2XXX)
-    _check_type(path_ops, non_planar_condition, buffer__fvertex_set)
+    _check_type(path_ops, nonplanar_condition, buffer__fvertex_set)
 
     (simple_nonempty_path0, simple_path1, simple_nonempty_path2
-    ) = non_planar_condition
+    ) = nonplanar_condition
     path, end_fvertex = simple_path1
     simple_path1 = Path(ugraph_fake_embedding, path, end_fvertex)
     args = (path_ops
@@ -59,9 +59,9 @@ def check_non_planar_condition(ugraph_fake_embedding, non_planar_condition):
 
 
 
-def _check_type(path_ops, non_planar_condition, buffer__fvertex_set):
-    if type(non_planar_condition) is not tuple: raise CheckNonPlanarConditionTypeError
-    if len(non_planar_condition) != 3: raise CheckNonPlanarConditionTypeError
+def _check_type(path_ops, nonplanar_condition, buffer__fvertex_set):
+    if type(nonplanar_condition) is not tuple: raise CheckNonPlanarConditionTypeError
+    if len(nonplanar_condition) != 3: raise CheckNonPlanarConditionTypeError
 
 
     def is_simple_maybe_empty_path(path):
@@ -70,7 +70,7 @@ def _check_type(path_ops, non_planar_condition, buffer__fvertex_set):
         return path_ops.is_simple_nonempty_path(path, buffer__fvertex_set)
 
     (simple_nonempty_path0, simple_path1, simple_nonempty_path2
-    ) = non_planar_condition
+    ) = nonplanar_condition
     if not is_simple_maybe_empty_path(simple_path1): raise CheckNonPlanarConditionTypeError
     if not is_simple_nonempty_path(simple_nonempty_path0): raise CheckNonPlanarConditionTypeError
     if not is_simple_nonempty_path(simple_nonempty_path2): raise CheckNonPlanarConditionTypeError

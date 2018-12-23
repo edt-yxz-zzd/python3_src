@@ -1,0 +1,101 @@
+"algo - canon label hweighted planar ugraph.txt"
+    O(n*logn)
+        classify many planar ugraph in O(n)
+        but O(n*logn) for canon labelling
+ref:
+    [ref_tri_planar_canon]
+    "[Planar_Graph_Isomorphism_1974]Linear time algorithm for isomorphism of planar graphs[good].pdf"
+    [ref_tree_canon]
+    "[tree isomorphism][linear time][page85]The design and analysis of computer algorithms (1974)(Hopcroft)(Addison-Wesley).djvu"
+
+
+
+
+hedge2hweight :: Map HEdge UInt
+ugraph_label :: Map Vertex UInt
+    == (old_vertex2new_vertex, old_aedge2new_aedge, old_hedge2new_hedge)
+    # new_vertex2old_vertex??
+
+1. algo: label_ugraph_fake_embedding_with_root_hedge
+    :: root_hedge -> ugraph_fake_embedding -> ugraph_label
+        # given a "root" hedge ==>> label ugraph fake embedding
+    O(n) by dfs:
+        label each fvertex/hedge/aedge the first time visited
+        #no matter how hweighted!!
+
+2. fact: simple triconnected planar ugraph has at most two planar embeddings
+3. algo: canon_label_hweighted_planar_ugraph
+    :: ugraph -> hedge2hweight -> ugraph_label
+    <<== decompose_ugraph_into_SPQR_tree-like
+        + canon_label_hweighted_rooted_tree-like
+        + double_canon_label_hweighted_simple_triconnected_planar_ugraph_with_root_aedge
+        + canon_label_hweighted_simple_triconnected_planar_ugraph_with_root_vertex
+        + canon_label_hweighted_simple_triconnected_planar_ugraph
+3.1. algo: double_canon_label_hweighted_simple_triconnected_planar_ugraph_with_root_aedge
+    both direction
+        more-hweight the parent triconnected component's hedge
+    <<== label_ugraph_fake_embedding_with_root_hedge
+        for both embeddings
+        <<== planar_embedding_ugraph_or_find_ugraph_nonplanar_condition
+        <<== mirror_ugraph_fake_embedding
+    2 directions * 2 embeddings == 4 cases
+3.1.1. algo: planar_embedding_ugraph_or_find_ugraph_nonplanar_condition
+    :: ugraph -> Either ugraph_fake_embedding ugraph_nonplanar_condition
+3.1.2. algo: mirror_ugraph_fake_embedding
+    :: ugraph_fake_embedding -> ugraph_fake_embedding
+3.2. algo: canon_label_hweighted_simple_triconnected_planar_ugraph_with_root_vertex
+    for root triconnected component of nonroot biconnected component
+    color the root vertex with a special color
+        <==> more-hweight all hedges around root vertex with a special hweight
+    <<== canon_label_hweighted_simple_triconnected_planar_ugraph
+3.3. algo: canon_label_hweighted_simple_triconnected_planar_ugraph
+    [ref_tri_planar_canon]
+    root triconnected component of root biconnected component
+        & more-hweighted root triconnected component of nonroot biconnected component
+
+    updated by:
+        * contract directed aedge
+        * move aedge to new position
+        * ...
+    [ref_tri_planar_canon] O(n) classify many planar graphs at same time
+    but what I want is to produce a canon labelling.
+    instead of just "bucket_classify" when re-hweight new hweights, using O(n*logn) sorted after bucket_classify.
+    hence total O(n*logn) algo
+
+    final_ugraph hedge -> original_ugraph hedge
+        # many1 old hedges to one new hedge
+        # and we choose one old hedge
+    if not n-star/n-flower/n-cycle/n-bond:
+        #final_ugraph is in finite known regular ugraphs
+        dfs final_ugraph for all hedges to find out a std canon labelling:
+            <<== label_ugraph_fake_embedding_with_root_hedge on final_ugraph
+        first hedge of final_ugraph = first hedge of std dfs of final_ugraph
+    else:
+        #final_ugraph.num_hedges = O(n)
+        #canon_label_hweighted n-star/n-flower/n-cycle/n-bond
+        find first hedge of final_ugraph <<== RMQ.SA_LCP.find_min_period
+            vertex/fface degree == 1 or 2
+            dual graph
+            1-star == 1-bond == single nonloop edge
+            1-flower == 1-cycle == single loop edge
+            2-bond == 2-cycle
+            vertex_degree   fface_degree
+            1   n-star      n-flower
+            2   n-cycle     n-bond
+    root hedge of original_ugraph <<== first hedge of final_ugraph
+    then call label_ugraph_fake_embedding_with_root_hedge on original_ugraph
+
+
+3.4. algo-framework: canon_label_hweighted_rooted_tree-like
+    [ref_tree_canon]
+    find super-tree-center/bicenter
+    recolor each level/depth when remove all deeper/higher vertices
+    produce an oriented compact tree represented by an oriented rooted DAG
+        see: rooted_tree_canonization__leveled_DAG
+            #leveled_DAG
+        see: rooted_tree_to_binary_string
+    then dfs to relabel
+3.5. algo-framework: decompose_ugraph_into_SPQR_tree-like...
+    decompose ugraph into connected/biconnected/triconnected components # SPQR-tree-like
+
+

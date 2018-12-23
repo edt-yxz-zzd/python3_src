@@ -1,18 +1,18 @@
 '''
 see:
     "planar/algo - is fake_embedding relax_planar[ver4].txt"
-        use dfs to detect non_planar_condition
+        use dfs to detect ugraph_fake_embedding nonplanar_condition
     "def - 3.4. simple clockwise path cycle.txt"
         for simple_nonemtpy_path, simple_path
-    "def - 3.5. non_planar_condition.txt"
-        for non_planar_condition
+    "def - 3.5. nonplanar_condition.txt"
+        for ugraph_fake_embedding nonplanar_condition
 
 xcycle =[def]= simple_nonemtpy_path__left_biased s.t. last hedge is back_hedge
     i.e. the path's tail is a cycle
 '''
 
 __all__ = '''
-    ugraph_fake_embedding2maybe_non_planar_condition
+    ugraph_fake_embedding2maybe_nonplanar_condition
     '''.split()
 
 from seed.tiny import print_err
@@ -30,15 +30,15 @@ from ..NonEmptyPathOps import (
     ,is_connected_hedges1__prime
     ,reverse_nonempty_path__basic
     )
-from .verify_non_planar_condition import check_non_planar_condition
+from .verify_ugraph_fake_embedding_nonplanar_condition import check_ugraph_fake_embedding_nonplanar_condition
 
 
-def ugraph_fake_embedding2maybe_non_planar_condition(ugraph_fake_embedding):
+def ugraph_fake_embedding2maybe_nonplanar_condition(ugraph_fake_embedding):
     '''
 input:
     ugraph_fake_embedding :: UGraphFakeEmbedding
 output:
-    maybe_non_planar_condition = () | non_planar_condition
+    maybe_nonplanar_condition = () | nonplanar_condition
         ()
             planar fake_embedding
         (simple_nonemtpy_path, simple_path, simple_nonemtpy_path)
@@ -54,9 +54,9 @@ output:
                 (first_hedgeX, first_hedgeY, reversed_last_hedgeX, reversed_last_hedgeY) in one clockwise-direction
 '''
     try:
-        _mk_maybe_non_planar_condition_impl(ugraph_fake_embedding)
+        _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding)
     except _NonPlanarConditionException as e:
-        return _handle_non_planar_condition(e)
+        return _handle_nonplanar_condition(e)
     return ()
 
 class _NonPlanarConditionException(BaseException):
@@ -67,7 +67,7 @@ class _NonPlanarConditionException(BaseException):
         self.depth = depth
         self.early_pair = early_pair
         self.later_pair = later_pair
-def _handle_non_planar_condition(e):
+def _handle_nonplanar_condition(e):
     ugraph_fake_embedding = e.ugraph_fake_embedding
     depth = e.depth
     pair0 = early_pair = e.early_pair
@@ -119,10 +119,10 @@ def _handle_non_planar_condition(e):
 
     C = path_ops.begin_fvertex_of__basic(arc1_C2A)
     path0_B2C = (arc0_B2C, C)
-    non_planar_condition = (arc1_B2A2C, path0_B2C, arc1_B2C__from_C2B)
+    nonplanar_condition = (arc1_B2A2C, path0_B2C, arc1_B2C__from_C2B)
 
-    assert check_non_planar_condition(ugraph_fake_embedding, non_planar_condition) or True
-    return non_planar_condition
+    assert check_ugraph_fake_embedding_nonplanar_condition(ugraph_fake_embedding, nonplanar_condition) or True
+    return nonplanar_condition
 
 def _left_biased_list_to_seq(left_biased_list):
     it = the_left_biased_list_as_stack_ops.reversed(left_biased_list)
@@ -131,7 +131,7 @@ def _left_biased_list_to_seq(left_biased_list):
     return tuple(ls)
 
 
-def _mk_maybe_non_planar_condition_impl(ugraph_fake_embedding):
+def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
     ancestor_hedges = LeftBiasedListAsAsCompleteMutableStack()
     it = dfs__ugraph_fake_embedding(
         ugraph_fake_embedding=ugraph_fake_embedding
@@ -207,7 +207,7 @@ def _mk_maybe_non_planar_condition_impl(ugraph_fake_embedding):
             raise
 
         if key1 > key0 > key2:
-            # non_planar_condition
+            # nonplanar_condition
             raise _NonPlanarConditionException(
                     ugraph_fake_embedding=ugraph_fake_embedding
                     , depth=depth, early_pair=last_pair, later_pair=pair

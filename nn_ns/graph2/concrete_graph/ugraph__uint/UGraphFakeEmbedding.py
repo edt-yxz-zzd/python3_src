@@ -190,6 +190,19 @@ methods:
 
     fvertex2iter_fake_clockwise_hedges
     fface2iter_fake_clockwise_hedges
+
+calc attrs:
+    # degree value that degree2sorted_XXXs[degree] is not empty
+    # sorted_XXX_degrees_idx - index of sorted_XXX_degrees
+    .calc.sorted_fface_degrees
+        .calc.num_fface_degrees
+        .calc.degree2maybe_sorted_fface_degrees_idx
+        .calc.sorted_fface_degrees_idx2nonempty_sorted_ffaces
+    .calc.sorted_fvertex_degrees
+        .calc.num_fvertex_degrees
+        .calc.degree2maybe_sorted_fvertex_degrees_idx
+        .calc.sorted_fvertex_degrees_idx2nonempty_sorted_fvertices
+
 '''
     all_UGraphFakeEmbedding_attr_seq = '''
         num_hedges
@@ -488,6 +501,10 @@ class VerifyUGraphFakeEmbedding(VerifyType__static):
         yield (is_uint_bijection(hedge2another_hedge, hedge2another_hedge)
             , lambda: f'(hedge2fake_clockwise_next_hedge_around_vertex,hedge2fake_clockwise_next_hedge_around_fface) mismatch: ({hedge2fake_clockwise_next_hedge_around_vertex!r}, {hedge2fake_clockwise_next_hedge_around_fface!r})'
             )
+        yield (all(hedge__from != hedge__to for hedge__from, hedge__to in enumerate(hedge2another_hedge))
+            , lambda: 'hedge2another_hedge should have no self-reflect hedge: hedge2another_hedge={hedge2another_hedge!r}'
+            )
+        assert num_hedges & 1 == 0 # even
 
 
 

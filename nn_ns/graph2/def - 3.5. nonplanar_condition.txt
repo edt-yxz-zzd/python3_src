@@ -1,26 +1,35 @@
 
-non_planar_condition
-    "planar" defined for hedge2next_hedge_around_vertex only
-    hedge2next_hedge_around_vertex can be
-        * hedge2fake_clockwise_next_hedge_around_vertex
-            visit fface in counterclockwise
-        * hedge2fake_clockwise_prev_hedge_around_vertex
-            visit fface in clockwise
-non_relax_planar_condition
-    "relax planar" defined for fake_embedding only
-    "relax" means no shared fake face for more than twe connected components
+nonplanar_condition for ugraph vs nonplanar_condition for ugraph_fake_embedding
+    this txt: "nonplanar_condition for ugraph_fake_embedding"
+    since "nonplanar_condition for ugraph" is well-known
+        K[3,3]  or  K[5]    ugraph
+        6       or  5       distinguish end-fverties
+        9       or  10      simple_nonempty_paths with distinguish middle-fverties
 
-# simplest non_planar_condition is the_two_nonparallel_loops:
+
+nonplanar_condition vs non_relax_planar_condition
+    nonplanar_condition
+        "planar" defined for hedge2next_hedge_around_vertex only
+        hedge2next_hedge_around_vertex can be
+            * hedge2fake_clockwise_next_hedge_around_vertex
+                visit fface in counterclockwise
+            * hedge2fake_clockwise_prev_hedge_around_vertex
+                visit fface in clockwise
+    non_relax_planar_condition
+        "relax planar" defined for fake_embedding only
+        "relax" means no shared fake face for more than twe connected components
+
+# simplest nonplanar_condition is the_two_nonparallel_loops:
 #   ([hedge_of_loop], ([], end_fvertex), [hedge_of_loop])
 #
-non_planar_condition = (simple_nonempty_path, simple_path, simple_nonempty_path)
+nonplanar_condition = (simple_nonempty_path, simple_path, simple_nonempty_path)
     where
         # allow begin_fvertex == end_fvertex
         #   i.e. allow p1/3 to be simple_nonempty_cycle
         #   allow p2 to be emtpy path or simple_nonempty_cycle
 
         # same begin and end
-        let (p1, p2, p3) = non_planar_condition
+        let (p1, p2, p3) = nonplanar_condition
         assert p1.begin_fvertex == p2.begin_fvertex == p3.begin_fvertex
         assert p1.end_fvertex == p2.end_fvertex == p3.end_fvertex
 
@@ -54,7 +63,7 @@ def is_in_clockwise(h1, h2, h3, hedge2fake_clockwise_next_hedge_around_vertex):
 
 
 
-[ver2] non_planar_condition
+[ver2] nonplanar_condition
     by dfs via ugraph-fake_embedding hedge2fake_clockwise_prev_hedge_around_vertex
                       --------arc4-------
                      /                   \
@@ -79,15 +88,15 @@ def is_in_clockwise(h1, h2, h3, hedge2fake_clockwise_next_hedge_around_vertex):
         clockwise_idx_around_vertex = hedge2clockwise_idx_around_vertex[hedge]
         compare via (depth, clockwise_idx_around_vertex)
     if compare(arc5, arc4) == LT:
-        non_planar_condition = (arc3+arc4, reverse_path(arc2), arc5+arc1)
+        nonplanar_condition = (arc3+arc4, reverse_path(arc2), arc5+arc1)
 
 
 
-[ver1] non_planar_condition
+[ver1] nonplanar_condition
     by merge fface in relax-biconnected-ugraph-fake_embedding
 frontier fverties: A-arc1->B-arc2->C-arc3->D-arc4->A
 fverties of two cross outer paths: A-arc5->C, B-arc6->D
-==>> non_planar_condition:
+==>> nonplanar_condition:
     bug: path from outside to inside
         cycle: A-arc1->B-arc6->D-arc4->A
         path: A-arc5->C-arc3->D

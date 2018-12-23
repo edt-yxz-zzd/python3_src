@@ -15,11 +15,11 @@ from ..stack.INearlyCompleteMutableStack import INearlyCompleteMutableStack
 from ..stack.SeqAsCompleteMutableStack import SeqAsCompleteMutableStack
 from ..stack.NearlyCompleteMutableStack import NearlyCompleteMutableStack
 
-from .dfs__finite_explicit_ugraph import (
-    dfs__finite_explicit_ugraph
-    ,the_vertex2color__no_effect
+from .dfs__finite_explicit_ugraph__two_color import (
+    dfs__finite_explicit_ugraph__two_color
     ,DFS_Case as _DFS_Case
     )
+from .Vertex2TwoColor.Vertex2TwoColor__no_effect import the_vertex2two_color__no_effect
 
 import enum
 DFS_Case = enum.Enum('DFS_Case', '''
@@ -203,7 +203,7 @@ def _dfs__sourced_finite_implicit_uforest_with_vertex_eq__basic_ver2(*
 
     it__new = dfs__finite_explicit_ugraph(
         source_vertices=source_vertices
-        ,vertex2color=the_vertex2color__no_effect
+        ,vertex2color=the_vertex2two_color__no_effect
         ,vertex2unstable_iter_hedges=vertex2unstable_iter_hedges__new
         ,hedge2another_vertex=hedge2another_vertex__new
         ,hedge2unstable_iter_other_hedges_around_another_vertex

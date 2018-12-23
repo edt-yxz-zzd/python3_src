@@ -44,3 +44,68 @@ UGraph =
 
 '''
 
+
+class UGraph:
+    '''
+
+methods:
+    vertex2degree
+        <<== vertex2maybe_fvertex + ugraph_fake_embedding.fvertex2degree
+    vertex2maybe_arbitrary_hedge
+        <<== vertex2maybe_fvertex + ugraph_fake_embedding.fvertex2arbitrary_hedge
+
+    degree2unstable_iter_vertices
+
+calc attrs:
+    """
+    neednot:
+    .calc.sorted_vertex_degrees
+        .calc.num_vertex_degrees
+        .calc.degree2maybe_sorted_vertex_degrees_idx
+        .calc.sorted_vertex_degrees_idx2nonempty_sorted_vertices
+        <<== .calc.sorted_isolated_vertices + ugraph_fake_embedding.calc fvertex version
+    """
+    .calc.sorted_isolated_vertices
+
+ugraph_fake_embedding.calc attrs:
+
+'''
+    attr_seq = '''
+        '''.split()
+    attr_set = frozenset(attr_seq)
+
+
+    @classmethod
+    def make_UGraph__simplest(cls, *
+        ,num_vertices
+        ,hedge2vertex
+        ,hedge2aedge
+        ):
+
+    @classmethod
+    def make_UGraph__simpler(cls, *
+        ,num_vertices
+        ,hedge2vertex
+        ,hedge2aedge
+        ,ugraph_fake_embedding
+        ):
+
+
+    def __init__(self, *
+        ,num_vertices
+        ,num_aedges
+            # <<== ugraph_fake_embedding.num_hedges
+
+        ,hedge2vertex
+        ,hedge2aedge
+
+        ,aedge2arbitrary_hedge
+        ,hedge2another_hedge
+            # <<== ugraph_fake_embedding.hedge2another_hedge()
+
+        ,vertex2maybe_fvertex
+        ,fvertex2vertex
+            # <<== hedge2vertex + ugraph_fake_embedding.fvertex2arbitrary_hedge
+        ,ugraph_fake_embedding
+        ):
+

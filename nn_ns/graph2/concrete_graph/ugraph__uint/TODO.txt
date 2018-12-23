@@ -1,0 +1,18 @@
+UGraphFakeEmbedding methods:
+    degree2unstable_iter_fvertices
+    degree2unstable_iter_ffaces
+UGraphFakeEmbedding calc attrs:
+    # degree value that degree2sorted_XXXs[degree] is not empty
+    # sorted_XXX_degrees_idx - index of sorted_XXX_degrees
+    .calc.sorted_fface_degrees
+        .calc.num_fface_degrees
+        .calc.degree2maybe_sorted_fface_degrees_idx
+        .calc.sorted_fface_degrees_idx2nonempty_sorted_ffaces
+    .calc.sorted_fvertex_degrees
+        .calc.num_fvertex_degrees
+        .calc.degree2maybe_sorted_fvertex_degrees_idx
+        .calc.sorted_fvertex_degrees_idx2nonempty_sorted_fvertices
+
+UGraph calc attrs:
+    .calc.sorted_isolated_vertices
+
