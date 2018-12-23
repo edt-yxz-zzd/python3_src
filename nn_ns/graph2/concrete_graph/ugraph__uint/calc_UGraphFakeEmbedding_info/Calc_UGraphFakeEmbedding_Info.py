@@ -6,6 +6,7 @@ __all__ = '''
 from ..UGraphFakeEmbedding import UGraphFakeEmbedding
 #from .is_relax_planar_embedding import is_relax_planar_embedding
 #from .is_ugraph_fake_embedding_relax_planar_ex import is_ugraph_fake_embedding_relax_planar_ex
+from .ugraph_fake_embedding2maybe_nonplanar_condition import ugraph_fake_embedding2maybe_nonplanar_condition
 from .make_hedge2fake_aedge import make_hedge2fake_aedge
 from .make_hedge2fake_counterclockwise_fface import make_hedge2fake_counterclockwise_fface
 
