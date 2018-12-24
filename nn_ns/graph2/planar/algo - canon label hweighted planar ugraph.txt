@@ -1,6 +1,6 @@
 "algo - canon label hweighted planar ugraph.txt"
     O(n*logn)
-        classify many planar ugraph in O(n)
+        classify many planar ugraphs in O(n)
         but O(n*logn) for canon labelling
 ref:
     [ref_tri_planar_canon]
@@ -16,7 +16,7 @@ ugraph_label :: Map Vertex UInt
     == (old_vertex2new_vertex, old_aedge2new_aedge, old_hedge2new_hedge)
     # new_vertex2old_vertex??
 
-1. algo: label_ugraph_fake_embedding_with_root_hedge
+1. algo: label_connected_ugraph_fake_embedding_with_root_hedge
     :: root_hedge -> ugraph_fake_embedding -> ugraph_label
         # given a "root" hedge ==>> label ugraph fake embedding
     O(n) by dfs:
@@ -34,7 +34,7 @@ ugraph_label :: Map Vertex UInt
 3.1. algo: double_canon_label_hweighted_simple_triconnected_planar_ugraph_with_root_aedge
     both direction
         more-hweight the parent triconnected component's hedge
-    <<== label_ugraph_fake_embedding_with_root_hedge
+    <<== label_connected_ugraph_fake_embedding_with_root_hedge
         for both embeddings
         <<== planar_embedding_ugraph_or_find_ugraph_nonplanar_condition
         <<== mirror_ugraph_fake_embedding
@@ -49,6 +49,11 @@ ugraph_label :: Map Vertex UInt
         <==> more-hweight all hedges around root vertex with a special hweight
     <<== canon_label_hweighted_simple_triconnected_planar_ugraph
 3.3. algo: canon_label_hweighted_simple_triconnected_planar_ugraph
+    <<== canon_label_hweighted_connected_ugraph_planar_embedding
+        for both embeddings
+        <<== planar_embedding_ugraph_or_find_ugraph_nonplanar_condition
+        <<== mirror_ugraph_fake_embedding
+3.3.1. algo: canon_label_hweighted_connected_ugraph_planar_embedding
     [ref_tri_planar_canon]
     root triconnected component of root biconnected component
         & more-hweighted root triconnected component of nonroot biconnected component
@@ -68,7 +73,7 @@ ugraph_label :: Map Vertex UInt
     if not n-star/n-flower/n-cycle/n-bond:
         #final_ugraph is in finite known regular ugraphs
         dfs final_ugraph for all hedges to find out a std canon labelling:
-            <<== label_ugraph_fake_embedding_with_root_hedge on final_ugraph
+            <<== label_connected_ugraph_fake_embedding_with_root_hedge on final_ugraph
         first hedge of final_ugraph = first hedge of std dfs of final_ugraph
     else:
         #final_ugraph.num_hedges = O(n)
@@ -83,7 +88,7 @@ ugraph_label :: Map Vertex UInt
             1   n-star      n-flower
             2   n-cycle     n-bond
     root hedge of original_ugraph <<== first hedge of final_ugraph
-    then call label_ugraph_fake_embedding_with_root_hedge on original_ugraph
+    then call label_connected_ugraph_fake_embedding_with_root_hedge on original_ugraph
 
 
 3.4. algo-framework: canon_label_hweighted_rooted_tree-like

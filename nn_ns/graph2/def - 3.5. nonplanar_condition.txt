@@ -63,6 +63,31 @@ def is_in_clockwise(h1, h2, h3, hedge2fake_clockwise_next_hedge_around_vertex):
 
 
 
+
+
+
+
+[ver3] nonplanar_condition
+    detected at the begin_vertex of 3-paths
+        # B
+    detected on rback_hedge
+        # when revisit back_hedge hedgeX
+        #
+        # B<-[hedgeX]-+-[back]-*-C
+        #   where preorder[hedgeX] < preorder[hedgeY]
+        #         C-*-[back]-+-[hedgeY]->A
+                                     <-\
+         /-<-[hedgeX]-+-[back]-*-C      |
+...A-*->B-*->C-*-[back]-+-[hedgeY]->A   |
+             \-*-[back]-+-[hedgeX]->B  /
+                                      /  direction of dfs visit hedges around vertex
+    # min low_pt[C.tree_hedge that lead to hedgeX] may lower than A
+    #   hence can not be detected by rtree_hedge at C
+
+
+
+
+[ver2] has bug! see [ver3]
 [ver2] nonplanar_condition
     by dfs via ugraph-fake_embedding hedge2fake_clockwise_prev_hedge_around_vertex
                       --------arc4-------

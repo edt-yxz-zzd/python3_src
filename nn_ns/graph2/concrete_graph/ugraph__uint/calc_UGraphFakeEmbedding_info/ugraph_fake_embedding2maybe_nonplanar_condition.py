@@ -1,4 +1,4 @@
-'''
+r'''
 see:
     "planar/algo - is fake_embedding relax_planar[ver4].txt"
         use dfs to detect ugraph_fake_embedding nonplanar_condition
@@ -9,6 +9,28 @@ see:
 
 xcycle =[def]= simple_nonemtpy_path__left_biased s.t. last hedge is back_hedge
     i.e. the path's tail is a cycle
+
+
+
+nonplanar_condition
+    detected at the begin_vertex of 3-paths
+        # B
+    detected on rback_hedge
+        # when revisit back_hedge hedgeX
+        #
+        # B<-[hedgeX]-+-[back]-*-C
+        #   where preorder[hedgeX] < preorder[hedgeY]
+        #         C-*-[back]-+-[hedgeY]->A
+                                     <-\
+         /-<-[hedgeX]-+-[back]-*-C      |
+...A-*->B-*->C-*-[back]-+-[hedgeY]->A   |
+             \-*-[back]-+-[hedgeX]->B  /
+                                      /  direction of dfs visit hedges around vertex
+    # min low_pt[C.tree_hedge that lead to hedgeX] may lower than A
+    #   hence can not be detected by rtree_hedge at C
+
+
+
 '''
 
 __all__ = '''
@@ -61,26 +83,34 @@ output:
 
 class _NonPlanarConditionException(BaseException):
     def __init__(self, *
-        , ugraph_fake_embedding, depth, early_pair, later_pair
+        , ugraph_fake_embedding, early_pair, later_pair
         ):
         self.ugraph_fake_embedding = ugraph_fake_embedding
-        self.depth = depth
+        #self.fork_depth = fork_depth
         self.early_pair = early_pair
         self.later_pair = later_pair
 def _handle_nonplanar_condition(e):
     ugraph_fake_embedding = e.ugraph_fake_embedding
-    depth = e.depth
+    #fork_depth = e.fork_depth
     pair0 = early_pair = e.early_pair
     pair1 = later_pair = e.later_pair
 
     ((depth0, local_idx0), xcycle0__left_biased) = pair0
-    depth1 = depth
+    #depth1 = fork_depth
     ((depth2, local_idx2), xcycle2__left_biased) = pair1
-    # key1 > key0 > key2
-    assert depth1 >= depth0 >= depth2
+    assert depth0 >= depth2
 
     xcycle0 = _left_biased_list_to_seq(xcycle0__left_biased)
     xcycle2 = _left_biased_list_to_seq(xcycle2__left_biased)
+    for fork_depth in range(depth0, min(len(xcycle0), len(xcycle2))):
+        if xcycle0[fork_depth] != xcycle2[fork_depth]: break
+    else:
+        raise logic-error
+    depth1 = fork_depth
+
+    # key1 > key0 > key2
+    assert depth1 >= depth0 >= depth2
+
     assert len(xcycle0) >= depth1+1
     assert len(xcycle2) >= depth1+1
 
@@ -152,6 +182,9 @@ def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
         # start from the another_hedge of income tree hedge
         #
 
+    rback_hedge2pair = [None]*ugraph_fake_embedding.num_hedges
+    hedge2preorder = [None]*ugraph_fake_embedding.num_hedges
+    global_hedge_preorder = 0
     global_depth = -1
     pair_stack = []
         # a stack<pair>
@@ -184,36 +217,48 @@ def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
         assert depth == global_depth
 
         last_pair = pair_stack[-1]
-        key0 = last_pair[0]
-        key1 = hedge2key(hedge)
-        key2 = pair[0]
-        if key1 < key2:
-            # no back_hedge back to above this fvertex
-            assert key2 == (global_depth+2, -1)
-            assert global_depth == depth == key1[0]
-            assert key0[0] <= global_depth or key0 == (global_depth+1, -1)
-            # update_last_pair must be called from DFS_ExitTreeHEdge
+        pair_stack[-1] = min_pair(last_pair, pair)
+        return
+    def detect_nonplanar_condition(global_depth, rback_hedge):
+        fvertex = ugraph_fake_embedding.hedge2fvertex[rback_hedge]
+        depth = fvertex2depth[fvertex]
+        assert depth == global_depth
+
+        last_pair = pair_stack[-1]
+        last_key = last_pair[0]
+        # since we have revisit a back_hedge, last_key cannot be the default one
+        assert last_key != (global_depth+1, -1)
+        assert last_key != make_default_key_at(global_depth)
+        assert last_key[0] == global_depth
+        assert last_key[1] >= 0
+
+        rback_pair = rback_hedge2pair[rback_hedge]
+        rback_hedge2pair[rback_hedge] = ()#del
+        rback_key = rback_pair[0]
+
+        if rback_key <= last_key:
             return
 
-        assert key1 >= key2
-        # has back_hedge back to above this fvertex
-        # ok: key0 > key1 >= key2
-        # ok:        key1 >= key2 > key0
-        try:
-            assert key1 >= key2
-            assert key1 != key0 != key2
-        except:
-            print_err(key1, key0, key2)
-            raise
+        assert last_key < rback_key # last_key goto outside back_hedge
+        back_hedge = rback_pair[1][1]
+        assert back_hedge == ugraph_fake_embedding.hedge2another_hedge(rback_hedge)
+        back_order = hedge2preorder[back_hedge]
+        last_order = hedge2preorder[last_pair[1][1]]
 
-        if key1 > key0 > key2:
-            # nonplanar_condition
-            raise _NonPlanarConditionException(
-                    ugraph_fake_embedding=ugraph_fake_embedding
-                    , depth=depth, early_pair=last_pair, later_pair=pair
-                    )
+        assert back_order != last_order
+        if back_order > last_order: return
+        assert back_order < last_order # rback_pair is early
 
-        pair_stack[-1] = min_pair(last_pair, pair)
+        last_depth = last_key[0]
+        rback_depth = rback_key[0]
+        assert last_depth <= rback_depth
+        #for fork_depth in range(rback_depth, len()):
+        # nonplanar_condition
+        raise _NonPlanarConditionException(
+                ugraph_fake_embedding=ugraph_fake_embedding
+                #, fork_depth=fork_depth
+                , early_pair=rback_pair, later_pair=last_pair
+                )
 
     def make_default_pair_at(global_depth):
         return (make_default_key_at(global_depth), None)
@@ -266,6 +311,9 @@ def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
             # fill hedge2local_idx
             # append pair_stack
             #
+            hedge2preorder[hedge] = global_hedge_preorder
+            global_hedge_preorder += 1
+
             fvertex2depth[fvertex] = global_depth
             other = ugraph_fake_embedding.hedge2another_hedge(hedge)
             it = ugraph_fake_embedding.hedge2iter_fake_clockwise_hedges_around_vertex(other)
@@ -307,6 +355,9 @@ def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
             assert payload is None
             hedge = ancestor_hedges.get_top()
 
+            hedge2preorder[ugraph_fake_embedding.hedge2another_hedge(hedge)] = global_hedge_preorder
+            global_hedge_preorder += 1
+
             pair = pair_stack.pop()
             update_last_pair(global_depth, hedge, pair)
             # len(ancestor_hedges) == len(pair_stack)+0 == global_depth+1
@@ -331,6 +382,9 @@ def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
             #
             hedge, fvertex = payload
 
+            hedge2preorder[hedge] = global_hedge_preorder
+            global_hedge_preorder += 1
+
             # to test whether a back_hedge
             other = ugraph_fake_embedding.hedge2another_hedge(hedge)
             begin_key = hedge2key(hedge)
@@ -338,12 +392,20 @@ def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
             assert begin_key != end_key
             if end_key < begin_key:
                 # back_hedge
+                back_hedge = hedge
                 simple_nonemtpy_xcycle__left_biased = \
                     ancestor_hedges.underlying_left_biased_list
                 key = xcycle2key(simple_nonemtpy_xcycle__left_biased)
                 pair = (key, simple_nonemtpy_xcycle__left_biased)
                 assert key == end_key
-                update_last_pair(global_depth, hedge, pair)
+                update_last_pair(global_depth, back_hedge, pair)
+
+                rback_hedge = ugraph_fake_embedding.hedge2another_hedge(back_hedge)
+                rback_hedge2pair[rback_hedge] = pair
+            else:
+                # rback_hedge
+                rback_hedge = hedge
+                detect_nonplanar_condition(global_depth, rback_hedge)
             # len(ancestor_hedges) == len(pair_stack)+0 == global_depth+1
             # will ancestor_hedges.pop_None()
             # len(ancestor_hedges) == len(pair_stack)-1 == global_depth
