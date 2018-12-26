@@ -63,10 +63,45 @@ def is_in_clockwise(h1, h2, h3, hedge2fake_clockwise_next_hedge_around_vertex):
 
 
 
+[ver4] nonplanar_condition
+how to find out nonplanar_condition of ugraph_fake_embedding?
+    use dfs
+    treat the whole dfs-tree as the only new super_vertex
+    treat all back_hedge/rback_hedge as super_hedge of super_loop
+    detect whether the new super_ugraph_fake_embedding is planar?
+
+    detail:
+        dfs:
+            iter children tree_hedge/back_hedge by counterclockwise from the parent tree_hedge/rtree_hedge
+
+            # number back_hedge/rback_hedge by postorder
+            hedge2maybe_postorder
+                # back_hedge/rback_hedge -> postorder
+                # tree_hedge/rtree_hedge -> None
+            postorder2hedge
+                # postorder -> back_hedge/rback_hedge
+
+            hedge2maybe_ancestor_hedges_of_another_hedge
+                # rback_hedge -> back_hedge's ancestor_hedges # left_biased_list
+                # non-rback_hedge -> None
 
 
 
 
+        postorder2paired_postorder
+            <<== postorder2hedge + hedge2another_hedge + hedge2maybe_postorder
+            assert postorder2paired_postorder is a bijection without self-reflect
+
+        use a stack to verify whether postorder2paired_postorder is well-parenthesis
+
+
+
+
+
+
+
+
+[ver3] has bug! see [ver4]
 [ver3] nonplanar_condition
     detected at the begin_vertex of 3-paths
         # B
