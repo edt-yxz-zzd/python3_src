@@ -3,6 +3,9 @@ __all__ = '''
     is_uint_injection
     is_uint_surjection
     is_uint_bijection
+
+    has_uint_mapping_no_self_reflect
+    is_uint_bijection_without_self_reflect
     '''.split()
 
 def is_uint_injection(forward_mapping, backward_mapping):
@@ -29,4 +32,14 @@ def is_uint_bijection(forward_mapping, backward_mapping):
         and is_uint_injection(backward_mapping, forward_mapping)
         )
 
+
+def has_uint_mapping_no_self_reflect(forward_mapping):
+    # precodition: forward_mapping :: [UInt]
+    #
+    return not any(i == j for i, j in enumerate(forward_mapping))
+
+def is_uint_bijection_without_self_reflect(forward_mapping, backward_mapping):
+    # precodition: forward_mapping, backward_mapping:: [UInt]
+    #
+    return is_uint_bijection(forward_mapping, backward_mapping) and has_uint_mapping_no_self_reflect(forward_mapping)
 

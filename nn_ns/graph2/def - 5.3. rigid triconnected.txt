@@ -1,0 +1,3 @@
+rigid triconnected
+    see: "def - 5. connectivity.txt"
+

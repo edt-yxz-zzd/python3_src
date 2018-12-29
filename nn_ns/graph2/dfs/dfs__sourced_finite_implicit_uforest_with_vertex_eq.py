@@ -201,7 +201,7 @@ def _dfs__sourced_finite_implicit_uforest_with_vertex_eq__basic_ver2(*
             self.ancestor_hedges.push(hedge)
     ancestor_hedges__new = AncestorHedges__new(ancestor_hedges)
 
-    it__new = dfs__finite_explicit_ugraph(
+    it__new = dfs__finite_explicit_ugraph__two_color.via_source_vertices(
         source_vertices=source_vertices
         ,vertex2color=the_vertex2two_color__no_effect
         ,vertex2unstable_iter_hedges=vertex2unstable_iter_hedges__new

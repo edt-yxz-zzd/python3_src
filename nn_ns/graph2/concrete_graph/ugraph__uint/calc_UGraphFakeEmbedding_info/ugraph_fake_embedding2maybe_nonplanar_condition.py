@@ -55,7 +55,6 @@ from seed.tiny import print_err
 from .dfs__ugraph_fake_embedding import (
     dfs__ugraph_fake_embedding
     ,DFS_Case
-    ,DFS_CaseParts
     )
 from .imports import (
     the_left_biased_list_as_stack_ops
@@ -189,7 +188,7 @@ def _mk_maybe_nonplanar_condition_impl(ugraph_fake_embedding):
             #   then child tree hedges from left to right
         ,maybe_ancestor_hedge_stack = ancestor_hedges
         ,maybe_ancestor_vertex_stack = None
-        )
+        ).more_dfs()
 
     # number back_hedge/rback_hedge by postorder
     hedge2maybe_postorder = [None]*ugraph_fake_embedding.num_hedges

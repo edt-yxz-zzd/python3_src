@@ -1,0 +1,3 @@
+rigid biconnected
+    see: "def - 5. connectivity.txt"
+

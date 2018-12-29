@@ -1,6 +1,6 @@
 
 __all__ = '''
-    radix_sort
+    radix_sort_with_table
     '''.split()
 from seed.tiny import echo
 from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted
@@ -20,7 +20,7 @@ def complete_key_func(num_alphabet_sizes, key):
         return keys
     return new_key
 
-def radix_sort(
+def radix_sort_with_table(
         alphabet_sizes, iterable, table
         , *, key=None, reverse=False, incomplete=False):
     ''':: [UInt] -> Iter a -> Iter TableIdx -> [[a]] -> [a]
@@ -96,6 +96,8 @@ time and space
     for i in range(len(ls)):
         _, ls[i] = ls[i]
     return ls
+
+radix_sort = radix_sort_with_table
 
 if __name__ == "__main__":
     import doctest

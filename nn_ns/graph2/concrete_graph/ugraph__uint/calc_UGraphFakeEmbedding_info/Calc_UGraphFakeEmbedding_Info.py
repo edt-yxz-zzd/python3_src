@@ -9,6 +9,7 @@ from ..UGraphFakeEmbedding import UGraphFakeEmbedding
 from .ugraph_fake_embedding2maybe_nonplanar_condition import ugraph_fake_embedding2maybe_nonplanar_condition
 from .make_hedge2fake_aedge import make_hedge2fake_aedge
 from .make_hedge2fake_counterclockwise_fface import make_hedge2fake_counterclockwise_fface
+from .ugraph_fake_embedding2num_nonedgeless_connected_components import ugraph_fake_embedding2num_nonedgeless_connected_components
 
 _get = object.__getattribute__
 class Calc_UGraphFakeEmbedding_Info:
@@ -16,6 +17,8 @@ class Calc_UGraphFakeEmbedding_Info:
         maybe_ugraph_fake_embedding_nonplanar_condition
         is_ugraph_fake_embedding_planar
         hedge2fake_counterclockwise_fface
+        is_ugraph_fake_embedding_nonedgeless_rigid_connected
+        num_nonedgeless_connected_components
         '''.split()
         #is_relax_planar_embedding
         #is_ugraph_fake_embedding_relax_planar
@@ -58,6 +61,15 @@ class Calc_UGraphFakeEmbedding_Info:
                 ,hedge2fake_clockwise_prev_hedge_around_vertex
                     = ugraph_fake_embedding.hedge2fake_clockwise_prev_hedge_around_vertex
                 )
+    def is_ugraph_fake_embedding_nonedgeless_rigid_connected(self):
+        return 1 == self.num_nonedgeless_connected_components
+    def num_nonedgeless_connected_components(self):
+        ugraph_fake_embedding = _get(self, 'ugraph_fake_embedding')
+        return ugraph_fake_embedding2num_nonedgeless_connected_components(
+            ugraph_fake_embedding
+            )
+
+
 
 
 

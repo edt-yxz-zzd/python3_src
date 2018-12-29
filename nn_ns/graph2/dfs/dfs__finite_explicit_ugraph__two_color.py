@@ -46,6 +46,11 @@ __all__ = '''
     IVertex2TwoColor
     dfs__finite_explicit_ugraph__two_color
 
+    dfs__finite_explicit_ugraph__two_color__basic
+    dfs__finite_explicit_ugraph__two_color__source_vertex
+    dfs__finite_explicit_ugraph__two_color__source_hedge
+    dfs__finite_explicit_ugraph__two_color__source_either
+
     make_hedge2unstable_iter_other_hedges_around_another_vertex
     '''.split()
 
@@ -67,6 +72,7 @@ from ..stack.INearlyCompleteMutableStack import INearlyCompleteMutableStack
 #from ..stack.SeqAsCompleteMutableStack import SeqAsCompleteMutableStack
 from ..stack.NearlyCompleteMutableStack import NearlyCompleteMutableStack
 from .abc import ABC, abstractmethod, override
+from seed.tiny import echo
 
 import enum
 from .Enum__NoShowValue import Enum__NoShowValue
@@ -122,8 +128,7 @@ class DFS_Case(Enum__NoShowValue):
     DFS_EnterExitBackOrRBackHEdge = _mk_frozenset('DFS Enter Exit EnterExit Back RBack HEdge BackHEdge RBackHEdge')
 
 
-
-def dfs__finite_explicit_ugraph__two_color(*
+def dfs__finite_explicit_ugraph__two_color__source_vertex(*
     ,source_vertices
     ,vertex2color
     ,vertex2unstable_iter_hedges
@@ -195,7 +200,7 @@ example:
     vertex2unstable_iter_hedges :: Vertex -> Iter HEdge
     hedge2another_vertex :: HEdge -> Vertex
     hedge2unstable_iter_other_hedges_around_another_vertex
-    >>> this = dfs__finite_explicit_ugraph__two_color
+    >>> this = dfs__finite_explicit_ugraph__two_color__source_vertex
     >>> source_vertices = '0a1'
     >>> vertex2color = Vertex2TwoColor__no_effect()
     >>> d = {'a':'bc', 'b':'a', 'c':'ad', 'd':'c', '0':'1', '1':'0'}#tree
@@ -207,6 +212,220 @@ example:
     [(<DFS_Case.DFS_EnterRootVertex>, '0'), (<DFS_Case.DFS_EnterTreeHEdge>, (('0', '1'), '1')), (<DFS_Case.DFS_ExitTreeHEdge>, None), (<DFS_Case.DFS_ExitRootVertex>, '0'), (<DFS_Case.DFS_EnterRootVertex>, 'a'), (<DFS_Case.DFS_EnterTreeHEdge>, (('a', 'b'), 'b')), (<DFS_Case.DFS_ExitTreeHEdge>, None), (<DFS_Case.DFS_EnterTreeHEdge>, (('a', 'c'), 'c')), (<DFS_Case.DFS_EnterTreeHEdge>, (('c', 'd'), 'd')), (<DFS_Case.DFS_ExitTreeHEdge>, None), (<DFS_Case.DFS_ExitTreeHEdge>, None), (<DFS_Case.DFS_ExitRootVertex>, 'a'), (<DFS_Case.DFS_EnterRootVertex>, '1'), (<DFS_Case.DFS_EnterTreeHEdge>, (('1', '0'), '0')), (<DFS_Case.DFS_ExitTreeHEdge>, None), (<DFS_Case.DFS_ExitRootVertex>, '1')]
 
 
+'''
+    return dfs__finite_explicit_ugraph__two_color__basic(
+            sources = source_vertices
+            ,source2vertex = echo
+            ,source2unstable_iter_hedges
+                = vertex2unstable_iter_hedges
+
+            ,vertex2color
+                = vertex2color
+            ,hedge2another_vertex
+                = hedge2another_vertex
+            ,hedge2unstable_iter_other_hedges_around_another_vertex
+                = hedge2unstable_iter_other_hedges_around_another_vertex
+
+            ,maybe_ancestor_hedge_stack
+                = maybe_ancestor_hedge_stack
+            ,maybe_ancestor_vertex_stack
+                = maybe_ancestor_vertex_stack
+        )
+
+class make_kwargs4dfs__finite_explicit_ugraph__two_color__basic:
+    def from_kwargs__source_hedge(*
+        ,hedge2another_hedge
+        ,hedge2unstable_iter_other_hedges_around_another_vertex
+        ,hedge2vertex
+        ):
+        # -> (hedge2another_vertex, hedge2unstable_iter_hedges)
+        # for dfs__finite_explicit_ugraph__two_color__source_hedge
+        def hedge2unstable_iter_hedges(hedge):
+            yield hedge
+            other = hedge2another_hedge(hedge)
+            yield from hedge2unstable_iter_other_hedges_around_another_vertex(other)
+        def hedge2another_vertex(hedge):
+            other = hedge2another_hedge(hedge)
+            return hedge2vertex(other)
+        return hedge2another_vertex, hedge2unstable_iter_hedges
+    def from_kwargs__source_either__less(*
+        ,hedge2vertex
+        ,vertex2unstable_iter_hedges
+        ,hedge2unstable_iter_hedges
+        ):
+        # -> (either2vertex, either2unstable_iter_hedges)
+        def either2vertex(either):
+            is_vertex, hedge_or_vertex = either
+            if is_vertex:
+                vertex = hedge_or_vertex
+            else:
+                hedge = hedge_or_vertex
+                vertex = hedge2vertex(hedge)
+            return vertex
+        def either2unstable_iter_hedges(either):
+            is_vertex, hedge_or_vertex = either
+            if is_vertex:
+                vertex = hedge_or_vertex
+                hedges = vertex2unstable_iter_hedges(vertex)
+            else:
+                hedge = hedge_or_vertex
+                hedges = hedge2unstable_iter_hedges(hedge)
+            return hedges
+        return (either2vertex, either2unstable_iter_hedges)
+
+    def from_kwargs__source_either(*
+        ,hedge2vertex
+        ,vertex2unstable_iter_hedges
+        ,hedge2another_hedge
+        ,hedge2unstable_iter_other_hedges_around_another_vertex
+        ):
+        # -> (either2vertex, either2unstable_iter_hedges, hedge2another_vertex)
+        # for dfs__finite_explicit_ugraph__two_color__source_either
+
+        def hedge2unstable_iter_hedges(hedge):
+            yield hedge
+            other = hedge2another_hedge(hedge)
+            yield from hedge2unstable_iter_other_hedges_around_another_vertex(other)
+        def hedge2another_vertex(hedge):
+            other = hedge2another_hedge(hedge)
+            return hedge2vertex(other)
+
+        (either2vertex, either2unstable_iter_hedges
+        ) = __class__.from_kwargs__source_either__less(
+            hedge2vertex = hedge2vertex
+            ,vertex2unstable_iter_hedges = vertex2unstable_iter_hedges
+            ,hedge2unstable_iter_hedges = hedge2unstable_iter_hedges
+            )
+        return (either2vertex, either2unstable_iter_hedges, hedge2another_vertex)
+
+def dfs__finite_explicit_ugraph__two_color__source_hedge(*
+    #,source_vertices
+    ,source_hedges
+    ,vertex2color
+    ,hedge2vertex
+    ,hedge2another_hedge
+    #,hedge2another_vertex
+    ,hedge2unstable_iter_other_hedges_around_another_vertex
+
+    ,maybe_ancestor_hedge_stack = None
+    ,maybe_ancestor_vertex_stack = None
+    ):
+    '''
+input:
+    source_hedges :: Iter HEdge
+        possible root_hedges
+    hedge2vertex :: HEdge -> Vertex
+    hedge2another_hedge :: HEdge -> HEdge
+    ...other parameters
+        see: dfs__finite_explicit_ugraph__two_color__source_vertex
+'''
+    (hedge2another_vertex, hedge2unstable_iter_hedges
+    ) = make_kwargs4dfs__finite_explicit_ugraph__two_color__basic \
+        .from_kwargs__source_hedge(
+            hedge2another_hedge
+                = hedge2another_hedge
+            ,hedge2unstable_iter_other_hedges_around_another_vertex
+                = hedge2unstable_iter_other_hedges_around_another_vertex
+            ,hedge2vertex
+                = hedge2vertex
+            )
+
+    return dfs__finite_explicit_ugraph__two_color__basic(
+            sources = source_hedges
+            ,source2vertex = hedge2vertex
+            ,source2unstable_iter_hedges = hedge2unstable_iter_hedges
+            ,hedge2another_vertex = hedge2another_vertex
+
+            ,vertex2color
+                = vertex2color
+            ,hedge2unstable_iter_other_hedges_around_another_vertex
+                = hedge2unstable_iter_other_hedges_around_another_vertex
+            ,maybe_ancestor_hedge_stack
+                = maybe_ancestor_hedge_stack
+            ,maybe_ancestor_vertex_stack
+                = maybe_ancestor_vertex_stack
+            )
+
+
+def dfs__finite_explicit_ugraph__two_color__source_either(*
+    #,source_vertices
+    ,source_eithers
+    ,vertex2color
+    ,vertex2unstable_iter_hedges
+    ,hedge2vertex
+    ,hedge2another_hedge
+    #,hedge2another_vertex
+    ,hedge2unstable_iter_other_hedges_around_another_vertex
+
+    ,maybe_ancestor_hedge_stack = None
+    ,maybe_ancestor_vertex_stack = None
+    ):
+    '''
+input:
+    source_eithers :: Iter ((False, HEdge)|(True, Vertex,))
+        eithers of possible root_hedge or root_vertex
+    hedge2vertex :: HEdge -> Vertex
+    hedge2another_hedge :: HEdge -> HEdge
+    ...other parameters
+        see: dfs__finite_explicit_ugraph__two_color__source_vertex
+'''
+    (either2vertex
+    ,either2unstable_iter_hedges
+    ,hedge2another_vertex
+    ) = make_kwargs4dfs__finite_explicit_ugraph__two_color__basic \
+        .from_kwargs__source_either(
+            hedge2vertex
+                = hedge2vertex
+            ,vertex2unstable_iter_hedges
+                = vertex2unstable_iter_hedges
+            ,hedge2another_hedge
+                = hedge2another_hedge
+            ,hedge2unstable_iter_other_hedges_around_another_vertex
+                = hedge2unstable_iter_other_hedges_around_another_vertex
+            )
+
+
+    return dfs__finite_explicit_ugraph__two_color__basic(
+            sources = source_eithers
+            ,source2vertex = either2vertex
+            ,source2unstable_iter_hedges = either2unstable_iter_hedges
+            ,hedge2another_vertex = hedge2another_vertex
+
+            ,vertex2color
+                = vertex2color
+            ,hedge2unstable_iter_other_hedges_around_another_vertex
+                = hedge2unstable_iter_other_hedges_around_another_vertex
+            ,maybe_ancestor_hedge_stack
+                = maybe_ancestor_hedge_stack
+            ,maybe_ancestor_vertex_stack
+                = maybe_ancestor_vertex_stack
+            )
+
+
+
+def dfs__finite_explicit_ugraph__two_color__basic(*
+    #,source_vertices
+    ,sources
+    ,vertex2color
+    #,vertex2unstable_iter_hedges
+    ,source2vertex
+    ,source2unstable_iter_hedges
+    ,hedge2another_vertex
+    ,hedge2unstable_iter_other_hedges_around_another_vertex
+
+    ,maybe_ancestor_hedge_stack
+    ,maybe_ancestor_vertex_stack
+    ):
+    '''
+input:
+    sources :: Iter Source
+        Source is opaque type
+        why?
+            to support root_hedge
+    source2vertex :: Source -> Vertex
+    source2unstable_iter_hedges :: Source -> Iter HEdge
+    ...other parameters
+        see: dfs__finite_explicit_ugraph__two_color__source_vertex
 '''
     assert isinstance(vertex2color, IVertex2TwoColor)
 
@@ -236,15 +455,19 @@ example:
     #ancestor_hedges = []
     #ancestor_vertices = []
 
-    for root_vertex in source_vertices:
+    #for root_vertex in source_vertices:
+    for source in sources:
         assert not iterator_stack
         assert ancestor_vertices.is_empty()
         assert ancestor_hedges.is_empty()
 
+        root_vertex = source2vertex(source)
         if vertex2color.is_vertex_colored_WHITE(root_vertex): continue
         vertex2color.set_vertex_color_WHITE(root_vertex)
 
-        iterator_stack.append(vertex2unstable_iter_hedges(root_vertex))
+        #hedges_around_root_vertex = vertex2unstable_iter_hedges(root_vertex)
+        hedges_around_root_vertex = source2unstable_iter_hedges(source)
+        iterator_stack.append(hedges_around_root_vertex)
         ancestor_vertices.push(root_vertex)
         yield DFS_Case.DFS_EnterRootVertex, root_vertex
 
@@ -284,6 +507,43 @@ example:
         ancestor_vertices.pop_None()
 
 
+class dfs__finite_explicit_ugraph__two_color:
+    '''
+common:
+    vertex2color
+    hedge2unstable_iter_other_hedges_around_another_vertex
+    maybe_ancestor_hedge_stack
+    maybe_ancestor_vertex_stack
+
+via_source_vertices:
+    ,source_vertices
+    ,vertex2unstable_iter_hedges
+    ,hedge2another_vertex
+
+via_source_hedges
+    ,source_hedges
+    ,hedge2vertex
+    ,hedge2another_hedge
+
+via_source_eithers
+    ,source_eithers
+    ,vertex2unstable_iter_hedges
+    ,hedge2vertex
+    ,hedge2another_hedge
+
+via_opaque_sources
+    ,sources
+    ,source2vertex
+    ,source2unstable_iter_hedges
+    ,hedge2another_vertex
+
+'''
+    via_source_vertices = dfs__finite_explicit_ugraph__two_color__source_vertex
+    via_source_hedges = dfs__finite_explicit_ugraph__two_color__source_hedge
+    via_source_eithers = dfs__finite_explicit_ugraph__two_color__source_either
+    via_opaque_sources = dfs__finite_explicit_ugraph__two_color__basic
+
+    make_kwargs4via_opaque_sources = make_kwargs4dfs__finite_explicit_ugraph__two_color__basic
 
 
 

@@ -1,0 +1,33 @@
+
+rigid connected
+rigid biconnected
+rigid triconnected
+
+
+[ugraph G]
+    [G is rigid_connected]
+        <==> [G.num_connected_components==1]
+        ==>> [G.num_vertices>=1]
+
+[ugraph G]
+    [G is rigid_biconnected]
+        <==> [G is rigid_connected][G.min_vertex_degree>=2][G has no self_loop][G has no cut vertex]
+        # allow multiedge
+        ==>> [G.num_vertices>=2][G.num_aedges>=2]
+        # vertex_degree >= 2
+        # fface_degree >= 2
+        # face_degree >= 2 if planar
+
+
+[ugraph G]
+    [G is rigid_triconnected]
+        <==> [G is rigid_biconnected][G.min_vertex_degree>=3][G has no multiedge][G has no separation vertex pair]
+        <==> [G is rigid_connected][G.min_vertex_degree>=3][G has no self_loop][G has no multiedge][G has no cut vertex][G has no separation vertex pair]
+        ==>> [G.num_vertices>=4][G.num_aedges>=3]
+        ==>> [G.num_vertices>=4][G.num_aedges>=6]
+        # vertex_degree >= 3
+        # fface_degree >= 3
+        # face_degree >= 3 if planar
+
+
+

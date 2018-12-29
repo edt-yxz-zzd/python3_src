@@ -151,6 +151,7 @@ __all__ = '''
 from .iter_cycle_from import iter_cycle_from
 from .inverse_uint_bijection import inverse_uint_bijection
 from .is_uint_bijection import (is_uint_injection, is_uint_bijection)
+from .get_attrs import get_attrs
 from .makes_for_UGraphFakeEmbedding import (
     make_hedge2another_hedge
 
@@ -170,9 +171,9 @@ from .makes_for_UGraphFakeEmbedding import (
 
 from seed.helper.repr_input import repr_helper_ex
 from seed.verify.common_verify import (
-    is_UInt, is_Sequence
+    is_UInt, is_Sequence, has_attrs
     #is_int, is_UInt, is_pair, is_tuple, is_Sequence
-    #, is_strict_sorted_sequence, has_attrs
+    #, is_strict_sorted_sequence
     )
 from seed.verify.VerifyType import VerifyType__static
 
@@ -185,6 +186,9 @@ methods:
     make_UGraphFakeEmbedding__simpler
     verify_ugraph_fake_embedding
     verify
+
+    ireplace
+    hedge2another_hedge
     hedge2iter_fake_clockwise_hedges_around_vertex
     hedge2iter_fake_clockwise_hedges_around_fface
 
@@ -308,6 +312,49 @@ calc attrs:
         num_hedges = len(hedge2fake_clockwise_next_hedge_around_vertex)
         num_ffaces = len(fface2arbitrary_hedge)
         num_fvertices = len(fvertex2arbitrary_hedge)
+
+        return cls.make_UGraphFakeEmbedding(
+            num_hedges = num_hedges
+            ,num_ffaces = num_ffaces
+            ,num_fvertices = num_fvertices
+
+            ,hedge2fake_clockwise_next_hedge_around_vertex
+                = hedge2fake_clockwise_next_hedge_around_vertex
+            ,hedge2fake_clockwise_prev_hedge_around_vertex
+                = hedge2fake_clockwise_prev_hedge_around_vertex
+            ,hedge2fake_clockwise_next_hedge_around_fface
+                = hedge2fake_clockwise_next_hedge_around_fface
+            ,hedge2fake_clockwise_prev_hedge_around_fface
+                = hedge2fake_clockwise_prev_hedge_around_fface
+
+            ,fface2degree = fface2degree
+            ,hedge2fake_clockwise_fface = hedge2fake_clockwise_fface
+            ,fface2arbitrary_hedge = fface2arbitrary_hedge
+
+            ,fvertex2degree = fvertex2degree
+            ,hedge2fvertex = hedge2fvertex
+            ,fvertex2arbitrary_hedge = fvertex2arbitrary_hedge
+            )
+
+    @classmethod
+    def make_UGraphFakeEmbedding(cls, *
+        ,num_hedges
+        ,num_ffaces
+        ,num_fvertices
+
+        ,hedge2fake_clockwise_next_hedge_around_vertex
+        ,hedge2fake_clockwise_prev_hedge_around_vertex
+        ,hedge2fake_clockwise_next_hedge_around_fface
+        ,hedge2fake_clockwise_prev_hedge_around_fface
+
+        ,fface2degree
+        ,hedge2fake_clockwise_fface
+        ,fface2arbitrary_hedge
+
+        ,fvertex2degree
+        ,hedge2fvertex
+        ,fvertex2arbitrary_hedge
+        ):
         return __class__(
             num_hedges = num_hedges
             ,num_ffaces = num_ffaces
@@ -330,6 +377,7 @@ calc attrs:
             ,hedge2fvertex = hedge2fvertex
             ,fvertex2arbitrary_hedge = fvertex2arbitrary_hedge
             )
+
 
     def __init__(self, *
         ,num_hedges
@@ -381,7 +429,7 @@ calc attrs:
         return VerifyUGraphFakeEmbedding(self, __mkError)
 
     def verify(self, __mkError=None):
-        return self.verify_ugraph_fake_embedding()
+        return self.verify_ugraph_fake_embedding(__mkError)
 
     def __setattr__(self, attr, obj):
         if attr in __class__.all_UGraphFakeEmbedding_attr_set or attr == 'calc':
@@ -397,6 +445,12 @@ calc attrs:
             # exclude 'calc'
         return repr_helper_ex(self, (), all_UGraphFakeEmbedding_attr_seq, {}, ordered_attrs_only=True)
 
+
+    def ireplace(self, **kwargs):
+        d = get_attrs(self, __class__.all_UGraphFakeEmbedding_attr_seq)
+        d.update(kwargs)
+        cls = type(self)
+        return cls.make_UGraphFakeEmbedding(**d)
 
     def hedge2another_hedge(self, hedge):
         return self.hedge2fake_clockwise_next_hedge_around_vertex[
@@ -428,6 +482,12 @@ class VerifyUGraphFakeEmbedding(VerifyType__static):
         def is_uint_seq(obj):
             return is_Sequence.of(obj, is_UInt)
         attrs = UGraphFakeEmbedding.all_UGraphFakeEmbedding_attr_seq
+
+        yield (has_attrs(obj, attrs=attrs)
+            , lambda: f'missing some attrs: {attrs!r}'
+            )
+
+
         for attr in attrs:
             value = getattr(obj, attr)
             if attr.startswith('num_'):
