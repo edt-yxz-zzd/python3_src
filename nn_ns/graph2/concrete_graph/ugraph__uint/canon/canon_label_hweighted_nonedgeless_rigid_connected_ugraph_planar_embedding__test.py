@@ -77,7 +77,9 @@ def this(embedding, hedge2hweight=None):
     if hedge2hweight is None:
         hedge2hweight = [0]*embedding.num_hedges
     num_hweights = 1+max(hedge2hweight, default=-1)
-    return _this(nonedgeless_rigid_connected_ugraph_planar_embedding=embedding, hedge2hweight=hedge2hweight, num_hweights=num_hweights)
+    labelling, hedge_classes = _this(nonedgeless_rigid_connected_ugraph_planar_embedding=embedding, hedge2hweight=hedge2hweight, num_hweights=num_hweights)
+    hedge_classes = list(hedge_classes)
+    return labelling, hedge_classes
 
 
 
