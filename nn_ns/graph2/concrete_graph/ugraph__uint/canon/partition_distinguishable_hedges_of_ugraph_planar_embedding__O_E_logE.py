@@ -14,7 +14,7 @@ from ..verify_associate_data import verify_associate_data_ex
 
 from ..inverse_uint_bijection import inverse_uint_bijection
 from .make_compact_uint2group_idx import make_compact_uint2group_idx
-from seed.algo.bucket_sort.radix_sort_with_table import radix_sort_with_table
+from ..imports__bucket_sort import radix_sort
 from itertools import accumulate, chain
 
 
@@ -238,11 +238,11 @@ def make_hedge2class_idx__via_radix_sort(*
     fface_degree_UB = 1+max(ugraph_planar_embedding.fface2degree, default=-1)
 
     alphabet_sizes = make_alphabet_sizes()
-    table = tuple([] for _ in range(max(alphabet_sizes)))
+    #table = tuple([] for _ in range(max(alphabet_sizes)))
     num_hedges = ugraph_planar_embedding.num_hedges
     key = hedge2class_data.__getitem__
 
-    sorted_hedges = radix_sort_with_table(alphabet_sizes, range(num_hedges), table, key=key)
+    sorted_hedges = radix_sort(alphabet_sizes, range(num_hedges), key=key)
 
     (hedge2group_idx, group_idx2key, group_idx2size
     ) = make_compact_uint2group_idx(num_hedges, sorted_hedges, key=key)

@@ -5,7 +5,7 @@ __all__ = '''
 
 from ..is_uint_sequence import is_uint_sequence
 from .make_compact_uint2group_idx import make_compact_uint2group_idx
-from seed.algo.bucket_sort.radix_sort_with_table import radix_sort_with_table
+from ..imports__bucket_sort import radix_sort
 
 class make_hedge2hweight:
     @classmethod
@@ -50,10 +50,10 @@ class make_hedge2hweight:
         #hedge2triple = tuple(map(hedge2triple__func, range(ugraph_fake_embedding.num_hedges)))
 
         alphabet_sizes = (num_colors, num_hweights, num_areas)
-        table = tuple([] for _ in max(alphabet_sizes))
+        #table = tuple([] for _ in max(alphabet_sizes))
         num_hedges = ugraph_fake_embedding.num_hedges
         key = hedge2triple__func
-        sorted_hedges = radix_sort_with_table(alphabet_sizes, range(num_hedges), key=key)
+        sorted_hedges = radix_sort(alphabet_sizes, range(num_hedges), key=key)
 
 
         (hedge2new_hweight

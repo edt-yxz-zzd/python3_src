@@ -1,0 +1,77 @@
+
+rooted utree = (root, utree)
+rooted_utree = (root_vertex, utree) | (root_aedge, utree)
+rooted_utree = vertex_rooted_utree | aedge_rooted_utree
+vertex_rooted_utree = (root_vertex, utree)
+aedge_rooted_utree = (root_aedge, utree)
+root = root_vertex | root_aedge
+    center = unicenter_vertex | bicenter_aedge
+    root_vertex/root_aedge vs unicenter_vertex/bicenter_aedge
+        any utree has unicenter_vertex/bicenter_aedge
+        center is not root, but can be.
+
+
+rooted_utree vs dtree
+    rooted_utree is not dtree
+
+    dtree = directed tree = in_tree | out_tree
+    dtree has root_vertex, but not root_aedge
+
+    although no direction, we distingusih:
+        parent child upper lower
+
+
+below concepts depend on a given "root"
+    parent/child/upper/lower
+    height/depth/level
+
+    parent/child - near/far away to root_vertex/root_aedge
+    upper/lower - near/far away to root_vertex/root_aedge
+    height - count from leaf
+    depth/level - count from root
+
+    uniroot_vertex/biroot_vertices
+
+uniroot_vertex = root_vertex
+biroot_vertices = the 2 vertices incident to root_aedge
+
+parent_vertex/child_vertex
+    is vertex u a parent_vertex/child_vertex of vertex v?
+        :: utree -> root -> vertex -> vertex -> bool
+    vertex has [0..1] parent_vertices
+    vertex has [0..] child_vertices
+
+    uniroot_vertex/biroot_vertices <==> 0 parent_vertices
+
+parent_aedge/child_aedge
+    is aedge e a parent_aedge/child_aedge of vertex v?
+        :: utree -> root -> aedge -> vertex -> bool
+    vertex has [0..1] parent_aedges
+    vertex has [0..] child_aedges
+
+    uniroot_vertex <==> 0 parent_aedges
+        # biroot_vertices has 1 parent_aedges
+
+upper_hedge/lower_hedge
+    is hedge h a upper_hedge/lower_hedge of aedge e?
+        :: utree -> root -> hedge -> aedge -> bool
+    aedge has [0..1] upper_hedges
+    aedge has [1..2] lower_hedges
+
+    root_aedge <==> 0 upper_hedges <==> 2 lower_hedges
+
+aedge2maybe_upper_hedge/vertex2maybe_parent_aedge
+    # vertex_rooted_utree
+        aedge2upper_hedge/vertex2maybe_parent_aedge
+    # aedge_rooted_utree
+        aedge2maybe_upper_hedge/vertex2parent_aedge
+
+
+height/depth/level
+    :: utree -> root -> vertex -> UInt
+
+    # length of path = num aedges of path = -1 + num vertices of path
+    height = max lengths of paths to leaf
+    depth = min length of path to uniroot_vertex/biroot_vertices
+    level = 1+depth
+

@@ -1,0 +1,13 @@
+
+#uforest = undirected forest
+
+
+utree = undirected tree
+    num_vertices = num_aedges + 1
+
+unicenter_vertex
+    all/any longest path has odd number of vertices
+bicenter_aedge
+    all/any longest path has odd number of aedges
+    all/any longest path has even number of vertices
+
