@@ -59,7 +59,7 @@ class UGraphBasic:
         num_hedges = len(hedge2vertex)
         num_aedges = num_hedges // 2
         return cls(
-            ,num_vertices=num_vertices
+            num_vertices=num_vertices
             ,num_aedges=num_aedges
             ,num_hedges=num_hedges
             ,hedge2vertex=hedge2vertex
@@ -187,7 +187,7 @@ class VerifyUGraphBasic(VerifyType__static):
 
 
         # verify hedge2aedge
-        aedge2degree_ = make_vertex2degree.from_hedge2vertex(num_aedges=num_aedges, hedge2aedge=hedge2aedge)
+        aedge2degree_ = make_vertex2degree.from_hedge2vertex(num_vertices=num_aedges, hedge2vertex=hedge2aedge)
         yield (all(d_==2 for d_ in aedge2degree_)
             , lambda:f'hedge2aedge: wrong aedge degree'
             )
