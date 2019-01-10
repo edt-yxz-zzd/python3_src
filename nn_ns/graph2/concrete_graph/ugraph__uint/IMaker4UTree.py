@@ -202,8 +202,7 @@ usage:
         # donot set aedge2maybe_upper_hedge[subtree_root_aedge]
         utree = self.utree
         hedge2another_hedge = utree.hedge2another_hedge
-        aedge2arbitrary_hedge = utree.aedge2arbitrary_hedge
-        hedge2vertex = utree.hedge2vertex
+        hedge2aedge = utree.hedge2aedge
 
         upper_hedge = hedge2another_hedge[subtree_root_lower_hedge]
         upper_hedges = [upper_hedge]
@@ -384,11 +383,13 @@ usage:
         aedge2arbitrary_hedge = utree.aedge2arbitrary_hedge
         hedge2another_hedge = utree.hedge2another_hedge
         hedge2vertex = utree.hedge2vertex
+        hedge2aedge = utree.hedge2aedge
+
         vertex2child_aedges = []
         for vertex, maybe_parent_aedge in enumerate(vertex2maybe_parent_aedge):
             if maybe_parent_aedge is None:
                 # vertex is root_vertex
-                it = self.vertex2unstable_iter_hedges(vertex)
+                iter_hedges = self.vertex2unstable_iter_hedges(vertex)
             else:
                 parent_aedge = maybe_parent_aedge
                 maybe_upper_hedge = aedge2maybe_upper_hedge[parent_aedge]
@@ -403,8 +404,11 @@ usage:
                 else:
                     upper_hedge = maybe_upper_hedge
                     pseudo_upper_hedge = upper_hedge
-                it = self.hedge2unstable_iter_other_hedges_around_another_vertex(pseudo_upper_hedge)
-            vertex2child_aedges.append(tuple(it))
+                iter_hedges = self.hedge2unstable_iter_other_hedges_around_another_vertex(pseudo_upper_hedge)
+            #bug: vertex2child_aedges.append(tuple(it))
+            #   it - now rename to iter_hedges
+            iter_aedges = (hedge2aedge[hedge] for hedge in iter_hedges)
+            vertex2child_aedges.append(tuple(iter_aedges))
         return tuple(vertex2child_aedges)
     def vertex2maybe_parent_vertex(self, *, aedge2maybe_upper_hedge, vertex2maybe_parent_aedge):
         # -> [(None|parent_vertex)]
