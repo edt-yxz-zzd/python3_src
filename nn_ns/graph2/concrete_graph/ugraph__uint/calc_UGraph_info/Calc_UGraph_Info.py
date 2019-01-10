@@ -16,11 +16,13 @@ class Calc_UGraph_Info:
         sorted_self_loop_aedges
         degree2sorted_vertices
         sorted_nonempty_vertex_degrees
-        either_ugraph_nonplanar_condition_or_ugraph_planar_embedding
+        is_ugraph_utree
         is_ugraph_rigid_connected
-        is_ugraph_rigid_biconnected
-        is_ugraph_rigid_triconnected
         '''.split()
+        #is_ugraph_rigid_biconnected
+        #is_ugraph_rigid_triconnected
+        #either_ugraph_nonplanar_condition_or_ugraph_planar_embedding
+
     all_attr_set = frozenset(all_attr_seq)
 
     def __init__(self, ugraph):
@@ -64,4 +66,17 @@ class Calc_UGraph_Info:
                 if vertices
             )
         return sorted_nonempty_vertex_degrees
+
+    def is_ugraph_utree(self):
+        ugraph = _get_ugraph(self)
+        return (ugraph.num_aedges+1 == ugraph.num_vertices
+            and self.is_ugraph_rigid_connected)
+    def is_ugraph_rigid_connected(self):
+        ugraph = _get_ugraph(self)
+        ugraph_fake_embedding = ugraph.ugraph_fake_embedding
+        if ugraph.num_aedges == 0:
+            return ugraph.num_vertices == 1 # <<== rigid
+        return (ugraph.num_vertices == ugraph_fake_embedding.num_fvertices
+            and ugraph_fake_embedding.calc.is_ugraph_fake_embedding_nonedgeless_rigid_connected
+            )
 

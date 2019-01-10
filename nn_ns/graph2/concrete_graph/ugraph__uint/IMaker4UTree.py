@@ -10,6 +10,10 @@ from seed.types.ImmutableNamespace import ImmutableNamespace
 class IMaker4UTree(ABC):
     '''
 
+why IMaker4UTree instead of Maker4UTree?
+    I donot determine the type of utree:
+        utree :: UGraph/UGraphBasic/...???
+
 see:
     "def - 6. utree.txt"
     "def - 6.2. rooted utree.txt"
@@ -62,7 +66,7 @@ required attrs of utree:
 result attrs of make_all_rooted_utree_attrs:
     aedge2maybe_upper_hedge
     vertex2maybe_parent_aedge
-    either_center
+    either_root
     vertex2child_aedges
     vertex2maybe_parent_vertex
     vertex2depth
@@ -73,20 +77,27 @@ result attrs of make_all_rooted_utree_attrs:
 methods:
     make_all_rooted_utree_attrs
     `vertex2unstable_iter_hedges
-    hedge2iter_other_hedges_around_another_vertex
+    hedge2unstable_iter_other_hedges_around_another_vertex
     vertex2unstable_iter_incident_aedge_neighbor_hedge_neighbor_vertex_triples
+
+    aedge2maybe_upper_hedge
+        aedge2maybe_upper_hedge__using_center_as_root
+        aedge2maybe_upper_hedge__with_root_vertex
+        aedge2maybe_upper_hedge__with_root_aedge
+        _inplace_aedge2maybe_upper_hedge4subtree_with_root_lower_hedge
 
 
 usage:
-    ns = Subclass_of_IMaker4UTree(utree).make_all_rooted_utree_attrs()
-    ns.either_center
+    ns = Subclass_of_IMaker4UTree(utree).make_all_rooted_utree_attrs(maybe_either_root=None)
+    ns.either_root
+        # either_root == either_center if above maybe_either_root=None
 '''
     #__slots__ = ()
 
     all_attr_seq = '''
         aedge2maybe_upper_hedge
         vertex2maybe_parent_aedge
-        either_center
+        either_root
         vertex2child_aedges
         vertex2maybe_parent_vertex
         vertex2depth
@@ -100,12 +111,14 @@ usage:
         assert utree.num_vertices == utree.num_aedges + 1
         self.utree = utree
 
-    def make_all_rooted_utree_attrs(self):
+    def make_all_rooted_utree_attrs(self, *, maybe_either_root):
         # no "utree"??
-        aedge2maybe_upper_hedge = self.aedge2maybe_upper_hedge()
+        # maybe_either_root - see: aedge2maybe_upper_hedge()
+        aedge2maybe_upper_hedge = self.aedge2maybe_upper_hedge(
+            maybe_either_root=maybe_either_root)
         vertex2maybe_parent_aedge = self.vertex2maybe_parent_aedge(
             aedge2maybe_upper_hedge=aedge2maybe_upper_hedge)
-        either_center = self.either_center(
+        either_root = self.either_root(
             aedge2maybe_upper_hedge=aedge2maybe_upper_hedge
             ,vertex2maybe_parent_aedge=vertex2maybe_parent_aedge)
         vertex2child_aedges = self.vertex2child_aedges(
@@ -133,7 +146,7 @@ usage:
         # -> Iter HEdge
         raise NotImplementedError
 
-    def hedge2iter_other_hedges_around_another_vertex(self, hedge):
+    def hedge2unstable_iter_other_hedges_around_another_vertex(self, hedge):
         # -> Iter HEdge
         other_hedge0 = self.utree.hedge2another_hedge[hedge]
         other_vertex = self.utree.hedge2vertex[other_hedge0]
@@ -152,10 +165,88 @@ usage:
             yield incident_aedge, neighbor_hedge, neighbor_vertex
 
 
-    def aedge2maybe_upper_hedge(self):
+    def aedge2maybe_upper_hedge(self, *, maybe_either_root):
+        # (None|either_root) -> [(None|upper_hedge)]
+        # either_root = (is_root_aedge, (root_vertex|root_aedge))
+        # either_root = (False, root_vertex) | (True, root_aedge)
+        # maybe_either_root is None <==> either_root = (False, unicenter_vertex)|(True, bicenter_aedge)
+        # aedge2maybe_upper_hedge
+        if maybe_either_root is None:
+            return self.aedge2maybe_upper_hedge__using_center_as_root()
+        else:
+            (is_root_aedge, root) = either_root = maybe_either_root
+            if is_root_aedge:
+                root_aedge = root
+                return self.aedge2maybe_upper_hedge__with_root_aedge(
+                            root_aedge=root_aedge)
+            else:
+                root_vertex = root
+                return self.aedge2maybe_upper_hedge__with_root_vertex(
+                            root_vertex=root_vertex)
+        pass
+
+    def _inplace_aedge2maybe_upper_hedge4subtree_with_root_lower_hedge(self, *
+        , aedge2maybe_upper_hedge, subtree_root_lower_hedge
+        ):
+        # -> None
+        # OUT: aedge2maybe_upper_hedge
+        # donot set aedge2maybe_upper_hedge[subtree_root_aedge]
+        utree = self.utree
+        hedge2another_hedge = utree.hedge2another_hedge
+        aedge2arbitrary_hedge = utree.aedge2arbitrary_hedge
+        hedge2vertex = utree.hedge2vertex
+
+        upper_hedge = hedge2another_hedge[subtree_root_lower_hedge]
+        upper_hedges = [upper_hedge]
+        iter_child_hedges = self.hedge2unstable_iter_other_hedges_around_another_vertex
+        while upper_hedges:
+            parent_upper_hedge = upper_hedges.pop()
+            for child_upper_hedge in iter_child_hedges(parent_upper_hedge):
+                child_aedge = hedge2aedge[child_upper_hedge]
+                aedge2maybe_upper_hedge[child_aedge] = child_upper_hedge
+                upper_hedges.append(child_upper_hedge)
+        return None
+
+    def aedge2maybe_upper_hedge__with_root_aedge(self, *, root_aedge):
+        # nonedgeless utree
+        utree = self.utree
+        hedge2another_hedge = utree.hedge2another_hedge
+
+        root_lower_hedge0 = utree.aedge2arbitrary_hedge[root_aedge]
+        root_lower_hedge1 = hedge2another_hedge[root_lower_hedge0]
+
+        aedge2maybe_upper_hedge = [None]*utree.num_aedges
+        inplace = self._inplace_aedge2maybe_upper_hedge4subtree_with_root_lower_hedge
+        inplace(aedge2maybe_upper_hedge=aedge2maybe_upper_hedge
+                , subtree_root_lower_hedge=root_lower_hedge0)
+        inplace(aedge2maybe_upper_hedge=aedge2maybe_upper_hedge
+                , subtree_root_lower_hedge=root_lower_hedge1)
+
+        #aedge2maybe_upper_hedge[root_aedge] = None
+        assert aedge2maybe_upper_hedge[root_aedge] is None
+        num_None_upper_hedges = sum(h is None for h in aedge2maybe_upper_hedge)
+        assert num_None_upper_hedges == 1
+        return tuple(aedge2maybe_upper_hedge)
+    def aedge2maybe_upper_hedge__with_root_vertex(self, *, root_vertex):
+        # maybe edgeless utree
+        utree = self.utree
+
+        for upper_hedge in self.vertex2unstable_iter_hedges(root_vertex):
+            break
+        else:
+            assert not utree.num_aedges
+            aedge2maybe_upper_hedge = ()
+            return aedge2maybe_upper_hedge
+        pseudo_root_aedge = utree.hedge2aedge[upper_hedge]
+        aedge2maybe_upper_hedge = self.aedge2maybe_upper_hedge__with_root_aedge(root_aedge=pseudo_root_aedge)
+        aedge2maybe_upper_hedge = list(aedge2maybe_upper_hedge)
+        aedge2maybe_upper_hedge[pseudo_root_aedge] = upper_hedge
+        return tuple(aedge2maybe_upper_hedge)
+    def aedge2maybe_upper_hedge__using_center_as_root(self):
         # -> [(None|upper_hedge)]
         # aedge2maybe_upper_hedge
-
+        #
+        # unicenter_vertex or bicenter_aedge as root
         vertex2height = [0]*self.utree.num_vertices
         vertex2remain = list(self.utree.vertex2degree)
         assert vertex2remain
@@ -249,26 +340,26 @@ usage:
 
         return tuple(vertex2maybe_parent_aedge)
 
-    def either_center(self, *, aedge2maybe_upper_hedge, vertex2maybe_parent_aedge):
-        # -> (is_bicenter, unicenter_vertex_or_bicenter_aedge)
-        # -> (False, unicenter_vertex)|(True, bicenter_aedge)
+    def either_root(self, *, aedge2maybe_upper_hedge, vertex2maybe_parent_aedge):
+        # -> (is_root_aedge, root_vertex_or_root_aedge)
+        # -> (False, root_vertex)|(True, root_aedge)
         for vertex, maybe_parent_aedge in enumerate(vertex2maybe_parent_aedge):
             if maybe_parent_aedge is None:
                 # vertex is root_vertex
-                unicenter_vertex = root_vertex = vertex
-                either_center = (False, unicenter_vertex)
+                root_vertex = vertex
+                either_root = (False, root_vertex)
                 break
             else:
                 parent_aedge = maybe_parent_aedge
                 maybe_upper_hedge = aedge2maybe_upper_hedge[parent_aedge]
                 if maybe_upper_hedge is None:
                     # parent_aedge is root_aedge
-                    bicenter_aedge = root_aedge = parent_aedge
-                    either_center = (True, bicenter_aedge)
+                    root_aedge = parent_aedge
+                    either_root = (True, root_aedge)
                     break
         else:
             raise logic-error
-        return either_center
+        return either_root
     def vertex2child_aedges(self, *, aedge2maybe_upper_hedge, vertex2maybe_parent_aedge):
         # -> [[aedge]]
         # vertex2child_aedges
@@ -295,7 +386,7 @@ usage:
                 else:
                     upper_hedge = maybe_upper_hedge
                     pseudo_upper_hedge = upper_hedge
-                it = self.hedge2iter_other_hedges_around_another_vertex(pseudo_upper_hedge)
+                it = self.hedge2unstable_iter_other_hedges_around_another_vertex(pseudo_upper_hedge)
             vertex2child_aedges.append(tuple(it))
         return tuple(vertex2child_aedges)
     def vertex2maybe_parent_vertex(self, *, aedge2maybe_upper_hedge, vertex2maybe_parent_aedge):

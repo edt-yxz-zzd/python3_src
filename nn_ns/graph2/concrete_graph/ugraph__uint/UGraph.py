@@ -124,6 +124,12 @@ methods:
     is_aedge_self_loop
     is_vertex_edgeless
 
+    aedge2unstable_iter_hedges
+    vertex2unstable_iter_hedges
+    hedge2unstable_iter_hedges_around_vertex
+    hedge2unstable_iter_other_hedges_around_vertex
+    hedge2unstable_iter_other_hedges_around_another_vertex
+
 
 calc attrs:
     """
@@ -340,6 +346,37 @@ ugraph_fake_embedding.calc attrs:
     #def is_vertex_isolated(self, vertex):
     def is_vertex_edgeless(self, vertex):
         return not self.vertex2degree[vertex]
+
+    def aedge2unstable_iter_hedges(self, aedge):
+        hedge = self.aedge2arbitrary_hedge[aedge]
+        yield hedge
+        other = self.hedge2another_hedge[hedge]
+        yield other
+    def vertex2unstable_iter_hedges(self, vertex):
+        maybe_hedge = self.vertex2maybe_arbitrary_hedge(vertex)
+        if maybe_hedge is None:
+            return null_iter
+        else:
+            hedge = maybe_hedge
+            return self.hedge2unstable_iter_hedges_around_vertex(hedge)
+    def hedge2unstable_iter_hedges_around_vertex(self, hedge):
+        return self.ugraph_fake_embedding.hedge2iter_fake_clockwise_hedges_around_vertex(hedge)
+    def hedge2unstable_iter_other_hedges_around_vertex(self, hedge):
+        # like hedge2unstable_iter_hedges_around_vertex
+        #   but exclude the input hedge
+        it = self.ugraph_fake_embedding.hedge2iter_fake_clockwise_hedges_around_vertex(hedge)
+        assert iter(it) is it
+        for this in it:
+            # skip head which is the input hedge
+            if this != hedge: raise logic-error
+            break
+        else:
+            raise logic-error
+        return it
+
+    def hedge2unstable_iter_other_hedges_around_another_vertex(self, hedge):
+        other = self.hedge2another_hedge[hedge]
+        return self.hedge2unstable_iter_other_hedges_around_vertex(other)
 
     ############################ properties ###########################
 
