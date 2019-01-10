@@ -134,10 +134,19 @@ usage:
         vertex2depth_idx = self.vertex2depth_idx(depth2vertices1=depth2vertices1)
 
         ################
-        del self
-        d = dict(locals())
-        assert 'd' not in d
-        assert frozenset(d) == __class__.all_attr_set
+        del self, maybe_either_root
+        d = dict(locals()) # __class__ in locals???
+        for name in (frozenset(d) - __class__.all_attr_set):
+            del d[name]
+
+        try:
+            assert frozenset(d) == __class__.all_attr_set
+        except:
+            from seed.tiny import print_err
+            print_err(__class__.all_attr_set - frozenset(d))
+            print_err(frozenset(d) - __class__.all_attr_set)
+            raise
+
         ns = ImmutableNamespace(**d)
         return ns
 
@@ -247,17 +256,20 @@ usage:
         # aedge2maybe_upper_hedge
         #
         # unicenter_vertex or bicenter_aedge as root
-        vertex2height = [0]*self.utree.num_vertices
-        vertex2remain = list(self.utree.vertex2degree)
+        utree = self.utree
+        vertex2height = [0]*utree.num_vertices
+        vertex2remain = list(utree.vertex2degree)
         assert vertex2remain
 
-        aedge2maybe_upper_hedge = [None]*self.utree.num_aedges
+        aedge2maybe_upper_hedge = [None]*utree.num_aedges
         vertices_le1 = [v for v,r in enumerate(vertex2remain) if r <= 1]
         assert vertices_le1
 
 
         i = 0
-        done = False
+        # bug: done = False
+        #   when num_vertices == 1
+        done = utree.num_vertices == 1
         while i < len(vertices_le1):
             vertex = vertices_le1[i]
             i += 1
@@ -284,10 +296,13 @@ usage:
                             # incident_aedge is not root_aedge
                             upper_hedge = neighbor_hedge
                             aedge2maybe_upper_hedge[incident_aedge] = upper_hedge
-                            vertex2height[neighbor_vertex] = max(neighbor_height, 1+height)
+                            if neighbor_height == height:
+                                #vertex2height[neighbor_vertex] = max(neighbor_height, 1+height)
+                                vertex2height[neighbor_vertex] = 1+height
                         else:
                             # incident_aedge is root_aedge
                             assert neighbor_remain == 0 and neighbor_height == height
+                        if not neighbor_remain:
                             done = True
                         break
                     else:
@@ -309,11 +324,12 @@ usage:
     def vertex2maybe_parent_aedge(self, *, aedge2maybe_upper_hedge):
         # -> [(None|parent_aedge)]
         # vertex2maybe_parent_aedge
-        hedge2vertex = self.utree.hedge2vertex
-        hedge2another_hedge = self.utree.hedge2another_hedge
-        aedge2arbitrary_hedge = self.utree.aedge2arbitrary_hedge
+        utree = self.utree
+        hedge2vertex = utree.hedge2vertex
+        hedge2another_hedge = utree.hedge2another_hedge
+        aedge2arbitrary_hedge = utree.aedge2arbitrary_hedge
 
-        vertex2maybe_parent_aedge = [None]*self.utree.num_vertices
+        vertex2maybe_parent_aedge = [None]*utree.num_vertices
         for aedge, maybe_upper_hedge in enumerate(aedge2maybe_upper_hedge):
             if maybe_upper_hedge is None:
                 # aedge is root_aedge
@@ -364,9 +380,10 @@ usage:
         # -> [[aedge]]
         # vertex2child_aedges
 
-        aedge2arbitrary_hedge = self.utree.aedge2arbitrary_hedge
-        hedge2another_hedge = self.utree.hedge2another_hedge
-        hedge2vertex = self.utree.hedge2vertex
+        utree = self.utree
+        aedge2arbitrary_hedge = utree.aedge2arbitrary_hedge
+        hedge2another_hedge = utree.hedge2another_hedge
+        hedge2vertex = utree.hedge2vertex
         vertex2child_aedges = []
         for vertex, maybe_parent_aedge in enumerate(vertex2maybe_parent_aedge):
             if maybe_parent_aedge is None:

@@ -18,8 +18,8 @@ usage:
 '''
     utree_type = UGraph
     def __init__(self, utree):
-        assert isinstance(utree, UGraph)
-        assert utree.calc.is_ugraph_utree
+        if not isinstance(utree, UGraph): raise TypeError
+        if not utree.calc.is_ugraph_utree: raise ValueError
         super().__init__(utree)
     @override
     def vertex2unstable_iter_hedges(self, vertex):
