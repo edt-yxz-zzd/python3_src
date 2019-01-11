@@ -14,7 +14,9 @@ __all__ = '''
     '''.split()
 
 from .NamedReadOnlyProperty import NamedReadOnlyProperty
-
+from .CachedProperty import CachedProperty
+from seed.helper.repr_input import repr_helper_ex
+from seed.verify.common_verify import is_Sequence
 
 
 class ImmutableNamespaceBase:
@@ -26,10 +28,10 @@ example:
 
     >>> NoAttrs()
     NoAttrs()
-    >>> A(a=1)
-    A(a=1)
-    >>> AB(b=0, a=1)
-    AB(a=1, b=0)
+    >>> A(a = 1)
+    A(a = 1)
+    >>> AB(b = 0, a = 1)
+    AB(a = 1, b = 0)
 
     >>> ns = NoAttrs()
     >>> ns.a = 1
@@ -39,7 +41,7 @@ example:
     >>> ns
     NoAttrs()
 
-    >>> ns = AB(b=0, a=1)
+    >>> ns = AB(b = 0, a = 1)
     >>> ns.a = 2
     Traceback (most recent call last):
         ...
@@ -58,9 +60,54 @@ example:
     NamedReadOnlyProperty('a')
     >>> AB.b
     NamedReadOnlyProperty('b')
+
+
+    >>> class AB(ImmutableNamespaceBase, type_attr4ordered_attr_name_seq='attrs'):
+    ...     attrs = 'ab'
+    >>> AB.b
+    NamedReadOnlyProperty('b')
+    >>> AB(b=-3, a=-1)
+    AB(a = -1, b = -3)
+    >>> class AB(ImmutableNamespaceBase, type2ordered_attr_name_seq=lambda cls:cls.attrs):
+    ...     attrs = 'ab'
+    >>> AB.b
+    NamedReadOnlyProperty('b')
+    >>> AB(b=-3, a=-1)
+    AB(a = -1, b = -3)
+
 '''
     @classmethod
-    def __init_subclass__(cls, *, ordered_attr_name_seq, **kwargs):
+    def __init_subclass__(cls, *
+        , ordered_attr_name_seq=None
+        , type2ordered_attr_name_seq=None
+        , type_attr4ordered_attr_name_seq=None
+        , **kwargs
+        ):
+        if sum(x is not None for x in [ordered_attr_name_seq, type2ordered_attr_name_seq, type_attr4ordered_attr_name_seq]) != 1: raise TypeError
+
+        if not (ordered_attr_name_seq is None
+                or is_Sequence(ordered_attr_name_seq)): raise TypeError
+        if not (type2ordered_attr_name_seq is None
+                or callable(type2ordered_attr_name_seq)): raise TypeError
+        if not (type_attr4ordered_attr_name_seq is None
+                or type(type_attr4ordered_attr_name_seq) is str): raise TypeError
+        #if ordered_attr_name_seq is None or iter(ordered_attr_name_seq):
+
+        if ordered_attr_name_seq is not None:
+            pass
+        elif type2ordered_attr_name_seq is not None:
+            # callable
+            ordered_attr_name_seq = type2ordered_attr_name_seq(cls)
+        elif type_attr4ordered_attr_name_seq is not None:
+            # str
+            attr = type_attr4ordered_attr_name_seq
+            ordered_attr_name_seq = getattr(cls, attr)
+        else:
+            raise logic-error
+
+        # verify result of cls->ordered_attr_name_seq
+        if not is_Sequence(ordered_attr_name_seq): raise TypeError
+
         ordered_attr_name_seq = tuple(ordered_attr_name_seq)
         cls.ordered_attr_name_seq = ordered_attr_name_seq
         cls.ordered_attr_name_set = frozenset(ordered_attr_name_seq)
@@ -73,8 +120,9 @@ example:
 
     def __init__(self, **kwargs):
         cls = type(self)
+        d = vars(self)
         for name in cls.ordered_attr_name_seq:
-            self.__dict__[name] = kwargs.pop(name)
+            d[name] = kwargs.pop(name)
         super().__init__(**kwargs)
 
     def __dir__(self):
@@ -84,20 +132,43 @@ example:
     def __delattr__(self, attr):
         raise AttributeError(attr)
 
+    def __iter_ordered_values(self):
+        values = (v for k, v in self.__iter_ordered_items())
+        return values
+    def __iter_ordered_items(self):
+        cls = type(self)
+        d = vars(self)
+        keys = cls.ordered_attr_name_seq
+        items = ((k, d[k]) for k in keys)
+        return items
+
     def __repr__(self):
         cls = type(self)
-        d = self.__dict__
-        keys = cls.ordered_attr_name_seq
-        items = ("{}={!r}".format(k, d[k]) for k in keys)
-        return "{}({})".format(type(self).__name__, ", ".join(items))
+        return repr_helper_ex(self, (), cls.ordered_attr_name_seq, {}, ordered_attrs_only=True)
+        """
+        cls = type(self)
+        items = self.__iter_ordered_items()
+        item_strs = ("{}={!r}".format(k, v) for k, v in items)
+        return "{}({})".format(cls.__name__, ", ".join(item_strs))
+        """
 
     def __eq__(self, other):
         #if not isinstance(other, __class__): return NotImplemented
         return (type(self) is type(other)
-            and self.__dict__ == other.__dict__
+            and hash(self) == hash(other)
+            #and vars(self) == vars(other)
+            and all(a == b for a, b in zip(self.__iter_ordered_values()
+                                        , other.__iter_ordered_values())
+                )
             )
     def __hash__(self):
-        return hash((id(type(self)), frozenset(self.__dict__.items())))
+        return self._hash_value
+    @CachedProperty
+    def _hash_value(self):
+        cls = type(self)
+        items = self.__iter_ordered_items()
+        repr_data = id(cls), tuple(items)
+        return hash(repr_data)
 
 
 if __name__ == "__main__":

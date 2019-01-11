@@ -33,14 +33,14 @@ def iter_duplicate_element_groups(iterable, *, key = None):
     #Counter(iterable)
 
     return filter(lambda ls: len(ls) > 1,
-                  iter_element_groups(iterable, key))
+                  iter_element_groups(iterable, key=key))
 
 def find_duplicate_element_groups(iterable, *, key = None):
-    return tuple(iter_duplicate_element_groups(iterable, key))
+    return tuple(iter_duplicate_element_groups(iterable, key=key))
 def iter_duplicate_representative_elements(iterable, *, key = None):
     'find all duplicated elements and return one elem per class'
     return map(lambda ls: ls[0],
-               iter_duplicate_element_groups(iterable, key))
+               iter_duplicate_element_groups(iterable, key=key))
 
 def find_maybe_duplicate_element1(iterable, *, key = None):
     'find one duplicate_element; returm () or (elem,)'

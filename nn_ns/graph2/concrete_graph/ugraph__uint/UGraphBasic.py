@@ -11,6 +11,7 @@ from .make_vertex2degree import make_vertex2degree
 from .is_uint_bijection import is_uint_bijection_without_self_reflect
 
 from seed.helper.repr_input import repr_helper_ex
+from seed.types.StructBase import StructBase
 from seed.verify.common_verify import (
     is_UInt, is_Sequence, has_attrs
     )
@@ -20,7 +21,7 @@ from seed.verify.VerifyType import VerifyType__static
 
 
 
-class UGraphBasic:
+class UGraphBasic(StructBase):
     all_UGraphBasic_attr_seq = '''
         num_vertices
         num_aedges
@@ -31,6 +32,12 @@ class UGraphBasic:
         vertex2degree
         '''.split()
     all_UGraphBasic_attr_set = frozenset(all_UGraphBasic_attr_seq)
+    all_UGraphBasic_primekey_attr_seq = '''
+        num_vertices
+        hedge2vertex
+        hedge2aedge
+        '''.split()
+
 
 
     @classmethod
@@ -77,6 +84,7 @@ class UGraphBasic:
         ,vertex2degree
         ):
 
+        """
         self.num_vertices = num_vertices
         self.num_aedges = num_aedges
         self.num_hedges = num_hedges
@@ -84,21 +92,64 @@ class UGraphBasic:
         self.hedge2aedge = hedge2aedge
         self.hedge2another_hedge = hedge2another_hedge
         self.vertex2degree = vertex2degree
+        """
+        super().__init__(
+            num_vertices=num_vertices
+            ,num_aedges=num_aedges
+            ,num_hedges=num_hedges
+            ,hedge2vertex=hedge2vertex
+            ,hedge2aedge=hedge2aedge
+            ,hedge2another_hedge=hedge2another_hedge
+            ,vertex2degree=vertex2degree
+            )
 
-        #self.calc = 
         assert self.verify_UGraphBasic(AssertionError)
+        #self.calc = 
+
     def verify_UGraphBasic(self, __mkError=None):
         return VerifyUGraphBasic(self, __mkError)
 
     def verify(self, __mkError=None):
         return self.verify_UGraphBasic(__mkError)
 
+    """
     def __repr__(self):
         all_UGraphBasic_attr_seq = __class__.all_UGraphBasic_attr_seq
         assert len(self.__dict__)-0 == len(all_UGraphBasic_attr_seq)
         #assert len(self.__dict__)-1 == len(all_UGraphBasic_attr_seq)
             # exclude 'calc'
         return repr_helper_ex(self, (), all_UGraphBasic_attr_seq, {}, ordered_attrs_only=True)
+    def __delattr__(self, attr):
+        raise AttributeError(attr)
+    def __setattr__(self, attr, obj):
+        if hasattr(self, attr):
+            raise AttributeError(attr)
+        if attr in __class__.all_UGraphBasic_attr_set:# or attr == 'calc':
+            super().__setattr__(attr, obj)
+        raise AttributeError(attr)
+    """
+
+
+
+    @classmethod
+    def __iter_all_primekey_attrs__(cls):
+        yield from cls.all_UGraphBasic_primekey_attr_seq
+        yield from super().__iter_all_primekey_attrs__()
+    @classmethod
+    def __iter_all_user_attrs__(cls):
+        yield from cls.all_UGraphBasic_attr_seq
+        yield from super().__iter_all_user_attrs__()
+    @classmethod
+    def __iter_all_impl_attrs__(cls):
+        yield from cls.all_UGraphBasic_attr_seq
+        #yield 'calc'
+        yield from super().__iter_all_impl_attrs__()
+    """
+    @classmethod
+    def __iter_all_cached_attr_calc_pairs__(cls):
+        yield from super().__iter_all_cached_attr_calc_pairs__()
+    """
+
 
 
 
@@ -204,5 +255,4 @@ class VerifyUGraphBasic(VerifyType__static):
         yield (all(h==h_ for h, h_ in zip(hedge2another_hedge, hedge2another_hedge_))
             , lambda:f'hedge2aedge & hedge2another_hedge: wrong hedge reversal'
             )
-
 

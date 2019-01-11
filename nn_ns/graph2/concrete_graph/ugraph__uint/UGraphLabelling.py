@@ -6,12 +6,13 @@ __all__ = '''
 
 
 from .UIntBijection import UIntBijection
+from seed.types.StructBase import StructBase
 from seed.helper.repr_input import repr_helper_ex
 from seed.verify.common_verify import has_attrs
 from seed.verify.VerifyType import VerifyType__static
 
 
-class UGraphLabelling:
+class UGraphLabelling(StructBase):
     '''
 
 methods:
@@ -28,6 +29,7 @@ methods:
         old_hedge2new_hedge
         '''.split()
     all_UGraphLabelling_attr_set = frozenset(all_UGraphLabelling_attr_seq)
+    all_UGraphLabelling_primekey_attr_seq = tuple(all_UGraphLabelling_attr_seq)
 
 
     @classmethod
@@ -124,11 +126,6 @@ methods:
         return self.verify_UGraphLabelling(__mkError)
 
 
-    def __repr__(self):
-        all_UGraphLabelling_attr_seq = __class__.all_UGraphLabelling_attr_seq
-        assert len(self.__dict__)-0 == len(all_UGraphLabelling_attr_seq)
-        return repr_helper_ex(self, (), all_UGraphLabelling_attr_seq, {}, ordered_attrs_only=True)
-
 
     def to_reversal_ugraph_labelling(self):
         cls = type(self)
@@ -139,6 +136,38 @@ methods:
                     )
     def __inv__(self):
         return self.to_reversal_ugraph_labelling()
+
+
+
+    """
+    def __repr__(self):
+        all_UGraphLabelling_attr_seq = __class__.all_UGraphLabelling_attr_seq
+        assert len(self.__dict__)-0 == len(all_UGraphLabelling_attr_seq)
+        return repr_helper_ex(self, (), all_UGraphLabelling_attr_seq, {}, ordered_attrs_only=True)
+    """
+
+
+    @classmethod
+    def __iter_all_primekey_attrs__(cls):
+        yield from cls.all_UGraphLabelling_primekey_attr_seq
+        yield from super().__iter_all_primekey_attrs__()
+    @classmethod
+    def __iter_all_user_attrs__(cls):
+        yield from cls.all_UGraphLabelling_attr_seq
+        yield from super().__iter_all_user_attrs__()
+    @classmethod
+    def __iter_all_impl_attrs__(cls):
+        yield from cls.all_UGraphLabelling_attr_seq
+        #yield 'calc'
+        yield from super().__iter_all_impl_attrs__()
+    """
+    @classmethod
+    def __iter_all_cached_attr_calc_pairs__(cls):
+        yield from super().__iter_all_cached_attr_calc_pairs__()
+    """
+
+
+
 
 
 

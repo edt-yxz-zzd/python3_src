@@ -62,6 +62,7 @@ from .is_uint_bijection import (
 from .get_attrs import get_attrs
 
 
+from seed.types.StructBase import StructBase
 from seed.helper.repr_input import repr_helper_ex
 from seed.verify.common_verify import (
     is_UInt, is_Sequence, has_attrs
@@ -73,7 +74,7 @@ from seed.iters.iter_unique_by_hash import iter_unique_by_hash
 from seed.tiny import null_iter
 from itertools import chain
 
-class UGraph:
+class UGraph(StructBase):
     '''
 
 attrs:
@@ -167,6 +168,7 @@ ugraph_fake_embedding.calc attrs:
         vertex2maybe_fvertex
         '''.split()
     all_UGraph_attr_set = frozenset(all_UGraph_attr_seq)
+    all_UGraph_primekey_attr_seq = tuple(all_UGraph_attr_seq)
 
     all_exported_UGraph_attr_seq = tuple(iter_unique_by_hash(chain(
         all_UGraph_attr_seq
@@ -310,6 +312,23 @@ ugraph_fake_embedding.calc attrs:
     def verify(self, __mkError=None):
         return self.verify_ugraph(__mkError)
 
+    """
+    def __repr__(self):
+        all_UGraph_attr_seq = __class__.all_UGraph_attr_seq
+        assert len(self.__dict__)-1 == len(all_UGraph_attr_seq)
+            # exclude 'calc'
+        return repr_helper_ex(self, (), all_UGraph_attr_seq, {}, ordered_attrs_only=True)
+    def __delattr__(self, attr):
+        raise AttributeError(attr)
+    def __setattr__(self, attr, obj):
+        if hasattr(self, attr):
+            raise AttributeError(attr)
+        if attr in __class__.all_UGraph_attr_set or attr == 'calc':
+            super().__setattr__(attr, obj)
+        raise AttributeError(attr)
+    """
+
+    '''
     def __setattr__(self, attr, obj):
         if attr in __class__.all_UGraph_attr_set or attr == 'calc':
             if hasattr(self, attr):
@@ -317,12 +336,27 @@ ugraph_fake_embedding.calc attrs:
                 raise AttributeError(attr)
             # inside __init__()
         super().__setattr__(attr, obj)
+    '''
 
-    def __repr__(self):
-        all_UGraph_attr_seq = __class__.all_UGraph_attr_seq
-        assert len(self.__dict__)-1 == len(all_UGraph_attr_seq)
-            # exclude 'calc'
-        return repr_helper_ex(self, (), all_UGraph_attr_seq, {}, ordered_attrs_only=True)
+    @classmethod
+    def __iter_all_primekey_attrs__(cls):
+        yield from cls.all_UGraph_primekey_attr_seq
+        yield from super().__iter_all_primekey_attrs__()
+    @classmethod
+    def __iter_all_user_attrs__(cls):
+        yield from cls.all_UGraph_attr_seq
+        yield from super().__iter_all_user_attrs__()
+    @classmethod
+    def __iter_all_impl_attrs__(cls):
+        yield from cls.all_UGraph_attr_seq
+        yield 'calc'
+        yield from super().__iter_all_impl_attrs__()
+    """
+    @classmethod
+    def __iter_all_cached_attr_calc_pairs__(cls):
+        yield from super().__iter_all_cached_attr_calc_pairs__()
+    """
+
 
 
     ############################ methods ###########################

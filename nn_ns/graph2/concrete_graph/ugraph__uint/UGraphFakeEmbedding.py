@@ -93,6 +93,8 @@ from .makes_for_UGraphFakeEmbedding import (
     ,make_hedge2XXX_ex
     )
 
+
+from seed.types.StructBase import StructBase
 from seed.helper.repr_input import repr_helper_ex
 from seed.verify.common_verify import (
     is_UInt, is_Sequence, has_attrs
@@ -102,7 +104,7 @@ from seed.verify.common_verify import (
 from seed.verify.VerifyType import VerifyType__static
 
 
-class UGraphFakeEmbedding:
+class UGraphFakeEmbedding(StructBase):
     '''
 
 methods:
@@ -150,6 +152,13 @@ calc attrs:
         fvertex2arbitrary_hedge
         '''.split()
     all_UGraphFakeEmbedding_attr_set = frozenset(all_UGraphFakeEmbedding_attr_seq)
+    all_UGraphFakeEmbedding_primekey_attr_seq = '''
+        hedge2fake_clockwise_next_hedge_around_vertex
+        hedge2fake_clockwise_prev_hedge_around_fface
+        fface2arbitrary_hedge
+        fvertex2arbitrary_hedge
+        '''.split()
+
 
     @classmethod
     def make_UGraphFakeEmbedding__simplest(cls, *
@@ -355,20 +364,6 @@ calc attrs:
     def verify(self, __mkError=None):
         return self.verify_ugraph_fake_embedding(__mkError)
 
-    def __setattr__(self, attr, obj):
-        if attr in __class__.all_UGraphFakeEmbedding_attr_set or attr == 'calc':
-            if hasattr(self, attr):
-                # @property all_UGraphFakeEmbedding_attr_set
-                raise AttributeError(attr)
-            # inside __init__()
-        super().__setattr__(attr, obj)
-
-    def __repr__(self):
-        all_UGraphFakeEmbedding_attr_seq = __class__.all_UGraphFakeEmbedding_attr_seq
-        assert len(self.__dict__)-1 == len(all_UGraphFakeEmbedding_attr_seq)
-            # exclude 'calc'
-        return repr_helper_ex(self, (), all_UGraphFakeEmbedding_attr_seq, {}, ordered_attrs_only=True)
-
 
     def ireplace(self, **kwargs):
         d = get_attrs(self, __class__.all_UGraphFakeEmbedding_attr_seq)
@@ -397,6 +392,51 @@ calc attrs:
     def fface2iter_fake_clockwise_hedges(self, fface, *, reverse=False):
         hedge = self.fface2arbitrary_hedge[fface]
         return self.hedge2iter_fake_clockwise_hedges_around_fface(hedge, reverse=reverse)
+
+
+
+    """
+    def __setattr__(self, attr, obj):
+        if attr in __class__.all_UGraphFakeEmbedding_attr_set or attr == 'calc':
+            if hasattr(self, attr):
+                # @property all_UGraphFakeEmbedding_attr_set
+                raise AttributeError(attr)
+            # inside __init__()
+        super().__setattr__(attr, obj)
+
+    def __repr__(self):
+        all_UGraphFakeEmbedding_attr_seq = __class__.all_UGraphFakeEmbedding_attr_seq
+        assert len(self.__dict__)-1 == len(all_UGraphFakeEmbedding_attr_seq)
+            # exclude 'calc'
+        return repr_helper_ex(self, (), all_UGraphFakeEmbedding_attr_seq, {}, ordered_attrs_only=True)
+    """
+
+
+
+    @classmethod
+    def __iter_all_primekey_attrs__(cls):
+        yield from cls.all_UGraphFakeEmbedding_primekey_attr_seq
+        yield from super().__iter_all_primekey_attrs__()
+    @classmethod
+    def __iter_all_user_attrs__(cls):
+        yield from cls.all_UGraphFakeEmbedding_attr_seq
+        yield from super().__iter_all_user_attrs__()
+    @classmethod
+    def __iter_all_impl_attrs__(cls):
+        yield from cls.all_UGraphFakeEmbedding_attr_seq
+        yield 'calc'
+        yield from super().__iter_all_impl_attrs__()
+    """
+    @classmethod
+    def __iter_all_cached_attr_calc_pairs__(cls):
+        yield from super().__iter_all_cached_attr_calc_pairs__()
+    """
+
+
+
+
+
+
 
 
 class VerifyUGraphFakeEmbedding(VerifyType__static):

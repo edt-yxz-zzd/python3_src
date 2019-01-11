@@ -14,20 +14,20 @@ CompactRecoloring vs RowColoring vs Serialization
             num_colors <= num_columns
             no requirements between upper_bound and len(serialization)
 
->>> Serialization(upper_bound=6, serialization=[5])
-Serialization(upper_bound=6, serialization=[5])
->>> Serialization(upper_bound=1, serialization=[0, 0])
-Serialization(upper_bound=1, serialization=[0, 0])
->>> CompactRecoloring(num_old_colors=6, compact_new_color2old_color=[5])
-CompactRecoloring(num_old_colors=6, compact_new_color2old_color=[5])
->>> RowColoring(num_colors=1, column2color=[0, 0])
-RowColoring(num_colors=1, column2color=[0, 0])
->>> TableColoring(num_colors=1, row2column2color=[[], [0, 0]])
-TableColoring(num_colors=1, row2column2color=[[], [0, 0]])
+>>> Serialization(upper_bound = 6, serialization = [5])
+Serialization(upper_bound = 6, serialization = [5])
+>>> Serialization(upper_bound = 1, serialization = [0, 0])
+Serialization(upper_bound = 1, serialization = [0, 0])
+>>> CompactRecoloring(num_old_colors = 6, compact_new_color2old_color = [5])
+CompactRecoloring(num_old_colors = 6, compact_new_color2old_color = [5])
+>>> RowColoring(num_colors = 1, column2color = [0, 0])
+RowColoring(num_colors = 1, column2color = [0, 0])
+>>> TableColoring(num_colors = 1, row2column2color = [[], [0, 0]])
+TableColoring(num_colors = 1, row2column2color = [[], [0, 0]])
 
 
->>> make_rowcoloring_from_color2columns(num_columns=5, color2columns=[[], [1,2], [0,3,4]])
-RowColoring(num_colors=3, column2color=(2, 1, 1, 2, 2))
+>>> make_rowcoloring_from_color2columns(num_columns = 5, color2columns = [[], [1,2], [0,3,4]])
+RowColoring(num_colors = 3, column2color = (2, 1, 1, 2, 2))
 
 '''
 

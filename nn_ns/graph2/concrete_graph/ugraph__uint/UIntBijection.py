@@ -7,6 +7,7 @@ __all__ = '''
 from .is_uint_bijection import is_uint_bijection
 from .inverse_uint_bijection import inverse_uint_bijection
 
+from seed.types.StructBase import StructBase
 from seed.helper.repr_input import repr_helper_ex
 from seed.verify.common_verify import (
     is_UInt, is_Sequence, has_attrs
@@ -14,7 +15,7 @@ from seed.verify.common_verify import (
 from seed.verify.VerifyType import VerifyType__static
 
 
-class UIntBijection:
+class UIntBijection(StructBase):
     '''
 
 methods:
@@ -28,6 +29,9 @@ methods:
         backward_mapping
         '''.split()
     all_UIntBijection_attr_set = frozenset(all_UIntBijection_attr_seq)
+    all_UIntBijection_primekey_attr_seq = '''
+        forward_mapping
+        '''.split()
 
 
     @classmethod
@@ -66,12 +70,6 @@ methods:
         return self.verify_UIntBijection(__mkError)
 
 
-    def __repr__(self):
-        all_UIntBijection_attr_seq = __class__.all_UIntBijection_attr_seq
-        assert len(self.__dict__)-0 == len(all_UIntBijection_attr_seq)
-        return repr_helper_ex(self, (), all_UIntBijection_attr_seq, {}, ordered_attrs_only=True)
-
-
     def to_reversal_uint_bijection(self):
         cls = type(self)
         return cls.make_UIntBijection(
@@ -80,6 +78,41 @@ methods:
                     )
     def __inv__(self):
         return self.to_reversal_uint_bijection()
+
+
+
+    """
+    def __repr__(self):
+        all_UIntBijection_attr_seq = __class__.all_UIntBijection_attr_seq
+        assert len(self.__dict__)-0 == len(all_UIntBijection_attr_seq)
+        return repr_helper_ex(self, (), all_UIntBijection_attr_seq, {}, ordered_attrs_only=True)
+    """
+
+
+
+    @classmethod
+    def __iter_all_primekey_attrs__(cls):
+        yield from cls.all_UIntBijection_primekey_attr_seq
+        yield from super().__iter_all_primekey_attrs__()
+    @classmethod
+    def __iter_all_user_attrs__(cls):
+        yield from cls.all_UIntBijection_attr_seq
+        yield from super().__iter_all_user_attrs__()
+    @classmethod
+    def __iter_all_impl_attrs__(cls):
+        yield from cls.all_UIntBijection_attr_seq
+        #yield 'calc'
+        yield from super().__iter_all_impl_attrs__()
+    """
+    @classmethod
+    def __iter_all_cached_attr_calc_pairs__(cls):
+        yield from super().__iter_all_cached_attr_calc_pairs__()
+    """
+
+
+
+
+
 
 class VerifyUIntBijection(VerifyType__static):
     types = UIntBijection
