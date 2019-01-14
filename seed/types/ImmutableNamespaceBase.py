@@ -205,6 +205,7 @@ example:
         """
 
     def __eq__(self, other):
+        if self is other: return True
         #if not isinstance(other, __class__): return NotImplemented
         return (type(self) is type(other)
             and hash(self) == hash(other)

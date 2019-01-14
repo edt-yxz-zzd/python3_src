@@ -325,6 +325,7 @@ StructBase vs ImmutableNamespaceBase vs ImmutableNamespace
         raise AttributeError(attr)
 
     def __eq__(self, other):
+        if self is other: return True
         return (type(self) is type(other)
             and all(getattr(self, attr) == getattr(other, attr)
                     for attr in type(self).__get_all_primekey_attr_seq__()
