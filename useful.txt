@@ -20,24 +20,27 @@ if __name__ == "__main__":
     #doctest: +IGNORE_EXCEPTION_DETAIL
     #Traceback (most recent call last):
 
-
 if __name__ == '__main__':
-    XXX = ???
+    classes = [XXX]
+    excludes = '''
+        logic
+        error
+        '''.split()
 
-    from seed.helper.print_methods import wrapped_print_methods
-    wrapped_print_methods(XXX)
+    from seed.helper.ongo import main
+    main(modules=[__name__], classes=classes, excludes=excludes)
 
-    from seed.helper.detect_method_conflict import \
-        wrapped_print_detect_method_conflict
-    wrapped_print_detect_method_conflict(XXX)
-
-    from seed.helper.find_bases_without_slots import print_bases_without_slots
-    print_bases_without_slots(XXX)
-
+from seed.helper.repr_input import repr_helper_ex
 from seed.helper.repr_input import repr_helper
     def __repr__(self):
         return repr_helper(self, *args, **kwargs)
-
+        return repr_helper_ex(self, args, ordered_attrs, kwargs, ordered_attrs_only=False)
+from seed.abc import abstractmethod, ABC, final, override
+from seed.decorators.__special_method__ import (
+    __static_method__
+    ,__class_method__
+    ,__instance_method__
+    )
 
 
 
@@ -47,14 +50,7 @@ if __name__ == "__main__":
     from random import *
 
 
-if __name__ == '__main__':
-    from seed.helper.print_global_names import print_global_names
-    print_global_names(globals())
 
-if __name__ == '__main__':
-    print('\n'.join(dir(XXX)))
-    print('\n'.join(n for n in dir(XXX) if getattr(getattr(XXX, n), '__isabstractmethod__', False)))
-    print('\n'.join('\n\t'.join([XXX.__name__, '\n\t'.join(dir(XXX))]) for XXX in map(globals().__getitem__, __all__) if isinstance(XXX, type)))
 
 if __name__ == '__main__':
     from seed.test_utils.generate_test_data import str2values_by_line2expr
@@ -100,4 +96,44 @@ if __name__ == "__main__":
 from seed.tiny import does_run_as_main
 if does_run_as_main(__name__):
     main()
+
+
+
+
+
+
+if __name__ == '__main__':
+    excludes = ???
+    qnames = ???
+
+    from seed.pkg_tools.dectect_all_unbound_names import DectectAllUnboundNames
+
+    excludes = frozenset(excludes)
+    for __name__ in qnames:
+        print(f'module: {__name__}')
+        unbound_names = forgots = (DectectAllUnboundNames.from_module_qname(__name__))
+
+if __name__ == '__main__':
+    XXX = ???
+
+    from seed.helper.print_methods import wrapped_print_methods
+    wrapped_print_methods(XXX)
+
+    from seed.helper.detect_method_conflict import \
+        wrapped_print_detect_method_conflict
+    wrapped_print_detect_method_conflict(XXX)
+
+    from seed.helper.find_bases_without_slots import print_bases_without_slots
+    print_bases_without_slots(XXX)
+
+
+if __name__ == '__main__':
+    from seed.helper.print_global_names import print_global_names
+    print_global_names(globals())
+
+if __name__ == '__main__':
+    print('\n'.join(dir(XXX)))
+    print('\n'.join(n for n in dir(XXX) if getattr(getattr(XXX, n), '__isabstractmethod__', False)))
+    print('\n'.join('\n\t'.join([XXX.__name__, '\n\t'.join(dir(XXX))]) for XXX in map(globals().__getitem__, __all__) if isinstance(XXX, type)))
+
 

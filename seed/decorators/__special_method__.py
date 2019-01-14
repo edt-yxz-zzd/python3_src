@@ -26,12 +26,20 @@ __all__ = '''
 
 class SpecialMethodAccessError(Exception):pass
 class __special_method__:
-    __slots__ = ()
+    #__slots__ = ['name']
+    #def __init__(self): self.name = None
+    def __set_name__(self, owner, name):
+        self.name = name
     def __get__(self, instance, owner):
         if instance is None:
             cls = type(self)
             return super(__class__, self).__get__(None, owner)
-        raise SpecialMethodAccessError('should access via class: cls.__static_method__')
+        raise SpecialMethodAccessError(f'should access via class: cls.__static_method__: cls.{self.name}')
+    def __set__(self, instance, value):
+        raise AttributeError
+    def __delete__(self, instance):
+        raise AttributeError
+
 class __static_method__(__special_method__, staticmethod):
     __slots__ = ()
 class __class_method__(__special_method__, classmethod):

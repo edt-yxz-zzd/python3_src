@@ -139,10 +139,19 @@ conflict:
     classes = tuple(classes)
     assert are_well_ordered_classes(classes)
 
-    T = type('X', classes, {}) # what if metaclass Error??
-    classes = T.__mro__[1:]
+    try:
+        T = type('X', classes, {}) # what if metaclass Error??
+    except:
+        if len(classes) != 1:
+            raise
+            raise NotImplementedError
+        [T] = classes
+        classes = classes
+    else:
+        classes = T.__mro__[1:]
+    attrs = dir(T); del T
 
-    attrs = dir(T)
+
     attr2classes = {attr:[] for attr in attrs}
     for cls in classes:
         for attr in cls.__dict__:
