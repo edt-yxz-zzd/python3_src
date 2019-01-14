@@ -74,6 +74,11 @@ from seed.iters.iter_unique_by_hash import iter_unique_by_hash
 from seed.tiny import null_iter
 from itertools import chain
 
+
+def Calc_UGraph_Info(self):
+    from .calc_UGraph_info.Calc_UGraph_Info import Calc_UGraph_Info
+    return Calc_UGraph_Info(self)
+
 class UGraph(StructBase):
     '''
 
@@ -292,6 +297,16 @@ ugraph_fake_embedding.calc attrs:
         #,degree2sorted_vertices
         #,sorted_vertex_degrees
         ):
+        super().__init__(
+            ugraph_basic=ugraph_basic
+            ,ugraph_fake_embedding=ugraph_fake_embedding
+            ,aedge2arbitrary_hedge=aedge2arbitrary_hedge
+            ,fvertex2vertex=fvertex2vertex
+            ,vertex2maybe_fvertex=vertex2maybe_fvertex
+            )
+        assert self.verify_ugraph(AssertionError)
+        return
+
         self.ugraph_basic = ugraph_basic
         self.ugraph_fake_embedding = ugraph_fake_embedding
 
@@ -351,11 +366,10 @@ ugraph_fake_embedding.calc attrs:
         yield from cls.all_UGraph_attr_seq
         yield 'calc'
         yield from super().__iter_all_impl_attrs__()
-    """
     @classmethod
     def __iter_all_cached_attr_calc_pairs__(cls):
+        yield 'calc', Calc_UGraph_Info
         yield from super().__iter_all_cached_attr_calc_pairs__()
-    """
 
 
 

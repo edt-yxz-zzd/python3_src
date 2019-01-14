@@ -104,6 +104,11 @@ from seed.verify.common_verify import (
 from seed.verify.VerifyType import VerifyType__static
 
 
+
+def Calc_UGraphFakeEmbedding_Info(self):
+    from .calc_UGraphFakeEmbedding_info.Calc_UGraphFakeEmbedding_Info import Calc_UGraphFakeEmbedding_Info
+    return Calc_UGraphFakeEmbedding_Info(self)
+
 class UGraphFakeEmbedding(StructBase):
     '''
 
@@ -330,6 +335,31 @@ calc attrs:
         ,hedge2fvertex
         ,fvertex2arbitrary_hedge
         ):
+        super().__init__(
+            num_hedges = num_hedges
+            ,num_ffaces = num_ffaces
+            ,num_fvertices = num_fvertices
+
+            ,hedge2fake_clockwise_next_hedge_around_vertex
+                = hedge2fake_clockwise_next_hedge_around_vertex
+            ,hedge2fake_clockwise_prev_hedge_around_vertex
+                = hedge2fake_clockwise_prev_hedge_around_vertex
+            ,hedge2fake_clockwise_next_hedge_around_fface
+                = hedge2fake_clockwise_next_hedge_around_fface
+            ,hedge2fake_clockwise_prev_hedge_around_fface
+                = hedge2fake_clockwise_prev_hedge_around_fface
+
+            ,fface2degree = fface2degree
+            ,hedge2fake_clockwise_fface = hedge2fake_clockwise_fface
+            ,fface2arbitrary_hedge = fface2arbitrary_hedge
+
+            ,fvertex2degree = fvertex2degree
+            ,hedge2fvertex = hedge2fvertex
+            ,fvertex2arbitrary_hedge = fvertex2arbitrary_hedge
+            )
+        assert self.verify_ugraph_fake_embedding(AssertionError)
+        return
+
         self.num_hedges = num_hedges
         self.num_ffaces = num_ffaces
         self.num_fvertices = num_fvertices
@@ -426,14 +456,10 @@ calc attrs:
         yield from cls.all_UGraphFakeEmbedding_attr_seq
         yield 'calc'
         yield from super().__iter_all_impl_attrs__()
-    """
     @classmethod
     def __iter_all_cached_attr_calc_pairs__(cls):
+        yield 'calc', Calc_UGraphFakeEmbedding_Info
         yield from super().__iter_all_cached_attr_calc_pairs__()
-    """
-
-
-
 
 
 

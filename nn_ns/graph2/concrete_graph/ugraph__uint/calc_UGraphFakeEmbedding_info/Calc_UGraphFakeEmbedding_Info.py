@@ -32,6 +32,15 @@ class Calc_UGraphFakeEmbedding_Info:
     all_attr_set = frozenset(all_attr_seq)
     def __init__(self, ugraph_fake_embedding):
         assert isinstance(ugraph_fake_embedding, UGraphFakeEmbedding)
+        """
+        global UGraphFakeEmbedding
+        try:
+            UGraphFakeEmbedding
+        except NameError:
+            from ..UGraphFakeEmbedding import UGraphFakeEmbedding
+            UGraphFakeEmbedding
+        """
+
         self._ugraph_fake_embedding_ref = weakref.ref(ugraph_fake_embedding)
         self._cache = {}
     def __getattribute__(self, attr):
