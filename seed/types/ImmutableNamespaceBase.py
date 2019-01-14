@@ -17,6 +17,15 @@ from .NamedReadOnlyProperty import NamedReadOnlyProperty
 from .CachedProperty import CachedProperty
 from seed.helper.repr_input import repr_helper_ex
 from seed.verify.common_verify import is_Sequence
+from types import MappingProxyType
+
+
+def _get_kwargs(self):
+    return super(ImmutableNamespaceBase, self).__getattribute__('_ImmutableNamespaceBase__kwargs')
+def _set_kwargs(self, kwargs):
+    super(ImmutableNamespaceBase, self).__setattr__('_ImmutableNamespaceBase__kwargs', kwargs)
+def _set_hash_value(self, hash_value):
+    super(ImmutableNamespaceBase, self).__setattr__('_ImmutableNamespaceBase__hash_value', hash_value)
 
 
 class ImmutableNamespaceBase:
@@ -40,6 +49,8 @@ example:
     AttributeError: a
     >>> ns
     NoAttrs()
+    >>> vars(ns)
+    mappingproxy({})
 
     >>> ns = AB(b = 0, a = 1)
     >>> ns.a = 2
@@ -52,6 +63,18 @@ example:
     AttributeError: a
     >>> ns.a
     1
+    >>> dir(ns)
+    ['a', 'b']
+    >>> ns == ns
+    True
+    >>> ns <= ns
+    True
+    >>> ns >= ns
+    True
+    >>> ns < ns
+    False
+    >>> ns > ns
+    False
 
     >>> type(hash(ns))
     <class 'int'>
@@ -75,7 +98,13 @@ example:
     >>> AB(b=-3, a=-1)
     AB(a = -1, b = -3)
 
+
 '''
+    __slots__ = '''
+        _ImmutableNamespaceBase__kwargs
+        _ImmutableNamespaceBase__hash_value
+        '''.split()
+
     @classmethod
     def __init_subclass__(cls, *
         , ordered_attr_name_seq=None
@@ -120,12 +149,35 @@ example:
 
     def __init__(self, **kwargs):
         cls = type(self)
-        d = vars(self)
-        for name in cls.ordered_attr_name_seq:
-            d[name] = kwargs.pop(name)
+        missing_names = cls.ordered_attr_name_set - frozenset(kwargs)
+        if missing_names:
+            raise TypeError(f'missing: {names!r}')
+
+        if len(kwargs) > len(cls.ordered_attr_name_set):
+            d = {name: kwargs.pop(name) for name in cls.ordered_attr_name_set}
+        else:
+            d = kwargs
+            kwargs = {}
+
+        _set_kwargs(self, MappingProxyType(d))
         super().__init__(**kwargs)
 
+    def __getattribute__(self, attr):
+        d = _get_kwargs(self)
+        try:
+            return d[attr]
+        except KeyError:
+            pass
+
+        if attr == '__dict__':
+            # kwargs as __dict__ for user!
+            return d
+            return MappingProxyType(d)
+
+        return super().__getattribute__(attr)
+
     def __dir__(self):
+        cls = type(self)
         return cls.ordered_attr_name_seq
     def __setattr__(self, attr, obj):
         raise AttributeError(attr)
@@ -137,7 +189,7 @@ example:
         return values
     def __iter_ordered_items(self):
         cls = type(self)
-        d = vars(self)
+        d = _get_kwargs(self)
         keys = cls.ordered_attr_name_seq
         items = ((k, d[k]) for k in keys)
         return items
@@ -156,15 +208,37 @@ example:
         #if not isinstance(other, __class__): return NotImplemented
         return (type(self) is type(other)
             and hash(self) == hash(other)
-            #and vars(self) == vars(other)
             and all(a == b for a, b in zip(self.__iter_ordered_values()
                                         , other.__iter_ordered_values())
                 )
             )
+    def __lt__(self, other):
+        #if not isinstance(other, __class__): return NotImplemented
+        if type(self) is not type(other): raise TypeError #NotImplementedError
+        for a, b in zip(self.__iter_ordered_values()
+                        , other.__iter_ordered_values()):
+            if a == b: continue
+            return a < b
+        return False
+    def __le__(self, other):
+        if type(self) is not type(other): raise TypeError #NotImplementedError
+        return not (other < self)
+    def __gt__(self, other):
+        return not (self <= other)
+    def __ge__(self, other):
+        return not (self < other)
+
     def __hash__(self):
-        return self._hash_value
-    @CachedProperty
-    def _hash_value(self):
+        try:
+            return self.__hash_value
+        except AttributeError:
+            cls = type(self)
+            hash_value = cls.__calc_hash_value__(self)
+            #self.__hash_value = hash_value
+            _set_hash_value(self, hash_value)
+        return self.__hash_value
+    #@CachedProperty.at(instance2cached_dict=_get_vars)
+    def __calc_hash_value__(self):
         cls = type(self)
         items = self.__iter_ordered_items()
         repr_data = id(cls), tuple(items)

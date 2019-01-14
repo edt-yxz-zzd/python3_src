@@ -15,6 +15,7 @@ from seed.helper.repr_input import repr_helper_ex
 
 
 
+"""
 def _get_vars(self):
     # return vars(self)
     return super(ImmutableNamespace, self).__getattribute__('__dict__')
@@ -22,6 +23,16 @@ def _get_kwargs(self):
     return _get_vars(self)['_kwargs_']
 def _set_kwargs(self, kwargs):
     _get_vars(self)['_kwargs_'] = kwargs
+"""
+
+def _get_kwargs(self):
+    return super(ImmutableNamespace, self).__getattribute__('_ImmutableNamespace__kwargs')
+def _set_kwargs(self, kwargs):
+    super(ImmutableNamespace, self).__setattr__('_ImmutableNamespace__kwargs', kwargs)
+def _set_hash_value(self, hash_value):
+    super(ImmutableNamespace, self).__setattr__('_ImmutableNamespace__hash_value', hash_value)
+
+
 
 
 class ImmutableNamespace:
@@ -58,6 +69,8 @@ example:
     <class 'int'>
     >>> len(vars(ns))
     2
+    >>> dir(ns)
+    ['a', 'b']
     >>> sorted(vars(ns))
     ['a', 'b']
     >>> vars(ImmutableNamespace())
@@ -66,20 +79,42 @@ example:
     >>> vars(ns)
     mappingproxy({'a': 1})
     >>> _get_kwargs(ns)
-    {'a': 1}
-    >>> _get_vars(ns) == {'_kwargs_': {'a': 1}, '_hash_value': hash(ns)}
-    True
+    mappingproxy({'a': 1})
+
+
+    #>>> _get_vars(ns) == {'_kwargs_': {'a': 1}, '_hash_value': hash(ns)}
+    #True
 
 '''
+    __slots__ = '''
+        _ImmutableNamespace__kwargs
+        _ImmutableNamespace__hash_value
+        '''.split()
+
     def __init__(self, **kwargs):
         '''
 self.!__dict__ = {'_kwargs_':??, '_hash_value':??}
 self.?__dict__ = self.!__dict__['_kwargs_']
 '''
-        _set_kwargs(self, kwargs)
+        _set_kwargs(self, MappingProxyType(kwargs))
         #for k, v in kwargs.items(): setattr(self, k, v)
 
+    def __dir__(self):
+        return tuple(_get_kwargs(self))
     def __getattribute__(self, attr):
+        d = _get_kwargs(self)
+        try:
+            return d[attr]
+        except KeyError:
+            pass
+
+        if attr == '__dict__':
+            # kwargs as __dict__ for user!
+            return d
+            return MappingProxyType(d)
+
+        return super().__getattribute__(attr)
+
         d = _get_kwargs(self)
         if attr == '__dict__':
             # kwargs as __dict__ for user!
@@ -115,9 +150,16 @@ self.?__dict__ = self.!__dict__['_kwargs_']
             and _get_kwargs(self) == _get_kwargs(other)
             )
     def __hash__(self):
-        return self._hash_value
-    @CachedProperty.at(instance2cached_dict=_get_vars)
-    def _hash_value(self):
+        try:
+            return self.__hash_value
+        except AttributeError:
+            cls = type(self)
+            hash_value = cls.__calc_hash_value__(self)
+            #self.__hash_value = hash_value
+            _set_hash_value(self, hash_value)
+        return self.__hash_value
+    #@CachedProperty.at(instance2cached_dict=_get_vars)
+    def __calc_hash_value__(self):
         d = _get_kwargs(self)
         cls = type(self)
         items = sorted(d.items())
