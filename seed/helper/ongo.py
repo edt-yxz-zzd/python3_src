@@ -30,7 +30,7 @@ def for_modules(*qnames, excludes=()):
         unbound_names = frozenset(unbound_names)
         unbound_names -= excludes
         if unbound_names:
-            print(__name__)
+            print(f'module: {__name__} forgots:')
             for unbound_name in unbound_names:
                 print('\t', unbound_name)
 

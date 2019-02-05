@@ -1,5 +1,12 @@
 
-#ICanonLabelSuperUTree
+'''
+CanonLabelSuperUTreeABC
+    do most boring boilerplate code
+'''
+
+__all__ = '''
+    CanonLabelSuperUTreeABC
+    '''.split()
 
 from ..IMaker4UTree import IMaker4UTree # make_all_rooted_utree_attrs
 from ..UGraphLabelling import UGraphLabelling
@@ -13,7 +20,11 @@ from ..Coloring import (
     ,make_column2color_from_color2columns
     )
 
-from ..locally_reindex_global_colors import locally_reindex_global_colors__virtual_row_layer
+from ..locally_reindex_global_colors import (
+    locally_reindex_global_colors
+    ,locally_reindex_global_colors__depth
+    #,locally_reindex_global_colors__virtual_row_layer
+    )
 from seed.verify.common_verify import is_Sequence
     #is_uint_sequence
     #is_UInt
@@ -31,7 +42,7 @@ from .abc import ABC, abstractmethod
 
 
 
-class ICanonLabelSuperUTree(ABC):
+class CanonLabelSuperUTreeABC(ABC):
     '''
 
 # super_XXX - obj of super_utree
@@ -85,7 +96,26 @@ named_global_rowcoloring :: RowColoring
 named_depth_layer_tablecoloring :: TableColoring
     # (num_named_depth_layer_colors, depth_idx2named_local_idx2named_depth_layer_color)
 
+
+
+##########################################################
+##########################################################
+##########################################################
+abstract_methods:
+    `canon_label_and_serialize_subgraphs_at_depth
+    `colored_subgraph_labelling2local_upper_color_at_depth
+    `make_IMaker4UTree
+    `make_UGraphLabelling_of_original_entire_graph
+    `make_depth2upper_interface_info
+    `make_init_lower_foot_coloring
+    `make_lower_foot_coloring_of_upper_layer
+    `make_name2named_merged_layer_tablecoloring_at_depth
+    `named_local_idx2maybe_named_global_idx
+    `super_vertex2num_named_local_indices
+
 '''
+    #__slots__ = ()
+
     def __init__(self, *
         , super_utree, name2named_global_rowcoloring, ordered_name_seq
         ):
@@ -106,7 +136,7 @@ named_depth_layer_tablecoloring :: TableColoring
     def super_vertex2num_named_local_indices(self, name, super_vertex):
         # -> UInt
         # -> num_named_local_indices
-        pass
+        raise NotImplementedError
     @abstractmethod
     def named_local_idx2maybe_named_global_idx(self, name, super_vertex, named_local_idx):
         # -> (None|UInt)
@@ -115,7 +145,7 @@ named_depth_layer_tablecoloring :: TableColoring
         # color virtual_named_local_idx with a special color
         #
         # use: locally_reindex_global_colors
-        pass
+        raise NotImplementedError
 
 
 
@@ -125,7 +155,7 @@ named_depth_layer_tablecoloring :: TableColoring
     @abstractmethod
     def make_IMaker4UTree(self, utree):
         # -> IMaker4UTree
-        pass
+        raise NotImplementedError
     def make_all_rooted_utree_attrs(self, utree):
         # -> namespace of rooted_utree_attrs...
         maker = self.make_IMaker4UTree(utree)
@@ -220,6 +250,7 @@ named_depth_layer_tablecoloring :: TableColoring
         return depth2named_depth_layer_tablecoloring
 
     def canon_label_super_utree(self):
+        # -> UGraphLabelling
         ordered_name_seq = self.ordered_name_seq
         super_utree = self.super_utree
         rooted_super_utree_attrs = self.rooted_super_utree_attrs
@@ -235,9 +266,10 @@ named_depth_layer_tablecoloring :: TableColoring
         depth2upper_interface_info = self.make_depth2upper_interface_info()
         lower_foot_coloring = self.make_init_lower_foot_coloring()
         saved_triples = []
+        num_depths = len(depth2depth_idx2super_vertex)
         for depth in reversed(range(num_depths)):
             (name2named_layer_tablecoloring_at_depth
-            ) = make_name2named_layer_tablecoloring_at_depth(
+            ) = self.make_name2named_layer_tablecoloring_at_depth(
                 depth = depth
                 ,name2depth2named_depth_layer_tablecoloring
                     = name2depth2named_depth_layer_tablecoloring
@@ -249,7 +281,8 @@ named_depth_layer_tablecoloring :: TableColoring
 
             (name2named_merged_layer_tablecoloring_at_depth
             ) = self.make_name2named_merged_layer_tablecoloring_at_depth(
-                upper_interface_info
+                depth = depth
+                ,upper_interface_info
                     = upper_interface_info
                 ,name2named_layer_tablecoloring_at_depth
                     = name2named_layer_tablecoloring_at_depth
@@ -261,7 +294,8 @@ named_depth_layer_tablecoloring :: TableColoring
             (name2depth_idx2named_merged_local_rowcoloring_at_depth
             ,name2depth_idx2named_depth_merged_local_compactrecoloring
             ) = self.make_name2depth_idx2named_merged_local_rowcoloring_at_depth_ex(
-                name2named_merged_layer_tablecoloring_at_depth
+                depth=depth
+                ,name2named_merged_layer_tablecoloring_at_depth
                     = name2named_merged_layer_tablecoloring_at_depth
                 )
                 #named_merged_local_rowcoloring_at_depth :: RowColoring
@@ -277,10 +311,32 @@ named_depth_layer_tablecoloring :: TableColoring
                 ,name2depth_idx2named_merged_local_rowcoloring_at_depth
                     = name2depth_idx2named_merged_local_rowcoloring_at_depth
                 )
-                # upper_interface_subgraph_labelling_pairs :: [(UpperInterface, UGraphLabelling)]
+                # upper_interface_subgraph_labelling_pairs :: [(UpperInterface, Serialization)]
                 # upper_interface - user_defined_data
-                #   i.e. hedge(used to connect to upper layer)
+                #   e.g. hedge(used to connect to upper layer)
                 # subgraph_serialization :: Serialization
+                #   subgraph_serialization is dependent on upper_interface
+                # i.e. upper_interface_subgraph_labelling_pair is a dependent sum type
+                #   e.g. (('vertex', upper_layer_depth_idx, upper_layer_local_vertex), subgraph_merged_layer_coloring_serialization)
+                #   e.g. (('hedge', upper_layer_depth_idx, upper_layer_local_hedge), planar_subgraph_merged_layer_coloring_imaged_embedding_serialization)
+                #
+                # old:
+                # upper_interface_subgraph_labelling_pairs :: [(UpperInterface, UGraphLabelling)]
+                # subgraph_labelling :: UGraphLabelling
+                #
+
+            #upper_interface <<== subgraph + subgraph_labelling
+            #std_subgraph <<== subgraph + subgraph_labelling
+            #std_subgraph_structure_serialization <<== std_subgraph
+            #std_subgraph_named_merged_local_coloring_serialization <<== std_subgraph + named_merged_local_rowcoloring_at_depth
+            #std_subgraph_named_merged_layer_coloring_serialization <<== std_subgraph_named_merged_local_coloring_serialization + named_depth_merged_local_compactrecoloring
+            #xxx std_subgraph_complete_serialization <<== std_subgraph_structure_serialization + [std_subgraph_named_merged_layer_coloring_serialization]
+            # TODO
+                # subgraph_serialization :: Serialization
+                #   subgraph_serialization donot contain color info
+                # subgraph_structure_serialization :: Serialization
+                # subgraph_merged_local_coloring_serialization :: Serialization
+                # subgraph_merged_layer_coloring_serialization :: Serialization
                 #
 
             (depth_idx2upper_interface_local_upper_color_pairs
@@ -314,18 +370,38 @@ named_depth_layer_tablecoloring :: TableColoring
                 ,depth_idx2upper_interface_local_upper_color_pairs
                 ))
 
-        handle_maybe_root_aedge
-        make_ UGraphLabelling of original_entire_graph
-            saved_triples
+        depth2triple = tuple(reversed(saved_triples)); del saved_triples
+
+        (ugraph_labelling
+        )= self.make_UGraphLabelling_of_original_entire_graph(
+            depth2triple
+            )
+        assert isinstance(ugraph_labelling, UGraphLabelling)
+        return ugraph_labelling
     #end of canon_label_super_utree
 
 
+    @abstractmethod
+    def make_UGraphLabelling_of_original_entire_graph(self, depth2triple):
+        #depth2triple :: [triple]
+        #triple =
+        #   (name2depth_idx2named_depth_merged_local_compactrecoloring
+        #   ,depth_idx2upper_interface_subgraph_labelling_pairs
+        #   ,depth_idx2upper_interface_local_upper_color_pairs
+        #   )
+        raise NotImplementedError
 
+
+
+    @abstractmethod
     def make_init_lower_foot_coloring(self):
         # -> lower_foot_coloring
+        raise NotImplementedError
+    @abstractmethod
     def make_depth2upper_interface_info(self):
         # -> depth2upper_interface_info
         # -> [upper_interface_info]
+        raise NotImplementedError
     def make_name2named_layer_tablecoloring_at_depth(self, *
         ,depth
         ,name2depth2named_depth_layer_tablecoloring
@@ -333,7 +409,16 @@ named_depth_layer_tablecoloring :: TableColoring
         # -> name2named_layer_tablecoloring_at_depth
         #
         #named_layer_tablecoloring_at_depth = (num_named_depth_layer_colors, depth_idx2named_local_idx2named_depth_layer_color)
+        #ordered_name_seq = self.ordered_name_seq
+        name2named_layer_tablecoloring_at_depth = {
+            name : depth2named_depth_layer_tablecoloring[depth]
+            for name, depth2named_depth_layer_tablecoloring
+                in name2depth2named_depth_layer_tablecoloring.items()
+            }
+        return name2named_layer_tablecoloring_at_depth
+    @abstractmethod
     def make_name2named_merged_layer_tablecoloring_at_depth(self, *
+        ,depth
         ,upper_interface_info
         ,name2named_layer_tablecoloring_at_depth
         ,lower_foot_coloring
@@ -341,26 +426,86 @@ named_depth_layer_tablecoloring :: TableColoring
         # -> name2named_merged_layer_tablecoloring_at_depth
         #
         #named_merged_layer_tablecoloring_at_depth = (num_named_depth_merged_layer_colors, depth_idx2named_local_idx2named_depth_merged_layer_color)
+        raise NotImplementedError
     def make_name2depth_idx2named_merged_local_rowcoloring_at_depth_ex(self, *
+        ,depth
         ,name2named_merged_layer_tablecoloring_at_depth
         ):
         # -> (name2depth_idx2named_merged_local_rowcoloring_at_depth
         #    ,name2depth_idx2named_depth_merged_local_compactrecoloring)
         #
+        #named_merged_layer_tablecoloring_at_depth = (num_named_depth_merged_layer_colors, depth_idx2named_local_idx2named_depth_merged_layer_color)
+        #
         #named_merged_local_rowcoloring_at_depth :: RowColoring
         #   # (num_named_depth_merged_local_colors, named_local_idx2named_depth_merged_local_color)
         #named_depth_merged_local_compactrecoloring :: CompactRecoloring
         #   # (num_named_depth_merged_layer_colors, named_depth_merged_local_color2named_depth_merged_layer_color)
+        #
+        #NOTE: super_vertex <==> (depth, depth_idx) <==> subgraph
+        #
+        #NOTE: named_depth_merged_layer_color ==>> named_depth_merged_local_color
+        #       input color is merged but whole layer at depth
+        #           tablecoloring
+        #       output color is merged and local to each subgraph
+        #           depth_idx2rowcoloring # not tablecoloring
+        #
+        '''
+        locally_reindex_global_colors
+        :: num_global_colors -> row2column2global_color
+        -> (row2num_local_colors, row2column2local_color, row2local_color2global_color)
+        '''
+        name2depth_idx2named_merged_local_rowcoloring_at_depth = {}
+        name2depth_idx2named_depth_merged_local_compactrecoloring = {}
+        for name, named_merged_layer_tablecoloring_at_depth in name2named_merged_layer_tablecoloring_at_depth.items():
+            # tablecoloring -> depth_idx2rowcoloring
+            # tablecoloring -> depth_idx2compactrecoloring
+            tablecoloring = named_merged_layer_tablecoloring_at_depth
+
+            (row2num_local_colors
+            ,row2column2local_color
+            ,row2local_color2global_color
+            ) = locally_reindex_global_colors(
+                num_global_colors=tablecoloring.num_colors
+                ,row2column2global_color=tablecoloring.row2column2color
+                )
+            depth_idx2rowcoloring = tuple(
+                RowColoring(
+                    num_colors=num_local_colors
+                    ,column2color=column2local_color
+                    )
+                for num_local_colors, column2local_color
+                    in zip(row2num_local_colors, row2column2local_color)
+                )
+            depth_idx2compactrecoloring = tuple(
+                CompactRecoloring(
+                    num_old_colors=tablecoloring.num_colors
+                    ,compact_new_color2old_color=local_color2global_color
+                    )
+                for local_color2global_color in row2local_color2global_color
+                )
+            name2depth_idx2named_merged_local_rowcoloring_at_depth[name
+                ] = depth_idx2rowcoloring
+            name2depth_idx2named_depth_merged_local_compactrecoloring[name
+                ] = depth_idx2compactrecoloring
+        return (name2depth_idx2named_merged_local_rowcoloring_at_depth
+                ,name2depth_idx2named_depth_merged_local_compactrecoloring
+                )
+    @abstractmethod
     def canon_label_and_serialize_subgraphs_at_depth(self, *
         ,depth
         ,name2depth_idx2named_merged_local_rowcoloring_at_depth
         ):
         # -> depth_idx2upper_interface_subgraph_labelling_pairs
-        # -> [(upper_interface, subgraph_serialization)]
+        # -> [(upper_interface, subgraph_labelling, subgraph_serialization)]
         #
         # upper_interface_subgraph_labelling_pairs :: [(UpperInterface, UGraphLabelling)]
         # upper_interface :: UpperInterface # user_defined_data
+        # subgraph_labelling :: UGraphLabelling
         # subgraph_serialization :: Serialization
+        #   subgraph_serialization donot contain color info
+        #
+        raise NotImplementedError
+    @abstractmethod
     def colored_subgraph_labelling2local_upper_color_at_depth(self, *
         ,depth
         ,depth_idx2upper_interface_subgraph_labelling_pairs
@@ -370,11 +515,14 @@ named_depth_layer_tablecoloring :: TableColoring
         # -> depth_idx2upper_interface_local_upper_color_pairs
         #
         # upper_interface_local_upper_color_pairs :: [(UpperInterface, local_upper_color)]
+        raise NotImplementedError
+    @abstractmethod
     def make_lower_foot_coloring_of_upper_layer(self, *
         ,depth
         ,depth_idx2upper_interface_local_upper_color_pairs
         ):
         # -> lower_foot_coloring
+        raise NotImplementedError
 
 
 
@@ -403,3 +551,15 @@ locally_reindex_global_colors__virtual_row_layer
 
 
 '''
+
+if __name__ == '__main__':
+    classes = [CanonLabelSuperUTreeABC]
+    excludes = '''
+        logic
+        error
+        '''.split()
+
+    from seed.helper.ongo import main
+    main(modules=[__name__], classes=classes, excludes=excludes)
+
+

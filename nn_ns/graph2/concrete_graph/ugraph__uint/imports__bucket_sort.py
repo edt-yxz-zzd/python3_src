@@ -6,11 +6,13 @@ __all__ = '''
     bucket_sort
     radix_sort
     bucket_sort4uint_seq
+    bucket_sort_per_row
     '''.split()
 
 from nn_ns.graph2.bucket_sort.UIntSeqSort import UIntSeqSort
 from seed.algo.bucket_sort.bucket_sort_with_table import bucket_sort_with_table__easy
 from seed.algo.bucket_sort.radix_sort_with_table import radix_sort_with_table
+from seed.algo.bucket_sort.bucket_sort_per_row import bucket_sort_per_row
 
 def radix_sort(alphabet_sizes, iterable, *, key):
     alphabet_sizes = tuple(alphabet_sizes)

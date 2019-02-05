@@ -82,7 +82,7 @@ rem to override C:\Windows\System32\find.exe
 set "usrbin_path=D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin"
 set "path=%usrbin_path%;%path%;%usrbin_path%\pkg-config"
 rem to override DOS command MKDIR
-    doskey mkdir=%usrbin_path%\mkdir.exe
+    doskey mkdir=%usrbin_path%\mkdir.exe $*
 set "path=%path%;%set_bat_path%\cmdline_tool_link"
 set "path=%path%;%bats_path%"
 set "path=%path%;D:\software\programming\develop tools\cmake\cmake-3.7.2-win64-x64\bin"

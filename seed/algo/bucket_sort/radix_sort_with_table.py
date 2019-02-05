@@ -73,6 +73,8 @@ time and space
     incomplete = bool(incomplete)
     if incomplete:
         key = complete_key_func(len(alphabet_sizes), key)
+
+    reverse = bool(reverse)
     if reverse:
         def make_wheres(sz):
             return reversed(range(sz))
@@ -91,8 +93,12 @@ time and space
         #   = time O(sz_)*sz.'+'
         #=time O(n)*('key' + uint[..sz].'< +1') + O(sz)*sz.'< +'
         sz_ = sz+incomplete
-        ls[:] = bucket_sort_with_table(
-                    sz_, ls, make_wheres(sz_), table, key=lambda x:x[0][idx])
+        ls = bucket_sort_with_table(
+                    sz_, ls, make_wheres(sz_), table
+                    ,key=lambda x:x[0][idx]
+                    ,reverse=reverse
+                        # set both make_wheres and reverse at same time
+                    )
     for i in range(len(ls)):
         _, ls[i] = ls[i]
     return ls
