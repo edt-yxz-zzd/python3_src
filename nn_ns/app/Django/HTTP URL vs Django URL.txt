@@ -1,0 +1,56 @@
+URI = scheme:[//authority]path[?query][#fragment]
+
+authority
+    authority = [userinfo@]host[:port]
+
+query
+    key1=value1&key2=value2
+    key1=value1;key2=value2
+
+
+ParseResult(scheme='http', netloc='www.cwi.nl:80', path='/%7Eguido/Python.html',
+            params='', query='', fragment='')
+
+HTTP URL vs Django URL?
+    ?? https://stackoverflow.com/questions/4591525/is-it-possible-to-pass-query-parameters-via-djangos-url-template-tag
+
+    HTTP URL
+        http://example.com/myview?office=foobar
+        #                       ^^^
+    Django URL
+        http://example.com/myview/
+        #??? http://example.com/myview/?office=foobar ???
+        #                            ^^^
+        #
+        #
+        # query is not part of Django URL!!!
+        # SHOULD remove '?....' from urlpatterns
+        # a fail example:
+        #   Request URL: http://127.0.0.1:8000/echo_image/?url=https://i.meizitu.net/2018/12/28f02.jpg
+        #   Using the URLconf defined in mzitu_com_project.urls, Django tried these URL patterns, in this order:
+        #   1. admin/
+        #   2. (?=old/|all/|new/)
+        #   3. per/
+        #   4. echo_image/ [?]url=.+$
+        #   5. index/
+        #   6. [name='main_index']
+        #   The current path, echo_image/, didn't match any of these.
+
+
+
+
+#########################
+# mzitu_com_project/urls.py
+urlpatterns = [
+    ...
+    #re_path(r'echo_image/(?=[?].+)', include('proxy_app.urls')),
+    path(r'echo_image/', include('proxy_app.urls')),
+    ...
+]
+# proxy_app/urls.py
+urlpatterns = [
+    # query is part of HTTP URL
+    #   but not part of Django URL
+    #re_path(r'[?]url=.+$', download_image_file_as_view),
+    path('', download_image_file_as_view),
+]

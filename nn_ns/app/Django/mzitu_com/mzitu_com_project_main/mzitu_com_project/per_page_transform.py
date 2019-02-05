@@ -16,9 +16,12 @@ from bs4 import BeautifulSoup
 #from urllib.parse import urlparse, urlunparse
 #from pathlib import PurePosixPath as Path
 
-def per_page_transform__url(old_url):
+
+#proxy_url_prefix = 'http://api.hahacn.com/other/getimg2?url='
+#proxy_url_prefix = 'http://127.0.0.1:8000/echo_image/?url='
+def per_page_transform__url(old_url, proxy_url_prefix):
     html_page = fetch_webpage(old_url)
-    return per_page_transform__page(html_page)
+    return per_page_transform__page(html_page, proxy_url_prefix)
 
 
 def extract_mzitu_com__per_pages(html_page):
@@ -137,7 +140,7 @@ new_html_begin = r'''
 '''
 
 
-def per_page_transform__page(html_page):
+def per_page_transform__page(html_page, proxy_url_prefix):
     html_title, img_urls = extract_mzitu_com__per_pages(html_page)
 
 
@@ -149,7 +152,7 @@ def per_page_transform__page(html_page):
     for img_url in img_urls:
         # http://bbs.hahacn.com/thread/5.html
         # [success]
-        img_url = 'http://api.hahacn.com/other/getimg2?url=' + img_url
+        img_url = proxy_url_prefix + img_url
 
         # bug: new_tag('img', href=...)
         #   SHOULD-BE new_tag('img', src=...)

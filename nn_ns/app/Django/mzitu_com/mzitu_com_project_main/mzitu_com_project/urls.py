@@ -20,10 +20,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #new:
-    re_path('(?=old/|all/|new/)', include('all_app.urls')),
+    re_path(r'(?=old/|all/|new/)', include('all_app.urls')),
     #path('old/', include('all_app.urls')),
     #path('all/', include('all_app.urls')),
     path('per/', include('per_app.urls')),
+    re_path(r'echo_image/', include('proxy_app.urls')),
     path(r'index/', include('main_index_app.urls')),
     #path(r'/', include('main_index_app.urls')),
     path(r'', include('main_index_app.urls')),

@@ -10,6 +10,13 @@ import re
 website = Path('www.mzitu.com')
 #https://www.mzitu.com/all/
 #https://www.mzitu.com/old/
+#https://www.mzitu.com/DDDDDDD
+
+#http://localhost/all/
+#http://localhost/old/
+#http://localhost/new/
+#http://localhost/per/DDDDDDD
+#http://localhost/echo_image/?url=...
 
 website_all_new = website / 'all'
 website_all_old = website / 'old'
@@ -25,6 +32,8 @@ per_page_url_regex = re.compile(
     + r'(?P<NUMBER>\d+)/'
     )
 
+echo_proxy_name = 'echo_image'
+echo_proxy_query_key = 'url'
 
 main_index_page = r'''
 <!DOCTYPE html>

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'all_app',
     'per_app',
     'main_index_app',
+    'proxy_app',
 ]
 
 MIDDLEWARE = [
