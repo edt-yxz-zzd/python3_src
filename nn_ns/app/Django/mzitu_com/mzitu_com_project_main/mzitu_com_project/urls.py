@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.views.generic import RedirectView
-from .StaticImageView import StaticImageView
+from ._configure_ import using_StaticImageView_instead_of_RedirectView
+if using_StaticImageView_instead_of_RedirectView:
+    from .StaticImageView import StaticImageView
+else:
+    from django.views.generic import RedirectView
 
 
 urlpatterns = [
@@ -49,5 +52,6 @@ urlpatterns = [
 
     re_path(r'^favicon[.]ico$', StaticImageView('static/images/favicon.ico'))
     #                                           ^^^ no "/" at beginning
-    if 0 else re_path(r'^favicon[.]ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
+    if using_StaticImageView_instead_of_RedirectView else
+    re_path(r'^favicon[.]ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
 ]

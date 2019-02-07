@@ -17,16 +17,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 if True:
     #new:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    #https://docs.djangoproject.com/en/2.1/howto/static-files/
-    STATICFILES_DIRS = [
-        #os.path.join(BASE_DIR, "static"),
-        #'/var/www/static/',
-        STATIC_ROOT,
-    ]
-    # ERRORS:
-    # ?: (staticfiles.E002) The STATICFILES_DIRS setting should not contain the STATIC_ROOT setting.
-    del STATIC_ROOT
+
+    from ._configure_ import using_StaticImageView_instead_of_RedirectView
+
+    _STATIC_ROOT_ = os.path.join(BASE_DIR, 'static')
+
+    if using_StaticImageView_instead_of_RedirectView:
+        STATIC_ROOT = _STATIC_ROOT_
+    else:
+        #https://docs.djangoproject.com/en/2.1/howto/static-files/
+        STATICFILES_DIRS = [
+            #os.path.join(BASE_DIR, "static"),
+            #'/var/www/static/',
+            _STATIC_ROOT_,
+        ]
+        # ERRORS:
+        # ?: (staticfiles.E002) The STATICFILES_DIRS setting should not contain the STATIC_ROOT setting.
+        #del STATIC_ROOT
 
     # see below: STATIC_URL = ...
 

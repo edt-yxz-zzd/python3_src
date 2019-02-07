@@ -7,5 +7,7 @@ rem or:         http://127.0.0.1:8000/new/
 rem or:         http://127.0.0.1:8000/all/
 rem or:         http://127.0.0.1:8000/
 rem or:         http://127.0.0.1:8000/index/
+rem
+rem py manage.py test
 py -m nn_ns.app.Django.mzitu_com.mzitu_com_project_main.manage runserver
 
