@@ -93,9 +93,16 @@ def download_image_file_as_view(request):
         assert type(UserAgent) is str is type(Referer)
 
         opener.addheaders = [('User-Agent', UserAgent), ('Referer', Referer)]
-        image_file = opener.open(url)
+        image_file = response = opener.open(url)
         image_data = image_file.read()
-        return HttpResponse(image_data, content_type='image/jpeg')
+        #return HttpResponse(image_data, content_type='image/jpeg')
+        #   hard code to 'image/jpeg'
+        #
+
+        # detect the orginal url content_type
+        url_info = response.info()
+        content_type = url_info.get_content_type()
+        return HttpResponse(image_data, content_type=content_type)
     else:
         pass
 
