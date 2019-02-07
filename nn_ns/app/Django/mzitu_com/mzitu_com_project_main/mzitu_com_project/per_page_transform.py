@@ -144,6 +144,7 @@ new_html_begin = r'''
 '''
 
 
+global_sep_text = '='*42
 def per_page_transform__page(html_page, proxy_url_prefix_less):
     html_title, img_urls = extract_mzitu_com__per_pages(html_page)
 
@@ -173,10 +174,13 @@ def per_page_transform__page(html_page, proxy_url_prefix_less):
             #'img', href=img_url, width="200", height="200"
             'img', src=img_url, style="max-width: 100%; height: auto;"
             )
-        new_br_tag = new_soup.new_tag('br')
+        new_br_tag1 = new_soup.new_tag('br')
+        new_br_tag2 = new_soup.new_tag('br')
 
+        new_div_tag.append(global_sep_text)
+        new_div_tag.append(new_br_tag1)
         new_div_tag.append(new_img_tag)
-        new_div_tag.append(new_br_tag)
+        new_div_tag.append(new_br_tag2)
 
         #############################################
         #############################################
