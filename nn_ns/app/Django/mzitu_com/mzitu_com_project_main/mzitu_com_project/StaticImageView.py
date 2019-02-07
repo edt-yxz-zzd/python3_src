@@ -15,6 +15,7 @@ from django.conf import settings
 from django.http import HttpResponse, StreamingHttpResponse
 from django.core.files.storage import get_storage_class
 import os.path
+import imghdr
 
 class StaticImageView:
     '''
@@ -39,7 +40,14 @@ urlpatterns = [
         if request.method == 'GET':
             storage_class = get_storage_class(settings.STATICFILES_STORAGE)
             image_file = storage_class().open(self.path)
+            #https://stackoverflow.com/questions/16252656/django-content-type-of-an-image-file
+            file_type = imghdr.what(image_file)
+            content_type = f'image/{file_type}'
+            return StreamingHttpResponse(image_file, content_type=content_type)
+
+            image_file = storage_class().open(self.path)
             return StreamingHttpResponse(image_file, content_type='image/jpeg')
-            #image_data = image_file.read()
-            #return HttpResponse(image_data, content_type='image/jpeg')
+
+            image_data = image_file.read()
+            return HttpResponse(image_data, content_type='image/jpeg')
 

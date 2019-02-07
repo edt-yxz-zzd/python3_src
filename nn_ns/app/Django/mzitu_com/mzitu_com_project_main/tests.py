@@ -18,6 +18,7 @@ http://127.0.0.1:8000/all/
     http://127.0.0.1:8000/new/
 http://127.0.0.1:8000/index/
     http://127.0.0.1:8000/
+http://127.0.0.1:8000/static/images/default_image.png
 http://127.0.0.1:8000/static/images/favicon.ico
     http://127.0.0.1:8000/favicon.ico
 
@@ -37,6 +38,11 @@ http://127.0.0.1:8000/static/images/favicon.ico
     def test_new_page_status_code(self):
         response = self.client.get('/new/')
         self.assertEqual(response.status_code, 200)
+
+    def test_static_images_default_image_page_status_code(self):
+        if not using_StaticImageView_instead_of_RedirectView:
+            response = self.client.get('/static/images/default_image.png')
+            self.assertEqual(response.status_code, 200)
     def test_favicon_page_status_code(self):
         response = self.client.get('/favicon.ico')
         self.assertEqual(response.status_code, 200)

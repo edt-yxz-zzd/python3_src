@@ -145,6 +145,9 @@ new_html_begin = r'''
 
 
 global_sep_text = '='*42
+#global_many_end_of_line = '\n'*20
+global_default_img_url = '/static/images/default_image.png'
+global_img_onerror = f"this.onerror=null;this.src='{global_default_img_url!s}';"
 def per_page_transform__page(html_page, proxy_url_prefix_less):
     html_title, img_urls = extract_mzitu_com__per_pages(html_page)
 
@@ -168,12 +171,30 @@ def per_page_transform__page(html_page, proxy_url_prefix_less):
         #                                  ^^^^^^^
         #                                  has fname
 
+        default_img_text = f'image not found: "{img_url!s}"'
+        #img_on_success = f'this.onafterprint=null;this.src="{img_url!s}";'
+        img_on_success = f'this.onload=null;this.style="wight: auto; height: auto";this.src="{img_url!s}";'
+
         # bug: new_tag('img', href=...)
         #   SHOULD-BE new_tag('img', src=...)
-        new_img_tag = new_soup.new_tag(
-            #'img', href=img_url, width="200", height="200"
-            'img', src=img_url, style="max-width: 100%; height: auto;"
-            )
+        if 0:
+            new_img_tag = new_soup.new_tag(
+                #'img', href=img_url, width="200", height="200"
+                'img', src=img_url, style="max-width: 100%; height: auto;"
+                ,alt=default_img_text
+                ,onerror=global_img_onerror
+                )
+        else:
+            new_img_tag = new_soup.new_tag(
+                'img', src=global_default_img_url # not img_url
+                #,style="max-width: 100%; height: auto;"
+                ,style="width: 600; height: 400;"
+                ,alt=default_img_text
+                ,onload=img_on_success
+                )
+
+
+
         new_br_tag1 = new_soup.new_tag('br')
         new_br_tag2 = new_soup.new_tag('br')
 

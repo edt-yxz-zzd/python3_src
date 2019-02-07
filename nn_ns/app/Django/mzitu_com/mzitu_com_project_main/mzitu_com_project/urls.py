@@ -49,9 +49,18 @@ urlpatterns = [
     #bug: this is not a relative path
     #   re_path(r'^favicon[.]ico$', StaticImageView('/static/images/favicon.ico')),
     #                                               ^^^
-
-    re_path(r'^favicon[.]ico$', StaticImageView('static/images/favicon.ico'))
-    #                                           ^^^ no "/" at beginning
-    if using_StaticImageView_instead_of_RedirectView else
-    re_path(r'^favicon[.]ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
 ]
+
+
+if using_StaticImageView_instead_of_RedirectView:
+  urlpatterns += [
+    re_path(r'^favicon[.]ico$', StaticImageView('static/images/favicon.ico')),
+    #                                           ^^^ no "/" at beginning
+    re_path(r'^static[/]images[/]favicon[.]ico$', StaticImageView('static/images/favicon.ico')),
+    re_path(r'^static/images/default_image[.]png$', StaticImageView('static/images/default_image.png')),
+  ]
+else:
+  urlpatterns += [
+    re_path(r'^favicon[.]ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
+  ]
+

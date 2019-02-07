@@ -1,3 +1,3 @@
 
-using_StaticImageView_instead_of_RedirectView = True
+using_StaticImageView_instead_of_RedirectView = False
 
