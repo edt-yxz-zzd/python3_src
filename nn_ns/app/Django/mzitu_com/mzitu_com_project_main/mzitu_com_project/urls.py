@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.views.generic import RedirectView
+from .StaticImageView import StaticImageView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +33,21 @@ urlpatterns = [
     path(r'', include('main_index_app.urls')),
     #re_path(r'(index/){0,1}\Z', include('main_index_app.urls')),
     #   SHOULD AVOID $
+
+    #re_path(r'^favicon[.]ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
+        # https://stackoverflow.com/questions/9371378/warning-not-found-favicon-ico
+        #   url(r'^favicon\.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
+        #
+        # https://stackoverflow.com/questions/47947673/is-it-better-to-use-path-or-url-in-urls-py-for-django-2-0?rq=1
+        #   use "re_path()" instead of "url()"
+        #
+        # I draw "favicon.ico" by "Greenfish Icon Editor Pro"
+        #
+    #bug: this is not a relative path
+    #   re_path(r'^favicon[.]ico$', StaticImageView('/static/images/favicon.ico')),
+    #                                               ^^^
+
+    re_path(r'^favicon[.]ico$', StaticImageView('static/images/favicon.ico'))
+    #                                           ^^^ no "/" at beginning
+    if 0 else re_path(r'^favicon[.]ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
 ]

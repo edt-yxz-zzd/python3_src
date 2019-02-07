@@ -8,20 +8,24 @@ __all__ = '''
     '''.split()
 
 #from .home_page_transform import NotFoundError, find
-from .DATA import website_per_page_img_url_regex
+from .DATA import (
+    website_per_page_img_url_regex
+    ,echo_proxy_query_key
+    )
 from nn_ns.internet.webpage.fetch_webpage import fetch_webpage
 from bs4 import BeautifulSoup
 #from seed.helper.repr_input import repr_helper
 #import re
-#from urllib.parse import urlparse, urlunparse
-#from pathlib import PurePosixPath as Path
+from urllib.parse import urlparse #, urlunparse
+from pathlib import PurePosixPath as Path
 
 
 #proxy_url_prefix = 'http://api.hahacn.com/other/getimg2?url='
 #proxy_url_prefix = 'http://127.0.0.1:8000/echo_image/?url='
-def per_page_transform__url(old_url, proxy_url_prefix):
+#proxy_url_prefix_less = 'http://127.0.0.1:8000/echo_image/'
+def per_page_transform__url(old_url, proxy_url_prefix_less):
     html_page = fetch_webpage(old_url)
-    return per_page_transform__page(html_page, proxy_url_prefix)
+    return per_page_transform__page(html_page, proxy_url_prefix_less)
 
 
 def extract_mzitu_com__per_pages(html_page):
@@ -140,7 +144,7 @@ new_html_begin = r'''
 '''
 
 
-def per_page_transform__page(html_page, proxy_url_prefix):
+def per_page_transform__page(html_page, proxy_url_prefix_less):
     html_title, img_urls = extract_mzitu_com__per_pages(html_page)
 
 
@@ -149,10 +153,19 @@ def per_page_transform__page(html_page, proxy_url_prefix):
     new_title_tag.append(html_title)
     [new_div_tag] = new_soup.find_all('div')
 
+    assert proxy_url_prefix_less[-1:] == '/'
     for img_url in img_urls:
         # http://bbs.hahacn.com/thread/5.html
         # [success]
-        img_url = proxy_url_prefix + img_url
+        fname = Path(urlparse(img_url).path).name
+        assert fname[-1:] != '/'
+        #img_url = f'{proxy_url_prefix_less}{fname}/?{echo_proxy_query_key}={img_url}'
+        #                                        ^^^^
+        #                                       no fname
+        #                                       browser will choose "download" as filename (no ext)
+        img_url = f'{proxy_url_prefix_less}{fname}?{echo_proxy_query_key}={img_url}'
+        #                                  ^^^^^^^
+        #                                  has fname
 
         # bug: new_tag('img', href=...)
         #   SHOULD-BE new_tag('img', src=...)

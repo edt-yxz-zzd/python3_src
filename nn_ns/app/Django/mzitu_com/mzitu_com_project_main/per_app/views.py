@@ -27,8 +27,9 @@ def per_mzitu__page_view(request):
 
     scheme = request.scheme
     host = request.get_host()
-    proxy_url_prefix = f'{scheme}://{host}/{echo_proxy_name}/?{echo_proxy_query_key}='
-    per_page = per_page_transform__url(old_url, proxy_url_prefix)
+    #proxy_url_prefix = f'{scheme}://{host}/{echo_proxy_name}/?{echo_proxy_query_key}='
+    proxy_url_prefix_less = f'{scheme}://{host}/{echo_proxy_name}/'
+    per_page = per_page_transform__url(old_url, proxy_url_prefix_less)
     return HttpResponse(per_page)
 
 
