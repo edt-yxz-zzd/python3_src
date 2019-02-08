@@ -1,3 +1,7 @@
 
 ls -c -r -1 . | py -m nn_ns.filedir.file_rename2 3  --dry_run
+    # change_time (last file status changed time)
+ls -t -r -1 . | py -m nn_ns.filedir.file_rename2 3  --dry_run
+    # modified_time (last file content modified time)
+
 

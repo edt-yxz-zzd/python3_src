@@ -1,0 +1,2 @@
+resize_image__non_gif -i big/* -o big/out/
+

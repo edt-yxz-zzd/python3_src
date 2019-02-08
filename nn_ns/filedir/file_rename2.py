@@ -9,7 +9,9 @@ ls -c -r -1
     last time first!!! so, we need "-r"
 -c
     sort by change time
-    ????????? sort by create time
+    ctime - change_time - time of last status change
+    ????????? sort by create time ?????????? NO
+        ctime is not creation_time
 -t
     sort by modification time
 -u
