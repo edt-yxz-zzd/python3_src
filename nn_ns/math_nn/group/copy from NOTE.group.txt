@@ -1,0 +1,5 @@
+
+below are copied from "NOTE/group/"
+    "finite simple groups.txt"
+    "list_all_orders_of_finite_simple_groups_lt.py"
+
