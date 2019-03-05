@@ -1,0 +1,15 @@
+
+
+pym extract_ctext_org.py -url https://ctext.org/???/ -rng 1 ??? -o ???[ctext.org].txt --book_title_at=zh --index_format="{???}/zh" -e utf8 --verbose --timeout=10 --time_sep=1
+
+===========================================
+pym extract_ctext_org.py -url https://ctext.org/fengshen-yanyi/ -rng 1 100 -o 封神演義[ctext.org].txt -e utf8 --verbose --timeout=10 --time_sep=1
+pym extract_ctext_org.py -url https://ctext.org/xiyouji/ -rng 1 100 -o 西遊記[ctext.org].txt -e utf8 --verbose --timeout=10 --time_sep=1 --index_format=ch{}
+pym extract_ctext_org.py -url https://ctext.org/sanguo-yanyi/ -rng 1 120 -o 三國演義[ctext.org].txt -e utf8 --verbose --timeout=10 --time_sep=1 --index_format="ch{}/zh"
+pym extract_ctext_org.py -url https://ctext.org/jinpingmei/ -rng 1 100 -o 金瓶梅[ctext.org].txt -e utf8 --verbose --timeout=10 --time_sep=1 --index_format="ch{}"
+
+pym extract_ctext_org.py -url https://ctext.org/hongloumeng/ -rng 1 120 -o 紅樓夢[ctext.org].txt -e utf8 --verbose --timeout=10 --time_sep=1 --index_format="ch{}/zh"
+
+pym extract_ctext_org.py -url https://ctext.org/quantangshi/ -rng 1 900 -o 全唐詩[ctext.org].txt --book_title_at=zh --index_format="{}/zh" -e utf8 --verbose --timeout=10 --time_sep=1
+pym extract_ctext_org.py -url https://ctext.org/quantangshi/ -rng 12 900 -o 全唐詩[ctext.org].txt --book_title_at=zh --index_format="{}/zh" -e utf8 --verbose --timeout=10 --time_sep=1 --append
+

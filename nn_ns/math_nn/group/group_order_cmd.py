@@ -5,13 +5,19 @@ from .list_all_orders_of_finite_simple_groups_lt import (
     list_all_orders_of_finite_simple_groups_lt__without_repetition
     ,list_all_shared_orders_of_finite_simple_groups_lt__without_repetition
     ,_inplace_mk_name__order_parameterized_names_pairs
+    ,family_short_name2family_long_name
+    ,all_family_short_names
+    ,all_family_long_names
+    ,family_long_names2family_short_names
     )
+
+
 def main(args=None):
     import argparse
 
     parser = argparse.ArgumentParser(
         description='show info about orders of finite simple groups'
-        , epilog='''
+        ,epilog=f'''
 format per line (non-verbose):
     group_order is_order_shared [group_name]
   e.g.
@@ -25,6 +31,9 @@ format per line (non-verbose):
 format per line (verbose):
     group_order is_order_shared [(group_name, family_long_name, family_short_name, argument_dict)]
 
+family_short_name2family_long_name = {dict(family_short_name2family_long_name)}
+all_family_long_names = {set(all_family_long_names)}
+all_family_short_names = {set(all_family_short_names)}
 '''
         , formatter_class=argparse.RawDescriptionHelpFormatter
         )
@@ -44,12 +53,46 @@ format per line (verbose):
                         , default = False
                         , help='show detail')
 
+    parser.add_argument('-XS', '--excluded_family_short_names'
+                        , action='append', type=str
+                        , default=[]
+                        #, choices=set(all_family_short_names)
+                        , help='excluded family_short_names')
+    parser.add_argument('-XL', '--excluded_family_long_names'
+                        , action='append', type=str
+                        , default=[]
+                        #, choices=set(all_family_long_names)
+                        , help='excluded family_long_names')
+
+    parser.add_argument('-IS', '--included_family_short_names'
+                        , action='append', type=str
+                        #, choices=set(all_family_short_names)
+                        , help='included family_short_names')
+    parser.add_argument('-IL', '--included_family_long_names'
+                        , action='append', type=str
+                        #, choices=set(all_family_long_names)
+                        , help='included family_long_names')
+
+
 
     args = parser.parse_args(args)
+
+    excluded_family_short_names = args.excluded_family_short_names
+    excluded_family_long_names = args.excluded_family_long_names
+    maybe_included_family_short_names = args.included_family_short_names
+    maybe_included_family_long_names = args.included_family_long_names
+    if not maybe_included_family_long_names and not maybe_included_family_short_names:
+        maybe_included_family_short_names = None
+        maybe_included_family_long_names = None
+
     output = make_main_result(args.upper_bound
         ,only_shared_orders = args.only_shared_orders
         ,with_cyclic = args.with_cyclic
         ,to_group_name = True
+        ,excluded_family_short_names=excluded_family_short_names
+        ,excluded_family_long_names=excluded_family_long_names
+        ,maybe_included_family_short_names=maybe_included_family_short_names
+        ,maybe_included_family_long_names=maybe_included_family_long_names
         )
 
     if args.verbose:
@@ -68,6 +111,10 @@ format per line (verbose):
 
 def make_main_result(upper_bound, *
     , only_shared_orders:bool, with_cyclic:bool, to_group_name:bool
+    ,excluded_family_short_names
+    ,excluded_family_long_names
+    ,maybe_included_family_short_names
+    ,maybe_included_family_long_names
     ):
     only_shared_orders = bool(only_shared_orders)
     with_cyclic = bool(with_cyclic)
@@ -82,6 +129,10 @@ def make_main_result(upper_bound, *
             upper_bound
             ,with_cyclic = with_cyclic
             ,with_parameterized_names = True
+            ,excluded_family_short_names=excluded_family_short_names
+            ,excluded_family_long_names=excluded_family_long_names
+            ,maybe_included_family_short_names=maybe_included_family_short_names
+            ,maybe_included_family_long_names=maybe_included_family_long_names
             )
 
     orders__w; shared_orders__w

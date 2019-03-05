@@ -20,6 +20,13 @@ __all__ = '''
         all_18_Eval_family_instances
         family_short_name2aEval
 
+        family_short_name2family_long_name
+        all_family_short_names
+        all_family_long_names
+        family_long_names2family_short_names
+        make_family_short_names_from2
+        make_family_short_names_from4
+
     IEvalStrictlyIncreasingTable
         IEvalOrderOfFiniteSimpleGroup
             EvalOrderOfSingletonGroup
@@ -75,6 +82,7 @@ import math # factorial
 import operator # __mul__
 import functools # reduce
 from fractions import Fraction
+from types import MappingProxyType
 
 def override(f):
     return f
@@ -1826,10 +1834,85 @@ assert len(all_18_Eval_family_instances) == 18
 all_45_Eval_instances = all_18_Eval_family_instances + tuple(family_short_name2aEval.values())
 assert len(all_45_Eval_instances) == 18 + 1+26 == 45
 
+if True:
+    family_short_name2family_long_name = {
+        aEval.get_family_short_name(): aEval.get_family_long_name()
+        for aEval in all_45_Eval_instances
+        }
+    family_short_name2family_long_name = MappingProxyType(family_short_name2family_long_name)
+    all_family_short_names = frozenset(family_short_name2family_long_name)
+    all_family_long_names = frozenset(family_short_name2family_long_name.values())
+    assert len(family_short_name2family_long_name) == 45
+    assert len(all_family_short_names) == 45
+    assert len(all_family_long_names) == 45 -(5-1)-(4-1)-(3-1)-(3-1) == 34
+
+    def family_long_names2family_short_names(family_long_names):
+        family_long_names = set(family_long_names)
+        return {
+            family_short_name
+            for family_short_name, family_long_name
+            in family_short_name2family_long_name.items()
+            if family_long_name in family_long_names
+            }
+
+    def make_family_short_names_from2(*, family_short_names, family_long_names):
+        family_long_names = set(family_long_names)
+        family_short_names = set(family_short_names)
+        if not family_long_names <= all_family_long_names:
+            raise ValueError(family_long_names-all_family_long_names)
+        if not family_short_names <= all_family_short_names:
+            raise ValueError(family_short_names-all_family_short_names)
+
+        family_short_names |= family_long_names2family_short_names(family_long_names)
+        return family_short_names
+
+    def make_family_short_names_from4(*
+        ,excluded_family_short_names#=()
+        ,excluded_family_long_names#=()
+        ,maybe_included_family_short_names# = None
+        ,maybe_included_family_long_names# = None
+        ):
+        #included_family_short_names
+        if maybe_included_family_long_names is None is maybe_included_family_short_names:
+            included_family_short_names = all_family_short_names
+        else:
+            if maybe_included_family_long_names is None:
+                maybe_included_family_long_names = ()
+            ##
+            if maybe_included_family_short_names is None:
+                maybe_included_family_short_names = ()
+
+            included_family_short_names = make_family_short_names_from2(
+                family_long_names=maybe_included_family_long_names
+                ,family_short_names=maybe_included_family_short_names
+                )
+        included_family_short_names
+
+        excluded_family_short_names = make_family_short_names_from2(
+                family_long_names=excluded_family_long_names
+                ,family_short_names=excluded_family_short_names
+                )
+
+        included_family_short_names -= excluded_family_short_names
+        return included_family_short_names
+
+
+
+    family_short_name2family_long_name
+    all_family_short_names
+    all_family_long_names
+    family_long_names2family_short_names
+    make_family_short_names_from2
+    make_family_short_names_from4
+
 def list_all_orders_of_finite_simple_groups_lt__without_repetition(
     result_value_upper_bound, *
     ,with_cyclic:bool
     ,with_parameterized_names:bool=False
+    ,excluded_family_short_names=()
+    ,excluded_family_long_names=()
+    ,maybe_included_family_short_names = None
+    ,maybe_included_family_long_names = None
     ):
     '''
     :: UInt -> sorted[UInt]
@@ -1841,16 +1924,35 @@ input:
         with or without orders of cyclic simple groups
     with_parameterized_names:
         order or (order, (aEval, argument_dict))
+    excluded_family_short_names :: Iter family_short_name
+    excluded_family_long_names :: Iter family_long_name
+    maybe_included_family_short_names :: None | Iter family_short_name
+    maybe_included_family_long_names :: None | Iter family_long_name
 output:
     result :: sorted[UInt] if not with_parameterized_names else sorted[(UInt, aEval, argument_dict)]
 '''
     with_cyclic = bool(with_cyclic)
     with_parameterized_names = bool(with_parameterized_names)
+    excluded_family_short_names = frozenset(excluded_family_short_names)
+    excluded_family_long_names = frozenset(excluded_family_long_names)
+    assert excluded_family_short_names <= all_family_short_names
+    assert excluded_family_long_names <= all_family_long_names
+
+
+    included_family_short_names = make_family_short_names_from4(
+        excluded_family_short_names=excluded_family_short_names
+        ,excluded_family_long_names=excluded_family_long_names
+        ,maybe_included_family_short_names = maybe_included_family_short_names
+        ,maybe_included_family_long_names = maybe_included_family_long_names
+        )
 
     def _iter_unordered_group_orders():
         for aEval in all_45_Eval_instances:
             if not with_cyclic and isinstance(aEval, Cyclic):
                 continue
+            if aEval.get_family_short_name() not in included_family_short_names:
+                continue
+
 
             yield from __iter_either_output(
                 aEval, result_value_upper_bound

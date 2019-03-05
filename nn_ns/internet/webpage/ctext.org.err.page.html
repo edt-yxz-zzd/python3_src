@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf8" /><title>Please confirm that you are human! 敬請輸入認證圖案</title><link href="/text.css" rel="stylesheet" type="text/css" /></head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000"><div id="menubar"></div>
+<div id="content"><font size="+3">Please confirm that you are human! 敬請輸入認證圖案</font><div id="content3">
+
+<p>Please confirm that you are a human user and not an automated program by entering the letters shown in the image below and clicking "OK":</p>
+<p>請輸入下述認證圖案中的字並點擊“OK”，以便確認您是真人而並非電腦軟體：</p>
+
+<form action="https://ctext.org/unban.pl" method="post">
+<table><tr><td>Validation image:<br />認證圖案：</td><td><span id="imageholder"></span></td></tr>
+<tr><td>Type the letters in the above image:<br />輸入上述認證圖案中的字：</td><td><input type="text" name="message" /></td></tr>
+<tr><td></td><td><input type="submit" value="OK" /></td></table>
+</form>
+
+<p>If you are seeing this message frequently, this is because ctext.org assigns a low trust value to your access patterns. Trust is calculated based on a number of indicators, primarily the prior actions of users with similar access patterns to your own. <b>The more ctext trusts you, the less frequently it will show you this page.</b></p>
+<p>若您經常遇到此一頁面，這就代表ctext.org認為您目前的使用方式似乎有可疑之處。這種判斷是根據各種指標而定的，特別是其它與您訪問記錄類似的使用者過去的訪問記錄。
+<b>本站越信任您，它就越少要求您輸入驗證碼。</b></p>
+
+<p>To increase the trust assigned to your use of ctext:</p>
+<p>若希望讓本站更信任您的使用，建議採取以下手段：</p>
+
+<p>
+<ul>
+<li>If accessing from within a university, <b>ask your university library to <a href="/tools/subscribe">subscribe</a>.</b><br />
+若從學術性機構訪問，請建議您的學術構<a href="/tools/subscribe/zh">訂購ctext.org</a>。
+</li>
+<li>Create an account and make constructive edits to the wiki. <b>All edits are manually reviewed</b> before trust is assigned - please read the instructions and policies before making edits.</b><br />
+建立帳戶並參與維基區的編輯活動。<b>請留意：所有編輯活動將會經過人工驗證後</b>系統才會作信任判斷。敬請參考相關的使用說明和政策再進行編輯。</b>
+</li>
+</ul>
+</p>
+
+
+</div></div>
+<script>
+window.onload = function() {
+  document.getElementById('imageholder').innerHTML = "<img src='https://ctext.org/captcha.pl?random=" + Math.floor(Math.random()*100000) + "' />";
+}
+</script>
+</body></html>
+
+
