@@ -12,6 +12,7 @@ from .DATA import (
     website_per_page_img_url_regex
     ,echo_proxy_query_key
     )
+from ._configure_ import timeout
 from nn_ns.internet.webpage.fetch_webpage import fetch_webpage
 from bs4 import BeautifulSoup
 #from seed.helper.repr_input import repr_helper
@@ -24,7 +25,7 @@ from pathlib import PurePosixPath as Path
 #proxy_url_prefix = 'http://127.0.0.1:8000/echo_image/?url='
 #proxy_url_prefix_less = 'http://127.0.0.1:8000/echo_image/'
 def per_page_transform__url(old_url, proxy_url_prefix_less):
-    html_page = fetch_webpage(old_url)
+    html_page = fetch_webpage(old_url, timeout=timeout)
     return per_page_transform__page(html_page, proxy_url_prefix_less)
 
 

@@ -1,6 +1,18 @@
 
 '''
 
+why fail?
+    1. <form action=action_url, method='post'>...</form>
+        POST to action_url
+            with data={soup['name']:soup['value']
+                for soup in form_soup.find_all(hasattr 'name'&'value')}
+                # hence not include 'submit'
+            with headers.referrer = ...
+    2. allow_redirects=True
+        should use requests instead of urllib
+    3. need session to hold cookies
+        should use requests instead of urllib
+
 https://ctext.org/
 https://ctext.cn/
 
@@ -16,7 +28,11 @@ https://ctext.org/fengshen-yanyi/1/zh
         extract text in this class
 
 https://ctext.org/quantangshi/900/zh
-    <h2>《<a href="text.pl?node=277772&amp;if=gb" class="popup">西江月</a>》</h2>
+    <tr>
+    <td><h2>《<a href="text.pl?node=108542&amp;if=gb" class="popup">帝京篇十首</a>》</h2></td>
+    <td><span class="etext opt"><b> 李世民著</b></span></td>
+    <td align='right'> ... </td>
+    </tr>
 
 https://ctext.org/wiki.pl?if=gb&res=115079
     <div class="ctext" style="margin: 10px; float: left;">
@@ -49,9 +65,9 @@ https://ctext.org/jinpingmei/ch1
 
 '''
 #####################https://www.w3schools.com/html/html_forms.asp
-##################### ?? will post {'message'=???, 'submit'='OK'} to "https://ctext.org/unban.pl"
-##################### ?? will post {'message'=???} to "https://ctext.org/unban.pl"
-##################### ?? will get "https://ctext.org/unban.pl?message=???"
+##################### xxxx ?? will post {'message'=???, 'submit'='OK'} to "https://ctext.org/unban.pl"
+##################### xxxx ?? will get "https://ctext.org/unban.pl?message=???"
+##################### yes ?? will post {'message'=???} to "https://ctext.org/unban.pl"
 #####################
 <form action="https://ctext.org/unban.pl" method="post">
 <table><tr><td>Validation image:<br />認證圖案：</td><td><span id="imageholder"></span></td></tr>
@@ -66,12 +82,13 @@ window.onload = function() {
 </script>
 '''
 
-from .fetch_webpage import open_webpage, fetch_webpage
-from .download import download_file_from_url_ex
+#from .fetch_webpage import open_webpage, fetch_webpage
+#from .download import download_file_from_url_ex
+from . import _configure_
 from seed.tiny import print_err
-from seed.for_libs.for_tkinter.ask_input import ask_input
+from seed.for_libs.for_tkinter.ask_maybe_input import ask_maybe_input
 
-import requires
+import requests
 import PIL.Image, PIL.ImageTk
 from bs4 import BeautifulSoup
 
@@ -80,18 +97,22 @@ import io
 import random
 import time
 import socket
-if False:
-    import tkinter
-    # PIL.ImageTk.PhotoImage ==>> RuntimeError('Too early to create image',)
-    # requires Tk() first
-    #
-    # but if Tk() then cause: _tkinter.TclError: image "pyimage1" doesn't exist
-    #   since there should not be more than 1 Tk object!!!!
-    ___donot_destroy_me = tkinter.Tk()
-    del tkinter
+import re
+import shelve
+import itertools
+#from collections import OrderedDict
+
 
 #from pathlib import PurePosixPath as Path
 #import os.path
+
+def show_session(session):
+    return
+    attrs = type(session).__attrs__
+    print_err('show_session')
+    for attr in attrs:
+        value = getattr(session, attr, None)
+        print_err(f'\t{attr}={value!r}')
 
 TimeoutErrors = (TimeoutError, socket.timeout)
 class CTextOrgConfirmError(Exception):
@@ -101,6 +122,11 @@ class CTextOrgConfirmError(Exception):
         super().__init__(*args, **kwargs)
     pass
 
+def swap_to_last(ls, i):
+    ls[i], ls[-1] = ls[-1], ls[i]
+def swap_to_last_and_pop(ls, i):
+    swap_to_last(ls, i)
+    ls.pop()
 def get_tag__lower(soup):
     return str(soup.name).lower()
 def get_classes__lower(soup):
@@ -112,203 +138,394 @@ def assert_html_class_single(soup):
     clss = get_classes__lower(soup)
     if not len(clss) == 1: raise Exception(clss)
     return True
-
-def pred_ver1(soup):
-    #ver1: ctexts = soup.find_all(attrs={'class': 'ctext'})
-    #   has not 'opt'
-    clss = get_classes__lower(soup)
-    if 'ctext' in clss:
-        if 'opt' in clss:
-            assert len(clss) == 2
-            return False
-        else:
-            assert len(clss) == 1
-            return True
-    return False
-
-def _pred_ver2(soup):
-    #ver2: +<h2>
-    return get_tag__lower(soup) == 'h2'
-def pred_ver2(soup):
-    return _pred_ver2(soup) or pred_ver1(soup)
-def get_text_ver1(soup):
+def get_text_prime(soup):
     return soup.get_text().strip()
-def _get_text_ver2(soup):
-    section_title = get_text_ver1(soup)
-    return f'[h2]:{section_title}'
-def get_text_ver2(soup):
-    if _pred_ver2(soup):
-        return _get_text_ver2(soup)
-    return get_text_ver1(soup)
 
-def fecth_captcha_image__PIL(*, referrer, timeout, **kwargs):
-    i = random.randrange(100000)
-    image_url = f'https://ctext.org/captcha.pl?random={i}'
-    image_PIL = fecth_image__PIL(image_url
-        , referrer=referrer, timeout=timeout, **kwargs)
-    return image_PIL
-def fecth_image__PIL(url, **kwargs):
-    (content_type, content_data, url_info
-    ) = download_file_from_url_ex(url, **kwargs)
+class Global:
+    captcha_url_random_range = 100000
+    captcha_url_fmt = 'https://ctext.org/captcha.pl?random={}'
+    re_newline = re.compile(r'(?:\n\r|\r\n|\n|\r)')
+    new_line = '\n'
+    escaped_new_line = f'{new_line}#'
 
-    if False:
-        print_err(f'captcha image content_type:{content_type!r}')
-        print_err(type(content_data))
-        print_err(content_data)
 
-    assert content_type.lower().startswith('image')
-    image_file = io.BytesIO(content_data)
-    image_PIL = PIL.Image.open(image_file)
-    #image_tk = PIL.ImageTk.PhotoImage(master=___donot_destroy_me, image=image_PIL)
-        # RuntimeError('Too early to create image',)
-        # see: ___donot_destroy_me
-    return image_PIL
+class ExtractCTextOrgBase:
+    def pred_ver1(self, soup):
+        #ver1: ctexts = soup.find_all(attrs={'class': 'ctext'})
+        #   has not 'opt'
+        clss = get_classes__lower(soup)
+        if 'ctext' in clss:
+            if 'opt' in clss:
+                assert len(clss) == 2
+                return False
+            else:
+                assert len(clss) == 1
+                return True
+        return False
 
-def ask_captcha(*, title, referrer, timeout, **kwargs):
-    image_PIL = fecth_captcha_image__PIL(
-        referrer=referrer, timeout=timeout, **kwargs)
-    captcha = ask_input(title=title, prompt='', image_PIL=image_PIL)
-    return captcha
+    def _pred_ver2(self, soup):
+        #ver2: +<h2>
+        return get_tag__lower(soup) == 'h2'
+    def pred_ver2(self, soup):
+        return self._pred_ver2(soup) or self.pred_ver1(soup)
+    def _pred_ver3(self, soup):
+        #ver3: +<td><span class="etext opt"><b> 李世民著</b></span></td>
+        return get_classes__lower(soup) == {'etext', 'opt'}
+    def pred_ver3(self, soup):
+        return self._pred_ver3(soup) or self.pred_ver2(soup)
+    def get_text_ver1(self, soup):
+        return self.escape_per_line(get_text_prime(soup))
+    def _get_text_ver2(self, soup):
+        section_title = get_text_prime(soup)
+        return f'[h2]:{section_title!r}'
+    def get_text_ver2(self, soup):
+        if self._pred_ver2(soup):
+            return self._get_text_ver2(soup)
+        return self.get_text_ver1(soup)
+    def _get_text_ver3(self, soup):
+        author = get_text_prime(soup)
+        return f'[etext opt]:{author!r}'
+    def get_text_ver3(self, soup):
+        if self._pred_ver3(soup):
+            return self._get_text_ver3(soup)
+        return self.get_text_ver2(soup)
+    pred_ver_LAST = pred_ver3
+    get_text_ver_LAST = get_text_ver3
 
-def post_captcha(*, referrer, action_url, text_field_name, captcha
-    , timeout, **kwargs):
-    data = {text_field_name: captcha}
-    r = requests.post(action_url, referrer=referrer
-        , data=data, allow_redirects=True, timeout=timeout)
-    r.content
-    return
-    ######### fail
-    fetch_webpage(action_url, referrer=referrer
-        , data=data, timeout=timeout, **kwargs)
 
-def extract_ctext_org(html_file, *, verbose:bool):
-    # html_file -> (title, txt)
-    # html_file may be BytesIO/StringIO?
-    verbose = bool(verbose)
+    def extract_ctext_org(self, html_file, *, verbose:bool):
+        soup = BeautifulSoup(html_file, 'lxml')
 
-    soup = BeautifulSoup(html_file, 'lxml')
-    title_soup = soup.find('meta', property="og:title")
-    if title_soup is None:
-        [form_soup] = soup.find_all('form', method='post')
-        [text_field_soup] = form_soup.find_all('input', type='text')
-        text_field_name = str(text_field_soup['name'])
-        action_url = form_soup['action']
-        raise CTextOrgConfirmError(
-            action_url=action_url, text_field_name=text_field_name
+        title = self.extract_ctext_org__step1_title(soup, verbose=verbose)
+        txt = self.extract_ctext_org__step2_ctext(soup, verbose=verbose)
+        if verbose: print_err('extract_ctext_org done!')
+        return title, txt
+    def extract_ctext_org__step1_title(self, soup, *, verbose:bool):
+        # html_file -> (title, txt)
+        # html_file may be BytesIO/StringIO?
+        verbose = bool(verbose)
+
+        title_soup = soup.find('meta', property="og:title")
+        if title_soup is None:
+            [form_soup] = soup.find_all('form', method='post')
+            [text_field_soup] = form_soup.find_all('input', type='text')
+            text_field_name = str(text_field_soup['name'])
+            action_url = form_soup['action']
+            raise CTextOrgConfirmError(
+                action_url=action_url, text_field_name=text_field_name
+                )
+
+        title = title_soup['content']
+        if verbose: print_err(f'title: {title!r}')
+        return title
+
+    def extract_ctext_org__step2_ctext(self, soup, *, verbose:bool):
+        verbose = bool(verbose)
+        #ver1: ctexts = soup.find_all(attrs={'class': 'ctext'})
+        #ls = [ctext.get_text().strip()
+        #       for ctext in ctexts
+        #       if not has_html_class(ctext, 'opt')
+        #           and assert_html_class_single(ctext)
+        #   ]
+        #ver2: +<h2>
+        #ver3: +class='etext opt'
+        pred = self.pred_ver_LAST
+        get_text = self.get_text_ver_LAST
+        ctexts = soup.find_all(pred)
+        ls = [get_text(ctext) for ctext in ctexts]
+
+        txt = Global.new_line.join(ls)
+        return txt
+    def escape_per_line(self, txt):
+        # '{line}' -> '#{line}'
+        txt = '#' + Global.re_newline.sub(Global.escaped_new_line, txt)
+        return txt
+
+
+class ExtractCTextOrg(ExtractCTextOrgBase):
+    def __init__(self, *, cache_fname, captcha_image_db_fname):
+        self.cache_fname = cache_fname
+        self.cache = shelve.open(cache_fname)
+        self.session = requests.Session()
+        self.captcha_image_db = shelve.open(captcha_image_db_fname)
+        show_session(self.session)
+    def close(self):
+        self.cache.close()
+        self.captcha_image_db.close()
+    def save_captcha(self, *, image_bytes, captcha:str, correct:bool):
+        if type(image_bytes) is not bytes: raise TypeError
+        if type(captcha) is not str: raise TypeError
+        if type(correct) is not bool: raise TypeError
+        L = len(self.captcha_image_db)
+        for i in itertools.count(L):
+            key = f'{i}_{captcha}'
+            if key in self.captcha_image_db: continue
+            self.captcha_image_db[key] = (correct, image_bytes)
+            break
+        return
+    def make_headers(self, *, referrer):
+        headers = {'User-Agent': _configure_.UserAgent, 'Referer': referrer}
+        if referrer is None:
+            del headers['Referer']
+        return headers
+
+    def fetch_webpage(self, url, *, timeout, referrer):
+        # -> page_bytes
+        return self.download_file_from_url(url
+            , timeout=timeout, referrer=referrer)
+    def download_file_from_url(self, url, *, timeout, referrer):
+        # -> content_data
+        headers =self.make_headers(referrer=referrer)
+        r = self.session.get(url, timeout=timeout, headers=headers)
+        show_session(self.session)
+        data = r.content
+        assert type(data) is bytes
+        return data
+
+    def fecth_captcha_image__bytes(self, *, referrer, timeout, **kwargs):
+        i = random.randrange(Global.captcha_url_random_range)
+        #print_err(f"random i for captcha_url_fmt: {i}={i:x}")
+        image_url = Global.captcha_url_fmt.format(i)
+        content_data = self.download_file_from_url(image_url
+            , referrer=referrer, timeout=timeout, **kwargs)
+
+        if False:
+            print_err(f'captcha image content_type:{content_type!r}')
+            print_err(type(content_data))
+            print_err(content_data)
+            #assert content_type.lower().startswith('image')
+        return content_data
+
+
+    def ask_maybe_captcha_ex(self, *, title, referrer, timeout, **kwargs):
+        # -> ()|(image_bytes:bytes, captcha:str)
+        image_bytes = self.fecth_captcha_image__bytes(
+            referrer=referrer, timeout=timeout, **kwargs)
+        image_file = io.BytesIO(image_bytes)
+        image_PIL = PIL.Image.open(image_file)
+        maybe_captcha = ask_maybe_input(title=title, prompt='', image_PIL=image_PIL)
+        if maybe_captcha:
+            [captcha] = maybe_captcha
+            captcha_ex = image_bytes, captcha
+            maybe_captcha_ex = captcha_ex
+        else:
+            maybe_captcha_ex = ()
+        del maybe_captcha
+        return maybe_captcha_ex
+
+    def post_captcha(self, *, referrer, action_url, text_field_name, captcha
+        , timeout, **kwargs):
+        data = {text_field_name: captcha}
+        headers =self.make_headers(referrer=referrer)
+        print_err(f'data={data}; headers={headers}')
+        r = self.session.post(action_url, headers=headers, data=data
+            , allow_redirects=True, timeout=timeout)
+        show_session(self.session)
+        data = r.content # read but discard
+        return data
+        return
+        print_err(data)
+        if input('(input yes to continue)>>>') != 'yes':
+            raise KeyboardInterrupt
+        return
+        ######### fail
+        self.fetch_webpage(action_url, referrer=referrer
+            , data=data, timeout=timeout, **kwargs)
+
+    def cached_extract_ctext_org__url(self, url
+        , *, verbose:bool, timeout, referrer, **kwargs):
+        # url -> (title, txt)
+        verbose = bool(verbose)
+
+        if url not in self.cache:
+            title, txt = self.bare_extract_ctext_org__url(url
+                , referrer=referrer
+                ,verbose=verbose, timeout=timeout
+                , **kwargs
+                )
+            self.cache[url] = title, txt
+            if verbose: print_err(f'store title: {title!r}')
+
+        if verbose: print_err(f'read cached webpage: {url!r}')
+        title, txt = self.cache[url]
+        if verbose: print_err(f'read title: {title!r}')
+        return title, txt
+
+    def bare_extract_ctext_org__url(self, url
+        , *, verbose:bool, timeout, referrer, **kwargs):
+        # url -> (title, txt)
+        verbose = bool(verbose)
+        try:
+            if verbose: print_err(f'fetch webpage: {url!r}')
+            page_bytes = self.fetch_webpage(url
+                , timeout=timeout, referrer=referrer, **kwargs)
+
+            if verbose: print_err(f'extracting webpage...: {url!r}')
+            title, txt = self.extract_ctext_org(page_bytes, verbose=verbose)
+
+            if verbose: print_err(f'extract webpage done: {url!r}')
+            return title, txt
+        except (CTextOrgConfirmError, *TimeoutErrors):
+            if verbose: print_err(f'extract webpage timeout: {url!r}')
+            raise
+        except Exception as e:
+            if verbose: print_err(f'extract webpage error: {url!r}')
+            raise Exception(f'url={url!r}', e)
+    def ordered_iter_extract_ctext_org__url_rng__cache_only(self
+        , base_url, indices, index_format
+        ):
+        # -> Iter (title, txt)
+        referrer_url_pairs = self.make_referrer_url_pairs__url_rng(
+                base_url, indices, index_format)
+        for referrer, url in referrer_url_pairs:
+            title, txt = self.cache[url]
+            yield title, txt
+    def unordered_iter_extract_ctext_org__url_rng(self
+        , base_url, indices, index_format, *
+        , verbose:bool, timeout, time_sep, **kwargs
+        ):
+        # url -> begin -> end -> Iter (title, txt)
+        #base_url = Path(base_url)
+        verbose = bool(verbose)
+        if verbose: print_err(f'fetch&extract webpages from: {base_url!r}')
+        referrer_url_pairs = self.make_referrer_url_pairs__url_rng(
+                base_url, indices, index_format)
+        return self.unordered_iter_extract_ctext_org__referrer_url_pairs(
+            referrer_url_pairs
+            , verbose=verbose, timeout=timeout, time_sep=time_sep
+            , **kwargs
             )
 
-    title = title_soup['content']
-    if verbose: print_err(f'title: {title!r}')
+    def make_referrer_url_pairs__url_rng(self
+        , base_url, indices, index_format):
+        if base_url[-1:] == '/':
+            base_url = base_url[:-1]
+        referrer = base_url
+        base_fmt = f'{base_url}/{index_format}'
+        referrer_url_pairs = [
+            (referrer, base_fmt.format(i))
+            for i in indices
+            ]
+        return referrer_url_pairs
 
-    #ver1: ctexts = soup.find_all(attrs={'class': 'ctext'})
-    #ls = [ctext.get_text().strip()
-    #       for ctext in ctexts
-    #       if not has_html_class(ctext, 'opt')
-    #           and assert_html_class_single(ctext)
-    #   ]
-    #ver2: +<h2>
-    pred = pred_ver2
-    get_text = get_text_ver2
-    ctexts = soup.find_all(pred)
-    ls = [get_text(ctext) for ctext in ctexts]
-    txt = '\n'.join(ls)
+    def unordered_iter_extract_ctext_org__referrer_url_pairs(self
+        , referrer_url_pairs, *
+        , verbose:bool, timeout, time_sep, **kwargs
+        ):
+        # referrer_url_pairs :: [(referrer, url)]
+        # -> Iter (referrer, url, title, txt)
+        verbose = bool(verbose)
+        referrer_url_pairs = list(referrer_url_pairs)
 
-    if verbose: print_err('extract_ctext_org done!')
-    return title, txt
+        while referrer_url_pairs:
+            i = random.randrange(len(referrer_url_pairs))
+            referrer, url = referrer_url_pairs[i]
+            if verbose: print_err(f'to fetch&extract webpage {url!r} from: {referrer!r}')
 
-def extract_ctext_org__url(url, *, verbose:bool, timeout, **kwargs):
-    # url -> (title, txt)
-    verbose = bool(verbose)
-    try:
-        if verbose: print_err(f'fetch webpage: {url!r}')
-        page_bytes = fetch_webpage(url, timeout=timeout, **kwargs)
+            if url not in self.cache:
+                t = random.randrange(time_sep, 2*time_sep)
+                if verbose: print_err(f'sleep {t}s before fetch&extract webpage')
+                time.sleep(t)
 
-        if verbose: print_err(f'extracting webpage...: {url!r}')
-        title, txt = extract_ctext_org(page_bytes, verbose=verbose)
-
-        if verbose: print_err(f'extract webpage done: {url!r}')
-        return title, txt
-    except (CTextOrgConfirmError, *TimeoutErrors):
-        if verbose: print_err(f'extract webpage timeout: {url!r}')
-        raise
-    except Exception as e:
-        if verbose: print_err(f'extract webpage error: {url!r}')
-        raise Exception(f'url={url!r}', e)
-def iter_extract_ctext_org__url_rng(base_url, indices, index_format, *
-    , verbose:bool, timeout, time_sep, **kwargs):
-    # url -> begin -> end -> Iter (title, txt)
-    #base_url = Path(base_url)
-    verbose = bool(verbose)
-    if verbose: print_err(f'fetch&extract webpages from: {base_url!r}')
-
-    if base_url[-1:] == '/':
-        base_url = base_url[:-1]
-    referrer = base_url
-    base_fmt = f'{base_url}/{index_format}'
-
-    for i in indices:
-        #str_i = str(i)
-        #url = base_url / str_i; url = str(url)
-        #url = os.path.join(base_url, str_i)
-        #url = f'{base_url}/{i}'
-        url = base_fmt.format(i)
-        #print(url)
-        while True:
-            t = random.randrange(time_sep, 2*time_sep)
-            if verbose: print_err(f'sleep {t}s before fetch&extract webpages from: {base_url!r}')
-            time.sleep(t)
             try:
-                title, txt = extract_ctext_org__url(url
-                    , verbose=verbose, timeout=timeout, referrer=referrer
+                title, txt = self.cached_extract_ctext_org__url(url
+                    , referrer=referrer
+                    , verbose=verbose, timeout=timeout
                     , **kwargs)
             except CTextOrgConfirmError as e:
                 #input('ctext.org requires confirm')
-                action_url = e.action_url
-                text_field_name = e.text_field_name
-                while True:
-                    try:
-                        captcha = ask_captcha(
-                                title='ctext.org requires confirm'
-                                ,referrer=url
-                                ,timeout=max(10, timeout)
-                                )
-                        post_captcha(
-                            action_url=action_url
-                            , text_field_name=text_field_name
-                            , referrer=url
-                            , captcha=captcha, timeout=timeout)
-                    except KeyboardInterrupt:
-                        raise
-                    except Exception as e2:
-                        print_err(repr(e2))
-                        if input('>>>'):
-                            traceback.print_exc()
-                            continue
-                        else:
-                            raise e2
-                    else:
-                        break
+                self.handle_captcha_confirm(
+                    from_url = url
+                    , action_url = e.action_url
+                    ,text_field_name = e.text_field_name
+                    ,verbose=verbose
+                    ,timeout=timeout, **kwargs
+                    )
                 continue
             except KeyboardInterrupt:
                 raise
             except (Exception, OSError, *TimeoutErrors) as e:
-                print_err(repr(e))
+                self.handle_exc(e)
                 continue
-            break
-        yield title, txt
+            yield url, referrer, title, txt
+
+            L = len(referrer_url_pairs)
+            swap_to_last_and_pop(referrer_url_pairs, i)
+            assert len(referrer_url_pairs) == L-1
+
+
+    def handle_captcha_confirm(self, *
+        , from_url, action_url, text_field_name
+        , verbose, timeout, **kwargs):
+        verbose = bool(verbose)
+
+        if verbose: print_err(f'text_field_name={text_field_name!r}; action_url={action_url!r}; from_url={from_url!r}')
+
+        while True:
+            try:
+                maybe_captcha_ex = self.ask_maybe_captcha_ex(
+                        title='ctext.org requires confirm'
+                        ,referrer=from_url
+                        ,timeout=max(10, timeout)
+                        ,**kwargs
+                        )
+                if not maybe_captcha_ex:
+                    raise KeyboardInterrupt
+                [image_bytes, captcha] = maybe_captcha_ex
+
+                if not captcha: raise logic-error
+                if verbose: print_err(f'input captcha = {captcha!r}')
+                data = self.post_captcha(
+                    action_url=action_url
+                    , text_field_name=text_field_name
+                    , referrer=from_url
+                    , captcha=captcha
+                    , timeout=timeout, **kwargs)
+
+                try:
+                    self.extract_ctext_org(data, verbose=False)
+                except CTextOrgConfirmError:
+                    # input wrong captcha
+                    self.save_captcha(image_bytes=image_bytes, captcha=captcha, correct=False)
+                except Exception as e:
+                    # unknown error
+                    self.handle_exc(e)
+                else:
+                    # input correct captcha
+                    self.save_captcha(image_bytes=image_bytes, captcha=captcha, correct=True)
+
+            except KeyboardInterrupt:
+                raise
+            except Exception as e:
+                self.handle_exc(e)
+                continue
+            else:
+                break
+        #end while
+        return
+    def handle_exc(self, e):
+        # requests.exceptions.ConnectionError
+        print_err(repr(type(e)))
+        print_err(repr(e))
+        if input('(input nothing to quit) >>>'):
+            traceback.print_exc()
+            return None
+        else:
+            raise
 
 
 def _test_file():
     fname = r'E:\download\novel_new\novel_20170808\小说\https _ctext.cn_fengshen-yanyi_1.htm'
+    self = ExtractCTextOrgBase()
     with open(fname, encoding='utf8') as fin:
-        print(extract_ctext_org(fin, verbose=False))
+        print(self.extract_ctext_org(fin, verbose=False))
 
 def _test_url():
     url = r'https://ctext.org/fengshen-yanyi/1'
-    print(extract_ctext_org__url(url, verbose=False))
+    print(self.cached_extract_ctext_org__url(url, verbose=False))
 def _test_url_rng():
     base_url = r'https://ctext.org/fengshen-yanyi'
-    for title, txt in iter_extract_ctext_org__url_rng(base_url, range(1,100+1), verbose=False):
+    for title, txt in self.unordered_iter_extract_ctext_org__url_rng(base_url, range(1,100+1), verbose=False):
         print(title)
         print(txt)
         break
@@ -365,6 +582,13 @@ def main(argv=None):
                         , default = None
                         , help='extended url for book_title; {base_url}{book_title_at}')
 
+    parser.add_argument('--cache_fname', type=str
+                        , required = True
+                        , help='cache file name; to store middle extract data; Map url (title, txt)')
+    parser.add_argument('--captcha_image_db_fname', type=str
+                        , required = True
+                        , help='cache file name; to store (correct or wrong) captcha string and its image bytes; Map "{i}_{captcha}" (correct, image_bytes)')
+
 
     args = parser.parse_args(argv)
     encoding = args.encoding
@@ -374,9 +598,15 @@ def main(argv=None):
 
     if args.input is not None and args.url is not None:
         raise ValueError('input both file and url at same time')
+
     if args.url is not None:
+        self = ExtractCTextOrg(
+            cache_fname=args.cache_fname
+            , captcha_image_db_fname=args.captcha_image_db_fname
+            )
         if args.range is None:
-            title, txt = extract_ctext_org__url(args.url
+            title, txt = self.cached_extract_ctext_org__url(args.url
+                    , referrer=None
                     , verbose=args.verbose
                     , timeout=args.timeout
                     )
@@ -390,11 +620,13 @@ def main(argv=None):
 
             base_url = args.url
             index_format = args.index_format
-            it = iter_extract_ctext_org__url_rng(base_url, rng, index_format
+            it = self.unordered_iter_extract_ctext_org__url_rng(
+                    base_url, rng, index_format
                     , verbose=args.verbose
                     , timeout=args.timeout
                     , time_sep=args.time_sep
                     )
+
             if args.without_book_title:
                 may_book_title = None
             else:
@@ -403,21 +635,28 @@ def main(argv=None):
                 else:
                     book_title_url = f'{base_url}{args.book_title_at}'
 
-                book_title, _ = extract_ctext_org__url(book_title_url
+                book_title, _ = self.cached_extract_ctext_org__url(
+                        book_title_url
+                        , referrer=None
                         , verbose=args.verbose
                         , timeout=args.timeout
                         )
                 may_book_title = book_title
 
+            for _ in it:pass
+            it = self.ordered_iter_extract_ctext_org__url_rng__cache_only(
+                    base_url, rng, index_format
+                    )
             begin = begin
             #result = (may_book_title, begin, list(it))
             result = (may_book_title, begin, iter(it))
     else:
+        self = ExtractCTextOrgBase()
         may_ifname = args.input
         try:
             # open as text file
             with may_open_stdin(may_ifname, 'rt', encoding=encoding) as fin:
-                title, txt = extract_ctext_org(fin
+                title, txt = self.extract_ctext_org(fin
                     , verbose=args.verbose
                     , timeout=args.timeout
                     )
@@ -426,7 +665,7 @@ def main(argv=None):
             ifname = may_ifname
             # open as binary file
             with open(ifname, 'rb') as fin:
-                title, txt = extract_ctext_org(fin
+                title, txt = self.extract_ctext_org(fin
                     , verbose=args.verbose
                     , timeout=args.timeout
                     )
@@ -447,12 +686,15 @@ def main(argv=None):
             fprint(f'[chapter{i}]:{title}')
             fprint(txt)
 
+    if hasattr(self, 'close'):
+        self.close()
     parser.exit(0)
     return 0
 
 
 if __name__ == "__main__":
     #_t()
+    #_test_file()
     pass
 if __name__ == "__main__":
     main()

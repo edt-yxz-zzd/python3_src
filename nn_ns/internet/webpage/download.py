@@ -37,8 +37,7 @@ import urllib.parse
 from seed.tiny import print_err
 
 
-global_UserAgent = r'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0'
-    # where: https://www.whatsmyip.org/
+from . import _configure_
 
 def get_scheme_authority(url):
     # http://xxx.com:80/... -> http://xxx.com:80/
@@ -71,7 +70,7 @@ def open_url(url, *
 
     #('User-Agent','Mozilla/5.0 (Linux; Android 4.4.4; en-us; Nexus 5 Build/JOP40D)
     #('Referer', 'http://www.python.org/')
-    UserAgent = global_UserAgent
+    UserAgent = _configure_.UserAgent
     Referer = get_scheme_authority(url)
     assert type(UserAgent) is str is type(Referer)
     if user_agent is not None:

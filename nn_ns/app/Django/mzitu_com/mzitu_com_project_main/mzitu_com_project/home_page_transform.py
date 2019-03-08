@@ -16,6 +16,7 @@ import re
 from urllib.parse import urlparse, urlunparse
 from pathlib import PurePosixPath as Path
 from .DATA import project_per_page_url_route
+from ._configure_ import timeout
 
 
 r'''
@@ -45,7 +46,7 @@ def home_page_transform__url(old_url):
     # e.g. home_page_transform__url('https://www.mzitu.com/old/')
     # e.g. home_page_transform__url('https://www.mzitu.com/all/')
     #
-    html_page = fetch_webpage(old_url)
+    html_page = fetch_webpage(old_url, timeout=timeout)
 
     #project_per_page_url_base = make_project_per_page_url_base(new_url)
     assert project_per_page_url_route[:1] == '/'
