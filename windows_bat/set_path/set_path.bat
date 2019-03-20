@@ -77,6 +77,9 @@ call "%set_bat_path%\set_git"
 call "%set_bat_path%\set_haskell8"
 call "%set_bat_path%\set_ffmpeg"
 
+set TESSDATA_PREFIX=E:\software\programming\Python\_image\OCR\tesseract\tessdata\
+
+
 rem set path=%path%;D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin
 rem to override C:\Windows\System32\find.exe
 set "usrbin_path=D:\software\programming\gcc\tool\UnxUtils\usr\local\wbin"

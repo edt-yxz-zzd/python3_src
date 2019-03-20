@@ -1,0 +1,64 @@
+https://en.wikipedia.org/wiki/Support-vector_machine
+"Artificial Intelligence -- A Modern Approach (3ed)(2010)(Stuart Russell)"
+    18.9 SUPPORT VECTOR MACHINES
+
+
+
+support vector machine (SVM)
+
+
+PN1 = {+1, -1}
+input:
+    N :: PInt
+        dim
+    samples :: [(Vector N Real, PN1)]
+        [(X, y)]
+    kernel :: Vector N Real -> Vector N Real -> Real = dot_product
+
+output:
+    W :: Vector N Real
+    b :: Real
+
+    <==>
+    A :: Vector L Real
+    B :: Vector L Real
+
+
+abs X =[def]= ||X|| = sqrt(sum(x^2 for x in X))
+target:
+    # s.t. == subject to
+    min abs(W)
+        s.t. all(y*(dot_product(W,X)-b) >= 1 for X,y in samples)
+
+    #An important consequence of this geometric description is that the max-margin hyperplane is completely determined by those X(=samples[i]) that lie nearest to it. These X (=samples[i]) are called support vectors.
+
+    <==>
+    max sum(A) - (1/2) * SUM A[j]*A[k]*B[j]*B[k]*dot_product(samples[j], samples[k])
+        s.t. all(A[j] >= 0 for j <- [0..L-1])
+            dot_product A B == 0
+        where
+            L = len(samples)
+            A :: Vector L Real
+            B :: Vector L Real
+            W = SUM A[j]*samples[j] {j <- [0..L-1]}
+
+separator(X)
+    = sign(dot_product W X - b)
+    = sign(SUM A[j]*B[j]*dot_product samples[j] X - b)
+    # samples[j] is support vector if A[j] != 0
+
+generalized target:
+    # dot_product ==>> kernel@input
+    min abs(W) s.t. all(y*(kernel(W,X)-b) >= 1 for X,y in samples)
+
+kernel examples:
+    * Polynomial (homogeneous)
+        kernel X Y = (dot_product X Y)^d
+    * Polynomial (inhomogeneous)
+        kernel X Y = (1 + dot_product X Y)^d
+    * Gaussian radial basis function
+        kernel X Y = exp(-r*abs(X-Y)^2) where [r > 0]
+            # e.g. r = 1/(2*sigma^2)
+    * Hyperbolic tangent
+        kernel X Y = tanh(c + k*dot_product X Y) where [c < 0][k > 0]
+

@@ -1,5 +1,7 @@
-# put this file into C:/Python33/Lib/site-packages
+# put this file into C:/Python36/Lib/site-packages
 E:/my_data/program_source/python3_src
 E:/my_data/program_source/python3_src/nn_ns/app/scripts
 E:/my_data/program_source/github/edt-yxz-zzd/python3_src
 E:/my_data/program_source/github/edt-yxz-zzd/python3_src/nn_ns/app/scripts
+C:/Python36/Lib/site-packages/libsvm-3.23/python
+./libsvm-3.23/python

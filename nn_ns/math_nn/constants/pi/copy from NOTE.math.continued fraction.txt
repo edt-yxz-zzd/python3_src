@@ -1,0 +1,3 @@
+
+copy from NOTE/math/continued fraction/
+

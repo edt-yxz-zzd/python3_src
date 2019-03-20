@@ -1,0 +1,12 @@
+svm_type c_svc
+kernel_type precomputed
+nr_class 2
+total_sv 2
+rho 0
+label 1 -1
+probA 0.69314717840248341
+probB 2.3918953807395669e-16
+nr_sv 1 1
+SV
+0.25 0:1 
+-0.25 0:2 
