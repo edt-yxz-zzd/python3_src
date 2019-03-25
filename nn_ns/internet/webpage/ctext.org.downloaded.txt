@@ -1,5 +1,7 @@
 
+pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1 -rng 0 0 -url ??? -o ???[ctext.org].txt
 
+=========================================== outdated
 pym extract_ctext_org.py --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat -e utf8 --verbose --timeout=10 --time_sep=1 -url https://ctext.org/???/ -rng 1 ??? -o ???[ctext.org].txt --book_title_at=zh --index_format="{???}/zh"
 
 
@@ -13,4 +15,13 @@ pym extract_ctext_org.py -url https://ctext.org/hongloumeng/ -rng 1 120 -o 紅�
 
 =========================================== OK
 pym extract_ctext_org.py -url https://ctext.org/quantangshi/ -rng 1 900 -o 全唐詩[ctext.org].txt --book_title_at=zh --index_format="{}/zh" -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1
+pym extract_ctext_org.py -url https://ctext.org/guo-yu/zh -rng 1 3 -o 國語[ctext.org].txt -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1
+pym extract_ctext_org.py -url https://ctext.org/guo-yu/zh -rng 0 0 -o 國語[ctext.org].txt -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1
 
+pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1 -rng 0 0 -url https://ctext.org/zhan-guo-ce/zh -o 戰國策[ctext.org].txt
+
+pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1 -rng 1 3 -url https://ctext.org/chun-qiu-zuo-zhuan/zh -o 春秋左傳[ctext.org].txt
+pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1 -rng 0 0 -url https://ctext.org/chun-qiu-zuo-zhuan/zh -o 春秋左傳[ctext.org].txt
+
+
+pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1 -rng 0 0 -url https://ctext.org/mutianzi-zhuan/zh -o 穆天子傳[ctext.org].txt

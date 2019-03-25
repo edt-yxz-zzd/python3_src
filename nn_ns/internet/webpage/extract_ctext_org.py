@@ -34,6 +34,33 @@ https://ctext.org/quantangshi/900/zh
     <td align='right'> ... </td>
     </tr>
 
+
+http://ctext.org/guo-yu/zh
+    <head>
+        <base href="https://ctext.org/"/>
+        ...
+        <meta content="book" property="og:type"/>
+        <meta content="國語" property="og:title"/>
+        <meta content="http://ctext.org/guo-yu/zh" property="og:url"/>
+        <title>國語 - 中國哲學書電子化計劃</title>
+        ...
+    </head>
+    <body ...>
+        ...
+        <div id="menubar">...<div id="menu">
+            ...
+            <span class="menuitem container"><a class="menuitem" href="guo-yu/zh" id="m24449">國語</a><br/><span class="subcontents">
+                <a class="menuitem" href="guo-yu/zhou-yu-shang/zh" id="m24451">周語上</a><br/>
+                <a class="menuitem" href="guo-yu/zhou-yu-zhong/zh" id="m24481">周語中</a>
+                ...
+            </span></span>
+            ...
+        </div>...</div>
+        <div id="content">...</div>
+    </body>
+
+
+
 https://ctext.org/wiki.pl?if=gb&res=115079
     <div class="ctext" style="margin: 10px; float: left;">
         <a href="wiki.pl?if=gb&amp;chapter=797963">第一卷</a>
@@ -87,6 +114,7 @@ window.onload = function() {
 from . import _configure_
 from seed.tiny import print_err
 from seed.for_libs.for_tkinter.ask_maybe_input import ask_maybe_input
+from seed.types.pair_based_leftward_list import iter_leftward_list
 
 import requests
 import PIL.Image, PIL.ImageTk
@@ -193,15 +221,56 @@ class ExtractCTextOrgBase:
     get_text_ver_LAST = get_text_ver3
 
 
-    def extract_ctext_org(self, html_file, *, verbose:bool):
+    def extract_ctext_org__subcontents(self, html_file, *, verbose:bool):
+        # -> ((title, url), [(subtitle, sub_url)])
         soup = BeautifulSoup(html_file, 'lxml')
+        verbose = bool(verbose)
+
+        (base_url, type, title, url
+        ) = self.extract_ctext_org__step1_base_type_title_url(soup, verbose=verbose)
+        assert type.lower() == 'book'
+        (middle_titles_subtitle_url_triples
+        ) = self.extract_ctext_org__step2_iter_middle_titles_subtitle_url_triples(soup, title, base_url, verbose=verbose)
+        subtitle_url_pairs = (
+            (repr((*middle_titles, subtitle)), sub_url)
+            for middle_titles, subtitle, sub_url
+            in middle_titles_subtitle_url_triples
+            )
+        return (title, url), tuple(subtitle_url_pairs)
+
+    def extract_ctext_org__text(self, html_file, *, verbose:bool):
+        soup = BeautifulSoup(html_file, 'lxml')
+        verbose = bool(verbose)
 
         title = self.extract_ctext_org__step1_title(soup, verbose=verbose)
         txt = self.extract_ctext_org__step2_ctext(soup, verbose=verbose)
-        if verbose: print_err('extract_ctext_org done!')
+        if verbose: print_err('extract_ctext_org__text done!')
         return title, txt
+    def extract_ctext_org__step1_base_type_title_url(self, soup, *, verbose:bool):
+        # -> (str, str, str, str)
+        # -> (base_url, type, title, url)
+        #<meta content="book" property="og:type"/>
+        #<meta content="國語" property="og:title"/>
+        #<meta content="http://ctext.org/guo-yu/zh" property="og:url"/>
+        verbose = bool(verbose)
+
+        _title = self.extract_ctext_org__step1_title(soup, verbose=verbose)
+        soup = soup.head
+        [base_url_soup] = soup.find_all(name='base')
+        base_url = str(base_url_soup['href'])
+
+        names = ('type', 'title', 'url')
+        def get(name):
+            property = f"og:{name}"
+            meta_soup = soup.find(name='meta', property=property)
+            if meta_soup is None: raise ValueError(f'not found: {property!r}')
+            value = str(meta_soup['content'])
+            if verbose: print_err(f'{name}: {value!r}')
+            return value
+        return (base_url, *map(get, names))
+
     def extract_ctext_org__step1_title(self, soup, *, verbose:bool):
-        # html_file -> (title, txt)
+        # html_file -> title
         # html_file may be BytesIO/StringIO?
         verbose = bool(verbose)
 
@@ -218,6 +287,104 @@ class ExtractCTextOrgBase:
         title = title_soup['content']
         if verbose: print_err(f'title: {title!r}')
         return title
+
+    def extract_ctext_org__step2_iter_middle_titles_subtitle_url_triples(self, soup, title, base_url, *, verbose:bool):
+        # -> Iter (middle_titles, subtitle, sub_href)
+        # middle_titles = [middle_title]
+        #
+        #.find_all(string=re.compile('\s*{}\s*'.format(re.escape('title'))))
+        '''
+        span menuitem_container
+            a menuitem_href
+                #href, title
+            span subcontents
+                [(menuitem_href | menuitem_container)
+        '''
+        #subcontents
+        #tree structure
+        #   many middle parents...
+        #   so search the first title that match
+        main_menuitem_href_soup = (soup.body
+                                .find('div', id='menubar')
+                                .find('div', id='menu')
+                                .find(name='a'
+                                    , attrs={'class':'menuitem'}
+                                    , string=title)
+                                )
+        '''
+        url = url.lower()
+        this_href = str(main_menuitem_href_soup['href']).lower()
+        url.endswith(this_href)
+        url_root = url[:-len(this_href)]
+        assert url_root and url_root[-1] == '/'
+        '''
+        url_root = base_url
+        assert url_root and url_root[-1] == '/'
+
+        topmost_span_container_soup = main_menuitem_href_soup.parent
+
+        #<span class="menuitem container"><a class="menuitem" href="guo-yu/zh" id="m24449">國語</a><br/><span class="subcontents">
+
+        # visit_(soup):
+        # -> Iter (middle_titles, subtitle, sub_href)
+        # middle_titles = () | (middle_title, middle_titles)
+        def visit_menuitem_href(menuitem_href_soup):# is_topmost:bool:
+            #leaf
+            subtitle = str(menuitem_href_soup.string)
+            #bug: sub_href = menuitem_href_soup.href
+            sub_href = str(menuitem_href_soup['href'])
+            assert sub_href and sub_href[0] != '/'
+            sub_href = url_root + sub_href
+            yield (), subtitle, sub_href
+
+        def pred(soup):
+            if has_html_class(soup, 'subcontents'):
+                return False
+            if soup.name.lower() == 'span':
+                return has_html_class(soup, 'container')
+            return True
+        def visit_subcontents(span_subcontents_soup):# is_topmost:bool:
+            it = span_subcontents_soup.find_all(
+                                name=['a', 'span']
+                                , attrs={'class':'menuitem'}
+                                , recursive=False
+                                )
+            children = list(filter(pred, it))
+            for child in children:
+                if child.name.lower() == 'a':
+                    visit = visit_menuitem_href
+                else:
+                    visit = visit_container
+                yield from visit(child)
+
+        def visit_container(span_container_soup):# is_topmost:bool:
+            #tree structure
+            #   many subcontents if children is a tree too
+            #   so, recursive=False
+            [menuitem_href_soup
+            ] = (span_container_soup
+                    .find_all(name='a'
+                            , attrs={'class':'menuitem'}
+                            , recursive=False
+                            )
+                )
+            [span_subcontents_soup
+            ] = (span_container_soup
+                    .find_all(name='span'
+                            , attrs={'class':'subcontents'}
+                            , recursive=False
+                            )
+                )
+            #menuitem_href_soup['href']
+            middle_title = str(menuitem_href_soup.string)
+            it = visit_subcontents(span_subcontents_soup)
+            for middle_titles, subtitle, sub_href in it:
+                yield (middle_title, middle_titles), subtitle, sub_href
+
+        it = visit_container(topmost_span_container_soup)
+        for middle_titles, subtitle, sub_href in it:
+            middle_titles = list(iter_leftward_list(middle_titles))
+            yield (middle_titles, subtitle, sub_href)
 
     def extract_ctext_org__step2_ctext(self, soup, *, verbose:bool):
         verbose = bool(verbose)
@@ -333,26 +500,46 @@ class ExtractCTextOrg(ExtractCTextOrgBase):
             , data=data, timeout=timeout, **kwargs)
 
     def cached_extract_ctext_org__url(self, url
-        , *, verbose:bool, timeout, referrer, **kwargs):
+        , *, verbose:bool, timeout, referrer, subcontents:bool, **kwargs):
         # url -> (title, txt)
         verbose = bool(verbose)
+        subcontents = bool(subcontents)
 
-        if url not in self.cache:
-            title, txt = self.bare_extract_ctext_org__url(url
+        fetch = lambda: self.bare_extract_ctext_org__url(url
                 , referrer=referrer
                 ,verbose=verbose, timeout=timeout
+                ,subcontents=subcontents
                 , **kwargs
                 )
-            self.cache[url] = title, txt
-            if verbose: print_err(f'store title: {title!r}')
+        if not subcontents:
+            key = url
+        else:
+            key = '[subcontents]'+url
+
+        def result2title(result):
+            if not subcontents:
+                title, txt = result
+            else:
+                ((title, _url), subtitle_url_pairs) = result
+            return title
+
+        if verbose:
+            str_may_subcontents = '[subcontents]' if subcontents else ''
+        if key not in self.cache:
+            result = fetch()
+            self.cache[key] = result
+            title = result2title(result)
+
+            if verbose: print_err(f'store title{str_may_subcontents!s}: {title!r}')
 
         if verbose: print_err(f'read cached webpage: {url!r}')
-        title, txt = self.cache[url]
-        if verbose: print_err(f'read title: {title!r}')
-        return title, txt
+        result = self.cache[key]
+        title = result2title(result)
+        if verbose: print_err(f'read title{str_may_subcontents!s}: {title!r}')
+        return result
 
     def bare_extract_ctext_org__url(self, url
-        , *, verbose:bool, timeout, referrer, **kwargs):
+        , *, verbose:bool, timeout, referrer, subcontents:bool, **kwargs):
         # url -> (title, txt)
         verbose = bool(verbose)
         try:
@@ -361,10 +548,16 @@ class ExtractCTextOrg(ExtractCTextOrgBase):
                 , timeout=timeout, referrer=referrer, **kwargs)
 
             if verbose: print_err(f'extracting webpage...: {url!r}')
-            title, txt = self.extract_ctext_org(page_bytes, verbose=verbose)
-
+            if not subcontents:
+                title, txt = self.extract_ctext_org__text(page_bytes, verbose=verbose)
+                result = title, txt
+            else:
+                ((title, url), subtitle_url_pairs
+                ) = self.extract_ctext_org__subcontents(page_bytes, verbose=verbose)
+                subtitle_url_pairs = tuple(subtitle_url_pairs)
+                result = (title, url), subtitle_url_pairs
             if verbose: print_err(f'extract webpage done: {url!r}')
-            return title, txt
+            return result
         except (CTextOrgConfirmError, *TimeoutErrors):
             if verbose: print_err(f'extract webpage timeout: {url!r}')
             raise
@@ -431,6 +624,7 @@ class ExtractCTextOrg(ExtractCTextOrgBase):
                 title, txt = self.cached_extract_ctext_org__url(url
                     , referrer=referrer
                     , verbose=verbose, timeout=timeout
+                    , subcontents=False
                     , **kwargs)
             except CTextOrgConfirmError as e:
                 #input('ctext.org requires confirm')
@@ -483,7 +677,7 @@ class ExtractCTextOrg(ExtractCTextOrgBase):
                     , timeout=timeout, **kwargs)
 
                 try:
-                    self.extract_ctext_org(data, verbose=False)
+                    self.extract_ctext_org__text(data, verbose=False)
                 except CTextOrgConfirmError:
                     # input wrong captcha
                     self.save_captcha(image_bytes=image_bytes, captcha=captcha, correct=False)
@@ -518,11 +712,11 @@ def _test_file():
     fname = r'E:\download\novel_new\novel_20170808\小说\https _ctext.cn_fengshen-yanyi_1.htm'
     self = ExtractCTextOrgBase()
     with open(fname, encoding='utf8') as fin:
-        print(self.extract_ctext_org(fin, verbose=False))
+        print(self.extract_ctext_org__text(fin, verbose=False))
 
 def _test_url():
     url = r'https://ctext.org/fengshen-yanyi/1'
-    print(self.cached_extract_ctext_org__url(url, verbose=False))
+    print(self.cached_extract_ctext_org__url(url, subcontents=False, verbose=False))
 def _test_url_rng():
     base_url = r'https://ctext.org/fengshen-yanyi'
     for title, txt in self.unordered_iter_extract_ctext_org__url_rng(base_url, range(1,100+1), verbose=False):
@@ -608,12 +802,13 @@ def main(argv=None):
             title, txt = self.cached_extract_ctext_org__url(args.url
                     , referrer=None
                     , verbose=args.verbose
+                    , subcontents=False
                     , timeout=args.timeout
                     )
             may_book_title = None
             begin = 0
             result = (may_book_title, begin, [(title, txt)])
-        else:
+        elif 0:
             first, last = args.range
             begin, end = first, last+1
             rng = range(begin, end)
@@ -639,6 +834,7 @@ def main(argv=None):
                         book_title_url
                         , referrer=None
                         , verbose=args.verbose
+                        , subcontents=False
                         , timeout=args.timeout
                         )
                 may_book_title = book_title
@@ -650,13 +846,66 @@ def main(argv=None):
             begin = begin
             #result = (may_book_title, begin, list(it))
             result = (may_book_title, begin, iter(it))
+        else:
+            first, last = args.range
+            if (first, last) == (0, 0):
+                first, last = 1, None
+                begin, end = None, None
+            else:
+                assert first >= 1
+                begin, end = first-1, last
+                #rng = range(begin, end)
+
+            base_url = args.url
+            if args.book_title_at is None:
+                book_title_url = base_url
+            else:
+                book_title_url = f'{base_url}{args.book_title_at}'
+
+            ((book_title, book_url), subtitle_url_pairs
+            ) = self.cached_extract_ctext_org__url(
+                    book_title_url
+                    , referrer=None
+                    , verbose=args.verbose
+                    , subcontents=True
+                    , timeout=args.timeout
+                    )
+            if args.without_book_title:
+                may_book_title = None
+            else:
+                may_book_title = book_title
+
+            subtitle_url_pairs = subtitle_url_pairs[begin:end]
+            referrer_url_pairs = [(book_url, sub_url)
+                        for subtitle, sub_url in subtitle_url_pairs]
+            it = self.unordered_iter_extract_ctext_org__referrer_url_pairs(
+                        referrer_url_pairs
+                        , verbose=args.verbose
+                        , timeout=args.timeout
+                        , time_sep=args.time_sep
+                        )
+
+
+
+            for _ in it:pass
+
+            def tmp__ordered_iter_extract_ctext_org__url_rng__cache_only():
+                for (referrer, url), (subtitle, _) in zip(referrer_url_pairs, subtitle_url_pairs):
+                    title, txt = self.cache[url]
+                    #yield title, txt
+                    yield subtitle, txt
+            it = tmp__ordered_iter_extract_ctext_org__url_rng__cache_only()
+            begin = first
+            #result = (may_book_title, begin, list(it))
+            result = (may_book_title, begin, iter(it))
+
     else:
         self = ExtractCTextOrgBase()
         may_ifname = args.input
         try:
             # open as text file
             with may_open_stdin(may_ifname, 'rt', encoding=encoding) as fin:
-                title, txt = self.extract_ctext_org(fin
+                title, txt = self.extract_ctext_org__text(fin
                     , verbose=args.verbose
                     , timeout=args.timeout
                     )
@@ -665,7 +914,7 @@ def main(argv=None):
             ifname = may_ifname
             # open as binary file
             with open(ifname, 'rb') as fin:
-                title, txt = self.extract_ctext_org(fin
+                title, txt = self.extract_ctext_org__text(fin
                     , verbose=args.verbose
                     , timeout=args.timeout
                     )
