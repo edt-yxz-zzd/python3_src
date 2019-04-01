@@ -71,8 +71,8 @@ x = A1/A2 + A3/A4*sqrt(A5)
 
     # algo floor(x)
     [floor(x) = floor((P + sqrt(N))/Q)
-        = [Q>0]floor((P + floor_sqrt(N))/abs(Q))
-        - [Q<0]floor((P + floor_sqrt(N) - 1)/abs(Q))
+        = [Q>0]((P + floor_sqrt(N))//abs(Q))
+        - [Q<0]((P + floor_sqrt(N) - 1)//abs(Q))
         - [Q<0]
     ]
 
@@ -131,19 +131,39 @@ __all__ = '''
 
     iter_continued_fraction_digits_of_quadratic_surd__PNQ
     iter_continued_fraction_digits_of_rational
-    iter_maybe_continued_fraction_digits_of_quadratic_surd__PNQ
+    iter_cut_maybe_continued_fraction_digits_of_quadratic_surd__PNQ
     is_reduced_quadratic_surd__PNQ
 
-    _iter_continued_fraction_digits_of_quadratic_surd__BDC
+    _iter_cut_maybe_continued_fraction_digits_of_quadratic_surd_withBC__BCD
+    _iter_continued_fraction_digits_of_quadratic_surd_withBC__BDC
     _is_reduced_quadratic_surd__BDC
     _PNQ2BDC
+    _split_iter_cut_maybes
     '''.split()
     #one
     #zero
+    #_A1_5_to_PNQ
+    #__list_split
+
+
+
+
+
+
+
 
 from ..floor_sqrt import floor_sqrt
 from fractions import Fraction
-from math import floor, gcd
+#from math import floor, gcd
+import math # floor, gcd
+import warnings
+
+try: floor
+except NameError:pass
+else: raise logic-error
+try: gcd
+except NameError:pass
+else: raise logic-error
 
 one = Fraction(1)
 zero = Fraction(0)
@@ -177,7 +197,7 @@ CCD2PNG = constant_coeff_discriminant_to_PNQ
 def _A1_5_to_PNQ(A1, A2, A3, A4, A5):
     # x = A1/A2 + A3/A4*sqrt(A5)
     # A1_5_to_BDC
-    g = gcd(A2, A4)
+    g = math.gcd(A2, A4)
     S = (A2//g*A3)
     A4_g = A4//g
 
@@ -193,7 +213,7 @@ def _A1_5_to_PNQ(A1, A2, A3, A4, A5):
     return P, N, Q
 
 def _PNQ2BDC(P, N, Q):
-    KK = Q//gcd(Q, N-P**2)
+    KK = Q//math.gcd(Q, N-P**2)
     B = P*KK
     D = N*KK**2
     C = Q*KK
@@ -206,10 +226,11 @@ input:
     x :: Fraction
 output:
     iter_continued_fraction_digits_of x :: Iter Integer
+        finite
 '''
     assert type(x) is Fraction
     while True:
-        d = floor(x)
+        d = math.floor(x)
         yield d
 
         x = x - d
@@ -226,13 +247,16 @@ input:
 output:
     (non_periodic_digits, periodic_digits) :: ([Integer], [PInt])
         continued_fraction_digits_of x == non_periodic_digits + periodic_digits*(+oo)
+        both must be finite
+        both may be empty
 '''
     return __list_split(
         split_periodic_continued_fraction_digits_of_quadratic_surd__PNQ
         ,**locals()
         )
 
-def split_periodic_continued_fraction_digits_of_quadratic_surd__PNQ(*, P, N, Q):
+def split_periodic_continued_fraction_digits_of_quadratic_surd__PNQ(
+    *, P, N, Q):
     '''-> (non_periodic_digits::[Integer], iter_periodic_digits::Iter PInt)
 input:
     P,N,Q :: Integer
@@ -241,15 +265,31 @@ input:
 output:
     (non_periodic_digits, iter_periodic_digits) :: ([Integer], Iter PInt)
         continued_fraction_digits_of x == non_periodic_digits + periodic_digits*(+oo)
+        both must be finite
+        both may be empty
 '''
-    it = iter_maybe_continued_fraction_digits_of_quadratic_surd__PNQ(
+    it = iter_cut_maybe_continued_fraction_digits_of_quadratic_surd__PNQ(
             P=P, N=N, Q=Q)
+    return _split_iter_cut_maybes(it)
+
+def _split_iter_cut_maybes(iter_cut_maybes):
+    '''Iter (None|a) -> ([a], Iter a)
+input:
+    iter_cut_maybes :: Iter (None|a)
+        contain exact one None
+output:
+    ([a], Iter a)
+        split by None
+'''
+    it = iter(iter_cut_maybes)
     non_periodic_digits = []
     for maybe_d in it:
         if maybe_d is None:
             break
         d = maybe_d
         non_periodic_digits.append(d)
+    else:
+        raise logic-error
 
     iter_periodic_digits = it
     return non_periodic_digits, iter_periodic_digits
@@ -264,17 +304,26 @@ input:
         x may be rational
 output:
     iter_continued_fraction_digits_of x :: Iter Integer
-        yield non_periodic_digits
-        while True:
-            yield periodic_digits
+        result may be infinite
+        ----------------------
+        yield from non_periodic_digits
+        if periodic_digits:
+            while True:
+                yield from periodic_digits
+        ---------------------
+        #non_periodic_digits, periodic_digits
+        #   both must be finite
+        #   both may be empty
 '''
-    it = iter_maybe_continued_fraction_digits_of_quadratic_surd__PNQ(
+    it = iter_cut_maybe_continued_fraction_digits_of_quadratic_surd__PNQ(
             P=P, N=N, Q=Q)
     for maybe_d in it:
         if maybe_d is None:
             break
         d = maybe_d
         yield d
+    else:
+        raise logic-error
 
     periodic_digits = []
     for d in it:
@@ -284,17 +333,24 @@ output:
     while True:
         yield from periodic_digits
 
-def iter_maybe_continued_fraction_digits_of_quadratic_surd__PNQ(*, P, N, Q):
-    '''= iter_maybe_continued_fraction_digits_of x :: Iter (None|Integer)
+def iter_cut_maybe_continued_fraction_digits_of_quadratic_surd__PNQ(
+    *, P, N, Q):
+    '''= iter_cut_maybe_continued_fraction_digits_of x :: Iter (None|Integer)
 input:
     P,N,Q :: Integer
         [x = (P+sqrt(N))/Q]
         x may be rational
 output:
-    iter_maybe_continued_fraction_digits_of x :: Iter (None|Integer)
-        yield non_periodic_digits
+    iter_cut_maybe_continued_fraction_digits_of x :: Iter (None|Integer)
+        result must be finite, must be nonempty (when exclude None)
+        ---------------------
+        yield from non_periodic_digits
         yield None
-        yield periodic_digits # finite!!!!
+        yield from periodic_digits
+        ---------------------
+        #non_periodic_digits, periodic_digits
+        #   both must be finite
+        #   both may be empty
 '''
     assert type(P) is type(N) is type(Q) is int
     assert Q != 0
@@ -310,24 +366,86 @@ output:
         yield None
         return
 
-    it = _iter_continued_fraction_digits_of_quadratic_surd__BDC(
+    it = _iter_cut_maybe_continued_fraction_digits_of_quadratic_surd_withBC__BCD(
+                B=B, D=D, C=C, floor_sqrtD=floor_sqrtD)
+    for maybe_BCd in it:
+        # finite
+        if maybe_BCd is None:
+            break
+        BCd = maybe_BCd
+        B, C, d = BCd
+        yield d
+    else:
+        raise logic-error
+
+    yield None
+    for B, C, d in it:
+        # finite
+        yield d
+
+
+def _iter_cut_maybe_continued_fraction_digits_of_quadratic_surd_withBC__BCD(
+    *, B, D, C, floor_sqrtD
+    ):
+    '''-> Iter (None|(B, C, continued_fraction_digit))
+
+
+input:
+    B,D,C,floor_sqrtD :: Integer
+        [x = (B + sqrt(D))/C][C `divs` D - B^2][sqrt(D) is irrational]
+output:
+    iter_cut_maybe_continued_fraction_digits_withBC_of x
+        :: Iter (None|(B, C, continued_fraction_digit))
+        result must be finite, must be nonempty (when exclude None)
+        ---------------------
+        yield from zip(Bs, Cs, non_periodic_digits)
+        yield None
+        yield from zip(Bs, Cs, periodic_digits)
+        ---------------------
+        #non_periodic_digits, periodic_digits
+        #   both must be finite
+        #   both may be empty
+'''
+    it = _iter_continued_fraction_digits_of_quadratic_surd_withBC__BDC(
                 B=B, D=D, C=C, floor_sqrtD=floor_sqrtD)
     for B, C, d in it:
         #if x is reduced_quadratic_surd:break
         if _is_reduced_quadratic_surd__BDC(
                 B=B, D=D, C=C, floor_sqrtD=floor_sqrtD):
             break
-        yield d # non_periodic_digits
-    yield None
+        yield (B, C, d) # non_periodic_digits
+    else:
+        raise logic-error
+    yield None # split
 
     B0, C0 = B, C
     d0 = d
+    '''
+    bug: B0,C0 are skipped, d0 go with (B1,C1,d0)
     for B, C, d_ in it:
-        yield d
+        yield (B, C, d) # periodic_digits
         d = d_
+        ...
+    '''
+    _remain = _max_period = min(2*D-1, floor_sqrtD*(floor_sqrtD+1))
+    assert _remain >= 1
+
+    def _after_yield():
+        nonlocal _remain
+        if not _remain: raise logic-error-too-many-digit in one-period
+        _remain -= 1
+
+    yield (B, C, d); _after_yield() # periodic_digits
+    for B, C, d in it:
         if B==B0 and C==C0:
-            assert d == d0
+            if not d == d0: raise logic-error
             break
+        yield (B, C, d); _after_yield() # periodic_digits
+    # cut; finite
+
+    # my guess: _max_period <= 2/3*D
+    period = _max_period - _remain
+    if not period <= 2*D//3: warnings.warn(f'not len(periodic_digits) <= 2*D//3: B={B0},D={D},C={C0}')
     return
 
 
@@ -352,7 +470,9 @@ output:
 '''
     return Q>0 and P>0 and Q+P > floor_sqrtN >= P and floor_sqrtN >= Q-P
 
-def _iter_continued_fraction_digits_of_quadratic_surd__BDC(*, B, D, C, floor_sqrtD):
+def _iter_continued_fraction_digits_of_quadratic_surd_withBC__BDC(
+    *, B, D, C, floor_sqrtD
+    ):
     '''-> Iter (B, C, continued_fraction_digit)
 
 
@@ -360,9 +480,11 @@ input:
     B,D,C,floor_sqrtD :: Integer
         [x = (B + sqrt(D))/C][C `divs` D - B^2][sqrt(D) is irrational]
 output:
-    triples :: Iter (B::Integer, C::Integer, d::Integer)
-        (B, C, d)
-        d == floor(x) = floor((B + sqrt(D))/C)
+    iter_triples :: Iter (B::Integer, C::Integer, d::Integer)
+        result must be infinite
+        (B, C, d):
+            d == floor(x) = floor((B + sqrt(D))/C)
+
 
 
 -------------------------
@@ -484,6 +606,9 @@ def is_integer(r:Fraction):
     return abs(r.denominator) == 1
 '''
 
+if __name__ == '__main__':
+    from seed.helper.print_global_names import print_global_names
+    print_global_names(globals())
 if __name__ == '__main__':
     _test()
     _t(4, one, zero)
