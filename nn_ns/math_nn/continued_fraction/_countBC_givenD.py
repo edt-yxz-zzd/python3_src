@@ -1,6 +1,7 @@
 
 r'''
 
+> pym _countBC_givenD.py ratio_small  -db E:\temp_output\tmp_sqlite3_db\_D_BCss.db -N 10 -from 3000 -to 5000
 ------------------
 result:
     D with max ratio_total/ratio_small:
@@ -86,18 +87,44 @@ from .continued_fraction_digits_of_quadratic_surd import (
     ,_split_iter_cut_maybes
     ,_iter_cut_maybe_continued_fraction_digits_of_quadratic_surd_withBC__BCD
     )
+import ast # literal_eval
+import sqlite3
 
 
 
-
-def iter_Ds2iter_D_BCs(iter_Ds):
-    'Iter D -> Iter (D, [(B,C)])'
+def filter_out_perfect_square(iter_Ds):
+    'Iter D -> Iter (D, floor_sqrtD) with D is irrational'
     for D in iter_Ds:
         floor_sqrtD = floor_sqrt(D)
         if floor_sqrtD**2 == D:
             continue
-        BCs = tuple(iter_BCs(D=D, floor_sqrtD=floor_sqrtD))
-        yield (D, BCs)
+        yield D, floor_sqrtD
+def D_BCss_to_info(D, BCss, *, floor_sqrtD):
+    #total = len(BCs)
+    total = sum(map(len, BCss))
+    small = max(map(len, BCss))
+    #floor_sqrtD = floor_sqrt(D)
+
+    ratio_total = Fraction(total, D)
+    ratio_small = Fraction(small, D)
+    ratio_total_floor_sqrt = Fraction(total, floor_sqrtD)
+    ratio_small_floor_sqrt = Fraction(small, floor_sqrtD)
+
+    triple = D_totalBCs_BCss_Triple(D=D, totalBCs=total, BCss=BCss)
+    #ratios = ratio_total, ratio_small
+    sort_keys = SortKeys(ratio_total=ratio_total
+                        ,ratio_small=ratio_small
+                        ,ratio_total_floor_sqrt=ratio_total_floor_sqrt
+                        ,ratio_small_floor_sqrt=ratio_small_floor_sqrt
+                        )
+    info = Info(D_totalBCs_BCss_triple=triple, sort_keys=sort_keys)
+    return info
+'''
+def iter_Ds2iter_D_BCs(iter_Ds):
+    'Iter D -> Iter (D, [(B,C)])'
+    yield (D, BCs)
+'''
+
 def iter_BCs(*, D, floor_sqrtD):
     '''D -> floor_sqrtD -> Iter (B,C)
 precondition:
@@ -127,8 +154,8 @@ def length_of_period__BDC(*, B, D, C):
             P=B, N=D, Q=C)
     return len(periodic_digits)
 
-def split_BCs(D, BCs):
-    floor_sqrtD = floor_sqrt(D)
+def split_BCs(D, BCs, *, floor_sqrtD):
+    #floor_sqrtD = floor_sqrt(D)
     BCs = set(BCs)
     BCss = []
     while BCs:
@@ -189,41 +216,54 @@ def show_info(info, *, print):
 def noshow_info(triple, *, print):
     pass
 
-def eval_info_forDs(iter_Ds, show_eachD:bool):
+def eval_info_forDs(iter_Ds, *, show_eachD:bool, maybe_info_db:'None|InfoDatabase'):
     # -> [Info]
     #print('see: continued_fraction_digits_of_quadratic_surd.py')
-    it = iter_Ds2iter_D_BCs(iter_Ds)
 
     maybe_show_info = show_info if show_eachD else noshow_info
+    if maybe_info_db is None:
+        def read_infos(D2floor_sqrtD):
+            return {}
+    else:
+        info_db = maybe_info_db
+        read_infos = info_db.read_infos
 
-    # infos :: [((D, BCs, BCss), (ratio_total, ratio_small))]
+    it = filter_out_perfect_square(iter_Ds)
+    D2floor_sqrtD = dict(it)
+    D2info = read_infos(D2floor_sqrtD)
+
+    #infos :: [Info]
     infos = []
-    for D, BCs in it:
-        #print(f'D={D}, total={len(BCs)}:')
-        #print(f'    BCs={BCs}')
-
-        BCss = split_BCs(D, BCs)
-        total = len(BCs)
-        small = max(map(len, BCss))
-        floor_sqrtD = floor_sqrt(D)
-
-        ratio_total = Fraction(total, D)
-        ratio_small = Fraction(small, D)
-        ratio_total_floor_sqrt = Fraction(total, floor_sqrtD)
-        ratio_small_floor_sqrt = Fraction(small, floor_sqrtD)
-
-        triple = D_totalBCs_BCss_Triple(D=D, totalBCs=len(BCs), BCss=BCss)
-        #ratios = ratio_total, ratio_small
-        sort_keys = SortKeys(ratio_total=ratio_total
-                            ,ratio_small=ratio_small
-                            ,ratio_total_floor_sqrt=ratio_total_floor_sqrt
-                            ,ratio_small_floor_sqrt=ratio_small_floor_sqrt
+    for D, floor_sqrtD in D2floor_sqrtD.items():
+        maybe_info = D2info.get(D)
+        if maybe_info is not None:
+            info = maybe_info
+        else:
+            info = _mk_info(D, floor_sqrtD=floor_sqrtD
+                            , maybe_info_db = maybe_info_db
                             )
-        info = Info(D_totalBCs_BCss_triple=triple, sort_keys=sort_keys)
         infos.append(info)
         #maybe_show_triple(triple)
         maybe_show_info(info, print=print)
     return infos
+
+def _mk_info(D, *, floor_sqrtD, maybe_info_db):
+    #floor_sqrtD = floor_sqrt(D)
+    BCs = tuple(iter_BCs(D=D, floor_sqrtD=floor_sqrtD))
+    BCss = split_BCs(D, BCs, floor_sqrtD=floor_sqrtD)
+    info = D_BCss_to_info(D, BCss, floor_sqrtD=floor_sqrtD)
+
+    if maybe_info_db is not None:
+        info_db = maybe_info_db
+        info_db.write_info(info)
+        maybe_info = info_db.read_maybe_info(D, floor_sqrtD=floor_sqrtD)
+
+        if info != maybe_info:
+            print(info)
+            print(maybe_info)
+            raise logic-error
+
+    return info
 
 def sort_then_show_infos(infos, *
     , sort_attrs:[str], maybe_show_first_n_infos:int, print):
@@ -314,6 +354,10 @@ ratio_total_floor_sqrt
                         , default = False
                         , help='show info for each D'
                         )
+    parser.add_argument('-db', '--database', type=str
+                        , default = None
+                        , help='use sqlite3 database to cache (D,BCss)'
+                        )
 
 
     args = parser.parse_args(args)
@@ -335,13 +379,171 @@ ratio_total_floor_sqrt
         iter_Ds = map(exprD, iter_ns)
 
     show_eachD = args.show_eachD
-    infos = eval_info_forDs(iter_Ds, show_eachD=show_eachD)
+    if args.database is not None:
+        with InfoDatabase(args.database) as info_db:
+            infos = eval_info_forDs(iter_Ds
+                                    ,show_eachD=show_eachD
+                                    ,maybe_info_db=info_db)
+    else:
+        infos = eval_info_forDs(iter_Ds
+                                ,show_eachD=show_eachD
+                                ,maybe_info_db=None)
     sort_then_show_infos(infos
                         ,sort_attrs=args.sort_attrs
                         ,maybe_show_first_n_infos=args.show_first_n_infos
                         ,print=print
                         )
 
+class InfoDatabase:
+    __encoding__ = 'ascii'
+    def __init__(self, database:str):
+        connection = sqlite3.connect(database)
+        cursor = connection.cursor()
+        self.connection = connection
+        self.cursor = cursor
+        cursor.execute(r'''
+            CREATE TABLE IF not EXISTS
+                reduced_quadratic_surd_D_BCss_table
+                (D
+                    Integer     not NULL
+                    check (D>=2)
+                ,strBCss
+                    TEXT        not NULL
+                -- ,reprBCss
+                --     BLOB        not NULL
+                );
+        ''')
+    def read_infos(self, D2floor_sqrtD):
+        'Map D floor_sqrtD -> Map D info'
+        """
+        https://stackoverflow.com/questions/14142554/sqlite3-python-executemany-select
+        !!!!!!!!!!!!!!!!!!!!!executemany not allow SELECT!!!!!!!!!
+        self.cursor.executemany(r'''
+            SELECT D, strBCss
+                from reduced_quadratic_surd_D_BCss_table
+                where D in (?)
+                ;
+        ''', list((D,) for D in D2floor_sqrtD))
+        """
+        self.cursor.execute(r'''
+            SELECT D, strBCss
+                from reduced_quadratic_surd_D_BCss_table
+                where D in ({})
+                ;
+        '''.format(','.join(map(str, D2floor_sqrtD))))
+
+        D2info = {}
+        for D, strBCss in self.cursor.fetchall():
+            BCss = ast.literal_eval(strBCss)
+            floor_sqrtD = D2floor_sqrtD[D]
+            info = D_BCss_to_info(D, BCss, floor_sqrtD=floor_sqrtD)
+            D2info[D] = info
+        return D2info
+
+    def read_maybe_info(self, D, *, floor_sqrtD):
+        'D -> (None|info)'
+        maybe_BCss = self._read_maybe_BCss(D)
+        if maybe_BCss is not None:
+            BCss = maybe_BCss
+            info = D_BCss_to_info(D, BCss, floor_sqrtD=floor_sqrtD)
+            maybe_info = info
+        else:
+            maybe_info = None
+        return maybe_info
+
+    def write_info(self, info):
+        triple = info.D_totalBCs_BCss_triple
+        D, BCss = triple.D, triple.BCss
+        self._write_D_BCss(D, BCss)
+    def _read_maybe_BCss(self, D):
+        # -> (None|BCss:[[(int, int)]])
+        maybe_strBCss = self._read_maybe_strBCss(D)
+        if maybe_strBCss is not None:
+            strBCss = maybe_strBCss
+            BCss = ast.literal_eval(strBCss)
+            #bug: forgot return BCss
+            #   and when "INSERT INTO" fail for duplicated
+            #       , python.sqlite3 just do complaint!!1
+            #       , I miss the error!!!
+            #https://stackoverflow.com/questions/25371636/how-to-get-sqlite-result-error-codes-in-python
+            #       no errcode/exception!!!!
+            return BCss
+        else:
+            return None
+    def _read_maybe_strBCss(self, D):
+        # -> (None|strBCss:str)
+        self.cursor.execute(r'''
+            SELECT strBCss
+                from reduced_quadratic_surd_D_BCss_table
+                where D==(?)
+                ;
+        ''', (D,))
+
+        maybe_boxed_strBCss = self.cursor.fetchone()
+        if maybe_boxed_strBCss is not None:
+            boxed_strBCss = maybe_boxed_strBCss
+            [strBCss] = boxed_strBCss
+            maybe_strBCss = strBCss
+        else:
+            maybe_strBCss = None
+        return maybe_strBCss
+
+        def _read_maybe_strBCss(self, D):
+            # -> (None|strBCss:str)
+            maybe_reprBCss = self._read_maybe_reprBCss(D)
+            if maybe_reprBCss is not None:
+                reprBCss = maybe_reprBCss
+                strBCss = reprBCss.decode(__class__.__encoding__)
+                return strBCss
+            else:
+                return None
+        def _read_maybe_reprBCss(self, D):
+            # -> (None|reprBCss:bytes)
+            self.cursor.execute(r'''
+                SELECT reprBCss
+                    from reduced_quadratic_surd_D_BCss_table
+                    where D==(?)
+                    ;
+            ''', (D,))
+
+            maybe_boxed_reprBCss = self.cursor.fetchone()
+            if maybe_boxed_reprBCss is not None:
+                boxed_reprBCss = maybe_boxed_reprBCss
+                [reprBCss] = boxed_reprBCss
+                maybe_reprBCss = reprBCss
+            else:
+                maybe_reprBCss = None
+            return maybe_reprBCss
+
+    def _write_D_BCss(self, D:int, BCss:[[(int, int)]]):
+        strBCss = repr(BCss)
+        self._write_D_strBCss(D, strBCss)
+    def _write_D_strBCss(self, D:int, strBCss:str):
+        self.cursor.execute(r'''
+            INSERT INTO reduced_quadratic_surd_D_BCss_table
+                (D, strBCss)
+                VALUES (?, ?)
+                ;
+        ''', (D, strBCss))
+        return
+
+        def _write_D_strBCss(self, D:int, strBCss:str):
+            reprBCss = strBCss.encode(__class__.__encoding__)
+            self._write_D_reprBCss(D, reprBCss)
+        def _write_D_reprBCss(self, D:int, reprBCss:bytes):
+            self.cursor.execute(r'''
+                INSERT INTO reduced_quadratic_surd_D_BCss_table
+                    (D, reprBCss)
+                    VALUES (?, ?)
+                    ;
+            ''', (D, reprBCss))
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.cursor.close()
+        self.connection.commit()
+        self.connection.close()
+        return None
 if __name__ == "__main__":
     main()
 
