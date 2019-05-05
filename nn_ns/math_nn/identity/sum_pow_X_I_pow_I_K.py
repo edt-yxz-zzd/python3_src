@@ -6,7 +6,7 @@ see:
     "NOTE/wolframalpha.com/sum2.txt"
 
 [n <- ZZ][k <- NN]
-[x != 1][x != 0][k>0]:
+[x != 1][k > 0]:
     let S(x,j) = (sum x^e * Eulerian_1st(j,e) {e=0..j})
         Eulerian_1st(n,k)
             = Eulerian<n,k> = Eulerian<n-1,k-1>*(n-k) + Eulerian<n-1,k>*(k+1)
@@ -43,8 +43,8 @@ __all__ = '''
 
     sum_pow_X_I_pow_I_K__x_eq_1
     sum_pow_X_I_pow_I_K__x_eq_0
-    sum_pow_X_I_pow_I_K__x_ne_1__k_eq_1
-    sum_pow_X_I_pow_I_K__x_ne_01__k_ge_1
+    sum_pow_X_I_pow_I_K__x_ne_1__k_eq_0
+    sum_pow_X_I_pow_I_K__x_ne_1__k_ge_1
     '''.split()
 
 from nn_ns.math_nn.numbers.Bernoulli_number import bernoulli
@@ -73,12 +73,15 @@ def sum_pow_X_I_pow_I_K(x, k, n):
         return zero
     if x == 1:
         return sum_pow_X_I_pow_I_K__x_eq_1(k, n)
+    elif k == 0:
+        return sum_pow_X_I_pow_I_K__x_ne_1__k_eq_0(x, n)
+    else:
+        return sum_pow_X_I_pow_I_K__x_ne_1__k_ge_1(x, k, n)
+
+    '''
     elif x == 0:
         return sum_pow_X_I_pow_I_K__x_eq_0(k, n)
-    elif k == 0:
-        return sum_pow_X_I_pow_I_K__x_ne_1__k_eq_1(x, n)
-    else:
-        return sum_pow_X_I_pow_I_K__x_ne_01__k_ge_1(x, k, n)
+    '''
 def reverse_powers(base, begin, end):
     powers = list_powers(base, end+1, begin+1)
     powers.reverse()
@@ -111,10 +114,10 @@ def S_ex(x_powers,j):
 
 one = Fraction(1)
 zero = Fraction(0)
-def sum_pow_X_I_pow_I_K__x_ne_1__k_eq_1(x, n):
+def sum_pow_X_I_pow_I_K__x_ne_1__k_eq_0(x, n):
     '(x^(n + 1) - 1)/(x - 1)'
     return (x**(n+1) - 1)*one/(x-1)
-def sum_pow_X_I_pow_I_K__x_ne_01__k_ge_1(x, k, n):
+def sum_pow_X_I_pow_I_K__x_ne_1__k_ge_1(x, k, n):
     '''
 Sum[x^i i^k, {i, 0, n}]
     = (x^(n + 1) sum (-1)^j C(k,j) n^(k-j) (x - 1)^(k-j) S(x,j) {j=0..k}
@@ -122,7 +125,6 @@ Sum[x^i i^k, {i, 0, n}]
       )/(x - 1)^(k + 1)
 '''
     assert x != 1
-    assert x != 0
     assert k >= 1
     assert n >= 0
     #Cs = C.get_row(k)
