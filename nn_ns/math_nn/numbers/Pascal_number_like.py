@@ -29,4 +29,14 @@ class PascalNumberLike(IPascalNumberLike, INumberTable__table__concrete_mixins):
     def __init__(self):
         super().__init__([[1]])
 
+    @override
+    def _lookup_pos_underflow(self, n, k, table):
+        assert n >= 0
+        assert k < 0
+        return 0
 
+    @override
+    def _lookup_pos_overflow(self, n, k, table):
+        assert n >= 0
+        assert k >= self.row_len(n)
+        return 0

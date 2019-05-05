@@ -379,8 +379,11 @@ ratio_total_floor_sqrt
         iter_Ds = map(exprD, iter_ns)
 
     show_eachD = args.show_eachD
-    if args.database is not None:
-        with InfoDatabase(args.database) as info_db:
+    database = args.database
+    if database is None:
+        database = ':memory:'
+    if database is not None:
+        with InfoDatabase(database) as info_db:
             infos = eval_info_forDs(iter_Ds
                                     ,show_eachD=show_eachD
                                     ,maybe_info_db=info_db)
@@ -425,7 +428,7 @@ class InfoDatabase:
                 ;
         ''', list((D,) for D in D2floor_sqrtD))
         """
-        self.cursor.execute(r'''
+        self.execute(r'''
             SELECT D, strBCss
                 from reduced_quadratic_surd_D_BCss_table
                 where D in ({})
@@ -433,7 +436,8 @@ class InfoDatabase:
         '''.format(','.join(map(str, D2floor_sqrtD))))
 
         D2info = {}
-        for D, strBCss in self.cursor.fetchall():
+        #neednot: for D, strBCss in self.cursor.fetchall():
+        for D, strBCss in self.cursor:
             BCss = ast.literal_eval(strBCss)
             floor_sqrtD = D2floor_sqrtD[D]
             info = D_BCss_to_info(D, BCss, floor_sqrtD=floor_sqrtD)
@@ -472,7 +476,7 @@ class InfoDatabase:
             return None
     def _read_maybe_strBCss(self, D):
         # -> (None|strBCss:str)
-        self.cursor.execute(r'''
+        self.execute(r'''
             SELECT strBCss
                 from reduced_quadratic_surd_D_BCss_table
                 where D==(?)
@@ -499,7 +503,7 @@ class InfoDatabase:
                 return None
         def _read_maybe_reprBCss(self, D):
             # -> (None|reprBCss:bytes)
-            self.cursor.execute(r'''
+            self.execute(r'''
                 SELECT reprBCss
                     from reduced_quadratic_surd_D_BCss_table
                     where D==(?)
@@ -518,20 +522,38 @@ class InfoDatabase:
     def _write_D_BCss(self, D:int, BCss:[[(int, int)]]):
         strBCss = repr(BCss)
         self._write_D_strBCss(D, strBCss)
+
+    def execute(self, sql_stmt, *args, **kwargs):
+        nchanges = self.connection.total_changes
+        result = self.cursor.execute(sql_stmt, *args, **kwargs)
+        nchanges_ = self.connection.total_changes
+        CMD = sql_stmt.split(maxsplit=1)[0]
+        cmd_idx = ('SELECT', 'INSERT').index(CMD.upper())
+        assert nchanges_ == nchanges + cmd_idx
+        if result is not self.cursor:
+            print(f'result of execute INSERT: {type(result)}, {result!r}, {result!s}')
+        assert result is self.cursor
+
+        #print(dir(result))
+        #print(f'before/after of execute {CMD!r}: {nchanges} -> {nchanges_}: \n\targs={args}\n\tkwargs={kwargs}')
+        return result
     def _write_D_strBCss(self, D:int, strBCss:str):
-        self.cursor.execute(r'''
+        self.__write_D_strBCss(D, strBCss)
+        self.__write_D_strBCss(D, strBCss)#XXXXXXXXXXXXX
+        self.__write_D_strBCss(D, 'xxxx')#XXXXXXXXXXXXX
+    def __write_D_strBCss(self, D:int, strBCss:str):
+        return self.execute(r'''
             INSERT INTO reduced_quadratic_surd_D_BCss_table
                 (D, strBCss)
                 VALUES (?, ?)
                 ;
         ''', (D, strBCss))
-        return
 
         def _write_D_strBCss(self, D:int, strBCss:str):
             reprBCss = strBCss.encode(__class__.__encoding__)
             self._write_D_reprBCss(D, reprBCss)
         def _write_D_reprBCss(self, D:int, reprBCss:bytes):
-            self.cursor.execute(r'''
+            self.execute(r'''
                 INSERT INTO reduced_quadratic_surd_D_BCss_table
                     (D, reprBCss)
                     VALUES (?, ?)
