@@ -25,3 +25,7 @@ pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_d
 
 
 pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1 -rng 0 0 -url https://ctext.org/mutianzi-zhuan/zh -o 穆天子傳[ctext.org].txt
+
+
+pym extract_ctext_org.py -e utf8 --cache_fname cache_fname.dat --captcha_image_db_fname captcha_image_db_fname.dat --verbose --timeout=10 --time_sep=1 -rng 0 0 -url https://ctext.org/book-of-changes/zh -o 周易[ctext.org].txt
+

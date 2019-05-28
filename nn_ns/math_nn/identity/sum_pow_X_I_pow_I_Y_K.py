@@ -147,8 +147,8 @@ def _test():
     for k in range(0, 6):
      for x in [-1, 0, 1, 2, one/2, -one/3]:
       for y in [-1, 0, 1, 2, 3*one/4, -5*one/3]:
-       for m in range(-1, 5):
-        for n in range(-1, 5):
+       for m in range(-6, 6):
+        for n in range(-6, 6):
             if not (x!=0 or m==n or (m>=0 and n>=0)): continue
             print(f'(x,y,k,m,n)=({x},{y},{k},{m},{n})')
             s = sum_pow_X_I_pow_I_Y_K(x,y,k,m,n)

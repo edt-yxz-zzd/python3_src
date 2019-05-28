@@ -3,3 +3,11 @@ auto read captcha
     libsvm
     pcv
 
+download:
+    https://www.gushiwen.org/guwen/zhouyi.aspx
+    周易·易经全文 翻译_古诗文网.htm
+        https://so.gushiwen.org/guwen/bookv_218.aspx
+        周易·乾卦_古诗文网
+
+
+
