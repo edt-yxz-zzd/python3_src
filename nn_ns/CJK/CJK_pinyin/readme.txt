@@ -85,3 +85,19 @@ whole_BaGuaHelper.py
 =>22
 
 
+######################
+final_sm2ym2num2good_hanzi_str[refined_by_hand].txt
+    +final_sm2ym2num2good_hanzi_str.txt
+    ==>> 天苍地诞雷攻山凸，离蛤习坎兑沼巽臭。
+GuaMing2GuaHua.py
+=>24
+
+######################
+join_GuaHua_Helper.py
+    +GuaMing2GuaHua.py
+    +final_sm2ym2num2good_hanzi_str[refined_by_hand].txt
+    join_GuaHua_Helper.output.txt
+join_GuaHua_Helper.output[hand].txt
+    +join_GuaHua_Helper.output.txt
+=>26
+

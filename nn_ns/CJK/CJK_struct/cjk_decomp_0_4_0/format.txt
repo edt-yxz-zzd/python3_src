@@ -1,0 +1,20 @@
+c = component
+    c()
+m - modified variant
+    me(variant)     equivalent  ⺑:me(𡯂)
+    msp(variant)    special     丷:msp(八)
+    mo(variant)     outline     凸:mo(丄)凹:mo(凵)𠕄:mo(⺆)
+
+
+Code regex  Meaning                 Number of possible constituents
+c           component	0
+m.*         modified in some way, e.g. me=equivalent, msp=special, mo=outline, ml=left radical version	1
+w.*     second constituent contained within first in some way, e.g. w=within at the center, wbl=within at bottom left	2
+ba|d        second between first moving across or downwards	2
+lock        components locked together	2
+s.*     first component surrounds second, e.g. s=surrounds fully, str=surrounds around the top-right	2
+a       flows across	>= 2
+d       flows downwards	>= 2
+r.*     repeats and/or reflects in some way, e.g. refh=reflect horizontally, rot=rotate 180 degrees, rrefr= repeat with a reflection rightwards, ra=repeat across, r3d=repeat 3 times downwards, r3tr=repeat in a triangle, rst=repeat surrounding around the top	1
+
+
