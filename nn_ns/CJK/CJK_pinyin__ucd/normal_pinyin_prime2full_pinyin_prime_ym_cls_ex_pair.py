@@ -1,3 +1,4 @@
+# -*- coding: gbk -*-
 normal_pinyin_prime2full_pinyin_prime_ym_cls_ex_pair = \
 {'a': ('a', ('', '', 'a')),
  'ai': ('ai', ('', '', 'ai')),

@@ -36,9 +36,9 @@ def pairs_to_src2dsts(pairs):
 
 
 #############################################################
-from ..CJK_pinyin.find_cliques__sm2ym_num_graph import \
+from ..CJK_pinyin__ucd.find_cliques__sm2ym_num_graph import \
     iter_find_cliques__sm2ym_num_graph
-from ..CJK_pinyin.make_max_cliques__sm2ym_num_graph import \
+from ..CJK_pinyin__ucd.make_max_cliques__sm2ym_num_graph import \
     make_max_cliques__sm2ym_num_graph
 
 def edges_to_doublesize2max_clique_srcs_dsts_pairs(edges):
