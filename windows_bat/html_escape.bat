@@ -1,1 +1,1 @@
-py -m nn_ns.app.html_escape %*
+@py -m nn_ns.app.html_escape %*
