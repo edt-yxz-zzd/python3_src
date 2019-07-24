@@ -1,7 +1,12 @@
 
-'''
+r'''
 fix:
     avoid using "getmac.exe" since "getmac.exe" happens to be unsupported.
+original:
+    https://inc0x0.com/2019/02/changing-mac-address-windows-python-script/
+        https://github.com/inc0x0/change-mac
+see:
+    "all internet query.txt"
 '''
 
 ############################################################
@@ -11,14 +16,14 @@ from subprocess import Popen, PIPE
 import subprocess
 import locale
 def run_cmd_and_get_stdout(cmd):
-    #https://stackoverflow.com/questions/33435110/subprocess-popen-stdout
-    #bufsize=1?
     encoding = locale.getpreferredencoding(False)
     r = subprocess.run(cmd, stdout=PIPE, universal_newlines=True, check=True)
     #bug: return r.stdout.decode(encoding)
     assert type(r.stdout) is str # since universal_newlines=True??
     return r.stdout
 
+    #https://stackoverflow.com/questions/33435110/subprocess-popen-stdout
+    #bufsize=1?
     with Popen(cmd, stdout=PIPE, universal_newlines=True, check=True) as process:
         bs = b''.join(process.stdout)
         return bs.decode(encoding)
@@ -97,6 +102,8 @@ def list_all_interfaces_guid():
 
 ############################################################
 ############################################################
+
+
 import winreg
 import itertools
 import re
