@@ -11,6 +11,8 @@ __all__ = '''
 from .DATA import (
     website_per_page_img_url_regex
     ,echo_proxy_query_key
+		,min_width_num_pages
+		,max_width_num_pages
     )
 from ._configure_ import timeout
 from nn_ns.internet.webpage.fetch_webpage import fetch_webpage
@@ -67,14 +69,14 @@ def extract_mzitu_com__per_pages(html_page):
     assert '下一页' in last.get_text()
     str_IMG_TOTAL = last2.get_text()
     IMG_TOTAL = int(str_IMG_TOTAL)
-    assert IMG_TOTAL < 1000
+    assert IMG_TOTAL < 10**max_width_num_pages
 
     img_urls = []
     for i in range(0, IMG_TOTAL):
         n = i+1
         str_IMG_NUMBER = f'{n:0>2}'
         #assert len(str_IMG_NUMBER) == 2
-        assert 2 <= len(str_IMG_NUMBER) <= 3
+        assert min_width_num_pages <= len(str_IMG_NUMBER) <= max_width_num_pages
         img_url = init + str_IMG_NUMBER + tail
         img_urls.append(img_url)
     return html_title, img_urls
