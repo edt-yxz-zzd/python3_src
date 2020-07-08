@@ -11,6 +11,7 @@ def is_parent_abspath(parent_abspath, child_abspath):
 
         # assert '/sf' == os.path.join('a', '/sf')
         # assert r'a\sf' == os.path.join('a', 'sf')
+        # assert 'c:/sf' == os.path.join('c:/a', '/sf')
         new = os.path.join(parent_abspath, tail)
         #print(new, tail, parent, child)
         if new == tail:
@@ -19,7 +20,13 @@ def is_parent_abspath(parent_abspath, child_abspath):
         elif len(new) > len(child_abspath):
             # introduce a new seperator
             return False
+        elif len(new) < len(child_abspath):
+            # tail startswith a seperater
+            # driver + tail
+            return True
         else:
+            print(f"len(new)={len(new)}; len(child_abspath)={len(child_abspath)}")
+            print(f"new={new!r}\n\t child_abspath={child_abspath!r}")
             raise logic-error
     return False
 child = r'E:\my_data\program_source\windows_bat\[20160322]windows_bat.7z'

@@ -2,6 +2,7 @@
 #import locale
 import codecs
 from seed.text.encodings import sys_encoding, text_encoding
+from seed.tiny import print_err
 
 gb18030 = 'gb18030'
 big5 = 'big5'
@@ -21,6 +22,10 @@ def _find_fail_subrange(state, inc_decoder, data, begin, end):
     except ValueError:
         inc_decoder.setstate(state)
         end = mid
+    except Exception:
+        print_err(f'begin={begin}, mid={mid}, end={end}')
+        print_err(f'inc_decoder={inc_decoder}')
+        raise
     else:
         state = inc_decoder.getstate()
         begin = mid
@@ -152,6 +157,9 @@ def try_encoding(fname, encoding, detail=None, errors='strict'):
             print(s, file=detail)
         #raise logic - error # not UnicodeError ??
         return False
+    except Exception:
+        print_err(f'encoding={encoding}')
+        raise
     return True
 
 def try_encodings(fname, encodings = _try_encodings, detail=None):
@@ -184,6 +192,11 @@ try_all_encodings
 try_encodings
 convert
 
+def iter_apply_without_encodings(encodings, without_encodings):
+    without_encodings = frozenset(without_encodings)
+    return (encoding for encoding in encodings
+            if encoding not in without_encodings
+            )
 def main(argv = None):
     import argparse, sys
     from seed.filesys.glob1 import glob1
@@ -213,8 +226,14 @@ def main(argv = None):
                         const=all_encodings, default=(),
                         help='try all known encodings: ' + repr(all_encodings))
 
+    parser.add_argument('-wo', '--without_encodings', type=str,
+                        nargs='+', default=[],
+                        help='encoding list which would be avoid to use to decode file'
+                        )
+
     args = parser.parse_args(argv)
     encodings = args.encodings
+    without_encodings = frozenset(args.without_encodings)
     try:
         fname = glob1(args.fname)
     except ValueError as e:
@@ -224,6 +243,9 @@ def main(argv = None):
 
     if args.try_all:
         encodings += args.try_all
+    encodings = iter_apply_without_encodings(encodings, without_encodings)
+
+    if args.try_all:
         result_encodings = try_all_encodings(fname, encodings)
         print(result_encodings)
         return 0

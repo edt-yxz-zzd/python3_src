@@ -1,4 +1,8 @@
 
+# set PYTHONIOENCODING=utf8
+#   > py .... > log.txt
+#
+
 __all__ = '''
     '''.split()
 from itertools import chain

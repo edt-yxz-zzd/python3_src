@@ -1,11 +1,15 @@
 
+r"""
+auto_backup E:\my_data\program_config
+
+"""
 
 import os
 from datetime import datetime
 from seed.special_funcs import identity as eye_func
 from seed.debug.print_err import print_err
-from sand import get_pylike_encoding_from_path, \
-     FormatError
+from seed.lang.get_pylike_encoding import get_pylike_encoding_from_path
+from seed.excepts.sand_excepts import FormatError
 from .zip_by_7z import zip_by_7z
 
 
