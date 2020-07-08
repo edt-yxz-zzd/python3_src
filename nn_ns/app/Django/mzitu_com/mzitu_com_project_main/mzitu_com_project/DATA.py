@@ -33,10 +33,15 @@ website_per_page_img_url_regex = re.compile(
 assert website_per_page_img_url_regex.fullmatch('https://i.meizitu.net/2015/02/03t01.jpg')
 assert website_per_page_img_url_regex.fullmatch(r"https://i3.mmzztt.com/2020/06/27b01.jpg")
 
+
+min_width_num_pages = 2
+max_width_num_pages = 3
 website_per_page_img_url_regex = re.compile(
-    r"https?://[^/]+/\d{4}/\d{2}/\d{2}[a-z](?P<IMG_NUMBER>\d+)(?:-\w+)?[.]jpg"
+    rf"https?://[^/]+/\d{{4}}/\d{{2}}/\d{{2}}[a-z](?P<IMG_NUMBER>\d{{{min_width_num_pages},{max_width_num_pages}}})(?:-\w+)?[.]jpg"
     )
 assert website_per_page_img_url_regex.fullmatch(r"https://i5.mmzztt.com/2020/05/19b118.jpg")
+	#https://www.mzitu.com/232347
+	#http://127.0.0.1:8000/per/232347/
 
 
 
