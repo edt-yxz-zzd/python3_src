@@ -67,13 +67,14 @@ def extract_mzitu_com__per_pages(html_page):
     assert '下一页' in last.get_text()
     str_IMG_TOTAL = last2.get_text()
     IMG_TOTAL = int(str_IMG_TOTAL)
-    assert IMG_TOTAL < 100
+    assert IMG_TOTAL < 1000
 
     img_urls = []
     for i in range(0, IMG_TOTAL):
         n = i+1
         str_IMG_NUMBER = f'{n:0>2}'
-        assert len(str_IMG_NUMBER) == 2
+        #assert len(str_IMG_NUMBER) == 2
+        assert 2 <= len(str_IMG_NUMBER) <= 3
         img_url = init + str_IMG_NUMBER + tail
         img_urls.append(img_url)
     return html_title, img_urls
