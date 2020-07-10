@@ -13,11 +13,13 @@ def _show(d):
 	for k,v in sorted(d.items()):
 		print(f"{k!s}={v!r}")
 def generate_forwarding_shell_script(*
-		, otemplate, force
+		, otemplate
+		, force, verbose
 		, idir, odir
 		, iencoding, oencoding
 		):
 	force = bool(force)
+	verbose = bool(verbose)
 	omode = 'wt' if force else 'xt'
 	if 0:
 		print(otemplate)
@@ -26,8 +28,9 @@ def generate_forwarding_shell_script(*
 		print(iencoding)
 		print(odir)
 		print(oencoding)
-	_show({**locals()})
-	print("="*25)
+	if verbose:
+		_show({**locals()})
+		print("="*25)
 
 	ipath = Path(idir)
 	opath = Path(odir)
@@ -40,7 +43,8 @@ def generate_forwarding_shell_script(*
 			ofname = opath/ifname.name
 			if ofname.exists():
 				if not force:
-					print(f"-skip: {str(ofname)!r}")
+					if verbose:
+						print(f"-skip: {str(ofname)!r}")
 					continue
 				if ofname.samefile(ifname): raise Exception('samefile: {ifname!r}=={ofname!r}')
 
@@ -82,6 +86,9 @@ def main(args=None):
 	parser.add_argument('-f', '--force', action='store_true'
 						, default = False
 						, help='open mode for output file')
+	parser.add_argument('-v', '--verbose', action='store_true'
+						, default = False
+						, help='verbose')
 
 	args = parser.parse_args(args)
 	otemplate = args.output_file_template
@@ -94,18 +101,12 @@ def main(args=None):
 	generate_forwarding_shell_script(
 			otemplate=otemplate
 			,force=args.force
+			,verbose=args.verbose
 			,idir=idir
 			,odir=odir
 			,iencoding=iencoding
 			,oencoding=oencoding
 			)
-"""
-	ifname 
-	with may_open_stdin(may_ifname, 'rt', encoding=encoding) as fin:
-
-	may_ofname = args.output
-	with may_open_stdout(may_ofname, omode, encoding=encoding) as fout:
-"""
 if __name__ == "__main__":
 	main()
 
