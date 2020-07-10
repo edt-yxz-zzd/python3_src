@@ -1,0 +1,26 @@
+#g2
+	#goto start
+	#echo ======= cp \*.sh
+	#export cmd='cp -r -u -i -t $my_git_sh/ $my_sh/*'
+	#echo ======= $cmd
+	#echo $cmd | bash
+	#======
+	#$cmd
+	#exec $cmd
+	#echo $cmd | bash -i -s -m -I -b
+	#bash -c $cmd
+	#env bash -i -c $cmd
+
+	#:start
+	echo ======= cp \*.sh
+	export cmd='bash "$my_git_sh/main_sh/ref_sh"'
+	echo ======= $cmd
+	echo $cmd | bash
+
+
+	export cmd='cp -u -i -t $my_sh/ $my_git_sh/my_sh/*'
+	echo ======= $cmd
+	echo $cmd | bash
+
+	echo ======= YOU MAY: 'chmod +x $my_sh/*'
+

@@ -1,0 +1,5 @@
+#
+#g_out: \ddd+ --> cjk
+#py $(which g_out.py)
+#py $my_git_sh/git_output2utf8.py
+py -m bash_script.git_output2utf8 "$@"

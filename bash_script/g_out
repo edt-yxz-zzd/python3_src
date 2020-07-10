@@ -1,3 +1,0 @@
-#
-#g_out: \ddd+ --> cjk
-py $(which g_out.py)
