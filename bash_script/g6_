@@ -1,5 +1,5 @@
 #g6_
 	export cmd='git commit --all -m "$@"'
 	export cmd='git commit --all -m'
-	echo ======= $cmd "$@"
-	echo $cmd "$@" | bash | g_out
+	echo ======= $cmd \""$@"\"
+	echo $cmd \""$@"\" | bash | g_out
