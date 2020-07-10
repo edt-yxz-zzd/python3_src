@@ -1,0 +1,4 @@
+#g7
+	export cmd='git push'
+	echo ======= $cmd
+	echo $cmd | bash

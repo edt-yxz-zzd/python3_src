@@ -1,0 +1,5 @@
+#g2
+	echo ======= cp *.sh
+	export cmd='cp -u -i -t $my_git_sh/ $my_sh/*'
+	echo ======= $(cat $(which cp_sh.sh))
+	cp_sh.sh

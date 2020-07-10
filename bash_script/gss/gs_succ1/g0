@@ -1,0 +1,7 @@
+#g0
+	echo ======= cd into
+	echo cd \$my_git_py
+	echo cd \$my_git_txt
+	echo ======= pwd
+	pwd
+	

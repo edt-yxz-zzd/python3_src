@@ -1,0 +1,21 @@
+#g1
+	echo ======= to del
+	export cmd='find . \( -name ".*" -or -name "*~"\) -and \( -not \( -name "*.swp" -or -name ".git" -or -name ".gitignore" -or -name "." \) \)'
+		###find . \( -name ".*" \) -and \( -not -type d \)
+		#to del
+	echo ======= $(cat $(which f_del.sh))
+	f_del.sh
+
+	echo ======= vim not complete
+	export 'cmd=find . -name "*.swp"'
+		#not del, to recovery
+	#echo ======= $cmd
+	#$cmd
+	#exec $cmd
+	#alias main=$cmd
+	#main
+	#/my_sh/g1: line 8: main: command not found
+	echo ======= $(cat $(which f_swp.sh))
+	f_swp.sh
+	#find . -name '*.*'
+

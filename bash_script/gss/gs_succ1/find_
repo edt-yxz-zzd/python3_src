@@ -1,0 +1,13 @@
+echo "$0"
+echo "$1"
+echo "$2"
+echo "$@"
+echo "$1" "$2" "$3" "$4" "$5"
+echo "$1" "$2" "$3" $4 "$5"
+echo 4=$4 
+pwd
+find "$@"
+find "$1" "$2" "$3" "$4" "$5"
+find "$1" "$2" "$3" $4 "$5"
+echo xxxx
+find . \( -name "f_*" \)

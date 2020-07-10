@@ -1,0 +1,4 @@
+#g_add
+	export cmd='git add --all'
+	echo ======= $cmd
+	echo $cmd | bash

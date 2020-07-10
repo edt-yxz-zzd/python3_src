@@ -1,0 +1,6 @@
+#g4
+	export cmd='git pull'
+	echo ======= $cmd
+	alias main=$cmd
+	main
+	

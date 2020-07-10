@@ -1,0 +1,3 @@
+#g4
+	echo ======= git pull
+	git pull

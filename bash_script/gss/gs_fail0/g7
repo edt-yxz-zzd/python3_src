@@ -1,0 +1,6 @@
+#g7
+	export cmd='git push'
+	echo ======= $cmd
+	alias main=$cmd
+	main
+

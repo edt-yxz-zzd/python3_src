@@ -1,0 +1,3 @@
+#g6_
+	echo ======= git commit --all -m "$@"
+	git commit --all -m "$@"

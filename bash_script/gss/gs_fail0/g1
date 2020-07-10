@@ -1,0 +1,17 @@
+g1
+	echo ======= vim not complete
+	export cmd='find -name "*.swp"'
+		#not del, to recovery
+	echo ======= $cmd
+	$cmd
+	alias main=$cmd
+	main
+	
+	echo ======= to del
+	export cmd='find . \( -name ".*" \) -and \( -not \( -name "*.swp" -or -name ".git" -or -name ".gitignore" -or -name "." \) \)'
+		###find . \( -name ".*" \) -and \( -not -type d \)
+		#to del
+	echo ======= $cmd
+	alias main=$cmd
+	main
+

@@ -1,0 +1,6 @@
+#g6_
+	export cmd='git commit --all -m "$@"'
+	echo ======= $cmd
+	alias main=$cmd
+	main
+	

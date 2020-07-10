@@ -1,0 +1,6 @@
+#g_st
+	export cmd='git status'
+	echo ======= $cmd
+	alias main=$cmd
+	main
+	

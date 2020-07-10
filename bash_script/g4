@@ -1,0 +1,4 @@
+#g4
+	export cmd='git pull'
+	echo ======= $cmd
+	echo $cmd | bash

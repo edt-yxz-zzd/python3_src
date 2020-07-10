@@ -1,4 +1,5 @@
 # -----
+#   work!!!
 #!$(PREFIX)/bin/env bash
 #    fail
 #! /data/data/com.termux/files/usr/bin/env bash

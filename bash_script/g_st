@@ -1,0 +1,9 @@
+#g_st
+	export cmd='git status'
+	echo ======= $cmd | g_out
+	echo $cmd | bash | g_out
+	echo =======
+	echo =======
+	echo =======
+	echo ======= $cmd
+	echo $cmd | bash

@@ -1,0 +1,6 @@
+#g_add
+	export cmd='git add --all'
+	echo ======= $cmd
+	alias main=$cmd
+	main
+

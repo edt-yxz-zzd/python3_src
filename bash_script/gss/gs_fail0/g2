@@ -1,0 +1,7 @@
+#g2
+	echo ======= cp *.sh
+	export cmd='cp -u -i -t $my_git_sh/ $my_sh/*'
+	echo ======= $cmd
+	alias main=$cmd
+	main
+	
