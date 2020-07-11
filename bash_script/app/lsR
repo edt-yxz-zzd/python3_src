@@ -1,0 +1,20 @@
+##lsR = ls -R -b -1 -A -Q --quoting-style=c
+##	-B
+##		ignore *~
+##	-R, --recursive
+##	-A, --almost-all
+##      do not list implied . and ..
+##	-Q
+##		double quotes
+##  --quoting-style=WORD
+##	-b, --escape
+##      print C-style escapes for nongraphic characters
+##	-1
+##		list one file per line.
+##		Avoid '\n' with -q or -b
+##$ cd /sdcard/0my_files/
+##$ ls -R -b -1 -A -Q --quoting-style=c music/ > tmp/music.txt
+##
+##
+ls -R -b -1 -A -Q --quoting-style=c "$@"
+

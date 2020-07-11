@@ -1,14 +1,20 @@
 # ----
-#python -m bash_script.gen_forwarding_sh  "$@"
-(python -m bash_script.gen_forwarding_sh \
+#python -m bash_script.py.gen_forwarding_sh  "$@"
+(python -m bash_script.py.gen_forwarding_sh \
 	-o $my_git_sh/my_sh/ \
 	-i $my_git_sh/main_sh/ \
 	-t  'bash $my_git_sh/main_sh/{} "$@"' \
 	"$@" \
 )
-(python -m bash_script.gen_forwarding_sh \
+(python -m bash_script.py.gen_forwarding_sh \
 	-o $my_git_sh/my_sh/ \
 	-i $my_git_sh/gss/export/ \
 	-t  'bash $my_git_sh/gss/export/{} "$@"' \
+	"$@" \
+)
+(python -m bash_script.py.gen_forwarding_sh \
+	-o $my_git_sh/my_sh/ \
+	-i $my_git_sh/app/ \
+	-t  'bash $my_git_sh/app/{} "$@"' \
 	"$@" \
 )

@@ -1,1 +1,1 @@
-bash $my_git_sh/gss/export/mz.sh "$@"
+bash $my_git_sh/app/mz.sh "$@"
