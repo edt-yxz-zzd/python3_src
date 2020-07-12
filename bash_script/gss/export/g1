@@ -12,3 +12,9 @@
 	echo ======= $cmd
 	echo $cmd | bash
 	
+	echo ======= 'github file<=50MB > 47MiB'
+	export cmd='find . -size +47M'
+		#not del, to split by rar
+	echo ======= $cmd
+	echo $cmd | bash
+	
