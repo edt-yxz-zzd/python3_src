@@ -1,5 +1,10 @@
 
-
+r"""
+f.seek(chunk_size * offset);
+ValueError: cannot fit 'int' into an offset-sized integer
+    NOTE:
+        file_byte_offset = begin*chunk_size
+#"""
 
 
 
@@ -167,9 +172,10 @@ def t1():
 
 def main(args = None):
     import argparse, sys
-    from sand import glob1
+    #from sand import glob1
+    from seed.filesys.glob1 import glob1
     from pprint import pprint
-    from sand.for_libs.for_argparse import str2pint, str2uint
+    from seed.for_libs.for_argparse import str2pint, str2uint
 
     parser = argparse.ArgumentParser(
         description='view snippet content of given binary file')

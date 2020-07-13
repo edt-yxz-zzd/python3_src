@@ -222,6 +222,7 @@ forbid_bs_callables = \
     ,'print'        # remove
     ,'quit'         # remove
     ,'setattr'      # remove
+    ,'breakpoint'      # remove
     }
 allow_bs_callables = \
     {'abs'
