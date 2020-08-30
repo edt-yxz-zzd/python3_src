@@ -1,0 +1,437 @@
+{'atomic_buttomup': {'': ['cp1258'],
+                     'big5': ['cp950'],
+                     'big5hkscs': ['gb18030'],
+                     'cp1258': ['big5', 'cp949', 'gb2312', 'iso2022_jp'],
+                     'cp932': ['gb18030'],
+                     'cp949': ['iso2022_jp_2'],
+                     'cp950': ['big5hkscs', 'gbk'],
+                     'euc_jis_2004': ['gb18030'],
+                     'euc_jisx0213': ['gb18030'],
+                     'euc_jp': ['euc_jis_2004', 'gbk', 'iso2022_jp_2'],
+                     'gb18030': [],
+                     'gb2312': ['gbk', 'iso2022_jp_2'],
+                     'gbk': ['gb18030'],
+                     'iso2022_jp': ['cp932',
+                                    'euc_jp',
+                                    'iso2022_jp_2004',
+                                    'iso2022_jp_3'],
+                     'iso2022_jp_2': ['gb18030'],
+                     'iso2022_jp_2004': ['euc_jis_2004'],
+                     'iso2022_jp_3': ['euc_jisx0213']},
+ 'atomic_buttomup__txt': '<\n'
+                         '  cp1258\n'
+                         '    big5\n'
+                         '      cp950\n'
+                         '        big5hkscs\n'
+                         '          gb18030\n'
+                         '        gbk\n'
+                         '          gb18030\n'
+                         '    cp949\n'
+                         '      iso2022_jp_2\n'
+                         '        gb18030\n'
+                         '    gb2312\n'
+                         '      gbk\n'
+                         '        gb18030\n'
+                         '      iso2022_jp_2\n'
+                         '        gb18030\n'
+                         '    iso2022_jp\n'
+                         '      cp932\n'
+                         '        gb18030\n'
+                         '      euc_jp\n'
+                         '        euc_jis_2004\n'
+                         '          gb18030\n'
+                         '        gbk\n'
+                         '          gb18030\n'
+                         '        iso2022_jp_2\n'
+                         '          gb18030\n'
+                         '      iso2022_jp_2004\n'
+                         '        euc_jis_2004\n'
+                         '          gb18030\n'
+                         '      iso2022_jp_3\n'
+                         '        euc_jisx0213\n'
+                         '          gb18030\n',
+ 'atomic_topdown': {'': ['gb18030'],
+                    'big5': ['cp1258'],
+                    'big5hkscs': ['cp950'],
+                    'cp1258': [],
+                    'cp932': ['iso2022_jp'],
+                    'cp949': ['cp1258'],
+                    'cp950': ['big5'],
+                    'euc_jis_2004': ['euc_jp', 'iso2022_jp_2004'],
+                    'euc_jisx0213': ['iso2022_jp_3'],
+                    'euc_jp': ['iso2022_jp'],
+                    'gb18030': ['big5hkscs',
+                                'cp932',
+                                'euc_jis_2004',
+                                'euc_jisx0213',
+                                'gbk',
+                                'iso2022_jp_2'],
+                    'gb2312': ['cp1258'],
+                    'gbk': ['cp950', 'euc_jp', 'gb2312'],
+                    'iso2022_jp': ['cp1258'],
+                    'iso2022_jp_2': ['cp949', 'euc_jp', 'gb2312'],
+                    'iso2022_jp_2004': ['iso2022_jp'],
+                    'iso2022_jp_3': ['iso2022_jp']},
+ 'atomic_topdown__txt': '>\n'
+                        '  gb18030\n'
+                        '    big5hkscs\n'
+                        '      cp950\n'
+                        '        big5\n'
+                        '          cp1258\n'
+                        '    cp932\n'
+                        '      iso2022_jp\n'
+                        '        cp1258\n'
+                        '    euc_jis_2004\n'
+                        '      euc_jp\n'
+                        '        iso2022_jp\n'
+                        '          cp1258\n'
+                        '      iso2022_jp_2004\n'
+                        '        iso2022_jp\n'
+                        '          cp1258\n'
+                        '    euc_jisx0213\n'
+                        '      iso2022_jp_3\n'
+                        '        iso2022_jp\n'
+                        '          cp1258\n'
+                        '    gbk\n'
+                        '      cp950\n'
+                        '        big5\n'
+                        '          cp1258\n'
+                        '      euc_jp\n'
+                        '        iso2022_jp\n'
+                        '          cp1258\n'
+                        '      gb2312\n'
+                        '        cp1258\n'
+                        '    iso2022_jp_2\n'
+                        '      cp949\n'
+                        '        cp1258\n'
+                        '      euc_jp\n'
+                        '        iso2022_jp\n'
+                        '          cp1258\n'
+                        '      gb2312\n'
+                        '        cp1258\n',
+ 'encoding2relation2encodings__std_cjk_eq': {'big5': {'<': ['big5hkscs',
+                                                            'cp950',
+                                                            'gb18030',
+                                                            'gbk'],
+                                                      '>': ['cp1258']},
+                                             'big5hkscs': {'<': ['gb18030'],
+                                                           '>': ['big5',
+                                                                 'cp1258',
+                                                                 'cp950']},
+                                             'cp1258': {'<': ['big5',
+                                                              'big5hkscs',
+                                                              'cp932',
+                                                              'cp949',
+                                                              'cp950',
+                                                              'euc_jis_2004',
+                                                              'euc_jisx0213',
+                                                              'euc_jp',
+                                                              'gb18030',
+                                                              'gb2312',
+                                                              'gbk',
+                                                              'iso2022_jp',
+                                                              'iso2022_jp_2',
+                                                              'iso2022_jp_2004',
+                                                              'iso2022_jp_3'],
+                                                        '>': []},
+                                             'cp932': {'<': ['gb18030'],
+                                                       '>': ['cp1258',
+                                                             'iso2022_jp']},
+                                             'cp949': {'<': ['gb18030',
+                                                             'iso2022_jp_2'],
+                                                       '>': ['cp1258']},
+                                             'cp950': {'<': ['big5hkscs',
+                                                             'gb18030',
+                                                             'gbk'],
+                                                       '>': ['big5', 'cp1258']},
+                                             'euc_jis_2004': {'<': ['gb18030'],
+                                                              '>': ['cp1258',
+                                                                    'euc_jp',
+                                                                    'iso2022_jp',
+                                                                    'iso2022_jp_2004']},
+                                             'euc_jisx0213': {'<': ['gb18030'],
+                                                              '>': ['cp1258',
+                                                                    'iso2022_jp',
+                                                                    'iso2022_jp_3']},
+                                             'euc_jp': {'<': ['euc_jis_2004',
+                                                              'gb18030',
+                                                              'gbk',
+                                                              'iso2022_jp_2'],
+                                                        '>': ['cp1258',
+                                                              'iso2022_jp']},
+                                             'gb18030': {'<': [],
+                                                         '>': ['big5',
+                                                               'big5hkscs',
+                                                               'cp1258',
+                                                               'cp932',
+                                                               'cp949',
+                                                               'cp950',
+                                                               'euc_jis_2004',
+                                                               'euc_jisx0213',
+                                                               'euc_jp',
+                                                               'gb2312',
+                                                               'gbk',
+                                                               'iso2022_jp',
+                                                               'iso2022_jp_2',
+                                                               'iso2022_jp_2004',
+                                                               'iso2022_jp_3']},
+                                             'gb2312': {'<': ['gb18030',
+                                                              'gbk',
+                                                              'iso2022_jp_2'],
+                                                        '>': ['cp1258']},
+                                             'gbk': {'<': ['gb18030'],
+                                                     '>': ['big5',
+                                                           'cp1258',
+                                                           'cp950',
+                                                           'euc_jp',
+                                                           'gb2312',
+                                                           'iso2022_jp']},
+                                             'iso2022_jp': {'<': ['cp932',
+                                                                  'euc_jis_2004',
+                                                                  'euc_jisx0213',
+                                                                  'euc_jp',
+                                                                  'gb18030',
+                                                                  'gbk',
+                                                                  'iso2022_jp_2',
+                                                                  'iso2022_jp_2004',
+                                                                  'iso2022_jp_3'],
+                                                            '>': ['cp1258']},
+                                             'iso2022_jp_2': {'<': ['gb18030'],
+                                                              '>': ['cp1258',
+                                                                    'cp949',
+                                                                    'euc_jp',
+                                                                    'gb2312',
+                                                                    'iso2022_jp']},
+                                             'iso2022_jp_2004': {'<': ['euc_jis_2004',
+                                                                       'gb18030'],
+                                                                 '>': ['cp1258',
+                                                                       'iso2022_jp']},
+                                             'iso2022_jp_3': {'<': ['euc_jisx0213',
+                                                                    'gb18030'],
+                                                              '>': ['cp1258',
+                                                                    'iso2022_jp']}},
+ 'encoding2std_cjk_eq_encoding': {'big5': 'big5',
+                                  'big5hkscs': 'big5hkscs',
+                                  'cp1258': 'cp1258',
+                                  'cp932': 'cp932',
+                                  'cp949': 'cp949',
+                                  'cp950': 'cp950',
+                                  'euc_jis_2004': 'euc_jis_2004',
+                                  'euc_jisx0213': 'euc_jisx0213',
+                                  'euc_jp': 'euc_jp',
+                                  'euc_kr': 'cp949',
+                                  'gb18030': 'gb18030',
+                                  'gb2312': 'gb2312',
+                                  'gbk': 'gbk',
+                                  'hz': 'gb2312',
+                                  'iso2022_jp': 'iso2022_jp',
+                                  'iso2022_jp_1': 'euc_jp',
+                                  'iso2022_jp_2': 'iso2022_jp_2',
+                                  'iso2022_jp_2004': 'iso2022_jp_2004',
+                                  'iso2022_jp_3': 'iso2022_jp_3',
+                                  'iso2022_jp_ext': 'euc_jp',
+                                  'iso2022_kr': 'cp949',
+                                  'johab': 'cp949',
+                                  'shift_jis': 'iso2022_jp',
+                                  'shift_jis_2004': 'iso2022_jp_2004',
+                                  'shift_jisx0213': 'iso2022_jp_3',
+                                  'utf8': 'gb18030'},
+ 'encoding_cjk_part_eq_classes': [('big5',),
+                                  ('big5hkscs',),
+                                  ('cp1258',),
+                                  ('cp932',),
+                                  ('cp949', 'euc_kr', 'iso2022_kr', 'johab'),
+                                  ('cp950',),
+                                  ('euc_jis_2004',),
+                                  ('euc_jisx0213',),
+                                  ('euc_jp', 'iso2022_jp_1', 'iso2022_jp_ext'),
+                                  ('gb18030', 'utf8'),
+                                  ('gb2312', 'hz'),
+                                  ('gbk',),
+                                  ('iso2022_jp', 'shift_jis'),
+                                  ('iso2022_jp_2',),
+                                  ('iso2022_jp_2004', 'shift_jis_2004'),
+                                  ('iso2022_jp_3', 'shift_jisx0213')],
+ 'encoding_cjk_part_eq_classes__txt': 'big5\n'
+                                      'big5hkscs\n'
+                                      'cp1258\n'
+                                      'cp932\n'
+                                      'cp949 = euc_kr = iso2022_kr = johab\n'
+                                      'cp950\n'
+                                      'euc_jis_2004\n'
+                                      'euc_jisx0213\n'
+                                      'euc_jp = iso2022_jp_1 = iso2022_jp_ext\n'
+                                      'gb18030 = utf8\n'
+                                      'gb2312 = hz\n'
+                                      'gbk\n'
+                                      'iso2022_jp = shift_jis\n'
+                                      'iso2022_jp_2\n'
+                                      'iso2022_jp_2004 = shift_jis_2004\n'
+                                      'iso2022_jp_3 = shift_jisx0213\n',
+ 'std_cjk_eq_encoding_atomic_lt_pairs': [('big5', 'cp950'),
+                                         ('big5hkscs', 'gb18030'),
+                                         ('cp1258', 'big5'),
+                                         ('cp1258', 'cp949'),
+                                         ('cp1258', 'gb2312'),
+                                         ('cp1258', 'iso2022_jp'),
+                                         ('cp932', 'gb18030'),
+                                         ('cp949', 'iso2022_jp_2'),
+                                         ('cp950', 'big5hkscs'),
+                                         ('cp950', 'gbk'),
+                                         ('euc_jis_2004', 'gb18030'),
+                                         ('euc_jisx0213', 'gb18030'),
+                                         ('euc_jp', 'euc_jis_2004'),
+                                         ('euc_jp', 'gbk'),
+                                         ('euc_jp', 'iso2022_jp_2'),
+                                         ('gb2312', 'gbk'),
+                                         ('gb2312', 'iso2022_jp_2'),
+                                         ('gbk', 'gb18030'),
+                                         ('iso2022_jp', 'cp932'),
+                                         ('iso2022_jp', 'euc_jp'),
+                                         ('iso2022_jp', 'iso2022_jp_2004'),
+                                         ('iso2022_jp', 'iso2022_jp_3'),
+                                         ('iso2022_jp_2', 'gb18030'),
+                                         ('iso2022_jp_2004', 'euc_jis_2004'),
+                                         ('iso2022_jp_3', 'euc_jisx0213')],
+ 'std_cjk_eq_encoding_atomic_lt_pairs__txt': 'big5 *<* cp950\n'
+                                             'big5hkscs *<* gb18030\n'
+                                             'cp1258 *<* big5\n'
+                                             'cp1258 *<* cp949\n'
+                                             'cp1258 *<* gb2312\n'
+                                             'cp1258 *<* iso2022_jp\n'
+                                             'cp932 *<* gb18030\n'
+                                             'cp949 *<* iso2022_jp_2\n'
+                                             'cp950 *<* big5hkscs\n'
+                                             'cp950 *<* gbk\n'
+                                             'euc_jis_2004 *<* gb18030\n'
+                                             'euc_jisx0213 *<* gb18030\n'
+                                             'euc_jp *<* euc_jis_2004\n'
+                                             'euc_jp *<* gbk\n'
+                                             'euc_jp *<* iso2022_jp_2\n'
+                                             'gb2312 *<* gbk\n'
+                                             'gb2312 *<* iso2022_jp_2\n'
+                                             'gbk *<* gb18030\n'
+                                             'iso2022_jp *<* cp932\n'
+                                             'iso2022_jp *<* euc_jp\n'
+                                             'iso2022_jp *<* iso2022_jp_2004\n'
+                                             'iso2022_jp *<* iso2022_jp_3\n'
+                                             'iso2022_jp_2 *<* gb18030\n'
+                                             'iso2022_jp_2004 *<* '
+                                             'euc_jis_2004\n'
+                                             'iso2022_jp_3 *<* euc_jisx0213\n',
+ 'std_cjk_eq_encoding_lt_pairs': [('big5', 'big5hkscs'),
+                                  ('big5', 'cp950'),
+                                  ('big5', 'gb18030'),
+                                  ('big5', 'gbk'),
+                                  ('big5hkscs', 'gb18030'),
+                                  ('cp1258', 'big5'),
+                                  ('cp1258', 'big5hkscs'),
+                                  ('cp1258', 'cp932'),
+                                  ('cp1258', 'cp949'),
+                                  ('cp1258', 'cp950'),
+                                  ('cp1258', 'euc_jis_2004'),
+                                  ('cp1258', 'euc_jisx0213'),
+                                  ('cp1258', 'euc_jp'),
+                                  ('cp1258', 'gb18030'),
+                                  ('cp1258', 'gb2312'),
+                                  ('cp1258', 'gbk'),
+                                  ('cp1258', 'iso2022_jp'),
+                                  ('cp1258', 'iso2022_jp_2'),
+                                  ('cp1258', 'iso2022_jp_2004'),
+                                  ('cp1258', 'iso2022_jp_3'),
+                                  ('cp932', 'gb18030'),
+                                  ('cp949', 'gb18030'),
+                                  ('cp949', 'iso2022_jp_2'),
+                                  ('cp950', 'big5hkscs'),
+                                  ('cp950', 'gb18030'),
+                                  ('cp950', 'gbk'),
+                                  ('euc_jis_2004', 'gb18030'),
+                                  ('euc_jisx0213', 'gb18030'),
+                                  ('euc_jp', 'euc_jis_2004'),
+                                  ('euc_jp', 'gb18030'),
+                                  ('euc_jp', 'gbk'),
+                                  ('euc_jp', 'iso2022_jp_2'),
+                                  ('gb2312', 'gb18030'),
+                                  ('gb2312', 'gbk'),
+                                  ('gb2312', 'iso2022_jp_2'),
+                                  ('gbk', 'gb18030'),
+                                  ('iso2022_jp', 'cp932'),
+                                  ('iso2022_jp', 'euc_jis_2004'),
+                                  ('iso2022_jp', 'euc_jisx0213'),
+                                  ('iso2022_jp', 'euc_jp'),
+                                  ('iso2022_jp', 'gb18030'),
+                                  ('iso2022_jp', 'gbk'),
+                                  ('iso2022_jp', 'iso2022_jp_2'),
+                                  ('iso2022_jp', 'iso2022_jp_2004'),
+                                  ('iso2022_jp', 'iso2022_jp_3'),
+                                  ('iso2022_jp_2', 'gb18030'),
+                                  ('iso2022_jp_2004', 'euc_jis_2004'),
+                                  ('iso2022_jp_2004', 'gb18030'),
+                                  ('iso2022_jp_3', 'euc_jisx0213'),
+                                  ('iso2022_jp_3', 'gb18030')],
+ 'std_cjk_eq_encoding_lt_pairs__txt': 'big5 < big5hkscs\n'
+                                      'big5 < cp950\n'
+                                      'big5 < gb18030\n'
+                                      'big5 < gbk\n'
+                                      'big5hkscs < gb18030\n'
+                                      'cp1258 < big5\n'
+                                      'cp1258 < big5hkscs\n'
+                                      'cp1258 < cp932\n'
+                                      'cp1258 < cp949\n'
+                                      'cp1258 < cp950\n'
+                                      'cp1258 < euc_jis_2004\n'
+                                      'cp1258 < euc_jisx0213\n'
+                                      'cp1258 < euc_jp\n'
+                                      'cp1258 < gb18030\n'
+                                      'cp1258 < gb2312\n'
+                                      'cp1258 < gbk\n'
+                                      'cp1258 < iso2022_jp\n'
+                                      'cp1258 < iso2022_jp_2\n'
+                                      'cp1258 < iso2022_jp_2004\n'
+                                      'cp1258 < iso2022_jp_3\n'
+                                      'cp932 < gb18030\n'
+                                      'cp949 < gb18030\n'
+                                      'cp949 < iso2022_jp_2\n'
+                                      'cp950 < big5hkscs\n'
+                                      'cp950 < gb18030\n'
+                                      'cp950 < gbk\n'
+                                      'euc_jis_2004 < gb18030\n'
+                                      'euc_jisx0213 < gb18030\n'
+                                      'euc_jp < euc_jis_2004\n'
+                                      'euc_jp < gb18030\n'
+                                      'euc_jp < gbk\n'
+                                      'euc_jp < iso2022_jp_2\n'
+                                      'gb2312 < gb18030\n'
+                                      'gb2312 < gbk\n'
+                                      'gb2312 < iso2022_jp_2\n'
+                                      'gbk < gb18030\n'
+                                      'iso2022_jp < cp932\n'
+                                      'iso2022_jp < euc_jis_2004\n'
+                                      'iso2022_jp < euc_jisx0213\n'
+                                      'iso2022_jp < euc_jp\n'
+                                      'iso2022_jp < gb18030\n'
+                                      'iso2022_jp < gbk\n'
+                                      'iso2022_jp < iso2022_jp_2\n'
+                                      'iso2022_jp < iso2022_jp_2004\n'
+                                      'iso2022_jp < iso2022_jp_3\n'
+                                      'iso2022_jp_2 < gb18030\n'
+                                      'iso2022_jp_2004 < euc_jis_2004\n'
+                                      'iso2022_jp_2004 < gb18030\n'
+                                      'iso2022_jp_3 < euc_jisx0213\n'
+                                      'iso2022_jp_3 < gb18030\n',
+ 'std_cjk_eq_encodings': {'big5',
+                          'big5hkscs',
+                          'cp1258',
+                          'cp932',
+                          'cp949',
+                          'cp950',
+                          'euc_jis_2004',
+                          'euc_jisx0213',
+                          'euc_jp',
+                          'gb18030',
+                          'gb2312',
+                          'gbk',
+                          'iso2022_jp',
+                          'iso2022_jp_2',
+                          'iso2022_jp_2004',
+                          'iso2022_jp_3'}}

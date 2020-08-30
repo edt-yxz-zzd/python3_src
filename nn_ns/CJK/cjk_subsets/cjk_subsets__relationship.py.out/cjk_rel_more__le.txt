@@ -1,0 +1,171 @@
+##############################
+big5
+big5hkscs
+cp1258
+cp932
+cp949 = euc_kr = iso2022_kr = johab
+cp950
+euc_jis_2004
+euc_jisx0213
+euc_jp = iso2022_jp_1 = iso2022_jp_ext
+gb18030 = utf8
+gb2312 = hz
+gbk
+iso2022_jp = shift_jis
+iso2022_jp_2
+iso2022_jp_2004 = shift_jis_2004
+iso2022_jp_3 = shift_jisx0213
+
+##############################
+big5 < big5hkscs
+big5 < cp950
+big5 < gb18030
+big5 < gbk
+big5hkscs < gb18030
+cp1258 < big5
+cp1258 < big5hkscs
+cp1258 < cp932
+cp1258 < cp949
+cp1258 < cp950
+cp1258 < euc_jis_2004
+cp1258 < euc_jisx0213
+cp1258 < euc_jp
+cp1258 < gb18030
+cp1258 < gb2312
+cp1258 < gbk
+cp1258 < iso2022_jp
+cp1258 < iso2022_jp_2
+cp1258 < iso2022_jp_2004
+cp1258 < iso2022_jp_3
+cp932 < gb18030
+cp949 < gb18030
+cp949 < iso2022_jp_2
+cp950 < big5hkscs
+cp950 < gb18030
+cp950 < gbk
+euc_jis_2004 < gb18030
+euc_jisx0213 < gb18030
+euc_jp < euc_jis_2004
+euc_jp < gb18030
+euc_jp < gbk
+euc_jp < iso2022_jp_2
+gb2312 < gb18030
+gb2312 < gbk
+gb2312 < iso2022_jp_2
+gbk < gb18030
+iso2022_jp < cp932
+iso2022_jp < euc_jis_2004
+iso2022_jp < euc_jisx0213
+iso2022_jp < euc_jp
+iso2022_jp < gb18030
+iso2022_jp < gbk
+iso2022_jp < iso2022_jp_2
+iso2022_jp < iso2022_jp_2004
+iso2022_jp < iso2022_jp_3
+iso2022_jp_2 < gb18030
+iso2022_jp_2004 < euc_jis_2004
+iso2022_jp_2004 < gb18030
+iso2022_jp_3 < euc_jisx0213
+iso2022_jp_3 < gb18030
+
+##############################
+big5 *<* cp950
+big5hkscs *<* gb18030
+cp1258 *<* big5
+cp1258 *<* cp949
+cp1258 *<* gb2312
+cp1258 *<* iso2022_jp
+cp932 *<* gb18030
+cp949 *<* iso2022_jp_2
+cp950 *<* big5hkscs
+cp950 *<* gbk
+euc_jis_2004 *<* gb18030
+euc_jisx0213 *<* gb18030
+euc_jp *<* euc_jis_2004
+euc_jp *<* gbk
+euc_jp *<* iso2022_jp_2
+gb2312 *<* gbk
+gb2312 *<* iso2022_jp_2
+gbk *<* gb18030
+iso2022_jp *<* cp932
+iso2022_jp *<* euc_jp
+iso2022_jp *<* iso2022_jp_2004
+iso2022_jp *<* iso2022_jp_3
+iso2022_jp_2 *<* gb18030
+iso2022_jp_2004 *<* euc_jis_2004
+iso2022_jp_3 *<* euc_jisx0213
+
+##############################
+<
+  cp1258
+    big5
+      cp950
+        big5hkscs
+          gb18030
+        gbk
+          gb18030
+    cp949
+      iso2022_jp_2
+        gb18030
+    gb2312
+      gbk
+        gb18030
+      iso2022_jp_2
+        gb18030
+    iso2022_jp
+      cp932
+        gb18030
+      euc_jp
+        euc_jis_2004
+          gb18030
+        gbk
+          gb18030
+        iso2022_jp_2
+          gb18030
+      iso2022_jp_2004
+        euc_jis_2004
+          gb18030
+      iso2022_jp_3
+        euc_jisx0213
+          gb18030
+
+##############################
+>
+  gb18030
+    big5hkscs
+      cp950
+        big5
+          cp1258
+    cp932
+      iso2022_jp
+        cp1258
+    euc_jis_2004
+      euc_jp
+        iso2022_jp
+          cp1258
+      iso2022_jp_2004
+        iso2022_jp
+          cp1258
+    euc_jisx0213
+      iso2022_jp_3
+        iso2022_jp
+          cp1258
+    gbk
+      cp950
+        big5
+          cp1258
+      euc_jp
+        iso2022_jp
+          cp1258
+      gb2312
+        cp1258
+    iso2022_jp_2
+      cp949
+        cp1258
+      euc_jp
+        iso2022_jp
+          cp1258
+      gb2312
+        cp1258
+
+##############################

@@ -1,5 +1,5 @@
 
-'''
+r"""
 input:
     str2values_by_line2expr:
         str = (line newline)*
@@ -23,16 +23,19 @@ input:
 
 example:
     str2values_by_line2expr:
-        s = \'''
+        s = r'''
             [1,2,4], [33,25,54]
             [3,2,5], [2, 4, 4]
 
             # empty line and comment are allowed
             [2,3,4,4,5], [1,2] # comment
-            \'''
+            #'''
         input_output_pairs = str2values_by_line2expr(s)
 
-'''
+#"""
+
+
+
 __all__ = '''
     str2values_by_line2expr
     str2valuess_by_line2exprs
@@ -83,16 +86,21 @@ assert evalExpr(r.body[0]) == 1
 
 
 def parsed_line2exprs(parsed_line):
+    return _parsed_line2exprs(parsed_line, tuple)
+def parsed_line2exprs__list(parsed_line):
+    return _parsed_line2exprs(parsed_line, list)
+def _parsed_line2exprs(parsed_line, f):
     # line = expr*
     ls = parsed_line.body
     assert ls
     assert all(type(expr) is ast.Expr for expr in ls)
-    return tuple(map(evalExpr, ls))
+    return f(map(evalExpr, ls))
 def parsed_line2may_expr1(parsed_line):
     # line = pass | expr_node
     # return None | (expr_value,)
     ls = parsed_line.body
     L = len(ls)
+    if L != 1: raise logic-error
     assert L == 1
     pass_or_expr, = ls
     if type(pass_or_expr) is ast.Pass:
@@ -101,6 +109,10 @@ def parsed_line2may_expr1(parsed_line):
     return (evalExpr(expr_node),)
 
 def parsed_line2may_exprs(parsed_line):
+    return _parsed_line2may_exprs(parsed_line, tuple)
+def parsed_line2may_exprs__list(parsed_line):
+    return _parsed_line2may_exprs(parsed_line, list)
+def _parsed_line2may_exprs(parsed_line, f):
     # line = pass | expr_node*
     # return None | [expr_value]
     ls = parsed_line.body
@@ -109,7 +121,7 @@ def parsed_line2may_exprs(parsed_line):
         pass_or_expr, = ls
         if type(pass_or_expr) is ast.Pass:
             return None
-    return parsed_line2exprs(parsed_line)
+    return _parsed_line2exprs(parsed_line, f)
 
 
 
@@ -128,8 +140,10 @@ assert [1, (1,2), ('1',[1])] == str2values_by_line2expr('''
 
 def str2valuess_by_line2exprs(s):
     # line.split(';')
-    return list(map(parsed_line2exprs, str2iter_parsed_lines(s)))
-assert [(1,), ((1,2),), (('1',[1]),), ((1,2),2,(3,))] == str2valuess_by_line2exprs('''
+    return list(map(parsed_line2exprs__list, str2iter_parsed_lines(s)))
+    #return list(map(parsed_line2exprs, str2iter_parsed_lines(s)))
+#assert [(1,), ((1,2),), (('1',[1]),), ((1,2),2,(3,))] == str2valuess_by_line2exprs('''
+assert [[1], [(1,2)], [('1',[1])], [(1,2),2,(3,)]] == str2valuess_by_line2exprs('''
     1 # 23423
     1,2
 
@@ -161,9 +175,11 @@ assert [[1, (1,2)], [('1',[1])]] == str2valuess_by_str2blocks_line2expr('''
 
 def str2valuesss_by_str2blocks_line2exprs(s):
     # str.split('pass'); block.split('\n'); line.split(';')
-    may_exprs_ls = list(map(parsed_line2may_exprs, str2iter_parsed_lines(s)))
-    return split_by_None(may_exprs_ls)
-assert [[(1,), ((1,2),)], [(('1',[1]),), ((1,2),2,(3,))]] == str2valuesss_by_str2blocks_line2exprs('''
+    #may_exprs_iter = map(parsed_line2may_exprs, str2iter_parsed_lines(s))
+    may_exprs_iter = map(parsed_line2may_exprs__list, str2iter_parsed_lines(s))
+    return split_by_None(may_exprs_iter)
+#assert [[(1,), ((1,2),)], [(('1',[1]),), ((1,2),2,(3,))]] == str2valuesss_by_str2blocks_line2exprs('''
+assert [[[1], [(1,2)]], [[('1',[1])], [(1,2),2,(3,)]]] == str2valuesss_by_str2blocks_line2exprs('''
     1 # 23423
     1,2
     pass

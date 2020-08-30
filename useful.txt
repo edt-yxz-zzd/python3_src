@@ -3,6 +3,10 @@
 #   > py .... > log.txt
 #
 
+
+r"""
+#"""
+
 __all__ = '''
     '''.split()
 from itertools import chain

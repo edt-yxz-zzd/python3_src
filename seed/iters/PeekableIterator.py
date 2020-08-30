@@ -43,13 +43,14 @@ def drop_strict(iterator, n):
     return None
 
 class PeekableIterator:
-    '''iterator with peek/read ops
+    r'''iterator with peek/read ops
 
 
 example:
     # see: merge_two_sorted_iterables
     # see: intersect_two_sorted_iterables
     # see: icut_to
+    # see: seed.data_funcs.rngs
     >>> it = PeekableIterator([1,2,3])
 
     # [] + [1,2,3]
@@ -136,6 +137,15 @@ example:
     >>> list(remains)
     [3]
 
+    # append_left
+    >>> it = PeekableIterator(range(2))
+    >>> it.append_left(-1)
+    >>> buffer, remains = it.detach()
+    >>> buffer
+    (-1,)
+    >>> list(remains)
+    [0, 1]
+
     # chain_detach
     >>> it = PeekableIterator(range(4))
     >>> it.head
@@ -216,6 +226,8 @@ example:
 
     # len_ge/len_lt
     >>> it = PeekableIterator(range(4))
+    >>> it.is_empty()
+    False
     >>> it.len_ge(2)
     True
     >>> it.peek_relax()
@@ -224,6 +236,12 @@ example:
     False
     >>> it.peek_relax()
     (0, 1, 2)
+    >>> it = PeekableIterator(range(1))
+    >>> it.is_empty()
+    False
+    >>> it = PeekableIterator(range(0))
+    >>> it.is_empty()
+    True
 
     # len_relax
     >>> it = PeekableIterator(range(4))
@@ -244,11 +262,13 @@ example:
 
 methods ordered:
     __next__
+    append_left
     chain_detach
     detach
     fill_and_test
     fill_le
     head
+    is_empty
     len_ge
     len_lt
     len_relax
@@ -282,16 +302,23 @@ methods classified:
 
     # safe
         # fill_le
+        is_empty
         len_ge
         len_lt
 
         # no fill_le
+        append_left
         chain_detach
         detach
         len_relax
         peek_relax
         read_relax
-'''
+
+no __bool__
+    since other iterator has no such usage, may cause bug
+    use "self.len_ge(1)" instead
+    use "not self.is_empty()" instead
+#'''
     def chain_detach(self):
         'like detach, but chain the output'
         dq = self.__dq
@@ -307,6 +334,8 @@ methods classified:
         self.__dq.clear()
         self.__it = null_iter
         return r
+    def append_left(self, x):
+        self.__dq.appendleft(x)
 
     def __init__(self, iterable):
         self.__dq = deque()
@@ -374,6 +403,8 @@ methods classified:
     def len_relax(self):
         'O(1); () -> UInt; len(self.peek_relax())'
         return len(self.__dq)
+    def is_empty(self):
+        return self.len_lt(1)
     def len_lt(self, n):
         'O(n)*ops'
         return not self.len_ge(n)
@@ -410,7 +441,7 @@ methods classified:
         return self.peek1()
 
 
-"""
+r"""
 class IterableReserveLastElement:
     '''should access the last element via self.head not iter'''
     @classmethod
@@ -453,7 +484,7 @@ class IterableReserveLastElement:
         # will yield last element
         return self.iter_with_last_element()
 
-"""
+#"""
 
 if __name__ == "__main__":
     print('\n'.join(s for s in dir(PeekableIterator) if not s.startswith('_')))
