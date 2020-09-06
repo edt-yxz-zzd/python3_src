@@ -4615,5 +4615,24 @@ cjk_common_subset_1869 = """
 默鼎鼓鼠鼻
 """ # cjk_common_subset_1869
 
+def hz_set2freq_sorted_rng_ex(hz_set):
+    idx2hz = hz_sp_str2hz_str(汉字单字字频总表_cedict_12041)
+    hz2idx = {hz:i for i,hz in enumerate(idx2hz)}
+    out = 0
+    m = len(idx2hz)
+    M = -1
+    for hz in hz_set:
+        may_idx = hz2idx.get(hz)
+        if may_idx is None:
+            out += 1
+        else:
+            idx = may_idx
+            m = min(m, idx)
+            M = max(M, idx)
+    M += 1
+    return (m,M), out
+
+if __name__ == "__main__":
+    print(hz_set2freq_sorted_rng_ex(hz_sp_str2hz_set(cjk_common_subset_1869)))
 
 
