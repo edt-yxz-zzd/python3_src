@@ -1,0 +1,3 @@
+cd /sdcard/0my_files/git_repos/txt_phone/txt
+py script/handle_现代常用字部件表.py > ~/tmp/现代常用字部件及部件名称规范_GF0014_2009_main_result.json.txt
+
