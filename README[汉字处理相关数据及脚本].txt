@@ -136,7 +136,8 @@
 
 py script/py_repr2json.py -i ~/tmp/ids_all_2.txt -o ~/tmp/ids_all_2.json.txt
 py script/handle_现代常用字部件表.py > ~/tmp/现代常用字部件及部件名称规范_GF0014_2009_main_result.json.txt
-  # /sdcard/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/output/handle_现代常用字部件表.py.out/现代常用字部件及部件名称规 范_GF0014_2009_main_result.json.txt
+  # /sdcard/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/output/handle_现代常用字部件表.py.out/现代常用字部件及部件名称规范_GF0014_2009_main_result.json.txt
+  # /sdcard/0my_files/git_repos/txt_phone/txt/others/汉语/现代常用字部件及部件名称规范_GF0014_2009/现代常用字部件及部件名称规范_GF0014_2009_main_result.json.txt
 
 
 
