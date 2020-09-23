@@ -45,7 +45,7 @@ class IMapping(metaclass=ABCMeta):
         return self.get_item(key, key2default=key2key_to_key2item(key2default))[0]
     def get_value(self, key, key2default=key2default):
         return self.get_item(key, key2default=key2value_to_key2item(key2default))[1]
-    def __getitem__(self, key): return self.get_value(key)
+    def __getitem__(self, key): return self.get_item(key)
 
 '''
     def try_alter(self, old_keyM, new_keyM, old_keyM_new_keyM_old_valueM_to_new_valueM):
@@ -161,6 +161,7 @@ class IMapping_ResetItem(IMapping_ResetKey, IMapping_ResetValue):
     def reset_fitem(self, new_key, old2new_value):
         self.reset_key(new_key)
         self.reset_fvalue(new_key, old2new_value)
+    #err: key not in self: def __setitem__(self, key, value): return self.reset_item(key, value)
 class IMapping_ResetValueOrItem(IMapping_ResetValue):
     @classmethod
     @abstractmethod

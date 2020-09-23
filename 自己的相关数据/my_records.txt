@@ -1,0 +1,17 @@
+
+python3_src/
+  useful.txt
+  README[汉字处理相关数据及脚本].txt
+  自己的相关数据/
+    py_modules.txt
+    py_ex_modules.txt
+  nn_ns/app/app_output/count_identifiers.py.out/
+    py_doc_381_words.txt
+
+
+
+
+
+
+
+

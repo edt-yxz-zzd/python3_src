@@ -97,6 +97,40 @@
         https://github.com/miaolapd/chinese-converter/tree/master/ChineseConverter/ConverterMaps
         https://github.com/fighting41love/funNLP/blob/master/data/%E7%B9%81%E7%AE%80%E4%BD%93%E8%BD%AC%E6%8D%A2%E8%AF%8D%E5%BA%93/fanjian_suoyin.txt
             https://github.com/fighting41love/funNLP/blob/master/data/繁简体转换词库/fanjian_suoyin.txt
+
+        # $ pwd
+        # /sdcard/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/繁简转换[20200913]
+        # $ tree .
+        .
+        ├── chinese-converter-master
+        │   └── ConverterMaps
+        │       ├── 00.Default.xml
+        │       ├── 01.Wikipedia.xml
+        │       ├── 02.HuoXingWen.xml
+        │       ├── 03.Tools.xml
+        │       └── 04.Kanzi_wulali.xml
+        └── 04.Kanzi_wulali.xml
+        ├── chinese-utils-master
+        │   └── resources
+        │       ├── pinyin.txt
+        │       ├── polyphone.txt
+        │       ├── simp.txt
+        │       ├── simplified.txt
+        │       ├── trad.txt
+        │       ├── traditional.txt
+        │       └── unknown.txt
+        ├── funNLP-master
+        │   └── fanjian_suoyin.txt
+        └── nstools-master
+            └── zhtools
+                ├── Mandarin.dat
+                ├── __init__.py
+                ├── chconv.py
+                ├── langconv.py
+                ├── test_langconv.py
+                ├── xpinyin.py
+                └── zh_wiki.py
+
   www/???:
     中华字经2003__重复字4000_不同字3980
     汉字单字字频总表_cedict_12041
@@ -109,6 +143,7 @@
       seed.data_funcs.rngs
       seed.text.charset_filter
     nn_ns
+      nn_ns/CJK/CJK_data/raw/parse_繁简.py
       #$ cd ../../python3_src/nn_ns/CJK/cjk_subsets/
       #$ tree .
       .
@@ -151,4 +186,7 @@ py script/handle_现代常用字部件表.py > ~/tmp/现代常用字部件及部
 
     #结合 ucs-strokes.txt, ids_all_2.json.txt, 对5077个部件(实际只有1743个基本部件)按笔画数排序并给出笔画顺序(校验或计算笔画数，辅助搜索部件)
       $ py script/ids_basic_component2strokes.py > ~/tmp/prime_hz_cmpnt2num_strokes_ls.txt
+
+
+py nn_ns/CJK/CJK_data/raw/parse_繁简.py >nn_ns/CJK/CJK_data/output/parse_繁简.py.out/简繁.txt 2>nn_ns/CJK/CJK_data/output/parse_繁简.py.out/简繁.err.txt
 

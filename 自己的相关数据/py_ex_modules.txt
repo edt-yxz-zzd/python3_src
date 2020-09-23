@@ -1,0 +1,15 @@
+
+##___LIST___##
+sympy
+bs4/beautifulsoup4
+Django
+
+##___LIST___##
+##___LIST___##
+##___LIST___##
+##___LIST___##
+##___LIST___##
+##___LIST___##
+##___LIST___##
+##___LIST___##
+##___LIST___##
