@@ -31,6 +31,8 @@ from .LeftBiasedRangeMinimumQuery__via_power_table import \
 from .left_biased_minimum_query import left_biased_minimum_query
 from .common_methods import calc_num_blocks, ceil_div, is_sorted
 from itertools import chain, starmap
+if __debug__:
+    from seed.data_funcs.rngs import make_Ranges
 
 BasicRMQ = LeftBiasedRangeMinimumQuery__via_power_table
 OffsetedBasicRMQ = LeftBiasedRangeMinimumQuery__via_power_table
@@ -538,7 +540,8 @@ query time:
             pseudo_in_normal_block_queries = [(begin, mid1), (mid2, end)]
 
 
-            assert mid1*s == beginN <= endN == mid2*s
+            #bug:assert mid1*s == beginN <= endN == mid2*s
+            assert mid1 == beginN*s <= endN*s == mid2
             mid1N = normal_blocks_mid1 = beginN + uptoN
             mid2N = normal_blocks_mid2 = endN - uptoN
             if endN <= mid1N:
@@ -557,10 +560,17 @@ query time:
             # NOET: beginS+1 == endS
             #       split into two cases
             if mid2N <= mid1N:
-                assert beginS+1 >= endS
+                try:
+                    #bug:assert beginS+1 >= endS
+                    #??? assert beginS+? >= endS
+                     assert beginS+3 >= endS
+                except:
+                    print(dict(locals()))
+                    raise
                 pseudo_super_blocks_queries = []
             else:
-                assert beginS+1 <= endS
+                #bug:assert beginS+1 <= endS
+                assert beginS < endS
                     # overlap with above condition
                     # but fine
                 if True:
@@ -594,6 +604,21 @@ query time:
             normal_blocks_queries = pseudo_normal_blocks_queries
             super_blocks_queries = pseudo_super_blocks_queries
 
+        if __debug__:
+            def _vr():
+                rngs0 = in_normal_block_queries
+                rngs1 = [(_b*s, _e*s) for _b, _e in normal_blocks_queries]
+                rngs2 = [(_b*s_, _e*s_) for _b, _e in super_blocks_queries]
+                rs = [*rngs0, *rngs1, *rngs2]
+                rs = [make_Ranges((r,)) for r in rs]
+                r0 = make_Ranges([])
+                for x in rs:
+                    r0 = r0 | x
+                rngs = r0.ranges
+                assert rngs == ((begin, end),)
+                return rngs
+            assert _vr() == ((begin, end),)
+
         array_indices = chain(
             # all return array_idx
             starmap(self.in_normal_block_query, in_normal_block_queries)
@@ -607,6 +632,13 @@ query time:
         assert 1 <= len(array_indices) <= 5
         rmq_result = self.__combine_array_indices(array_indices)
         if not self.__may_verify_rmq_result(begin, end, rmq_result):
+            _v = min(self.array[begin:end])
+            _i = self.array.index(_v, begin, end)
+            _b = begin//s*s
+            _e = ceil_div(end, s)*s
+            _arr = self.array
+
+            raise Exception(f'LeftBiasedRMQ impl error: (len={len(_arr)}, begin={begin}, end={end}); rmq_result={rmq_result} (min={_arr[rmq_result]}); real rmq_result={_i} (min={_v});;; in_normal_block_queries={in_normal_block_queries}; normal_blocks_queries={normal_blocks_queries} (*{s}); super_blocks_queries={super_blocks_queries} (*{s_});;;;; array[{_b}:{begin}]+array[{begin}:{end}]+array[{end}:{_e}]={_arr[_b:begin]}+{_arr[begin:end]}+{_arr[end:_e]}')
             raise Exception('LeftBiasedRMQ impl error')
         return rmq_result
     def __may_verify_rmq_result(self, begin, end, rmq_result):
@@ -678,7 +710,8 @@ time:
 
 in_normal_block_query(begin, end) -> array_min_idx
     0 <= begin < end <= self.p
-    0 <= end-begin < self.s
+    #bug:0 <= end-begin < self.s
+    0 < end-begin <= self.s
 
 time:
     O(1) * BasicRMQ<s>.'left_biased_range_minimum_query'

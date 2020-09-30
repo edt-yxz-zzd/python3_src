@@ -117,7 +117,8 @@ ast
 namedtuple
 fractions
   Fraction, gcd
-
+types
+  MappingProxyType
 
 ##___LIST___##
 #words
@@ -127,11 +128,18 @@ fractions
 #stmt
 r""" #"""
 __all__ = ''' '''.split()
+from pathlib import PurePath, Path
 from pprint import pprint
 from seed.tiny import print_err
 from itertools import chain
 from functools import partial
+from collections import defaultdict
 from .abc import ABC, abstractmethod, override, not_implemented, ABCMeta
+from types import MappingProxyType #frozenset, tuple
+from seed.types.view.SeqTransformView import SeqTransformView
+from seed.types.view.SeqSliceView import SeqSliceView
+from seed.io.with_text_input_file import with_text_input_file__path
+from seed.iters.PeekableIterator import PeekableIterator
 raise logic-error
 if __name__ == "__main__":
     main()

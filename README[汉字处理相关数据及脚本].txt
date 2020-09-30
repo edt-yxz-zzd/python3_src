@@ -167,6 +167,7 @@
         #含手录数据: 
         # 现代常用字部件及部件名称规范
         # 现代常用字部件的笔画顺序__依github_stroke_seq_MB
+      pre_hz_decomp.py
 
 
 py script/py_repr2json.py -i ~/tmp/ids_all_2.txt -o ~/tmp/ids_all_2.json.txt
@@ -189,4 +190,13 @@ py script/handle_现代常用字部件表.py > ~/tmp/现代常用字部件及部
 
 
 py nn_ns/CJK/CJK_data/raw/parse_繁简.py >nn_ns/CJK/CJK_data/output/parse_繁简.py.out/简繁.txt 2>nn_ns/CJK/CJK_data/output/parse_繁简.py.out/简繁.err.txt
+
+py script/pre_hz_decomp.py -o ~/tmp/笔顺码分解.txt -f
+    27978 笔顺码
+    单笔部件=True:54.7 MB
+    单笔部件=False:42.4 MB
+  py -m nn_ns.app.cut_text -n 500 -re '^\s*$' -cs tail -ofmt '{0:0>4}.txt' -od ~/tmp/笔顺码分解 -i /storage/emulated/0/0my_files/笔顺码分解.txt
+    0000.txt .. 0055.txt
+      56=ceil(27978/500)
+  py script/pre_hz_decomp.py --_tmp_call 2 > /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/output/pre_hz_decomp.py.out/部件的单字符代表.txt
 

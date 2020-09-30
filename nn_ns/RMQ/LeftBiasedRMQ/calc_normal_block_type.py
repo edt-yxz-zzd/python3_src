@@ -113,6 +113,17 @@ let p = len(array)
     #bug:for begin, end in zip(count(0, s), count(s, s)):
     for begin, end in zip(range(0, p, s), count(s, s)):
         normal_block = array[begin:end]
+        #bug: len(normal_block) may not s
+        if len(normal_block) < s:
+            assert p < end
+            assert normal_block
+            assert begin < p < end
+            assert begin + s == end
+            #pad = _max = max(normal_block)
+            pad = 0
+            normal_block = (*normal_block, *[pad]*(end-p))
+            assert len(normal_block) == s
+        assert len(normal_block) == s
         normal_block_type = calc_normal_block_type(normal_block, encoding)
         T.append(normal_block_type)
 
