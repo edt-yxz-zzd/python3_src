@@ -1,0 +1,118 @@
+
+font basic from freetype doc
+
+wget https://download.savannah.gnu.org/releases/freetype/freetype-doc-2.10.2.tar.xz
+
+===
+https://community.adobe.com/t5/type-typography/where-can-i-find-font-parsing-or-text-rasterization-algorithm/td-p/2531034
+  FreeType
+  https://www.freetype.org/freetype2/docs/documentation.html
+    =======
+    font family = font faces
+    #conceptually single file
+    digital font = a data file that may contain one or more font faces. For each o
+    font collection = a font file containing more than one face
+    glyph = character image
+          = metrics = glyph placement, cursor advances, text layout,...
+    font file =
+      {glyphs :: {glyph_index:glyph}
+      ,character_maps :: [?encoding. {character_code<encoding>:glyph_index}]
+        #charmaps or cmaps
+        # For example, many OpenType fonts contain an Apple-specific charmap as well as a Unicode charmap, which makes them usable on both Mac and Windows platforms.
+      }
+
+    glyph outline = master outline = scalable representation of glyph image
+        = [contour]
+    contour = closed path
+        = [line segment | Bezier arc]
+        = [normal point | control point] (font_unit)
+    Bezier arc = quadratic Bezier | cubic Bezier
+    quadratic Bezier = conic Bezier
+    =====
+    EM square = be thought of as a tablet on which the characters are drawn
+    EM_size font_unit
+      = 'the' EM square's size, i.e., the number of grid units on its sides
+      #grid unit = font_unit
+    point_size point = 'the' point size of rendering font
+    pixel_size pixel = 'the' pixel size of rendering font
+
+    dpi = dot/inch #dots per inch
+    1 dot = 1 pixel
+    1 inch = 72 point = 72pt
+    pixel_size pixel = the point_size point * resolution dpi
+      ==>> pixel_size = point_size * resolution * point*dpi/pixel = point_size * resolution /72
+    pixel_coord pixel / grid_coord font_unit = pixel_size pixel / EM_size font_unit
+      ==>> pixel_coord = grid_coord * pixel_size / EM_size
+    ppem pixel = pixel per EM === pixel_size
+    ppem~EM_size vs pixel_size~point_size
+      let pixel_coord=ppem,grid_coord=EM_size
+      ==>> ppem = pixel_size
+
+    ====
+    master_outline(point_coordinate:font_unit)+point_size(point)+resolution(dpi)==>>bitmap
+    grid-fitting = explicit grid-fitting | hinting | automatic grid-fitting
+      #hinting=implicit grid-fitting
+    *explicit grid-fitting
+      glyph = outline + control program
+    *hinting
+      glyph = outline + [feature hint]
+    *automatic grid-fitting
+      glyph = outline
+    =======typographic metrics
+    baseline
+      horizontal | vertical
+      With horizontal layout, glyphs simply ‘rest’ on the baseline.
+      With a vertical layout, glyphs are centered around the baseline.
+    pen position = origin
+      #origin on baseline
+    advance_width font_unit = distance between two successive pen positions
+      # glyph-specific
+    ascent font_unit = max y >= 0
+    descent font_unit = min y <= 0
+    linegap font_unit = distance that must be placed between two lines of text
+      #newline gap
+    linespace font_unit = baseline-to-baseline distance
+      = ascent - descent + linegap
+      = abs(ascent) + abs(descent) + abs(linegap)
+    unscaled bbox (:font_unit) = bounding box
+      = {xMin, yMin, xMax, and yMax}
+    scaled bbox (:pixel)
+    internal_leading font_unit
+      = the amount of space within the leading which is reserved for glyph features that lay outside of the EM square
+      = ascent - descent - EM_size
+      = ascent + abs(descent) - EM_size
+    external_leading === linegap
+    lsb = bearingX = left side bearing
+      = horizontal distance from the current pen position to the glyph's left bbox edge.
+      =?= xMin
+    bearingY = top side bearing
+      = vertical distance from the baseline to the top of the glyph's bbox.
+      =?= yMax
+    advanceX === advance_width
+    advanceY = advance_height
+      = vertical distance to decrement the pen position after a glyph has been rendered
+    unscaled glyph_width font_unit = bbox.xMax - bbox.xMin
+    unscaled glyph_height = bbox.yMax - bbox.yMin
+    rsb = right side bearing
+      = advance_width - left_side_bearing - (xMax-xMin)
+      = advance_width - left_side_bearing - glyph_width
+    advance_width == lsb + glyph_width + rsb
+    =======
+    kerning_pair = pair<glyph_index>
+    kerning_distance font_unit
+    kerning_information =
+      {maybe horizontal kern_table
+      ,maybe vertical kern_table
+      ,maybe GPOS_table
+      }
+      #OpenType fonts (OTF)
+    kern_table = dict<kerning_pair, kerning_distance>
+    GPOS_table = ??? #freetype2 not support
+    =======
+    =======
+    =======
+    =======
+    =======
+    =======
+    =======
+    =======

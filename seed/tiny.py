@@ -23,6 +23,7 @@ __all__ = str2__all__('''
 
     print_err           # file=sys.stderr; see: no_op/print_ferr
     print_ferr          # file=sys.stderr; see: no_op/print_err
+    fprint              # force/require 'file='
     __not__             # :: Testable a => a -> bool
     not_dot             # :: (a->bool) -> (a->bool)
     xor, nxor           # :: bool -> bool -> bool
@@ -73,6 +74,8 @@ def with_key(key, iterable):
         yield key(x), x
 
 
+def fprint(*args, file, **kw):
+    print(*args, file=file, **kw)
 
 def py_cmp(a, b):
     # Ord a => a -> a -> -> (-1|0|+1)

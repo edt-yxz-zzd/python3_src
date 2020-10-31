@@ -1,0 +1,498 @@
+
+e /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/我的所有折笔归类.txt
+view /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/unicode_CJK_Strokes_U31C0.pdf.txt
+  36 种 笔画
+  除去 横 竖 撇 捺 提 竖钩 竖撇 点 提捺，共 36-9=27 种 折笔
+
+view /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/汉字笔画名称表.txt
+  41 种 笔画
+  除去 横 竖 撇 捺 提 竖钩 竖撇 点 提捺 左点 横捺，共 41-11=30 种 折笔
+  比 上面 27 多 3种:
+    ⺄u2E84h~横斜钩~风
+    ㄣu3123h~竖折撇~专
+    ?~撇折撇~ㄆu3106h夨u5928h
+      ㄆu3106h
+        p
+      夨u5928h
+        ce4 ze4
+
+
+
+
+
+
+
+
+
+=================
+=================
+折笔定义
+RSIndex_pdf
+所有折笔
+  54 个 字符
+所有折笔归类
+  33 种 折笔类
+大类折笔定义
+折笔大类归类
+  8 个 折笔大类
+
+33 = unicode 27 + extra 6
+  %z161d:=z161dㆸu31B8h=折平乙
+  %z170893d:=z170893d⺄u2E84h_HZWG_HXG_fei1=折风
+  %z61d:=z61dㆹu31B9h_SZ_dong1=折车
+  %z6160193d:=z6160193d_u200C9h=折丿乙
+  %z7196d:=z7196dㄣu3123h_SZP_SZG_zhuan1=折专
+  %z71605d:=z71605dㄣu3123h_SZP_SZP_ce4=折夨
+
+
+
+
+=================
+=================
+折笔定义:
+  "z[_0-9_]\+d"  #折z 数digit[0-9]d
+  9?:钩
+  0?:弯
+  _??_: _xy_=(x+y)/2
+  1-8:(i-1)*pi/4
+  横1 提2 竖7 撇605 竖撇706 捺801 点807 左点80706
+  ======
+  乙=z160193d
+  〇u3007h=z0d
+#end 折笔定义
+
+=================
+=================
+RSIndex_pdf:
+from RSIndex.pdf:
+  2A6D9/⺂u2E82h 但 RSIndex.pdf 归类到『一』中
+    2A6D9/z196d
+  撇 4E3F 4E40 4E41 2F802
+  折 4E59 4E5A 4E5B 200C9 200CA 200CB 200CC 200CD 200CE 200D1
+    4E85 2010C
+    200CE/z75d
+    200C9/z6160193d
+#end RSIndex_pdf
+
+
+
+
+
+
+
+
+
+
+
+=================
+=================
+所有折笔:
+#单字_笔顺码_29685个.txt + RSIndex.pdf
+#
+#㇅u31C5h 卍u534Dh vs ㇍u31CDh 投
+#㇄u31C4h 亡四 vs ㇗u31D7h 山东 vs ㇜u31DCh 公弘 vs ㇙u31D9h vs ㇛u31DBh 巡女
+#㇖u31D6h 疋u758Bh子 vs ㇇u31C7h 又今 vs ㇕u31D5h
+#
+#㇆u31C6h 羽也 !!
+#㇈u31C8h 飞九 !! ==>>
+#㇖u31D6h 疋u758Bh子 !!
+#㇗u31D7h 山东 !! ==>>
+#
+@⺂u2E82h
+@⺃u2E83h
+@⺄u2E84h
+@⼄u2F04h
+@〇u3007h
+
+@ㄅu3105h
+@ㄋu310Bh
+@ㄑu3111h
+@ㄣu3123h
+@ㄥu3125h
+@ㆴu31B4h
+@ㆸu31B8h
+@ㆹu31B9h
+
+@㇁u31C1h
+@㇂u31C2h
+@㇃u31C3h
+@㇄u31C4h 亡四
+@㇅u31C5h 卍u534Dh
+@㇆u31C6h 羽也 !!
+@㇇u31C7h 又今
+@㇈u31C8h 飞九 !!
+@㇉u31C9h 弓马
+@㇊u31CAh 计鳩
+@㇋u31CBh
+@㇌u31CCh 阝u961Dh邮
+@㇍u31CDh 投
+@㇎u31CEh
+
+@㇕u31D5h
+@㇖u31D6h 疋u758Bh子 !!
+@㇗u31D7h 山东 !!
+@㇘u31D8h
+@㇙u31D9h
+@㇛u31DBh 巡女
+@㇜u31DCh 公弘
+@㇞u31DEh 卐u5350h亞u4E9Eh
+@㇟u31DFh 乱己
+@㇠u31E0h
+@㇡u31E1h
+@㇢u31E2h
+@㇣u31E3h
+
+@乙u4E59h
+@乚u4E5Ah
+@乛u4E5Bh
+
+@𠃊u200CAh
+@𠃋u200CBh
+@𠃌u200CCh
+@𠃍u200CDh
+@𠃑u200D1h
+@𠄌u2010Ch
+@𠄎u2010Eh
+@𡿨u21FE8h
+@u200CEh/z75d
+@u200C9h/z6160193d
+@u2A6D9h/z196d
+
+#end 所有折笔
+54 个 字符
+160-101 -5 -54 = 0
+  59   54
+
+
+
+=================
+=================
+所有折笔归类:
+%z196d:=z196d㇖u31D6h_HG=折买
+⺂u2E82h
+㇖u31D6h
+乛u4E5Bh
+u2A6D9h/z196d
+
+%z1605d:=z1605d㇇u31C7h_HP=折今
+㇇u31C7h
+
+%z160193d:=z160193d㇠u31E0h=折乙
+⼄u2F04h
+㇠u31E0h
+乙u4E59h
+
+%z161d:=z161dㆸu31B8h=折平乙
+ㆸu31B8h
+
+%z161605d:=z161605d㇋u31CBh=折及
+ㄋu310Bh
+㇋u31CBh
+
+%z161794d:=z161794d㇡u31E1h=折乃
+㇡u31E1h
+𠄎u2010Eh
+
+%z160580694d:=z160580694d㇌u31CCh=折队
+㇌u31CCh
+
+
+
+%z17d:=z17d㇕u31D5h_HZ=折口
+㇕u31D5h
+𠃍u200CDh
+
+%z1794d:=z1794d㇆u31C6h=折习
+㇆u31C6h
+𠃌u200CCh
+
+:㇈u31C8h:
+  %z170893d:=z170893d⺄u2E84h_HZWG_HXG_fei1=折风
+  ㇈u31C8h_HZWG__HXG_fei1
+  ⺄u2E84h
+
+  %z170193d:=z170193d㇈u31C8h_HZWG_HSWG_jiu3=折几
+  ㇈u31C8h_HZWG_HSWG_jiu3
+
+%z1701d:=z1701d㇍u31CDh_HZW=折朵
+㇍u31CDh
+
+%z171d:=z171d㇅u31C5h_HZZ=折左凹
+㇅u31C5h
+
+%z172d:=z172d㇊u31CAh=折计
+㇊u31CAh
+
+%z1717d:=z1717d㇎u31CEh=折凸
+㇎u31CEh
+
+
+
+
+
+%z0d:=z0d㇣u31E3h=折末㔔
+〇u3007h
+㇣u31E3h
+
+%z80694d:=z80694d㇁u31C1h=折狂
+㇁u31C1h
+
+%z70893d:=z70893d㇂u31C2h=折戈
+㇂u31C2h
+
+%z80193d:=z80193d㇃u31C3h=折心
+㇃u31C3h
+
+%z60594d:=z60594d㇢u31E2h=折乄
+㇢u31E2h
+
+
+
+
+%z75d:=z75d㇘u31D8h=折左上淵
+㇘u31D8h
+u200CEh/z75d
+
+%z72d:=z72d㇙u31D9h_ST=折以
+㇙u31D9h
+𠄌u2010Ch
+
+%z701d:=z701d㇄u31C4h_SW=折亡
+㇄u31C4h
+
+:㇗u31D7h:
+  %z61d:=z61dㆹu31B9h_SZ_dong1=折车
+  ㇗u31D7h_SZ_dong1
+  ㆹu31B9h
+
+  %z71d:=z71d㇗u31D7h_SZ_shan1=折山
+  ㇗u31D7h_SZ_shan1
+  𠃊u200CAh
+
+%z70193d:=z70193d㇟u31DFh=折匕
+⺃u2E83h
+㇟u31DFh
+乚u4E5Ah
+
+%z717d:=z717d㇞u31DEh=折亞
+㇞u31DEh
+𠃑u200D1h
+
+:ㄣu3123h:
+  %z7196d:=z7196dㄣu3123h_SZP_SZG_zhuan1=折专
+  ㄣu3123h_SZP_SZG_zhuan1
+
+  %z71605d:=z71605dㄣu3123h_SZP_SZP_ce4=折夨
+  ㄣu3123h_SZP_SZP_ce4
+
+%z71794d:=z71794d㇉u31C9h=折与
+㇉u31C9h
+ㄅu3105h
+ㆴu31B4h
+
+
+
+%z605807d:=z605807d㇛u31DBh_PD=折女
+ㄑu3111h
+㇛u31DBh
+𡿨u21FE8h
+
+%z6051d:=z6051d㇜u31DCh_PZ=折公
+ㄥu3125h
+㇜u31DCh
+𠃋u200CBh
+
+
+%z6160193d:=z6160193d_u200C9h=折丿乙
+u200C9h/z6160193d #笔撇+乙
+
+#end 所有折笔归类
+33 种 折笔类
+308-171
+=================
+乄u4E44h/shī,㔔u3514h
+=================
+%z196d:=z196d㇖u31D6h_HG=折买
+%z1605d:=z1605d㇇u31C7h_HP=折今
+%z160193d:=z160193d㇠u31E0h=折乙
+%z161d:=z161dㆸu31B8h=折平乙
+%z161605d:=z161605d㇋u31CBh=折及
+%z161794d:=z161794d㇡u31E1h=折乃
+%z160580694d:=z160580694d㇌u31CCh=折队
+%z17d:=z17d㇕u31D5h_HZ=折口
+%z1794d:=z1794d㇆u31C6h=折习
+%z170893d:=z170893d⺄u2E84h_HZWG_HXG_fei1=折风
+%z170193d:=z170193d㇈u31C8h_HZWG_HSWG_jiu3=折几
+%z1701d:=z1701d㇍u31CDh_HZW=折朵
+%z171d:=z171d㇅u31C5h_HZZ=折左凹
+%z172d:=z172d㇊u31CAh=折计
+%z1717d:=z1717d㇎u31CEh=折凸
+%z0d:=z0d㇣u31E3h=折末㔔
+%z80694d:=z80694d㇁u31C1h=折狂
+%z70893d:=z70893d㇂u31C2h=折戈
+%z80193d:=z80193d㇃u31C3h=折心
+%z60594d:=z60594d㇢u31E2h=折乄
+%z75d:=z75d㇘u31D8h=折左上淵
+%z72d:=z72d㇙u31D9h_ST=折以
+%z701d:=z701d㇄u31C4h_SW=折亡
+%z61d:=z61dㆹu31B9h_SZ_dong1=折车
+%z71d:=z71d㇗u31D7h_SZ_shan1=折山
+%z70193d:=z70193d㇟u31DFh=折匕
+%z717d:=z717d㇞u31DEh=折亞
+%z7196d:=z7196dㄣu3123h_SZP_SZG_zhuan1=折专
+%z71605d:=z71605dㄣu3123h_SZP_SZP_ce4=折夨
+%z71794d:=z71794d㇉u31C9h=折与
+%z605807d:=z605807d㇛u31DBh_PD=折女
+%z6051d:=z6051d㇜u31DCh_PZ=折公
+%z6160193d:=z6160193d_u200C9h=折丿乙
+
+
+=================
+=================
+大类折笔定义:
+  钩 弯 提 经常变化，如 竖+竖钩=2 点+捺=4，
+  折笔由小类归大类，难认(由于被缩小放置导致字形走样)，摆放型变体(九 提九，木 木旁 木底，最 聽，舟 船)
+  "zc\([12][123]|[906J]\)c" # 折z 类c
+  [12] 横/提 竖/撇 开头
+  [123] 几个折拐点
+  [906] 左弯钩 圈 右弯钩 竖左拐
+  共10大类
+#end 大类折笔定义
+
+=================
+=================
+折笔大类归类:
+
+$$zc11c=折类衍颇
+####勇负尔同㔖u3516h
+%z196d:=z196d㇖u31D6h_HG=折买
+%z1605d:=z1605d㇇u31C7h_HP=折今
+%z17d:=z17d㇕u31D5h_HZ=折口
+%z1794d:=z1794d㇆u31C6h=折习
+
+$$zc12c=折类衍讥
+####九鸠，几沿，丸纨，气:折风or乙
+%z160193d:=z160193d㇠u31E0h=折乙
+%z161d:=z161dㆸu31B8h=折平乙
+%z170893d:=z170893d⺄u2E84h_HZWG_HXG_fei1=折风
+%z170193d:=z170193d㇈u31C8h_HZWG_HSWG_jiu3=折几
+%z1701d:=z1701d㇍u31CDh_HZW=折朵
+%z171d:=z171d㇅u31C5h_HZZ=折左凹
+%z172d:=z172d㇊u31CAh=折计
+
+$$zc13c=折类衍辸
+####建之走之双耳 #走之 变体 含 折及
+%z160580694d:=z160580694d㇌u31CCh=折队
+%z161605d:=z161605d㇋u31CBh=折及
+%z161794d:=z161794d㇡u31E1h=折乃
+%z1717d:=z1717d㇎u31CEh=折凸
+
+
+$$zc0c=折类形圈
+%z0d:=z0d㇣u31E3h=折末㔔
+
+$$zc9c=折类形撇
+%z80694d:=z80694d㇁u31C1h=折狂
+####依 卧钩 与 斜钩 同类之例，撇钩 与 弯钩 归为一类
+%z60594d:=z60594d㇢u31E2h=折乄
+####依 斜钩 与 竖折 同类 之例，竖左拐 与 弯钩 归为一类
+####极为罕见，且极为可能被拆成两笔
+####$$zcJc=折类位乾
+%z75d:=z75d㇘u31D8h=折左上淵
+
+
+$$zc21c=折类衍纰
+####公牙儿四陋喝亡甚比旨
+%z6051d:=z6051d㇜u31DCh_PZ=折公
+%z72d:=z72d㇙u31D9h_ST=折以
+%z701d:=z701d㇄u31C4h_SW=折亡
+%z61d:=z61dㆹu31B9h_SZ_dong1=折车
+%z71d:=z71d㇗u31D7h_SZ_shan1=折山
+%z70193d:=z70193d㇟u31DFh=折匕
+####系首折笔 曾一度由 撇折 改 撇点 以满足 当时雕版印刷技术条件
+%z605807d:=z605807d㇛u31DBh_PD=折女
+####卧钩 有时被定义为 竖弯钩
+####斜钩 与 卧钩 很像，而且 既然 几风 归为一类，斜钩 与 竖弯钩 也该归于一类
+#### $$zc6c=折类形捺
+%z80193d:=z80193d㇃u31C3h=折心
+%z70893d:=z70893d㇂u31C2h=折戈
+
+$$zc22c=折类状勹
+%z717d:=z717d㇞u31DEh=折亞
+%z7196d:=z7196dㄣu3123h_SZP_SZG_zhuan1=折专
+%z71605d:=z71605dㄣu3123h_SZP_SZP_ce4=折夨
+%z71794d:=z71794d㇉u31C9h=折与
+
+$$zc23c=折类状幺
+%z6160193d:=z6160193d_u200C9h=折丿乙
+
+
+#end 折笔大类归类
+####共10大类，两类取消:折类形捺/折类位乾
+共8大类
+=================
+# =================
+# 角 皮 司
+# 鲎u9C8Eh
+# 鲏u9C8Fh
+#   =3525121153254
+# 鯞u9BDEh
+#   =3525121444451145252
+# 辸u8FB8h
+#   =53454
+# 匸u5338h
+#   =15
+# =================
+=================
+$$zc11c=折类衍颇$
+$$zc12c=折类衍讥$
+$$zc13c=折类衍辸$
+$$zc0c=折类形圈$
+$$zc9c=折类形撇$
+$$zc21c=折类衍纰$
+$$zc22c=折类状勹$
+$$zc23c=折类状幺$
+=================
+在『TODO-汉字拆分设计.txt』中，定义 单字代表八大折笔类:
+    四简笔八折笔
+      一丨丿乀 刁九乃 匕与幺 犭回
+      #幺:罕见，甚至不见#竖三折
+      #回:韩汉字#圈
+      #乀fu2，犭quan3，幺yao1
+=================
+:h :q
+  to exit help/cmd window opened by :h or q:
+:h q:
+  to edit cmd
+:h :list
+  :l
+  to list lines in given range
+:h :filter
+  like shell grep
+:h :redir
+
+:redir @">
+:filter /^[$][$]/ :%l
+  list/l whole file/%
+  filter all lines
+  append to register
+p
+  paste
+=================
+:h ^v
+  *CTRL-V* *blockwise-visual*
+  terminals
+      ctrl-v
+  windows
+      ctrl-q
+=================
+
+
+
+
+=================
+=================
+=================
+=================
+=================
+=================

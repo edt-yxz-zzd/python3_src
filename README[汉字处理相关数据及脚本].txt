@@ -1,6 +1,28 @@
 
 汉字处理相关数据及脚本
 
+我的
+  e /storage/emulated/0/0my_files/git_repos/python3_src/README\[汉字处理相关数据及脚本].txt
+    本文件
+  e ../../python3_src/nn_ns/CJK/CJK_data/raw/我的汉字分解原则.txt
+  e /storage/emulated/0/0my_files/git_repos/txt_phone/txt/TODO2.txt
+    临时
+  e /storage/emulated/0/0my_files/git_repos/txt_phone/笔顺码分解/0000.txt
+    进程:暂停:重新思考拆分原则
+    太细致，细化到笔画 无用，应立于更粗颗粒的基础部件上
+    转:汉字粗拆分
+
+  view /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/我的所有折笔归类.txt
+  view /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/unicode_CJK_Strokes_U31C0.pdf.txt
+  e /storage/emulated/0/0my_files/git_repos/txt_phone/汉字粗拆分/汉字粗拆分working.txt
+    进程:暂停:重新思考拆分原则、数据格式
+    阶段性结果:
+      view /storage/emulated/0/0my_files/git_repos/txt_phone/汉字粗拆分/汉字粗拆分working__1pause_20201022.txt
+    对如何拆分仍有疑问，转:
+      e hz/TODO-汉字拆分设计.txt
+      e /storage/emulated/0/0my_files/git_repos/txt_phone/汉字粗拆分/2汉字粗拆分working2.txt
+
+
 数据:
   [unicode]
       #E:\book\computer\standard\unicode\13.0.0[download_at][20200913]
@@ -131,6 +153,18 @@
                 ├── xpinyin.py
                 └── zh_wiki.py
 
+  www/yywzw/语言文字网:
+    汉字零件表_胡敬禹_20061218
+      file:///storage/emulated/0/0my_files/tmp-download/www.yywzw.com/jt/hjy/a-xfljb.htm
+    汉字部件清单_潘德孚_20030617
+      潘德孚::两种汉字部件研究方法的比较::汉字部件系统研究
+      file:///storage/emulated/0/0my_files/tmp-download/www.yywzw.com/pan/pan-03b-02.htm
+        五、部件定义的补充解释
+        六、部件清单
+          汉字部件清单
+    working
+      e ../../python3_src/nn_ns/CJK/CJK_data/raw/汉字部件清单_潘德孚_20030617.txt
+      e ../../python3_src/nn_ns/CJK/CJK_data/raw/汉字零件表_胡敬禹_20061218.txt
   www/???:
     中华字经2003__重复字4000_不同字3980
     汉字单字字频总表_cedict_12041
@@ -199,4 +233,35 @@ py script/pre_hz_decomp.py -o ~/tmp/笔顺码分解.txt -f
     0000.txt .. 0055.txt
       56=ceil(27978/500)
   py script/pre_hz_decomp.py --_tmp_call 2 > /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/output/pre_hz_decomp.py.out/部件的单字符代表.txt
+py -m nn_ns.CJK.CJK_data.raw.汉字相关字符范围 -do prepare_for_汉字粗拆分 -o ~/tmp/汉字粗拆分working.txt
+  1.8 MB
+  sorted by char ord
+  working with 一汉字多字形 unicode 13.0.0 :: charts-East_Asian_Scripts :: *.pdf
+  $ ls -1 '/sdcard/0my_files/zip/zip_selected__e_book_data/13.0.0[download_at][20200913]/charts-East_Asian_Scripts/'
+    U20000.pdf
+    U2A700.pdf
+    U2B740.pdf
+    U2B820.pdf
+    U2CEB0.pdf
+    U2E80.pdf
+    U2F00.pdf
+    U2F800.pdf
+    U2FF0.pdf
+    U30000.pdf
+    U3100.pdf
+    U31A0.pdf
+    U31C0.pdf
+    U3400.pdf
+    U4E00.pdf
+    UF900.pdf
+py '/storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/汉字笔顺表[20200913]/stroke-seq_MB-master[汉字笔顺表][20200827]/my_patch.py'
+  cd '/storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/汉字笔顺表[20200913]/stroke-seq_MB-master[汉字笔顺表][20200827]/'
+  py my_patch.py > my_patch.py.out.txt
+  view /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/汉字笔顺表\[20200913]/stroke-seq_MB-master\[汉字笔顺表]\[20200827]/my_patch.py.out.txt
+  view /storage/emulated/0/0my_files/git_repos/txt_phone/汉字粗拆分/汉字粗拆分working__1day.txt
+  view /storage/emulated/0/0my_files/git_repos/txt_phone/汉字粗拆分/汉字粗拆分working__1pause_20201022.txt
+
+
+py -m nn_ns.CJK.CJK_data.raw.汉字相关字符范围 -do prepare_for_2汉字粗拆分2 -o ~/tmp/2汉字粗拆分working2.txt
+  3.7 MB
 

@@ -1,0 +1,127 @@
+
+e /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/unicode_CJK_Strokes_U31C0.pdf.txt
+
+
+缺5:
+  ⺄u2E84h~横斜钩~风
+  ㄣu3123h~竖折撇~专
+  ?~左点~火冗
+  ?~撇折撇~ㄆu3106h夨u5928h
+  乁u4E41h~横捺~亪u4EAAh
+  ##已有：乀u4E40h~提捺~尐u5C10h
+  see:
+    view /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/汉字笔画名称表.txt
+
+36 stroke types from uncode 13.0.0
+㇀u31C0h
+  =1
+  #T 提 冰
+㇁u31C1h
+  =5
+  #WG 弯钩 狐
+㇂u31C2h
+  =5
+  #XG 斜钩 我
+㇃u31C3h
+  =5
+  #BXG 扁斜钩？ 心
+㇄u31C4h
+  =5
+  #SW 竖弯 亡四
+㇅u31C5h
+  =5
+  #HZZ 横折折 卍u534Dh
+㇆u31C6h
+  =5
+  #HZG 横折钩 羽也
+㇇u31C7h
+  =5
+  #HP 横撇 又今
+㇈u31C8h
+  =5
+  #HZWG 横折弯钩 飞九
+㇉u31C9h
+  =5
+  #SZWG 竖折弯钩 弓马
+㇊u31CAh
+  =5
+  #HZT 横折提 计鳩u9CE9h
+㇋u31CBh
+  =5
+  #HZZP 横折折撇 及
+㇌u31CCh
+  =5
+  #HPWG 横撇弯钩 阝u961Dh邮
+㇍u31CDh
+  =5
+  #HZW 横折弯 投
+㇎u31CEh
+  =5
+  #HZZZ 横折折折 凸
+㇏u31CFh
+  =4
+  #N 捺 大
+㇐u31D0h
+  =1
+  #H 横 大七
+㇑u31D1h
+  =2
+  #S 竖 中
+㇒u31D2h
+  =3
+  #P 撇 乏
+㇓u31D3h
+  =3
+  #SP 竖撇 月
+㇔u31D4h
+  =4
+  #D 点 丸
+㇕u31D5h
+  =5
+  #HZ 横折 四
+㇖u31D6h
+  =5
+  #HG 横钩 疋u758Bh子
+㇗u31D7h
+  =5
+  #SZ 竖折 山东
+㇘u31D8h
+  =5
+  #SWZ 竖弯折？ 肅u8085h
+㇙u31D9h
+  =5
+  #ST 竖提 民
+㇚u31DAh
+  =2
+  #SG 竖钩 水
+㇛u31DBh
+  =5
+  #PD 撇点 巡女
+㇜u31DCh
+  =5
+  #PZ 撇折 公弘
+㇝u31DDh
+  =4
+  #TN 提捺 廻u5EFBh
+㇞u31DEh
+  =5
+  #SZZ 竖折折 卐u5350h亞u4E9Eh
+㇟u31DFh
+  =5
+  #SWG 竖弯钩 乱己
+㇠u31E0h
+  =5
+  #HXWG 横斜弯钩 乙
+㇡u31E1h
+  =5
+  #HZZZG 横折折折钩 乃
+㇢u31E2h
+  =5
+  #PG 撇钩 乄u4E44h
+㇣u31E3h
+  =5
+  #Q 圈 㔔u3514h
+
+
+
+

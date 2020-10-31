@@ -1,0 +1,208 @@
+
+e /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/CJK/CJK_data/raw/unicode_CJK_Bopomofo_Zhuyin_Fuhao_U3100.pdf.txt
+
+16*3-5=43
+
+
+注音符号 from uncode 13.0.0
+See also the Bopomofo Extended block.
+Extended block. This script is also known as Zhuyin Fuhao.
+@@@SECTION:Based on GB 2312
+3105ㄅBOPOMOFO LETTER B
+3106ㄆBOPOMOFO LETTER P
+3107ㄇBOPOMOFO LETTER M
+3108ㄈBOPOMOFO LETTER F
+3109ㄉBOPOMOFO LETTER D
+310AㄊBOPOMOFO LETTER T
+310BㄋBOPOMOFO LETTER N
+310CㄌBOPOMOFO LETTER L
+310DㄍBOPOMOFO LETTER G
+310EㄎBOPOMOFO LETTER K
+310FㄏBOPOMOFO LETTER H
+3110ㄐBOPOMOFO LETTER J
+3111ㄑBOPOMOFO LETTER Q
+3112ㄒBOPOMOFO LETTER X
+3113ㄓBOPOMOFO LETTER ZH
+3114ㄔBOPOMOFO LETTER CH
+3115ㄕBOPOMOFO LETTER SH
+3116ㄖBOPOMOFO LETTER R
+3117ㄗBOPOMOFO LETTER Z
+3118ㄘBOPOMOFO LETTER C
+3119ㄙBOPOMOFO LETTER S
+311AㄚBOPOMOFO LETTER A
+311BㄛBOPOMOFO LETTER O
+311CㄜBOPOMOFO LETTER E
+311DㄝBOPOMOFO LETTER EH
+311EㄞBOPOMOFO LETTER AI
+311FㄟBOPOMOFO LETTER EI
+3120ㄠBOPOMOFO LETTER AU
+3121ㄡBOPOMOFO LETTER OU
+3122ㄢBOPOMOFO LETTER AN
+3123ㄣBOPOMOFO LETTER EN
+3124ㄤBOPOMOFO LETTER ANG
+3125ㄥBOPOMOFO LETTER ENG
+3126ㄦBOPOMOFO LETTER ER
+3127ㄧBOPOMOFO LETTER I
+####REMARK:• the vertical stroke form is considered a rendering variant
+3128ㄨBOPOMOFO LETTER U
+3129ㄩBOPOMOFO LETTER IU
+@@@SECTION:Dialect (non-Mandarin) letters
+312AㄪBOPOMOFO LETTER V
+312BㄫBOPOMOFO LETTER NG
+312CㄬBOPOMOFO LETTER GN
+@@@SECTION:Miscellaneous additions
+312DㄭBOPOMOFO LETTER IH
+####REMARK:• for analytic representation of apical vowel
+312EㄮBOPOMOFO LETTER O WITH DOT ABOVE
+####REMARK:• early form of letter e
+312FㄯBOPOMOFO LETTER NN
+####REMARK:• syllabic nasal
+
+
+
+
+
+
+
+######==========
+㄀u3100h
+  =n
+㄁u3101h
+  =n
+㄂u3102h
+  =n
+㄃u3103h
+  =n
+㄄u3104h
+  =n
+ㄅu3105h
+  =5
+  #@b
+ㄆu3106h
+  =54
+  #@p
+ㄇu3107h
+  =25
+  #@m
+ㄈu3108h
+  =15
+  #@f
+ㄉu3109h
+  =53
+  #@d
+ㄊu310Ah
+  =154
+  #@t
+  #𠫓u20AD3h
+ㄋu310Bh
+  =5
+  #@n
+ㄌu310Ch
+  =53 ? 35
+  #@l
+ㄍu310Dh
+  =55
+  #@g
+ㄎu310Eh
+  =15
+  #@k
+ㄏu310Fh
+  =13
+  #@h
+ㄐu3110h
+  =52
+  #@j
+ㄑu3111h
+  =5
+  #@q
+ㄒu3112h
+  =12
+  #@x
+ㄓu3113h
+  =5221
+  #@zh
+ㄔu3114h
+  =332
+  #@ch
+ㄕu3115h
+  =513
+  #@sh
+ㄖu3116h
+  =2514 ? 2541
+  #@r
+ㄗu3117h
+  =52
+  #@z
+ㄘu3118h
+  =15
+  #@c
+ㄙu3119h
+  =54
+  #@s
+ㄚu311Ah
+  =432
+  #@a
+ㄛu311Bh
+  =15
+  #@o
+ㄜu311Ch
+  =15
+  #@e
+ㄝu311Dh
+  =135
+  #@eh
+ㄞu311Eh
+  =153 ? 135
+  #@ai
+ㄟu311Fh
+  =4
+  #@ei
+ㄠu3120h
+  =554
+  #@au
+ㄡu3121h
+  =54
+  #@ou
+ㄢu3122h
+  =55
+  #@an
+ㄣu3123h
+  =5
+  #@en
+ㄤu3124h
+  =135
+  #@ang
+ㄥu3125h
+  =5
+  #@eng
+ㄦu3126h
+  =35
+  #@er
+ㄧu3127h
+  =1
+  #@i
+ㄨu3128h
+  =34
+  #@u
+ㄩu3129h
+  =52
+  #@iu
+ㄪu312Ah
+  =153
+  #@v
+ㄫu312Bh
+  =135
+  #@ng
+ㄬu312Ch
+  =413
+  #@gn
+ㄭu312Dh
+  =1252
+  #@ih
+ㄮu312Eh
+  =415
+  #@e
+ㄯu312Fh
+  =52
+  #@nn
+######==========
