@@ -19,7 +19,8 @@ def set_fdefault(mapping, key, fdefault):
     def miss():
         r = mapping[key] = fdefault()
         return r
-    return mapping.get(key, miss)
+    #bug:return mapping.get(key, miss)
+    return get_fdefault(mapping, key, miss)
 
 
 def getitem_fdefault(mapping, key, fdefault):

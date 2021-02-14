@@ -2,6 +2,49 @@ plantri
   http://users.cecs.anu.edu.au/~bdm/plantri/
 
 [[[
+统计信息
+view /sdcard/0my_files/git_repos/python3_src/nn_ns/graph/adc3m3/'-adc3m3[4, 6, 8].txt'
+
+4 bcd,adc,abd,acb
+6 bcd,aef,afd,ace,bdf,bec
+8 bcd,aef,afg,agh,bhf,bec,chd,dge
+8 bcd,aef,afg,age,bdh,bhc,chd,egf
+
+num_edges = num_vertices *3/2
+    # 39 = 26 *3/2
+num_vertices2num_graphs = \
+    {4:1
+    ,6:1
+    ,8:2
+    ,10:5
+    ,12:14
+    ,14:50
+    ,16:233
+    ,18:1249
+    ,20:7595
+    ,22:49566
+    ,24:339722
+    #total=398438
+    ,26:2406841
+    #total=2805279
+    }
+$ echo $[398438+2406841]
+2805279
+
+# unicode total: 0x11_0000 == 1114112
+    -adc3m3[26].txt
+        247 MB (259,938,828 bytes)
+        2406841 cubic graphs
+    -adc3m3[4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24].txt
+        37.4 MB (39,285,084 bytes)
+        398438 cubic graphs
+#
+]]]
+
+
+
+
+[[[
 使用
 cd ~/src/plantri50
 view ../../python3_src/c_external/plantri/plantri-doc/plantri-guide.txt
@@ -19,6 +62,7 @@ view ../../python3_src/c_external/plantri/plantri-doc/plantri-guide.txt
     -s sparse6
     -a ascii
 
+cd /data/data/com.termux/files/home/src/plantri50/plantri50@termux@armv7l-unknown-linux-gnueabi/
 ./plantri -adc3m3 4d
   4 bcd,adc,abd,acb
 
@@ -39,6 +83,9 @@ view ~/tmp/-adc3m3[4d-16d].txt
 diff ~/tmp/-adc3m3[4d-16d].txt /sdcard/0my_files/git_repos/python3_src/nn_ns/graph/adc3m3_from4to18d.txt
 
 
+cd /data/data/com.termux/files/home/src/plantri50/plantri50@termux@armv7l-unknown-linux-gnueabi/
+for i in {4..20..2} ; do ./plantri -adc3m3 ${i}d ; done > ~/tmp/plantri~-adc3m3~4d-20d.txt
+    726 KB
 ]]]
 
 [[[
