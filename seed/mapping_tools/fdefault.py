@@ -1,11 +1,23 @@
 
 
 __all__ = '''
+    mapping_on_key
+
     get_fdefault
     set_fdefault
     getitem_fdefault
     setitem_fdefault
+    add_new_item
     '''.split()
+
+def mapping_on_key(mapping, key, payload, handler):
+    r'''
+    handler :: mapping->key->payload->may_old_value->result
+    #'''
+    Nothing = object()
+    r = mapping.get(key, Nothing)
+    may_old_value = () if r is Nothing else (r,)
+    return handler(mapping, key, payload, may_old_value)
 
 def get_fdefault(mapping, key, fdefault):
     # fdefault :: () -> d
@@ -43,4 +55,28 @@ def setitem_fdefault(mapping, key, fdefault):
         r = mapping[key] = fdefault()
         return r
     return getitem_fdefault(mapping, key, miss)
+
+def add_new_item(mapping, key, new_value, *op_oldnew=None):
+    if op_oldnew is None:
+        def op_oldnew(old_value, new_value):
+            raise KeyError('key existed!')
+    def handler(mapping, key, payload, may_old_value):
+        new_value = payload
+        if may_old_value:
+            [old_value] = may_old_value
+            new_value = op_oldnew(old_value, new_value)
+        else:
+            #miss, add_new_item
+            pass
+        mapping[key] = new_value
+    payload = new_value
+    mapping_on_key(mapping, key, payload, handler)
+
+
+
+
+
+
+
+
 
