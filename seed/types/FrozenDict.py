@@ -1,8 +1,14 @@
 
 '''
 ReadOnly mapping ==>> MappingProxyType
+    mapping view
+    not hashable
 Hashable mapping ==>> FrozenDict
+    like tuple, hashable iff all elements hashable
 KeysImmutable mapping ==>> HalfFrozenDict
+    like list with fixed len
+    frozen keys
+    not hashable
 '''
 
 
@@ -15,6 +21,8 @@ __all__ = '''
 '''.split()
 
 
+from seed.helper.repr_input import repr_helper_ex
+from seed.helper.repr_input import repr_helper
 from types import MappingProxyType
 from collections.abc import Mapping, Set, Hashable
 
@@ -89,6 +97,9 @@ class FrozenDict(__Dict, HashableMapping):
         if self.__hash is None:
             self.__hash = self._hash()
         return self.__hash
+    def __repr__(self):
+        return repr_helper(self, {**self})
+        return repr_helper_ex('mk_GetArgsKwargs', self.args, [], self.kwargs, name_only=True)
 
 class HalfFrozenDict(__Dict):
     def __init__(self, iterable_or_mapping=(), **kwargs):

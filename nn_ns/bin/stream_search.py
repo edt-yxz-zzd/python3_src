@@ -1,8 +1,31 @@
 
-from collections import deque
-from prime2 import mod_pow
+r'''
+see:
+    seed.iters.find
+        #search subseq
+        #using failure_func
+    nn_ns.bin.stream_search
+        #search subseq
+        #using polynomial hash
+    seed.seq_tools.seq_index_if
+        #search value
+        #using predicator
+#'''
 
-'''
+__all__ = '''
+    iter_search_all
+    search_all
+
+    Finder
+    Hasher
+    hash_str
+    hash_str_plus
+    '''.split()
+
+from collections import deque
+from nn_ns.math_nn.prime2 import mod_pow
+
+r'''
 wiki/Multiplicative_group_of_integers_modulo_n#Powers_of_2
 
 k > 2, n = 2^k, U(Z/nZ) is not cyclic
@@ -54,8 +77,9 @@ Finding primitive roots
         | otherwise    = g
         where g = primitive_root(p^k)
 
-        
-'''
+
+#'''
+
 hash_bit_num = 32
 hash_modulo_n = 2**hash_bit_num
 hash_base = 3
@@ -63,20 +87,18 @@ hash_order= 2**(hash_bit_num - 2)
 
 
 def search_all(key, fname):
-    with open(fname, 'rb') as f:
-        return _search_all(key, f)
+    with open(fname, 'rb') as fin:
+        locations = iter_search_all(key, fin)
+    return locations
 
 
-def _search_all(key, file_obj):
-    locations = []
+def iter_search_all(key, file_obj):
     finder = Finder(key)
     while True:
-        loc = finder.search_next(file_obj)
-        if loc < 0:
+        location = finder.search_next(file_obj)
+        if location < 0:
             break
-        locations.append(loc)
-
-    return locations
+        yield location
 
 
 class Finder:
@@ -85,7 +107,7 @@ class Finder:
         length = len(self.key)
         self.key_deque = deque(key, length)
         self.key_hash = Hasher(key).get_hash()
-        
+
     def search_next(self, file_obj):
         f = file_obj
         length = len(self.key)
@@ -123,8 +145,8 @@ class Hasher:
         self.patch = p
 
     def fifo_hash(self, old_ibyte, new_ibyte):
-        self.hash = hash_str_plus(self.hash, old_ibyte, new_ibyte, \
-                                  self.modulo_n, self.base, self.patch)
+        self.hash = hash_str_plus(self.hash, old_ibyte, new_ibyte
+                                  ,self.modulo_n, self.base, self.patch)
         return self.hash
 
     def get_hash(self):
@@ -134,7 +156,7 @@ class Hasher:
 
 def hash_str(data, modulo_n, base, order):
     assert(type(data[0]) == int) # data is of type bytes or bytearray, but not str
-    
+
     # data[0]*base**(length-1+d) +..+ data[-1]*base**(0+d) mod n
     # base**(length+d) = 1 mod n
     # length+d = 0 mod order
@@ -154,7 +176,7 @@ def hash_str(data, modulo_n, base, order):
 
     h = (h * patch) % modulo_n
     return (h, patch)
-    
+
 
 def hash_str_plus(data_hash, old_ibyte, new_ibyte, modulo_n, base, patch):
     assert(type(old_ibyte) == int)
@@ -168,8 +190,8 @@ def test_finder():
     import io
     f = io.BytesIO(b'33af33')
     key = b'33'
-    r = _search_all(key, f)
+    r = [*iter_search_all(key, f)]
     assert r == [0, 4]
-    
+
 
 test_finder()

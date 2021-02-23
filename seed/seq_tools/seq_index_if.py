@@ -1,5 +1,19 @@
 
 '''
+see:
+    seed.iters.find
+        #search subseq
+        #using failure_func
+    nn_ns.bin.stream_search
+        #search subseq
+        #using polynomial hash
+    seed.seq_tools.seq_index_if
+        #search value
+        #using predicator
+
+
+
+
 example:
     >>> from seed.tiny import expectError
     >>> ls = '0123456789'

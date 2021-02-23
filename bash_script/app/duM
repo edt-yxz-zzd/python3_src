@@ -1,0 +1,2 @@
+##du -h -d 1 /sdcard/Android/data/   | grep '[MG]\s'
+du -h -d 1 "$@"  | grep '^[0-9.]\+[MGTP]\s'

@@ -10,6 +10,7 @@ __all__ = str2__all__('''
     ifNone              # :: (None|a) -> default -> (a|default)
     ifNonef             # :: (None|a) -> (()->default) -> (a|default)
     expectError         # :: Error -> (()->...) -> bool
+    assert_eq           # :: lhs -> rhs -> (_fmt=...) -> **vars -> ()
     null_iter           # :: iter([])
     null_tuple          # == ()
 
@@ -45,6 +46,7 @@ from .helper.Echo import echo, theEcho
 from .helper.with_if import with_if
 from .debug.expectError import expectError
 from .debug.print_err import print_err, print_ferr
+from .debug.assert_eq import assert_eq
 from .debug.lazy_raise import lazy_raise
 from .func_tools.not_dot import __not__, not_dot
 

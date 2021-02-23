@@ -1,4 +1,9 @@
 
+r'''
+
+from seed.types.view.View import MapView
+
+#'''
 
 __all__ = '''
     MapView
