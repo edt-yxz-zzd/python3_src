@@ -1,5 +1,10 @@
 
 '''
+seed.seq_tools.seq_index_if
+py -m seed.seq_tools.seq_index_if
+from seed.seq_tools.seq_index_if import seq_index, seq_index_if, seq_find, seq_find_if
+
+
 see:
     seed.iters.find
         #search subseq
@@ -10,6 +15,9 @@ see:
     seed.seq_tools.seq_index_if
         #search value
         #using predicator
+    seed.text.StepDecoder
+        #def&search "line"
+        #using step_builder,step_predicator
 
 
 

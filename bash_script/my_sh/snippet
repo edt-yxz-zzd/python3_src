@@ -1,0 +1,1 @@
+bash $my_git_sh/app/snippet "$@"

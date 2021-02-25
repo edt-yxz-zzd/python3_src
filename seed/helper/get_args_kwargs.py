@@ -4,6 +4,8 @@ r'''
 py -m seed.helper.get_args_kwargs
 
 from seed.helper.get_args_kwargs import mk_GetArgsKwargs, xcall
+from seed.helper.get_args_kwargs import mk_GetArgsKwargs as mkG, xcall
+
 
 >>> g = mk_GetArgsKwargs(3, 2, 1, b=4, a=5)
 >>> g

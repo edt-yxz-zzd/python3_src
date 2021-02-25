@@ -1,5 +1,9 @@
 
 r'''
+nn_ns.bin.stream_search
+py -m nn_ns.bin.stream_search
+from nn_ns.bin.stream_search import iter_search_all
+
 see:
     seed.iters.find
         #search subseq
@@ -10,6 +14,9 @@ see:
     seed.seq_tools.seq_index_if
         #search value
         #using predicator
+    seed.text.StepDecoder
+        #def&search "line"
+        #using step_builder,step_predicator
 #'''
 
 __all__ = '''

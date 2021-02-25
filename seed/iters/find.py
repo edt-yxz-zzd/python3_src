@@ -1,6 +1,9 @@
 
 r'''
+seed.iters.find
 py -m seed.iters.find
+from seed.iters.find import iter_search_subseq_on_seq, iter_search_subseq_on_stream
+
 
 see:
     seed.iters.find
@@ -12,6 +15,9 @@ see:
     seed.seq_tools.seq_index_if
         #search value
         #using predicator
+    seed.text.StepDecoder
+        #def&search "line"
+        #using step_builder,step_predicator
 
 #'''
 

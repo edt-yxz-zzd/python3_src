@@ -69,6 +69,81 @@ if __name__ == '__main__':
     data = str2values_by_line2expr(data)
 
 
+
+
+def main(args=None):
+  from seed.for_libs.for_argparse.subcmd import Main4subcmd
+  class Main(Main4subcmd):
+    def on_subcmd__search(sf, subcmd_name, parsed_args):
+        return _main_subcmd_search(parsed_args)
+    def on_subcmd__readline(sf, subcmd_name, parsed_args):
+        return _main_subcmd_readline(parsed_args)
+    def on_no_subcmd(sf, subcmd_name, parsed_args):
+        raise NotImplementedError
+    @classmethod
+    def _mk_option_config_(cls):
+        '-> ([parent::ArgParserPrepare], [common_option::GetArgsKwargs], {group_name:{subcmd:ArgParserPrepare}})'
+        return [], [], {'subcmd':_mk_subcmd2prepare()}
+  return Main(description=_g_description, subcmd_dest_name='subcmd').main(args)
+
+
+
+#_Main+main.Main(_Main, Main4subcmd): framework from <phone_txt>/txt/script/欧路词典.py
+class _Main:
+    def on_subcmd__search(sf, subcmd_name, parsed_args):
+        return _main_subcmd_search(parsed_args)
+    def on_subcmd__readline(sf, subcmd_name, parsed_args):
+        return _main_subcmd_readline(parsed_args)
+    def on_no_subcmd(sf, subcmd_name, parsed_args):
+        raise NotImplementedError
+    @classmethod
+    def _mk_option_config_(cls):
+        '-> ([parent::ArgParserPrepare], [common_option::GetArgsKwargs], {group_name:{subcmd:ArgParserPrepare}})'
+        return [], [], {'subcmd':_mk_subcmd2prepare()}
+
+        #below copy from seed.for_libs.for_argparse.subcmd
+        Get, Pack = cls.Get, cls.Pack
+
+        options_XXX = (
+    [Get('-v', '--method_version', type=int, required=True, choices=(1,2,3), help='XXX method impl version')
+    ,Get('-i', '--input', type=str, default=None, help='input file path')
+    ,Get('-o', '--output', type=str, default=None, help='output file path')
+    ,Get('-e', '--encoding', type=str, default='utf8', help='input/output file encoding')
+    ,Get('-f', '--force', action='store_true', default = False, required=False, help='open mode for output file')
+        ])
+        options_YYY = (
+    [
+        ])
+
+
+        prepare_XXX = Pack([], options_XXX, {})
+        prepare_YYY = Pack([], options_YYY, {})
+        subcmd2prepare_GROUP_A = (dict
+            (XXX=prepare_XXX
+            ,YYY=prepare_YYY
+            ))
+        subcmd2prepare_GROUP_B = (dict
+            (
+            ))
+        group_name2subcmd2prepare = (dict
+            (GROUP_A=subcmd2prepare_GROUP_A
+            ,GROUP_B=subcmd2prepare_GROUP_B
+            ))
+        return [], [], group_name2subcmd2prepare
+        def on_subcmd__XXX(sf, subcmd_name, parsed_args):
+            'XXX'
+        def on_subcmd__YYY(sf, subcmd_name, parsed_args):
+            'YYY'
+        def on_no_subcmd(sf, subcmd_name, parsed_args):
+            raise NotImplementedError
+def main(args=None):
+    from seed.for_libs.for_argparse.subcmd import Main4subcmd
+    class Main(_Main, Main4subcmd):
+      pass
+    return Main(description=_g_description, subcmd_dest_name='subcmd').main(args)
+
+
+
 def main(args=None):
     import argparse
     from seed.io.may_open import may_open_stdin, may_open_stdout
