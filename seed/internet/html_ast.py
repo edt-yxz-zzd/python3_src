@@ -21,11 +21,86 @@ ops.枚举后代(obj)
 ops.举得第一后代(obj)
 ops.举得唯一后代(obj)
 ops.搜索后代(obj, ['div', 'span'], 属性过滤={'class':'xxx yyy'}, 文本过滤=re.compile(...), 前几个=4)
-ops.搜索第一后代(obj, ['div', 'span'], 属性过滤={'class':'xxx yyy'}, 文本过滤=re.compile(...))
-ops.搜索唯一后代(obj, ['div', 'span'], 属性过滤={'class':'xxx yyy'}, 文本过滤=re.compile(...))
+ops.搜得第一后代(obj, ['div', 'span'], 属性过滤={'class':'xxx yyy'}, 文本过滤=re.compile(...))
+ops.搜得唯一后代(obj, ['div', 'span'], 属性过滤={'class':'xxx yyy'}, 文本过滤=re.compile(...))
 
 
+枚举序后文本
+枚举此后文本
+枚举此后
+    # obj not in descendants/next_elements
+    # descendants == next_elements[:L]
+    # [document]需特别对待
 
+
+py -m seed.internet.html_ast
+
+>>> ops = HtmlAstOps()
+>>> obj = ops.建('<p>xxx<span>sss</span><br/><img><div>yyy</div></p>', markup_lang=MarkupLang.HTML)
+
+>>> obj
+<p>xxx<span>sss</span><br/><img/><div>yyy</div></p>
+
+#注意: obj是[document]，因此 此后 含obj+<p>
+>>> for x in ops.枚举此后(obj): print(x)
+<p>xxx<span>sss</span><br/><img/><div>yyy</div></p>
+<p>xxx<span>sss</span><br/><img/><div>yyy</div></p>
+xxx
+<span>sss</span>
+sss
+<br/>
+<img/>
+<div>yyy</div>
+yyy
+
+#注意: obj是[document]，因此 序后 含<p>
+>>> for x in ops.枚举序后(obj): print(x)
+<p>xxx<span>sss</span><br/><img/><div>yyy</div></p>
+xxx
+<span>sss</span>
+sss
+<br/>
+<img/>
+<div>yyy</div>
+yyy
+
+#注意: obj是[document]，因此 后代 含<p>
+>>> for x in ops.枚举后代(obj): print(x)
+<p>xxx<span>sss</span><br/><img/><div>yyy</div></p>
+xxx
+<span>sss</span>
+sss
+<br/>
+<img/>
+<div>yyy</div>
+yyy
+
+
+>>> span = ops.搜得唯一后代(obj, 'span')
+>>> span
+<span>sss</span>
+
+>>> sss = ops.举得唯一后代(span)
+>>> str(sss)
+'sss'
+
+>>> for x in ops.枚举此后(span): print(x)
+<span>sss</span>
+sss
+<br/>
+<img/>
+<div>yyy</div>
+yyy
+
+>>> for x in ops.枚举序后(span): print(x)
+sss
+<br/>
+<img/>
+<div>yyy</div>
+yyy
+
+>>> for x in ops.枚举后代(span): print(x)
+sss
 
 
 #'''
@@ -39,7 +114,7 @@ __all__ = '''
     '''.split()
 
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag, NavigableString
 from bs4 import SoupStrainer
 import enum
 import re
@@ -73,10 +148,14 @@ MarkupTag = Tag
 名类别 = fr'(?P<类别>(?(单动作举){名类别举}|{名类别搜}))'
 
 
-名要求 = r'(?P<要求>{隔要求})'
+名要求 = fr'(?P<要求>{隔要求})'
 式单方法名 = re.compile(fr'{名单动作}{名要求}{名类别}')
 隔类别列表 = [隔类别举, 隔类别搜]
 
+if 1:
+    #print(式单方法名.pattern)
+    assert 式单方法名.fullmatch('举得唯一后代')
+    assert 式单方法名.fullmatch('搜得唯一后代')
 
 def _cut(s):
     i = s.index('>')
@@ -111,13 +190,13 @@ def _iter_fmt_f3():
     fmt_I = """\
     def {nm}(ops, obj):
         check_tag(obj)
-        return super().{nm}(obj)
+        return ops._{nm}(obj)
         #"""
 
     fmt_S = """\
     def {nm}(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={{}}):
         check_tag(obj)
-        return super().{nm}(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._{nm}(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #"""
 
     yield from _iter_fmt_f3_X(I, fmt_I)
@@ -131,12 +210,17 @@ def _print_f3():
     for s in _iter_fmt_f3():
         print(s)
 
+_iter = iter
 
 
 
+
+def is_bs4_doc(obj):
+    return type(obj) is BeautifulSoup and obj.name == '[document]'
 
 def check_iterator(iterator):
     if iter(iterator) is not iterator:
+        # TypeError: <class 'bs4.element.ResultSet'> is not iterator
         raise TypeError(fr'{type(iterator)!r} is not iterator')
 def check_tag(obj):
     if not isinstance(obj, (MarkupTag, MarkupProxy)):
@@ -150,10 +234,22 @@ class _HtmlAstOpsAid0:
     # 类别搜 = 后代|子女|祖先|弟妹|兄姐|序后|序前
     # 全部/第一/唯一 (枚举搜索结果)
     # 举得/搜得 * 第一/唯一 * <类别举/类别搜>
-    def __getattr__(ops, name):
-        m = 式单方法名.fullmatch(name)
+    def __getattr__(ops, _name):
+        #print(f'{name}')
+
+        m = None
+        if _name.startswith('_'):
+            name = _name[1:]
+            m = 式单方法名.fullmatch(name)
+
         if m is None:
+            name = _name
+            #print(f'{name}')
+            #AttributeError: 'super' object has no attribute '__getattr__'
+            #说明真的没有name! 不是bug!
             return super().__getattr__(name)
+            return super(__class__, type(ops)).__getattr__(ops, name)
+            return super(__class__, ops).__getattr__(name)
         单动作 = m['单动作']
         要求 = m['要求']
         类别 = m['类别']
@@ -218,131 +314,131 @@ class _HtmlAstOpsAid1(_HtmlAstOpsAid0):
     #[
     def 举得第一后代(ops, obj):
         check_tag(obj)
-        return super().举得第一后代(obj)
+        return ops._举得第一后代(obj)
         #
     def 举得第一子女(ops, obj):
         check_tag(obj)
-        return super().举得第一子女(obj)
+        return ops._举得第一子女(obj)
         #
     def 举得第一祖先(ops, obj):
         check_tag(obj)
-        return super().举得第一祖先(obj)
+        return ops._举得第一祖先(obj)
         #
     def 举得第一弟妹(ops, obj):
         check_tag(obj)
-        return super().举得第一弟妹(obj)
+        return ops._举得第一弟妹(obj)
         #
     def 举得第一兄姐(ops, obj):
         check_tag(obj)
-        return super().举得第一兄姐(obj)
+        return ops._举得第一兄姐(obj)
         #
     def 举得第一序后(ops, obj):
         check_tag(obj)
-        return super().举得第一序后(obj)
+        return ops._举得第一序后(obj)
         #
     def 举得第一序前(ops, obj):
         check_tag(obj)
-        return super().举得第一序前(obj)
+        return ops._举得第一序前(obj)
         #
     def 举得第一文本(ops, obj):
         check_tag(obj)
-        return super().举得第一文本(obj)
+        return ops._举得第一文本(obj)
         #
     def 举得第一简报(ops, obj):
         check_tag(obj)
-        return super().举得第一简报(obj)
+        return ops._举得第一简报(obj)
         #
     def 举得唯一后代(ops, obj):
         check_tag(obj)
-        return super().举得唯一后代(obj)
+        return ops._举得唯一后代(obj)
         #
     def 举得唯一子女(ops, obj):
         check_tag(obj)
-        return super().举得唯一子女(obj)
+        return ops._举得唯一子女(obj)
         #
     def 举得唯一祖先(ops, obj):
         check_tag(obj)
-        return super().举得唯一祖先(obj)
+        return ops._举得唯一祖先(obj)
         #
     def 举得唯一弟妹(ops, obj):
         check_tag(obj)
-        return super().举得唯一弟妹(obj)
+        return ops._举得唯一弟妹(obj)
         #
     def 举得唯一兄姐(ops, obj):
         check_tag(obj)
-        return super().举得唯一兄姐(obj)
+        return ops._举得唯一兄姐(obj)
         #
     def 举得唯一序后(ops, obj):
         check_tag(obj)
-        return super().举得唯一序后(obj)
+        return ops._举得唯一序后(obj)
         #
     def 举得唯一序前(ops, obj):
         check_tag(obj)
-        return super().举得唯一序前(obj)
+        return ops._举得唯一序前(obj)
         #
     def 举得唯一文本(ops, obj):
         check_tag(obj)
-        return super().举得唯一文本(obj)
+        return ops._举得唯一文本(obj)
         #
     def 举得唯一简报(ops, obj):
         check_tag(obj)
-        return super().举得唯一简报(obj)
+        return ops._举得唯一简报(obj)
         #
     def 搜得第一后代(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得第一后代(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得第一后代(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得第一子女(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得第一子女(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得第一子女(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得第一祖先(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得第一祖先(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得第一祖先(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得第一弟妹(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得第一弟妹(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得第一弟妹(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得第一兄姐(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得第一兄姐(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得第一兄姐(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得第一序后(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得第一序后(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得第一序后(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得第一序前(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得第一序前(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得第一序前(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得唯一后代(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得唯一后代(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得唯一后代(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得唯一子女(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得唯一子女(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得唯一子女(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得唯一祖先(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得唯一祖先(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得唯一祖先(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得唯一弟妹(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得唯一弟妹(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得唯一弟妹(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得唯一兄姐(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得唯一兄姐(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得唯一兄姐(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得唯一序后(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得唯一序后(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得唯一序后(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
     def 搜得唯一序前(ops, obj, 件名过滤=True, *, 文本过滤=None, 属性过滤={}):
         check_tag(obj)
-        return super().搜得唯一序前(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
+        return ops._搜得唯一序前(obj, 件名过滤, 文本过滤=文本过滤, 属性过滤=属性过滤)
         #
 
 
@@ -418,24 +514,64 @@ class HtmlAstOps(_HtmlAstOpsAid1):
         return obj.previous_siblings
     def 枚举序后(ops, obj):
         check_tag(obj)
-        return obj.next_elements
+        if is_bs4_doc(obj):
+            return obj.descendants
+        else:
+            return obj.next_elements
     def 枚举序前(ops, obj):
         check_tag(obj)
         return obj.previous_elements
     def 枚举文本(ops, obj):
         check_tag(obj)
-        return obj.strings
+        #print(obj)
+        #return obj.strings #？只有『子女』，非所有『后代』？
+        it = ops.枚举后代(obj)
+        return ops._过滤文本(it)
+    def _过滤文本(ops, objs):
+        #T = bs4.element.NavigableString
+        T = NavigableString
+        for x in objs:
+            #print(type(x))
+            if isinstance(x, T):
+                yield str(x)
     def 枚举简报(ops, obj):
         check_tag(obj)
         return obj.stripped_strings
+    def 枚举序后文本(ops, obj):
+        check_tag(obj)
+        if 0:
+            print(obj.children)
+            print(len([*obj.children]))
+            print([*map(type, obj.children)])
+            print([*obj.children][2].name)
+        if 0:
+            it = ops.枚举序后(obj)
+            ls = [*it]
+            print(len(ls))
+        it = ops.枚举序后(obj)
+        return ops._过滤文本(it)
+    def 枚举此后文本(ops, obj):
+        check_tag(obj)
+        it = ops.枚举此后(obj)
+        return ops._过滤文本(it)
+    def 枚举此后(ops, obj):
+        check_tag(obj)
+        #print(type(obj), obj.name, len([*obj.children]))
+        # obj not in descendants/next_elements
+        # descendants == next_elements[:L]
+        yield obj
+        yield from ops.枚举序后(obj)
+
+
+
 
     def 搜索后代(ops, obj, 件名过滤=True, *, 文本过滤=None, 前几个=None, 属性过滤={}):
         check_tag(obj)
-        return obj.find_all(name=件名过滤, attrs=属性过滤, recursive=True, string=文本过滤, limit=前几个)
+        return _iter(obj.find_all(name=件名过滤, attrs=属性过滤, recursive=True, string=文本过滤, limit=前几个))
 
     def 搜索子女(ops, obj, 件名过滤=True, *, 文本过滤=None, 前几个=None, 属性过滤={}):
         check_tag(obj)
-        return obj.find_all(name=件名过滤, attrs=属性过滤, recursive=False, string=文本过滤, limit=前几个)
+        return _iter(obj.find_all(name=件名过滤, attrs=属性过滤, recursive=False, string=文本过滤, limit=前几个))
 
     def 搜索祖先(ops, obj, 件名过滤=True, *, 文本过滤=None, 前几个=None, 属性过滤={}):
         check_tag(obj)
@@ -451,11 +587,11 @@ class HtmlAstOps(_HtmlAstOpsAid1):
 
     def 搜索序后(ops, obj, 件名过滤=True, *, 文本过滤=None, 前几个=None, 属性过滤={}):
         check_tag(obj)
-        return obj.find_all_next(name=件名过滤, attrs=属性过滤, string=文本过滤, limit=前几个)
+        return _iter(obj.find_all_next(name=件名过滤, attrs=属性过滤, string=文本过滤, limit=前几个))
 
     def 搜索序前(ops, obj, 件名过滤=True, *, 文本过滤=None, 前几个=None, 属性过滤={}):
         check_tag(obj)
-        return obj.find_all_previous(name=件名过滤, attrs=属性过滤, string=文本过滤, limit=前几个)
+        return _iter(obj.find_all_previous(name=件名过滤, attrs=属性过滤, string=文本过滤, limit=前几个))
 
 
 
@@ -484,6 +620,10 @@ class HtmlTag:
 
 if __name__ == '__main__':
     _print_f3()
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
 
 
 

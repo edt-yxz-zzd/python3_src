@@ -39,6 +39,11 @@ __all__ = str2__all__('''
                         # does_run_as_main(__name__)
                         # does_run_as_main.alter_main_name :: String
 
+    MapView             # mapping -> MappingProxyType
+    kwargs2Attrs        # (**kwargs) -> SimpleNamespace
+    is_iterable         # a -> Bool
+    is_iterator         # a -> Bool
+    is_reiterable       # a -> Bool
     ''')
 
 from .helper.ifNone import ifNone, ifNonef
@@ -49,6 +54,12 @@ from .debug.print_err import print_err, print_ferr
 from .debug.assert_eq import assert_eq
 from .debug.lazy_raise import lazy_raise
 from .func_tools.not_dot import __not__, not_dot
+from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs
+  #SimpleNamespace(**kw)
+from collections.abc import Iterable, Iterator
+
+
+
 
 no_op = lambda *args, **kwargs:None
 echo_args_kwargs = lambda *args, **kwargs:(args, kwargs)
@@ -90,6 +101,15 @@ def int2cmp(i):
         return 0
     return -1 if i < 0 else +1
 
+def is_iterable(x):
+    if not isinstance(x, Iterable): return False
+    return iter(x) is not None
+def is_iterator(x):
+    if not isinstance(x, Iterator): return False
+    return iter(x) is x
+def is_reiterable(x):
+    return is_iterable(x) and not is_iterator(x)
+
 def does_run_as_main(__name__):
     '''to replace '__name__ == "__main__"'
 
@@ -120,7 +140,7 @@ does_run_as_main.alter_main_name = '__run_as_main__'
 
 
 
-'''see: seed.ECHO
+r'''see: seed.ECHO
 
 ECHO = theEcho
 def __register(qname, pseudo_module):
@@ -145,4 +165,4 @@ del __register_ECHO, __register
 
     # seed.tiny.ECHO is a virtual module
     # from seed.tiny.ECHO import x,y,z
-'''
+#'''
