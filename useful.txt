@@ -4,9 +4,14 @@
 #
 
 
+#HHHHH
+#TODO
 r"""
 #"""
 
+from seed.tiny import str2__all__
+__all__ = str2__all__(r'''#)
+    #(''')
 __all__ = '''
     '''.split()
 from itertools import chain

@@ -16,6 +16,7 @@ __all__ = str2__all__('''
 
     fst                 # :: (a, ...) -> a
     snd                 # :: (a, b, ...) -> b
+    at                  # at[k](m) := m[k]
     const               # :: a -> b -> a
     eq                  # :: a -> (a -> bool)
     lazy                # :: a -> (() -> a)
@@ -58,6 +59,32 @@ from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs
   #SimpleNamespace(**kw)
 from collections.abc import Iterable, Iterator
 
+
+class _At:
+    def __new__(cls):
+        try:
+            return at
+        except NameError:
+            return super().__new__(cls)
+    def __getitem__(sf, k):
+        return At(k)
+    def __call__(sf, k):
+        return At(k)
+    def __repr__(sf):
+        return f'at'
+class At:
+    def __init__(sf, i):
+        sf.__i = i
+    def __call__(sf, x):
+        return x[sf.__i]
+    def __repr__(sf):
+        return f'At({sf.__i!r})'
+at = _At()
+assert at is _At()
+assert at[1]('ab') == 'b'
+assert at(1)('ab') == 'b'
+assert {at}
+assert {at[0]}
 
 
 

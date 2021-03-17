@@ -2,25 +2,33 @@
 r'''
 
 seed.types.Tester
-from seed.types.Tester import is_good, ITester, TesterNOT, TesterAND, TesterXOR, TesterNOTXOR, TesterOR, ITesterUnaryOp, ITesterBinaryOp, ITesterArg, ITesterArgs, Tester__is_obj, Tester__eq_obj, Tester__in_obj, ITesterArg__with_cls, Tester__cls_is, Tester__cls_le, Tester__cls_lt, ITesterArgs, ITesterArgs__with_strs, Tester__obj_hasattrs, Tester__cls_hasattrs, return__False, test__False, ITesterArg__with_str, Tester__obj_getattr_test, Tester__obj_getattr_call, Tester__cls_getattr_call
+from seed.types.Tester import is_good, ITester, the_Tester_True, the_Tester_False, Tester_True, Tester_False, TesterNOT, TesterAND, TesterXOR, TesterNOTXOR, TesterOR, ITesterNoArgs, ITesterUnaryOp, ITesterBinaryOp, ITesterArg, ITesterArgs, Tester__is_obj, Tester__eq_obj, Tester__in_obj, ITesterArg__with_cls, Tester__cls_is, Tester__cls_le, Tester__cls_lt, ITesterArgs, ITesterArgs__with_strs, Tester__obj_hasattrs, Tester__cls_hasattrs, return__False, test__False, ITesterArg__with_str, Tester__obj_getattr_test, Tester__obj_getattr_call, Tester__cls_getattr_call
 
 from seed.types.Tester import
 
 from seed.types.Tester import is_good, ITester
-from seed.types.Tester import TesterNOT, TesterAND, TesterXOR, TesterNOTXOR, TesterOR
-from seed.types.Tester import ITesterUnaryOp, ITesterBinaryOp, ITesterArg, ITesterArgs, ITesterArg__with_cls, ITesterArgs__with_strs, ITesterArg__with_str, ITesterArg__with_callable
+from seed.types.Tester import the_Tester_True, the_Tester_False, Tester_True, Tester_False, TesterNOT, TesterAND, TesterXOR, TesterNOTXOR, TesterOR
+from seed.types.Tester import ITesterNoArgs, ITesterUnaryOp, ITesterBinaryOp, ITesterArg, ITesterArgs, ITesterArg__with_cls, ITesterArgs__with_strs, ITesterArg__with_str, ITesterArg__with_callable
 from seed.types.Tester import Tester__is_obj, Tester__eq_obj, Tester__in_obj, Tester__cls_is, Tester__cls_le, Tester__cls_lt, Tester__obj_hasattrs, Tester__cls_hasattrs, Tester__obj_getattr_test, Tester__obj_getattr_call, Tester__cls_getattr_call, Tester__test_func
 from seed.types.Tester import return__False, test__False
 
 
 see:
-    seed.helper.repr_sys
+    seed.helper.repr.repr_sys
+    seed.helper.repr.repr_api
+    seed.types.Tester
+    seed.types.SinkTester
 
 #'''
 
 __all__ = '''
     is_good
+    the_Tester_True
+    the_Tester_False
     ITester
+        ITesterNoArgs
+            Tester_True
+            Tester_False
         ITesterUnaryOp
             TesterNOT
         ITesterBinaryOp
@@ -82,6 +90,24 @@ class ITester(IReprImmutableHelper):
         return TesterNOT(sf)
 
 
+
+
+class ITesterNoArgs(ITester):
+    @override
+    def ___get_args_kwargs___(sf):
+        return [], {}
+class Tester_True(ITesterNoArgs):
+    @override
+    def __is_good__(sf, x):
+        '-> bool'
+        return True
+class Tester_False(ITesterNoArgs):
+    @override
+    def __is_good__(sf, x):
+        '-> bool'
+        return False
+the_Tester_True = Tester_True()
+the_Tester_False = Tester_False()
 
 
 class ITesterUnaryOp(ITester):
@@ -278,7 +304,7 @@ class Tester__cls_hasattrs(ITesterArgs__with_strs):
 
 
 
-def return__False(x):
+def return__False():
     return False
 def test__False(x):
     return False

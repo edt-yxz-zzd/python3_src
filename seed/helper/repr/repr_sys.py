@@ -65,26 +65,7 @@ from seed.abc.IReprImmutableHelper import IReprImmutableHelper
 from seed.abc.abc import ABC, abstractmethod, override
 
 
-
-class SinkTester(IReprImmutableHelper):
-    def __init__(sf, if_tester:ITester, then_tester:ITester):
-        if not isinstance(if_tester, ITester): raise TypeError
-        if not isinstance(then_tester, ITester): raise TypeError
-        sf.__if_tester = if_tester
-        sf.__then_tester = then_tester
-    def if_test(sf, x):
-        return is_good(sf.__if_tester, x)
-    def then_test(sf, x):
-        return is_good(sf.__then_tester, x)
-    @property
-    def if_tester(sf):
-        return sf.__if_tester
-    @property
-    def then_tester(sf):
-        return sf.__then_tester
-    @override
-    def ___get_args_kwargs___(sf):
-        return [sf.if_tester, sf.then_tester], {}
+from seed.types.SinkTester import SinkTester
 
 
 r'''

@@ -67,6 +67,11 @@ json
   dict.key MUST BE str
   print(json.dumps({'4': 5, '6': 7}, sort_keys=True, indent=4, ensure_ascii=False))
 
+weakref
+  WeakKeyDictionary
+  WeakValueDictionary
+  WeakSet
+
 functools
   ##py -c 'print("\n".join(sorted(__import__("functools").__all__)))'
   py -c 'print("\n".join(sorted(dir(__import__("functools")))))'
