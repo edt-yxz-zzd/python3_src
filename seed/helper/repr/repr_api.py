@@ -28,7 +28,7 @@ from seed.abc.IImmutableHelper import IImmutableHelper
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
 from seed.abc.abc import abstractmethod, override, not_implemented
 from seed.lang.class_property import class_property
-from seed.tiny import is_iterator, is_reiterable, fst, snd, MapView
+from seed.tiny import is_iterator, is_reiterable, fst, snd, MapView, expectError
 
 
 
@@ -143,6 +143,7 @@ check_identifier = checkers.identifier # <: check_module <: check_str
 
 fst, snd
 MapView
+expectError
 the_Tester_True
 Mapping
 
@@ -380,8 +381,75 @@ class ReprHandler__union(IReprHandler__not_ref):
 
 
 
+class IReprHandler__Container(IReprHandler__not_ref):
+    r'''
+    ReprHandler__ Container
+        type tester/base type
+        size tester
+        elem content tester
+            Mapping -> items
+            _ -> iter
+
+    #'''
+    @class_property
+    @abstractmethod
+    def _base_type_tree_(cls):
+        'check_type_tree:isinstance/issubclass'
+        return Container
+    @abstractmethod
+    def _iter_elems_(sf, container):
+        'after type check: iter()/.items()'
+    @abstractmethod
+    def _get_type_tester_(sf):
+        r''' -> BaseTester
+        test container type
+        apply type_tester after isinstance(container, cls._base_type_tree_)
+        #'''
+        return True
+    @abstractmethod
+    def _get_size_tester_(sf):
+        r''' -> BaseTester
+        test container size
+        apply size_tester after type_tester
+        #'''
+        return True
+    @abstractmethod
+    def _get_pre_whole_tester_(sf):
+        r''' -> BaseTester
+        test whole container
+        apply pre_whole_tester after type_tester&size_tester
+        apply pre_whole_tester before elem_tester
+        #'''
+        return True
+    @abstractmethod
+    def _get_elem_tester_(sf):
+        r''' -> BaseTester
+        test container elem
+        Mapping.elem is item
+        #'''
+        return True
+    @abstractmethod
+    def _get_post_whole_tester_(sf):
+        r''' -> BaseTester
+        test whole container
+        apply post_whole_tester after elem_tester
+        #'''
+        return True
+TODO
+    def iter_elems(sf, container):
+        'after type check: iter()/.items()'
+    def get_elem_tester(sf):
+        '-> BaseTester'
+
 class ReprHandler__dict(IReprHandler__not_ref):
-    'arbitrary Mapping show as py builtin dict'
+    r'''
+    arbitrary Mapping show as py builtin dict literal "{...}"
+        ==>> cls({...})
+    but OrderedDict used seq:
+        OrderedDict([...])
+    #'''
+    _base_type_tree_ = Mapping
+
     def __init__(sf, may_item_tester, key_repr_handler, value_repr_handler):
         if may_item_tester is None:
             item_tester = the_Tester_True
@@ -428,7 +496,7 @@ class ReprHandler__dict(IReprHandler__not_ref):
         item_tester = sf.get_item_tester()
         if not isinstance(obj, Mapping):
             return False
-        if not (isinstance(item_tester, Tester_True) or all(base_test(item_tester, item) for item in obj.items())):
+        if not (item_tester is True or isinstance(item_tester, Tester_True) or all(base_test(item_tester, item) for item in obj.items())):
             return False
 
         if depth > 0:
@@ -505,22 +573,40 @@ class IReprToken(IReprImmutableHelper):
         ReprToken__op_not_kw # ^/&/...
     #number sign is neither op nor sep; should have no space follows
     #'''
+class IReprToken__finite_instances(IReprToken):
+    _remain_num_instances = 0
+    def __new__(cls):
+        #if not __class__.__allow_new: raise TypeError
+        if cls._remain_num_instances <= 0: raise TypeError
+        sf = super().__new__(cls)
+        cls._remain_num_instances -= 1
+        return sf
 
+    pass
 class IReprToken_one_arg(IReprToken):
     def __new__(cls, s:str):
         check_str(s)
         sf = super().__new__(cls)
         sf.__s = s
+        return sf
     @property
     def arg(sf):
         return sf.__s
     @override
     def ___get_args_kwargs___(sf):
         return [sf.__s], {}
+class IReprToken_one_arg__finite_instances(IReprToken_one_arg, :IReprToken__finite_instances):
+    pass
+
+
 class ReprToken__literal(IReprToken_one_arg):pass
-class ReprToken__open(IReprToken_one_arg):pass
-class ReprToken__close(IReprToken_one_arg):pass
-class ReprToken__sep(IReprToken_one_arg):pass
+
+class ReprToken__open(IReprToken_one_arg__finite_instances):
+    _remain_num_instances = 3
+class ReprToken__close(IReprToken_one_arg__finite_instances):
+    _remain_num_instances = 3
+class ReprToken__sep(IReprToken_one_arg__finite_instances):
+    _remain_num_instances = 4
 
 
 
@@ -535,8 +621,12 @@ def _mk_TOKEN():
         for ch in s:
             token = mk(ch)
             r[ch] = token
+        cls = mk
+        assert cls._remain_num_instances == 0
+        expectError(TypeError, cls, ch)
     return MapView(r)
 TOKEN = _mk_TOKEN()
+#IReprToken._IReprToken__allow_new = False
 
 def compare_repr_result(lhs, rhs):
     'IReprResult -> IReprResult -> [-1..+1]'
@@ -716,6 +806,8 @@ class IReprResultMixin__idx_by_name(IReprResult):
     ReprResult__map_slice
     ReprResult__map_tuple
         '''.split()
+    __name2idx = dict(enumerate(__names))
+    __used_names = set()
     #ReprResult__empty_set
     #ReprResult__empty_frozenset
     @classmethod
@@ -727,7 +819,11 @@ class IReprResultMixin__idx_by_name(IReprResult):
     def __init_subclass__(cls, /, **kwargs):
         if not inspect.isabstract(cls):
             name = cls.__name__
-            idx = __class__.__names.index(name)
+            #idx = __class__.__names.index(name)
+            idx = __class__.__name2idx[name]
+            if name in __class__.__used_names: raise TypeError
+            else:
+                __class__.__used_names.add(name)
             cls.__type_idx4repr_sort = idx
         super().__init_subclass__(**kwargs)
 

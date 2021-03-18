@@ -11,6 +11,8 @@ __all__ = str2__all__('''
     ifNonef             # :: (None|a) -> (()->default) -> (a|default)
     expectError         # :: Error -> (()->...) -> bool
     assert_eq           # :: lhs -> rhs -> (_fmt=...) -> **vars -> ()
+    assert_eq_f         # :: ans -> f -> *args -> (_fmt=...) -> **vars -> ()
+    mk_assert_eq_f      # :: (_fmt=...) -> **vars -> (ans -> f -> *args -> **kwargs -> ())
     null_iter           # :: iter([])
     null_tuple          # == ()
 
@@ -52,7 +54,7 @@ from .helper.Echo import echo, theEcho
 from .helper.with_if import with_if
 from .debug.expectError import expectError
 from .debug.print_err import print_err, print_ferr
-from .debug.assert_eq import assert_eq
+from .debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f
 from .debug.lazy_raise import lazy_raise
 from .func_tools.not_dot import __not__, not_dot
 from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs

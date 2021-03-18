@@ -15,6 +15,7 @@ ICheckCalcor_with_args
 TODO:
     #here TODO: def __new__(
 
+
 py -m seed.helper.check.check
 from seed.helper.check.check import check, verify, check_then_calc, verify_then_may_calc, check_then_calc_ex, verify_then_may_calc_ex
 from seed.helper.check.check import mk_checker, mk_impl_class_checker, mk_checker__point, mk_checker__pair, mk_checker__array, mk_checker__pairs
@@ -28,8 +29,14 @@ from seed.helper.check.check import
 
 e ../../python3_src/seed/helper/check/check.py
 see:
+    view ../../python3_src/seed/helper/check/check.py
+    view ../../python3_src/seed/helper/check/checkers.py
     view ../../python3_src/nn_ns/Bijection/TypeVerifier.py
     view ../../python3_src/seed/helper/check_utils.py
+    view ../../python3_src/seed/types/Tester.py
+vs:
+    seed.helper.check.check # check+calc
+    seed.types.Tester       # verify
 
 why ICheckCalcor?
     why a checker required.calc?

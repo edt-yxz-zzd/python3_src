@@ -54,14 +54,16 @@ class BaseTesterError(Exception):pass
 class BaseTesterError4then(BaseTesterError, ValueError):pass
 class BaseTesterError4if(BaseTesterError, TypeError):pass
 
-BaseTester = (ITester, SinkTester)
+BaseTester = (ITester, SinkTester, bool)
 def base_assert(base_tester, obj):
     'BaseTester -> obj -> None|raise BaseTesterError4then/BaseTesterError4if'
     if not base_test(base_tester, obj): raise BaseTesterError4if
     return
 def base_test(base_tester, obj):
     'BaseTester -> obj -> bool|raise BaseTesterError4then'
-    if isinstance(base_tester, SinkTester):
+    if type(base_tester) is bool:
+        return base_tester
+    elif isinstance(base_tester, SinkTester):
         sink_tester = base_tester
         if sink_tester.if_test(obj):
             if sink_tester.then_test(obj):
