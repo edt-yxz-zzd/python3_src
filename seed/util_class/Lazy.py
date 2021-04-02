@@ -1,5 +1,15 @@
 
-# copy from RecognizeSystem
+r'''
+seed.util_class.Lazy
+    copy from RecognizeSystem
+
+see also:
+    seed.util_class.Lazy
+        copy from RecognizeSystem
+    seed.util_class.Lazy__call
+        required from seed.types.Tester+seed.types.TriBoolOps
+
+#'''
 
 
 __all__ = ['Lazy']

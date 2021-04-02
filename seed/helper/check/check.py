@@ -34,9 +34,11 @@ see:
     view ../../python3_src/nn_ns/Bijection/TypeVerifier.py
     view ../../python3_src/seed/helper/check_utils.py
     view ../../python3_src/seed/types/Tester.py
+    view ../../python3_src/seed/verify/Verify.py
 vs:
     seed.helper.check.check # check+calc
     seed.types.Tester       # verify
+    seed.verify.Verify      # verify
 
 why ICheckCalcor?
     why a checker required.calc?

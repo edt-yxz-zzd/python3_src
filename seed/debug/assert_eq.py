@@ -38,4 +38,5 @@ def mk_assert_eq_f(_fmt='ans={!r};\nresult={!r}={!s}(*{!r}, **{!r});\nvars={vars
         except:
             print_err(_fmt.format(ans, f.__name__, args, kwargs, vars=vars))
             raise
+    return assert_eq_f
 
