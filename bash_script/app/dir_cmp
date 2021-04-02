@@ -1,0 +1,2 @@
+# py -m nn_ns.filedir.dir_cmp -r /sdcard/0my_files/git_repos/python3_src/ /mnt/m_external_sd/000edt/0my_files/git_repos/python3_src/ | grep "\([.]pyc\|[/]__pycache__\)')$\|/__pycache__/" -v
+py -m nn_ns.filedir.dir_cmp -r "$@"
