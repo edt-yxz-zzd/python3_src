@@ -6,6 +6,15 @@ py -m nn_ns.filedir.dir_cmp -r ../../python3_src/nn_ns/filedir/_dir_cmp__test_da
 py -m nn_ns.filedir.dir_cmp -r ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/lhs/ ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/rhs/ -ls -pp
 
 
+cat /sdcard/0my_files/tmp/xxx/a.txt | grep "\([.]pyc\|[/]__pycache__\)')$\|/__pycache__/" -v
+py -m nn_ns.filedir.dir_cmp -r /sdcard/0my_files/git_repos/python3_src/ /mnt/m_external_sd/000edt/0my_files/git_repos/python3_src/ | grep "\([.]pyc\|[/]__pycache__\)')$\|/__pycache__/" -v
+py -m nn_ns.filedir.dir_cmp -r /sdcard/0my_files/git_repos/txt_phone/txt/ /mnt/m_external_sd/000edt/0my_files/git_repos/txt_phone/txt/ | grep "\([.]pyc\|[/]__pycache__\)')$\|/__pycache__/" -v
+py -m nn_ns.filedir.dir_cmp -r /sdcard/0my_files/p/ /mnt/m_external_sd/000edt/0my_files/p/
+py -m nn_ns.filedir.dir_cmp -r /sdcard/0my_files/git_repos/txt_phone/ /mnt/m_external_sd/000edt/0my_files/git_repos/txt_phone/ | grep "\([.]pyc\|[/]__pycache__\)')$\|/__pycache__/" -v
+
+
+
+
 from nn_ns.filedir.dir_cmp import dir_cmp, dir_cmp__relative, path2str4dir_cmp_result, DirViewer__fsys, MkIsSameFile, AccessFile4MkIsSameFile__fsys:
 from nn_ns.filedir.dir_cmp import IDirViewer, IPseudoFile4MkIsSameFile, IAccessFile4MkIsSameFile
 
