@@ -15,7 +15,8 @@ __all__ = '''
     sort_seqs_by_key_at
     '''.split()
 from seed.iters.minmax import maybe_minmax
-from seed.algo.bucket_sort import bucket_sort
+#from seed.algo.bucket_sort import bucket_sort
+from seed.algo.bucket_sort.bucket_sort__plain import bucket_sort
 from seed.special_funcs import identity
 
 def sort_seqs_by_key_at(idx, seqs, *, key=None):

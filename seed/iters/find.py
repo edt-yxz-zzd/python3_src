@@ -146,20 +146,34 @@ def mk_last_pos2len_longest_proper_bifix(seq):
 
 
 
-def failure_func(seq, begin=None, end=None):
+def failure_func(seq, begin=None, end=None, *, ex=False):
     r""":: seq -> end_pos2len_longest_proper_bifix
+    outdate, use below instead:
+        mk_last_pos2len_longest_proper_bifix
+        mk_last_succ_pos2restart_pos__from_seq
+
     fail_pos2restart_pos == end_pos2len_longest_proper_bifix
-    len(end_pos2len_longest_proper_bifix) == len(seq)
+    len(end_pos2len_longest_proper_bifix) == len(seq)+bool(ex)
+    not end_pos2len_longest_proper_bifix or end_pos2len_longest_proper_bifix[0] == -1
+    all((0 if end_pos else -1) <= llpb < end_pos for end_pos, llpb in enumerate(end_pos2len_longest_proper_bifix))
+    end_pos2len_longest_proper_bifix == [-1, *mk_last_pos2len_longest_proper_bifix(seq)][len(seq)+bool(ex)]
+
     end_pos, len_longest_proper_bifix:
         see: mk_last_pos2len_longest_proper_bifix
     restart_pos:
         see: mk_last_succ_pos2restart_pos
+
+>>> failure_func('0123012012012')
+[-1, 0, 0, 0, 0, 1, 2, 3, 1, 2, 3, 1, 2]
+>>> failure_func('0123012012012', ex=True)
+[-1, 0, 0, 0, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3]
     #"""
 ##    if not isinstance(seq, Sequence):
 ##        raise TypeError('not isinstance(subseq, Sequence)')
     begin, end, _ = slice(begin, end).indices(len(seq))
+    ex = bool(ex)
     if begin >= end:
-        return []
+        return [] if not ex else [-1]
     assert 0 <= begin < end <= len(seq)
 
     fail_pos2restart_pos = end_pos2len_longest_proper_bifix = [-1]
@@ -180,15 +194,28 @@ def failure_func(seq, begin=None, end=None):
         else:
             assert L == -1
             L = 0
+    else:
+        assert L < len(seq)
+        if ex:
+            fail_pos2restart_pos.append(L)
 
     assert all(L < i for i, L in enumerate(fail_pos2restart_pos))
-    assert len(fail_pos2restart_pos) == len(seq)
-    return fail_pos2restart_pos
+    assert len(fail_pos2restart_pos) == len(seq)+bool(ex)
+    assert not fail_pos2restart_pos or fail_pos2restart_pos[0] == -1
+    assert all((0 if end_pos else -1) <= llpb < end_pos for end_pos, llpb in enumerate(fail_pos2restart_pos))
+    assert end_pos2len_longest_proper_bifix == [-1, *mk_last_pos2len_longest_proper_bifix(seq)][:len(seq)+bool(ex)]
+    assert end_pos2len_longest_proper_bifix is fail_pos2restart_pos
+    return end_pos2len_longest_proper_bifix
 
 assert failure_func('0123012012012') == [-1, 0, 0, 0, 0, 1, 2, 3, 1, 2, 3, 1, 2]
+assert failure_func('0123012012012', ex=True) == [-1, 0, 0, 0, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3]
 
 def make_failure_map_for_find_subseq(subseq):
     r'''subseq -> end_pos2len_longest_proper_bifix_ex
+    outdate, use below instead:
+        mk_last_pos2len_longest_proper_bifix
+        mk_last_succ_pos2restart_pos__from_seq
+
     failure_map == end_pos2len_longest_proper_bifix_ex
         == [-1]+last_pos2len_longest_proper_bifix
 
@@ -199,10 +226,10 @@ def make_failure_map_for_find_subseq(subseq):
     #bug:return failure_func(subseq)
     #bug: failure_map = end_pos2len_longest_proper_bifix_ex = failure_func(subseq + subseq[:1])
     #       subseq may empty
-    failure_map = failure_func(subseq + subseq[:1] or '1')
+    failure_map = failure_func(subseq + subseq[:1] or '1') if 0 else failure_func(subseq, ex=True)
         #last appended value can be any thing comparable!
     assert len(failure_map) == 1+len(subseq)
-    assert failure_map == [-1, *mk_last_pos2len_longest_proper_bifix(subseq)]
+    #assert failure_map == [-1, *mk_last_pos2len_longest_proper_bifix(subseq)]
     return failure_map
 
 def _check(subseq, *, failure_map_or_last_pos2restart_pos, _ver_is_1):
@@ -721,3 +748,8 @@ seq_find = find
 ##        return i
 ##    except ValueError:
 ##        return -1
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
