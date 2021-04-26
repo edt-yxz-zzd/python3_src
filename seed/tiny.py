@@ -47,8 +47,12 @@ __all__ = str2__all__('''
     is_iterable         # a -> Bool
     is_iterator         # a -> Bool
     is_reiterable       # a -> Bool
+    flip                # (a->b->r) -> (b->a->r)
+    neg_flip            # (a->b->r) -> (b->a->-r)
+    sign_of             # RealNumber -> (-1|0|+1)
     ''')
 
+from .math.sign_of import sign_of
 from .helper.ifNone import ifNone, ifNonef
 from .helper.Echo import echo, theEcho
 from .helper.with_if import with_if
@@ -102,6 +106,9 @@ def snd(seq): return seq[1]
 def const(a): return lambda _:a
 def lazy(a): return lambda:a
 def eq(a): return lambda b: a==b
+
+def flip(op): return lambda a,b,/: op(b, a)
+def neg_flip(cmp): return lambda a,b,/: -cmp(b, a)
 
 
 def xor(a, b):

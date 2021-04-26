@@ -3,11 +3,64 @@
 #   > py .... > log.txt
 #
 
+__all__ = '''
+
+    '''.split()
+
+
+___begin_mark_of_excluded_global_names__0___ = ...
+___end_mark_of_excluded_global_names__0___ = ...
+
+# exec these two cmds in vim
+%s/\(def [^/*]\+[^/*(]\)\(\(,\s\+[*].*\)\?[)]:\)$/\1, \/\2/g
+%s/\(def [^/*]\+[/],\)\s\+\([*],.*[)]:\)$/\1\2/g
+    from:
+        def xxx(...):
+        def xxx(..., *, ...):
+        def xxx(..., *args, ...):
+        def xxx(..., **kwargs):
+    to mk:
+        def xxx(..., /):
+        def xxx(..., /,*...):
+        def xxx(..., /, *args, ...):
+        def xxx(..., /, **kwargs):
+    avoid:
+        def xxx():
+        def xxx(*...):
+            def xxx(*, ...):
+            def xxx(*args, ...):
+            def xxx(**kwargs, ...):
+        def xxx(..., /...):
+            def xxx(..., /):
+            def xxx(..., /,*...):
+                def xxx(..., /, *, ...):
+                def xxx(..., /, *args, ...):
+                def xxx(..., /, **kwargs, ...):
+
+
+may
+  nmay T = (None|T)
+  tmay T = (()|(T,))
+  imay uint = (-1|uint) = [-1..]
+  smay nestr = (''|nonempty_str) = str
+  tribool = (...|bool) #TriBoolOps
+  cmp = (-1|0|+1) = (<|=|>) = (LT|EQ|GT)
+  partial_order_cmp = tmay cmp
+2
+  to
+  convert to
+4
+  for/at/on
+
+
 
 #HHHHH
 #TODO
 r"""
 #"""
+
+
+
 
 from seed.tiny import str2__all__
 __all__ = str2__all__(r'''#)
@@ -84,7 +137,8 @@ def main(args=None):
     def on_subcmd__readline(sf, subcmd_name, parsed_args):
         return _main_subcmd_readline(parsed_args)
     def on_no_subcmd(sf, subcmd_name, parsed_args):
-        raise NotImplementedError
+        sf.parser.print_help()
+        #raise NotImplementedError
     @classmethod
     def _mk_option_config_(cls):
         '-> ([parent::ArgParserPrepare], [common_option::GetArgsKwargs], {group_name:{subcmd:ArgParserPrepare}})'
@@ -100,7 +154,8 @@ class _Main:
     def on_subcmd__readline(sf, subcmd_name, parsed_args):
         return _main_subcmd_readline(parsed_args)
     def on_no_subcmd(sf, subcmd_name, parsed_args):
-        raise NotImplementedError
+        sf.parser.print_help()
+        #raise NotImplementedError
     @classmethod
     def _mk_option_config_(cls):
         '-> ([parent::ArgParserPrepare], [common_option::GetArgsKwargs], {group_name:{subcmd:ArgParserPrepare}})'
@@ -140,12 +195,16 @@ class _Main:
         def on_subcmd__YYY(sf, subcmd_name, parsed_args):
             'YYY'
         def on_no_subcmd(sf, subcmd_name, parsed_args):
-            raise NotImplementedError
+            sf.parser.print_help()
+            #raise NotImplementedError
 def main(args=None):
     from seed.for_libs.for_argparse.subcmd import Main4subcmd
     class Main(_Main, Main4subcmd):
-      pass
+        pass
     return Main(description=_g_description, subcmd_dest_name='subcmd').main(args)
+if __name__ == "__main__":
+    main()
+
 
 
 
@@ -218,6 +277,16 @@ if __name__ == '__main__':
 if __name__ == '__main__':
     from seed.helper.print_global_names import print_global_names
     print_global_names(globals())
+      # module.__dict__ or globals() or locals()
+
+if __name__ == '__main__':
+    ___begin_mark_of_excluded_global_names__0___ = ...
+    ___end_mark_of_excluded_global_names__0___ = ...
+    ___begin_mark_of_excluded_global_names__9999___ = ...
+    from seed.helper.print_global_names import print_global_names_ex
+    print_global_names_ex(globals(),  prefix=' '*4, ___begin_mark_pattern_of_excluded_global_names___=r'___begin_mark_of_excluded_global_names__\d+___', ___end_mark_pattern_of_excluded_global_names___=r'___end_mark_of_excluded_global_names__\d+___')
+      # module.__dict__ or globals() or locals()
+
 
 if __name__ == '__main__':
     print('\n'.join(dir(XXX)))

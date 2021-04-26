@@ -25,6 +25,7 @@ from seed.helper.repr_input import repr_helper_ex
 from seed.helper.repr_input import repr_helper
 from types import MappingProxyType
 from collections.abc import Mapping, Set, Hashable
+import itertools
 
 def mapping_hash(mapping):
     'like Set._hash; to provide a std algo for all mapping'
@@ -57,6 +58,25 @@ class HashableMapping(Mapping, Hashable):
         # since __hash__ may not be inherited
         return mapping_hash(self)
 
+def check_tmay(x):
+    if not type(x) is tuple: raise TypeError
+    if not len(x) <= 1: raise TypeError
+
+def _set_tm(d, k, tm):
+    check_tmay(tm)
+    if tm:
+        [d[k]] = tm
+    else:
+        del d[k]
+
+def default_init(k, a, /):
+    return (a,)
+def default_on_left_only(k, r, /):
+    return (r,)
+def default_on_right_only(k, b, /):
+    return (b,)
+def default_on_both(k, r, b, /):
+    return (b,)
 
 class __Dict(Mapping):
     'should not reassigned .__d!'
@@ -80,6 +100,91 @@ class __Dict(Mapping):
         return self.__d == dict(other)
     def __ne__(self, other):
         return self != other
+    def __repr__(self):
+        return repr_helper(self, {**self})
+        #return repr_helper_ex('mk_GetArgsKwargs', self.args, [], self.kwargs, name_only=True)
+    def iupdates_ex(self, mappings, /,*, init, on_left_only, on_right_only, on_both):
+        r'''
+        :: {k:a} -> Iter {k:b} -> (init::None|(k->a->tmay r)) -> (on_left_only::None|(k->r->tmay r)) -> on_right_only::None|(k->b->tmay r)) -> (on_both::None|(k->r->b->tmay r)) -> {k:r}
+        #'''
+        d = {**self}
+        if init is None:
+            init = default_init
+        if on_left_only is None:
+            on_left_only = default_on_left_only
+        if on_right_only is None:
+            on_right_only = default_on_right_only
+        if on_both is None:
+            on_both = default_on_both
+
+        def set_tm(d, k, tm):
+            L = len(d)
+            _set_tm(d, k, tm)
+            if not on_left_only is default_on_left_only:
+                #update keys
+                assert L == len(keys)
+                cmp = len(keys) - len(d)
+                if cmp == 0:
+                    pass
+                elif cmp == +1:
+                    keys.remove(k)
+                elif cmp == -1:
+                    keys.add(k)
+                else:
+                    raise logic-err
+        if not on_left_only is default_on_left_only:
+            keys = set(d)
+        if not init is default_init:
+            if on_left_only is default_on_left_only:
+                keys = (*d,)
+            for k in keys:
+                tm = init(k, d[k])
+                set_tm(d, k, tm)
+
+        for mapping in mappings:
+            if not (on_right_only is default_on_right_only and on_both is default_on_both):
+                for k, b in mapping.items():
+                    try:
+                        r = d[k]
+                    except KeyError:
+                        tm = on_right_only(k, b)
+                    else:
+                        tm = on_both(k, r, b)
+                    set_tm(d, k, tm)
+            else:
+                d.update(mapping)
+
+            if not on_left_only is default_on_left_only:
+                lonly_keys = keys - set(mapping.keys())
+                for lonly_key in lonly_keys:
+                    tm = on_left_only(lonly_key, d[lonly_key])
+                    set_tm(d, lonly_key, tm)
+            else:
+                pass
+
+    def ireplaces_or_removes_via_tmay(self, mappings, /, **kwargs):
+        d = {**self}
+        for mapping in itertools.chain(mappings, [kwargs]):
+            for k, tm in mapping.items():
+                _set_tm(d, k, tm)
+        return type(self)(d)
+    def ireplaces(self, mappings, /, **kwargs):
+        d = {**self}
+        for mapping in mappings:
+            d.update(mapping)
+        d.update(kwargs)
+        return type(self)(d)
+
+
+    def iupdate_ex(self, /, *mappings, init, on_left_only, on_right_only, on_both):
+        return self.iupdates_ex(mappings, init=init, on_left_only=on_left_only, on_right_only=on_right_only, on_both=on_both)
+    def ireplace_or_remove_via_tmay(self, /, *mappings, **kwargs):
+        return self.ireplaces_or_removes_via_tmay(mappings, **kwargs)
+    def ireplace(self, /, *mappings, **kwargs):
+        return self.ireplaces(mappings, **kwargs)
+        d = {**self, **mapping, **kwargs}
+        return type(self)(d)
+
 
 
 
@@ -97,10 +202,9 @@ class FrozenDict(__Dict, HashableMapping):
         if self.__hash is None:
             self.__hash = self._hash()
         return self.__hash
-    def __repr__(self):
-        return repr_helper(self, {**self})
-        return repr_helper_ex('mk_GetArgsKwargs', self.args, [], self.kwargs, name_only=True)
-
+    def __or__(self, mapping, /):
+        return self.ireplace(mapping)
+    __ior__ = __or__
 class HalfFrozenDict(__Dict):
     def __init__(self, iterable_or_mapping=(), **kwargs):
         d = dict(iterable_or_mapping, **kwargs)
@@ -112,6 +216,9 @@ class HalfFrozenDict(__Dict):
         self._Dict__d[key] = value
         # why _Dict__d!!
         #   getattr(self, '___Dict__d')[key] = value
+    def __or__(self, mapping, /):
+        return self.ireplace(mapping)
+    __ior__ = __or__
 
 
 {FrozenDict({1:2, 3:3})}

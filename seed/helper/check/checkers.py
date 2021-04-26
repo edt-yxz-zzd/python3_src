@@ -99,6 +99,13 @@ __all__ = str2__all__(r'''#)
 
 
 
+# later add:
+    checker4tribool
+    #
+    check_tmay
+    check_nmay
+    check_is_obj_or
+
 
 # main output
     check_funcs
@@ -129,6 +136,16 @@ if 0:
     from seed.helper.check.check import IChecker, CheckFail, CheckError, CheckException
     from seed.helper.check.check import the_checker__is_None, the_fail_checker, the_pass_checker, the_hashable_checker, checker4callable
     from seed.helper.check.check import Checker__uint_mod, Checker__int_between, Checker__tuple_maybe, Checker__none_maybe
+
+
+#####################################
+#from nn_ns.filedir.relative_path_ops import relative_path_ops, check_relative_path, is_relative_path_empty, relative_path2parts
+    #for check_relative_path & empty
+    #but seed shouldnot import nn_ns
+
+from seed.types.TriBoolOps import TriBoolOps#is_tribool
+
+
 
 
 #####################################
@@ -196,6 +213,11 @@ assert checker4qual_name['af']
 assert checker4qual_name['a.f']
 
 
+#########################################
+#########################################
+checker4tribool = Checker__verify_func(TriBoolOps.is_tribool)
+
+
 #HHHHH
 #########################################
 #########################################
@@ -205,7 +227,9 @@ def check_(verify, /, *args, **kwargs):
         raise CheckFail(args, kwargs)
     return
 def check_int_ge_neg1(imay):
-    'imay <- [-1..]; tmay :: ()/(x,); nmay :: None/x'
+    r'''imay <- [-1..]; tmay :: ()/(x,); nmay :: None/x'
+    'see: check_uint_imay/check_tmay/check_nmay/check_is_obj_or/check_instance_or_None'
+    #'''
     check_int(imay, min=-1)
 check_uint_imay = check_int_ge_neg1
 
@@ -232,6 +256,7 @@ def check_bool(x):
 def check_uint(i):
     check_int(i, min=0)
 def check_instance_or_None(cls, obj):
+    'see: check_uint_imay/check_tmay/check_nmay/check_is_obj_or/check_instance_or_None'
     if obj is not None:
         check_instance(cls, obj)
 
@@ -255,6 +280,33 @@ def check_all(check_func, xs):
         check_func(x)
 def check_pair(x):
     check_tuple(x, sz=2)
+#########################################
+check_uint_imay
+def check_tmay(x, *, cls=None, check_func=None):
+    'see: check_uint_imay/check_tmay/check_nmay/check_is_obj_or/check_instance_or_None'
+    check_tuple(x)
+    tpl = x
+    check_int(len(tpl), max=1)
+    if tpl:
+        if cls is not None:
+            check_instance_all(cls, tpl)
+        if check_func is not None:
+            check_all(check_func, tpl)
+
+def check_nmay(check_func, x, /,*, cls=None):
+    'see: check_uint_imay/check_tmay/check_nmay/check_is_obj_or/check_instance_or_None'
+    check_is_obj_or(None, check_func, x, cls=cls)
+def check_is_obj_or(obj, check_func, x, /,*, cls=None):
+    'see: check_uint_imay/check_tmay/check_nmay/check_is_obj_or/check_instance_or_None'
+    if x is not obj:
+        if cls is not None:
+            check_instance(cls, x)
+        if check_func is not None:
+            check_func(x)
+
+
+
+
 #########################################
 #########################################
 #########################################
@@ -301,6 +353,11 @@ class check_funcs:
     sorted = check_sorted
     all = check_all
     pair = check_pair
+    ###########################
+    'see: check_uint_imay/check_tmay/check_nmay/check_is_obj_or/check_instance_or_None'
+    tmay = check_tmay
+    nmay = check_nmay
+    is_obj_or = check_is_obj_or
 checks = check_funcs
 
 
@@ -315,7 +372,8 @@ class checkers:
     identifier = checker4identifier
     qual_name = checker4qual_name
 
-    # = checker4#
+    ###################
+    tribool = checker4tribool
     # = checker4#
     # = checker4#
     # = checker4#

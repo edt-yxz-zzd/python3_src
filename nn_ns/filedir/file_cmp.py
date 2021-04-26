@@ -1,9 +1,29 @@
 r'''
 bias patch
+see:
+    nn_ns.filedir.dir_cmp
+        py::filecmp.dircmp/cmp/cmpfiles
+    nn_ns.filedir.file_cmp #diff/patch/delta, O(n)
+        py::difflib.restore/context_diff/Differ.compare/ndiff/unified_diff/diff_bytes
+            O(n^2)
+    nn_ns.filedir.inf_dir
+    nn_ns.filedir.backup_util
+
+
+TODO:
+    DONE:main():
+        subcmd:
+            #diff -old -new -out -lcp_threshold -f
+            #patch -old -patch -out -f
+    pack lcp_threshold?? no or save external
 
 nn_ns.filedir.file_cmp
 py -m nn_ns.filedir.file_cmp
-from nn_ns.filedir.file_cmp import uints_diff, bytes_diff, mk_patch_uints, check_result4uints_diff
+
+from nn_ns.filedir.file_cmp import uints_diff, bytes_diff, file_diff
+from nn_ns.filedir.file_cmp import uints_patch, bytes_patch, file_patch
+from nn_ns.filedir.file_cmp import mk_patch_uints, mk_patch_uints__iter, check_result4uints_diff, pack__patch_bytes_ex__ver1
+from nn_ns.filedir.file_cmp import uints_patch__iter, unpack__patch_bytes_ex__ver1
 
 
 >>> uints_diff(1, 0, b'', b'', to_mk_patch=True)
@@ -39,18 +59,25 @@ b'123567912356788912354'
 >>> all(rhs_bytes == bytes_patch(lhs_bytes, *bytes_diff(lcp_threshold, lhs_bytes, rhs_bytes, to_mk_patch=True, _completely_test=True)) for lcp_threshold in range(1, 1+max(len(lhs_bytes), len(rhs_bytes))))
 True
 
+>>> file_diff(4, lhs_bytes, rhs_bytes, ver=1)
+b'\x00fpatch\xfe\x01(6,(12,16),(5,9),(11,16),2)\n12356754'
+
 #'''
 
 __all__ = '''
     uints_diff
         bytes_diff
+            file_diff
+                pack__patch_bytes_ex__ver1
         mk_patch_uints
             mk_patch_uints__iter
-    check_result4uints_diff
+        check_result4uints_diff
 
     uints_patch
-        bytes_patch
         uints_patch__iter
+        bytes_patch
+            file_patch
+                unpack__patch_bytes_ex__ver1
     '''.split()
 from nn_ns.RMQ.make_SA_LCP import make_SA_LCP
 from seed.algo.sort_ints import sort_ints
@@ -69,6 +96,8 @@ from seed.tiny import assert_eq_f
 
 import itertools
 from collections.abc import Sequence
+import ast
+from pathlib import Path
 
 
 def id_or_len_rng(len_or_rng):
@@ -80,10 +109,54 @@ def len_rng(rng):
     begin, end = rng
     return end-begin
 
+class data4patch_bytes_ex:
+    head_bytes = b'\x00fpatch\xFE'
+    version_dynamic_bytes = b'\x01'
+    sep_bytes = b'\n'
+def unpack__patch_bytes_ex__ver1(patch_bytes_ex):
+    '-> (saved_or_copied_rng_infos, patch_bytes)'
+    X = data4patch_bytes_ex
+
+    if patch_bytes_ex[:len(X.head_bytes)] != X.head_bytes: raise ValueError('not patch_bytes_ex')
+    if patch_bytes_ex[len(X.head_bytes):len(X.head_bytes)+len(X.version_dynamic_bytes)] != X.version_dynamic_bytes: raise ValueError('patch_bytes_ex is not version 1')
+    control_bytes_begin = len(X.head_bytes)+len(X.version_dynamic_bytes)
+    control_bytes_end = patch_bytes_ex.index(X.sep_bytes, control_bytes_begin)
+    patch_bytes_begin = control_bytes_end + len(X.sep_bytes)
+    control_bytes = patch_bytes_ex[control_bytes_begin:control_bytes_end]
+    patch_bytes = patch_bytes_ex[patch_bytes_begin:]
+    saved_or_copied_rng_infos = ast.literal_eval(control_bytes.decode('ascii'))
+    return saved_or_copied_rng_infos, patch_bytes
+
+def pack__patch_bytes_ex__ver1(saved_or_copied_rng_infos, patch_bytes):
+    '-> patch_bytes_ex'
+    X = data4patch_bytes_ex
+
+    control_bytes = str(saved_or_copied_rng_infos).replace(' ', '').encode('ascii')
+    assert X.sep_bytes
+    assert X.sep_bytes[0] not in control_bytes
+    patch_bytes_ex = b''.join([X.head_bytes, X.version_dynamic_bytes, control_bytes, X.sep_bytes, patch_bytes])
+
+    assert (saved_or_copied_rng_infos, patch_bytes) == unpack__patch_bytes_ex__ver1(patch_bytes_ex)
+    return patch_bytes_ex
+
+def file_diff(lcp_threshold, lhs_bytes, rhs_bytes, /, *, ver:int):
+    '-> patch_bytes_ex'
+    if ver != 1: raise NotImplementedError
+
+    (saved_or_copied_rng_infos, patch_bytes) = bytes_diff(lcp_threshold, lhs_bytes, rhs_bytes, to_mk_patch=True, _completely_test=False)
+    patch_bytes_ex = pack__patch_bytes_ex__ver1(saved_or_copied_rng_infos, patch_bytes)
+
+    assert rhs_bytes == file_patch(lhs_bytes, patch_bytes_ex, ver=ver)
+    return patch_bytes_ex
+
+
 def bytes_diff(lcp_threshold, lhs_bytes, rhs_bytes, *, to_mk_patch:bool, _completely_test:bool=False):
     '-> (saved_or_copied_rng_infos, may_patch_bytes)'
     (saved_or_copied_rng_infos, may_patch_bytes) = uints_diff(lcp_threshold, 2**8, lhs_bytes, rhs_bytes, to_mk_patch=to_mk_patch, _completely_test=_completely_test, patch_uints_from_iterable=bytes)
+
+    #if to_mk_patch: assert rhs_bytes == bytes_patch(lhs_bytes, saved_or_copied_rng_infos, patch_bytes)
     return (saved_or_copied_rng_infos, may_patch_bytes)
+
 def uints_diff(lcp_threshold, alphabet_size, lhs_uints, rhs_uints, *, to_mk_patch:bool, _completely_test:bool=False, patch_uints_from_iterable=None):
     r'''
     diff/patch
@@ -505,7 +578,7 @@ def mk_patch_uints__iter(rhs_uints, saved_or_copied_rng_infos, /):
             patch_end = patch_begin + len_prng
             prng = patch_begin, patch_end
 
-            yield from (rhs_uints[rhs_begin:rhs_end])
+            yield from seq_islice(rhs_uints, rhs_begin, rhs_end)
             assert 0 <= patch_begin < patch_end# == len(patch_uints)
             patch_begin = patch_end
             rhs_begin = rhs_end
@@ -609,6 +682,14 @@ def check_result4uints_diff(lcp_threshold, lhs_uints, rhs_uints, saved_or_copied
         assert patch_end == len(patch_uints)
     assert rhs_end == len(rhs_uints)
 
+def file_patch(lhs_bytes, patch_bytes_ex, /, *, ver:int):
+    '-> rhs_bytes'
+    if ver != 1: raise NotImplementedError
+
+    (saved_or_copied_rng_infos, patch_bytes) = unpack__patch_bytes_ex__ver1(patch_bytes_ex)
+    rhs_bytes = bytes_patch(lhs_bytes, saved_or_copied_rng_infos, patch_bytes)
+    return rhs_bytes
+
 def bytes_patch(lhs_bytes, saved_or_copied_rng_infos, patch_bytes):
     '-> rhs_bytes'
     rhs_bytes = uints_patch(lhs_bytes, saved_or_copied_rng_infos, patch_bytes, rhs_uints_from_iterable=bytes)
@@ -637,7 +718,7 @@ def uints_patch__iter(lhs_uints, saved_or_copied_rng_infos, patch_uints):
             prng = patch_begin, patch_end
 
             assert 0 <= patch_begin < patch_end <= len(patch_uints)
-            yield from patch_uints[patch_begin:patch_end]
+            yield from seq_islice(patch_uints, patch_begin, patch_end)
             patch_begin = patch_end
             rhs_begin = rhs_end
 
@@ -653,7 +734,7 @@ def uints_patch__iter(lhs_uints, saved_or_copied_rng_infos, patch_uints):
             rrng = rhs_begin, rhs_end
             lhs_begin, lhs_end = lrng
 
-            yield from lhs_uints[lhs_begin:lhs_end]
+            yield from seq_islice(lhs_uints, lhs_begin, lhs_end)
             rhs_begin = rhs_end
 
     assert patch_end == len(patch_uints)
@@ -677,11 +758,133 @@ def _t2():
         #print(f'lcp_threshold={lcp_threshold!r}')
         pair = bytes_diff(lcp_threshold, lhs_bytes, rhs_bytes, to_mk_patch=True, _completely_test=True)
         assert_eq_f(rhs_bytes, bytes_patch, lhs_bytes, *pair, vars=dict(lcp_threshold=lcp_threshold))
-if __name__ == "__main__":
-    _t1()
-    _t2()
+
+
+
+
+
+class _Main:
+    def on_subcmd__diff(sf, subcmd_name, parsed_args):
+        file_diff
+        #diff -old -new -out -lcp_threshold -f
+        old_ipath = Path(parsed_args.old_ifile)
+        new_ipath = Path(parsed_args.new_ifile)
+        patch_opath = Path(parsed_args.patch_ofile)
+
+        force = parsed_args.force
+        omode = 'wb' if force else 'xb'
+
+        lcp_threshold = parsed_args.lcp_threshold
+        if not lcp_threshold >= 1: raise ValueError
+        lhs_bytes = old_ipath.read_bytes()
+        rhs_bytes = new_ipath.read_bytes()
+        with open(patch_opath, omode) as fout:
+            patch_bytes_ex = file_diff(lcp_threshold, lhs_bytes, rhs_bytes, ver=1)
+            fout.write(patch_bytes_ex)
+
+    def on_subcmd__patch(sf, subcmd_name, parsed_args):
+        file_patch
+        #patch -old -patch -out -f
+        old_ipath = Path(parsed_args.old_ifile)
+        patch_ipath = Path(parsed_args.patch_ifile)
+        new_opath = Path(parsed_args.new_ofile)
+
+        force = parsed_args.force
+        omode = 'wb' if force else 'xb'
+
+        lhs_bytes = old_ipath.read_bytes()
+        patch_bytes_ex = patch_ipath.read_bytes()
+
+        rhs_bytes = file_patch(lhs_bytes, patch_bytes_ex, ver=1)
+        with open(new_opath, omode) as fout:
+            fout.write(rhs_bytes)
+
+    def on_no_subcmd(sf, subcmd_name, parsed_args):
+        sf.parser.print_help()
+        #raise NotImplementedError
+    @classmethod
+    def _mk_option_config_(cls):
+        '-> ([parent::ArgParserPrepare], [common_option::GetArgsKwargs], {group_name:{subcmd:ArgParserPrepare}})'
+        Get, Pack = cls.Get, cls.Pack
+
+        #diff -old -new -out -lcp_threshold -f
+        #patch -old -patch -out -f
+        options_diff = (
+    [Get('-n', '--lcp_threshold', type=int, required=True, help='copy bytes from the old file to restore the new file, lcp_threshold set the min length of such copied bytes')
+    ,Get('-old', '--old_ifile', type=str, required=True, help='the input old/source file path')
+    ,Get('-new', '--new_ifile', type=str, required=True, help='the input new/target file path')
+    ,Get('-out', '--patch_ofile', type=str, required=True, help='the output patch file path')
+    ,Get('-f', '--force', action='store_true', default = False, required=False, help='open mode for output file')
+        ])
+
+
+
+        options_patch = (
+    [Get('-old', '--old_ifile', type=str, required=True, help='the input old/source file path')
+    ,Get('-patch', '--patch_ifile', type=str, required=True, help='the input patch file path')
+    ,Get('-out', '--new_ofile', type=str, required=True, help='the output new/target file path')
+    ,Get('-f', '--force', action='store_true', default = False, required=False, help='open mode for output file')
+        ])
+
+        prepare_diff = Pack([], options_diff, {})
+        prepare_patch = Pack([], options_patch, {})
+        subcmd2prepare_FILE_BACKUP_RESTORE = (dict
+            (diff=prepare_diff
+            ,patch=prepare_patch
+            ))
+        group_name2subcmd2prepare = (dict
+            (FILE_BACKUP_RESTORE=subcmd2prepare_FILE_BACKUP_RESTORE
+            ))
+        return [], [], group_name2subcmd2prepare
+def main(args=None):
+    from seed.for_libs.for_argparse.subcmd import Main4subcmd
+    class Main(_Main, Main4subcmd):
+        pass
+    return Main(description='diff/patch - used to backup and restore file', subcmd_dest_name='subcmd').main(args)
+
+
+def _test_main(dir_path):
+    import tempfile
+    lhs_bytes = b'12304567890891234'
+    rhs_bytes = b'123567912356788912354'
+    lcp_threshold = 4
+    with tempfile.TemporaryDirectory(dir=dir_path, prefix = '.', suffix = '~') as odir:
+        #odir = Path(odir)
+        old = odir+'/old'
+        new1 = odir+'/new1'
+        patch = odir+'/patch'
+        new2 = odir+'/new2'
+
+        Path(old).write_bytes(lhs_bytes)
+        Path(new1).write_bytes(rhs_bytes)
+
+        main(['diff', '-old', old, '-new', new1, '-n', str(lcp_threshold), '-out', patch])
+        main(['patch', '-old', old, '-patch', patch, '-out', new2])
+
+        rhs_bytes1 = Path(new1).read_bytes()
+        rhs_bytes2 = Path(new2).read_bytes()
+        assert rhs_bytes1 == rhs_bytes
+        assert rhs_bytes2 == rhs_bytes1
+
+
+if 0:
+    if __name__ == "__main__":
+        _t1()
+        _t2()
+
+    if __name__ == "__main__":
+        import doctest
+        doctest.testmod()
+        ##
+    if __name__ == "__main__":
+        _test_main('/sdcard/0my_files/tmp/for-test/file_cmp/')
+
+
+
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-    ##
+    main()
+
+
+
+

@@ -38,6 +38,13 @@ def mk_subset_names(names, pred):
 
 __bs__ = {name for name in bs if name[:2] == '__' == name[-2:]}
 bs_normal = bs - __bs__
+bs_unexpected = {name for name in bs_normal if name[:1] == '_' or '_' == name[-1:]}
+if bs_unexpected:
+    if bs_unexpected <= {'_'}:
+        bs_normal -= bs_unexpected
+    else:
+        print(bs_unexpected)
+        raise logic-error
 if any(name[:1] == '_' or '_' == name[-1:] for name in bs_normal):
     raise logic-error
 bs_types = mk_subset_names(bs_normal, lambda obj: isinstance(obj, type))
@@ -55,6 +62,7 @@ def is_set_partition(whole, subsets):
 #assert bs == __bs__ | bs_excepts | bs_nonexcepts | bs_callables | bs_noncallables
 assert is_set_partition(bs,
                 [ __bs__
+                , bs_unexpected
                 , bs_excepts
                 , bs_nonexcepts
                 , bs_callables
@@ -255,7 +263,7 @@ allow_bs_callables = \
     ,'sum'
     ,'vars'}
 
-forbids = forbid___bs__ | forbid_bs_callables
+forbids = forbid___bs__ | forbid_bs_callables | bs_unexpected
 allows = allow___bs__ | allow_bs_callables | bs_types | bs_noncallables
 assert not (forbids & allows)
 if not is_set_partition(bs, [forbids, allows]):

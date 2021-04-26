@@ -5,13 +5,13 @@ __all__ = '''
 import operator
 import itertools
 
-def calc_common_prefix_length(lhs_iterable, rhs_iterable, /, *, eq=None):
-    if eq is None:
-        eq = operator.__eq__
+def calc_common_prefix_length(lhs_iterable, rhs_iterable, /, *, __eq__=None):
+    if __eq__ is None:
+        __eq__ = operator.__eq__
 
     idx = -1
     for a, b, idx in zip(lhs_iterable, rhs_iterable, itertools.count(0)):
-        if not eq(a, b):
+        if not __eq__(a, b):
             return idx
     else:
         return idx+1
