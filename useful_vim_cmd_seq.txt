@@ -1,0 +1,112 @@
+section:
+  nn_ns.filedir.backup_tools._debug
+  finger_tree_ops
+
+
+
+
+
+
+
+
+
+
+
+[section:nn_ns.filedir.backup_tools._debug]:
+#begin of nn_ns.filedir.backup_tools._debug
+
+# exec these two cmds in vim
+%s/\(def [^/*]\+[^/*(]\)\(\(,\s\+[*].*\)\?[)]:\)$/\1, \/\2/g
+%s/\(def [^/*]\+[/],\)\s\+\([*],.*[)]:\)$/\1\2/g
+    from:
+        def xxx(...):
+        def xxx(..., *, ...):
+        def xxx(..., *args, ...):
+        def xxx(..., **kwargs):
+    to mk:
+        def xxx(..., /):
+        def xxx(..., /,*...):
+        def xxx(..., /, *args, ...):
+        def xxx(..., /, **kwargs):
+    avoid:
+        def xxx():
+        def xxx(*...):
+            def xxx(*, ...):
+            def xxx(*args, ...):
+            def xxx(**kwargs, ...):
+        def xxx(..., /...):
+            def xxx(..., /):
+            def xxx(..., /,*...):
+                def xxx(..., /, *, ...):
+                def xxx(..., /, *args, ...):
+                def xxx(..., /, **kwargs, ...):
+
+
+
+#end of nn_ns.filedir.backup_tools._debug
+
+
+
+
+
+
+
+
+
+
+
+[section:finger_tree_ops]:
+#begin of finger_tree_ops
+
+e script/finger_tree_ops.py
+view others/数学/编程/tree/finger_tree.txt
+finger_tree_ops
+raw_finger_tree_ops
+
+
+
+IFingerTreeOps:
+mk same name wrapper method:
+^\(\s*def \)\(\w*\)\(.*\n.*\):_'$
+%s//\1___\2___\3:\2'\r\1\2\3:___\2___'
+    @abstractmethod
+    def f(...):
+        '... #see:_'
+    ==>>
+    @abstractmethod
+    def ___f___(...):
+        '... #see:f'
+    def f(...):
+        '... #see:___f___'
+
+abstractmethod_decls_of_IFingerTreeOps:
+get abstractmethod decl
+    each abstractmethod decl occupy 3 lines
+    copy whole class body to file end
+    exec below vim q/ search-cmd && q: edit-cmd, to remove non-abstractmethod func
+^\(\s*@abstractmethod.*\)\n\(.*\)\n\(.*\)
+.,$s//##?!\1\r##?!\2\r##?!\3
+^\(##?!\)\@!.*\n
+.,$s//
+^\(##?!\)
+.,$s//
+
+
+WrappedFingerTreeOps:
+forward call 4 wrapper class
+    the undering obj/wrapped obj named '__ops'
+    each abstractmethod decl has form regex'^\s*def .*/):$''
+    each abstractmethod decl occupy 3 lines
+    copy all abstractmethod decls to file end
+    exec below vim q/ search-cmd && q: edit-cmd, to remove non-abstractmethod func
+^\(\s*@abstractmethod.*\)\n\(\s*def \s*\)\([a-zA-Z]\w*\)[(]\(\w\+\)\(, \)\?\(.*\), [/][)]:\n\(\s*\)\(\S.*\)
+.,$s//\1\r\2\3(\4\5\6, \/):\r\7\8\r\7return \4.__ops.\3(\6)
+^\(\s*@abstractmethod.*\)\n\(\s*def \s*\)\(__\w*__\)[(]\(\w\+\)\(.*\), [/][)]:\n\(\s*\)\(\S.*\)
+.,$s//\1\r\2\3(\4\5, \/):\r\6\7\r\6return type(\4.__ops).\3(\4.__ops\5)
+@abstractmethod$
+.,$s//@override
+
+ReversedFingerTreeOps
+
+#end of finger_tree_ops
+

@@ -13,7 +13,7 @@ TODO:
     DONE: ignore/skip by pattern/glob
 
 nn_ns.filedir.dir_cmp
-from nn_ns.filedir.dir_cmp import dir_cmp, dir_cmp__relative, mk_filer_basenames_ex, path2str, path2str4dir_cmp_result, DirViewer__fsys, is_same_file__True, STR_TIME_FORMAT, get_str_mtime4real_fsys, mk_is_same_file, MkIsSameFile, AccessFile4MkIsSameFile__fsys, bytes2PseudoFile4MkIsSameFile, binary_ifile2PseudoFile4MkIsSameFile
+from nn_ns.filedir.dir_cmp import dir_cmp, dir_cmp__relative, mk_filer_basenames_ex, path2str, path2str4dir_cmp_result, the_empty_dir_viewer, the_fsys_dir_viewer, DirViewer__fsys, DirViewer__empty_root_dir, is_same_file__True, STR_TIME_FORMAT, get_str_mtime4real_fsys, mk_is_same_file, MkIsSameFile, the_empty_access_file, the_fsys_access_file, AccessFile4MkIsSameFile__fsys, AccessFile4MkIsSameFile__empty_root_dir, bytes2PseudoFile4MkIsSameFile, binary_ifile2PseudoFile4MkIsSameFile
 from nn_ns.filedir.dir_cmp import IDirViewer, IPseudoFile4MkIsSameFile, IAccessFile4MkIsSameFile
 from nn_ns.filedir.dir_cmp import to_std_onoff_patterns_list, onoff_patterns_lists2ignore_str, onoff_patterns_list2ignore_str, read_ignorefile, iter_read_ignorefile, read_ignorefile__text, write_ignorefile, write_ignorefile__text
 
@@ -53,6 +53,9 @@ __all__ = '''
 
     IDirViewer
         DirViewer__fsys
+            the_fsys_dir_viewer
+        DirViewer__empty_root_dir
+            the_empty_dir_viewer
 
     is_same_file__True
     mk_is_same_file
@@ -63,6 +66,9 @@ __all__ = '''
             IAccessFile4MkIsSameFile
                 STR_TIME_FORMAT
                 AccessFile4MkIsSameFile__fsys
+                    the_fsys_access_file
+                AccessFile4MkIsSameFile__empty_root_dir
+                    the_empty_access_file
                 get_str_mtime4real_fsys
 
     to_std_onoff_patterns_list
@@ -94,7 +100,8 @@ from seed.types.TriBoolOps import TriBoolOps
 #from seed.helper.check.checkers import check_uint_imay, check_uint, check_all, check_str, check_int, check_tuple
 from seed.helper.check.checkers import check_uint
 #from nn_ns.filedir.relative_path_ops import relative_path_ops, check_relative_path, is_relative_path_empty, relative_path2parts #avoid relative_path.parts
-from nn_ns.filedir.relative_path_ops import empty_relative_path
+from nn_ns.filedir.relative_path_ops import empty_relative_path, is_relative_path_empty, check_relative_path
+from seed.abc.ISingleton import ISingleton
 
 
 class IDirViewer(ABC):
@@ -422,9 +429,32 @@ def dir_cmp(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rhs_path, /,
 
 
 
+class DirViewer__empty_root_dir(IDirViewer, ISingleton):
+    'path::relative PurePosixPath'
+    @override
+    def exists(sf, path):
+        'path -> bool'
+        check_relative_path(path)
+        return is_relative_path_empty(path)
+
+    @override
+    def __is_file__(sf, path):
+        'path -> (bool|raise FileNotFoundError)'
+        check_relative_path(path)
+        if is_relative_path_empty(path): return False
+        raise FileNotFoundError(path)
+    @override
+    def dir_iter(sf, dir_path):
+        'dir_path -> (Iter basename | raise FileNotFoundError/NotADirectoryError)'
+        check_relative_path(path)
+        if is_relative_path_empty(path):
+            return;yield
+        raise FileNotFoundError(path)
+the_empty_dir_viewer = DirViewer__empty_root_dir()
+assert the_empty_dir_viewer is DirViewer__empty_root_dir()
 
 
-class DirViewer__fsys(IDirViewer):
+class DirViewer__fsys(IDirViewer, ISingleton):
     @override
     def exists(sf, path):
         'path -> bool'
@@ -440,6 +470,9 @@ class DirViewer__fsys(IDirViewer):
         return
         for path in dir_path.iterdir():
             yield path.name
+the_fsys_dir_viewer = DirViewer__fsys()
+assert the_fsys_dir_viewer is DirViewer__fsys()
+
 if 0:
     path.samefile
     path.stat().st_size
@@ -598,8 +631,39 @@ os.path.getmtime :: path -> (mtime::float_time | raise OSError)
 
     #'''
 
+def raise_on_file_path__empty_root_dir(file_path, /):
+    'path::relative PurePosixPath'
+    check_relative_path(file_path)
+    if is_relative_path_empty(file_path): raise IsADirectoryError('root dir is not file')
+    raise FileNotFoundError(file_path)
+class AccessFile4MkIsSameFile__empty_root_dir(IAccessFile4MkIsSameFile, ISingleton):
+    r'''
+    for MkIsSameFile
+    path::relative PurePosixPath
+    #'''
+    def __raise_on_file_path(sf, file_path, /):
+        raise raise_on_file_path__empty_root_dir(file_path)
 
-class AccessFile4MkIsSameFile__fsys(IAccessFile4MkIsSameFile):
+    @override
+    def open(sf, file_path):
+        'file_path -> IPseudoFile4MkIsSameFile'
+        raise sf.__raise_on_file_path(file_path)
+    @override
+    def get_file_size(sf, file_path):
+        'file_path -> uint # unit:byte'
+        raise sf.__raise_on_file_path(file_path)
+    @override
+    def get_may_hash_method_uppercase_std_name2upper_hex_digest(sf, file_path):
+        'file_path -> (None|hash_method_uppercase_std_name2upper_hex_digest::{name:hex}) #name <- {SHA256, MD5, ...}'
+        raise sf.__raise_on_file_path(file_path)
+    @override
+    def get_may_str_mtime(sf, file_path):
+        raise sf.__raise_on_file_path(file_path)
+the_empty_access_file = AccessFile4MkIsSameFile__empty_root_dir()
+assert the_empty_access_file is AccessFile4MkIsSameFile__empty_root_dir()
+
+
+class AccessFile4MkIsSameFile__fsys(IAccessFile4MkIsSameFile, ISingleton):
     @override
     def get_file_size(sf, file_path):
         'file_path -> uint # unit:byte'
@@ -620,6 +684,8 @@ class AccessFile4MkIsSameFile__fsys(IAccessFile4MkIsSameFile):
         #'''
         str_mtime = get_str_mtime4real_fsys(file_path)
         return str_mtime
+the_fsys_access_file = AccessFile4MkIsSameFile__fsys()
+assert the_fsys_access_file is AccessFile4MkIsSameFile__fsys()
 
 
 def get_str_mtime4real_fsys(file_path, /):

@@ -105,6 +105,40 @@ __all__ = str2__all__(r'''#)
     check_tmay
     check_nmay
     check_is_obj_or
+    #
+    check_strict_sorted
+    check_int_ge1
+    check_int_ge2
+    #
+    check_seq
+    check_len_of
+    #
+    check_union_of_cased_tuples
+    check_cased_tuple
+    check_cased_tuple__free
+    #check_cased_tuple__free_ex
+    check_empty
+    check_nonempty
+    check_nonempty_str
+    check_FrozenDict_as_record__free
+    check_FrozenDict_as_record
+    check_FrozenDict_as_cased_record__free
+    check_FrozenDict_as_cased_record
+    check_FrozenDict_as_union_of_cased_records
+
+    check_mapping_as_record__free
+    check_mapping_as_record
+    check_mapping_as_cased_record__free
+    check_mapping_as_cased_record
+    check_mapping_as_union_of_cased_records
+
+    check_is_None
+    check_result_of_cmp
+    check_result_of_partial_cmp__int
+    check_result_of_partial_cmp__tmay
+    check_icmp
+    check_ipcmp
+    check_tpcmp
 
 
 # main output
@@ -124,7 +158,7 @@ import keyword#iskeyword
 from collections.abc import Mapping, Set, Sequence
 from collections.abc import Container, Iterable
 from seed.tiny import is_iterator, is_reiterable, fst, snd
-from seed.iters.is_sorted import is_sorted
+from seed.iters.is_sorted import is_sorted, is_strict_sorted
 
 
 if 0:
@@ -305,8 +339,176 @@ def check_is_obj_or(obj, check_func, x, /,*, cls=None):
             check_func(x)
 
 
+#########################################
+check_sorted
+def check_strict_sorted(x):
+    check_(is_strict_sorted, x)
+
+check_uint_imay
+check_int_ge_neg1
+def check_int_ge1(x):
+    check_int(x, min=1)
+def check_int_ge2(x):
+    check_int(x, min=2)
+
+#########################################
+def check_seq(obj):
+    check_instance(Sequence, obj)
+def check_len_of(container, /,*, sz=None, min=None, max=None, cls=None, base=None):
+    u = len(container)
+    if sz is not None:
+        check_int(u, min=sz, max=sz)
+    check_int(u, min=min, max=max)
+    if cls is not None:
+        check_type_is(cls, container)
+    if base is not None:
+        check_instance(base, container)
+#########################################
+
+def check_union_of_cased_tuples(case_name2may_sz, obj, /):
+    check_cased_tuple__free(obj)
+    cased_tuple = obj
+    case_name = cased_tuple[0]
+    if not case_name in case_name2may_sz: raise TypeError
+    may_sz = case_name2may_sz[case_name]
+    check_cased_tuple(case_name, may_sz, obj)
+
+def check_cased_tuple(may_case_name, may_sz, obj, /):
+    check_cased_tuple__free(obj)
+    cased_tuple = obj
+    if may_case_name is not None:
+        expected_case_name = may_case_name
+        case_name = cased_tuple[0]
+        if case_name != expected_case_name: raise TypeError
+
+    if may_sz is not None:
+        expected_sz = may_sz
+        if len(cased_tuple) != expected_sz: raise TypeError
+
+def check_cased_tuple__free(obj, /):
+    check_tuple(obj)
+    check_nonempty(obj)
+    tpl1s = obj
+    ps_case_name = tpl1s[0]
+    check_nonempty_str(ps_case_name)
+r'''
+def check_cased_tuple__free_ex(obj, /,*, case_name=None, sz=None, min=None, max=None, case_names=None, case_name2sz=None):
+    check_cased_tuple(case_name, sz, obj)
+    cased_tuple = obj
+    check_len_of(cased_tuple, sz=sz, min=min, max=max)
+    case_name = cased_tuple(0]
+    if case_names is not None:
+        if not case_name in case_names: raise TypeError
+    if case_name2sz is not None:
+        if not case_name in case_name2sz: raise TypeError
+        sz = case_name2sz[case_name]
+        if len(cased_tuple) != sz: raise TypeError
+#'''
+
+def check_empty(container, /):
+    if len(container): raise TypeError
+def check_nonempty(container, /):
+    if not len(container): raise TypeError
+def check_nonempty_str(x, /):
+    check_str(x)
+    #if '' == x: raise TypeError
+    check_nonempty(x)
 
 
+def check_mapping_as_record__free(x, /,*, empty_str_key_ok:bool, cls=None):
+    if cls is not None:
+        check_type_is(cls, x)
+    check_mapping(x)
+    check_all(check_str if empty_str_key_ok else check_nonempty_str, iter(x))
+
+def check_mapping_as_record(may_field_name_set, x, /,*, empty_str_key_ok:bool=False, cls=None):
+    check_mapping_as_record__free(x, empty_str_key_ok=empty_str_key_ok, cls=cls)
+    record = x
+    _tail_of__check_mapping_as_record(may_field_name_set, record)
+def _tail_of__check_mapping_as_record(may_field_name_set, record, /):
+    if may_field_name_set is not None:
+        field_name_set = may_field_name_set
+        if not len(record) == len(field_name_set): raise TypeError
+        if not set(record) == field_name_set: raise TypeError
+def check_mapping_as_cased_record__free(field_name4case_name, x, /,*, cls=None):
+    check_mapping_as_cased_record(field_name4case_name, None, None, x, cls=cls)
+def check_mapping_as_cased_record(field_name4case_name, may_case_name, may_field_name_set, x, /,*, cls=None):
+    check_mapping_as_record(may_field_name_set, x, empty_str_key_ok=(not field_name4case_name), cls=cls)
+    if not field_name4case_name in x: raise TypeError
+    ps_case_name = x[field_name4case_name]
+    check_nonempty_str(ps_case_name)
+    case_name = ps_case_name
+
+    if may_case_name is not None:
+        expected_case_name = may_case_name
+        if case_name != expected_case_name: raise TypeError
+def check_mapping_as_union_of_cased_records(field_name4case_name, case_name2may_field_name_set, x, /,*, cls=None):
+    check_mapping_as_cased_record__free(field_name4case_name, x, cls=cls)
+    cased_record = x
+    case_name = cased_record[field_name4case_name]
+    if not case_name in case_name2may_field_name_set: raise TypeError
+    may_field_name_set = case_name2may_field_name_set[case_name]
+    #_tail_of__check_mapping_as_record(may_field_name_set, cased_record)
+    check_mapping_as_cased_record(field_name4case_name, case_name, may_field_name_set, x, cls=cls)
+
+
+def check_FrozenDict_as_record__free(x, /,*, empty_str_key_ok:bool):
+    check_mapping_as_record__free(x, empty_str_key_ok=empty_str_key_ok, cls=FrozenDict)
+def check_FrozenDict_as_record(may_field_name_set, x, /,*, empty_str_key_ok:bool=False):
+    check_mapping_as_record(may_field_name_set, x, empty_str_key_ok=empty_str_key_ok, cls=FrozenDict)
+def check_FrozenDict_as_cased_record__free(field_name4case_name, x):
+    check_mapping_as_cased_record__free(field_name4case_name, x, cls=FrozenDict)
+def check_FrozenDict_as_cased_record(field_name4case_name, may_case_name, may_field_name_set, x, /):
+    check_mapping_as_cased_record(field_name4case_name, may_case_name, may_field_name_set, x, cls=FrozenDict)
+def check_FrozenDict_as_union_of_cased_records(field_name4case_name, case_name2may_field_name_set, x, /):
+    check_mapping_as_union_of_cased_records(field_name4case_name, case_name2may_field_name_set, x, cls=FrozenDict)
+
+
+check_union_of_cased_tuples
+check_cased_tuple
+check_cased_tuple__free
+#check_cased_tuple__free_ex
+check_empty
+check_nonempty
+check_nonempty_str
+
+check_FrozenDict_as_record__free
+check_FrozenDict_as_record
+check_FrozenDict_as_cased_record__free
+check_FrozenDict_as_cased_record
+check_FrozenDict_as_union_of_cased_records
+
+check_mapping_as_record__free
+check_mapping_as_record
+check_mapping_as_cased_record__free
+check_mapping_as_cased_record
+check_mapping_as_union_of_cased_records
+
+
+
+def check_is_None(obj, /):
+    if obj is not None: raise TypeError
+def check_result_of_cmp(obj, /):
+    '[-1..+1]'
+    check_int(obj, min=-1, max=+1)
+def check_result_of_partial_cmp__int(obj, /):
+    '[-2..+1]'
+    check_int(obj, min=-2, max=+1)
+def check_result_of_partial_cmp__tmay(obj, /):
+    'tmay [-1..+1]'
+    check_tmay(obj, check_func=check_result_of_cmp)
+check_icmp = check_result_of_cmp
+check_ipcmp = check_result_of_partial_cmp__int
+check_tpcmp = check_result_of_partial_cmp__tmay
+
+check_is_None
+check_result_of_cmp
+check_result_of_partial_cmp__int
+check_result_of_partial_cmp__tmay
+
+check_icmp
+check_ipcmp
+check_tpcmp
 #########################################
 #########################################
 #########################################
@@ -358,6 +560,45 @@ class check_funcs:
     tmay = check_tmay
     nmay = check_nmay
     is_obj_or = check_is_obj_or
+    ###########################
+    strict_sorted = check_strict_sorted
+    int_ge1 = check_int_ge1
+    int_ge2 = check_int_ge2
+    ###########################
+    seq = check_seq
+    len_of = check_len_of
+    ###########################
+    union_of_cased_tuples = check_union_of_cased_tuples
+    cased_tuple = check_cased_tuple
+    cased_tuple__free = check_cased_tuple__free
+    #cased_tuple__free_ex = check_cased_tuple__free_ex
+    empty = check_empty
+    nonempty = check_nonempty
+    nonempty_str = check_nonempty_str
+
+    FrozenDict_as_record__free = check_FrozenDict_as_record__free
+    FrozenDict_as_record = check_FrozenDict_as_record
+    FrozenDict_as_cased_record__free = check_FrozenDict_as_cased_record__free
+    FrozenDict_as_cased_record = check_FrozenDict_as_cased_record
+    FrozenDict_as_union_of_cased_records = check_FrozenDict_as_union_of_cased_records
+
+    mapping_as_record__free = check_mapping_as_record__free
+    mapping_as_record = check_mapping_as_record
+    mapping_as_cased_record__free = check_mapping_as_cased_record__free
+    mapping_as_cased_record = check_mapping_as_cased_record
+    mapping_as_union_of_cased_records = check_mapping_as_union_of_cased_records
+
+    is_None = check_is_None
+    result_of_cmp = check_result_of_cmp
+    result_of_partial_cmp__int = check_result_of_partial_cmp__int
+    result_of_partial_cmp__tmay = check_result_of_partial_cmp__tmay
+    icmp = check_icmp
+    ipcmp = check_ipcmp
+    tpcmp = check_tpcmp
+    ###########################
+    ###########################
+    ###########################
+    ###########################
 checks = check_funcs
 
 

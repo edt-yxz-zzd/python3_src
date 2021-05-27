@@ -9,12 +9,16 @@ KeysImmutable mapping ==>> HalfFrozenDict
     like list with fixed len
     frozen keys
     not hashable
+
+from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, HalfFrozenDict
 '''
 
 
 __all__ = '''
     mapping_hash
     FrozenDict
+        mk_FrozenDict
+        empty_FrozenDict
     HalfFrozenDict
 
     HashableMapping
@@ -26,6 +30,18 @@ from seed.helper.repr_input import repr_helper
 from types import MappingProxyType
 from collections.abc import Mapping, Set, Hashable
 import itertools
+
+def mk_FrozenDict(mapping_or_pairs=(), /, **kwargs):
+    if not kwargs and type(mapping_or_pairs) is FrozenDict:
+        d = mapping_or_pairs
+    else:
+        d = FrozenDict(mapping_or_pairs, **kwargs)
+    assert type(d) is FrozenDict
+
+    if not d:
+        d = empty_FrozenDict
+    assert type(d) is FrozenDict
+    return d
 
 def mapping_hash(mapping):
     'like Set._hash; to provide a std algo for all mapping'
@@ -190,12 +206,12 @@ class __Dict(Mapping):
 
 class FrozenDict(__Dict, HashableMapping):
     'should not modify .__d!'
-    def __init__(self, iterable_or_mapping=(), **kwargs):
-        if not kwargs and isinstance(iterable_or_mapping, __class__):
-            # bug: d = iterable_or_mapping.__d
-            d = iterable_or_mapping._Dict__d
+    def __init__(self, mapping_or_pairs=(), /, **kwargs):
+        if not kwargs and isinstance(mapping_or_pairs, __class__):
+            # bug: d = mapping_or_pairs.__d
+            d = mapping_or_pairs._Dict__d
         else:
-            d = dict(iterable_or_mapping, **kwargs)
+            d = dict(mapping_or_pairs, **kwargs)
         super().__init__(d)
         self.__hash = None
     def __hash__(self):
@@ -205,9 +221,12 @@ class FrozenDict(__Dict, HashableMapping):
     def __or__(self, mapping, /):
         return self.ireplace(mapping)
     __ior__ = __or__
+empty_FrozenDict = FrozenDict()
+
+
 class HalfFrozenDict(__Dict):
-    def __init__(self, iterable_or_mapping=(), **kwargs):
-        d = dict(iterable_or_mapping, **kwargs)
+    def __init__(self, mapping_or_pairs=(), **kwargs):
+        d = dict(mapping_or_pairs, **kwargs)
         super().__init__(d)
     def __setitem__(self, key, value):
         if key not in self:

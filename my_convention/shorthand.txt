@@ -1,0 +1,191 @@
+
+py
+  Python
+hs
+  Haskell
+cpp
+  C++
+
+[type]
+  [a]
+    iter<a>
+    seq<a>
+      list<a>
+      tuple<a>
+[bool-expr]
+  proposal/proof/type(type_as_proof)/precondition/postcondition/constraint
+  [a][b] === [a and b]
+  [a]or[b]
+
+template<args...>
+obj :: type
+subtype <: type
+obj <- set
+@a::A. B a
+  Any/All
+  @(a::A) -> B a
+  @[a::A] -> B a
+  ==>> (X -> Y)
+@[A<:B] -> P A
+  @[A::Type] -> [A<:B] -> P A
+@set::Set<K>. @[a<-set] -> B a
+  @set::Set<K>. @[a::K] -> [a<-set] -> B a
+?a::A. B a
+  Exist/Some
+  (?a::A, B a)
+  (?[a::A], B a)
+  ==>> (X, Y)
+
+
+
+
+
+
+obj
+  object
+cls
+  class
+sf
+  self
+ops
+  operators/operator_collection_obj/obj_offering_operators
+ls
+  list
+  seq
+  stack
+
+uint
+  int{>=0}
+pint
+  int{>=1}
+sz
+  size :: uint
+stmt
+expr
+rex/regex
+
+
+mk
+  make/create/new
+2
+  to
+    direction
+      left2right
+    target
+      into...
+  convert to
+    transform
+    mapping
+    seq
+4
+  for/at/on
+
+IXXXX
+  interface/abc/abstract_class
+    ISingleton
+ixxxx
+  immutable method
+    ipush :: sf -> x -> new_sf
+    ipop :: sf -> (new_sf, x)
+ex
+  extras/extended
+ps/_ex
+  pseudo/fake/extended/virtual
+  pairs
+xxxxs
+  pairs
+    pair_set
+    pair_seq
+    iter_pairs
+iter_xxxx
+  iter_pairs
+    :: Iter<pair>
+    :: sf -> Iter<pair>
+is_xxxx
+  :: bool
+  :: x -> bool
+xxxx_ok
+  :: bool
+  exist_ok
+fname
+  file_name/file_path
+nm
+  name
+cmd
+  command
+dir
+  directory
+tmp
+  temp
+inf
+  +oo/infinite
+ordered/unordered
+sorted/unsorted
+
+
+le
+  little-endian #vs big-endian
+  <= #lt or eq
+
+
+___f___
+  @abstractmethod
+  def ___f___(...):
+  @final_method
+  def f(...):
+    cls.___f___(sf?, ...)
+  cls/sf.f(...)
+
+may
+  Maybe  @hs
+  nmay T = (None|T)
+  tmay T = (()|(T,))
+  imay uint = (-1|uint) = [-1..]
+  smay nestr = (''|nonempty_str) = str
+  tribool = (...|bool) #TriBoolOps
+  cmp = (-1|0|+1) = (<|=|>) = (LT|EQ|GT)
+    icmp = [-1..+1]
+  partial_order_cmp = tmay cmp or [-2..+1]
+    ipcmp = [-2..+1]
+    tpcmp = tmay [-1..+1]
+  cmay = may4cased_tuple = ()|cased_tuple
+    cased_tuple = (case_name::nonempty_str, ...)
+
+reiterable
+  iterable - iterator
+  [reiterable is not iter reiterable]
+
+ordered
+  ordered_iterable
+  ordered_reiterable
+    <==> [a]  @hs
+  array
+    ordered_reiterable+__getitem__
+    <==> seq<a>  @py
+    <==> vector<a>  @cpp
+  vector
+    <==> seq<sz,a>
+    <==> array<a>  @cpp
+  point
+    <==> (a,b,c,...)  @hs
+    <==> Tuple<a,b,c,...>  @cpp
+  mapping
+    Mapping<k,v>
+  record
+    Record<(?[key_set :: Set], key2value_type :: @(key<-key_set) -> (value_type::Type))>
+  namespace
+    ##Mapping<key_set,k,v>
+    ns<attr_set, v>
+
+
+cased_record
+  cased_FrozenDict
+  field_name4case_name :: str # may empty
+    case_name :: nonempty_str
+  field_name2value_type
+    nonempty_str{this!=field_name4case_name} -> Type
+
+cased_point
+  cased_tuple = (case_name::nonempty_str, ...)
+
+

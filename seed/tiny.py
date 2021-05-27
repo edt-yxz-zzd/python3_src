@@ -2,6 +2,8 @@
 from .helper.str2__all__ import str2__all__
 __all__ = str2__all__('''
     no_op               # :: (*args, **kwargs) -> None
+    next__tmay          # :: Iter a -> tmay a
+    lookup__tmay          # :: Lookupable k v -> tmay v  # Lookupable := hasattr __getitem__ raise LookupError
     echo_args_kwargs    # :: (*args, **kwargs) -> (args, kwargs)
     echo_args           # :: *args -> args
     echo_kwargs         # :: (**kwargs) -> kwargs
@@ -61,6 +63,9 @@ from .debug.print_err import print_err, print_ferr
 from .debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f
 from .debug.lazy_raise import lazy_raise
 from .func_tools.not_dot import __not__, not_dot
+from .for_libs.next__tmay import next__tmay
+from .for_libs.lookup__tmay import lookup__tmay
+
 from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs
   #SimpleNamespace(**kw)
 from collections.abc import Iterable, Iterator

@@ -1,0 +1,29 @@
+
+ops_sys
+
+use qname_named_symbol(py.obj) as attr instead of str
+  (pkg.)*module/(class_name.)*class_name/method_name
+  to avoid attr collision
+  singleton by importing sys
+    each qname_named_symbol must be there
+    decl final
+get:
+  Ops[IOps.f]     #wrapped
+  Ops[IOps.f.raw] #raw
+call:
+  ops[IOps.f](*args, **kwargs)
+  ops(IOps.f, *args, **kwargs)
+
+domain:
+  offer optional/possible domain method signature
+  not abstractmethod that are required
+
+immutable proof obj
+  if condition set, then save all immutable relative objs
+  neednot check depth recur
+
+
+ops/obj data field:
+  public
+  protected
+  private

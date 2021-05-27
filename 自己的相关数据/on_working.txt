@@ -1,0 +1,17 @@
+
+finger_tree_ops
+  e ../../python3_src/script/finger_tree_ops.py
+
+repr_sys
+  e ../../python3_src/seed/helper/repr/repr_sys.py
+  e ../../python3_src/seed/helper/repr/repr_api.py
+
+
+IOps
+  e ../../python3_src/seed/ops/___IOps___.py
+
+IOps4OneMainObjType
+  e ../../python3_src/seed/ops/IOps4OneMainObjType.py
+  e ../../python3_src/seed/ops/___IOps4OneMainObjType___.py
+
+

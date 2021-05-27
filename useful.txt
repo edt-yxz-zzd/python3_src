@@ -7,6 +7,13 @@ __all__ = '''
 
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
+import ...
+___end_mark_of_excluded_global_names__0___ = ...
+if __name__ == '__main__':
+    #put anywhere, neednot at eof
+    from seed.debug._debug import main__print_infos_of_modules
+    main__print_infos_of_modules([__name__])
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -45,7 +52,8 @@ may
   smay nestr = (''|nonempty_str) = str
   tribool = (...|bool) #TriBoolOps
   cmp = (-1|0|+1) = (<|=|>) = (LT|EQ|GT)
-  partial_order_cmp = tmay cmp
+  partial_order_cmp = tmay cmp or [-2..+1]
+  cmay = may4cased_tuple = ()|cased_tuple
 2
   to
   convert to

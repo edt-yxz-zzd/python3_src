@@ -1,0 +1,61 @@
+
+python3_src/my_convention/overridable_method__to_auto_generate_wrapper_class_forward_call_src_code.txt
+
+
+mixin abc/cls or impl cls/abc
+  cannot be used in isinstance/issubclass/decl-external
+
+obj ~=~ by is
+  may repr
+  named obj
+    repr by name
+value ~=~ by ==
+  repr
+  named value
+    repr by name
+named obj/value
+  [this is other] <==> [eqv names]
+  [this ~=~ other] <==> [eqv names]or[this.payload ~=~ other.payload]
+
+kwargs:param be symbol is better
+  to dipatch which paramter to which method...
+  eqv_kw_groups @this method signature
+required by seed.ops.IOps4OneMainObjType
+    input: abstract cls T
+        assume only abstractmethod are overridable
+        other method is final
+            except overridable_default_method
+        abstractmethod can be overrided only once
+            #override old abstractmethod but depends on new abstractmethod
+            #   e.g. IMeasurableOps__commutable.___get_monoid_ops4measured_result___ -> ___get_commutable_monoid_ops4measured_result___
+    steps:
+        get all methods of T
+            is override?
+                is not final_method?
+                and
+                    is chain cooperatiin/collaboration
+                        when override not with overridable key, and not with final, not set final
+                    or
+                        is abstractmethod?
+                            #abstractmethod named ___f___
+                        or
+                        is overridable_default_method?
+                            #overridable_default_method named _f_
+                        both when override not with overridable key, then set final
+
+        verif mro:
+            not override non-override method/
+            abstractmethod decl only once
+                except overridable_default_method
+        get src-code-snippet by ast
+            api+doc
+            +wrapped_obj=sf.__ops
+            +return wrapped_obj.f()
+            +return wrapped_obj._f_()
+            +return type(wrapped_obj).__f__(wrapped_obj, ...)
+            @property
+            def __ops(sf):
+                ...
+
+
+

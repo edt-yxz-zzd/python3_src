@@ -1,9 +1,15 @@
+r'''
+py -m seed.math.floor_ceil
+#'''
+
 __all__ = '''
     floor_log2
     ceil_log2
 
     floor_div
     ceil_div
+
+    offsetted_divmod
     '''.split()
 
 
@@ -151,6 +157,40 @@ example:
 '''
     assert pint > 0
     return pint.bit_length()-1
+
+
+def offsetted_divmod(original, n, d, /):
+    r'''original -> n -> d -> (pq, pr)
+    d >= 1
+    n == pq*d+pr
+    original <= pr < original+d
+
+    t := pr - original
+    n == pq*d+pr
+        == pq*d+t+original
+    n-original == pq*d + t
+    0 <= t < d
+
+example:
+    >>> offsetted_divmod(3, 2, 1)
+    (-1, 3)
+    >>> offsetted_divmod(3, 1, 5)
+    (-1, 6)
+    >>> offsetted_divmod(3, 12, 5)
+    (1, 7)
+    >>> offsetted_divmod(-3, -1, 5)
+    (0, -1)
+    >>> offsetted_divmod(-3, -12, 5)
+    (-2, -2)
+
+    #'''
+    if not d >= 1: raise ValueError
+    (pq, t) = divmod(n-original, d)
+    pr = t + original
+
+    assert n == pq*d+pr
+    assert original <= pr < original+d
+    return (pq, pr)
 
 
 if __name__ == "__main__":
