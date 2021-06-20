@@ -145,18 +145,18 @@ if __name__ == '__main__':
 
 
 
-def main(args=None):
+def main(args=None, /):
   from seed.for_libs.for_argparse.subcmd import Main4subcmd
   class Main(Main4subcmd):
-    def on_subcmd__search(sf, subcmd_name, parsed_args):
+    def on_subcmd__search(sf, subcmd_name, parsed_args, /):
         return _main_subcmd_search(parsed_args)
-    def on_subcmd__readline(sf, subcmd_name, parsed_args):
+    def on_subcmd__readline(sf, subcmd_name, parsed_args, /):
         return _main_subcmd_readline(parsed_args)
-    def on_no_subcmd(sf, subcmd_name, parsed_args):
+    def on_no_subcmd(sf, subcmd_name, parsed_args, /):
         sf.parser.print_help()
         #raise NotImplementedError
     @classmethod
-    def _mk_option_config_(cls):
+    def _mk_option_config_(cls, /):
         '-> ([parent::ArgParserPrepare], [common_option::GetArgsKwargs], {group_name:{subcmd:ArgParserPrepare}})'
         return [], [], {'subcmd':_mk_subcmd2prepare()}
   return Main(description=_g_description, subcmd_dest_name='subcmd').main(args)
@@ -165,15 +165,15 @@ def main(args=None):
 
 #_Main+main.Main(_Main, Main4subcmd): framework from <phone_txt>/txt/script/欧路词典.py
 class _Main:
-    def on_subcmd__search(sf, subcmd_name, parsed_args):
+    def on_subcmd__search(sf, subcmd_name, parsed_args, /):
         return _main_subcmd_search(parsed_args)
-    def on_subcmd__readline(sf, subcmd_name, parsed_args):
+    def on_subcmd__readline(sf, subcmd_name, parsed_args, /):
         return _main_subcmd_readline(parsed_args)
-    def on_no_subcmd(sf, subcmd_name, parsed_args):
+    def on_no_subcmd(sf, subcmd_name, parsed_args, /):
         sf.parser.print_help()
         #raise NotImplementedError
     @classmethod
-    def _mk_option_config_(cls):
+    def _mk_option_config_(cls, /):
         '-> ([parent::ArgParserPrepare], [common_option::GetArgsKwargs], {group_name:{subcmd:ArgParserPrepare}})'
         return [], [], {'subcmd':_mk_subcmd2prepare()}
 
@@ -206,14 +206,14 @@ class _Main:
             ,GROUP_B=subcmd2prepare_GROUP_B
             ))
         return [], [], group_name2subcmd2prepare
-        def on_subcmd__XXX(sf, subcmd_name, parsed_args):
+        def on_subcmd__XXX(sf, subcmd_name, parsed_args, /):
             'XXX'
-        def on_subcmd__YYY(sf, subcmd_name, parsed_args):
+        def on_subcmd__YYY(sf, subcmd_name, parsed_args, /):
             'YYY'
-        def on_no_subcmd(sf, subcmd_name, parsed_args):
+        def on_no_subcmd(sf, subcmd_name, parsed_args, /):
             sf.parser.print_help()
             #raise NotImplementedError
-def main(args=None):
+def main(args=None, /):
     from seed.for_libs.for_argparse.subcmd import Main4subcmd
     class Main(_Main, Main4subcmd):
         pass
@@ -224,7 +224,7 @@ if __name__ == "__main__":
 
 
 
-def main(args=None):
+def main(args=None, /):
     import argparse
     from seed.io.may_open import may_open_stdin, may_open_stdout
 

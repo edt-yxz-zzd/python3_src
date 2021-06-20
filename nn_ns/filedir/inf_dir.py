@@ -2,8 +2,48 @@ r'''
 
 nn_ns.filedir.inf_dir
 py -m nn_ns.filedir.inf_dir
+py -m nn_ns.filedir.inf_dir -L 10 -i 29
+py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9
+py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9  -i 29
+py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9  -i 28
+
+
+$ py -m nn_ns.filedir.inf_dir -L 10 -i 29
+9/2/0
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9
+28
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9  -i 29
+!=
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9  -i 28
+==
+
+
+py -m nn_ns.filedir.inf_dir
+py -m nn_ns.filedir.inf_dir -L 10
+py -m nn_ns.filedir.inf_dir -L -10 -i 29
+py -m nn_ns.filedir.inf_dir -L 10 -i -29
+py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/+9
+py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/
+
+
+$ py -m nn_ns.filedir.inf_dir
+inf_dir.py: error: the following arguments are required: -L/--dir_size
+$ py -m nn_ns.filedir.inf_dir -L 10
+inf_dir.py: error: turn on any of -i,-p
+$ py -m nn_ns.filedir.inf_dir -L -10 -i 29
+inf_dir.py: error: dir_size == -10 < 2
+$ py -m nn_ns.filedir.inf_dir -L 10 -i -29
+inf_dir.py: error: inf_dir_idx == -29 < 0
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/+9
+ValueError: non-std inf_dir_user_data_relative_path:PurePosixPath('9/1/+9')
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/
+inf_dir.py: error: argument -p/--inf_dir_user_data_relative_path: invalid str2relative_path value: '9/1/'
+
+
+
 
 from nn_ns.filedir.inf_dir import inf_dir_idx2user_data_uint_relative_path, inf_dir_user_data_uint_relative_path2idx
+from nn_ns.filedir.inf_dir import inf_dir_idx2user_data_relative_path, inf_dir_user_data_relative_path2idx
 from nn_ns.filedir.inf_dir import move_and_push_into_inf_dir, copy_and_push_into_inf_dir, pop_from_inf_dir_and_move, pop_from_inf_dir_and_push_into_another, inf_dir_remove_tail_empty_dirs, len_inf_dir, inf_dir_end_based_idx2user_data_path_ex
 from nn_ns.filedir.inf_dir import bisearch_child_end, len_finite_dir_or_file, inf_dir_idx2user_data_relative_path, inf_dir_end_based_idx2user_data_relative_path_ex, inf_dir_end_based_idx2begin_based_idx
 from nn_ns.filedir.inf_dir import open_under_inf_dir, mk_target_path_under_inf_dir
@@ -70,11 +110,78 @@ inf_dir
 (2, 2, 0, 2, 0)
 
 
+
+
+
+>>> def call_on_fout_result(fout, out, /):
+...     return out
+>>> def main_f(cmd, /):
+...     return main(cmd.split(), may_call_on_fout_result=call_on_fout_result)
+
+>>> main_f('-L 10 -i 29')
+'9/2/0'
+>>> main_f('-L 10 -p 9/1/9')
+'28'
+>>> main_f('-L 10 -p 9/1/9  -i 29')
+'!='
+>>> main_f('-L 10 -p 9/1/9  -i 28')
+'=='
+
+
+#'''
+#################################
+#################################
+#################################
+r'''
+#>>> import sys, io
+#>>> saved_stderr = sys.stderr
+#>>> sys.stderr = io.StringIO()
+
+inf_dir.py: error: the following arguments are required: -L/--dir_size
+>>> main_f('')
+Traceback (most recent call last):
+    ...
+SystemExit: 2
+
+inf_dir.py: error: turn on any of -i,-p
+>>> main_f('-L 10')
+Traceback (most recent call last):
+    ...
+SystemExit: 2
+
+inf_dir.py: error: dir_size == -10 < 2
+>>> main_f('-L -10 -i 29')
+Traceback (most recent call last):
+    ...
+SystemExit: 2
+
+inf_dir.py: error: inf_dir_idx == -29 < 0
+>>> main_f('-L 10 -i -29')
+Traceback (most recent call last):
+    ...
+SystemExit: 2
+
+>>> main_f('-L 10 -p 9/1/+9')
+Traceback (most recent call last):
+    ...
+ValueError: non-std inf_dir_user_data_relative_path:PurePosixPath('9/1/+9')
+
+
+inf_dir.py: error: argument -p/--inf_dir_user_data_relative_path: invalid str2relative_path value: '9/1/'
+>>> main_f('-L 10 -p 9/1/')
+Traceback (most recent call last):
+    ...
+SystemExit: 2
+
+#>>> sys.stderr = saved_stderr
+
 #'''
 
 __all__ = '''
     inf_dir_idx2user_data_uint_relative_path
+        inf_dir_idx2user_data_relative_path
     inf_dir_user_data_uint_relative_path2idx
+        inf_dir_user_data_relative_path2idx
 
     move_and_push_into_inf_dir
     copy_and_push_into_inf_dir
@@ -100,10 +207,11 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.int_tools.repr_uint import iter_reprdigits_BE2uint, uint2reprdigits_BE
 from seed.int_tools.int_tools import is_odd
 
-from pathlib import Path, PurePosixPath #as_posix
+#from pathlib import Path, PurePosixPath #as_posix
 import os.path
 import shutil
 #from nn_ns.filedir.relative_path_ops import relative_path_ops, check_relative_path, is_relative_path_empty, relative_path2parts #avoid relative_path.parts
+from nn_ns.filedir.relative_path_ops import check_relative_path, str2relative_path, relative_path2str, relative_path2parts #avoid relative_path.parts
 from nn_ns.filedir.filedir_ops import is_dir_empty, remove_dirs, filedir_move_then_remove_dirs, filedir_move, filedir_copy
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -444,12 +552,21 @@ def open_under_inf_dir(dir_size, inf_dir_path, inf_dir_idx, may_target_file_path
 
 
 
+def inf_dir_user_data_relative_path2idx(inf_dir_user_data_relative_path, /,*, dir_size):
+    #used in main() only, added very late
+    check_relative_path(inf_dir_user_data_relative_path)
+    ints = tuple(map(int, relative_path2parts(inf_dir_user_data_relative_path)))
+
+    inf_dir_idx = inf_dir_user_data_uint_relative_path2idx(ints, dir_size=dir_size)
+    if not inf_dir_user_data_relative_path == inf_dir_idx2user_data_relative_path(inf_dir_idx, dir_size=dir_size): raise ValueError(fr'non-std inf_dir_user_data_relative_path:{inf_dir_user_data_relative_path!r}')
+    return inf_dir_idx
 #mk_relative_path__from_inf_dir_idx
 #inf_dir_idx2user_data_relative_path
 def inf_dir_idx2user_data_relative_path(inf_dir_idx, /,*, dir_size):
     inf_dir_user_data_uint_relative_path = inf_dir_idx2user_data_uint_relative_path(inf_dir_idx, dir_size=dir_size)
     #.as_posix()
-    inf_dir_user_data_relative_path = PurePosixPath(*map(repr, inf_dir_user_data_uint_relative_path))
+    #inf_dir_user_data_relative_path = PurePosixPath(*map(repr, inf_dir_user_data_uint_relative_path))
+    inf_dir_user_data_relative_path = str2relative_path('/'.join(map(repr, inf_dir_user_data_uint_relative_path)))
     return inf_dir_user_data_relative_path
 
 
@@ -588,16 +705,101 @@ def _t():
 
 if __name__ == "__main__":
     _t()
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
 
 #HHHHH
-if __name__ == '__main__':
+if 0 and __name__ == '__main__':
     from seed.helper.print_global_names import print_global_names
     print_global_names(globals())
 
 
+
+
+def main(args=None, /,*, may_call_on_fout_result=None):
+    inf_dir_idx2user_data_uint_relative_path
+    inf_dir_user_data_uint_relative_path2idx
+    inf_dir_idx2user_data_relative_path
+    inf_dir_user_data_relative_path2idx
+
+    if may_call_on_fout_result is not None:
+        call_on_fout_result = may_call_on_fout_result
+        if not callable(call_on_fout_result): raise TypeError
+
+    import argparse
+    from seed.io.may_open import may_open_stdin, may_open_stdout
+
+    parser = argparse.ArgumentParser(
+        description='@inf_dir:idx<->user_data_relative_path'
+        , epilog=r'''
+$ py -m nn_ns.filedir.inf_dir -L 10 -i 29
+9/2/0
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9
+28
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9  -i 29
+!=
+$ py -m nn_ns.filedir.inf_dir -L 10 -p 9/1/9  -i 28
+==
+        #'''
+        , formatter_class=argparse.RawDescriptionHelpFormatter
+        )
+    parser.add_argument('-i', '--inf_dir_idx', type=int, default=None
+                        , help='inf_dir_idx >= 0')
+    parser.add_argument('-p', '--inf_dir_user_data_relative_path', type=str2relative_path, default=None
+                        , help='inf_dir_user_data_relative_path')
+    parser.add_argument('-L', '--dir_size', type=int
+                        , required=True
+                        , help='dir_size >= 2; max number of children of dir of inf_dir system (except user data dir)')
+
+    parser.add_argument('-o', '--output', type=str, default=None
+                        , help='output file path')
+    parser.add_argument('-e', '--encoding', type=str
+                        , default='utf8'
+                        , help='output file encoding')
+    parser.add_argument('-f', '--force', action='store_true'
+                        , default = False
+                        , help='open mode for output file')
+
+    args = parser.parse_args(args)
+    encoding = args.encoding
+    omode = 'wt' if args.force else 'xt'
+
+    dir_size = args.dir_size
+    may_inf_dir_idx = args.inf_dir_idx
+    may_inf_dir_user_data_relative_path = args.inf_dir_user_data_relative_path
+
+    if not dir_size >= 2: raise parser.error(fr'dir_size == {dir_size!r} < 2')
+
+    if may_inf_dir_idx is not None:
+        if not may_inf_dir_idx >= 0: raise parser.error(fr'inf_dir_idx == {may_inf_dir_idx!r} < 0')
+
+
+    if may_inf_dir_user_data_relative_path is None:
+        if may_inf_dir_idx is None is may_inf_dir_user_data_relative_path: raise parser.error(fr'turn on any of -i,-p')
+        inf_dir_idx = may_inf_dir_idx
+        inf_dir_user_data_relative_path = inf_dir_idx2user_data_relative_path(inf_dir_idx, dir_size=dir_size)
+        out = relative_path2str(inf_dir_user_data_relative_path)
+    else:
+        inf_dir_user_data_relative_path = may_inf_dir_user_data_relative_path
+        inf_dir_idx = inf_dir_user_data_relative_path2idx(inf_dir_user_data_relative_path, dir_size=dir_size)
+        if may_inf_dir_idx is not None:
+            out = '==' if inf_dir_idx == may_inf_dir_idx else '!='
+        else:
+            out = str(inf_dir_idx)
+
+    may_ofname = args.output
+    with may_open_stdout(may_ofname, omode, encoding=encoding) as fout:
+        if may_call_on_fout_result is not None:
+            call_on_fout_result = may_call_on_fout_result
+            return call_on_fout_result(fout, out)
+        else:
+            print(out, file=fout)
+            return out
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+if __name__ == "__main__":
+    main()
 
 
 
