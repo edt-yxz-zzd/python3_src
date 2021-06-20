@@ -1,0 +1,3 @@
+#debug_pym aaa.bbb xxx.yyy.zzz pkg.module
+#debug_pym nn_ns.filedir.backup_tools.main
+py -m nn_ns.app.debug_cmd "$@"
