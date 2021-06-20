@@ -1,3 +1,14 @@
+backup_tools
+  nn_ns.filedir.backup_tools._debug
+  nn_ns.filedir.backup_tools._test_main
+    nn_ns.filedir.backup_tools.main
+    nn_ns.filedir.backup_tools.filedir_cmp_utils__repository__fsys_mapping
+
+
+view /sdcard/0my_files/tmp/src/glob.py
+  py-3.8::glob
+  e /sdcard/0my_files/tmp/src/glob_ex.py
+
 
 finger_tree_ops
   e ../../python3_src/script/finger_tree_ops.py

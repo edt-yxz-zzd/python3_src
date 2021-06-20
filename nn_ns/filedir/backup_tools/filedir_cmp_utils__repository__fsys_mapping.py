@@ -2,11 +2,20 @@
 r'''
 
 filedir_cmp_utils__repository__fsys_mapping
+nn_ns.filedir.backup_tools.filedir_cmp_utils__repository__fsys_mapping
+py -m nn_ns.app.debug_cmd nn_ns.filedir.backup_tools.filedir_cmp_utils__repository__fsys_mapping
 
 main:
     def dir_cmp__relative__with_IRepositorySetting__rhs_is_real_fsys(lhs_repository_setting:IRepositorySetting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path:'relative PurePosixPath', rhs_path, /,*, kwargs4MkIsSameFile, kwargs4dir_cmp__relative):
+        kwargs4dir_cmp__relative
+            #except:ignore_relative_path
+            ignore_basename, max_depth
+        kwargs4MkIsSameFile
+            always_tribool_as_is_or_not_same_file:'tribool', size_eq_as_same_file:bool, size_hash0_eq_as_same_file:bool, hash_eq_as_same_file:bool, mtime_eq_as_same_file:bool, mtime_ne_as_not_same_file:bool, imay_max_size_threshold4cmp_content:int, _block_size
     def mk_commit_and_push__rhs_is_real_fsys(result_of_dir_cmp__relative, lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_root_path, /):
     def mk_commit_and_push__rhs_is_IRepositorySetting(result_of_dir_cmp__relative, lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_repository_setting, rhs_branch_name, rhs_may_signed_branch_idx, rhs_relative_path, /):
+    def mk_empty_repository_branch(lhs_repository_setting, lhs_branch_name, /):#, lhs_may_signed_branch_idx
+    def extract_branch(lhs_repository_setting, lhs_branch_name, lhs_branch_idx, rhs_real_fsys_root_dir_path4output, /):
 
 
 
@@ -17,12 +26,33 @@ _dict
 
 
 
-======================
+======================mkdirs-->makedirs
+AttributeError: module 'os' has no attribute 'mkdirs'
+
+cd /sdcard/0my_files/git_repos/python3_src/nn_ns/filedir/
+grep '\(^\|[^a-zA-Z0-9_]\)mkdirs' -r . -l
+
+./backup_tools/filedir_cmp_utils__repository__fsys_mapping.py
+./backup_tools/IRepositorySetting.py
+./filedir_ops.py
+no use os.makedirs:
+    ./backup_tools/main.py
+    ./backup_tools/FileSystem4update.py
+    ./backup_tools/fsys_mapping_ex.py
+    ./backup_tools/fsys_mapping_patch.py
 
 ==========
+TypeError: len_inf_dir() missing 1 required keyword-only argument: 'level'
+
+grep '\(^\|[^a-zA-Z0-9_]\)len_inf_dir' -r . -l
 
 
-
+./inf_dir.py
+./backup_tools/IRepositorySetting.py
+no use len_inf_dir:
+    ./backup_tools/filedir_cmp_utils__repository__fsys_mapping.py
+    ./backup_tools/FileSystem4update.py
+    ./backup_tools/imports.py
 
 
 
@@ -60,6 +90,8 @@ __all__ = '''
     Run_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_file_cmp_file_diff_ver1__using_IRepositorySetting__rhs_is_IRepositorySetting
     mk_commit_and_push__rhs_is_real_fsys
     mk_commit_and_push__rhs_is_IRepositorySetting
+    mk_empty_repository_branch
+    extract_branch
     '''.split()
 
 
@@ -67,13 +99,15 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 
 from nn_ns.filedir.backup_tools.fsys_mapping_ex import using_FrozenDict_as_valueonly_fsys_mapping_ex, get_tmay_sub_fsys_mapping_or_patch_idx, check_fsys_mapping, pseudo_virtual_file_reprobj_checker_cls4fsys_patch_mapping, deepcopy_fsys_mapping_ex
 from nn_ns.filedir.backup_tools.IRepositorySetting import IRepositorySetting, metadata_keys_setting
-from nn_ns.filedir.dir_cmp import dir_cmp__relative, mk_filer_basenames_ex, IDirViewer, IAccessFile4MkIsSameFile, MkIsSameFile, get_str_mtime4real_fsys, DirViewer__fsys, AccessFile4MkIsSameFile__fsys
+from nn_ns.filedir.backup_tools.IRepositorySetting__using_IFileSystem4update__fsys_delta import IRepositorySetting__using_IFileSystem4update__fsys_delta
+from nn_ns.filedir.dir_cmp import dir_cmp__relative, IDirViewer, IAccessFile4MkIsSameFile, MkIsSameFile, get_str_mtime4real_fsys, DirViewer__fsys, AccessFile4MkIsSameFile__fsys#, mk_filter_basenames_ex
 from nn_ns.filedir.file_cmp import file_diff
 from nn_ns.filedir.inf_dir import inf_dir_idx2user_data_relative_path
-from nn_ns.filedir.relative_path_ops import relative_path2parts
+from nn_ns.filedir.relative_path_ops import relative_path2parts, empty_relative_path
 
 
-from seed.helper.check.checkers import check_uint, check_tuple
+
+from seed.helper.check.checkers import check_uint, check_tuple, check_instance
 from seed.math.calc_hash_digest import calc_SHA256__file
 from seed.abc.abc import override
 from seed.types.FrozenDict import FrozenDict
@@ -83,6 +117,7 @@ import copy
 import os.path
 from abc import ABC, abstractmethod
 
+BLOCK_SIZE = 2**20
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
@@ -138,7 +173,7 @@ class DirViewer__fsys_mapping(IDirViewer):
         sf.fsys_mapping = fsys_mapping
 
     @override
-    def __is_file__(sf, path, /):
+    def ___is_file___(sf, path, /):
         'path -> (bool|raise FileNotFoundError)'
         if 1:
             assert not path.is_absolute()
@@ -164,7 +199,7 @@ class DirViewer__fsys_mapping(IDirViewer):
             return type(root_fsys_mapping_or_patch_idx) is int
 
     @override
-    def dir_iter(sf, dir_path, /):
+    def ___dir_iter___(sf, dir_path, /):
         'dir_path -> (Iter basename | raise FileNotFoundError/NotADirectoryError)'
         if 1:
             assert not dir_path.is_absolute()
@@ -196,7 +231,7 @@ class DirViewer__fsys_mapping(IDirViewer):
                 return iter(fsys_mapping)
 
     @override
-    def exists(sf, path, /):
+    def ___exists___(sf, path, /):
         'path -> bool'
         assert not path.is_absolute()
         return bool(get_tmay_sub_fsys_mapping_or_patch_idx(sf.fsys_mapping, path))
@@ -351,7 +386,7 @@ see: dir_cmp__relative__with_IRepositorySetting
     def dir_cmp__relative(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rhs_path, /,*, ignore_relative_path, ignore_basename, max_depth):
     ##################################
     is_same_file = MkIsSameFile
-        def __init__(sf, lhs_access_file, rhs_access_file, /,*, always_tribool_as_is_or_not_same_file:'tribool', size_eq_as_same_file:bool, size_hash0_eq_as_same_file:bool, hash_eq_as_same_file:bool, mtime_eq_as_same_file:bool, mtime_ne_as_not_same_file:bool, _block_size):
+        def __init__(sf, lhs_access_file, rhs_access_file, /, *, always_tribool_as_is_or_not_same_file:'tribool', size_eq_as_same_file:bool, size_hash0_eq_as_same_file:bool, hash_eq_as_same_file:bool, mtime_eq_as_same_file:bool, mtime_ne_as_not_same_file:bool, imay_max_size_threshold4cmp_content:int, _block_size):
     ##################################
     #'''
     branch_idx = repository_setting.resolve_may_signed_branch_idx(branch_name, may_signed_branch_idx)
@@ -378,7 +413,7 @@ see: dir_cmp__relative__with_IRepositorySetting
 def access_file2open_ignorefile_text_ifile(access_file4working_root_dir:IAccessFile4MkIsSameFile, /):
     def open_ignorefile_text_ifile(working_root_dir_path, ignorefile_relative_path, /,*, encoding):
         with access_file4working_root_dir.open(working_root_dir_path/ignorefile_relative_path) as bfin:
-            bs = bfin.read(0)
+            bs = bfin.read(-1)
         s = bs.decode(encoding)
         return io.StringIO(s)
     return open_ignorefile_text_ifile
@@ -414,6 +449,12 @@ def dir_cmp__relative__with_IRepositorySetting(lhs_repository_setting:IRepositor
     return dir_cmp__relative(is_same_file, lhs_dir_viewer, lhs_relative_path, rhs_dir_viewer, rhs_path, ignore_relative_path=ignore_relative_path, **kwargs4dir_cmp__relative)
 def dir_cmp__relative__with_IRepositorySetting__rhs_is_real_fsys(lhs_repository_setting:IRepositorySetting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path:'relative PurePosixPath', rhs_path, /,*, kwargs4MkIsSameFile, kwargs4dir_cmp__relative):
     r'''->result_of_dir_cmp__relative
+
+    kwargs4dir_cmp__relative
+        #except:ignore_relative_path
+        ignore_basename, max_depth
+    kwargs4MkIsSameFile
+        always_tribool_as_is_or_not_same_file:'tribool', size_eq_as_same_file:bool, size_hash0_eq_as_same_file:bool, hash_eq_as_same_file:bool, mtime_eq_as_same_file:bool, mtime_ne_as_not_same_file:bool, imay_max_size_threshold4cmp_content:int, _block_size
     #'''
     rhs_dir_viewer = DirViewer__fsys()
     rhs_access_file = AccessFile4MkIsSameFile__fsys()
@@ -436,16 +477,21 @@ class IVisit_result_of_dir_cmp__relative(ABC):
     def get_rhs_root_path(sf, /):
         '-> rhs_root_path'
     def on_diff_file(sf, xhs_relative_file_path, /):
-        ''
+        '#overwrite_file_by_file'
 
     def on_right_only_new_file(sf, rhs_relative_file_path, /):
         '.visit() not call on_new_file_under_new_dir'
     #to_skip from [on_right_only_new_top_dir__enter, on_remove_file_and_new_top_dir__enter, on_new_top_dir__enter, on_new_dir__enter]
+    #   ???for what??? apply ignorefile???
     def on_right_only_new_top_dir__enter(sf, rhs_relative_dir_path, /):
         r'''-> to_skip:bool
         if to_skip==True: not call inside & exit
         else: '.visit() call on_new_top_dir__enter/on_new_top_dir__exit'
         #'''
+        #return__to_skip
+        ##bug:return
+        to_skip = False
+        return to_skip
     def on_right_only_new_top_dir__exit(sf, rhs_relative_dir_path, /):
         ''
     def on_new_top_dir__enter(sf, rhs_relative_dir_path, /):
@@ -453,6 +499,10 @@ class IVisit_result_of_dir_cmp__relative(ABC):
         if to_skip==True: not call inside & exit
         else: '.visit() call on_new_dir__enter/on_new_dir__exit'
         #'''
+        #return__to_skip
+        ##bug:return
+        to_skip = False
+        return to_skip
     def on_new_top_dir__exit(sf, rhs_relative_dir_path, /):
         ''
     def on_new_dir__enter(sf, rhs_relative_dir_path, /):
@@ -460,6 +510,10 @@ class IVisit_result_of_dir_cmp__relative(ABC):
         if to_skip==True: not call inside & exit
         else: '.visit() call on_new_file_under_new_dir/recur call on_new_dir__enter/on_new_dir__exit'
         #'''
+        #return__to_skip
+        ##bug:return
+        to_skip = False
+        return to_skip
     def on_new_dir__exit(sf, rhs_relative_dir_path, /):
         ''
     def on_new_file_under_new_dir(sf, rhs_relative_file_path, /):
@@ -468,12 +522,16 @@ class IVisit_result_of_dir_cmp__relative(ABC):
     def on_remove_file_or_top_dir(sf, lhs_relative_file_path, /):
         ''
     def on_remove_top_dir_and_new_file(sf, xhs_relative_filedir_path, /):
-        '.visit() not call on_new_file_under_new_dir'
+        '.visit() not call on_new_file_under_new_dir;  #overwrite_dir_by_file'
     def on_remove_file_and_new_top_dir__enter(sf, xhs_relative_filedir_path, /):
-        r'''-> to_skip:bool
+        r'''-> to_skip:bool     #overwrite_file_by_dir
         if to_skip==True: not call inside & exit
         else: '.visit() call on_new_top_dir__enter/on_new_top_dir__exit'
         #'''
+        #return__to_skip
+        ##bug:return
+        to_skip = False
+        return to_skip
     def on_remove_file_and_new_top_dir__exit(sf, xhs_relative_filedir_path, /):
         ''
 
@@ -488,6 +546,7 @@ class IVisit_result_of_dir_cmp__relative(ABC):
         rhs_root_path = sf.get_rhs_root_path()
         #to_skip from [on_right_only_new_top_dir__enter, on_remove_file_and_new_top_dir__enter, on_new_top_dir__enter, on_new_dir__enter]
         def _test_to_skip(to_skip, /):
+            #print(type(to_skip))
             if type(to_skip) is not bool: raise TypeError
             return to_skip
         def _is_file(xhs_relative_filedir_path, /):
@@ -496,7 +555,7 @@ class IVisit_result_of_dir_cmp__relative(ABC):
         def _on_new_filedir(xhs_relative_filedir_path, /):
             if sf.xhs_relative_filedir_path2is_ignore(xhs_relative_filedir_path): return
             if _is_file(xhs_relative_filedir_path):
-                f = f.on_new_file_under_new_dir
+                f = sf.on_new_file_under_new_dir
             else:
                 f = _on_new_dir
             f(xhs_relative_filedir_path)
@@ -640,15 +699,19 @@ class IRun_file_diff_over_result_of_dir_cmp__relative(Visit_result_of_dir_cmp__r
     def on_right_only_new_top_dir__enter
     #'''
     def on_diff_file(sf, xhs_relative_file_path, /):
-        ''
+        '#overwrite_file_by_file'
         lhs_root_path = sf.lhs_root_path
         rhs_root_path = sf.rhs_root_path
         lhs_file_path = lhs_root_path/xhs_relative_file_path
         rhs_file_path = rhs_root_path/xhs_relative_file_path
-        lhs_pseudo_ifile = sf.lhs_access_file.open(lhs_file_path)
-        rhs_pseudo_ifile = sf.rhs_access_file.open(lhs_file_path)
+        if 0:
+            #bug: should be "with file:"
+            lhs_pseudo_ifile = sf.lhs_access_file.open(lhs_file_path)
+            #bug:rhs_pseudo_ifile = sf.rhs_access_file.open(lhs_file_path)
+            rhs_pseudo_ifile = sf.rhs_access_file.open(rhs_file_path)
 
-        sf.run_file_diff(lhs_root_path, rhs_root_path, xhs_relative_file_path, lhs_pseudo_ifile, rhs_pseudo_ifile)
+        with sf.lhs_access_file.open(lhs_file_path) as lhs_pseudo_ifile, sf.rhs_access_file.open(rhs_file_path) as rhs_pseudo_ifile:
+            sf.run_file_diff(lhs_root_path, rhs_root_path, xhs_relative_file_path, lhs_pseudo_ifile, rhs_pseudo_ifile)
 
         sf.__overwrite_file_by_dir = ...
 
@@ -659,10 +722,11 @@ class IRun_file_diff_over_result_of_dir_cmp__relative(Visit_result_of_dir_cmp__r
             may_lhs_root_path = None
         rhs_root_path = sf.rhs_root_path
         rhs_file_path = rhs_root_path/rhs_relative_file_path
-        rhs_pseudo_ifile = sf.rhs_access_file.open(rhs_file_path)
-
-        xhs_relative_filedir_path = rhs_relative_file_path
-        sf.create_file(may_lhs_root_path, rhs_root_path, xhs_relative_filedir_path, rhs_pseudo_ifile)
+        #bug: rhs_pseudo_ifile = sf.rhs_access_file.open(rhs_file_path)
+        #   using "with"
+        with sf.rhs_access_file.open(rhs_file_path) as rhs_pseudo_ifile:
+            xhs_relative_filedir_path = rhs_relative_file_path
+            sf.create_file(may_lhs_root_path, rhs_root_path, xhs_relative_filedir_path, rhs_pseudo_ifile)
 
     def on_right_only_new_file(sf, rhs_relative_file_path, /):
         '.visit() not call on_new_file_under_new_dir'
@@ -670,6 +734,7 @@ class IRun_file_diff_over_result_of_dir_cmp__relative(Visit_result_of_dir_cmp__r
     def on_new_file_under_new_dir(sf, rhs_relative_file_path, /):
         'only call between on_new_dir__enter/on_new_dir__exit; not with on_right_only_new_file'
         sf._on_new_file(False, rhs_relative_file_path)
+    @override
     def on_new_dir__enter(sf, rhs_relative_dir_path, /):
         r'''-> to_skip:bool
         if to_skip==True: not call inside & exit
@@ -682,28 +747,41 @@ class IRun_file_diff_over_result_of_dir_cmp__relative(Visit_result_of_dir_cmp__r
             may_lhs_root_path = None
         rhs_root_path = sf.rhs_root_path
         sf.create_dir(may_lhs_root_path, rhs_root_path, rhs_relative_dir_path)
+        #return__to_skip
+        ##bug:return
+        to_skip = False
+        return to_skip
 
     def on_remove_file_or_top_dir(sf, lhs_relative_file_path, /):
         ''
         sf.remove_filedir(sf.lhs_root_path, lhs_relative_file_path)
 
     def on_remove_top_dir_and_new_file(sf, xhs_relative_filedir_path, /):
-        '.visit() not call on_new_file_under_new_dir'
+        '.visit() not call on_new_file_under_new_dir;  #overwrite_dir_by_file'
         sf._on_new_file(True, xhs_relative_filedir_path)
 
-    def on_remove_file_and_new_top_dir__eFalsenter(sf, xhs_relative_filedir_path, /):
-        r'''-> to_skip:bool
+    def on_remove_file_and_new_top_dir__enter(sf, xhs_relative_filedir_path, /):
+        r'''-> to_skip:bool     #overwrite_file_by_dir
         if to_skip==True: not call inside & exit
         else: '.visit() call on_new_top_dir__enter/on_new_top_dir__exit'
         #'''
         sf.__overwrite_file_by_dir = True
+        #return__to_skip
+        ##bug:return
+        to_skip = False
+        return to_skip
 
+    @override
     def on_right_only_new_top_dir__enter(sf, rhs_relative_dir_path, /):
         r'''-> to_skip:bool
         if to_skip==True: not call inside & exit
         else: '.visit() call on_new_top_dir__enter/on_new_top_dir__exit'
         #'''
         sf.__overwrite_file_by_dir = False
+        #return__to_skip
+        ##bug:return
+        to_skip = False
+        return to_skip
 
 
 #end of class IRun_file_diff_over_result_of_dir_cmp__relative(Visit_result_of_dir_cmp__relative):
@@ -768,6 +846,7 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
 
     def read_rhs_file_metadata(sf, rhs_root_path, xhs_relative_file_path, /):
         '-> rhs_file_metadata#see: mk_basic_rhs_file_metadata/read_rhs_file_metadata/___read_rhs_file_metadata___/___try_to_get_rhs_file_str_mtime___ #fill str_mtime&SHA256'
+        rhs_file_path = rhs_root_path/xhs_relative_file_path
         rhs_file_metadata = type(sf).___read_rhs_file_metadata___(sf, rhs_root_path, xhs_relative_file_path)
 
         may_str_mtime = rhs_file_metadata[metadata_keys_setting.key4may_str_mtime] #must exist, but can be empty or None!
@@ -790,6 +869,7 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
             with sf.rhs_access_file.open(rhs_file_path) as bfin:
                 digest_upper_hex_str = calc_SHA256__file(bfin, hex=True, upper=True)
             hash_method_uppercase_std_name2upper_hex_digest['SHA256'] = digest_upper_hex_str
+        return rhs_file_metadata
  
 
 
@@ -811,9 +891,10 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
         old_pseudo_virtual_file_reprobj = sf.lhs_file_path2pseudo_virtual_file_reprobj4fsys_mapping_ex(lhs_root_path, xhs_relative_file_path)
             #old~parent
 
-        lhs_file_bytes = lhs_pseudo_ifile.read(0)
-        rhs_file_bytes = rhs_pseudo_ifile.read(0)
-        patch_file_bytes = sf.file_diff__file_bytes(lhs_file_bytes, rhs_file_bytes, ver=1)
+        lhs_file_bytes = lhs_pseudo_ifile.read(-1)
+        rhs_file_bytes = rhs_pseudo_ifile.read(-1)
+        #bug:patch_file_bytes = sf.file_diff__file_bytes(lhs_file_bytes, rhs_file_bytes, ver=1)
+        patch_file_bytes = sf.file_diff__file_bytes(lhs_file_bytes, rhs_file_bytes)
         contentfile_bytes = patch_file_bytes
 
         may_lhs_root_path = lhs_root_path
@@ -826,7 +907,7 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
         ''
         rhs_relative_file_path = xhs_relative_filedir_path
         rhs_file_metadata = sf.read_rhs_file_metadata(rhs_root_path, rhs_relative_file_path)
-        rhs_bytes = rhs_pseudo_ifile.read(0)
+        rhs_bytes = rhs_pseudo_ifile.read(-1)
         original_file_bytes = rhs_bytes
         contentfile_bytes = original_file_bytes
         tmay_old_pseudo_virtual_file_reprobj = ()
@@ -847,10 +928,14 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
 #end of class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes(IRun_file_diff_over_result_of_dir_cmp__relative):
 
 class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_file_cmp_file_diff_ver1(IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes):
+    @property
+    @abstractmethod
+    def lcp_threshold(sf, /):
+        '->lcp_threshold::uint @nn_ns.filedir.file_cmp.file_diff'
     @override
     def file_diff__file_bytes(sf, lhs_file_bytes, rhs_file_bytes, /):
         '-> patch_file_bytes'
-        patch_bytes_ex4file_diff = file_diff(lhs_file_bytes, rhs_file_bytes, ver=1)
+        patch_bytes_ex4file_diff = file_diff(sf.lcp_threshold, lhs_file_bytes, rhs_file_bytes, ver=1)
         patch_file_bytes = patch_bytes_ex4file_diff
         return patch_file_bytes
 #end of class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_file_cmp_file_diff_ver1(IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes):
@@ -888,7 +973,7 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
             sf.__file_stack_dir_sz = 0
             sf.lhs_repository_setting.clean_updating_root_dir()
             file_stack_dir_path = sf.lhs_repository_setting.get_file_stack_dir_path()
-            os.mkdirs(file_stack_dir_path, exist_ok=False)
+            os.makedirs(file_stack_dir_path, exist_ok=False)
 
 
         lhs_root_path = lhs_relative_path
@@ -897,17 +982,6 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
         new_patch_idx = sf.__next_new_patch_idx
         sf.__next_new_patch_idx += 1
         return new_patch_idx
-    def _open_new_file_and_push_into_file_stack_dir(sf, /):
-        '-> (idx4file_stack, binary_ofile) #idx4file_stack to mk move_cmd'
-        idx4file_stack = sf.__file_stack_dir_sz
-        sf.__file_stack_dir_sz += 1
-        file_path = sf.lhs_repository_setting.get_file_stack_dir_path() / inf_dir_idx2user_data_relative_path(idx4file_stack, dir_size=sf.lhs_repository_setting.get_dir_size())
-        dir_path = file_path.parent
-        os.mkdirs(dir_path, exist_ok=True)
-        binary_ofile = open(file_path, 'xb')
-            #shouldnot be "wb" to avoid unclean updating commit: see:IRepositorySetting.clean_updating_root_dir()
-        return idx4file_stack, binary_ofile
-
     def _mkdirs_to_parent_and_return_with_basename(sf, xhs_relative_filedir_path, /):
         '-> sub_fsys_patch_mapping'
         parts = relative_path2parts(xhs_relative_filedir_path)
@@ -938,6 +1012,7 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
     def update_fsys_patch_mapping__update_file(sf, xhs_relative_file_path, pseudo_virtual_file_reprobj, /):
         'update underlying fsys_patch_mapping - subcase:update_file #new/patch'
         patch_idx = pseudo_virtual_file_reprobj
+        #print(patch_idx)
         check_uint(patch_idx)
 
         d, basename = sf._mkdirs_to_parent_and_return_with_basename(xhs_relative_file_path)
@@ -1013,7 +1088,9 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
             sf._push_store_py_obj_and_mk_move_cmd(write__binary_ofile__py_obj=write_func, py_obj=data, move_cmd_target=move_cmd_target, move_cmd_target_args=move_cmd_target_args, idx4move_cmd_target=idx4move_cmd_target)
 
         ##
-        return
+        #bug:return
+        new_pseudo_virtual_file_reprobj = new_patch_idx
+        return new_pseudo_virtual_file_reprobj
     def _mk_offsetted_fsys_patch_frozendict_ex(sf, /):
 
         offsetted_fsys_patch_frozendict = deepcopy_fsys_mapping_ex(dst_mapping_type_from_dict=FrozenDict, src_fsys_mapping_ex=sf.__offsetted_fsys_patch_mapping, may_mapping_types_or_check_mapping_type=(dict,), pseudo_virtual_file_reprobj_checker_cls=pseudo_virtual_file_reprobj_checker_cls4fsys_patch_mapping)
@@ -1037,16 +1114,15 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
         move_cmds = sf.finish_visit()
 
         #mk TODO_list4move_cmd_file
-        TODO_list4move_cmd_file_path = sf.get_TODO_list4move_cmd_file_path()
-        binary_ofile = open(TODO_list4move_cmd_file_path, 'xb')
-        with binary_ofile:
+        sf.lhs_repository_setting.check_move_cmds(move_cmds)
+        TODO_list4move_cmd_file_path = sf.lhs_repository_setting.get_TODO_list4move_cmd_file_path()
+        with open(TODO_list4move_cmd_file_path, 'xb') as binary_ofile:
             sf.lhs_repository_setting.write_move_cmds(binary_ofile, move_cmds)
 
         #mk commit_completed_file #empty
-        commit_completed_file_path = sf.get_commit_completed_file_path()
-        binary_ofile = open(commit_completed_file_path, 'xb')
-        with binary_ofile:
-            #mk empty filr
+        commit_completed_file_path = sf.lhs_repository_setting.get_commit_completed_file_path()
+        with open(commit_completed_file_path, 'xb') as binary_ofile:
+            #close === mk empty file
             pass
         return
 
@@ -1068,13 +1144,14 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
         #read_repred_py_obj
         #write_py_obj_as_repr
         #command_history_cmd = (new branch_time, new len_inf_dir_of_file_patch_forest, [high_level_user_command__str])
-        next_branch_time = (sf.branch_name, sf.branch_idx+1)
+        #next_branch_time = (sf.branch_name, sf.branch_idx+1)
+        next_branch_time = (sf.lhs_branch_name, sf.lhs_branch_idx+1)
         expected_len_inf_dir_of_file_patch_forest = sf.__next_new_patch_idx
         high_level_user_command__strs = ('dir_cmp__relative',)
         command_history_cmd = next_branch_time, expected_len_inf_dir_of_file_patch_forest, high_level_user_command__strs
-        #check branch_idx is latest/correct
-        latest_branch_idx = sf.lhs_repository_setting.resolve_may_signed_branch_idx(sf.branch_name, -1)
-        if not sf.branch_idx == latest_branch_idx: raise ValueError
+        #check lhs_branch_idx is latest/correct
+        latest_branch_idx = sf.lhs_repository_setting.resolve_may_signed_branch_idx(sf.lhs_branch_name, -1)
+        if not sf.lhs_branch_idx == latest_branch_idx: raise ValueError
 
         if 1:
             move_cmd_target = 'push_into_command_history'
@@ -1093,7 +1170,8 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
             write__binary_ofile__py_obj = sf.lhs_repository_setting.write_branch_history_deltas
             sf._push_store_py_obj_and_mk_move_cmd(write__binary_ofile__py_obj=write__binary_ofile__py_obj, py_obj=py_obj, move_cmd_target=move_cmd_target, move_cmd_target_args=move_cmd_target_args, idx4move_cmd_target=idx4move_cmd_target)
             ##
-        move_cmds = tuple(sf.__move_cmds)
+        #bug:move_cmds = tuple(sf.__move_cmds)
+        move_cmds = tuple(reversed(sf.__move_cmds))
         sf.lhs_repository_setting.check_move_cmds(move_cmds)
         return move_cmds
 
@@ -1104,9 +1182,22 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
         move_cmd = (idx4file_stack, move_cmd_target, move_cmd_target_args, idx4move_cmd_target)
         sf.lhs_repository_setting.check_move_cmd(move_cmd)
         sf.__move_cmds.append(move_cmd)
+    def _open_new_file_and_push_into_file_stack_dir(sf, /):
+        '-> (idx4file_stack, binary_ofile) #idx4file_stack to mk move_cmd'
+        idx4file_stack = sf.__file_stack_dir_sz
+        sf.__file_stack_dir_sz += 1
+        file_path = sf.lhs_repository_setting.get_file_stack_dir_path() / inf_dir_idx2user_data_relative_path(idx4file_stack, dir_size=sf.lhs_repository_setting.get_dir_size())
+        dir_path = file_path.parent
+        os.makedirs(dir_path, exist_ok=True)
+        binary_ofile = open(file_path, 'xb')
+            #shouldnot be "wb" to avoid unclean updating commit: see:IRepositorySetting.clean_updating_root_dir()
+        return idx4file_stack, binary_ofile
 
 
-    @abstractmethod
+
+
+    #@abstractmethod
+    @override
     def mk_fsys_deltas(sf, lhs_dst_dir_relative_path4IRepositorySetting, offsetted_fsys_patch_frozendict, /):
         r'''-> tuple<fsys_delta>
 see: nn_ns.filedir.backup_tools.FileSystem4update
@@ -1140,10 +1231,17 @@ class IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping_
 
 
 class Run_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_file_cmp_file_diff_ver1__using_IRepositorySetting__rhs_is_real_fsys(IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_file_cmp_file_diff_ver1__using_IRepositorySetting):
-    def __init__(sf, lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_root_path, /):
+    def __init__(sf, lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_root_path, /,*, lcp_threshold):
         rhs_dir_viewer = DirViewer__fsys()
         rhs_access_file = AccessFile4MkIsSameFile__fsys()
         super().__init__(lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_dir_viewer, rhs_access_file, rhs_root_path)
+        if not lcp_threshold >= 1: raise ValueError
+        sf.__lcp_threshold = lcp_threshold
+    @property
+    @override
+    def lcp_threshold(sf, /):
+        '->lcp_threshold::uint @nn_ns.filedir.file_cmp.file_diff'
+        return sf.__lcp_threshold
 
 
     @override
@@ -1190,8 +1288,8 @@ class Run_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__
 
 
 
-def mk_commit_and_push__rhs_is_real_fsys(result_of_dir_cmp__relative, lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_root_path, /):
-    sf = Run_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_file_cmp_file_diff_ver1__using_IRepositorySetting__rhs_is_real_fsys(lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_root_path)
+def mk_commit_and_push__rhs_is_real_fsys(result_of_dir_cmp__relative, lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_root_path, /,*, lcp_threshold):
+    sf = Run_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_file_cmp_file_diff_ver1__using_IRepositorySetting__rhs_is_real_fsys(lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_root_path, lcp_threshold=lcp_threshold)
     sf.mk_commit_and_push(result_of_dir_cmp__relative)
 
 def mk_commit_and_push__rhs_is_IRepositorySetting(result_of_dir_cmp__relative, lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, lhs_relative_path, rhs_repository_setting, rhs_branch_name, rhs_may_signed_branch_idx, rhs_relative_path, /):
@@ -1199,6 +1297,178 @@ def mk_commit_and_push__rhs_is_IRepositorySetting(result_of_dir_cmp__relative, l
     sf.mk_commit_and_push(result_of_dir_cmp__relative)
 
 
+def mk_empty_repository_branch(lhs_repository_setting, lhs_branch_name, /):#, lhs_may_signed_branch_idx
+    check_instance(IRepositorySetting__using_IFileSystem4update__fsys_delta, lhs_repository_setting)
+    if 1:
+        #IRepositorySetting__using_IFileSystem4update__fsys_delta.mk_empty_fsys_updater
+        branch_name2min_extracting_branch_idx = {}
+        fsys_updater = lhs_repository_setting.mk_empty_fsys_updater(branch_name2min_extracting_branch_idx)
+        fsys_delta__init_empty_branch = fsys_updater.mk_fsys_delta4init_empty_branch()
+        fsys_delta__remove_branch = fsys_updater.mk_fsys_delta4remove_branch()
+
+
+    if 1:
+        #mk branch dir
+        lhs_branch_dir = lhs_repository_setting.get_branch_history_dir_path(lhs_branch_name)
+        os.makedirs(lhs_branch_dir, exist_ok=True)
+
+        #bug:lhs_branch_sz = lhs_repository_setting.resolve_may_signed_branch_idx(lhs_branch_name, -1/0/xxx) xxx !!!
+        lhs_branch_sz = lhs_repository_setting.get_len_inf_dir_of_branch_history(lhs_branch_name)
+        if lhs_branch_sz != 0:
+            fsys_delta__remove_branch
+            raise NotImplementedError(f'branch[{lhs_branch_name!r}] not empty. existed? should check prev fsys_delta is del-cmd')
+
+
+
+    #mk/rm order: IRepositorySetting.clean_updating_root_dir
+    #IRun_file_diff_over_result_of_dir_cmp__relative__using_fsys_patch_mapping__using_file_diff__file_bytes__using_IRepositorySetting.finish_visit:: move_cmd_target = 'push_into_command_history'/ move_cmd_target = 'push_into_branch_fsys_history'
+
+
+
+    __move_cmds = []
+    if 1:
+        __file_stack_dir_sz = 0
+        lhs_repository_setting.clean_updating_root_dir()
+        file_stack_dir_path = lhs_repository_setting.get_file_stack_dir_path()
+        os.makedirs(file_stack_dir_path, exist_ok=False)
+
+    #.finish_visit
+    if 1:
+        #next_branch_time = (lhs_branch_name, lhs_branch_idx+1)
+        next_branch_time = (lhs_branch_name, lhs_branch_sz)
+        expected_len_inf_dir_of_file_patch_forest = 2 #one for cmd, another for branch[empty]
+        high_level_user_command__strs = (f'init_empty_branch[{lhs_branch_name!r}]',)
+        command_history_cmd = next_branch_time, expected_len_inf_dir_of_file_patch_forest, high_level_user_command__strs
+        #check lhs_branch_idx is latest/correct
+        if lhs_branch_sz:
+            #bug: empty branch shouldnot use resolve_may_signed_branch_idx
+            latest_branch_idx = lhs_repository_setting.resolve_may_signed_branch_idx(lhs_branch_name, -1)
+            if not lhs_branch_sz == latest_branch_idx: raise ValueError
+        #lhs_branch_sz = lhs_repository_setting.get_len_inf_dir_of_branch_history(lhs_branch_name)
+
+        command_history_cmd
+        #fsys_deltas = mk_fsys_deltas(lhs_dst_dir_relative_path4IRepositorySetting, offsetted_fsys_patch_frozendict)
+        #fsys_delta = ('mk_empty_fsys',)
+        #fsys_delta = ('init_as_empty',)
+        fsys_deltas = (fsys_delta__init_empty_branch,)
+        check_tuple(fsys_deltas)
+
+        command_history_cmd
+        fsys_deltas
+
+        command_history_cmd
+        if 1:
+            move_cmd_target = 'push_into_command_history'
+            move_cmd_target_args = ()
+            idx4move_cmd_target = lhs_repository_setting.get_len_inf_dir_of_command_history()
+            py_obj = command_history_cmd
+            write__binary_ofile__py_obj = lhs_repository_setting.write_command_history_cmd
+            __file_stack_dir_sz = _push_store_py_obj_and_mk_move_cmd(lhs_repository_setting, __file_stack_dir_sz, __move_cmds, write__binary_ofile__py_obj=write__binary_ofile__py_obj, py_obj=py_obj, move_cmd_target=move_cmd_target, move_cmd_target_args=move_cmd_target_args, idx4move_cmd_target=idx4move_cmd_target)
+            ##
+
+        fsys_deltas
+        if 1:
+            #should be last push of curr commit
+            move_cmd_target = 'push_into_branch_fsys_history'
+            move_cmd_target_args = (next_branch_time[0],)
+            idx4move_cmd_target = next_branch_time[1]
+            py_obj = fsys_deltas
+            write__binary_ofile__py_obj = lhs_repository_setting.write_branch_history_deltas
+            __file_stack_dir_sz = _push_store_py_obj_and_mk_move_cmd(lhs_repository_setting, __file_stack_dir_sz, __move_cmds, write__binary_ofile__py_obj=write__binary_ofile__py_obj, py_obj=py_obj, move_cmd_target=move_cmd_target, move_cmd_target_args=move_cmd_target_args, idx4move_cmd_target=idx4move_cmd_target)
+            ##
+        #bug:move_cmds = tuple(__move_cmds)
+        move_cmds = tuple(reversed(__move_cmds))
+        lhs_repository_setting.check_move_cmds(move_cmds)
+        #return move_cmds
+    move_cmds
+
+    #.mk_commit
+    move_cmds
+    if 1:
+        #mk TODO_list4move_cmd_file
+        lhs_repository_setting.check_move_cmds(move_cmds)
+        bfout = io.BytesIO()
+        lhs_repository_setting.write_move_cmds(bfout, move_cmds)
+
+        TODO_list4move_cmd_file_path = lhs_repository_setting.get_TODO_list4move_cmd_file_path()
+        with open(TODO_list4move_cmd_file_path, 'xb') as binary_ofile:
+            #lhs_repository_setting.write_move_cmds(binary_ofile, move_cmds)
+            binary_ofile.write(bfout.getvalue())
+
+        #mk commit_completed_file #empty
+        commit_completed_file_path = lhs_repository_setting.get_commit_completed_file_path()
+        with open(commit_completed_file_path, 'xb') as binary_ofile:
+            #close === mk empty file
+            pass
+        #return
+    #.mk_commit_and_push
+    if 1:
+        lhs_repository_setting.clean_updating_root_dir()
+    return
+#end of def mk_empty_repository_branch(lhs_repository_setting, lhs_branch_name, /):#, lhs_may_signed_branch_idx
+
+if 1:
+    def _push_store_py_obj_and_mk_move_cmd(lhs_repository_setting, __file_stack_dir_sz, __move_cmds, /,*, write__binary_ofile__py_obj, py_obj, move_cmd_target, move_cmd_target_args, idx4move_cmd_target):
+        '-> __file_stack_dir_sz'
+        (idx4file_stack, binary_ofile), __file_stack_dir_sz = _open_new_file_and_push_into_file_stack_dir(lhs_repository_setting, __file_stack_dir_sz)
+        with binary_ofile:
+            write__binary_ofile__py_obj(binary_ofile, py_obj)
+        move_cmd = (idx4file_stack, move_cmd_target, move_cmd_target_args, idx4move_cmd_target)
+        lhs_repository_setting.check_move_cmd(move_cmd)
+        __move_cmds.append(move_cmd)
+        return __file_stack_dir_sz
+    def _open_new_file_and_push_into_file_stack_dir(lhs_repository_setting, __file_stack_dir_sz, /):
+        '-> ((idx4file_stack, binary_ofile), __file_stack_dir_sz) #idx4file_stack to mk move_cmd'
+        idx4file_stack = __file_stack_dir_sz
+        __file_stack_dir_sz += 1
+        file_path = lhs_repository_setting.get_file_stack_dir_path() / inf_dir_idx2user_data_relative_path(idx4file_stack, dir_size=lhs_repository_setting.get_dir_size())
+        dir_path = file_path.parent
+        os.makedirs(dir_path, exist_ok=True)
+        binary_ofile = open(file_path, 'xb')
+            #shouldnot be "wb" to avoid unclean updating commit: see:IRepositorySetting.clean_updating_root_dir()
+        return (idx4file_stack, binary_ofile), __file_stack_dir_sz
+
+
+
+
+def extract_branch(lhs_repository_setting, lhs_branch_name, lhs_branch_idx, rhs_real_fsys_root_dir_path4output, /):
+    if not rhs_real_fsys_root_dir_path4output.exists(): raise FileNotFoundError
+    if not rhs_real_fsys_root_dir_path4output.is_dir(): raise NotADirectoryError
+
+    may_root_fsys_frozendict = lhs_repository_setting.extract_may_root_fsys_frozendict_at_branch_time({}, lhs_branch_name, lhs_branch_idx)
+    if may_root_fsys_frozendict is None: raise ValueError(f'branch[{(lhs_branch_name, lhs_branch_idx)!r} not exists!]')
+    lhs_root_fsys_frozendict = may_root_fsys_frozendict
+
+    lhs_may_signed_branch_idx = lhs_branch_idx
+    #(rhs_dir_viewer, rhs_access_file, _, rhs_branch_idx) = mk_args4dir_cmp__with_IRepositorySetting(rhs_repository_setting, rhs_branch_name, rhs_may_signed_branch_idx, may_working_root_dir_path=None, may_open_ignorefile_text_ifile=None)
+    (lhs_dir_viewer, lhs_access_file, _, lhs_branch_idx) = mk_args4dir_cmp__with_IRepositorySetting(lhs_repository_setting, lhs_branch_name, lhs_may_signed_branch_idx, may_working_root_dir_path=None, may_open_ignorefile_text_ifile=None)
+
+
+    lhs_root_fsys_frozendict
+    lhs_dir_viewer
+    lhs_access_file
+
+    lhs_root_path = lhs_relative_path = empty_relative_path
+    rhs_root_path = rhs_real_fsys_root_dir_path4output
+    existing_dir_pairs = [(lhs_root_path, rhs_root_path)]
+    while existing_dir_pairs:
+        lhs_dir_path, rhs_dir_path = existing_dir_pairs.pop()
+        for basename in lhs_dir_viewer.dir_iter(lhs_dir_path):
+            lhs_path = lhs_dir_path / basename
+            rhs_path = rhs_dir_path / basename
+            if lhs_dir_viewer.is_dir(lhs_path):
+                os.mkdir(rhs_path)
+                existing_dir_pairs.append((lhs_path, rhs_path))
+            else:
+                with lhs_access_file.open(lhs_path) as bfin, open(rhs_path, 'xb') as bfout:
+                    while 1:
+                        bs = bfin.read(BLOCK_SIZE)
+                        if not bs: break
+                        bfout.write(bs)
+
+
+    return
+#end of def extract_branch(lhs_repository_setting, lhs_branch_name, lhs_branch_idx, rhs_real_fsys_root_dir_path4output, /):
 
 
 

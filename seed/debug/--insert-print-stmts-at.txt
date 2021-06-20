@@ -1,0 +1,42 @@
+
+audit 旁听
+  在特定位置插入钩子
+  但无法注销？
+
+see: seed.debug.audit
+
+sys.addaudithook(hook)
+
+    Append the callable hook to the list of active auditing hooks for the current interpreter.
+
+    When an auditing event is raised through the sys.audit() function, each hook will be called in the order it was added with the event name and the tuple of arguments. Native hooks added by PySys_AddAuditHook() are called first, followed by hooks added in the current interpreter.
+
+    Raise an auditing event sys.addaudithook with no arguments. If any existing hooks raise an exception derived from RuntimeError, the new hook will not be added and the exception suppressed. As a result, callers cannot assume that their hook has been added unless they control all existing hooks.
+
+    New in version 3.8.
+
+    Changed in version 3.8.1: Exceptions derived from Exception but not RuntimeError are no longer suppressed.
+
+    CPython implementation detail: When tracing is enabled (see settrace()), Python hooks are only traced if the callable has a __cantrace__ member that is set to a true value. Otherwise, trace functions will skip the hook.
+
+
+
+
+sys.audit(event, *args)
+
+    Raise an auditing event with any active hooks. The event name is a string identifying the event and its associated schema, which is the number and types of arguments. The schema for a given event is considered public and stable API and should not be modified between releases.
+
+    This function will raise the first exception raised by any hook. In general, these errors should not be handled and should terminate the process as quickly as possible.
+
+    Hooks are added using the sys.addaudithook() or PySys_AddAuditHook() functions.
+
+    The native equivalent of this function is PySys_Audit(). Using the native function is preferred when possible.
+
+    See the audit events table for all events raised by CPython.
+
+    New in version 3.8.
+
+
+
+
+

@@ -8,17 +8,19 @@ see:
             O(n^2)
     nn_ns.filedir.inf_dir
     nn_ns.filedir.backup_util
+py -m nn_ns.app.debug_cmd nn_ns.filedir.dir_cmp
 
 TODO:
     DONE: ignore/skip by pattern/glob
 
 nn_ns.filedir.dir_cmp
-from nn_ns.filedir.dir_cmp import dir_cmp, dir_cmp__relative, mk_filer_basenames_ex, path2str, path2str4dir_cmp_result, the_empty_dir_viewer, the_fsys_dir_viewer, DirViewer__fsys, DirViewer__empty_root_dir, is_same_file__True, STR_TIME_FORMAT, get_str_mtime4real_fsys, mk_is_same_file, MkIsSameFile, the_empty_access_file, the_fsys_access_file, AccessFile4MkIsSameFile__fsys, AccessFile4MkIsSameFile__empty_root_dir, bytes2PseudoFile4MkIsSameFile, binary_ifile2PseudoFile4MkIsSameFile
-from nn_ns.filedir.dir_cmp import IDirViewer, IPseudoFile4MkIsSameFile, IAccessFile4MkIsSameFile
+from nn_ns.filedir.dir_cmp import dir_cmp, dir_cmp__relative, mk_filter_basenames_ex, path2str, path2str4dir_cmp_result, inv__path2str4result_of_dir_cmp__relative, path2str4result_of_dir_cmp__relative, path2str4result_of_dir_cmp, the_empty_dir_viewer, the_fsys_dir_viewer, DirViewer__fsys, DirViewer__empty_root_dir, is_same_file__True, STR_TIME_FORMAT, get_str_mtime4real_fsys, mk_is_same_file, MkIsSameFile, the_empty_access_file, the_fsys_access_file, AccessFile4MkIsSameFile__fsys, AccessFile4MkIsSameFile__empty_root_dir, bytes2PseudoFile4MkIsSameFile, binary_ifile2PseudoFile4MkIsSameFile
+from nn_ns.filedir.dir_cmp import Glob4IDirViewer, IDirViewer, IPseudoFile4MkIsSameFile, IAccessFile4MkIsSameFile
 from nn_ns.filedir.dir_cmp import to_std_onoff_patterns_list, onoff_patterns_lists2ignore_str, onoff_patterns_list2ignore_str, read_ignorefile, iter_read_ignorefile, read_ignorefile__text, write_ignorefile, write_ignorefile__text
 
 
 py -m nn_ns.filedir.dir_cmp
+py -m nn_ns.app.debug_cmd nn_ns.filedir.dir_cmp
 py -m nn_ns.filedir.dir_cmp -r ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/lhs/ ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/rhs/
 py -m nn_ns.filedir.dir_cmp -r ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/lhs/ ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/rhs/ -ls -pp
 py -m nn_ns.filedir.dir_cmp -r ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/lhs/ ../../python3_src/nn_ns/filedir/_dir_cmp__test_data/rhs/ -t
@@ -40,6 +42,71 @@ py -m nn_ns.filedir.dir_cmp -r /sdcard/0my_files/git_repos/txt_phone/ /mnt/m_ext
 
 
 path::Path
+relative_path :: PurePosixPath
+
+
+
+[[[fnmatch/glob
+
+from seed.for_libs.for_glob.glob_match import glob_match, glob_match_, GlobMatcher, path2std_path_parts, to_std_path_parts, check_basename, check_path, check_path__str, check_path__PurePath, is_path_always_dir, is_path_always_dir__PurePath, is_path_always_dir__str
+from seed.for_libs.for_glob.IGlob import IGlob, the_glob4real_fsys
+
+
+py::fnmatch
+    fnmatch'*' <==> regex'.*'
+        * matches everything
+
+    fnmatch'?' <==> regex'.'
+        ?  matches any single character
+
+    fnmatch'[abc]' <==> regex'[abc]'
+        [seq] matches any character in seq
+
+    fnmatch'[!abc]' <==> regex'[^abc]'
+        [!seq] matches any character not in seq
+
+    escape char:
+        fnmatch'[*]' <==> regex'\*'
+        fnmatch'[?]' <==> regex'\?'
+        fnmatch'[[]' <==> regex'\['
+        ???
+            err:fnmatch'[]]' <==> regex'\]'
+            err:fnmatch'[!]' <==> regex'!'
+                glob.escape(pathname)
+                    Escape all special characters ('?', '*' and '[').
+                glob using the os.scandir() and fnmatch.fnmatch()
+                    glob'*' <==> regex'[^/]'
+                    glob'**' with (recursive=True) <==> regex'[^/]'
+
+
+fnmatch.fnmatch(filename, pattern)
+    Test whether the filename string matches the pattern string, returning True or False. Both parameters are case-normalized using os.path.normcase(). fnmatchcase() can be used to perform a case-sensitive comparison, regardless of whether that’s standard for the operating system.
+
+fnmatch.fnmatchcase(filename, pattern)
+    Test whether filename matches pattern, returning True or False; the comparison is case-sensitive and does not apply os.path.normcase().
+
+fnmatch.filter(names, pattern)
+    Return the subset of the list of names that match pattern. It is the same as [n for n in names if fnmatch(n, pattern)], but implemented more efficiently.
+
+fnmatch.translate(pattern)
+    Return the shell-style pattern converted to a regular expression for using with re.match().
+]]]
+
+
+
+
+[[[termux:
+cd ~
+view ../usr/lib/python3.8/glob.py
+cp -t /sdcard/0my_files/tmp/src/ ~/../usr/lib/python3.8/glob.py
+
+===droidvim:
+view /sdcard/0my_files/tmp/src/glob.py
+
+view ../../python3_src/seed/for_libs/for_glob/IGlob.py
+view ../../python3_src/seed/for_libs/for_glob/glob@py-3-8-0.py
+]]]
+
 #'''
 
 __all__ = '''
@@ -47,10 +114,14 @@ __all__ = '''
 
     dir_cmp
         dir_cmp__relative
-        mk_filer_basenames_ex
+        mk_filter_basenames_ex
         path2str
         path2str4dir_cmp_result
+            path2str4result_of_dir_cmp__relative
+                inv__path2str4result_of_dir_cmp__relative
+            path2str4result_of_dir_cmp
 
+    Glob4IDirViewer
     IDirViewer
         DirViewer__fsys
             the_fsys_dir_viewer
@@ -81,6 +152,7 @@ __all__ = '''
         write_ignorefile__text
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import fnmatch
 import glob
 import re
@@ -97,11 +169,42 @@ from seed.tiny import fprint, fst, snd
 from seed.iters.group_by import group_by
 from seed.tiny import assert_eq_f
 from seed.types.TriBoolOps import TriBoolOps
-#from seed.helper.check.checkers import check_uint_imay, check_uint, check_all, check_str, check_int, check_tuple
-from seed.helper.check.checkers import check_uint
+#from seed.helper.check.checkers import check_uint, check_all, check_str, check_int, check_tuple
+from seed.helper.check.checkers import check_uint_imay, check_uint, check_type_is
 #from nn_ns.filedir.relative_path_ops import relative_path_ops, check_relative_path, is_relative_path_empty, relative_path2parts #avoid relative_path.parts
 from nn_ns.filedir.relative_path_ops import empty_relative_path, is_relative_path_empty, check_relative_path
 from seed.abc.ISingleton import ISingleton
+
+
+#from seed.for_libs.for_glob.glob_match import glob_match, glob_match_, GlobMatcher, path2std_path_parts, to_std_path_parts, check_basename, check_path, check_path__str, check_path__PurePath, is_path_always_dir, is_path_always_dir__PurePath, is_path_always_dir__str
+from seed.for_libs.for_glob.glob_match import check_basename, glob_match
+from seed.for_libs.for_glob.IGlob import IGlob#, the_glob4real_fsys
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+class Glob4IDirViewer(IGlob):
+    def __init__(sf, dir_viewer, /):
+        if not isinstance(dir_viewer, IDirViewer): raise TypeError
+        sf.__dir_viewer = dir_viewer
+
+    @override
+    def ___os_path_lexists___(sf, pathname, /):
+        '-> bool'
+        return sf.__dir_viewer.exists(pathname)
+    @override
+    def ___os_path_isdir___(sf, pathname, /):
+        '-> bool'
+        return sf.__dir_viewer.is_dir(pathname)
+    @override
+    def ___iter_child_basenames_of_dir___(sf, dirname, /):
+        '-> Iter<basename>'
+        return sf.__dir_viewer.dir_iter(dirname)
+    @override
+    def ___get_os_curdir___(sf, /):
+        '-> curr_dirname'
+        return empty_relative_path
+        raise NotImplementedError
+
 
 
 class IDirViewer(ABC):
@@ -109,18 +212,31 @@ class IDirViewer(ABC):
     path::Path
     #'''
     @abstractmethod
-    def __is_file__(sf, path):
+    def ___is_file___(sf, path):
         'path -> (bool|raise FileNotFoundError)'
     @abstractmethod
-    def dir_iter(sf, dir_path):
+    def ___dir_iter___(sf, dir_path):
         'dir_path -> (Iter basename | raise FileNotFoundError/NotADirectoryError)'
     @abstractmethod
+    def ___exists___(sf, path):
+        'path -> bool'
+
     def exists(sf, path):
         'path -> bool'
+        b = type(sf).___exists___(sf, path)
+        if not type(b) is bool: raise TypeError
+        return b
+    def dir_iter(sf, dir_path):
+        'dir_path -> (Iter basename | raise FileNotFoundError/NotADirectoryError)'
+        it = type(sf).___dir_iter___(sf, dir_path)
+        if not it is iter(it): raise TypeError
+        for basename in it:
+            check_basename(basename)
+            yield basename
 
     def __is_file(sf, path):
         'path -> bool'
-        b = type(sf).__is_file__(sf, path)
+        b = type(sf).___is_file___(sf, path)
         if type(b) is not bool: raise TypeError
         return b
     def is_file(sf, path):
@@ -149,14 +265,29 @@ def dir_cmp__relative(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rh
 def path2str(path):
     #bug:return str(path)
     return path.as_posix()
-def path2str4dir_cmp_result(dir_cmp_result):
-    'dir_cmp_result = result of dir_cmp/dir_cmp__relative'
-    for case, x in dir_cmp_result:
+def inv__path2str4result_of_dir_cmp__relative(result_of_dir_cmp__relative__str):
+    for case, y in result_of_dir_cmp__relative__str:
+        x = PurePosixPath(y)
+        yield case, x
+def path2str4result_of_dir_cmp__relative(result_of_dir_cmp__relative):
+    for case, x in result_of_dir_cmp__relative:
+        y = path2str(x)
+        yield case, y
+def path2str4result_of_dir_cmp(result_of_dir_cmp):
+    for case, p, x in result_of_dir_cmp:
+        z = path2str(p)
         if type(x) is tuple:
             y = tuple(map(path2str, x))
         else:
             y = path2str(x)
-        yield case, y
+        yield case, z, y
+inv__path2str4result_of_dir_cmp__relative
+path2str4result_of_dir_cmp__relative
+path2str4result_of_dir_cmp
+def path2str4dir_cmp_result(dir_cmp_result, /,*, relative:bool):
+    'dir_cmp_result = result of dir_cmp/dir_cmp__relative'
+    f = path2str4result_of_dir_cmp__relative if relative else path2str4result_of_dir_cmp
+    return f(dir_cmp_result)
 
 def match__cased_pattern(pattern_case, pattern, s):
     r'''pattern_case -> pattern -> str -> bool
@@ -169,8 +300,11 @@ def match__cased_pattern(pattern_case, pattern, s):
     elif pattern_case == 'fnmatch':
         return fnmatch.fnmatchcase(s, pattern)
     elif pattern_case == 'glob':
-        #err:return glob.iglob(s, recursive=True)
-        raise NotImplementedError
+        if 0:
+            #err:return glob.iglob(s, recursive=True)
+            raise NotImplementedError
+        else:
+            return glob_match(pattern, s, is_path_dir__tribool=..., match_dir_only=False, ignore_case=False, recursive=True)
     else:
         raise logic-err
 def match__OR(cased_patterns, s):
@@ -226,8 +360,8 @@ def onoff_patterns_list2ignore_str(onoff_patterns_list):
     def ignore_str(s):
         ignore = ...
         for onoff_case, cased_patterns in reversed(onoff_patterns_list):
+            if onoff_case not in ('-', '+'): raise ValueError
             if match__OR(cased_patterns, s):
-                if onoff_case not in ('-', '+'): raise ValueError
                 ignore = onoff_case == '-'
                 return ignore
         ignore = False
@@ -235,7 +369,7 @@ def onoff_patterns_list2ignore_str(onoff_patterns_list):
     return ignore_str
 
 
-def mk_filer_basenames_ex(*, ignore_basename, ignore_relative_path):
+def mk_filter_basenames_ex(*, ignore_basename, ignore_relative_path):
     r'''-> (xhs_relative_dir_path -> basenames -> set<basename>)
     =====
     never ignore '.' #empty_relative_path
@@ -246,7 +380,7 @@ def mk_filer_basenames_ex(*, ignore_basename, ignore_relative_path):
     ignore_relative_path :: None|(xhs_relative_filedir_path::Path -> bool)|onoff_patterns_list
         see: dir_cmp
     =====
-    filer_basenames_ex = mk_filer_basenames_ex(ignore_basename=ignore_basename, ignore_relative_path=ignore_relative_path)
+    filter_basenames_ex = mk_filter_basenames_ex(ignore_basename=ignore_basename, ignore_relative_path=ignore_relative_path)
     del ignore_basename, ignore_relative_path
     #'''
     if 1:
@@ -276,26 +410,26 @@ def mk_filer_basenames_ex(*, ignore_basename, ignore_relative_path):
 
         assert callable(ignore_basename)
         assert callable(ignore_relative_path)
-        def filer_basenames(basenames):
+        def filter_basenames(basenames):
             '-> Iter<basename>'
             return (basename for basename in basenames if not ignore_basename(basename))
 
-        def filer_relative_path(xhs_relative_dir_path, basenames):
+        def filter_relative_path(xhs_relative_dir_path, basenames):
             '-> Iter<basename>'
             return (basename for basename in basenames if not ignore_relative_path(xhs_relative_dir_path/basename))
 
-        def filer_basenames_ex(xhs_relative_dir_path, basenames):
+        def filter_basenames_ex(xhs_relative_dir_path, basenames):
             '-> set<basename>'
-            basenames = filer_basenames(basenames)
-            basenames = filer_relative_path(xhs_relative_dir_path, basenames)
+            basenames = filter_basenames(basenames)
+            basenames = filter_relative_path(xhs_relative_dir_path, basenames)
             return set(basenames)
-    return filer_basenames_ex
-    filer_basenames_ex = mk_filer_basenames_ex(ignore_basename=ignore_basename, ignore_relative_path=ignore_relative_path)
+    return filter_basenames_ex
+    filter_basenames_ex = mk_filter_basenames_ex(ignore_basename=ignore_basename, ignore_relative_path=ignore_relative_path)
     del ignore_basename, ignore_relative_path
     #
 
 def dir_cmp(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rhs_path, /, *, ignore_basename, ignore_relative_path, max_depth):
-    r'''
+    r'''#stable ordered output by sorted basenames
     -> Iter ([-2..+2], xhs_relative_filedir_path, payload)
     -> Iter ((-1, xhs_relative_filedir_path, lhs_path)|(+1, xhs_relative_filedir_path, rhs_path)|(0, xhs_relative_filedir_path, (lhs_file_path, rhs_file_path))|(-2, xhs_relative_filedir_path, (lhs_dir_path, rhs_file_path))|(+2, xhs_relative_filedir_path, (lhs_file_path, rhs_dir_path)))
     # diff = extra lhs_path | extra rhs_path | diff file content | mismatch dir/file
@@ -345,7 +479,7 @@ def dir_cmp(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rhs_path, /,
             max_depth = None
 
 
-    filer_basenames_ex = mk_filer_basenames_ex(ignore_basename=ignore_basename, ignore_relative_path=ignore_relative_path)
+    filter_basenames_ex = mk_filter_basenames_ex(ignore_basename=ignore_basename, ignore_relative_path=ignore_relative_path)
     del ignore_basename, ignore_relative_path
 
 
@@ -406,9 +540,9 @@ def dir_cmp(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rhs_path, /,
                 ronly = rnames - common
 
                 xhs_relative_dir_path = xhs_relative_filedir_path #PurePosixPath(lhs_dir_path.relative_to(lhs_root))
-                common = filer_basenames_ex(xhs_relative_dir_path, common)
-                lonly = filer_basenames_ex(xhs_relative_dir_path, lonly)
-                ronly = filer_basenames_ex(xhs_relative_dir_path, ronly)
+                common = filter_basenames_ex(xhs_relative_dir_path, common)
+                lonly = filter_basenames_ex(xhs_relative_dir_path, lonly)
+                ronly = filter_basenames_ex(xhs_relative_dir_path, ronly)
 
                 #all_names = sorted(lnames | rnames, reverse=True)
                 filtered_all_names = sorted(common | lonly | ronly, reverse=True)
@@ -432,39 +566,39 @@ def dir_cmp(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rhs_path, /,
 class DirViewer__empty_root_dir(IDirViewer, ISingleton):
     'path::relative PurePosixPath'
     @override
-    def exists(sf, path):
+    def ___exists___(sf, path):
         'path -> bool'
         check_relative_path(path)
         return is_relative_path_empty(path)
 
     @override
-    def __is_file__(sf, path):
+    def ___is_file___(sf, path):
         'path -> (bool|raise FileNotFoundError)'
         check_relative_path(path)
         if is_relative_path_empty(path): return False
         raise FileNotFoundError(path)
     @override
-    def dir_iter(sf, dir_path):
+    def ___dir_iter___(sf, dir_path):
         'dir_path -> (Iter basename | raise FileNotFoundError/NotADirectoryError)'
-        check_relative_path(path)
-        if is_relative_path_empty(path):
+        check_relative_path(dir_path)
+        if is_relative_path_empty(dir_path):
             return;yield
-        raise FileNotFoundError(path)
+        raise FileNotFoundError(dir_path)
 the_empty_dir_viewer = DirViewer__empty_root_dir()
 assert the_empty_dir_viewer is DirViewer__empty_root_dir()
 
 
 class DirViewer__fsys(IDirViewer, ISingleton):
     @override
-    def exists(sf, path):
+    def ___exists___(sf, path):
         'path -> bool'
         return path.exists()
     @override
-    def __is_file__(sf, path):
+    def ___is_file___(sf, path):
         'path -> (bool|raise FileNotFoundError)'
         return path.is_file()
     @override
-    def dir_iter(sf, dir_path):
+    def ___dir_iter___(sf, dir_path):
         'dir_path -> (Iter basename | raise FileNotFoundError/NotADirectoryError)'
         yield from os.listdir(dir_path)
         return
@@ -474,6 +608,7 @@ the_fsys_dir_viewer = DirViewer__fsys()
 assert the_fsys_dir_viewer is DirViewer__fsys()
 
 if 0:
+    path = ... #to s.t. forgots
     path.samefile
     path.stat().st_size
     os.path.getsize
@@ -488,11 +623,40 @@ class IPseudoFile4MkIsSameFile(ABC):
     r'''
     for MkIsSameFile
     path::Path
+
+    NOTE:io.binary_ifile.read(0) -> b'' !!!
+        avoid .read(0)
+
+    see:
+        bytes2PseudoFile4MkIsSameFile
+        binary_ifile2PseudoFile4MkIsSameFile
     #'''
     @abstractmethod
-    def read(sf, num_bytes, /):
-        'uint -> bytes# 0 ==>> read all'
-        check_uint(num_bytes)
+    def ___read_all_remain_bytes___(sf, /):
+        '-> remain_bytes'
+    @abstractmethod
+    def ___read_le_positive___(sf, num_bytes__ge1, /):
+        'num_bytes{>=1} -> remain_bytes[:num_bytes]'
+    def read(sf, imay_num_bytes, /):
+        r'''uint_imay -> bytes# -1 ==>> read all, 0 ==>> raise ValueError
+
+        NOTE:io.binary_ifile.read(0) -> b'' !!!
+            avoid .read(0)
+        #'''
+        #bug:不兼容标准库:'uint -> bytes# 0 ==>> read all'
+        check_uint_imay(imay_num_bytes)
+        if imay_num_bytes == -1:
+            bs = type(sf).___read_all_remain_bytes___(sf)
+        elif imay_num_bytes == 0: raise ValueError
+        else:
+            assert imay_num_bytes > 0
+            num_bytes__ge1 = imay_num_bytes
+            assert num_bytes__ge1 >= 1
+            bs = type(sf).___read_le_positive___(sf, num_bytes__ge1)
+            assert 0 <= len(bs) <= num_bytes__ge1
+        check_type_is(bytes, bs)
+        return bs
+
     #context manager
     @abstractmethod
     def __enter__(sf, /):
@@ -517,16 +681,20 @@ class bytes2PseudoFile4MkIsSameFile(IPseudoFile4MkIsSameFile):
         sf.__pos = 0
 
     @override
-    def read(sf, num_bytes, /):
-        'uint -> bytes# 0 ==>> read all'
-        check_uint(num_bytes)
-        if num_bytes == 0:
+    def ___read_all_remain_bytes___(sf, /):
+        '-> remain_bytes'
             #read all
-            bs = sf.__bs[sf.__pos:]
-        else:
-            bs = sf.__bs[sf.__pos:sf.__pos+num_bytes]
+        bs = sf.__bs[sf.__pos:]
         sf.__pos += len(bs)
         return bs
+    @override
+    def ___read_le_positive___(sf, num_bytes__ge1, /):
+        'num_bytes{>=1} -> remain_bytes[:num_bytes]'
+        bs = sf.__bs[sf.__pos:sf.__pos+num_bytes__ge1]
+        sf.__pos += len(bs)
+        return bs
+
+
     #context manager
     @override
     def __enter__(sf, /):
@@ -554,10 +722,15 @@ class binary_ifile2PseudoFile4MkIsSameFile(IPseudoFile4MkIsSameFile):
         sf.__pos = 0
 
     @override
-    def read(sf, num_bytes, /):
-        'uint -> bytes# 0 ==>> read all'
-        check_uint(num_bytes)
-        return sf.__bfin.read(num_bytes)
+    def ___read_all_remain_bytes___(sf, /):
+        '-> remain_bytes'
+        return sf.__bfin.read()
+    @override
+    def ___read_le_positive___(sf, num_bytes__ge1, /):
+        'num_bytes{>=1} -> remain_bytes[:num_bytes]'
+        return sf.__bfin.read(num_bytes__ge1)
+
+
     #context manager
     @override
     def __enter__(sf, /):
@@ -705,12 +878,16 @@ class MkIsSameFile:
     for is_same_file
     path::Path
     #'''
-    def __init__(sf, lhs_access_file, rhs_access_file, /, *, always_tribool_as_is_or_not_same_file:'tribool', size_eq_as_same_file:bool, size_hash0_eq_as_same_file:bool, hash_eq_as_same_file:bool, mtime_eq_as_same_file:bool, mtime_ne_as_not_same_file:bool, _block_size):
+    def __init__(sf, lhs_access_file, rhs_access_file, /, *, always_tribool_as_is_or_not_same_file:'tribool', size_eq_as_same_file:bool, size_hash0_eq_as_same_file:bool, hash_eq_as_same_file:bool, mtime_eq_as_same_file:bool, mtime_ne_as_not_same_file:bool, imay_max_size_threshold4cmp_content:int, _block_size):
         'IAccessFile4MkIsSameFile -> IAccessFile4MkIsSameFile -> MkIsSameFile'
         if not isinstance(lhs_access_file, IAccessFile4MkIsSameFile):raise TypeError
         if not isinstance(rhs_access_file, IAccessFile4MkIsSameFile):raise TypeError
         if type(_block_size) is not int:raise TypeError
         if not _block_size >= 1: raise ValueError
+        if type(imay_max_size_threshold4cmp_content) is not int:raise TypeError
+        if not imay_max_size_threshold4cmp_content >= -1: raise ValueError
+        check_uint_imay(imay_max_size_threshold4cmp_content)
+
         if not TriBoolOps.is_tribool(always_tribool_as_is_or_not_same_file):raise TypeError
         if not (always_tribool_as_is_or_not_same_file is ... or type(always_tribool_as_is_or_not_same_file) is bool):raise TypeError
 
@@ -723,6 +900,7 @@ class MkIsSameFile:
         sf.lhs_access_file = lhs_access_file
         sf.rhs_access_file = rhs_access_file
         sf._block_size = _block_size
+        sf.imay_max_size_threshold4cmp_content = imay_max_size_threshold4cmp_content
         sf.always_tribool_as_is_or_not_same_file = always_tribool_as_is_or_not_same_file
         sf.size_eq_as_same_file = size_eq_as_same_file
         sf.size_hash0_eq_as_same_file = size_hash0_eq_as_same_file
@@ -737,6 +915,7 @@ class MkIsSameFile:
         return r
     def ___is_same_file___(sf, lhs_file_path, rhs_file_path):
         'is_same_file :: lhs_file_path -> rhs_file_path -> bool #precondition: both exist and are files'
+        #def _half_impl___is_same_file___(sf, lhs_file_path, rhs_file_path):
         if sf.always_tribool_as_is_or_not_same_file is not ...:
             return sf.always_tribool_as_is_or_not_same_file
 
@@ -780,6 +959,14 @@ class MkIsSameFile:
 
 
 
+        if sf.imay_max_size_threshold4cmp_content != -1:
+            max_size_threshold4cmp_content = sf.imay_max_size_threshold4cmp_content
+
+            assert lsz == rsz
+            assert max_size_threshold4cmp_content >= 0
+            if lsz > max_size_threshold4cmp_content:
+                #skip cmp since too big
+                return True
         with sf.lhs_access_file.open(lhs_file_path) as lfin, sf.rhs_access_file.open(rhs_file_path) as rfin:
             lfin
             rfin
@@ -793,8 +980,13 @@ class MkIsSameFile:
                     return False
             return True
 
-def mk_is_same_file(lhs_access_file, rhs_access_file, /, *, always_tribool_as_is_or_not_same_file:'tribool'=..., size_eq_as_same_file:bool=False, size_hash0_eq_as_same_file:bool=False, hash_eq_as_same_file:bool=False, mtime_eq_as_same_file:bool=False, mtime_ne_as_not_same_file:bool=False, _block_size=2**8):
-    'IAccessFile4MkIsSameFile -> IAccessFile4MkIsSameFile -> (is_same_file::MkIsSameFile)'
+def mk_is_same_file(lhs_access_file, rhs_access_file, /, *, always_tribool_as_is_or_not_same_file:'tribool'=..., size_eq_as_same_file:bool=False, size_hash0_eq_as_same_file:bool=False, hash_eq_as_same_file:bool=False, mtime_eq_as_same_file:bool=False, mtime_ne_as_not_same_file:bool=False, imay_max_size_threshold4cmp_content:int=-1, _block_size=2**8):
+    r'''IAccessFile4MkIsSameFile -> IAccessFile4MkIsSameFile -> (is_same_file::MkIsSameFile)
+
+    mk_is_same_file vs MkIsSameFile:
+        * MkIsSameFile all kwargs except "_block_size" are required
+        * mk_is_same_file all kwargs have default values
+    #'''
     is_same_file = MkIsSameFile(lhs_access_file, rhs_access_file
         , always_tribool_as_is_or_not_same_file=always_tribool_as_is_or_not_same_file
         , size_eq_as_same_file=size_eq_as_same_file
@@ -802,7 +994,8 @@ def mk_is_same_file(lhs_access_file, rhs_access_file, /, *, always_tribool_as_is
         , hash_eq_as_same_file=hash_eq_as_same_file
         , mtime_eq_as_same_file=mtime_eq_as_same_file
         , mtime_ne_as_not_same_file=mtime_ne_as_not_same_file
-        , _block_size=2**8
+        , imay_max_size_threshold4cmp_content=imay_max_size_threshold4cmp_content
+        , _block_size=_block_size
         )
     return is_same_file
 
@@ -823,7 +1016,7 @@ if __name__ == "__main__":
         lhs_path = test_data_path/'lhs'
         rhs_path = test_data_path/'rhs'
 
-        ls = list(path2str4dir_cmp_result(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=None, max_depth=None)))
+        ls = list(path2str4result_of_dir_cmp__relative(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=None, max_depth=None)))
         if 0:
             print(ls)
             from pprint import pprint
@@ -839,14 +1032,14 @@ if __name__ == "__main__":
             ]
         assert ls == expected
 
-        ls = list(path2str4dir_cmp_result(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=None, max_depth=2)))
+        ls = list(path2str4result_of_dir_cmp__relative(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=None, max_depth=2)))
         assert ls == expected
 
-        ls = list(path2str4dir_cmp_result(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=None, max_depth=1)))
+        ls = list(path2str4result_of_dir_cmp__relative(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=None, max_depth=1)))
         assert ls != expected
         assert not ls
 
-        ls = list(path2str4dir_cmp_result(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=[('-', [('fnmatch', r'*only*')])], ignore_relative_path=None, max_depth=None)))
+        ls = list(path2str4result_of_dir_cmp__relative(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=[('-', [('fnmatch', r'*only*')])], ignore_relative_path=None, max_depth=None)))
         expected__ignore__only = \
             [(0, 'z/diff.txt')
             ,(-2, 'z/ld_rf')
@@ -854,7 +1047,7 @@ if __name__ == "__main__":
             ]
         assert ls == expected__ignore__only
 
-        ls = list(path2str4dir_cmp_result(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=[('-', [('fnmatch', r'*only*'), ('re', r'lf.*')]), ('+', [('fnmatch', r'lonly*')])], ignore_relative_path=None, max_depth=None)))
+        ls = list(path2str4result_of_dir_cmp__relative(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=[('-', [('fnmatch', r'*only*'), ('re', r'lf.*')]), ('+', [('fnmatch', r'lonly*')])], ignore_relative_path=None, max_depth=None)))
         expected__ignore__only__but = \
             [(0, 'z/diff.txt')
             ,(-2, 'z/ld_rf')
@@ -863,7 +1056,7 @@ if __name__ == "__main__":
             ]
         assert ls == expected__ignore__only__but
 
-        ls = list(path2str4dir_cmp_result(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=[('-', [('fnmatch', r'*only*'), ('re', r'lf.*')]), ('+', [('fnmatch', r'lonly*')])], max_depth=None)))
+        ls = list(path2str4result_of_dir_cmp__relative(dir_cmp__relative(is_same_file, xhs_dir_viewer, lhs_path, xhs_dir_viewer, rhs_path, ignore_basename=None, ignore_relative_path=[('-', [('fnmatch', r'*only*'), ('re', r'lf.*')]), ('+', [('fnmatch', r'lonly*')])], max_depth=None)))
         assert ls == expected__ignore__only
 
 
@@ -894,6 +1087,7 @@ def iter_read_ignorefile(fin, /, *, may_pattern_case_set):
     r'''fin -> Iter<(onoff_case, cased_pattern)>
     see: read_ignorefile
     #'''
+    is_good_pattern_case = may_pattern_case_set2is_good_pattern_case(may_pattern_case_set)
     for line in fin:
         m = ignorefile_line_regex.fullmatch(line)
         if not m:
@@ -903,6 +1097,8 @@ def iter_read_ignorefile(fin, /, *, may_pattern_case_set):
         if may_onoff_case is None: continue
         onoff_case = m.group('onoff_case')
         pattern_case = m.group('pattern_case')
+        if not is_good_pattern_case(pattern_case): raise ValueError((pattern_case, may_pattern_case_set))
+
         pattern = m.group('pattern')
         pattern = pattern.strip()
         pattern = ast.literal_eval(pattern)
@@ -937,12 +1133,13 @@ Set
 def may_pattern_case_set2is_good_pattern_case(may_pattern_case_set):
     if may_pattern_case_set is None:
         def is_good_pattern_case(pattern_case):
+            return type(pattern_case) is str
             return True
     else:
         pattern_case_set = may_pattern_case_set
         assert isinstance(pattern_case_set, Set)
         def is_good_pattern_case(pattern_case):
-            return pattern_case in pattern_case_set
+            return type(pattern_case) is str and pattern_case in pattern_case_set
     return is_good_pattern_case
 
 def write_ignorefile(fout, onoff_patterns_list, /, *, may_pattern_case_set):
@@ -1023,9 +1220,12 @@ def main(args=None):
     parser.add_argument('--mtime_ne_as_not_same_file', action='store_true'
                         , default = False
                         , help='one of mk_is_same_file kwargs')
+    parser.add_argument('--max_size_threshold4cmp_content', type=int, default=-1
+                        , help='max_size_threshold4cmp_content >= -1; if max_size_threshold4cmp_content==-1(default) then no limits else file whose size > max_size_threshold4cmp_content will be skip cmp content')
 
     args = parser.parse_args(args)
     max_depth = args.max_depth
+    imay_max_size_threshold4cmp_content = args.max_size_threshold4cmp_content
     igencoding = args.ignorefile_encoding
     oencoding = args.output_file_encoding
     omode = 'wt' if args.force else 'xt'
@@ -1033,8 +1233,9 @@ def main(args=None):
     if args.print_Path:
         f = g
     else:
-        def f(*args, **kwargs):
-            return path2str4dir_cmp_result(g(*args, **kwargs))
+        def f(*_args, **kwargs):
+            #bug:return path2str4dir_cmp_result(g(*_args, relative=args.relative, **kwargs))
+            return path2str4dir_cmp_result(g(*_args, **kwargs), relative=args.relative)
 
     if args.cmp_fsys_tree_only:
         is_same_file = is_same_file__True
@@ -1045,6 +1246,7 @@ def main(args=None):
         hash_eq_as_same_file
         mtime_eq_as_same_file
         mtime_ne_as_not_same_file
+        imay_max_size_threshold4cmp_content
         #'''
         xhs_access_file = AccessFile4MkIsSameFile__fsys()
         is_same_file = mk_is_same_file(
@@ -1055,6 +1257,8 @@ def main(args=None):
             , hash_eq_as_same_file=args.hash_eq_as_same_file
             , mtime_eq_as_same_file=args.mtime_eq_as_same_file
             , mtime_ne_as_not_same_file=args.mtime_ne_as_not_same_file
+            #, imay_max_size_threshold4cmp_content=args.imay_max_size_threshold4cmp_content
+            , imay_max_size_threshold4cmp_content=args.max_size_threshold4cmp_content
             )
     is_same_file
 
@@ -1094,9 +1298,68 @@ def main(args=None):
                 fprint(x, file=fout)
 
 
+
+
+def _t():
+    r'''
+    #try fnmatch to match __pycache__ .git ...
+    #
+    #onoff_patterns_list2ignore_str
+
+=======
+python3_src/./
+python3_src/../
+python3_src/.git/
+python3_src/.gitignore
+view ../../python3_src/.gitignore
+=======
+# exclude everything except directory foo/bar
+#    /*
+#    !/foo
+#    /foo/*
+#    !/foo/bar
+#
+#python cache
+/**/__pycache__
+/java_src/**/*.class
+#
+#ply PLY yacc output
+/**/parsetab.py
+/**/parser.out
+#
+#mypy - static typing information
+/**/.mypy_cache
+
+=======
+
+    #'''
+
+    may_pattern_case_set = {'fnmatch'}
+    onoff_patterns_list = [('-', [('fnmatch', '__pycache__'), ('fnmatch', '__pycache__/*'), ('fnmatch', '*/__pycache__'), ('fnmatch', '*/__pycache__/*'),    ('fnmatch', '.?*'), ('fnmatch', '.?*/*'), ('fnmatch', '*/.?*'), ('fnmatch', '*/.?*/*')])]
+    onoff_patterns_list = [('-', [('fnmatch', '__pycache__'), ('fnmatch', '__pycache__/*'), ('fnmatch', '*/__pycache__'), ('fnmatch', '*/__pycache__/*'),    ('fnmatch', '.?*'), ('fnmatch', '*/.?*')])]
+    ignore_str = onoff_patterns_list2ignore_str(onoff_patterns_list)
+
+    ls = [
+        '.'
+        ,'..'
+        ,'wgit'
+        ,'.git'
+        ,'x/.git'
+        ,'x/.git/y'
+        ,'.git/'
+        ,'/.git/'
+        ,'./.git/'
+        ]
+    holds = ['.', 'wgit']
+    for s in ls:
+        if ignore_str(s):
+            #print(fr'ignore: {s!r}')
+            assert s not in holds
+        else:
+            #print(fr'hold: {s!r}')
+            assert s in holds
+_t()
+
 if __name__ == "__main__":
     main()
-
-
-
 

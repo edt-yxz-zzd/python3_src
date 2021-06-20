@@ -115,7 +115,8 @@ class __Dict(Mapping):
             return False
         return self.__d == dict(other)
     def __ne__(self, other):
-        return self != other
+        #bug:return self != other
+        return not self == other
     def __repr__(self):
         return repr_helper(self, {**self})
         #return repr_helper_ex('mk_GetArgsKwargs', self.args, [], self.kwargs, name_only=True)

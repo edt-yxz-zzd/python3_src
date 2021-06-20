@@ -32,6 +32,7 @@ __all__ = '''
     write_py_obj_as_repr
     check_metadata
     IRepositorySetting__user_data_dir_path
+        IRepositorySetting__user_data_dir_path__using_default_read_write_metadata_imay_parent_idx
     IRepositorySetting__repository_root_dir_path
     check_ignorefile_relative_path_encoding_pairs
     IRepositorySetting__working_root_dir_path
@@ -70,11 +71,13 @@ from nn_ns.filedir.dir_cmp import IPseudoFile4MkIsSameFile
 from seed.for_libs.for_io.stream_obj_converter import binary_stream_obj2text_stream_obj
 
 from seed.helper.check.checkers import check_uint_imay, check_uint, check_all, check_str, check_int, check_tuple, check_nmay, check_pair
-from seed.tiny import echo, fst
+from seed.tiny import echo, fst, fprint
+from seed.mapping_tools.dict_op import partition_by_keyss__immutable
 
 import re
 import shutil
 import ast
+import io
 import os.path
 from pathlib import Path
 from abc import ABC, abstractmethod
@@ -99,25 +102,34 @@ class metadata_keys_setting:
 
 
 def reopen_bin2txt(binary_ifile, /,*, encoding, buffered_case):
+    #.detach()
     text_ifile = binary_stream_obj2text_stream_obj(binary_ifile, encoding=encoding, buffered_case=buffered_case, kwargs4buffered_binary_stream={}, kwargs4text_stream={})
     return text_ifile
 
 def read_repred_py_obj(binary_ifile, /):
     text_ifile = reopen_bin2txt(binary_ifile, encoding='utf8', buffered_case='read')
-    s = text_ifile.read()
+    try:
+        s = text_ifile.read()
+    finally:
+        text_ifile.detach()
     obj = ast.literal_eval(s)
     return obj
 def write_py_obj_as_repr(binary_ofile, obj, /):
     'see:read_repred_py_obj'
     s = repr(obj)
-    if ast.literal_eval(obj) != obj: raise ValueError
+    #bug:if ast.literal_eval(obj) != obj: raise ValueError
+    if ast.literal_eval(s) != obj: raise ValueError
     text_ofile = reopen_bin2txt(binary_ofile, encoding='utf8', buffered_case='write')
-    text_ofile.write(s)
+    try:
+        text_ofile.write(s)
+    finally:
+        text_ofile.detach()
     return
 
 def check_metadata(metadata, /):
     'see?: metadata_keys_setting'
     #check_dict(check_str, None, metadata)
+    #print(type(metadata))
     if not type(metadata) is dict: raise TypeError
     if not all(type(k) is str for k in metadata): raise TypeError
     attrs = dir(metadata_keys_setting)
@@ -155,9 +167,14 @@ class IRepositorySetting__user_data_dir_path(ABC):
     @abstractmethod
     def read_metadata(sf, metadata_ifile, /):
         'input_binary_file -> metadata'
+        metadata = read_repred_py_obj(metadata_ifile)
+        check_metadata(metadata)
+        return metadata
     @abstractmethod
     def write_metadata(sf, metadata_ofile, metadata, /):
         'output_binary_file -> metadata -> None'
+        check_metadata(metadata)
+        write_py_obj_as_repr(metadata_ofile, metadata)
     @abstractmethod
     def read_imay_parent_idx(sf, imay_parent_idx_ifile, /):
         'input_binary_file -> [-1..] # imay'
@@ -172,6 +189,28 @@ class IRepositorySetting__user_data_dir_path(ABC):
     @abstractmethod
     def write_imay_parent_idx(sf, imay_parent_idx_ofile, imay_parent_idx, /):
         'output_binary_file -> [-1..] -> None # imay'
+        check_uint_imay(imay_parent_idx)
+        write_py_obj_as_repr(imay_parent_idx_ofile, imay_parent_idx)
+
+class IRepositorySetting__user_data_dir_path__using_default_read_write_metadata_imay_parent_idx(IRepositorySetting__user_data_dir_path):
+    @override
+    def read_metadata(sf, metadata_ifile, /):
+        'input_binary_file -> metadata'
+        return super().read_metadata(metadata_ifile)
+    @override
+    def write_metadata(sf, metadata_ofile, metadata, /):
+        'output_binary_file -> metadata -> None'
+        super().write_metadata(metadata_ofile, metadata)
+    @override
+    def read_imay_parent_idx(sf, imay_parent_idx_ifile, /):
+        'input_binary_file -> [-1..] # imay'
+        return super().read_imay_parent_idx(imay_parent_idx_ifile)
+    @override
+    def write_imay_parent_idx(sf, imay_parent_idx_ofile, imay_parent_idx, /):
+        'output_binary_file -> [-1..] -> None # imay'
+        super().write_imay_parent_idx(imay_parent_idx_ofile, imay_parent_idx)
+
+
 
 #HHHHH
 class IRepositorySetting__repository_root_dir_path(ABC):
@@ -236,7 +275,6 @@ class IRepositorySetting__repository_root_dir_path(ABC):
 
 
 
-
     #grow_only
     def get_command_history_dir_path(sf, /):
         '-> command_history_dir_path'
@@ -269,7 +307,7 @@ class IRepositorySetting__repository_root_dir_path(ABC):
             ]
 
         for dir_path in dir_paths:
-            os.mkdirs(dir_path, exist_ok=False)
+            os.makedirs(dir_path, exist_ok=False)
 
 
 
@@ -315,6 +353,10 @@ class IRepositorySetting__working_root_dir_path(ABC):
 
     def mk_relative_path2is_ignore(sf, working_root_dir_path, may_open_ignorefile_text_ifile, /):
         r'''working_root_dir_path -> may(working_root_dir_path -> ignorefile_relative_path -> (encoding:str) -> text_ifile) -> (relative_path -> bool)
+
+            #problem: ignorefile_rpath should not be skipped. how? parents should not be ignored
+            #problem: some file/dir under new dir not be show. how?  handle at 2nd-phase
+
         ignorefile_relative_paths should never be ignored!
             any ancestors of ignorefile_relative_paths should never be ignored!
             empty_relative_path should never be ignored!
@@ -328,7 +370,8 @@ class IRepositorySetting__working_root_dir_path(ABC):
         ignorefile_relative_path_encoding_pairs = tuple(ignorefile_relative_path_encoding_pairs)
         check_ignorefile_relative_path_encoding_pairs(ignorefile_relative_path_encoding_pairs)
         ignorefile_relative_path_set = frozenset(map(fst, ignorefile_relative_path_encoding_pairs))
-        never_ignored_path_set = ignorefile_relative_path_set.union(ignorefile_relative_path.parents for ignorefile_relative_path in ignorefile_relative_path_set)
+        #bug:never_ignored_relative_path_set = ignorefile_relative_path_set.union(ignorefile_relative_path.parents for ignorefile_relative_path in ignorefile_relative_path_set)
+        never_ignored_relative_path_set = ignorefile_relative_path_set.union(*[ignorefile_relative_path.parents for ignorefile_relative_path in ignorefile_relative_path_set])
         del ignorefile_relative_path_set
 
         if may_open_ignorefile_text_ifile is None:
@@ -340,19 +383,36 @@ class IRepositorySetting__working_root_dir_path(ABC):
 
         preds = []
         for ignorefile_relative_path, encoding in ignorefile_relative_path_encoding_pairs:
-            with open_ignorefile_text_ifile(working_root_dir_path, ignorefile_relative_path, encoding=encoding) as fin:
-                relative_path__str2is_ignore = type(sf).___mk_relative_path__str2is_ignore___(sf, fin)
+            try:
+                fin = open_ignorefile_text_ifile(working_root_dir_path, ignorefile_relative_path, encoding=encoding)
+            except FileNotFoundError:
+                continue
+            else:
+                with fin:
+                    relative_path__str2is_ignore = type(sf).___mk_relative_path__str2is_ignore___(sf, fin)
+                del fin
             preds.append(relative_path__str2is_ignore)
 
 
-        def dir_cmp__kw__ignore_relative_path(relative_path, /):
-            check_relative_path(relative_path)
-            if relative_path in never_ignored_path_set:
-                ignore = False
-            else:
+        if 1:
+            #ver2
+            def dir_cmp__kw__ignore_relative_path(relative_path, /):
+                check_relative_path(relative_path)
                 relative_path__str = relative_path2str(relative_path)
                 ignore = any(relative_path__str2is_ignore(relative_path__str) for relative_path__str2is_ignore in preds)
-            return ignore
+                return ignore
+            if any(map(dir_cmp__kw__ignore_relative_path, never_ignored_relative_path_set)): raise ValueError(fr'check ignorefile content, not to ignore ignorefile.parents, or move ignorefile to non-ignored location')
+        else:
+            #ver1
+            def dir_cmp__kw__ignore_relative_path(relative_path, /):
+                check_relative_path(relative_path)
+                if relative_path in never_ignored_relative_path_set:
+                    ignore = False
+                else:
+                    relative_path__str = relative_path2str(relative_path)
+                    ignore = any(relative_path__str2is_ignore(relative_path__str) for relative_path__str2is_ignore in preds)
+                return ignore
+
         return dir_cmp__kw__ignore_relative_path
 
 
@@ -564,13 +624,17 @@ class IRepositorySetting(IRepositorySetting__working_root_dir_path, IRepositoryS
         idc4file_stack = tuple(map(fst, move_cmds))
 
         #reversed
+        #print(idc4file_stack)
         if not idc4file_stack == tuple(reversed(range(len(idc4file_stack)))): raise ValueError
 
         if not len(move_cmds) >= 2: raise ValueError
-        if not move_cmds[0][0] == 'push_into_branch_fsys_history': raise ValueError
+        idx4target = 1
+        #print(move_cmds[0][idx4target])
+        if not move_cmds[0][idx4target] == 'push_into_branch_fsys_history': raise ValueError
             # ensure branch_time is latest/correct
-        if not move_cmds[1][0] == 'push_into_command_history': raise ValueError
-        if not all(move_cmd[0] == 'move_into_file_patch_forest' for move_cmd in move_cmds[2:]): raise ValueError
+            # last in file stack, first to be pop/commit
+        if not move_cmds[1][idx4target] == 'push_into_command_history': raise ValueError
+        if not all(move_cmd[idx4target] == 'move_into_file_patch_forest' for move_cmd in move_cmds[2:]): raise ValueError
 
     def check_move_cmd(sf, move_cmd, /):
         check_tuple(move_cmd, sz=4)
@@ -640,8 +704,9 @@ class IRepositorySetting(IRepositorySetting__working_root_dir_path, IRepositoryS
         if 1:
             dir_size = sf.get_dir_size()
             inf_dir_remove_tail_empty_dirs(file_stack_dir_path, dir_size=dir_size, min_len=0)
-            sz = len_inf_dir(file_stack_dir_path)
-            move_cmds = sf.read_move_cmds()
+            sz = len_inf_dir(file_stack_dir_path, level=0, dir_size=dir_size, min_len=0)
+            with open(TODO_list4move_cmd_file_path, 'rb') as bfin:
+                move_cmds = sf.read_move_cmds(bfin)
             move_cmds = move_cmds[len(move_cmds)-sz:]
             if sz:
                 init_idx = sz-1
@@ -676,14 +741,38 @@ class IRepositorySetting(IRepositorySetting__working_root_dir_path, IRepositoryS
             target_file_relative_path_under_user_data_dir = sf.move_cmd_target__user_data_file__virtual_name2relative_path_under_user_data_dir(user_data_file__virtual_name)
             target_file_path = mk_target_path_under_inf_dir(file_patch_forest_dir_path, idx4move_cmd_target, target_file_relative_path_under_user_data_dir, dir_size=dir_size)
             pop_from_inf_dir_and_move
-            pop_from_inf_dir_and_move(to_path=target_file_path, from_inf_dir_path=file_stack_dir_path, dir_size=dir_size, min_len=idx4file_stack, imay_inf_dir_idx4assert=idx4file_stack)
+            if 0:#[01_to_turn_off)
+                print(fr'move_cmd={move_cmd}')
+                print(fr'to_path={target_file_path}')
+                print(fr'from_inf_dir_path={file_stack_dir_path}')
+                from seed.debug.read_write_whole_dir_as_fsys_mapping import read_whole_dir_as_fsys_mapping_ex, build_whole_dir_as_fsys_mapping_ex, eqv__fsys_mapping_ex, _prepare__name2fsys_mapping_ex
+                d = read_whole_dir_as_fsys_mapping_ex(file_stack_dir_path)
+                from pprint import pprint
+                pprint(d)
+            try:
+                pop_from_inf_dir_and_move(to_path=target_file_path, from_inf_dir_path=file_stack_dir_path, dir_size=dir_size, min_len=idx4file_stack, imay_inf_dir_idx4assert=idx4file_stack)
+            except:
+                if 0:#[01_to_turn_off)
+                    d2 = read_whole_dir_as_fsys_mapping_ex(file_stack_dir_path)
+                    pprint(d2)
+                raise
         else:
             raise logic-err
 
     def write_move_cmds(sf, TODO_list4move_cmd_binary_ofile, move_cmds, /):
         'see:read_move_cmds'
         sf.check_move_cmds(move_cmds)
-        type(sf).___write_move_cmds___(sf, TODO_list4move_cmd_binary_ofile, move_cmds)
+        #type(sf).___write_move_cmds___(sf, TODO_list4move_cmd_binary_ofile, move_cmds)
+        if 1:
+            bfout = io.BytesIO()
+            begin = bfout.tell()
+            type(sf).___write_move_cmds___(sf, bfout, move_cmds)
+            bs = bfout.getvalue()
+            bfout.seek(begin); bfin = bfout; del bfout
+            _move_cmds = sf.read_move_cmds(bfin)
+            if bs != bfin.getvalue(): raise logic-err
+            if _move_cmds != move_cmds: raise logic-err
+        TODO_list4move_cmd_binary_ofile.write(bs)
         return
 
     def read_branch_history_deltas(sf, branch_history_deltas_binary_ifile, /):
@@ -699,10 +788,18 @@ class IRepositorySetting(IRepositorySetting__working_root_dir_path, IRepositoryS
         check_tuple(branch_history_deltas)
         check_all(sf.check_branch_history_delta, branch_history_deltas)
     def check_command_history_cmd(sf, command_history_cmd, /):
-        'see: FileSystem4update~command_history_cmd = (branch_time, [high_level_user_command__str])'
-        check_pair(command_history_cmd)
-        branch_time, high_level_user_command__strs = command_history_cmd
-        check_branch_time(branch_time)
+        r'''
+            command_history_cmd = next_branch_time, expected_len_inf_dir_of_file_patch_forest, high_level_user_command__strs
+            [outdated]
+                see: FileSystem4update~command_history_cmd = (branch_time, [high_level_user_command__str])
+        #'''
+        #check_pair(command_history_cmd)
+        #branch_time, high_level_user_command__strs = command_history_cmd
+        check_tuple(command_history_cmd, sz=3)
+        expected_branch_time, expected_len_inf_dir_of_file_patch_forest, high_level_user_command__strs = command_history_cmd 
+
+        check_branch_time(expected_branch_time)
+        check_uint(expected_len_inf_dir_of_file_patch_forest)
         check_tuple(high_level_user_command__strs)
         check_all(check_str, high_level_user_command__strs)
     def read_command_history_cmd(sf, command_history_cmd_binary_ifile, /):
@@ -845,7 +942,7 @@ class IRepositorySetting__cache_min_len_inf_dir(IRepositorySetting):
         check_uint(min_len_file_patch_forest_dir)
 
         branch_name2min_len_branch_history_dir = dict(branch_name2min_len_branch_history_dir)
-        check_all(check_str, branch_name2min_len_branch_history_dir.key())
+        check_all(check_str, branch_name2min_len_branch_history_dir.keys())
         check_all(check_uint, branch_name2min_len_branch_history_dir.values())
 
         sf.__dict__.update(locals())
@@ -854,19 +951,19 @@ class IRepositorySetting__cache_min_len_inf_dir(IRepositorySetting):
     @override
     def get_len_inf_dir_of_command_history(sf, /):
         '-> len(command_history)=len_inf_dir(command_history_dir_path)'
-        sz = len_inf_dir(sf.get_command_history_dir_path(), dir_size=sf.get_dir_size(), min_len=sf.min_len_command_history_dir)
+        sz = len_inf_dir(sf.get_command_history_dir_path(), dir_size=sf.get_dir_size(), min_len=sf.min_len_command_history_dir, level=0)
         sf.min_len_command_history_dir = sz
         return sz
     @override
     def get_len_inf_dir_of_file_patch_forest(sf, /):
         '-> len(file_patch_forest)=len_inf_dir(file_patch_forest_dir_path)'
-        sz = len_inf_dir(sf.get_file_patch_forest_dir_path(), dir_size=sf.get_dir_size(), min_len=sf.min_len_file_patch_forest_dir)
+        sz = len_inf_dir(sf.get_file_patch_forest_dir_path(), dir_size=sf.get_dir_size(), min_len=sf.min_len_file_patch_forest_dir, level=0)
         sf.min_len_file_patch_forest_dir = sz
         return sz
     @override
     def get_len_inf_dir_of_branch_history(sf, branch_name, /):
         'branch_name -> len(branch_name2branch_history[branch_name])=len_inf_dir(branch_history_dir_path)'
-        sz = len_inf_dir(sf.get_branch_history_dir_path(branch_name), dir_size=sf.get_dir_size(), min_len=sf.branch_name2min_len_branch_history_dir.get(branch_name, 0))
+        sz = len_inf_dir(sf.get_branch_history_dir_path(branch_name), dir_size=sf.get_dir_size(), min_len=sf.branch_name2min_len_branch_history_dir.get(branch_name, 0), level=0)
         sf.branch_name2min_len_branch_history_dir[branch_name] = sz
         return sz
 
@@ -880,7 +977,7 @@ class IRepositorySetting__init_caches(IRepositorySetting):
         #'''
         return sf.branch_time2root_fsys_frozendict
 class IRepositorySetting__init_constants(IRepositorySetting):
-    def __init__(sf, /,*, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path):
+    def __init__(sf, /,*, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path, file_stack_dir_relative_path, TODO_list4move_cmd_file_relative_path, commit_completed_file_relative_path):
         sf.__dict__.update(locals())
         del sf.__dict__['sf']
 
@@ -901,6 +998,9 @@ class IRepositorySetting__init_constants(IRepositorySetting):
         check_relative_path(metadatafile_relative_path)
         check_relative_path(command_history_dir_relative_path)
         check_relative_path(file_patch_forest_dir_relative_path)
+        check_relative_path(file_stack_dir_relative_path)
+        check_relative_path(TODO_list4move_cmd_file_relative_path)
+        check_relative_path(commit_completed_file_relative_path)
 
     @override
     def get_ignorefile_relative_path_encoding_pairs_under_working_root_dir(sf, /):
@@ -935,6 +1035,23 @@ class IRepositorySetting__init_constants(IRepositorySetting):
     def get_repository_extra_cache_root_dir_path(sf, /):
         '-> repository_extra_cache_root_dir_path'
         return sf.repository_extra_cache_root_dir_path
+
+    #updating/
+    @override
+    def get_file_stack_dir_relative_path(sf, /):
+        '-> file_stack_dir_relative_path'
+        return sf.file_stack_dir_relative_path
+    @override
+    def get_TODO_list4move_cmd_file_relative_path(sf, /):
+        '-> TODO_list4move_cmd_file_relative_path'
+        return sf.TODO_list4move_cmd_file_relative_path
+    @override
+    def get_commit_completed_file_relative_path(sf, /):
+        '-> commit_completed_file_relative_path'
+        return sf.commit_completed_file_relative_path
+
+
+    #grow_only/
     @override
     def get_command_history_dir_relative_path(sf, /):
         '-> command_history_dir_relative_path'
@@ -945,39 +1062,66 @@ class IRepositorySetting__init_constants(IRepositorySetting):
         return sf.file_patch_forest_dir_relative_path
 
 class IRepositorySetting__init_constants__branches_together(IRepositorySetting__init_constants, IRepositorySetting__branches_together):
-    def __init__(sf, /,*, branches_dir_relative_path, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path):
+    def __init__(sf, /,*, branches_dir_relative_path, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path, file_stack_dir_relative_path, TODO_list4move_cmd_file_relative_path, commit_completed_file_relative_path):
         check_relative_path(branches_dir_relative_path)
         sf.branches_dir_relative_path = branches_dir_relative_path
         d = dict(locals())
         del d['sf']
         del d['branches_dir_relative_path']
+        del d['__class__']
 
         super().__init__(**d)
+            #TypeError: __init__() got an unexpected keyword argument '__class__'
     @override
     def get_branches_dir_relative_path(sf, /):
         '-> branches_dir_relative_path'
         return sf.branches_dir_relative_path
 class IRepositorySetting__init_constants__branches_together__cache_min_len_inf_dir__init_caches(IRepositorySetting__init_caches, IRepositorySetting__init_constants__branches_together, IRepositorySetting__cache_min_len_inf_dir):
-    def __init__(sf, /,*, min_len_command_history_dir, min_len_file_patch_forest_dir, branch_name2min_len_branch_history_dir, branches_dir_relative_path, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path):
+    def __init__(sf, /,*, min_len_command_history_dir, min_len_file_patch_forest_dir, branch_name2min_len_branch_history_dir, branches_dir_relative_path, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path, file_stack_dir_relative_path, TODO_list4move_cmd_file_relative_path, commit_completed_file_relative_path):
         d = dict(locals())
         del d['sf']
 
-        def f(min_len_command_history_dir, min_len_file_patch_forest_dir, branch_name2min_len_branch_history_dir, /, **kw):
-            del kw
-            IRepositorySetting__cache_min_len_inf_dir.__init__(sf, **locals())
+        if 0:
+            #bug:def f(min_len_command_history_dir, min_len_file_patch_forest_dir, branch_name2min_len_branch_history_dir, /, **kw):
+            def f(_, /, min_len_command_history_dir, min_len_file_patch_forest_dir, branch_name2min_len_branch_history_dir, **kw):
+                del kw, _
+                print(sorted(locals()))
+                    #['branch_name2min_len_branch_history_dir', 'min_len_command_history_dir', 'min_len_file_patch_forest_dir', 'sf']
+                IRepositorySetting__cache_min_len_inf_dir.__init__(sf, **locals())
+                    #TypeError: __init__() got some positional-only arguments passed as keyword arguments: 'sf'
 
-        def g(branches_dir_relative_path, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path, /, **kw):
-            del kw
-            IRepositorySetting__init_constants__branches_together.__init__(sf, **locals())
-        f(**d)
-        g(**d)
-        IRepositorySetting__init_caches.__init__(sf)
+            def g(_, /, branches_dir_relative_path, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path, file_stack_dir_relative_path, TODO_list4move_cmd_file_relative_path, commit_completed_file_relative_path, **kw):
+                del kw, _
+                IRepositorySetting__init_constants__branches_together.__init__(sf, **locals())
+            f(..., **d)
+                #TypeError: f() missing 3 required positional arguments: 'min_len_command_history_dir', 'min_len_file_patch_forest_dir', and 'branch_name2min_len_branch_history_dir'
+                #  <<== def f(a, b, c, /, **kw)
+                #  -->> def f(/, a, b, c, **kw)
+                #       #but now syntax error!
+                #  -->> def f(_, /, a, b, c, **kw)
+            g(..., **d)
+            IRepositorySetting__init_caches.__init__(sf)
+        else:
+            kw4f, kw4g, kw4_ = partition_by_keyss__immutable(d, [
+                'min_len_command_history_dir, min_len_file_patch_forest_dir, branch_name2min_len_branch_history_dir'.split(', ')
+                ,'branches_dir_relative_path, ignorefile_relative_path_encoding_pairs, parentfile_relative_path, contentfile_relative_path, metadatafile_relative_path, dir_size, lcp_threshold, repository_root_dir_path, repository_extra_cache_root_dir_path, command_history_dir_relative_path, file_patch_forest_dir_relative_path, file_stack_dir_relative_path, TODO_list4move_cmd_file_relative_path, commit_completed_file_relative_path'.split(', ')
+                ,()
+                ])
+            kw4f
+            IRepositorySetting__cache_min_len_inf_dir.__init__(sf, **kw4f)
+            kw4g
+            IRepositorySetting__init_constants__branches_together.__init__(sf, **kw4g)
+            kw4_
+            IRepositorySetting__init_caches.__init__(sf, **kw4_)
+
+
 
 
 
 #HHHHH
 re
 uint_pattern = fr'(?:0|[1-9][0-9]*)'
+branch_name_char_pattern = fr'(?:(?!=[\\\[\]])\S)' #can include '/' but not '\'
 branch_name_char_pattern = fr'(?:(?!=\\)\S)' #can include '/' but not '\'
 branch_name_pattern = fr'(?:{branch_name_char_pattern}+)' #can include '/' but not '\'
 #IRepositorySetting.move_cmd_target__user_data_file__virtual_names
@@ -988,9 +1132,26 @@ push2command_history_pattern = fr'(?:pop updating/file_stack\[(?P<idx4file_stack
 #branch_fsys_history, branch_history
 push2branch_fsys_history_pattern = fr'(?:pop updating/file_stack\[(?P<idx4file_stack>{uint_pattern})\] -> push_into (?P<move_cmd_target__virtual_dir>grow_only/branches/(?P<branch_name>{branch_name_pattern}))\[(?P<idx4move_cmd_target>{uint_pattern})\])'
 move2file_patch_forest_pattern = fr'(?:pop updating/file_stack\[(?P<idx4file_stack>{uint_pattern})\] -> move_to (?P<move_cmd_target__virtual_dir>(?P<user_data_file__virtual_name>{user_data_file__virtual_name__pattern}) @ grow_only/file_patch_forest)\[(?P<idx4move_cmd_target>{uint_pattern})\])'
-move_cmd_line_pattern = '(?:{push2command_history_pattern}|{push2branch_fsys_history_pattern}|{move2file_patch_forest_pattern})'
-move2file_patch_forest_regex = re.compile(move2file_patch_forest_pattern)
+#bug:move_cmd_line_pattern = '(?:{push2command_history_pattern}|{push2branch_fsys_history_pattern}|{move2file_patch_forest_pattern})'
+move_cmd_line_pattern = fr'(?:{push2command_history_pattern}|{push2branch_fsys_history_pattern}|{move2file_patch_forest_pattern})'
+    #re.error: redefinition of group name 'idx4file_stack' as group 4; was group 1 at position 223
+#move_cmd_line_regex = re.compile(move_cmd_line_pattern)
+_case2move_cmd_line_regex = dict(
+    push2command_history_regex = re.compile(push2command_history_pattern)
+    ,push2branch_fsys_history_regex = re.compile(push2branch_fsys_history_pattern)
+    ,move2file_patch_forest_regex = re.compile(move2file_patch_forest_pattern)
+    )
+
 branch_name_regex = re.compile(branch_name_pattern)
+assert re.fullmatch(push2branch_fsys_history_pattern, 'pop updating/file_stack[1] -> push_into grow_only/branches/master[0]')
+def move_cmd_line_regex__fullmatch(move_cmd_line):
+    #=== move_cmd_line_regex.fullmatch
+    for case, regex in _case2move_cmd_line_regex.items():
+        m = regex.fullmatch(move_cmd_line)
+        if m: return m
+    return None
+assert move_cmd_line_regex__fullmatch('pop updating/file_stack[1] -> push_into grow_only/branches/master[0]')
+
 def check_branch_name(branch_name, /):
     check_str(branch_name)
     if branch_name_regex.fullmatch(branch_name) is None:raise ValueError
@@ -1029,15 +1190,20 @@ class IRepositorySetting__default_move_cmd_line_fmt(IRepositorySetting):
     def __iter_read_move_cmds(sf, TODO_list4move_cmd_binary_ifile, /):
         binary_ifile = TODO_list4move_cmd_binary_ifile
         text_ifile = reopen_bin2txt(binary_ifile, encoding='utf8', buffered_case='read')
-        for line in text_ifile:
-            line = line.strip()
-            if line[:1] in '#': continue
-            move_cmd = sf._parse_default_move_cmd_line_fmt(line)
-            yield move_cmd
+        try:
+            for line in text_ifile:
+                line = line.strip()
+                if line[:1] in '#': continue
+                move_cmd = sf._parse_default_move_cmd_line_fmt(line)
+                yield move_cmd
+        finally:
+            text_ifile.detach()
 
     def _parse_default_move_cmd_line_fmt(sf, line, /):
         '-> move_cmd'
-        m = move2file_patch_forest_regex.fullmatch(line)
+        #bug:m = move2file_patch_forest_regex.fullmatch(line)
+        #m = move_cmd_line_regex.fullmatch(line)
+        m = move_cmd_line_regex__fullmatch(line)
         if not m:
             raise ValueError(f'bad move_cmd_line: {line!r}')
         idx4file_stack = int(m['idx4file_stack'])
@@ -1078,11 +1244,15 @@ class IRepositorySetting__default_move_cmd_line_fmt(IRepositorySetting):
         #'''
         binary_ofile = TODO_list4move_cmd_binary_ofile
         text_ofile = reopen_bin2txt(binary_ofile, encoding='utf8', buffered_case='write')
-        for move_cmd in move_cmds:
-            sf.__write_move_cmd(text_ofile, move_cmd)
+        try:
+            for move_cmd in move_cmds:
+                sf.__write_move_cmd(text_ofile, move_cmd)
+        finally:
+            text_ofile.detach()
     def __write_move_cmd(sf, text_ofile, move_cmd, /):
         s = sf._show_default_move_cmd_line_fmt(move_cmd)
-        print(text_ofile, s)
+        #bug:print(text_ofile, s)
+        fprint(s, file=text_ofile)
     def _show_default_move_cmd_line_fmt(sf, move_cmd, /):
         'move_cmd -> str'
         (idx4file_stack, move_cmd_target, move_cmd_target_args, idx4move_cmd_target) = move_cmd

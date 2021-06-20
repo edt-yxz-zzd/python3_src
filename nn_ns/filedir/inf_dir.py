@@ -96,6 +96,7 @@ __all__ = '''
 
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.int_tools.repr_uint import iter_reprdigits_BE2uint, uint2reprdigits_BE
 from seed.int_tools.int_tools import is_odd
 
@@ -104,6 +105,7 @@ import os.path
 import shutil
 #from nn_ns.filedir.relative_path_ops import relative_path_ops, check_relative_path, is_relative_path_empty, relative_path2parts #avoid relative_path.parts
 from nn_ns.filedir.filedir_ops import is_dir_empty, remove_dirs, filedir_move_then_remove_dirs, filedir_move, filedir_copy
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def bisearch_child_end(dir_path, /,*, end, begin=0):
@@ -141,33 +143,79 @@ def len_finite_dir_or_file(finite_dir_or_file_path, /,*, dir_size, level, min_le
 
     if not finite_dir_or_file_path.exists(): raise FileNotFoundError(finite_dir_or_file_path)
 
-    def recur(level, finite_dir_or_file_path, *, min_len):
+    def recur(level, finite_dir_or_file_path, /,*, min_len):
+        saved_min_len = min_len
         if not (level==0 or finite_dir_or_file_path.is_dir()): raise NotADirectoryError(finite_dir_or_file_path)
         if level==0:
-            if not min_len <= 1: raise ValueError
+            # user file/dir
+            if not 0 <= min_len <= 1: raise ValueError
             return 1
+        assert level > 0
+        finite_dir_path = finite_dir_or_file_path
+        assert finite_dir_path.is_dir()
 
         child_finite_dir_full_sz = dir_size**(level-1)
         this_finite_dir_full_sz = dir_size*child_finite_dir_full_sz
-        if not min_len <= this_finite_dir_full_sz: raise ValueError
+        if not 0 <= min_len <= this_finite_dir_full_sz: raise ValueError
         begin = min_len//child_finite_dir_full_sz
         assert 0 <= begin <= dir_size
-        child_end = bisearch_child_end(finite_dir_or_file_path, begin=begin, end=dir_size)
-        assert child_end==dir_size or not (finite_dir_or_file_path/repr(child_end)).exists()
-        assert not child_end or (finite_dir_or_file_path/repr(child_end-1)).exists()
+        child_end = bisearch_child_end(finite_dir_path, begin=begin, end=dir_size)
+        assert child_end==dir_size or not (finite_dir_path/repr(child_end)).exists()
+            #assert not (finite_dir_path/repr(child_end)).exists()
+            #in inf_dir logic: ./{dir_size} does not exists
+            #but ... user may use this path for another usage
+        assert not child_end or (finite_dir_path/repr(child_end-1)).exists()
+        assert 0 <= begin <= child_end <= dir_size #==end
 
-        if child_end == 0:
-            return 0
+        num_children = child_end
+            #<<==# ./{child_end} not exists in logic
+
+        #if child_end == 0: return 0
+        #elif begin == child_end:
+        if begin == child_end:
+            # ./{child_end} not exists in logic
+            # ==>> [0..begin-1] are all full
+            # ==>> [0..child_end-1] are all full
+            num_full_children = num_children
+            full_sz = num_full_children*child_finite_dir_full_sz
+            non_full_sz = 0
+            pass
         else:
+            assert 0 <= begin < child_end <= dir_size #==end
+            # ./{child_end} not exists in logic
+            # ==>> [0..child_end-2] are all full
+            # ==>> child_end-1 may mot be full
+            num_full_children = num_children-1
             child_last = child_end-1
-            assert 0 <= child_last <= dir_size-1
-            assert 0 <= begin <= child_last == child_end-1 < child_end <= dir_size
+            assert 0 <= num_full_children==child_last < dir_size
+            try:
+                assert 0 <= begin <= num_full_children==child_last == child_end-1 < child_end <= dir_size
+            except AssertionError:
+                if 0:#[01_to_turn_off)
+                    print(fr'assert 0 <= {begin} <= {num_full_children}=={child_last} == {child_end-1} < {child_end} <= {dir_size}')
+                raise
+            child_last__may_not_full = child_last
 
-            init_sz = child_last * child_finite_dir_full_sz
-            min_len = max(0, min_len-init_sz)
-            tail_sz = recur(finite_dir_or_file_path/repr(child_last), dir_size=dir_size, level=level-1, min_len=min_len)
+            full_sz = num_full_children * child_finite_dir_full_sz
+            min_len = max(0, min_len-full_sz)
+            non_full_sz = recur(level-1, finite_dir_path/repr(child_last__may_not_full), min_len=min_len)
                 # level-1
-            return init_sz + tail_sz
+            pass
+        full_sz
+        non_full_sz
+
+        if 0:#[01_to_turn_off)
+            #print(fr'x={x}')
+            print(fr'len_finite_dir_or_file(level={level}, finite_dir_or_file_path={finite_dir_or_file_path}, min_len={saved_min_len})')
+            print(fr'    full_sz={full_sz}')
+            print(fr'    non_full_sz={non_full_sz}')
+            if begin == child_end:
+                print(fr'    begin=child_end={child_end}')
+                print(fr'    min_len={saved_min_len}')
+                print(fr'    child_finite_dir_full_sz={child_finite_dir_full_sz}')
+        whole_sz = full_sz + non_full_sz
+        assert whole_sz >= saved_min_len #01_to_turn_off
+        return whole_sz
 
     return recur(level, finite_dir_or_file_path, min_len=min_len)
 
@@ -182,20 +230,36 @@ def len_inf_dir(inf_dir_path, /,*, dir_size, level, min_len):
 
     if not inf_dir_path.exists(): raise FileNotFoundError(inf_dir_path)
 
-    def recur(level, inf_dir_path, *, min_len):
+    def recur(level, inf_dir_path, /,*, min_len):
+        saved_min_len = min_len
         if not inf_dir_path.is_dir(): raise NotADirectoryError(inf_dir_path)
 
         child_finite_dir_full_sz = dir_size**level
         this_level_full_sz = (dir_size-1) * child_finite_dir_full_sz
         next_level_inf_dir_path = inf_dir_path / repr(dir_size-1)
         if next_level_inf_dir_path.exists():
-            min_len = max(0, min_len-this_level_full_sz)
-            tail_sz = recur(level+1, next_level_inf_dir_path, min_len=min_len)
-            return this_level_full_sz + tail_sz
-        else:
-            init_sz = len_finite_dir_or_file(inf_dir_path, dir_size=dir_size, level=level+1, min_len=min_len)
+            init_sz4finite = this_level_full_sz
+            min_len = max(0, min_len-init_sz4finite)
+            tail_sz4inf = recur(level+1, next_level_inf_dir_path, min_len=min_len)
                 #level+1
-            return init_sz
+            pass
+
+        else:
+            init_sz4finite = len_finite_dir_or_file(inf_dir_path, dir_size=dir_size, level=level+1, min_len=min_len)
+                #level+1
+            tail_sz4inf = 0
+            pass
+        init_sz4finite
+        tail_sz4inf
+
+        if 0:#[01_to_turn_off)
+            #print(fr'x={x}')
+            print(fr'len_inf_dir(level={level}, inf_dir_path={inf_dir_path}, min_len={saved_min_len})')
+            print(fr'    init_sz4finite={init_sz4finite}')
+            print(fr'    tail_sz4inf={tail_sz4inf}')
+        whole_sz = init_sz4finite + tail_sz4inf
+        assert whole_sz >= saved_min_len #01_to_turn_off
+        return whole_sz
 
     return recur(level, inf_dir_path, min_len=min_len)
 
@@ -274,7 +338,15 @@ def inf_dir_remove_tail_empty_dirs(inf_dir_path, /,*, dir_size, min_len):
     (inf_dir_end_user_data_path, inf_dir_end_idx) = (inf_dir_user_data_path, inf_dir_idx)
 
     assert not inf_dir_end_user_data_path.exists()
-    remove_dirs(inf_dir_end_user_data_path.parent, may_root_dir_path=inf_dir_path, missing_ok=True, target_dir_nonempty_ok=True, target_path_is_file_ok=False, target_dir_path_is_root_dir_path_ok=True)
+        #inf_dir_end_user_data_path.parent may not exists too!!!
+    if 1:
+        remove_dirs(inf_dir_end_user_data_path.parent, may_root_dir_path=inf_dir_path, missing_ok=True, target_dir_nonempty_ok2halt=True, target_dir_nonempty_ok2remove=False, target_path_is_file_ok2remove=False, target_path_is_file_ok2halt=False, target_dir_path_is_root_dir_path_ok=True)
+            #inf_dir_end_user_data_path.parent may not exists too!!!
+                #==>>missing_ok=True
+    else:
+        remove_dirs(inf_dir_end_user_data_path, may_root_dir_path=inf_dir_path, missing_ok=True, target_dir_nonempty_ok2halt=False, target_dir_nonempty_ok2remove=False, target_path_is_file_ok2remove=False, target_path_is_file_ok2halt=False, target_dir_path_is_root_dir_path_ok=False)
+            #inf_dir_end_user_data_path not exists
+                #==>>missing_ok=True
 
 
 
@@ -324,12 +396,21 @@ def inf_dir_end_based_idx2begin_based_idx(inf_dir_path, inf_dir_end_based_idx:'=
     offset_from_end = inf_dir_end_based_idx
     inf_dir_begin_based_idx = inf_dir_begin_based_end_idx + offset_from_end
 
-    if inf_dir_begin_based_idx < 0 and not neg_begin_based_idx_ok: raise ValueError
+    if inf_dir_begin_based_idx < 0 and not negative_begin_based_idx_ok: raise ValueError
 
     if imay_inf_dir_idx4assert != -1:
         inf_dir_idx4assert = imay_inf_dir_idx4assert
         inf_dir_idx = inf_dir_begin_based_idx
-        if inf_dir_idx != inf_dir_idx4assert: raise ValueError
+        try:
+            if inf_dir_idx != inf_dir_idx4assert: raise ValueError
+        except ValueError:
+            if 0:#[01_to_turn_off)
+                print(fr'inf_dir_idx4assert={inf_dir_idx4assert}')
+                print(fr'inf_dir_idx={inf_dir_idx}')
+                print(fr'inf_dir_begin_based_end_idx={inf_dir_begin_based_end_idx}')
+                print(fr'offset_from_end={offset_from_end}')
+                quit()
+            raise
 
     return inf_dir_begin_based_idx
 

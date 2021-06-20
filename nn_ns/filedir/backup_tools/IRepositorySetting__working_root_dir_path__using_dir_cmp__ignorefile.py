@@ -23,7 +23,11 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 
-_pattern_case_set = frozenset({'fnmatch'})
+_pattern_case_set = frozenset({'fnmatch', 'glob'})
+    #see: py::fnmatch::fnmatch
+    #see: seed.for_libs.for_glob.glob_match::glob_match
+    #see: seed.for_libs.for_glob.IGlob::IGlob
+    #see: nn_ns.filedir.dir_cmp::Glob4IDirViewer
 class IRepositorySetting__working_root_dir_path__using_dir_cmp__ignorefile(IRepositorySetting__working_root_dir_path):
     @override
     def ___mk_relative_path__str2is_ignore___(sf, ignorefile_text_ifile, /):

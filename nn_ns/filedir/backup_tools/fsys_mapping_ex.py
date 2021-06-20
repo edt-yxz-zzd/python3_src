@@ -164,6 +164,8 @@ class Visit__fsys_mapping_ex:
                 underlying obj shouldnot be changed
                 NOTE: subobj not changed, but subview to subobj can be diff objs
     #'''
+    def careless_check_pseudo_virtual_file_reprobj(sf, pseudo_virtual_file_reprobj, /):
+        if isinstance(pseudo_virtual_file_reprobj, Mapping): raise TypeError
     def check_mapping_type(sf, mapping_type, /):
         return
     #on_fsys_mapping_enter
@@ -186,7 +188,8 @@ class Visit__fsys_mapping_ex:
       def recur(ancestors, fsys_mapping_ex, /):
         sf.check_mapping_type(type(fsys_mapping_ex))
 
-        to_skip = sf.on_fsys_mapping_ex_enter(ancestors_view, fsys_mapping_ex)
+        saved_fsys_mapping_ex = fsys_mapping_ex
+        to_skip = sf.on_fsys_mapping_ex_enter(ancestors_view, saved_fsys_mapping_ex)
         if type(to_skip) is not bool: raise TypeError
         if to_skip: return # without sf.on_fsys_mapping_ex_exit()
         for basename in fsys_mapping_ex:
@@ -195,13 +198,16 @@ class Visit__fsys_mapping_ex:
             if is_fsys_mapping_ex_or_pseudo_virtual_file_reprobj_dir(fsys_mapping_ex_or_pseudo_virtual_file_reprobj):
                 fsys_mapping_ex = fsys_mapping_ex_or_pseudo_virtual_file_reprobj
                 ancestors.append(basename)
-                recur(fsys_mapping_ex)
+                recur(ancestors, fsys_mapping_ex)
                 ancestors.pop()
             else:
                 pseudo_virtual_file_reprobj = fsys_mapping_ex_or_pseudo_virtual_file_reprobj
-                if not pseudo_virtual_file_reprobj >= 0: raise ValueError
+                #bug:if not pseudo_virtual_file_reprobj >= 0: raise ValueError
+                #   pseudo_virtual_file_reprobj may not be patch_idx
+                sf.careless_check_pseudo_virtual_file_reprobj(pseudo_virtual_file_reprobj)
                 sf.on_pseudo_virtual_file_reprobj(ancestors_view, basename, pseudo_virtual_file_reprobj)
-        sf.on_fsys_mapping_ex_exit(ancestors_view, fsys_mapping_ex)
+        #bug:sf.on_fsys_mapping_ex_exit(ancestors_view, fsys_mapping_ex)
+        sf.on_fsys_mapping_ex_exit(ancestors_view, saved_fsys_mapping_ex)
         #end recur()
 
       ancestors = []
@@ -730,6 +736,7 @@ def zip_up4fsys_mapping_ex__seq(ireplace_mapping_tmay, parts, ancestors, tmay_bu
     tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj
         :: tmay (fsys_mapping_ex|pseudo_virtual_file_reprobj)
     #'''
+    #print(len(ancestors), len(parts))
     if not 0 < len(ancestors) == len(parts): raise ValueError
     reversed_ancestor_child_basename_pairs = zip(reversed(ancestors), reversed(parts))
     tmay_new_fsys_mapping_ex_or_tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj = zip_up4fsys_mapping_ex(ireplace_mapping_tmay, tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj, reversed_ancestor_child_basename_pairs)

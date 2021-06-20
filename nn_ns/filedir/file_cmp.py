@@ -79,6 +79,8 @@ __all__ = '''
             file_patch
                 unpack__patch_bytes_ex__ver1
     '''.split()
+
+___begin_mark_of_excluded_global_names__0___ = ...
 from nn_ns.RMQ.make_SA_LCP import make_SA_LCP
 from seed.algo.sort_ints import sort_ints
 from seed.algo.is_sorted import is_sorted
@@ -98,6 +100,7 @@ import itertools
 from collections.abc import Sequence
 import ast
 from pathlib import Path
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def id_or_len_rng(len_or_rng):

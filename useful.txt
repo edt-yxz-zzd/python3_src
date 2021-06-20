@@ -3,6 +3,14 @@
 #   > py .... > log.txt
 #
 
+py -m nn_ns.app.debug_cmd xxx.yyy zzz.www
+if 1:#[01_to_turn_off)
+    print(fr'x={x}')
+    from seed.tiny import print_err
+    print_err(fr'x={x}')
+    from pprint import pprint
+    pprint(x)
+
 __all__ = '''
 
     '''.split()

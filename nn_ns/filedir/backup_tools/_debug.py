@@ -152,6 +152,7 @@ if __name__ == '__main__':
     qnames_in_lines = '''
         nn_ns.filedir.backup_tools.fsys_mapping_ex
         nn_ns.filedir.backup_tools.fsys_mapping_patch
+            nn_ns.filedir.backup_tools.fsys_mapping_ex_diff__tmay__slow
         nn_ns.filedir.backup_tools.FileSystem4update
         nn_ns.filedir.backup_tools.IRepositorySetting
         nn_ns.filedir.backup_tools.IRepositorySetting__working_root_dir_path__using_dir_cmp__ignorefile
@@ -159,6 +160,14 @@ if __name__ == '__main__':
         nn_ns.filedir.backup_tools.IRepositorySetting__using_IFileSystem4update__fsys_delta
         nn_ns.filedir.backup_tools.RepositorySetting
         nn_ns.filedir.backup_tools.filedir_cmp_utils__repository__fsys_mapping
+
+        nn_ns.filedir.backup_tools.main
+        nn_ns.filedir.inf_dir
+        nn_ns.filedir.dir_cmp
+        nn_ns.filedir.file_cmp
+        seed.debug.read_write_whole_dir_as_fsys_mapping
+        nn_ns.filedir.backup_tools._test_main
+        nn_ns.filedir.backup_tools.__main__
     '''
     #jump
     '''

@@ -30,6 +30,7 @@ __all__ = str2__all__('''
     print_err           # file=sys.stderr; see: no_op/print_ferr
     print_ferr          # file=sys.stderr; see: no_op/print_err
     fprint              # force/require 'file='
+    mk_fprint           # fixed 'file'
     __not__             # :: Testable a => a -> bool
     not_dot             # :: (a->bool) -> (a->bool)
     xor, nxor           # :: bool -> bool -> bool
@@ -128,6 +129,10 @@ def with_key(key, iterable):
         yield key(x), x
 
 
+def mk_fprint(file):
+    def fprint(*args, **kw):
+        print(*args, file=file, **kw)
+    return fprint
 def fprint(*args, file, **kw):
     print(*args, file=file, **kw)
 

@@ -1,0 +1,9 @@
+-glob:'**/.git/**'
+-glob:'**/__pycache__/**'
+-glob:'java_src/**/*.class'
+-glob:'**/parsetab.py'
+-glob:'**/parser.out'
+-glob:'**/parser.out/**'
+-glob:'**/.mypy_cache'
+-glob:'**/.mypy_cache/**'
+

@@ -121,6 +121,7 @@ class IFileSystem4update__fsys_delta(ABC):
     implicit args:
         #command_history: each cmd should contains these args explicitly
         #   command_history_cmd = (this_branch_name, curr_branch_idx) branch_history_cmd
+        #       -->> command_history_cmd = next_branch_time, expected_len_inf_dir_of_file_patch_forest, high_level_user_command__strs
         #branch_history: each cmd not contains these args explicitly
         #   branch_history_cmd = (op, ...)
         this_branch_name
@@ -151,12 +152,14 @@ command_history_cmd
     = (branch_time, fsys_deltas)
     = ((branch_name, branch_idx), [fsys_delta]::tuple<fsys_delta>)
 fsys_delta = fsys_update_cmd | branch_history_cmd
+    add mk_empty_fsys/init_as_empty to impl new_fsys/init_via_copy#except:init_via_branch
 
 fsys_update_cmd:
     #bad: data fsys_frozendict/fsys_patch_frozendict is too big when impl branch_history_cmd::init_via_branch/merge_from_internal/copy_from_internal
     #       ???keep big to seperate branches???
     #           !!! not a delta repository impl !!!
     ('new_fsys', fsys_frozendict)
+    ('mk_empty_fsys',)
     ('del_fsys',)
     ('update_fsys', dst_dir_relative_path, offsetted_fsys_patch_frozendict)
 branch_history_cmd:
@@ -169,6 +172,7 @@ branch_history_cmd:
     #       solved: now add IRepositorySetting to support
     ('init_via_copy', src_fsys_frozendict)
     ('init_via_branch', src_branch_name, src_branch_idx)
+    ('init_as_empty',)
     ('del_branch',)
 
     ('merge_from_external', uint_mod_8_as_merge_case2skip_or_replace, dst_relative_path, src_fsys_frozendict_or_patch_idx)
@@ -268,6 +272,21 @@ branch_history_cmd:
         @abstractmethod
         def get_may_root_fsys_frozendict(sf, /):
             '-> (None|fsys_frozendict)'
+    def mk_fsys_delta4init_empty_branch(sf, /):
+        fsys_delta = type(sf).___mk_fsys_delta4init_empty_branch___(sf)
+        sf.check_fsys_delta(fsys_delta)
+        return fsys_delta
+    @abstractmethod
+    def ___mk_fsys_delta4init_empty_branch___(sf, /):
+        '-> fsys_delta'
+
+    def mk_fsys_delta4remove_branch(sf, /):
+        fsys_delta = type(sf).___mk_fsys_delta4remove_branch___(sf)
+        sf.check_fsys_delta(fsys_delta)
+        return fsys_delta
+    @abstractmethod
+    def ___mk_fsys_delta4remove_branch___(sf, /):
+        '-> fsys_delta'
 
 
     @abstractmethod
@@ -434,6 +453,7 @@ checker4fsys_patch_frozendict
 class FileSystem4update__fsys_delta_is_fsys_update_cmd(IFileSystem4update__fsys_delta_is_cmd):
     __cmd_checker_table = (
         ('new_fsys', checker4fsys_frozendict)
+        ,('mk_empty_fsys',)
         ,('del_fsys',)
         ,('update_fsys', checker4relative_path, checker4fsys_patch_frozendict)
         )
@@ -475,6 +495,16 @@ class FileSystem4update__fsys_delta_is_fsys_update_cmd(IFileSystem4update__fsys_
 
 
     @override
+    def ___mk_fsys_delta4init_empty_branch___(sf, /):
+        '-> fsys_delta'
+        fsys_delta = ('mk_empty_fsys',)
+        return fsys_delta
+    @override
+    def ___mk_fsys_delta4remove_branch___(sf, /):
+        '-> fsys_delta'
+        fsys_delta = ('del_fsys',)
+        return fsys_delta
+    @override
     def apply_fsys_delta(sf, fsys_delta, /):
         'update underlying may fsys_frozendict'
         fsys_update_cmd = fsys_delta
@@ -489,11 +519,12 @@ class FileSystem4update__fsys_delta_is_fsys_update_cmd(IFileSystem4update__fsys_
     def get_cmd_op_names(cls, /):
         '-> frozenset<op_name>'
         return __class__.__op_names
-    __op_names = frozenset(('new_fsys', 'del_fsys', 'update_fsys'))
+    __op_names = frozenset(('new_fsys', 'mk_empty_fsys', 'del_fsys', 'update_fsys'))
 
     if 0:
         r'''
         ('new_fsys', src_fsys_frozendict)
+        ('mk_empty_fsys',)
         ('del_fsys',)
         ('update_fsys', dst_dir_relative_path, offsetted_fsys_patch_frozendict)
         #'''
@@ -502,6 +533,9 @@ class FileSystem4update__fsys_delta_is_fsys_update_cmd(IFileSystem4update__fsys_
         if not sf._may_fsys_frozendict is None: raise RuntimeError
         check_fsys_frozendict(src_fsys_frozendict)
         sf._may_fsys_frozendict = fsys_frozendict = echo_valueonly_fsys_mapping(src_fsys_frozendict)# = copy_fsys_dict(src_fsys_dict)
+    def mk_empty_fsys(sf, /):
+        if not sf._may_fsys_frozendict is None: raise RuntimeError
+        sf._may_fsys_frozendict = fsys_frozendict = echo_valueonly_fsys_mapping(FrozenDict())
 
     def del_fsys(sf, /):
         if sf._may_fsys_frozendict is None: raise RuntimeError
@@ -523,6 +557,12 @@ class FileSystem4update__fsys_delta_is_fsys_update_cmd(IFileSystem4update__fsys_
         old_fsys_frozendict = sf._may_fsys_frozendict
 
         new_fsys_frozendict = offsetted_fsys_frozendict_patch(old_fsys_frozendict, dst_dir_relative_path, offsetted_fsys_patch_frozendict)
+        if 0:#[01_to_turn_off]
+            print('@update_fsys')
+            print(fr'old_fsys_frozendict={old_fsys_frozendict}')
+            print(fr'dst_dir_relative_path={dst_dir_relative_path!r}')
+            print(fr'offsetted_fsys_patch_frozendict={offsetted_fsys_patch_frozendict}')
+            print(fr'new_fsys_frozendict={new_fsys_frozendict}')
         sf._may_fsys_frozendict = new_fsys_frozendict
         return
 
@@ -547,6 +587,7 @@ class FileSystem4update__fsys_delta_is_branch_history_cmd(IFileSystem4update__fs
     __cmd_checker_table = (
         ('init_via_copy', checker4fsys_frozendict)
         ,('init_via_branch', checker4branch_name, checker4branch_idx)
+        ,('init_as_empty',)
         ,('del_branch',)
         ,('merge_from_external', checker4uint_mod_8, checker4relative_path, checker4fsys_frozendict_or_patch_idx)
         ,('merge_from_internal', checker4uint_mod_8, checker4relative_path, checker4branch_name, checker4branch_idx, checker4relative_path)
@@ -618,17 +659,28 @@ class FileSystem4update__fsys_delta_is_branch_history_cmd(IFileSystem4update__fs
         cmd = fsys_delta = branch_history_cmd
         sf.exec_cmd4apply_fsys_delta(cmd)
 
+    @override
+    def ___mk_fsys_delta4init_empty_branch___(sf, /):
+        '-> fsys_delta'
+        fsys_delta = ('init_as_empty',)
+        return fsys_delta
+    @override
+    def ___mk_fsys_delta4remove_branch___(sf, /):
+        '-> fsys_delta'
+        fsys_delta = ('del_branch',)
+        return fsys_delta
     @classmethod
     @override
     def get_cmd_op_names(cls, /):
         '-> frozenset<op_name>'
         return __class__.__op_names
-    __op_names = frozenset(('init_via_copy', 'init_via_branch', 'del_branch', 'merge_from_external', 'merge_from_internal', 'mkdirs', 'copy_from_external', 'copy_from_internal', 'move_shiftL', 'swap_rotateL', 'remove', 'update_file', 'update_fsys'))
+    __op_names = frozenset(('init_via_copy', 'init_via_branch', 'init_as_empty', 'del_branch', 'merge_from_external', 'merge_from_internal', 'mkdirs', 'copy_from_external', 'copy_from_internal', 'move_shiftL', 'swap_rotateL', 'remove', 'update_file', 'update_fsys'))
 
     if 0:
         r'''
         ('init_via_copy', src_fsys_frozendict)
         ('init_via_branch', src_branch_name, src_branch_idx)
+        ('init_as_empty',)
         ('del_branch',)
         ('merge_from_external', uint_mod_8_as_merge_case2skip_or_replace, dst_relative_path, src_fsys_frozendict_or_patch_idx)
         ('merge_from_internal', uint_mod_8_as_merge_case2skip_or_replace, dst_relative_path, src_branch_name, src_branch_idx, src_relative_path)
@@ -653,6 +705,9 @@ class FileSystem4update__fsys_delta_is_branch_history_cmd(IFileSystem4update__fs
         if may_src_root_fsys_frozendict is None: raise ValueError
         src_root_sys_frozendict = may_src_root_fsys_frozendict
         sf._may_fsys_frozendict = fsys_frozendict = echo_valueonly_fsys_mapping(src_root_sys_frozendict) #= copy_fsys_dict(src_root_fsys_dict)
+    def init_as_empty(sf, /):
+        if not sf._may_fsys_frozendict is None: raise RuntimeError
+        sf._may_fsys_frozendict = fsys_frozendict = echo_valueonly_fsys_mapping(FrozenDict())
 
     def del_branch(sf, /):
         if sf._may_fsys_frozendict is None: raise RuntimeError
@@ -1231,6 +1286,13 @@ class FileSystem4update__fsys_delta_is_branch_history_cmd(IFileSystem4update__fs
             old_fsys_frozendict = sf._may_fsys_frozendict
 
             new_fsys_frozendict = offsetted_fsys_frozendict_patch(old_fsys_frozendict, dst_dir_relative_path, offsetted_fsys_patch_frozendict)
+
+            if 0:#[01_to_turn_off]
+                print('@update_fsys')
+                print(fr'old_fsys_frozendict={old_fsys_frozendict}')
+                print(fr'dst_dir_relative_path={dst_dir_relative_path!r}')
+                print(fr'offsetted_fsys_patch_frozendict={offsetted_fsys_patch_frozendict}')
+                print(fr'new_fsys_frozendict={new_fsys_frozendict}')
             sf._may_fsys_frozendict = new_fsys_frozendict
             return
 

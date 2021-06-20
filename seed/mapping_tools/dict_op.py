@@ -1,6 +1,6 @@
 
 '''
-
+from seed.mapping_tools.dict_op import partition_by_keyss__immutable
 '''
 
 __all__ = '''
@@ -13,6 +13,9 @@ __all__ = '''
     subset_keys__immutable
     intersect_keys__immutable
     sum_dicts__immutable
+
+    partition_by_keyss__immutable
+    iter_partition_by_keyss__immutable
     '''.split()
 
 
@@ -60,4 +63,22 @@ def sum_dicts__immutable(dicts):
         d.update(x)
     return d
 
-
+def partition_by_keyss__immutable(dict_, keyss):
+    return list(iter_partition_by_keyss__immutable(dict_, keyss))
+def iter_partition_by_keyss__immutable(dict_, keyss):
+    s = set()
+    for keys in keyss:
+        d = {}
+        for key in keys:
+            if key in d:
+                pass
+            elif key in s:
+                raise KeyError(f'keyss not partition: duplicate key: {key!r}')
+            else:
+                d[key] = dict_[key]
+                s.add(key)
+        yield d
+    if len(s) != len(dict_):
+        diff = s^set(dict_)
+        raise KeyError(f'keyss not partition of the input mapping: diff={diff!r}')
+    return

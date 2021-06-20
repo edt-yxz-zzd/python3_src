@@ -1,0 +1,9 @@
+
+__std_repr__
+  __str__
+  __repr__
+  __std_repr__
+  __eq__ <==> cmp __std_repr__
+  for debugging by doctest
+    when showing set/mapping
+

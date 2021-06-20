@@ -1,5 +1,14 @@
 
 r'''
+
+py -m nn_ns.filedir.backup_tools.fsys_mapping_patch
+
+
+
+
+
+
+
     , echo_valueonly_fsys_mapping_or_patch_idx
     , echo_valueonly_fsys_mapping
     , mk_valueonly_fsys_mapping__depth_eq_1
@@ -34,6 +43,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 
 from nn_ns.filedir.backup_tools.fsys_mapping_ex import using_FrozenDict_as_valueonly_fsys_mapping_ex, check_valueonly_fsys_patch_mapping, check_fsys_mapping, check_valueonly_fsys_mapping, Visit__fsys_patch_mapping, check_fsys_frozendict, check_valueonly_fsys_mapping_or_patch_idx, get_tmay_sub_fsys_mapping_or_patch_idx, zip_up4fsys_mapping_ex__seq, mk_ireplace_mapping_tmay_by_mapping_from_dict, mkdirs_to_update4valueonly_fsys_mapping_ex
 
+from nn_ns.filedir.relative_path_ops import is_relative_path_empty
 
 
 from seed.helper.check.checkers import check_int
@@ -44,6 +54,7 @@ from seed.types.FrozenDict import FrozenDict
 from seed.tiny import echo
 
 from enum import Flag, auto
+from collections.abc import Mapping
 
 if not using_FrozenDict_as_valueonly_fsys_mapping_ex:
     from .somewhere import mk_fsys_mapping_view, deepcopy_fsys_mapping_as_fsys_dict
@@ -154,7 +165,16 @@ def offsetted_valueonly_fsys_mapping_patch_ex(*, merge_case2skip_or_replace, old
 
     ireplace_mapping_tmay = mk_ireplace_mapping_tmay_by_mapping_from_dict(valueonly_fsys_mapping_ex_from_dict)
     tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj = (offsetted_new_root_valueonly_fsys_mapping,)
-    new_valueonly_fsys_mapping = zip_up4fsys_mapping_ex__seq(ireplace_mapping_tmay, parts, ancestors, tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj)
+    if not parts:
+        assert is_relative_path_empty(dst_dir_relative_path)
+        if not tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj: raise logic-err
+        [buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj] = tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj
+        #print(type(buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj))
+        if not isinstance(buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj, Mapping): raise logic-err
+        buttom_fsys_mapping_ex = buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj
+        new_valueonly_fsys_mapping = buttom_fsys_mapping_ex
+    else:
+        new_valueonly_fsys_mapping = zip_up4fsys_mapping_ex__seq(ireplace_mapping_tmay, parts, ancestors, tmay_buttom_fsys_mapping_ex_or_pseudo_virtual_file_reprobj)
     return new_valueonly_fsys_mapping
 
 def valueonly_fsys_mapping_patch_ex(*, merge_case2skip_or_replace, old_valueonly_fsys_mapping, valueonly_fsys_patch_mapping):
@@ -171,6 +191,7 @@ def valueonly_fsys_mapping_patch_ex(*, merge_case2skip_or_replace, old_valueonly
     return new_valueonly_fsys_mapping
 
 if using_FrozenDict_as_valueonly_fsys_mapping_ex:
+
     #fsys_dict_patch
     def fsys_frozendict_patch(old_fsys_frozendict, fsys_patch_frozendict, /):
         return valueonly_fsys_mapping_patch(old_valueonly_fsys_mapping=old_fsys_frozendict, valueonly_fsys_patch_mapping=fsys_patch_frozendict)
@@ -474,6 +495,11 @@ class _Visit__fsys_patch_mapping4fsys_mapping_patch(Visit__fsys_patch_mapping):
 
             #inherit from old
             inherits = set(old_this_xdict)-set(valueonly_fsys_patch_mapping)
+            if 0:#[01_to_turn_off]
+                print(fr'ancestors_view={ancestors_view}')
+                print(fr'inherits={inherits}')
+                print(fr'set(old_this_xdict)={set(old_this_xdict)}')
+                print(fr'set(valueonly_fsys_patch_mapping)={set(valueonly_fsys_patch_mapping)}')
             if 0:
                 neednot and shouldnot
                 saved_ancestors_view = ancestors_view
@@ -524,7 +550,8 @@ class _Visit__fsys_patch_mapping4fsys_mapping_patch(Visit__fsys_patch_mapping):
 
         #may overwrite!
         #copy or copy&overwrite
-        the_into_dst_old_fsys_xdict = sf.old_this_xdicts[-1]
+        #??the_into_dst_old_fsys_xdict = sf.old_this_xdicts[-1]
+        the_into_dst_old_fsys_xdict = sf.old_fsys_xdicts[-1]
         if basename in the_into_dst_old_fsys_xdict:
             #copy&overwrite
             the_overwrited_old_fsys_xdict_or_patch_idx = the_into_dst_old_fsys_xdict[basename]
@@ -598,3 +625,22 @@ class _Visit__fsys_patch_mapping4fsys_mapping_patch(Visit__fsys_patch_mapping):
 #end of _Visit__fsys_patch_mapping4fsys_mapping_patch
 
 
+
+
+
+def _t():
+    from pathlib import PurePosixPath
+    #old-lhs
+    old_fsys_frozendict=FrozenDict({'diff_dir': FrozenDict({'a': FrozenDict({})}), 'diff_file': 0, 'ldir_rfile': FrozenDict({'a': FrozenDict({})}), 'lfile_rdir': 1, 'lonly_dir': FrozenDict({'a': FrozenDict({})}), 'lonly_file': 2, 'same': FrozenDict({'e': FrozenDict({}), 'f': 3, 'g': 4, 'h': 5, 'i': FrozenDict({'a': FrozenDict({})}), 'j': FrozenDict({'b': 6}), 'k': FrozenDict({'c': 7}), 'l': FrozenDict({'d': 8}), 'm': FrozenDict({'e': FrozenDict({}), 'f': 9, 'g': 10, 'h': 11})})})
+    dst_dir_relative_path=PurePosixPath('.')
+    offsetted_fsys_patch_frozendict=FrozenDict({'diff_dir': FrozenDict({'a': None, 'b': 12}), 'diff_file': 13, 'ldir_rfile': 14, 'lfile_rdir': FrozenDict({'b': 15}), 'lonly_dir': None, 'lonly_file': None, 'ronly_dir': FrozenDict({'b': 16}), 'ronly_file': 17})
+
+    #new-rhs
+    expected__new_fsys_frozendict=FrozenDict({'diff_dir': FrozenDict({'b': 12}), 'diff_file': 13, 'ldir_rfile': 14, 'lfile_rdir': FrozenDict({'b': 15}), 'ronly_dir': FrozenDict({'b': 16}), 'ronly_file': 17, 'same': FrozenDict({'e': FrozenDict({}), 'f': 3, 'g': 4, 'h': 5, 'i': FrozenDict({'a': FrozenDict({})}), 'j': FrozenDict({'b': 6}), 'k': FrozenDict({'c': 7}), 'l': FrozenDict({'d': 8}), 'm': FrozenDict({'e': FrozenDict({}), 'f': 9, 'g': 10, 'h': 11})})})
+
+
+
+
+    result__new_fsys_frozendict = offsetted_fsys_frozendict_patch(old_fsys_frozendict, dst_dir_relative_path, offsetted_fsys_patch_frozendict)
+    assert result__new_fsys_frozendict == expected__new_fsys_frozendict
+_t()
