@@ -88,6 +88,84 @@ debug:
 
 
 
+
+
+
+# copy to python3_src/my_convention/backup_cmds.txt
+
+[[[working_cmds4loop
+#################################
+#################################
+##### working cmds for loop #####
+#################################
+#################################
+
+=====init-loop-for-src
+
+export src_from=/sdcard/0my_files/git_repos/python3_src/
+export src_to=/sdcard/0my_files/my_backup/python3_src/
+export tmp=/sdcard/0my_files/tmp/
+export src_to4manual=/mnt/m_external_sd/000edt/0my_files/my_backup/python3_src/
+export branch_name=my_src
+
+
+export xxx_from=$src_from
+export xxx_to=$src_to
+export xxx_to4manual=$src_to4manual
+export my_xxx=$branch_name
+
+=====init-loop-for-txt
+
+export txt_from=/sdcard/0my_files/git_repos/txt_phone/txt/
+export txt_to=/sdcard/0my_files/my_backup/txt_phone__txt/
+export tmp=/sdcard/0my_files/tmp/
+export txt_to4manual=/mnt/m_external_sd/000edt/0my_files/my_backup/txt_phone__txt/
+export branch_name=my_txt
+
+
+export xxx_from=$txt_from
+export xxx_to=$txt_to
+export xxx_to4manual=$txt_to4manual
+export my_xxx=$branch_name
+
+
+=====begin-loop
+
+echo $xxx_from
+echo $xxx_to
+echo $tmp
+echo $xxx_to4manual
+echo $my_xxx
+cd $tmp/
+
+
+py -m nn_ns.filedir.backup_tools.main cmp_branch_dir -cache $xxx_to/extra -repos $xxx_to/repos -name $my_xxx -workdir $xxx_from -oX $tmp/$my_xxx/out__result_of_dir_cmp__relative__extended.txt -encoding_ignorefile4workdir :utf8@___ignorefile4dir_cmp___ --mtime_eq_as_same_file -f
+view $tmp/$my_xxx/out__result_of_dir_cmp__relative__extended.txt
+
+py -m nn_ns.filedir.backup_tools.main update_branch -cache $xxx_to/extra -repos $xxx_to/repos -name $my_xxx -workdir $xxx_from -iX $tmp/$my_xxx/out__result_of_dir_cmp__relative__extended.txt
+
+
+py -m nn_ns.filedir.dir_cmp $xxx_to4manual $xxx_to --cmp_fsys_tree_only
+py -m nn_ns.filedir.dir_cmp $xxx_to4manual $xxx_to --size_eq_as_same_file
+
+=====end-loop
+
+#################################
+#################################
+#################################
+#################################
+#################################
+]]]#working_cmds4loop
+
+
+
+
+
+
+
+
+
+
 [[[working_cmds:
 #################################
 #################################
@@ -112,15 +190,18 @@ python3_src/___ignorefile4dir_cmp___:
 export src_from=/sdcard/0my_files/git_repos/python3_src/
 export src_to=/sdcard/0my_files/my_backup/python3_src/
 export tmp=/sdcard/0my_files/tmp/
+export src_to4manual=/mnt/m_external_sd/000edt/0my_files/my_backup/python3_src/
+    #copy manually, since termux has no write permission
 
 echo $src_from
 echo $src_to
 echo $tmp
+echo $src_to4manual
+cd $tmp/
+    #proof from misused relative_path
 
 mkdir $src_to
 mkdir $tmp/my_src/
-cd $tmp/
-    #proof from misused relative_path
 
 py -m nn_ns.filedir.backup_tools.main init_repository -cache $src_to/extra -repos $src_to/repos
 py -m nn_ns.filedir.backup_tools.main init_branch -cache $src_to/extra -repos $src_to/repos -name my_src
@@ -135,23 +216,27 @@ py -m nn_ns.filedir.backup_tools.main extract_branch -cache $src_to/extra -repos
 
 py -m nn_ns.filedir.dir_cmp $src_from $tmp/my_src/extract/ -ige utf8 -ig $src_from/___ignorefile4dir_cmp___
 
+py -m nn_ns.filedir.dir_cmp $src_to4manual $src_to --size_eq_as_same_file
 
 
 =====
 =====
 =====
 export txt_from=/sdcard/0my_files/git_repos/txt_phone/txt/
-export txt_to=/sdcard/0my_files/my_backup/txt_phone/
+export txt_to=/sdcard/0my_files/my_backup/txt_phone__txt/
 export tmp=/sdcard/0my_files/tmp/
+export txt_to4manual=/mnt/m_external_sd/000edt/0my_files/my_backup/txt_phone__txt/
+    #copy manually, since termux has no write permission
 
 echo $txt_from
 echo $txt_to
 echo $tmp
+echo $txt_to4manual
+cd $tmp/
+    #proof from misused relative_path
 
 mkdir $txt_to
 mkdir $tmp/my_txt/
-cd $tmp/
-    #proof from misused relative_path
 
 py -m nn_ns.filedir.backup_tools.main init_repository -cache $txt_to/extra -repos $txt_to/repos
 py -m nn_ns.filedir.backup_tools.main init_branch -cache $txt_to/extra -repos $txt_to/repos -name my_txt
@@ -167,12 +252,22 @@ py -m nn_ns.filedir.backup_tools.main extract_branch -cache $txt_to/extra -repos
 
 py -m nn_ns.filedir.dir_cmp $txt_from $tmp/my_txt/extract/
 
+py -m nn_ns.filedir.dir_cmp $txt_to4manual $txt_to --size_eq_as_same_file
+
 #################################
 #################################
 #################################
 #################################
 #################################
 ]]]#working_cmds
+
+
+
+
+
+
+
+
 
 
 

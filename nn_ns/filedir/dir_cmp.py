@@ -1220,12 +1220,12 @@ def main(args=None):
     parser.add_argument('--mtime_ne_as_not_same_file', action='store_true'
                         , default = False
                         , help='one of mk_is_same_file kwargs')
-    parser.add_argument('--max_size_threshold4cmp_content', type=int, default=-1
+    parser.add_argument('--imay_max_size_threshold4cmp_content', type=int, default=-1
                         , help='max_size_threshold4cmp_content >= -1; if max_size_threshold4cmp_content==-1(default) then no limits else file whose size > max_size_threshold4cmp_content will be skip cmp content')
 
     args = parser.parse_args(args)
     max_depth = args.max_depth
-    imay_max_size_threshold4cmp_content = args.max_size_threshold4cmp_content
+    imay_max_size_threshold4cmp_content = args.imay_max_size_threshold4cmp_content
     igencoding = args.ignorefile_encoding
     oencoding = args.output_file_encoding
     omode = 'wt' if args.force else 'xt'
@@ -1241,6 +1241,7 @@ def main(args=None):
         is_same_file = is_same_file__True
     else:
         r'''
+        always_tribool_as_is_or_not_same_file
         size_eq_as_same_file
         size_hash0_eq_as_same_file
         hash_eq_as_same_file
@@ -1252,13 +1253,13 @@ def main(args=None):
         is_same_file = mk_is_same_file(
             xhs_access_file
             , xhs_access_file
+            , always_tribool_as_is_or_not_same_file=True if args.cmp_fsys_tree_only else ...
             , size_eq_as_same_file=args.size_eq_as_same_file
             , size_hash0_eq_as_same_file=args.size_hash0_eq_as_same_file
             , hash_eq_as_same_file=args.hash_eq_as_same_file
             , mtime_eq_as_same_file=args.mtime_eq_as_same_file
             , mtime_ne_as_not_same_file=args.mtime_ne_as_not_same_file
-            #, imay_max_size_threshold4cmp_content=args.imay_max_size_threshold4cmp_content
-            , imay_max_size_threshold4cmp_content=args.max_size_threshold4cmp_content
+            , imay_max_size_threshold4cmp_content=args.imay_max_size_threshold4cmp_content
             )
     is_same_file
 

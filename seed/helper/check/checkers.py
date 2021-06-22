@@ -1,6 +1,7 @@
 #HHHHH
 r'''
 e ../../python3_src/seed/helper/check/checkers.py
+debug_pym seed.helper.check.checkers
 py -m seed.helper.check.checkers
 from seed.helper.check.checkers import checks, checkers, check_funcs
 
@@ -23,6 +24,10 @@ check_identifier <: check_module <: check_str
 check_identifier <: check_pseudo_identifier <: check_str
 
 #'''
+
+
+
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.tiny import str2__all__
 __all__ = str2__all__(r'''#)
     checkers
@@ -105,6 +110,7 @@ __all__ = str2__all__(r'''#)
     check_tmay
     check_nmay
     check_is_obj_or
+    check_obj_is
     #
     check_strict_sorted
     check_int_ge1
@@ -159,6 +165,7 @@ from collections.abc import Mapping, Set, Sequence
 from collections.abc import Container, Iterable
 from seed.tiny import is_iterator, is_reiterable, fst, snd
 from seed.iters.is_sorted import is_sorted, is_strict_sorted
+from seed.types.FrozenDict import FrozenDict
 
 
 if 0:
@@ -181,6 +188,7 @@ from seed.types.TriBoolOps import TriBoolOps#is_tribool
 
 
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 #####################################
 #####################################
@@ -337,6 +345,10 @@ def check_is_obj_or(obj, check_func, x, /,*, cls=None):
             check_instance(cls, x)
         if check_func is not None:
             check_func(x)
+        if cls is None is check_func:
+            raise CheckFail
+def check_obj_is(obj, x, /):
+    if x is not obj: raise CheckFail
 
 
 #########################################
