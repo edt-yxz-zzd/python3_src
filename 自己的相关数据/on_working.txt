@@ -1,13 +1,22 @@
+
+e ../../python3_src/seed/recognize/CmdlinePrefixParser.py
+
+
+
 backup_tools
   nn_ns.filedir.backup_tools._debug
   nn_ns.filedir.backup_tools._test_main
     nn_ns.filedir.backup_tools.main
     nn_ns.filedir.backup_tools.filedir_cmp_utils__repository__fsys_mapping
+  DONE-basic
 
 
 view /sdcard/0my_files/tmp/src/glob.py
   py-3.8::glob
   e /sdcard/0my_files/tmp/src/glob_ex.py
+  e ../../python3_src/seed/for_libs/for_glob/IGlob.py
+  e ../../python3_src/seed/for_libs/for_glob/glob_match.py
+  DONE
 
 
 finger_tree_ops
