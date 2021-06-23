@@ -66,23 +66,45 @@ my argparser
       -h/--help is another example
     * subcmd of subcmd, options before subcmd ...
     * prefix as arg case/type
-      '*' ==>> subcmd
+      '**' ==>> subcmd
+      '+' ==>> option
+        take args until eol or non-arg
+        array vs tuple
       '-' ==>> option
         take exactly one arg
           can use kw '[' ']' to group
           or use ',' prefix'
-      '?' ==>> switch
+          ===now:
+          [{tag} ]{tag}
+            not use ',' prefix, since ',[' hard to impl
+      '?' ==>> switch/help/query-default-choices
+        #switch
         '?-' off
-        '?+'
-      '&' ==>> var
-      '#' ==>> int
-      '@' ==>> path
+        '?+' on
+        #help/query-default-choices
+        '?:'
+            '?:??' for switch
+            '?:+' for option
+            '?:-' for option
+            '?:**' for subcmd
+
+      '&' ==>> define var
+        usage: setting path used locally(this cmd only, hs::let)
+            <==> let x=y in z
+            z is format_str: {x}
+        xxx regex'&[^=]*='
+        regex'&.*'
+            take exactly one arg
+                not allow '['
+                expect str formated? escaped?
+      xxx '#' ==>> int
+      xxx '@' ==>> path
         prefix regex'@(/|./|&)'
         '@/' abspath
         '@./' relative_path
         '@&' spec named file STDOUT DEVNULL...
       '=' ==>> str
-        prefix regex'=(regex|glob)?[=&][=~]'
+        prefix regex'=(\[(regex|glob)])?[=&][=~]'
         (regex|glob)? str or regex or glob
         [=&] formated? {var} or &{var} or {&var}
         [=~] raw vs escaped
