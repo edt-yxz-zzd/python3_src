@@ -5,6 +5,36 @@ call by
     all method inform:
         def f(..., /,*, qsymbol2arg)
 
+
+
+#define qname:space(open/pkg vs close/module/class/class~method~kw) vs nonspace
+    "open_space::open_space"
+    "open_space::close_space"
+    no: "open_space::nonspace"
+
+    no: "close_space.open_space"
+    "close_space.close_space"
+    "close_space..callable_xspace"
+    "close_space...noncallable_nonspace"
+
+    "callable_xspace**kwarg"
+    =====
+    nonspace may be callable
+        ==>> named kw...
+    =====
+
+    secret_obj4opening_space_qname = define_new_open_space_name(secret_obj4opening_parent_space_qname, subspace_name)
+        #always open for add new subspace #not nonspace
+        #publish immediately
+    secret_obj4opening_space_qname = open_new_close_space_name(secret_obj4opening_parent_space_qname, subspace_name)
+        #LookupError:exist
+    define_new_nonspace_name(secret_obj4opening_space_qname, nonspace_name, descriptor)
+        #LookupError:exist
+    close_and_publish_new_space_name(secret_obj4opening_space_qname)
+        #now, the new qname is visible
+
+
+
 constraint on subclass
     constraint on single kw/qsymbol
         subclass.kwarg <= super.kwarg
