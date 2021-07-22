@@ -6,4 +6,7 @@
 -glob:'**/parser.out/**'
 -glob:'**/.mypy_cache'
 -glob:'**/.mypy_cache/**'
+-glob:'script/cpp/**/*.out'
+-glob:'script/cpp/**/*.o'
+-glob:'script/cpp/**/*.gch'
 
