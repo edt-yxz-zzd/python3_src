@@ -15,3 +15,11 @@
 #mypy - static typing information
 /**/.mypy_cache
 
+#clang output
+/script/cpp/**/*.out
+/script/cpp/**/*.o
+/script/cpp/**/*.gch
+
+
+
+
