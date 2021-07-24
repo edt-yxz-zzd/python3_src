@@ -56,7 +56,7 @@ int _main(const int argc, char const *const *const argv){
 
   const std::string program_name {argv[0]};
   std::vector<std::string> args {argv+1, argv+argc};
-  //for (int i=1; i < argc; ++i){ args.empush_back(argv[i]); }
+  //for (int i=1; i < argc; ++i){ args.emplace_back(argv[i]); }
   try{
     return main4string(program_name, args);
   }catch (...){
