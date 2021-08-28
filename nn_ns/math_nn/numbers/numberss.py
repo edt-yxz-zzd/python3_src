@@ -24,6 +24,10 @@ class NumberList(INumberList__nums__concrete_mixins):
     __slots__ = 'nums'
     @override
     def __please_add_nums_to_slots__(self):pass
+    @override
+    def _calc_pos(self, n, nums):
+        #calc for positive n
+        return super()._calc_pos(n, nums)
 class NumberTable(INumberTable__table__concrete_mixins):
     __slots__ = 'table'
     @override

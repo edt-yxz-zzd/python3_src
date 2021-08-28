@@ -25,22 +25,25 @@ def delta_fill_minfactors(minfactors, L):
 
         minfactors.extend(p if p else n for n, p in enumerate(ls,N0))
     return
-                    
+
 
 
 
 class MinFactor(NumberList):
     'min_factor(n) = abs(n) if -2<n<2 else the minimum prime factor of abs(n)'
 
-    
-    def _calc_neg(self, n, nums):
+    def _lookup_neg(self, n, nums):
         assert n < 0
         return nums[-n]
+
+    def _calc_neg(self, n, nums):
+        assert n < 0
+        return self._calc_pos(-n, nums)
         raise NotImplementedError()
-    
+
     def _fill_when_neg(self, n):
         self.fill_len(-n+1)
-    
+
     def fill_len(self, L):
         n = len(self.nums)
         if n < L:
@@ -49,13 +52,13 @@ class MinFactor(NumberList):
         assert len(self.nums) >= L
         return
 
-    
+
     def __init__(self):
         super().__init__([0,1])
 
 
 
-        
+
 
 min_factor = MinFactor()
 #print(min_factor.get_first(20))
