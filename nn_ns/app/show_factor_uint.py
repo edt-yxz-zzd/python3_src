@@ -2,6 +2,11 @@
 r'''
 py -m nn_ns.app.show_factor_uint
 cp -T /sdcard/0my_files/git_repos/txt_phone/txt/script/factor_uint.py /sdcard/0my_files/git_repos/python3_src/nn_ns/app/show_factor_uint.py
+
+
+view ../../python3_src/nn_ns/app/show_factor_uint.py
+py -m nn_ns.app.show_factor_uint --coprime_le 0 --uint_le 100000 > /sdcard/0my_files/tmp/out4py/factor_uint.py.100000_0.out.txt
+view /sdcard/0my_files/tmp/out4py/factor_uint.py.100000_0.out.txt
 =================================
 =================================
 =================================

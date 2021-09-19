@@ -15,7 +15,7 @@ headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/2010
     # to avoid HTTP Error 403:Forbidden
 
 def fetch_webpage(url):
-    return open_webpage(url).read()
+    return open_webpage(url).read()#bytes!!!
 def open_webpage(url):
     assert url.startswith('http://') or url.startswith('https://')
     #return urlopen(url)
