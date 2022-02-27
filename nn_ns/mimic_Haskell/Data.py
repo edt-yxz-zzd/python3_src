@@ -23,6 +23,17 @@ view /sdcard/0my_files/tmp/out4py/nn_ns.mimic_Haskell.Data.debug.txt
 e ../../python3_src/nn_ns/mimic_Haskell/Data.py
 !mkdir ../../python3_src/nn_ns/mimic_Haskell/
 
+
+
+example:
+    see:
+        _test_compile__mix2____MultiInputUnboxedRecurLet4hs()
+
+
+
+
+
+
 syntactic-data@post-parse~~pre-compile
 semantic-data@post-compile~~pre-execute
 
@@ -251,6 +262,10 @@ TODO:
     remove Data4hs from both_Semantic4hs_Syntactic4hs
         Data4hs CtorH4hs [MixSyntactic4hs]
             -->> Apps4hs [CtorH4hs, ...]
+        =====TODO:cancel this remove
+            Apps4hs [MixSyntactic4hs]
+            is_obj4hs(CtorH4hs)
+            need to known N_ary/num_args4call
 
     #################################
     DONE
@@ -326,7 +341,7 @@ TODO:
                 # by deep_check_Semantic4hs, not just shallow check type(obj)
         ######################
         mix1 =:
-            | both_Semantic4hs_Syntactic4hs(Apps4hs)
+            | both_Semantic4hs_Syntactic4hs(Apps4hs/++Data4hs??)
                 # by shallow check is both_Semantic4hs_Syntactic4hs + recur deep_check_mix1
             | mix0
                 # check after both_Semantic4hs_Syntactic4hs
@@ -435,6 +450,10 @@ TODO:
         MultiInputUnboxedRecurLet4hs
             # let f a [b] = ...
             #     f [a] b = ...
+    #################################
+    TODO
+      compile__mix2...Data4hs transparent or unbox as Apps4hs...
+      consider (x,y) ie Data4hs(ctor4hs, var...)
     #################################
     TODO
     MixSyntactic4hs.___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ :: {cls} or ()->{cls}
@@ -712,6 +731,7 @@ rebuild_apps5output
     mk_apps5iter
     whnf_reduce4apps
     deep_reduce4apps
+    deep_reduce4apps_
     check_intXs_between
     check_uintXs_lt
     check_uintXs
@@ -760,6 +780,7 @@ rebuild_apps5output
     mk_Tuple4Data4hs_
     mk_f4hs__Tuple4Data4hs_
     ctor4hs_to_f4hs
+    ctor4Pair4hs
     VarTypes4get
     check_var
     is_var
@@ -777,6 +798,7 @@ rebuild_apps5output
     OutputUnboxedStepSugarLet4hs
     OutputUnboxedRecurLet4hs
     MultiInputUnboxedRecurLet4hs
+    mk_MultiInputUnboxedRecurLet4hs
     InputUnboxedLambda4hs
     is_tuple
     is_pair
@@ -845,10 +867,12 @@ from collections import Counter
 from seed.tiny import fst, snd, echo, mk_tuple, check_uint, check_callable, MapView, check_type_is, check_pair#, check_tuple, check_bool
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt as check_int_between #, check_int_ge, check_int_ge_le
 from seed.helper.repr_input import repr_helper
+from seed.tiny import expectError
 from seed.tiny import iter_cls_member_pairs_in_mro_at, get_mro4cls, get_dict4cls#, get_dict4obj
 from seed.tiny import get5cls, call5cls, get5cls_, call5cls_
 from seed.types.RopeOps import RopeOps
 from seed.seq_tools.seq_index_if import seq_find_if #seq_index, seq_index_if, seq_find, seq_find_if
+from seed.tiny_.containers import null_frozenset, mk_frozenset #null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -1019,6 +1043,10 @@ class IIsCls4Obj4hs(ABC4check, metaclass=Meta4check_cls_members_consistent):
     @abstractmethod
     def ___shallow_degrade_unless_mix2___(sf, /):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
+
+    @abstractmethod
+    class ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___:
+        ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
     r'''
     @abstractmethod
     #see:_deep_convert_to_mixN
@@ -1060,6 +1088,10 @@ class IHasNoInnerMixSyntactic4hs(IIsCls4Obj4hs):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
         return sf
 
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
+
 
 class ___0:
     __slots__ = ()
@@ -1069,6 +1101,8 @@ class BaseSyntactic4hs(IIsCls4Obj4hs, ___1, ___0):
     'syntactic'
     __slots__ = ()
     ___is_cls4obj4hs___ = False
+
+    #################################
 class BaseSemantic4hs(IIsCls4Obj4hs, ___0, ___1):
     'semantic'
     __slots__ = ()
@@ -1383,6 +1417,10 @@ class _Apps4hs(_ITuple, IReduceable4apps4hs):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
         raise NotImplementedError#user should never see it!
 
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
+
     #@@_Apps4hs
     #@override
     if 0:
@@ -1605,6 +1643,10 @@ class _Placeholder4hs(BaseSemantic4hs, IReduceable4apps4hs, ABC4check, metaclass
         return sf
         return _get_output4placeholder(sf)
 
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
+
     #@@_Placeholder4hs
     #@override
     def __init__(apps, may_input, may_output, /, **kwargs4repr_detail):
@@ -1779,9 +1821,9 @@ class Apps4hs(_Placeholder4hs):
     #       but Infix4hs required cmp operator-precedence
     #
     # collect-[[both_Semantic4hs_Syntactic4hs]]:
-    #   both Semantic4hs&&Syntactic4hs: Apps4hs
-    #   now not include Data4hs
-    #       using Apps4hs [CtorH4hs, mix...]
+    #   both Semantic4hs&&Syntactic4hs: Apps4hs, Data4hs
+    #   cancel!!!##now not include Data4hs
+    #       err:using Apps4hs [CtorH4hs, mix...]
     #       not Data4hs CtorH4hs [MixSyntactic4hs]
     #
     #
@@ -1804,6 +1846,10 @@ class Apps4hs(_Placeholder4hs):
     def ___shallow_degrade_unless_mix2___(sf, /):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
         return sf
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
     #@override
@@ -2518,9 +2564,9 @@ the_undefined = Error4hs('the_undefined')
 #class Tuple4Data4hs -->> CtorH4hs -->> Tuple4CtorH4hs -> Ctor4Tuple4Data4hs
 #   mk_Ctor4Tuple4Data4hs
 class Data4hs(_ITuple, BaseSemantic4hs, IReduceable4apps4hs):
-    r'''(constructor, *args) #Data4hs vs Tuple4Data4hs vs Undefined4hs
+    r'''(constructor, *args:[MixSyntactic4hs]) #Data4hs vs Tuple4Data4hs vs Undefined4hs
     #
-    # not see-[[both_Semantic4hs_Syntactic4hs]]
+    # see-[[both_Semantic4hs_Syntactic4hs]]
     #
     #'''
     __slots__ = ()
@@ -2529,7 +2575,8 @@ class Data4hs(_ITuple, BaseSemantic4hs, IReduceable4apps4hs):
     def ___deep_check_mixN___(sf, recur_check, /):
         '-> None #apply recur_check on inner MixSyntactic4hs'
         _, *args = sf
-        _eat_iter(map(recur_check, sf))
+        #bug:_eat_iter(map(recur_check, sf))
+        _eat_iter(map(recur_check, args))
         return
     #@override
     def ___fmap_on_child_mixN___(sf, recur_convert, /):
@@ -2539,8 +2586,20 @@ class Data4hs(_ITuple, BaseSemantic4hs, IReduceable4apps4hs):
     #@override
     def ___shallow_degrade_unless_mix2___(sf, /):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
-        return sf
+        if not _is_cls_both(__class__):
+            return sf
+        else:
+            #both_Semantic4hs_Syntactic4hs
+            #unbox into Apps4hs
+            (ctor4hs, *args) = sf
+            N = len(args)
+            f4hs = ctor4hs_to_f4hs(N, ctor4hs)
+            return mk_apps(f4hs, *args)
     #@override
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
     #@override
@@ -3074,6 +3133,10 @@ class Expr8List4hs(_ITuple, BaseSyntactic4hs):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
         return sf
 
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
+
 
     #@override
     def ___pre_check___(cls4py, /, *expr_flow):
@@ -3102,6 +3165,10 @@ class Lambda4hs(_ITuple, BaseSyntactic4hs):
     def ___shallow_degrade_unless_mix2___(sf, /):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
         return sf
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
     #@override
@@ -3157,6 +3224,12 @@ class RecurLet4hs(ILet4hs):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
         pairs4def, body = sf
         return _AsIfPrimeRecurLet4hs(pairs4def, body)
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        _AsIfPrimeRecurLet4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 Let4hs = RecurLet4hs
 
 class _AsIfPrimeRecurLet4hs(RecurLet4hs):
@@ -3188,6 +3261,10 @@ class _AsIfPrimeRecurLet4hs(RecurLet4hs):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
         return sf
 
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
+
 class BlockSugarLet4hs(ILet4hs):
     __slots__ = ()
     ___is_cls4obj4hs___ = False
@@ -3199,6 +3276,12 @@ class BlockSugarLet4hs(ILet4hs):
         params = mk_tuple(map(fst, pairs4def))
         f4hs = Lambda4hs(params, body)
         return mk_apps(f4hs, *map(snd, pairs4def))
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        Lambda4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
 
@@ -3214,6 +3297,12 @@ class StepSugarLet4hs(ILet4hs):
             f4hs = Lambda4hs((var,), body)
             body = mk_apps(f4hs, rhs)
         return body
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        Lambda4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 class IOutputUnboxedLet4hs(_ITuple, BaseSyntactic4hs):
     '(pairs4def:[(xpattern_lhs:XPattern4hs, rhs:MixSyntactic4hs)], body:MixSyntactic4hs)'
@@ -3269,6 +3358,12 @@ class OutputUnboxedBlockSugarLet4hs(IOutputUnboxedLet4hs):
         f4hs = InputUnboxedLambda4hs(xpatterns8params, body)
         return mk_apps(f4hs, *map(snd, pairs4def))
 
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        InputUnboxedLambda4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
+
 
 #OutputUnboxedStepSugarLet4hs -> InputUnboxedLambda4hs
 class OutputUnboxedStepSugarLet4hs(IOutputUnboxedLet4hs):
@@ -3283,6 +3378,12 @@ class OutputUnboxedStepSugarLet4hs(IOutputUnboxedLet4hs):
             f4hs = InputUnboxedLambda4hs((xpattern_lhs,), body)
             body = mk_apps(f4hs, rhs)
         return body
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        InputUnboxedLambda4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
 PathIndex4Data4hs
@@ -3339,6 +3440,12 @@ class OutputUnboxedRecurLet4hs(IOutputUnboxedLet4hs):
             var_rhs_pairs = mk_tuple(_it(pairs4def))
             return RecurLet4hs(var_rhs_pairs, body)
         return main()
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        RecurLet4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
 #MultiInputUnboxedRecurLet4hs -> OutputUnboxedRecurLet4hs
@@ -3417,6 +3524,12 @@ class MultiInputUnboxedRecurLet4hs(_ITuple, BaseSyntactic4hs):
 
 
         return main()
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        OutputUnboxedRecurLet4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
     #@override
     def ___pre_check___(cls4py, pairs4data_def, triples4func_def, body, /):
@@ -3533,6 +3646,12 @@ class InputUnboxedLambda4hs(_ITuple, BaseSyntactic4hs):
         case4hs = Case4hs(input4case, ((pattern, body),))
         f4hs = Lambda4hs(params, case4hs)
         return f4hs
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        Case4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
     #@override
@@ -3704,6 +3823,12 @@ class Case4hs(_ITuple, BaseSyntactic4hs):
         xpattern__to__params_ExtendedApp4Data4hs_pair
         ExtendedApp4Data4hs
 
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        BareCase4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
+
 
 
     #@override
@@ -3816,6 +3941,12 @@ class BareCase4hs(_ITuple, BaseSyntactic4hs):
         #return recur_convert(mk_apps(on_error, input4case))
         result__mix2 = mk_apps(i2o, input4case)
         return result__mix2
+
+    #@override
+    ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
+        Lambda4hs
+        '''
+    ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 
 
     #@override
@@ -4043,6 +4174,44 @@ XPatternTypes = frozenset(XPatternTypes)
 
 
 
+def _fulfill___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___(verbose, /):
+    '___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ from callable/str to frozenset'
+    import inspect
+    k = '___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___'
+    #only direct subclasses: for C in IIsCls4Obj4hs.__subclasses__():
+    to_do = {IIsCls4Obj4hs}
+    done = set()
+    #print(help(inspect.isabstract))
+    assert not inspect.isabstract(Lambda4hs)
+    #bug: why fail??: assert inspect.isabstract(IIsCls4Obj4hs)
+    while to_do:
+        C = to_do.pop()
+        if C in done: continue
+        done.add(C)
+        to_do.update(C.__subclasses__())
+        if verbose: print(C)
+        if inspect.isabstract(C): continue
+            #not work
+        if (C.__abstractmethods__): continue
+        if k not in C.__dict__:
+            if not issubclass(C, IHasNoInnerMixSyntactic4hs):
+                raise Exception(C)
+            continue
+        x = getattr(C, k)
+        if callable(x):
+            x = x()
+        ##
+        if type(x) is str:
+            x = mk_frozenset(globals()[nm] for nm in x.split())
+        x = mk_frozenset(x)
+        assert all(isinstance(cls, type) for cls in x)
+        setattr(C, k, x)
+        if verbose: print('    ', x)
+#_fulfill___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___(True)
+_fulfill___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___(False)
+
+
+
 assert is_cls4obj4hs(Apps4hs)
 assert is_cls4obj4hs(_Placeholder4hs)
 assert not is_cls4obj4hs(_Apps4hs)
@@ -4148,11 +4317,11 @@ def ___tmp_env():
     return deep_check_mix0
 deep_check_mix0 = ___tmp_env(); del ___tmp_env
 
-_Types4both = (Apps4hs,)
+_Types4both = (Apps4hs, Data4hs)
 def _is_cls_both(cls, /):
     #both_Semantic4hs_Syntactic4hs
-    return cls is Apps4hs
     return cls in _Types4both
+    return cls is Apps4hs
 def _is_obj_both(obj, /):
     #both_Semantic4hs_Syntactic4hs
     return _is_cls_both(type(obj))
@@ -4162,7 +4331,7 @@ def ___types2deep_check_mix_(Types, /):
         cls = type(mix)
         if (not _is_cls_both(cls)) and is_cls4obj4hs(cls):
             deep_check_mix0(mix)
-                #Semantic4hs except Apps4hs should not contain Syntactic4hs
+                #Semantic4hs except Apps4hs/Data4hs should not contain Syntactic4hs
         else:
             if not cls in Types: raise TypeError
                 #shallow_check
@@ -4170,7 +4339,7 @@ def ___types2deep_check_mix_(Types, /):
                 #recur_check
     return recur_check
 # mix1
-MixSyntactic4hs__Types4mix1 = frozenset([Expr8List4hs, Apps4hs, *VarTypes4get])
+MixSyntactic4hs__Types4mix1 = frozenset([Expr8List4hs, Apps4hs, Data4hs, *_Types4both, *VarTypes4get])
 # mix2
 MixSyntactic4hs__Types4mix2 = frozenset([_AsIfPrimeRecurLet4hs, Lambda4hs, *MixSyntactic4hs__Types4mix1])
 MixSyntactic4hs__Types4mix3 = frozenset([BareCase4hs, *MixSyntactic4hs__Types4mix2])
@@ -4179,6 +4348,9 @@ deep_check_mix1 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix1)
 deep_check_mix2 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix2)
 deep_check_mix3 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix3)
 deep_check_mix4 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix4)
+assert Data4hs in MixSyntactic4hs__Types4mix2
+assert Apps4hs in MixSyntactic4hs__Types4mix2
+assert _AsIfPrimeRecurLet4hs in MixSyntactic4hs__Types4mix2
 
 
 _deep_check_mixNs = (
@@ -4306,6 +4478,7 @@ scoped_vars - assume outer env exists
         if not_Lambda4hs:
             mix2 = Lambda4hs((), mix2)
         deep_check_mix2(mix2)
+
         payload4CASE_MIDWAY = _main4Lambda4hs(mix2, scoped_vars)
         return payload4CASE_MIDWAY
         return not_Lambda4hs, payload4CASE_MIDWAY
@@ -4753,6 +4926,10 @@ scoped_vars - assume outer env exists
         ##################################
         #'''
         cls = type(mix2)
+        if cls is Data4hs:
+            mix2 = shallow_degrade_unless_mix2(mix2)
+            cls = type(mix2)
+        assert cls is type(mix2) is not Data4hs
         if cls in (Apps4hs, Expr8List4hs):
             ls = [bottomup(scoped_vars, x, ofrees, ov2cxx) for x in mix2]
             if all(map(fst, ls)):
@@ -5040,6 +5217,35 @@ if 1:
     whnf_reduce4apps
     eq4output4apps
     rebuild_apps5output #to show
+
+def _test_compile__mix2___on_Data4hs():
+    r'''
+    \x y -> case (x,y) of
+        ...
+    Data4hs(ctor4Pair4hs, var_x, var_y)
+    but Var is Syntactic4hs not Semantic4hs
+    ...
+    #'''
+    ctor4Pair4hs
+    x = mk_var.x
+    y = mk_var.y
+    mixN = Data4hs(ctor4Pair4hs, x, y)
+    mix2 = deep_convert_to_mix2(mixN)
+    assert mix2 == mixN
+    deep_check_mix2(mixN)
+    payload4CASE_MIDWAY = compile__mix2(mixN, {})
+    (midway, inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs) = payload4CASE_MIDWAY
+    print(inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs)
+    assert global_FVs == (y, x)
+        #transparent-Data4hs as Apps4hs
+        #
+        #why not (x,y)?
+        #   FVs sorted by midway.nint2idc
+        #       see:ordered_by()
+        #   nint2idc index in reversed ordered: -1=x, -2=y, -3,...
+        #       put into seq [...,y,x]
+_test_compile__mix2___on_Data4hs()
+
 
 def _prepare_CombinatorSKIBC__Lambda4hs():
     x = mk_var.x
