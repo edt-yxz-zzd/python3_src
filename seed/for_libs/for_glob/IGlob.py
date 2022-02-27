@@ -263,6 +263,7 @@ _d = dict(
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class IGlob(ABC):
+    __slots__ = ()
     _iglob=_d['_iglob']
     _glob0=_d['_glob0']
     _iterdir=_d['_iterdir']
@@ -333,6 +334,7 @@ class IGlob(ABC):
         return dirname
 
 class Glob4real_fsys(IGlob, ISingleton):
+    __slots__ = ()
     @override
     def ___os_path_lexists___(sf, pathname, /):
         '-> bool'

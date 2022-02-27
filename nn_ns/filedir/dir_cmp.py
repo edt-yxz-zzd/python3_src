@@ -162,6 +162,9 @@ from pathlib import Path, PurePosixPath
 import os.path
 import time
 from abc import ABC, abstractmethod
+if 0:
+    from abc import ABC as _ABC, abstractmethod
+    from seed.abc.abc import ABC, abstractmethod
 from collections.abc import Set
 from seed.abc.abc import override
 #from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
@@ -183,6 +186,7 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 class Glob4IDirViewer(IGlob):
+    #remove___slots__ = ()
     def __init__(sf, dir_viewer, /):
         if not isinstance(dir_viewer, IDirViewer): raise TypeError
         sf.__dir_viewer = dir_viewer
@@ -211,6 +215,7 @@ class IDirViewer(ABC):
     r'''
     path::Path
     #'''
+    __slots__ = ()
     @abstractmethod
     def ___is_file___(sf, path):
         'path -> (bool|raise FileNotFoundError)'
@@ -565,6 +570,7 @@ def dir_cmp(is_same_file, lhs_dir_viewer, lhs_path, rhs_dir_viewer, rhs_path, /,
 
 class DirViewer__empty_root_dir(IDirViewer, ISingleton):
     'path::relative PurePosixPath'
+    __slots__ = ()
     @override
     def ___exists___(sf, path):
         'path -> bool'
@@ -589,6 +595,7 @@ assert the_empty_dir_viewer is DirViewer__empty_root_dir()
 
 
 class DirViewer__fsys(IDirViewer, ISingleton):
+    __slots__ = ()
     @override
     def ___exists___(sf, path):
         'path -> bool'
@@ -631,6 +638,7 @@ class IPseudoFile4MkIsSameFile(ABC):
         bytes2PseudoFile4MkIsSameFile
         binary_ifile2PseudoFile4MkIsSameFile
     #'''
+    __slots__ = ()
     @abstractmethod
     def ___read_all_remain_bytes___(sf, /):
         '-> remain_bytes'
@@ -676,6 +684,7 @@ class bytes2PseudoFile4MkIsSameFile(IPseudoFile4MkIsSameFile):
         bytes2PseudoFile4MkIsSameFile
         binary_ifile2PseudoFile4MkIsSameFile
     #'''
+    #remove___slots__ = ()
     def __init__(sf, bs:bytes, /):
         sf.__bs = bs
         sf.__pos = 0
@@ -717,6 +726,7 @@ class binary_ifile2PseudoFile4MkIsSameFile(IPseudoFile4MkIsSameFile):
         bytes2PseudoFile4MkIsSameFile
         binary_ifile2PseudoFile4MkIsSameFile
     #'''
+    #remove___slots__ = ()
     def __init__(sf, binary_ifile, /):
         sf.__bfin = binary_ifile
         sf.__pos = 0
@@ -753,6 +763,7 @@ class IAccessFile4MkIsSameFile(ABC):
     for MkIsSameFile
     path::Path
     #'''
+    __slots__ = ()
     @abstractmethod
     def open(sf, file_path):
         'file_path -> IPseudoFile4MkIsSameFile'
@@ -814,6 +825,7 @@ class AccessFile4MkIsSameFile__empty_root_dir(IAccessFile4MkIsSameFile, ISinglet
     for MkIsSameFile
     path::relative PurePosixPath
     #'''
+    __slots__ = ()
     def __raise_on_file_path(sf, file_path, /):
         raise raise_on_file_path__empty_root_dir(file_path)
 
@@ -837,6 +849,7 @@ assert the_empty_access_file is AccessFile4MkIsSameFile__empty_root_dir()
 
 
 class AccessFile4MkIsSameFile__fsys(IAccessFile4MkIsSameFile, ISingleton):
+    __slots__ = ()
     @override
     def get_file_size(sf, file_path):
         'file_path -> uint # unit:byte'
@@ -878,6 +891,7 @@ class MkIsSameFile:
     for is_same_file
     path::Path
     #'''
+    #remove___slots__ = ()
     def __init__(sf, lhs_access_file, rhs_access_file, /, *, always_tribool_as_is_or_not_same_file:'tribool', size_eq_as_same_file:bool, size_hash0_eq_as_same_file:bool, hash_eq_as_same_file:bool, mtime_eq_as_same_file:bool, mtime_ne_as_not_same_file:bool, imay_max_size_threshold4cmp_content:int, _block_size):
         'IAccessFile4MkIsSameFile -> IAccessFile4MkIsSameFile -> MkIsSameFile'
         if not isinstance(lhs_access_file, IAccessFile4MkIsSameFile):raise TypeError
