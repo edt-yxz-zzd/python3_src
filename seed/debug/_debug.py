@@ -116,13 +116,13 @@ def print_unbound_names_of_modules(qnames):
     excludes = '''
         logic err
         '''.split()
-    from seed.pkg_tools.dectect_all_unbound_names import DectectAllUnboundNames
+    from seed.pkg_tools.detect_all_unbound_names import DetectAllUnboundNames
 
 
     excludes = frozenset(excludes)
     for __name__ in qnames:
         print(f'module: {__name__}: unbound_name@space_lineno_list')
-        unbound_name2space_lineno_list = forgots = (DectectAllUnboundNames.from_module_qname(__name__))
+        unbound_name2space_lineno_list = forgots = (DetectAllUnboundNames.from_module_qname(__name__))
         #print(unbound_name2space_lineno_list)
         for unbound_name, space_lineno_list in unbound_name2space_lineno_list.items():
             if unbound_name not in excludes:

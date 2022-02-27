@@ -176,14 +176,6 @@ from seed.abc import abstractmethod, ABC, final, override
 import inspect # isabstract
 from collections.abc import Set, Sequence, Mapping
 from types import MappingProxyType
-"""
-from seed.types.EmptyMapping import (
-    empty_mapping
-    ,empty_set
-    ,empty_tuple
-    ,empty_iterator
-    )
-"""
 
 def is_str(obj): return type(obj) is str
 def are_strs(iterable): return all(map(is_str, iterable))

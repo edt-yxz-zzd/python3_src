@@ -1,23 +1,170 @@
+template4module:goto
+main:goto
+
 
 # set PYTHONIOENCODING=utf8
 #   > py .... > log.txt
 #
 
-py -m nn_ns.app.debug_cmd xxx.yyy zzz.www
-if 1:#[01_to_turn_off)
+py -m nn_ns.app.debug_cmd   xxx.yyy zzz.www
+  to mk __all__
+  to list toplayer defs:
+    xxx = ...
+    def xxx(...):
+    class xxx:
+
+view ../../python3_src/script/try_python/try_attrs/try_slots.py
+    见B_a
+        隐藏 attr 的方法有了！
+          定义__slots__，取出descriptor，删除cls.__dict__中的descriptor
+
+vs
+  sf = super(__class__, cls).__new__(cls, *args, **kwargs)
+    #as-if staticmethod
+  super(__class__, cls).__init_subclass__(*args, **kwargs)
+    #as-if classmethod
+__new__ over ABC:
+  exec __new__ before check whether abstractclass
+  check whether abstractclass at:
+    sf = ABC.__new__(cls)
+
+
+
+#################################
+#[[[doctest_examples:begin
+r'''
+#'''
+doctest_examples = r'''
+#'''[1:-1]
+#]]]doctest_examples:end
+
+#################################
+#[[[goto:end_my_all__src_code__output
+#[[[goto:end_my_src_code
+#[[[
+#]]]
+#]]]here_is:end_my_src_code
+#]]]here_is:end_my_all__src_code__output
+
+#################################
+#[[[__doc__:begin
+r'''
+
+#'''
+#]]]__doc__:end
+
+
+
+#################################
+#[[[[[template4module:begin
+#__all__:goto
+#main_body_src_code:goto
+#HHHHH
+#[[[__doc__:begin
+r'''
+py -m nn_ns.app.mk_py_template -o ../../python3_src/seed/types/mapping/OpaquePseudoMapping__weakref.py
+s/^\s*e .*[/]python3_src[/]\(.*\)[.]py$/\1/g
+s/[/]/./g
+%s/xxx[.]yyy/this_module/g
+e ../../python3_src/xxx/yyy.py
+xxx.yyy
+py -m    xxx.yyy
+py -m nn_ns.app.debug_cmd   xxx.yyy
+
+from xxx.yyy import ...
+
+#[[[doc_sections:begin
+#doctest_examples:goto
+#wwwzzz:goto
+
+#[[[doctest_examples:begin
+>>>
+...
+#]]]doctest_examples:end
+
+#[[[wwwzzz:begin
+#]]]wwwzzz:end
+#]]]doc_sections:end
+
+
+#'''
+#]]]__doc__:end
+
+#################################
+#HHHHH
+__all__ = '''
+
+    '''.split()
+
+#################################
+#HHHHH
+___begin_mark_of_excluded_global_names__0___ = ...
+r"""
+import ...
+from seed.tiny import str2__all__
+__all__ = str2__all__(r'''#)
+    #(''')
+from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
+from seed.helper.repr_input import repr_helper
+from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f, expectError
+from seed.helper.check.checkers import check_pair, check_type_is
+  #from seed.helper.check.checkers import checks, checkers, check_funcs
+  #view ../../python3_src/seed/helper/check/checkers.py
+if 0b00:#[01_to_turn_off]
+    #0b01
     print(fr'x={x}')
     from seed.tiny import print_err
     print_err(fr'x={x}')
     from pprint import pprint
     pprint(x)
-
-__all__ = '''
-
-    '''.split()
-
-___begin_mark_of_excluded_global_names__0___ = ...
-import ...
+#"""
 ___end_mark_of_excluded_global_names__0___ = ...
+
+#HHHHH
+#[[[main_body_src_code:begin
+#zzzwww:goto
+
+#[[[zzzwww:begin
+#]]]zzzwww:end
+#]]]main_body_src_code:end
+
+
+#HHHHH
+if __name__ == "__main__":
+    from xxx.yyy import *
+    from xxx.yyy import ...
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+    #doctest: +ELLIPSIS
+    #doctest: +NORMALIZE_WHITESPACE
+    #doctest: +IGNORE_EXCEPTION_DETAIL
+    #<BLANKLINE>
+    #Traceback (most recent call last):
+
+
+#]]]]]template4module:end
+#################################
+
+
+
+from seed.lang.hasattr__as_cls import hasattr__as_cls
+class Iterable(ABC):
+    __slots__ = ()
+    @classmethod
+    @override
+    def __subclasshook__(cls, C, /):
+        # ABCMeta::__subclasshook__
+        if cls is __class__:
+            #assert isinstance(C, type)
+            #bug: if hasattr(C, '__iter__'):
+            #correct: if any("__iter__" in B.__dict__ for B in C.__mro__):
+            if hasattr__as_cls(C, '__iter__'):
+                return True
+        return NotImplemented
+
+
+
 if __name__ == '__main__':
     #put anywhere, neednot at eof
     from seed.debug._debug import main__print_infos_of_modules
@@ -25,6 +172,7 @@ if __name__ == '__main__':
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 ___end_mark_of_excluded_global_names__0___ = ...
+
 
 # exec these two cmds in vim
 %s/\(def [^/*]\+[^/*(]\)\(\(,\s\+[*].*\)\?[)]:\)$/\1, \/\2/g
@@ -56,6 +204,9 @@ ___end_mark_of_excluded_global_names__0___ = ...
 may
   nmay T = (None|T)
   tmay T = (()|(T,))
+    why not (None|(T,))?
+      mapping.pop(key, /, *tmay_default)
+      if tmay_xxx: check_xxx(*tmay_xxx)
   imay uint = (-1|uint) = [-1..]
   smay nestr = (''|nonempty_str) = str
   tribool = (...|bool) #TriBoolOps
@@ -67,6 +218,20 @@ may
   convert to
 4
   for/at/on
+8
+  at/as
+5:
+  #image of "2/two/to"
+  from
+6/9
+  down/up
+  阴/阳
+int:
+  uint: unsigned_int, int_ge_0
+  nint: negative_int, int_lt_0
+  pint: positive_int, int_ge_1 not prime_int
+  #dint: reverse-positive_int, int_le_0
+  imay: imay_uint, int_ge_n1, int>=-1
 
 
 
@@ -78,13 +243,14 @@ r"""
 
 
 
+#HHHHH
 from seed.tiny import str2__all__
 __all__ = str2__all__(r'''#)
     #(''')
 __all__ = '''
     '''.split()
 from itertools import chain
-from .abc import ABC, abstractmethod, override, not_implemented, ABCMeta
+from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
     # since abc.ABC has no "__slots__ = ()"
     __slots__ = ()
     (printf "\"%s\"\0" "class \|__slots__ =" && find -name "*.py" -and -not -path *-* -print0) | xargs -0 grep
@@ -93,14 +259,6 @@ class IXXX(metaclass=ABCMeta):
 class IXXX(ABC):
     __slots__ = ()
     raise NotImplementedError
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-    #doctest: +ELLIPSIS
-    #doctest: +NORMALIZE_WHITESPACE
-    #doctest: +IGNORE_EXCEPTION_DETAIL
-    #Traceback (most recent call last):
 
 if __name__ == '__main__':
     classes = [XXX]
@@ -269,12 +427,12 @@ if __name__ == '__main__':
     excludes = ???
     qnames = ???
 
-    from seed.pkg_tools.dectect_all_unbound_names import DectectAllUnboundNames
+    from seed.pkg_tools.detect_all_unbound_names import DetectAllUnboundNames
 
     excludes = frozenset(excludes)
     for __name__ in qnames:
         print(f'module: {__name__}')
-        unbound_names = forgots = (DectectAllUnboundNames.from_module_qname(__name__))
+        unbound_names = forgots = (DetectAllUnboundNames.from_module_qname(__name__))
 
 if __name__ == '__main__':
     XXX = ???

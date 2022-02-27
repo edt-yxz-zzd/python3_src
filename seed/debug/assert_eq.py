@@ -24,7 +24,7 @@ def assert_eq_f(ans, f, /, *args, _fmt='ans={!r};\nresult={!r}={!s}{!r};\nvars={
     try:
         r = f(*args)
     except:
-        print_err(_fmt.format(ans, "??err??", f.__name__, args, vars=vars))
+        print_err(_fmt.format(ans, "??err:exception??", f.__name__, args, vars=vars))
         raise
     try:
         assert ans == r
@@ -34,9 +34,14 @@ def assert_eq_f(ans, f, /, *args, _fmt='ans={!r};\nresult={!r}={!s}{!r};\nvars={
 def mk_assert_eq_f(_fmt='ans={!r};\nresult={!r}={!s}(*{!r}, **{!r});\nvars={vars!r}', /, **vars):
     def assert_eq_f(ans, f, /, *args, **kwargs):
         try:
-            assert ans == f(*args, **kwargs)
+            r = f(*args, **kwargs)
         except:
-            print_err(_fmt.format(ans, f.__name__, args, kwargs, vars=vars))
+            print_err(_fmt.format(ans, "??err:exception??", f.__name__, args, kwargs, vars=vars))
+            raise
+        try:
+            assert ans == r
+        except:
+            print_err(_fmt.format(ans, r, f.__name__, args, kwargs, vars=vars))
             raise
     return assert_eq_f
 

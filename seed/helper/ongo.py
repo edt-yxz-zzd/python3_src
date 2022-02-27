@@ -20,13 +20,13 @@ def main(*, modules, classes, excludes):
     for_classes(*classes)
 
 def for_modules(*qnames, excludes=()):
-    from seed.pkg_tools.dectect_all_unbound_names import DectectAllUnboundNames
+    from seed.pkg_tools.detect_all_unbound_names import DetectAllUnboundNames
 
     excludes = frozenset(excludes)
     for __name__ in qnames:
         print('='*70)
         print(f'module: {__name__}')
-        unbound_names = forgots = (DectectAllUnboundNames.from_module_qname(__name__))
+        unbound_names = forgots = (DetectAllUnboundNames.from_module_qname(__name__))
         unbound_names = frozenset(unbound_names)
         unbound_names -= excludes
         if unbound_names:

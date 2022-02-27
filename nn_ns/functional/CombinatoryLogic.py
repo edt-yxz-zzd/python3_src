@@ -1,4 +1,77 @@
 
+r'''
+py -m nn_ns.app.debug_cmd   nn_ns.functional.CombinatoryLogic
+py -m nn_ns.functional._try_CombinatoryLogic
+    指数增长？！！！
+#'''
+
+
+#################################
+__all__ = '''
+    Expr
+    is_free
+    is_combinator__SKIBC
+    is_combinator
+    substitute
+    frozen_set__list
+    has_no_frees
+    empty_frozen_set
+    collect_frees
+    Variable
+    NamedVariable
+    Application
+    call
+    Abstraction
+    EvaluationStrategy
+    UnknownExprCase
+    FullBetaReduction
+    NormalOrder
+    CallByName
+    CallByNeed
+    CallByValue
+    evalue
+    Use_py_id_InsteadOf_id
+    py_id
+    id
+    L
+    V
+    I
+    K
+    const
+    S
+    implication_elimination
+    reader_apply
+    C
+    flip
+    B
+    composition
+    primitive_combinators__SKIBC
+    primitive_combinator_id_set__SKIBC
+    is_primitive_combinator__SKIBC
+    POS_body
+    POS_outermost
+    POS_func
+    POS_arg
+    POS_paran
+    PrintArg
+    print_expr
+    print_expr__SKIBC
+    short_hand__SKIBC
+    show_expr__SKIBC
+    show_expr
+    has_no_abstraction
+    remove_abstraction__SKIBC
+    newtype_container
+    right_apply
+    C_I
+    apply_self
+    divergent
+    omega
+    fix
+    '''.split()
+#################################
+
+
 from abc import ABCMeta, abstractmethod
 class Expr(metaclass=ABCMeta):
     # Expr = Abstraction | Application | Variable
@@ -580,7 +653,10 @@ divergent = omega = apply_self[apply_self]
 # fix__call_by_name  = \f. (\x. f (    x x  )) (\x. f (    x x  ))
 # Y
 fix = L(f = apply_self[L(x = _f[apply_self[_x]])])
-print_expr(fix)
-print_expr(apply_self)
+
+
+if __name__ == "__main__":
+    print_expr(fix)
+    print_expr(apply_self)
 
 

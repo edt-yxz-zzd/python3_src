@@ -4,7 +4,7 @@ __all__ = '''
     IGetArgsKwargs
     '''.split()
 
-from . import ABC, abstractmethod
+from .abc import ABC, abstractmethod
 
 
 class IGetArgsKwargs(ABC):

@@ -4,6 +4,22 @@ py -m seed.types.TriBoolOps
 
 from seed.types.TriBoolOps import TriBoolOps
 from seed.util_class.Lazy__call import Lazy
+
+
+改动:
+    TriBoolOps 更新 XNOR
+        NXOR ---> XNOR
+            标准名 由 NOT_XOR ---> XNOR
+
+=====
+同或 XNOR
+    e others/数学/编程/术语/同或XNOR.txt
+    异或 XOR = [is_odd total_1s]
+    同或 XNOR = ???
+      if = not $ fold XOR<2> =[is_even total_1s]
+      if = fold XNOR<2> =[is_even total_0s]
+      if = pairwise EQU<2> =[0 == total_0s]or[0 == total_1s]
+    同或 XNOR/ENOR/ExNOR 同或门=异或非门
 #'''
 
 __all__ = '''
@@ -27,7 +43,7 @@ class TriBoolOps:
     NOT
     AND OR XOR~NOT_EQU
 
-    NXOR=NOT_XOR~EQU
+    XNOR=NOT_XOR~EQU
     NAND=NOT_AND
     NOR=NOT_OR
     IMPLY = OR_notL_idR
@@ -44,7 +60,7 @@ class TriBoolOps:
     need both = remain 10:
         symmetry = 6:
             AND OR XOR
-            NAND NOR NXOR
+            NAND NOR XNOR
         asymmetry = 4:
             IMPLY  FLIP_IMPLY
             NOT_IMPLY  NOT_FLIP_IMPLY
@@ -128,7 +144,8 @@ class TriBoolOps:
     def NOT_IMPLY(cls, lhs, rhs):
         return cls.NOT(cls.IMPLY(lhs, rhs))
     @classmethod
-    def NOT_XOR(cls, lhs, rhs):
+    #def NOT_XOR(cls, lhs, rhs):
+    def XNOR(cls, lhs, rhs):
         return cls.NOT(cls.XOR(lhs, rhs))
     @classmethod
     def NOT_OR(cls, lhs, rhs):
@@ -136,7 +153,8 @@ class TriBoolOps:
     @classmethod
     def NOT_AND(cls, lhs, rhs):
         return cls.NOT(cls.AND(lhs, rhs))
-    NXOR = NOT_XOR
+    #XNOR = NOT_XOR
+    NOT_XOR = XNOR
     NOR = NOT_OR
     NAND = NOT_AND
 
@@ -191,7 +209,8 @@ class test_TriBool_binary_ops:
     @classmethod
     def get_all_xbool_ops(cls, T):
         x = T
-        return (x.AND, x.OR, x.XOR, x.IMPLY, x.FLIP_IMPLY, x.NOT_AND, x.NOT_OR, x.NOT_XOR, x.NOT_IMPLY, x.NOT_FLIP_IMPLY)
+        return (x.AND, x.OR, x.XOR, x.IMPLY, x.FLIP_IMPLY, x.NOT_AND, x.NOT_OR, x.XNOR, x.NOT_IMPLY, x.NOT_FLIP_IMPLY)
+        #return (x.AND, x.OR, x.XOR, x.IMPLY, x.FLIP_IMPLY, x.NOT_AND, x.NOT_OR, x.NOT_XOR, x.NOT_IMPLY, x.NOT_FLIP_IMPLY)
     @classmethod
     def main_test(cls):
         T = TriBoolOps
@@ -233,7 +252,8 @@ class BoolOps:
         return lhs and (not rhs)
         return cls.NOT(cls.IMPLY(lhs, rhs))
     @classmethod
-    def NOT_XOR(cls, lhs, rhs):
+    #def NOT_XOR(cls, lhs, rhs):
+    def XNOR(cls, lhs, rhs):
         return lhs is rhs
         return cls.NOT(cls.XOR(lhs, rhs))
     @classmethod
@@ -242,7 +262,8 @@ class BoolOps:
     @classmethod
     def NOT_AND(cls, lhs, rhs):
         return cls.NOT(cls.AND(lhs, rhs))
-    NXOR = NOT_XOR
+    #XNOR = NOT_XOR
+    NOT_XOR = XNOR
     NOR = NOT_OR
     NAND = NOT_AND
 
@@ -270,13 +291,14 @@ class TriBoolOps__std_name_and_aliases:
 
     NOT_AND NAND
     NOT_OR  NOR
-    NOT_XOR NXOR
+    XNOR NOT_XOR
 
     IMPLY       OR_notL_idR
     FLIP_IMPLY  OR_idL_notR
     NOT_IMPLY   AND_idL_notR
     NOT_FLIP_IMPLY FLIP_NOT_IMPLY AND_notL_idR
     #'''
+    # NOT_XOR XNOR ---> XNOR NOT_XOR
         binary_tribool_op_std_name2aliases = {}
         binary_tribool_op_alias2std_name = d = {}
         lines = binary_tribool_op_std_name_and_aliases__lines.replace('#', '')
@@ -317,7 +339,7 @@ lhs/rhs-determine-value, foldl0/foldr0 init-value
         .../...
         False/False
 
-    NXOR=NOT_XOR
+    XNOR=NOT_XOR
         .../...
         True/True
     NAND=NOT_AND
@@ -484,11 +506,15 @@ lhs/rhs-determine-value, foldl0/foldr0 init-value
         return Lazy(cls._lazy_binary_tribool_op, True, 'NOT_OR', lazy_lhs, lazy_rhs)
 
     @classmethod
-    def lazyL_NOT_XOR(cls, lazy_lhs, lazy_rhs):
-        return Lazy(cls._lazy_binary_tribool_op, False, 'NOT_XOR', lazy_lhs, lazy_rhs)
+    #def lazyL_NOT_XOR(cls, lazy_lhs, lazy_rhs):
+    def lazyL_XNOR(cls, lazy_lhs, lazy_rhs):
+        return Lazy(cls._lazy_binary_tribool_op, False, 'XNOR', lazy_lhs, lazy_rhs)
+        #return Lazy(cls._lazy_binary_tribool_op, False, 'NOT_XOR', lazy_lhs, lazy_rhs)
     @classmethod
-    def lazyR_NOT_XOR(cls, lazy_lhs, lazy_rhs):
-        return Lazy(cls._lazy_binary_tribool_op, True, 'NOT_XOR', lazy_lhs, lazy_rhs)
+    #def lazyR_NOT_XOR(cls, lazy_lhs, lazy_rhs):
+    def lazyR_XNOR(cls, lazy_lhs, lazy_rhs):
+        return Lazy(cls._lazy_binary_tribool_op, True, 'XNOR', lazy_lhs, lazy_rhs)
+        #return Lazy(cls._lazy_binary_tribool_op, True, 'NOT_XOR', lazy_lhs, lazy_rhs)
 
     @classmethod
     def lazyL_IMPLY(cls, lazy_lhs, lazy_rhs):
@@ -520,7 +546,8 @@ lhs/rhs-determine-value, foldl0/foldr0 init-value
 
     lazyL_NAND = lazyL_NOT_AND
     lazyL_NOR = lazyL_NOT_OR
-    lazyL_NXOR = lazyL_NOT_XOR
+    #lazyL_XNOR = lazyL_NOT_XOR
+    lazyL_NOT_XOR = lazyL_XNOR
     lazyL_OR_notL_idR = lazyL_IMPLY
     lazyL_OR_idL_notR = lazyL_FLIP_IMPLY
     lazyL_AND_idL_notR = lazyL_NOT_IMPLY
@@ -529,15 +556,35 @@ lhs/rhs-determine-value, foldl0/foldr0 init-value
     #
     lazyR_NAND = lazyR_NOT_AND
     lazyR_NOR = lazyR_NOT_OR
-    lazyR_NXOR = lazyR_NOT_XOR
+    #lazyR_XNOR = lazyR_NOT_XOR
+    lazyR_NOT_XOR = lazyR_XNOR
     lazyR_OR_notL_idR = lazyR_IMPLY
     lazyR_OR_idL_notR = lazyR_FLIP_IMPLY
     lazyR_AND_idL_notR = lazyR_NOT_IMPLY
     lazyR_FLIP_NOT_IMPLY = lazyR_NOT_FLIP_IMPLY
     lazyR_AND_notL_idR = lazyR_NOT_FLIP_IMPLY
     #
-LazyTriBoolOps.binary_tribool_op_std_name2lazy_info = LazyTriBoolOps._mk_binary_tribool_op_std_name2lazy_info()
 
+_cached__binary_tribool_op_std_name2lazy_info = \
+        {'AND': ('AND', (False, False, True), (False, False, True))
+        , 'OR': ('OR', (True, True, False), (True, True, False))
+        , 'XOR': ('XOR', (Ellipsis, Ellipsis, False), (Ellipsis, Ellipsis, False))
+
+        , 'NOT_AND': ('NOT_AND', (False, True, None), (False, True, None))
+        , 'NOT_OR': ('NOT_OR', (True, False, None), (True, False, None))
+        #, 'NOT_XOR': ('NOT_XOR', (Ellipsis, Ellipsis, True), (Ellipsis, Ellipsis, True))
+        , 'XNOR': ('XNOR', (Ellipsis, Ellipsis, True), (Ellipsis, Ellipsis, True))
+
+        , 'IMPLY': ('IMPLY', (False, True, True), (True, True, None))
+        , 'FLIP_IMPLY': ('FLIP_IMPLY', (True, True, None), (False, True, True))
+        , 'NOT_IMPLY': ('NOT_IMPLY', (False, False, None), (True, False, False))
+        , 'NOT_FLIP_IMPLY': ('NOT_FLIP_IMPLY', (True, False, False), (False, False, None))
+        }
+
+if 0:
+    LazyTriBoolOps.binary_tribool_op_std_name2lazy_info = LazyTriBoolOps._mk_binary_tribool_op_std_name2lazy_info()
+else:
+    LazyTriBoolOps.binary_tribool_op_std_name2lazy_info = _cached__binary_tribool_op_std_name2lazy_info
 
 #aliases include std_name
 TriBoolOps__std_name_and_aliases.binary_tribool_op_alias2std_name
@@ -549,22 +596,16 @@ LazyTriBoolOps.binary_tribool_op_std_name2aliases
 
 LazyTriBoolOps.binary_tribool_op_std_name2lazy_info
 if __name__ == '__main__':
+    #LazyTriBoolOps.binary_tribool_op_std_name2lazy_info = LazyTriBoolOps._mk_binary_tribool_op_std_name2lazy_info()
+    #################################
+    #################################
+    #################################
     from pprint import pprint
     #pprint(LazyTriBoolOps.binary_tribool_op_std_name2lazy_info)
-    assert LazyTriBoolOps.binary_tribool_op_std_name2lazy_info == \
-        {'AND': ('AND', (False, False, True), (False, False, True))
-        , 'OR': ('OR', (True, True, False), (True, True, False))
-        , 'XOR': ('XOR', (Ellipsis, Ellipsis, False), (Ellipsis, Ellipsis, False))
+    assert LazyTriBoolOps.binary_tribool_op_std_name2lazy_info == _cached__binary_tribool_op_std_name2lazy_info
+    assert LazyTriBoolOps._mk_binary_tribool_op_std_name2lazy_info() == _cached__binary_tribool_op_std_name2lazy_info
 
-        , 'NOT_AND': ('NOT_AND', (False, True, None), (False, True, None))
-        , 'NOT_OR': ('NOT_OR', (True, False, None), (True, False, None))
-        , 'NOT_XOR': ('NOT_XOR', (Ellipsis, Ellipsis, True), (Ellipsis, Ellipsis, True))
 
-        , 'IMPLY': ('IMPLY', (False, True, True), (True, True, None))
-        , 'FLIP_IMPLY': ('FLIP_IMPLY', (True, True, None), (False, True, True))
-        , 'NOT_IMPLY': ('NOT_IMPLY', (False, False, None), (True, False, False))
-        , 'NOT_FLIP_IMPLY': ('NOT_FLIP_IMPLY', (True, False, False), (False, False, None))
-        }
 #HHHHH
 class test_TriBool_lazy_binary_ops:
     #LazyTriBoolOps

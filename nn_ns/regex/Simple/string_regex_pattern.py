@@ -661,7 +661,7 @@ def parse_string_regex_pattern(pattern:str, simplify:bool=True
     tokens = iter_tokens_of_string_regex_pattern(pattern)
     py_expr_str = ''.join(stream_convertor(tokens))
     locals = {'ns': theSimpleNameSpace}
-    regex = safe_eval(py_expr_str, locals)
+    regex = safe_eval(py_expr_str, locals=locals)
     if simplify:
         regex = regex.simplify(
                 terminal_set_cmp=terminal_set_cmp

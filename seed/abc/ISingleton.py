@@ -128,13 +128,16 @@ from seed.abc.IReprImmutableHelper import IReprImmutableHelper
 import inspect
 
 from weakref import WeakKeyDictionary
-import operator
+#import operator
+from seed.abc.eq_by_id.BaseAddrAsHash import BaseAddrAsHash
+from seed.abc.eq_by_id.AddrAsHash import AddrAsHash
 
 
 
 #HHHHH
 
-class ISingleton(FinalTypeNotFalse, IReprImmutableHelper):
+class ISingleton(AddrAsHash, FinalTypeNotFalse, IReprImmutableHelper):
+#class ISingleton(BaseAddrAsHash, FinalTypeNotFalse, IReprImmutableHelper):
     __slots__ = ()
     def ___init___(sf):
         'donot override __init__'
@@ -145,12 +148,16 @@ class ISingleton(FinalTypeNotFalse, IReprImmutableHelper):
         return [], {}
         #for repr()
 
+    r'''
     def __eq__(sf, ot):
         return sf is ot
     def __hash__(sf):
         return id(sf)
     __eq__ = operator.is_
+    __ne__ = operator.is_not
     __hash__ = id
+    now use BaseAddrAsHash
+    #'''
 
     __cache = WeakKeyDictionary()
     r'''

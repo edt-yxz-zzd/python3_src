@@ -35,3 +35,7 @@ IOps4OneMainObjType
   e ../../python3_src/seed/ops/___IOps4OneMainObjType___.py
 
 
+py仿真hs
+  e ../../python3_src/nn_ns/mimic_Haskell/Data.py
+外挂接口体系
+  e ../../python3_src/seed/hierarchy/README.txt

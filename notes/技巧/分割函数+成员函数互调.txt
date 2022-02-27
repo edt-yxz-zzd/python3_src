@@ -1,0 +1,66 @@
+
+e ../../python3_src/notes/技巧/分割函数+成员函数互调.txt
+分割函数(+递归)
+成员函数互调(本类+私有函数+类私有数据)
+
+
+[[[[[分割函数(+递归)
+def fff(aas, /, *, kkk):
+  ...very long body...
+<==>
+def ___tmp_env():
+  def fff(aas, /, *, kkk):
+    ...short main body...
+    ...using f,g,h...
+    ...递归 recur using fff...
+  #below mimic_Haskell "where" body:
+  def f...
+  def g...
+  def h...
+  return fff
+  main = fff
+  return main
+fff = ___tmp_env(); del ___tmp_env
+]]]]]
+
+
+[[[[[成员函数互调(本类+私有函数+类私有数据)
+class C:
+  @staticmethod
+  def f():
+    f()
+    C.g() #???__class__.g()
+  @classmethod
+  def g(cls):
+    __class__.f()
+    __class__.g()
+  def h(sf):
+    __class__.f()
+    __class__.g()
+    __class__.h(sf)
+
+<==>
+class C:
+  def ___tmp_env():
+    private_data = ...
+    CASE_xxx = ...
+    def private_method...
+    ######################
+    def f():
+      f()
+      g(C)
+    def g(cls):
+      f()
+      g(C)
+    def h(sf):
+      f()
+      g(C)
+      h(sf)
+    return f, g, h
+  f, g, h = ___tmp_env(); del ___tmp_env
+  f = staticmethod(f)
+  g = staticmethod(g)
+
+
+]]]]]
+

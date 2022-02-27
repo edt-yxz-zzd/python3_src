@@ -49,7 +49,7 @@ True
 
 
 
-'''
+#'''
 
 __all__ = '''
     NamespaceABC
@@ -65,7 +65,7 @@ __all__ = '''
         DynamicImmutableNamespace
     '''.split()
 
-"""
+r"""
 class NamespaceABC(ABC):
 class ImmutableNamespaceABC(NamespaceABC):
 class StaticImmutableNamespaceABC(ImmutableNamespaceABC):
@@ -77,14 +77,14 @@ class SetImplDictOnceNamespaceABC(ImplCachedNamespaceABC):
 
 class StaticImmutableNamespaceBase(StaticImmutableNamespaceABC, _ImmutableNamespaceBase):
 class DynamicImmutableNamespace(_ImmutableNamespaceBase):
-"""
+#"""
 
 
 
 #from collections.abc import Set, Sequence, Mapping
 from types import MappingProxyType
 import inspect # isabstract
-from seed.types.EmptyMapping import empty_mapping
+from seed.types.empty_containers import empty_mapping
 #from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty
 from seed.verify.common_verify import is_Sequence
 from seed.tiny import null_iter, print_err

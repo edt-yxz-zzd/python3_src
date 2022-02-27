@@ -3,7 +3,7 @@ r'''
 problem:
     * rough/precise regex pattern
         rough to fast-trap-read
-        precise to dectect error
+        precise to detect error
     * distinguish: RawDictKey vs Name vs Integer
         vs inline cb-string vs multiline cb-string
         vs body-headers

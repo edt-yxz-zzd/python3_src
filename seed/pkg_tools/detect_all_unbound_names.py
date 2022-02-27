@@ -1,10 +1,10 @@
 
-'''
-pym dectect_all_unbound_names.py -i dectect_all_unbound_names.py -x a -x logic
-'''
+r'''
+pym detect_all_unbound_names.py -i detect_all_unbound_names.py -x a -x logic
+#'''
 
 __all__ = '''
-    DectectAllUnboundNames
+    DetectAllUnboundNames
     main
     '''.split()
 
@@ -17,7 +17,7 @@ import ast
 from pathlib import Path
 
 import symtable
-'''
+r'''
 class CollectAllUnboundNamesVisitor(ast.NodeVisitor):
 class PrintNodeVisitor(ast.NodeVisitor):
     def __init__(self):
@@ -48,10 +48,10 @@ class PrintNodeVisitor(ast.NodeVisitor):
                 pass
             else:
                 raise logic-error
-'''
+#'''
 
 
-class DectectAllUnboundNames:
+class DetectAllUnboundNames:
     @classmethod
     def from_module_qname(cls, module_qname):
         source_path = module_qname2source_file_path(module_qname)
@@ -82,20 +82,20 @@ class DectectAllUnboundNames:
 def _t():
     def f():
         lambda : a
-    r = DectectAllUnboundNames.from_module_qname(__name__)
+    r = DetectAllUnboundNames.from_module_qname(__name__)
     print(r)
     {'a': [80], 'CollectAllUnboundNamesVisitor': [67]}
 
 
 def main(args=None):
-    '''
+    r'''
 --module xxx.yyy.zzz
 --input_path path/to/zzz.py
 --excludes logic
 --excludes error
 '''
     import argparse
-    parser = argparse.ArgumentParser(description='DectectAllUnboundNames')
+    parser = argparse.ArgumentParser(description='DetectAllUnboundNames')
     parser.add_argument('-x', '--excludes', type=str
                         ,action='append', default=[]
                         ,help='exclude from the result unbound_names'
@@ -113,9 +113,9 @@ def main(args=None):
 
     args = parser.parse_args(args)
     if args.module is not None:
-        r = DectectAllUnboundNames.from_module_qname(args.module)
+        r = DetectAllUnboundNames.from_module_qname(args.module)
     elif args.input_path is not None:
-        r = DectectAllUnboundNames.from_source_path(args.input_path)
+        r = DetectAllUnboundNames.from_source_path(args.input_path)
     else:
         raise logic-error
     unbound_names = forgots = r

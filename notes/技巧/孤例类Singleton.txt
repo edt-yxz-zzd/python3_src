@@ -1,0 +1,12 @@
+
+e ../../python3_src/notes/技巧/孤例类Singleton.txt
+
+class Singleton:
+  __slots__ = ()
+  def __new__(cls, /)
+    if not cls is __class__: raise TypeError
+    return the_singleton
+the_singleton = object.__new__(Singleton)
+Singleton.__abstractmethods__ = {''}
+assert expect_Error(TypeError, Singleton)
+

@@ -16,6 +16,14 @@ TODO:
     #here TODO: def __new__(
 
 
+seed.helper.check.check
+    e ../../python3_src/seed/helper/check/check.py
+py -m    seed.helper.check.check
+py -m nn_ns.app.debug_cmd   seed.helper.check.check
+
+from seed.helper.check.check import mk_checker
+
+
 py -m seed.helper.check.check
 from seed.helper.check.check import check, verify, check_then_calc, verify_then_may_calc, check_then_calc_ex, verify_then_may_calc_ex
 from seed.helper.check.check import mk_checker, mk_impl_class_checker, mk_checker__point, mk_checker__pair, mk_checker__array, mk_checker__pairs
@@ -615,6 +623,8 @@ IChecker
             Checker__set
             Checker__frozenset
 
+        Checker__slice
+            Checker__slice__triple
 
 
 mk_impl_class_checker
@@ -696,10 +706,11 @@ if 0:
 #HHHHH
 
 from seed.lang.class_property import class_property
-from seed.abc.abc import abstractmethod, override, not_implemented, ABC
+from seed.abc.abc import abstractmethod, override, not_implemented, ABC, ABC__no_slots
+from seed.abc.abc__ver1 import Base4check_slots_setting
 from seed.types.FrozenDict import FrozenDict, HalfFrozenDict
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
-from seed.tiny import echo, fst, snd, at, print_err
+from seed.tiny import echo, fst, snd, at, print_err, slice2triple
 from collections.abc import Mapping, Set, Sequence
 from collections.abc import Container, Iterable
 
@@ -984,6 +995,7 @@ def check_type_tree(obj):
 
 #HHHHH
 class IChecker(IReprImmutableHelper):
+    __slots__ = ()
     #def ___get_args_kwargs___(sf):
     @abstractmethod
     def ___check___(sf, obj):
@@ -1091,9 +1103,12 @@ class IChecker(IReprImmutableHelper):
 
 
 #HHHHH
-class ____0:pass
-class ____1:pass
+class ____0:
+    __slots__ = ()
+class ____1:
+    __slots__ = ()
 class ICheckEchor(____1, ____0, IChecker):
+    __slots__ = ()
     #def ___check___(sf, obj):
     @override
     def ___check_then_calc___(sf, obj):
@@ -1111,6 +1126,7 @@ class ICheckEchor(____1, ____0, IChecker):
 
 
 class ICheckCalcor(____0, ____1, IChecker):
+    __slots__ = ()
     #def ___check_then_calc_ex___(sf, check_only, obj):
     @override
     def ___check___(sf, obj):
@@ -1136,6 +1152,7 @@ class ICheckCalcor(____0, ____1, IChecker):
 
 #HHHHH
 class _IChecker_with_args(IChecker):
+  __slots__ = ()
   if 1:
     __x__ICheckEchor = False
     __x__ICheckCalcor = False
@@ -1179,6 +1196,7 @@ class _IChecker_with_args(IChecker):
 #def _std_argX_(cls, argX): return argX
 
 class IChecker_with_args(_IChecker_with_args):
+    __slots__ = ()
     @class_property
     @abstractmethod
     def _may_num_args_(cls):
@@ -1251,6 +1269,7 @@ class IChecker_with_args(_IChecker_with_args):
 
 
 class ICheckCalcor_with_args(IChecker_with_args, ICheckCalcor):
+    __slots__ = ()
     #def _check_then_calc_ex_with_args_(cls, args, check_only, obj):
     @classmethod
     @override
@@ -1271,6 +1290,7 @@ class ICheckCalcor_with_args(IChecker_with_args, ICheckCalcor):
             raise
 
 class ICheckEchor_with_args(IChecker_with_args, ICheckEchor):
+    __slots__ = ()
     #def _check_with_args_(cls, args, obj):
     @classmethod
     @override
@@ -1289,6 +1309,7 @@ class ICheckEchor_with_args(IChecker_with_args, ICheckEchor):
 
 
 class ICheckEchor_with_args__verify4check(ICheckEchor_with_args):
+    __slots__ = ()
     @classmethod
     @abstractmethod
     def _verify_with_args_(cls, args, obj):
@@ -1352,7 +1373,7 @@ def _std_arg4Container(cls, arg):
 def _std_arg4checker_bool_pairs(cls, arg):
     _4checker_bool_pairs(arg)
     return arg
-    _4checker_bool_pairs(checker_hold_result_pairs)
+    #_4checker_bool_pairs(checker_hold_result_pairs)
 @classmethod
 @override
 def _std_arg4checkers_or_key2checker(cls, arg):
@@ -1385,36 +1406,47 @@ def _std_arg4type_tree(cls, arg):
 
 
 class IChecker_with_args__arg0_is_checker(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4checker
 
 class IChecker_with_args__arg0_is_checkers(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4checkers
 
 class IChecker_with_args__arg0_is_callable(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4callable
 
 class IChecker_with_args__arg0_is_type_tree(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4type_tree
 
 class IChecker_with_args__arg0_is_type(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4type
 
 class IChecker_with_args__arg0_is_uint(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4uint
 
 class IChecker_with_args__arg0_is_int(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4int
 
 class IChecker_with_args__arg0_is_bool(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4bool
 
 class IChecker_with_args__arg0_is_Container(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4Container
 
 class IChecker_with_args__arg0_is_key2checker(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4key2checker
 
 class IChecker_with_args__arg0_is_checkers_or_key2checker(IChecker_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4checkers_or_key2checker
 
 
@@ -1422,24 +1454,31 @@ class IChecker_with_args__arg0_is_checkers_or_key2checker(IChecker_with_args):
 
 ###################################
 class IChecker_with_args__arg1_is_checker(IChecker_with_args):
+    __slots__ = ()
     _std_arg1_ = _std_arg4checker
 
 class IChecker_with_args__arg1_is_checkers(IChecker_with_args):
+    __slots__ = ()
     _std_arg1_ = _std_arg4checkers
 
 class IChecker_with_args__arg1_is_callable(IChecker_with_args):
+    __slots__ = ()
     _std_arg1_ = _std_arg4callable
 
 class IChecker_with_args__arg1_is_type(IChecker_with_args):
+    __slots__ = ()
     _std_arg1_ = _std_arg4type
 
 class IChecker_with_args__arg1_is_uint(IChecker_with_args):
+    __slots__ = ()
     _std_arg1_ = _std_arg4uint
 
 class IChecker_with_args__arg1_is_int(IChecker_with_args):
+    __slots__ = ()
     _std_arg1_ = _std_arg4int
 
 class IChecker_with_args__arg1_is_checker_bool_pairs(IChecker_with_args):
+    __slots__ = ()
     _std_arg1_ = _std_arg4checker_bool_pairs
 
 
@@ -1453,6 +1492,7 @@ class IChecker_with_args__arg1_is_checker_bool_pairs(IChecker_with_args):
 
 #HHHHH
 class IChecker_one_arg(IChecker_with_args):
+    __slots__ = ()
     _may_num_args_ = 1
     r'''
     @classmethod
@@ -1460,23 +1500,34 @@ class IChecker_one_arg(IChecker_with_args):
         return arg0
     #'''
 
-class ICheckEchor_one_arg__verify(IChecker_one_arg, ICheckEchor_with_args__verify4check):pass
+class ICheckEchor_one_arg__verify(IChecker_one_arg, ICheckEchor_with_args__verify4check):
+    __slots__ = ()
 
 
-class IChecker_one_arg__checker(IChecker_with_args__arg0_is_checker, IChecker_one_arg):pass
-class IChecker_one_arg__checkers(IChecker_with_args__arg0_is_checkers, IChecker_one_arg):pass
-class IChecker_one_arg__callable(IChecker_with_args__arg0_is_callable, IChecker_one_arg):pass
-class IChecker_one_arg__uint(IChecker_with_args__arg0_is_uint, IChecker_one_arg):pass
-class IChecker_one_arg__int(IChecker_with_args__arg0_is_int, IChecker_one_arg):pass
-class IChecker_one_arg__key2checker(IChecker_with_args__arg0_is_key2checker, IChecker_one_arg):pass
-class IChecker_one_arg__checkers_or_key2checker(IChecker_with_args__arg0_is_checkers_or_key2checker, IChecker_one_arg):pass
+class IChecker_one_arg__checker(IChecker_with_args__arg0_is_checker, IChecker_one_arg):
+    __slots__ = ()
+class IChecker_one_arg__checkers(IChecker_with_args__arg0_is_checkers, IChecker_one_arg):
+    __slots__ = ()
+class IChecker_one_arg__callable(IChecker_with_args__arg0_is_callable, IChecker_one_arg):
+    __slots__ = ()
+class IChecker_one_arg__uint(IChecker_with_args__arg0_is_uint, IChecker_one_arg):
+    __slots__ = ()
+class IChecker_one_arg__int(IChecker_with_args__arg0_is_int, IChecker_one_arg):
+    __slots__ = ()
+class IChecker_one_arg__key2checker(IChecker_with_args__arg0_is_key2checker, IChecker_one_arg):
+    __slots__ = ()
+class IChecker_one_arg__checkers_or_key2checker(IChecker_with_args__arg0_is_checkers_or_key2checker, IChecker_one_arg):
+    __slots__ = ()
 
 
-class ICheckEchor_one_arg__type_tree__verify(IChecker_with_args__arg0_is_type_tree, ICheckEchor_one_arg__verify):pass
-class ICheckEchor_one_arg__type__verify(IChecker_with_args__arg0_is_type, ICheckEchor_one_arg__verify):pass
+class ICheckEchor_one_arg__type_tree__verify(IChecker_with_args__arg0_is_type_tree, ICheckEchor_one_arg__verify):
+    __slots__ = ()
+class ICheckEchor_one_arg__type__verify(IChecker_with_args__arg0_is_type, ICheckEchor_one_arg__verify):
+    __slots__ = ()
 
 
-class ICheckEchor_one_arg__Container__verify(IChecker_with_args__arg0_is_Container, ICheckEchor_one_arg__verify):pass
+class ICheckEchor_one_arg__Container__verify(IChecker_with_args__arg0_is_Container, ICheckEchor_one_arg__verify):
+    __slots__ = ()
 Container
 
 
@@ -1488,24 +1539,35 @@ Container
 #HHHHH
 
 class IChecker_two_args(IChecker_with_args):
+    __slots__ = ()
     _may_num_args_ = 2
-class IChecker_two_args__arg0_is_checker(IChecker_with_args__arg0_is_checker, IChecker_two_args):pass
-class IChecker_two_args__arg0_is_uint(IChecker_with_args__arg0_is_int, IChecker_two_args):pass
-class IChecker_two_args__arg0_is_bool(IChecker_with_args__arg0_is_bool, IChecker_two_args):pass
-class IChecker_two_args__arg0_is_int(IChecker_with_args__arg0_is_int, IChecker_two_args):pass
-class IChecker_two_args__arg1_is_int(IChecker_with_args__arg1_is_int, IChecker_two_args):pass
-class IChecker_two_args__args_are_int(IChecker_with_args__arg1_is_int, IChecker_with_args__arg0_is_int, IChecker_two_args):pass
+class IChecker_two_args__arg0_is_checker(IChecker_with_args__arg0_is_checker, IChecker_two_args):
+    __slots__ = ()
+class IChecker_two_args__arg0_is_uint(IChecker_with_args__arg0_is_int, IChecker_two_args):
+    __slots__ = ()
+class IChecker_two_args__arg0_is_bool(IChecker_with_args__arg0_is_bool, IChecker_two_args):
+    __slots__ = ()
+class IChecker_two_args__arg0_is_int(IChecker_with_args__arg0_is_int, IChecker_two_args):
+    __slots__ = ()
+class IChecker_two_args__arg1_is_int(IChecker_with_args__arg1_is_int, IChecker_two_args):
+    __slots__ = ()
+class IChecker_two_args__args_are_int(IChecker_with_args__arg1_is_int, IChecker_with_args__arg0_is_int, IChecker_two_args):
+    __slots__ = ()
 
 
 
 
-class IChecker_two_args__arg1_is_checker(IChecker_with_args__arg1_is_checker, IChecker_two_args):pass
-class IChecker_two_args__arg1_is_checkers(IChecker_with_args__arg1_is_checkers, IChecker_two_args):pass
-class IChecker_two_args__arg0_is_bool__arg1_is_checker_bool_pairs(IChecker_with_args__arg1_is_checker_bool_pairs, IChecker_two_args__arg0_is_bool):pass
+class IChecker_two_args__arg1_is_checker(IChecker_with_args__arg1_is_checker, IChecker_two_args):
+    __slots__ = ()
+class IChecker_two_args__arg1_is_checkers(IChecker_with_args__arg1_is_checkers, IChecker_two_args):
+    __slots__ = ()
+class IChecker_two_args__arg0_is_bool__arg1_is_checker_bool_pairs(IChecker_with_args__arg1_is_checker_bool_pairs, IChecker_two_args__arg0_is_bool):
+    __slots__ = ()
 class ICheckCalcor_two_args__hold_input__checker_hold_result_pairs(IChecker_two_args__arg0_is_bool__arg1_is_checker_bool_pairs, ICheckCalcor_with_args):
     r'''
     'args = (hold_input::bool, checker_hold_result_pairs::[(IChecker, hold_result::bool)])'
     #'''
+    __slots__ = ()
 
     _may_num_args_ = 2
     _std_arg0_ = _std_arg4bool
@@ -1541,6 +1603,7 @@ class ICheckCalcor_two_args__hold_input__checker_hold_result_pairs(IChecker_two_
 #HHHHH
 
 class IChecker_no_args(ICheckEchor):
+    __slots__ = ()
     __cls2sf = {}
     def __new__(cls):
         d = __class__.__cls2sf
@@ -1554,6 +1617,7 @@ class IChecker_no_args(ICheckEchor):
         return [], {}
 class Checker__fail(IChecker_no_args):
     'fail'
+    __slots__ = ()
     @override
     def ___check___(sf, obj):
         "obj -> None|raise CheckFail/CheckHelperExc_unknown/Exception"
@@ -1563,6 +1627,7 @@ class Checker__fail(IChecker_no_args):
         return the_pass_checker
 
 class Checker__pass(IChecker_no_args):
+    __slots__ = ()
     'pass'
     @override
     def ___check___(sf, obj):
@@ -1575,6 +1640,7 @@ the_pass_checker = Checker__pass()
 the_fail_checker = Checker__fail()
 
 class Checker__hashable(IChecker_no_args):
+    __slots__ = ()
     @override
     def ___check___(sf, obj):
         "obj -> None|raise CheckFail/CheckHelperExc_unknown/Exception"
@@ -1593,6 +1659,7 @@ class ICheckCalcor__DAG_width_depth(ICheckCalcor_with_args):
     'args = (hold_input::bool, checker_hold_result_pairs::[(IChecker, bool)])'
     'obj -> [obj?, new0?, ...]'
     #'''
+    __slots__ = ()
     _may_num_args_ = 2
     _std_arg0_ = _std_arg4bool
     _std_arg1_ = _std_arg4checker_bool_pairs
@@ -1639,13 +1706,13 @@ class ICheckCalcor__DAG_width_depth(ICheckCalcor_with_args):
                 obj = r
             r = 0; del r
         return (*ls,) if calc else None
-class CheckCalcor__DAG_star(ICheckCalcor__DAG_width_depth):
+class CheckCalcor__DAG_star(ICheckCalcor__DAG_width_depth, ABC__no_slots):
     _width_ = True
-class CheckCalcor__DAG_line(ICheckCalcor__DAG_width_depth):
+class CheckCalcor__DAG_line(ICheckCalcor__DAG_width_depth, ABC__no_slots):
     _width_ = False
 
 
-class CheckCalcor__transform(ICheckCalcor_with_args):
+class CheckCalcor__transform(ICheckCalcor_with_args, ABC__no_slots):
     _may_num_args_ = 3
     _std_arg0_ = _std_arg4bool
     _std_arg1_ = _std_arg4checker
@@ -1675,7 +1742,7 @@ class CheckCalcor__transform(ICheckCalcor_with_args):
 
 
 
-class Checker__if_else(ICheckCalcor_with_args):
+class Checker__if_else(ICheckCalcor_with_args, ABC__no_slots):
     _may_num_args_ = 4
     _std_arg0_ = _std_arg4bool
     _std_arg1_ = _std_arg4checker
@@ -1707,7 +1774,7 @@ class Checker__if_else(ICheckCalcor_with_args):
 
 
 
-class Checker__no_calc(IChecker_one_arg__checker, ICheckEchor_with_args):
+class Checker__no_calc(IChecker_one_arg__checker, ICheckEchor_with_args, ABC__no_slots):
     '==? Checker__check_func?'
     @classmethod
     @override
@@ -1716,7 +1783,7 @@ class Checker__no_calc(IChecker_one_arg__checker, ICheckEchor_with_args):
         [checker] = args
         check(checker, obj)
 
-class Checker__inv(IChecker_one_arg__checker, ICheckEchor_with_args):
+class Checker__inv(IChecker_one_arg__checker, ICheckEchor_with_args, ABC__no_slots):
     'not'
     @classmethod
     @override
@@ -1764,7 +1831,8 @@ class Checker__inv(IChecker_one_arg__checker, ICheckEchor_with_args):
 
 
 #HHHHH
-class ConfigMixin__Lookupable:
+class ConfigMixin__Lookupable(Base4check_slots_setting):
+    __slots__ = ()
     _base_Lookupable_ = Lookupable = (Mapping, Sequence)
     _type_is_base_Lookupable_ = False
     @classmethod
@@ -1840,6 +1908,7 @@ class ConfigMixin__Lookupable:
 
 
 class ConfigMixin__Mapping(ConfigMixin__Lookupable):
+    __slots__ = ()
     @class_property
     @override
     def _base_Lookupable_(cls):
@@ -1867,17 +1936,21 @@ class ConfigMixin__Mapping(ConfigMixin__Lookupable):
         else:
             check_instance(cls._base_Mapping_, obj)
 class ConfigMixin__FrozenDict(ConfigMixin__Mapping):
+    __slots__ = ()
     _base_Mapping_ = FrozenDict
     _type_is_base_Mapping_ = True
 class ConfigMixin__HalfFrozenDict(ConfigMixin__Mapping):
+    __slots__ = ()
     _base_Mapping_ = HalfFrozenDict
     _type_is_base_Mapping_ = True
 class ConfigMixin__dict(ConfigMixin__Mapping):
+    __slots__ = ()
     _base_Mapping_ = dict
     _type_is_base_Mapping_ = True
 
 
-class ConfigMixin__Set:
+class ConfigMixin__Set(Base4check_slots_setting):
+    __slots__ = ()
     _base_Set_ = Set
     _type_is_base_Set_ = False
 
@@ -1888,14 +1961,17 @@ class ConfigMixin__Set:
         else:
             check_instance(cls._base_Set_, obj)
 class ConfigMixin__set(ConfigMixin__Set):
+    __slots__ = ()
     _base_Set_ = set
     _type_is_base_Set_ = True
 class ConfigMixin__frozenset(ConfigMixin__Set):
+    __slots__ = ()
     _base_Set_ = frozenset
     _type_is_base_Set_ = True
 
 
 class ConfigMixin__Sequence(ConfigMixin__Lookupable):
+    __slots__ = ()
     @class_property
     @override
     def _base_Lookupable_(cls):
@@ -1923,9 +1999,11 @@ class ConfigMixin__Sequence(ConfigMixin__Lookupable):
         else:
             check_instance(cls._base_Sequence_, obj)
 class ConfigMixin__list(ConfigMixin__Sequence):
+    __slots__ = ()
     _base_Sequence_ = list
     _type_is_base_Sequence_ = True
 class ConfigMixin__tuple(ConfigMixin__Sequence):
+    __slots__ = ()
     _base_Sequence_ = tuple
     _type_is_base_Sequence_ = True
 
@@ -1938,7 +2016,7 @@ class ConfigMixin__tuple(ConfigMixin__Sequence):
 
 
 #HHHHH
-class Checker__ordered_intersection(IChecker_one_arg__checkers, ICheckCalcor_with_args):
+class Checker__ordered_intersection(IChecker_one_arg__checkers, ICheckCalcor_with_args, ABC__no_slots):
     'and'
     @classmethod
     @override
@@ -1957,7 +2035,7 @@ r""""
         Checker__ordered_choice_many1
         Checker__ordered_choice_only_one
         Checker__ordered_choice
-class Checker__ordered_choice(IChecker_one_arg__checkers, ICheckCalcor_with_args):
+class Checker__ordered_choice(IChecker_one_arg__checkers, ICheckCalcor_with_args, ABC__no_slots):
     r'''
     'either'
     'ordered_choice :: [(i->o)] -> i -> (i,o)'
@@ -1988,7 +2066,7 @@ Checker__ordered_union = Checker__ordered_choice
 #"""
 
 r'''
-class Checker__ordered_union(IChecker_one_arg__checkers):
+class Checker__ordered_union(IChecker_one_arg__checkers, ABC__no_slots):
     'or'
     @classmethod
     @override
@@ -2004,6 +2082,7 @@ class Checker__ordered_union(IChecker_one_arg__checkers):
 
 #HHHHH
 class IChecker__choice_or_switch(ConfigMixin__Lookupable, IChecker_one_arg, ICheckCalcor_with_args):
+    __slots__ = ()
     _std_arg0_ = _std_arg4checkers
     _std_arg0_ = _std_arg4key2checker
     _std_arg0_ = _std_arg4checkers_or_key2checker
@@ -2017,15 +2096,17 @@ class IChecker__choice_or_switch(ConfigMixin__Lookupable, IChecker_one_arg, IChe
 
 class IChecker__unordered_choice_or_switch(ConfigMixin__Mapping, IChecker__choice_or_switch):
     'should before Checker__switch/...'
+    __slots__ = ()
     _std_arg0_ = _std_arg4key2checker
 class IChecker__ordered_choice_or_switch(ConfigMixin__Sequence, IChecker__choice_or_switch):
     'should before Checker__switch/...'
+    __slots__ = ()
     _std_arg0_ = _std_arg4checkers
 
 
 
 
-class Checker__switch(IChecker__choice_or_switch):
+class Checker__switch(IChecker__choice_or_switch, ABC__no_slots):
     r'''switch
     unordered_switch :: {k:(i->o)} -> (k,i) -> o
     ordered_switch :: [(i->o)] -> (k,i) -> o
@@ -2047,9 +2128,9 @@ class Checker__switch(IChecker__choice_or_switch):
             return
         else:
             return z # not with case
-class Checker__unordered_switch(IChecker__unordered_choice_or_switch, Checker__switch):
+class Checker__unordered_switch(IChecker__unordered_choice_or_switch, Checker__switch, ABC__no_slots):
     _std_arg0_ = _std_arg4key2checker
-class Checker__ordered_switch(IChecker__ordered_choice_or_switch, Checker__switch):
+class Checker__ordered_switch(IChecker__ordered_choice_or_switch, Checker__switch, ABC__no_slots):
     _std_arg0_ = _std_arg4checkers
 
 
@@ -2057,7 +2138,7 @@ class Checker__ordered_switch(IChecker__ordered_choice_or_switch, Checker__switc
 
 
 
-class Checker__switch__with_case(IChecker__choice_or_switch):
+class Checker__switch__with_case(IChecker__choice_or_switch, ABC__no_slots):
     r'''switch__with_case
     unordered_switch__with_case :: {k:((k,i)->o)} -> (k,i) -> (k,o)
     ordered_switch__with_case :: [((k,i)->o)] -> (k,i) -> (k,o)
@@ -2078,16 +2159,16 @@ class Checker__switch__with_case(IChecker__choice_or_switch):
             return
         else:
             return case, z
-class Checker__unordered_switch__with_case(IChecker__unordered_choice_or_switch, Checker__switch__with_case):
+class Checker__unordered_switch__with_case(IChecker__unordered_choice_or_switch, Checker__switch__with_case, ABC__no_slots):
     _std_arg0_ = _std_arg4key2checker
-class Checker__ordered_switch__with_case(IChecker__ordered_choice_or_switch, Checker__switch__with_case):
+class Checker__ordered_switch__with_case(IChecker__ordered_choice_or_switch, Checker__switch__with_case, ABC__no_slots):
     _std_arg0_ = _std_arg4checkers
 
 
 
 
 
-class Checker__choice_many1(IChecker__choice_or_switch):
+class Checker__choice_many1(IChecker__choice_or_switch, ABC__no_slots):
     r'''choice_many1
     'unordered_choice_many1 :: {k:(i->o)} -> i -> {k:o}{len>=1}'
     'ordered_choice_many1 :: [(i->o)] -> i -> {k:o}{len>=1}'
@@ -2111,13 +2192,13 @@ class Checker__choice_many1(IChecker__choice_or_switch):
         # >=1
         if check_only: raise CheckError_Logic
         return FrozenDict(d)
-class Checker__unordered_choice_many1(IChecker__unordered_choice_or_switch, Checker__choice_many1):
+class Checker__unordered_choice_many1(IChecker__unordered_choice_or_switch, Checker__choice_many1, ABC__no_slots):
     _std_arg0_ = _std_arg4key2checker
-class Checker__ordered_choice_many1(IChecker__ordered_choice_or_switch, Checker__choice_many1):
+class Checker__ordered_choice_many1(IChecker__ordered_choice_or_switch, Checker__choice_many1, ABC__no_slots):
     _std_arg0_ = _std_arg4checkers
 
 
-class Checker__choice_only_one(IChecker__choice_or_switch):
+class Checker__choice_only_one(IChecker__choice_or_switch, ABC__no_slots):
     r'''choice_only_one
     'unordered_choice_only_one :: {k:(i->o)} -> i -> (k,o)'
     'ordered_choice_only_one :: [(i->o)] -> i -> (k,o)'
@@ -2144,14 +2225,14 @@ class Checker__choice_only_one(IChecker__choice_or_switch):
         else:
             [x] = bm
             return (k, x)
-class Checker__unordered_choice_only_one(IChecker__unordered_choice_or_switch, Checker__choice_only_one):
+class Checker__unordered_choice_only_one(IChecker__unordered_choice_or_switch, Checker__choice_only_one, ABC__no_slots):
     _std_arg0_ = _std_arg4key2checker
-class Checker__ordered_choice_only_one(IChecker__ordered_choice_or_switch, Checker__choice_only_one):
+class Checker__ordered_choice_only_one(IChecker__ordered_choice_or_switch, Checker__choice_only_one, ABC__no_slots):
     _std_arg0_ = _std_arg4checkers
 
 
 
-class Checker__choice(IChecker__choice_or_switch):
+class Checker__choice(IChecker__choice_or_switch, ABC__no_slots):
     r'''choice
     'unordered_choice :: {k:(i->o)} -> i -> (k,o)'
     'ordered_choice :: [(i->o)] -> i -> (k,o)'
@@ -2175,9 +2256,9 @@ class Checker__choice(IChecker__choice_or_switch):
         else:
             [x] = bm
             return (k, x)
-class Checker__unordered_choice(IChecker__unordered_choice_or_switch, Checker__choice):
+class Checker__unordered_choice(IChecker__unordered_choice_or_switch, Checker__choice, ABC__no_slots):
     _std_arg0_ = _std_arg4key2checker
-class Checker__ordered_choice(IChecker__ordered_choice_or_switch, Checker__choice):
+class Checker__ordered_choice(IChecker__ordered_choice_or_switch, Checker__choice, ABC__no_slots):
     _std_arg0_ = _std_arg4checkers
 Checker__ordered_union = Checker__ordered_choice
 
@@ -2212,7 +2293,7 @@ Checker__ordered_union = Checker__ordered_choice
 
 
 #HHHHH
-class Checker__all(IChecker_one_arg__checker, ICheckCalcor_with_args):
+class Checker__all(IChecker_one_arg__checker, ICheckCalcor_with_args, ABC__no_slots):
     'iterable'
     @classmethod
     @override
@@ -2251,7 +2332,7 @@ def mk_impl_class_checker(type_is_impl_cls, impl_cls, interface_pseudo_checker):
     return concrete_type_checker & api_and_data_checker
 
 
-class Checker__py_Sequence_as_array(ConfigMixin__Sequence, IChecker_one_arg__checker, ICheckCalcor_with_args):
+class Checker__py_Sequence_as_array(ConfigMixin__Sequence, IChecker_one_arg__checker, ICheckCalcor_with_args, ABC__no_slots):
     'Sequence<T>'
 
     @classmethod
@@ -2263,16 +2344,16 @@ class Checker__py_Sequence_as_array(ConfigMixin__Sequence, IChecker_one_arg__che
         seq = obj
         return Checker__all._check_then_calc_ex_with_args_(args, check_only, seq)
 
-class Checker__py_list_as_array(ConfigMixin__list, Checker__py_Sequence_as_array):
+class Checker__py_list_as_array(ConfigMixin__list, Checker__py_Sequence_as_array, ABC__no_slots):
     'list<T>'
-class Checker__py_tuple_as_array(ConfigMixin__tuple, Checker__py_Sequence_as_array):
+class Checker__py_tuple_as_array(ConfigMixin__tuple, Checker__py_Sequence_as_array, ABC__no_slots):
     'tuple<T>'
 
 def mk_checker__array(pseudo_checker):
     checker = mk_checker(pseudo_checker)
     return Checker__py_tuple_as_array(checker)
 
-class Checker__py_Sequence_as_point(ConfigMixin__Sequence, IChecker_one_arg__checkers, ICheckCalcor_with_args):
+class Checker__py_Sequence_as_point(ConfigMixin__Sequence, IChecker_one_arg__checkers, ICheckCalcor_with_args, ABC__no_slots):
     r'''
     'Sequence<T,...>'
 
@@ -2290,9 +2371,9 @@ class Checker__py_Sequence_as_point(ConfigMixin__Sequence, IChecker_one_arg__che
         seq = obj
         return _check_then_calc_ex_with_args4point(-1, checkers, check_only, seq)
 
-class Checker__py_list_as_point(ConfigMixin__list, Checker__py_Sequence_as_point):
+class Checker__py_list_as_point(ConfigMixin__list, Checker__py_Sequence_as_point, ABC__no_slots):
     'list<T,...>'
-class Checker__py_tuple_as_point(ConfigMixin__tuple, Checker__py_Sequence_as_point):
+class Checker__py_tuple_as_point(ConfigMixin__tuple, Checker__py_Sequence_as_point, ABC__no_slots):
     'tuple<T,...>'
 
 
@@ -2305,7 +2386,7 @@ def mk_checker__pairs(fst_pseudo_checker, snd_pseudo_checker):
     return mk_checker__array(mk_checker__pair(fst_pseudo_checker, snd_pseudo_checker))
 
 
-class Checker__py_Sequence_as_point__omit(ConfigMixin__Sequence, ICheckCalcor_with_args):
+class Checker__py_Sequence_as_point__omit(ConfigMixin__Sequence, ICheckCalcor_with_args, ABC__no_slots):
     r'''
     'Sequence<T..., S?...>'
     if min_len==-1: no omit
@@ -2327,13 +2408,13 @@ class Checker__py_Sequence_as_point__omit(ConfigMixin__Sequence, ICheckCalcor_wi
         seq = obj
         return _check_then_calc_ex_with_args4point(min_len, checkers, check_only, seq)
 
-class Checker__py_list_as_point__omit(ConfigMixin__list, Checker__py_Sequence_as_point__omit):
+class Checker__py_list_as_point__omit(ConfigMixin__list, Checker__py_Sequence_as_point__omit, ABC__no_slots):
     'list<T..., S?...>'
-class Checker__py_tuple_as_point__omit(ConfigMixin__tuple, Checker__py_Sequence_as_point__omit):
+class Checker__py_tuple_as_point__omit(ConfigMixin__tuple, Checker__py_Sequence_as_point__omit, ABC__no_slots):
     'tuple<T..., S?...>'
 
 
-class Checker__tuple_maybe(IChecker_one_arg__checker, ICheckCalcor_with_args):
+class Checker__tuple_maybe(IChecker_one_arg__checker, ICheckCalcor_with_args, ABC__no_slots):
     @classmethod
     @override
     def _check_then_calc_ex_with_args_(cls, args, check_only, obj):
@@ -2354,7 +2435,7 @@ class Checker__tuple_maybe(IChecker_one_arg__checker, ICheckCalcor_with_args):
             return None if check_only else ()
 
 
-class Checker__none_maybe(IChecker_one_arg__checker, ICheckCalcor_with_args):
+class Checker__none_maybe(IChecker_one_arg__checker, ICheckCalcor_with_args, ABC__no_slots):
     @classmethod
     @override
     def _check_then_calc_ex_with_args_(cls, args, check_only, obj):
@@ -2371,7 +2452,7 @@ class Checker__none_maybe(IChecker_one_arg__checker, ICheckCalcor_with_args):
                 return (z,)
 
 
-class Checker__check_then_calc_ex_func(IChecker_one_arg__callable, ICheckCalcor_with_args):
+class Checker__check_then_calc_ex_func(IChecker_one_arg__callable, ICheckCalcor_with_args, ABC__no_slots):
     'vs Checker__check_func'
     @classmethod
     @override
@@ -2379,7 +2460,7 @@ class Checker__check_then_calc_ex_func(IChecker_one_arg__callable, ICheckCalcor_
         [check_then_calc_ex_func] = args
         return check_then_calc_ex_func(check_only, obj)
 
-class Checker__check_func(IChecker_one_arg__callable, ICheckEchor_with_args):
+class Checker__check_func(IChecker_one_arg__callable, ICheckEchor_with_args, ABC__no_slots):
     'vs Checker__no_calc'
     @classmethod
     @override
@@ -2388,7 +2469,7 @@ class Checker__check_func(IChecker_one_arg__callable, ICheckEchor_with_args):
         [check_func] = args
         #bug:recur:check(check_func, obj)
         return check_func(obj) #return to test None
-class Checker__verify_func(IChecker_one_arg__callable, ICheckEchor_one_arg__verify):
+class Checker__verify_func(IChecker_one_arg__callable, ICheckEchor_one_arg__verify, ABC__no_slots):
     assert issubclass(ICheckEchor_one_arg__verify, ICheckEchor_with_args__verify4check)
     @classmethod
     @override
@@ -2401,7 +2482,7 @@ checker4callable = Checker__verify_func(callable)
 
 
 #HHHHH
-class Checker__is_obj(ICheckEchor_one_arg__verify):
+class Checker__is_obj(ICheckEchor_one_arg__verify, ABC__no_slots):
     __arg_id2sf = {}
     @staticmethod
     def _cached_new_(arg):
@@ -2439,7 +2520,7 @@ assert ... is Ellipsis
 
 
 
-class Checker__eq_obj(ICheckEchor_one_arg__verify):
+class Checker__eq_obj(ICheckEchor_one_arg__verify, ABC__no_slots):
     'same type? given pseudo_checker?'
     @classmethod
     @override
@@ -2449,7 +2530,7 @@ class Checker__eq_obj(ICheckEchor_one_arg__verify):
         return obj in [arg]
 
 
-class Checker__eq_obj__same_type(ICheckEchor_one_arg__verify):
+class Checker__eq_obj__same_type(ICheckEchor_one_arg__verify, ABC__no_slots):
     'eg: str/bytes/int'
     @classmethod
     @override
@@ -2459,7 +2540,7 @@ class Checker__eq_obj__same_type(ICheckEchor_one_arg__verify):
         return type(obj) is type(arg) and obj == arg
 
 
-class Checker__in_set(ICheckEchor_one_arg__Container__verify):
+class Checker__in_set(ICheckEchor_one_arg__Container__verify, ABC__no_slots):
     'raise when hash fail?'
     @classmethod
     @override
@@ -2467,7 +2548,7 @@ class Checker__in_set(ICheckEchor_one_arg__Container__verify):
         "args -> obj -> bool"
         [arg] = args
         return obj in arg
-class Checker__in_set__hash(ICheckEchor_one_arg__Container__verify):
+class Checker__in_set__hash(ICheckEchor_one_arg__Container__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
@@ -2487,7 +2568,7 @@ class Checker__in_set__hash(ICheckEchor_one_arg__Container__verify):
 
 
 
-class Checker__uint_mod(IChecker_one_arg__uint, ICheckEchor_with_args):
+class Checker__uint_mod(IChecker_one_arg__uint, ICheckEchor_with_args, ABC__no_slots):
     @classmethod
     @override
     def _check_with_args_(cls, args, obj):
@@ -2497,7 +2578,7 @@ class Checker__uint_mod(IChecker_one_arg__uint, ICheckEchor_with_args):
             check_int(obj, min=0, max=M-1)
         else:
             check_int(obj)
-class Checker__int_between(IChecker_two_args__args_are_int, ICheckEchor_with_args):
+class Checker__int_between(IChecker_two_args__args_are_int, ICheckEchor_with_args, ABC__no_slots):
     @classmethod
     @override
     def _check_with_args_(cls, args, obj):
@@ -2505,14 +2586,14 @@ class Checker__int_between(IChecker_two_args__args_are_int, ICheckEchor_with_arg
         [begin, end] = args
         check_int(obj, min=begin, max=end-1)
 
-class Checker__int_ge(IChecker_one_arg__int, ICheckEchor_with_args):
+class Checker__int_ge(IChecker_one_arg__int, ICheckEchor_with_args, ABC__no_slots):
     @classmethod
     @override
     def _check_with_args_(cls, args, obj):
         "args -> obj -> None|raise CheckFail/Exception"
         [begin] = args
         check_int(obj, min=begin)
-class Checker__int_lt(IChecker_one_arg__int, ICheckEchor_with_args):
+class Checker__int_lt(IChecker_one_arg__int, ICheckEchor_with_args, ABC__no_slots):
     @classmethod
     @override
     def _check_with_args_(cls, args, obj):
@@ -2524,7 +2605,7 @@ Checker__int_lt
 
 
 
-class Checker__issubclass(ICheckEchor_one_arg__type_tree__verify):
+class Checker__issubclass(ICheckEchor_one_arg__type_tree__verify, ABC__no_slots):
     'nontype obj?'
     @classmethod
     @override
@@ -2533,7 +2614,7 @@ class Checker__issubclass(ICheckEchor_one_arg__type_tree__verify):
         [super_cls] = args
         return issubclass(obj, super_cls)
 Checker__le_cls = Checker__issubclass
-class Checker__issubclass__allow_nontype(ICheckEchor_one_arg__type_tree__verify):
+class Checker__issubclass__allow_nontype(ICheckEchor_one_arg__type_tree__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
@@ -2542,7 +2623,7 @@ class Checker__issubclass__allow_nontype(ICheckEchor_one_arg__type_tree__verify)
         return isinstance(obj, type) and issubclass(obj, super_cls)
 
 
-class Checker__is_proper_subclass(ICheckEchor_one_arg__type__verify):
+class Checker__is_proper_subclass(ICheckEchor_one_arg__type__verify, ABC__no_slots):
     'nontype obj?'
     @classmethod
     @override
@@ -2553,7 +2634,7 @@ class Checker__is_proper_subclass(ICheckEchor_one_arg__type__verify):
 Checker__lt_cls = Checker__is_proper_subclass
 
 
-class Checker__isinstance(ICheckEchor_one_arg__type_tree__verify):
+class Checker__isinstance(ICheckEchor_one_arg__type_tree__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
@@ -2563,7 +2644,7 @@ class Checker__isinstance(ICheckEchor_one_arg__type_tree__verify):
 Checker__in_cls = Checker__isinstance
 
 
-class Checker__type_is(ICheckEchor_one_arg__type__verify):
+class Checker__type_is(ICheckEchor_one_arg__type__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
@@ -2573,7 +2654,7 @@ class Checker__type_is(ICheckEchor_one_arg__type__verify):
 
 
 #HHHHH
-class Checker__namedtuple(IChecker_two_args, ICheckCalcor_with_args):
+class Checker__namedtuple(IChecker_two_args, ICheckCalcor_with_args, ABC__no_slots):
     r'''
     typing.NamedTuple
     collections.namedtuple
@@ -2623,7 +2704,7 @@ Checker__py_namedtuple_as_point = Checker__namedtuple
 
 
 
-class Checker__Mapping_as_record(ConfigMixin__Mapping, IChecker_two_args, ICheckCalcor_with_args):
+class Checker__Mapping_as_record(ConfigMixin__Mapping, IChecker_two_args, ICheckCalcor_with_args, ABC__no_slots):
     'Mapping{key=V,...}'
     _std_arg0_ = _std_arg4frozenset
     _std_arg1_ = _std_arg4key2checker
@@ -2666,14 +2747,14 @@ class Checker__Mapping_as_record(ConfigMixin__Mapping, IChecker_two_args, ICheck
                 g = echo
             return g(r)
 
-class Checker__HalfFrozenDict_as_record(ConfigMixin__HalfFrozenDict, Checker__Mapping_as_record):
+class Checker__HalfFrozenDict_as_record(ConfigMixin__HalfFrozenDict, Checker__Mapping_as_record, ABC__no_slots):
     'seed.types.HalfFrozenDict{key=V,...}'
-class Checker__FrozenDict_as_record(ConfigMixin__FrozenDict, Checker__Mapping_as_record):
+class Checker__FrozenDict_as_record(ConfigMixin__FrozenDict, Checker__Mapping_as_record, ABC__no_slots):
     'seed.types.FrozenDict{key=V,...}'
-class Checker__dict_as_record(ConfigMixin__dict, Checker__Mapping_as_record):
+class Checker__dict_as_record(ConfigMixin__dict, Checker__Mapping_as_record, ABC__no_slots):
     'dict{key=V,...}'
 
-class Checker__Mapping(ConfigMixin__Mapping, IChecker_two_args, ICheckCalcor_with_args):
+class Checker__Mapping(ConfigMixin__Mapping, IChecker_two_args, ICheckCalcor_with_args, ABC__no_slots):
     'Mapping<K,V>'
     _may_num_args_ = 2
     _std_arg0_ = _std_arg4checker
@@ -2699,16 +2780,16 @@ class Checker__Mapping(ConfigMixin__Mapping, IChecker_two_args, ICheckCalcor_wit
                 pairs.append((a,b))
             return (*pairs,)
 
-class Checker__dict(ConfigMixin__dict, Checker__Mapping):
+class Checker__dict(ConfigMixin__dict, Checker__Mapping, ABC__no_slots):
     'dict<K,V>'
-class Checker__HalfFrozenDict(ConfigMixin__HalfFrozenDict, Checker__Mapping):
+class Checker__HalfFrozenDict(ConfigMixin__HalfFrozenDict, Checker__Mapping, ABC__no_slots):
     'HalfFrozenDict<K,V>'
-class Checker__FrozenDict(ConfigMixin__FrozenDict, Checker__Mapping):
+class Checker__FrozenDict(ConfigMixin__FrozenDict, Checker__Mapping, ABC__no_slots):
     'FrozenDict<K,V>'
 
 
 
-class Checker__Mapping__item(ConfigMixin__Mapping, IChecker_one_arg__checker, ICheckCalcor_with_args):
+class Checker__Mapping__item(ConfigMixin__Mapping, IChecker_one_arg__checker, ICheckCalcor_with_args, ABC__no_slots):
     'Mapping<Item>'
 
     @classmethod
@@ -2720,17 +2801,17 @@ class Checker__Mapping__item(ConfigMixin__Mapping, IChecker_one_arg__checker, IC
         d = obj
         return Checker__all._check_then_calc_ex_with_args_(args, check_only, d.items())
 
-class Checker__dict__item(ConfigMixin__dict, Checker__Mapping__item):
+class Checker__dict__item(ConfigMixin__dict, Checker__Mapping__item, ABC__no_slots):
     'dict<Item>'
-class Checker__HalfFrozenDict__item(ConfigMixin__HalfFrozenDict, Checker__Mapping__item):
+class Checker__HalfFrozenDict__item(ConfigMixin__HalfFrozenDict, Checker__Mapping__item, ABC__no_slots):
     'HalfFrozenDict<Item>'
-class Checker__FrozenDict__item(ConfigMixin__FrozenDict, Checker__Mapping__item):
+class Checker__FrozenDict__item(ConfigMixin__FrozenDict, Checker__Mapping__item, ABC__no_slots):
     'FrozenDict<Item>'
 
 
 
 
-class Checker__Set(IChecker_one_arg__checker, ICheckCalcor_with_args):
+class Checker__Set(IChecker_one_arg__checker, ICheckCalcor_with_args, ABC__no_slots):
     'Set<K>'
     @classmethod
     @override
@@ -2741,12 +2822,46 @@ class Checker__Set(IChecker_one_arg__checker, ICheckCalcor_with_args):
         s = obj
         return Checker__all._check_then_calc_ex_with_args_(args, check_only, s)
 
-class Checker__set(ConfigMixin__set, Checker__Set):
+class Checker__set(ConfigMixin__set, Checker__Set, ABC__no_slots):
     'set<K>'
-class Checker__frozenset(ConfigMixin__frozenset, Checker__Set):
+class Checker__frozenset(ConfigMixin__frozenset, Checker__Set, ABC__no_slots):
     'frozenset<K>'
 
 
+# vivi Checker__Mapping
+class Checker__slice(ICheckCalcor_with_args, ABC__no_slots):
+    'slice<start, stop, step>'
+
+    _may_num_args_ = 3
+    _std_arg0_ = _std_arg4checker
+    _std_arg1_ = _std_arg4checker
+    _std_arg2_ = _std_arg4checker
+
+    @classmethod
+    @override
+    def _check_then_calc_ex_with_args_(cls, args, check_only, obj):
+        [checker4the_start, checker4the_stop, checker4the_step] = args
+        check_type_is(slice, obj)
+        triple = slice2triple(obj)
+        triple_checker = Checker__py_tuple_as_point(*args)
+        return check_then_calc_ex(triple_checker, check_only, triple)
+        return triple
+Checker__slice(the_pass_checker, the_pass_checker, the_pass_checker)
+
+
+# vivi Checker__Mapping__item
+class Checker__slice__triple(IChecker_one_arg__checker, ICheckCalcor_with_args, ABC__no_slots):
+    'slice<triple>'
+
+    @classmethod
+    @override
+    def _check_then_calc_ex_with_args_(cls, args, check_only, obj):
+        [triple_checker] = args
+        check_type_is(slice, obj)
+        triple = slice2triple(obj)
+        return check_then_calc_ex(triple_checker, check_only, triple)
+        return triple
+Checker__slice__triple(the_pass_checker)
 
 
 
@@ -2754,7 +2869,7 @@ class Checker__frozenset(ConfigMixin__frozenset, Checker__Set):
 
 #HHHHH
 
-class Checker__le_obj(ICheckEchor_one_arg__verify):
+class Checker__le_obj(ICheckEchor_one_arg__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
@@ -2763,7 +2878,7 @@ class Checker__le_obj(ICheckEchor_one_arg__verify):
         return obj <= rhs
 
 
-class Checker__lt_obj(ICheckEchor_one_arg__verify):
+class Checker__lt_obj(ICheckEchor_one_arg__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
@@ -2772,7 +2887,7 @@ class Checker__lt_obj(ICheckEchor_one_arg__verify):
         return obj < rhs
 
 
-class Checker__ge_obj(ICheckEchor_one_arg__verify):
+class Checker__ge_obj(ICheckEchor_one_arg__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
@@ -2781,7 +2896,7 @@ class Checker__ge_obj(ICheckEchor_one_arg__verify):
         return obj >= rhs
 
 
-class Checker__gt_obj(ICheckEchor_one_arg__verify):
+class Checker__gt_obj(ICheckEchor_one_arg__verify, ABC__no_slots):
     @classmethod
     @override
     def _verify_with_args_(cls, args, obj):
