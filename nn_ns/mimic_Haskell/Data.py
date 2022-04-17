@@ -50,7 +50,7 @@ Syntactic4hs = ???
 MixSyntactic4hs =
     | Constant Semantic4hs #mix~half_compiled
     | Var
-    | Expr8List4hs [MixSyntactic4hs]
+    | ExprFlow [MixSyntactic4hs]
     | Lambda4hs [Var] MixSyntactic4hs
     | RecurDoLet4hs [(Var, MixSyntactic4hs)] MixSyntactic4hs
         #copy to
@@ -125,7 +125,7 @@ MixSyntactic4hs =
         xxx    in  f x_jmp >>= \x_val -> assert [x_val is not x_jmp] $ x_jmp.set(x_val) `seq` x_val
 
     | RecurLet4hs as_if_prime/bool [(Var, MixSyntactic4hs)] MixSyntactic4hs
-        # why not Expr8List4hs [Lambda4hs ..., ...]?
+        # why not ExprFlow [Lambda4hs ..., ...]?
         #   since def recur_group!
         # let {a=..., b=...} in body
         #   =!= Apps4hs [\a b ... -> body, a, b, ...]
@@ -246,7 +246,7 @@ compile4mix order:
     3. BIG_STEP: convert OutputUnboxedBlockSugarLet4hs/OutputUnboxedRecurLet4hs/Case4hs/BareCase4hs(Pattern4hs) into _AsIfPrimeRecurLet4hs/Lambda4hs+builtins_and_constants(closure?incomplete)
     4. compile__mix2 :: mix2 -> _MidWayBound
         precondition:
-            input only: Semantic4hs, both_Semantic4hs_Syntactic4hs(Apps4hs/xxx Data4hs)/Expr8List4hs, Lambda4hs, Var
+            input only: Semantic4hs, both_Semantic4hs_Syntactic4hs(Apps4hs/xxx Data4hs)/ExprFlow, Lambda4hs, Var
         postcondition:
             output:
                 builtins_and_constants
@@ -258,14 +258,19 @@ compile4mix order:
 
 TODO:
     #################################
-    DONE
+    cancel-DONE
     remove Data4hs from both_Semantic4hs_Syntactic4hs
         Data4hs CtorH4hs [MixSyntactic4hs]
             -->> Apps4hs [CtorH4hs, ...]
-        =====TODO:cancel this remove
+        =====DONE:cancel this remove
             Apps4hs [MixSyntactic4hs]
             is_obj4hs(CtorH4hs)
             need to known N_ary/num_args4call
+        #################################
+        DONE
+        compile__mix2...Data4hs transparent or unbox as Apps4hs...
+        consider (x,y) ie Data4hs(ctor4hs, var...)
+        unbox_Data4hs_back_to_Apps4hs@compile__mix2.bottomup()
 
     #################################
     DONE
@@ -346,7 +351,7 @@ TODO:
             | mix0
                 # check after both_Semantic4hs_Syntactic4hs
                 # ie. if shallow check the type is Semantic4hs but not both_Semantic4hs_Syntactic4hs, then deep_check_Semantic4hs
-            | Expr8List4hs
+            | ExprFlow
                 #no Infix4hs
                 #recur deep_check_mix1
             | Var
@@ -359,7 +364,12 @@ TODO:
         [[def__mix2]]
         mix2 = mix1
             | Lambda4hs
-            | _AsIfPrimeRecurLet4hs #unordered recur
+            | RecurLet4hs
+                #unordered recur
+                #unoptimized
+            | _AsIfPrimeRecurLet4hs
+                #unordered recur
+                #optimized
         mix3 = mix2 | BareCase4hs
         mix6 = mix5 | StepSugarLet4hs #ordered nonrecur
             # (\x (\y -> ...) b) a
@@ -451,14 +461,10 @@ TODO:
             # let f a [b] = ...
             #     f [a] b = ...
     #################################
-    TODO
-      compile__mix2...Data4hs transparent or unbox as Apps4hs...
-      consider (x,y) ie Data4hs(ctor4hs, var...)
+    DONE
+    MixSyntactic4hs.___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ :: {cls} or ()->{cls} or str
     #################################
-    TODO
-    MixSyntactic4hs.___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ :: {cls} or ()->{cls}
-    #################################
-    TODO
+    cancel-TODO
     remove _ITuple.__iter__/__contains__
         #since whnf
         + .iter__isT(sf, T)
@@ -466,6 +472,45 @@ TODO:
         iter__if_type_is
         iter__if_type_in
         iter__if(test, x)
+    #################################
+    DONE-optimization
+    Lambda4hs-Lambda4hs merge params
+    see:optimization__Lambda4hs_Lambda4hs_merge
+        @compile__mix2._bottomup__Lambda4hs._0_Lambda4hs._opt_L_L()
+
+    #################################
+    TODO-optimization
+    RecurLet4hs split into _AsIfPrimeRecurLet4hs
+        RecurLet4hs move into mix2, ie. split happens in compile__mix2.bottomup()
+        since eval-free_vars better in bottomup-style
+    see:"if optimization__split_recur_vars"@_bottomup___AsIfPrimeRecurLet4hs
+        not impl yet
+    #################################
+    DONE-optimization
+        Apps4hs [x] -->> x
+    see:optimization__transparent_unit_Apps4hs_Expr8List4hs
+    see:link__payload4CASE_CONST
+        mix0 -->> Apps4hs [mix0]
+            for emplace-whnf
+    #################################
+    DONE-optimization
+        \x->body   -->>   body
+    see:optimization__drop_Lambda4hs_with_no_params
+    #################################
+    TODO-add env/kwargs @compile__mix2
+        flags to control optimization
+        eg:
+            keep_Lambda4hs_with_no_params
+    # from seed.types.DictKeyAsObjAttr import DictKeyAsObjAttr, DictKeyAsObjAttrAndAsMapping
+    #################################
+    TODO-Expr8List4hs
+        renaming to ExprFlow
+        Apps4hs - Semantic4hs
+        ExprFlow - Syntactic4hs
+        ==>> remove ExprFlow from mix2
+    #################################
+    #################################
+    #################################
     #################################
     #################################
 
@@ -483,7 +528,7 @@ TODO:
 
 
 Data4hs <: tuple
-Expr8List4hs <: tuple
+ExprFlow <: tuple
 
 
 ToplevelStmt
@@ -705,156 +750,202 @@ eq4output4apps
 rebuild_apps5output
 
 
+
+
+
+
+
+
+
+
+
     Meta4check
     ABC4check
     Meta4check_cls_members_consistent
     Meta4check4object
     Meta4check4tuple
+
     IIsCls4Obj4hs
-    is_obj4hs
-    is_cls4obj4hs
-    check_obj4hs
-    check_cls4obj4hs
+        is_obj4hs
+        is_cls4obj4hs
+        check_obj4hs
+        check_cls4obj4hs
+
     IHasNoInnerMixSyntactic4hs
-    BaseSyntactic4hs
-    BaseSemantic4hs
-    IFixAryCallable4hs
-    IReduceable4apps4hs
-    is_impure_stmt4hs
-    is_cls4impure_stmt4hs
-    Apps4hs
-    eq4output4placeholder
-    rebuild_apps5output
-    eq4output4apps
-    I
-    mk_apps
-    mk_apps5iter
-    whnf_reduce4apps
-    deep_reduce4apps
-    deep_reduce4apps_
-    check_intXs_between
-    check_uintXs_lt
-    check_uintXs
-    fold__objXtuple
-    fold__intXiter
-    intXiter2intXtuple
-    FreeLocalBatchRouter
-    mk_FreeLocalBatchRouter
-    mk_LocalBatchRouter
-    LocalBatchRouter
-    CombinatorSKIBC
-    ExtendedFreeLocalBatchRouter
-    mk_ExtendedFreeLocalBatchRouter
+
+BaseSemantic4hs
     Error4hs
-    the_undefined
-    Data4hs
+        the_undefined
     Data4py
-    IFunc4py
-    Expr4py
-    Stmt4py
-    App4Data4hs
-    ExtendedApp4Data4hs
-    PathIndex4Data4hs
+
+    Data4hs
+        unbox_Data4hs_back_to_Apps4hs
+    Apps4hs
+        eq4output4placeholder
+        rebuild_apps5output
+        eq4output4apps
+        I
+        mk_apps
+        mk_apps5iter
+        whnf_reduce4apps
+        deep_reduce4apps
+        deep_reduce4apps_
+
+    IReduceable4apps4hs
+    IFixAryCallable4hs
+        is_impure_stmt4hs
+        is_cls4impure_stmt4hs
+        IFunc4py
+            Expr4py
+            Stmt4py
+        App4Data4hs
+        ExtendedApp4Data4hs
+        PathIndex4Data4hs
+
+        FreeLocalBatchRouter
+            mk_FreeLocalBatchRouter
+        LocalBatchRouter
+            mk_LocalBatchRouter
+        ExtendedFreeLocalBatchRouter
+            mk_ExtendedFreeLocalBatchRouter
+
+            check_intXs_between
+            check_uintXs_lt
+            check_uintXs
+            fold__objXtuple
+            fold__intXiter
+            intXiter2intXtuple
+
+            CombinatorSKIBC
+                S
+                K
+                B
+                C
+                Yh
+                Y
+
+
+
+BaseSyntactic4hs
+    ExprFlow
+    Lambda4hs
+        mk_Lambda4hs
+
     var2getter
     Infix4hs
-    VarN4hs
-    VarH4hs
-    VarR4hs
-    Var4hs
-    UnusedPattern4hs
-    default_unused_pattern
-    CtorR4hs
-    Ctor4hs
-    CtorH4hs
-    Ctor4Nothing4Data4hs
-    Ctor4Just4Data4hs
-    Ctor4False4Data4hs
-    Ctor4True4Data4hs
-    True4Data4hs
-    False4Data4hs
-    Nothing4Data4hs
-    mk_Just4Data4hs
-    mk_Ctor4Integer4Data4hs
-    mk_Integer4Data4hs
-    mk_Ctor4Tuple4Data4hs
-    mk_Tuple4Data4hs_
-    mk_f4hs__Tuple4Data4hs_
-    ctor4hs_to_f4hs
-    ctor4Pair4hs
+
     VarTypes4get
-    check_var
-    is_var
-    is_cls4var
-    Expr8List4hs
-    mk_Lambda4hs
-    Lambda4hs
+        VarN4hs
+        VarH4hs
+        VarR4hs
+        Var4hs
+
+        check_var
+        is_var
+        is_cls4var
+
+    UnusedPattern4hs
+        default_unused_pattern
+
+    CtorH4hs
+        CtorR4hs
+        Ctor4hs
+
+        Ctor4Nothing4Data4hs
+        Ctor4Just4Data4hs
+        Ctor4False4Data4hs
+        Ctor4True4Data4hs
+        True4Data4hs
+        False4Data4hs
+        Nothing4Data4hs
+
+        mk_Just4Data4hs
+        mk_Ctor4Integer4Data4hs
+            mk_Integer4Data4hs
+        mk_Ctor4Tuple4Data4hs
+            mk_Tuple4Data4hs_
+            mk_f4hs__Tuple4Data4hs_
+            ctor4Pair4hs
+        ctor4hs_to_f4hs
+
+    IFromName
+        MkVarH4hs
+            mk_var
+        MkCtorH4hs
+            mk_ctor
+
+
     ILet4hs
-    RecurLet4hs
-    Let4hs
-    BlockSugarLet4hs
-    StepSugarLet4hs
+        RecurLet4hs
+            Let4hs
+        BlockSugarLet4hs
+        StepSugarLet4hs
+
     IOutputUnboxedLet4hs
-    OutputUnboxedBlockSugarLet4hs
-    OutputUnboxedStepSugarLet4hs
-    OutputUnboxedRecurLet4hs
+        OutputUnboxedBlockSugarLet4hs
+        OutputUnboxedStepSugarLet4hs
+        OutputUnboxedRecurLet4hs
+
     MultiInputUnboxedRecurLet4hs
-    mk_MultiInputUnboxedRecurLet4hs
-    InputUnboxedLambda4hs
+        mk_MultiInputUnboxedRecurLet4hs
+
+
+    BareCase4hs
+        if_then_else___Syntactic4hs
+        fold_Maybe___Syntactic4hs
+    Case4hs
+        fold__guarded_body
+        InputUnboxedLambda4hs
+
+
+    Pattern4hs
+    Alias4Pattern4hs
+        iter_vars4xpattern
+        deep_check_xpattern_has_no_duplicates_vars
+        xpattern__to__params_ExtendedApp4Data4hs_pair
+
+        XVarTypes
+        XPatternTypes
+        is_xvar
+        check_xvar
+        check_xpattern
+
+
+    deep_check_mix0
+        deep_check_mix1
+        deep_check_mix2
+        MixSyntactic4hs__Types4mix1
+        MixSyntactic4hs__Types4mix2
+
+    fmap_on_child_mixN
+    shallow_degrade_unless_mix2
+        deep_convert_to_mix2
+
+    compile__mix2
+        main_link__payload4CASE_MIDWAY
+        link__payload4CASE_MIDWAY
+
+
     is_tuple
     is_pair
     is_pairs
-    fold__guarded_body
     check_pairs
-    Case4hs
-    BareCase4hs
     is_triple
     is_triples
     check_triple
     check_triples
-    if_then_else___Syntactic4hs
-    fold_Maybe___Syntactic4hs
-    xpattern__to__params_ExtendedApp4Data4hs_pair
-    is_xvar
-    check_xvar
-    check_xpattern
-    Alias4Pattern4hs
-    Pattern4hs
-    iter_vars4xpattern
-    deep_check_xpattern_has_no_duplicates_vars
-    XVarTypes
-    XPatternTypes
-    IFromName
-    MkVarH4hs
-    mk_var
-    MkCtorH4hs
-    mk_ctor
-    S
-    K
-    B
-    C
-    Yh
-    Y
-    deep_check_mix0
-    MixSyntactic4hs__Types4mix1
-    MixSyntactic4hs__Types4mix2
-    MixSyntactic4hs__Types4mix3
-    MixSyntactic4hs__Types4mix4
-    deep_check_mix1
-    deep_check_mix2
-    deep_check_mix3
-    deep_check_mix4
-    fmap_on_child_mixN
-    shallow_degrade_unless_mix2
-    deep_convert_to_mix2
-    deep_convert_to_mix3
-    deep_convert_to_mix4
-    compile__mix2
-    main_link__payload4CASE_MIDWAY
-    link__payload4CASE_MIDWAY
-
-
 
     '''.split()
+r'''
+#see:___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___
+deprecated:
+    MixSyntactic4hs__Types4mix3
+    MixSyntactic4hs__Types4mix4
+    deep_check_mix3
+    deep_check_mix4
+    deep_convert_to_mix3
+    deep_convert_to_mix4
+#'''
 #__all__
 
 #################################
@@ -866,6 +957,7 @@ from collections import Counter
 #from functools import partial
 from seed.tiny import fst, snd, echo, mk_tuple, check_uint, check_callable, MapView, check_type_is, check_pair#, check_tuple, check_bool
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt as check_int_between #, check_int_ge, check_int_ge_le
+from seed.tiny_.oXs import eat_iter as _eat_iter, check_intXs_between, check_uintXs_lt, check_uintXs, fold__objXtuple, fold__intXiter, intXiter2intXtuple
 from seed.helper.repr_input import repr_helper
 from seed.tiny import expectError
 from seed.tiny import iter_cls_member_pairs_in_mro_at, get_mro4cls, get_dict4cls#, get_dict4obj
@@ -1015,8 +1107,6 @@ class IIsCls4Obj4hs(ABC4check, metaclass=Meta4check_cls_members_consistent):
     #see:deep_check_mix0
     #see:deep_check_mix1
     #see:deep_check_mix2
-    #see:deep_check_mix3
-    #see:deep_check_mix4
     #
     #'''
     __slots__ = ()
@@ -1194,6 +1284,14 @@ class IFixAryCallable4hs(BaseSemantic4hs, IIsCls4Obj4hs):
         return result
 #IFixAryCallable4hs()
 class IReduceable4apps4hs(IIsCls4Obj4hs):
+    r'''
+    why not class IReduceable4apps4hs(BaseSemantic4hs):
+        BaseSemantic4hs.___is_cls4obj4hs___ = True
+        _Apps4hs <: IReduceable4apps4hs
+        _Apps4hs.___is_cls4obj4hs___ = False
+            #_Apps4hs is just impl detail of Apps4hs
+    #'''
+
     __slots__ = ()
 
     if 0:
@@ -1816,12 +1914,13 @@ class Apps4hs(_Placeholder4hs):
     #Apps4hs is Semantic4hs, not Syntactic4hs
     #   but to impl a Syntactic4hs-version-Apps4hs is too complicate
     #   so, also use Apps4hs as Syntactic4hs
-    # Apps4hs-as-Syntactic4hs vs Expr8List4hs-is-Syntactic4hs
-    #   Expr8List4hs may using Infix4hs
+    # Apps4hs-as-Syntactic4hs vs ExprFlow-is-Syntactic4hs
+    #   ExprFlow may using Infix4hs
     #       but Infix4hs required cmp operator-precedence
     #
     # collect-[[both_Semantic4hs_Syntactic4hs]]:
     #   both Semantic4hs&&Syntactic4hs: Apps4hs, Data4hs
+    #   see:unbox_Data4hs_back_to_Apps4hs
     #   cancel!!!##now not include Data4hs
     #       err:using Apps4hs [CtorH4hs, mix...]
     #       not Data4hs CtorH4hs [MixSyntactic4hs]
@@ -2090,9 +2189,19 @@ assert not is_cls4impure_stmt4hs(Apps4hs)
 
 
 #FreeLocalBatchRouter, LocalBatchRouter
+r'''[[[
+from seed.tiny_.oXs import eat_iter as _eat_iter, check_intXs_between, check_uintXs_lt, check_uintXs, fold__objXtuple, fold__intXiter, intXiter2intXtuple
+py -m nn_ns.app.mk_py_template -o ../../python3_src/seed/tiny_/oXs.py
+e ../../python3_src/seed/tiny_/oXs.py
+
+from seed.tiny_.check import check_uint_lt, check_int_ge_lt as check_int_between
+
 check_int_between
+check_uint
+
 def _eat_iter(it:'iter None', /):
     for _ in it:pass
+eat_iter = _eat_iter
 def check_intXs_between(m, M, iXs, /):
     'IntXs<m,M> = int<m,M> | tuple<IntXs<m,M> >'
     def f4i(i, /):
@@ -2134,7 +2243,7 @@ def fold__intXiter(f4i, f4s, iXs, /):
 def intXiter2intXtuple(iXit, /):
     'intXiter -> intXtuple'
     return fold__intXiter(echo, mk_tuple, iXit)
-
+#]]]'''
 
 class FreeLocalBatchRouter(_ITuple, IFixAryCallable4hs, IHasNoInnerMixSyntactic4hs):
     r'''(num_args4call, uXss4body)
@@ -2586,16 +2695,12 @@ class Data4hs(_ITuple, BaseSemantic4hs, IReduceable4apps4hs):
     #@override
     def ___shallow_degrade_unless_mix2___(sf, /):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
+        return sf #like Apps4hs
         if not _is_cls_both(__class__):
             return sf
         else:
-            #both_Semantic4hs_Syntactic4hs
-            #unbox into Apps4hs
-            (ctor4hs, *args) = sf
-            N = len(args)
-            f4hs = ctor4hs_to_f4hs(N, ctor4hs)
-            return mk_apps(f4hs, *args)
-    #@override
+            #moved into compile__mix2
+            return unbox_Data4hs_back_to_Apps4hs(sf)
 
     #@override
     ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = null_frozenset
@@ -2626,6 +2731,15 @@ class Data4hs(_ITuple, BaseSemantic4hs, IReduceable4apps4hs):
         #bug:return __class__(sf[0], map(deep_reduce4apps, sf[1:]))
         return __class__(sf[0], *map(deep_reduce4apps, sf[1:]))
 
+def unbox_Data4hs_back_to_Apps4hs(data4hs, /):
+    'Data4hs -> Apps4hs'
+    #both_Semantic4hs_Syntactic4hs
+    #unbox into Apps4hs
+    check_type_is(Data4hs, data4hs)
+    (ctor4hs, *args) = data4hs
+    N = len(args)
+    f4hs = ctor4hs_to_f4hs(N, ctor4hs)
+    return mk_apps(f4hs, *args)
 
 r'''
 class _14hs(_ITuple):
@@ -3060,7 +3174,10 @@ True4Data4hs = Data4hs(Ctor4True4Data4hs)
 False4Data4hs = Data4hs(Ctor4False4Data4hs)
 Nothing4Data4hs = Data4hs(Ctor4Nothing4Data4hs)
 def mk_Just4Data4hs(x, /):
-    raise 'lazy'
+    if 0:
+        #now compile__mix2 accept Data4hs
+        #see:mk_Tuple4Data4hs_
+        raise 'lazy'
     return Data4hs(Ctor4Just4Data4hs, x)
 
 #Integer4Data4hs
@@ -3080,12 +3197,14 @@ def mk_Tuple4Data4hs_(N, /, *s):
     #   see: App4Data4hs
     check_uint(N)
     if not len(s) == N: raise TypeError
-    if 0:
-        #bug:SHOULD_BE lazy mk using Apps4hs
+    if 1:
+        #now compile__mix2 accept Data4hs
+        #deprecated:bug:SHOULD_BE lazy mk using Apps4hs
         #   ==>> to substitute var #Data4hs is mix0!!!
         ctor4hs = mk_Ctor4Tuple4Data4hs(N)
         return Data4hs(ctor4hs, *s)
-    return mk_apps(mk_f4hs__Tuple4Data4hs_(N), *s)
+    else:
+        return mk_apps(mk_f4hs__Tuple4Data4hs_(N), *s)
 def _mk_Tuple4Data4hs(*s):
     N = len(s)
     return mk_Tuple4Data4hs_(N, *s)
@@ -3113,7 +3232,7 @@ check_var(VarH4hs('x'))
 assert is_var(VarH4hs('x'))
 
 #class Apply4hs(_ITuple):
-class Expr8List4hs(_ITuple, BaseSyntactic4hs):
+class ExprFlow(_ITuple, BaseSyntactic4hs):
     r'''(*MixSyntactic4hs,)   #MixSyntactic4hs = (BaseSyntactic4hs|BaseSemantic4hs)
 
     f ... | f ... + g ... #vs case...of | let ... in | ... where ...
@@ -3222,8 +3341,11 @@ class RecurLet4hs(ILet4hs):
     #@override
     def ___shallow_degrade_unless_mix2___(sf, /):
         'sf:mix<M> -> mix<N> # 2 <= N < M or 2 == N == M'
-        pairs4def, body = sf
-        return _AsIfPrimeRecurLet4hs(pairs4def, body)
+        return sf #now RecurLet4hs is mix2
+        ######################
+        if __class__ in MixSyntactic4hs__Types4mix2:
+            return sf
+        return simple_convert_RecurLet4hs_to__AsIfPrimeRecurLet4hs(sf)
 
     #@override
     ___introduced_non_mix2_types_in_shallow_degrade_unless_mix2___ = '''
@@ -3231,6 +3353,10 @@ class RecurLet4hs(ILet4hs):
         '''
     ':: {cls} or ()->{cls} #for MixSyntactic4hs #see:___shallow_degrade_unless_mix2___'
 Let4hs = RecurLet4hs
+def simple_convert_RecurLet4hs_to__AsIfPrimeRecurLet4hs(sf, /):
+    check_type_is(RecurLet4hs, sf)
+    pairs4def, body = sf
+    return _AsIfPrimeRecurLet4hs(pairs4def, body)
 
 class _AsIfPrimeRecurLet4hs(RecurLet4hs):
     r'''(pairs4def:[(var:Var, rhs:MixSyntactic4hs)], body:MixSyntactic4hs)
@@ -3677,7 +3803,7 @@ def is_pair(t, /):
 def is_pairs(ps, /):
     return is_tuple(ps) and all(map(is_pair, ps))
 
-def fold__guarded_body(f4guard, f4body, f4pairs, guarded_body, /, is_pairs):
+def fold__guarded_body(f4guard, f4body, f4pairs, guarded_body, /, *, is_pairs):
     'guarded_body = body | [(guard, guarded_body)]'
     if is_pairs is None:
         is_pairs = is_tuple
@@ -4237,7 +4363,7 @@ assert not is_cls4obj4hs(VarR4hs)
 assert not is_cls4obj4hs(VarN4hs)
 assert not is_cls4obj4hs(Var4hs)
 assert not is_cls4obj4hs(CtorH4hs)
-assert not is_cls4obj4hs(Expr8List4hs)
+assert not is_cls4obj4hs(ExprFlow)
 assert not is_cls4obj4hs(Lambda4hs)
 assert not is_cls4obj4hs(RecurLet4hs)
 assert not is_cls4obj4hs(_AsIfPrimeRecurLet4hs)
@@ -4339,26 +4465,27 @@ def ___types2deep_check_mix_(Types, /):
                 #recur_check
     return recur_check
 # mix1
-MixSyntactic4hs__Types4mix1 = frozenset([Expr8List4hs, Apps4hs, Data4hs, *_Types4both, *VarTypes4get])
+MixSyntactic4hs__Types4mix1 = frozenset([ExprFlow, Apps4hs, Data4hs, *_Types4both, *VarTypes4get])
 # mix2
-MixSyntactic4hs__Types4mix2 = frozenset([_AsIfPrimeRecurLet4hs, Lambda4hs, *MixSyntactic4hs__Types4mix1])
-MixSyntactic4hs__Types4mix3 = frozenset([BareCase4hs, *MixSyntactic4hs__Types4mix2])
-MixSyntactic4hs__Types4mix4 = frozenset([Case4hs, *MixSyntactic4hs__Types4mix3])
+MixSyntactic4hs__Types4mix2 = frozenset([RecurLet4hs, _AsIfPrimeRecurLet4hs, Lambda4hs, *MixSyntactic4hs__Types4mix1])
 deep_check_mix1 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix1)
 deep_check_mix2 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix2)
-deep_check_mix3 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix3)
-deep_check_mix4 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix4)
 assert Data4hs in MixSyntactic4hs__Types4mix2
 assert Apps4hs in MixSyntactic4hs__Types4mix2
 assert _AsIfPrimeRecurLet4hs in MixSyntactic4hs__Types4mix2
+if 0:
+    MixSyntactic4hs__Types4mix3 = frozenset([BareCase4hs, *MixSyntactic4hs__Types4mix2])
+    MixSyntactic4hs__Types4mix4 = frozenset([Case4hs, *MixSyntactic4hs__Types4mix3])
+    deep_check_mix3 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix3)
+    deep_check_mix4 = ___types2deep_check_mix_(MixSyntactic4hs__Types4mix4)
 
 
 _deep_check_mixNs = (
     deep_check_mix0
     ,deep_check_mix1
     ,deep_check_mix2
-    ,deep_check_mix3
-    ,deep_check_mix4
+    #,deep_check_mix3
+    #,deep_check_mix4
     )
 r'''
 def _deep_convert_to_mixN(mix, N, recur_convert, /):
@@ -4391,16 +4518,17 @@ def ___types2deep_convert_to_mix_(Types, /):
         return fmap_on_child_mixN(mix, recur_convert)
     return recur_convert
 deep_convert_to_mix2 = ___types2deep_convert_to_mix_(MixSyntactic4hs__Types4mix2)
-deep_convert_to_mix3 = ___types2deep_convert_to_mix_(MixSyntactic4hs__Types4mix3)
-deep_convert_to_mix4 = ___types2deep_convert_to_mix_(MixSyntactic4hs__Types4mix4)
-#deep_convert_to_mix5 = ___types2deep_convert_to_mix_(MixSyntactic4hs__Types4mix5)
+if 0:
+    deep_convert_to_mix3 = ___types2deep_convert_to_mix_(MixSyntactic4hs__Types4mix3)
+    deep_convert_to_mix4 = ___types2deep_convert_to_mix_(MixSyntactic4hs__Types4mix4)
+    #deep_convert_to_mix5 = ___types2deep_convert_to_mix_(MixSyntactic4hs__Types4mix5)
 
 _deep_convert_to_mixNs = (
     None#deep_convert_to_mix0
     ,None#deep_convert_to_mix1
     ,deep_convert_to_mix2
-    ,deep_convert_to_mix3
-    ,deep_convert_to_mix4
+    #,deep_convert_to_mix3
+    #,deep_convert_to_mix4
     )
 
 
@@ -4477,19 +4605,23 @@ scoped_vars - assume outer env exists
         not_Lambda4hs = type(mix2) is not Lambda4hs
         if not_Lambda4hs:
             mix2 = Lambda4hs((), mix2)
+                #==>> keep_Lambda4hs_with_no_params == True
         deep_check_mix2(mix2)
 
         payload4CASE_MIDWAY = _main4Lambda4hs(mix2, scoped_vars)
+            #keep_Lambda4hs_with_no_params == True
         return payload4CASE_MIDWAY
         return not_Lambda4hs, payload4CASE_MIDWAY
 
     def _main4Lambda4hs(mix2, scoped_vars, /):
         '-> payload<CASE_MIDWAY>'
+        #keep_Lambda4hs_with_no_params == True
         check_type_is(Lambda4hs, mix2)
         ofrees = set()
         ov2cxx = {} #OrderedDict()
         #is_mix0, varXs = bottomup(scoped_vars, mix2, ofrees, ov2cxx)
         is_mix0, varXs = _bottomup__Lambda4hs(scoped_vars, mix2, ofrees, ov2cxx)
+            #keep_Lambda4hs_with_no_params == True
         assert ofrees&ov2cxx.keys() == set()
         var4f, (case, payload) = ov2cxx.popitem()
         if ov2cxx: raise logic-err
@@ -4506,6 +4638,7 @@ scoped_vars - assume outer env exists
 
     #[[def___bottomup__Lambda4hs]]
     def _bottomup__Lambda4hs(scoped_vars, mix2, ofrees, ov2cxx, /):
+        #keep_Lambda4hs_with_no_params == True
         (params, varXs4body, body_frees, body_v2cxx) = _0_Lambda4hs(scoped_vars, mix2)
         (case, payload) = _1_Lambda4hs(scoped_vars, params, varXs4body, body_frees, body_v2cxx)
         if 0b0: assert not (ofrees & ov2cxx.keys()),    (ofrees & ov2cxx.keys())
@@ -4513,9 +4646,58 @@ scoped_vars - assume outer env exists
         if 0b0: assert not (ofrees & ov2cxx.keys())
         return is_mix0, varXs
 
+    def to_may_Lambda4hs(mix2, /):
+        '-> may Lambda4hs'
+        while 1:
+            cls = type(mix2)
+            if cls is Apps4hs or cls is ExprFlow:
+                if len(mix2) == 1:
+                    [mix2] = mix2
+                    continue
+                return None
+            elif cls is Lambda4hs:
+                return mix2
+            else:
+                return None
+    def _opt_L_L(params, body, /):
+        '-> Lambda4hs'
+        #optimization__Lambda4hs_Lambda4hs_merge
+        #check_type_is(Lambda4hs, body)
+        _params = [*params]
+        #while type(body) is Lambda4hs:
+        while 1:
+            m = to_may_Lambda4hs(body)
+            if m is None: break
+            body = m
+            check_type_is(Lambda4hs, body)
+            params, body = body
+            _params.extend(params)
+        del params
+        body
+
+        #remove duplicates
+        var2idx = {var:i for i, var in enumerate(_params)}
+        for i, var in enumerate(_params):
+            if not i == var2idx[var]:
+                #discard _params[i]
+                _params[i] = Var4hs() #fresh
+
+        params = mk_tuple(_params)
+        return Lambda4hs(params, body)
+            #check params no duplicates
     def _0_Lambda4hs(scoped_vars, mix2, /):
         check_type_is(Lambda4hs, mix2)
         params, body = mix2
+        del mix2
+
+        m = to_may_Lambda4hs(body)
+        #if type(body) is Lambda4hs:
+        if m is not None:
+            body = m
+            mix2 = _opt_L_L(params, body)
+            return _0_Lambda4hs(scoped_vars, mix2)
+                #recur
+        del m
 
         body_frees = set()
         body_v2cxx = {} #OrderedDict()
@@ -4691,8 +4873,13 @@ scoped_vars - assume outer env exists
 
     #end-def _bottomup__Lambda4hs(scoped_vars, mix2, ofrees, ov2cxx, /):
 
+    def _bottomup__RecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx, /):
+        check_type_is(RecurLet4hs, mix2)
+        mix2 = simple_convert_RecurLet4hs_to__AsIfPrimeRecurLet4hs(mix2)
+        return _bottomup___AsIfPrimeRecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx, optimization__split_recur_vars=True)
+
     #[[def___bottomup___AsIfPrimeRecurLet4hs]]
-    def _bottomup___AsIfPrimeRecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx, /):
+    def _bottomup___AsIfPrimeRecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx, /, *, optimization__split_recur_vars:bool):
         check_type_is(_AsIfPrimeRecurLet4hs, mix2)
         pairs4def, body = mix2
 
@@ -4716,6 +4903,7 @@ scoped_vars - assume outer env exists
                 assert _L + len(_adds) == len(scoped_vars)
                 f = Lambda4hs((), body)
                 payload4CASE_MIDWAY = _main4Lambda4hs(f, scoped_vars)
+                    #keep_Lambda4hs_with_no_params == True
                 scoped_vars.difference_update(_adds)
                     #scoped_vars -= _adds
                 assert _L == len(scoped_vars)
@@ -4734,6 +4922,10 @@ scoped_vars - assume outer env exists
         recur_vars = params
         recur_midway_payloads = mk_tuple(map(on_body, map(snd, pairs4def)))
 
+        del on_body
+        if optimization__split_recur_vars:
+            if 0:
+                raise NotImplementedError
         #check ? really min-prime-recur-group???
 
         if 0:
@@ -4786,7 +4978,7 @@ scoped_vars - assume outer env exists
         var4closure_ = Var4hs() #fresh
         if 0:
             #bug? should be later?
-            #   see:_bottomup__Lambda4hs.assert before _2_Lambda4hs()
+            #   see:_bottomup__Lambda4hs.assert-stmt before _2_Lambda4hs()
             #       assert not (ofrees & ov2cxx.keys())
             #
             ov2cxx[var4closure_] = cased_payload4CASE_CLOSURE_
@@ -4867,7 +5059,7 @@ scoped_vars - assume outer env exists
         #hs_obj = constant
         return True, var
     #[[def__bottomup]]
-    def bottomup(scoped_vars, mix2, ofrees, ov2cxx, /):
+    def bottomup(scoped_vars, mix2, ofrees, ov2cxx, /, *, keep_Lambda4hs_with_no_params=False):
         r'''-> (is_mix0, varXs)=((True, var)|(False, varXs) #varXs=Var|tuple<varXs>))
         #ofrees - output__free_vars
         #ov2cxx - output__var2cased #using .pop()
@@ -4919,18 +5111,50 @@ scoped_vars - assume outer env exists
                     this <==> Apps4hs [var4f, *scoped_FVs]
                     f is to be computed
                     f <==> Apps4hs [g, result5midway]
-                    result5midway :: Expr8List4hs
+                    result5midway :: ExprFlow
 
                     this <==> Apps4hs [g, result5midway, *args<scoped_FVs>]
                         <==> Apps4hs [result5midway, closure]
         ##################################
         #'''
-        cls = type(mix2)
-        if cls is Data4hs:
-            mix2 = shallow_degrade_unless_mix2(mix2)
+        while 1:
             cls = type(mix2)
+            if cls is Data4hs:
+                mix2 = unbox_Data4hs_back_to_Apps4hs(mix2)
+                continue
+            assert cls is type(mix2) is not Data4hs
+            if cls in (Apps4hs, ExprFlow):
+                #optimization__transparent_unit_Apps4hs_Expr8List4hs
+                    #for emplace_reduce#emplace-whnf
+                    #   see:link__payload4CASE_CONST
+                if len(mix2) == 1:
+                    #unit Apps4hs/ExprFlow
+                    [mix2] = mix2
+                    continue
+            if cls is Lambda4hs and not keep_Lambda4hs_with_no_params:
+                #optimization__drop_Lambda4hs_with_no_params
+                #
+                #???
+                #Lambda4hs.params==()
+                #???
+                #IFixAryCallable4hs.num_args4call>0
+                #IFixAryCallable4hs.___is_cls4impure_stmt4hs___ is True
+                #
+                params, body = mix2
+                if not params:
+                    if 0:
+                        #deprecated by:link__payload4CASE_CONST
+                        mix2 = mk_apps(body) #for emplace_reduce
+                    else:
+                        mix2 = body
+                    del params, body
+                    continue
+                del params, body
+            break
+        #end-loop
         assert cls is type(mix2) is not Data4hs
-        if cls in (Apps4hs, Expr8List4hs):
+
+        if cls in (Apps4hs, ExprFlow):
             ls = [bottomup(scoped_vars, x, ofrees, ov2cxx) for x in mix2]
             if all(map(fst, ls)):
                 #all children are is_mix0
@@ -4954,7 +5178,12 @@ scoped_vars - assume outer env exists
         if cls is Lambda4hs:
             return _bottomup__Lambda4hs(scoped_vars, mix2, ofrees, ov2cxx)
         if cls is _AsIfPrimeRecurLet4hs:
-            return _bottomup___AsIfPrimeRecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx)
+            return _bottomup___AsIfPrimeRecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx, optimization__split_recur_vars=False)
+        if cls is RecurLet4hs:
+            mix2 = simple_convert_RecurLet4hs_to__AsIfPrimeRecurLet4hs(mix2)
+            return _bottomup___AsIfPrimeRecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx, optimization__split_recur_vars=True)
+            return _bottomup__RecurLet4hs(scoped_vars, mix2, ofrees, ov2cxx)
+            raise NotImplementedError
         raise TypeError('logic-err in compile__mix2 or deep_check_mix2')
     #end-def bottomup(scoped_vars, mix2, ofrees, ov2cxx, /):
 
@@ -5235,7 +5464,8 @@ def _test_compile__mix2___on_Data4hs():
     deep_check_mix2(mixN)
     payload4CASE_MIDWAY = compile__mix2(mixN, {})
     (midway, inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs) = payload4CASE_MIDWAY
-    print(inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs)
+    #print(inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs)
+
     assert global_FVs == (y, x)
         #transparent-Data4hs as Apps4hs
         #
@@ -5244,7 +5474,97 @@ def _test_compile__mix2___on_Data4hs():
         #       see:ordered_by()
         #   nint2idc index in reversed ordered: -1=x, -2=y, -3,...
         #       put into seq [...,y,x]
+    assert inner_cased_xxx == ((compile__mix2.CASE_CONST, ctor4hs_to_f4hs(2, ctor4Pair4hs)),)
+    assert len(inner_FVs) == len(inner_cased_xxx) == 1
+    assert type(*inner_FVs) is Var4hs
+        #(Var4hs(_addr = 3063376368),)
+    assert scoped_FVs == ()
 _test_compile__mix2___on_Data4hs()
+
+def _test_optimization__Lambda4hs_Lambda4hs_merge():
+    #test optimization__Lambda4hs_Lambda4hs_merge
+    x = mk_var.x
+    y = mk_var.y
+    params = (x, y)
+    body = x
+    mix2 = Lambda4hs(params
+            ,mk_apps(
+            Lambda4hs(params
+            ,ExprFlow(
+            Lambda4hs(params[::-1]
+            ,body
+            )))))
+            #see:to_may_Lambda4hs
+    ans__mix2 = Lambda4hs(
+            (*(Var4hs() for _ in range(2*len(params))), *params[::-1])
+            , body
+            )
+
+    payload4CASE_MIDWAY = compile__mix2(mix2, {})
+    ans__payload4CASE_MIDWAY = compile__mix2(ans__mix2, {})
+    assert payload4CASE_MIDWAY == ans__payload4CASE_MIDWAY, (payload4CASE_MIDWAY, ans__payload4CASE_MIDWAY)
+
+    (midway, inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs) = payload4CASE_MIDWAY
+    check_type_is(_MidWayBound, midway)
+    (nint2free_var, num_free_vars, num_args4call, iXss4body) = midway
+
+    assert not inner_FVs
+        #if not opt: outer Lambda4hs will has an inner constant obj(Lambda4hs too)
+
+    assert not global_FVs
+    assert not scoped_FVs
+
+    #print(midway)
+    assert midway == _MidWayBound((), 0, 6, 5)
+_test_optimization__Lambda4hs_Lambda4hs_merge()
+
+def _test_optimization__transparent_unit_Apps4hs_Expr8List4hs():
+    #test optimization__transparent_unit_Apps4hs_Expr8List4hs
+    x = mk_var.x
+    y = mk_var.y
+    params = (x, y)
+    _ = mk_apps
+    mix2 = Lambda4hs(params, _(_(_(_(_(y))), _(x))))
+    ans__mix2 = Lambda4hs(params, _(y, x))
+
+    payload4CASE_MIDWAY = compile__mix2(mix2, {})
+    ans__payload4CASE_MIDWAY = compile__mix2(ans__mix2, {})
+    assert payload4CASE_MIDWAY == ans__payload4CASE_MIDWAY, (payload4CASE_MIDWAY, ans__payload4CASE_MIDWAY)
+
+    (midway, inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs) = payload4CASE_MIDWAY
+    check_type_is(_MidWayBound, midway)
+    (nint2free_var, num_free_vars, num_args4call, iXss4body) = midway
+
+    assert payload4CASE_MIDWAY == (_MidWayBound((), 0, 2, (1, 0)), (), (), (), ()), payload4CASE_MIDWAY
+_test_optimization__transparent_unit_Apps4hs_Expr8List4hs()
+
+
+
+def _test_optimization__drop_Lambda4hs_with_no_params():
+    #test optimization__drop_Lambda4hs_with_no_params
+    x = mk_var.x
+    y = mk_var.y
+    params = ()
+    _ = mk_apps
+    mix2 = Lambda4hs(params, _(x
+        , Lambda4hs(params, _(x
+        , Lambda4hs(params, _(x
+        , y
+        ))))))
+    ans__mix2 = _(x, _(x, _(x, y)))
+
+    payload4CASE_MIDWAY = compile__mix2(mix2, {})
+    ans__payload4CASE_MIDWAY = compile__mix2(ans__mix2, {})
+    assert payload4CASE_MIDWAY == ans__payload4CASE_MIDWAY, (payload4CASE_MIDWAY, ans__payload4CASE_MIDWAY)
+
+    (midway, inner_cased_xxx, inner_FVs, global_FVs, scoped_FVs) = payload4CASE_MIDWAY
+    check_type_is(_MidWayBound, midway)
+    (nint2free_var, num_free_vars, num_args4call, iXss4body) = midway
+
+    assert payload4CASE_MIDWAY == (_MidWayBound((y, x), 2, 0, (-1, (-1, (-1, -2)))), (), (), (y, x), ())
+_test_optimization__drop_Lambda4hs_with_no_params()
+
+
 
 
 def _prepare_CombinatorSKIBC__Lambda4hs():
@@ -5442,7 +5762,7 @@ Func 调用 = (lambda函数体, closure静态闭包, 动态自动填充参数(�
 Typing # xxx :: ...
 DefTyp # data Xxx ... = ...
 DefVar # xxx = ... | f ... = ... | Xxx ... = ...
-#Arrow #Expr8List4hs + Infix4hs
+#Arrow #ExprFlow + Infix4hs
 
 
 

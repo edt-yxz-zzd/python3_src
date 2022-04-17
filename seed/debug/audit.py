@@ -139,7 +139,7 @@ def define_location_api(location, num_args, kwarg_names, /,*, exist_ok:bool=Fals
 
 
 
-def _call_on_may_onoff_just_hooks_ex(location, num_args, kwarg_names, f, /, nonexist_ok:bool):
+def _call_on_may_onoff_just_hooks_ex(location, num_args, kwarg_names, f, /, *, nonexist_ok:bool):
     '-> f(kwarg_name_set, may_num_args2kwarg_name_set2onoff_just_hooks, may_kwarg_name_set2onoff_just_hooks, may_onoff_just_hooks)'
     (location, num_args, kwarg_name_set) = _to_std_api(location, num_args, kwarg_names)
     del kwarg_names
@@ -162,7 +162,7 @@ def _call_on_may_onoff_just_hooks_ex(location, num_args, kwarg_names, f, /, none
 
 
 
-def _test_on_may_onoff_just_hooks_ex(location, num_args, kwarg_name_set, may_num_args2kwarg_name_set2onoff_just_hooks, may_kwarg_name_set2onoff_just_hooks, may_onoff_just_hooks, /, nonexist_ok):
+def _test_on_may_onoff_just_hooks_ex(location, num_args, kwarg_name_set, may_num_args2kwarg_name_set2onoff_just_hooks, may_kwarg_name_set2onoff_just_hooks, may_onoff_just_hooks, /, *, nonexist_ok):
     if nonexist_ok and may_num_args2kwarg_name_set2onoff_just_hooks is None: return
     if may_num_args2kwarg_name_set2onoff_just_hooks is None: raise AuditLocationApiNotExistError(fr'location/schema not exists: location={location!r}')
 

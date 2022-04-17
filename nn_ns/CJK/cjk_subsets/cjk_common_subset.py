@@ -1,5 +1,56 @@
 
 r"""
+[[[[[additional note:
+cjk_common_subset_2513 < range(19968, 40764)
+$ hex 19968 40764
+0x4e00
+0x9f3c
+
+
+[[
+# from: UCD::PropList-13.0.0.txt
+4E00..9FFC    ; Unified_Ideograph # Lo [20989] CJK UNIFIED IDEOGRAPH-4E00..CJK UNIFIED IDEOGRAPH-9FFC
+解说: unicode标准的字符数据库 将 (U+4E00..U+9FFC).Unified_Ideograph 真值属性 的 属性值 设为 Yes
+故而 cjk_common_subset_2513 中的 所有汉字 都是 Unified_Ideograph
+]]
+
+
+虽然 [not 发發髮 <- cjk_common_subset_2513]
+但是 [后後 <- cjk_common_subset_2513]，可见 Unified_Ideograph 并非 『简繁统一体』的意思
+考虑一下，是否 排除『后後』这样的 在 简繁 转换中 可能会被改变的 汉字？
+考虑一下，是否 排除 有 高仿变体 kSpoofingVariant或kZVariant 的 汉字？
+view  ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/reformat__Unihan_Variants_txt.py
+view  ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__Unihan_Variants_txt__of_ver13_0.py
+from nn_ns.CJK.unicode.ucd_unihan.unihan.parsed_result__of__Unihan_Variants_txt__of_ver13_0 import readonly_simplified_result4ver13_0
+
+[[
+参考:UCD::Unihan::Unihan_Variants.txt
+    kTraditionalVariant
+        繁体
+    kSimplifiedVariant
+        简体
+    kSpoofingVariant
+        形近字(不同字，形似)
+    kZVariant
+        异体字(同字，不同形)
+
+#后0x540e/後0x5f8c
+U+540E  kSimplifiedVariant  U+540E
+U+540E  kTraditionalVariant U+540E U+5F8C
+U+5F8C  kSimplifiedVariant  U+540E
+
+#发0x53d1/發0x767c/髮0x9aee
+U+53D1  kTraditionalVariant U+767C U+9AEE
+U+767C  kSimplifiedVariant  U+53D1
+U+9AEE  kSimplifiedVariant  U+53D1
+
+髪0x9aea
+奇怪 [not 髪0x9aea <- 髮0x9aee.kSpoofingVariant]
+]]
+
+]]]]]
+
+
 py -m nn_ns.CJK.cjk_subsets.cjk_common_subset
 
 cjk_common_subset_2513

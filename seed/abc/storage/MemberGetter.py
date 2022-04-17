@@ -1058,7 +1058,7 @@ class IMemberPatcher(IMemberGetter, ___2, ___0, ___1):
     @abstractmethod
     def ___patch_member__plugin___(sf, packet, plugin4member, /):
         'patch_member__xplugin(); -> None|raise ???'
-    def patch_member__xplugin(sf, packet, imay_xplugin_rank, xplugin4member, /, member_exist_ok):
+    def patch_member__xplugin(sf, packet, imay_xplugin_rank, xplugin4member, /, *, member_exist_ok):
         '___patch_member__plugin___(); -> (tmay_plugin4member, member_value)|raise ???'
         check_bool(member_exist_ok)
         (is_member_value, default_or_member_value) = sf.get_member__xdefault__cased(packet, imay_xplugin_rank, xplugin4member)
@@ -1112,7 +1112,7 @@ class IMemberSetter(IMemberPatcher):
     #'''
 
 
-    def set_member__xvalue(sf, packet, imay_xvalue_rank, xvalue4member, /, member_exist_ok):
+    def set_member__xvalue(sf, packet, imay_xvalue_rank, xvalue4member, /, *, member_exist_ok):
         '-> (is_new_value, member_value)|raise ???'
         ##'___set_member__value___(); -> (is_new_value, member_value)|raise ???'
         (tmay_new_value, member_value_from_get) = super().patch_member__xplugin(packet, imay_xvalue_rank, xvalue4member, member_exist_ok=member_exist_ok)
@@ -1146,7 +1146,7 @@ class IMemberSetter(IMemberPatcher):
         'get_relationship_between_plugin4member_and_member_value(); -> [0,1,2,3] #0:None, 1:SUBSET,2:EQ,3:IS # 1:plugin-is-valid-member_value, 2:plugin-EQ-result-member_value, 3:plugin-IS-result-member_value'
         return 3#IS
     @override
-    def patch_member__xplugin(sf, packet, imay_xplugin_rank, xplugin4member, /, member_exist_ok):
+    def patch_member__xplugin(sf, packet, imay_xplugin_rank, xplugin4member, /, *, member_exist_ok):
         '___patch_member__plugin___(); -> (tmay_plugin4member, member_value)|raise ???'
         (is_new_value, member_value) = sf.set_member__xvalue(packet, imay_xplugin_rank, xplugin4member, member_exist_ok=member_exist_ok)
         plugin4member = member_value
@@ -1178,7 +1178,7 @@ class IAutoMemberPatcher(IMemberPatcher, IAutoMemberGetter):#(, IRigidMemberGett
         plugin4member = type(sf).___mk_plugin4member_on_default___(sf, packet)
         sf.check_plugin4member(plugin4member)
         return plugin4member
-    def patch_member__default(sf, packet, /, member_exist_ok):
+    def patch_member__default(sf, packet, /, *, member_exist_ok):
         '-> (tmay_plugin4member, member_value)|raise ???'
         return sf.patch_member__xplugin(packet, 1, sf.mk_plugin4member_on_default, member_exist_ok=member_exist_ok)
 
@@ -1382,7 +1382,7 @@ class IMemberAdaptor(IIndirectMemberGetter__via_collapse, IMemberPatcher):
         sf.patch_member__xplugin__via_handler4packet(handler4packet, -1, plugin4member)
 
     #register
-    def patch_member__xplugin__via_handler4packet(sf, handler4packet, imay_xplugin_rank, xplugin4member, /, member_exist_ok):
+    def patch_member__xplugin__via_handler4packet(sf, handler4packet, imay_xplugin_rank, xplugin4member, /, *, member_exist_ok):
         '-> tmay_plugin4member|raise ???'
         member_getter4handler4target_member_getter = sf.get_member_getter4handler4target_member_getter()
         member_patcher = member_getter4handler4target_member_getter
@@ -1395,11 +1395,11 @@ class IMemberAdaptor(IIndirectMemberGetter__via_collapse, IMemberPatcher):
         'get_relationship_between_plugin4member_and_member_value(); -> [0,1,2,3] #0:None, 1:SUBSET,2:EQ,3:IS # 1:plugin-is-valid-member_value, 2:plugin-EQ-result-member_value, 3:plugin-IS-result-member_value'
         return 0#no-relation
     r'''
-    def register_handler4target_member_getter__xvalue__via_handler4packet(sf, handler4packet, imay_xvalue_rank4handler4target_member_getter, xvalue4handler4target_member_getter, /, registered_ok):
+    def register_handler4target_member_getter__xvalue__via_handler4packet(sf, handler4packet, imay_xvalue_rank4handler4target_member_getter, xvalue4handler4target_member_getter, /, *, registered_ok):
         sf.check_handler4packet(handler4packet)
         member_register4handler4target_member_getter = sf.get_member_register4handler4target_member_getter()
         member_register4handler4target_member_getter.register_member__xvalue(handler4packet, imay_xvalue_rank4handler4target_member_getter, xvalue4handler4target_member_getter, registered_ok=registered_ok)
-    def register_handler4target_member_getter__xvalue__via_packet(sf, packet, imay_xvalue_rank4handler4target_member_getter, xvalue4handler4target_member_getter, /, registered_ok):
+    def register_handler4target_member_getter__xvalue__via_packet(sf, packet, imay_xvalue_rank4handler4target_member_getter, xvalue4handler4target_member_getter, /, *, registered_ok):
         sf.check_packet(packet)
         member_getter4handler4packet = sf.get_member_getter4handler4packet()
         handler4packet = member_getter4handler4packet.get_or_auto_install_member(packet)
@@ -1407,7 +1407,7 @@ class IMemberAdaptor(IIndirectMemberGetter__via_collapse, IMemberPatcher):
         del member_getter4handler4packet
 
         sf.register_handler4target_member_getter__xvalue__via_handler4packet(handler4packet, imay_xvalue_rank4handler4target_member_getter, xvalue4handler4target_member_getter, registered_ok=registered_ok)
-    def register_member__xvalue(sf, packet, imay_xvalue_rank, xvalue, /, registered_ok):
+    def register_member__xvalue(sf, packet, imay_xvalue_rank, xvalue, /, *, registered_ok):
         #'''
 
 #assert (IMemberAdaptor.__abstractmethods__) == frozenset({'___get_member_getter4handler4packet___', '___get_member_getter4handler4target_member_getter___', 'check_member_value', '___mk_target_member_getter_from_handler___'}), (IMemberAdaptor.__abstractmethods__)
@@ -1433,7 +1433,7 @@ class IAutoMemberAdaptor(IMemberAdaptor, IAutoMemberPatcher):
         sf.check_plugin4member(plugin4member)
         return plugin4member
 
-    def patch_member__default__via_handler4packet(sf, handler4packet, /, member_exist_ok):
+    def patch_member__default__via_handler4packet(sf, handler4packet, /, *, member_exist_ok):
         '-> tmay_plugin4member|raise ???'
         return sf.patch_member__xplugin__via_handler4packet(handler4packet, 1, sf.mk_plugin4member_on_default__via_handler4packet, member_exist_ok=member_exist_ok)
     @override
@@ -1626,10 +1626,10 @@ if 0:
     @abstractmethod
     def ___register_member__value___(sf, packet, member_value, /):
         'register_member__fvalue(); -> None|raise ???'
-    def register_member__fvalue(sf, packet, fvalue, /, registered_ok):
+    def register_member__fvalue(sf, packet, fvalue, /, *, registered_ok):
         '___register_member__value___(); -> None|raise ???'
         sf.register_member__xvalue(packet, 0, fvalue)
-    def register_member__xvalue(sf, packet, imay_xvalue_rank, xvalue, /, registered_ok):
+    def register_member__xvalue(sf, packet, imay_xvalue_rank, xvalue, /, *, registered_ok):
         '___register_member__value___(); -> None|raise ???'
         check_bool(registered_ok)
         (is_member_value, default_or_member_value) = sf.get_member__xdefault__cased(packet, imay_xdefault_rank, xdefault)
@@ -1683,7 +1683,7 @@ if 0:
         member_value = type(sf).___mk_member_value_on_default___(sf, packet)
         sf.check_member_value(member_value)
         return member_value
-    def register_member__default(sf, packet, /, registered_ok):
+    def register_member__default(sf, packet, /, *, registered_ok):
         sf.register_member__xvalue(packet, 1, sf.mk_member_value_on_default, registered_ok=registered_ok)
         return
         fvalue = lambda:sf.mk_member_value_on_default(packet)
@@ -2085,7 +2085,7 @@ class IMemberRegister__via_ops_property_getter(IMemberGetter__via_ops_property_g
         member_getter4ops = member_register4ops
         return member_getter4ops
 
-    def register__property_getter(sf, ops4packet, property_getter, /, registered_ok):
+    def register__property_getter(sf, ops4packet, property_getter, /, *, registered_ok):
         'ops<packet> -> (packet -> member_value) -> None|raise ???'
         check_callable(property_getter)
         sf.check_ops4packet(ops4packet)

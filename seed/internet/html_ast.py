@@ -119,6 +119,9 @@ __all__ = '''
 
 from bs4 import BeautifulSoup, Tag, NavigableString
 from bs4 import SoupStrainer
+import bs4
+_bs4__element__ResultSet = bs4.element.ResultSet
+del bs4
 import enum
 import re
 
@@ -257,7 +260,20 @@ class _HtmlAstOpsAid0:
         要求 = m['要求']
         类别 = m['类别']
 
-        f2 = getattr(ops, 要求)
+        if 1:
+            f2 = getattr(ops, 要求)
+        else:
+            _f2 = getattr(ops, 要求)
+            def f2(x):
+                try:
+                    return _f2(x)
+                except TypeError:
+                    print(x)
+                    print(type(x))
+                    #<class 'bs4.element.ResultSet'>
+                    raise
+        #end-def f2
+
         if 单动作 == '举得':
             method_name = fr'枚举{类别}'
             f1 = getattr(ops, method_name)
@@ -277,12 +293,17 @@ class _HtmlAstOpsAid0:
     @classmethod
     def _check_iterator(cls, iterator):
         check_iterator(iterator)
+    #may be <class 'bs4.element.ResultSet'>
     @classmethod
     def 全部(cls, iterator):
+        if type(iterator) is _bs4__element__ResultSet:
+            iterator = iter(iterator)
         cls._check_iterator(iterator)
         return iterator
     @classmethod
     def 第一(cls, iterator):
+        if type(iterator) is _bs4__element__ResultSet:
+            iterator = iter(iterator)
         cls._check_iterator(iterator)
         for head in iterator:
             return head
@@ -290,6 +311,8 @@ class _HtmlAstOpsAid0:
             raise ValueError('空序列@求第一元素')
     @classmethod
     def 唯一(cls, iterator):
+        if type(iterator) is _bs4__element__ResultSet:
+            iterator = iter(iterator)
         cls._check_iterator(iterator)
         for head in iterator:
             break

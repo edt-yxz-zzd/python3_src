@@ -107,7 +107,7 @@ def is_path_always_dir__str(path, /):
     #if not basename: return True
     return basename in '..' # ('', '.', '..')
 
-def glob_match(glob_pattern:str, path, /, is_path_dir__tribool, match_dir_only:bool, ignore_case:bool, recursive:bool):
+def glob_match(glob_pattern:str, path, /, *,, is_path_dir__tribool, match_dir_only:bool, ignore_case:bool, recursive:bool):
     '-> bool #match or not #is_path_dir__tribool may come from os.isdir(path)'
     check_path__str(glob_pattern)
 
@@ -164,7 +164,7 @@ def path2std_path_parts(path, /):
         else:
             return to_std_path_parts(path.parts)
 
-def glob_match_(glob_pattern_parts:'[str]', path_parts:'[str]', /, is_path_dir__tribool, match_dir_only:bool, ignore_case:bool, recursive:bool):
+def glob_match_(glob_pattern_parts:'[str]', path_parts:'[str]', /, *,, is_path_dir__tribool, match_dir_only:bool, ignore_case:bool, recursive:bool):
     '-> bool #match or not #is_path_dir__tribool may come from os.isdir(path)'
     if not id(is_path_dir__tribool) in [*map(id, [..., True, False])]: raise TypeError
     if match_dir_only and is_path_dir__tribool is False: return False
@@ -181,7 +181,7 @@ class GlobMatcher:
     st :: frozenset<idx4glob_pattern_parts>
     #'''
 
-    def __init__(sf, glob_pattern_parts:'[str]', /, ignore_case:bool, recursive:bool):
+    def __init__(sf, glob_pattern_parts:'[str]', /, *,, ignore_case:bool, recursive:bool):
         if not type(recursive) is bool: raise TypeError
         if not type(ignore_case) is bool: raise TypeError
 
@@ -276,7 +276,7 @@ class GlobMatcher:
         '-> st'
         new_st = sf.feed(st, path_part, is_first_feed=False)
         return new_st
-    def feed(sf, st, path_part, /, is_first_feed:bool):
+    def feed(sf, st, path_part, /, *,, is_first_feed:bool):
         '-> st'
         if is_first_feed:
             check_driver_or_basename(path_part)

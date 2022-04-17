@@ -1,4 +1,4 @@
-#from seed.tiny_.check import check_type_le, check_type_is, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_pair, icheck_uint, icheck_imay
+#from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 #from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 #from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 
@@ -7,6 +7,7 @@
 __all__ = '''
     check_type_le
     check_type_is
+    check_tmay
     check_pair
     check_uint
     check_imay
@@ -18,6 +19,7 @@ __all__ = '''
 
     icheck_type_le
     icheck_type_is
+    icheck_tmay
     icheck_pair
     icheck_uint
     icheck_imay
@@ -40,6 +42,10 @@ def check_type_le(cls, obj, /):
     if not isinstance(obj, cls): raise TypeError
 def check_type_is(cls, obj, /):
     if not type(obj) is cls: raise TypeError
+#no check_tuple
+def check_tmay(obj, /):
+    check_type_is(tuple, obj)
+    if not len(obj) < 2: raise TypeError
 def check_pair(obj, /):
     check_type_is(tuple, obj)
     if not len(obj) == 2: raise TypeError
@@ -72,6 +78,9 @@ def icheck_type_is(cls, obj, /):
 def icheck_type_le(cls, obj, /):
     check_type_le(cls, obj)
     return obj
+def icheck_tmay(obj, /):
+    check_tmay(obj)
+    return obj
 def icheck_pair(obj, /):
     check_pair(obj)
     return obj
@@ -97,10 +106,13 @@ def icheck_imay_le(max, obj, /):
     return obj
 
 check_uint(1)
+check_tmay(())
+check_tmay((0,))
 check_pair((0, 0))
 check_type_is(str, '')
 check_type_le(object, '')
 assert 1 == icheck_uint(1)
+assert (0,) == icheck_tmay((0,))
 assert (0,0) == icheck_pair((0, 0))
 assert '' == icheck_type_is(str, '')
 assert '' == icheck_type_le(object, '')

@@ -101,7 +101,7 @@ interpreter4aops = intr4aops = {
       #impl by get_
       -> property_of_obj
       -> partial_call<intr4aops, aops, obj> #like types.MethodType
-  ,call(intr4aops, aops, tmay_obj, symbol, /, symbol2arg, args)
+  ,call(intr4aops, aops, tmay_obj, symbol, /, *, symbol2arg, args)
       #impl by get
       <==> get(intr4aops, aops, tmay_obj, symbol)(symbol2arg, args)
   }

@@ -39,3 +39,450 @@ py仿真hs
   e ../../python3_src/nn_ns/mimic_Haskell/Data.py
 外挂接口体系
   e ../../python3_src/seed/hierarchy/README.txt
+
+
+以构造 变换/函数 为 目标/输出:
+  e ../../python3_src/seed/func_tools/parameterized_transform.py
+  ---还有：
+  fmap, dive-into, recur_convert
+  深入，多参数平行深入
+    单参数 fmap, hash, repr, CSV/TSV等 行域文本(域内之域，深入切分), filter(iterator, list, dict(pred on val)), check
+    双参数 diff/patch(输出/输入delta), cmp/eq/lt(自引用 类型描述 需cache ancestor caller args), 泛型schema的匹配(求出 类型变量 的 统一融合值)
+    ---
+    [[拆分 fmapT.py
+      fmapT__tiny.py
+      DONE ]]
+  DONE 拆分:e ../../python3_src/seed/func_tools/fmapT/_xxxT__tiny.py
+
+
+包含 很多 unicode_13::UCD/Unihan 的 相关信息:
+  e ../../python3_src/script/try_python/unicodedata/list_all_values_of_property.py
+e ../../python3_src/script/try_python/unicodedata/list_all_values_of_property.py
+  很多 TODO 目标
+  parse UCD 13.0:
+    区域名
+    属性名 属性值别名
+    汉字变体字:简繁字/形近字/同义字/异体字
+    窄字符的全角字符变体/宽字符的半角字符变体
+    成对字符/近似镜像字符
+    ...
+  [[拆分 移至 unicide 标准 的 笔记摘要
+!mkdir ../../txt_phone/lots/NOTE/unicode/note4UnicodeStandard_13_0_pdf/
+!cp ../../python3_src/script/try_python/unicodedata/list_all_values_of_property.py   ../../txt_phone/lots/NOTE/unicode/note4UnicodeStandard_13_0_pdf/[20220407]list_all_values_of_property.py
+view ../../txt_phone/lots/NOTE/unicode/note4UnicodeStandard_13_0_pdf/[20220407]list_all_values_of_property.py
+e ../../txt_phone/lots/NOTE/unicode/note4UnicodeStandard_13_0_pdf/unicode_ver13_0第3第4章摘要.txt
+e ../../txt_phone/lots/NOTE/unicode/note4UnicodeStandard_13_0_pdf/unicode_ver13_0数据库清单及我注.txt
+  ]]
+
+
+
+考虑进一步 缩水:
+  e ../../python3_src/nn_ns/CJK/cjk_subsets/cjk_common_subset.py
+  去除 简繁不一致，有 异体字、形近字、同义字、...
+  from nn_ns.CJK.cjk_subsets.hanzi import cjk_common_subset_1869
+
+  ===
+  还有 用 汉字 编码 整数
+  主要是 要能 从 字形/笔划 上 看出 2进制 比特
+  因为:
+    bin 嫌太长，而且 没有 归组，很难 定位 到 特定 位置，以 读取 该位置上的 的 比特值。
+    hex 很难 直观 得到 比特流。
+
+[[
+  from nn_ns.CJK.cjk_subsets.hanzi import cjk_common_subset_1869
+  对比一下:
+    nn_ns.CJK.CJK_data.汉字繁简
+    nn_ns.CJK.unicode.ucd_unihan.unihan.parsed_result__of__Unihan_Variants_txt__of_ver13_0
+
+e script/简繁字信息对比.py
+  from nn_ns.CJK.CJK_data.汉字繁简 import (
+    简繁字对集
+        ,繁体字到简体字串
+        ,简体字到繁体字串
+    )
+  view ../../python3_src/nn_ns/CJK/CJK_data/raw/汉字繁简.py
+    简繁字对集
+        繁体字到简体字串
+        简体字到繁体字串
+        ====上面是读取已打包好的数据，下面是解析生成
+        view ../../python3_src/nn_ns/CJK/CJK_data/raw/parse_繁简.py
+          从网上搜集的繁简字信息，但不含UCD::Unihan::Unihan_Variants.txt
+  from nn_ns.CJK.unicode.ucd_unihan.unihan.parsed_result__of__Unihan_Variants_txt__of_ver13_0 import readonly_parsed_result4ver13_0, readonly_simplified_result4ver13_0
+      view /storage/emulated/0/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_Variants.txt
+e script/简繁字信息对比.py
+py script/简繁字信息对比.py > script/简繁字信息对比.py.out.txt
+view script/简繁字信息对比.py.out.txt
+py script/简繁字信息对比.py 显示消除非平凡繁简属性字后的1869与2513 -o script/简繁字信息对比.py.显示消除非平凡繁简属性字后的1869与2513.out.txt
+view script/简繁字信息对比.py.显示消除非平凡繁简属性字后的1869与2513.out.txt
+diff script/简繁字信息对比.py.显示消除非平凡繁简属性字后的1869与2513.out.txt script/简繁字信息对比.py.out.txt
+
+!mkdir ../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对比/
+!cp script/简繁字信息对比.py  script/简繁字信息对比.py.显示消除非平凡繁简属性字后的1869与2513.out.txt      ../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对比/
+view ../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对比/简繁字信息对比.py.显示消除非平凡繁简属性字后的1869与2513.out.txt
+view ../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对比/简繁字信息对比.py
+
+
+[DONE:
+hz2513 /-\ trivial_TS_hzs
+  另外 建档
+  中外共享汉字集
+  古今中外共享汉字集
+    =中外共享汉字集/-\平凡繁简汉字集
+    =中外共享汉字集\-\非平凡繁简汉字集
+e ../../python3_src/nn_ns/CJK/cjk_subsets/hanzi.py
+]
+
+[DONE:
+hz2513 -> 笔顺码
+  另外 建档
+e ../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集笔顺码.py
+]
+
+[TODO:
+hz2513 -> 频数/分级 ++Unihan
+  另外 建档
+e ../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集频度.py
+]
+[TODO:
+hz2513 -> 拼音 ++Unihan
+  另外 建档
+e ../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集拼音.py
+进一步 缩减:除去 多音字？
+]
+[DONE:
+  mv to nn_ns?? 整合进 hanzi.py?? 再添个 模拟 佛曰/与佛论禅？
+用于编码二进制数据的高稳定度汉字字集
+用汉字编码数据.高稳定度汉字字集
+可用于类似『佛曰/与佛论禅』的项目。
+
+e ../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字编码数据/高稳定度汉字字集.py
+view ../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字编码数据/chars_in_banned_words.u8
+view ../../python3_src/script/char/common_CJK/[common_CJK]ReadMe.txt
+]
+
+
+
+[DONE
+汉字笔划 --> 4bit/8bit  ...6bit?
+e script/repr_binary_by_hz_stroke_kind.py
+没有8bit
+!mkdir   ../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字表达二进制/
+!cp script/repr_binary_by_hz_stroke_kind.py    ../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字表达二进制/
+view ../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字表达二进制/repr_binary_by_hz_stroke_kind.py
+!du -h ../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字表达二进制/repr_binary_by_hz_stroke_kind.py
+  108K
+!mv script/repr_binary_by_hz_stroke_kind.py    script/[20220413]repr_binary_by_hz_stroke_kind.py
+ls   'script/[20220413]repr_binary_by_hz_stroke_kind.py'
+
+e ../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字表达二进制/结果速报.txt
+]
+
+]]
+
+[[DONE
+---
+filterT/alterT mimic fmapT
+    filterT===ctor(filter(iter...))
+    alterT===ctor(filter(chain...))
+---
+]]
+
+
+[[[
+尽量少拆
+
+===
+[[
+拆字:
+  拆否？
+    天，矢/知，广，之，鬼...
+    呆果男
+    ===
+    点 视为 附加物
+      其他单笔，如果接触其他部件，也视为 附加物，不拆出
+      土士王玉主义互母舟
+    部件 并非 稳定，一个 代表 多个，不断精细化归类
+      月:月，青字底，肉月
+      日:日，子曰，冒头
+      火:火，火左旁，火底，四点水，
+      木:木，木左旁，木底(带钩？)
+      耳:耳，戢，左立耳，右立耳，取，最，聽
+    不同地区，字形不同，部件不同
+    字形有特别约束的，不拆:
+      二三土士未末曰冃日
+    字形排版复杂的，不拆:
+      兔鬼包
+  命名:
+    例子减去其余部分:
+      打丁==>>提手
+    近似叠加+所在例子:
+      口木刺==>>朿 #不是『束/呆/杏』
+]]
+===
+
+view ../../python3_src/nn_ns/CJK/CJK_struct/CHISE_IDS_67b94ff_20191211/basic_decomp.txt
+  generated by:
+    view ../../python3_src/nn_ns/CJK/CJK_struct/CHISE_IDS_67b94ff_20191211/parse_CHISE_IDS.py
+每个tree建立反向索引:
+  Map tree (Set ((idx, tree)|(0,hz)))
+  一tree多字形
+截止:交叠类 不拆；其余 人工检查
+  拓扑排序
+e script/collect_hz_components.py
+
+
+
+]]]
+
+
+[[[
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+[[[
+TODO
+转义序列
+    仅相当于 \xxx 而非 xml
+    相当于 编码 xml中的 < &
+        因为这些 字符 实属 带外信息
+    [[[
+    ====草案目标
+    [...]
+        独立
+    [:raw]...[/raw]
+        原貌
+    [:tag]...[/tag]
+        嵌套
+    [!...]
+    [!:raw]...[/raw]
+    [!:tag]...[/tag]
+        注释
+    --有无 可能 重新配置 标点？
+    [:<config(head,tail)>raw]...[/raw]
+        专用语言
+        内容是 专用嵌套标记语言
+        以避免 过长转义
+        #下面 实际方案中 本语言的 head=『[/:』, tail=『/]』
+    ====实际方案:
+    ==范型:
+    [/:string/]
+        # xxx head=『[/:』, tail=『/]』
+        # head_head=『[/』, head_tail=『:』, tail=『/]』
+        #   Total=3
+        #
+        #补偿几个[[[[\[
+        string <- regex'((?!/\]))'
+        可用做 成对的头尾
+        为何 使用 俩字符『/]』结束 而非 只用 单字符『]』？
+            因为 string 很可能 包含 『]』
+            比如：补偿性地注释添加一个『]』以使vim『%』动作 正常工作。
+        转义『[/:』:
+        『[/:』
+        『[/0:』..『[/9:』
+        『[/00:』..『[/99:』
+        『[/000:』..『[/999:』
+        ...
+        #补偿几个]]]]]]]]
+    ==细化<范型>: 独立，成对，独立注释，成对注释
+    [/:=string/]
+    [/:{string/]
+    [/:}string/]
+        # data_isolated=『=』
+        #   允空，表示otherwise/fallback，只要 不与 comment_isolated 冲突
+        # data_open=『{』
+        # data_close=『}』
+        #   Total+=3 ->6
+        #补偿几个[
+    #命名/定义 与上面的 保持 尾部 完全一致！
+    #   见:引用独立
+    [/:.id=string/]
+    [/:.id{string/]
+    [/:.}string/]
+        #id 前缀 区分 私用 与 公开
+    #内嵌原貌 与上面的 保持 尾部 完全一致！
+    #   以防 string 中 出现 『/]』
+    [/:[raw]=string[raw]/]
+    [/:[raw]{string[raw]/]
+    [/:[raw]}string[raw]/]
+    [/:[raw].id=string[raw]/]
+    [/:[raw].id{string[raw]/]
+    [/:[raw].}string[raw]/]
+    #注释 与上面的 保持 尾部 完全一致！
+        #补偿[[[
+    #   注释是必需的！见下面:ZWSP 破 『/]』
+    #       不对！没必要，因为 嵌套 主体 内 的 『/]』 无特殊意义，而 转义序列 内嵌内容 则 不允许 『/]』出现，因为 以其为 终止符(当使用 内嵌中止模式 时)。
+    [/:!=string/]
+    [/:!{string/]
+    [/:!}string/]
+    [/:![raw]=string[raw]/]
+    [/:![raw]{string[raw]/]
+    [/:![raw]}string[raw]/]
+    [/:![raw].id=string[raw]/]
+    [/:![raw].id{string[raw]/]
+    [/:![raw].}string[raw]/]
+        # comment_isolated=『!=』
+        #   允空，表示otherwise/fallback，只要 不与 data_isolated 冲突
+        # comment_open=『!{』
+        # comment_close=『!}』
+        #   Total+=3 ->9
+    ==细化<独立>: 内建独立，应用独立
+    [/:=/string/]
+    [/:==string/]
+    ==细化<成对>: 内建成对，应用成对
+    [/:{/string/]
+    [/:}/string/]
+    [/:{=string/]
+    [/:}=string/]
+    ==细化<成对>: 原貌，嵌套(解析/树) # 乘以 上面的 内建、应用==>> 4对
+    # 这里的原貌 是指 嵌套内容(即 成对的两个转义序列open/close中间所夹的内容) 的 原貌
+    #   而 上面 内嵌原貌 是指 单个转义序列 内部的原貌(即 [/:.../]里面的内容)
+    # [/:{[raw]string/]
+    # [/:}[raw]string/]
+        [/:{[raw]/string/]
+        [/:}[raw]/string/]
+        [/:{[raw]=string/]
+        [/:}[raw]=string/]
+    # [/:{{string/]
+    # [/:}}string/]
+        [/:{{/string/]
+        [/:}}/string/]
+        [/:{{=string/]
+        [/:}}=string/]
+    ########
+        # xxx raw_data_open=『{[』
+        # xxx raw_data_close=『}[』
+        # tag_data_open=『{{』
+        # tag_data_close=『}}』
+        #   Total+=2 ->11
+        # 补偿 ]]
+    ==细化<嵌套>:多自多引入,???应用嵌套？
+        TODO 见:引入独立
+    ==细化<内建独立>:字符串独立，引用独立(见:命名)，引入独立
+    [/:=/=string/]
+    [/:=/&qname/]
+    [/:=/&qname@&qname/]
+    [/:=/&qname@:external_path/]
+        # 这里 很有可能 需要 内嵌原貌
+        #   ??? ==>> [内嵌原貌的必要性]???
+        #   不对！可用 嵌套 破之！
+        #   嵌套 似乎更好，支持 多个 引入源？按 优先度 排序？多个 引入目标？
+        #
+
+    ==细化<原貌>: 外用，专用
+    [/:{[raw]=string/]
+    [/:}[raw]=string/]
+    [/:{[raw]#domain_ML,ver=1_0,ctor=1_0,nargs=15,=strings<15即nargs即Total>/]
+    [/:}[raw]#/]
+        # app_raw_data_open?=『{[』+『]=』
+        # app_raw_data_close?=『}[』+『]=』
+        # cfg_raw_data_open?=『{[』+『]#』
+        # cfg_raw_data_close?=『}[』+『]#』
+        #   Total+=4 ->15
+        strings<n> <- regex'(#unicode){n}'
+        unicode <- regex'(_u\x+_)+'
+        # raw/上面的标识名+值 不得使用 任何括号+引号，『,=/』
+        # raw/ID/val 只能使用 regex'[_\w]*' #含 汉字
+        #   机器自动生成的raw，或者说 任意 配置下，共通子集 为:regex'[0-9A-H]*' #不含 小写/下划线/汉字
+        #   ID 不得为空
+        # val 只能使用 regex'[_\d]*'
+        # nargs.val 只能使用 regex'[\d]+'
+        #
+        # ver ==>> 语言实际版本 #语法树类型模版
+        # ctor ==>> 语法树类型模版的构造用别名模版
+        #       alias template ctor 用于 精简
+        # nargs ==>> 语法树类型模版的构造用别名模版的输入参数的数目
+        #
+    ==具体string是何语义，由应用自行决定
+    ==  特别地，成对的头尾 它俩的string是何关系，由应用自行决定。
+    ==      （不一定相等，也可反转标签if-fi，也可带参数xml）
+    一次转义就多了7-8个字符！！！
+        补偿性注释 至少8字符
+            [/:!=[/]
+            [/:!=]/]
+            [/:!=\[/]
+            [/:!=\]/]
+    =========
+    拓展:是否 添加 内建 字符串 转义？
+        #补偿一个[
+        其实 作为 转义序列 的 语言，提供了 带外信息/非字符信息，用户 可以 使用 嵌套+用户自定义字符串转义。
+        也 并未 阻止用户使用 任何字符，但 某些 序列 『/]』却被禁止，但 嵌套 空注释 (类似 零宽空格ZWSP) 可破。
+            #见下面:？内嵌原貌模式？
+        只是 太长，太复杂，不够统一。
+    =========
+    拓展:命名，引用，引入，内嵌原貌
+    =========
+    上面 仅止于 转义模式/内嵌中止模式:
+        #补偿几个[[[[
+        即 『/]』中止 一个 转义序列，不考虑 其中 内容
+    拓展 使之更像 ML/markup-lang:
+        内嵌解析模式:
+            对里面的 里面的 内容 进行解析
+                提前 指定 格式，默认 与 外部 相同
+                更新 范型::成对::原貌::专用 的格式
+        内嵌原貌模式:
+            以『[raw]/]』作为 终止符，读取 内容
+        内嵌中止再解析模式:
+            先以『/]』作为 终止符，读取 内容
+            再 解析 内容
+        内嵌原貌再解析模式:
+            先以『[raw]/]』作为 终止符，读取 内容
+            再 解析 内容
+
+    ]]]
+]]]
+
+TODO
+[[[
+    ---seed.int_tools.base64 泛化
+    uint -> hex -> uint<1~7 bit>
+        查表法！
+        array.array!!
+    ---
+    转义序列/带外信息
+        考虑 编码:
+            00xx 独
+            01xx 起
+            11xx 承
+            10xx 讫
+            ---
+            带内信息:
+                00xx
+                01xx 11xx* 10xx
+            带外信息:
+                10xx 11xx* 01xx
+                这样不好，无法 单点 确定 位置
+]]]
+[[[
+TODO
+e ../../python3_src/nn_ns/CJK/cjk_subsets/cjk_common_subset.py
+TODO
+e ../../python3_src/seed/func_tools/parameterized_transform.py
+        directed-fmapT/transform(sf, type_info, x, /):
+            e ../../python3_src/seed/func_tools/fmapT/...
+]]]
+]]]
+
+
+
+
+
+
+
+
+[[DONE
+
+拆分 parsed_result__of__Unihan_Variants_txt__of_ver13_0
+拆分 parsed_result__of__PropList_txt__of_ver13_0
+  dump_load___parsed_result__of__Unihan_Variants_txt
+  dump_load___parsed_result__of__PropList_txt
+!mv ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__Unihan_Variants_txt__of_ver13_0.py ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__Unihan_Variants_txt.py
+!mv ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__PropList_txt__of_ver13_0.py ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/dump_load___parsed_result__of__PropList_txt.py
+
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__Unihan_Variants_txt.py
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__Unihan_Variants_txt__of_ver13_0.py
+
+
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/dump_load___parsed_result__of__PropList_txt.py
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__PropList_txt__of_ver13_0.py
+
+DONE！
+
+]]

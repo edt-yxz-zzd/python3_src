@@ -639,15 +639,15 @@ class IMutableOpaquePseudoMapping__init_new_key_only__WeakKeyPathDictionary(IMut
     __slots__ = ()
     @classmethod
     @abstractmethod
-    def check_key_path(cls, key_path, /, init_vs_mix_vs_get):
+    def check_key_path(cls, key_path, /, *, init_vs_mix_vs_get):
         'key_path4init/key_path4get -> None'
-        #def check_key_path(cls, key_path, /, init_vs_get:bool):
+        #def check_key_path(cls, key_path, /, *, init_vs_get:bool):
         #def check_key_path(cls, key_path, /):
         check_Weakable(key_path)
         return
     @classmethod
     @abstractmethod
-    def key_path2valued_key_path(cls, key_path, /, init_vs_mix_vs_get):
+    def key_path2valued_key_path(cls, key_path, /, *, init_vs_mix_vs_get):
         'key_path4init/key_path4get -> valued_key_path <: Hashable'
         #cls.check_key_path(key_path4get, init_vs_mix_vs_get=init_vs_mix_vs_get)
         return id(key_path)
@@ -745,13 +745,13 @@ class MutableOpaquePseudoMapping__init_new_key_only__WeakRefDictionary(IMutableO
     __slots__ = ()
     @classmethod
     @override
-    def check_key_path(cls, key_path, /, init_vs_mix_vs_get):
+    def check_key_path(cls, key_path, /, *, init_vs_mix_vs_get):
         'key_path4init/key_path4get -> None'
         check_Weakable(key_path)
         return
     @classmethod
     @override
-    def key_path2valued_key_path(cls, key_path, /, init_vs_mix_vs_get):
+    def key_path2valued_key_path(cls, key_path, /, *, init_vs_mix_vs_get):
         'key_path4init/key_path4get -> valued_key_path <: Hashable'
         return id(key_path)
 
@@ -826,7 +826,7 @@ class MutableOpaquePseudoMapping__init_new_key_only__Value_Ref_Weak_KeysTripleDi
     __slots__ = ()
     @classmethod
     @override
-    def check_key_path(cls, key_path, /, init_vs_mix_vs_get):
+    def check_key_path(cls, key_path, /, *, init_vs_mix_vs_get):
         'key_path4init/key_path4get -> None'
         check_tuple(key_path, sz=3)
         (keys_via_valued_eq, keys_via_id_eq, keys_via_weakref) = key_path
@@ -841,7 +841,7 @@ class MutableOpaquePseudoMapping__init_new_key_only__Value_Ref_Weak_KeysTripleDi
         return
     @classmethod
     @override
-    def key_path2valued_key_path(cls, key_path, /, init_vs_mix_vs_get):
+    def key_path2valued_key_path(cls, key_path, /, *, init_vs_mix_vs_get):
         'key_path4init/key_path4get -> valued_key_path <: Hashable'
         (keys_via_valued_eq, keys_via_id_eq, keys_via_weakref) = key_path
         valued_key_path = (keys_via_valued_eq, _tuple_map_id(keys_via_id_eq), _tuple_map_id(keys_via_weakref))

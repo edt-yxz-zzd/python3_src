@@ -1,5 +1,10 @@
 
-'''
+r'''
+from seed.func_tools.dot2 import dot
+NOTE:
+    use dot[[...],] instead of dot[[...]]
+        which <==> partial(...)
+
 dot[f,g](*args, **kwargs)
     =[def]= f(g(*args, **kwargs))
 
@@ -19,7 +24,7 @@ dot[[f, a...]::[b...], g](*args, **kwargs)
     >>> assert dot[tuple, [map, lambda a,b:a+b, [1,2,3]], echo_args](2,4,6) == (3,6,9)
     >>> assert dot[str, int:{'base':16}]('A') == '10'
 
-'''
+#'''
 
 
 __all__ = '''
@@ -66,16 +71,38 @@ class Dot:
     # pseudo_funcB  = callable | [callable, object...]
     def __init__(self, __pseudo_funcs):
         pseudo_funcs = __pseudo_funcs
-        if type(pseudo_funcs) is tuple:
-            pairs = tuple(map(pseudo_func2func_last_args, pseudo_funcs))
-            if not pairs:
-                pairs = (echo, ()),
-        elif callable(pseudo_funcs):
-            f = pseudo_funcs
-            last_args = ()
-            pairs = (f, last_args),
+        if 0:
+            r'''
+            deprecated:updated to support:
+                dot[[f, x, y]]
+                dot[f:x:y]
+            deprecated by:
+                dot[[f, x, y],]
+                dot[f:kw:zs,]
+            #'''
+            if callable(pseudo_funcs):
+                f = pseudo_funcs
+                last_args = ()
+                pairs = ((f, last_args),)
+            else:
+                if not type(pseudo_funcs) is tuple:
+                    x = pseudo_funcs
+                    pseudo_funcs = (x,)
+                assert type(pseudo_funcs) is tuple
+                pairs = tuple(map(pseudo_func2func_last_args, pseudo_funcs))
+                if not pairs:
+                    pairs = (echo, ()),
         else:
-            raise TypeError
+            if type(pseudo_funcs) is tuple:
+                pairs = tuple(map(pseudo_func2func_last_args, pseudo_funcs))
+                if not pairs:
+                    pairs = (echo, ()),
+            elif callable(pseudo_funcs):
+                f = pseudo_funcs
+                last_args = ()
+                pairs = (f, last_args),
+            else:
+                raise TypeError
 
         self.__func_last_args_pairs = pairs
         if False and len(pairs) < 2:

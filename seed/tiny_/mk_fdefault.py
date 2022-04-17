@@ -1663,7 +1663,7 @@ class XDefaultMappingOps:
     xxx__xdefault__mix
     xxx__xdefault__cased
 
-    (imay_xdefault_rank, xdefault) >--> (mirror_imay_xedefault_rank, xedefault, /, mirror:bool):
+    (imay_xdefault_rank, xdefault) >--> (mirror_imay_xedefault_rank, xedefault, /, *, mirror:bool):
     #'''
     __slots__ = ()
     def _000___detect___000_(ops, d, key, /):
@@ -1701,13 +1701,13 @@ class XDefaultMappingOps:
             ops._000___drop__delete_or_undefined___000_(d, key)
         return tm
 
-    def get__xedefault(ops, d, key, mirror_imay_xedefault_rank, xedefault, /, mix:bool, mirror:bool):
+    def get__xedefault(ops, d, key, mirror_imay_xedefault_rank, xedefault, /, *, mix:bool, mirror:bool):
         tm = ops.get__tmay(d, key)
         return eliminate_tmay_or_raise(tm, mirror_imay_xedefault_rank, xedefault, d, key, mix=mix, mirror=mirror)
-    def pop__xedefault(ops, d, key, mirror_imay_xedefault_rank, xedefault, /, mix:bool, mirror:bool):
+    def pop__xedefault(ops, d, key, mirror_imay_xedefault_rank, xedefault, /, *, mix:bool, mirror:bool):
         tm = ops.pop__tmay(d, key)
         return eliminate_tmay_or_raise(tm, mirror_imay_xedefault_rank, xedefault, d, key, mix=mix, mirror=mirror)
-    def set__xedefault(ops, d, key, mirror_imay_xedefault_rank, xedefault, /, mix:bool, mirror:bool):
+    def set__xedefault(ops, d, key, mirror_imay_xedefault_rank, xedefault, /, *, mix:bool, mirror:bool):
         #nonsense:SHOULD-USE get__xedefault
         (is_old_value, default_or_value) = ops.get__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, mirror=mirror, mix=False)#cased
         if not is_old_value:
@@ -1722,13 +1722,13 @@ class XDefaultMappingOps:
 
 
 
-    def get__xdefault(ops, d, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def get__xdefault(ops, d, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         check_imay(imay_xdefault_rank)
         return ops.get__xedefault(d, key, imay_xdefault_rank, xdefault, mirror=False, mix=mix)
-    def pop__xdefault(ops, d, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def pop__xdefault(ops, d, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         check_imay(imay_xdefault_rank)
         return ops.pop__xedefault(d, key, imay_xdefault_rank, xdefault, mirror=False, mix=mix)
-    def set__xdefault(ops, d, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def set__xdefault(ops, d, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         check_imay(imay_xdefault_rank)
         return ops.set__xedefault(d, key, imay_xdefault_rank, xdefault, mirror=False, mix=mix)
     def get__xdefault__mix(ops, d, key, imay_xdefault_rank, xdefault, /):
@@ -1760,7 +1760,7 @@ class XDefaultMappingMixin:
     xxx__xdefault__mix
     xxx__xdefault__cased
 
-    (imay_xdefault_rank, xdefault) >--> (mirror_imay_xedefault_rank, xedefault, /, mirror:bool):
+    (imay_xdefault_rank, xdefault) >--> (mirror_imay_xedefault_rank, xedefault, /, *, mirror:bool):
 
     def get__tmay(sf, key, /):
         if key in sf:
@@ -1772,13 +1772,13 @@ class XDefaultMappingMixin:
             del sf[key]
         return tm
 
-    def get__xdefault(sf, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def get__xdefault(sf, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         tm = sf.get__tmay(key)
         return eliminate_tmay(tm, imay_xdefault_rank, xdefault, sf, key, mix=mix)
-    def pop__xdefault(sf, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def pop__xdefault(sf, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         tm = sf.pop__tmay(key)
         return eliminate_tmay(tm, imay_xdefault_rank, xdefault, sf, key, mix=mix)
-    def set__xdefault(sf, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def set__xdefault(sf, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         (is_value, default_or_value) = sf.get__xdefault(key, imay_xdefault_rank, xdefault, mix=False)#cased
         if not is_value:
             default = default_or_value
@@ -1812,20 +1812,20 @@ class XDefaultMappingMixin:
     def pop__tmay(d, key, /):
         return ops4XDefaultMapping.pop__tmay(d, key)
 
-    def get__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, /, mix:bool, mirror:bool):
+    def get__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, /, *, mix:bool, mirror:bool):
         return ops4XDefaultMapping.get__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, mix=mix, mirror=mirror)
-    def pop__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, /, mix:bool, mirror:bool):
+    def pop__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, /, *, mix:bool, mirror:bool):
         return ops4XDefaultMapping.pop__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, mix=mix, mirror=mirror)
-    def set__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, /, mix:bool, mirror:bool):
+    def set__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, /, *, mix:bool, mirror:bool):
         #nonsense:SHOULD-USE get__xedefault
         return ops4XDefaultMapping.set__xedefault(d, key, mirror_imay_xedefault_rank, xedefault, mix=mix, mirror=mirror)
 
 
-    def get__xdefault(d, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def get__xdefault(d, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         return ops4XDefaultMapping.get__xdefault(d, key, imay_xdefault_rank, xdefault, mix=mix)
-    def pop__xdefault(d, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def pop__xdefault(d, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         return ops4XDefaultMapping.pop__xdefault(d, key, imay_xdefault_rank, xdefault, mix=mix)
-    def set__xdefault(d, key, imay_xdefault_rank, xdefault, /, mix:bool):
+    def set__xdefault(d, key, imay_xdefault_rank, xdefault, /, *, mix:bool):
         return ops4XDefaultMapping.set__xdefault(d, key, imay_xdefault_rank, xdefault, mix=mix)
 
     def get__xdefault__mix(d, key, imay_xdefault_rank, xdefault, /):

@@ -1,0 +1,4 @@
+##
+#py -m nn_ns.app.hex -i "$@"
+py -m nn_ns.app.py_eval --postprocess 'hex' -i "$@"
+

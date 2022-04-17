@@ -263,12 +263,12 @@ def main(args=None, /):
         '''.split()
     class case2post_process:
         #@staticmethod
-        def store(nm, stored_form4target, /, fout):
+        def store(nm, stored_form4target, /, *, fout):
             print(fr'##action=store; target_name:{nm!s}##', file=fout)
             print(stored_form4target, file=fout)
 
         #@staticmethod
-        def list_print(nm, f, /, fout):
+        def list_print(nm, f, /, *, fout):
             print(fr'##action=list_print; target_name:{nm!s}##', file=fout)
             f(fout=fout)
     case2post_process = case2post_process.__dict__

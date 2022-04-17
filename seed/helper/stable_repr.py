@@ -1,5 +1,5 @@
-
-'''
+#__all__:goto
+r'''[[[[[
 dict/set are unordered
 let us sorted it
 
@@ -7,6 +7,11 @@ see:
     ast.literal_eval
     seed.helper.safe_eval
         # for "set()"
+
+py -m nn_ns.app.debug_cmd   seed.helper.stable_repr
+from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
+SortableIterReprable4builtins.register_datatype_and_name_and_SortableIterReprable
+    后来注册了个HexReprInt
 
 
 >>> stable_repr(None)
@@ -262,7 +267,7 @@ OrderedDict([
 
 
 
-'''
+#]]]]]'''
 
 __all__ = '''
     stable_repr
@@ -304,9 +309,10 @@ __all__ = '''
     '''.split()
     #check_echo
 
-from seed.abc import abstractmethod, override, ABC, final
+from seed.abc.abc__ver0 import abstractmethod, override, ABC, final
 from seed.for_libs.for_operator.method_caller import method_caller
 from seed.tiny import echo, fst
+from seed.tiny import HexReprInt
 from itertools import repeat
 from types import MappingProxyType
 from fractions import Fraction
@@ -879,9 +885,9 @@ class SortableIterReprableABC(ABC):
         t2S = cls._get_datatype2SortableIterReprable_()
         assert len(t2n) == len(n2t) == len(t2S)
         if datatype in t2n:
-            raise Exception('datatype {datatype!r} has been registered!')
+            raise Exception(f'datatype {datatype!r} has been registered!')
         if name in n2t:
-            raise Exception('datatype name {name!r} has been registered!')
+            raise Exception(f'datatype name {name!r} has been registered!')
         t2n.setdefault(datatype, name)
         n2t.setdefault(name, datatype)
         t2S.setdefault(datatype, SortableIterReprable)
@@ -891,7 +897,7 @@ class SortableIterReprableABC(ABC):
             T = n2t[name]
             if datatype is T:
                 if datatype not in t2n or t2n[datatype] != name:
-                    raise logic-error
+                    raise logic-err
                 else:
                     pass
             else:
@@ -943,6 +949,7 @@ class SortableIterReprable__directly(SortableIterReprable4builtins):
         , type(...) # Ellipsis ellipsis
         , type(NotImplemented) # NotImplementedType
         , bool, int, float, complex, Fraction
+            , HexReprInt
         , bytes, bytearray, str
         }
 
@@ -1192,7 +1199,10 @@ def __register():
     Sdc = SortableIterReprable__dict
     for S__ in [Sdy, Stl, Ssf, SO, Sdc]:
         for datatype in S__.supported_types:
-            register(datatype, datatype.__name__, S__)
+            if 0b00:
+                register(datatype, datatype.__name__, S__)
+            else:
+                register(datatype, datatype.__qualname__, S__)
 __register(); del __register
 
 

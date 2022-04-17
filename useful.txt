@@ -99,7 +99,7 @@ __all__ = '''
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-r"""
+r"""[[
 import ...
 from seed.tiny import str2__all__
 __all__ = str2__all__(r'''#)
@@ -117,7 +117,7 @@ if 0b00:#[01_to_turn_off]
     print_err(fr'x={x}')
     from pprint import pprint
     pprint(x)
-#"""
+#]]"""
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH

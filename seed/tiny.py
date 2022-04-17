@@ -5,7 +5,7 @@ py -m seed.tiny
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
 from seed.tiny import fst, snd, at
 from seed.tiny import mk_tuple, mk_frozenset
-from seed.tiny import check_pair, check_uint, check_imay, icheck_pair, icheck_uint, icheck_imay
+from seed.tiny import check_tmay, check_pair, check_uint, check_imay, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 from seed.tiny import check_type_le, check_type_is, icheck_type_le, icheck_type_is
 from seed.tiny import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny import check_callable, check_is_obj, check_is_None
@@ -43,11 +43,25 @@ from seed.tiny import get5cls, call5cls, get5cls_, call5cls_
 
 from seed.helper.str2__all__ import str2__all__
 __all__ = str2__all__(r'''
+    HexReprInt          # subtype of int, __repr__ -> hex
     no_op               # :: (*args, **kwargs) -> None
     next__tmay          # :: Iter a -> tmay a
     lookup__tmay        # :: Lookupable k v -> tmay v  # Lookupable := hasattr __getitem__ raise LookupError
 
     slice2triple        # :: slice -> (.start, .stop, .step)
+    range2triple        # :: range -> (.start, .stop, .step)
+
+    fix_slice_by_len    # :: length -> slice -> (.start, .stop, .step)
+    fix_slice_by_len_of # :: seq -> slice -> (.start, .stop, .step)
+
+    convert_triple_as_  # :: cls{tuple|range|slice} -> triple -> cls(.start, .stop, .step)
+
+    slice2triple_       # :: cls -> slice -> cls(.start, .stop, .step)
+    range2triple_       # :: cls -> slice -> cls(.start, .stop, .step)
+
+    fix_slice_by_len_   # :: cls -> length -> slice -> cls(.start, .stop, .step)
+    fix_slice_by_len_of_# :: cls -> seq -> slice -> cls(.start, .stop, .step)
+
     slice2item          # :: slice -> (.start, .stop) # .step is None
     slices2iter_items   # :: iter<slice> -> iter<(.start, .stop)> # .step is None
     slices2items        # :: iter<slice> -> tuple<(.start, .stop)> # .step is None
@@ -63,9 +77,11 @@ __all__ = str2__all__(r'''
     icheck_type_le      # :: cls -> a -> a|raise TypeError
     icheck_type_is      # :: cls -> a -> a|raise TypeError
 
+    check_tmay          # :: a -> None|raise TypeError
     check_pair          # :: a -> None|raise TypeError
     check_uint          # :: a -> None|raise TypeError
     check_imay          # :: a -> None|raise TypeError
+    icheck_tmay          # :: a -> a|raise TypeError
     icheck_pair          # :: a -> a|raise TypeError
     icheck_uint          # :: a -> a|raise TypeError
     icheck_imay          # :: a -> a|raise TypeError
@@ -93,6 +109,7 @@ __all__ = str2__all__(r'''
                         # :: cls -> str -> None|raise TypeError
 
 
+    echo_key            # echo_key[k...] -> (k...)
     mk_frozenset        # :: Iter a -> frozenset a
     mk_tuple            # :: Iter a -> tuple a
     echo_args_kwargs    # :: (*args, **kwargs) -> (args, kwargs)
@@ -205,6 +222,20 @@ __all__ = str2__all__(r'''
 
 
 
+    str_join__list_nonemty
+    str_join__entry_nonemty
+    str_join__both_list_and_entry_may_be_emty
+                        # sep -> Iter<str> -> str
+    str_split__list_nonemty
+    str_split__entry_nonemty
+    str_split__both_list_and_entry_may_be_emty
+                        # sep -> str -> [str]
+
+    fmap4dict_value     # (a->b) -> dict<k,a> -> dict<k,b>
+    filter4dict_value   # (v->bool) -> dict<k,v> -> dict<k,v>
+    group4dict_value    # (v->g) -> dict<k,v> -> dict<g, dict<k,v> >
+    dict_add__is        # dict<k,v> -> k -> v -> None
+    dict_add__eq        # Eq v => dict<k,v> -> k -> v -> None
 
     #''')
 
@@ -223,6 +254,10 @@ from seed.for_libs.lookup__tmay import lookup__tmay
 from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs
   #SimpleNamespace(**kw)
 
+from seed.tiny_.HexReprInt import HexReprInt
+from seed.tiny import HexReprInt
+assert repr(HexReprInt(15)) == hex(15) == '0xf'
+assert repr(HexReprInt(-15)) == hex(-15) == '-0xf'
 
 
 #vivi fst, snd
@@ -243,20 +278,35 @@ __all__ = '''
 #"""
 
 
+from seed.tiny_.echo_key import echo_key
+
+
 from seed.tiny_.slice2triple import slice2triple
 assert slice2triple(slice(3, 9, 2)) == (3, 9, 2)
 from seed.tiny_.slice2triple import slice2triple, slice2item, slices2iter_items, slices2items, slices2dict, items2dict__reject_duplicates
+from seed.tiny_.slice2triple import slice2triple, fix_slice_by_len, fix_slice_by_len_of
+from seed.tiny_.slice2triple import slice2triple_, fix_slice_by_len_, fix_slice_by_len_of_
+from seed.tiny_.slice2triple import slice2triple, range2triple, convert_triple_as_, range2triple_, slice2triple_
 
 
+assert (0,4,1) == fix_slice_by_len(4, echo_key[:])
+assert (4-1,-1,-1) == fix_slice_by_len(4, echo_key[::-1])
+assert (4-1,-1,-1) == fix_slice_by_len_of(range(4), echo_key[::-1])
+assert (4-1,-1,-1) == fix_slice_by_len_of_(tuple, range(4), echo_key[::-1])
+assert range(4-1,-1,-1) == fix_slice_by_len_of_(range, range(4), echo_key[::-1])
 
-from seed.tiny_.check import check_type_le, check_type_is, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_pair, icheck_uint, icheck_imay
+
+from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 check_uint(1)
+check_tmay(())
+check_tmay((0,))
 check_pair((0, 0))
 check_type_is(str, '')
 check_type_le(object, '')
 assert 1 == icheck_uint(1)
+assert (0,) == icheck_tmay((0,))
 assert (0,0) == icheck_pair((0, 0))
 assert '' == icheck_type_is(str, '')
 assert '' == icheck_type_le(object, '')
@@ -392,6 +442,11 @@ assert call5cls.__getitem__([1], 0) == 1
 assert get5cls_('__getitem__', [1])(0) == 1
 assert call5cls_('__getitem__', [1], 0) == 1
 
+
+
+from seed.tiny_.str__split_join import str_join__list_nonemty, str_split__list_nonemty, str_join__entry_nonemty, str_split__entry_nonemty, str_join__both_list_and_entry_may_be_emty, str_split__both_list_and_entry_may_be_emty
+
+from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, group4dict_value
 
 
 

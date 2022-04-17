@@ -411,7 +411,7 @@ class _SymbolLeadingPathBase(ABC):
     @abstractmethod
     def __repr__(sf, /):
         ...
-def check_qname(qname, /, empty_ok):
+def check_qname(qname, /, *, empty_ok):
     check_type_is(str, qname)
     if not type(qname) is str: raise TypeError
     if not all(name.isidentifier() for name in qname.split('.')):raise ValueError
@@ -512,7 +512,7 @@ class Symbol(IWrapperBase4UniqueHashable, _SymbolLeadingPathBase):
 def mk_new_Symbol(pkg, qname, /):
     return get_or_mk_Symbol(pkg, qname, exist_ok=False)
     return Symbol.mk_new(pkg, qname)
-def get_or_mk_Symbol(pkg, qname, /, exist_ok=True):
+def get_or_mk_Symbol(pkg, qname, /, *, exist_ok=True):
     if exist_ok:
         return Symbol.get_or_mk(pkg, qname)
     else:
@@ -602,7 +602,7 @@ class OpsMeta(type):
     class key4namespace4OpsMeta:pass
     class key4ops_wrapper4OpsMeta:pass
     class key4bases4OpsMeta:pass
-    def __new__(metaclass, name, bases2, namespace, /, ops_wrapper, **kwds2):
+    def __new__(metaclass, name, bases2, namespace, /, *, ops_wrapper, **kwds2):
         d = {'__slots__':('__OpsMeta__cls__sf__私有数据',), __class__.key4ops_wrapper4OpsMeta:ops_wrapper, __class__.key4namespace4OpsMeta:namespace, __class__.key4bases4OpsMeta:bases2}
 
         sf_as_cls = super(__class__, metaclass).__new__(metaclass, name, (), d, **kwds2)

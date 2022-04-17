@@ -1,6 +1,9 @@
 
 
 r'''
+py -m seed.data_funcs.rngs
+from seed.data_funcs.rngs import make_Ranges, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet
+
 ===============================
 ===============================
 NOTE: use Ranges.set_eq instead of "=="
@@ -10,6 +13,7 @@ main_exports:
     make_Ranges
     sorted_ints_to_iter_nontouch_ranges
     detect_iter_ranges
+    StackStyleSimpleIntSet
 ===============================
 ===============================
 rngs = [rng] = iter<rng>
@@ -242,6 +246,104 @@ False
 
 
 
+
+
+StackStyleSimpleIntSet
+>>> s = StackStyleSimpleIntSet()
+>>> s
+StackStyleSimpleIntSet([])
+>>> len(s)
+0
+>>> s.add(1)
+>>> s.add(2)
+>>> s.add(3)
+>>> s.add(4)
+>>> s.get_top()
+4
+>>> s.add(6)
+>>> len(s)
+5
+>>> s.push(7)
+>>> s.push(8)
+>>> s.push(10)
+>>> len(s)
+8
+>>> s.get_top()
+10
+>>> s
+StackStyleSimpleIntSet([(1, 5), (6, 9), (10, 11)])
+>>> s.pop()
+10
+>>> len(s)
+7
+>>> s
+StackStyleSimpleIntSet([(1, 5), (6, 9)])
+
+>>> s.get_top()
+8
+>>> s.pop()
+8
+>>> len(s)
+6
+>>> s
+StackStyleSimpleIntSet([(1, 5), (6, 8)])
+
+>>> s.get_top()
+7
+>>> s.pop()
+7
+>>> len(s)
+5
+
+>>> s.get_top()
+6
+>>> s.pop()
+6
+>>> len(s)
+4
+>>> s
+StackStyleSimpleIntSet([(1, 5)])
+
+>>> s.get_top()
+4
+>>> s.pop()
+4
+>>> len(s)
+3
+
+>>> s.get_top()
+3
+>>> s.pop()
+3
+>>> len(s)
+2
+
+>>> s.get_top()
+2
+>>> s.pop()
+2
+>>> len(s)
+1
+
+>>> s.get_top()
+1
+>>> s.pop()
+1
+>>> len(s)
+0
+>>> s
+StackStyleSimpleIntSet([])
+
+>>> s.get_top()
+Traceback (most recent call last):
+    ...
+KeyError: 'get_top from an empty set'
+
+>>> s.pop()
+Traceback (most recent call last):
+    ...
+KeyError: 'pop from an empty set'
+
 #'''
 
 
@@ -279,6 +381,9 @@ __all__ = """
     make_Ranges
     TouchRanges
     NonTouchRanges
+
+
+    StackStyleSimpleIntSet
     """.split()
 
 import bisect
@@ -1394,9 +1499,90 @@ def iter_nontouch_rangess_between(begin, end):
         rngs = tuple(rngs)
         yield rngs
 
+
+
+class StackStyleSimpleIntSet:
+    r'''
+    .rngs :: [(int, int)] #nontouch_ranges
+        public-mutable
+        NOTE: SHOULD call fix_after_modify_rngs after update rngs externally
+    #'''
+    def __init__(sf, rngs=None, /):
+        if rngs is None:
+            rngs = []
+        sf.rngs = rngs
+    def fix_after_modify_rngs(sf, /, *, turnoff__check_rngs=False, may_delta4size=None):
+        rngs = sf.rngs
+        if not turnoff__check_rngs:
+            sf.check_rngs(rngs)
+        if may_delta4size is None:
+            sf._sz = sum(j-i for i,j in rngs)
+        else:
+            delta4size = may_delta4size
+            sf._sz += delta4size
+    def push(sf, i, /):
+        if not type(i) is int: raise TypeError
+        rngs = sf.rngs
+        if not rngs:
+            rngs.append((i, i+1))
+        else:
+            (begin, end) = rngs[-1]
+            if i == end:
+                rngs[-1] = (begin, i+1)
+            elif end < i:
+                rngs.append((i, i+1))
+            elif i < end:
+                raise ValueError('stack_styple-int-set: add(i) but i < end')
+            else:
+                raise logc-err
+        sf._sz += 1
+        return
+    add = push
+    def get_top(sf, /):
+        rngs = sf.rngs
+        if not rngs: raise KeyError('get_top from an empty set')
+        return rngs[-1][-1] -1
+    def pop(sf, /):
+        rngs = sf.rngs
+        if not rngs: raise KeyError('pop from an empty set')
+        (begin, end) = rngs[-1]
+        end -= 1
+        if begin == end:
+            rngs.pop()
+        else:
+            rngs[-1] = (begin, end)
+        sf._sz -= 1
+        return end
+    def __len__(sf, /):
+        return sf._sz
+    def __repr__(sf, /):
+        return '{}({})'.format(type(sf).__name__, sf.rngs)
+
+
+
+    @property
+    def rngs(sf, /):
+        return sf._rngs
+    @rngs.setter
+    def rngs(sf, rngs, /):
+        sf.check_rngs(rngs)
+        sf._rngs = rngs
+        sf.fix_after_modify_rngs(turnoff__check_rngs=True)
+
+    @classmethod
+    def check_rngs(cls, rngs, /):
+        'check rngs is nontouch_ranges-list-version'
+        if not type(rngs) is list: raise TypeError
+        if not 15 == detect_iter_ranges(rngs): raise TypeError #not nontouch_ranges-list-version
+    @classmethod
+    def from_clone_of_rngs(cls, rngs, /):
+        rngs = [*make_Ranges(rngs).to_nontouch_ranges()]
+        return cls(rngs)
+
 if __name__ == "__main__":
     print('\n'.join(s for s in globals() if not s.startswith('_')))
     import doctest
     doctest.testmod()
+    raise
     test_subset_relation_ex__xtouch_ranges()
 
