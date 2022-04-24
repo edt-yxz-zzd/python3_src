@@ -226,10 +226,51 @@ view ../../python3_src/nn_ns/CJK/CJK_struct/CHISE_IDS_67b94ff_20191211/basic_dec
 每个tree建立反向索引:
   Map tree (Set ((idx, tree)|(0,hz)))
   一tree多字形
-截止:交叠类 不拆；其余 人工检查
+下面 部件=tree，身兼多个字形，并非正常意义上的部件
+截止:
+  * 交叠类 不拆
+  * 当有一直接子部件是单笔部件时，不拆
+  * 其余 人工检查
+  ===
   拓扑排序
+  计数被引用次数-->阈值
+    定义 可拆出部件
+      = 『被引用次数超过阈值』并且不是『单笔部件』并且不是『用户显式指定的不可拆出部件』的部件
+      | 所有直接子部件都是『可拆出部件』的部件
+  当一个部件的所有直接子部件都是『可拆出部件』时，可将之拆开。
 e script/collect_hz_components.py
+e ../../python3_src/seed/io/fielded_line_utils.py
+$ ls ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/
+    dump_load___parsed_result__of__PropList_txt.py
+    parse__PropList_txt.py
+    parse__PropList_txt.py.out.ver13_0.hex.txt
+    parsed_result__of__PropList_txt__of_ver13_0.py
 
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__CJKRadicals_txt.py
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/dump_load___parsed_result__of__CJKRadicals_txt.py
+
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__PropList_txt__of_ver13_0.py
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__CJKRadicals_txt__of_ver13_0.py
+from nn_ns.CJK.unicode.ucd_unihan.ucd.parsed_result__of__CJKRadicals_txt__of_ver13_0 import readonly_parsed_result4ver13_0, readonly_compact_result4ver13_0, readonly_radical_char2unified_ideograph4ver13_0, readonly_simplified_radical2traditional_radical4ver13_0
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__CJKRadicals_txt.py.out.ver13_0.txt
+
+
+]]]
+
+
+
+
+
+[[[
+加密网页 第二版？
+e script/加密囗短字符串.py
+  TODO:简易 短字符串 压缩算法
+    本来就不需要压缩！
+
+算了，还是 继续用 呜呼哀哉尚飨加密 第二版
+file:///storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__html_js/呜呼哀哉尚飨加密v2_1.html
+  view ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__html_js/呜呼哀哉尚飨加密v2_1.html
+  file:///storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/app/%E5%91%9C%E5%91%BC%E5%93%80%E5%93%89%E5%B0%9A%E9%A3%A8%E5%8A%A0%E5%AF%86/%E9%A6%96%E4%B8%A4%E7%89%88%E5%9B%97%E6%94%B6%E9%9B%86%E4%BA%8E20220424/phone_txt__html_js/%E5%91%9C%E5%91%BC%E5%93%80%E5%93%89%E5%B0%9A%E9%A3%A8%E5%8A%A0%E5%AF%86v2_1.html
 
 
 ]]]

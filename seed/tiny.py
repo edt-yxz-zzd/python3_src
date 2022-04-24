@@ -1,5 +1,5 @@
 
-r'''
+r'''[[[
 py -m seed.tiny
 
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
@@ -38,7 +38,7 @@ from seed.tiny_.mk_fdefault import BasePermissionMappingOps, SimplePermissionMap
 from seed.tiny import get5cls, call5cls, get5cls_, call5cls_
 
 
-#'''
+#]]]'''
 
 
 from seed.helper.str2__all__ import str2__all__
@@ -237,6 +237,13 @@ __all__ = str2__all__(r'''
     dict_add__is        # dict<k,v> -> k -> v -> None
     dict_add__eq        # Eq v => dict<k,v> -> k -> v -> None
 
+    update_attr         # obj -> name -> (old->new) -> None
+    iupdate_attrs       # obj -> Iter name -> (old->arg->new) -> {name:arg} ->  -> None
+    set_attrs           # obj -> Iter name -> {key:new} -> may ((name->key)|str) -> None
+    fwd_call            # (**kwargs->r) -> Iter name -> {name:arg} -> r
+
+    prepare4set_attrs   # Iter name -> {key:new} -> may ((name->key)|str) -> Iter (name, new)
+
     #''')
 
 from seed.math.sign_of import sign_of
@@ -253,6 +260,7 @@ from seed.for_libs.lookup__tmay import lookup__tmay
 
 from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs
   #SimpleNamespace(**kw)
+from seed.tiny_.update_attr import update_attr, iupdate_attrs, set_attrs, prepare4set_attrs, fwd_call
 
 from seed.tiny_.HexReprInt import HexReprInt
 from seed.tiny import HexReprInt

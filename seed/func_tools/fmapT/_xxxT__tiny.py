@@ -288,7 +288,7 @@ values_of = lambda d, /: d.values()
 
 
 def _check_len_same(lhs, rhs, /):
-    if not len(lhs) == len(rhs):raise TypeError
+    if not len(lhs) == len(rhs):raise TypeError(f'len(lhs)={len(lhs)}; len(rhs)={len(rhs)};    lhs={lhs!r};    rhs={rhs!r};')
     return
 def zip__same_len(lhs, rhs, /):
     _check_len_same(lhs, rhs)

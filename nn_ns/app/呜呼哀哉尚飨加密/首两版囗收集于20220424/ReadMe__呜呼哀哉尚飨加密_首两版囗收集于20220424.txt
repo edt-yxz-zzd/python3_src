@@ -1,0 +1,54 @@
+
+e ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/ReadMe__呜呼哀哉尚飨加密_首两版囗收集于20220424.txt
+[[
+已修复bug:
+  v2_1 -> v2_2
+
+发现bug:
+  eval :: literal_in_fmt__ascii_ex -> str
+    未定义！
+    运行无响应！
+
+『初始散列值』格式 ：
+★ 十六进制（如：ff、1a2b、89ab12）
+★ utf8编码（如：好的、abc、1234）
+★ ascii扩展（如：'\x00'、'\n\t'、"1a\3"）
+]]
+
+[[[
+view ./script/加密囗短字符串.py
+
+[[以前:
+加密网页 第一版？
+  == 呜呼哀哉尚飨加密 第二版
+
+
+呜呼哀哉尚飨加密 第二版摘要:
+  view ./others/数学/编程/呜呼哀哉尚飨加密/呜呜呼哀哉尚飨v2.txt
+加密页面:
+  view html_js/呜呼哀哉尚飨加密.html
+    20220424 <==> view html_js/呜呼哀哉尚飨加密v2_2.html
+加密脚本:
+  view ./script/whazsx.py
+
+加密脚本不同语言实现的网页展示:
+  view ./others/数学/编程/呜呼哀哉尚飨加密/呜呼哀哉尚飨加密.js[v2_1].html
+  view ./others/数学/编程/呜呼哀哉尚飨加密/呜呼哀哉尚飨加密.py[v2_2].html
+    $ python whazsx.py a/b/c -d -i abc -m 1 -n 10 -k0 'abc' | python whazsx.py a/b/c -m 0 -n 10 -k0 'abc'
+
+
+===
+!mkdir ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/
+!mkdir ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/
+!mkdir ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__others__数学__编程/
+!mkdir ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__script/
+!mkdir ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__html_js/
+
+!cp -r ./others/数学/编程/呜呼哀哉尚飨加密/   ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__others__数学__编程/
+!cp ./script/whazsx.py       ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__script/
+!cp ./html_js/呜呼*      ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/phone_txt__html_js/
+
+e ../../python3_src/nn_ns/app/呜呼哀哉尚飨加密/首两版囗收集于20220424/ReadMe__呜呼哀哉尚飨加密_首两版囗收集于20220424.txt
+]]
+
+]]]

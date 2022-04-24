@@ -425,10 +425,21 @@ class RecurView4Seq(IRecurView, Sequence):
         return len(sf.__s)
     def __contains__(sf, x, /):
         return x in sf.__s
-    def __iter__(sf, /):
-        return iter(sf.__s)
-    def __reversed__(sf, /):
-        return reversed(sf.__s)
+    if 0:
+        #bug: RecurView4Seq!!!not recur!!!
+        def __iter__(sf, /):
+            return iter(sf.__s)
+        def __reversed__(sf, /):
+            return reversed(sf.__s)
+    else:
+        def __iter__(sf, /):
+            it = iter(sf.__s)
+            f = sf.__cfg.to_view
+            return map(f, it)
+        def __reversed__(sf, /):
+            it = reversed(sf.__s)
+            f = sf.__cfg.to_view
+            return map(f, it)
     def index(sf, /, *args):
         return sf.__s.index(*args)
     def count(sf, /, *args):
