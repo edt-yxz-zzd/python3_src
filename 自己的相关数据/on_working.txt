@@ -276,6 +276,85 @@ file:///storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/app/呜呼哀�
 ]]]
 
 
+[[TODO:
+
+e ??目标计算
+  class ...:
+    src: input-name/symbol, sf.attr/sf[key]
+    @cached-property
+    .z
+      = f1(.x, .y)
+      | f2(.w, .y)
+    @cached-arged-property
+    .xxx(*args)
+      = f1(.x, .y)
+      | f2(.w, .y)
+
+e ../../python3_src/seed/tiny_/pprint4container__depth1.py
+
+e script/download_zxcs_novel/collect_links_from_zxcs_sort_pages.py
+  输出 纯数据
+    [(idx, ID, title, 简介)]
+e script/download_zxcs_novel/extract_scores_from_zxcs_novel_page.py
+  ID -> (日期, [此刻评分]{len=5})
+e script/download_zxcs_novel/merge_link_iinfos_and_scores.py
+  合并 两个输出文件:
+    view /sdcard/0my_files/tmp/out4py/download_zxcs_novel/collect_links_from_zxcs_sort_pages/sorts/42.html.iinfos.txt
+    view /sdcard/0my_files/tmp/out4py/download_zxcs_novel/collect_links_from_zxcs_sort_pages/sorts/42.html.iinfos.scores.txt
+  为：
+    view /sdcard/0my_files/tmp/out4py/download_zxcs_novel/collect_links_from_zxcs_sort_pages/sorts/42.scored.html
+
+e /storage/emulated/0/0my_files/git_repos/python3_src/nn_ns/app/呜呼哀哉尚飨加密/呜呼哀哉尚飨加密v2_3.html
+  使用 regex 严格检查 @str2int
+  BigInt(s)
+  BigInt.asIntN
+  BigInt.asUintN
+  [[
+  The BigInt.asUintN static method clamps a BigInt value to an unsigned integer value, and returns that value.
+  const max = 2n ** 64n - 1n;
+  function check64bit(number) {
+    (number > max) ?
+      console.log('Number doesn\'t fit in unsigned 64-bit integer!') :
+      console.log(BigInt.asUintN(64, number));
+  }
+  check64bit(2n ** 64n);
+  // expected output: "Number doesn't fit in unsigned 64-bit integer!"
+  check64bit(2n ** 32n);
+  // expected output: 4294967296n
+  ]]
+
+[[
+#JavaScript Math.random()->float
+#JavaScript parseInt()
+#JavaScript parse BigInt
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+function roughScale(x, base) {
+  const parsed = parseInt(x, base);
+  if (isNaN(parsed)) { return 0; }
+  return parsed * 100;
+}
+
+
+A stricter parse function
+
+It is sometimes useful to have a stricter way to parse integers.
+
+Regular expressions can help:
+
+function filterInt(value) {
+  if (/^[-+]?(\d+|Infinity)$/.test(value)) {
+    return Number(value)
+  } else {
+    return NaN
+  }
+}
+]]
+]]
+
+
+
 [[[
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 [[[
