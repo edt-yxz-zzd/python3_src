@@ -188,7 +188,7 @@ filterT/alterT mimic fmapT
 ]]
 
 
-[[[
+[[[TODO:
 尽量少拆
 
 ===
@@ -253,6 +253,63 @@ view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__PropL
 view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__CJKRadicals_txt__of_ver13_0.py
 from nn_ns.CJK.unicode.ucd_unihan.ucd.parsed_result__of__CJKRadicals_txt__of_ver13_0 import readonly_parsed_result4ver13_0, readonly_compact_result4ver13_0, readonly_radical_char2unified_ideograph4ver13_0, readonly_simplified_radical2traditional_radical4ver13_0
 view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__CJKRadicals_txt.py.out.ver13_0.txt
+
+TODO:
+  + 用 统一区汉字 替换掉 兼容字符 部首字符
+  + hz2513 另档？
+  + 手动 逐个记录 高频 部件(ref_count)，引用字集 使用 部件的不同字形 要区分开来
+
+unicode 兼容字符 的 『原字符』属性名 是什么？
+  ===
+  view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/PropertyAliases.txt
+    cjkCompatibilityVariant  ; kCompatibilityVariant
+  ===
+  view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/PropertyValueAliases.txt
+    # cjkCompatibilityVariant (cjkCompatibilityVariant)
+    # @missing: 0000..10FFFF; cjkCompatibilityVariant; <code point>
+  ===
+  view ../lots/NOTE/unicode/note4UnicodeStandard_14_0_annex/unicode_ver14_0_UAX31_UAX38摘要.txt
+    kCompatibilityVariant
+      Description 	The canonical Decomposition_Mapping value for the ideograph, derived from UnicodeData.txt. This field is derived by taking the non-null Decomposition_Mapping values from Field 5 of UnicodeData.txt, for characters contained within the CJK Compatibility Ideographs block and the CJK Compatibility Ideographs Supplement block.
+    Unihan_IRGSources.txt 	kCompatibilityVariant, kIICore, kIRG_GSource, kIRG_HSource, kIRG_JSource, kIRG_KPSource, kIRG_KSource, kIRG_MSource, kIRG_SSource, kIRG_TSource, kIRG_UKSource, kIRG_USource, kIRG_VSource, kRSUnicode, kTotalStrokes
+  ===
+  view /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_IRGSources.txt
+    U+F900	kCompatibilityVariant	U+8C48
+      #豈豈
+    U+F901	kCompatibilityVariant	U+66F4
+      #更更
+    U+F91B	kCompatibilityVariant	U+4E82
+      #亂亂
+  ===
+
+[
+  view ../lots/NOTE/unicode/note4UnicodeStandard_14_0_annex/unicode_ver14_0_UAX31_UAX38摘要.txt
+  ===
+  kIICore
+  Syntax 	[ABC][GHJKMPT]{1,7}
+  Description 	Used for characters which are in IICore, the IRG-produced minimal set of required ideographs for East Asian use. A character is in IICore if and only if it has a value for the kIICore field.
+  Each value consists of a letter (A, B, or C), indicating priority value, and one or more letters (G, H, J, K, M, P, or T), indicating source. The source letters are the same as used for IRG sources, except that "P" is used instead of "KP".
+  ===
+  cjkIICore                ; kIICore
+  # cjkIICore (cjkIICore)
+  # @missing: 0000..10FFFF; cjkIICore; <none>
+  U+34E4	kIICore	CH
+    #㓤
+  U+3577	kIICore	CT
+    #㕷
+  U+35CE	kIICore	BHM
+    #㗎
+  U+3960	kIICore	CK
+    #㥠
+  U+39DF	kIICore	CG
+  U+3ED0	kIICore	CP
+  ...
+  U+4E00	kIICore	AGTJHKMP
+    #一
+  #最核心字集，搜索:『\t\<A[GHJKMPT]\{7}\>』
+  ===
+]
+
 
 
 ]]]
