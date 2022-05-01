@@ -1,4 +1,7 @@
 r'''
+see:
+    view ../../python3_src/nn_ns/CJK/cjk_subsets/囗共享汉字集单字信息.py
+
 from nn_ns.CJK.cjk_subsets.共享汉字集笔顺码 import 只读囗共享汉字到笔顺码, 只读囗平凡繁简囗初步缩减囗共享汉字到笔顺码, 只读囗初步缩减囗共享汉字到笔顺码, 只读囗平凡繁简囗共享汉字到笔顺码
 
 hz2513 -> 笔顺码

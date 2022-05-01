@@ -9,7 +9,11 @@ see:
         # for "set()"
 
 py -m nn_ns.app.debug_cmd   seed.helper.stable_repr
+py -m seed.helper.stable_repr
+
 from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
+from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
+
 SortableIterReprable4builtins.register_datatype_and_name_and_SortableIterReprable
     后来注册了个HexReprInt
 
@@ -242,7 +246,24 @@ OrderedDict([
 ,3
 : [4, 5]
 }
-
+>>> print(stable_repr__expand_top_layer({1: 2, 3: [4,5]}))
+{1
+: 2
+,3
+: [4, 5]
+}
+>>> import sys
+>>> stable_repr_print__expand_top_layer(sys.stdout, {1: 2, 3: [4,5]})
+{1
+: 2
+,3
+: [4, 5]
+}
+>>> stable_repr__expand_top_layer({1: 2, 3: [4,5]})
+'{1\n: 2\n,3\n: [4, 5]\n}'
+>>> from seed.tiny_.pprint4container__depth1 import show5pprint
+>>> show5pprint(0, stable_repr_print__expand_top_layer, {1: 2, 3: [4,5]}) #2 diffs cmp pprint4container__depth1: no tailing EOL, item_sep=': ' has space
+'{1\n: 2\n,3\n: [4, 5]\n}'
 
 
 ############## sort....
@@ -270,6 +291,9 @@ OrderedDict([
 #]]]]]'''
 
 __all__ = '''
+    stable_repr__expand_top_layer
+    stable_repr_print__expand_top_layer
+
     stable_repr
     stable_repr_ex
     stable_repr_print
@@ -563,6 +587,12 @@ def sorted_mapping_by_SortableIterReprable(mapping, *
             )
 
 ##################################
+_kwargs4expand_top_layer = dict(indent='', depth=0, maybe_max_depth=1, has_head_eol_when_indent=False)
+def stable_repr__expand_top_layer(obj, /):
+    return stable_repr(obj, **_kwargs4expand_top_layer)
+def stable_repr_print__expand_top_layer(ofile, obj, /):
+    return stable_repr_print(ofile, obj, **_kwargs4expand_top_layer)
+
 def stable_repr(obj, *
     , indent:str='    ', depth:int=-1, maybe_max_depth:[None, int]=None
     ,has_head_eol_when_indent:bool=True

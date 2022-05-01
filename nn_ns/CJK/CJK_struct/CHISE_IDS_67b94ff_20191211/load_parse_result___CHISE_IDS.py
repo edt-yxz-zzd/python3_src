@@ -13,7 +13,7 @@ see:
 
 
 nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.load_parse_result___CHISE_IDS
-from nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.load_parse_result___CHISE_IDS import load_hz2tree___BMP_only, load_hz2tree___ipath, mutable_tree2immutable
+from nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.load_parse_result___CHISE_IDS import load_hz2tree___BMP_only, load_hz2tree___ipath, hz2mutable_tree__to__hz2immutable_tree, hz2mutable_tree__from__hz2immutable_tree, mutable_tree2immutable, mutable_tree5immutable
 
 #'''
 
@@ -25,7 +25,10 @@ from nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.load_parse_result___CHISE_I
 __all__ = '''
     load_hz2tree___BMP_only
     load_hz2tree___ipath
+    hz2mutable_tree__to__hz2immutable_tree
+    hz2mutable_tree__from__hz2immutable_tree
     mutable_tree2immutable
+    mutable_tree5immutable
     '''.split()
 
 
@@ -61,6 +64,9 @@ def load_hz2tree___ipath(ipath, /, *, result_readonly):
 def hz2mutable_tree__to__hz2immutable_tree(hz2mutable_tree, /):
     hz2immutable_tree = fmapT__dict(mutable_tree2immutable)(hz2mutable_tree)
     return hz2immutable_tree
+def hz2mutable_tree__from__hz2immutable_tree(hz2immutable_tree, /):
+    hz2mutable_tree = fmapT__dict(mutable_tree5immutable)(hz2immutable_tree)
+    return hz2mutable_tree
 def mutable_tree2immutable(tree, /):
     def recur(tree, /):
         case, payload = tree
@@ -72,8 +78,26 @@ def mutable_tree2immutable(tree, /):
             tree = case, payload
         else:
             assert len(case) > 1
+            assert type(payload) is str
+        return tree
+    return recur(tree)
+def mutable_tree5immutable(tree, /):
+    def recur(tree, /):
+        case, payload = tree
+        if type(payload) is tuple:
+            assert len(case) == 1
+            children = payload
+            children = list(map(recur, children))
+            payload = children
+            tree = case, payload
+        else:
+            assert len(case) > 1
+            assert type(payload) is str
         return tree
     return recur(tree)
 
 
+
+
+from nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.load_parse_result___CHISE_IDS import load_hz2tree___BMP_only, load_hz2tree___ipath, hz2mutable_tree__to__hz2immutable_tree, hz2mutable_tree__from__hz2immutable_tree, mutable_tree2immutable, mutable_tree5immutable
 

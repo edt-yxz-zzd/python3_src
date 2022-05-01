@@ -565,3 +565,20 @@ if __name__ == '__main__':
 
 
 
+
+from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
+>>> print(stable_repr__expand_top_layer({1: 2, 3: [4,5]}))
+  等价于下面
+from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
+  depth 定位当前缩进层次
+  maybe_max_depth 与depth一起决定是否单行显示
+  has_head_eol_when_indent 首元素之前是否换行
+>>> print(stable_repr({1: 2, 3: [4,5]}, indent='', depth=0, maybe_max_depth=1, has_head_eol_when_indent=False))
+{1
+: 2
+,3
+: [4, 5]
+}
+
+
+

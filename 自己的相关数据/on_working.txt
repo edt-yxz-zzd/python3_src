@@ -146,8 +146,9 @@ e ../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集字形拆分树.py
     view script/collect_hz_components.py
 from nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.parse_result___CHISE_IDS import hz2tree___BMP_only
 
-
-
+view script/collect_hz_components.py
+    py_eval --startup 'import unicodedata as U' --turnoff_eval --postprocess 'lambda x:(x, U.name(x))' -i ⺳ タ 具 ⺢  ⻖ ⺗ 直 ⺯ 刃 ⺜ ⺇ ⻀ ⺫  𥄳 ⺃ 屮 旣 ⺲ ⻏ 灰 ⺈ ⺊  冗 ⺼ ⺧ ⻢ 穀 ⺣ ⺄ ⺆ 充  ⺪ 叟 者 ⻞ ⺶ ⻃ ⺌ ⻤ ⻌
+[⺳タ具⺢⻖⺗直⺯刃⺜⺇⻀⺫𥄳⺃屮旣⺲⻏灰⺈⺊冗⺼⺧⻢穀⺣⺄⺆充⺪叟者⻞⺶⻃⺌⻤⻌]
 ]
 [TODO:
 hz2513 -> 频数/分级 ++Unihan
@@ -271,6 +272,7 @@ TODO:
   + 手动 逐个记录 高频 部件(ref_count)，引用字集 使用 部件的不同字形 要区分开来
 
 unicode 兼容字符 的 『原字符』属性名 是什么？
+  TODO:kCompatibilityVariant/kIICore
   ===
   view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/PropertyAliases.txt
     cjkCompatibilityVariant  ; kCompatibilityVariant
