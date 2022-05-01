@@ -1,4 +1,4 @@
-
+#HHHHH
 r"""
 basic_charset_filter
     = charset
@@ -26,8 +26,97 @@ op = or | and | xor | exclude
 
 
 
+see:
+    view ../../python3_src/seed/text/charset_filter.py
+    view ../../python3_src/seed/text/mk_char_pt_ranges5predicator.py
+
+
+usage:
+    printable_ascii_gb2312_char_pt_ranges = ((EncodingCharFilter('ascii') | EncodingCharFilter('gb2312')) & the_printable_char_filter).to_NonTouchRanges()
+
+
+py -m nn_ns.app.debug_cmd   seed.text.charset_filter
+py -m seed.text.charset_filter -i U
+
+from seed.text.charset_filter import (
+    ICharFilter
+        ,ICharPredicatorCharFilter
+        ,IBinOpCharFilter
+)
+from seed.text.charset_filter import (
+        EncodingCharFilter
+        ,CharsetCharFilter
+        ,CharNameRegexCharFilter
+        ,CharPredicatorCharFilter
+)
+from seed.text.charset_filter import (
+    the_space_char_filter
+    ,the_printable_char_filter
+        ,the_identifier_char_filter
+            ,the_alpha_numeric_char_filter
+                ,the_alpha_char_filter
+                    ,the_lower_char_filter
+                    ,the_upper_char_filter
+                ,the_numeric_char_filter
+                    ,the_digit_char_filter
+                        ,the_decimal_char_filter
+)
+
+
 #"""
 
+#################################
+#HHHHH
+__all__ = '''
+    unicode_begin
+    unicode_end
+    unicode_rngs
+
+    ICharFilter
+        EncodingCharFilter
+        CharsetCharFilter
+        CharNameRegexCharFilter
+        CharPredicatorCharFilter
+        ICharPredicatorCharFilter
+            PrintableCharFilter
+                the_printable_char_filter
+            SpaceCharFilter
+                the_space_char_filter
+            IdentifierCharFilter
+                the_identifier_char_filter
+            AlphaNumericCharFilter
+                the_alpha_numeric_char_filter
+            AlphaCharFilter
+                the_alpha_char_filter
+            LowerCharFilter
+                the_lower_char_filter
+            UpperCharFilter
+                the_upper_char_filter
+            NumericCharFilter
+                the_numeric_char_filter
+            DigitCharFilter
+                the_digit_char_filter
+            DecimalCharFilter
+                the_decimal_char_filter
+
+    encoding2char_key_func4sort
+    sort_chars_by_encoding
+
+        IBinOpCharFilter
+            OrCharFilter
+            AndCharFilter
+            XorCharFilter
+            ExcludeCharFilter
+    E
+    R
+    N
+    U
+    main
+    '''.split()
+
+#################################
+#HHHHH
+___begin_mark_of_excluded_global_names__0___ = ...
 import codecs
 import re
 import unicodedata
@@ -36,81 +125,92 @@ from seed.data_funcs.rngs import (
     make_Ranges
     ,sorted_unique_ints_to_iter_nontouch_ranges
     )
+from seed.data_funcs.rngs import NonTouchRanges
 from seed.helper.repr_input import repr_helper
 from seed.helper.safe_eval import safe_eval
- 
+___end_mark_of_excluded_global_names__0___ = ...
 
+
+
+
+#################################
+#HHHHH
 unicode_begin = 0
 unicode_end = 0x11_0000
 unicode_rngs = make_Ranges([(0, 0x11_0000)])
 class ICharFilter(ABC):
     @abstractmethod
-    def _get_init_args(self):
+    def _get_init_args(self, /):
         raise NotImplementedError
     @abstractmethod
-    def _is_good_char_ord(self, char_ord):
+    def _is_good_char_ord(self, char_ord, /):
         raise NotImplementedError
-    def is_good_char_ord(self, char_ord):
+    def is_good_char_ord(self, char_ord, /):
         return self._is_good_char_ord(char_ord)
-    def iter_sorted_good_char_ords(self):
+    def iter_sorted_good_char_ords(self, /):
         return filter(self.is_good_char_ord, unicode_rngs.iter_ints())
-    def iter_nontouch_ranges(self):
+    def iter_nontouch_ranges(self, /):
         return sorted_unique_ints_to_iter_nontouch_ranges(self.iter_sorted_good_char_ords())
-    def iter_sorted_good_chars(self):
+    def iter_sorted_good_chars(self, /):
         return map(chr, self.iter_sorted_good_char_ords())
-    def sort_all_good_chars_by_encoding(self, encoding):
+    def sort_all_good_chars_by_encoding(self, encoding, /):
         return sort_chars_by_encoding(encoding, self.iter_sorted_good_chars())
-    def to_CharsetCharFilter(self):
+    def to_NonTouchRanges(self, /):
+        rngs = self.iter_nontouch_ranges()
+        nontouch_ranges = make_Ranges(rngs)
+        assert type(nontouch_ranges) is NonTouchRanges
+        return nontouch_ranges
+    def to_CharsetCharFilter(self, /):
         rngs = self.iter_nontouch_ranges()
         return CharsetCharFilter(rngs)
-    def __repr__(self):
+    def __repr__(self, /):
         args = self._get_init_args()
         return repr_helper(self, *args)
 
-    def __or__(self, other):
+    def __or__(self, other, /):
         return OrCharFilter(self, other)
-    def __and__(self, other):
+    def __and__(self, other, /):
         return AndCharFilter(self, other)
-    def __xor__(self, other):
+    def __xor__(self, other, /):
         return XorCharFilter(self, other)
-    def __sub__(self, other):
+    def __sub__(self, other, /):
         return ExcludeCharFilter(self, other)
 
 class EncodingCharFilter(ICharFilter):
-    def __init__(self, encoding):
+    def __init__(self, encoding, /):
         self.__codec_info = codecs.lookup(encoding)
     @property
-    def encoding(self):
+    def encoding(self, /):
         return self.__codec_info.name
-    def _get_init_args(self):
+    def _get_init_args(self, /):
         return (self.encoding,)
-    def _is_good_char_ord(self, char_ord):
+    def _is_good_char_ord(self, char_ord, /):
         try:
             self.__codec_info.encode(chr(char_ord))
         except UnicodeEncodeError:
             return False
         else:
             return True
-    def sort_all_good_chars_by_encoding(self, encoding=None):
+    def sort_all_good_chars_by_encoding(self, encoding=None, /):
         if encoding is None:
             encoding = self.encoding
         return super().sort_all_good_chars_by_encoding(encoding)
 
 class CharsetCharFilter(ICharFilter):
-    def __init__(self, xtouch_ranges):
+    def __init__(self, xtouch_ranges, /):
         self.__rngs = make_Ranges(xtouch_ranges)
     @property
-    def ranges(self):
+    def ranges(self, /):
         return self.__rngs.ranges
-    def len(self):
+    def len(self, /):
         return self.__rngs.len_ints()
-    def _get_init_args(self):
+    def _get_init_args(self, /):
         return (self.ranges,)
-    def _is_good_char_ord(self, char_ord):
+    def _is_good_char_ord(self, char_ord, /):
         return char_ord in self.__rngs
 
 class CharNameRegexCharFilter(ICharFilter):
-    def __init__(self, pattern_or_regex):
+    def __init__(self, pattern_or_regex, /):
         if isinstance(pattern_or_regex, str):
             pattern = pattern_or_regex
             regex = re.compile(pattern)
@@ -118,25 +218,111 @@ class CharNameRegexCharFilter(ICharFilter):
             regex = pattern_or_regex
         self.__rex = regex
     @property
-    def pattern(self):
+    def pattern(self, /):
         return self.__rex.pattern
-    def _get_init_args(self):
+    def _get_init_args(self, /):
         return (self.pattern,)
-    def _is_good_char_ord(self, char_ord):
+    def _is_good_char_ord(self, char_ord, /):
         char = chr(char_ord)
         may_char_name = unicodedata.name(char, '')
         m = self.__rex.search(may_char_name)
         return m is not None
 
-def encoding2char_key_func4sort(encoding):
+class CharPredicatorCharFilter(ICharFilter):
+    'bad: repr()'
+    def __init__(self, char_predicator, /):
+        if not callable(char_predicator): raise TypeError(char_predicator)
+        self.__pred = char_predicator
+    @property
+    def char_predicator(self, /):
+        return self.__pred
+    def _get_init_args(self, /):
+        return (self.char_predicator,)
+    def _is_good_char_ord(self, char_ord, /):
+        char = chr(char_ord)
+        b = self.__pred(char)
+        if not type(b) is bool: raise TypeError(b)
+        return b
+
+
+
+class ICharPredicatorCharFilter(ICharFilter):
+    'ICharPredicatorCharFilter vs CharPredicatorCharFilter: better look repr()'
+    @staticmethod
+    @abstractmethod
+    def ___char_predicator___(char, /):
+        'char -> bool'
+        raise NotImplementedError
+
+    def __new__(cls, /):
+        while not hasattr(cls, '___the_self___'):
+            cls.___the_self___ = super(__class__, cls).__new__(cls)
+        sf = cls.___the_self___
+        if type(sf) is not cls: raise TypeError
+        return sf
+    def __init__(self, /):
+        return
+    def _get_init_args(self, /):
+        return ()
+    def _is_good_char_ord(self, char_ord, /):
+        char = chr(char_ord)
+        b = type(self).___char_predicator___(char)
+        if not type(b) is bool: raise TypeError(b)
+        return b
+
+
+# %s/class \(\w\+\)CharFilter(ICharPredicatorCharFilter):/\0\rthe_\1_char_filter = \1CharFilter()
+class PrintableCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isprintable
+the_printable_char_filter = PrintableCharFilter()
+class SpaceCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isspace
+the_space_char_filter = SpaceCharFilter()
+
+class IdentifierCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = lambda ch,/:str.isidentifier('_'+ch)
+the_identifier_char_filter = IdentifierCharFilter()
+class AlphaNumericCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isalnum
+the_alpha_numeric_char_filter = AlphaNumericCharFilter()
+
+class AlphaCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isalpha
+the_alpha_char_filter = AlphaCharFilter()
+class LowerCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.islower
+the_lower_char_filter = LowerCharFilter()
+class UpperCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isupper
+the_upper_char_filter = UpperCharFilter()
+
+class NumericCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isnumeric
+the_numeric_char_filter = NumericCharFilter()
+class DigitCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isdigit
+the_digit_char_filter = DigitCharFilter()
+class DecimalCharFilter(ICharPredicatorCharFilter):
+    ___char_predicator___ = str.isdecimal
+the_decimal_char_filter = DecimalCharFilter()
+
+
+
+assert the_printable_char_filter is PrintableCharFilter()
+
+
+
+#################################
+#HHHHH
+def encoding2char_key_func4sort(encoding, /):
     encode = codecs.lookup(encoding).encode
-    def char_key_func(char):
+    def char_key_func(char, /):
         assert len(char) == 1
         bs = encode(char)
         return len(bs), bs
     return char_key_func
 
-def sort_chars_by_encoding(encoding, chars):
+def sort_chars_by_encoding(encoding, chars, /):
     key = encoding2char_key_func4sort(encoding)
     return ''.join(sorted(chars, key=key))
 
@@ -147,47 +333,51 @@ def sort_chars_by_encoding(encoding, chars):
 
 
 
+#################################
+#HHHHH
 class IBinOpCharFilter(ICharFilter):
     @abstractmethod
-    def _bool_bin_op(self, fa, fb):
+    def _bool_bin_op(self, fa, fb, /):
         raise NotImplementedError
     @abstractmethod
-    def _get_op_str(self):
+    def _get_op_str(self, /):
         raise NotImplementedError
-    def __repr__(self):
+    def __repr__(self, /):
         lhs, rhs = self._get_init_args()
         op = self._get_op_str()
         return f"({lhs!r} {op!s} {rhs!r})"
-    def __init__(self, lhs_char_filter, rhs_char_filter):
+    def __init__(self, lhs_char_filter, rhs_char_filter, /):
         self.__lhs = lhs_char_filter
         self.__rhs = rhs_char_filter
-    def _get_init_args(self):
+    def _get_init_args(self, /):
         return (self.__lhs, self.__rhs)
-    def _is_good_char_ord(self, char_ord):
+    def _is_good_char_ord(self, char_ord, /):
         fa = lambda:bool(self.__lhs.is_good_char_ord(char_ord))
         fb = lambda:bool(self.__rhs.is_good_char_ord(char_ord))
         return bool(self._bool_bin_op(fa, fb))
 class OrCharFilter(IBinOpCharFilter):
-    def _bool_bin_op(self, fa, fb):
+    def _bool_bin_op(self, fa, fb, /):
         return bool(fa()) or bool(fb())
-    def _get_op_str(self):
+    def _get_op_str(self, /):
         return '|'
 class AndCharFilter(IBinOpCharFilter):
-    def _bool_bin_op(self, fa, fb):
+    def _bool_bin_op(self, fa, fb, /):
         return bool(fa()) and bool(fb())
-    def _get_op_str(self):
+    def _get_op_str(self, /):
         return '&'
 class XorCharFilter(IBinOpCharFilter):
-    def _bool_bin_op(self, fa, fb):
+    def _bool_bin_op(self, fa, fb, /):
         return bool(fa()) ^ bool(fb())
-    def _get_op_str(self):
+    def _get_op_str(self, /):
         return '^'
 class ExcludeCharFilter(IBinOpCharFilter):
-    def _bool_bin_op(self, fa, fb):
+    def _bool_bin_op(self, fa, fb, /):
         return bool(fa()) and not bool(fb())
-    def _get_op_str(self):
+    def _get_op_str(self, /):
         return '-'
 
+#################################
+#HHHHH
 r"""
 E(s) = EncodingCharFilter(s)
 R({1:2,3:4}) = CharsetCharFilter([(1,2),(3,4)])
@@ -198,12 +388,12 @@ U = CharsetCharFilter([(0, 0xD800), (0xE000, 0x11_0000)])
 #"""
 
 
-def E(s):
+def E(s, /):
     return EncodingCharFilter(s)
-def R(begin2end):
+def R(begin2end, /):
     rngs = sorted(begin2end.items())
     return CharsetCharFilter(rngs)
-def N(s):
+def N(s, /):
     return CharNameRegexCharFilter(s)
 #_U = E('utf8').to_CharsetCharFilter()
 U = CharsetCharFilter([(0, 0xD800), (0xE000, 0x11_0000)])
@@ -235,7 +425,9 @@ if 0 and __name__ == '__main__':
     _t()
     _u()
 
-def main(args=None):
+#################################
+#HHHHH
+def main(args=None, /):
     import argparse
     from seed.io.may_open import may_open_stdin, may_open_stdout
 
@@ -370,7 +562,7 @@ cp1258
     encodings = set(encodings)
     assert len(encodings) == 9+13+5+1-2
     return encodings
-def _cjk_encodings_to_rngss(cjk_encodings):
+def _cjk_encodings_to_rngss(cjk_encodings, /):
     encodings = sorted(set(cjk_encodings))
     utf8 = 'utf8'
     #(E("gb2312") & N("CJK")).to_CharsetCharFilter()
