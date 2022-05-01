@@ -135,9 +135,20 @@ e ../../python3_src/nn_ns/CJK/cjk_subsets/hanzi.py
 [DONE:
 hz2513 -> 笔顺码
   另外 建档
-e ../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集笔顺码.py
+view ../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集笔顺码.py
 ]
 
+[TODO:
+hz2513 -> IDS
+  另外 建档
+e ../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集字形拆分树.py
+  from:
+    view script/collect_hz_components.py
+from nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.parse_result___CHISE_IDS import hz2tree___BMP_only
+
+
+
+]
 [TODO:
 hz2513 -> 频数/分级 ++Unihan
   另外 建档
