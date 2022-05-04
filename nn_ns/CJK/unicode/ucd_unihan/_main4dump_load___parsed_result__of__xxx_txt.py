@@ -76,7 +76,7 @@ def mainT(*, description, epilog, parse__xxx_txt__lines, cfg4load_compact_result
     parser.add_argument('-f', '--force', action='store_true'
                         , default = False
                         , help='open mode for output file')
-    parser.add_argument('--donot_output_result4load', action='store_true'
+    parser.add_argument('--donot_output_result5load', action='store_true'
                         , default = False
                         , help='donot use output file')
 
@@ -105,7 +105,7 @@ def mainT(*, description, epilog, parse__xxx_txt__lines, cfg4load_compact_result
         dataobj = parsed_result2dataobj(parsed_result)
     dataobj
 
-    if not args.donot_output_result4load:
+    if not args.donot_output_result5load:
         may_ofname = args.output
         with may_open_stdout(may_ofname, omode, encoding=oencoding) as fout:
             print(dataobj, file=fout)

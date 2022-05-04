@@ -52,6 +52,8 @@ import re
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
 from copy import deepcopy
 from ast import literal_eval
+from seed.helper.safe_eval import safe_eval
+from json import loads as json_load__str
 #import json
 from seed.helper.stable_repr import stable_repr
 from seed.helper.stable_repr import stable_repr__expand_top_layer
@@ -59,7 +61,7 @@ from seed.tiny import echo
 from seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild import literal_rebuild
 from seed.types.view.RecurView import default_cfg4RecurView
 from seed.tiny import dict_add__is
-from seed.tiny import MapView
+from seed.tiny import MapView, check_type_is, check_pair
 
 
 from seed.helper.IHelper4parse__xxx_txt import IHelper4parse__xxx_txt
@@ -175,6 +177,9 @@ class IConfig4load_versioned_repr_txt_file(ABC):
         #json.loads if sf.py_literal_vs_json else literal_eval
         st = literal_eval(txt)
         return st
+        safe_eval
+        literal_eval
+        json_load__str
     @abstractmethod
     def state2dataobj___create(sf, st, /):
         #.state5dataobj___save
@@ -340,10 +345,28 @@ class Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable
     dataobj = (parsed_result, extra_derived_result, compact_result)
     st = compact_result
     ----:
+    xxx ++kw: str_instead_repr
+    ++kw: state_rawtxt
+    xxx ++kw: override__text5state___repr
+    ++kw: override__text52state
+
     #'''
-    def __init__(sf, helper4parse__xxx_txt, /, *, __file__, data_dir_rpath, basename_fmt, version_str__rex, encoding, dataobj_immutable, state_immutable):
+    def __init__(sf, helper4parse__xxx_txt, /, *, __file__, data_dir_rpath, basename_fmt, version_str__rex, encoding, dataobj_immutable, state_immutable, override__text52state=None, state_rawtxt=False):#, str_instead_repr=False
         assert isinstance(helper4parse__xxx_txt, IHelper4parse__xxx_txt)
+        if override__text52state is not None:
+            check_pair(override__text52state)
+            override__text5state___repr, override__text2state___eval = override__text52state
+            if override__text5state___repr is not None:
+                check_callable(override__text5state___repr)
+            if override__text2state___eval is not None:
+                check_callable(override__text2state___eval)
+
+        if state_rawtxt and not state_immutable: raise TypeError('state is str, must be immutable')
+        if state_rawtxt and not override__text52state is None: raise TypeError('state is final raw text, not convertion take-place')
         sf._helper4parse = helper4parse__xxx_txt
+        #sf.str_instead_repr = str_instead_repr
+        sf.state_rawtxt = state_rawtxt
+        sf.override__text52state = override__text52state
         super().__init__(__file__=__file__, data_dir_rpath=data_dir_rpath, basename_fmt=basename_fmt, version_str__rex=version_str__rex, encoding=encoding, dataobj_immutable=dataobj_immutable, state_immutable=state_immutable)
 
     @override
@@ -394,8 +417,29 @@ class Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable
         'can be overrided as: def text5state___repr(sf, st, /, *args4repr, **kwargs4repr):'
         #.text2state___eval
         #.check_extra_input4repr
-        txt = stable_repr__expand_top_layer(st)
+        if sf.state_rawtxt:
+            txt = st
+        elif None is sf.override__text52state:
+            txt = stable_repr__expand_top_layer(st)
+        else:
+            override__text5state___repr, override__text2state___eval = sf.override__text52state
+            txt = override__text5state___repr(st)
+        check_type_is(str, txt)
         return txt
+    def text2state___eval(sf, txt, /):
+        #.text5state___repr
+        #
+        #json.loads if sf.py_literal_vs_json else literal_eval
+        check_type_is(str, txt)
+        if sf.state_rawtxt:
+            st = txt
+        elif None is sf.override__text52state:
+            st = super().text2state___eval(txt)
+        else:
+            override__text5state___repr, override__text2state___eval = sf.override__text52state
+            st = override__text2state___eval(txt)
+        return st
+
 
 
 #]]]

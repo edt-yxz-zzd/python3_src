@@ -281,8 +281,18 @@ TODO:
   + 手动 逐个记录 高频 部件(ref_count)，引用字集 使用 部件的不同字形 要区分开来
 
 unicode 兼容字符 的 『原字符』属性名 是什么？
-  TODO:kCompatibilityVariant
-  DONE:Blocks/kIICore...
+  DONE:Blocks/kIICore/kCompatibilityVariant...
+  ===
+  DONE:kCompatibilityVariant
+      ==
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kIICore8Unihan_IRGSources_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__kIICore8Unihan_IRGSources_txt__of_ver13_0.py
+      ==
+      s/kIICore/kCompatibilityVariant/g
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kCompatibilityVariant8Unihan_IRGSources_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kCompatibilityVariant8Unihan_IRGSources_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__kCompatibilityVariant8Unihan_IRGSources_txt__of_ver13_0.py
   ===
   DONE:view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt
       2FF0..2FFF; Ideographic Description Characters

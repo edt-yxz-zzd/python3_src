@@ -73,10 +73,10 @@ nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Uniha
 
 py -m nn_ns.app.debug_cmd   nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt
 
-py -m nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt -i /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_IRGSources.txt --donot_output_result4load
-py -m nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt -i /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_IRGSources.txt --dump ver13_0 --donot_output_result4load
+py -m nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt -i /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_IRGSources.txt --donot_output_result5load
+py -m nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt -i /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_IRGSources.txt --dump ver13_0 --donot_output_result5load
 
-py -m nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt --load ver13_0 --donot_output_result4load > /sdcard/0my_files/tmp/_.txt
+py -m nn_ns.CJK.unicode.ucd_unihan.unihan.dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt --load ver13_0 --donot_output_result5load > /sdcard/0my_files/tmp/_.txt
 view /sdcard/0my_files/tmp/_.txt
     get:
         hz_2143 = levelA_common_hz_str@ver13_0
