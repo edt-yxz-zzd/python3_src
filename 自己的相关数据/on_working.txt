@@ -149,6 +149,15 @@ from nn_ns.CJK.CJK_struct.CHISE_IDS_67b94ff_20191211.parse_result___CHISE_IDS im
 view script/collect_hz_components.py
     py_eval --startup 'import unicodedata as U' --turnoff_eval --postprocess 'lambda x:(x, U.name(x))' -i ⺳ タ 具 ⺢  ⻖ ⺗ 直 ⺯ 刃 ⺜ ⺇ ⻀ ⺫  𥄳 ⺃ 屮 旣 ⺲ ⻏ 灰 ⺈ ⺊  冗 ⺼ ⺧ ⻢ 穀 ⺣ ⺄ ⺆ 充  ⺪ 叟 者 ⻞ ⺶ ⻃ ⺌ ⻤ ⻌
 [⺳タ具⺢⻖⺗直⺯刃⺜⺇⻀⺫𥄳⺃屮旣⺲⻏灰⺈⺊冗⺼⺧⻢穀⺣⺄⺆充⺪叟者⻞⺶⻃⺌⻤⻌]
+DOING
+]
+[TODO:
+
+view ../../python3_src/nn_ns/app/register_xor.py
+  第二版 由almost_symmetry_cipher 到 真完全对称
+e others/数学/编程/TODO_list/周期长度为二的对称加密.txt
+DOING
+
 ]
 [TODO:
 hz2513 -> 频数/分级 ++Unihan
@@ -272,7 +281,20 @@ TODO:
   + 手动 逐个记录 高频 部件(ref_count)，引用字集 使用 部件的不同字形 要区分开来
 
 unicode 兼容字符 的 『原字符』属性名 是什么？
-  TODO:kCompatibilityVariant/kIICore
+  TODO:kCompatibilityVariant
+  DONE:Blocks/kIICore...
+  ===
+  DONE:view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt
+      2FF0..2FFF; Ideographic Description Characters
+      StackStyleSimpleIntSet-->StackStyleSimpleIntMapping
+        view ../../python3_src/seed/data_funcs/rngs.py
+
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/dump_load___parsed_result__of__Blocks_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__Blocks_txt__of_ver13_0.py
+
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/_main4dump_load___parsed_result__of__xxx_txt.py
+      view ../../python3_src/seed/helper/IHelper4parse__xxx_txt.py
   ===
   view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/PropertyAliases.txt
     cjkCompatibilityVariant  ; kCompatibilityVariant
@@ -295,7 +317,15 @@ unicode 兼容字符 的 『原字符』属性名 是什么？
       #亂亂
   ===
 
-[
+[DONE:kIICore
+from seed.data_funcs.rngs import make_Ranges, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet, StackStyleSimpleIntMapping, TouchRangeBasedIntMapping
+        view ../../python3_src/seed/data_funcs/rngs.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kIICore8Unihan_IRGSources_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt.py
+        DONE:hz_2143 --> hanzi.py
+        DONE:500K 太大，改变保存方式？
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__kIICore8Unihan_IRGSources_txt__of_ver13_0.py
+
   view ../lots/NOTE/unicode/note4UnicodeStandard_14_0_annex/unicode_ver14_0_UAX31_UAX38摘要.txt
   ===
   kIICore

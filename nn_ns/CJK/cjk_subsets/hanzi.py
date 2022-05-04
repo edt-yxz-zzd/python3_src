@@ -8,6 +8,11 @@ r'''[[[[[
         ，见『hz_sp_str2hz_str』
     注意:大多是无序的字集，但部分有序
         ，如：『汉字单字字频总表_cedict_12041』
+        ，如：『按横捺为零竖撇为一忽略折笔记为二进制数时前四笔的十六个代表字』
+    注意:可能含重复汉字
+        ，见『hz_sp_str2hz_set』
+    注意:大多是不重复的字集，但部分有重复字
+        如：『中华字经2003__重复字4000_不同字3980』
 
 
 [[[
@@ -168,12 +173,35 @@ cjk_common_subset_1869_trivial_TS_1631
             之前第一版的敏感词没有保存，又重新收集了。
         ]]
         ====
+
+
+
+
+unihan_kIICore_levelA_common_hz_str__U13_0___2143
+    =[def]= 交集 of:
+        hz-set of level-A
+        hz-set of any-source
+    ######################
+    view /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_IRGSources.txt
+          view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kIICore8Unihan_IRGSources_txt.py
+          view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt.py
+    view ../lots/NOTE/unicode/note4UnicodeStandard_14_0_annex/unicode_ver14_0_UAX31_UAX38摘要.txt
+      ===
+      kIICore
+      Syntax        [ABC][GHJKMPT]{1,7}
+      Description   Used for characters which are in IICore, the IRG-produced minimal set of required ideographs for East Asian use. A character is in IICore if and only if it has a value for the kIICore field.
+      Each value consists of a letter (A, B, or C), indicating priority value, and one or more letters (G, H, J, K, M, P, or T), indicating source. The source letters are the same as used for IRG sources, except that "P" is used instead of "KP".
+
+
 ]]]
 
 
 =============
 =============
 from nn_ns.CJK.cjk_subsets.hanzi import (
+vs__hz_sp_str8set
+sorted_hz_str5set_intersect4hz_sp_str
+sorted_hz_str5set_diff4hz_sp_str
 hz_sp_str2hz_str
 hz_sp_str2hz_set
 hz_set2sorted_hz_str
@@ -199,6 +227,7 @@ cjk_common_subset_1869_trivial_TS_1631
 高稳定度汉字字集囗第一版囗降频囗三百四十二字
 高稳定度汉字字集囗第二版囗降频囗无病字框囗二百五十九字
 高稳定度汉字字集囗第三版囗码序囗二百六十一字
+unihan_kIICore_levelA_common_hz_str__U13_0___2143
 )
 
 from nn_ns.CJK.cjk_subsets.hanzi import (
@@ -245,6 +274,9 @@ cjk_common_subset_1869_nontrivial_TS_238
 =====
 py -m nn_ns.CJK.cjk_subsets.hanzi
 py others/汉语/hanzi.py > ~/tmp/gb2312_and_cjk_common_set_1869.txt
+py -m nn_ns.CJK.cjk_subsets.hanzi > /sdcard/0my_files/tmp/_.txt
+view /sdcard/0my_files/tmp/_.txt
+
 
 =====
 vim cmd:
@@ -258,6 +290,9 @@ zzz_ddd = """
 #]]]]]'''
 
 __all__ = """
+    vs__hz_sp_str8set
+    sorted_hz_str5set_intersect4hz_sp_str
+    sorted_hz_str5set_diff4hz_sp_str
     hz_sp_str2hz_str
     hz_sp_str2hz_set
     hz_set2sorted_hz_str
@@ -281,6 +316,7 @@ __all__ = """
     高稳定度汉字字集囗第一版囗降频囗三百四十二字
     高稳定度汉字字集囗第二版囗降频囗无病字框囗二百五十九字
     高稳定度汉字字集囗第三版囗码序囗二百六十一字
+    unihan_kIICore_levelA_common_hz_str__U13_0___2143
 
 
 
@@ -321,9 +357,30 @@ cjk_common_subset_2513_trivial_TS_2227
     stable_hz_set_ver2__excludeILL__reversed_freq__259
 高稳定度汉字字集囗第三版囗码序囗二百六十一字
     stable_hz_set_ver3__sorted__261
+
+
+
+
+unihan_kIICore_levelA_common_hz_str__U13_0___2143
+    common__hzs_2513_vs_hzs_2143___2133
+        left_only__hzs_2513_vs_hzs_2143___380
+        right_only__hzs_2513_vs_hzs_2143___10
+    common__hzs_1869_vs_hzs_2143___1755
+        left_only__hzs_1869_vs_hzs_2143___114
+        right_only__hzs_1869_vs_hzs_2143___388
+
     """.split()
     #
 r"""
+def _vs_(suffix, lhs, rhs, /):
+    显示 异同
+    仅内部使用
+def vs__hz_sp_str8set(lhs, rhs, /):
+    字集异同
+def sorted_hz_str5set_intersect4hz_sp_str(lhs, rhs, /):
+    字集交
+def sorted_hz_str5set_diff4hz_sp_str(lhs, rhs, /):
+    字集差
 def hz_sp_str2hz_str(hz_sp_str):
     消除空格
 def hz_sp_str2hz_set(hz_sp_str):
@@ -338,6 +395,13 @@ def hz_set2sorted_hz_str__by_reversed_freq(s):
 
 
 
+
+def sorted_hz_str5set_intersect4hz_sp_str(lhs, rhs, /):
+    intersect = hz_set2sorted_hz_str(hz_sp_str2hz_set(lhs) & hz_sp_str2hz_set(rhs))
+    return intersect
+def sorted_hz_str5set_diff4hz_sp_str(lhs, rhs, /):
+    diff = hz_set2sorted_hz_str(hz_sp_str2hz_set(lhs) - hz_sp_str2hz_set(rhs))
+    return diff
 
 def hz_sp_str2hz_str(hz_sp_str):
     '不排序，见『汉字单字字频总表_cedict_12041』'
@@ -356,7 +420,9 @@ def _gb2312_1980():
     assert len(gb2312_1980_二级汉字3008) == 3008
     return gb2312_1980_一级汉字3755, gb2312_1980_二级汉字3008
 if __name__ == "__main__":
-    print(_gb2312_1980())
+    if 0: print(_gb2312_1980())
+        #==>> gb2312_1980_一级汉字3755, gb2312_1980_二级汉字3008
+    assert [*map(len, _gb2312_1980())] == [3755, 3008]
 
 
 
@@ -4616,9 +4682,10 @@ def _test_cjk_common_subset_2513():
 
 if __name__ == "__main__":
     c = _test_cjk_common_subset_2513()
-    print(f"cjk_common_subset_{len(c)}")
-    print(c)
-    # ==>> cjk_common_subset_1869
+    if 0:
+        # ==>> cjk_common_subset_1869
+        print(f"cjk_common_subset_{len(c)}")
+        print(c)
     assert len(c) == 1869
 
     r"""
@@ -4887,7 +4954,9 @@ def hz_set2freq_sorted_rng_ex(hz_set):
     return (m,M), out
 
 if __name__ == "__main__":
-    print(hz_set2freq_sorted_rng_ex(hz_sp_str2hz_set(cjk_common_subset_1869)))
+    if 0:print(hz_set2freq_sorted_rng_ex(hz_sp_str2hz_set(cjk_common_subset_1869)))
+    assert ((0, 5489), 0) == hz_set2freq_sorted_rng_ex(hz_sp_str2hz_set(cjk_common_subset_1869))
+        #1869 频度 竟然 分布在 前5489，不怎么常用...
 
 
 
@@ -5647,6 +5716,339 @@ if __name__ == "__main__":
 
 
 
+unihan_kIICore_levelA_common_hz_str__U13_0___2143 = """
+一丁七丈三上下不
+丑且丕世丘丙丞中
+串丸丹主乃久之乍
+乎乏乖乙九乞也乳
+乾了予事二于云互
+五井些亡交亥亦亨
+享京亭亮人什仁仄
+仇今介仍仔仕他付
+仙仟代令以仰仲件
+任企伉伊伍伏伐休
+伯伴伶伸伺似伽佃
+但位低住佐佑何余
+佛作佩佰佳使侃侈
+例侍侏供依侮侯侵
+便促俄俊俑俗俚保
+俟信修俯俳俸俺倍
+倒候倚借倦倪倭偈
+偏偕做停健偶傀傅
+傍催傲像僖僚僧僭
+僻儒儡兀允元兄充
+兆先光克免兜入全
+八公六共兵其具典
+兼冀再冒冕冠冥冬
+冶冷冽准凋凌凝凡
+凰凶凸凹出函刀刃
+分切刊刎刑列初判
+利刮到制刷券刺刻
+剃削剋剌前剖剪副
+割剽劈力功加劣助
+努劫劾勃勇勉勒勘
+募勤勾勿包匈匐匕
+化北匙匠匡匣匪匹
+匿十千升午卉半卑
+卒卓南博卜卞占卦
+卯印危卵卿厄厘厚
+原厥去又叉及友反
+叔取受叛口古句叩
+只叫召可台叱史右
+司吃各合吉同名后
+吏吐向君吝吟吠否
+含吸吹吻吼吾呈告
+周味呵呻呼命咀咆
+和咎咫咬咳咸咽哀
+品哄哈哉哥哨哭哮
+哲哺唆唐唯唱唾啄
+商啖啼喀善喉喊喘
+喜喝喧嗅嗜嗟嗣嗤
+嘉嘲嘴嘶器噫嚼囚
+四回因困固圃圈土
+在圭地址均坊坐坑
+坡坤坦坪垂型垠垢
+垣埃埋城域埠培基
+堂堆堡堤堪堰堵塑
+塔塘塾境墓墟墨壁
+壑壕壤士壬壹夏夕
+外夙多夜大天太夫
+夭央失夷奄奇奈奉
+奎奏契奔奕套奚奠
+奢女奴奸好如妃妄
+妊妓妖妙妥妨妹妻
+妾姆始姐姑姓委姚
+姜姨姻姿威娃娑娘
+娜娟娠娥娩娼婆婉
+婚婢媒媚媛嫁嫉嫌
+嫡嫦嫩嬉子孔孕字
+存孚孜孝孟季孤孰
+孵宅宇守安宋完宏
+宗官宙定宛宜客宣
+室宥宦宰害宴宵家
+容宿寂寄寅密寇富
+寐寒寓寞察寡寨寮
+寸寺封射尉尊小少
+尖尤就尹尺尼尾尿
+局居屈屋屎屑展屠
+履屯山屹岐岑岩岱
+岳岷岸峙峨峰峻崇
+崎崔崖崩嵌嵩巍川
+州巡工左巧巨巫差
+己已巳巴巷巾市布
+帆希帑帖帛帝席常
+帽幅幌幕幢干平年
+幸幻幼幽庇序底店
+庚府度座庭庵庶康
+庸廉廊廓廖延廷建
+弄弊式弓引弗弘弛
+弟弦弧弩弱弼彗形
+彩彪彬彭彰影彷役
+彼往征待徇徊律徐
+徒得徘徙御徨循微
+徽心必忌忍忖志忘
+忙忠快念忽忿怒怖
+思怠怡急性怨怪怯
+恃恍恐恒恕恢恣恨
+恩恪恬恭息恰悉悍
+悔悖悟悠患悲悴悸
+悼情惑惚惜惟惠惰
+想惶惹惺愁愈愉意
+愕愚感愧慈慌慕慢
+慧慨慰慷憎憔憧憩
+憬憾懈懿戈戊戌戍
+戎成我戒或戚戟截
+戮戴房所扁扇扈扉
+手才打托扮扶批承
+技抄抉把抑抒投抗
+折披抱抵抹押抽拇
+拉拌拍拐拒拓拗拘
+拙招括拭拮拱拳拷
+拾拿持指按挑挫振
+挺挽捉捏捐捕捧捷
+捻授掉掌排掖掘掠
+探接控推掩措描提
+揖握援搬搭摘摩摸
+摺撒撞撤播撮撰擅
+操擒擦攀攘攫支收
+改攻放政故效敏救
+敖敞敢散敦敬敲整
+敷文斌斐斑斗料斜
+斟斡斤斥斧斯新方
+於施旁旅旋族旗日
+旦旨早旬旭旱旺昆
+昊昌明昏易昔星映
+春昧昨昭是晃晏晤
+晦晨普景晴晶智暇
+暑暖暗暮暴曙曜曝
+曦曰曲曳更曹曼曾
+替最月有朋服朔朕
+朗望朝期朦木未末
+本札朱朴朽杉李杏
+材村杖杜杞束杭杯
+杰杳杵杷松板枇析
+枕林枚果枝枯架柄
+柏某柑染柔柚柩柯
+柱柳柴栓校株核根
+格栽桂桃案桐桑桓
+桔桶梁梅梓梗梢梧
+梨梯械梳梵棉棋棍
+棒棘棚棠森棺椅植
+椎椒椰椿楔楚楞楠
+楫楷榕榛榜榴槌槐
+槽樊樟模樵樽橘橙
+橡檀檄欠次欣欲欺
+款歌止正此武歪死
+殆殉殊殖段殷殿毅
+母毒毓比毛毫氏民
+氓水永氾汀汁求汐
+汕汗汝江池汪汰汲
+汽沁沂沃沈沌沐沙
+沛沫沮河沸油治沼
+沽沿泄泉泊泌法泗
+泡波泣泥注泰泳洋
+洗洛洞津洪洲活洽
+派流浙浚浣浦浩浪
+浮浴海浸消涌涎涓
+涯液涵淆淇淋淑淘
+淞淡淫淮深淳混淹
+添渚渠渡渤渥渭港
+游渺湃湍湖湘湛源
+溜溢溥溪溯溶溺滂
+滋滑滓滔滴漂漆漏
+演漠漫漱潘潭潮潺
+澄澎澳澹激濠濡濯
+瀑瀚瀛灌火灰灸灼
+炊炎炒炙炬炭炯炳
+炸烈烙烹焉焙焚焦
+然煌煎煤照煮煽熄
+熊熔熙熟熹燃燎燕
+燥燧燮爆爪爬爵父
+爽片版牌牒牙牛牝
+牟牡牢牧物牲特犀
+犬犯狂狄狎狐狗狙
+狡狩狼猖猛猜猥猩
+猷猾猿獗玄率玉王
+玖玩玲玳珀珊珍珠
+班球琅理琉琢琥琳
+琴琵琶瑁瑕瑙瑚瑛
+瑜瑞瑟璃璋璧瓜瓢
+瓣瓦瓷甘甚生甥用
+甫田由甲申男甸界
+畏畔留畜略畦番畸
+疆疏疑疝疥疫疲疵
+疹疼疽疾病症痔痕
+痘痛痢痰瘤癌癖癸
+登白百的皆皇皎皓
+皮皿盂盆盈益盒盛
+盟目盲直相盾省眉
+看眠眩眷眸眺眼睛
+睡督睦睫睿瞑瞥瞬
+瞭瞰瞳瞻瞿矗矛矜
+矢知矩短矮石砂砥
+砧破硝硫硬碌碑碗
+碧磁磊磋磐磨礁示
+社祀祁祇祈祉祖祗
+祚祝神祠祥票祭祺
+禁福禧禹禽禾秀私
+秉秋科秒秘租秤秦
+秧秩移稀程稍稔稚
+稠稷稼稽稿穀穆穗
+穴究穹空穿突窄窈
+窒窘窟立站竟章竣
+童端竹竺竿笑笙笛
+笠符第等筋筏筐筒
+答策筵箔箕算管箭
+箱箴篆篇簇簿籍米
+粉粒粗粘粟粥精糊
+糖糟糠系紊素索紫
+累絮繁纂罐罪置署
+罹羊美羚羞群羲羹
+羽翁翅翌翔翟翠翡
+翩翰翼耀老考者耆
+而耐耕耗耘耳耶耽
+耿聆聊聘聚聿肆肇
+肉肋肌肖肛肝股肢
+肥肩肪肯肱育肴肺
+胃背胎胚胞胡胤胥
+胱胴胸能脂脆脊脾
+腋腐腑腔腕腰腱腹
+腺腿膀膏膜膝膨膳
+臀臂臆臣自臭至致
+臻臼舅舌舍舒舜舞
+舟航舫般舵舶舷船
+艇良色艾芋芍芒芙
+芝芥芬芭芯花芳芷
+芸芹芽苑苔苗苛苞
+若苦英茂范茄茅茉
+茗茨茫茱茶茸茹荀
+草荏荒荷荻莉莎莞
+莫莽菁菊菌菜菩菱
+菲萃萄萌萍萎萱落
+著葛葡董葬葵蒙蒜
+蒲蒸蓄蓉蓑蓬蔑蔓
+蔚蔡蔬蔽蕃蕉蕨薄
+薇薛薪薯藉藏藤藩
+藻虎虐虔虞虹蚊蚓
+蚤蛇蛋蛙蛛蛟蛤蛭
+蛾蜀蜂蜘蜚蜜蝴蝶
+螂融螺蟹蠢血行衍
+街衙衡衣表衰衷袁
+袂袈袋袍袖被裁裂
+裔裕裙裟裳裴裸褐
+褥褪褶襄襟西要覃
+覆角解言詹誓警谷
+豁豆豚象豪豫豹貂
+貌赤赦赫走赳赴起
+超越趣足趾跋跌距
+跨路跳踏踵蹂蹄蹉
+蹊蹶躁躇身躬辛辜
+辣辰辱迂迅迎近返
+迦迪迫迭述迷追退
+送逃逅逆逍透逐途
+逗通逝逞速造逢逮
+逵逸逼遁遂遇遍遑
+道遣遭遮遵遽避邂
+邑那邦邪邱邵邸郁
+郊郡部郭都鄂鄙酉
+酊酋酌配酒酩酪酬
+酵酷酸醇醋醒采釉
+里重野量金釜閒阜
+阪阮防阻阿陀附陋
+降限陛院除陪陵陶
+隅隆隋隔隘隙障隧
+雀雁雄雅集雉雌雍
+雨雪零雷雹需霆震
+霖霜霞露霹靖非靡
+面革靴鞋鞍鞠鞭音
+韶食餐首香馥馨骨
+骸高鬼魁魂魄魅魏
+魔鹿麒麓麝麟麻麾
+黍黎黛鼎鼓鼠鼻
+""" # unihan_kIICore_levelA_common_hz_str__U13_0___2143
+
+
+def _test__unihan_kIICore_levelA_common_hz_str__U13_0__2143():
+    hzs_2143 = hz_sp_str2hz_set(unihan_kIICore_levelA_common_hz_str__U13_0___2143)
+    assert len(hzs_2143) == 2143
+    hzs_2513 = hz_sp_str2hz_set(cjk_common_subset_2513)
+    assert len(hzs_2513) == 2513
+    common = hzs_2513 & hzs_2143
+    left_only = hzs_2513 - hzs_2143
+    right_only = hzs_2143 - hzs_2513
+
+    assert len(common) == 2133
+    assert len(left_only) == 380
+    assert len(right_only) == 10
+    return
+    suffix = '__hzs_1869_vs_hzs_2143'
+    _vs_(suffix, cjk_common_subset_1869, unihan_kIICore_levelA_common_hz_str__U13_0___2143)
+    return
+    suffix = '__hzs_2513_vs_hzs_2143'
+    _vs_(suffix, cjk_common_subset_2513, unihan_kIICore_levelA_common_hz_str__U13_0___2143)
+    return
+def vs__hz_sp_str8set(lhs, rhs, /):
+    common = sorted_hz_str5set_intersect4hz_sp_str(lhs, rhs)
+    left_only = sorted_hz_str5set_diff4hz_sp_str(lhs, rhs)
+    right_only = sorted_hz_str5set_diff4hz_sp_str(rhs, lhs)
+    return common, left_only, right_only
+def _vs_(suffix, lhs, rhs, /):
+    (common, left_only, right_only) = vs__hz_sp_str8set(lhs, rhs)
+
+    d = {**locals()}
+    nms = 'common left_only right_only'.split()
+    for nm in nms:
+        s = hz_set2sorted_hz_str(d[nm])
+        print(f'len({nm}{suffix}___{len(s)})={len(s)}')
+        print(f'{nm}{suffix}___{len(s)}={s!r}')
+    return common, left_only, right_only
+if __name__ == "__main__":
+    _test__unihan_kIICore_levelA_common_hz_str__U13_0__2143()
+
+
+
+
+
+left_only__hzs_2513_vs_hzs_2143___380='万乘亢仗仝价伎佚佯佶侑俎倡倨倬偃假兢兮冗凄刈剔剩剿勺匍匏卷叭吊吩呱咐咨唇喇喙嗔嗽嗾嚆囹圄圻坎垓埴堀塞墅壅娶嫂嬖孀孑孩孱孺宕宸寤寥尸尻岫岬嵋嵬嵯嶝巽帙幄幡庄床庠廛弁彖後怏怜恁恂恙恤悌悚悛愆愍愎愿慊慝懊懋懦戡扼拂拈拔拜拯捌据捺揄揆揶搏搜擘擢攸斛斫旌旒昴昶晁晟暄暝暹暾曷机杆杓枉枋枳枷枸柝柬栖栗桀桁桎梏梭棕棹椽楮楸楹榧榻槁槿樗橄檎檗歇殃殄毋汞汨汾沓沾泓泛泯洌洙洵涅涕淀淅淙渣渫湟湫湮溟漕潼濂烽煦熏熬燔爰爻犁狸猊猝珂珞珥瑾璞瓠瓮甄甑甬町畛畿疋疳疸痂痍痒痴痼瘟瘠瘢眄眈睹睾矣砒砦硅硼碇碎碣磅磬禳秕稗稻穰窕竭笏笞筌筑筮箝箸篁簧簪粕粱粲粳粹纛缶缸缺罔罕羌羔羸翊翕肄胄胛脯腥膈膊膣膺臧臾舛艮芟苒苟苡茯茴茵莪菅菖菰菽萸葫葺蒡蒿蓍蓼蔗薨藕藜蚌蚣蚩蛔蜃蜈蝎蝗螟螳蟠蟾衢衫衲衾衿袒裨褒褓襁譬豌豕豺貊趺跏跛跣踊踞蹇蹈蹙蹴辨逋逑逡逾遐邀邃邯酎酢醉醍醯醴醵阡陂陌陟陷隍雇雎雕霓霰鞫髓魃黔默黜'
+
+right_only__hzs_2513_vs_hzs_2143___10='剋恒氾瞭祇穀翟芷詹閒'
+
+
+
+common__hzs_2513_vs_hzs_2143___2133 = sorted_hz_str5set_diff4hz_sp_str(unihan_kIICore_levelA_common_hz_str__U13_0___2143, right_only__hzs_2513_vs_hzs_2143___10)
+assert len(common__hzs_2513_vs_hzs_2143___2133) == 2133
+assert common__hzs_2513_vs_hzs_2143___2133 == sorted_hz_str5set_intersect4hz_sp_str(cjk_common_subset_2513, unihan_kIICore_levelA_common_hz_str__U13_0___2143)
+assert common__hzs_2513_vs_hzs_2143___2133 == sorted_hz_str5set_diff4hz_sp_str(cjk_common_subset_2513, left_only__hzs_2513_vs_hzs_2143___380)
+assert (common__hzs_2513_vs_hzs_2143___2133, left_only__hzs_2513_vs_hzs_2143___380, right_only__hzs_2513_vs_hzs_2143___10) == vs__hz_sp_str8set(cjk_common_subset_2513, unihan_kIICore_levelA_common_hz_str__U13_0___2143)
+
+
+
+left_only__hzs_1869_vs_hzs_2143___114='万乘亢仗价倡假兢冗凄剔剩剿勺卷叭吊吩咐咨唇喇嗽坎塞墅娶嫂孩寥尸庄床怜恤愿懊懦扼拂拔拜拯捌据搏搜机杆枉柬栖栗梭棕歇殃汞沾泛涕淀渣熏熬犁狸痒痴瘟睹矣硅碎磅稻竭筑簧粱粹缸缺罕羔脯腥膊苟茵葫蔗藕蚌蝎蝗衫褒譬豌豺踊蹈辨逾邀醉陌陷雇雕髓黔默'
+right_only__hzs_1869_vs_hzs_2143___388='丕丞亨仄仕仟伉伽佰侃侏俑俚俟俳俸倪倭偈偕傀僖僭儡兀冕冥冽凋刎剋剌剽劾匐匕匡卞卦厄厥叩叱咀咆咎咫啖喀嗟嗣嗤噫圭垠垣塾壑壕夙夭奄奎奕奚妃妊妾娑娠娩娼婢媛嫡嫦嬉孚孜孰宥寐寮尹岐岑岱岷峙嵩帑帛庵廖弩弼彗彷徇徙徨忖怡恒恣恪悖悴悸惚惺愕憔憧憩憬懿戍戟戮扈扉抉拗拮掖揖摺攘攫敖斐斡於昊晏晤曜曝曦曳朔朕朦札杞杳杵杷枇柚柩柯桓梓梵楔楞楠楫榕榛槌樊樵樽橘檄殆毓氾汀汐汕汲沂沌沐泗浚浣涎涓淇淞渚渥渭湍湛溥滂滓潺澹濠濡濯瀚瀛炙炯炳焙熹燎燧燮牒牝牟狄狎狙狩猥猷獗玳珀琥琵琶瑁瑕瑙瑚瑛瑜璋璧畦疝疥疵疽痔癖皎皓盂眩眸眺睿瞑瞥瞭瞰瞿矜砥砧磊磋磐祀祁祇祉祗祚祠祺禧稔稷穀穹窈竺笙笠筵箔箴篆纂罹羲翌翟翡翩耆耶聆聿肱肴胤胥胱胴腑腱膳臆臻舜舫舷芍芙芷芸茉茗茨茱茹荀荏荻莎莞菁萃萱蓑蕃蕨薇藩虔虞蚓蛟蛭蜚螂袂袈裔裟裴褶襄覃詹豚貂赳踵蹂蹉蹊蹶躇迦逅逍逵遁遑遽邂邱邵邸郡酊酋酩釉釜閒阜阪阮陀陛雉雍霆霖韶馥馨骸魅麒麓麝麟麾黍黛'
+common__hzs_1869_vs_hzs_2143___1755 = sorted_hz_str5set_intersect4hz_sp_str(cjk_common_subset_1869, unihan_kIICore_levelA_common_hz_str__U13_0___2143)
+assert (common__hzs_1869_vs_hzs_2143___1755, left_only__hzs_1869_vs_hzs_2143___114, right_only__hzs_1869_vs_hzs_2143___388) == vs__hz_sp_str8set(cjk_common_subset_1869, unihan_kIICore_levelA_common_hz_str__U13_0___2143)
+
+
 
 
 #！下面的代码，保持在最后！
@@ -5658,7 +6060,11 @@ def _():
     for nm in __all__:
         v = d[nm]
         if type(v) is str:
+            d[f'-{nm}-'] = v
+                #save
             d[nm] = hz_sp_str2hz_str(v)
+                #保持重复...
+                #保持次序...
 _(); del _
 
 

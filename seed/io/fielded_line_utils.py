@@ -32,11 +32,11 @@ e ../../python3_src/seed/io/fielded_line_utils.py
 
 from seed.io.fielded_line_utils import txt2lines__split, txt2lines__splitlines, txt2iter_lines__regex_search, txt2lines__StringIO
 
-from seed.io.fielded_line_utils import line_remove_EOL, line_remove_comment, line_remove_py_comment, line_strip, line_rstrip, line_split
+from seed.io.fielded_line_utils import line_remove_EOL, line_remove_comment, line_remove_py_comment, line_strip, line_rstrip, line_split, line_remove_prefix, line_remove_suffix
 
 from seed.io.fielded_line_utils import is_all_spaces, hex2int, hex2char
 
-from seed.io.fielded_line_utils import mk_fT, line_remove_commentT, line_stripT, line_rstripT, line_splitT
+from seed.io.fielded_line_utils import mk_fT, line_remove_commentT, line_stripT, line_rstripT, line_splitT, line_remove_prefixT, line_remove_suffixT
 
 from seed.io.fielded_line_utils import lines_handler2txt_handler, fielded_lines_parserT__tuple, fielded_lines_preprocesserT, lines_preprocesserT
 
@@ -75,6 +75,8 @@ __all__ = '''
     line_strip
     line_rstrip
     line_split
+    line_remove_prefix
+    line_remove_suffix
 
     is_all_spaces
     hex2int
@@ -85,6 +87,8 @@ __all__ = '''
         line_stripT
         line_rstripT
         line_splitT
+        line_remove_prefixT
+        line_remove_suffixT
 
     lines_handler2txt_handler
         fielded_lines_parserT__tuple
@@ -175,6 +179,7 @@ def txt2lines__StringIO(txt, /, newline=None):
     check_type_is(list, ls)
     return ls
 
+
 def line_remove_EOL(line, /):
     return line.rstrip(_chars4EOL)
     ######################
@@ -202,6 +207,16 @@ def line_rstrip(line, chars=None, /):
 
 def line_split(line, sep, /, *, maxsplit=-1):
     return line.split(sep, maxsplit=maxsplit)
+
+
+
+def line_remove_prefix(line, prefix, /):
+    if not line.startswith(prefix): raise ValueError(f'not startswith: {line!r} :  {prefix!r}')
+    return line[len(prefix):]
+def line_remove_suffix(line, suffix, /):
+    if not line.endswith(suffix): raise ValueError(f'not endswith: {line!r} :  {suffix!r}')
+    return line[:len(line)-len(suffix)]
+
 
 def is_all_spaces(txt, /):
     return (not txt) or txt.isspace()
@@ -234,6 +249,8 @@ line_stripT = mk_fT(line_strip)
 line_rstripT = mk_fT(line_rstrip)
 line_splitT = mk_fT(line_split)
 
+line_remove_prefixT = mk_fT(line_remove_prefix)
+line_remove_suffixT = mk_fT(line_remove_suffix)
 
 
 

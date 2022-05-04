@@ -1,0 +1,617 @@
+{(0x0, 0x80)
+: 'Basic Latin'
+,(0x80, 0x100)
+: 'Latin-1 Supplement'
+,(0x100, 0x180)
+: 'Latin Extended-A'
+,(0x180, 0x250)
+: 'Latin Extended-B'
+,(0x250, 0x2b0)
+: 'IPA Extensions'
+,(0x2b0, 0x300)
+: 'Spacing Modifier Letters'
+,(0x300, 0x370)
+: 'Combining Diacritical Marks'
+,(0x370, 0x400)
+: 'Greek and Coptic'
+,(0x400, 0x500)
+: 'Cyrillic'
+,(0x500, 0x530)
+: 'Cyrillic Supplement'
+,(0x530, 0x590)
+: 'Armenian'
+,(0x590, 0x600)
+: 'Hebrew'
+,(0x600, 0x700)
+: 'Arabic'
+,(0x700, 0x750)
+: 'Syriac'
+,(0x750, 0x780)
+: 'Arabic Supplement'
+,(0x780, 0x7c0)
+: 'Thaana'
+,(0x7c0, 0x800)
+: 'NKo'
+,(0x800, 0x840)
+: 'Samaritan'
+,(0x840, 0x860)
+: 'Mandaic'
+,(0x860, 0x870)
+: 'Syriac Supplement'
+,(0x8a0, 0x900)
+: 'Arabic Extended-A'
+,(0x900, 0x980)
+: 'Devanagari'
+,(0x980, 0xa00)
+: 'Bengali'
+,(0xa00, 0xa80)
+: 'Gurmukhi'
+,(0xa80, 0xb00)
+: 'Gujarati'
+,(0xb00, 0xb80)
+: 'Oriya'
+,(0xb80, 0xc00)
+: 'Tamil'
+,(0xc00, 0xc80)
+: 'Telugu'
+,(0xc80, 0xd00)
+: 'Kannada'
+,(0xd00, 0xd80)
+: 'Malayalam'
+,(0xd80, 0xe00)
+: 'Sinhala'
+,(0xe00, 0xe80)
+: 'Thai'
+,(0xe80, 0xf00)
+: 'Lao'
+,(0xf00, 0x1000)
+: 'Tibetan'
+,(0x1000, 0x10a0)
+: 'Myanmar'
+,(0x10a0, 0x1100)
+: 'Georgian'
+,(0x1100, 0x1200)
+: 'Hangul Jamo'
+,(0x1200, 0x1380)
+: 'Ethiopic'
+,(0x1380, 0x13a0)
+: 'Ethiopic Supplement'
+,(0x13a0, 0x1400)
+: 'Cherokee'
+,(0x1400, 0x1680)
+: 'Unified Canadian Aboriginal Syllabics'
+,(0x1680, 0x16a0)
+: 'Ogham'
+,(0x16a0, 0x1700)
+: 'Runic'
+,(0x1700, 0x1720)
+: 'Tagalog'
+,(0x1720, 0x1740)
+: 'Hanunoo'
+,(0x1740, 0x1760)
+: 'Buhid'
+,(0x1760, 0x1780)
+: 'Tagbanwa'
+,(0x1780, 0x1800)
+: 'Khmer'
+,(0x1800, 0x18b0)
+: 'Mongolian'
+,(0x18b0, 0x1900)
+: 'Unified Canadian Aboriginal Syllabics Extended'
+,(0x1900, 0x1950)
+: 'Limbu'
+,(0x1950, 0x1980)
+: 'Tai Le'
+,(0x1980, 0x19e0)
+: 'New Tai Lue'
+,(0x19e0, 0x1a00)
+: 'Khmer Symbols'
+,(0x1a00, 0x1a20)
+: 'Buginese'
+,(0x1a20, 0x1ab0)
+: 'Tai Tham'
+,(0x1ab0, 0x1b00)
+: 'Combining Diacritical Marks Extended'
+,(0x1b00, 0x1b80)
+: 'Balinese'
+,(0x1b80, 0x1bc0)
+: 'Sundanese'
+,(0x1bc0, 0x1c00)
+: 'Batak'
+,(0x1c00, 0x1c50)
+: 'Lepcha'
+,(0x1c50, 0x1c80)
+: 'Ol Chiki'
+,(0x1c80, 0x1c90)
+: 'Cyrillic Extended-C'
+,(0x1c90, 0x1cc0)
+: 'Georgian Extended'
+,(0x1cc0, 0x1cd0)
+: 'Sundanese Supplement'
+,(0x1cd0, 0x1d00)
+: 'Vedic Extensions'
+,(0x1d00, 0x1d80)
+: 'Phonetic Extensions'
+,(0x1d80, 0x1dc0)
+: 'Phonetic Extensions Supplement'
+,(0x1dc0, 0x1e00)
+: 'Combining Diacritical Marks Supplement'
+,(0x1e00, 0x1f00)
+: 'Latin Extended Additional'
+,(0x1f00, 0x2000)
+: 'Greek Extended'
+,(0x2000, 0x2070)
+: 'General Punctuation'
+,(0x2070, 0x20a0)
+: 'Superscripts and Subscripts'
+,(0x20a0, 0x20d0)
+: 'Currency Symbols'
+,(0x20d0, 0x2100)
+: 'Combining Diacritical Marks for Symbols'
+,(0x2100, 0x2150)
+: 'Letterlike Symbols'
+,(0x2150, 0x2190)
+: 'Number Forms'
+,(0x2190, 0x2200)
+: 'Arrows'
+,(0x2200, 0x2300)
+: 'Mathematical Operators'
+,(0x2300, 0x2400)
+: 'Miscellaneous Technical'
+,(0x2400, 0x2440)
+: 'Control Pictures'
+,(0x2440, 0x2460)
+: 'Optical Character Recognition'
+,(0x2460, 0x2500)
+: 'Enclosed Alphanumerics'
+,(0x2500, 0x2580)
+: 'Box Drawing'
+,(0x2580, 0x25a0)
+: 'Block Elements'
+,(0x25a0, 0x2600)
+: 'Geometric Shapes'
+,(0x2600, 0x2700)
+: 'Miscellaneous Symbols'
+,(0x2700, 0x27c0)
+: 'Dingbats'
+,(0x27c0, 0x27f0)
+: 'Miscellaneous Mathematical Symbols-A'
+,(0x27f0, 0x2800)
+: 'Supplemental Arrows-A'
+,(0x2800, 0x2900)
+: 'Braille Patterns'
+,(0x2900, 0x2980)
+: 'Supplemental Arrows-B'
+,(0x2980, 0x2a00)
+: 'Miscellaneous Mathematical Symbols-B'
+,(0x2a00, 0x2b00)
+: 'Supplemental Mathematical Operators'
+,(0x2b00, 0x2c00)
+: 'Miscellaneous Symbols and Arrows'
+,(0x2c00, 0x2c60)
+: 'Glagolitic'
+,(0x2c60, 0x2c80)
+: 'Latin Extended-C'
+,(0x2c80, 0x2d00)
+: 'Coptic'
+,(0x2d00, 0x2d30)
+: 'Georgian Supplement'
+,(0x2d30, 0x2d80)
+: 'Tifinagh'
+,(0x2d80, 0x2de0)
+: 'Ethiopic Extended'
+,(0x2de0, 0x2e00)
+: 'Cyrillic Extended-A'
+,(0x2e00, 0x2e80)
+: 'Supplemental Punctuation'
+,(0x2e80, 0x2f00)
+: 'CJK Radicals Supplement'
+,(0x2f00, 0x2fe0)
+: 'Kangxi Radicals'
+,(0x2ff0, 0x3000)
+: 'Ideographic Description Characters'
+,(0x3000, 0x3040)
+: 'CJK Symbols and Punctuation'
+,(0x3040, 0x30a0)
+: 'Hiragana'
+,(0x30a0, 0x3100)
+: 'Katakana'
+,(0x3100, 0x3130)
+: 'Bopomofo'
+,(0x3130, 0x3190)
+: 'Hangul Compatibility Jamo'
+,(0x3190, 0x31a0)
+: 'Kanbun'
+,(0x31a0, 0x31c0)
+: 'Bopomofo Extended'
+,(0x31c0, 0x31f0)
+: 'CJK Strokes'
+,(0x31f0, 0x3200)
+: 'Katakana Phonetic Extensions'
+,(0x3200, 0x3300)
+: 'Enclosed CJK Letters and Months'
+,(0x3300, 0x3400)
+: 'CJK Compatibility'
+,(0x3400, 0x4dc0)
+: 'CJK Unified Ideographs Extension A'
+,(0x4dc0, 0x4e00)
+: 'Yijing Hexagram Symbols'
+,(0x4e00, 0xa000)
+: 'CJK Unified Ideographs'
+,(0xa000, 0xa490)
+: 'Yi Syllables'
+,(0xa490, 0xa4d0)
+: 'Yi Radicals'
+,(0xa4d0, 0xa500)
+: 'Lisu'
+,(0xa500, 0xa640)
+: 'Vai'
+,(0xa640, 0xa6a0)
+: 'Cyrillic Extended-B'
+,(0xa6a0, 0xa700)
+: 'Bamum'
+,(0xa700, 0xa720)
+: 'Modifier Tone Letters'
+,(0xa720, 0xa800)
+: 'Latin Extended-D'
+,(0xa800, 0xa830)
+: 'Syloti Nagri'
+,(0xa830, 0xa840)
+: 'Common Indic Number Forms'
+,(0xa840, 0xa880)
+: 'Phags-pa'
+,(0xa880, 0xa8e0)
+: 'Saurashtra'
+,(0xa8e0, 0xa900)
+: 'Devanagari Extended'
+,(0xa900, 0xa930)
+: 'Kayah Li'
+,(0xa930, 0xa960)
+: 'Rejang'
+,(0xa960, 0xa980)
+: 'Hangul Jamo Extended-A'
+,(0xa980, 0xa9e0)
+: 'Javanese'
+,(0xa9e0, 0xaa00)
+: 'Myanmar Extended-B'
+,(0xaa00, 0xaa60)
+: 'Cham'
+,(0xaa60, 0xaa80)
+: 'Myanmar Extended-A'
+,(0xaa80, 0xaae0)
+: 'Tai Viet'
+,(0xaae0, 0xab00)
+: 'Meetei Mayek Extensions'
+,(0xab00, 0xab30)
+: 'Ethiopic Extended-A'
+,(0xab30, 0xab70)
+: 'Latin Extended-E'
+,(0xab70, 0xabc0)
+: 'Cherokee Supplement'
+,(0xabc0, 0xac00)
+: 'Meetei Mayek'
+,(0xac00, 0xd7b0)
+: 'Hangul Syllables'
+,(0xd7b0, 0xd800)
+: 'Hangul Jamo Extended-B'
+,(0xd800, 0xdb80)
+: 'High Surrogates'
+,(0xdb80, 0xdc00)
+: 'High Private Use Surrogates'
+,(0xdc00, 0xe000)
+: 'Low Surrogates'
+,(0xe000, 0xf900)
+: 'Private Use Area'
+,(0xf900, 0xfb00)
+: 'CJK Compatibility Ideographs'
+,(0xfb00, 0xfb50)
+: 'Alphabetic Presentation Forms'
+,(0xfb50, 0xfe00)
+: 'Arabic Presentation Forms-A'
+,(0xfe00, 0xfe10)
+: 'Variation Selectors'
+,(0xfe10, 0xfe20)
+: 'Vertical Forms'
+,(0xfe20, 0xfe30)
+: 'Combining Half Marks'
+,(0xfe30, 0xfe50)
+: 'CJK Compatibility Forms'
+,(0xfe50, 0xfe70)
+: 'Small Form Variants'
+,(0xfe70, 0xff00)
+: 'Arabic Presentation Forms-B'
+,(0xff00, 0xfff0)
+: 'Halfwidth and Fullwidth Forms'
+,(0xfff0, 0x10000)
+: 'Specials'
+,(0x10000, 0x10080)
+: 'Linear B Syllabary'
+,(0x10080, 0x10100)
+: 'Linear B Ideograms'
+,(0x10100, 0x10140)
+: 'Aegean Numbers'
+,(0x10140, 0x10190)
+: 'Ancient Greek Numbers'
+,(0x10190, 0x101d0)
+: 'Ancient Symbols'
+,(0x101d0, 0x10200)
+: 'Phaistos Disc'
+,(0x10280, 0x102a0)
+: 'Lycian'
+,(0x102a0, 0x102e0)
+: 'Carian'
+,(0x102e0, 0x10300)
+: 'Coptic Epact Numbers'
+,(0x10300, 0x10330)
+: 'Old Italic'
+,(0x10330, 0x10350)
+: 'Gothic'
+,(0x10350, 0x10380)
+: 'Old Permic'
+,(0x10380, 0x103a0)
+: 'Ugaritic'
+,(0x103a0, 0x103e0)
+: 'Old Persian'
+,(0x10400, 0x10450)
+: 'Deseret'
+,(0x10450, 0x10480)
+: 'Shavian'
+,(0x10480, 0x104b0)
+: 'Osmanya'
+,(0x104b0, 0x10500)
+: 'Osage'
+,(0x10500, 0x10530)
+: 'Elbasan'
+,(0x10530, 0x10570)
+: 'Caucasian Albanian'
+,(0x10600, 0x10780)
+: 'Linear A'
+,(0x10800, 0x10840)
+: 'Cypriot Syllabary'
+,(0x10840, 0x10860)
+: 'Imperial Aramaic'
+,(0x10860, 0x10880)
+: 'Palmyrene'
+,(0x10880, 0x108b0)
+: 'Nabataean'
+,(0x108e0, 0x10900)
+: 'Hatran'
+,(0x10900, 0x10920)
+: 'Phoenician'
+,(0x10920, 0x10940)
+: 'Lydian'
+,(0x10980, 0x109a0)
+: 'Meroitic Hieroglyphs'
+,(0x109a0, 0x10a00)
+: 'Meroitic Cursive'
+,(0x10a00, 0x10a60)
+: 'Kharoshthi'
+,(0x10a60, 0x10a80)
+: 'Old South Arabian'
+,(0x10a80, 0x10aa0)
+: 'Old North Arabian'
+,(0x10ac0, 0x10b00)
+: 'Manichaean'
+,(0x10b00, 0x10b40)
+: 'Avestan'
+,(0x10b40, 0x10b60)
+: 'Inscriptional Parthian'
+,(0x10b60, 0x10b80)
+: 'Inscriptional Pahlavi'
+,(0x10b80, 0x10bb0)
+: 'Psalter Pahlavi'
+,(0x10c00, 0x10c50)
+: 'Old Turkic'
+,(0x10c80, 0x10d00)
+: 'Old Hungarian'
+,(0x10d00, 0x10d40)
+: 'Hanifi Rohingya'
+,(0x10e60, 0x10e80)
+: 'Rumi Numeral Symbols'
+,(0x10e80, 0x10ec0)
+: 'Yezidi'
+,(0x10f00, 0x10f30)
+: 'Old Sogdian'
+,(0x10f30, 0x10f70)
+: 'Sogdian'
+,(0x10fb0, 0x10fe0)
+: 'Chorasmian'
+,(0x10fe0, 0x11000)
+: 'Elymaic'
+,(0x11000, 0x11080)
+: 'Brahmi'
+,(0x11080, 0x110d0)
+: 'Kaithi'
+,(0x110d0, 0x11100)
+: 'Sora Sompeng'
+,(0x11100, 0x11150)
+: 'Chakma'
+,(0x11150, 0x11180)
+: 'Mahajani'
+,(0x11180, 0x111e0)
+: 'Sharada'
+,(0x111e0, 0x11200)
+: 'Sinhala Archaic Numbers'
+,(0x11200, 0x11250)
+: 'Khojki'
+,(0x11280, 0x112b0)
+: 'Multani'
+,(0x112b0, 0x11300)
+: 'Khudawadi'
+,(0x11300, 0x11380)
+: 'Grantha'
+,(0x11400, 0x11480)
+: 'Newa'
+,(0x11480, 0x114e0)
+: 'Tirhuta'
+,(0x11580, 0x11600)
+: 'Siddham'
+,(0x11600, 0x11660)
+: 'Modi'
+,(0x11660, 0x11680)
+: 'Mongolian Supplement'
+,(0x11680, 0x116d0)
+: 'Takri'
+,(0x11700, 0x11740)
+: 'Ahom'
+,(0x11800, 0x11850)
+: 'Dogra'
+,(0x118a0, 0x11900)
+: 'Warang Citi'
+,(0x11900, 0x11960)
+: 'Dives Akuru'
+,(0x119a0, 0x11a00)
+: 'Nandinagari'
+,(0x11a00, 0x11a50)
+: 'Zanabazar Square'
+,(0x11a50, 0x11ab0)
+: 'Soyombo'
+,(0x11ac0, 0x11b00)
+: 'Pau Cin Hau'
+,(0x11c00, 0x11c70)
+: 'Bhaiksuki'
+,(0x11c70, 0x11cc0)
+: 'Marchen'
+,(0x11d00, 0x11d60)
+: 'Masaram Gondi'
+,(0x11d60, 0x11db0)
+: 'Gunjala Gondi'
+,(0x11ee0, 0x11f00)
+: 'Makasar'
+,(0x11fb0, 0x11fc0)
+: 'Lisu Supplement'
+,(0x11fc0, 0x12000)
+: 'Tamil Supplement'
+,(0x12000, 0x12400)
+: 'Cuneiform'
+,(0x12400, 0x12480)
+: 'Cuneiform Numbers and Punctuation'
+,(0x12480, 0x12550)
+: 'Early Dynastic Cuneiform'
+,(0x13000, 0x13430)
+: 'Egyptian Hieroglyphs'
+,(0x13430, 0x13440)
+: 'Egyptian Hieroglyph Format Controls'
+,(0x14400, 0x14680)
+: 'Anatolian Hieroglyphs'
+,(0x16800, 0x16a40)
+: 'Bamum Supplement'
+,(0x16a40, 0x16a70)
+: 'Mro'
+,(0x16ad0, 0x16b00)
+: 'Bassa Vah'
+,(0x16b00, 0x16b90)
+: 'Pahawh Hmong'
+,(0x16e40, 0x16ea0)
+: 'Medefaidrin'
+,(0x16f00, 0x16fa0)
+: 'Miao'
+,(0x16fe0, 0x17000)
+: 'Ideographic Symbols and Punctuation'
+,(0x17000, 0x18800)
+: 'Tangut'
+,(0x18800, 0x18b00)
+: 'Tangut Components'
+,(0x18b00, 0x18d00)
+: 'Khitan Small Script'
+,(0x18d00, 0x18d90)
+: 'Tangut Supplement'
+,(0x1b000, 0x1b100)
+: 'Kana Supplement'
+,(0x1b100, 0x1b130)
+: 'Kana Extended-A'
+,(0x1b130, 0x1b170)
+: 'Small Kana Extension'
+,(0x1b170, 0x1b300)
+: 'Nushu'
+,(0x1bc00, 0x1bca0)
+: 'Duployan'
+,(0x1bca0, 0x1bcb0)
+: 'Shorthand Format Controls'
+,(0x1d000, 0x1d100)
+: 'Byzantine Musical Symbols'
+,(0x1d100, 0x1d200)
+: 'Musical Symbols'
+,(0x1d200, 0x1d250)
+: 'Ancient Greek Musical Notation'
+,(0x1d2e0, 0x1d300)
+: 'Mayan Numerals'
+,(0x1d300, 0x1d360)
+: 'Tai Xuan Jing Symbols'
+,(0x1d360, 0x1d380)
+: 'Counting Rod Numerals'
+,(0x1d400, 0x1d800)
+: 'Mathematical Alphanumeric Symbols'
+,(0x1d800, 0x1dab0)
+: 'Sutton SignWriting'
+,(0x1e000, 0x1e030)
+: 'Glagolitic Supplement'
+,(0x1e100, 0x1e150)
+: 'Nyiakeng Puachue Hmong'
+,(0x1e2c0, 0x1e300)
+: 'Wancho'
+,(0x1e800, 0x1e8e0)
+: 'Mende Kikakui'
+,(0x1e900, 0x1e960)
+: 'Adlam'
+,(0x1ec70, 0x1ecc0)
+: 'Indic Siyaq Numbers'
+,(0x1ed00, 0x1ed50)
+: 'Ottoman Siyaq Numbers'
+,(0x1ee00, 0x1ef00)
+: 'Arabic Mathematical Alphabetic Symbols'
+,(0x1f000, 0x1f030)
+: 'Mahjong Tiles'
+,(0x1f030, 0x1f0a0)
+: 'Domino Tiles'
+,(0x1f0a0, 0x1f100)
+: 'Playing Cards'
+,(0x1f100, 0x1f200)
+: 'Enclosed Alphanumeric Supplement'
+,(0x1f200, 0x1f300)
+: 'Enclosed Ideographic Supplement'
+,(0x1f300, 0x1f600)
+: 'Miscellaneous Symbols and Pictographs'
+,(0x1f600, 0x1f650)
+: 'Emoticons'
+,(0x1f650, 0x1f680)
+: 'Ornamental Dingbats'
+,(0x1f680, 0x1f700)
+: 'Transport and Map Symbols'
+,(0x1f700, 0x1f780)
+: 'Alchemical Symbols'
+,(0x1f780, 0x1f800)
+: 'Geometric Shapes Extended'
+,(0x1f800, 0x1f900)
+: 'Supplemental Arrows-C'
+,(0x1f900, 0x1fa00)
+: 'Supplemental Symbols and Pictographs'
+,(0x1fa00, 0x1fa70)
+: 'Chess Symbols'
+,(0x1fa70, 0x1fb00)
+: 'Symbols and Pictographs Extended-A'
+,(0x1fb00, 0x1fc00)
+: 'Symbols for Legacy Computing'
+,(0x20000, 0x2a6e0)
+: 'CJK Unified Ideographs Extension B'
+,(0x2a700, 0x2b740)
+: 'CJK Unified Ideographs Extension C'
+,(0x2b740, 0x2b820)
+: 'CJK Unified Ideographs Extension D'
+,(0x2b820, 0x2ceb0)
+: 'CJK Unified Ideographs Extension E'
+,(0x2ceb0, 0x2ebf0)
+: 'CJK Unified Ideographs Extension F'
+,(0x2f800, 0x2fa20)
+: 'CJK Compatibility Ideographs Supplement'
+,(0x30000, 0x31350)
+: 'CJK Unified Ideographs Extension G'
+,(0xe0000, 0xe0080)
+: 'Tags'
+,(0xe0100, 0xe01f0)
+: 'Variation Selectors Supplement'
+,(0xf0000, 0x100000)
+: 'Supplementary Private Use Area-A'
+,(0x100000, 0x110000)
+: 'Supplementary Private Use Area-B'
+}

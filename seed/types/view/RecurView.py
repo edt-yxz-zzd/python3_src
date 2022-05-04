@@ -125,7 +125,7 @@ class IConfig4RecurView(ABC):
         tmay_view = sf8cfg.try_view(obj)
         if not tmay_view:
             cls4obj = type(obj)
-            raise TypeError('type(obj)={cls4obj.__qualname__}; cfg4RecurView={sf8cfg!r}')
+            raise TypeError(f'type(obj)={cls4obj.__qualname__}; cfg4RecurView={sf8cfg!r}')
         [view] = tmay_view
         return view
 

@@ -16,7 +16,7 @@ seed.helper.IConfig4load_versioned_repr_txt_file
 py -m    seed.helper.IConfig4load_versioned_repr_txt_file
 py -m nn_ns.app.debug_cmd   seed.helper.IConfig4load_versioned_repr_txt_file
 
-from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versioned_repr_txt_file
+from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versioned_repr_txt_file, Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer
 
 #[[[doc_sections:begin
 #doctest_examples:goto
@@ -39,6 +39,7 @@ from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versio
 #HHHHH
 __all__ = '''
     IConfig4load_versioned_repr_txt_file
+    Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer
     '''.split()
 
 #################################
@@ -53,20 +54,25 @@ from copy import deepcopy
 from ast import literal_eval
 #import json
 from seed.helper.stable_repr import stable_repr
+from seed.helper.stable_repr import stable_repr__expand_top_layer
 from seed.tiny import echo
 from seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild import literal_rebuild
 from seed.types.view.RecurView import default_cfg4RecurView
 from seed.tiny import dict_add__is
 from seed.tiny import MapView
 
+
+from seed.helper.IHelper4parse__xxx_txt import IHelper4parse__xxx_txt
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
 #HHHHH
 #[[[main_body_src_code:begin
+#IConfig4load_versioned_repr_txt_file:goto
 #zzzwww:goto
 
-#[[[zzzwww:begin
+#[[[IConfig4load_versioned_repr_txt_file:begin
 
 _basename_fmt__rex = re.compile(r'^[^?*{}]*[{][}][^?*{}]*$')
 class IConfig4load_versioned_repr_txt_file(ABC):
@@ -320,7 +326,82 @@ class IConfig4load_versioned_repr_txt_file(ABC):
             #st come from literal_eval
             #   but dataobj may contain instance of userdefined class
 
+#]]]IConfig4load_versioned_repr_txt_file:end
 
+#[[[Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer:begin
+#[[[
+r'''
+copy from:
+    view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/dump_load___parsed_result__of__Blocks_txt.py
+#'''
+
+class Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer(IConfig4load_versioned_repr_txt_file):
+    r'''
+    dataobj = (parsed_result, extra_derived_result, compact_result)
+    st = compact_result
+    ----:
+    #'''
+    def __init__(sf, helper4parse__xxx_txt, /, *, __file__, data_dir_rpath, basename_fmt, version_str__rex, encoding, dataobj_immutable, state_immutable):
+        assert isinstance(helper4parse__xxx_txt, IHelper4parse__xxx_txt)
+        sf._helper4parse = helper4parse__xxx_txt
+        super().__init__(__file__=__file__, data_dir_rpath=data_dir_rpath, basename_fmt=basename_fmt, version_str__rex=version_str__rex, encoding=encoding, dataobj_immutable=dataobj_immutable, state_immutable=state_immutable)
+
+    @override
+    def state2dataobj___create(sf, st, /):
+        #.state5dataobj___save
+        #see: seed.func_tools.fmapT
+        dataobj = sf._helper4parse.state2dataobj___create(st)
+        return dataobj
+
+
+
+
+
+
+
+    @override
+    def state5dataobj___save(sf, dataobj, /):
+        'can be overrided as: def state5dataobj___save(sf, dataobj, /, *args4dump, **kwargs4dump):'
+        #.check_extra_input4dump
+        #.state2dataobj___create
+        #see: seed.func_tools.fmapT
+        st = sf._helper4parse.state5dataobj___save(dataobj)
+        return st
+    @override
+    def check_extra_input4dump(sf, /):
+        'can be overrided as: def check_extra_input4dump(sf, /, *args4dump, **kwargs4dump): #check len/keys #same as state5dataobj___save'
+        #.state5dataobj___save
+        pass
+
+    def dataobj2readonly___recur_view(sf, dataobj, /):
+        #.dataobj5readonly___literal_rebuild
+        'dataobj -> readonly_dataobj'
+        #result_readonly=True
+        return sf._helper4parse.dataobj2readonly(dataobj)
+    def dataobj5readonly___literal_rebuild(sf, readonly_dataobj, /):
+        #.dataobj2readonly___recur_view
+        'readonly_dataobj -> dataobj'
+        #un verbose? un view?
+        #neat naive clean rebuild simplified
+        return sf._helper4parse.dataobj5readonly(readonly_dataobj)
+
+
+    def check_extra_input4repr(sf, /):
+        'can be overrided as: def check_extra_input4repr(sf, /, *args4repr, **kwargs4repr): #check len/keys #same as text5state___repr'
+        #.text5state___repr
+        pass
+    def text5state___repr(sf, st, /):
+        'can be overrided as: def text5state___repr(sf, st, /, *args4repr, **kwargs4repr):'
+        #.text2state___eval
+        #.check_extra_input4repr
+        txt = stable_repr__expand_top_layer(st)
+        return txt
+
+
+#]]]
+
+#]]]Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer:end
+#[[[zzzwww:begin
 #]]]zzzwww:end
 #]]]main_body_src_code:end
 
@@ -328,7 +409,7 @@ class IConfig4load_versioned_repr_txt_file(ABC):
 #HHHHH
 if __name__ == "__main__":
     from seed.helper.IConfig4load_versioned_repr_txt_file import *
-    from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versioned_repr_txt_file
+    from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versioned_repr_txt_file, Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
