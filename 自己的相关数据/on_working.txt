@@ -284,19 +284,26 @@ unicode 兼容字符 的 『原字符』属性名 是什么？
   DONE:Blocks/kIICore/kCompatibilityVariant...
   ===
   DONE:kCompatibilityVariant
-      ==
-      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kIICore8Unihan_IRGSources_txt.py
-      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt.py
-      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__kIICore8Unihan_IRGSources_txt__of_ver13_0.py
-      ==
-      s/kIICore/kCompatibilityVariant/g
       view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kCompatibilityVariant8Unihan_IRGSources_txt.py
       view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kCompatibilityVariant8Unihan_IRGSources_txt.py
       view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__kCompatibilityVariant8Unihan_IRGSources_txt__of_ver13_0.py
   ===
   DONE:view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt
       2FF0..2FFF; Ideographic Description Characters
-      StackStyleSimpleIntSet-->StackStyleSimpleIntMapping
+    grep Compatibility /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt
+      3130..318F; Hangul Compatibility Jamo
+      3300..33FF; CJK Compatibility
+        2**8=256
+      F900..FAFF; CJK Compatibility Ideographs
+        2**9=512
+      FE30..FE4F; CJK Compatibility Forms
+        2**5=32
+      2F800..2FA1F; CJK Compatibility Ideographs Supplement
+        2**9+2**5=512+32
+        ==>> 1344
+        kCompatibilityVariant 只有1002对
+      ==
+    StackStyleSimpleIntSet-->StackStyleSimpleIntMapping
         view ../../python3_src/seed/data_funcs/rngs.py
 
       view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py
@@ -332,7 +339,7 @@ from seed.data_funcs.rngs import make_Ranges, sorted_ints_to_iter_nontouch_range
         view ../../python3_src/seed/data_funcs/rngs.py
       view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kIICore8Unihan_IRGSources_txt.py
       view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kIICore8Unihan_IRGSources_txt.py
-        DONE:hz_2143 --> hanzi.py
+        DONE:hzs_2143 --> hanzi.py
         DONE:500K 太大，改变保存方式？
       view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__kIICore8Unihan_IRGSources_txt__of_ver13_0.py
 
@@ -364,6 +371,43 @@ from seed.data_funcs.rngs import make_Ranges, sorted_ints_to_iter_nontouch_range
 ]
 
 
+[[DONE:kUnihanCore2020
+  Unihan_DictionaryLikeData.txt 	kCangjie, kCheungBauer, kCihaiT, kFenn, kFourCornerCode, kFrequency, kGradeLevel, kHDZRadBreak, kHKGlyph, kPhonetic, kStrange, kUnihanCore2020
+view ../lots/NOTE/unicode/note4UnicodeStandard_14_0_annex/unicode_ver14_0_UAX31_UAX38摘要.txt
+[
+Property 	kUnihanCore2020
+Status 	Informative
+Category 	Dictionary-like Data
+Introduced 	13.0
+Delimiter 	N/A
+Syntax 	[GHJKMPT]{1,7}
+Description 	Used for characters which are in the UnihanCore2020 set, the minimal set of required ideographs for East Asia. A character is in the UnihanCore2020 set if and only if it has a value for the kUnihanCore2020 property.
+
+The property value consists of one or more letters (G, H, J, K, M, P, or T), indicating source. The source letters are the same as used for IRG sources, except that P is used instead of the two-letter sequence KP.
+]
+view /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_DictionaryLikeData.txt
+# Unihan_DictionaryLikeData.txt
+# Date: 2020-02-18 18:27:33 GMT [JHJ]
+# Unicode version: 13.0.0
+grep kUnihanCore2020 /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_DictionaryLikeData.txt > /sdcard/0my_files/tmp/_.txt
+view /sdcard/0my_files/tmp/_.txt
+  20720个！！！
+!du -h /sdcard/0my_files/tmp/_.txt
+  556K
+!du -h ../../python3_src/nn_ns/CJK/cjk_subsets/hanzi.py
+  164K
+grep 'kUnihanCore2020\s\+\S\{7\}' /sdcard/0my_files/unzip/e_book/unicode_13__Unihan/Unihan_DictionaryLikeData.txt > /sdcard/0my_files/tmp/_.txt
+view /sdcard/0my_files/tmp/_.txt
+  2573个
+
+      s/kIICore\C/kUnihanCore2020/g
+      s/Unihan_IRGSources\C/Unihan_DictionaryLikeData/g
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kUnihanCore20208Unihan_DictionaryLikeData_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__kUnihanCore20208Unihan_DictionaryLikeData_txt.py
+      view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parsed_result__of__kUnihanCore20208Unihan_DictionaryLikeData_txt__of_ver13_0.py
+
+DONE:hzs_2573 --> hanzi.py
+]]
 
 ]]]
 

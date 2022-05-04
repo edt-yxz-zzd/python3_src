@@ -139,12 +139,12 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.data_funcs.rngs import make_Ranges, StackStyleSimpleIntSet, NonTouchRanges
 
 
-from seed.io.fielded_line_utils import lines_handler2txt_handler, fielded_lines_parserT__tuple, fielded_lines_preprocesserT, lines_preprocesserT
+from seed.io.fielded_line_utils import fielded_lines_parserT__tuple#, lines_handler2txt_handler, fielded_lines_preprocesserT, lines_preprocesserT
 from seed.io.fielded_line_utils import line_splitT, hex2int, line_remove_prefixT
 
-from seed.tiny_.HexReprInt import HexReprInt
-from seed.func_tools.fmapT.fmapT__tiny import fmapT__dict, fmap_rngs2hex_repr, fmapT__pairs#, fmapT__list, fmapT__iter, fmapT__tuple, fmapT__tpls
-from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__tuple, fmapT__list
+#from seed.tiny_.HexReprInt import HexReprInt
+#from seed.func_tools.fmapT.fmapT__tiny import fmapT__dict, fmap_rngs2hex_repr, fmapT__pairs#, fmapT__list, fmapT__iter, fmapT__tuple, fmapT__tpls
+#from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__tuple, fmapT__list
 from seed.func_tools.fmapT.predT__tiny import (dot, eqT)
 from seed.func_tools.fmapT.filterT__tiny import (filterT)
 
@@ -182,7 +182,7 @@ _lines_parser4kIICore8Unihan_IRGSources_txt = dot[filterT(dot[eqT('kIICore'), at
 
 
 def parse__kIICore8Unihan_IRGSources_txt(lines, /):
-    '-> parsed_result::(char_pt2code_block_name, code_block_name2char_pt_rngs)'
+    '-> parsed_result::(level_char2char_pt_rngs, sourceIRG_char2char_pt_rngs)'
 
     fieldss = _lines_parser4kIICore8Unihan_IRGSources_txt(lines)
     pt_kIICore_lvlsrcs_triples = fieldss
