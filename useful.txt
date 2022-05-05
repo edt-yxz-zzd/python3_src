@@ -1,6 +1,8 @@
 template4module:goto
 main:goto
 
+所有 虚函数 改名:格式为 _xxx_
+    以保证 map(IBase.xxx, ...)可正常工作！
 
 # set PYTHONIOENCODING=utf8
 #   > py .... > log.txt

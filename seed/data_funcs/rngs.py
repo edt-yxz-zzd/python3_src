@@ -874,87 +874,87 @@ KeyError: 10
 >>> s
 StackStyleSimpleIntMapping(([(1, 5), (6, 7), (7, 9), (13, 15)], [111, 111, 222, 333]))
 
->>> [*s.iter_intersect_range_ex((-1,0))]
+>>> [*s.iter_intersect_range_ex__with_value((-1,0))]
 []
->>> [*s.iter_intersect_range_ex((0,1))]
+>>> [*s.iter_intersect_range_ex__with_value((0,1))]
 []
->>> [*s.iter_intersect_range_ex((5,6))]
+>>> [*s.iter_intersect_range_ex__with_value((5,6))]
 []
->>> [*s.iter_intersect_range_ex((10,11))]
+>>> [*s.iter_intersect_range_ex__with_value((10,11))]
 []
->>> [*s.iter_intersect_range_ex((15,16))]
+>>> [*s.iter_intersect_range_ex__with_value((15,16))]
 []
 
 
->>> [*s.iter_intersect_range_ex((0,1))]
+>>> [*s.iter_intersect_range_ex__with_value((0,1))]
 []
->>> [*s.iter_intersect_range_ex((0,3))]
+>>> [*s.iter_intersect_range_ex__with_value((0,3))]
 [(0, (1, 3), 111)]
->>> [*s.iter_intersect_range_ex((0,5))]
+>>> [*s.iter_intersect_range_ex__with_value((0,5))]
 [(0, (1, 5), 111)]
->>> [*s.iter_intersect_range_ex((0,6))]
+>>> [*s.iter_intersect_range_ex__with_value((0,6))]
 [(0, (1, 5), 111)]
 
->>> [*s.iter_intersect_range_ex((0,7))]
+>>> [*s.iter_intersect_range_ex__with_value((0,7))]
 [(0, (1, 5), 111), (1, (6, 7), 111)]
->>> [*s.iter_intersect_range_ex((0,8))]
+>>> [*s.iter_intersect_range_ex__with_value((0,8))]
 [(0, (1, 5), 111), (1, (6, 7), 111), (2, (7, 8), 222)]
->>> [*s.iter_intersect_range_ex((0,9))]
+>>> [*s.iter_intersect_range_ex__with_value((0,9))]
 [(0, (1, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((0,10))]
+>>> [*s.iter_intersect_range_ex__with_value((0,10))]
 [(0, (1, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((0,13))]
+>>> [*s.iter_intersect_range_ex__with_value((0,13))]
 [(0, (1, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((0,14))]
+>>> [*s.iter_intersect_range_ex__with_value((0,14))]
 [(0, (1, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 14), 333)]
->>> [*s.iter_intersect_range_ex((0,15))]
+>>> [*s.iter_intersect_range_ex__with_value((0,15))]
 [(0, (1, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 15), 333)]
->>> [*s.iter_intersect_range_ex((0,16))]
+>>> [*s.iter_intersect_range_ex__with_value((0,16))]
 [(0, (1, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 15), 333)]
 
 
->>> [*s.iter_intersect_range_ex((2,3))]
+>>> [*s.iter_intersect_range_ex__with_value((2,3))]
 [(0, (2, 3), 111)]
->>> [*s.iter_intersect_range_ex((2,5))]
+>>> [*s.iter_intersect_range_ex__with_value((2,5))]
 [(0, (2, 5), 111)]
->>> [*s.iter_intersect_range_ex((2,6))]
+>>> [*s.iter_intersect_range_ex__with_value((2,6))]
 [(0, (2, 5), 111)]
 
->>> [*s.iter_intersect_range_ex((2,7))]
+>>> [*s.iter_intersect_range_ex__with_value((2,7))]
 [(0, (2, 5), 111), (1, (6, 7), 111)]
->>> [*s.iter_intersect_range_ex((2,8))]
+>>> [*s.iter_intersect_range_ex__with_value((2,8))]
 [(0, (2, 5), 111), (1, (6, 7), 111), (2, (7, 8), 222)]
->>> [*s.iter_intersect_range_ex((2,9))]
+>>> [*s.iter_intersect_range_ex__with_value((2,9))]
 [(0, (2, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((2,10))]
+>>> [*s.iter_intersect_range_ex__with_value((2,10))]
 [(0, (2, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((2,13))]
+>>> [*s.iter_intersect_range_ex__with_value((2,13))]
 [(0, (2, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((2,14))]
+>>> [*s.iter_intersect_range_ex__with_value((2,14))]
 [(0, (2, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 14), 333)]
->>> [*s.iter_intersect_range_ex((2,15))]
+>>> [*s.iter_intersect_range_ex__with_value((2,15))]
 [(0, (2, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 15), 333)]
->>> [*s.iter_intersect_range_ex((2,16))]
+>>> [*s.iter_intersect_range_ex__with_value((2,16))]
 [(0, (2, 5), 111), (1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 15), 333)]
 
 
->>> [*s.iter_intersect_range_ex((5,6))]
+>>> [*s.iter_intersect_range_ex__with_value((5,6))]
 []
->>> [*s.iter_intersect_range_ex((5,7))]
+>>> [*s.iter_intersect_range_ex__with_value((5,7))]
 [(1, (6, 7), 111)]
->>> [*s.iter_intersect_range_ex((5,8))]
+>>> [*s.iter_intersect_range_ex__with_value((5,8))]
 [(1, (6, 7), 111), (2, (7, 8), 222)]
->>> [*s.iter_intersect_range_ex((5,9))]
+>>> [*s.iter_intersect_range_ex__with_value((5,9))]
 [(1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((5,10))]
+>>> [*s.iter_intersect_range_ex__with_value((5,10))]
 [(1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((5,13))]
+>>> [*s.iter_intersect_range_ex__with_value((5,13))]
 [(1, (6, 7), 111), (2, (7, 9), 222)]
->>> [*s.iter_intersect_range_ex((5,14))]
+>>> [*s.iter_intersect_range_ex__with_value((5,14))]
 [(1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 14), 333)]
->>> [*s.iter_intersect_range_ex((5,15))]
+>>> [*s.iter_intersect_range_ex__with_value((5,15))]
 [(1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 15), 333)]
->>> [*s.iter_intersect_range_ex((5,16))]
+>>> [*s.iter_intersect_range_ex__with_value((5,16))]
 [(1, (6, 7), 111), (2, (7, 9), 222), (3, (13, 15), 333)]
 
 
@@ -2230,10 +2230,93 @@ def rngs_op__iter_intersect_range_ex(rngs, rng, /):
         _, begin = common_rng
     return
 
+def rngs_op__iter_gaps(rngs, /):
+    it = iter(rngs)
+    for _, pre_end in it:
+        break
+    for begin, end in it:
+        if begin != pre_end:
+            yield pre_end, begin
+        pre_end = end
+def rngs_op__reversed_gaps(rngs, /):
+    it = reversed(rngs)
+    for next_begin, _ in it:
+        break
+    for begin, end in it:
+        if end != next_begin:
+            yield end, next_begin
+        next_begin = begin
+def rngs_op__iter_gaps_(rngs, /, *, reverse):
+    f = rngs_op__reversed_gaps if reverse else rngs_op__iter_gaps
+    return f(rngs)
+
+class IMixin4_get_rngs_:
+    def _get_rngs_(sf, /):
+        raise NotImplementedError
+    def _to_NonTouchRanges_(sf, /):
+        raise NotImplementedError
+    def _O_get_rngs_O_(sf, /):
+        return sf._get_rngs_()
+    def to_NonTouchRanges(sf, /):
+        return sf._to_NonTouchRanges_()
+    def to_Ranges(sf, /):
+        '-> immutable IRanges#TouchRanges/NonTouchRanges'
+        rngs = sf._get_rngs_()
+        return make_Ranges(rngs)
+    def iter_intersect_range_ex(sf, rng, /):
+        '-> Iter<(idx, common_rng)>'
+        rngs = sf._get_rngs_()
+        return rngs_op__iter_intersect_range_ex(rngs, rng)
+    def len_rngs(sf, /):
+        rngs = sf._get_rngs_()
+        return len(rngs)
+    def __iter__(sf, /):
+        return sf.iter_ints()
+    def __reversed__(sf, /):
+        return sf.reversed_ints()
+    def iter_ints(sf, /):
+        return sf.iter_keys_(reverse=False)
+    def reversed_ints(sf, /):
+        return sf.iter_keys_(reverse=True)
+    def iter_keys_(sf, /, reverse):
+        rngs = sf._get_rngs_()
+        return rngs_to_iter_ints_(rngs, reverse=reverse)
+    iter_ints_ = iter_keys_
+    def iter_rngs_(sf, /, reverse):
+        rngs = sf._get_rngs_()
+        g = reversed if reverse else iter
+        return g(rngs)
+    def iter_rngs(sf, /):
+        return sf.iter_rngs_(reverse=False)
+    def reversed_rngs(sf, /):
+        return sf.iter_rngs_(reverse=True)
+
+    def __bool__(sf, /):
+        return bool(sf.len_rngs())
+    def gaps(sf, /):
+        return tuple(sf.iter_gaps())
+    def iter_gaps(sf, /):
+        return sf.iter_gaps_(reverse=False)
+    def reversed_gaps(sf, /):
+        return sf.iter_gaps_(reverse=True)
+    def iter_gaps_(sf, /, *, reverse):
+        rngs = sf._get_rngs_()
+        return rngs_op__iter_gaps_(rngs, reverse=reverse)
+    ###news:
+    def maybe_range_contained(sf, i, /):
+        return rngs_op__get_maybe_range_contained(sf._get_rngs_(), i)
+    def maybe_range_contained_ex(sf, i, /):
+        return rngs_op__get_maybe_range_contained_ex(sf._get_rngs_(), i)
+    def __contains__(sf, int_or_rng, /):
+        return rngs_op__contains_range_or_int(sf._get_rngs_(), int_or_rng)
+    def contains_range(sf, sub_rng, /):
+        return rngs_op__contains_range(sf._get_rngs_(), sub_rng)
+    def contains_all(sf, iterable, /):
+        return rngs_op__contains_all(sf._get_rngs_(), iterable)
 #]]]
 
 
-class IRanges:
+class IRanges(IMixin4_get_rngs_):
     r'''
 ABC IRanges:
     * immutable TouchRanges
@@ -2252,20 +2335,24 @@ used:
             :: Map<char, NonTouchRanges>
             :: Map<char, StackStyleSimpleIntSet>
 
+TODO:
+    所有 虚函数 改名:格式为 _xxx_
+        以保证 map(IRanges.xxx, ...)可正常工作！
     #'''
-    def to_NonTouchRanges(self, /):
-        raise NotImplementedError
     @classmethod
-    def valid_ranges(cls, ranges, /):
+    def _valid_ranges_(cls, ranges, /):
         raise NotImplementedError
         return valid_ranges(ranges)
-    def is_nontouch_ranges(self, /):
-        return self.__nontouch
-    def to_nontouch_ranges(self, /):
-        if self.__nontouch:
-            return self.ranges
-        return tuple(sorted_rngs_to_iter_nontouch_ranges(self.ranges))
-        return self.to_NonTouchRanges().ranges
+    @classmethod
+    def valid_ranges(cls, ranges, /):
+        return cls._valid_ranges_(ranges)
+    def is_nontouch_ranges(sf, /):
+        return sf.__nontouch
+    def to_nontouch_ranges(sf, /):
+        if sf.__nontouch:
+            return sf.ranges
+        return tuple(sorted_rngs_to_iter_nontouch_ranges(sf.ranges))
+        return sf.to_NonTouchRanges().ranges
     def to_hex_repr_pair_list(sf, /):
         return ranges2hex_repr_pair_list(sf)
     @staticmethod
@@ -2294,161 +2381,84 @@ used:
     def from_len_rng2begin_chars(len_rng2begin_chars, /):
         return ranges5len_rng2begin_chars(len_rng2begin_chars)
 
-    def __init__(self, ranges, /):
+    def __init__(sf, ranges, /):
         #ranges = tuple(ranges)
-        if not type(self).valid_ranges(ranges):
-            raise TypeError('not {}.valid_ranges({})'.format(type(self).__name__, ranges))
-        self.__ranges = ranges
-        self.__sz = len_ints_of_nonoverlap_rngs(ranges)
-        self.__nontouch = valid_nontouch_ranges(ranges)
+        if not type(sf).valid_ranges(ranges):
+            raise TypeError('not {}.valid_ranges({})'.format(type(sf).__name__, ranges))
+        sf.__ranges = ranges
+        sf.__sz = len_ints_of_nonoverlap_rngs(ranges)
+        sf.__nontouch = valid_nontouch_ranges(ranges)
     @property
-    def ranges(self, /):
-        return self.__ranges
-    #def __len__(self, /):
-    #    return self.__sz
-    def len_ints(self, /):
-        return self.__sz
-    def maybe_range_contained(self, i, /):
-        return rngs_op__get_maybe_range_contained(self.ranges, i)
-    def maybe_range_contained_ex(self, i, /):
-        return rngs_op__get_maybe_range_contained_ex(self.ranges, i)
-    def __contains__(self, int_or_rng, /):
-        return rngs_op__contains_range_or_int(self.ranges, int_or_rng)
-    def contains_range(self, sub_rng, /):
-        return rngs_op__contains_range(self.ranges, sub_rng)
-    def contains_all(self, iterable, /):
-        return rngs_op__contains_all(self.ranges, iterable)
-    r'''[[[moved out to global
-    def maybe_range_contained(self, i, /):
-        # None | rng
-        return self.maybe_range_contained_ex(i)[0]
-    def maybe_range_contained_ex(self, i, /):
-        rngs = self.ranges
-        L = len(rngs)
-
-        j = i + 1
-        idx = bisect.bisect_left(rngs, (j,j)) - 1
-        if idx < 0:
-            assert not L or rngs[0][0] > i
-            return None, idx
-
-        begin, end = rng = rngs[idx]
-        assert begin <= i
-        if not i < end:
-            assert idx + 1 == L or rngs[idx+1][0] > i
-            return None, idx
-        return rng, idx
-
-    def __contains__(self, int_or_rng, /):
-        if isinstance(int_or_rng, int):
-            begin = int_or_rng
-            end = begin + 1
-            sub_rng = begin, end
-        else:
-            sub_rng = int_or_rng
-        return self.contains_range(sub_rng)
-    def contains_range(self, sub_rng, /):
-        check_range(sub_rng)
-        rngs = self.ranges
-        begin, end = sub_rng
-        may_rng, idx = self.maybe_range_contained_ex(begin)
-        if may_rng is None:
-            return False
-
-        pre_end = may_rng[0]
-        for idx in range(idx, len(rngs)):
-            begin_, end_ = rngs[idx]
-            if pre_end != begin_:
-                return False
-            pre_end = end_
-            if end <= end_:
-                return True
-        assert end > rngs[-1][-1]
-        return False
-        #return is_subrange_of(sub_rng, may_rng)
-        pass
-
-    def contains_all(self, iterable, /):
-        return all_map(self.__contains__, iterable)
-    #]]]'''
-    def iter_ints(self, /):
-        return rngs_to_iter_ints(self.ranges)
-    def iter_rngs(self, /):
-        return iter(self.ranges)
-    def __hash_args(self, /):
-        return type(self), self.ranges
-    def __hash__(self, /):
-        return hash(self.__hash_args())
-    def __eq__(self, other, /):
+    def ranges(sf, /):
+        return sf.__ranges
+    def _get_rngs_(sf, /):
+        return sf.ranges
+    #def __len__(sf, /):
+    #    return sf.__sz
+    def len_ints(sf, /):
+        return sf.__sz
+    def __hash_args(sf, /):
+        return type(sf), sf.ranges
+    def __hash__(sf, /):
+        return hash(sf.__hash_args())
+    def __eq__(sf, other, /):
         r"""
         #match __hash__
         see: set_eq
         #"""
         #assert isinstance(other, (TouchRanges, NonTouchRanges))
-        if type(other) is not type(self):
+        if type(other) is not type(sf):
             return NotImplemented
-        return self.__hash_args() == other.__hash_args()
-    def __repr__(self, /):
-        return '{}({})'.format(type(self).__name__, self.ranges)
+        return sf.__hash_args() == other.__hash_args()
+    def __repr__(sf, /):
+        return '{}({})'.format(type(sf).__name__, sf.ranges)
 
-    def __bool__(self, /):
-        return len(self.ranges)
-    def gaps(self, /):
-        return tuple(self.iter_gaps())
-    def iter_gaps(self, /):
-        rngs = self.ranges
-        for pre_end, _ in rngs:
-            break
-        for begin, end in rngs:
-            if begin != pre_end:
-                yield pre_end, begin
-            pre_end = end
-    def _rel_op(self, other, op, /, **kw):
+    def _rel_op(sf, other, op, /, **kw):
         assert isinstance(other, (TouchRanges, NonTouchRanges))
-        return op(self.ranges, other.ranges, rhs_maynot_be_nontouch_ranges=not other.__nontouch, **kw)
+        return op(sf.ranges, other.ranges, rhs_maynot_be_nontouch_ranges=not other.__nontouch, **kw)
 
-    def _op(self, other, op, /, **kw):
+    def _op(sf, other, op, /, **kw):
         assert isinstance(other, (TouchRanges, NonTouchRanges))
-        ranges = op(self.to_nontouch_ranges(), other.to_nontouch_ranges(), **kw)
+        ranges = op(sf.to_nontouch_ranges(), other.to_nontouch_ranges(), **kw)
         return make_NonTouchRanges(ranges)
 
-    def __lt__(self, other, /):
-        return self._rel_op(other, is_proper_subset_ex_of__xtouch_ranges)
-    def __le__(self, other, /):
-        return self._rel_op(other, is_subset_ex_of__xtouch_ranges)
-    def set_eq(self, other, /):
+    def __lt__(sf, other, /):
+        return sf._rel_op(other, is_proper_subset_ex_of__xtouch_ranges)
+    def __le__(sf, other, /):
+        return sf._rel_op(other, is_subset_ex_of__xtouch_ranges)
+    def set_eq(sf, other, /):
         #vs __eq__
-        if self.__nontouch and other.__nontouch:
-            return self.ranges == other.ranges
-        return self._rel_op(other, is_equal_set_ex_of__xtouch_ranges, lhs_maynot_be_nontouch_ranges=not self.__nontouch)
+        if sf.__nontouch and other.__nontouch:
+            return sf.ranges == other.ranges
+        return sf._rel_op(other, is_equal_set_ex_of__xtouch_ranges, lhs_maynot_be_nontouch_ranges=not sf.__nontouch)
         ########## old impl ############
-        return self._rel_op(other, is_equal_set_ex_of__xtouch_ranges)
+        return sf._rel_op(other, is_equal_set_ex_of__xtouch_ranges)
 
-    def __or__(self, other, /):
-        return self._op(other, union_ex__xtouch_ranges, faster_output_iter_touch_ranges=False)
+    def __or__(sf, other, /):
+        return sf._op(other, union_ex__xtouch_ranges, faster_output_iter_touch_ranges=False)
 
-    def __and__(self, other, /):
-        return self._op(other, intersection__xtouch_ranges)
+    def __and__(sf, other, /):
+        return sf._op(other, intersection__xtouch_ranges)
 
-    def __sub__(self, other, /):
-        return self._op(other, difference__xtouch_ranges)
-    def __xor__(self, other, /):
-        return self._op(other, symmetric_difference_ex__xtouch_ranges, faster_output_iter_touch_ranges=False)
+    def __sub__(sf, other, /):
+        return sf._op(other, difference__xtouch_ranges)
+    def __xor__(sf, other, /):
+        return sf._op(other, symmetric_difference_ex__xtouch_ranges, faster_output_iter_touch_ranges=False)
 
 
 class TouchRanges(IRanges):
-    def to_NonTouchRanges(self, /):
-        return make_NonTouchRanges(sorted_rngs_to_iter_nontouch_ranges(self.ranges))
+    def _to_NonTouchRanges_(sf, /):
+        return make_NonTouchRanges(sorted_rngs_to_iter_nontouch_ranges(sf.ranges))
     @classmethod
-    def valid_ranges(cls, ranges, /):
+    def _valid_ranges_(cls, ranges, /):
         return valid_touch_ranges(ranges)
 
 
 class NonTouchRanges(IRanges):
-    def to_NonTouchRanges(self, /):
-        return self
+    def _to_NonTouchRanges_(sf, /):
+        return sf
     @classmethod
-    def valid_ranges(cls, ranges, /):
+    def _valid_ranges_(cls, ranges, /):
         return valid_nontouch_ranges(ranges)
 
 
@@ -2612,20 +2622,20 @@ def iter_nontouch_rangess_between(begin, end, /):
         rngs = tuple(rngs)
         yield rngs
 
-class StackStyleSimpleIntSet:
+class StackStyleSimpleIntSet(IMixin4_get_rngs_):
     r'''
     .rngs :: [(int, int)] #nontouch_ranges
         public-mutable
         NOTE: SHOULD call fix_after_modify_rngs after update .rngs externally
     #'''
-    def to_NonTouchRanges(sf, /):
+    def _to_NonTouchRanges_(sf, /):
         rngs = sf.rngs
         return NonTouchRanges((*rngs,))
         return make_NonTouchRanges(sorted_rngs_to_iter_nontouch_ranges(rngs))
-    def __eq__(self, other, /):
-        if type(other) is not type(self):
+    def __eq__(sf, other, /):
+        if type(other) is not type(sf):
             return NotImplemented
-        return self.rngs == other.rngs
+        return sf.rngs == other.rngs
     def __init__(sf, rngs=None, /):
         if rngs is None:
             rngs = []
@@ -2724,42 +2734,19 @@ class StackStyleSimpleIntSet:
     def from_clone_of_rngs(cls, rngs, /):
         rngs = [*make_Ranges(rngs).to_nontouch_ranges()]
         return cls(rngs)
-
-    def iter_intersect_range_ex(sf, rng, /):
-        '-> Iter<(idx, common_rng)>'
+    def _get_rngs_(sf, /):
         rngs = sf.rngs
-        return rngs_op__iter_intersect_range_ex(rngs, rng)
+        return rngs
 
-    def __iter__(sf, /):
-        return sf.iter_keys_(reverse=False)
-    def __reversed__(sf, /):
-        return sf.iter_keys_(reverse=True)
-    def iter_keys_(sf, /, reverse):
-        rngs = sf.rngs
-        return rngs_to_iter_ints_(rngs, reverse=reverse)
-    def iter_rngs_(sf, /, reverse):
-        rngs = sf.rngs
-        g = reversed if reverse else iter
-        return g(rngs)
 
-    ###news:
-    def maybe_range_contained(self, i, /):
-        return rngs_op__get_maybe_range_contained(self.rngs, i)
-    def maybe_range_contained_ex(self, i, /):
-        return rngs_op__get_maybe_range_contained_ex(self.rngs, i)
-    def __contains__(self, int_or_rng, /):
-        return rngs_op__contains_range_or_int(self.rngs, int_or_rng)
-    def contains_range(self, sub_rng, /):
-        return rngs_op__contains_range(self.rngs, sub_rng)
-    def contains_all(self, iterable, /):
-        return rngs_op__contains_all(self.rngs, iterable)
+
 
 
 #end:class StackStyleSimpleIntSet:
 
 
 
-class IRangeBasedIntMapping:
+class IRangeBasedIntMapping(IMixin4_get_rngs_):
     r'''
 ABC IRangeBasedIntMapping:
     * immutable TouchRangeBasedIntMapping
@@ -2779,9 +2766,11 @@ used:
             :: Map<str, StackStyleSimpleIntSet>
 
     #'''
-    def to_TouchRangeBasedIntMapping(sf, /):
+    def _to_TouchRangeBasedIntMapping_(sf, /):
         '-> immutable TouchRangeBasedIntMapping'
         raise NotImplementedError
+    def to_TouchRangeBasedIntMapping(sf, /):
+        return sf._to_TouchRangeBasedIntMapping_()
     @classmethod
     def _get_type_of_seq4both_rngs_and_values(cls, /):
         '-> seq_type'
@@ -2789,21 +2778,23 @@ used:
     def __len__(sf, /):
         '-> len_ints'
         raise NotImplementedError
-    @property
-    def rngs_values_pair(sf, /):
+    def _get_rngs_values_pair_(sf, /):
         '-> ([rng], [value])'
         raise NotImplementedError
-
-
-    def __eq__(self, other, /):
-        if type(other) is not type(self):
-            return NotImplemented
-        return self.rngs_values_pair == other.rngs_values_pair
-
-    def to_Ranges(sf, /):
-        '-> immutable IRanges#TouchRanges/NonTouchRanges'
+    @property
+    def rngs_values_pair(sf, /):
+        return sf._get_rngs_values_pair_()
+    def _get_rngs_(sf, /):
         rngs, values = sf.rngs_values_pair
-        return make_Ranges(rngs)
+        return rngs
+    _to_NonTouchRanges_ = TouchRanges._to_NonTouchRanges_
+
+
+    def __eq__(sf, other, /):
+        if type(other) is not type(sf):
+            return NotImplemented
+        return sf.rngs_values_pair == other.rngs_values_pair
+
 
 
     @classmethod
@@ -2877,7 +2868,7 @@ used:
             return v
         raise KeyError(i)
     #def getitem4rng_ex(sf, sub_rng, /):
-    def iter_intersect_range_ex(sf, rng, /):
+    def iter_intersect_range_ex__with_value(sf, rng, /):
         '-> Iter<(idx, common_rng, value)>'
         rngs, values = sf.rngs_values_pair
         it = rngs_op__iter_intersect_range_ex(rngs, rng)
@@ -2886,17 +2877,6 @@ used:
             yield idx, common_rng, v
         return
 
-    def __iter__(sf, /):
-        return sf.iter_keys_(reverse=False)
-    def __reversed__(sf, /):
-        return sf.iter_keys_(reverse=True)
-    def iter_keys_(sf, /, reverse):
-        rngs, values = sf.rngs_values_pair
-        return rngs_to_iter_ints_(rngs, reverse=reverse)
-    def iter_rngs_(sf, /, reverse):
-        rngs, values = sf.rngs_values_pair
-        g = reversed if reverse else iter
-        return g(rngs)
     def iter_values__per_rng_(sf, /, reverse):
         rngs, values = sf.rngs_values_pair
         g = reversed if reverse else iter
@@ -2915,24 +2895,8 @@ used:
         xreversed_rng_value_pairs = sf.iter_rng_value_pairs_(reverse=reverse)
         reverse = iter if reverse else False
         return rng_value_pairs_to_iter_int_value_pairs_(xreversed_rng_value_pairs, reverse=reverse)
-    ###news:
-    def maybe_range_contained(self, i, /):
-        rngs, values = self.rngs_values_pair
-        return rngs_op__get_maybe_range_contained(rngs, i)
-    def maybe_range_contained_ex(self, i, /):
-        rngs, values = self.rngs_values_pair
-        return rngs_op__get_maybe_range_contained_ex(rngs, i)
-    def __contains__(self, int_or_rng, /):
-        rngs, values = self.rngs_values_pair
-        return rngs_op__contains_range_or_int(rngs, int_or_rng)
-    def contains_range(self, sub_rng, /):
-        rngs, values = self.rngs_values_pair
-        return rngs_op__contains_range(rngs, sub_rng)
-    def contains_all(self, iterable, /):
-        rngs, values = self.rngs_values_pair
-        return rngs_op__contains_all(rngs, iterable)
 class TouchRangeBasedIntMapping(IRangeBasedIntMapping):
-    def to_TouchRangeBasedIntMapping(sf, /):
+    def _to_TouchRangeBasedIntMapping_(sf, /):
         '-> immutable TouchRangeBasedIntMapping'
         return sf
     @classmethod
@@ -2942,8 +2906,7 @@ class TouchRangeBasedIntMapping(IRangeBasedIntMapping):
     def __len__(sf, /):
         '-> len_ints'
         return sf._sz
-    @property
-    def rngs_values_pair(sf, /):
+    def _get_rngs_values_pair_(sf, /):
         '-> ([rng], [value])'
         return sf._rngs_values_pair
     def __init__(sf, rngs_values_pair=None, /):
@@ -2958,14 +2921,14 @@ class TouchRangeBasedIntMapping(IRangeBasedIntMapping):
         sf._sz = sum(j-i for i,j in rngs)
         sf._rngs_values_pair = rngs_values_pair
 
-    def __hash_args(self, /):
-        return type(self), self.rngs_values_pair
-    def __hash__(self, /):
-        return hash(self.__hash_args())
-    def __eq__(self, other, /):
-        if type(other) is not type(self):
+    def __hash_args(sf, /):
+        return type(sf), sf.rngs_values_pair
+    def __hash__(sf, /):
+        return hash(sf.__hash_args())
+    def __eq__(sf, other, /):
+        if type(other) is not type(sf):
             return NotImplemented
-        return self.__hash_args() == other.__hash_args()
+        return sf.__hash_args() == other.__hash_args()
 
 class StackStyleSimpleIntMapping(IRangeBasedIntMapping):
     r'''
@@ -2974,7 +2937,7 @@ class StackStyleSimpleIntMapping(IRangeBasedIntMapping):
         public-mutable
         NOTE: SHOULD call fix_after_modify_rngs after update .rngs/.values externally
     #'''
-    def to_TouchRangeBasedIntMapping(sf, /):
+    def _to_TouchRangeBasedIntMapping_(sf, /):
         '-> immutable TouchRangeBasedIntMapping'
         rngs, values = sf.rngs_values_pair
         rngs = to_tuple(rngs)
@@ -2987,10 +2950,13 @@ class StackStyleSimpleIntMapping(IRangeBasedIntMapping):
     def __len__(sf, /):
         '-> len_ints'
         return sf._sz
-    @property
-    def rngs_values_pair(sf, /):
+    def _get_rngs_values_pair_(sf, /):
+        #保证IRangeBasedIntMapping.rngs_values_pair 能找到有效的_get_rngs_values_pair_
         '-> ([rng], [value])'
         return sf._rngs_values_pair
+    @property
+    def rngs_values_pair(sf, /):
+        return sf._get_rngs_values_pair_()
     @rngs_values_pair.setter
     def rngs_values_pair(sf, rngs_values_pair, /):
         if not type(rngs_values_pair) is tuple: raise TypeError
@@ -3095,7 +3061,7 @@ class StackStyleSimpleIntMapping(IRangeBasedIntMapping):
 #end:class StackStyleSimpleIntMapping:
 
 
-ranges2hex_repr_pair_list = dot[fmap_rngs2hex_repr, lambda rs: rs.ranges]
+ranges2hex_repr_pair_list = dot[fmap_rngs2hex_repr, IMixin4_get_rngs_._O_get_rngs_O_]
 ranges5hex_repr_pair_list = dot[make_Ranges, fmapT__pairs(int, int)]
 
 def iter_rngs2iter_hexXhexszpair_list(rngs, /):

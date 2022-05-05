@@ -22,10 +22,10 @@ view /storage/emulated/0/0my_files/tmp/out4py/cjk.parse__PropList_txt.ver13_0.he
     124K
 !du -h /storage/emulated/0/0my_files/tmp/out4py/cjk.parse__PropList_txt.ver13_0.decimal.txt
     24k
-        #decimal
+        #decimal#ver1
 !du -h /storage/emulated/0/0my_files/tmp/out4py/cjk.parse__PropList_txt.ver13_0.hex.txt
-    28k
-        #hex
+    28k #hex#ver1
+    20K #hex#ver2
 !cp /storage/emulated/0/0my_files/tmp/out4py/cjk.parse__PropList_txt.ver13_0.hex.txt      ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__PropList_txt.py.out.ver13_0.hex.txt
 ]]
 
@@ -80,12 +80,19 @@ White_Space
     Terminal_Punctuation
     Unified_Ideograph
     White_Space
+    ===
+    Pattern_Syntax
+    Pattern_White_Space
+    Noncharacter_Code_Point
+    #
+    # UAX31-R2. Immutable Identifiers
+    # UAX31-R2. Immutable Identifiers: To meet this requirement, an implementation shall define identifiers to be any non-empty string of characters that contains no character having any of the following property values:
+        Pattern_White_Space=True
+        Pattern_Syntax=True
+        General_Category=Private_Use, Surrogate, or Control
+        Noncharacter_Code_Point=True
 
-TODO:
-    加载数据
-        mimic parsed_result__of__Unihan_Variants_txt__of_ver13_0.py
-    parsed_result__of__PropList_txt__of_ver13_0.py
-    e ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__PropList_txt__of_ver13_0.py
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__PropList_txt__of_ver13_0.py
 
 e ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__PropList_txt.py
 0009..000D    ; White_Space # Cc   [5] <control-0009>..<control-000D>
@@ -118,11 +125,12 @@ from seed.io.FieldedLineHandler import FieldedLineHandler, IFieldedLineHandler
 from seed.tiny import mk_fprint
 from seed.tiny import fmap4dict_value#, filter4dict_value, dict_add__is, dict_add__eq
 from seed.tiny import MapView, echo
-#from seed.data_funcs.rngs import NonTouchRanges
-from seed.data_funcs.rngs import make_Ranges#, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet
-from seed.func_tools.fmapT.fmapT__tiny import fmapT__dict, fmap_rngs2hex_repr#, fmapT__list, fmapT__iter, fmapT__tuple, fmapT__tpls, fmapT__pairs
+from seed.data_funcs.rngs import NonTouchRanges
+from seed.data_funcs.rngs import StackStyleSimpleIntSet, make_Ranges#, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges
+from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmap_rngs2hex_repr#, fmapT__list, fmapT__iter, fmapT__tuple, fmapT__tpls, fmapT__pairs
 from ast import literal_eval
 from seed.helper.stable_repr import stable_repr
+from collections import defaultdict
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
@@ -135,26 +143,54 @@ def pt2ord(pt, /):
     return int(hex, 16)
 
 _fielded_line_handler__PropList_txt= FieldedLineHandler(remove_empty_lines=True, line_strip=True, field_strip=True, line_comment_prefix='#', line_tail_comment_prefix='#', field_sep=';')
+
+class _Globals:
+    ver = 2
 def parse__PropList_txt(lines, /, *, result_readonly):
     '-> attr2rngs/{property_name:[(begin,end)]}'
-    attr2rngs = {}
+    if _Globals.ver == 2:
+        attr2rngs = defaultdict(StackStyleSimpleIntSet)
+    elif _Globals.ver == 1:
+        attr2rngs = {}
+    else:
+        raise logic-err
 
     fieldss = _fielded_line_handler__PropList_txt.lines2fieldss(lines)
     for pt_or_blk, property_name in fieldss:
-        rngs = attr2rngs.setdefault(property_name, [])
         pt_ls = pt_or_blk.split('..')
         assert pt_ls
         assert len(pt_ls) in [1, 2]
         if len(pt_ls) == 1:
             pt_ls *= 2
         first, last = map(pt2ord, pt_ls)
-        rngs.append((first, last+1))
+        rng = (first, last+1)
+
+        if _Globals.ver == 2:
+            rngs = attr2rngs[property_name]
+            rngs.push_rng(rng)
+        elif _Globals.ver == 1:
+            rngs = attr2rngs.setdefault(property_name, [])
+            rngs.append(rng)
+        else:
+            raise logic-err
+
+    if _Globals.ver == 2:
+        #attr2rngs = fmap4dict_value(StackStyleSimpleIntSet.to_NonTouchRanges, attr2rngs)
+        attr2rngs = fmap4dict_value(dot[list, StackStyleSimpleIntSet.iter_rngs], attr2rngs)
+    elif _Globals.ver == 1:
+        pass
+    else:
+        raise logic-err
+
     if 1:
         #!!!!!check!!!!!
         #!!!!!check!!!!!
         #!!!!!check!!!!!
         #check sorted and not touch/overlap
         readonly__attr2rngs = parsed_result2readonly(attr2rngs)
+            #bug:make_Ranges 可能返回TouchRanges
+            #   有毛病！unicode的PropList.txt本身就是TouchRanges(见:属性Pattern_Syntax)，但我没有转化为NonTouchRanges
+            #
         #!!!!!check!!!!!
         #!!!!!check!!!!!
         #!!!!!check!!!!!
@@ -170,7 +206,14 @@ def parsed_result2readonly(parsed_result, /):
     #parsed_result5readonly
     '{property_name:[(begin,end)]} -> MapView {property_name:NonTouchRanges}'
     attr2rngs = parsed_result
-    readonly__attr2rngs = MapView(fmap4dict_value(make_Ranges, attr2rngs))
+    if _Globals.ver == 2:
+        readonly__attr2rngs = MapView(fmap4dict_value(dot[NonTouchRanges, tuple], attr2rngs))
+    elif _Globals.ver == 1:
+        readonly__attr2rngs = MapView(fmap4dict_value(make_Ranges, attr2rngs))
+            #bug:make_Ranges 可能返回TouchRanges
+    else:
+        raise logic-err
+
     readonly__parsed_result = readonly__attr2rngs
 
     if not parsed_result == parsed_result5readonly(readonly__parsed_result):raise logic-err
