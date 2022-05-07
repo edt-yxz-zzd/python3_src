@@ -22,7 +22,7 @@ __all__ = '''
                 radix_repr2uint__big_endian
 
     '''.split()
-from seed.abc.abc import ABC, abstractmethod, override
+from seed.abc.abc import ABC, abstractmethod, override, ABC__no_slots
 from seed.helper.check.checkers import check_int, check_type_is
 from seed.int_tools.digits._common import _Int
 
@@ -31,6 +31,8 @@ class IRadixRepr2Uint(ABC):
     r'''
     eval poly
     #'''
+    __slots__ = ()
+
     @abstractmethod
     def get_radix(sf, /):
         ...
@@ -198,7 +200,7 @@ class IRadixRepr2Uint(ABC):
         for d in digits:
             u = add(mul(u, base), d)
         return u
-class RadixRepr2Uint(IRadixRepr2Uint):
+class RadixRepr2Uint(IRadixRepr2Uint, ABC__no_slots):
     def __init__(sf, radix, /):
         check_int(radix, min=2)
         sf.__radix = radix
@@ -219,7 +221,7 @@ class RadixRepr2Uint(IRadixRepr2Uint):
     def mul(sf, lhs, rhs, /):
         return lhs*rhs
 
-class _RadixRepr2Uint(IRadixRepr2Uint):
+class _RadixRepr2Uint(IRadixRepr2Uint, ABC__no_slots):
     def __init__(sf, radix, /):
         check_type_is(_Int, radix)
         check_int(radix.i, min=2)

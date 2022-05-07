@@ -54,10 +54,12 @@ from seed.func_tools.fmapT._xxxT__tiny import (dot
 ,is_dict
 ,is_bool
 ,is_int
+,is_uint
 ,is_float
 ,is_complex
 ,is_bytes
 ,is_str
+,is_char
 ,is_tuple
 ,is_list
 ,predT__tuple

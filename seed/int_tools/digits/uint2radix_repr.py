@@ -22,7 +22,7 @@ from seed.int_tools.digits._common import _Int, _pow_ge1
 
 
 from seed.tiny import null_iter
-from seed.abc.abc import ABC, abstractmethod, override
+from seed.abc.abc import ABC, abstractmethod, override, ABC__no_slots
 from seed.seq_tools.bisearch import bisearch
 from seed.helper.check.checkers import check_int, check_uint, check_uint_imay, check_type_is
 import itertools
@@ -30,6 +30,8 @@ import itertools
 class IUint2RadixRepr__little_endian__plain(ABC):
     r'''
     #'''
+    __slots__ = ()
+
     @abstractmethod
     def get_radix(sf, /):
         ...
@@ -92,6 +94,8 @@ class IUint2RadixRepr__little_endian__plain(ABC):
 class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
     r'''
     #'''
+    __slots__ = ()
+
     @abstractmethod
     def get_one(sf, /):
         ...
@@ -412,7 +416,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
 
 
 #end-class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
-class Uint2RadixRepr(IUint2RadixRepr):
+class Uint2RadixRepr(IUint2RadixRepr, ABC__no_slots):
     def __init__(sf, radix, /):
         if not sf.lt__abs(sf.get_one(), radix): raise ValueError
         sf.__radix = radix
@@ -454,7 +458,7 @@ class Uint2RadixRepr(IUint2RadixRepr):
 
 
 
-class _Uint2RadixRepr(IUint2RadixRepr):
+class _Uint2RadixRepr(IUint2RadixRepr, ABC__no_slots):
     def __init__(sf, radix, /):
         check_type_is(_Int, radix)
         check_int(radix.i, min=2)
@@ -499,17 +503,17 @@ class _Uint2RadixRepr(IUint2RadixRepr):
 
 
 
-def uint2radix_repr__little_endian(radix, digits, /,*, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1):
-    return Uint2RadixRepr(radix).uint2radix_repr__little_endian(digits, _split_ver=_split_ver, min_len=min_len, imay_max_len=imay_max_len)
-def uint2radix_repr__big_endian(radix, digits, /,*, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1):
-    return Uint2RadixRepr(radix).uint2radix_repr__big_endian(digits, _split_ver=_split_ver, min_len=min_len, imay_max_len=imay_max_len)
-def uint2radix_repr(radix_or_an_IUint2RadixRepr, digits, /,*, is_big_endian:bool, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1, input_is_an_IUint2RadixRepr_not_radix=False):
+def uint2radix_repr__little_endian(radix, uint, /,*, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1):
+    return Uint2RadixRepr(radix).uint2radix_repr__little_endian(uint, _split_ver=_split_ver, min_len=min_len, imay_max_len=imay_max_len)
+def uint2radix_repr__big_endian(radix, uint, /,*, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1):
+    return Uint2RadixRepr(radix).uint2radix_repr__big_endian(uint, _split_ver=_split_ver, min_len=min_len, imay_max_len=imay_max_len)
+def uint2radix_repr(radix_or_an_IUint2RadixRepr, uint, /,*, is_big_endian:bool, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1, input_is_an_IUint2RadixRepr_not_radix=False):
     if input_is_an_IUint2RadixRepr_not_radix:
         an_IUint2RadixRepr = radix_or_an_IUint2RadixRepr
     else:
         radix = radix_or_an_IUint2RadixRepr
         an_IUint2RadixRepr = Uint2RadixRepr(radix)
-    return an_IUint2RadixRepr.uint2radix_repr(digits, is_big_endian=is_big_endian, _split_ver=_split_ver, min_len=min_len, imay_max_len=imay_max_len)
+    return an_IUint2RadixRepr.uint2radix_repr(uint, is_big_endian=is_big_endian, _split_ver=_split_ver, min_len=min_len, imay_max_len=imay_max_len)
 
 def _t2():
     radix = 2

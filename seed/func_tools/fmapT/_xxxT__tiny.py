@@ -148,10 +148,12 @@ __all__ = '''
     is_dict
     is_bool
     is_int
+    is_uint
     is_float
     is_complex
     is_bytes
     is_str
+    is_char
     is_tuple
     is_list
     predT__tuple
@@ -198,6 +200,8 @@ __all__ = '''
     checkT__AND
     checkT__type_is
     checkT__type_le
+    checkT__issubclass__any
+    checkT__issubclass__all
     checkT__type_is__AND
     checkT__type_le__AND
     check__pass
@@ -215,16 +219,19 @@ __all__ = '''
     checkT__ge_lt
     check_bool
     check_int
+    check_uint
     check_float
     check_complex
     check_bytes
     check_str
+    check_char
     check_tuple
     check_list
     check_frozenset
     check_set
     check_dict
     check__is_None
+    check_callable
     checkT__tmay
     checkT__smay
     checkT__may
@@ -497,11 +504,15 @@ is_dict = isT(dict)
 
 is_bool = type_isT(bool)
 is_int = type_isT(int)
+def is_uint(u, /):
+    return is_int(u) and u >= 0
 is_float = type_isT(float)
 is_complex = type_isT(complex)
 
 is_bytes = type_isT(bytes)
 is_str = type_isT(str)
+def is_char(ch, /):
+    return is_str(ch) and len(ch)==1
 
 is_tuple = type_isT(tuple)
 is_list = type_isT(list)
@@ -672,6 +683,14 @@ def checkT__type_le(cls, /, *, lazy_exc=TypeError):
     def check(x, /):
         if not issubclass(type(x),cls):raise lazy_exc()
     return check
+def checkT__issubclass__any(*clss, lazy_exc=TypeError):
+    def check(T, /):
+        if not any(issubclass(T, cls) for cls in clss):raise lazy_exc()
+    return check
+def checkT__issubclass__all(*clss, lazy_exc=TypeError):
+    def check(T, /):
+        if not all(issubclass(T, cls) for cls in clss):raise lazy_exc()
+    return check
 def checkT__type_is__AND(cls, /, *checks, lazy_exc=TypeError):
     return checkT__AND(checkT__type_is(cls, lazy_exc=lazy_exc), *checks)
 def checkT__type_le__AND(cls, /, *checks, lazy_exc=TypeError):
@@ -734,11 +753,13 @@ def checkT__ge_lt(m, M, /, *, lazy_exc=TypeError):
 #check_x = checkT__type_is(x)
 check_bool = checkT__type_is(bool)
 check_int = checkT__type_is(int)
+check_uint = checkT__5pred(is_uint)
 check_float = checkT__type_is(float)
 check_complex = checkT__type_is(complex)
 
 check_bytes = checkT__type_is(bytes)
 check_str = checkT__type_is(str)
+check_char = checkT__5pred(is_char)
 check_tuple = checkT__type_is(tuple)
 check_list = checkT__type_is(list)
 check_frozenset = checkT__type_is(frozenset)
@@ -748,6 +769,7 @@ check_dict = checkT__type_is(dict)
 #check__is_x = checkT__is(x)
 check__is_None = checkT__is(None)
 
+check_callable = checkT__5pred(callable)
 
 #[[
 if 0:
@@ -902,10 +924,12 @@ from seed.func_tools.fmapT._xxxT__tiny import (dot
 ,is_dict
 ,is_bool
 ,is_int
+,is_uint
 ,is_float
 ,is_complex
 ,is_bytes
 ,is_str
+,is_char
 ,is_tuple
 ,is_list
 ,predT__tuple
@@ -961,6 +985,8 @@ from seed.func_tools.fmapT._xxxT__tiny import (dot
 ,checkT__AND
 ,checkT__type_is
 ,checkT__type_le
+,checkT__issubclass__any
+,checkT__issubclass__all
 ,checkT__type_is__AND
 ,checkT__type_le__AND
 ,check__pass
@@ -978,16 +1004,19 @@ from seed.func_tools.fmapT._xxxT__tiny import (dot
 ,checkT__ge_lt
 ,check_bool
 ,check_int
+,check_uint
 ,check_float
 ,check_complex
 ,check_bytes
 ,check_str
+,check_char
 ,check_tuple
 ,check_list
 ,check_frozenset
 ,check_set
 ,check_dict
 ,check__is_None
+,check_callable
 ,checkT__tmay
 ,checkT__smay
 ,checkT__may

@@ -3,6 +3,7 @@
 #from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 
 #from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
+#from seed.tiny_.check import check_str, check_char
 
 __all__ = '''
     check_type_le
@@ -35,6 +36,9 @@ __all__ = '''
     check_callable
     check_is_obj
     check_is_None
+
+    check_str
+    check_char
     '''.split()
 
 
@@ -163,4 +167,11 @@ def check_is_obj(expected, obj, /):
 def check_is_None(obj, /):
     check_is_obj(None, obj)
 
+
+def check_str(s, /):
+    check_type_is(str, s)
+
+def check_char(char, /):
+    check_type_is(str, char)
+    if not len(char) == 1: raise TypeError
 

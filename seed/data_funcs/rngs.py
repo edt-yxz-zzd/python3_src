@@ -4,6 +4,14 @@ r'''[[[[[
 py -m seed.data_funcs.rngs
 py -m nn_ns.app.debug_cmd   seed.data_funcs.rngs
 from seed.data_funcs.rngs import make_Ranges, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet, StackStyleSimpleIntMapping, TouchRangeBasedIntMapping
+from seed.data_funcs.rngs import NonTouchRanges, TouchRanges, make_NonTouchRanges, make_TouchRanges
+from seed.data_funcs.rngs import len_of__rng, len_of__rng__neg_as0
+
+IMixin4_get_rngs_
+IMixin4_get_rngs_AND_len_ints
+IRanges
+IRangeBasedIntMapping
+
 ##from seed.data_funcs.rngs import ranges2hex_repr_pair_list, ranges5hex_repr_pair_list
 
     iter_rngs2iter_hexXhexszpair_list
@@ -17,6 +25,20 @@ from seed.data_funcs.rngs import make_Ranges, sorted_ints_to_iter_nontouch_range
     ranges5len_rng2hexbegins_str
     ranges2len_rng2begin_chars
     ranges5len_rng2begin_chars
+
+    char_pt_rngs2char_pairs__iter
+    char_pt_rngs5char_pairs__iter
+    str2char_pairs__iter
+    str5char_pairs__iter
+    char_pt_rngs2char_pairs__str
+    char_pt_rngs5char_pairs__str
+    ranges2iter_rngs
+    ranges5iter_rngs
+    ranges2char_pairs__str
+    ranges5char_pairs__str
+
+    check_input4isomorphism_mapping__RangeBased
+    isomorphism_mapping__RangeBased
 
 ===============================
 ===============================
@@ -1217,6 +1239,77 @@ TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
 
 
 ]]
+[[
+@20220506:++:
+
+    char_pt_rngs2char_pairs__iter
+    char_pt_rngs5char_pairs__iter
+    str2char_pairs__iter
+    str5char_pairs__iter
+    char_pt_rngs2char_pairs__str
+    char_pt_rngs5char_pairs__str
+    ranges2iter_rngs
+    ranges5iter_rngs
+    ranges2char_pairs__str
+    ranges5char_pairs__str
+
+    check_input4isomorphism_mapping__RangeBased
+    isomorphism_mapping__RangeBased
+
+++IMixin4_get_rngs_AND_len_ints.is_contiguous_ranges
+
+>>> ranges5char_pairs__str('09AF')
+NonTouchRanges(((48, 58), (65, 71)))
+>>> ranges = IRanges.from_char_pairs__str('09AF')
+>>> ranges
+NonTouchRanges(((48, 58), (65, 71)))
+>>> ranges.to_char_pairs__str()
+'09AF'
+
+
+>>> src_ranges = IRanges.from_char_pairs__str('09AF')
+>>> dst_ranges = ranges5char_pairs__str('ap')
+>>> isomorphism_mapping__RangeBased(KeyError, ord('2'), src_ranges, dst_ranges)
+Traceback (most recent call last):
+    ...
+TypeError
+
+>>> dst_ranges = ranges5char_pairs__str('ajkp')
+>>> chr(isomorphism_mapping__RangeBased(KeyError, ord('2'), src_ranges, dst_ranges))
+'c'
+>>> chr(isomorphism_mapping__RangeBased(KeyError, ord('9'), src_ranges, dst_ranges))
+'j'
+>>> chr(isomorphism_mapping__RangeBased(KeyError, ord('A'), src_ranges, dst_ranges))
+'k'
+>>> check_input4isomorphism_mapping__RangeBased(src_ranges=src_ranges, dst_ranges=dst_ranges, dst_ranges__is__idc4seq=False, full_check=True)
+
+
+
+
+
+>>> bug_dst_ranges = ranges5char_pairs__str('aijp')
+>>> chr(isomorphism_mapping__RangeBased(KeyError, ord('2'), src_ranges, bug_dst_ranges))
+'c'
+>>> chr(isomorphism_mapping__RangeBased(KeyError, ord('9'), src_ranges, bug_dst_ranges))
+'j'
+>>> chr(isomorphism_mapping__RangeBased(KeyError, ord('A'), src_ranges, bug_dst_ranges))
+'j'
+
+>>> check_input4isomorphism_mapping__RangeBased(src_ranges=src_ranges, dst_ranges=bug_dst_ranges, dst_ranges__is__idc4seq=False, full_check=True)
+Traceback (most recent call last):
+    ...
+TypeError
+
+
+
+>>> src_ranges.is_contiguous_ranges()
+False
+>>> dst_ranges.is_contiguous_ranges()
+True
+
+
+
+]]
 
 
 ]]]
@@ -1286,6 +1379,23 @@ __all__ = """
     ranges5len_rng2hexbegins_str
     ranges2len_rng2begin_chars
     ranges5len_rng2begin_chars
+
+    len_of__rng
+    len_of__rng__neg_as0
+
+    char_pt_rngs2char_pairs__iter
+    char_pt_rngs5char_pairs__iter
+    str2char_pairs__iter
+    str5char_pairs__iter
+    char_pt_rngs2char_pairs__str
+    char_pt_rngs5char_pairs__str
+    ranges2iter_rngs
+    ranges5iter_rngs
+    ranges2char_pairs__str
+    ranges5char_pairs__str
+
+    check_input4isomorphism_mapping__RangeBased
+    isomorphism_mapping__RangeBased
     """.split()
 
 import bisect
@@ -2251,10 +2361,13 @@ def rngs_op__iter_gaps_(rngs, /, *, reverse):
     return f(rngs)
 
 class IMixin4_get_rngs_:
+    #no len_ints
     def _get_rngs_(sf, /):
         raise NotImplementedError
     def _to_NonTouchRanges_(sf, /):
         raise NotImplementedError
+    def rngs__get(sf, idx_or_slice, /):
+        return sf._get_rngs_()[idx_or_slice]
     def _O_get_rngs_O_(sf, /):
         return sf._get_rngs_()
     def to_NonTouchRanges(sf, /):
@@ -2316,7 +2429,23 @@ class IMixin4_get_rngs_:
 #]]]
 
 
-class IRanges(IMixin4_get_rngs_):
+class IMixin4_get_rngs_AND_len_ints(IMixin4_get_rngs_):
+    #len_ints
+    def _len_ints_(sf, /):
+        '-> len_ints/uint'
+        raise NotImplementedError
+    def len_ints(sf, /):
+        return sf._len_ints_()
+    def is_contiguous_ranges(sf, /):
+        sz = sf.len_ints()
+        if not sz:
+            return True
+        rngs = sf._get_rngs_()
+        begin = rngs[0][0]
+        end = rngs[-1][-1]
+        return sz == end-begin
+
+class IRanges(IMixin4_get_rngs_AND_len_ints):
     r'''
 ABC IRanges:
     * immutable TouchRanges
@@ -2380,6 +2509,12 @@ TODO:
     @staticmethod
     def from_len_rng2begin_chars(len_rng2begin_chars, /):
         return ranges5len_rng2begin_chars(len_rng2begin_chars)
+
+    def to_char_pairs__str(sf, /):
+        return ranges2char_pairs__str(sf)
+    @staticmethod
+    def from_char_pairs__str(char_pairs__str, /):
+        return ranges5char_pairs__str(char_pairs__str)
 
     def __init__(sf, ranges, /):
         #ranges = tuple(ranges)
@@ -2622,12 +2757,15 @@ def iter_nontouch_rangess_between(begin, end, /):
         rngs = tuple(rngs)
         yield rngs
 
-class StackStyleSimpleIntSet(IMixin4_get_rngs_):
+class StackStyleSimpleIntSet(IMixin4_get_rngs_AND_len_ints):
     r'''
     .rngs :: [(int, int)] #nontouch_ranges
         public-mutable
         NOTE: SHOULD call fix_after_modify_rngs after update .rngs externally
     #'''
+    def _len_ints_(sf, /):
+        '-> len_ints/uint'
+        return len(sf)
     def _to_NonTouchRanges_(sf, /):
         rngs = sf.rngs
         return NonTouchRanges((*rngs,))
@@ -2746,7 +2884,7 @@ class StackStyleSimpleIntSet(IMixin4_get_rngs_):
 
 
 
-class IRangeBasedIntMapping(IMixin4_get_rngs_):
+class IRangeBasedIntMapping(IMixin4_get_rngs_AND_len_ints):
     r'''
 ABC IRangeBasedIntMapping:
     * immutable TouchRangeBasedIntMapping
@@ -2766,6 +2904,9 @@ used:
             :: Map<str, StackStyleSimpleIntSet>
 
     #'''
+    def _len_ints_(sf, /):
+        '-> len_ints/uint'
+        return len(sf)
     def _to_TouchRangeBasedIntMapping_(sf, /):
         '-> immutable TouchRangeBasedIntMapping'
         raise NotImplementedError
@@ -3104,6 +3245,13 @@ ranges5hexXhexszpair_list
 def len_of__rng(rng, /):
     begin, end = rng
     sz = end - begin
+    if sz < 0: raise TypeError
+    return sz
+def len_of__rng__neg_as0(rng, /):
+    begin, end = rng
+    sz = end - begin
+    if sz < 0:
+        sz = 0
     return sz
 def ranges2len_rng2hexbegins(ranges, /):
     'IRanges -> {len_rng/int: [begin/HexReprInt]}'
@@ -3165,6 +3313,83 @@ def ranges5len_rng2begin_chars(len_rng2begin_chars, /):
 ranges2len_rng2begin_chars
 ranges5len_rng2begin_chars
 
+def char_pt_rngs2char_pairs__iter(char_pt_rngs, /):
+    for begin, end in char_pt_rngs:
+        first = chr(begin)
+        last = chr(end-1)
+        yield first+last
+def char_pt_rngs5char_pairs__iter(char_pairs, /):
+    for first, last in char_pairs:
+        begin = ord(first)
+        end = ord(last)+1
+        yield begin, end
+def str2char_pairs__iter(char_pairs__str, /):
+    if not len(char_pairs__str)%2==0: raise TypeError
+    def _iter_pairs(s, /):
+        for i in range(0, len(s), 2):
+            yield s[i:i+2]
+    return _iter_pairs(char_pairs__str)
+def str5char_pairs__iter(char_pairs, /):
+    char_pairs__str = ''.join(first+last for first, last in char_pairs)
+    return char_pairs__str
+
+char_pt_rngs2char_pairs__str = dot[str5char_pairs__iter, char_pt_rngs2char_pairs__iter]
+char_pt_rngs5char_pairs__str = dot[char_pt_rngs5char_pairs__iter, str2char_pairs__iter]
+
+def ranges2iter_rngs(ranges, /):
+    return ranges.iter_rngs()
+def ranges5iter_rngs(rngs, /):
+    return make_Ranges(rngs)
+ranges2char_pairs__str = dot[char_pt_rngs2char_pairs__str, ranges2iter_rngs]
+ranges5char_pairs__str = dot[ranges5iter_rngs, char_pt_rngs5char_pairs__str]
+
+
+
+
+
+
+
+
+
+
+def check_input4isomorphism_mapping__RangeBased(*, src_ranges, dst_ranges, dst_ranges__is__idc4seq, full_check):
+    if not dst_ranges.len_rngs() == src_ranges.len_rngs():raise TypeError
+    if not dst_ranges.len_ints() == src_ranges.len_ints():raise TypeError
+
+    sz_rngs = dst_ranges.len_rngs()
+    sz_ints = dst_ranges.len_ints()
+    if dst_ranges__is__idc4seq:
+        if not dst_ranges.is_contiguous_ranges(): raise TypeError
+
+    if not full_check: return
+    if 0:
+        if sz_ints and dst_ranges__is__idc4seq:
+            #deprecated by above:if not dst_ranges.is_contiguous_ranges(): raise TypeError
+            _dst_rngs = dst_ranges.to_NonTouchRanges()
+            if not 1 == _dst_rngs.len_rngs():raise TypeError
+            [(begin_idx, end_idx)] = _dst_rngs.iter_rngs()
+            if not 0 == begin_idx < end_idx == sz_ints: raise TypeError
+        ###
+
+    lens4dst = (*map(len_of__rng, dst_ranges.iter_rngs()),)
+    lens4src = (*map(len_of__rng, src_ranges.iter_rngs()),)
+    if not lens4src == lens4dst: raise TypeError
+
+def isomorphism_mapping__RangeBased(mkError, src_int, src_ranges, dst_ranges, /):
+    if not dst_ranges.len_rngs() == src_ranges.len_rngs():raise TypeError
+    if not dst_ranges.len_ints() == src_ranges.len_ints():raise TypeError
+
+    may_rng, idx4rngs = src_ranges.maybe_range_contained_ex(src_int)
+    if not may_rng: raise mkError(src_int)
+    src_begin, _ = may_rng
+    dst_begin, _ = dst_ranges.rngs__get(idx4rngs)
+    dst_int = dst_begin + (src_int - src_begin)
+    return dst_int
+
+
+
+
+
 
 if __name__ == "__main__":
     print('\n'.join(s for s in globals() if not s.startswith('_')))
@@ -3173,4 +3398,5 @@ if __name__ == "__main__":
     if 0:
         raise
         test_subset_relation_ex__xtouch_ranges()
+
 

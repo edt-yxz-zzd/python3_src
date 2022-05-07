@@ -9,6 +9,7 @@ from seed.tiny import check_tmay, check_pair, check_uint, check_imay, icheck_tma
 from seed.tiny import check_type_le, check_type_is, icheck_type_le, icheck_type_is
 from seed.tiny import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny import check_callable, check_is_obj, check_is_None
+from seed.tiny_.check import check_str, check_char
 from seed.tiny import get_abstractmethod_names, check_manifest4abstractmethods
 
 from seed.tiny import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter  #,    null_sequence, null_set, null_mapping
@@ -102,6 +103,8 @@ __all__ = str2__all__(r'''
     check_callable      # :: a -> None|raise TypeError
     check_is_obj        # :: a -> a -> None|raise TypeError
     check_is_None       # :: a -> None|raise TypeError
+    check_str           # :: a -> None|raise TypeError
+    check_char          # :: a -> None|raise TypeError
 
     get_abstractmethod_names
                         # :: cls -> frozenset<attr>
@@ -307,6 +310,10 @@ assert range(4-1,-1,-1) == fix_slice_by_len_of_(range, range(4), echo_key[::-1])
 from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
+from seed.tiny_.check import check_str, check_char
+
+
+
 check_uint(1)
 check_tmay(())
 check_tmay((0,))
@@ -336,6 +343,16 @@ assert expectError(TypeError, lambda:check_smay_pseudo_qual_name(' '))
 assert expectError(TypeError, lambda:check_smay_pseudo_qual_name('.x'))
 
 assert expectError(TypeError, lambda:check_pseudo_qual_name(''))
+
+check_str('')
+check_char('+')
+assert expectError(TypeError, lambda:check_str(b''))
+assert expectError(TypeError, lambda:check_char(b''))
+assert expectError(TypeError, lambda:check_char(''))
+assert expectError(TypeError, lambda:check_char('ab'))
+
+
+
 
 
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple
