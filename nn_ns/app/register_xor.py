@@ -10,8 +10,20 @@ r'''
         * [N-2**n, N-1]
         遇到带外元素，则保持不变
         但这样也不对称，两次的次序需颠倒。
+    有点麻烦，involutory_cipher.py 已将近完成...
+
 see:
     view others/数学/编程/TODO_list/周期长度为二的对称加密.txt
+    view ../../python3_src/nn_ns/app/crypt/involution/InvolutoryCipher.py
+        核心镜像:InvolutoryCipher_mod__subtracted_by
+            #InvolutoryCipher_mod__subtracted_by
+            #InvolutoryCipher_mod__flip_parity
+            #InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
+        周边加密:ICipher_mod/ICipher_bits
+        连接工具:Cipher__chain/InvolutoryCipher__chain
+        文本接口:Cipher__charset/InvolutoryCipher__charset
+        字集转换:IOrderedCharset.convert_to
+
 
 e ../../python3_src/nn_ns/app/register_xor.py
 py -m nn_ns.app.register_xor
@@ -109,6 +121,8 @@ assert printable_ascii_sorted_chars in printable_ascii_gb2312_sorted_chars
 assert printable_ascii_char_pt_ranges < printable_ascii_gb2312_char_pt_ranges
 assert 7539 == (len(printable_ascii_gb2312_sorted_chars))
 assert 7539 == (printable_ascii_gb2312_char_pt_ranges.len_ints())
+assert 3631 == printable_ascii_gb2312_char_pt_ranges.len_rngs()
+    # too sparse to make char_pt_ranges efficient.
 
 
 #################################

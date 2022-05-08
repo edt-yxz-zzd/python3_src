@@ -235,6 +235,14 @@ int:
   #dint: reverse-positive_int, int_le_0
   imay: imay_uint, int_ge_n1, int>=-1
 
+len ~ len() ~ function ~ not noun
+    len_ints/len_rngs
+    iter_ints/iter_rngs
+    num_XXXs/total_num_XXXs :: uint
+    len_XXXs :: (xs) -> uint
+.+1,$s/len_bits/num_bits/g
+
+
 
 
 #HHHHH
