@@ -217,6 +217,13 @@ __all__ = '''
     checkT__le
     checkT__ge
     checkT__ge_lt
+    checkT__len_eq
+    checkT__len_ne
+    checkT__len_lt
+    checkT__len_le
+    checkT__len_gt
+    checkT__len_ge
+    checkT__len_ge_lt
     check_bool
     check_int
     check_uint
@@ -747,6 +754,18 @@ def checkT__ge_lt(m, M, /, *, lazy_exc=TypeError):
         if not (m <= x < M):raise lazy_exc()
     return check
 
+def checkT__len_(check, /):
+    return dot[check, len]
+def checkTT__len_(checkT, /):
+    return dot[checkT__len_, checkT]
+
+checkT__len_eq = checkTT__len_(checkT__eq)
+checkT__len_ne = checkTT__len_(checkT__ne)
+checkT__len_lt = checkTT__len_(checkT__lt)
+checkT__len_le = checkTT__len_(checkT__le)
+checkT__len_gt = checkTT__len_(checkT__gt)
+checkT__len_ge = checkTT__len_(checkT__ge)
+checkT__len_ge_lt = checkTT__len_(checkT__ge_lt)
 
 
 
@@ -1002,6 +1021,13 @@ from seed.func_tools.fmapT._xxxT__tiny import (dot
 ,checkT__le
 ,checkT__ge
 ,checkT__ge_lt
+,checkT__len_eq
+,checkT__len_ne
+,checkT__len_lt
+,checkT__len_le
+,checkT__len_gt
+,checkT__len_ge
+,checkT__len_ge_lt
 ,check_bool
 ,check_int
 ,check_uint

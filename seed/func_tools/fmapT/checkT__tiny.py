@@ -28,6 +28,13 @@ from seed.func_tools.fmapT._xxxT__tiny import (dot
 ,checkT__le
 ,checkT__ge
 ,checkT__ge_lt
+,checkT__len_eq
+,checkT__len_ne
+,checkT__len_lt
+,checkT__len_le
+,checkT__len_gt
+,checkT__len_ge
+,checkT__len_ge_lt
 ,check_bool
 ,check_int
 ,check_uint

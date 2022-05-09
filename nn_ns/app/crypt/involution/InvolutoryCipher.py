@@ -1,14 +1,138 @@
 #__all__:goto
 #main_body_src_code:goto
+#TODO:goto
 #HHHHH
 r'''
+[[
+有个大毛病！
+加密算法 最重要的是 数据可以重新解密。
+这不仅仅止于要求 算法正确。
+同样重要的是 可移植性、易实现，所以 琐碎细节尽量少。
+
+
+在不同的机器上、不同操作系统、不同编程语言、不同的标准库，是否还能 快速简单地实现？
+
+运算量大不大倒还在其次。
+
+本模块 加密算法 倒还简单明了，组合也简单。
+只是 CipherKeyGenerator 细节方面非常琐碎，要重现十分困难！
+
+]]
+[[
+无状态/不可修改 vs 带状态/可修改
+    ==>> 可复制
+
+无状态/不可修改
+    ICipher
+        要求 长期加解密匹配
+        必然 不可修改
+
+带状态/可修改
+    ICipherKeyGenerator
+        基于 密钥，生成 各种伪随机数(用作 子加密器 的 参数、密钥...)
+        作为 伪随机源，必须 带状态
+    ICipherMaker
+        基于 输入参数，构造 加密器
+        无必然要求，但 既然有的带状态，那就只能全部当作 带状态 处理。
+
+可重现 ==>> 带状态 必须 可复制
+    ICloneable
+        ICipherKeyGenerator <: ICloneable
+        ICipherMaker <: ICloneable
+    比如：
+        某个ICipher根据 输入参数(本加密器额外参数、密钥、明文/密文 在 本加密器 算法 作用下 的 不变量(如:长度)) 构造 实际上的 加密器，进行加解密。
+            1. 无状态，即 相同输入 得到 相同结果(即 实际工作的加密器)
+            2. 使用了伪随机数，以生成多个 加密器 用于 组成更复杂的加密器，伪随机源 连续用于整个流程，但 确不是 上一个流程的伪随机源 的 后续。必须 于流程开头 新造/复制。
+
+]]
 [[cmds:
 py -m nn_ns.app.crypt.involution.involutory_cipher_cmd
-py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt alnum -k ++--/// -i 207eygA --core_involutory_cipher subtracted_by
-py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt alnum -k ++--/// -i 207eygA --core_involutory_cipher flip_parity
-py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt printable_ascii -k ++--/// -i '~' --core_involutory_cipher flip_parity
-py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt nonspace_printable_ascii -k ++--/// -i '~' --core_involutory_cipher flip_parity
-py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt alnum -k ++--/// -i 345dfyy --core_involutory_cipher fmap_bit_op_on_tail_bits
+{NONE,_default_rotate__without_key,add_then_mul,mask4bits__accumulate_xor_reversed__without_key,mask4bits__permutation,mask4bits__xor,permutation_partition_fmap__add_then_mul,rotate}
+    {NONE,_default_rotate__without_key,add_then_mul,permutation_partition_fmap__add_then_mul,rotate}
+    {mask4bits__accumulate_xor_reversed__without_key,mask4bits__permutation,mask4bits__xor}
+
+py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt alnum -k ++--/// nnnnonce -i 207eygA --core_involutory_cipher subtracted_by --cipher_impl_version permutation_partition_fmap__add_then_mul
+l1whIyF
+
+py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt alnum -k ++--/// nnnnonce -i l1whIyF --core_involutory_cipher subtracted_by --cipher_impl_version permutation_partition_fmap__add_then_mul
+207eygA
+
+
+
+
+alias ivcc='py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -iEOL OFF -oEOL ON --charset4txt alnum -k ++--/// nnnnonce --core_involutory_cipher subtracted_by --cipher_impl_version'
+
+[[single ver
+
+ivcc NONE -i 207eygA
+TYVQuMg
+ivcc NONE -i TYVQuMg
+207eygA
+
+ivcc _default_rotate__without_key -i 207eygA
+p5Czn2a
+ivcc _default_rotate__without_key -i p5Czn2a
+207eygA
+
+ivcc add_then_mul -i 207eygA
+fIdRMpn
+ivcc add_then_mul -i fIdRMpn
+207eygA
+
+ivcc permutation_partition_fmap__add_then_mul -i 207eygA
+l1whIyF
+ivcc permutation_partition_fmap__add_then_mul -i l1whIyF
+207eygA
+
+ivcc rotate -i 207eygA
+vdxlL8V
+ivcc rotate -i vdxlL8V
+207eygA
+
+    {mask4bits__accumulate_xor_reversed__without_key,mask4bits__permutation,mask4bits__xor}
+ivcc mask4bits__accumulate_xor_reversed__without_key -i 207eygA
+8PrEuXT
+ivcc mask4bits__accumulate_xor_reversed__without_key -i 8PrEuXT
+207eygA
+
+ivcc mask4bits__permutation -i 207eygA
+bbRkwl9
+ivcc mask4bits__permutation -i bbRkwl9
+207eygA
+
+ivcc mask4bits__xor -i 207eygA
+WMldD3B
+ivcc mask4bits__xor -i WMldD3B
+207eygA
+
+]]
+[[multi ver
+
+
+ivcc add_then_mul mask4bits__accumulate_xor_reversed__without_key permutation_partition_fmap__add_then_mul mask4bits__permutation rotate mask4bits__xor _default_rotate__without_key -i 207eygA
+qVPYw47
+
+ivcc add_then_mul mask4bits__accumulate_xor_reversed__without_key permutation_partition_fmap__add_then_mul mask4bits__permutation rotate mask4bits__xor _default_rotate__without_key -i qVPYw47
+207eygA
+
+]]
+
+
+
+
+
+
+
+
+
+py -m nn_ns.app.crypt.involution.involutory_cipher_cmd --cipher_impl_version NONE -iEOL OFF -oEOL ON --charset4txt alnum -k ++--/// nnnnonce -i 207eygA --core_involutory_cipher subtracted_by
+
+alias ivcc="py -m nn_ns.app.crypt.involution.involutory_cipher_cmd --cipher_impl_version NONE -iEOL OFF -oEOL ON --charset4txt"
+ivcc alnum -k ++--/// -i 207eygA --core_involutory_cipher flip_parity
+ivcc printable_ascii -k ++--/// -i '~' --core_involutory_cipher flip_parity
+ivcc nonspace_printable_ascii -k ++--/// -i '~' --core_involutory_cipher flip_parity
+ivcc alnum -k ++--/// -i 345dfyy --core_involutory_cipher fmap_bit_op_on_tail_bits
+
 
 py -m nn_ns.app.debug_cmd   nn_ns.app.crypt.involution.InvolutoryCipher
 py -m nn_ns.app.crypt.involution.InvolutoryCipher
@@ -267,6 +391,13 @@ __all__ = '''
     mk_basic_permutation
 
 
+
+
+    ICloneable
+        ICloneable__immutable
+        ICipherKeyGenerator
+        ICipherMaker
+
     IEase_repr
         IEase_repr_init
             BiPermutation
@@ -298,6 +429,7 @@ __all__ = '''
     ordered_charset4cjk_common_subset_2513_trivial_TS_2227
     ordered_charset4cjk_common_subset_2513
 
+    collect_objs_with_name_prefix
     full_name2ordered_charset
     short_name2ordered_charset
 
@@ -310,6 +442,16 @@ __all__ = '''
 
 
     ICipherKeyGenerator
+        CipherKeyGenerator
+
+    ICipherMaker
+        ICipherMaker_mod
+            ICipherMaker_mod__5modulus
+                CipherMaker_mod__5modulus__func
+            ICipherMaker_mod__5num_bits
+                CipherMaker_mod__5num_bits__func
+
+
 
 
     IHas__modulus
@@ -415,8 +557,9 @@ from seed.helper.repr_input import repr_helper
 from seed.func_tools.fmapT.filterT__tiny import filterT__dict
 from seed.func_tools.fmapT.fmapT__tiny import fmapT__dict#fmapT__tuple
 from seed.func_tools.fmapT.predT__tiny import predT__tuple, pred__True, predT__NOT, type_isT, dot, predT__AND, is_str#, is_char
-from seed.func_tools.fmapT.checkT__tiny import check_uint, check_int, check_str, check_char, check_uint, checkT__pattern_list, checkT__type_is, check_tuple, check_callable, checkT__type_le, checkT__issubclass__any, checkT__issubclass__all, checkT__eq, checkT__AND
+from seed.func_tools.fmapT.checkT__tiny import check_uint, check_int, check_str, check_char, check_uint, checkT__pattern_list, checkT__type_is, check_tuple, check_callable, checkT__type_le, checkT__issubclass__any, checkT__issubclass__all, checkT__eq, checkT__AND, checkT__len_eq, checkT__list
 from nn_ns.math_nn.integer.mod import invmod
+from fractions import gcd
 #from seed.tiny_.check import check_str, check_char, check_uint, check_type_is
 from seed.tiny_.check import check_uint_lt#, check_int_ge_lt, check_int_ge, check_int_ge_le
 #from seed.tiny_.verify import type_is, is_str, is_char
@@ -453,8 +596,9 @@ from math import factorial, comb as C
 from random import randrange, getrandbits
 from random import Random
 from secrets import randbelow, randbits
-from itertools import accumulate, chain
+from itertools import islice, accumulate, chain, count as mk_iter_counts
 import operator
+import hashlib
 
 _saved_print = print
 if __name__ == '__main__':
@@ -471,6 +615,19 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 #HHHHH
+assert b'\0\n'.hex() == '000a'
+assert b'\0\n' == bytes.fromhex('000a')
+def str2hex_(encoding, s, /):
+    return s.encode(encoding).hex()
+def str5hex_(encoding, hexdigits, /):
+    return bytes.fromhex(hexdigits).decode(encoding)
+def str2hex__utf8(s, /):
+    return str2hex_('utf8', s)
+def str5hex__utf8(hexdigits, /):
+    return str5hex_('utf8', hexdigits)
+assert str2hex__utf8('\0\n') == '000a'
+assert '\0\n' == str5hex__utf8('000a')
+
 def count_1s_ex(u, /):
     check_uint(u)
     bs = f'{u:b}'
@@ -557,6 +714,62 @@ def mk_basic_permutation(sz, mk_random_mod, /):
     assert {*us} == {*range(sz)}
     old2new = basic_permutation = (*us,)
     return old2new
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class ICloneable(ABC):
+    @abstractmethod
+    def _clone_(sf, /):
+        '-> copy of sf'
+    def clone(sf, /):
+        ot = sf._clone_()
+        checkT__type_is(type(sf))(ot)
+        return ot
+class ICloneable__immutable(ICloneable):
+    @override
+    def _clone_(sf, /):
+        '-> copy of sf'
+        return sf
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -991,10 +1204,18 @@ ordered_charset4cjk_common_subset_2513_trivial_TS_2227 = OrderedCharset__str.mk(
 ordered_charset4cjk_common_subset_2513 = OrderedCharset__str.mk(_4mk_all_ordered_charsets.sorted_chars4cjk_common_subset_2513)
 
 
-_prefix4nm4ordered_charset = 'ordered_charset4'
-full_name2ordered_charset = MapView({nm:v for nm, v in globals().items() if is_str(nm) and nm.isidentifier() and nm.startswith(_prefix4nm4ordered_charset)})
-#brief name
-short_name2ordered_charset = MapView({nm[len(_prefix4nm4ordered_charset):]:v for nm, v in full_name2ordered_charset.items()})
+def collect_objs_with_name_prefix(d, name_prefix, excluded_full_names, /):
+    excluded_full_names = frozenset(excluded_full_names)
+    full_name2obj = MapView({nm:v for nm, v in d.items() if is_str(nm) and nm.isidentifier() and nm.startswith(name_prefix) and nm not in excluded_full_names})
+    L = len(name_prefix)
+    #brief name
+    short_name2obj = MapView({nm[L:]:v for nm, v in full_name2obj.items()})
+    return full_name2obj, short_name2obj
+
+
+(full_name2ordered_charset
+,short_name2ordered_charset
+) = collect_objs_with_name_prefix(globals(), 'ordered_charset4', {})
 
 
 
@@ -1011,47 +1232,61 @@ short_name2ordered_charset = MapView({nm[len(_prefix4nm4ordered_charset):]:v for
 
 
 #HHHHH
-class ICipherKeyGenerator(ABC):
+class ICipherKeyGenerator(ICloneable):
     @abstractmethod
     def _get_prefix4key_(sf, /):
         '-> prefix4key/str'
-    def get_prefix4key(sf, /):
-        return sf._get_prefix4key_()
     @abstractmethod
     def _get_state4key_(sf, /):
         '-> state4key'
-    def get_state4key(sf, /):
-        return sf._get_state4key_()
     @abstractmethod
     def _get_state4branch_(sf, /):
         '-> state4branch'
-    def get_state4branch(sf, /):
-        return sf._get_state4branch_()
     @abstractmethod
     def _update_state4key_(sf, /):
         '-> None  # eg. state4key+=1'
+    @abstractmethod
+    def _update_state4branch_(sf, /):
+        '-> None  # eg. state4branch+=1'
+    @classmethod
+    @abstractmethod
+    def _make_stated_key_(cls, prefix4key, state4key, /):
+        '-> stated_key/str'
+    @classmethod
+    @abstractmethod
+    def _make_new_brach_(cls, state4branch, stated_key, /):
+        'state4branch -> stated_key -> ICipherKeyGenerator'
+    @classmethod
+    @abstractmethod
+    def _generate_key__uints_mod_(cls, iter_next_stated_keys, M, num_uints, /):
+        'Iter next_stated_key -> M/uint -> num_uints -> [uint%M]{len=num_uints}'
+
+
+    def get_prefix4key(sf, /):
+        prefix4key = sf._get_prefix4key_()
+        check_str(prefix4key)
+        return prefix4key
+    def get_state4key(sf, /):
+        return sf._get_state4key_()
+    def get_state4branch(sf, /):
+        return sf._get_state4branch_()
     def update_state4key(sf, /):
         state4key = sf.get_state4key()
         sf._update_state4key_()
         if state4key == sf.get_state4key(): raise logic-err
         return
-    @abstractmethod
-    def _update_state4branch_(sf, /):
-        '-> None  # eg. state4branch+=1'
     def update_state4branch(sf, /):
         state4branch = sf.get_state4branch()
         sf._update_state4branch_()
         if state4branch == sf.get_state4branch(): raise logic-err
         return
 
-    @classmethod
-    @abstractmethod
-    def _make_stated_key_(cls, prefix4key, state4key, /):
-        '-> stated_key/str'
     def _make_stated_key(sf, /):
         prefix4key = sf.get_prefix4key()
         state4key = sf.get_state4key()
-        return type(sf)._make_stated_key_(prefix4key, state4key)
+        stated_key = type(sf)._make_stated_key_(prefix4key, state4key)
+        check_str(stated_key)
+        return stated_key
 
     def make_next_stated_key(sf, /):
         _1state4key = sf.get_state4key()
@@ -1071,24 +1306,17 @@ class ICipherKeyGenerator(ABC):
         next_stated_key = _2stated_key
         return next_stated_key
 
-    @classmethod
-    @abstractmethod
-    def _make_new_brach_(cls, state4branch, stated_key, /):
-        'state4branch -> stated_key -> ICipherKeyGenerator'
     def make_next_brach(sf, /):
         state4branch = sf.get_state4branch()
         stated_key = sf._make_stated_key()
         new_brach = type(sf)._make_new_brach_(state4branch, stated_key)
+        checkT__type_le(ICipherKeyGenerator)(new_brach)
         sf.update_state4branch()
         if state4branch == sf.get_state4branch(): raise logic-err
 
         next_brach = new_brach
         return next_brach
 
-    @classmethod
-    @abstractmethod
-    def _generate_key__uints_mod_(cls, iter_next_stated_keys, M, num_uints, /):
-        'Iter next_stated_key -> M/uint -> num_uints -> [uint%M]{len=num_uints}'
     def generate_next_key__uints_mod(sf, M, num_uints, /):
         'M/uint -> num_uints -> [uint%M]{len=num_uints}'
         def iter_next_stated_keys():
@@ -1096,7 +1324,12 @@ class ICipherKeyGenerator(ABC):
                 next_stated_key = sf.make_next_stated_key()
                 yield next_stated_key
         iter_next_stated_keys = iter_next_stated_keys()
-        return type(sf)._generate_key__uints_mod_(iter_next_stated_keys, M, num_uints)
+        us = type(sf)._generate_key__uints_mod_(iter_next_stated_keys, M, num_uints)
+        us = mk_tuple(us)
+        check_uint_tuple(us)
+        checkT__len_eq(num_uints)(us)
+        check_uint_lt(M, max(us))
+        return us
     def generate_next_key__uint_mod(sf, M, /):
         'M/uint -> uint%M'
         [u] = sf.generate_next_key__uints_mod(M, 1)
@@ -1107,6 +1340,271 @@ class ICipherKeyGenerator(ABC):
         bipermutation = mk_bipermutation(sz, mk_random_mod)
         return bipermutation
 #end-class ICipherKeyGenerator(ABC):
+
+
+
+
+
+class CipherKeyGenerator(IEase_repr, ICipherKeyGenerator):
+    @classmethod
+    @override
+    def _mk_kwargs4init_(cls, /, *, prefix4key):
+        '-> __init__.kwargs'
+        return dict(prefix4key=prefix4key, _IN_state4key=0, _IN_state4branch=0)
+    def __init__(sf, /, *, prefix4key, _IN_state4key, _IN_state4branch):
+        check_str(prefix4key)
+    r'''
+    @classmethod
+    def from_prefix4key(cls, prefix4key, /):
+        '-> sf'
+        return cls(prefix4key=prefix4key)
+    #'''
+
+    @override
+    def _clone_(sf, /):
+        '-> copy of sf'
+        return type(sf)(prefix4key=sf.prefix4key, _IN_state4key=sf._IN_state4key, _IN_state4branch=sf._IN_state4branch)
+
+    @override
+    def _get_prefix4key_(sf, /):
+        '-> prefix4key/str'
+        return sf.prefix4key
+    @override
+    def _get_state4key_(sf, /):
+        '-> state4key'
+        return sf._IN_state4key
+    @override
+    def _get_state4branch_(sf, /):
+        '-> state4branch'
+        return sf._IN_state4branch
+    @override
+    def _update_state4key_(sf, /):
+        '-> None  # eg. state4key+=1'
+        sf._IN_state4key += 1
+
+    @override
+    def _update_state4branch_(sf, /):
+        '-> None  # eg. state4branch+=1'
+        sf._IN_state4branch += 1
+
+
+    @classmethod
+    def _join_strs_until_min_sz(cls, min_sz, iter_ss, /):
+        check_uint(min_sz)
+        ss = []
+        sz = min_sz
+        for s in iter_ss:
+            check_str(s)
+            ss.append(s)
+            sz -= len(s)
+            if not sz > 0: break
+        s = ''.join(ss)
+        assert len(s) >= min_sz
+        #_saved_print('min_sz', min_sz)
+        #_saved_print('len(s)', len(s))
+        return s
+
+    @classmethod
+    def _hash_str_into_iter_hex_strs(cls, s, /):
+        m = hashlib.sha512()
+        bs = s.encode('utf8')
+        m.update(bs)
+        for i in mk_iter_counts():
+            if 0:
+                hs = hex(i)[2:]
+                if len(hs)&1:
+                    hs = '0'+hs
+                _saved_print(hs)
+                _bs = bytes.fromhex(hs)
+            else:
+                _bs = str(i).encode('ascii')
+            m.update(_bs)
+            hs = m.hexdigest()# m.digest()
+            yield hs
+        return
+
+    @classmethod
+    def _hash_str_into_hex(cls, s, /):
+        check_str(s)
+        min_sz = len(s)*4
+        #_saved_print('min_sz', min_sz)
+        if min_sz > 12304: raise ...
+        iter_hss = cls._hash_str_into_iter_hex_strs(s)
+        return cls._join_strs_until_min_sz(min_sz, iter_hss)
+
+    @classmethod
+    def _join_objs(cls, /, *xs):
+        rss = map(repr, xs)
+        hss = map(cls._hash_str_into_hex, rss)
+        #s = ';'.join(map(str2hex__utf8, hss))
+        s = ';'.join(hss)
+        return s
+
+    @classmethod
+    @override
+    def _make_stated_key_(cls, prefix4key, state4key, /):
+        '-> stated_key/str'
+        return cls._join_objs('prefix4key -> state4key -> stated_key', prefix4key, state4key)
+    @classmethod
+    @override
+    def _make_new_brach_(cls, state4branch, stated_key, /):
+        'state4branch -> stated_key -> ICipherKeyGenerator'
+        new__prefix4key = cls._join_objs('state4branch -> stated_key -> new_brach.prefix4key', state4branch, stated_key)
+        return cls.mk(prefix4key=new__prefix4key)
+
+    @classmethod
+    @override
+    def _generate_key__uints_mod_(cls, iter_next_stated_keys, M, num_uints, /):
+        'Iter next_stated_key -> M/uint -> num_uints -> [uint%M]{len=num_uints}'
+        min_sz = floor_log2(M)
+        m = hashlib.sha512()
+        def iter_fixed_len_hex_strs(iter_next_stated_keys, /):
+            for s in iter_next_stated_keys:
+                bs = s.encode('utf8')
+                m.update(bs)
+                fixed_len_hs = m.hexdigest()
+                #_saved_print('fixed_len_hs', fixed_len_hs)
+                yield fixed_len_hs
+        def iter_min_sized_hex_strs(min_sz, iter_hss, /):
+            iter_hss = iter(iter_hss)
+            while 1:
+                min_sized_hs = cls._join_strs_until_min_sz(min_sz, iter_hss)
+                #_saved_print('min_sized_hs', min_sized_hs)
+                yield min_sized_hs
+        def iter_uints___via_min_sized_hex_strs(min_sz, iter_hss, /):
+            hss = iter_min_sized_hex_strs(min_sz, iter_hss)
+            for hs in hss:
+                #bug:u = int(bytes.fromhex(hs), 16)
+                u = int(hs, 16)
+                #_saved_print('u', u)
+                yield u
+        def iter_uints_mod_(M, us, /):
+            for u in us:
+                yield u%M
+        iter_uints_mod = iter_uints_mod_(M
+            ,iter_uints___via_min_sized_hex_strs(min_sz
+                , iter_fixed_len_hex_strs(iter_next_stated_keys)
+                )
+            )
+        #bug:return iter_uints_mod
+        islice
+        return islice(iter_uints_mod, num_uints)
+#end-class CipherKeyGenerator(IEase_repr, ICipherKeyGenerator):
+
+
+
+
+class ICipherMaker(ICloneable):
+    r'''
+    using ICipherMaker to replace non-ICloneable function with mutable ICipherKeyGenerator:
+        mk_ICipher5num_bits
+            Cipher_mod__fmap_bit_op_on_tail_bits
+        mk_ICipher5modulus
+            Cipher__charset
+            InvolutoryCipher__charset
+
+    #'''
+
+    @abstractmethod
+    def _mk_ICipher_(sf, /, **kwargs):
+        '-> ICipher'
+    def _check_ICipher_(sf, cipher, /, **kwargs):
+        checkT__type_le(ICipher)(cipher)
+
+    def check_ICipher(sf, cipher, /, **kwargs):
+        sf._check_ICipher_(cipher, **kwargs)
+    def mk_ICipher(sf, /, **kwargs):
+        cipher = sf._mk_ICipher_(**kwargs)
+        sf.check_ICipher(cipher, **kwargs)
+        return cipher
+
+
+class ICipherMaker_mod(ICipherMaker):
+    @override
+    def _check_ICipher_(sf, cipher, /, **kwargs):
+        super()._check_ICipher_(cipher, **kwargs)
+        checkT__type_le(ICipher_mod)(cipher)
+
+
+
+class ICipherMaker_mod__5modulus(ICipherMaker_mod):
+    @abstractmethod
+    def _mk_ICipher5modulus_(sf, /, *, modulus):
+        '-> ICipher_mod'
+    @override
+    def _mk_ICipher_(sf, /, *, modulus):
+        '-> ICipher_mod'
+        check_uint(modulus)
+        return sf._mk_ICipher5modulus_(modulus=modulus)
+    @override
+    def _check_ICipher_(sf, cipher, /, *, modulus):
+        super()._check_ICipher_(cipher, modulus=modulus)
+        checkT__eq(modulus)(cipher.get_modulus())
+
+
+
+
+class ICipherMaker_mod__5num_bits(ICipherMaker_mod):
+    @abstractmethod
+    def _mk_ICipher5num_bits_(sf, /, *, num_bits):
+        '-> ICipher_mod #not ICipher_bits'
+    @override
+    def _mk_ICipher_(sf, /, *, num_bits):
+        '-> ICipher_mod'
+        check_uint(num_bits)
+        return sf._mk_ICipher5num_bits_(num_bits=num_bits)
+    @override
+    def _check_ICipher_(sf, cipher, /, *, num_bits):
+        super()._check_ICipher_(cipher, num_bits=num_bits)
+        checkT__eq(1<<num_bits)(cipher.get_modulus())
+
+
+
+class CipherMaker_mod__5modulus__func(ICipherMaker_mod__5modulus, ICloneable__immutable):
+    def __init__(sf, /, *, mk_ICipher5modulus):
+        check_callable(mk_ICipher5modulus)
+        sf._mk_ICipher5modulus = mk_ICipher5modulus
+
+    @override
+    def _mk_ICipher5modulus_(sf, /, *, modulus):
+        '-> ICipher_mod'
+        return sf._mk_ICipher5modulus(modulus=modulus)
+
+class CipherMaker_mod__5num_bits__func(ICipherMaker_mod__5num_bits, ICloneable__immutable):
+    def __init__(sf, /, *, mk_ICipher5num_bits):
+        check_callable(mk_ICipher5num_bits)
+        sf._mk_ICipher5num_bits = mk_ICipher5num_bits
+
+    @override
+    def _mk_ICipher5num_bits_(sf, /, *, num_bits):
+        '-> ICipher_mod'
+        return sf._mk_ICipher5num_bits(num_bits=num_bits)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2133,21 +2631,25 @@ class InvolutoryCipher_mod__modulus_is_1(IEase_repr_init, IInvolutoryCipher_mod)
 involutory_cipher_mod__modulus_is_1 = InvolutoryCipher_mod__modulus_is_1()
 
 class Cipher_mod__fmap_bit_op_on_tail_bits(IEase_repr_init, ICipher_mod):
-    def __init__(sf, /, *, mk_ICipher5len_bits, modulus):
+    def __init__(sf, /, *, mk_ICipher5num_bits, modulus):
         check_uint(modulus)
-        check_callable(mk_ICipher5len_bits)
+        if 0:
+            check_callable(mk_ICipher5num_bits)
+        else:
+            checkT__type_le(ICipherMaker_mod__5num_bits)(mk_ICipher5num_bits)
+
     @override
     def _get_modulus_(sf, /):
         '-> modulus/uint'
         return sf.modulus
 
 
-    def _check_cipher_mod_(sf, len_bits, modulus, cipher_mod, /):
+    def _check_cipher_mod_(sf, num_bits, modulus, cipher_mod, /):
         checkT__type_le(ICipher_mod)(cipher_mod)
         checkT__eq(modulus)(cipher_mod.get_modulus())
 
-    def check_cipher_mod(sf, len_bits, modulus, cipher_mod, /):
-        sf._check_cipher_mod_(len_bits, modulus, cipher_mod)
+    def check_cipher_mod(sf, num_bits, modulus, cipher_mod, /):
+        sf._check_cipher_mod_(num_bits, modulus, cipher_mod)
 
 
 
@@ -2155,21 +2657,24 @@ class Cipher_mod__fmap_bit_op_on_tail_bits(IEase_repr_init, ICipher_mod):
         M = sf.modulus
         _1_masked_tail_bits = w ^ M
         assert _1_masked_tail_bits
-        len_bits = floor_log2(_1_masked_tail_bits)
-        MSB = 1 << len_bits
+        num_bits = floor_log2(_1_masked_tail_bits)
+        MSB = 1 << num_bits
         _masked_tail_bits = MSB ^ _1_masked_tail_bits
         assert 0 <= _masked_tail_bits < MSB
 
         if not MSB == 1:
-            cipher_mod = sf.mk_ICipher5len_bits(len_bits)
+            if 0:
+                cipher_mod = sf.mk_ICipher5num_bits(num_bits)
+            else:
+                cipher_mod = sf.mk_ICipher5num_bits.clone().mk_ICipher(num_bits=num_bits)
         else:
             cipher_mod = involutory_cipher_mod__modulus_is_1
 
-        sf.check_cipher_mod(len_bits, MSB, cipher_mod)
+        sf.check_cipher_mod(num_bits, MSB, cipher_mod)
         if not cipher_mod.get_modulus()==MSB: raise TypeError
-        return _masked_tail_bits, len_bits, MSB, cipher_mod
+        return _masked_tail_bits, num_bits, MSB, cipher_mod
 
-    def _postprocess(sf, _masked_tail_bits, len_bits, MSB, cipher_mod, /):
+    def _postprocess(sf, _masked_tail_bits, num_bits, MSB, cipher_mod, /):
         M = sf.modulus
         _1_masked_tail_bits = MSB ^ _masked_tail_bits
         w = _1_masked_tail_bits ^ M
@@ -2179,22 +2684,22 @@ class Cipher_mod__fmap_bit_op_on_tail_bits(IEase_repr_init, ICipher_mod):
     def _encrypt_(sf, u, /):
     #def _encrypt_mod_(sf, u, /):
         'uint%M -> uint%M'
-        u_masked_tail_bits, len_bits, MSB, cipher_mod = sf._preprocess(u)
+        u_masked_tail_bits, num_bits, MSB, cipher_mod = sf._preprocess(u)
 
         v_masked_tail_bits = cipher_mod.encrypt(u_masked_tail_bits, validate=False)
 
-        v = sf._postprocess(v_masked_tail_bits, len_bits, MSB, cipher_mod)
+        v = sf._postprocess(v_masked_tail_bits, num_bits, MSB, cipher_mod)
         return v
 
     @override
     def _decrypt_(sf, v, /):
     #def _decrypt_mod_(sf, v, /):
         'uint%M -> uint%M'
-        v_masked_tail_bits, len_bits, MSB, cipher_mod = sf._preprocess(v)
+        v_masked_tail_bits, num_bits, MSB, cipher_mod = sf._preprocess(v)
 
         u_masked_tail_bits = cipher_mod.decrypt(v_masked_tail_bits)
 
-        u = sf._postprocess(u_masked_tail_bits, len_bits, MSB, cipher_mod)
+        u = sf._postprocess(u_masked_tail_bits, num_bits, MSB, cipher_mod)
         return u
 
 class InvolutoryCipher_mod__fmap_bit_op_on_tail_bits(Cipher_mod__fmap_bit_op_on_tail_bits, IInvolutoryCipher_mod):
@@ -2203,8 +2708,8 @@ class InvolutoryCipher_mod__fmap_bit_op_on_tail_bits(Cipher_mod__fmap_bit_op_on_
     _en_de_cipher_op_ = Cipher_mod__fmap_bit_op_on_tail_bits._decrypt_
 
     @override
-    def _check_cipher_mod_(sf, len_bits, modulus, cipher_mod, /):
-        super()._check_cipher_mod_(len_bits, modulus, cipher_mod)
+    def _check_cipher_mod_(sf, num_bits, modulus, cipher_mod, /):
+        super()._check_cipher_mod_(num_bits, modulus, cipher_mod)
         #checkT__type_le(IInvolutoryCipher)(cipher_mod)
         #   偶然关联？
         checkT__type_le(IInvolutoryCipher_mod)(cipher_mod)
@@ -2285,6 +2790,7 @@ class Cipher_mod__add_then_mul(IEase_repr, ICipher_mod):
         u = (v*sf.inv4key4mul-sf.key4add)%sf.modulus
         return u
 
+class ValueError4Cipher_mod__rotate(ValueError):pass
 class Cipher_mod__rotate(IEase_repr, ICipher_mod):
     @classmethod
     def mk_N1_N2(cls, modulus, /, *, N_or_ver):
@@ -2310,9 +2816,10 @@ class Cipher_mod__rotate(IEase_repr, ICipher_mod):
     def _mk_kwargs4init_(cls, /, *, modulus, N_or_ver='ver1__mul233div377'):
         '-> __init__.kwargs'
         N1, N2 = cls.mk_N1_N2(modulus, N_or_ver=N_or_ver)
-        if not 2 < N1 < N1+2 <= N2 < N2+2 <modulus:raise ValueError(f'modulus too small?: {modulus!r}: {N2},{N1}')
-        return dict(N1 = N1, N2 = N2, modulus = modulus)
-    def __init__(sf, /, *, N1, N2, modulus):
+        if not 2 < N1 < N1+2 <= N2 < N2+2 <modulus:raise ValueError4Cipher_mod__rotate(f'modulus too small?: {modulus!r}: {N2},{N1}')
+        kwargs = dict(N1 = N1, N2 = N2, modulus = modulus)
+        return kwargs
+    def __init__(__sf_cls, /, *, N1, N2, modulus):
         if not N1+N2 == modulus:raise TypeError
         if not 2 < N1 < N1+2 <= N2 < N2+2 <modulus:raise TypeError
 
@@ -2726,17 +3233,21 @@ _test_InvolutoryCipher_mod__subtracted_by()
 
 def _test_Cipher_mod__fmap_bit_op_on_tail_bits():
     cls = Cipher_mod__fmap_bit_op_on_tail_bits
-    def _mk_ICipher5len_bits(len_bits, /):
-        return Cipher_mod__add_then_mul.mk(modulus=1<<len_bits, key4add=3, key4mul=5)
-        return Cipher_mod__rotate.mk(modulus=1<<len_bits)
-    _test_ICipher_mod(cls, modulus=15, mk_ICipher5len_bits=_mk_ICipher5len_bits)
+    def _mk_ICipher5num_bits(*, num_bits):
+    #def _mk_ICipher5num_bits(num_bits, /):
+        return Cipher_mod__add_then_mul.mk(modulus=1<<num_bits, key4add=3, key4mul=5)
+        return Cipher_mod__rotate.mk(modulus=1<<num_bits)
+    _mk_ICipher5num_bits = CipherMaker_mod__5num_bits__func(mk_ICipher5num_bits=_mk_ICipher5num_bits)
+    _test_ICipher_mod(cls, modulus=15, mk_ICipher5num_bits=_mk_ICipher5num_bits)
 _test_Cipher_mod__fmap_bit_op_on_tail_bits()
 
-def _default_mk_InvolutoryCipher5len_bits(len_bits, /):
-    return InvolutoryCipher_mod__subtracted_by.mk(modulus=1<<len_bits)
+def _default_mk_InvolutoryCipher5num_bits(*, num_bits):
+#def _default_mk_InvolutoryCipher5num_bits(num_bits, /):
+    return InvolutoryCipher_mod__subtracted_by.mk(modulus=1<<num_bits)
+_default_mk_InvolutoryCipher5num_bits = CipherMaker_mod__5num_bits__func(mk_ICipher5num_bits=_default_mk_InvolutoryCipher5num_bits)
 def _test_InvolutoryCipher_mod__fmap_bit_op_on_tail_bits():
     cls = InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
-    _test_ICipher_mod(cls, modulus=15, mk_ICipher5len_bits=_default_mk_InvolutoryCipher5len_bits)
+    _test_ICipher_mod(cls, modulus=15, mk_ICipher5num_bits=_default_mk_InvolutoryCipher5num_bits)
 _test_InvolutoryCipher_mod__fmap_bit_op_on_tail_bits()
 
 
@@ -2808,8 +3319,11 @@ _test_Cipher_mod__permutation_partition_fmap()
 #HHHHH
 class Cipher__charset(IEase_repr_init, ICipher):
     def __init__(sf, /, *, ordered_charset, mk_ICipher5modulus):
-        check_callable(mk_ICipher5modulus)
         checkT__type_le(IOrderedCharset)(ordered_charset)
+        if 0:
+            check_callable(mk_ICipher5modulus)
+        else:
+            checkT__type_le(ICipherMaker_mod__5modulus)(mk_ICipher5modulus)
         pass
 
     def _check_cipher_mod_(sf, modulus, cipher_mod, /):
@@ -2824,7 +3338,10 @@ class Cipher__charset(IEase_repr_init, ICipher):
         radix = len(ordered_charset)
         modulus = radix**L
         assert 0 <= u < modulus
-        cipher_mod = sf.mk_ICipher5modulus(modulus)
+        if 0:
+            cipher_mod = sf.mk_ICipher5modulus(modulus)
+        else:
+            cipher_mod = sf.mk_ICipher5modulus.clone().mk_ICipher(modulus=modulus)
         sf.check_cipher_mod(modulus, cipher_mod)
         if not cipher_mod.get_modulus()==modulus: raise TypeError
         return u, L, cipher_mod
@@ -2891,15 +3408,19 @@ class InvolutoryCipher__charset(Cipher__charset, IInvolutoryCipher):
 
 def _test_Cipher__charset():
     cls = Cipher__charset
-    def _mk_ICipher5modulus(modulus, /):
+    def _mk_ICipher5modulus(*, modulus):
+    #def _mk_ICipher5modulus(modulus, /):
         return Cipher_mod__rotate.mk(modulus=modulus)
 
+    _mk_ICipher5modulus = CipherMaker_mod__5modulus__func(mk_ICipher5modulus=_mk_ICipher5modulus)
     _test_le_Cipher__charset(cls, mk_ICipher5modulus = _mk_ICipher5modulus)
 def _test_InvolutoryCipher__charset():
     cls = InvolutoryCipher__charset
-    def _mk_ICipher5modulus(modulus, /):
+    def _mk_ICipher5modulus(*, modulus):
+    #def _mk_ICipher5modulus(modulus, /):
         return InvolutoryCipher_mod__subtracted_by.mk(modulus=modulus)
 
+    _mk_ICipher5modulus = CipherMaker_mod__5modulus__func(mk_ICipher5modulus=_mk_ICipher5modulus)
     _test_le_Cipher__charset(cls, mk_ICipher5modulus = _mk_ICipher5modulus)
 _test_Cipher__charset()
 _test_InvolutoryCipher__charset()
@@ -3007,47 +3528,221 @@ _test_InvolutoryCipher__charset()
 
 
 #HHHHH
-_prefix4nm4core_involutory_cipher_type = 'InvolutoryCipher_mod__'
-    # InvolutoryCipher_bits__xor is not available for arbitrary modulus
-    #
-_excluded_full_name4core_involutory_cipher_type = {'InvolutoryCipher_mod__chain'}
-full_name2core_involutory_cipher_type = MapView({nm:v for nm, v in globals().items() if is_str(nm) and nm.isidentifier() and nm.startswith(_prefix4nm4core_involutory_cipher_type) and nm not in _excluded_full_name4core_involutory_cipher_type})
 
-#brief name
-short_name2core_involutory_cipher_type = MapView({nm[len(_prefix4nm4core_involutory_cipher_type):]:v for nm, v in full_name2core_involutory_cipher_type.items()})
+(full_name2core_involutory_cipher_type
+,short_name2core_involutory_cipher_type
+) = collect_objs_with_name_prefix(globals()
+    , 'InvolutoryCipher_mod__'
+        # "mod" not "bits"
+        #   InvolutoryCipher_bits__xor is not available for arbitrary modulus
+        #
+    , {'InvolutoryCipher_mod__chain'}
+    )
 
 _short_name2may_extra_kwargs4core_involutory_cipher_type = MapView(fmapT__dict(MapView)(dict(
     fmap_bit_op_on_tail_bits=dict(
-        mk_ICipher5len_bits=_default_mk_InvolutoryCipher5len_bits
+        mk_ICipher5num_bits=_default_mk_InvolutoryCipher5num_bits
         )
     )))
 
 
-def _4main():
-    def mkT_ICipher5modulus(cls_nm, key, /):
-        cls = short_name2core_involutory_cipher_type[cls_nm]
-        extra_kwargs = _short_name2may_extra_kwargs4core_involutory_cipher_type.get(cls_nm, {})
-        #InvolutoryCipher_mod__subtracted_by
-        #InvolutoryCipher_mod__flip_parity
-        #InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
-        #
-        def mk_ICipher5modulus(modulus, /):
-            involutory_cipher_mod = cls.mk(modulus=modulus, **extra_kwargs)
-            #TODO
-            import warnings
-            warnings.warn('not using the key, use simple encrypt()')
-            return involutory_cipher_mod
-        return mk_ICipher5modulus
 
-    def main_cipher_op(cls_nm, ordered_charset4txt, /, *, txt, key, validate):
+def _4main():
+    def mk__ciphersR_mod__ver_NONE(key, modulus, /):
+        '-> Iter ICipher_mod<modulus>'
+        #TODO
+        return;yield
+    def mk__ciphersR_mod__ver__default_rotate__without_key(__key, modulus, /):
+        try:
+            yield Cipher_mod__rotate.mk(modulus=modulus)
+        except ValueError4Cipher_mod__rotate as e:
+            #yield ???
+            raise NotImplementedError(e)
+            ...
+    r'''
+    Cipher_mod__add_then_mul
+    Cipher_mod__rotate
+    Cipher_mod__permutation_partition
+        Cipher_mod__permutation_partition_fmap
+    Cipher_mod__fmap_bit_op_on_tail_bits
+        InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
+
+    === above:{NONE,_default_rotate__without_key,add_then_mul,permutation_partition_fmap__add_then_mul,rotate}
+    === below:{mask4bits__accumulate_xor_reversed__without_key,mask4bits__permutation,mask4bits__xor}
+
+    Cipher_mod__mask
+        Cipher_bits__permutation
+        InvolutoryCipher_bits__xor
+        Cipher_bits__accumulate_xor_reversed
+    #'''
+    def mk__ciphersR_mod__ver_add_then_mul(key, modulus, /):
+        if modulus == 1:
+            return involutory_cipher_mod__modulus_is_1
+        if not 2 <= modulus: raise NotImplementedError(modulus)
+        [key4add, key4mul] = key.generate_next_key__uints_mod(modulus, 2)
+        while not gcd(key4mul, modulus) == 1:
+            key4mul += 1
+        key4mul %= modulus
+        yield Cipher_mod__add_then_mul.mk(modulus=modulus, key4add=key4add, key4mul=key4mul)
+        return
+    def mk__ciphersR_mod__ver_rotate(key, modulus, /):
+        if not 16 <= modulus: raise NotImplementedError(modulus)
+        while 1:
+            [N] = key.generate_next_key__uints_mod(modulus, 1)
+            #_saved_print(N)
+            try:
+                yield Cipher_mod__rotate.mk(modulus=modulus, N_or_ver=N)
+                return
+            except ValueError4Cipher_mod__rotate:
+                pass
+
+    def mk__ciphersR_mod__ver_permutation_partition_fmap__add_then_mul(key, modulus, /):
+        if not 16 <= modulus: raise NotImplementedError(modulus)
+        Cipher_mod__permutation_partition_fmap
+        origin4rngs = key.generate_next_key__uint_mod(modulus)
+        #_saved_print('origin4rngs', origin4rngs)
+
+        min_num_eqvclss = floor_log2(modulus)
+        max1_num_eqvclss = modulus // 4
+        max2_num_eqvclss = 8+(min_num_eqvclss+2)
+        #bug:max_num_eqvclss = max(max1_num_eqvclss, max2_num_eqvclss)
+        max_num_eqvclss = min(max1_num_eqvclss, max2_num_eqvclss)
+
+        #_saved_print('max_num_eqvclss', max_num_eqvclss)
+
+        num_eqvclss = min_num_eqvclss + key.generate_next_key__uint_mod(max_num_eqvclss+1-min_num_eqvclss)
+        #_saved_print('num_eqvclss', num_eqvclss)
+
+        M_sub_4n = modulus-4*num_eqvclss
+        _offsets = sorted(key.generate_next_key__uints_mod(M_sub_4n, num_eqvclss-1))
+        _offsets.append(M_sub_4n)
+        def iter_num_elements():
+            pre_offset = 0
+            for offset in _offsets:
+                num_elements_at = offset+4 -pre_offset
+                yield num_elements_at
+                pre_offset = offset
+
+        idx8eqvcls2num_elements = (*iter_num_elements(),)
+
+        #raise ...
+        may_ciphers_mod = tuple(chain.from_iterable(mk__ciphersR_mod__ver_add_then_mul(key, num_elements_at) for num_elements_at in idx8eqvcls2num_elements))
+
+        bipermutation = mk_bipermutation(num_eqvclss, key.generate_next_key__uint_mod)
+        pn = InnerIndexablePartition_mod__rng8eqvcls.mk(origin4rngs=origin4rngs, idx8eqvcls2num_elements=idx8eqvcls2num_elements)
+        yield Cipher_mod__permutation_partition_fmap.mk(inner_indexable_partition_mod=pn, bipermutation=bipermutation, idx8eqvcls2may_cipher_mod4fmap=may_ciphers_mod)
+        return
+
+
+    def _helper__mk_ciphersR_mod__ver_mask4bits__xxx(key, modulus, mk_cipher_bits, /):
+        num_bits = floor_log2(modulus)
+        cipher_bits = mk_cipher_bits(key, num_bits=num_bits)
+        yield Cipher_mod__mask(cipher_mod=cipher_bits, modulus=modulus)
+        return
+    def mk__ciphersR_mod__ver_mask4bits__permutation(key, modulus, /):
+        def mk_cipher_bits(key, /, *, num_bits):
+            bipermutation = mk_bipermutation(num_bits, key.generate_next_key__uint_mod)
+            return Cipher_bits__permutation.mk(bipermutation=bipermutation)
+        return _helper__mk_ciphersR_mod__ver_mask4bits__xxx(key, modulus, mk_cipher_bits)
+    def mk__ciphersR_mod__ver_mask4bits__xor(key, modulus, /):
+        def mk_cipher_bits(key, /, *, num_bits):
+            key4xor = key.generate_next_key__uint_mod(1<<num_bits)
+            return InvolutoryCipher_bits__xor.mk(key4xor=key4xor, num_bits=num_bits)
+        return _helper__mk_ciphersR_mod__ver_mask4bits__xxx(key, modulus, mk_cipher_bits)
+    def mk__ciphersR_mod__ver_mask4bits__accumulate_xor_reversed__without_key(__key, modulus, /):
+        def mk_cipher_bits(__key, /, *, num_bits):
+            return Cipher_bits__accumulate_xor_reversed.mk(num_bits=num_bits)
+        return _helper__mk_ciphersR_mod__ver_mask4bits__xxx(None, modulus, mk_cipher_bits)
+
+
+
+
+    #def mkT_IInvolutoryCipher5modulus(vers, cls_nm, key, /):
+    class mkT_IInvolutoryCipher5modulus(ICipherMaker_mod__5modulus):
+        def __init__(sf, vers, cls_nm, key, /):
+            vers = mk_tuple(vers)
+            checkT__pattern_list(check_str)(vers)
+            check_str(cls_nm)
+            checkT__type_le(ICipherKeyGenerator)(key)
+
+            sf.vers = vers
+            sf.cls_nm = cls_nm
+            sf.key = key
+
+        @override
+        def _clone_(sf, /):
+            '-> copy of sf'
+            return type(sf)(sf.vers, sf.cls_nm, sf.key.clone())
+
+        @override
+        def _mk_ICipher5modulus_(sf, /, *, modulus):
+            '-> ICipher_mod'
+            if 0:
+                (vers, cls_nm, key) = (sf.vers, sf.cls_nm, sf.key.clone())
+                #bug: why key.clone() here? meanless
+                #  Cipher__charset/InvolutoryCipher__charset call .clone() before call .mk_ICipher()
+                # ICipher should be immutable, to do encrypt/decrypt in longterm.
+                #   but, ICipherMaker can be mutable, and should be mutable if contains ICipherKeyGenerator
+                #   if caller donot want to keep unchange, then explictly call .clone() to protect state
+                #
+            else:
+                (vers, cls_nm, key) = (sf.vers, sf.cls_nm, sf.key)
+            ######################
+            key = key.make_next_brach()
+                ### move key far away
+            cls = short_name2core_involutory_cipher_type[cls_nm]
+            extra_kwargs = _short_name2may_extra_kwargs4core_involutory_cipher_type.get(cls_nm, {})
+            #InvolutoryCipher_mod__subtracted_by
+            #InvolutoryCipher_mod__flip_parity
+            #InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
+            #
+        #def mk_IInvolutoryCipher5modulus(modulus, /):
+            core_involutory_cipher_mod = cls.mk(modulus=modulus, **extra_kwargs)
+            [cipher0R_mod] = mk__ciphersR_mod__ver__default_rotate__without_key(None, modulus)
+
+            def vers2iter_ciphersR_mod(vers, /):
+                for ver in vers:
+                    mk__ciphersR_mod = short_name2mk__ciphersR_mod[ver]
+                    yield from mk__ciphersR_mod(key, modulus)
+            ciphersR_mod = tuple(vers2iter_ciphersR_mod(vers))
+            if not ciphersR_mod:
+                import warnings
+                warnings.warn('not using the key, use simple core+default_rotate.encrypt() without key')
+                r'''
+                involutory_cipher_mod = core_involutory_cipher_mod
+            else:
+                involutory_cipher_mod = InvolutoryCipher_mod__chain.mk(involutory_cipher=core_involutory_cipher_mod, ciphersR=ciphersR_mod)
+                #'''
+            ciphersR_mod = (cipher0R_mod, *ciphersR_mod)
+            involutory_cipher_mod = InvolutoryCipher_mod__chain.mk(involutory_cipher=core_involutory_cipher_mod, ciphersR=ciphersR_mod)
+            return involutory_cipher_mod
+        #return mk_IInvolutoryCipher5modulus
+
+    def main_cipher_op(cls_nm, /, *, vers, ordered_charset4txt, txt, key, validate):
         '-> txt'
+        check_str(cls_nm)
+
+        #checkT__pattern_list(check_str)(vers)
+        checkT__list(check_str)(vers)
+        checkT__type_is(OrderedCharset__str)(ordered_charset4txt)
+        check_str(txt)
+        checkT__type_le(ICipherKeyGenerator)(key)
+        checkT__type_is(bool)(validate)
+
         tyt = txt; del txt
-        involutory_cipher__charset = InvolutoryCipher__charset(ordered_charset=ordered_charset4txt, mk_ICipher5modulus=mkT_ICipher5modulus(cls_nm, key))
+        #CipherKeyGenerator.clone
+        #bug:CipherMaker_mod__5modulus__func
+        involutory_cipher__charset = InvolutoryCipher__charset(ordered_charset=ordered_charset4txt, mk_ICipher5modulus=mkT_IInvolutoryCipher5modulus(vers, cls_nm, key))
         tzt = involutory_cipher__charset.en_de_cipher_op(tyt, validate=validate)
         return tzt
+    (full_name2mk__ciphersR_mod
+    ,short_name2mk__ciphersR_mod
+    ) = collect_objs_with_name_prefix(locals(), 'mk__ciphersR_mod__ver_', {})
+
     return {**locals()}
 class _4main:
     locals().update(_4main())
+
 
 #HHHHH
 def main(args=None, /):
@@ -3070,13 +3765,16 @@ example: how to input arbitrary str (text or key)?
     def sorted__nm(nms, /):
         return sorted(nms, key=lambda nm:(len(nm), nm))
 
+    parser.add_argument('--cipher_impl_version', required=True, choices = sorted(_4main.short_name2mk__ciphersR_mod), nargs='+'
+                        , help='select cipher algorithm version chain')
     parser.add_argument('--just_show_charset4txt', action='store_true'
                         , default = False
                         , help='display size and all chars of the selected charset4txt')
     parser.add_argument('--core_involutory_cipher', required=True, choices = sorted__nm(short_name2core_involutory_cipher_type)
                         , help='select the core involutory cipher algorithm')
-    parser.add_argument('-k', '--key', required=True, type=str
-                        , help='cipher key; arbitrary str')
+    parser.add_argument('-k', '--key', required=True, type=str, nargs='+'
+                        , help='cipher key; arbitrary str; required at least 2 key, one is nonce(correspondence to the clear_text, just use once, do reuse for snother clear_text)')
+
 
     parser.add_argument('--charset4txt', required=True, choices = sorted__nm(short_name2ordered_charset)
                         , help='charset of input/output text; (not for key, key can be arbitrary str)')
@@ -3117,11 +3815,18 @@ example: how to input arbitrary str (text or key)?
     input__drop__new_line = is_ON(args.input__drop__new_line)
     output__append__new_line = is_ON(args.output__append__new_line)
 
+    #key = ';'.join(map(str2hex__utf8, (args.key, args.nonce)))
+    if not len(args.key) >= 2: raise ValueError('please include a nonce key for each clear_text')
+        #nonce -- "number used once" or "number once"
+    key = ';'.join(map(str2hex__utf8, args.key))
+    key = CipherKeyGenerator.mk(prefix4key=key)
+
 
     #bug:nm4charset4txt = _prefix4nm4ordered_charset+args.charset4txt
     nm4charset4txt = args.charset4txt
     ordered_charset4txt = short_name2ordered_charset[nm4charset4txt]
 
+    vers = args.cipher_impl_version
     cls_nm = args.core_involutory_cipher
 
     if args.just_show_charset4txt:
@@ -3149,7 +3854,8 @@ example: how to input arbitrary str (text or key)?
 
 
 
-    tzt = _4main.main_cipher_op(cls_nm, ordered_charset4txt, txt=tyt, key=args.key, validate=True)
+
+    tzt = _4main.main_cipher_op(cls_nm, vers=vers, ordered_charset4txt=ordered_charset4txt, txt=tyt, key=key, validate=True)
     if output__append__new_line:
         tzt_ = tzt + '\n'
     else:
