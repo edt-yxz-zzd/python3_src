@@ -235,6 +235,37 @@ int:
   #dint: reverse-positive_int, int_le_0
   imay: imay_uint, int_ge_n1, int>=-1
 
+mk: make :: callable
+  mkr: maker :: some-IMaker # has .mk_xxx(...)
+ls: list or seq
+  ps: pairs
+  it: iterator not reiterable
+  d: dict
+sf: self
+  cls: class
+  eqv: equivalent
+  ptn: partition
+nm: name
+  f: file
+    fname, fout
+  i:input
+  o:output
+    ifnm
+    opath
+    iencoding
+    itxt
+k: key
+  v: value
+  kw:keyword
+idx:index
+  idc:indices
+  vtx : vertex
+  vtc : vertices
+  e : edge
+  d/u : directed/undirected
+  u,v :: uint
+  e: encoding, exp
+
 len ~ len() ~ function ~ not noun
     len_ints/len_rngs
     iter_ints/iter_rngs

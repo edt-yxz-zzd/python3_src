@@ -1,8 +1,66 @@
 #__all__:goto
 #main_body_src_code:goto
+#cmds:goto
 #TODO:goto
 #HHHHH
 r'''
+TODO:def many mk_ICipher5num_bits__key for CipherMaker_mod__5num_bits__key/InvolutoryCipherMaker_mod__5num_bits__key
+    move from mks__ciphersR_mod__ver_
+DONE: accumulate on selected bits only
+    Cipher_bits__convolve
+DONE: mod permutation on [0..modulus-1] for modulus <= 16 ..2048?
+    Cipher_mod__permutation
+        involutory_cipher_mod__modulus_is_0
+        involutory_cipher_mod__modulus_is_1
+        mk_all_ciphers__Cipher_mod__permutation
+        tabulate4modulus2all_ciphers__Cipher_mod__permutation
+        modulus2all_ciphers__Cipher_mod__permutation___modulus_lt_6
+TODO: ICipher.mk5key generate random parameters
+    mk5child5key
+    mk5key_ex
+#'''
+
+r'''[[[[[[[
+[[[
+[[释义:
+自逆加密
+    InvolutoryCipher
+    self-inverse function
+    involutory function
+.+1,$s/InvolutionCipher/InvolutoryCipher/g
+
+
+roots of unity (not "unit"!)
+square root of unity
+
+
+see:
+  view others/数学/involution自逆函数.txt.
+  view others/数学/编程/TODO_list/周期长度为二的对称加密.txt
+    view ../../python3_src/nn_ns/app/crypt/InvolutoryCipher.py
+  ===
+  involution
+  https://handwiki.org/wiki/Involution_(mathematics)
+    In mathematics, an involution, involutory function, or self-inverse function[1] is a function f that is its own inverse,
+
+        f(f(x)) = x
+
+    for all x in the domain of f.[2] Equivalently, applying f twice produces the original value.
+
+
+[f is invertible function] =[def]=
+  [?g. @x. g(f(x))===x]
+  let f**-1 =[def]= g
+
+[f is involution] =[def]=
+  [@x. f(f(x)) === x]
+  [f . f === echo]
+  [f === f**-1]
+
+
+
+
+]]
 [[
 有个大毛病！
 加密算法 最重要的是 数据可以重新解密。
@@ -39,13 +97,37 @@ r'''
     ICloneable
         ICipherKeyGenerator <: ICloneable
         ICipherMaker <: ICloneable
-    比如：
+    比如：ICipher__with_cipher_key_generator
         某个ICipher根据 输入参数(本加密器额外参数、密钥、明文/密文 在 本加密器 算法 作用下 的 不变量(如:长度)) 构造 实际上的 加密器，进行加解密。
             1. 无状态，即 相同输入 得到 相同结果(即 实际工作的加密器)
-            2. 使用了伪随机数，以生成多个 加密器 用于 组成更复杂的加密器，伪随机源 连续用于整个流程，但 确不是 上一个流程的伪随机源 的 后续。必须 于流程开头 新造/复制。
+            2. 使用了伪随机数，以生成多个 加密器 用于 组成更复杂的加密器，伪随机源 连续用于整个流程，但 确不是 上一个流程的伪随机源 的 后续。必须 于流程开头 复制 伪随机源。必须 于整个对象初始化时 复制 伪随机源。
+                SHOULD store clone of input-ICipherKeyGenerator when __init__()!!!!
+                SHOULD use clone of stored-ICipherKeyGenerator when .encrypt()/.decrypt()!!!!
 
 ]]
 [[cmds:
+py -m nn_ns.app.crypt.involution.involutory_cipher_cmd -h
+py -m nn_ns.app.debug_cmd   nn_ns.app.crypt.involution.InvolutoryCipher
+py -m nn_ns.app.crypt.involution.InvolutoryCipher
+
+py -m nn_ns.app.crypt.involution.InvolutoryCipher > /sdcard/0my_files/tmp/_.txt
+view /sdcard/0my_files/tmp/_.txt
+py -m nn_ns.app.debug_cmd   nn_ns.app.crypt.involution.InvolutoryCipher > /sdcard/0my_files/tmp/_.txt
+
+e ../../python3_src/nn_ns/app/crypt/involution/InvolutoryCipher.py
+e ../../python3_src/nn_ns/app/crypt/involution/involutory_cipher_cmd.py
+
+from nn_ns.app.crypt.involution.InvolutoryCipher import ...
+
+
+
+
+
+
+
+
+
+
 py -m nn_ns.app.crypt.involution.involutory_cipher_cmd
 {NONE,_default_rotate__without_key,add_then_mul,mask4bits__accumulate_xor_reversed__without_key,mask4bits__permutation,mask4bits__xor,permutation_partition_fmap__add_then_mul,rotate}
     {NONE,_default_rotate__without_key,add_then_mul,permutation_partition_fmap__add_then_mul,rotate}
@@ -134,58 +216,11 @@ ivcc nonspace_printable_ascii -k ++--/// -i '~' --core_involutory_cipher flip_pa
 ivcc alnum -k ++--/// -i 345dfyy --core_involutory_cipher fmap_bit_op_on_tail_bits
 
 
-py -m nn_ns.app.debug_cmd   nn_ns.app.crypt.involution.InvolutoryCipher
-py -m nn_ns.app.crypt.involution.InvolutoryCipher
-py -m nn_ns.app.crypt.involution.InvolutoryCipher > /sdcard/0my_files/tmp/_.txt
-view /sdcard/0my_files/tmp/_.txt
-
-e ../../python3_src/nn_ns/app/crypt/involution/InvolutoryCipher.py
-e ../../python3_src/nn_ns/app/crypt/involution/involutory_cipher_cmd.py
-
-from nn_ns.app.crypt.involution.InvolutoryCipher import ...
 ]]
+]]]
 
 
 
-[[释义:
-自逆加密
-    InvolutoryCipher
-    self-inverse function
-    involutory function
-.+1,$s/InvolutionCipher/InvolutoryCipher/g
-
-
-roots of unity (not "unit"!)
-square root of unity
-
-
-see:
-  view others/数学/involution自逆函数.txt.
-  view others/数学/编程/TODO_list/周期长度为二的对称加密.txt
-    view ../../python3_src/nn_ns/app/crypt/InvolutoryCipher.py
-  ===
-  involution
-  https://handwiki.org/wiki/Involution_(mathematics)
-    In mathematics, an involution, involutory function, or self-inverse function[1] is a function f that is its own inverse,
-
-        f(f(x)) = x
-
-    for all x in the domain of f.[2] Equivalently, applying f twice produces the original value.
-
-
-[f is invertible function] =[def]=
-  [?g. @x. g(f(x))===x]
-  let f**-1 =[def]= g
-
-[f is involution] =[def]=
-  [@x. f(f(x)) === x]
-  [f . f === echo]
-  [f === f**-1]
-
-
-
-
-]]
 
 
 
@@ -199,6 +234,9 @@ endofunction
     翻译来自：https://hongjiang.info/understand-monad-5-what-is-endofunctor/
   内射函数/自射
     我自己的翻译
+  畴内函数/同畴映射
+    我自己的翻译
+    畴domain/kind/类/种类
 involution
   ?自逆函数/++回旋函数
     我自己的翻译
@@ -372,31 +410,31 @@ len ~ len() ~ function ~ not noun
     iter_ints/iter_rngs
 .+1,$s/len_bits/num_bits/g
 
-#'''
+#]]]]]]]'''
 
 #HHHHH
 __all__ = '''
+
+    str2hex_
+    str5hex_
+        str2hex__utf8
+        str5hex__utf8
     count_1s_ex
-    count_1s
+        count_1s
+
     uint2bits
-
     mod__double_width_
-
-
     check_uint_tuple
-    check_basic_permutation
-    perform_basic_permutation__inv__uint8bits
-    iter_perform_basic_permutation__inv
+
     mk_bipermutation
-    mk_basic_permutation
-
-
+        check_basic_permutation
+        perform_basic_permutation__inv__uint8bits
+        iter_perform_basic_permutation__inv
+        mk_basic_permutation
 
 
     ICloneable
         ICloneable__immutable
-        ICipherKeyGenerator
-        ICipherMaker
 
     IEase_repr
         IEase_repr_init
@@ -411,6 +449,7 @@ __all__ = '''
         OrderedCharset__RangeBased
             binary___ordered_charset__RangeBased
             hex___ordered_charset__RangeBased
+
 
 
     ordered_charset4binary
@@ -429,35 +468,38 @@ __all__ = '''
     ordered_charset4cjk_common_subset_2513_trivial_TS_2227
     ordered_charset4cjk_common_subset_2513
 
+
+
     collect_objs_with_name_prefix
-    full_name2ordered_charset
-    short_name2ordered_charset
+        full_name2ordered_charset
+        short_name2ordered_charset
 
 
 
 
 
 
+    ICloneable
+        ICloneable__immutable
+                    CipherMaker_mod__5modulus__func
+                    CipherMaker_mod__5num_bits__func
 
+        ICipherKeyGenerator
+            CipherKeyGenerator
 
+        ICipherMaker
+            ICipherMaker_mod
+                ICipherMaker_mod__5modulus
+                    CipherMaker_mod__5modulus__func
+                ICipherMaker_mod__5num_bits
+                    CipherMaker_mod__5num_bits__func
 
-    ICipherKeyGenerator
-        CipherKeyGenerator
-
-    ICipherMaker
-        ICipherMaker_mod
-            ICipherMaker_mod__5modulus
-                CipherMaker_mod__5modulus__func
-            ICipherMaker_mod__5num_bits
-                CipherMaker_mod__5num_bits__func
 
 
 
 
     IHas__modulus
         IHas__modulus__bits
-
-
 
 
     IInnerIndexablePartition
@@ -471,8 +513,6 @@ __all__ = '''
 
 
 
-
-
     ICipher
         ICipher__with_cipher_key_generator
         IEndoCipher
@@ -482,7 +522,6 @@ __all__ = '''
                 IInvolutoryCipher
                     IInvolutoryCipher_mod
                         IInvolutoryCipher_bits
-
     Cipher__chain
         Cipher_mod__chain
     InvolutoryCipher__chain
@@ -490,24 +529,42 @@ __all__ = '''
 
     InvolutoryCipher_mod__flip_parity
     InvolutoryCipher_mod__subtracted_by
+    InvolutoryCipher_mod__modulus_is_0
+        involutory_cipher_mod__modulus_is_0
     InvolutoryCipher_mod__modulus_is_1
         involutory_cipher_mod__modulus_is_1
+
     Cipher_mod__fmap_bit_op_on_tail_bits
         InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
 
     Cipher_mod__mask
     Cipher_mod__add_then_mul
     Cipher_mod__rotate
+        ValueError4Cipher_mod__rotate
     Cipher_mod__permutation_partition
         Cipher_mod__permutation_partition_fmap
+    Cipher_mod__permutation
+        modulus2all_ciphers__Cipher_mod__permutation___modulus_lt_6
+            involutory_cipher_mod__modulus_is_0
+            involutory_cipher_mod__modulus_is_1
+            tabulate4modulus2all_ciphers__Cipher_mod__permutation
+                mk_all_ciphers__Cipher_mod__permutation
 
     Cipher_bits__permutation
     InvolutoryCipher_bits__xor
     Cipher_bits__accumulate_xor_reversed
+    Cipher_bits__convolve
 
 
     Cipher__charset
         InvolutoryCipher__charset
+
+
+    main
+        full_name2core_involutory_cipher_type
+        short_name2core_involutory_cipher_type
+
+
 
     '''.split()
 
@@ -585,6 +642,7 @@ from seed.int_tools.digits.radix_repr2uint import radix_repr2uint
 
 
 from seed.seq_tools.bisearch import bisearch
+from nn_ns.math_nn.convolution import convolve__uint8bits__littleendian, inv_convolve__uint8bits__littleendian
 
 
 
@@ -596,7 +654,7 @@ from math import factorial, comb as C
 from random import randrange, getrandbits
 from random import Random
 from secrets import randbelow, randbits
-from itertools import islice, accumulate, chain, count as mk_iter_counts
+from itertools import islice, accumulate, chain, count as mk_iter_counts, permutations as mk_iter_all_permutations
 import operator
 import hashlib
 
@@ -1498,10 +1556,12 @@ class ICipherMaker(ICloneable):
     r'''
     using ICipherMaker to replace non-ICloneable function with mutable ICipherKeyGenerator:
         mk_ICipher5num_bits
-            Cipher_mod__fmap_bit_op_on_tail_bits
+            @Cipher_mod__fmap_bit_op_on_tail_bits
+            --> mkr_ICipher5num_bits
         mk_ICipher5modulus
-            Cipher__charset
-            InvolutoryCipher__charset
+            @Cipher__charset
+            @InvolutoryCipher__charset
+            --> mkr_ICipher5modulus
 
     #'''
 
@@ -1524,6 +1584,11 @@ class ICipherMaker_mod(ICipherMaker):
     def _check_ICipher_(sf, cipher, /, **kwargs):
         super()._check_ICipher_(cipher, **kwargs)
         checkT__type_le(ICipher_mod)(cipher)
+class IInvolutoryCipherMaker_mod(ICipherMaker_mod):
+    @override
+    def _check_ICipher_(sf, cipher, /, **kwargs):
+        super()._check_ICipher_(cipher, **kwargs)
+        checkT__type_le(IInvolutoryCipher_mod)(cipher)
 
 
 
@@ -1582,6 +1647,15 @@ class CipherMaker_mod__5num_bits__func(ICipherMaker_mod__5num_bits, ICloneable__
 
 
 
+class IInvolutoryCipherMaker_mod__5modulus(ICipherMaker_mod__5modulus, IInvolutoryCipherMaker_mod):
+    pass
+class InvolutoryCipherMaker_mod__5modulus__func(CipherMaker_mod__5modulus__func, IInvolutoryCipherMaker_mod__5modulus):
+    pass
+
+class IInvolutoryCipherMaker_mod__5num_bits(ICipherMaker_mod__5num_bits, IInvolutoryCipherMaker_mod):
+    pass
+class InvolutoryCipherMaker_mod__5num_bits__func(CipherMaker_mod__5num_bits__func, IInvolutoryCipherMaker_mod__5num_bits):
+    pass
 
 
 
@@ -2202,6 +2276,11 @@ class ICipher(ABC):
 
     #'''
 
+    @classmethod
+    @abstractmethod
+    def _may__mk5key_(cls, /, *, key, **kwargs):
+        'None|(ICipherKeyGenerator -> sf)'
+
     @abstractmethod
     def _encrypt_(sf, clear_text, /):
         'clear_text -> cipher_text'
@@ -2215,6 +2294,15 @@ class ICipher(ABC):
 
 
 
+    @classmethod
+    def mk5key_ex(cls, /, *, key, **kwargs):
+        checkT__type_le(ICipherKeyGenerator)(key)
+        m = cls._may__mk5key_
+        if m is None:raise NotImplementedError
+        mk5key = m
+        sf = mk5key(key=key, **kwargs)
+        checkT__type_is(cls)(sf)
+        return sf
 
     def encrypt(sf, clear_text, /, *, validate):
         sf.check_clear_text(clear_text)
@@ -2241,6 +2329,10 @@ class ICipher(ABC):
 
 
 class ICipher__with_cipher_key_generator(ICipher):
+    r'''
+    SHOULD store clone of input-ICipherKeyGenerator when __init__()!!!!
+    SHOULD use clone of stored-ICipherKeyGenerator when .encrypt()/.decrypt()!!!!
+    #'''
     @abstractmethod
     def _get_cipher_key_generator_(sf, /):
         '-> ICipherKeyGenerator/str'
@@ -2615,6 +2707,20 @@ class InvolutoryCipher_mod__subtracted_by(IEase_repr, IInvolutoryCipher_mod):
         v = (sf.minuend-u) %sf.modulus
         return v
 
+class InvolutoryCipher_mod__modulus_is_0(IEase_repr_init, IInvolutoryCipher_mod):
+    def __init__(sf, /):
+        pass
+    @override
+    def _get_modulus_(sf, /):
+        '-> modulus/uint'
+        return 0
+    @override
+    def _en_de_cipher_op_(sf, u, /):
+        'uint%M -> uint%M'
+        raise logic-err
+involutory_cipher_mod__modulus_is_0 = InvolutoryCipher_mod__modulus_is_0()
+
+
 class InvolutoryCipher_mod__modulus_is_1(IEase_repr_init, IInvolutoryCipher_mod):
     def __init__(sf, /):
         pass
@@ -2631,12 +2737,11 @@ class InvolutoryCipher_mod__modulus_is_1(IEase_repr_init, IInvolutoryCipher_mod)
 involutory_cipher_mod__modulus_is_1 = InvolutoryCipher_mod__modulus_is_1()
 
 class Cipher_mod__fmap_bit_op_on_tail_bits(IEase_repr_init, ICipher_mod):
-    def __init__(sf, /, *, mk_ICipher5num_bits, modulus):
+    def __init__(sf, /, *, mkr_ICipher5num_bits, modulus):
         check_uint(modulus)
-        if 0:
-            check_callable(mk_ICipher5num_bits)
-        else:
-            checkT__type_le(ICipherMaker_mod__5num_bits)(mk_ICipher5num_bits)
+        sf._check_mkr_ICipher5num_bits_(mkr_ICipher5num_bits)
+    def _check_mkr_ICipher5num_bits_(sf, mkr_ICipher5num_bits, /):
+        checkT__type_le(ICipherMaker_mod__5num_bits)(mkr_ICipher5num_bits)
 
     @override
     def _get_modulus_(sf, /):
@@ -2666,7 +2771,7 @@ class Cipher_mod__fmap_bit_op_on_tail_bits(IEase_repr_init, ICipher_mod):
             if 0:
                 cipher_mod = sf.mk_ICipher5num_bits(num_bits)
             else:
-                cipher_mod = sf.mk_ICipher5num_bits.clone().mk_ICipher(num_bits=num_bits)
+                cipher_mod = sf.mkr_ICipher5num_bits.clone().mk_ICipher(num_bits=num_bits)
         else:
             cipher_mod = involutory_cipher_mod__modulus_is_1
 
@@ -2706,6 +2811,11 @@ class InvolutoryCipher_mod__fmap_bit_op_on_tail_bits(Cipher_mod__fmap_bit_op_on_
     _encrypt_ = IInvolutoryCipher._encrypt_
     _decrypt_ = IInvolutoryCipher._decrypt_
     _en_de_cipher_op_ = Cipher_mod__fmap_bit_op_on_tail_bits._decrypt_
+
+    @override
+    def _check_mkr_ICipher5num_bits_(sf, mkr_ICipher5num_bits, /):
+        super()._check_mkr_ICipher5num_bits_(mkr_ICipher5num_bits)
+        checkT__type_le(IInvolutoryCipherMaker_mod__5num_bits)(mkr_ICipher5num_bits)
 
     @override
     def _check_cipher_mod_(sf, num_bits, modulus, cipher_mod, /):
@@ -2978,7 +3088,52 @@ class Cipher_mod__permutation_partition_fmap(Cipher_mod__permutation_partition):
         return old_idx8inner
 #end-class Cipher_mod__permutation_partition_fmap(Cipher_mod__permutation_partition):
 
+class Cipher_mod__permutation(IEase_repr_init, ICipher_mod):
+    r'''
+    see:Cipher_bits__permutation
+    see:Cipher_mod__permutation
+    #'''
+    def __init__(sf, /, *, bipermutation):
+        checkT__type_is(BiPermutation)(bipermutation)
 
+    @override
+    def _get_modulus_(sf, /):
+        '-> modulus/uint'
+        return len(sf.bipermutation.old2new)
+
+
+
+    @override
+    def _encrypt_(sf, u, /):
+        'uint%M -> uint%M'
+        v = sf.bipermutation.old2new[u]
+        return v
+
+    @override
+    def _decrypt_(sf, v, /):
+        'uint%M -> uint%M'
+        u = sf.bipermutation.new2old[v]
+        return u
+assert factorial(6) == 720  #too many
+assert factorial(5) == 120  #ok
+assert factorial(4) == 24   #ok
+def mk_all_ciphers__Cipher_mod__permutation(modulus, /):
+    check_uint(modulus)
+    it = mk_iter_all_permutations(range(modulus))
+    def iter_ciphers():
+        for old2new in it:
+            bipermutation = BiPermutation.mk(old2new=old2new)
+            cipher = Cipher_mod__permutation.mk(bipermutation=bipermutation)
+            yield cipher
+    ciphers = tuple(iter_ciphers())
+    return ciphers
+def tabulate4modulus2all_ciphers__Cipher_mod__permutation(*, modulus_lt):
+    return tuple(map(mk_all_ciphers__Cipher_mod__permutation, range(modulus_lt)))
+
+modulus2all_ciphers__Cipher_mod__permutation___modulus_lt_6 = tabulate4modulus2all_ciphers__Cipher_mod__permutation(modulus_lt=6)
+if 1:
+    involutory_cipher_mod__modulus_is_0
+    involutory_cipher_mod__modulus_is_1
 
 
 #HHHHH
@@ -2990,6 +3145,7 @@ class Cipher_bits__permutation(IEase_repr_init, ICipher_bits):
     see:IInnerIndexablePartition_mod
     see:Cipher_mod__permutation_partition
     see:Cipher_bits__permutation
+    see:Cipher_mod__permutation
     #'''
     def __init__(sf, /, *, bipermutation):
         checkT__type_is(BiPermutation)(bipermutation)
@@ -3052,8 +3208,12 @@ class InvolutoryCipher_bits__xor(IEase_repr_init, IInvolutoryCipher_bits):
 class Cipher_bits__accumulate_xor_reversed(IEase_repr_init, ICipher_bits):
     r'''
     defect:all 0s are fixed point
+
+    see:Cipher_bits__accumulate_xor_reversed
+    see:Cipher_bits__convolve
     #'''
     def __init__(sf, /, *, num_bits):
+        check_uint(num_bits)
         pass
 
     @override
@@ -3116,6 +3276,55 @@ class Cipher_bits__accumulate_xor_reversed(IEase_repr_init, ICipher_bits):
         bs = ''.join(map(str, _01s))
         u = int(bs, 2)
         return u
+#end-class Cipher_bits__accumulate_xor_reversed(IEase_repr_init, ICipher_bits):
+
+
+
+class Cipher_bits__convolve(IEase_repr_init, ICipher_bits):
+    r'''
+    see:Cipher_bits__accumulate_xor_reversed
+    see:Cipher_bits__convolve
+    #'''
+    @classmethod
+    @override
+    def _mk_kwargs4init_(cls, /, *, num_bits, key4convolve):
+        '-> __init__.kwargs'
+        inv4key4convolve = inv_convolve__uint8bits__littleendian(key4convolve, __add__=None, __mul__=None, __neg__=None, __eq__=None, inv_head_element=None, result_length_le=num_bits, validate=False)
+        return dict(key4convolve=key4convolve, inv4key4convolve=inv4key4convolve, num_bits=num_bits)
+
+
+    def __init__(sf, /, *, num_bits, key4convolve, inv4key4convolve):
+        check_uint(num_bits)
+
+        check_uint_lt(1<<num_bits, key4convolve)
+        if not (1&key4convolve): raise TypeError
+
+        check_uint_lt(1<<num_bits, inv4key4convolve)
+        if not (1&inv4key4convolve): raise TypeError
+        if not 1 == convolve__uint8bits__littleendian(key4convolve, inv4key4convolve, __add__=None, __mul__=None, result_length_le=num_bits, tmay_zero4padding=(0,)): raise TypeError
+        return
+
+    @override
+    def _get_num_bits_(sf, /):
+        '-> num_bits/uint'
+        return sf.num_bits
+
+    @override
+    def _encrypt_(sf, u, /):
+        'uint%M -> uint%M'
+        num_bits = sf.get_num_bits()
+        key4convolve = sf.key4convolve
+        v = convolve__uint8bits__littleendian(u, key4convolve, __add__=None, __mul__=None, result_length_le=num_bits, tmay_zero4padding=(0,))
+        return v
+
+    @override
+    def _decrypt_(sf, v, /):
+        'uint%M -> uint%M'
+        num_bits = sf.get_num_bits()
+        inv4key4convolve = sf.inv4key4convolve
+        u = convolve__uint8bits__littleendian(v, inv4key4convolve, __add__=None, __mul__=None, result_length_le=num_bits, tmay_zero4padding=(0,))
+        return u
+#end-class Cipher_bits__convolve(IEase_repr_init, ICipher_bits):
 
 
 
@@ -3177,6 +3386,16 @@ def _test_Cipher_mod__add_then_mul():
 _test_Cipher_mod__rotate()
 _test_Cipher_mod__add_then_mul()
 
+def _test_Cipher_mod__permutation():
+    cls = Cipher_mod__permutation
+    modulus = 17
+    bipermutation = mk_bipermutation(modulus, randrange)
+    _test_ICipher_mod(cls, bipermutation=bipermutation)
+    bipermutation = mk_bipermutation(modulus, randbelow)
+    _test_ICipher_mod(cls, bipermutation=bipermutation)
+_test_Cipher_mod__permutation()
+
+
 def _test_Cipher_bits__permutation():
     cls = Cipher_bits__permutation
     num_bits = 4
@@ -3195,10 +3414,20 @@ def _test_Cipher_bits__accumulate_xor_reversed():
     cls = Cipher_bits__accumulate_xor_reversed
     num_bits = 4
     _test_ICipher_mod(cls, num_bits=num_bits)
+def _test_Cipher_bits__convolve():
+    cls = Cipher_bits__convolve
+    num_bits = 4
+    key4convolve = 0b101
+    _test_ICipher_mod(cls, num_bits=num_bits, key4convolve=key4convolve)
+
 
 _test_Cipher_bits__permutation()
 _test_InvolutoryCipher_bits__xor()
 _test_Cipher_bits__accumulate_xor_reversed()
+_test_Cipher_bits__convolve()
+
+
+
 def _test_Cipher_mod__mask():
     cls = Cipher_mod__mask
     num_bits = 4
@@ -3237,17 +3466,18 @@ def _test_Cipher_mod__fmap_bit_op_on_tail_bits():
     #def _mk_ICipher5num_bits(num_bits, /):
         return Cipher_mod__add_then_mul.mk(modulus=1<<num_bits, key4add=3, key4mul=5)
         return Cipher_mod__rotate.mk(modulus=1<<num_bits)
-    _mk_ICipher5num_bits = CipherMaker_mod__5num_bits__func(mk_ICipher5num_bits=_mk_ICipher5num_bits)
-    _test_ICipher_mod(cls, modulus=15, mk_ICipher5num_bits=_mk_ICipher5num_bits)
+    _mkr_ICipher5num_bits = CipherMaker_mod__5num_bits__func(mk_ICipher5num_bits=_mk_ICipher5num_bits)
+    _test_ICipher_mod(cls, modulus=15, mkr_ICipher5num_bits=_mkr_ICipher5num_bits)
 _test_Cipher_mod__fmap_bit_op_on_tail_bits()
 
 def _default_mk_InvolutoryCipher5num_bits(*, num_bits):
 #def _default_mk_InvolutoryCipher5num_bits(num_bits, /):
     return InvolutoryCipher_mod__subtracted_by.mk(modulus=1<<num_bits)
-_default_mk_InvolutoryCipher5num_bits = CipherMaker_mod__5num_bits__func(mk_ICipher5num_bits=_default_mk_InvolutoryCipher5num_bits)
+_default_mkr_InvolutoryCipher5num_bits = InvolutoryCipherMaker_mod__5num_bits__func(mk_ICipher5num_bits=_default_mk_InvolutoryCipher5num_bits)
+InvolutoryCipherMaker_mod__5num_bits__func
 def _test_InvolutoryCipher_mod__fmap_bit_op_on_tail_bits():
     cls = InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
-    _test_ICipher_mod(cls, modulus=15, mk_ICipher5num_bits=_default_mk_InvolutoryCipher5num_bits)
+    _test_ICipher_mod(cls, modulus=15, mkr_ICipher5num_bits=_default_mkr_InvolutoryCipher5num_bits)
 _test_InvolutoryCipher_mod__fmap_bit_op_on_tail_bits()
 
 
@@ -3318,13 +3548,13 @@ _test_Cipher_mod__permutation_partition_fmap()
 
 #HHHHH
 class Cipher__charset(IEase_repr_init, ICipher):
-    def __init__(sf, /, *, ordered_charset, mk_ICipher5modulus):
+    def __init__(sf, /, *, ordered_charset, mkr_ICipher5modulus):
         checkT__type_le(IOrderedCharset)(ordered_charset)
-        if 0:
-            check_callable(mk_ICipher5modulus)
-        else:
-            checkT__type_le(ICipherMaker_mod__5modulus)(mk_ICipher5modulus)
-        pass
+        sf._check_mkr_ICipher5modulus_(mkr_ICipher5modulus)
+
+    def _check_mkr_ICipher5modulus_(sf, mkr_ICipher5modulus, /):
+        checkT__type_le(ICipherMaker_mod__5modulus)(mkr_ICipher5modulus)
+
 
     def _check_cipher_mod_(sf, modulus, cipher_mod, /):
         checkT__type_le(ICipher_mod)(cipher_mod)
@@ -3341,7 +3571,7 @@ class Cipher__charset(IEase_repr_init, ICipher):
         if 0:
             cipher_mod = sf.mk_ICipher5modulus(modulus)
         else:
-            cipher_mod = sf.mk_ICipher5modulus.clone().mk_ICipher(modulus=modulus)
+            cipher_mod = sf.mkr_ICipher5modulus.clone().mk_ICipher(modulus=modulus)
         sf.check_cipher_mod(modulus, cipher_mod)
         if not cipher_mod.get_modulus()==modulus: raise TypeError
         return u, L, cipher_mod
@@ -3369,7 +3599,7 @@ class Cipher__charset(IEase_repr_init, ICipher):
 #def _mk_ICipher5modulus(modulus, /):
 
 
-def _test_le_Cipher__charset(cls, /, *, mk_ICipher5modulus):
+def _test_le_Cipher__charset(cls, /, *, mkr_ICipher5modulus):
     checkT__issubclass__any(Cipher__charset)(cls)
     print(cls)
     ordered_charset__hex1 = hex___ordered_charset__str
@@ -3381,7 +3611,7 @@ def _test_le_Cipher__charset(cls, /, *, mk_ICipher5modulus):
         ,(ordered_charset__hex2, clear_text__hex)
         ]
     for ordered_charset, clear_text in ps:
-        cipher__charset = cls(ordered_charset=ordered_charset, mk_ICipher5modulus=mk_ICipher5modulus)
+        cipher__charset = cls(ordered_charset=ordered_charset, mkr_ICipher5modulus=mkr_ICipher5modulus)
         print(cipher__charset)
 
 
@@ -3400,6 +3630,12 @@ class InvolutoryCipher__charset(Cipher__charset, IInvolutoryCipher):
     _en_de_cipher_op_ = Cipher__charset._decrypt_
     #'''
 
+    @override
+    def _check_mkr_ICipher5modulus_(sf, mkr_ICipher5modulus, /):
+        super()._check_mkr_ICipher5modulus_(mkr_ICipher5modulus)
+        checkT__type_le(IInvolutoryCipherMaker_mod__5modulus)(mkr_ICipher5modulus)
+
+    @override
     def _check_cipher_mod_(sf, modulus, cipher_mod, /):
         super()._check_cipher_mod_(modulus, cipher_mod)
         #checkT__type_le(IInvolutoryCipher)(cipher_mod)
@@ -3412,16 +3648,16 @@ def _test_Cipher__charset():
     #def _mk_ICipher5modulus(modulus, /):
         return Cipher_mod__rotate.mk(modulus=modulus)
 
-    _mk_ICipher5modulus = CipherMaker_mod__5modulus__func(mk_ICipher5modulus=_mk_ICipher5modulus)
-    _test_le_Cipher__charset(cls, mk_ICipher5modulus = _mk_ICipher5modulus)
+    _mkr_ICipher5modulus = CipherMaker_mod__5modulus__func(mk_ICipher5modulus=_mk_ICipher5modulus)
+    _test_le_Cipher__charset(cls, mkr_ICipher5modulus = _mkr_ICipher5modulus)
 def _test_InvolutoryCipher__charset():
     cls = InvolutoryCipher__charset
     def _mk_ICipher5modulus(*, modulus):
     #def _mk_ICipher5modulus(modulus, /):
         return InvolutoryCipher_mod__subtracted_by.mk(modulus=modulus)
 
-    _mk_ICipher5modulus = CipherMaker_mod__5modulus__func(mk_ICipher5modulus=_mk_ICipher5modulus)
-    _test_le_Cipher__charset(cls, mk_ICipher5modulus = _mk_ICipher5modulus)
+    _mkr_ICipher5modulus = InvolutoryCipherMaker_mod__5modulus__func(mk_ICipher5modulus=_mk_ICipher5modulus)
+    _test_le_Cipher__charset(cls, mkr_ICipher5modulus = _mkr_ICipher5modulus)
 _test_Cipher__charset()
 _test_InvolutoryCipher__charset()
 
@@ -3529,6 +3765,83 @@ _test_InvolutoryCipher__charset()
 
 #HHHHH
 
+
+#mk_ICipher5modulus
+#mk_ICipher5num_bits
+class CipherMaker_mod__5modulus__key(IEase_repr_init, ICipherMaker_mod__5modulus):
+    #xxx '-> ICipher_mod/-\ICipher__with_cipher_key_generator'
+    def __init__(sf, /, *, key, mk_ICipher5modulus__key):
+        checkT__type_le(ICipherKeyGenerator)(key)
+        check_callable(mk_ICipher5modulus__key)
+
+    @override
+    def _mk_ICipher5modulus_(sf, /, *, modulus):
+        '-> ICipher_mod'
+        key = sf.key #no .clone()!!!
+        return sf.mk_ICipher5modulus__key(key, modulus=modulus)
+class InvolutoryCipherMaker_mod__5modulus__key(CipherMaker_mod__5modulus__key, IInvolutoryCipherMaker_mod__5modulus):
+    pass
+
+
+class CipherMaker_mod__5num_bits__key(IEase_repr_init, ICipherMaker_mod__5num_bits):
+    #xxx '-> ICipher_mod/-\ICipher__with_cipher_key_generator'
+    def __init__(sf, /, *, key, mk_ICipher5num_bits__key):
+        checkT__type_le(ICipherKeyGenerator)(key)
+        check_callable(mk_ICipher5num_bits__key)
+
+    @override
+    def _mk_ICipher5num_bits_(sf, /, *, num_bits):
+        '-> ICipher_mod'
+        key = sf.key #no .clone()!!!
+        return sf.mk_ICipher5num_bits__key(key=key, num_bits=num_bits)
+class InvolutoryCipherMaker_mod__5num_bits__key(CipherMaker_mod__5num_bits__key, IInvolutoryCipherMaker_mod__5num_bits):
+    pass
+
+
+
+
+
+def mk_involutory_cipher_mod__modulus_lt_2(*, modulus):
+    check_uint_lt(2, modulus)
+    if modulus == 1:
+        return involutory_cipher_mod__modulus_is_1
+    elif modulus == 0:
+        return involutory_cipher_mod__modulus_is_0
+    raise logic-err
+
+def mk_ICipher5modulus__key___add_then_mul(*, key, modulus):
+    '-> Cipher_mod__add_then_mul'
+    if modulus < 2:
+        return mk_involutory_cipher_mod__modulus_lt_2(modulus=modulus)
+
+    if not 2 <= modulus: raise NotImplementedError(modulus)
+
+    [key4add, key4mul] = key.generate_next_key__uints_mod(modulus, 2)
+    while not gcd(key4mul, modulus) == 1:
+        key4mul += 1
+    key4mul %= modulus
+    return Cipher_mod__add_then_mul.mk(modulus=modulus, key4add=key4add, key4mul=key4mul)
+
+r'''
+TODO:def many mk_ICipher5num_bits__key for CipherMaker_mod__5num_bits__key/InvolutoryCipherMaker_mod__5num_bits__key
+    move from mks__ciphersR_mod__ver_
+#'''
+
+def mk_ICipher5modulus__key___rotate__modulus_ge_16(*, key, modulus):
+    if not 16 <= modulus: raise NotImplementedError(modulus)
+    while 1:
+        N = key.generate_next_key__uint_mod(modulus)
+        #_saved_print(N)
+        try:
+            yield Cipher_mod__rotate.mk(modulus=modulus, N_or_ver=N)
+            return
+        except ValueError4Cipher_mod__rotate:
+            pass
+        #end-try
+    #end-while
+    raise logic-err
+
+
 (full_name2core_involutory_cipher_type
 ,short_name2core_involutory_cipher_type
 ) = collect_objs_with_name_prefix(globals()
@@ -3536,23 +3849,26 @@ _test_InvolutoryCipher__charset()
         # "mod" not "bits"
         #   InvolutoryCipher_bits__xor is not available for arbitrary modulus
         #
-    , {'InvolutoryCipher_mod__chain'}
+    , {'InvolutoryCipher_mod__chain'
+      ,'InvolutoryCipher_mod__modulus_is_1'
+      ,'InvolutoryCipher_mod__fmap_bit_op_on_tail_bits'
+      }
     )
 
 _short_name2may_extra_kwargs4core_involutory_cipher_type = MapView(fmapT__dict(MapView)(dict(
     fmap_bit_op_on_tail_bits=dict(
-        mk_ICipher5num_bits=_default_mk_InvolutoryCipher5num_bits
+        mkr_ICipher5num_bits=_default_mkr_InvolutoryCipher5num_bits
         )
     )))
 
 
 
 def _4main():
-    def mk__ciphersR_mod__ver_NONE(key, modulus, /):
+    def mks__ciphersR_mod__ver_NONE(key, modulus, /):
         '-> Iter ICipher_mod<modulus>'
         #TODO
         return;yield
-    def mk__ciphersR_mod__ver__default_rotate__without_key(__key, modulus, /):
+    def mks__ciphersR_mod__ver__default_rotate__without_key(__key, modulus, /):
         try:
             yield Cipher_mod__rotate.mk(modulus=modulus)
         except ValueError4Cipher_mod__rotate as e:
@@ -3574,29 +3890,39 @@ def _4main():
         Cipher_bits__permutation
         InvolutoryCipher_bits__xor
         Cipher_bits__accumulate_xor_reversed
-    #'''
-    def mk__ciphersR_mod__ver_add_then_mul(key, modulus, /):
-        if modulus == 1:
-            return involutory_cipher_mod__modulus_is_1
-        if not 2 <= modulus: raise NotImplementedError(modulus)
-        [key4add, key4mul] = key.generate_next_key__uints_mod(modulus, 2)
-        while not gcd(key4mul, modulus) == 1:
-            key4mul += 1
-        key4mul %= modulus
-        yield Cipher_mod__add_then_mul.mk(modulus=modulus, key4add=key4add, key4mul=key4mul)
-        return
-    def mk__ciphersR_mod__ver_rotate(key, modulus, /):
-        if not 16 <= modulus: raise NotImplementedError(modulus)
-        while 1:
-            [N] = key.generate_next_key__uints_mod(modulus, 1)
-            #_saved_print(N)
-            try:
-                yield Cipher_mod__rotate.mk(modulus=modulus, N_or_ver=N)
-                return
-            except ValueError4Cipher_mod__rotate:
-                pass
 
-    def mk__ciphersR_mod__ver_permutation_partition_fmap__add_then_mul(key, modulus, /):
+
+    ======================more:TODO:
+    InvolutoryCipher_mod__flip_parity
+    InvolutoryCipher_mod__subtracted_by
+    InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
+
+    Cipher_mod__add_then_mul
+    Cipher_mod__rotate
+        ValueError4Cipher_mod__rotate
+    Cipher_mod__permutation_partition
+        Cipher_mod__permutation_partition_fmap
+
+    Cipher_mod__fmap_bit_op_on_tail_bits
+    Cipher_mod__mask
+        Cipher_bits__permutation
+        Cipher_bits__accumulate_xor_reversed
+        InvolutoryCipher_bits__xor
+        InvolutoryCipher_mod__subtracted_by
+        InvolutoryCipher_mod__fmap_bit_op_on_tail_bits
+
+    Cipher_mod__permutation
+
+
+    #'''
+    def mks__ciphersR_mod__ver_add_then_mul(key, modulus, /):
+        yield mk_ICipher5modulus__key___add_then_mul(key=key, modulus=modulus)
+        return
+    def mks__ciphersR_mod__ver_rotate(key, modulus, /):
+        yield mk_ICipher5modulus__key___rotate__modulus_ge_16(key=key, modulus=modulus)
+        return
+
+    def mks__ciphersR_mod__ver_permutation_partition_fmap__add_then_mul(key, modulus, /):
         if not 16 <= modulus: raise NotImplementedError(modulus)
         Cipher_mod__permutation_partition_fmap
         origin4rngs = key.generate_next_key__uint_mod(modulus)
@@ -3626,7 +3952,7 @@ def _4main():
         idx8eqvcls2num_elements = (*iter_num_elements(),)
 
         #raise ...
-        may_ciphers_mod = tuple(chain.from_iterable(mk__ciphersR_mod__ver_add_then_mul(key, num_elements_at) for num_elements_at in idx8eqvcls2num_elements))
+        may_ciphers_mod = tuple(chain.from_iterable(mks__ciphersR_mod__ver_add_then_mul(key, num_elements_at) for num_elements_at in idx8eqvcls2num_elements))
 
         bipermutation = mk_bipermutation(num_eqvclss, key.generate_next_key__uint_mod)
         pn = InnerIndexablePartition_mod__rng8eqvcls.mk(origin4rngs=origin4rngs, idx8eqvcls2num_elements=idx8eqvcls2num_elements)
@@ -3639,17 +3965,17 @@ def _4main():
         cipher_bits = mk_cipher_bits(key, num_bits=num_bits)
         yield Cipher_mod__mask(cipher_mod=cipher_bits, modulus=modulus)
         return
-    def mk__ciphersR_mod__ver_mask4bits__permutation(key, modulus, /):
+    def mks__ciphersR_mod__ver_mask4bits__permutation(key, modulus, /):
         def mk_cipher_bits(key, /, *, num_bits):
             bipermutation = mk_bipermutation(num_bits, key.generate_next_key__uint_mod)
             return Cipher_bits__permutation.mk(bipermutation=bipermutation)
         return _helper__mk_ciphersR_mod__ver_mask4bits__xxx(key, modulus, mk_cipher_bits)
-    def mk__ciphersR_mod__ver_mask4bits__xor(key, modulus, /):
+    def mks__ciphersR_mod__ver_mask4bits__xor(key, modulus, /):
         def mk_cipher_bits(key, /, *, num_bits):
             key4xor = key.generate_next_key__uint_mod(1<<num_bits)
             return InvolutoryCipher_bits__xor.mk(key4xor=key4xor, num_bits=num_bits)
         return _helper__mk_ciphersR_mod__ver_mask4bits__xxx(key, modulus, mk_cipher_bits)
-    def mk__ciphersR_mod__ver_mask4bits__accumulate_xor_reversed__without_key(__key, modulus, /):
+    def mks__ciphersR_mod__ver_mask4bits__accumulate_xor_reversed__without_key(__key, modulus, /):
         def mk_cipher_bits(__key, /, *, num_bits):
             return Cipher_bits__accumulate_xor_reversed.mk(num_bits=num_bits)
         return _helper__mk_ciphersR_mod__ver_mask4bits__xxx(None, modulus, mk_cipher_bits)
@@ -3658,7 +3984,7 @@ def _4main():
 
 
     #def mkT_IInvolutoryCipher5modulus(vers, cls_nm, key, /):
-    class mkT_IInvolutoryCipher5modulus(ICipherMaker_mod__5modulus):
+    class mkT_IInvolutoryCipher5modulus(ICipherMaker_mod__5modulus, ICipher__with_cipher_key_generator):
         def __init__(sf, vers, cls_nm, key, /):
             vers = mk_tuple(vers)
             checkT__pattern_list(check_str)(vers)
@@ -3668,6 +3994,11 @@ def _4main():
             sf.vers = vers
             sf.cls_nm = cls_nm
             sf.key = key
+
+        @override
+        def _get_cipher_key_generator_(sf, /):
+            '-> ICipherKeyGenerator/str'
+            return sf.key
 
         @override
         def _clone_(sf, /):
@@ -3698,7 +4029,7 @@ def _4main():
             #
         #def mk_IInvolutoryCipher5modulus(modulus, /):
             core_involutory_cipher_mod = cls.mk(modulus=modulus, **extra_kwargs)
-            [cipher0R_mod] = mk__ciphersR_mod__ver__default_rotate__without_key(None, modulus)
+            [cipher0R_mod] = mks__ciphersR_mod__ver__default_rotate__without_key(None, modulus)
 
             def vers2iter_ciphersR_mod(vers, /):
                 for ver in vers:
@@ -3732,12 +4063,12 @@ def _4main():
         tyt = txt; del txt
         #CipherKeyGenerator.clone
         #bug:CipherMaker_mod__5modulus__func
-        involutory_cipher__charset = InvolutoryCipher__charset(ordered_charset=ordered_charset4txt, mk_ICipher5modulus=mkT_IInvolutoryCipher5modulus(vers, cls_nm, key))
+        involutory_cipher__charset = InvolutoryCipher__charset(ordered_charset=ordered_charset4txt, mkr_ICipher5modulus=mkT_IInvolutoryCipher5modulus(vers, cls_nm, key))
         tzt = involutory_cipher__charset.en_de_cipher_op(tyt, validate=validate)
         return tzt
     (full_name2mk__ciphersR_mod
     ,short_name2mk__ciphersR_mod
-    ) = collect_objs_with_name_prefix(locals(), 'mk__ciphersR_mod__ver_', {})
+    ) = collect_objs_with_name_prefix(locals(), 'mks__ciphersR_mod__ver_', {})
 
     return {**locals()}
 class _4main:
@@ -3773,7 +4104,7 @@ example: how to input arbitrary str (text or key)?
     parser.add_argument('--core_involutory_cipher', required=True, choices = sorted__nm(short_name2core_involutory_cipher_type)
                         , help='select the core involutory cipher algorithm')
     parser.add_argument('-k', '--key', required=True, type=str, nargs='+'
-                        , help='cipher key; arbitrary str; required at least 2 key, one is nonce(correspondence to the clear_text, just use once, do reuse for snother clear_text)')
+                        , help='cipher key; arbitrary str; required at least 2 key, one is nonce(correspondence to the clear_text, just use once, store with the correspondent cipher_text, donot reuse for another clear_text,)')
 
 
     parser.add_argument('--charset4txt', required=True, choices = sorted__nm(short_name2ordered_charset)

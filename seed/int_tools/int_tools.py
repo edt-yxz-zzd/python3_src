@@ -1,7 +1,8 @@
 r'''
 seed.int_tools.int_tools
 from seed.int_tools.int_tools import divs, is_even, is_odd, even, odd
-from seed.int_tools.int_tools import bit_length_of, byte_length_of, align_length, unit_length2block_length, bit_length2byte_length, uint2bytes_
+from seed.int_tools.int_tools import bit_length_of, byte_length_of, align_length, unit_length2block_length, bit_length2byte_length
+from seed.int_tools.int_tools import uint2bytes_, uint2bytes__littleendian
 
 
 #'''
@@ -21,11 +22,13 @@ __all__ = '''
     unit_length2block_length
     bit_length2byte_length
     uint2bytes_
+        uint2bytes__littleendian
 
     '''.split()
 
 
 from seed.math.divs import divs, is_odd, is_even, odd, even
+from seed.tiny import check_uint
 
 
 
@@ -80,3 +83,8 @@ def uint2bytes_(u, /, *, byteorder, alignment):
         #why uint?
         #   since to_bytes(..., signed=False) ==>> OverflowError if [u < 0]
     return u.to_bytes(byte_length_of(u), byteorder=byteorder)
+
+def uint2bytes__littleendian(u, /):
+    check_uint(u)
+    return uint2bytes_(u, byteorder='little', alignment=1)
+
