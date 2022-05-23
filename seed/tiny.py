@@ -189,6 +189,7 @@ __all__ = str2__all__(r'''
 
     MapView             # mapping -> MappingProxyType
     kwargs2Attrs        # (**kwargs) -> SimpleNamespace
+    curry1              # ((sf, /, *args, **kwargs) -> r) -> sf -> ((*args, **kwargs) -> r)
     is_iterable         # a -> Bool
     is_iterator         # a -> Bool
     is_reiterable       # a -> Bool
@@ -261,7 +262,7 @@ from seed.func_tools.not_dot import __not__, not_dot
 from seed.for_libs.next__tmay import next__tmay
 from seed.for_libs.lookup__tmay import lookup__tmay
 
-from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs
+from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs, MethodType as curry1
   #SimpleNamespace(**kw)
 from seed.tiny_.update_attr import update_attr, iupdate_attrs, set_attrs, prepare4set_attrs, fwd_call
 
@@ -270,6 +271,9 @@ from seed.tiny import HexReprInt
 assert repr(HexReprInt(15)) == hex(15) == '0xf'
 assert repr(HexReprInt(-15)) == hex(-15) == '-0xf'
 
+assert curry1(isinstance, 1)(int)
+assert not curry1(isinstance, 1)(str)
+assert curry1(int.__add__, 1)(5) == 6
 
 #vivi fst, snd
 from seed.tiny_.at import at

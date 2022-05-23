@@ -158,6 +158,7 @@ view ../../python3_src/nn_ns/app/register_xor.py
 e others/数学/编程/TODO_list/周期长度为二的对称加密.txt
 e ../../python3_src/nn_ns/app/crypt/UnitSqrtCipher/unit_sqrt_cipher.py
 DOING
+e ../../python3_src/nn_ns/app/crypt/involution/InvolutoryCipher.py
 e ../../python3_src/nn_ns/math_nn/convolution.py
 
 ]
@@ -874,7 +875,8 @@ e ../../python3_src/seed/func_tools/parameterized_transform.py
 
 
 
-
+DONE:
+  view ../../python3_src/seed/func_tools/recur5yield.py
 
 [[DONE
 
