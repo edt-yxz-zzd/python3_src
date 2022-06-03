@@ -5,13 +5,19 @@ py -m seed.func_tools.recur5yield
 py -m nn_ns.app.debug_cmd   seed.func_tools.recur5yield
 
 from seed.func_tools.recur5yield import HelperPseudoMeta8Recur5Yield
-from seed.func_tools.recur5yield import recur5yield__echo__echo, recur5yield__echo__off, recur5yield__0func__echo, recur5yield__0func__off
+
+xxxxxxx from seed.func_tools.recur5yield import recur5yield__echo__echo, recur5yield__echo__off, recur5yield__0func__echo, recur5yield__0func__off
+
+from seed.func_tools.recur5yield import recur5yield__list__echo__echo, recur5yield__list__echo__off, recur5yield__list__0func__echo, recur5yield__list__0func__off
+
+from seed.func_tools.recur5yield import recur5yield__huge__echo__echo, recur5yield__huge__echo__off, recur5yield__huge__0func__echo, recur5yield__huge__0func__off
 
 from seed.func_tools.recur5yield import recur5yield__eval__main_generator_iterator
-from seed.func_tools.recur5yield import recur5yield__decoratorT__all_gi_protocols, child_gi_protocol__echo, child_gi_protocol__0func, tail_recur_gi_protocol__echo, tail_recur_gi_protocol__off
+from seed.func_tools.recur5yield import recur5yield__decoratorT__all_gi_protocols, child_gi_protocol__echo, child_gi_protocol__0func, child_gi_protocolT__0func5ref, tail_recur_gi_protocol__echo, tail_recur_gi_protocol__off
 
 from seed.func_tools.recur5yield import RecurGroupCollector4Recur5Yield
-from seed.func_tools.recur5yield import explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff
+from seed.func_tools.recur5yield import explain__child_gi_protocol_vs_may_0ref4func_vs_echo, explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff, explain__emplace_stack_ops_vs_may_ops4list_vs_ops4huge, explain__may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case
+from seed.func_tools.recur5yield import child_gi_protocol6getitemable__0case, child_gi_protocol6getitemable__0func, child_gi_protocol6getitemableT__0func5ref
 
 
 [[
@@ -62,6 +68,10 @@ generator_func(*args4gi_mkr, **kwds4gi_mkr) -> generator_iterator
             recur_branch_gen_iter_protocol
             recur_branch_gi_protocol
             child_gi_protocol
+    child_gi_protocol6getitemable(getitemable, exprlist5yield) -> generator_iterator
+        child_gi_protocol6collector(collector, exprlist5yield) -> generator_iterator
+            collector :: RecurGroupCollector4Recur5Yield
+
 tail_recur_gi_protocol(return_value5child) -> either_tailrecur_result/(is_result5recur, payload)/((False, exprlist5yield)|(True, result5recur))
 
 ]]]
@@ -74,7 +84,7 @@ tail_recur_gi_protocol(return_value5child) -> either_tailrecur_result/(is_result
 1000
 >>> sys.setrecursionlimit(500)
 
->>> collector = RecurGroupCollector4Recur5Yield(None, None)
+>>> collector = RecurGroupCollector4Recur5Yield(None, None, None, None)
 >>> @collector.put_named_generator_func
 ... def f():
 ...     yield
@@ -93,7 +103,7 @@ Traceback (most recent call last):
 ValueError
 
 >>> def _():
-...     @recur5yield__echo__echo
+...     @recur5yield__list__echo__echo
 ...     def mul(n, m, /):
 ...         if m > 0:
 ...             return False, mul_(0, n, m)
@@ -131,7 +141,7 @@ ValueError
 >>> main_entry1([999])
 [[999]]
 
->>> class main_entry2(metaclass=HelperPseudoMeta8Recur5Yield, may_child_gi_protocol__collector=None):
+>>> class main_entry2(metaclass=HelperPseudoMeta8Recur5Yield, may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case=None):
 ...     def main_entry2(x, /):
 ...         return (False, ('main_', x))
 ...         yield
@@ -141,7 +151,7 @@ ValueError
 >>> main_entry2([999])
 ([999],)
 
->>> class main_entry3(metaclass=HelperPseudoMeta8Recur5Yield, may_child_gi_protocol__collector=RecurGroupCollector4Recur5Yield._child_gi_protocol_, tail_recur_gi_protocol_vs_may_echo_vs_turnoff=True):
+>>> class main_entry3(metaclass=HelperPseudoMeta8Recur5Yield, emplace_stack_ops_vs_may_ops4list_vs_ops4huge=True, may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case=child_gi_protocol6getitemable__0func, tail_recur_gi_protocol_vs_may_echo_vs_turnoff=True):
 ...     def main_entry3(n, /):
 ...         num_steps = 0
 ...         num_steps = yield 'main_', num_steps, n
@@ -340,29 +350,53 @@ generator.close()
 __all__ = '''
 
     recur5yield__decoratorT__all_gi_protocols
+        explain__child_gi_protocol_vs_may_0ref4func_vs_echo
         explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff
+        explain__emplace_stack_ops_vs_may_ops4list_vs_ops4huge
+        explain__may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case
         child_gi_protocol__echo
         child_gi_protocol__0func
+        child_gi_protocolT__0func5ref
         tail_recur_gi_protocol__echo
         tail_recur_gi_protocol__off
-            recur5yield__echo__echo
-            recur5yield__echo__off
-            recur5yield__0func__echo
-            recur5yield__0func__off
+            recur5yield__list__echo__echo
+            recur5yield__list__echo__off
+            recur5yield__list__0func__echo
+            recur5yield__list__0func__off
+            recur5yield__huge__echo__echo
+            recur5yield__huge__echo__off
+            recur5yield__huge__0func__echo
+            recur5yield__huge__0func__off
     recur5yield__eval__main_generator_iterator
+
+
+    explain__may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case
+        child_gi_protocol6getitemable__0case
+        child_gi_protocol6getitemable__0func
+        child_gi_protocol6getitemableT__0func5ref
 
     HelperPseudoMeta8Recur5Yield
         RecurGroupCollector4Recur5Yield
     '''.split()
+r'''
+xxxxxxx
+    recur5yield__echo__echo
+    recur5yield__echo__off
+    recur5yield__0func__echo
+    recur5yield__0func__off
+#'''
 
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
 from functools import wraps
 from collections.abc import Generator as GeneratorIterator #, Callable
-from seed.tiny_.check import check_callable, check_type_is, check_pair #no check_tuple
+from seed.tiny_.check import check_getitemable, check_callable, check_type_is, check_type_le, check_pair #no check_tuple
 from seed.tiny_.dict__add_fmap_filter import dict_add__is
 from seed.tiny import curry1
+
+from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
+from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def _t():
@@ -411,9 +445,9 @@ def recur5yield__may_recur_group(may_name2recur_func, main_generator_func, /):
 #'''
 
 #old:recur5yield__decoratorT__child_gi_protocol
-def recur5yield__decoratorT__all_gi_protocols(child_gi_protocol, tail_recur_gi_protocol, /):
+def recur5yield__decoratorT__all_gi_protocols(emplace_stack_ops, child_gi_protocol, tail_recur_gi_protocol, /):
     r'''
-    (child_gi_protocol, tail_recur_gi_protocol) -> decorator
+    (emplace_stack_ops, child_gi_protocol, tail_recur_gi_protocol) -> decorator
 
     decorator :: main_generator_func -> expected_main_recur_func
     expected_main_recur_func :: (*args4main, **kwds4main) -> main_result
@@ -422,10 +456,12 @@ def recur5yield__decoratorT__all_gi_protocols(child_gi_protocol, tail_recur_gi_p
     main_generator_func(*args4main, **kwds4main) -> main_generator_iterator
     main_generator_iterator :: GeneratorIterator<iter-exprlist5yield, return-return_value5child>
 
+    emplace_stack_ops :: IEmplaceStackOps
     child_gi_protocol(exprlist5yield) -> generator_iterator
     tail_recur_gi_protocol(return_value5child) -> either_tailrecur_result
     either_tailrecur_result === (is_result5recur, payload) :: ((False, exprlist5yield)|(True, result5recur))
     #'''
+    check_type_le(IEmplaceStackOps, emplace_stack_ops)
     check_callable(child_gi_protocol)
         # child_gi_protocol(exprlist5yield) -> generator_iterator
     check_callable(tail_recur_gi_protocol)
@@ -441,13 +477,52 @@ def recur5yield__decoratorT__all_gi_protocols(child_gi_protocol, tail_recur_gi_p
         @wraps(main_generator_func)
         def wrapper(*args4main, **kwds4main):
             main_generator_iterator = main_generator_func(*args4main, **kwds4main)
-            main_result = recur5yield__eval__main_generator_iterator(main_generator_iterator, child_gi_protocol, tail_recur_gi_protocol)
+            main_result = recur5yield__eval__main_generator_iterator(emplace_stack_ops, main_generator_iterator, child_gi_protocol, tail_recur_gi_protocol)
             return main_result
         return wrapper
     return recur5yield__decorator__main_generator_func
 
+def explain__child_gi_protocol_vs_may_0ref4func_vs_echo(child_gi_protocol_vs_may_0ref4func_vs_echo, may_deref4func, /):
+    r'''
+    -> child_gi_protocol
+
+    child_gi_protocol_vs_may_0ref4func_vs_echo :: (callable | None | bool)
+        callable ==>> child_gi_protocol
+        True ==>> child_gi_protocol__echo
+        default:None/False ==>>:
+            may_deref4func :: None | deref4func/callable/(ref4func -> generator_func)
+                None ==>> child_gi_protocol__0func
+                callable ==>> child_gi_protocol__0ref4func===child_gi_protocolT__0func5ref<deref4func>
+
+    #'''
+    if callable(child_gi_protocol_vs_may_0ref4func_vs_echo):
+        child_gi_protocol = child_gi_protocol_vs_may_0ref4func_vs_echo
+    elif child_gi_protocol_vs_may_0ref4func_vs_echo is True:
+        _echo = True
+        child_gi_protocol = child_gi_protocol__echo
+    else:
+        may_0ref4func = child_gi_protocol_vs_may_0ref4func_vs_echo
+        if not (may_0ref4func is None or may_0ref4func is False):raise TypeError
+        if may_deref4func is None:
+            child_gi_protocol = child_gi_protocol__0func
+        else:
+            deref4func = may_deref4func
+            check_callable(deref4func)
+            child_gi_protocol__0ref4func = child_gi_protocolT__0func5ref(deref4func)
+            child_gi_protocol = child_gi_protocol__0ref4func
+    return child_gi_protocol
+explain__child_gi_protocol_vs_may_0ref4func_vs_echo
 
 def explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff(tail_recur_gi_protocol_vs_may_echo_vs_turnoff, /):
+    r'''
+    -> tail_recur_gi_protocol
+
+    tail_recur_gi_protocol_vs_may_echo_vs_turnoff :: (callable | None | bool)
+        callable ==>> tail_recur_gi_protocol
+        True ==>> tail_recur_gi_protocol__off
+        default:None/False ==>> tail_recur_gi_protocol__echo
+
+    #'''
     if callable(tail_recur_gi_protocol_vs_may_echo_vs_turnoff):
         tail_recur_gi_protocol = tail_recur_gi_protocol_vs_may_echo_vs_turnoff
     elif tail_recur_gi_protocol_vs_may_echo_vs_turnoff is True:
@@ -458,6 +533,31 @@ def explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff(tail_recur_gi_protoco
         if not (may_echo is None or may_echo is False):raise TypeError
         tail_recur_gi_protocol = tail_recur_gi_protocol__echo
     return tail_recur_gi_protocol
+explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff
+def explain__emplace_stack_ops_vs_may_ops4list_vs_ops4huge(emplace_stack_ops_vs_may_ops4list_vs_ops4huge, /):
+    r'''
+    -> IEmplaceStackOps
+
+    emplace_stack_ops_vs_may_ops4list_vs_ops4huge :: (IEmplaceStackOps | None | bool)
+        IEmplaceStackOps ==>> emplace_stack_ops
+        True ==>> the_emplace_stack_ops4HugeStack
+        default:None/False ==>> the_emplace_stack_ops4list
+
+    #'''
+    if isinstance(emplace_stack_ops_vs_may_ops4list_vs_ops4huge, IEmplaceStackOps):
+        emplace_stack_ops = emplace_stack_ops_vs_may_ops4list_vs_ops4huge
+    else:
+        may_ops4list_vs_ops4huge = emplace_stack_ops_vs_may_ops4list_vs_ops4huge
+        if may_ops4list_vs_ops4huge is True:
+            ops4huge = may_ops4list_vs_ops4huge
+            emplace_stack_ops = the_emplace_stack_ops4HugeStack
+        else:
+            may_ops4list = may_ops4list_vs_ops4huge
+            if not (may_ops4list is None or may_ops4list is False):raise TypeError
+            emplace_stack_ops = the_emplace_stack_ops4list
+    return emplace_stack_ops
+explain__emplace_stack_ops_vs_may_ops4list_vs_ops4huge
+
 
 
 #child_gi_protocol
@@ -471,6 +571,22 @@ def child_gi_protocol__0func(exprlist5yield, /):
     check_type_is(tuple, exprlist5yield)
     [generator_func, *args4gi_mkr] = exprlist5yield
     return generator_func(*args4gi_mkr)
+def child_gi_protocolT__0func5ref(deref4func, /):
+    r'''
+    deref4func -> child_gi_protocol__0ref4func
+
+    deref4func(ref4func) -> generator_func
+    child_gi_protocol__0ref4func :: exprlist5yield/(ref4func, *args4gi_mkr) -> generator_iterator
+
+    #'''
+    check_callable(deref4func)
+    def child_gi_protocol__0ref4func(exprlist5yield, /):
+        'exprlist5yield/(ref4func, *args4gi_mkr) -> generator_iterator'
+        check_type_is(tuple, exprlist5yield)
+        [ref4func, *args4gi_mkr] = exprlist5yield
+        generator_func = deref4func(ref4func)
+        return generator_func(*args4gi_mkr)
+    return child_gi_protocol__0ref4func
 
 #tail_recur_gi_protocol
 def tail_recur_gi_protocol__echo(return_value5child, /):
@@ -486,23 +602,31 @@ def tail_recur_gi_protocol__off(return_value5child, /):
     return (True, result5recur)
 
 
-recur5yield__echo__echo = recur5yield__decoratorT__all_gi_protocols(child_gi_protocol__echo, tail_recur_gi_protocol__echo)
-recur5yield__echo__off = recur5yield__decoratorT__all_gi_protocols(child_gi_protocol__echo, tail_recur_gi_protocol__off)
-recur5yield__0func__echo = recur5yield__decoratorT__all_gi_protocols(child_gi_protocol__0func, tail_recur_gi_protocol__echo)
-recur5yield__0func__off = recur5yield__decoratorT__all_gi_protocols(child_gi_protocol__0func, tail_recur_gi_protocol__off)
+recur5yield__list__echo__echo = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4list, child_gi_protocol__echo, tail_recur_gi_protocol__echo)
+recur5yield__list__echo__off = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4list, child_gi_protocol__echo, tail_recur_gi_protocol__off)
+recur5yield__list__0func__echo = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4list, child_gi_protocol__0func, tail_recur_gi_protocol__echo)
+recur5yield__list__0func__off = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4list, child_gi_protocol__0func, tail_recur_gi_protocol__off)
+
+recur5yield__huge__echo__echo = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4HugeStack, child_gi_protocol__echo, tail_recur_gi_protocol__echo)
+recur5yield__huge__echo__off = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4HugeStack, child_gi_protocol__echo, tail_recur_gi_protocol__off)
+recur5yield__huge__0func__echo = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4HugeStack, child_gi_protocol__0func, tail_recur_gi_protocol__echo)
+recur5yield__huge__0func__off = recur5yield__decoratorT__all_gi_protocols(the_emplace_stack_ops4HugeStack, child_gi_protocol__0func, tail_recur_gi_protocol__off)
 
 
 
-
-
-def recur5yield__eval__main_generator_iterator(main_generator_iterator, child_gi_protocol, tail_recur_gi_protocol, /):
+def recur5yield__eval__main_generator_iterator(emplace_stack_ops, main_generator_iterator, child_gi_protocol, tail_recur_gi_protocol, /):
     r'''
-    (main_generator_iterator, child_gi_protocol, tail_recur_gi_protocol) -> main_result/result5recur<main_generator_iterator>
+    emplace_stack_ops -> (main_generator_iterator, child_gi_protocol, tail_recur_gi_protocol) -> main_result/result5recur<main_generator_iterator>
+
+    emplace_stack_ops :: IEmplaceStackOps
 
     main_generator_iterator :: GeneratorIterator<iter-exprlist5yield, return-return_value5child>
     child_gi_protocol(exprlist5yield) -> generator_iterator
     tail_recur_gi_protocol(return_value5child) -> either_tailrecur_result/(is_result5recur, payload)/((False, exprlist5yield)|(True, result5recur))
     #'''
+    check_type_le(IEmplaceStackOps, emplace_stack_ops)
+    ops = emplace_stack_ops
+
     init_value4send = None #const
     def push(exprlist5yield, /):
         it = child_gi_protocol(exprlist5yield)
@@ -510,25 +634,25 @@ def recur5yield__eval__main_generator_iterator(main_generator_iterator, child_gi
     def push_gi(generator_iterator, /):
         if not isinstance(generator_iterator, GeneratorIterator): raise TypeError
         if tmay_value4send: raise logic-err
-        ls.append(generator_iterator)
+        ops.push(stack, generator_iterator) #ls.append(generator_iterator)
         tmay_value4send.append(init_value4send)
 
-    ls = [] # stack<generator_iterator>
+    stack = ops.mk_empty_stack() #ls = [] # stack<generator_iterator>
     tmay_value4send = []
     def main():
         push_gi(main_generator_iterator)
-        while ls:
+        while not ops.is_empty(stack):#while ls:
             try:
                 while 1:
                     value4send = tmay_value4send.pop()
                     [] = tmay_value4send
-                    exprlist5yield = ls[-1].send(value4send)
+                    exprlist5yield = ops.get_top(stack).send(value4send)#ls[-1].send(value4send)
                         #raise StopIteration(result5recur)
 
                     push(exprlist5yield)
             except StopIteration as e:
                 return_value5child = e.value
-                ls.pop()
+                ops.pop(stack)#ls.pop()
                 (is_result5recur, payload) = tail_recur_gi_protocol(return_value5child)
                 if is_result5recur:
                     result5recur = payload
@@ -546,11 +670,104 @@ def recur5yield__eval__main_generator_iterator(main_generator_iterator, child_gi
     return main()
 
 
+
+
+if 0:
+  def check_getitemable(x, /):
+    if not hasattr(type(x), '__getitem__'): raise TypeError
+
+#child_gi_protocol6collector <: child_gi_protocol6getitemable
+#child_gi_protocol6getitemable
+def child_gi_protocol6getitemable__0case(getitemable, exprlist5yield, /):
+    'getitemable<k,case> -> exprlist5yield/(key4case, *payload) -> generator_iterator'
+    check_getitemable(getitemable)
+    check_type_is(tuple, exprlist5yield)
+    [key4case, *payload] = exprlist5yield
+    case = getitemable[key4case]
+    return_value5child = (case, *payload,)
+    def generator_func():
+        return return_value5child;yield
+    return generator_func()
+def child_gi_protocol6getitemable__0func(getitemable, exprlist5yield, /):
+    'getitemable<k,generator_func> -> exprlist5yield/(generator_func, *args4gi_mkr) -> generator_iterator'
+    check_getitemable(getitemable)
+    check_type_is(tuple, exprlist5yield)
+    [key4func, *args4gi_mkr] = exprlist5yield
+    generator_func = getitemable[key4func]
+    return generator_func(*args4gi_mkr)
+def child_gi_protocol6getitemableT__0func5ref(deref4func, /):
+    r'''
+    deref4func -> child_gi_protocol6getitemable__0ref4func
+
+    deref4func(ref4func) -> generator_func
+    child_gi_protocol6getitemable__0ref4func :: getitemable<k,ref4func> -> exprlist5yield/(ref4func, *args4gi_mkr) -> generator_iterator
+
+    #'''
+    check_callable(deref4func)
+    def child_gi_protocol6getitemable__0ref4func(getitemable, exprlist5yield, /):
+        'getitemable<k,ref4func> -> exprlist5yield/(ref4func, *args4gi_mkr) -> generator_iterator'
+        check_getitemable(getitemable)
+        check_type_is(tuple, exprlist5yield)
+        [key4ref4func, *args4gi_mkr] = exprlist5yield
+        ref4func = getitemable[key4ref4func]
+        generator_func = deref4func(ref4func)
+        return generator_func(*args4gi_mkr)
+    return child_gi_protocol6getitemable__0ref4func
+
+explain__child_gi_protocol_vs_may_0ref4func_vs_echo
+def explain__may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case(may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case, may_deref4func, collector, /):
+    r'''
+    -> child_gi_protocol
+
+child_gi_protocol := curry1(child_gi_protocol6getitemable, collector)
+
+child_gi_protocol6getitemable <<==:
+    collector :: getitemable
+    may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case :: (callable | None | bool)
+        default:None ==>>:
+            collector :: RecurGroupCollector4Recur5Yield
+                ==>> type(collector)._child_gi_protocol_
+        callable ==>> child_gi_protocol6getitemable
+        True ==>> child_gi_protocol6getitemable__0case
+        False ==>>:
+            may_deref4func :: None | deref4func/callable/(ref4func -> generator_func)
+                None ==>> child_gi_protocol6getitemable__0func
+                callable ==>> child_gi_protocol6getitemable__0ref4func===child_gi_protocol6getitemableT__0func5ref<deref4func>
+
+    #'''
+    check_getitemable(collector)
+    if may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case is None:
+        check_type_le(RecurGroupCollector4Recur5Yield, collector)
+        child_gi_protocol6getitemable = type(collector)._child_gi_protocol_
+    elif callable(may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case):
+        child_gi_protocol6getitemable = may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case
+    elif may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case is True:
+        _0case = True
+        child_gi_protocol6getitemable = child_gi_protocol6getitemable__0case
+    else:
+        _0ref4func = may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case
+        if not (_0ref4func is False):raise TypeError
+        if may_deref4func is None:
+            child_gi_protocol6getitemable = child_gi_protocol6getitemable__0func
+        else:
+            deref4func = may_deref4func
+            check_callable(deref4func)
+            child_gi_protocol6getitemable__0ref4func = child_gi_protocol6getitemableT__0func5ref(deref4func)
+            child_gi_protocol6getitemable = child_gi_protocol6getitemable__0ref4func
+    child_gi_protocol = curry1(child_gi_protocol6getitemable, collector)
+    return child_gi_protocol
+explain__may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case
+
+
+
 #class Recur5Yield:
 class RecurGroupCollector4Recur5Yield:
-    def __init__(sf, may_child_gi_protocol__collector, tail_recur_gi_protocol_vs_may_echo_vs_turnoff, /, *args4update, **kwds4update):
-        sf._child_gi_protocol = sf._child_gi_protocol_ if may_child_gi_protocol__collector is None else curry1(may_child_gi_protocol__collector, sf)
+    #def __init__(sf, emplace_stack_ops_vs_may_ops4list_vs_ops4huge, may_child_gi_protocol__collector, tail_recur_gi_protocol_vs_may_echo_vs_turnoff, /, *args4update, **kwds4update):
+    #    sf._child_gi_protocol = sf._child_gi_protocol_ if may_child_gi_protocol__collector is None else curry1(may_child_gi_protocol__collector, sf)
+    def __init__(sf, emplace_stack_ops_vs_may_ops4list_vs_ops4huge, may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case, may_deref4func, tail_recur_gi_protocol_vs_may_echo_vs_turnoff, /, *args4update, **kwds4update):
+        sf._child_gi_protocol = explain__may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case(may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case, may_deref4func, sf)
         sf._tail_recur_gi_protocol = explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff(tail_recur_gi_protocol_vs_may_echo_vs_turnoff)
+        sf._emplace_stack_ops = explain__emplace_stack_ops_vs_may_ops4list_vs_ops4huge(emplace_stack_ops_vs_may_ops4list_vs_ops4huge)
         sf._d = {}
         sf.update(*args4update, **kwds4update)
     def update(sf, /, *args4update, **kwds4update):
@@ -596,7 +813,9 @@ class RecurGroupCollector4Recur5Yield:
             return sf
         return decorator
     def _child_gi_protocol_(sf, exprlist5yield, /):
-        'exprlist5yield/(name, *args4gi_mkr) -> generator_iterator'
+        'exprlist5yield/(name4func, *args4gi_mkr) -> generator_iterator'
+        return child_gi_protocol6getitemable__0func(sf, exprlist5yield)
+        ##old ver:
         check_type_is(tuple, exprlist5yield)
         #check_tuple(exprlist5yield)
         [nm, *args4gi_mkr] = exprlist5yield
@@ -604,9 +823,10 @@ class RecurGroupCollector4Recur5Yield:
     def mk_main(sf, main_name, /):
         child_gi_protocol = sf._child_gi_protocol
         tail_recur_gi_protocol = sf._tail_recur_gi_protocol
+        emplace_stack_ops = sf._emplace_stack_ops
 
         main_generator_func = sf[main_name]
-        main4recur5yield = recur5yield__decoratorT__all_gi_protocols(child_gi_protocol, tail_recur_gi_protocol)(main_generator_func)
+        main4recur5yield = recur5yield__decoratorT__all_gi_protocols(emplace_stack_ops, child_gi_protocol, tail_recur_gi_protocol)(main_generator_func)
         return main4recur5yield
 #pseudo
 class HelperPseudoMeta8Recur5Yield(type):
@@ -614,15 +834,15 @@ class HelperPseudoMeta8Recur5Yield(type):
         if not meta is __class__: raise TypeError
         del meta
         return HelperPseudoMeta8Recur5Yield(name, bases, namespace, **kwds4meta__full)
-def HelperPseudoMeta8Recur5Yield(name, bases, namespace, /, may_child_gi_protocol__collector=None, tail_recur_gi_protocol_vs_may_echo_vs_turnoff=None, **kwds4meta__tail):
+def HelperPseudoMeta8Recur5Yield(name, bases, namespace, /, *, emplace_stack_ops_vs_may_ops4list_vs_ops4huge=None, may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case=None, may_deref4func=None, tail_recur_gi_protocol_vs_may_echo_vs_turnoff=None, **kwds4meta__tail):
     if 1:
         if bases: raise TypeError
         if kwds4meta__tail: raise TypeError
-        collector = RecurGroupCollector4Recur5Yield(may_child_gi_protocol__collector, tail_recur_gi_protocol_vs_may_echo_vs_turnoff)
+        collector = RecurGroupCollector4Recur5Yield(emplace_stack_ops_vs_may_ops4list_vs_ops4huge, may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case, may_deref4func, tail_recur_gi_protocol_vs_may_echo_vs_turnoff)
     else:
         args4gi_mkr = bases
         kwds4gi_mkr = kwds4meta__tail
-        collector = RecurGroupCollector4Recur5Yield(may_child_gi_protocol__collector, tail_recur_gi_protocol_vs_may_echo_vs_turnoff, *args4gi_mkr, **kwds4gi_mkr)
+        collector = RecurGroupCollector4Recur5Yield(emplace_stack_ops_vs_may_ops4list_vs_ops4huge, may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case, may_deref4func, tail_recur_gi_protocol_vs_may_echo_vs_turnoff, *args4gi_mkr, **kwds4gi_mkr)
     excludes = {
         '__module__'
         ,'__qualname__'

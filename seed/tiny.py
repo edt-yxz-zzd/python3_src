@@ -72,8 +72,11 @@ __all__ = str2__all__(r'''
 
     check_Weakable      # :: obj -> None|raise TypeError
     is_Weakable         # :: obj -> bool
-    WeakableDict        # :: obj -> bool
-    check_type_le       # <: Weakable&dict
+    WeakableDict        # <: Weakable&dict
+
+    check_getitemable   # :: a -> None|raise TypeError
+    icheck_getitemable  # :: a -> a|raise TypeError
+    check_type_le       # :: cls -> a -> None|raise TypeError
     check_type_is       # :: cls -> a -> None|raise TypeError
     icheck_type_le      # :: cls -> a -> a|raise TypeError
     icheck_type_is      # :: cls -> a -> a|raise TypeError
@@ -248,6 +251,11 @@ __all__ = str2__all__(r'''
 
     prepare4set_attrs   # Iter name -> {key:new} -> may ((name->key)|str) -> Iter (name, new)
 
+    CallCounter         # :: f -> wrap(f){.count, .func}
+                        # count num_call
+    default_cmp         # a->a->(-1/0/+1)
+                        # cmp by (<)&(==)
+                        # vs default_key = echo
     #''')
 
 from seed.math.sign_of import sign_of
@@ -311,6 +319,7 @@ assert (4-1,-1,-1) == fix_slice_by_len_of_(tuple, range(4), echo_key[::-1])
 assert range(4-1,-1,-1) == fix_slice_by_len_of_(range, range(4), echo_key[::-1])
 
 
+from seed.tiny_.check import check_getitemable, icheck_getitemable
 from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
@@ -478,6 +487,8 @@ from seed.tiny_.str__split_join import str_join__list_nonemty, str_split__list_n
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, group4dict_value
 
 
+from seed.tiny_.CallCounter import CallCounter
+from seed.tiny_.default_cmp import default_cmp
 
 
 def does_run_as_main(__name__):

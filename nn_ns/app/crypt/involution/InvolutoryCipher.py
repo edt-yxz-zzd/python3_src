@@ -1934,6 +1934,7 @@ class IInnerIndexablePartition_mod__lookup_table(IInnerIndexablePartition_mod):
 
 def derived5idx8eqvcls2num_elements(idx8eqvcls2num_elements, /):
     #bug:idx8eqvcls2offset = (*accumulate(idx8eqvcls2num_elements),)
+    #see: seed.seq_tools.lsls52ls
     idx8eqvcls_ex2offset = (0, *accumulate(idx8eqvcls2num_elements),)
     idx8eqvcls2offset = idx8eqvcls_ex2offset[:-1]
     total_num_elements = idx8eqvcls_ex2offset[-1]

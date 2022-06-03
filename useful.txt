@@ -107,11 +107,37 @@ from seed.tiny import str2__all__
 __all__ = str2__all__(r'''#)
     #(''')
 from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+[[
+先复制再修改一半
+.,.+13s/^\( *\)def\( \+\)\(\w\+\)/\1@abstractmethod\r\1def\2_\3_
+  def f(...):
+  ==>>:
+  @abstractmethod
+  def _f_(...):
+
+.,.+13s/^\( *\)def\( \+\)\(\w\+\)(\(\w\+\)\(\%(, *\(\%(\w\+\%( *, *\w\+\)*\)\)\)\?\)\(\%(, *[/]\)\?\)\(.\{-}\)):$/\1def\2\3(\4\5\7\8):\r\1    return \4._\3_(\6\8)
+  def f(...):
+  ==>>:
+  def f(xxx, a, /, ...):
+      return xxx._f_(a, ...)
+
+.,.+13s/^\( *\)def\( \+\)\(\w\+\)(\(\w\+\)\(\%(, *\(\%(\w\+\%( *, *\w\+\)*\)\)\)\?\)\(\%(, *[/]\)\?\)\(.\{-}\)):$\n\(.*\)/\1def\2\3(\4\5\7\8):\r\9\r\1    return \4._\3_(\6\8)
+  def f(...):
+      '...'
+  ==>>:
+  def f(xxx, a, /, ...):
+      '...'
+      return xxx._f_(a, ...)
+]]
+
 from seed.helper.repr_input import repr_helper
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f, expectError
 from seed.helper.check.checkers import check_pair, check_type_is
   #from seed.helper.check.checkers import checks, checkers, check_funcs
   #view ../../python3_src/seed/helper/check/checkers.py
+from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
+#view ../../python3_src/seed/func_tools/fmapT/all_xxxT__tiny.py
 if 0b00:#[01_to_turn_off]
     #0b01
     print(fr'x={x}')
@@ -225,9 +251,10 @@ may
 5:
   #image of "2/two/to"
   from
-6/9
+6/9:69
   down/up
   阴/阳
+  6:sit/under-context/bind
 int:
   uint: unsigned_int, int_ge_0
   nint: negative_int, int_lt_0

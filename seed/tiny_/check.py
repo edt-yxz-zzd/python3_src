@@ -1,3 +1,4 @@
+#from seed.tiny_.check import check_getitemable, icheck_getitemable
 #from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 #from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 #from seed.tiny_.check import check_callable, check_is_obj, check_is_None
@@ -6,6 +7,8 @@
 #from seed.tiny_.check import check_str, check_char
 
 __all__ = '''
+    check_getitemable
+
     check_type_le
     check_type_is
     check_tmay
@@ -18,6 +21,7 @@ __all__ = '''
     check_int_ge
     check_int_ge_le
 
+    icheck_getitemable
     icheck_type_le
     icheck_type_is
     icheck_tmay
@@ -41,6 +45,9 @@ __all__ = '''
     check_char
     '''.split()
 
+
+def check_getitemable(x, /):
+    if not hasattr(type(x), '__getitem__'): raise TypeError
 
 def check_type_le(cls, obj, /):
     if not isinstance(obj, cls): raise TypeError
@@ -76,11 +83,14 @@ def check_uint_le(max, obj, /):
 def check_imay_le(max, obj, /):
     check_int_ge_le(-1, max, obj)
 
-def icheck_type_is(cls, obj, /):
-    check_type_is(cls, obj)
+def icheck_getitemable(obj, /):
+    check_getitemable(obj)
     return obj
 def icheck_type_le(cls, obj, /):
     check_type_le(cls, obj)
+    return obj
+def icheck_type_is(cls, obj, /):
+    check_type_is(cls, obj)
     return obj
 def icheck_tmay(obj, /):
     check_tmay(obj)
