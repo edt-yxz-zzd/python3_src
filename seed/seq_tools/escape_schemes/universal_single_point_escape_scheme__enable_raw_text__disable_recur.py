@@ -1,7 +1,9 @@
+#__all__:goto
 r'''
 
 seed.seq_tools.escape_schemes.universal_single_point_escape_scheme__enable_raw_text__disable_recur
-py -m seed.seq_tools.escape_schemes.universal_single_point_escape_scheme__enable_raw_text__disable_recur
+py -m seed.seq_tools.escape_schemes.universal_single_point_escape_scheme__enable_raw_text__disable_recur > /sdcard/0my_files/tmp/_.txt
+view /sdcard/0my_files/tmp/_.txt
 
 e ../../python3_src/seed/seq_tools/escape_schemes/universal_single_point_escape_scheme__enable_raw_text__disable_recur.py
 view ../../python3_src/seed/iters/PeekableIterator.py
@@ -354,7 +356,9 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
 #'''
-
+__all__ = '''
+    '''.split()
+from seed.helper.stable_repr import stable_repr
 
 r'''
 from seed.iters.PeekableIterator import PeekableIterator
@@ -380,7 +384,7 @@ class UniversalSinglePointEscapeScheme__enable_raw_text__disable_recur:
 #'''
 
 from itertools import combinations
-def _():
+def _(local_fnm, /):
     lhs = 'IHLT'
     rhs = 'hrty'
     def before(case, a, b, /):
@@ -434,12 +438,55 @@ def _():
         mk_ch2kd_(d, False, True, var_szsL)
         mk_ch2kd_(d, True, True, var_szsR)
         return d
-    ch2kd = mk_ch2kd()
-    def f1_case2splited_sz(case, /):
+    ch2kd = mk_ch2kd() #{segment/ch : kind/kd}
+    def is_segment_R(segment, /):
+        return ch2kd[segment][0]
+    def is_segment_var_sz(segment, /):
+        return ch2kd[segment][1]
+    if 0:
+      def is_fragment_sz_ge1(case, fragment, /):
+        # case == ..., segmentL0, segmentR1, segmentR*, segmentL2, ... # implicitly ended by X=segmentL
+        #   ==>> sz(fragment=[segmentL2,segmentR1]) >=1
+
+        chL2, chR1 = nm = fragment
+        assert not is_segment_R(chL2)
+        assert is_segment_R(chR1)
+        iL2 = case.index(chL2)
+        iR1 = case.index(chR1)
+        if not 0 < iR1 < iL2: return False
+        if is_segment_R(case[iR1-1]): return False
+        if not all(map(is_segment_R, case[iR1:iL2])): return False
+        return True
+    def f1_0_case2fragments_of_sz_ge1(case, /):
+        #see:is_fragment_sz_ge1
+        '-> fragments_of_sz_ge1'
+        case_ex = case+'X'; del case
+        fragments_of_sz_ge1 = []
+        idc4segmentL = [i for i, ch in enumerate(case_ex) if not is_segment_R(ch)]
+        for ii, iL2 in enumerate(idc4segmentL[1:], 1):
+            iL2_or_iR1 = idc4segmentL[ii-1]+1
+            assert iL2 >= iL2_or_iR1
+            if iL2 > iL2_or_iR1:
+                iR1 = iL2_or_iR1
+                chL2 = case_ex[iL2]
+                chR1 = case_ex[iR1]
+                assert not is_segment_R(chL2)
+                assert is_segment_R(chR1)
+                nm = chL2+chR1
+                fragments_of_sz_ge1.append(nm)
+        return fragments_of_sz_ge1
+
+
+    def f1_case2segment2fragments(case, /):
+        'case -> segment2fragments'
+        #segment: e.g. I,H,L,T,X,h,r,t,y
+        #fragment: Ih, Hh...
+
         #ch2sum = defaultdict(list)
         ch2sum = {ch:[] for ch in 'X'+lhs+rhs}
         def dropable(nm, /):
-            return all(ch2kd[ch][1] for ch in nm)
+            #同时变长，可取消(即 填充任意长度均有解)
+            return all(map(is_segment_var_sz, nm))
         def f(curr_ls, next_data, /):
             isR, is_var, next_ch = next_data
             if isR:
@@ -467,25 +514,89 @@ def _():
         else:
             # [ch2sum[ch] = []] ==>> len==0
             pass
-        return dict(ch2sum)
+        segment2fragments = dict(ch2sum)
+        return segment2fragments
 
+    case2segment2fragments = {case:f1_case2segment2fragments(case) for case in cases}
+        #{case:segment2fragments}
+        #{case:{segment:[fragment]}}
+    case2fragments_of_sz_ge1 = {case:f1_0_case2fragments_of_sz_ge1(case) for case in cases}
+        #{case:fragments_of_sz_ge1}
+        #{case:[fragment]}
     def solve_at_given_H_T(sz4H, sz4T, /):
+        for case in case:
+            yield from solve_at_given_H_T_case(sz4H, sz4T, case)
+    def solve_at_given_H_T_case(sz4H, sz4T, case, /):
+        'Iter ((sz4I, sz4H, sz4L, sz4T, sz4X), (sz4h, sz4r, sz4t, sz4y))'
         ch2sz = dict(H=sz4H, T=sz4T, h=sz4H, t=sz4T)
-        ... ...
+        segment2fragments = f1_case2segment2fragments(case)
+        fragments_of_sz_ge1 = {*f1_0_case2fragments_of_sz_ge1(case)}
+        fragments4H = segment2fragments['H']
+        fragments4h = segment2fragments['h']
+        fragments4T = segment2fragments['T']
+        fragments4t = segment2fragments['t']
+        for d4H in _mk_it(fragments4H, sz4H):
+            for d4T in _mk_it(fragments4T, sz4T):
+                known_fragments = {*d4H, *d4T}
+
+                known_fragments4h = {*fragments4h} & known_fragments
+                unknown_fragments4h = {*fragments4h} - known_fragments
+                sz4unknown_fragments4h = sz4H - sum(d4H[nm] if nm in d4H else d4T for nm in known_fragments4h)
+                if sz4unknown_fragments4h < 0:continue
+                ###
+                known_fragments4t = {*fragments4t} & known_fragments
+                unknown_fragments4t = {*fragments4t} - known_fragments
+                sz4unknown_fragments4t = sz4T - sum(d4H[nm] if nm in d4H else d4T for nm in known_fragments4t)
+                if sz4unknown_fragments4t < 0:continue
+                ###
+                #fill sz of unknown_fragments4h/unknown_fragments4t
+                #filter fragments_of_sz_ge1
+                #... ... TODO
+        return;yield
+
+        var_nms = {nm for segment, fragments in segment2fragments.items() for nm in [segment, *fragments]}
+        _knowns = set('HTht')
+        unknowns = sorted(var_nms-_knowns)+sorted(_knowns) #移至最后，解线性方程组 需要 自由变量时，优先选用后面的变量
+        equalities = {EQ(segment, fragments) for segment, fragments in segment2fragments.items()} | {EQ('H', 'h'), EQ('T', 't')}# | {EQ('H', sz4H), EQ('T', sz4T)}
+        inequalities = {GE(nm, [0]) for nm in unknowns} | {GE(nm, [1]) for nm in fragments_of_sz_ge1}
+        #... ...TODO
 
     def _t_f0():
         for i, case in enumerate(cases):
             print(i, case)
     def _t_f1():
         for i, case in enumerate(cases):
-            print(i, case, f1_case2splited_sz(case))
+            segment2fragments = f1_case2segment2fragments(case)
+            #bug:assert segment2fragments['y'] == []
+            print(i, case, stable_repr(segment2fragments))
+            #H==h, T==t
+            H = segment2fragments['H']
+            h = segment2fragments['h']
+            T = segment2fragments['T']
+            t = segment2fragments['t']
+            print(f'    #H={H}={h}=h')
+            print(f'    #T={T}={t}=t')
+            lslsL = [segment2fragments[ch] for ch in lhs+'X']
+            lslsR = [segment2fragments[ch] for ch in rhs]
+            lsL = [nm for ls in lslsL for nm in ls]
+            lsR = [nm for ls in lslsR for nm in ls]
+            if not lsL==lsR:raise Exception((lslsL, lslsR))
+            ls = lsL
+            print(f'    #IHLTX={lslsL}={lslsR}=hrty')
+            print(f'    #IHLTX={ls}=hrty')
+            fragments_of_sz_ge1 = f1_0_case2fragments_of_sz_ge1(case)
+            print(f'    #fragments_of_sz_ge1={fragments_of_sz_ge1}')
     #_t_f0()
-    _t_f1()
+    #_t_f1()
+    if local_fnm:
+        locals()[local_fnm]()
     return
 
 #from collections import defaultdict
-_()
-r'''
+#_('_t_f0')
+_('_t_f1')
+r'''[[[
+_('_t_f0')
 0 hrItyHLT
 1 hrItHyLT
 2 hrItHLyT
@@ -536,4 +647,307 @@ r'''
 47 IhHLrtTy
 48 IhHLrTty
 49 IhHLTrty
-#'''
+#]]]'''
+r'''[[[
+_('_t_f1')
+0 hrItyHLT {'H': ['Ht', 'Hy'], 'I': ['Ih', 'It'], 'L': [], 'T': [], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht'], 'y': ['Hy']}
+    #H=['Ht', 'Hy']=['Ih']=h
+    #T=[]=['It', 'Ht']=t
+    #IHLTX=[['Ih', 'It'], ['Ht', 'Hy'], [], [], []]=[['Ih'], [], ['It', 'Ht'], ['Hy']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Hy']=hrty
+    #fragments_of_sz_ge1=['Ht']
+1 hrItHyLT {'H': ['Ht', 'Hy'], 'I': ['Ih', 'It'], 'L': [], 'T': [], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht'], 'y': ['Hy']}
+    #H=['Ht', 'Hy']=['Ih']=h
+    #T=[]=['It', 'Ht']=t
+    #IHLTX=[['Ih', 'It'], ['Ht', 'Hy'], [], [], []]=[['Ih'], [], ['It', 'Ht'], ['Hy']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Hy']=hrty
+    #fragments_of_sz_ge1=['Ht', 'Ly']
+2 hrItHLyT {'H': ['Ht', 'Hy'], 'I': ['Ih', 'It'], 'L': [], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht'], 'y': ['Hy', 'Ty']}
+    #H=['Ht', 'Hy']=['Ih']=h
+    #T=['Ty']=['It', 'Ht']=t
+    #IHLTX=[['Ih', 'It'], ['Ht', 'Hy'], [], ['Ty'], []]=[['Ih'], [], ['It', 'Ht'], ['Hy', 'Ty']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Hy', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Ht', 'Ty']
+3 hrItHLTy {'H': ['Ht', 'Hy'], 'I': ['Ih', 'It'], 'L': [], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht'], 'y': ['Hy', 'Ty']}
+    #H=['Ht', 'Hy']=['Ih']=h
+    #T=['Ty']=['It', 'Ht']=t
+    #IHLTX=[['Ih', 'It'], ['Ht', 'Hy'], [], ['Ty'], []]=[['Ih'], [], ['It', 'Ht'], ['Hy', 'Ty']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Hy', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Ht', 'Xy']
+4 hrIHtyLT {'H': ['Ht'], 'I': ['Ih', 'It'], 'L': ['Lt'], 'T': [], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht', 'Lt'], 'y': []}
+    #H=['Ht']=['Ih']=h
+    #T=[]=['It', 'Ht', 'Lt']=t
+    #IHLTX=[['Ih', 'It'], ['Ht'], ['Lt'], [], []]=[['Ih'], [], ['It', 'Ht', 'Lt'], []]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Lt']=hrty
+    #fragments_of_sz_ge1=['Lt']
+5 hrIHtLyT {'H': ['Ht'], 'I': ['Ih', 'It'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht', 'Lt'], 'y': ['Ty']}
+    #H=['Ht']=['Ih']=h
+    #T=['Ty']=['It', 'Ht', 'Lt']=t
+    #IHLTX=[['Ih', 'It'], ['Ht'], ['Lt'], ['Ty'], []]=[['Ih'], [], ['It', 'Ht', 'Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Lt', 'Ty']
+6 hrIHtLTy {'H': ['Ht'], 'I': ['Ih', 'It'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht', 'Lt'], 'y': ['Ty']}
+    #H=['Ht']=['Ih']=h
+    #T=['Ty']=['It', 'Ht', 'Lt']=t
+    #IHLTX=[['Ih', 'It'], ['Ht'], ['Lt'], ['Ty'], []]=[['Ih'], [], ['It', 'Ht', 'Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Lt', 'Xy']
+7 hrIHLtyT {'H': ['Ht'], 'I': ['Ih', 'It'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht', 'Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Ht']=['Ih']=h
+    #T=['Tt', 'Ty']=['It', 'Ht', 'Lt', 'Tt']=t
+    #IHLTX=[['Ih', 'It'], ['Ht'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih'], [], ['It', 'Ht', 'Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Tt']
+8 hrIHLtTy {'H': ['Ht'], 'I': ['Ih', 'It'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht', 'Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Ht']=['Ih']=h
+    #T=['Tt', 'Ty']=['It', 'Ht', 'Lt', 'Tt']=t
+    #IHLTX=[['Ih', 'It'], ['Ht'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih'], [], ['It', 'Ht', 'Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Tt', 'Xy']
+9 hrIHLTty {'H': ['Ht'], 'I': ['Ih', 'It'], 'L': ['Lt'], 'T': ['Tt'], 'X': ['Xt'], 'h': ['Ih'], 'r': [], 't': ['It', 'Ht', 'Lt', 'Tt', 'Xt'], 'y': []}
+    #H=['Ht']=['Ih']=h
+    #T=['Tt']=['It', 'Ht', 'Lt', 'Tt', 'Xt']=t
+    #IHLTX=[['Ih', 'It'], ['Ht'], ['Lt'], ['Tt'], ['Xt']]=[['Ih'], [], ['It', 'Ht', 'Lt', 'Tt', 'Xt'], []]=hrty
+    #IHLTX=['Ih', 'It', 'Ht', 'Lt', 'Tt', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Xt']
+10 hIrtyHLT {'H': ['Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': [], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy']}
+    #H=['Hr', 'Ht', 'Hy']=['Ih']=h
+    #T=[]=['Ht']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht', 'Hy'], [], [], []]=[['Ih'], ['Hr'], ['Ht'], ['Hy']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Hy']=hrty
+    #fragments_of_sz_ge1=['Hr']
+11 hIrtHyLT {'H': ['Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': [], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy']}
+    #H=['Hr', 'Ht', 'Hy']=['Ih']=h
+    #T=[]=['Ht']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht', 'Hy'], [], [], []]=[['Ih'], ['Hr'], ['Ht'], ['Hy']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Hy']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Ly']
+12 hIrtHLyT {'H': ['Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy', 'Ty']}
+    #H=['Hr', 'Ht', 'Hy']=['Ih']=h
+    #T=['Ty']=['Ht']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht', 'Hy'], [], ['Ty'], []]=[['Ih'], ['Hr'], ['Ht'], ['Hy', 'Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Hy', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Ty']
+13 hIrtHLTy {'H': ['Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy', 'Ty']}
+    #H=['Hr', 'Ht', 'Hy']=['Ih']=h
+    #T=['Ty']=['Ht']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht', 'Hy'], [], ['Ty'], []]=[['Ih'], ['Hr'], ['Ht'], ['Hy', 'Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Hy', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Xy']
+14 hIrHtyLT {'H': ['Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': [], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht', 'Lt'], 'y': []}
+    #H=['Hr', 'Ht']=['Ih']=h
+    #T=[]=['Ht', 'Lt']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht'], ['Lt'], [], []]=[['Ih'], ['Hr'], ['Ht', 'Lt'], []]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Lt']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Lt']
+15 hIrHtLyT {'H': ['Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht', 'Lt'], 'y': ['Ty']}
+    #H=['Hr', 'Ht']=['Ih']=h
+    #T=['Ty']=['Ht', 'Lt']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht'], ['Lt'], ['Ty'], []]=[['Ih'], ['Hr'], ['Ht', 'Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Lt', 'Ty']
+16 hIrHtLTy {'H': ['Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht', 'Lt'], 'y': ['Ty']}
+    #H=['Hr', 'Ht']=['Ih']=h
+    #T=['Ty']=['Ht', 'Lt']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht'], ['Lt'], ['Ty'], []]=[['Ih'], ['Hr'], ['Ht', 'Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Lt', 'Xy']
+17 hIrHLtyT {'H': ['Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht', 'Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hr', 'Ht']=['Ih']=h
+    #T=['Tt', 'Ty']=['Ht', 'Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih'], ['Hr'], ['Ht', 'Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Tt']
+18 hIrHLtTy {'H': ['Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht', 'Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hr', 'Ht']=['Ih']=h
+    #T=['Tt', 'Ty']=['Ht', 'Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih'], ['Hr'], ['Ht', 'Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Tt', 'Xy']
+19 hIrHLTty {'H': ['Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt'], 'X': ['Xt'], 'h': ['Ih'], 'r': ['Hr'], 't': ['Ht', 'Lt', 'Tt', 'Xt'], 'y': []}
+    #H=['Hr', 'Ht']=['Ih']=h
+    #T=['Tt']=['Ht', 'Lt', 'Tt', 'Xt']=t
+    #IHLTX=[['Ih'], ['Hr', 'Ht'], ['Lt'], ['Tt'], ['Xt']]=[['Ih'], ['Hr'], ['Ht', 'Lt', 'Tt', 'Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hr', 'Ht', 'Lt', 'Tt', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Hr', 'Xt']
+20 hIHrtyLT {'H': ['Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': [], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Lt'], 'y': []}
+    #H=['Hr']=['Ih']=h
+    #T=[]=['Lt']=t
+    #IHLTX=[['Ih'], ['Hr'], ['Lt'], [], []]=[['Ih'], ['Hr'], ['Lt'], []]=hrty
+    #IHLTX=['Ih', 'Hr', 'Lt']=hrty
+    #fragments_of_sz_ge1=['Lr']
+21 hIHrtLyT {'H': ['Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Lt'], 'y': ['Ty']}
+    #H=['Hr']=['Ih']=h
+    #T=['Ty']=['Lt']=t
+    #IHLTX=[['Ih'], ['Hr'], ['Lt'], ['Ty'], []]=[['Ih'], ['Hr'], ['Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Lr', 'Ty']
+22 hIHrtLTy {'H': ['Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Lt'], 'y': ['Ty']}
+    #H=['Hr']=['Ih']=h
+    #T=['Ty']=['Lt']=t
+    #IHLTX=[['Ih'], ['Hr'], ['Lt'], ['Ty'], []]=[['Ih'], ['Hr'], ['Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Lr', 'Xy']
+23 hIHrLtyT {'H': ['Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hr']=['Ih']=h
+    #T=['Tt', 'Ty']=['Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hr'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih'], ['Hr'], ['Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Lr', 'Tt']
+24 hIHrLtTy {'H': ['Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr'], 't': ['Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hr']=['Ih']=h
+    #T=['Tt', 'Ty']=['Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hr'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih'], ['Hr'], ['Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Lr', 'Tt', 'Xy']
+25 hIHrLTty {'H': ['Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt'], 'X': ['Xt'], 'h': ['Ih'], 'r': ['Hr'], 't': ['Lt', 'Tt', 'Xt'], 'y': []}
+    #H=['Hr']=['Ih']=h
+    #T=['Tt']=['Lt', 'Tt', 'Xt']=t
+    #IHLTX=[['Ih'], ['Hr'], ['Lt'], ['Tt'], ['Xt']]=[['Ih'], ['Hr'], ['Lt', 'Tt', 'Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hr', 'Lt', 'Tt', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Lr', 'Xt']
+26 hIHLrtyT {'H': ['Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr', 'Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr', 'Tr'], 't': ['Tt'], 'y': ['Ty']}
+    #H=['Hr']=['Ih']=h
+    #T=['Tr', 'Tt', 'Ty']=['Tt']=t
+    #IHLTX=[['Ih'], ['Hr'], [], ['Tr', 'Tt', 'Ty'], []]=[['Ih'], ['Hr', 'Tr'], ['Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Tr', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Tr']
+27 hIHLrtTy {'H': ['Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr', 'Tt', 'Ty'], 'X': [], 'h': ['Ih'], 'r': ['Hr', 'Tr'], 't': ['Tt'], 'y': ['Ty']}
+    #H=['Hr']=['Ih']=h
+    #T=['Tr', 'Tt', 'Ty']=['Tt']=t
+    #IHLTX=[['Ih'], ['Hr'], [], ['Tr', 'Tt', 'Ty'], []]=[['Ih'], ['Hr', 'Tr'], ['Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hr', 'Tr', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Tr', 'Xy']
+28 hIHLrTty {'H': ['Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr', 'Tt'], 'X': ['Xt'], 'h': ['Ih'], 'r': ['Hr', 'Tr'], 't': ['Tt', 'Xt'], 'y': []}
+    #H=['Hr']=['Ih']=h
+    #T=['Tr', 'Tt']=['Tt', 'Xt']=t
+    #IHLTX=[['Ih'], ['Hr'], [], ['Tr', 'Tt'], ['Xt']]=[['Ih'], ['Hr', 'Tr'], ['Tt', 'Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hr', 'Tr', 'Tt', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Tr', 'Xt']
+29 hIHLTrty {'H': ['Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr'], 'X': ['Xt'], 'h': ['Ih'], 'r': ['Hr', 'Tr'], 't': ['Xt'], 'y': []}
+    #H=['Hr']=['Ih']=h
+    #T=['Tr']=['Xt']=t
+    #IHLTX=[['Ih'], ['Hr'], [], ['Tr'], ['Xt']]=[['Ih'], ['Hr', 'Tr'], ['Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hr', 'Tr', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Xr']
+30 IhrtyHLT {'H': ['Hh', 'Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': [], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy']}
+    #H=['Hh', 'Hr', 'Ht', 'Hy']=['Ih', 'Hh']=h
+    #T=[]=['Ht']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht', 'Hy'], [], [], []]=[['Ih', 'Hh'], ['Hr'], ['Ht'], ['Hy']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Hy']=hrty
+    #fragments_of_sz_ge1=['Hh']
+31 IhrtHyLT {'H': ['Hh', 'Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': [], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy']}
+    #H=['Hh', 'Hr', 'Ht', 'Hy']=['Ih', 'Hh']=h
+    #T=[]=['Ht']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht', 'Hy'], [], [], []]=[['Ih', 'Hh'], ['Hr'], ['Ht'], ['Hy']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Hy']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Ly']
+32 IhrtHLyT {'H': ['Hh', 'Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': ['Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy', 'Ty']}
+    #H=['Hh', 'Hr', 'Ht', 'Hy']=['Ih', 'Hh']=h
+    #T=['Ty']=['Ht']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht', 'Hy'], [], ['Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Ht'], ['Hy', 'Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Hy', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Ty']
+33 IhrtHLTy {'H': ['Hh', 'Hr', 'Ht', 'Hy'], 'I': ['Ih'], 'L': [], 'T': ['Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht'], 'y': ['Hy', 'Ty']}
+    #H=['Hh', 'Hr', 'Ht', 'Hy']=['Ih', 'Hh']=h
+    #T=['Ty']=['Ht']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht', 'Hy'], [], ['Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Ht'], ['Hy', 'Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Hy', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Xy']
+34 IhrHtyLT {'H': ['Hh', 'Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': [], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht', 'Lt'], 'y': []}
+    #H=['Hh', 'Hr', 'Ht']=['Ih', 'Hh']=h
+    #T=[]=['Ht', 'Lt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht'], ['Lt'], [], []]=[['Ih', 'Hh'], ['Hr'], ['Ht', 'Lt'], []]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Lt']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lt']
+35 IhrHtLyT {'H': ['Hh', 'Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht', 'Lt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr', 'Ht']=['Ih', 'Hh']=h
+    #T=['Ty']=['Ht', 'Lt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht'], ['Lt'], ['Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Ht', 'Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lt', 'Ty']
+36 IhrHtLTy {'H': ['Hh', 'Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht', 'Lt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr', 'Ht']=['Ih', 'Hh']=h
+    #T=['Ty']=['Ht', 'Lt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht'], ['Lt'], ['Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Ht', 'Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lt', 'Xy']
+37 IhrHLtyT {'H': ['Hh', 'Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht', 'Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr', 'Ht']=['Ih', 'Hh']=h
+    #T=['Tt', 'Ty']=['Ht', 'Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Ht', 'Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Tt']
+38 IhrHLtTy {'H': ['Hh', 'Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht', 'Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr', 'Ht']=['Ih', 'Hh']=h
+    #T=['Tt', 'Ty']=['Ht', 'Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Ht', 'Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Tt', 'Xy']
+39 IhrHLTty {'H': ['Hh', 'Hr', 'Ht'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt'], 'X': ['Xt'], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Ht', 'Lt', 'Tt', 'Xt'], 'y': []}
+    #H=['Hh', 'Hr', 'Ht']=['Ih', 'Hh']=h
+    #T=['Tt']=['Ht', 'Lt', 'Tt', 'Xt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr', 'Ht'], ['Lt'], ['Tt'], ['Xt']]=[['Ih', 'Hh'], ['Hr'], ['Ht', 'Lt', 'Tt', 'Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Ht', 'Lt', 'Tt', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Xt']
+40 IhHrtyLT {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': [], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Lt'], 'y': []}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=[]=['Lt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], ['Lt'], [], []]=[['Ih', 'Hh'], ['Hr'], ['Lt'], []]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Lt']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lr']
+41 IhHrtLyT {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Lt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Ty']=['Lt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], ['Lt'], ['Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lr', 'Ty']
+42 IhHrtLTy {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Lt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Ty']=['Lt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], ['Lt'], ['Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Lt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Lt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lr', 'Xy']
+43 IhHrLtyT {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Tt', 'Ty']=['Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lr', 'Tt']
+44 IhHrLtTy {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt', 'Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Lt', 'Tt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Tt', 'Ty']=['Lt', 'Tt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], ['Lt'], ['Tt', 'Ty'], []]=[['Ih', 'Hh'], ['Hr'], ['Lt', 'Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Lt', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lr', 'Tt', 'Xy']
+45 IhHrLTty {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': ['Lt'], 'T': ['Tt'], 'X': ['Xt'], 'h': ['Ih', 'Hh'], 'r': ['Hr'], 't': ['Lt', 'Tt', 'Xt'], 'y': []}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Tt']=['Lt', 'Tt', 'Xt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], ['Lt'], ['Tt'], ['Xt']]=[['Ih', 'Hh'], ['Hr'], ['Lt', 'Tt', 'Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Lt', 'Tt', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Lr', 'Xt']
+46 IhHLrtyT {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr', 'Tt', 'Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr', 'Tr'], 't': ['Tt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Tr', 'Tt', 'Ty']=['Tt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], [], ['Tr', 'Tt', 'Ty'], []]=[['Ih', 'Hh'], ['Hr', 'Tr'], ['Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Tr', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Tr']
+47 IhHLrtTy {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr', 'Tt', 'Ty'], 'X': [], 'h': ['Ih', 'Hh'], 'r': ['Hr', 'Tr'], 't': ['Tt'], 'y': ['Ty']}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Tr', 'Tt', 'Ty']=['Tt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], [], ['Tr', 'Tt', 'Ty'], []]=[['Ih', 'Hh'], ['Hr', 'Tr'], ['Tt'], ['Ty']]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Tr', 'Tt', 'Ty']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Tr', 'Xy']
+48 IhHLrTty {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr', 'Tt'], 'X': ['Xt'], 'h': ['Ih', 'Hh'], 'r': ['Hr', 'Tr'], 't': ['Tt', 'Xt'], 'y': []}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Tr', 'Tt']=['Tt', 'Xt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], [], ['Tr', 'Tt'], ['Xt']]=[['Ih', 'Hh'], ['Hr', 'Tr'], ['Tt', 'Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Tr', 'Tt', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Tr', 'Xt']
+49 IhHLTrty {'H': ['Hh', 'Hr'], 'I': ['Ih'], 'L': [], 'T': ['Tr'], 'X': ['Xt'], 'h': ['Ih', 'Hh'], 'r': ['Hr', 'Tr'], 't': ['Xt'], 'y': []}
+    #H=['Hh', 'Hr']=['Ih', 'Hh']=h
+    #T=['Tr']=['Xt']=t
+    #IHLTX=[['Ih'], ['Hh', 'Hr'], [], ['Tr'], ['Xt']]=[['Ih', 'Hh'], ['Hr', 'Tr'], ['Xt'], []]=hrty
+    #IHLTX=['Ih', 'Hh', 'Hr', 'Tr', 'Xt']=hrty
+    #fragments_of_sz_ge1=['Hh', 'Xr']
+#]]]'''
