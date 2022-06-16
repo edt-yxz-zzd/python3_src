@@ -451,6 +451,21 @@ if __name__ == "__main__":
 
 
 
+def main(args=None, /, *, description, epilog='', globals, locals=None):
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description=description
+        , epilog=epilog
+        , formatter_class=argparse.RawDescriptionHelpFormatter
+        )
+    parser.add_argument('-s', '--stmt4py', type=str, default=None
+                        , help='input exec stmt for python')
+
+    args = parser.parse_args(args)
+    exec(args.stmt4py, globals, locals)
+
+
 def main(args=None, /):
     import argparse
     from seed.io.may_open import may_open_stdin, may_open_stdout

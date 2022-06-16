@@ -552,6 +552,7 @@ function filterInt(value) {
 [[[[
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 [[[
+view others/数学/编程/永恒代码/原貌字符串.txt
 原貌字符串
   求一有效结束串囗特定原貌字符串(结束串的结束串，结束串字集，原貌字符串)
     前置条件:
