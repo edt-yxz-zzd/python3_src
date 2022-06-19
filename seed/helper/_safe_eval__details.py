@@ -232,7 +232,7 @@ forbid_bs_callables = \
     ,'setattr'      # remove
     ,'breakpoint'      # remove
     }
-allow_bs_callables = \
+_allow_bs_callables = \
     {'abs'
     ,'all'
     ,'any'
@@ -262,6 +262,11 @@ allow_bs_callables = \
     ,'sorted'
     ,'sum'
     ,'vars'}
+if 'aiter' in bs:
+    allow_bs_callables = _allow_bs_callables | {'aiter', 'anext'}
+else:
+    allow_bs_callables = _allow_bs_callables
+assert allow_bs_callables <= bs_callables
 
 forbids = forbid___bs__ | forbid_bs_callables | bs_unexpected
 allows = allow___bs__ | allow_bs_callables | bs_types | bs_noncallables
