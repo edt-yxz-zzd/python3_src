@@ -9,7 +9,9 @@ __all__ = '''
     '''.split()
 
 import functools
-from fractions import gcd
+#[deprecated]:from fractions import gcd
+#   ImportError: cannot import name 'gcd' from 'fractions' (/data/data/com.termux/files/usr/lib/python3.10/fractions.py)
+from seed.math.gcd import gcd #, gcd_many
 from ..math_func.math_func_of_float import sign
 
 
