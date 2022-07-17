@@ -1,5 +1,12 @@
 
-r'''
+r'''[[[[[
+see vs:
+    seed.io.savefile.unbuffered_growonly_dict_in_file
+        UnbufferedGrowonlyDictInFile
+    seed.io.savefile.SaveFile
+        SaveFileDict
+
+
 
 >>> encoding = 'u8'
 >>> kwargs = {'a':b'', 0:[]}
@@ -481,7 +488,7 @@ True
 <BLANKLINE>
 
 
-'''
+#]]]]]'''
 
 
 __all__ = '''
@@ -550,7 +557,7 @@ import ast # literal_eval
 import re
 import copy # deepcopy
 from collections import OrderedDict
-from seed.abc import abstractmethod, override, ABC# final
+from seed.abc.abc__ver0 import abstractmethod, override, ABC# final
 from seed.helper.safe_eval import safe_eval
 from seed.helper.stable_repr import (
     stable_repr
@@ -942,6 +949,8 @@ class SaveFile__UpdatableDict(SaveFileABC):
                     state = state1
                 case0 = case
             elif state == state1:
+                #rint(repr(line))
+                #   写时意外中断，文件处于 错误格式 的状态
                 value = safe_eval(line[1:])
                 state = state2
             else:
@@ -953,6 +962,13 @@ class SaveFile__UpdatableDict(SaveFileABC):
                 state = state0
 
     def write_item(self, ofile, case, key, value):
+        if 0:
+            # __main__ 在作怪
+            if key == 4:
+                nm = 'xxxxxxx'
+                if nm in globals():
+                    raise Exception(key)
+                globals()[nm] = 1
         if case not in self.all_cases:
             raise ValueError(f'bad case: {case!r}')
         write = ofile.write
@@ -1317,6 +1333,7 @@ class SaveFileContainerABC(SaveFileMethodsABC):
         , encoding
         , kwargs
         ):
+        self.__finish_init_ = False
         aSaveFile = self._get_SaveFile()
         _kwargs = copy.deepcopy(kwargs)
         maybe_iofile = aSaveFile.open_verify_or_create_setup_savefile_header(

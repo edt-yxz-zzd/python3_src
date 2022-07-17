@@ -1,4 +1,7 @@
 
+r'''
+from seed.types.GrowingDict import GrowingDict, GrowingDictView
+#'''
 
 __all__ = '''
     GrowingDict
@@ -7,7 +10,7 @@ __all__ = '''
 
 from collections.abc import MutableMapping, Mapping
 #from types import MappingProxyType
-from .View import MapViewBase
+from seed.types.view.View import MapViewBase
 
 
 class GrowingDict(Mapping):

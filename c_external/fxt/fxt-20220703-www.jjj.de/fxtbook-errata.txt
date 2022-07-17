@@ -1,0 +1,638 @@
+
+Errata and remarks for the fxtbook
+("Matters Computational", first edition):
+
+Last change: 2021-June-20 (13:59)
+
+------------------------------------------------------------
+
+Page 4 (section 1.1.5):
+The function first_comb() should better be defined as follows.
+static inline ulong first_comb(ulong k)
+{
+    if ( k==0 )  return 0;  // shift with BITS_PER_LONG is undefined
+    return ~0UL >> ( BITS_PER_LONG - k );
+}
+This avoids undefined behaviour with the shift operation.
+[Reported by Xavier Combelle, 2016-November-21]
+
+------------------------------------------------------------
+
+Page 5 (section 1.1.7):
+Renamed average() into floor_average().
+See file fxt/src/bits/average.h where assembler
+version for floor_average() and ceil_average()
+are now given.
+[Reported by Stefan Kanthak, 2019-March-03]
+
+------------------------------------------------------------
+
+Page 10 (section 1.3.3):
+The function lowest_block() as given does not preserve
+the highest bit of the block if it is the highest bit
+of the argument x.  The following code fixes this:
+
+static inline ulong lowest_block(ulong x)
+{
+    ulong l = x & -x;  // lowest bit
+    ulong y = x + l;
+    y ^= x;
+    return  y & x;
+}
+
+The last two lines of code have been changed.
+[Reported by Mike Engber, 20-October-2010]
+
+------------------------------------------------------------
+
+Page 14 (section 1.5.2):
+The comment
+// multiplication by a power of 2 is a shift
+on line 4 of the function  db_lowest_one_idx(ulong x)
+shall not indicate that the compiler emits just a shift.
+
+------------------------------------------------------------
+
+Page 18 (section 1.7):
+For arguments 0 and 1 (either order)
+ld_eq(x,y) correctly returns false
+whereas ld(x) == ld(y) gives true
+(because ld(x) returns 0 for both x==1 and x==0).
+
+------------------------------------------------------------
+
+Page 25 (section 1.11):
+Replace
+"The obvious code to test whether a point $(x,y)$ lies outside
+a square box of size $m$ is
+if ( (x<0) || (x>m) || (y<0) || (y>m) )  { ... }"
+by
+"The obvious code to test whether a point $(x,y)$ lies outside
+a square with both coordinates less than $m$ is
+if ( (x<0) || (x>=m) || (y<0) || (y>=m) )  { ... }"
+[Reported by Daniel Eckert, 2015-June-06]
+
+------------------------------------------------------------
+
+Page 46 (section 1.16.6):
+Replace
+"Then $E$ preserves the lowest bit of $X$, while $E$ preserves the highest."
+by
+"Then $E$ preserves the lowest bit of $X$, while $G$ preserves the highest."
+
+Replace
+"Also $E$ preserves the lowest \emph{set} bit of $X$, while $E$ preserves the highest."
+by
+"Also $E$ preserves the lowest \emph{set} bit of $X$, while $G$ preserves the highest."
+
+
+[Reported by Etienne Lorrain, 2016-August-02]
+
+------------------------------------------------------------
+
+Page 58 (section 1.22):
+Code for the conversion from and to the complex base (-1+i)
+has been added to the FXT library, (fxt/src/bits/radix-m1pi.h),
+the corresponding demo programs are fxt/demo/bits/radix-m1pi-demo.cc
+and fxt/demo/bits/radix-m1pi-to-z-demo.cc
+The routines use conversion from and to radix (-4), see
+fxt/src/bits/radix-m4.h and fxt/demo/bits/radix-m4-demo.cc
+
+Code for the conversion from and to the complex base (2*i)
+(the quarter-imaginary base) has been added to the FXT library,
+see fxt/src/bits/radix-2i.h, the corresponding demo programs are
+fxt/demo/bits/radix-2i-demo.cc and fxt/demo/bits/radix-2i-to-z-demo.cc
+
+------------------------------------------------------------
+
+Page 83 (section 1.31.1):
+An algorithm for the generation of n-dimensional Hilbert curves,
+given by Fred Lunnon, is implemented in the class in
+  fxt/src/comb/hilbert-ndim.h
+The corresponding program showing usage of the class is
+  fxt/demo/comb/hilbert-ndim-demo.cc
+
+------------------------------------------------------------
+
+Page 95 (section 1.31.5):
+For curves of this type see my preprint
+"Plane-filling curves on all uniform grids"
+  http://arxiv.org/abs/1607.02433
+
+------------------------------------------------------------
+
+Page 106 (section 2.3.1):
+The code for inverting a permutation without an extra
+bit-array is given in the program
+ fxt/demo/perm/perm-invert-notag-demo.cc
+
+------------------------------------------------------------
+
+Page 124 (section 2.9):
+In the procedures rotate_left() and rotate_right(),
+replace the code before the calls to reverse() by
+    if ( n<=1 )  return;  // nothing to do
+    if ( s>=n )  s %= n;
+    if ( s==0 )  return;  // nothing to do
+
+------------------------------------------------------------
+
+Page 141 (section 3.1.5):
+heap_sort_descending() was plain wrong.  Replace by
+
+template <typename Type>
+void heap_sort_descending(Type *x, ulong n)
+// Sort x[] into descending order.
+{
+    heap_sort( x, n );
+    reverse( x, n );
+}
+
+[reported by Pedro Pereira, 2019-September-04]
+
+------------------------------------------------------------
+
+Page 152 (section 3.5.3):
+The first sentence should read
+"They can be computed ..."
+(the letter y is missing in the first word).
+
+------------------------------------------------------------
+
+Page 152 (section 4.1):
+At the end of the comment for the method
+     ulong pop(Type &z)
+replace "is undefined" by "undefined".
+
+------------------------------------------------------------
+
+Page 165 (section 4.6):
+In code line 10, near top of page, the comment
+    // (ones are at the positions of the _unused_ bits)
+should be
+    // (ones are at the positions of the used bits)
+
+------------------------------------------------------------
+
+Page 166 (section 4.6):
+In the last sentence just before section 4.7
+replace "out of bounds" by "out of bound accesses".
+
+------------------------------------------------------------
+
+Page 176 (section 6.1):
+Code for the binomial coefficients more carefully
+guarded against overflow is available at
+  https://gist.github.com/jlaire/be48c44c59770051e467
+[Reported by Johannes Laire, 21 Oct 2015]
+
+------------------------------------------------------------
+
+Page 197 (section 7.2):
+In the method next() replace
+        if ( j==k_ )  return k_;  // current composition is last
+by
+        if ( j >= k_ - 1 )  return k_;  // current composition is last
+(otherwise the sentinel is changed with the final call to next()
+which however does usually not matter).
+
+------------------------------------------------------------
+
+Page 217 (section 9.1):
+Renamed class mixedradix_lex to class mixedradix.
+
+------------------------------------------------------------
+
+Page 243 (section 11.3):
+A generator for permutations in lexicographic order
+that also computes the inverse permutations is given in
+ fxt/src/comb/perm-lex-inv.h
+The corresponding demo program is fxt/demo/comb/perm-lex-inv-demo.cc
+
+------------------------------------------------------------
+
+Page 273 (section 10.12):
+In the list on top of the page, replace
+ j%1 by j%2 (twice).
+
+------------------------------------------------------------
+
+Page 295 (section 13.1):
+The demo program fxt/demo/comb/mset-ksubset-demo.cc for the
+generation of k-subsets of a multiset has been
+added to the FXT library.
+
+------------------------------------------------------------
+
+Page 295 (section 13.2):
+In the last sentence on this page ("Relation 13.2-1a is obtained ...")
+insert a comma after the first occurrence of the word "elements".
+
+------------------------------------------------------------
+
+Page 301 (section 13.2.4):
+A permutation generator using only prefix shifts
+(specialization of the multiset permutations in cool-lex order)
+has been added to the FXT library (fxt/src/comb/perm-pref.h),
+the corresponding demo program is fxt/demo/comb/perm-pref-demo.cc
+
+------------------------------------------------------------
+
+Page 304 (chapter 14):
+typo: "successsive" --> "successive" (top of page)
+
+------------------------------------------------------------
+
+Page 314 (section 14.6.2):
+Equation (14.6-2) needs to be
+  p_r(n) = r * p_r(n-1) + p_r(n-2)
+
+------------------------------------------------------------
+
+Page 317 (section 14.8):
+In equation (14.8-1) all expressions on the left but the first
+need to have argument n-2 (not n-1 as given):
+
+  D_r(n) =
+    [  0 . D_r(n-1) ]
+    [ 10 . D_r(n-2) ]
+    [ 20 . D_r(n-2) ]
+    [ 30 . D_r(n-2) ]
+      etc.
+
+------------------------------------------------------------
+
+Page 333 (section 15.5):
+The two algorithms for generation Dyck words by prefix shifts given in
+  Stephane Durocher, Pak Ching Li, Debajyoti Mondal, Aaron Williams:
+  Ranking and Loopless Generation of k-ary Dyck Words in Cool-lex Order,
+  The 22nd International Workshop on Combinatorial Algorithms,
+  Victoria, Canada, IWOCA, (2011).
+
+Are implemented in fxt/src/comb/dyck-pref.h and
+fxt/src/comb/dyck-pref2.h
+
+The corresponding demo programs are fxt/demo/comb/dyck-pref-demo.cc
+and fxt/demo/comb/dyck-pref2-demo.cc
+
+------------------------------------------------------------
+
+Page 346 (section 16.4.1):
+In relation (16.4-14) both products in the denominator
+range from 1 to n (not from 0 to n-1 as shown).
+
+------------------------------------------------------------
+
+Page 348 (section 16.4.2):
+For the number of partitions into parts >= L whose
+generating function obviously is G = prod(n>=L, (1+x^n) )
+the following two expressions can be given:
+  G = sum(n>=0, x^(n*(n+1)/2+n*(L-1)) / prod(k=1..n, 1-x^k) )
+  G = sum(n>=L-1, x^(n*(n+1)/2-L*(L-1)/2) / prod(k=1..n-(L-1), 1-x^k) )
+
+------------------------------------------------------------
+
+Page 350 (section 16.4.2):
+Another identity for the partitions into parts r mod m (r!=0)
+(cf. relation (16.4-38)) can be given as follows:
+  1/prod(n>=0, 1-x^(m*n+r) ) =
+  sum(n>=0, x^(r*n)/prod(k=1..n, 1-x^(m*k) ) )
+
+In relation (16.4-39), the lower limit for the products
+on the right needs to be k=1 (not k=0 as given):
+  prod(n>=0, 1+x^(m*n+r) )  =
+  sum(n>=0, x^((m*n^2+(2*r-m)*n)/2) / prod(k=1..n, 1-x^(m*k)) )
+
+------------------------------------------------------------
+
+Page 368 (section 17.3.5):
+In the table of numbers of F-increment RGSs
+n should start with 1 (not 0, as given).
+
+------------------------------------------------------------
+
+Page 406 (section 20.5.2):
+The Gray code for Lyndon words of length 41 (using comparison
+function 2) was computed in December 2016.
+Thanks to Wolfgang Bauer for doing this.
+[Reported by Wolfgang Bauer, 2016-December-19]
+
+------------------------------------------------------------
+
+Page 417 (section 21.2.3):
+In the first line the formula
+  exp(i x) = sin(x) + i cos(x)
+should be (swap sin and cos)
+  exp(i x) = cos(x) + i sin(x)
+[Reported by Mani Zandifar, 2-November-2010]
+
+A blank is missing between the words "type" and "double"
+near the end of the page.
+[Reported by Stefan Kanthak, 2019-March-03]
+
+------------------------------------------------------------
+
+Page 437 (section 21.9.1):
+In the arguments of both exponential functions in relation (21.9-4)
+the factor 2*Pi*i is missing.
+
+------------------------------------------------------------
+
+Page 446 (section 22.2.2):
+In relations (22.2-3) and (22.2-4) drop the subscript Tau.
+
+------------------------------------------------------------
+
+Page 467 (section 23.4.2):
+The file containing the routines
+  void walsh_wak_matrix(Type *f, ulong ldn)  and
+  void walsh_wak_matrix_1(Type *f, ulong ldn)
+has been removed from the fxt library, find it under
+  fxt/src/walsh/attic/walshwakmatrix.h
+
+------------------------------------------------------------
+
+Page 478 (section 23.7.2):
+The routine grs_negate() is defined as
+
+template <typename Type>
+void grs_negate(Type *f, ulong n)
+// Negate elements at indices where the Golay-Rudin-Shapiro is negative.
+{
+    for (ulong k=0; k<n; ++k)
+    {
+        ulong gnq  =  parity( k & (k>>1) );  // == grs_negative_q(k)
+        if ( gnq )  f[k] = -f[k];
+    }
+}
+
+It is given in fxt/src/walsh/grsnegate.h
+
+------------------------------------------------------------
+
+Page 553 (section 28.1.3.1):
+Replace "f(s)=log_s(2s+1)" by "f(s)=log_s(2s-1)".
+
+[Reported by Christoph Feck, 2015-October-09]
+
+------------------------------------------------------------
+
+Page 562 (section 28.4):
+The references files fxt/src/mult/auxil.cc and
+fxt/src/mult/fxtmultiply.cc have been moved from the fxt library to
+the hfloat library (under the same file names).
+
+------------------------------------------------------------
+
+Page 568 (section 29.1.1):
+The last three lines in Figure 29.1-A are incorrect.
+The correct version is
+        y_2 := 1.0000000 - d * x_2 = 0.00000044
+  x_2 * y 2 := 0.31830975 * 0.00000044 = 0.000000014
+        x_3 := x_2 + x_2 * y_2 = 0.31830975 + 0.000000014 = 0.31830989
+[Reported by Guenter Rote, 2021-June-14]
+
+------------------------------------------------------------
+
+Page 575 (section 29.3.4):
+Relation (29.3-19) is incorrect and should be removed.
+
+------------------------------------------------------------
+
+Page 589 (section 30.2.1):
+In relation (30.2-12) replace f(x) by A(x).
+
+------------------------------------------------------------
+
+Page 603 (section 31.2.2):
+The last expression for E in relation (31.2-17b)
+must be negated.
+
+------------------------------------------------------------
+
+Page 608 (section 31.3.3):
+In relation (31.3-29h) the q in the denominator on the
+right side needs to be q^4.
+
+------------------------------------------------------------
+
+Page 647 (section 33.2.1):
+In the last line cos() and sin() need to be swapped:
+" ... the values of x and y approach cos(Pi/3)=1/2
+  and sin(Pi/3) ... "
+
+[Reported by Karsten Meißner, 2020-January-17]
+
+------------------------------------------------------------
+
+Page 650 (section 33.2.3):
+[Citation from the reporting email]
+
+"... there is an error in Chapter 33, page 650 when describing the
+hyperbolic vectoring mode used to calculate the square root. You state
+that z will tend to K'sqrt(w) but the result for the square root
+calculation appears in the x value."
+
+"It may also be worth noting that the sqrt calculation is only
+accurate for the range 0.5 <= w <= 2.0. The natural log calculation
+using the hyperbolic vectoring mode seems to be accurate in the range
+0.5 <= z <= 9.0 in my implementation."
+
+[Reported by Gary Sands, 2014-July-11]
+
+------------------------------------------------------------
+
+Page 675 (section 35.1.6.3):
+In the idenity "... we have h(x) = sum_{k}{1 - r_k x_k} ..."
+in the last sentence of the page drop the subscript k of x.
+
+------------------------------------------------------------
+
+Page 709 (section 37.1.3):
+The power series given by relation (37.1-32) can
+be computed efficiently as
+  sum(k>=1, x^(k^2) * a^k * ( 1/(1-x^k) + a*x^k/(1-a*x^k) ) )
+See https://oeis.org/A079586 for an application of this
+method to compute the sum of the inverse Fibonacci numbers.
+See http://arxiv.org/abs/1202.6525 for a quite general formula.
+
+Relation (37.1-34)
+  sum(k>=1, A(k)*x^k / (1-x^k) ) =
+  sum(k>=1, x^(k*k) * (A(k) + sum(j>=1, (A(k) + A(k+j)) * x^(k*j)) ) )
+can be generalized as
+  sum(k>=1, A(k)*t^k / (1 - B(k)*x^k) ) =
+  sum(k>=1, x^(k*(k-1)) * t^k *
+    (A(k)*B(k)^(k-1) + sum(j>=1, ( A(k)*B(k)^(k+j-1)*x^j + A(k+j)*B(k+j)^(k-1)*t^j ) * x^(j*(k-1)) ) ) )
+Setting t=x and B(k)=1 gives relation (37.1-34).
+
+------------------------------------------------------------
+
+Page 712 (section 37.2.3):
+In the last expression in relation (37.2-15a)
+replace  x^k/n  by  x^k/k
+
+The identity, written as
+  exp(sum(n>=1, sigma(n)/n * x^n) = 1/eta(x)
+where sigma(n) denotes the sum of divisors of n
+can be generalised as follows:
+  exp(sum(n>=1, sigma(s*n)/n * x^n) =
+  prod(d divides s, eta(x^d)^(-moebius(d)*sigma(s/d)) )
+
+------------------------------------------------------------
+
+Page 715 (section 37.2.4):
+A very large collection of identities like relation (37.2-24a)
+is given by Michael Somos at  http://eta.math.georgetown.edu/
+
+------------------------------------------------------------
+
+Page 744 (section 38.8.3):
+The last term in the continued fraction given in equation (38.8-10)
+should be 2 (not 3 as given).
+[Reported by Kevin Ryde, 2020-July-10]
+
+------------------------------------------------------------
+
+Page 767 (section 39.1.4):
+The routines for the gcd () are now in the file fxt/src/aux0/gcd.h
+
+For alternative version for gcd() and binary_ugcd() see
+file fxt/src/aux0/gcd.h
+[Reported by Stefan Kanthak, 2019-March-03]
+
+------------------------------------------------------------
+
+Page 826 (section 40.1.6):
+In step 3 of the algorithm for exact division the last operation
+should be "R := R + T", not "R := T" as given.
+[Reported by Michael Maier, 2020-September-02]
+
+------------------------------------------------------------
+
+Page 850 (section 40.9.2):
+Clause (3) of Swan's theorem has to be
+n is odd, k is even and ...
+[Reported by Charles Greathouse, 2015-June-05]
+
+------------------------------------------------------------
+
+Page 855 (section 40.9.13):
+In the last sentence of the page,
+replace "primitve" by "primitive".
+
+------------------------------------------------------------
+
+Page 885 (section 41.9.1):
+The sequence of numbers n such that a length-n CLHCA
+of maximal period exists is A194125 of the OEIS, see
+  https://oeis.org/A194125
+
+------------------------------------------------------------
+
+Page 887 (section 42.1.3):
+The first sentence
+ "The trace of an element u ..."
+should read
+ "The trace of an element a ..."
+[Reported by Marc Delvaux, 24-December-2012]
+
+------------------------------------------------------------
+
+Page 907 (section 42.6.3.5):
+Just after relation (42.6-12), insert "for" where it belongs:
+"... works [for] all odd n:"
+
+------------------------------------------------------------
+
+Page 908 (section 42.6.4):
+typo: "Therfore" --> "Therefore" (end of page)
+
+------------------------------------------------------------
+
+Page 919 (section 42.9.2.2):
+In step (5.b) of the algorithm, replace F_{i-1} by F_{k-1}.
+
+------------------------------------------------------------
+
+Page 921 (appendix A):
+typo: "expecially" --> "especially" (end of page)
+
+------------------------------------------------------------
+
+Page 925 (appendix C):
+In "Logical operators are && (and), || (or), and ! (not)"
+The "||" (for logical or) is missing.
+[Reported by Lorenzo Newman, 2019-March-18]
+
+------------------------------------------------------------
+
+Page 928 (appendix C):
+In the last sentence on the page replace break(n) by next(n).
+
+------------------------------------------------------------
+
+Page 930 (appendix C):
+The rarely useful null-defaults can now be turned off
+using the command
+  default(strictargs,1)
+before any functions are defined.
+
+------------------------------------------------------------
+
+Bibliography:
+
+Page 932: Item [31] by David H. Bailey et. al. is available at
+  http://www.emis.de/journals/EM/expmath/volumes/10/10.html
+  (the given link became invalid: as the domain expmath.org
+   has been hijacked by a spammer.)
+
+Page 933: Item [46] by E. R. Berlekamp is available at
+  http://www.alcatel-lucent.com/bstj/vol46-1967/bstj-vol46-issue08.html
+
+Page 935: Item [46] by Dany Breslauer and Devdatt P. Dubhashi
+  is now available at  http://www.brics.dk/LS/95/4/
+
+Page 936: Item [106] by Mathieu Ciet et. al. is available at
+  http://www.uclouvain.be/crypto/publications/year/2002
+  (the given link became invalid)
+
+Page 937: Item [111] by Henri Cohen et. al. is available at
+  http://www.emis.de/journals/EM/expmath/volumes/9/9.html
+  (the given link became invalid: as the domain expmath.org
+   has been hijacked by a spammer.)
+
+Page 938: Item [134] by Peter Eades and Brendan McKay is available at
+  http://cs.anu.edu.au/~bdm/publications.html
+
+Page 942: Item [217] by Koike and Shiga is available at
+  http://dx.doi.org/10.1016/j.jnt.2006.08.002
+The title of the final version is
+  "Isogeny formulas for the Picard modular form
+   and a three terms arithmetic geometric mean"
+
+Page 945: Item [248] by Igor Pak is available at
+  http://www.combinatorics.org/issue/view/Surveys
+  (the link given became invalid).
+
+Page 945: Item [265] by Igor Pak is now available at
+  http://www.math.ucla.edu/~pak/papers/research.htm#par
+  (the given link became invalid)
+
+Page 948: Item [322] by Damien Stehle and Paul Zimmermann
+is available at  http://hal.inria.fr/LORIA/inria-00071533
+
+Page 949: Item [338] by Vincent Vajnovszki and Timothy Walsh,
+and items [342] and [343] by Timothy Walsh are available at
+  http://www.info2.uqam.ca/~walsh_t/pages/papers.html
+
+Page 950: Item [361] by Hugh C. Williams is titled
+ "\'{E}douard Lucas and primality testing"
+(not "\'{E}duard ..." as given, where the letter o is missing).
+
+Page 950: Item [368] by Neal Zierler is available at
+  http://www.ams.org/journals/proc/1958-009-02/S0002-9939-1958-0094332-2/
+
+
+------------------------------------------------------------
+End of file.
+------------------------------------------------------------

@@ -20,6 +20,9 @@
 /script/cpp/**/*.o
 /script/cpp/**/*.gch
 
+#external
+/**/_ignore__unzip
+/**/_ignore__build
 
 
 
