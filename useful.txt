@@ -506,9 +506,18 @@ def main(args=None, /):
 if __name__ == "__main__":
     main()
 
+
 from seed.tiny import does_run_as_main
 if does_run_as_main(__name__):
     main()
+
+#简单的子命令调用
+if __name__ == "__main__":
+    from seed.recognize.cmdline.adhoc_argparser import adhoc_argparser__main, adhoc_argparse
+    adhoc_argparser__main(globals(), None)
+        #main()
+
+
 
 
 

@@ -4,6 +4,10 @@ e ../../python3_src/seed/math/max_power_of_base_as_factor_of_.py
 
 from seed.math.max_power_of_base_as_factor_of_ import max_power_of_base_as_factor_of_
 
+view ../../python3_src/nn_ns/math_nn/uint_map.py
+!!![max_power_of_base_as_factor_of_ is not floor_log]!!!
+    max_power_of_base_as_factor_of_(2,12)==2
+    floor_log(2,12)==3
 #'''
 
 __all__ = '''
@@ -11,6 +15,7 @@ __all__ = '''
     '''.split()
 
 
+#from nn_ns.math_nn.uint_map import floor_log
 
 
 def max_power_of_base_as_factor_of_(base, n, /):

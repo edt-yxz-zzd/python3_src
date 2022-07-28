@@ -1,10 +1,22 @@
 
+r'''[[[
 
+e ../../python3_src/nn_ns/math_nn/numbers/min_factor.py
+nn_ns.math_nn.numbers.min_factor
+from nn_ns.math_nn.numbers.min_factor import min_factor, factor_uint__via_min_factor_list
+
+#]]]'''
+__all__ = '''
+    min_factor
+    factor_uint__via_min_factor_list
+    '''.split()
 
 from .numberss import NumberList
 from .prime_number import PRIMES
 from ..floor_sqrt import floor_sqrt
 from ..prime1 import min_prime_factor as _min_prime_factor
+from seed.math.II import II
+from collections import Counter
 
 
 _data = [0, 1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2, 3, 2, 17, 2, 19]
@@ -69,4 +81,16 @@ assert all(min_factor(-n) == min_factor(n) for n in range(20))
 ##n = 203; ps1 = _primes(n); ps2 = PRIMES.get_le(n-1);
 
 
+
+def factor_uint__via_min_factor_list(u, /):
+    if not u >= 1: raise ValueError
+    u0 = u
+    ls = []
+    while not u == 1:
+        p = min_factor(u)
+        ls.append(p)
+        u //= p
+    p2e = {**Counter(ls)}
+    if not u0 == II(p**e for p,e in p2e.items()): raise ValueError
+    return p2e
 
