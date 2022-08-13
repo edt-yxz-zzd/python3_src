@@ -7,12 +7,11 @@ used by:
         py script/平方和.py main2__show_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt =100
 
 py -m nn_ns.app.debug_cmd   seed.math.GaussInteger
-from seed.math.GaussInteger import divmod__half, is_zero__Gauss_integer, neg__Gauss_integer, conj__Gauss_integer, square_len__Gauss_integer, cmp_len__Gauss_integer, cmp_square_len_ex__Gauss_integer, mul__Gauss_integer, add__Gauss_integer, sub__Gauss_integer, divmod__Gauss_integer, gcd__Gauss_integer, square_len__Gauss_integer, pow__Gauss_integer
+from seed.math.GaussInteger import is_zero__Gauss_integer, neg__Gauss_integer, conj__Gauss_integer, square_len__Gauss_integer, cmp_len__Gauss_integer, cmp_square_len_ex__Gauss_integer, mul__Gauss_integer, add__Gauss_integer, sub__Gauss_integer, divmod__Gauss_integer, gcd__Gauss_integer, square_len__Gauss_integer, pow__Gauss_integer
 from seed.math.GaussInteger import find_Gauss_integer_factor_coeffs_of_4k1_prime, find_sqrt_neg1_of_4k1_prime_ex, find_sqrt_neg1_of_4k1_prime, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt, iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt
 
 #]]]'''
 __all__ = '''
-    divmod__half
     is_zero__Gauss_integer
     neg__Gauss_integer
     conj__Gauss_integer
@@ -36,11 +35,15 @@ __all__ = '''
         iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt
         iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq
     '''.split()
+    #divmod__half
+    #sign_of
+
 
 from seed.math.max_power_of_base_as_factor_of_ import max_power_of_base_as_factor_of_
 from seed.math.sign_of import sign_of
 from seed.math.II import II
 from seed.math.gcd import gcd
+from seed.math.divmod__half import divmod__half#, mod__half
 from nn_ns.math_nn.numbers.min_factor import factor_uint__via_min_factor_list #, min_factor
 
 if 0:
@@ -49,7 +52,7 @@ if 0:
         return 0
     return 1 if x>0 else -1
 
-def divmod__half(n,d,/):
+  def divmod__half(n,d,/):
     (q,r) = divmod(n, d)
     if 2*r > abs(d):
         r -= abs(d)
@@ -272,7 +275,7 @@ def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, f
 或 其他算法:
     参数: k,s,t
     [k >= 1][1 <= t < s][gcd(s,t)==1]
-    (len_hypotenuse, odd, even) := k*(s**2+t**2, s**2-t**2, 2*s*t)
+    (len_hypotenuse, maybe_odd, must_even) := k*(s**2+t**2, s**2-t**2, 2*s*t)
 
 [[
 Hypotenuse
