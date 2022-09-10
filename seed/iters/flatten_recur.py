@@ -1,9 +1,16 @@
 
 r"""
+see also:
+    seed.iters.flatten_recur
+        view ../../python3_src/seed/iters/flatten_recur.py
+    seed.func_tools.recur5yield
+        view ../../python3_src/seed/func_tools/recur5yield.py
+
 flatten_recur
 
 to avoid stack-overflow when calling recur func
 
+from seed.iters.flatten_recur import flatten_recur
 
 
 ==========================
@@ -22,7 +29,7 @@ __all__ """
     """.split()
 
 from collections.abc import Generator
-def flatten_recur(g:Generator, *, value:object=None):
+def flatten_recur(g:Generator, /, *, value:object=None):
     assert isinstance(g, Generator)
     #assert iter(g) is g
     ls = [g]

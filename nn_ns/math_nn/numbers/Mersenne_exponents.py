@@ -1,6 +1,11 @@
 
 
 r'''[[[[[
+命名有误，应当是:exponents4Mersenne_prime
+    Mersenne_prime |<| Mersenne_number
+
+e ../../python3_src/nn_ns/math_nn/numbers/exponents4Mersenne_prime.py
+
 e ../../python3_src/nn_ns/math_nn/numbers/Mersenne_exponents.py
 from nn_ns.math_nn.numbers.Mersenne_exponents import Mersenne_exponents, Mersenne_exponents__stable, Mersenne_exponents__unstable
 from nn_ns.math_nn.numbers.Mersenne_exponents import known_Mersenne_exponent_set, is_known_Mersenne_exponent, is_Mersenne_exponent__Lucas_Lehmer_test

@@ -1,5 +1,11 @@
 #__all__:goto
 r'''[[[[[
+see also:
+    seed.iters.flatten_recur
+        view ../../python3_src/seed/iters/flatten_recur.py
+    seed.func_tools.recur5yield
+        view ../../python3_src/seed/func_tools/recur5yield.py
+
 e ../../python3_src/seed/func_tools/recur5yield.py
 py -m seed.func_tools.recur5yield
 py -m nn_ns.app.debug_cmd   seed.func_tools.recur5yield

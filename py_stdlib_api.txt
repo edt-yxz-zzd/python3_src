@@ -1,0 +1,111 @@
+e ../../python3_src/py_stdlib_api.txt
+
+print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+
+[[
+view ../../python3_src/seed/func_tools/recur5yield.py
+    #generator_iterator 并没有保留 返回值
+    #   返回值 在 StopIteration.value!!
+def _get_return_value_of_null_generator_iterator(it0, /):
+    try:
+        next(it0)
+    except StopIteration as exc:
+        r = exc.value
+    else:
+        raise logic-err
+    return r
+
+def _t():
+    def f():
+        return 1; yield
+    it = f()
+    print(_get_return_value_of_null_generator_iterator(it))
+        # => 1
+    print(_get_return_value_of_null_generator_iterator(it))
+        # => None
+    #不可重复取值！
+
+    def f():
+        while 1:
+            return 1
+        yield
+    it = f()
+    print(_get_return_value_of_null_generator_iterator(it))
+        # => 1
+    print(_get_return_value_of_null_generator_iterator(it))
+        # => None
+    #不可重复取值！
+]]
+
+
+[[
+help(str.isspace)
+help(bytes.isspace)
+isspace(...)
+    B.isspace() -> bool
+
+    Return True if all characters in B are whitespace and there is at least one character in B, False otherwise.
+
+help(bytes.split)
+split(self, /, sep=None, maxsplit=-1)
+    Return a list of the sections in the bytes, using sep as the delimiter.
+
+    sep
+        The delimiter according which to split the bytes.
+        None (the default value) means split on ASCII whitespace characters (space, tab, return, newline, formfeed, vertical tab).
+    maxsplit
+        Maximum number of splits to do.
+        -1 (the default value) means no limit.
+
+help(bytes.replace)
+replace(self, old, new, count=-1, /)
+    Return a copy with all occurrences of substring old replaced by new.
+
+      count
+        Maximum number of occurrences to replace.
+        -1 (the default value) means replace all occurrences.
+
+    If the optional argument count is given, only the first count occurrences are replaced.
+
+
+]]
+
+from collections import deque
+#deque([iterable[, maxlen]]) --> deque object
+
+from functools import reduce
+reduce(function, iterable[, initial]) -> value
+
+from itertools import accumulate
+accumulate(iterable, func=None, *, initial=None)
+[[
+NAME
+  itertools - Functional tools for creating and using iterators.
+
+DESCRIPTION
+  Infinite iterators:
+    count(start=0, step=1) --> start, start+step, start+2*step, ...
+    cycle(p) --> p0, p1, ... plast, p0, p1, ...
+    repeat(elem [,n]) --> elem, elem, elem, ... endlessly or up to n times
+
+  Iterators terminating on the shortest input sequence:
+    accumulate(p[, func]) --> p0, p0+p1, p0+p1+p2
+    chain(p, q, ...) --> p0, p1, ... plast, q0, q1, ...
+    chain.from_iterable([p, q, ...]) --> p0, p1, ... plast, q0, q1, ...
+    compress(data, selectors) --> (d[0] if s[0]), (d[1] if s[1]), ...
+    dropwhile(pred, seq) --> seq[n], seq[n+1], starting when pred fails
+    groupby(iterable[, keyfunc]) --> sub-iterators grouped by value of keyfunc(v)
+    filterfalse(pred, seq) --> elements of seq where pred(elem) is False
+    islice(seq, [start,] stop [, step]) --> elements from seq[start:stop:step]
+    pairwise(s) --> (s[0],s[1]), (s[1],s[2]), (s[2], s[3]), ...
+    starmap(fun, seq) --> fun(*seq[0]), fun(*seq[1]), ...
+    tee(it, n=2) --> (it1, it2 , ... itn) splits one iterator into n
+    takewhile(pred, seq) --> seq[0], seq[1], until pred fails
+    zip_longest(p, q, ...) --> (p[0], q[0]), (p[1], q[1]), ...
+
+  Combinatoric generators:
+    product(p, q, ... [repeat=1]) --> cartesian product
+    permutations(p[, r])
+    combinations(p, r)
+    combinations_with_replacement(p, r)
+]]

@@ -511,11 +511,24 @@ from seed.tiny import does_run_as_main
 if does_run_as_main(__name__):
     main()
 
+
+
+view ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
+assert (adhoc_argparse('a.bb.ccc :0 =11 --d:2 ++ee:33 ++ee=444 -f +gg'.split()) == (['a', 'bb', 'ccc'], ['0', 11], {'f': False, 'gg': True}, {'d': '2'}, {'ee': ['33', 444]}))
 #简单的子命令调用
 if __name__ == "__main__":
-    from seed.recognize.cmdline.adhoc_argparser import adhoc_argparser__main, adhoc_argparse
-    adhoc_argparser__main(globals(), None)
+    from seed.recognize.cmdline.adhoc_argparser import adhoc_argparser__main__subcmds, AdhocArgParserError, _NOP_
+    adhoc_argparser__main__subcmds(globals(), None)
         #main()
+
+if __name__ == "__main__":
+    from seed.recognize.cmdline.adhoc_argparser import adhoc_argparser__main__call, AdhocArgParserError, _NOP_
+    adhoc_argparser__main__call(globals(), None)
+        #main()
+
+
+
+
 
 
 
@@ -663,6 +676,60 @@ if __name__ == '__main__':
 
 
 
+
+
+[[
+from seed.func_tools.recur5yield import recur5yield__list__echo__echo
+
+def _():
+  @recur5yield__list__echo__echo
+  def main(...):
+    if 0: yield
+    r = yield f(...)
+    if ...:
+      return False, f(...)
+    return True, r
+  def f(...):
+    if 0: yield
+    r = yield f(...)
+    if ...:
+      return False, f(...)
+    return True, r
+
+view ../../python3_src/seed/func_tools/recur5yield.py
+
+from seed.func_tools.recur5yield import recur5yield__list__echo__echo, recur5yield__list__echo__off, recur5yield__list__0func__echo, recur5yield__list__0func__off
+>>> def _():
+...     @recur5yield__list__echo__echo
+...     def mul(n, m, /):
+...         if m > 0:
+...             return False, mul_(0, n, m)
+...         return True, 0
+...         yield
+...     def mul_(acc, n, m, /):
+...         if m > 1:
+...             m = yield dec(m)
+...             acc = yield add(acc, n)
+...             return False, mul_(acc, n, m)
+...         return False, add(acc, n)
+...         return True, acc
+...     def add(n, m, /):
+...         if m > 0:
+...             m = yield dec(m)
+...             n = yield inc(n)
+...             return False, add(n, m)
+...         return True, n
+...     def inc(n, /):
+...         return True, n+1
+...         yield
+...     def dec(n, /):
+...         return True, n-1
+...         yield
+...     return mul
+>>> mul = _()
+>>> mul(100, 233)
+23300
+]]
 
 
 

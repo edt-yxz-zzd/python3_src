@@ -12,27 +12,58 @@ Pratt Certificate
   The Pratt certificate is a primality certificate based on Fermat's little theorem converse.
 
 [[多证据证明正整数的素性:
+copy from: view ./others/数学/不可约多项式/irreducible_polynomial.txt
+===
 wget 'https://www.ams.org/journals/mcom/1967-21-097/S0025-5718-67-99898-5/S0025-5718-67-99898-5.pdf' -O 'Some Factorizations of 2^n±1 and Related Results(1966)(Brillhart).pdf'
-  正整数素性判定:
+  [[正整数素性判定:
     [@[u <- [2..]] -> [?[a <- [1..<u]] -> [[a**(u-1)%u==1][@[p<-all_prime_factors_of(u-1)] -> [a**((u-1)//p)%u=!=1]]]] -> [is_prime u]]
     #同一个a<u> --> 拆成多个a<u,p>
     [@[u <- [2..]] -> [@[p<-all_prime_factors_of(u-1)] -> [?[a <- [1..<u]] -> [[a**(u-1)%u==1][a**((u-1)//p)%u=!=1]]]] -> [is_prime u]]
-    #如何合并a<u,p>为a<u>？难。
-    [@[p<-all_prime_factors_of(u-1)] -> [order<u>(a<u,p>)%p**max_height_of_prime_power_(p,u-1) == 0]]
-    [@[p<-all_prime_factors_of(u-1)] -> [(u-1)//order<u>(a<u,p>) % p =!= 0]]
-    [(u-1) == order<u>(a<u>)]
-    [u % order<u>(a<u>) ==1]
-    [@[p<-all_prime_factors_of(u-1)] -> [?[k <- [1..<=u-2]] -> [gcd(k,p)==1][a<u,p> =[%u]= a<u>**k =![%u]!= a<u> **((u-1)//p *k)]]]
-    方程组:
-    [@[k :: [@[p<-all_prime_factors_of(u-1)] -> [1..<=u-2]]] -> [@[p<-all_prime_factors_of(u-1)] -> [gcd(k<p>,p)==1]] -> ?[e] -> [sum e<p>*k<p> {p} =[%(u-1)]= 1]]
-      let M:=II{p}
-      let C<p>:=u//p**max_height_of_prime_power_(p,u)
-      assume e<p> == e2<p>*C<p>
-      assume k2<p> == k<p>*C<p>
-      [sum e2<p>*k<p>*C<p> {p} =[%(u-1)]= 1]
-      [sum e2<p>*k2<p> {p} =[%(u-1)]= 1]
-      k2 <- coprimes_of p**max_height_of_prime_power_(p,u)
-        搜索空间太大，离散对数 难求
+    [[#如何合并a<u,p>为a<u>？
+    [@[p<-all_prime_factors_of(u-1)] -> [order_mod<u>(a<u,p>)%p**max_height_of_prime_power_(p,u-1) == 0]]
+    [@[p<-all_prime_factors_of(u-1)] -> [
+      [(u-1)%order_mod<u>(a<u,p>) == 0]
+      [e4a<u,p> := max_height_of_prime_power_(p;u-1)]
+      [p_pow4a<u,p> := p**e4a<u,p>]
+      [max_height_of_prime_power_(p;order_mod<u>(a<u,p>)) == e4a<u,p>]
+      [order_mod<u>(a<u,p>**((u-1)///p_pow4a<u,p>)) == p_pow4a<u,p>]
+      ]]
+    [a<u> := II (a<u,p>**((u-1)///p_pow4a<u,p>)) {p<-all_prime_factors_of(u-1)} % u]
+      [[proof:
+      @[p<-all_prime_factors_of(u-1)]:
+        [a<u>**((u-1)///p) %u
+          == (II (a<u,q>**((u-1)///p_pow4a<u,q>)) {q<-all_prime_factors_of(u-1)} % u)**((u-1)///p) %u
+          == (II (a<u,q>**((u-1)///p_pow4a<u,q>))**((u-1)///p) %u {q<-all_prime_factors_of(u-1)} % u)
+          == (II (a<u,q>**((u-1)///p_pow4a<u,q> * (u-1)///p %(u-1)[#指数这里『%(u-1)』是因为[(u-1)%order_mod<u>(a<u,p>) == 0]。无需 证明u是素数#])) %u {q<-all_prime_factors_of(u-1)} % u)
+          == (II ([q==p]+[q=!=p])*(a<u,q>**((u-1)///p_pow4a<u,q> * (u-1)///p %(u-1)) %u) {q<-all_prime_factors_of(u-1)} % u)
+            [[
+            [e_fill<u,q,p> := ((u-1)///p_pow4a<u,q> * (u-1)///p %(u-1))]
+            * [q==p]:
+              [gcd((u-1)///p_pow4a<u,p> * (u-1)///p, (u-1)) == (u-1)///p]
+              [e_fill<u,q,p>
+              == ((u-1)///p_pow4a<u,p> * (u-1)///p %(u-1))
+              =[?k4e_fill<u,p> <-[1..<p]]= k4e_fill<u,p> * (u-1)///p
+              ]
+              [a<u,q>**e_fill<u,q,p> %u == a<u,q>**(k4e_fill<u,p> * (u-1)///p) %u =!= 1]
+
+            * [q=!=p]:
+              [e_fill<u,q,p>
+              == ((u-1)///p_pow4a<u,q>///p * p * (u-1)///p %(u-1))
+              == ((u-1)///p_pow4a<u,q>///p * (u-1) %(u-1))
+              == 0
+              ]
+              [a<u,q>**e_fill<u,q,p> %u == 1]
+            ]]
+          == (II ([q==p]*(a<u,q>**e_fill<u,q,p> %u) + [q=!=p]*1) {q<-all_prime_factors_of(u-1)} % u)
+          == (a<u,p>**e_fill<u,p,p> %u)
+          == a<u,p>**(k4e_fill<u,p> * (u-1)///p) %u
+          =!= 1
+        ]
+        [a<u>**((u-1)///p) %u =!= 1]
+      ]]
+    ]]
+  ]]
+
 ]]
 
 
