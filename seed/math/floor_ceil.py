@@ -1,5 +1,11 @@
-r'''
+r'''[[[
+e ../../python3_src/seed/math/floor_ceil.py
 view others/数学/divmod加速.txt
+
+py -m nn_ns.app.debug_cmd   seed.math.floor_ceil
+
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
+
 
 py -m seed.math.floor_ceil
 from seed.math.floor_ceil import floor_div, ceil_div
@@ -9,7 +15,8 @@ from seed.math.floor_ceil import floor_log2_sqrt, ceil_log2_sqrt
 from seed.math.floor_ceil import floor_log_, ceil_log_
 
 from seed.math.floor_ceil import floor_sqrt, ceil_sqrt
-#'''
+
+#]]]'''
 
 __all__ = '''
     floor_log2
@@ -28,11 +35,43 @@ __all__ = '''
     ceil_div
 
     offsetted_divmod
+
+
+    floor_div
+    ceil_div
+    ceil_log2
+    floor_log2
+    offsetted_divmod
+    floor_log2_kth_root_
+    ceil_log2_kth_root_
+    floor_log2_sqrt
+    ceil_log2_sqrt
+    ceil_sqrt
+    floor_sqrt
+    floor_kth_root_
+    ceil_kth_root_
+    floor_lshift_kth_root_
+    floor_lshift_sqrt_
+    floor_lshift_div_
+    ceil_log2_div
+    floor_log2_div
+    imay_floor_log2
+    extended_imay_floor_log2
+    count_num_high_same_bits_of_two_uints
+    ceil_log_
+    floor_log_
     '''.split()
+    #load_tests
+    #NotImplementedError:
+        #floor_log2_pow
+        #floor_lshift_log2_
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
 #from seed.math.max_power_of_base_as_factor_of_ import count_num_low_0bits_of_pint, count_num_low_1bits_of_uint
+from seed.func_tools.recur5yield import recur5yield__list__echo__echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def floor_div(n, d, /):
@@ -297,7 +336,7 @@ def floor_sqrt(n, /):
     [0 <= dd < 2**e]
     [dd == fsqrtN%2**e]
     [fsqrtN == (fsqrtQ*2**e+dd)]
-    #由(e,q,r,fKrtQ)先求dd再求fKrtN
+    #由(e,q,r,fsqrtQ)先求dd再求fKrtN
 
     [D := n -(fsqrtQ*2**e)**2]
     [D == n -(fsqrtQ*2**e)**2 == (q*2**(2*e) + r) -(fsqrtQ*2**e)**2 == ((q-fsqrtQ**2)*2**(2*e) + r)]
@@ -319,7 +358,10 @@ def floor_sqrt(n, /):
     [0 <= D//2**e <= (2*fsqrtQ+1)**2-2]:
         #view others/数学/divmod加速.txt
         !![[d>=2] -> [-(d-1) <= n <= d**2-2] -> [0 <= n//(d-1) - n//d <= 1]]
-        [-1 +D//2**e //(2*fsqrtQ) <= dd <= D//2**e //(2*fsqrtQ)]
+        #   [outer_txt.n := D//2**e]
+        #   [outer_txt.d := (2*fsqrtQ+1)]
+        [upper_dd := D//2**e //(2*fsqrtQ)]
+        [-1 +upper_dd <= dd <= upper_dd]
 
         [(2*fsqrtQ+1)**2-2
         >= D//2**e
@@ -347,7 +389,8 @@ def floor_sqrt(n, /):
             # 2**(2*e) 占 约1/2
             # q 占 约1/2
             # 由q到n(由fsqrtQ到fsqrtN)，比特数大约翻倍
-    [1 <= e <= (floor_log2(n)+2)//4][n>=4]:
+    [flbN := floor_log2(n)]
+    [1 <= e <= (flbN+2)//4][n>=4]:
         [0 <= D//2**e <= (2*fsqrtQ+1)**2-2]
         #dd只有2个可能的取值
         [-1 +D//2**e //(2*fsqrtQ) <= dd <= D//2**e //(2*fsqrtQ)]
@@ -357,9 +400,9 @@ def floor_sqrt(n, /):
         [upper_dd ==  ((q-fsqrtQ**2)*2**e + r//2**e)//(2*fsqrtQ)]
 
         [n >= 2**(4*e-2) == 4**(2*e-1)]
-        [[1 <= (floor_log2(n)+2)//4] -> [n>=4]]
-        [[2 <= (floor_log2(n)+2)//4] -> [n>=64]]
-        [[3 <= (floor_log2(n)+2)//4] -> [n>=1024]]
+        [[1 <= (flbN+2)//4] -> [n>=4]]
+        [[2 <= (flbN+2)//4] -> [n>=64]]
+        [[3 <= (flbN+2)//4] -> [n>=1024]]
 
 
 
@@ -434,11 +477,44 @@ def _t2__floor_sqrt():
         floor_sqrt(5**i)
     for i in range(10_0000, 10_0101):
         floor_sqrt(7**i)
-if __name__ == "__main__":
+if 0 and __name__ == "__main__":
     _t2__floor_sqrt()
     _t1__floor_sqrt()
 
 
+def _iter_partial_floor_kth_root__bisearch_(k, n, /):
+    'k -> n -> Iter<(partial_lead_bits4fKrtN, num_remain_bits)> # [partial_lead_bits4fKrtN == fKrtN//2**num_remain_bits][num_remain_bits <- reversed[0..=floor_log2_fKrtN]]'
+    assert k >= 2
+    assert n >= 1
+    flbN = floor_log2(n)
+    #floor_log2_fKrtN = floor_log2_kth_root_(k, n)
+    #floor_log2_fKrtN = flbN//k
+    (floor_log2_fKrtN, flbQ0) = divmod(flbN, k)
+    fKrtQ0 = 1
+    num_remain_bits = floor_log2_fKrtN
+
+    yield (fKrtQ0, num_remain_bits)
+    for k_e in reversed(range(0, flbN-flbQ0, k)):
+        n1 = n>>k_e
+        fKrtQ1 = (fKrtQ0<<1)^1
+        if n1 < fKrtQ1**k:
+            fKrtQ1 ^= 1
+        #####
+        fKrtQ0 = fKrtQ1
+        num_remain_bits -= 1
+        yield (fKrtQ0, num_remain_bits)
+    assert num_remain_bits == 0
+    assert floor_log2(fKrtQ0) == floor_log2_fKrtN
+    fKrtN = fKrtQ0
+    assert fKrtN**k <= n < (fKrtN+1)**k
+    return
+
+def ceil_kth_root_(k, n, /):
+    assert k >= 1
+    assert n >= 0
+    if n == 0:
+        return 0
+    return 1+floor_kth_root_(k, n-1)
 def floor_kth_root_(k, n, /):
     r'''[[[
     [kth_root_(k,n) =[def]= n**(1/k)]
@@ -446,7 +522,9 @@ def floor_kth_root_(k, n, /):
     [floor_sqrt === floor_kth_root_<2>]
 
     [k>=1][n>=0]
-[k>=2][n>=1]:
+[k>=2][e>=1][n>=1]:
+    # 前提由来:见下面:不必需囗前提条件:[[k>=2][e>=1] -> [(upper_D1_dd1-lower_D_dd) >= 1]]
+    #
     [(q,r) := divmod(n, 2**(k*e))]
     [fKrtN := floor_kth_root_(k,n)]
     [fKrtQ := floor_kth_root_(k,q)]
@@ -462,95 +540,641 @@ def floor_kth_root_(k, n, /):
     [fKrtN == (fKrtQ*2**e+dd)]
     #由(e,q,r,fKrtQ)先求dd再求fKrtN
 
+    [f(x) := ((A+x)*k - A**k)/x][x > 0]:
+        [Df(x)
+        == k*(A+x)**(k-1)/x -((A+x)**k - A**k)/x**2
+        == (k*x*(A+x)**(k-1) -((A+x)**k - A**k))/x**2
+        == (k*x*(sum{choose_(k-1;i)*A**(k-1-i)*x**i | [i :<- [0..=k-1]]}) -(sum{choose_(k;i)*A**(k-i)*x**i | [i :<- [1..=k]]}))/x**2
+        == ((sum{k*choose_(k-1;i)*A**(k-(1+i))*x**(i+1) | [i :<- [0..=k-1]]}) -(sum{choose_(k;i)*A**(k-i)*x**i | [i :<- [1..=k]]}))/x**2
+        == ((sum{k*choose_(k-1;j-1)*A**(k-j)*x**j | [j :<- [1..=k]]}) -(sum{choose_(k;j)*A**(k-j)*x**j | [j :<- [1..=k]]}))/x**2
+        == (sum{(k*choose_(k-1;j-1)*A**(k-j)*x**j - choose_(k;j)*A**(k-j)*x**j) | [j :<- [1..=k]]})/x**2
+        == (sum{(k*choose_(k-1;j-1) - choose_(k;j))*A**(k-j)*x**j | [j :<- [1..=k]]})/x**2
+        == (sum{(j*choose_(k;j) - choose_(k;j))*A**(k-j)*x**j | [j :<- [1..=k]]})/x**2
+        == (sum{(j-1)*choose_(k;j)*A**(k-j)*x**j | [j :<- [1..=k]]})/x**2
+        >= 0
+        ]
+        !![x>0]
+        [f(x)单调递增]
+        [f(x) >= limit[f(x) | x --> 0+] == D_<x>((A+x)*k - A**k){x:=0} == (k*(A+x)**(k-1)){x:=0} == (k*A**(k-1))]
+
     [D := n -(fKrtQ*2**e)**k]
     [D == n -(fKrtQ*2**e)**k == (q*2**(k*e) + r) -(fKrtQ*2**e)**k == ((q-fKrtQ**k)*2**(k*e) + r)]
 
-    [n >= fKrtN**k == (fKrtQ*2**e+dd)**k]
-    [D == n -(fKrtQ*2**e)**k
-    >= (k*(fKrtQ*2**e)**(k-1)*dd +sum{choose_(k,i) *(fKrtQ*2**e)**i *dd**(k-i) | [i <- [0..=k-2]]})
-    == (k*(fKrtQ*2**e)**(k-1) +sum{choose_(k,i) *(fKrtQ*2**e)**i *dd**(k-1-i) | [i <- [0..=k-2]]}) *dd
-    == (k*fKrtQ**(k-1) +sum{choose_(k,i) *fKrtQ**i *(dd/2**e)**(k-1-i) | [i <- [0..=k-2]]}) *(2**e)**(k-1) *dd
-    ]
-    !![0 <= dd < 2**e]]
-    TODO:
-    [floor(2*fKrtQ+dd/2**e) == (2*fKrtQ)]
-
-    [n < (1+fKrtN)**k == (fKrtQ*2**e+dd+1)**k]
-    [D == n -(fKrtQ*2**e)**k < (2*fKrtQ*2**e+(dd+1))*(dd+1) == (2*fKrtQ+(dd+1)/2**e)*2**e*(dd+1)]
-    [ceil(2*fKrtQ+(dd+1)/2**e) == (2*fKrtQ+1)]
-
-    [(2*fKrtQ)*2**e*dd <= D < (2*fKrtQ+1)*2**e*(dd+1)]
-    [dd <= D/((2*fKrtQ)*2**e)]
-    [dd+1 > D/((2*fKrtQ+1)*2**e)]
-    [-1 +D/2**e /(2*fKrtQ+1) < dd <= D/2**e /(2*fKrtQ)]
-    [D//2**e //(2*fKrtQ+1) <= dd <= D//2**e //(2*fKrtQ)]
-
-    [0 <= D//2**e <= (2*fKrtQ+1)**k-2]:
-        #view others/数学/divmod加速.txt
-        !![[d>=2] -> [-(d-1) <= n <= d**2-2] -> [0 <= n//(d-1) - n//d <= 1]]
-        [-1 +D//2**e //(2*fKrtQ) <= dd <= D//2**e //(2*fKrtQ)]
-
-        [(2*fKrtQ+1)**k-2
-        >= D//2**e
-        == ((q-fKrtQ**k)*2**(k*e) + r)//2**e
-        == ((q-fKrtQ**k)*2**e + r//2**e)
+    [E := 2**e]
+    [n >= fKrtN**k == (fKrtQ*E+dd)**k]
+    [D == n -(fKrtQ*E)**k
+    >= (fKrtQ*E+dd)**k -(fKrtQ*E)**k
+    == (k*(fKrtQ*E)**(k-1)*dd +sum{choose_(k,i) *(fKrtQ*E)**i *dd**(k-i) | [i <- [0..=k-2]]})
+    == (k*(fKrtQ*E)**(k-1) +sum{choose_(k,i) *(fKrtQ*E)**i *dd**(k-1-i) | [i <- [0..=k-2]]}) *dd
+        [>= (k*(fKrtQ*E)**(k-1) +sum{choose_(k,i) *(fKrtQ*E)**i *1**(k-1-i) | [i <- [0..=k-2]]}) *dd
+            # 括号内dd用1代替，因为dd==0时括号外的dd起作用
+        == (k*(fKrtQ*E)**(k-1) +sum{choose_(k,i) *(fKrtQ*E)**i *1**(k-i) | [i <- [0..=k-2]]}) *dd
+        == ((fKrtQ*E+1)**k - (fKrtQ*E)**k) *dd
         ]
-        [(q-fKrtQ**k) < (fKrtQ+1)**k -fKrtQ**k == 2*fKrtQ+1]
-        [(q-fKrtQ**k) <= (2*fKrtQ)]
-        #充分条件:
-        [(2*fKrtQ+1)**k-2 >= D//2**e]
-        <<== [(2*fKrtQ+1)**k-2 >= ((2*fKrtQ)*2**e + r//2**e)]
-        <<== [(2*fKrtQ+1)**k-2 >= ((2*fKrtQ)*2**e + 2**e-1)]
-        <<== [(2*fKrtQ+1)**k >= (1 + (2*fKrtQ+1)*2**e)]
-        <<== [(2*fKrtQ+1) >= (1/(2*fKrtQ+1) + 2**e)]
-        <<== [(2*fKrtQ+1) >= (1 + 2**e)]
-        <<== [fKrtQ >= (2**(e-1))]
-        <<== [floor_log2(q)//2 == floor_log2_sqrt(q) == floor_log2(sqrt(q)) == floor_log2(fKrtQ) >= (e-1)]
-        <<== [floor_log2(q) >= 2*(e-1)]
-        !![(q,r) := divmod(n, 2**(k*e))]
-        !![q >= 1] # ==>> [k*e <= floor_log2(n)]
-        <<== [k*e <= floor_log2(n) == floor_log2(q)+k*e >= 2*(e-1)+k*e == 4*e-2]
-        <<== [floor_log2(n) >= 4*e-2][e >= 1]
-        <<== [1 <= e <= (floor_log2(n)+2)//4][n>=4]
-            # 2**e 占 约1/4
-            # 2**(k*e) 占 约1/2
-            # q 占 约1/2
-            # 由q到n(由fKrtQ到fKrtN)，比特数大约翻倍
-    [1 <= e <= (floor_log2(n)+2)//4][n>=4]:
-        [0 <= D//2**e <= (2*fKrtQ+1)**k-2]
-        #dd只有2个可能的取值
-        [-1 +D//2**e //(2*fKrtQ) <= dd <= D//2**e //(2*fKrtQ)]
-        [fKrtN == (fKrtQ*2**e+dd)]
-        #通过dd求fKrtN
-        [upper_dd := D//2**e //(2*fKrtQ)]
-        [upper_dd ==  ((q-fKrtQ**k)*2**e + r//2**e)//(2*fKrtQ)]
+    == (k*fKrtQ**(k-1) +sum{choose_(k,i) *fKrtQ**i *(dd/E)**(k-1-i) | [i <- [0..=k-2]]}) *E**(k-1) *dd
+    ]
+    !![0 <= dd < E]
+    !![f(x)单调递增]
+    [D >= ((fKrtQ*E+dd)**k - (fKrtQ*E)**k) == if dd==0 then 0 else ((fKrtQ*E+dd)**k - (fKrtQ*E)**k)/dd *dd >= ((fKrtQ*E+1)**k - (fKrtQ*E)**k)/1 *dd]
+    [D >= ((fKrtQ*E+1)**k - (fKrtQ*E)**k) *dd]
 
-        [n >= 2**(4*e-2) == 4**(k*e-1)]
-        [[1 <= (floor_log2(n)+2)//4] -> [n>=4]]
-        [[2 <= (floor_log2(n)+2)//4] -> [n>=64]]
-        [[3 <= (floor_log2(n)+2)//4] -> [n>=1024]]
+
+    [n < (1+fKrtN)**k == (fKrtQ*E+dd+1)**k]
+    [D == n -(fKrtQ*E)**k
+    < (fKrtQ*E+dd+1)**k -(fKrtQ*E)**k
+    == (k*(fKrtQ*E)**(k-1)*(dd+1) +sum{choose_(k,i) *(fKrtQ*E)**i *(dd+1)**(k-i) | [i <- [0..=k-2]]})
+    == (k*(fKrtQ*E)**(k-1) +sum{choose_(k,i) *(fKrtQ*E)**i *(dd+1)**(k-1-i) | [i <- [0..=k-2]]}) *(dd+1)
+    == (k*fKrtQ**(k-1) +sum{choose_(k,i) *fKrtQ**i *((dd+1)/E)**(k-1-i) | [i <- [0..=k-2]]}) *E**(k-1) *(dd+1)
+    ]
+    [D < ((fKrtQ*E+dd+1)**k - (fKrtQ*E)**k)
+    == ((fKrtQ*E+dd+1)**k - (fKrtQ*E)**k)/(dd+1) *(dd+1)
+    !![0 <= dd < E]
+    !![f(x)单调递增]
+    <= ((fKrtQ*E+E)**k - (fKrtQ*E)**k)/E *(dd+1)
+    == ((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1) *(dd+1)
+    ]
+    [D < ((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1) *(dd+1)]
+    [D <= -1 +((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1) *(dd+1)]
+
+    [lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)]
+    [upper_D1_dd1 := (((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1))]
+    [lower_D_dd *dd <= D < D+1 <= upper_D1_dd1 *(dd+1)]
+
+
+    [dd <= D/lower_D_dd]
+    [dd+1 > D/upper_D1_dd1]
+    [-1 +D/upper_D1_dd1 < dd <= D/lower_D_dd]
+        #true_div
+    [-1 +D//upper_D1_dd1 < dd <= D//lower_D_dd]
+        #floor_div
+    [D//upper_D1_dd1 <= dd <= D//lower_D_dd]
+
+    [lower_dd := D//upper_D1_dd1]
+    [upper_dd := D//lower_D_dd]
+    [lower_dd <= dd <= upper_dd]
+
+    #view others/数学/divmod加速.txt
+    !![[[d>=1][d_>=1][u<=v]] -> [[u*d*d_ -(d-1) <= (d-d_)*n <= (d_-1) +v*d*d_] -> [u <= (n//d_ - n//d) <= v]]]
+    #   [outer_txt.n := D]
+    #   [outer_txt.d := upper_D1_dd1]
+    #   [outer_txt.d_ := lower_D_dd]
+    #   [outer_txt.dd := .d - ._d = (upper_D1_dd1-lower_D_dd)]
+    #
+
+    [[0 <= (upper_D1_dd1-lower_D_dd)*D <= upper_D1_dd1 *lower_D_dd +(lower_D_dd-1)] -> [upper_dd-lower_dd == (D//lower_D_dd - D//upper_D1_dd1) <- {0,1}][dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+        # [(u,v) := (0,1)]
+        # used when [(upper_D1_dd1-lower_D_dd) >= 0]
+
+    [[-upper_D1_dd1 *lower_D_dd -(upper_D1_dd1-1) <= (upper_D1_dd1-lower_D_dd)*D <= 0] -> [upper_dd-lower_dd == (D//lower_D_dd - D//upper_D1_dd1) <- {-1,0}]]
+        # [(u,v) := (-1,0)]
+        # used when [(upper_D1_dd1-lower_D_dd) <= 0]
+
+    !![lower_dd <= dd <= upper_dd]
+    [upper_dd-lower_dd >= 0]
+    [[-upper_D1_dd1 *lower_D_dd -(upper_D1_dd1-1) <= (upper_D1_dd1-lower_D_dd)*D <= 0] -> [dd==upper_dd==lower_dd == D//lower_D_dd == D//upper_D1_dd1]]
+
+    !![D >= 0]
+    * [(upper_D1_dd1-lower_D_dd) > 0]:
+        [[D <= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+
+    * [(upper_D1_dd1-lower_D_dd) < 0]:
+        [[D <= (upper_D1_dd1 *lower_D_dd +(upper_D1_dd1-1))//(-(upper_D1_dd1-lower_D_dd))] -> [dd == D//lower_D_dd]]
+    * [(upper_D1_dd1-lower_D_dd) == 0]:
+        [dd == D//lower_D_dd]
+
+    #综上:
+    [[D <= (upper_D1_dd1 *lower_D_dd +(min(upper_D1_dd1,lower_D_dd)-1))//max(1,abs(upper_D1_dd1-lower_D_dd))] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+
+
+
+
+
+
+    # 下面寻找满足 上面 命题 的 充分条件
+    [[必需:前提条件
+    ??? [lower_D_dd >= 1] ???
+        # <<== [outer_txt._d >= 1]
+    ??? [upper_D1_dd1 >= 1] ???
+        # <<== [outer_txt.d >= 1]
+    ]]
+
+    [[不必需:前提条件
+    ??? [upper_D1_dd1 - lower_D_dd > 0] ???
+        # <<== [outer_txt.dd > 0]
+    ??? [1 <= lower_D_dd < upper_D1_dd1] ???
+    ]]
+
+    [[[证明:必需:前提条件[lower_D_dd >= 1][upper_D1_dd1 >= 1]
+    !![lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)]
+    [k == 1]:
+        [lower_D_dd == 1]
+    !![k >= 2]
+    [lower_D_dd >= k*(fKrtQ*E)**(k-1)+1]
+    [fKrtQ >= 0][e >= 0]:
+        [lower_D_dd >= 1]
+    [fKrtQ >= 1][e >= 1]:
+        [lower_D_dd >= 2*(1*2**1)**(2-1)+1 == 5]
+    [lower_D_dd >= 1] # for [k>=1]
+
+    !![upper_D1_dd1 := (((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1))]
+    [k == 1]:
+        [upper_D1_dd1 == E**(k-1) == 1]
+    !![k >= 2]
+    [upper_D1_dd1 >= ((k*fKrtQ**(k-1)+1)*E**(k-1))]
+    [upper_D1_dd1 >= 1] # for [k>=1]
+    ]]]
+
+    [[证明:不必需:前提条件[upper_D1_dd1 - lower_D_dd > 0]
+    !![D//upper_D1_dd1 <= dd <= D//lower_D_dd]
+    [D//upper_D1_dd1 <= D//lower_D_dd]
+
+    !![lower_D_dd *dd <= D < D+1 <= upper_D1_dd1 *(dd+1)]
+    [lower_D_dd *dd < upper_D1_dd1 *(dd+1)]
+    !![0 <= dd < E]
+    [lower_D_dd *(E-1) < upper_D1_dd1 *E]
+
+    !![lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)]
+    !![upper_D1_dd1 := (((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1))]
+    [(upper_D1_dd1-lower_D_dd) #==outer_txt.dd
+    == (((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1)) -((fKrtQ*E+1)**k - (fKrtQ*E)**k)
+    == (fKrtQ+1)**k*E**(k-1) -(fKrtQ)**k*E**(k-1) -(fKrtQ*E+1)**k +(fKrtQ*E)**k
+    == (fKrtQ+1)**k*E**(k-1) -(fKrtQ*E+1)**k +(fKrtQ)**k*E**(k-1)*(E-1)
+    ]
+    [g(k) := (fKrtQ+1)**k*E**(k-1) -(fKrtQ*E+1)**k +(fKrtQ)**k*E**(k-1)*(E-1)]
+    [g(k) == (upper_D1_dd1-lower_D_dd)]
+
+    [g(1)
+    == (fKrtQ+1)**1*E**(1-1) -(fKrtQ*E+1)**1 +(fKrtQ)**1*E**(1-1)*(E-1)
+    == (fKrtQ+1) -(fKrtQ*E+1) +(fKrtQ)*(E-1)
+    == 0
+    ]
+    [g(2)
+    == (fKrtQ+1)**2*E**(2-1) -(fKrtQ*E+1)**2 +(fKrtQ)**2*E**(2-1)*(E-1)
+    == (fKrtQ+1)**2*E -(fKrtQ*E+1)**2 +(fKrtQ)**2*E*(E-1)
+    == (fKrtQ**2*E+2*fKrtQ*E+E) -(fKrtQ**2*E**2 +2*fKrtQ*E +1) +(fKrtQ**2*E**2-fKrtQ**2*E)
+    == E-1
+    == 2**e-1
+    >= e
+    >= 0
+    ]
+
+    [E*g(k) == (fKrtQ*E+E)**k +(fKrtQ*E)**k*(E-1) -E*(fKrtQ*E+1)**k]
+
+    [E*g(k)
+    == 1*(fKrtQ*E+1+(E-1))**k +(E-1)*(fKrtQ*E+1-1)**k -E*(fKrtQ*E+1)**k
+    == 1*sum{(choose_(k;i)*(fKrtQ*E+1)**i*(E-1)**(k-i)) | [i :<-[0..=k]]} +(E-1)*sum{(choose_(k;i)*(fKrtQ*E+1)**i*(-1)**(k-i)) | [i :<-[0..=k]]} -E*(fKrtQ*E+1)**k
+    == sum{(choose_(k;i)*(fKrtQ*E+1)**i*((E-1)**(k-i)+(E-1)*(-1)**(k-i))) | [i :<-[0..=k]]} -E*(fKrtQ*E+1)**k
+    !![k>=0]
+    == sum{(choose_(k;i)*(fKrtQ*E+1)**i*((E-1)**(k-i)+(E-1)*(-1)**(k-i))) | [i :<-[0..<k]]} +(choose_(k;k)*(fKrtQ*E+1)**k*((E-1)**(k-k)+(E-1)*(-1)**(k-k))) -E*(fKrtQ*E+1)**k
+    == sum{(choose_(k;i)*(fKrtQ*E+1)**i*((E-1)**(k-i)+(E-1)*(-1)**(k-i))) | [i :<-[0..<k]]} +(1*(fKrtQ*E+1)**k*(1+(E-1)*1)) -E*(fKrtQ*E+1)**k
+    == (E-1)*sum{(choose_(k;i)*(fKrtQ*E+1)**i*((E-1)**(k-1-i)+(-1)**(k-i))) | [i :<-[0..<k]]}
+        [[
+        * [k>=0][e>=0]:[
+            [E==2**e>=1]
+            [... >= (E-1)*sum{(choose_(k;i)*(fKrtQ*E+1)**i*(1**(k-1-i)-1)) | [i :<-[0..<k]]}
+            == 0
+            ]
+        ]
+        * [k>=2][e>=1]:[
+            [E==2**e>=2]
+            [... >= (2-1)*sum{(choose_(k;i)*(fKrtQ*2+1)**i*((2-1)**(k-1-i)+(-1)**(k-i))) | [i :<-[0..<k]]}
+            >= (2-1)*sum{(choose_(k;i)*(fKrtQ*2+1)**i*((2-1)**(k-1-i)+(-1)**(k-i))) | [i == k-2]}
+            == (2-1)*(choose_(k;(k-2))*(fKrtQ*2+1)**(k-2)*((2-1)**(k-1-(k-2))+(-1)**(k-(k-2))))
+            == (choose_(k;2)*(fKrtQ*2+1)**(k-2)*2)
+            >= (choose_(2;2)*(fKrtQ*2+1)**(2-2)*2)
+            == 2
+            ]
+        ]
+        ]]
+    ]
+    [[k>=0][e>=0] -> [E*g(k) >= 0]]
+    [[k>=2][e>=1] -> [E*g(k) >= 2]]
+
+    [[k>=0][e>=0] -> [g(k) >= 0]]
+    [[k>=2][e>=1] -> [g(k) >= ceil(2/E) == 1]]
+
+    [[k>=0][e>=0] -> [(upper_D1_dd1-lower_D_dd) >= 0]]
+    [[k>=2][e>=1] -> [(upper_D1_dd1-lower_D_dd) >= 1]] #不必需囗前提条件
+    ]]
+
+
+    !![k>=2][e>=1]
+    [(upper_D1_dd1-lower_D_dd) >= 1]
+
+    !![[D <= (upper_D1_dd1 *lower_D_dd +(min(upper_D1_dd1,lower_D_dd)-1))//max(1,abs(upper_D1_dd1-lower_D_dd))] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+    [[D <= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+
+    [flbN := floor_log2(n)]
+    [flbQ := floor_log2(q)]
+    !![(q,r) := divmod(n, 2**(k*e))]
+    [flbN == flbQ + k*e]
+    !![fKrtQ**k <= q < (fKrtQ+1)**k]
+    [k*log2(fKrtQ) <= log2(q) < k*log2(fKrtQ+1)]
+    [log2(fKrtQ) <= log2(q)/k < log2(fKrtQ+1)]
+    [floor_log2(fKrtQ) <= floor(log2(q)/k) <= floor_log2(fKrtQ+1)]
+    [floor_log2(fKrtQ) <= floor_log2(q)//k <= floor_log2(fKrtQ+1)]
+    [k*floor_log2(fKrtQ) <= flbQ <= k*floor_log2(fKrtQ+1) +k-1]
+
+    # 求max_E(k;flbN): [[1 <= E <= max_E(k;flbN)] -> [D <= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]]
+    # 即:求max_E(k;flbN): [[D > (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)] -> [E > max_E(k;flbN)]]
+    #
+    [not$ [D <= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]]:[[
+        [D > (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]
+
+
+        !![lower_D_dd *dd <= D < D+1 <= upper_D1_dd1 *(dd+1)]
+        !![0 <= dd < E]
+        #bug:dd并不自由:[lower_D_dd *(E-1) <= D < D+1 <= upper_D1_dd1 *((E-1)+1)]
+        [lower_D_dd *0 <= D < D+1 <= upper_D1_dd1 *((E-1)+1)]
+
+
+        [0 <= D < upper_D1_dd1*E]
+        !![D > (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]
+        [upper_D1_dd1*E > D > (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]
+        [(upper_D1_dd1*E -2) >= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]
+
+        !![(upper_D1_dd1-lower_D_dd) >= 1]
+        [(upper_D1_dd1*E -2)*(upper_D1_dd1-lower_D_dd) >= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))]
+
+        # ==>> [E > ???max_E(k;flbN)]
+        [0
+        <= (upper_D1_dd1*E -2)*(upper_D1_dd1-lower_D_dd) - (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))
+        == (upper_D1_dd1*E)*(upper_D1_dd1-lower_D_dd) -2*(upper_D1_dd1-lower_D_dd) -(upper_D1_dd1*lower_D_dd +(lower_D_dd-1))
+        == (upper_D1_dd1*E)*(upper_D1_dd1-lower_D_dd) -(upper_D1_dd1*lower_D_dd +2*upper_D1_dd1 -lower_D_dd-1)
+        ]
+        [(upper_D1_dd1*E)*(upper_D1_dd1-lower_D_dd) >= (upper_D1_dd1*lower_D_dd +2*upper_D1_dd1 -lower_D_dd-1)]
+        [2**e == E
+        >= ceil((upper_D1_dd1*lower_D_dd +2*upper_D1_dd1 -lower_D_dd-1)/upper_D1_dd1/(upper_D1_dd1-lower_D_dd))
+        == ceil((lower_D_dd +2 -(lower_D_dd+1)/upper_D1_dd1)/(upper_D1_dd1-lower_D_dd))
+        !![(upper_D1_dd1-lower_D_dd) >= 1]
+        >= ceil((lower_D_dd +2 -1)/(upper_D1_dd1-lower_D_dd))
+        == ceil_div((lower_D_dd +1), (upper_D1_dd1-lower_D_dd))
+        == 1 +lower_D_dd//(upper_D1_dd1-lower_D_dd)
+        ]
+        [E >= 1 +lower_D_dd//(upper_D1_dd1-lower_D_dd)] #适用于 实时计算，但对于 提取估计[E > max_E(k;flbQ)] 而言，过宽
+
+        #####
+        [a,b>=0][k>=2]:
+            [(a+b)**k
+            == (sum{(choose_(k;i) *a**(k-i) *b**i) | [i :<- [0..=k]]})
+            == (sum{(choose_(k;i) *a**(k-i) *b**i) | [i :<- [0..=k-2]]}) +(choose_(k;(k-1)) *a**(k-(k-1)) *b**(k-1)) +(choose_(k;k) *a**(k-k) *b**k)
+            == (sum{(choose_(k;i) *a**(k-i) *b**i) | [i :<- [0..=k-2]]}) +(k*a*b**(k-1)) +b**k
+            == (sum{(k*(k-1)/(k-i)/(k-1-i) *a**2 *choose_(k-2;i) *a**(k-2-i) *b**i) | [i :<- [0..=k-2]]}) +(k*a*b**(k-1)) +b**k
+            * >= (sum{(k*(k-1)/(k-0)/(k-1-0) *a**2 *choose_(k-2;i) *a**(k-2-i) *b**i) | [i :<- [0..=k-2]]}) +(k*a*b**(k-1)) +b**k
+                == a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k
+            * <= (sum{(k*(k-1)/(k-(k-2))/(k-1-(k-2)) *a**2 *choose_(k-2;i) *a**(k-2-i) *b**i) | [i :<- [0..=k-2]]}) +(k*a*b**(k-1)) +b**k
+                == k*(k-1)/2 *a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k
+            ]
+            [a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k <= (a+b)**k <= k*(k-1)/2 *a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k]
+            [a**2 *(a+b)**(k-2) <= ((a+b)**k -(k*a*b**(k-1)) -b**k) <= k*(k-1)/2 *a**2 *(a+b)**(k-2)]
+            [not$ [a==0==b]]:
+                [1 <= ((a+b)**k -(k*a*b**(k-1)) -b**k)/(a**2 *(a+b)**(k-2)) <= k*(k-1)/2]
+        [[a,b>=0][k>=2][not$ [a==0==b]] -> [1 <= ((a+b)**k -(k*a*b**(k-1)) -b**k)/(a**2 *(a+b)**(k-2)) <= k*(k-1)/2]]
+        [[a,b>=0][k>=2] -> [a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k <= (a+b)**k <= k*(k-1)/2 *a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k]]
+        #####
+        !![(upper_D1_dd1*E)*(upper_D1_dd1-lower_D_dd) >= (upper_D1_dd1*lower_D_dd +2*upper_D1_dd1 -lower_D_dd-1)]
+        [2 -(lower_D_dd+1)/upper_D1_dd1
+        <= E*(upper_D1_dd1-lower_D_dd) -lower_D_dd
+        == E*upper_D1_dd1-(E+1)*lower_D_dd
+        !![lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)]
+        !![upper_D1_dd1 := (((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1))]
+        == E*(((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1)) -(E+1)*((fKrtQ*E+1)**k - (fKrtQ*E)**k)
+        == ((fKrtQ+1)**k - (fKrtQ)**k)*E**k -(E+1)*((fKrtQ*E+1)**k - (fKrtQ*E)**k)
+        == (fKrtQ+1)**k*E**k +E*fKrtQ**k*E**k -(E+1)*(fKrtQ*E+1)**k
+        # <= ???
+
+        !![[a,b>=0][k>=2] -> [a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k <= (a+b)**k <= k*(k-1)/2 *a**2 *(a+b)**(k-2) +(k*a*b**(k-1)) +b**k]]
+        <= (k*(k-1)/2 *1**2 *(fKrtQ+1)**(k-2) +(k*1*fKrtQ**(k-1)) +fKrtQ**k)*E**k +E*fKrtQ**k*E**k -(E+1)*(1**2 *(1+fKrtQ*E)**(k-2) +(k*1*(fKrtQ*E)**(k-1)) +(fKrtQ*E)**k)
+        == (k*(k-1)/2 *(fKrtQ+1)**(k-2) +k*fKrtQ**(k-1) +fKrtQ**k)*E**k +E*fKrtQ**k*E**k -(E+1)*((1+fKrtQ*E)**(k-2) +k*fKrtQ**(k-1)*E**(k-1) +fKrtQ**k*E**k)
+        == k*(k-1)/2 *(fKrtQ+1)**(k-2)*E**k +k*fKrtQ**(k-1)*E**k +fKrtQ**k*E**k +fKrtQ**k*E**(k+1) -((1+fKrtQ*E)**(k-2)*E +k*fKrtQ**(k-1)*E**k +fKrtQ**k*E**(k+1)) -((1+fKrtQ*E)**(k-2) +k*fKrtQ**(k-1)*E**(k-1) +fKrtQ**k*E**k)
+        == k*(k-1)/2 *(fKrtQ+1)**(k-2)*E**k -(1+fKrtQ*E)**(k-2)*E -(1+fKrtQ*E)**(k-2) -k*fKrtQ**(k-1)*E**(k-1)
+        == k*(k-1)/2 *(fKrtQ+1)**(k-2)*E**k -(1+1/(fKrtQ*E))**(k-2)*fKrtQ**(k-2)*E**(k-1) -(1+1/(fKrtQ*E))**(k-2)*fKrtQ**(k-2)*E**(k-2) -k*fKrtQ**(k-1)*E**(k-1)
+        == (k*(k-1)/2 *(fKrtQ+1)**(k-2)*E**2 -(1+1/(fKrtQ*E))**(k-2)*fKrtQ**(k-2)*E -(1+1/(fKrtQ*E))**(k-2)*fKrtQ**(k-2) -k*fKrtQ**(k-1)*E)*E**(k-2)
+        == (k*(k-1)/2 *(fKrtQ+1)**(k-2)*E**2 -(k*fKrtQ +(1+1/(fKrtQ*E))**(k-2))*fKrtQ**(k-2)*E -(1+1/(fKrtQ*E))**(k-2)*fKrtQ**(k-2))*E**(k-2)
+        == (k*(k-1)/2 *(1+1/fKrtQ)**(k-2)*E**2 -(k*fKrtQ +(1+1/(fKrtQ*E))**(k-2))*E -(1+1/(fKrtQ*E))**(k-2))*fKrtQ**(k-2)*E**(k-2)
+        ]
+
+        !![(upper_D1_dd1-lower_D_dd) >= 1]
+        [1 <= 2 -(lower_D_dd+1)/upper_D1_dd1 <= (k*(k-1)/2 *(1+1/fKrtQ)**(k-2)*E**2 -(k*fKrtQ +(1+1/(fKrtQ*E))**(k-2))*E -(1+1/(fKrtQ*E))**(k-2))*fKrtQ**(k-2)*E**(k-2)]
+        [1/(fKrtQ**(k-2)*E**(k-2)) <= (k*(k-1)/2 *(1+1/fKrtQ)**(k-2)*E**2 -(k*fKrtQ +(1+1/(fKrtQ*E))**(k-2))*E -(1+1/(fKrtQ*E))**(k-2))]
+        [((k*(k-1)/2 *(1+1/fKrtQ)**(k-2)) *E**2 -(k*fKrtQ +(1+1/(fKrtQ*E))**(k-2)) *E -(1+2/(fKrtQ*E))**(k-2)) >= 0]
+        !![e>=1][E == 2**e >= 2][fKrtQ>=1]
+        # [E >= (+(k*fKrtQ +(1+1/(fKrtQ*E))**(k-2)) +sqrt((k*fKrtQ +(1+1/(fKrtQ*E))**(k-2))**2 +4*(k*(k-1)/2 *(1+1/fKrtQ)**(k-2))*(1+2/(fKrtQ*E))**(k-2)))/(2*(k*(k-1)/2 *(1+1/fKrtQ)**(k-2)))]
+        [((k*(k-1)/2 *2**(k-2)) *E**2 -(k*fKrtQ +1) *E -1) >= 0]
+        [E
+        >= ((k*fKrtQ +1) +sqrt((k*fKrtQ +1)**2 +4*(k*(k-1)/2 *2**(k-2))*1))/(2*(k*(k-1)/2 *2**(k-2)))
+        >= ((k*fKrtQ +1) +sqrt((k*fKrtQ +1)**2 +(2*k*(k-1) *2**(k-2))))/(k*(k-1) *2**(k-2))
+        > 2*(k*fKrtQ +1)/(k*(k-1) *2**(k-2))
+        == (fKrtQ +1/k)/((k-1) *2**(k-3))
+        ]
+        [e == log2(E)
+        > log2((fKrtQ +1/k)/((k-1) *2**(k-3)))
+        == log2(fKrtQ +1/k) -log2(k-1) -(k-3)
+        > floor_log2(fKrtQ) -ceil_log2(k-1) -k +3
+        ]
+        [e > floor_log2(fKrtQ) -ceil_log2(k-1) -k +3] #预估用，近乎翻倍
+
+        [[实时用:
+        # ==>> [e > ???max_e(k;flbQ)]
+        [e == ceil_log2(2**e)
+        == ceil_log2(E)
+        >= ceil_log2(1 +lower_D_dd//(upper_D1_dd1-lower_D_dd))
+        == ceil_log2((lower_D_dd +1)/(upper_D1_dd1-lower_D_dd))
+        ] #适用于 实时计算，但对于 提取估计[E > max_E(k;flbQ)] 而言，过宽
+        ]]
+
+
+        [e
+        > floor_log2(fKrtQ) -ceil_log2(k-1) -k +3
+        !![k*floor_log2(fKrtQ) <= flbQ <= k*floor_log2(fKrtQ+1) +k-1]
+        >= floor_log2(fKrtQ+1) -1 -ceil_log2(k-1) -k +3
+        >= flbQ//k -ceil_log2(k-1) -k +2
+        !![flbN == flbQ + k*e]
+        >= (flbN-k*e)//k -ceil_log2(k-1) -k +2
+        == flbN//k -e -ceil_log2(k-1) -k +2
+        ]
+        [2*e > flbN//k -ceil_log2(k-1) -k +2]
+        [e > (flbN//k -ceil_log2(k-1) -k +2)//2]
+        [max_e(k;flbN) =[def]= (flbN//k -ceil_log2(k-1) -k +2)//2]
+        [e > max_e(k;flbN)]
+        [[
+        [floor_log2(fKrtQ) -ceil_log2(k-1) -k +3 >= 1]:
+            [floor_log2(fKrtQ) >= ceil_log2(k-1) +k -2]
+                # {k:rhs}={2:0, 3:2, 4:4, 5:5, 6:7, 7:8, 8:9, 9:10, 10:12, ...}
+        ]]
+        [max_e(k;flbN) >= 1]:
+            [(flbN//k -ceil_log2(k-1) -k +2)//2 >= 1]
+            [(flbN//k -ceil_log2(k-1) -k +2) >= 2]
+            [flbN//k >= (ceil_log2(k-1) +k)]
+            [flbN >= k*(ceil_log2(k-1) +k)]
+                # {k:rhs}={2:4, 3:12, 4:24, 5:35, 6:54, 7:70, 8:88, 9:108, 10:140, ...}
+        [min_flbN(k) =[def]= k*(ceil_log2(k-1) +k)]
+            #这也太大了...
+        算了，还是直接用脚本枚举...
+            e script/seed.math.floor_ceil-floor_kth_root_--E-flbQ.py
+            直接检查:[not$ [(upper_D1_dd1*E)*(upper_D1_dd1-lower_D_dd) >= (upper_D1_dd1*lower_D_dd +2*upper_D1_dd1 -lower_D_dd-1)]]
+                [lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)]
+                [upper_D1_dd1 := (((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1))]
+                [E == 2**e]
+                求:max_E(k;flbQ), max_e(k;flbN)
+        view script/seed.math.floor_ceil-floor_kth_root_--E-flbQ.py
+        [[
+            [is_e_ok__k__fKrtQ(k, fKrtQ, e) =[def]= [[k>=2][fKrtQ>=1][E:=2**e][lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)][upper_D1_dd1 := (((fKrtQ+1)**k - (fKrtQ)**k)*E**(k-1))][(upper_D1_dd1*E)*(upper_D1_dd1-lower_D_dd) < (upper_D1_dd1*lower_D_dd +2*upper_D1_dd1 -lower_D_dd-1)]]]
+            [is_e_ok__k__floor_log2_fKrtQ(k, floor_log2_fKrtQ, e) =[def]= [[k>=2][floor_log2_fKrtQ>=0][@[fKrtQ :<- [2**floor_log2_fKrtQ..<2**(1+floor_log2_fKrtQ)]] -> [is_e_ok__k__fKrtQ(k, fKrtQ, e)]]]]
+            [find_max_e__k__floor_log2_fKrtQ(k, floor_log2_fKrtQ) =[def]= (-1+min({0}\-/{bad_e <- [1..] | [not$ [is_e_ok__k__floor_log2_fKrtQ(k, floor_log2_fKrtQ, bad_e)]]}))]
+                # [find_max_e__k__floor_log2_fKrtQ(k, floor_log2_fKrtQ) =[def]= (max({-1}\-/{max_e <- [0..] | [@[e <- [0..=max_e]] -> [is_e_ok__k__floor_log2_fKrtQ(k, floor_log2_fKrtQ, e)]]}))]
+            [第一猜想:= [@[k>=2] -> [i:=ceil_log2(k-1)-1] -> @[floor_log2_fKrtQ>=0] -> [[max(0, floor_log2_fKrtQ-i)<=find_max_e__k__floor_log2_fKrtQ(k, floor_log2_fKrtQ)<=max(0, 1+floor_log2_fKrtQ-i)][?[threshold>=i] -> [floor_log2_fKrtQ >= threshold] -> [find_max_e__k__floor_log2_fKrtQ(k, floor_log2_fKrtQ)==floor_log2_fKrtQ-i]]]]] #候选的粗略定义:[max_e<k{>=2},floor_log2_fKrtQ{>=0}> =[def]= max(0, 1+floor_log2_fKrtQ-ceil_log2(k-1))]
+
+        ]]
+
+        [第一猜想]:[[
+            [max_e__k__floor_log2_fKrtQ(k,floor_log2_fKrtQ) =[def]= max(0, 1+floor_log2_fKrtQ-ceil_log2(k-1))]
+            !![flbN == flbQ + k*e]
+            !![floor_log2_fKrtQ == flbQ//k *k == flbQ-flbQ%k]
+            [floor_log2_fKrtQ
+            == flbQ-flbQ%k
+            == (flbN-k*e -flbN%k)
+            ]
+            [(1+floor_log2_fKrtQ-ceil_log2(k-1)) >= 0]:
+                [e
+                <= max_e__k__floor_log2_fKrtQ(k,floor_log2_fKrtQ)
+                == max(0, 1+floor_log2_fKrtQ-ceil_log2(k-1))
+                == (1+floor_log2_fKrtQ-ceil_log2(k-1))
+                == (1+(flbN-k*e -flbN%k)-ceil_log2(k-1))
+                ]
+                [(flbN -flbN%k) >= ceil_log2(k-1) -1 +(k+1)*e]
+                [(k+1)*e <= (flbN -flbN%k) -ceil_log2(k-1) +1]
+                [e <= ((flbN -flbN%k) -ceil_log2(k-1) +1)//(k+1)]
+            [max_e(k,flbN) =[def]= ((flbN -flbN%k) -ceil_log2(k-1) +1)//(k+1)]
+            [max_e(k,flbN) <= 0]:
+                [((flbN -flbN%k) -ceil_log2(k-1) +1)//(k+1) <= 0]
+                [((flbN -flbN%k) -ceil_log2(k-1) +1) <= k]
+                [flbN//k *k == (flbN -flbN%k) <= (k-1 +ceil_log2(k-1))]
+                [flbN//k <= (k-1 +ceil_log2(k-1))//k]
+                [flbN <= (k-1 +ceil_log2(k-1))//k *k +k-1]
+                [flbN < (k-1 +ceil_log2(k-1))//k *k +k]
+                * [k==2]:
+                    [ceil_log2(k-1) == 0]
+                    [flbN < (2-1 +0)//2 *2 +2 == 2 == 1*k]
+                * [k>=3]:
+                    [ceil_log2(k-1) == 1+floor_log2(k-2) <= 1+(k-2)-1 == k-2]
+                    [ceil_log2(k-1) >= ceil_log2(3-1) == 1]
+                    [flbN < (k-1 +ceil_log2(k-1))//k *k +k == 1*k +k == 2*k]
+                [flbN < (2-[k==2])*k]
+            [[max_e(k,flbN) <= 0] -> [flbN < (2-[k==2])*k]]
+            [[flbN >= (2-[k==2])*k] -> [max_e(k,flbN) >= 1]]
+        ]]
+
+        !![e > max_e(k;flbN)]
+        [not$ [e <= max_e(k;flbN)]]
+        ]]
+    [[not$ [D <= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]] -> [not$ [e <= max_e(k;flbN)]]]
+    [[e <= max_e(k;flbN)] -> [D <= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)]]
+    !![[D <= (upper_D1_dd1*lower_D_dd +(lower_D_dd-1))//(upper_D1_dd1-lower_D_dd)] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+    [[e <= max_e(k;flbN)] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+    # ==>> [???max_e(k;flbN)]
+    其中[[
+        [dd := fKrtN - (fKrtQ*2**e)]
+        [D := n -(fKrtQ*2**e)**k]
+        [E := 2**e]
+        [lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)]
+        [第一猜想]:[[
+            [max_e__k__floor_log2_fKrtQ(k,floor_log2_fKrtQ) =[def]= max(0, 1+floor_log2_fKrtQ-ceil_log2(k-1))]
+            [max_e(k,flbN) =[def]= ((flbN -flbN%k) -ceil_log2(k-1) +1)//(k+1)]
+            [[flbN >= (2-[k==2])*k] -> [max_e(k,flbN) >= 1]]
+        ]]
+    ]]
+
+
+
+
+
+[[
+>>> from seed.math.floor_ceil import floor_kth_root_
+>>> floor_kth_root_(7, 1<<1000)
+10099156328514439423684435017530967657253776
+
+>>> floor_kth_root_(207, 1<<10000)
+348748114132194
+
+]]
+
 
 
 
 
 
     #]]]'''
+    fKrtN = _floor_kth_root__impl_(k, n)
+    assert fKrtN**k <= n < (fKrtN+1)**k
+    return fKrtN
+def _floor_kth_root__impl_(k, n, /):
     assert k >= 1
     assert n >= 0
     if k == 1 or n < 2:
         return n
+    # [k >= 2]
+    # [n >= 2]
+    flbN = floor_log2(n)
+    if flbN < k:
+        return 1
+    # [n >= 2**k]
 
-floor_lshift_kth_root_(e, k, n)
-floor_log2_div
-floor_log2_pow
-def floor_lshift_sqrt_(k, n, /):
+
+    # [k >= 2][n >= 2**k >= 4]
+    floor_log2_fKrtN = floor_log2_kth_root_(k, n)
+    assert floor_log2_fKrtN >= 1
+    fKrtN = 1<<floor_log2_fKrtN
+    if n < (fKrtN^1)**k:
+        return fKrtN
+    fKrtN = (1<<(floor_log2_fKrtN+1))-1
+    if fKrtN**k <= n:
+        return fKrtN
+    del fKrtN
+
     r'''[[[
-    [floor_lshift_sqrt_(k,n) =[def]= floor(2**k * sqrt(n))]
+    [[e <= max_e(k;flbN)] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
+        [dd := fKrtN - (fKrtQ*2**e)]
+        [D := n -(fKrtQ*2**e)**k]
+        [E := 2**e]
+        [lower_D_dd := ((fKrtQ*E+1)**k - (fKrtQ*E)**k)]
+        [第一猜想]:[[
+            [max_e__k__floor_log2_fKrtQ(k,floor_log2_fKrtQ) =[def]= max(0, 1+floor_log2_fKrtQ-ceil_log2(k-1))]
+            [max_e(k,flbN) =[def]= ((flbN -flbN%k) -ceil_log2(k-1) +1)//(k+1)]
+            [[flbN >= (2-[k==2])*k] -> [max_e(k,flbN) >= 1]]
+        ]]
 
     #]]]'''
+    t = ceil_log2(k-1) -1
+    #k1 = k+1
+    #min_flbN = k if k==2 else 2*k
+    min_floor_log2_fKrtQ = t+1
+
+    #for floor_log2_partial_lead_bits4fKrtN, (partial_lead_bits4fKrtN, num_remain_bits) in enumerate(_iter_partial_floor_kth_root__bisearch_(k, n)):
+    for floor_log2_fKrtQ, (fKrtQ, num_remain_bits) in enumerate(_iter_partial_floor_kth_root__bisearch_(k, n)):
+        if floor_log2_fKrtQ == min_floor_log2_fKrtQ:
+            break
+    assert floor_log2_fKrtQ == floor_log2(fKrtQ)
+    assert floor_log2_fKrtN == floor_log2_fKrtQ+num_remain_bits
+    pow_fKrtQ_k = fKrtQ**k
+    pow_1fKrtQ_k = (fKrtQ+1)**k
+    assert pow_fKrtQ_k <= (n>>(num_remain_bits*k)) < pow_1fKrtQ_k
+    while num_remain_bits:
+        num_remain_bits, fKrtQ, pow_fKrtQ_k, floor_log2_fKrtQ
+            #循环变量
+        #####
+        max_e = floor_log2_fKrtQ -t
+        e = min(num_remain_bits, max_e)
+        num_remain_bits -= e
+        n_ = (n>>(num_remain_bits*k))
+
+        assert e >= 1
+        E = 1 << e
+        k_e = k*e
+        E_fKrtQ = (fKrtQ<<e)
+        pow_EfKrtQ_k = pow_fKrtQ_k << k_e
+        pow_1EfKrtQ_k = (E_fKrtQ^1)**k
+        D = n_ -pow_EfKrtQ_k
+        lower_D_dd = pow_1EfKrtQ_k -pow_EfKrtQ_k
+        dd = D//lower_D_dd
+        assert 0 <= dd <= E
+        dd_ = dd-1 if dd == E else dd
+        assert 0 <= dd_ < E
+
+        fKrtN_ = E_fKrtQ^dd_
+        pow_fKrtN__k = fKrtN_**k
+        if n_ < pow_fKrtN__k:
+            assert 1 <= dd_==dd < E
+            fKrtN_ -= 1
+            pow_fKrtN__k = fKrtN_**k
+        else:
+            assert 0 <= dd_ < E
+        assert pow_fKrtN__k <= n_
+        #####
+        fKrtQ = fKrtN_
+        pow_fKrtQ_k = pow_fKrtN__k
+        floor_log2_fKrtQ += e
+    fKrtN = fKrtQ
+    return fKrtN
+
+def floor_lshift_kth_root_(e, k, n, /):
+    '[floor_lshift_kth_root_(e, k, n) =[def]= floor(kth_root_(k;n) *2**e) = floor_kth_root_(k;n*2**(k*e))]'
+    return floor_kth_root_(k, n<<(k*e))
+def floor_lshift_sqrt_(e, n, /):
+    r'''[[[
+    [floor_lshift_sqrt_(e,n) =[def]= floor(2**e * sqrt(n))]
+
+    see:floor_lshift_kth_root_
+    #]]]'''
     assert n >= 0
-    assert k >= 0
-    return floor_sqrt(n<<(2*k))
+    assert e >= 0
+    return floor_sqrt(n<<(2*e))
+def floor_lshift_div_(e, n, d, /):
+    '[floor_lshift_div_(e, n, d) =[def]= floor(n/d *2**e) = floor_div(n<<e, d)]'
+    return (n<<e)//d
+def ceil_log2_div(n, d, /):
+    return -floor_log2_div(d,n)
+def floor_log2_div(n, d, /):
+    '[floor_log2_div(n,d) =[def]= floor(log2(n/d)) = floor(log2(n)-log2(d)) = -ceil(log2(d)-log2(n)) = -ceil_log2_div(d,n)]'
+    assert not d==0
+    assert not n==0
+    if d < 0:
+        d = -d
+        n = -n
+    assert d > 0
+    assert n > 0
+
+    s = +1
+    if n < d:
+        # return -ceil_log2_div(d,n)
+        n,d = d,n
+        s = -1
+    assert n >= d > 0
+
+    diff_flb = floor_log2(n) - floor_log2(d)
+    if s > 0:
+        #floor
+        #not_bug:
+        r = diff_flb - ((n>>diff_flb) < d)
+            # <==>
+            #   r = diff_flb - (n < (d<<diff_flb))
+    else:
+        #ceil
+        #bug:r = diff_flb + ((n>>diff_flb) > d)
+        r = diff_flb + (n > (d<<diff_flb))
+
+    assert r >= 0
+    r *= s
+    return r
+
+def floor_log2_pow(n, k, /):
+    '[floor_log2_pow(n,k) =[def]= floor_log2(pow(n,k))] # [floor_lshift_log2_(k,n) =[def]= floor(2**k * log2(n)) = floor(log2(n**2**k)) = floor_log2_pow(n,2**k)]'
+    raise NotImplementedError
+    vs-floor_lshift_log2_
+    vs-floor_lshift_kth_root_
+    TODO
+def imay_floor_log2(n, /):
+    assert n >= 0
+    if n == 0:
+        return -1
+    return floor_log2(n)
+def extended_imay_floor_log2(n, /):
+    if n > 0:
+        return floor_log2(n)
+    return -1-ceil_log2(1-n)
+
+def count_num_high_same_bits_of_two_uints(u, v, /):
+    '求最高有效位数目'
+    assert u >= 0
+    assert v >= 0
+    return max(0, imay_floor_log2(u)-imay_floor_log2(u^v))
+    return imay_floor_log2(max(u,v))-imay_floor_log2(u^v)
+    if u > v:
+        u, v = v, u
+    #assert 0 <= u <= v
+    v-u
+    0b11_1000 - 0b11_0000 == 0b00_1000
+    0b11_1000 - 0b11_0111 == 0b00_0001
 def floor_lshift_log2_(k, n, /):
     r'''[[[
     [floor_lshift_log2_(k,n) =[def]= floor(2**k * log2(n))]
@@ -630,11 +1254,156 @@ def floor_lshift_log2_(k, n, /):
     # <<== [s >= ceil_log2(ceil_div((k+1+t), floor_log2(odd)))]
     ]
 
+
+
+
+    #]]]'''
+
+    r'''[[[
+
+[imay_floor_log2 :: uint -> imay]
+[imay_floor_log2(n) =[def]= if n==0 then -1 else floor_log2(n)]
+[count_num_high_1bits_of_uint u =[def]= if n==0 then 0 else (1+floor_log2(n>>min{i<-[0..] | [n_i := (n>>i)][floor_log2(n_i+1)==floor_log2(n_i)+1]}))]
+[count_num_high_same_bits_of_two_uints u v =[def]= max{0, imay_floor_log2(u)-imay_floor_log2(u^v)}]
+[n, e :: uint][d :: int]:
+    [approximate(n,e,d) =[def]= (n//2**e +d) *2**e]
+
+@[f::uint->uint] -> [f单调递增][@[n::uint] -> [f(n) <= f(n+1)]] -> [
+    [@[n::uint] -> @[e::uint] -> [n_e0 := approximate(n,e,0)][n_e1 := approximate(n,e,1)][#n_e0<=n<n_e1#][#f(n_e0)<=f(n)<=f(n_e1)#] -> [f(n_e0) >= 1] -> [Lh_n_e := count_num_high_same_bits_of_two_uints(f(n_e0),f(n_e1))] -> [L_n_e := 1+imay_floor_log2(f(n_e0))][L_n := 1+imay_floor_log2(f(n))][#L_n == count_num_high_same_bits_of_two_uints(f(n),f(n)) >= L_n_e>=Lh_n_e#] -> [
+        #大端序计算floor高位有效精度
+        [(f(n_e0)>>(L_n_e-Lh_n_e)) == (f(n)>>(L_n-Lh_n_e))][#floor_div(x,2**y)#]
+        #bug:???精度提高:追加的输入比特里必须含零
+        [@[de::uint] -> [n_ed0 := approximate(n,e+de,0)][n_ed1 := approximate(n,e+de,1)] -> [n_ed0//2**(e+de) %2**de == 2**de -1][#全一#] -> [n_ed1 == n_e1]]
+    ]]
+]
+
+
+
+floor_lshift_log2_
+    floor_log2(n**2) 并非一定要完整计算〖n**2〗
+    [floor_log2(n**2) == floor_log2((n/2**floor_log2(n))**2) +2*floor_log2(n)]
+    [1 <= (n/2**floor_log2(n)) < 2]
+    [1 <= (n/2**floor_log2(n))**2 < 4]
+    [0 <= floor_log2((n/2**floor_log2(n))**2) < 2]
+    [floor_log2((n/2**floor_log2(n))**2)
+    == [(n/2**floor_log2(n)) >= sqrt_2]
+    == [n >= (sqrt_2*2**floor_log2(n))]
+    == [n >= ceil(sqrt_2*2**floor_log2(n)) == 1+floor_sqrt(2**(1+2*floor_log2(n)))]
+    ]
+    只要n与(sqrt_2*2**floor_log2(n))不是太接近，则只需比较前几位
+
+    与其计算sqrt_2，不如计算n前几位的平方
+        #通过floor_sqrt(或连分数+floor_lshift_div_) 计算sqrt_2，也不难，但关键是，从n**2**1 推广至 n**2**k (相应地，从sqrt_2<-{kth_root_(2**1; 2**(i%2**1))}推广到{kth_root_(2**k;2**(i%2**k))}。)
+    [L>=0]:
+        [floor_log2((n/2**floor_log2(n))**2)
+        == [(n/2**floor_log2(n)) >= sqrt_2]
+        == [(n/2**(floor_log2(n)-L)) >= sqrt_2*2**L]
+        == [(n/2**(floor_log2(n)-L))**2 >= 2**(1+2*L)]
+        * ... <= [(ceil(n/2**(floor_log2(n)-L)))**2 >= 2**(1+2*L)]
+            <= [(1+(n>>(floor_log2(n)-L)))**2 >= 2**(1+2*L)]
+            == [floor_log2((1+(n>>(floor_log2(n)-L)))**2) >= (1+2*L)]
+
+        * ... >= [(floor(n/2**(floor_log2(n)-L)))**2 >= 2**(1+2*L)]
+            == [(n>>(floor_log2(n)-L))**2 >= 2**(1+2*L)]
+            == [imay_floor_log2((n>>(floor_log2(n)-L))**2) >= (1+2*L)]
+        ]
+    !![n>=1]
+    [@[L>=0] -> [imay_floor_log2((n>>(floor_log2(n)-L))**2) >= (1+2*L)] -> [floor_log2((n/2**floor_log2(n))**2) == 1]]
+    [@[L>=0] -> [floor_log2((1+(n>>(floor_log2(n)-L)))**2) < (1+2*L)] -> [floor_log2((n/2**floor_log2(n))**2) == 0]]
+
+    [@[L>=0] -> [imay_floor_log2((n>>(floor_log2(n)-L))**2) >= (1+2*L)] -> [floor_log2(n**2) == 1+2*floor_log2(n)]]
+    [@[L>=0] -> [floor_log2((1+(n>>(floor_log2(n)-L)))**2) < (1+2*L)] -> [floor_log2(n**2) == 0+2*floor_log2(n)]]
+
+    计算量逐次翻倍，最终整体计算量只是最后一次的计算量的两倍
+    计划一下前面L应有的增长速率:
+        [计算量(mul<bit_length>) == O(bit_length**2)]:
+            [imay_floor_log2(n>>(floor_log2(n)-L)) ~= bit_length(n)]
+            [计算量(每次迭代<L>) == 计算量(mul<bit_length=L>) = O(L**2)]
+            [2 == 计算量(每次迭代<L[i+1]>)/计算量(每次迭代<L[i]>) == O((L[i+1]>/L[i]>)**2)]
+            [(L[i+1]>/L[i]>) ~= sqrt_2 = 连分数[]]
+            x**2 = 2
+            [sqrt_2
+            == 1+(sqrt_2-1)
+            == 1+1/(1/(sqrt_2-1))
+            == 1+1/(sqrt_2+1)
+            ]
+            [(sqrt_2+1) == 2+1/(sqrt_2+1) == 连分数[2; 2,2..]]
+                # limit[2, 5/2, 12/5, 29/12, 70/29, 169/70, 408/169, 985/408, ...]
+            [sqrt_2 == 连分数[1; 2,2..]]
+                # limit[1, 3/2, 7/5, 17/12, 41/29, 99/70, 239/169, 577/408, ...]
+
+
+===递推关系与增长速率
+[A[n] := A[n-1]+A[n-2]][x := limit[A[n]/A[n-1] | [n --> +oo]]]:
+    [A[n]/A[n-1] == 1+1/(A[n-1]/A[n-2])]
+    [x == 1+1/x]
+    [x**2 -x -1 ==0]
+    [x == (1+sqrt_5)/2 == golden_ratio = 1.618... = 连分数[1; 1,1..]]
+    # golden section:黄金分割
+    # extreme and mean ratio??: 中外比
+[L >= 0][len(K)==L+1][K[0] > 0][K[0]*A[n] := sum{K[i]*A[n-i] | [i :<- [1..=L]]}][x := limit[A[n]/A[n-1] | [n --> +oo]]]
+    #有限长线性递推关系与增长速率
+    [A[n] ~= A[n-1]*x ~= A[n-i]*x**i]
+    [A[n-i] ~= A[n]/x**i]
+    [K[0]*A[n] ~= sum{K[i]*A[n]/x**i | [i :<- [1..=L]]}]
+    [K[0] == sum{K[i]/x**i | [i :<- [1..=L]]}]
+    [K[0]*x**L == sum{K[i]*x**(L-i) | [i :<- [1..=L]]}]
+    [0 == sum{(-1)**[i==0] * K[i]*x**(L-i) | [i :<- [0..=L]]}]
+    这个多项式的根的大小？？
+
+
+[n>=1][x := 连分数[n; n, n..]]:
+    [x == n+1/x]
+    [x**2 -n*x -1 ==0]
+    !![x > n >= 1 > 0]
+    [x == (n+sqrt(n**2+4))/2]
+    [x(n=1) == (1+sqrt(5))/2] #黄金比例
+    [x(n=2) == (2+sqrt(8))/2 == 1+sqrt_2]
+    [x(n=3) == (3+sqrt(13))/2]
+    [x(n=4) == (4+sqrt(20))/2 == 2+sqrt_5]
+    [x(n=11) == (11+sqrt(125))/2 == (11+5*sqrt_5)/2]
+    [x(n=14) == (14+sqrt(200))/2 == 7+5*sqrt_2]
+    [x(n=19) == (19+sqrt(365)/2]
+    [x(n=20) == (20+sqrt(404))/2 == 10+sqrt_101]
+    [n==2*k]:
+        [x == (n+sqrt(n**2+4))/2 == (2*k+sqrt(4*k**2+4))/2 == k+sqrt(k**2+1)]
+        [k+sqrt(k**2+1) == 连分数[2*k; 2*k, 2*k..]]
+        [sqrt(k**2+1) == 连分数[k; 2*k, 2*k..]]
+            # k**2+1 <- [2,5,10,17,26,37,50,65,82,101,122,145,170,197,226,257,290,325,362,401,...]
+
+[m,n>=1][x := 连分数[m; n, m, n, m, n, ...]]:
+    [x == m + 1/(n+1/x) == m + x/(n*x+1)]
+    [n*x**2+x == m*n*x+m + x]
+    [n*x**2 -m*n*x -m ==0]
+    !![x > m]
+    [x == (m*n +sqrt(m**2*n**2+4*m*n))/2]
+    [x == (m*n +sqrt((m*n+4)*m*n))/(2*n)]
+    [m == 2*k*n]:
+        [x == (m*n +sqrt((m*n+4)*m*n))/(2*n)
+        == (2*k*n*n +sqrt((2*k*n*n+4)*2*k*n*n))/(2*n)
+        == (k*n +sqrt((k*n**2+2)*k))
+        == (k*n +sqrt((k*n)**2+2*k))
+        ]
+        [(k*n +sqrt((k*n)**2+2*k)) == 连分数[2*k*n; n, 2*k*n, n, 2*k*n, ...]]
+        [sqrt((k*n)**2+2*k) == 连分数[k*n; n, 2*k*n, n, 2*k*n, ...]]
+
+
+
+
+#TODO:其他
+    #整数表达为(bit_length, Iter (bit_length, uint))
+        #无限长浮点数连续开平方
+#TODO:实现floor_lshift_log2_
+    部分平方求[floor_log2_square(n) =[def]= floor_log2(n**2)]
+        当[(n>>flbN) ~= kth_root_(2**k,2)]时，计算量最大，等价于直接求[floor_log2(n**2**k)]
+
+
     #]]]'''
     if 0:
         return floor_log2(n**2**k) #太慢！
     raise NotImplementedError('waiting floor_sqrt')
-from seed.func_tools.recur5yield import recur5yield__list__echo__echo
+    if 0:
+        return floor_log2_pow(n, 2**k)
 
 def _(t, /):
   @recur5yield__list__echo__echo
@@ -684,12 +1453,11 @@ def _(t, /):
 
     return True, r;yield
   return floor_lshift_log2_
-floor_lshift_log2_ = _()
+if 0:floor_lshift_log2_ = _()
+    #还是太慢
+#_floor_lshift_log2__via_even_odd_ = _()
 
 
-
-#整数表达为(bit_length, Iter (bit_length, uint))
-#无限长浮点数连续开平方
 
 
 def ceil_log_(B, n, /):
@@ -790,6 +1558,71 @@ def floor_log_(B, n, /):
 315464
 >>> floor_log_(29, 1<<1000_000)
 205846
+
+
+
+[log_(B;n)
+== log2(n)/log2(B)
+== (log2(n)*2**k)/(log2(B)*2**k)
+== (log2(n)*2**k_)*2**(k-k_)/(log2(B)*2**k)
+    * > (floor_lshift_log2_(k_;n))*2**(k-k_)/(1+floor_lshift_log2_(k;B))
+    * < (1+floor_lshift_log2_(k_;n))*2**(k-k_)/floor_lshift_log2_(k;B)
+]
+[floor_lshift_log2_(k_;n)*2**(k-k_)//(1+floor_lshift_log2_(k;B)) <= floor_log_(B;n) <= (1+floor_lshift_log2_(k_;n))*2**(k-k_)//floor_lshift_log2_(k;B)]
+[floor_log2(B)*2**k <= floor_lshift_log2_(k;B) < (1+floor_log2(B))*2**k]
+
+
+[??? -> [u <= (n+dn)//d - n//(d+dd) <= v]]
+
+view others/数学/divmod加速.txt
+[[n_,dn,d_ :: int][d_>=1] -> [-d_ -(d_+1)*dn <= n_ <= (d_+1)**2 -2 -(d_+1)*dn] -> [0 <= ((n_+dn)//d_ - n_//(d_+1)) <= 1]]
+
+[0 <= k_ <= k][B>=2][n_ := floor_lshift_log2_(k_;n)*2**(k-k_)][dn := 2**(k-k_)][d_ := floor_lshift_log2_(k;B)]:
+    [n_ > (d_+1)**2 -2 -(d_+1)*dn]:
+        [floor_lshift_log2_(k_;n)*2**(k-k_) > (floor_lshift_log2_(k;B)+1)**2 -2 -(floor_lshift_log2_(k;B)+1)*2**(k-k_)]
+        [(1+floor_log2(n))*2**k_
+        >= floor_lshift_log2_(k_;n)
+        > (floor_lshift_log2_(k;B)+1)**2/2**(k-k_) -2/2**(k-k_) -(floor_lshift_log2_(k;B)+1)
+        == (floor_lshift_log2_(k;B)+1)*((floor_lshift_log2_(k;B)+1)/2**(k-k_) -1) -2/2**(k-k_)
+        >= (floor_log2(B)*2**k+1)*((floor_log2(B)*2**k+1)/2**(k-k_) -1) -2/2**(k-k_)
+        == 2**k*(floor_log2(B)+1/2**k)*(2**k_*(floor_log2(B)+1/2**k) -1) -2/2**(k-k_)
+        ]
+        [(1+floor_log2(n))*2**k_ > 2**k*(floor_log2(B)+1/2**k)*(2**k_*(floor_log2(B)+1/2**k) -1) -2/2**(k-k_)]
+        [(1+floor_log2(n)) > 2**k*(floor_log2(B)+1/2**k)*(floor_log2(B) +1/2**k -1/2**k_) -2/2**k]
+        [[B<-{2,3}][k_==0]]:
+            [(floor_log2(B) +1/2**k -1/2**k_) == 1/2**k]
+        [[B>=4]or[k_>=1]]:
+            [floor_log2(B)/2 >= 1/2**k_]
+            [(floor_log2(B) +1/2**k -1/2**k_) >= (floor_log2(B)/2 +1/2**k)]
+            [(1+floor_log2(n))
+            > 2**k*(floor_log2(B)+1/2**k)*(floor_log2(B) +1/2**k -1/2**k_) -2/2**k
+            >= 2**k*(floor_log2(B)+1/2**k)*(floor_log2(B)/2 +1/2**k) -2/2**k
+            == 2**k*(floor_log2(B)**2 /2 +3/2*floor_log2(B)/2**k +1/4**k) -2/2**k
+            == 2**k*floor_log2(B)**2 /2 +3/2*floor_log2(B) -1/2**k
+            ]
+            [2**k*floor_log2(B)**2 /2 < (floor_log2(n) +1 +1/2**k -3/2*floor_log2(B))]
+            [2**k*floor_log2(B)**2 < (2*floor_log2(n) +2 +2/2**k -3*floor_log2(B))]
+            [2**k < (2*floor_log2(n) +2 +2/2**k -3*floor_log2(B))/floor_log2(B)**2]
+            [2**k < (2*floor_log2(n) +4 -3*floor_log2(B))/floor_log2(B)**2]
+    [[[B>=4]or[k_>=1]] -> [n_ > (d_+1)**2 -2 -(d_+1)*dn] -> [2**k < (2*floor_log2(n) +4 -3*floor_log2(B))/floor_log2(B)**2]]
+    #逆否:
+    [[[B>=4]or[k_>=1]] -> [2**k >= (2*floor_log2(n) +4 -3*floor_log2(B))/floor_log2(B)**2] -> [n_ <= (d_+1)**2 -2 -(d_+1)*dn]]
+
+    !![[n_,dn,d_ :: int][d_>=1] -> [-d_ -(d_+1)*dn <= n_ <= (d_+1)**2 -2 -(d_+1)*dn] -> [0 <= ((n_+dn)//d_ - n_//(d_+1)) <= 1]]
+    !![0 <= k_ <= k][B>=2][n_ := floor_lshift_log2_(k_;n)*2**(k-k_)][dn := 2**(k-k_)][d_ := floor_lshift_log2_(k;B)]
+    [[[B>=4]or[k_>=1]] -> [2**k >= (2*floor_log2(n) +4 -3*floor_log2(B))/floor_log2(B)**2] -> [
+        [n_ <= (d_+1)**2 -2 -(d_+1)*dn]
+        !![n_ := floor_lshift_log2_(k_;n)*2**(k-k_)][n_ >= 0]
+        [0 <= n_ <= (d_+1)**2 -2 -(d_+1)*dn]
+        !![0 <= k][B>=2][d_ := floor_lshift_log2_(k;B)][d_ >= 1]
+        [0 <= ((n_+dn)//d_ - n_//(d_+1)) <= 1]
+        [0 <= ((floor_lshift_log2_(k_;n)+1)*2**(k-k_)//floor_lshift_log2_(k;B) - floor_lshift_log2_(k_;n)*2**(k-k_)//(floor_lshift_log2_(k;B)+1)) <= 1]
+
+        !![floor_lshift_log2_(k_;n)*2**(k-k_)//(1+floor_lshift_log2_(k;B)) <= floor_log_(B;n) <= (1+floor_lshift_log2_(k_;n))*2**(k-k_)//floor_lshift_log2_(k;B)]
+        [0 <= floor_log_(B;n)-floor_lshift_log2_(k_;n)*2**(k-k_)//(1+floor_lshift_log2_(k;B)) <= 1]
+        ]]
+
+[[0 <= k_ <= k] -> [[B>=4]or[k_>=1]] -> [2**k >= (2*floor_log2(n) +4 -3*floor_log2(B))/floor_log2(B)**2] -> [0 <= floor_log_(B;n)-floor_lshift_log2_(k_;n)*2**(k-k_)//(1+floor_lshift_log2_(k;B)) <= 1]]
 
 
     #'''
@@ -1071,17 +1904,34 @@ def _t2__floor_log_():
             floor_log_(B, 7**e)
     floor_log_(3, 7**2_0000)
 
-if __name__ == "__main__":
+___begin_mark_of_excluded_global_names__1___ = ...
+if 0 and __name__ == "__main__":
     _t2__floor_log_()
     _t1__floor_log_()
     #raise #0b01 #0b00
-if __name__ == "__main__":
+if 0 and __name__ == "__main__":
     import doctest
     doctest.testmod()
 
 
-if __name__ == "__main__":
+if 0 and __name__ == "__main__":
     assert (1<<1000_000) < float('inf')
     #print(_1_floor_log_.__doc__)
+
+#if __name__ == "__main__":
+if 1:
+    import unittest
+    import doctest
+    def load_tests(loader, tests, ignore):
+        tests.addTests(doctest.DocTestSuite(__name__))
+        return tests
+    #考虑使用unittest+doctest
+
+
+if __name__ == "__main__":
+    from seed.recognize.cmdline.adhoc_argparser import adhoc_argparser__main__call, AdhocArgParserError, _NOP_
+    adhoc_argparser__main__call(globals(), None)
+        #main()
+___end_mark_of_excluded_global_names__1___ = ...
 
 

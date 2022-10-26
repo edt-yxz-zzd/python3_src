@@ -240,9 +240,17 @@ __all__ = str2__all__(r'''
 
     fmap4dict_value     # (a->b) -> dict<k,a> -> dict<k,b>
     filter4dict_value   # (v->bool) -> dict<k,v> -> dict<k,v>
-    group4dict_value    # (v->g) -> dict<k,v> -> dict<g, dict<k,v> >
+    group4dict_value    # (Hashable g) => (v->g) -> dict<k,v> -> dict<g, dict<k,v> >
     dict_add__is        # dict<k,v> -> k -> v -> None
     dict_add__eq        # Eq v => dict<k,v> -> k -> v -> None
+    fmap4dict_value_with_key
+                        # (k->a->b) -> dict<k,a> -> dict<k,b>
+    filter4dict_value_with_key,filter4dict_item
+                        # (k->v->bool) -> dict<k,v> -> dict<k,v>
+    group4dict_value_with_key,group4dict_item
+                        # (Hashable g) => (k->v->g) -> dict<k,v> -> dict<g, dict<k,v> >
+
+
 
     update_attr         # obj -> name -> (old->new) -> None
     iupdate_attrs       # obj -> Iter name -> (old->arg->new) -> {name:arg} ->  -> None
@@ -485,6 +493,7 @@ assert call5cls_('__getitem__', [1], 0) == 1
 from seed.tiny_.str__split_join import str_join__list_nonemty, str_split__list_nonemty, str_join__entry_nonemty, str_split__entry_nonemty, str_join__both_list_and_entry_may_be_emty, str_split__both_list_and_entry_may_be_emty
 
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, group4dict_value
+from seed.tiny_.dict__add_fmap_filter import fmap4dict_value_with_key, filter4dict_value_with_key, group4dict_value_with_key, filter4dict_item, group4dict_item
 
 
 from seed.tiny_.CallCounter import CallCounter

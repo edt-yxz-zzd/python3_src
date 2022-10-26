@@ -135,7 +135,7 @@ def adhoc_argparse__call(prefixes4func_name, may_argv, /):
         if prefixes:
             break
     else:
-        raise AdhocArgParserError(NotImplementedError('not found func_name to call'))
+        raise AdhocArgParserError(NotImplementedError('not found func_name to call: prefixes4func_name={prefixes4func_name!r}'))
     if not len(prefixes) == 1: raise Exception(f'logic-err:prefixes not mutex: {prefixes!r}')
     [prefix] = prefixes
     func_name = s[len(prefix):]

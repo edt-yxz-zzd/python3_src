@@ -68,7 +68,19 @@ def _():
             if not are_pairwise_coprime(coprime_factors): raise ValueError
         if calc_directly_via_enumerate:
             #it = iter_sorted_products_of_uints(coprime_factors)
-            it = iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs(sorted(coprime_factors), finite_seq_vs_infinite_seq=False, turnoff__verify_factors_are_pairwise_coprime=True)
+            it = iter_sorted_products_of_strict_sorted_pairwise_coprime_uints(sorted(coprime_factors), finite_seq_vs_infinite_seq=False, turnoff__verify_factors_are_pairwise_coprime=True)
+            if 0b00:
+                #it = [*it] #infinite length
+                #print(it)
+                for u in it:
+                    if type(u) is not int:
+                        print(type(u))
+                        print(repr(u))
+                        #<class 'tuple'>
+                        #(1, ())
+                        #bug:iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs --> iter_sorted_products_of_strict_sorted_pairwise_coprime_uints
+                        break
+                raise ...
 
             it = map(upperbound.__ge__, it)
             it = takewhile(bool, it)

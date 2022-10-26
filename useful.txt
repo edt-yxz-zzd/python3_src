@@ -1,5 +1,7 @@
 template4module:goto
-main:goto
+def__main:adhoc_argparser__main__call:main:goto
+repr_helper,stable_repr__expand_top_layer,recur5yield__list__echo__echo,factor_uint__via_min_factor_list
+
 debug:
   __main__ 模块!! import 所有自己的东西!! 避免两套数据
 
@@ -205,6 +207,9 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
+===新版:
+%s/^\(\s*def \s*\w\+\s*[(]\(\s*\w\+[^/*),]*\)\(,\s*\w\+[^/*),]*\)*\)\(\(,\s*[*][^)]*\)\?[)]:\)/\1, \/\4/g
+===但是对『def ...(...): ...』无效:
 # exec these two cmds in vim
 %s/\(def [^/*]\+[^/*(]\)\(\(,\s\+[*].*\)\?[)]:\)$/\1, \/\2/g
 %s/\(def [^/*]\+[/],\)\s\+\([*],.*[)]:\)$/\1\2/g
@@ -469,6 +474,7 @@ def main(args=None, /, *, description, epilog='', globals, locals=None):
     exec(args.stmt4py, globals, locals)
 
 
+#def__main
 def main(args=None, /):
     import argparse
     from seed.io.may_open import may_open_stdin, may_open_stdout
@@ -505,6 +511,9 @@ def main(args=None, /):
     with may_open_stdout(may_ofname, omode, encoding=oencoding) as fout:
 if __name__ == "__main__":
     main()
+nargs
+class argparse.ArgumentParser(prog=None, usage=None, description=None, epilog=None, parents=[], formatter_class=argparse.HelpFormatter, prefix_chars='-', fromfile_prefix_chars=None, argument_default=None, conflict_handler='error', add_help=True, allow_abbrev=True)
+ArgumentParser.add_argument(name or flags...[, action][, nargs][, const][, default][, type][, choices][, required][, help][, metavar][, dest])
 
 
 from seed.tiny import does_run_as_main
@@ -748,5 +757,44 @@ from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_pri
 : [4, 5]
 }
 
+
+
+
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/bisect.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/bisect.html
+bisect.bisect_left(a, x, lo=0, hi=len(a)) -> i
+  all(val < x for val in a[lo:i])
+  all(val >= x for val in a[i:hi])
+bisect.bisect_right(a, x, lo=0, hi=len(a)) -> i
+  all(val <= x for val in a[lo:i])
+  all(val > x for val in a[i:hi])
+
+view ../../python3_src/seed/seq_tools/bisearch.py
+from seed.seq_tools.bisearch import bisearch
+from bisect import bisect_left, bisect_right
+    assert bisearch(x, array) == (bisect_left(array, x), bisect_right(array, x))
+
+def bisearch(x, array, begin=None, end=None, *, key=None, __lt__=None, result_case=2)
+    result_case :: UInt = 2
+        result_case = -1 | 0 | 1 | 2
+        affect the output
+
+        -1 - arbitrary_middle
+            arbitrary_middle = arbitrary index in [middle_begin..middle_end]
+            i.e. in range(middle_begin, middle_end+1)
+            [arbitrary_middle == middle_end] <==> [x not in array]
+        0 - lower_end == middle_begin
+        1 - middle_end == upper_begin
+        2 - (middle_begin, middle_end)
+
+
+
+#py -m seed.for_libs.for_doctest -h
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
+
+
+from nn_ns.math_nn.numbers.min_factor import min_factor, factor_uint__via_min_factor_list
+def factor_uint__via_min_factor_list(u, /, *, turnon__try_div=False, may_upperbound4primes4try_div=None, may_primes4try_div=None, threshold4max_sz4min_factor = (1<<28)):
 
 

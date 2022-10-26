@@ -2,6 +2,221 @@ e ../../python3_src/py_stdlib_api.txt
 
 print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
 
+
+[[
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/decimal.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/decimal.html > $my_tmp/out4py/html2text/py_38_doc/decimal.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/decimal.html.txt
+
+>>> from decimal import *
+>>> import decimal as d
+>>> dir(d)
+['BasicContext', 'Clamped', 'Context', 'ConversionSyntax', 'Decimal', 'DecimalException', 'DecimalTuple', 'DefaultContext', 'DivisionByZero', 'DivisionImpossible', 'DivisionUndefined', 'ExtendedContext', 'FloatOperation', 'HAVE_CONTEXTVAR', 'HAVE_THREADS', 'Inexact', 'InvalidContext', 'InvalidOperation', 'MAX_EMAX', 'MAX_PREC', 'MIN_EMIN', 'MIN_ETINY', 'Overflow', 'ROUND_05UP', 'ROUND_CEILING', 'ROUND_DOWN', 'ROUND_FLOOR', 'ROUND_HALF_DOWN', 'ROUND_HALF_EVEN', 'ROUND_HALF_UP', 'ROUND_UP', 'Rounded', 'Subnormal', 'Underflow', '__builtins__', '__cached__', '__doc__', '__file__', '__libmpdec_version__', '__loader__', '__name__', '__package__', '__spec__', '__version__', 'getcontext', 'localcontext', 'setcontext']
+>>> dir(Decimal)
+['__abs__', '__add__', '__bool__', '__ceil__', '__class__', '__complex__', '__copy__', '__deepcopy__', '__delattr__', '__dir__', '__divmod__', '__doc__', '__eq__', '__float__', '__floor__', '__floordiv__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__int__', '__le__', '__lt__', '__mod__', '__module__', '__mul__', '__ne__', '__neg__', '__new__', '__pos__', '__pow__', '__radd__', '__rdivmod__', '__reduce__', '__reduce_ex__', '__repr__', '__rfloordiv__', '__rmod__', '__rmul__', '__round__', '__rpow__', '__rsub__', '__rtruediv__', '__setattr__', '__sizeof__', '__str__', '__sub__', '__subclasshook__', '__truediv__', '__trunc__', 'adjusted', 'as_integer_ratio', 'as_tuple', 'canonical', 'compare', 'compare_signal', 'compare_total', 'compare_total_mag', 'conjugate', 'copy_abs', 'copy_negate', 'copy_sign', 'exp', 'fma', 'from_float', 'imag', 'is_canonical', 'is_finite', 'is_infinite', 'is_nan', 'is_normal', 'is_qnan', 'is_signed', 'is_snan', 'is_subnormal', 'is_zero', 'ln', 'log10', 'logb', 'logical_and', 'logical_invert', 'logical_or', 'logical_xor', 'max', 'max_mag', 'min', 'min_mag', 'next_minus', 'next_plus', 'next_toward', 'normalize', 'number_class', 'quantize', 'radix', 'real', 'remainder_near', 'rotate', 'same_quantum', 'scaleb', 'shift', 'sqrt', 'to_eng_string', 'to_integral', 'to_integral_exact', 'to_integral_value']
+>>> Decimal('2').logb()
+Decimal('0')
+>>> Decimal('2')**Decimal('2.12316463')
+Decimal('4.356485163789795294212506525')
+>>> getcontext().prec
+28
+>>> Decimal('2')**Decimal('-2.12316463')
+Decimal('0.2295428452991860082601533507')
+>>>
+
+]]
+
+[[
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/argparse.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/argparse.html > $my_tmp/out4py/html2text/py_38_doc/argparse.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/argparse.html.txt
+
+class argparse.ArgumentParser(prog=None, usage=None, description=None, epilog=None, parents=[], formatter_class=argparse.HelpFormatter, prefix_chars='-', fromfile_prefix_chars=None, argument_default=None, conflict_handler='error', add_help=True, allow_abbrev=True)
+ArgumentParser.add_argument(name or flags...[, action][, nargs][, const][, default][, type][, choices][, required][, help][, metavar][, dest])
+
+[[我的:
+import argparse
+
+parser = argparse.ArgumentParser(
+    description=''
+    , epilog=''
+    , formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+parser.add_argument(...)
+]]
+
+
+py -m seed.for_libs.for_doctest -h
+
+]]
+[[
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/operator.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/operator.html > $my_tmp/out4py/html2text/py_38_doc/operator.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/operator.html.txt
+
+operator.attrgetter(attr)(x) -> x.attr
+operator.attrgetter(attr, attr, *attrs)(x) -> [x.attr]
+  attr <- {'xxx', 'a.b', ...}
+
+
+]]
+[[
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/importlib.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/importlib.html > $my_tmp/out4py/html2text/py_38_doc/importlib.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/importlib.html.txt
+
+importlib.import_module(name, package=None)
+
+]]
+[[
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/unittest.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/unittest.html > $my_tmp/out4py/html2text/py_38_doc/unittest.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/unittest.html.txt
+Command-Line Interface
+python -m unittest test_module1 test_module2
+python -m unittest test_module.TestClass
+python -m unittest test_module.TestClass.test_method
+python -m unittest tests/test_something.py
+  # <==> python -m unittest tests.test_something
+  # If you want to execute a test file that isn’t importable as a module you should execute the file directly instead.
+  # 仅用于 利用 终端壳路径补全
+
+
+Test Discovery
+cd project_directory
+python -m unittest discover
+  <==> python -m unittest
+  ???显然，用户不能有名为discover的模块
+
+python -m unittest discover -s . -p 'test*.py' -t .
+-s, --start-directory directory
+    Directory to start discovery (. default)
+-p, --pattern pattern
+    Pattern to match test files (test*.py default)
+-t, --top-level-directory directory
+    Top level directory of project (defaults to start directory)
+
+
+
+load_tests Protocol
+If a test module defines load_tests it will be called by TestLoader.loadTestsFromModule() with the following arguments:
+    load_tests(loader, standard_tests, pattern) -> TestSuite
+
+def load_tests(loader, tests, pattern):
+    suite = TestSuite()
+    for test_class in test_cases:
+        tests = loader.loadTestsFromTestCase(test_class)
+        suite.addTests(tests)
+    return suite
+def load_tests(loader, standard_tests, pattern):
+    # top level directory cached on loader instance
+    this_dir = os.path.dirname(__file__)
+    package_tests = loader.discover(start_dir=this_dir, pattern=pattern)
+    standard_tests.addTests(package_tests)
+    return standard_tests
+
+
+
+
+]]
+[[
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/doctest.html
+mkdir $my_tmp/out4py/html2text/
+mkdir $my_tmp/out4py/html2text/py_38_doc/
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/doctest.html > $my_tmp/out4py/html2text/py_38_doc/doctest.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/doctest.html.txt
+
+example.py:
+  ...
+  if __name__ == "__main__":
+      import doctest
+      doctest.testmod()
+
+python example.py
+python example.py -v
+python -m doctest -v example.py
+
+
+example.txt:
+    >>> from example import factorial
+    ...
+
+import doctest
+doctest.testfile("example.txt")
+
+
+显式指定搜索使用哪些__doc__
+module.__test__ :: {name:(func|type|str)}
+  ???module.__doc__
+  func.__doc__
+  type.__doc__
+    recur:nested_type.__doc__
+
+
+[没有测试单个指定对象文档字符串的选项
+$ python -m doctest -h
+usage: doctest.py [-h] [-v]
+                  [-o {DONT_ACCEPT_TRUE_FOR_1,DONT_ACCEPT_BLANKLINE,NORMALIZE_WHITESPACE,ELLIPSIS,SKIP,IGNORE_EXCEPTION_DETAIL,REPORT_UDIFF,REPORT_CDIFF,REPORT_NDIFF,REPORT_ONLY_FIRST_FAILURE,FAIL_FAST}]
+                  [-f]
+                  file [file ...]
+
+doctest runner
+]
+
+
+Basic API
+doctest.testfile(filename, module_relative=True, name=None, package=None, globs=None, verbose=None, report=True, optionflags=0, extraglobs=None, raise_on_error=False, parser=DocTestParser(), encoding=None)
+  #name并非对象名:Optional argument name gives the name of the test; by default, or if None, os.path.basename(filename) is used.
+doctest.testmod(m=None, name=None, globs=None, verbose=None, report=True, optionflags=0, extraglobs=None, raise_on_error=False, exclude_empty=False)
+  #name并非对象名:Optional argument name gives the name of the module; by default, or if None, m.__name__ is used.
+doctest.run_docstring_examples(f, globs, verbose=False, name="NoName", compileflags=None, optionflags=0)¶
+  #Test examples associated with object f; for example, f may be a string, a module, a function, or a class object.
+  #name并非对象名:Optional argument name is used in failure messages, and defaults to "NoName".
+
+Unittest API
+import unittest
+import doctest
+import my_module_with_doctests
+
+def load_tests(loader, tests, ignore):
+    tests.addTests(doctest.DocTestSuite(my_module_with_doctests))
+    return tests
+      #能否拆成单对象？
+doctest.DocFileSuite(*paths, module_relative=True, package=None, setUp=None, tearDown=None, globs=None, optionflags=0, parser=DocTestParser(), encoding=None)
+doctest.DocTestSuite(module=None, globs=None, extraglobs=None, test_finder=None, setUp=None, tearDown=None, checker=None)
+doctest.set_unittest_reportflags(flags)
+
+
+
+Advanced API
+
+
+]]
+
+[[
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/bisect.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/bisect.html
+bisect.bisect_left(a, x, lo=0, hi=len(a)) -> i
+  all(val < x for val in a[lo:i])
+  all(val >= x for val in a[i:hi])
+bisect.bisect_right(a, x, lo=0, hi=len(a)) -> i
+  all(val <= x for val in a[lo:i])
+  all(val > x for val in a[i:hi])
+
+
+view ../../python3_src/seed/seq_tools/bisearch.py
+from seed.seq_tools.bisearch import bisearch
+from bisect import bisect_left, bisect_right
+    assert bisearch(x, array) == (bisect_left(array, x), bisect_right(array, x))
+      #等价索引值范围的左右边界
+
+bisect.insort_left(a, x, lo=0, hi=len(a))
+  a.insert(bisect.bisect_left(a, x, lo, hi), x)
+bisect.insort_right(a, x, lo=0, hi=len(a))
+  a.insert(bisect.bisect_right(a, x, lo, hi), x)
+
+]]
+
 [[
 view ../../python3_src/seed/func_tools/recur5yield.py
     #generator_iterator 并没有保留 返回值
