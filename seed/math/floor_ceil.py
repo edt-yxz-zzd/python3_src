@@ -1,4 +1,21 @@
+#__all__:goto
 r'''[[[
+[[TODO:
+    主要模式:floor_scale_(n/d;expr)
+        使用 分数/进一步:分子分母粗略整数分解(c*radix**exp)
+        floor运算输入输出限制在整数
+        floor之前的scale用于提供精度
+    expr主要是:pow,log
+        注意:floor_scale_与 浮点数运算的区别:float考虑 误差，误差 可正可负
+    [floor_scale_pow(sn/sd;bn/bd;en/ed) =[def]= floor((sn/sd)*(bn/bd)**(en/ed))]
+    [floor_scale_log(sn/sd;bn/bd;en/ed) =[def]= floor((sn/sd)*log_((bn/bd),(en/ed)))]
+    #######
+    参考 浮点数运算:py::decimal.Decimal
+    cp ~/../usr/lib/python3.10/_pydecimal.py ~/my_tmp/
+    view /sdcard/0my_files/tmp/_pydecimal.py
+]]
+
+
 e ../../python3_src/seed/math/floor_ceil.py
 view others/数学/divmod加速.txt
 

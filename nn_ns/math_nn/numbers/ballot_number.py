@@ -1,10 +1,529 @@
+#__all__:goto
+#定理推导:goto
+#   [@[p,q::int] -> [xballot_number(q;p) == [0 <= p <= q]*(C(q+p-1;p)-C(q+p-1;p-2)) == [0 <= p <= q]*(C(q+p;p) - C(q+p;p-1)) == [0 <= p <= q]*(C(p+q;p)*(q+1-p)///(q+1))]]
+#   [@[n::int] -> [区别左右的二叉树的总数囗(叶节点的总数:=n) == [n>=1]*(C(2*n-3;n-2)-C(2*n-3;n-3)) == [1<=n<3]*1 + [n>=3]*(2*C(2*n-3;n-3)///(n-2)) == [n==1]*1 + [n>=2]*(2*C(2*n-3;n-2)///n) == [n==1]*1 + [n>=2]*(C(2*n-2;n)///(n-1)) == [n>=1]*(C(2*(n-1);n-1)///n)]]
+#       Catalan_number
+#   [g1_xballot_number(k;q;p) == [[k>=0][q>=0][0<=p<=q+k]]*(C(q+p;p) - C(q+p;p-k-1))]
+r'''[[[[[[[
+##################
+[[[20221103-20221104
+py -m nn_ns.math_nn.numbers.ballot_number table 10
+[[1], [1, 1], [1, 2, 2], [1, 3, 5, 5], [1, 4, 9, 14, 14], [1, 5, 14, 28, 42, 42], [1, 6, 20, 48, 90, 132, 132], [1, 7, 27, 75, 165, 297, 429, 429], [1, 8, 35, 110, 275, 572, 1001, 1430, 1430], [1, 9, 44, 154, 429, 1001, 2002, 3432, 4862, 4862]]
+py -m nn_ns.math_nn.numbers.ballot_number series 0 0
+B= 0 N0= 0
+[1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862]
+
+结合律打括号不同方式的数量囗(括号对的总数) #输入>=1
+区别左右的二叉树的总数囗(叶节点的总数) #输入>=1
+    Catalan_number
+    Catalan number
+起点(0,0)讫点(N,N)的、所有节点(x,y)满足条件[0<=x<=y<=N]的、所有边((x0,y0)->(x1,y1))满足条件[x0<=x1][y0<=y1][(x0,y0)=!=(x1,y1)]的 栅格路径的总数囗(N+1) #输入>=1 #N>=0
+N:?
+0:1
+1:1 1
+2:1 2 2
+3:1 3 5 5
+4:1 4 9 14 14
+5:1 5 14 28 42 42
+6:1 6 20 48 90 132 132
+7:1 7 27 75 165 297 429 429
+8:1 8 35 110 275 572 1001 1430 1430
+9:1 9 44 154 429 1001 2002 3432 4862 4862
+C(N;0):1...
+C(N;1):0,1,2,3,...
+C(N-1;0)-C(N-1;-2):1...
+C(N+0;1)-C(N+0;-1):0,1,2,3,...
+C(N+1;2)-C(N+1;0):-1,0,2,5,9,14,20,27,35,44
+C(N+2;3)-C(N+2;1):-2,-2,0,5,14,28,48,75,110,154
+    C(N+2;3):0,1,4,10,20,35,56,84
+    f(N;3):   0,0,0,5,14,28,48,75,110,154
+    C(.)-f(.): 0,1,4,5,6, 7, 8, 9...
+N:C(N;i)
+-1:1,-1,1,-1,...
+0:1
+1:1 1
+2:1 2 1
+3:1 3 3 1
+4:1 4 6 4 1
+5:1 5 10 10 5 1
+6:1 6 15 20 15 6 1
+7:1 7 21 35 35 21 7 1
+8:1 8 28 56 70 56 28 8 1
+9:1 9 36 84 126 126 84 36 9 1
+view ../../python3_src/nn_ns/math_nn/numbers/choose.py
+py -m nn_ns.math_nn.numbers.choose
+>>> import nn_ns.math_nn.numbers.choose as cc
+>>> c = cc.choose
+C = cc.C
+>>> C = cc.C
+>>> C(-1,0)
+1
+>>> C(-1,1)
+-1
+>>> C(-1,2)
+1
+>>> C(-1,3)
+-1
+>>> C(-1,-1)
+0
+>>> C(-1,-2)
+0
+>>>
+
+定理推导:[[
+[g(N;i) =[def]= C(N+i-1;i)-C(N+i-1;i-2)]
+???[g(N;i) == g(N;i-1)+g(N-1;i)]???
+    [[proof:
+    [rhs
+    = g(N;i-1)+g(N-1;i)
+    = C(N+i-2;i-1)-C(N+i-2;i-3)
+    + C(N+i-2;i)-C(N+i-2;i-2)
+    !![C(N;i)==C(N-1;i-1)+C(N-1;i)]
+    = C(N+i-1;i)-C(N+i-1;i-2)
+    = lhs
+    ]
+    DONE
+    ]]
+[g(N;i) == g(N;i-1)+g(N-1;i)]
+
+@[p,q::int]:
+    [xballot_number(q;p) =[def]= [0 <= p <= q]*([q==0]*1 + [q=!=0]*(xballot_number(q;p-1)+xballot_number(q-1;p)))]
+[@[p,q::int] -> [q>=0] -> [-1 <= p <= q+1] -> [xballot_number(q;p) == g(q;p)]]
+    [[proof:
+    !![g(N;i) =[def]= C(N+i-1;i)-C(N+i-1;i-2)]
+    [g(1;1) = C(1;1)-C(1;-1) = 1-0 = 1 = xballot_number(1;1)]
+    [0<=q][p==q+1]:
+        [g(q;p) = g(q;q+1) = C(2*q;q+1)-C(2*q;q-1) = 0 = xballot_number(q;q+1) = xballot_number(q;p)]
+    [0<=q][p==-1]:
+        [g(q;p) = g(q;-1) = C(q-2;-1)-C(q-2;-1) = 0-0 = 0 = xballot_number(q;-1) = xballot_number(q;p)]
+    [0 <= p <= q]+归纳法:
+        [xballot_number(q;p)
+        !![xballot_number(q;p) =[def]= [0 <= p <= q]*([q==0]*1 + [q=!=0]*(xballot_number(q;p-1)+xballot_number(q-1;p)))]
+        = (xballot_number(q;p-1)+xballot_number(q-1;p))
+        = (g(q;p-1)+g(q-1;p))
+        !![g(N;i) == g(N;i-1)+g(N-1;i)]
+        = (g(q;p)
+        ]
+    DONE
+    ]]
+[@[p,q::int] -> [0 <= p <= q] -> [xballot_number(q;p) == g(q;p)]]
+[@[p,q::int] -> [0 <= p <= q] -> [xballot_number(q;p) == C(q+p-1;p)-C(q+p-1;p-2)]]
+[@[p,q::int] -> [xballot_number(q;p) == [0 <= p <= q]*(C(q+p-1;p)-C(q+p-1;p-2)) == [0 <= p <= q]*(C(q+p;p) - C(q+p;p-1)) == [0 <= p <= q]*(C(p+q;p)*(q+1-p)///(q+1))]]
+    #最后两个等号，见下面:『原来以前已经有了:定理推导』
+[@[q::int] -> [q>=1] -> [xballot_number(q;q-1) == xballot_number(q;q) == C(2*q-1;q)-C(2*q-1;q-2)]]
+    [[proof:
+    [xballot_number(q;q)
+    =[p:=q]= (C(q+p-1;p)-C(q+p-1;p-2))
+    = C(2*q-1;q)-C(2*q-1;q-2)
+    ]
+    [xballot_number(q;q-1)
+    =[p:=q-1]= (C(q+p-1;p)-C(q+p-1;p-2))
+    = C(2*q-2;q-1)-C(2*q-2;q-3)
+    ]
+    [xballot_number(q;q) - xballot_number(q;q-1)
+    = (C(2*q-1;q)-C(2*q-1;q-2))
+    - (C(2*q-2;q-1)-C(2*q-2;q-3))
+    = (C(2*q-1;q)-C(2*q-2;q-1))
+    - (C(2*q-1;q-2)-C(2*q-2;q-3))
+    !![C(N;i)==C(N-1;i-1)+C(N-1;i)]
+    = C(2*q-2;q)
+    - C(2*q-2;q-2)
+    = 0
+    ]
+    DONE
+    ]]
+[@[n::int] -> [n>=1] -> [区别左右的二叉树的总数囗(叶节点的总数:=n) == xballot_number(n-1;n-1) == (C(2*n-3;n-1)-C(2*n-3;n-3)) == (C(2*n-3;n-2)-C(2*n-3;n-3)) == [1<=n<3]*1 + [n>=3]*(2*C(2*n-3;n-3)///(n-2)) == [n==1]*1 + [n>=2]*(2*C(2*n-3;n-2)///n) == [n==1]*1 + [n>=2]*(C(2*n-2;n)///(n-1)) == [n>=1]*(C(2*(n-1);n-1)///n)]]
+    [[
+    [n >= 2]:
+        [n >= 1][2*n>=3]
+        [(C(2*n-3;n-1)-C(2*n-3;n-3))
+        =(C(2*n-3;n-1)-C(2*n-3;n))
+        !![n >= 1][2*n>=3]
+        = II{2*n-3-(n-1)+1..=2*n-3}/II{1..=n-1}
+        - II{2*n-3-(n-0)+1..=2*n-3}/II{1..=n-0}
+        = II{n-1..=2*n-3}/II{1..=n-1}
+        - II{n-2..=2*n-3}/II{1..=n}
+        = (1 - (n-2)/n) * II{n-1..=2*n-3}/II{1..=n-1}
+        = (2/n) * C(2*n-3;n-1)
+        = (2*C(2*n-3;n-1)///n)
+        = (2*C(2*n-3;n-2)///n)
+        ]
+    [n >= 3]:
+        [n >= 3][2*n>=3]
+        [(C(2*n-3;n-1)-C(2*n-3;n-3))
+        =(C(2*n-3;n-2)-C(2*n-3;n-3))
+        !![n >= 3][2*n>=3]
+        = II{2*n-3-(n-2)+1..=2*n-3}/II{1..=n-2}
+        - II{2*n-3-(n-3)+1..=2*n-3}/II{1..=n-3}
+        = II{n..=2*n-3}/II{1..=n-2}
+        - II{n+1..=2*n-3}/II{1..=n-3}
+        = (n/(n-2) - 1) * II{n+1..=2*n-3}/II{1..=n-3}
+        = (2/(n-2)) * C(2*n-3;n-3)
+        = (2*C(2*n-3;n-3))///(n-2)
+        ]
+    ]]
+[@[n::int] -> [区别左右的二叉树的总数囗(叶节点的总数:=n) == [n>=1]*(C(2*n-3;n-2)-C(2*n-3;n-3)) == [1<=n<3]*1 + [n>=3]*(2*C(2*n-3;n-3)///(n-2)) == [n==1]*1 + [n>=2]*(2*C(2*n-3;n-2)///n) == [n==1]*1 + [n>=2]*(C(2*n-2;n)///(n-1)) == [n>=1]*(C(2*(n-1);n-1)///n)]]
+叶节点的总数:区别左右的二叉树的总数
+n:C(2*n-3;n-1)-C(2*n-3;n-3)
+1:1     =C(-1;0)-C(-1;-2)=1-0
+2:1     =C(1;1)-C(1;-1)=1-0
+3:2     =C(3;2)-C(3;0)=3-1
+4:5     =C(5;3)-C(5;1)=10-5
+5:14    =C(7;4)-C(7;2)=35-21
+6:42    =C(9;5)-C(9;3)=126-84
+7:132   =C(11;6)-C(11;4)=462-330
+8:429   =C(13;7)-C(13;5)=1716-1287
+9:1430  =C(15;8)-C(15;6)=6435-5005
+10:4862 =C(17;9)-C(17;7)=24310-19448
+>>> [C(2*n-3,n-1)-C(2*n-3,n-3) for n in range(1,10+1)]
+[1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862]
+>>> [C(2*n-3,n-1) for n in range(1,10+1)]
+[1, 1, 3, 10, 35, 126, 462, 1716, 6435, 24310]
+>>> [C(2*n-3,n-3) for n in range(1,10+1)]
+[0, 0, 1, 5, 21, 84, 330, 1287, 5005, 19448]
+>>>
+]]定理推导
+
+原来以前已经有了:定理推导:[[
+view ../../python3_src/nn_ns/RMQ/LeftBiasedRMQ/ballot_number/ballot_number.py
+view ../../python3_src/nn_ns/RMQ/LeftBiasedRMQ/ballot_number/ballot_number\ -\ 1.\ def\ ballot_number\ by\ good_paths.txt
+
+num_paths__0_le_p_le_q(q;p)
+num_paths__p_ge_0_le_q(q;p)
+[num_paths__p_ge_0_le_q__some_not_0_le_p_le_q(q;p) =[def]= num_paths__p_ge_0_le_q(q;p) - num_paths__0_le_p_le_q(q;p)]
+[num_paths__p_ge_0_le_q(q;p) == C(q+p;p)]
+[[0<=p<=q] -> [num_paths__p_ge_0_le_q__some_not_0_le_p_le_q(q;p) == num_paths__p_ge_0_le_q(q+1;p-1) == C(q+p;p-1)]]
+    [[proof:
+    * [p==0]:
+        [lhs == 0 == rhs]
+    * [p > 0]:
+        默认:[#所有(x,y)满足[0 <= x <= p][0 <= y <= q]#]
+        路径:[(p,q), ...[#存在(x,y)满足[x>y]#], (0,0)]
+        必有:[(p,q), ..., (m,n), ..., (0,0)]
+            [0 <= n <= m <= p <= q]
+        必有:[(p,q), ..., (m,m-1), ..., (0,0)]
+            [0 <= 1 <= m <= p <= q]
+        必有:[(p,q), ...[#所有(x,y)满足[x<=y]#], (m,m), (m,m-1), ..., (0,0)]
+            [0 <= 1 <= m <= p <= q]
+        一一对应，数量相等:
+            <==> [(p,q), ...[#所有(x,y)满足[x<=y]#], (m,m)]++[(m,m-1), ..., (0,0)]
+            <==> [(p,q), ...[#所有(x,y)满足[x<=y]#], (m,m)]++变换{(x,y) :-> (y+1,x-1)}[#关于直线[x-y==1]的镜像#]([(m,m-1), ..., (0,0)])
+            <==> [(p,q), ...[#所有(x,y)满足[x<=y]#], (m,m)]++[(m,m-1), ..., (1,-1)]
+            <==> [(p,q), ..., (1,-1)]
+            <==> [(p-1,q+1), ..., (0,0)]
+    DONE
+    ]]
+[[0<=p<=q] -> [xballot_number(q;p) == num_paths__0_le_p_le_q(q;p) == num_paths__p_ge_0_le_q(q;p) - num_paths__p_ge_0_le_q__some_not_0_le_p_le_q(q;p) == C(q+p;p) - C(q+p;p-1) == ((q-p+1)/(q+1))*C(q+p;p)]]
+    [[
+    [p > 0]:
+        [C(q+p;p) - C(q+p;p-1)
+        = ((q+1)/p - 1)*C(q+p;p-1)
+        = ((q-p+1)/p)*C(q+p;p-1)
+        ]
+    [q >= 0]:
+        [C(q+p;p) - C(q+p;p-1)
+        = (1 - p/(q+1))*C(q+p;p)
+        = ((q-p+1)/(q+1))*C(q+p;p)
+        ]
+    ]]
+
+
+对比:
+    #以前:
+    [@[p,q::int] -> [xballot_number(q;p) == [0<=p<=q]*(C(p+q,p) * (q+1 - p)/(q+1))]]
+    #本文件:
+    [@[p,q::int] -> [xballot_number(q;p) == [0 <= p <= q]*(C(q+p-1;p)-C(q+p-1;p-2))]]
+???[@[p,q::int] -> [0 <= p <= q] -> [(C(q+p-1;p)-C(q+p-1;p-2)) == (C(p+q,p)*(q+1-p)/(q+1))]]???
+    [[proof:
+    !![0 <= p <= q]:
+    * [0 <= p <= q == 0]:
+        [q == p == 0]
+        [q+p-1 == -1]
+        [lhs = 1-0 = 1 = rhs]
+    * [0 <= p <= q =!= 0]:
+        [q >= 1]
+        [q+p-1 >= p >= 0]
+        * [p < 2]:
+            [lhs = C(q+p-1;p) -0 = [p==0]*1 + [p==1]*q]
+            [rhs = (C(p+q,p) * (q+1 - p)/(q+1)) = [p==0]*1*(q+1)/(q+1) + [p==1]*(q+1)*q/(q+1) = [p==0]*1 + [p==1]*q = lhs]
+        * [p >= 2]:
+            [lhs
+            = C(q+p-1;p) -C(q+p-1;p-2)
+            = II{q..=q+p-1}/II{1..=p} -II{q+2..=q+p-1}/II{1..=p-2}
+            = (q*(q+1)/(p-1)/p-1)*C(q+p-1;p-2)
+            = ((q*q+q-p*p+p)/(p-1)/p)*C(q+p-1;p-2)
+            = ((q+p)*(q-p+1)/(p-1)/p)*C(q+p-1;p-2)
+            = (q-p+1)/p * (q+p)/(p-1)*C(q+p-1;p-2)
+            = (q-p+1)/p * C(q+p;p-1)
+            = (q-p+1)/(q+1) * (q+1)/p * C(q+p;p-1)
+            = (q-p+1)/(q+1) * C(q+p;p)
+            = rhs
+            ]
+    DONE
+    ]]
+]]原来以前已经有了:定理推导
+
+泛化:移动对角线禁限:定理推导:[[
+@[k,p,q::int]:
+    [g1_xballot_number(k;q;p) =[def]= [k >= 0][q >= 0][0 <= p <= q+k]*([p==q==0]*1 + [q=!=0]*(g1_xballot_number(k;q;p-1)+g1_xballot_number(k;q-1;p)))]
+@[m,w,p,q::int]:
+    [g2_xballot_number(m,w;q;p) =[def]= [m >= 0][w >= 0][0 <= p <= q+w][0 <= q <= p+m]*([p==q==0]*1 + [q=!=0]*(g2_xballot_number(k;q;p-1)+g2_xballot_number(k;q-1;p)))]
+    # [-m <= p-q <= w]
+
+num_paths__rectangle(q;p)
+    #without:k,m,w
+num_paths__g1_miss_corner(k;q;p)
+[num_paths__g1_hit_corner(k;q;p) =[def]= num_paths__rectangle(q;p) - num_paths__g1_miss_corner(k;q;p)]
+
+[num_paths__rectangle(q;p) == C(q+p;p)]
+[[[k>=0][q>=0][0<=p<=q+k]] -> [num_paths__g1_hit_corner(k;q;p) == num_paths__rectangle(q+k+1;p-k-1) == C(q+p;p-k-1)]]
+    [[proof:
+    路径:[(p,q), ..., (0,0)]
+    (0,0) 关于直线 [x==y+k+1][#(0,-k-1)~(k+1,0)#] 的 镜像 是 (k+1,-k-1)
+    <->路径:[(p,q), ..., (k+1,-k-1)]
+    <->路径:[(p-k-1,q+k+1), ..., (0,0)]
+    DONE
+    ]]
+[[[k>=0][q>=0][0<=p<=q+k]] -> [g1_xballot_number(k;q;p) == num_paths__g1_miss_corner(k;q;p) == num_paths__rectangle(q;p) - num_paths__g1_hit_corner(k;q;p) == C(q+p;p) - C(q+p;p-k-1)]]
+[g1_xballot_number(k;q;p) == [[k>=0][q>=0][0<=p<=q+k]]*(C(q+p;p) - C(q+p;p-k-1))]
+    [[验证:
+    [k==1]:
+        #q:
+        0:1,1
+        1:1,2,2
+        2:1,3,5,5
+        3:1,4,9,14,14
+        4:1,5,14,28,42,42
+        [g1_xballot_number(1;q;p) == [q>=0]*xballot_number(q+1;p)]
+        [xballot_number(q+1;p)
+        = (C(q+1+p;p) - C(q+1+p;p-1))
+        = (C(q+p;p) - C(q+p;p-2))
+        ]
+        [g1_xballot_number(1;q;p)
+        = (C(q+p;p) - C(q+p;p-1-1))
+        ]
+        ok!
+    [k==2]:
+        #q:
+        0:1,1,1
+        1:1,2,3,3
+        2:1,3,6,9,9
+        3:1,4,10,19,28,28
+        4:1,5,15,34,62,90,90
+        5:1,6,21,55,117,207,297,297
+        6:1,7,28,83,200,407,704,1001,1001
+        [117=g1_xballot_number(2;5;4)
+        =?= (C(q+p;p) - C(q+p;p-2-1))
+        = (C(9;4) - C(9;4-3))
+        = 9*8*7*6/4/3/2 - 9
+        = 9*2*7 - 9
+        = 9*13
+        = 117#ok
+        ]
+        [407=g1_xballot_number(2;6;5)
+        =?= (C(11;5) - C(11;5-3))
+        = 11*10*9*8*7/5/4/3/2 -55
+        = 11*3*2*7 -55
+        = 11*(3*2*7 -5)
+        = 11*37
+        = 407#ok
+        ]
+
+    ]]
+[@[p,q,s::int] -> [0 <= s <= p+q] -> [g1_xballot_number(k;q;p) == sum{g1_xballot_number(k;y;x)*g1_xballot_number(k+y-x;q-y;p-x) | [x,y::int][x+y==s]}]]
+    # 起讫点 中转于 完整流量 的 一个 截流点集
+[@[p,q,s::int] -> [0 <= s <= p+q] -> [g1_xballot_number(k;q;p) == sum{g1_xballot_number(k;y;x)*g1_xballot_number(k+y-x;q-y;p-x) | [x,y::int][x+y==s][y>=0][0<=x<=y+k]}]]
+
+!![g1_xballot_number(k_;q_;p_) == ([[k_>=0][q_>=0][0<=p_<=q_+k_]]*(C(q_+p_;p_) - C(q_+p_;p_-k_-1)))]
+[@[p,q,s::int] -> [0 <= s <= p+q] -> [
+    [g1_xballot_number(k;q;p) == sum{g1_xballot_number(k;y;x)*g1_xballot_number(k+y-x;q-y;p-x) | [x,y::int][x+y==s]}]
+    [[[k>=0][q>=0][0<=p<=q+k]]*(C(q+p;p) - C(q+p;p-k-1))
+    == sum{[k>=0][y>=0][0<=x<=y+k]*[k+y-x>=0][q-y>=0][0<=p-x<=q-y+k+y-x]*(C(y+x;x) - C(y+x;x-k-1))*(C(q-y+p-x;p-x) - C(q-y+p-x;p-x-(k+y-x)-1)) | [x,y::int][x+y==s]}
+    == sum{[k>=0][q>=y>=0][0<=x<=y+k][x<=p<=q+k]*(C(s;x) - C(s;x-k-1))*(C(q+p-s;p-x) - C(q+p-s;p-y-k-1)) | [x,y::int][x+y==s]}
+    ]
+    [[[k>=0][q>=0][0<=p<=q+k]] -> [
+        [(C(q+p;p) - C(q+p;p-k-1))
+        == sum{[k>=0][q>=y>=0][0<=x<=y+k][x<=p<=q+k]*(C(s;x) - C(s;x-k-1))*(C(q+p-s;p-x) - C(q+p-s;p-y-k-1)) | [x,y::int][x+y==s]}
+        == sum{[q>=y>=0][0<=x<=y+k][x<=p]*(C(s;x) - C(s;x-k-1))*(C(q+p-s;p-x) - C(q+p-s;p-y-k-1)) | [x,y::int][x+y==s]}
+        == sum{[q>=(s-i)>=0][0<=i<=(s-i)+k][i<=p]*(C(s;i) - C(s;i-k-1))*(C(q+p-s;p-i) - C(q+p-s;p-(s-i)-k-1)) | [i::int]}
+            [#
+            [q>=(s-i)>=0][0<=i<=(s-i)+k][i<=p]
+            = [q+i>=s>=i][0<=i<=(s+k)/2][i<=p]
+            = [s-q<=i<=s][0<=i<=(s+k)/2][i<=p]
+            = [max{0,s-q} <= i <= min{p,s,(s+k)/2}]
+            #]
+        == sum{(C(s;i) - C(s;i-k-1))*(C(q+p-s;p-i) - C(q+p-s;p+i-s-k-1)) | [i::int][max{0,s-q} <= i <= min{p,s,(s+k)/2}]}
+        ]
+        ]]
+    ]]
+[@[p,q,s::int] -> [0 <= s <= p+q] -> [
+    [[[k>=0][q>=0][0<=p<=q+k]] -> [
+        [(C(q+p;p) - C(q+p;p-k-1))
+        == sum{(C(s;i) - C(s;i-k-1))*(C(q+p-s;p-i) - C(q+p-s;p+i-s-k-1)) | [i::int][max{0,s-q} <= i <= min{p,s,(s+k)/2}]}
+        ]
+        ]]
+    ]]
+
+
+num_paths__rectangle(q;p)
+    #without:k,m,w
+num_paths__g2_miss_corner(m,w;q;p)
+    路径:点(p,q)->点(0,0)
+    允许范围:[0<=x<=p][0<=y<=q][y<=x+m][x<=y+w]
+        代入(0,0)与(p,q)，得:
+            [0<=0<=p][0<=0<=q][0<=0+m][0<=0+w]
+            [0<=p<=p][0<=q<=q][q<=p+m][p<=q+w]
+            <==> [[m>=0][w>=0][0<=p<=q+w][0<=q<=p+m]]
+    允许范围:左上角:
+        * [m>=q]:
+            左上角=点(0,q)
+        * [0<=m<q]:
+            左上角=点(0,m)~点(q-m,q)
+    允许范围:右下角:
+        * [w>=p]:
+            右下角=点(p,0)
+        * [0<=w<p]:
+            右下角=点(w,0)~点(p,p-w)
+num_paths__g2_hit_both_corner(m,w;q;p)
+[[[m>=0][w>=0][0<=p<=q+w][0<=q<=p+m]] -> [[0<=m<q][0<=w<p][q-m-1<=w+1][p-w-1<=m+1]] -> [num_paths__g2_hit_both_corner(m,w;q;p) == [q-m-1==w+1] + [p-w-1==m+1]]]
+
+[num_paths__g2_hit_corner(m,w;q;p) =[def]= num_paths__rectangle(q;p) - num_paths__g2_miss_corner(m,w;q;p)]
+
+num_paths__g2_hit_both_corner(m,w;q;p)
+
+
+#bug:[[[m>=0][w>=0][0<=p<=q+w][0<=q<=p+m]] -> [num_paths__g2_hit_corner(m,w;q;p) == num_paths__rectangle(p+m+1;q-m-1) + num_paths__g1_miss_corner(m;q+w+1;p-w-1) == C(q+p;q-m-1) + [[m>=0][q+w+1>=0][0<=p-w-1<=q+w+1+m]]*(C(q+p;p-w-1) - C(q+p;p-w-1-m-1)) == C(q+p;q-m-1) + [w+1<=p<=q+2*w+2+m]*(C(q+p;p-w-1) - C(q+p;p-w-2-m)) == (C(q+p;q-m-1) + C(q+p;p-w-1) - C(q+p;p-w-2-m))]]
+#   意图:过左上角+过右下角而不过左上角
+#   但实际表达式为:过左上角+过右下角且之后不过左上角(之前可能已经经过左上角)
+#   这样结果应该变大，为何下面验证确反而变小？
+#       没错，hit变大，miss变小
+
+#bug:继承性:[[[m>=0][w>=0][0<=p<=q+w][0<=q<=p+m]] -> [g2_xballot_number(m,w;q;p) == num_paths__g2_miss_corner(m,w;q;p) == num_paths__rectangle(q;p) - num_paths__g2_hit_corner(m,w;q;p) == (C(q+p;p) +C(q+p;p-w-2-m) -C(q+p;q-m-1) -C(q+p;p-w-1))]]
+#bug:继承性:[g2_xballot_number(m,w;q;p) == [[m>=0][w>=0][0<=p<=q+w][0<=q<=p+m]]*(C(q+p;p) +C(q+p;p-w-2-m) -C(q+p;q-m-1) -C(q+p;p-w-1))]
+    bug:C(q+p;p-w-2-m)不对称！有毛病！
+
+    [[验证:
+    [m==2][w==1]:
+        #q:
+        0:1,1
+        1:1,2,2
+        2:1,3,5,5
+        3:0,3,8,13,13
+        4:0,0,8,21,34,34
+        5:0,0,0,21,55,89,89
+        6:0,0,0,0,55,144,233,233
+        [144=g2_xballot_number(2,1;6;5)
+        =?=(C(q+p;p) +C(q+p;p-w-2-m) -C(q+p;q-m-1) -C(q+p;p-w-1))
+        =(C(11;5) +C(11;5-5) -C(11;6-3) -C(11;5-2))
+        =(11*3*2*7 +1 -11*5*3 -11*5*3)
+        =11*(3*2*7-5*3*2) +1
+        =11*3*2*(7-5) +1
+        =11*12 +1
+        =133#bug!
+        ]
+    ]]
+???[[[m>=0][w>=0][0<=p<=q+w][0<=q<=p+m]] -> [
+    [num_paths__g2_hit_both_corner(m,w;q;p)
+    == num_paths__g2_hit_corner(m+2*w,m;q+w+1;p-w-1)
+    == num_paths__g2_hit_corner(w+2*m,w;p+m+1;q-m-1)
+    ]
+    [num_paths__g2_hit_corner(m,w;q;p)
+    == num_paths__rectangle(p+m+1;q-m-1) + num_paths__rectangle(q+w+1;p-w-1) - num_paths__g2_hit_both_corner(m,w;q;p)
+    == num_paths__rectangle(q;p) - num_paths__g2_miss_corner(m,w;q;p)
+    == num_paths__rectangle(p+m+1;q-m-1) + num_paths__g2_miss_corner(m+2*w,m;q+w+1;p-w-1)
+    ]
+    [num_paths__g2_miss_corner(m,w;q;p)
+    == num_paths__rectangle(q;p) - num_paths__rectangle(p+m+1;q-m-1) - num_paths__g2_miss_corner(m+2*w,m;q+w+1;p-w-1)
+    == C(q+p;p) - C(q+p;q-m-1) - num_paths__g2_miss_corner(m+2*w,m;q+w+1;p-w-1)
+    == C(q+p;p) - C(q+p;q-m-1) - [[w+1<=p][q<=p+m-2]]*num_paths__g2_miss_corner(m+2*w,m;q+w+1;p-w-1)
+        [#
+        [[m>=0][w>=0][0<=p<=q+w][0<=q<=p+m]]:
+            [[m+2*w>=0][m>=0][0<=p-w-1<=q+w+1+m][0<=q+w+1<=p-w-1+m+2*w]]
+                <==>[[w+1<=p<=q+2*w+2+m][-w-1<=q<=p-2+m]]
+                <==>[[w+1<=p][q<=p+m-2]]
+        #]
+    == (C(q+p;p) - C(q+p;q-m-1) - [[w+1<=p][q<=p+m-2]]*(C(q+p;p-w-1) - C(q+p;q+w+1-m-2*w-1) - [[m+1<=p-w-1][q+w+1<=p-w-1+m+2*w-2]]*num_paths__g2_miss_corner(m+2*w+2*m,m+2*w;q+w+1+m+1;p-w-1-m-1)))
+
+    == (C(q+p;p) - C(q+p;q-m-1) - [[w+1<=p][q<=p+m-2]]*(C(q+p;p-w-1) - C(q+p;q-m-w) - [[m+w+2<=p][q<=p+m-4]]*num_paths__g2_miss_corner(3*m+2*w,m+2*w;q+w+2+m;p-w-2-m)))
+    ]
+    ]]
 
 
 
+]]定理推导
+]]] #20221103-20221104
+##################
+[[[20221104-?
+边界条件 + 递推关系 ==>> 泛化边界:[[
+    * binomial_number=C:[[
+        * 边界条件:
+            [@[n::int] -> [n>=0] -> [C(n,0)==1]]
+            [@[n::int] -> [n>=0] -> [C(n,n+1)==0]]
+        * 递推关系:
+            [@[n,k::int] -> [C(n,k) == C(n-1,k-1) + C(n-1,k)]]
+            # 互推 小三角:
+                *-*
+                 \|
+                  *
+        * 泛化边界:
+            !! [互推 小三角 <==> 泛化边界 大三角]
+            !! [有定义边界 {(n,0) | [n>=0]} 突破 大三角 斜边]
+            !! [有定义边界 {(n,n+1) | [n>=0]} 突破 大三角 纵边]
+            [只剩 大三角 横边{(0,k) | [k::int]}]
+            [C(n,k) 定义域 为 [n>=0][k::int]]
+        ]]
+    * gxballot_number=G:[[
+        #不是 xballot_number
+        #按 互推 小三角 泛化，而非 置零
+        * 边界条件:
+            [@[n::int] -> [n>=0] -> [G(n,0)==1]]
+            [@[n::int] -> [n>=0] -> [G(n,n+1)==0]]
+            # G 与 C 的 边界条件 完全相同
+        * 递推关系:
+            [@[n,k::int] -> [G(n,k) == G(n,k-1) + G(n-1,k)]]
+            # 互推 小三角:
+                  *
+                 /|
+                *-*
+        * 泛化边界:
+            !! [互推 小三角 <==> 泛化边界 大三角]
+            !! [有定义边界 {(n,0) | [n>=0]} 突破 大三角 横边]
+            !! [有定义边界 {(n,n+1) | [n>=0]} 突破 大三角 纵边]
+            [只剩 大三角 斜边{(n,-n) | [n::int]}]
+            [G(n,k) 定义域 为 [n,k::int][n+k>=0]]
+        ]]
+    ]]
+递推关系 变形:[[
+    [@[n,k::int] -> [A(n,k) == A(n-1,k-1) + A(n-1,k)]]
+    [@[n,k::int] -> [B(n,k) == B(n,k-1) + B(n-1,k)]]
+    # 考虑:从A变到B
+    [A(n,k) == B(n-k,k)]:
+        [A(n+k,k) == B(n,k)]
+        !! [B(n,k) == B(n,k-1) + B(n-1,k)]
+        [A(n+k,k) == A(n+k-1,k-1) + A(n+k-1,k)]
+        [A(n,k) == A(n-1,k-1) + A(n-1,k)]
+    [A(n,k) 的 边界条件 与 C(n,k)相同]:[[
+        A(n,k) 的 边界条件:
+            [@[n::int] -> [n>=0] -> [A(n,0)==1]]
+            [@[n::int] -> [n>=0] -> [A(n,n+1)==0]]
+        B(n,k) 的 边界条件:
+            [@[n::int] -> [n>=0] -> [B(n,0)==1]]
+            [@[n::int] -> [n>=0] -> [B(-1,n+1)==0]]
+        ]]
+    [B(n,k) 的 边界条件 与 G(n,k)相同]:[[
+        B(n,k) 的 边界条件:
+            [@[n::int] -> [n>=0] -> [B(n,0)==1]]
+            [@[n::int] -> [n>=0] -> [B(n,n+1)==0]]
+        A(n,k) 的 边界条件:
+            [@[n::int] -> [n>=0] -> [A(n,0)==1]]
+            [@[n::int] -> [n>=0] -> [A(2*n+1,n+1)==0]]
+        ]]
+    ]]
+]]] #20221104-?
 
 
-
-'''
+##################
+##################
 
 xballot_number(q,p) = ballot_number(p,q)
     | 0 <= p <= q != 0  = ballot_number(p-1,q) + ballot_number(p,q-1)
@@ -401,14 +920,15 @@ FX(w,h,L,1, z) = ??
     FX(h,w,w,1, z) =?= FX(w,h,h,1, z) ???????????
 
 
-'''
+#]]]]]]]'''
 
 
 
 
 
 
-'''
+
+r'''[[[[[[[
 ballot_number
 
 from (n,k) goto (0,0) (or (-1,0))
@@ -657,7 +1177,8 @@ E(1,0, n-n0,k-k0) = sum E(w,h, n,k, n',k')*E(1,0, n'-1-n0,k'-k0) {n',k': w*n'-h*
     N = (n-n0)+1+(k-k0) = (h/g*i+nr + w/g*i+kr) + 1 - (n0+k0)
         = (h+w)/g*i + (nr+kr+1) - (n0+k0)
 
-'''
+
+#]]]]]]]'''
 
 
 __all__ = '''
@@ -668,6 +1189,9 @@ __all__ = '''
 
     XBallotNumberEx1
     XBallotNumberEx2
+
+    direct_calc__xballot_number
+    direct_calc__total_oriented_binary_tree
     '''.split()
 
 import functools
@@ -677,6 +1201,7 @@ from .IXBallotNumberLike import IXBallotNumberLike
 from .INumberTable import INumberTable__table__concrete_mixins
 from .numbers_common import\
     (ABC, optional_method, abstract_method, override, define)
+from nn_ns.math_nn.numbers.choose import C #used@direct_calc__xballot_number
 
 
 
@@ -720,7 +1245,7 @@ class _impl_XBallotNumberEx1(
 
 class _impl_XBallotNumberEx2(
         IXBallotNumberLike, INumberTable__table__concrete_mixins):
-    __slots__ = '__w __h table'.split()
+    __slots__ = '__w __h __B table'.split()
 
     @override
     def __please_add_table_to_slots__(self):pass
@@ -827,6 +1352,76 @@ def _test(max_m=5, max_L=3, max_n=10):
 
 
 
+#################### [[[ 20221103-20221104
+#[@[p,q::int] -> [xballot_number(q;p) == [0 <= p <= q]*(C(q+p-1;p)-C(q+p-1;p-2)) == [0 <= p <= q]*(C(q+p;p) - C(q+p;p-1)) == [0 <= p <= q]*(C(p+q;p)*(q+1-p)///(q+1))]]
+#[@[n::int] -> [区别左右的二叉树的总数囗(叶节点的总数:=n) == [n>=1]*(C(2*n-3;n-2)-C(2*n-3;n-3)) == [1<=n<3]*1 + [n>=3]*(2*C(2*n-3;n-3)///(n-2)) == [n==1]*1 + [n>=2]*(2*C(2*n-3;n-2)///n) == [n==1]*1 + [n>=2]*(C(2*n-2;n)///(n-1)) == [n>=1]*(C(2*(n-1);n-1)///n)]]
+#def direct_calc(self, n, k):
+def direct_calc__xballot_number(q, p, /):
+    if not 0 <= p <= q:
+        return 0
+    return (C(q+p-1,p)-C(q+p-1,p-2))
+    return (C(q+p,p)-C(q+p,p-1))
+direct_calc__xballot_number
+xballot_number
+def direct_calc__total_oriented_binary_tree(n, /):
+    if not n >= 1:
+        return 0
+    #######
+    if __debug__:
+        (q,r) = divmod(C(2*n-2,n-1), n)
+        assert r == 0
+        return q
+    raise NotImplementedError
+    #######
+    if not n >= 2:
+        return 1
+    if __debug__:
+        #(q,r) = divmod(2*C(2*n-3,n-2), n)
+        (q,r) = divmod(2*C(2*n-3,n-1), n)
+        assert r == 0
+        return q
+    raise NotImplementedError
+    #######
+    if not n >= 2:
+        return 1
+    if __debug__:
+        (q,r) = divmod(C(2*n-2,n), (n-1))
+        assert r == 0
+        return q
+    raise NotImplementedError
+    #######
+    if not n >= 2:
+        return 1
+    if __debug__:
+        (q,r) = divmod(2*C(2*n-3,n-2), n)
+        assert r == 0
+        return q
+    raise NotImplementedError
+    #######
+    if not n >= 3:
+        return 1
+    if __debug__:
+        (q,r) = divmod(2*C(2*n-3,n-3), (n-2))
+        assert r == 0
+        return q
+    raise NotImplementedError
+    #######
+    return (2*C(2*n-3,n-3)//(n-2))
+def _test__direct_calc__xballot_number():
+    us = range(-2, 100+1)
+        #_fill_when_neg: raise NotImplementedError
+    us = range(0, 100+1)
+    for q in us:
+        for p in us:
+            assert direct_calc__xballot_number(q,p) == xballot_number(q,p)
+def _test__direct_calc__total_oriented_binary_tree():
+    us = range(1, 100+1)
+    for n in us:
+        assert direct_calc__total_oriented_binary_tree(n) == xballot_number(n-1,n-1), (n, direct_calc__total_oriented_binary_tree(n), xballot_number(n-1,n-1))
+if __name__ == '__main__':
+    _test__direct_calc__xballot_number()
+    _test__direct_calc__total_oriented_binary_tree()
+#################### ]]] 20221103-20221104
 
 
 #################### cmd
@@ -852,7 +1447,7 @@ knows n0,k0, so use (n,k) to query instead of (dn,dk)
         print(self.ns.table)
 
 
-'''
+r'''[[[[[[[
 from .Pascal_number_like import PascalNumberLike
 class BallotNumberLike(PascalNumberLike): # not that likely
     def _calc_pos_pascal_like(self, n, k, n1_k1, n1_k):
@@ -864,7 +1459,7 @@ class BallotNumberLike(PascalNumberLike): # not that likely
         raise NotImplementedError()
     def direct_calc(self, n, k):
         raise NotImplementedError()
-'''
+#]]]]]]]'''
 
 
 _old_print = print
@@ -886,7 +1481,7 @@ def main(args=None):
 ##    parser.add_argument('size', type=int, default=0, nargs='?',
 ##                        help='table size')
 
-    '''
+    r'''[[[[[[[
     parser.add_argument('-t', '--test', action='store_true',
                         default=False,
                         help=('test(max_m, max_L, max_n) and exit')
@@ -915,7 +1510,7 @@ def main(args=None):
     parser.add_argument('col', type=int,
                         nargs='?', default=None, #required=False,
                         help='colomn index')
-                        '''
+    #]]]]]]]'''
 
     subparsers = parser.add_subparsers(dest='subs', help='sub-command help')
     parser_table = subparsers.add_parser('table', help='show table')
@@ -1029,7 +1624,8 @@ def _N0(w,h,L):
 def _series(w,h,L,B, max_I):
     'X(w,h,L,B,~N) = E'
 
-    from .. import ginvmod
+    #from .. import ginvmod
+    from nn_ns.math_nn.integer.mod import ginvmod
 
     assert w>0
     assert h>0
@@ -1056,7 +1652,7 @@ def _series(w,h,L,B, max_I):
 
     print(ls)
 
-    '''
+    r'''[[[[[[[
     let N = (n-n0) + (k-k0)
     let (k-k0) = T=(w*N-L)/(w+h);
     let (n-n0) = S=(h*N+L)/(w+h)
@@ -1067,7 +1663,8 @@ def _series(w,h,L,B, max_I):
 
     E(w,h, n,k, n0,k0) = X(w,h,L,B, N)
         = X(w,h, (w*n-h*k)-(w*n0-h*k0), -(w*n0-h*k0), (n-n0) + (k-k0))
-        = E(w,h, S+(h*r-B)/w + h*q, T+r + w*q, (h*r-B)/w + h*q, r + w*q)'''
+        = E(w,h, S+(h*r-B)/w + h*q, T+r + w*q, (h*r-B)/w + h*q, r + w*q)
+    #]]]]]]]'''
 
 def _guess(Es, L, Ns, args):
     from sympy import factorint
@@ -1079,7 +1676,7 @@ def _guess(Es, L, Ns, args):
     print('[max factor x for x in Es] =', ps)
     #print(Ns)
 
-    '''
+r'''[[[[[[[
 args = {'kr': 0, 'nr': 0, 'w': 2, 'h': 3}
 L = 2
 Es = [1, 2, 23, 377, 7229, 151491, 3361598, 77635093,
@@ -1089,7 +1686,7 @@ Es = [1, 2, 23, 377, 7229, 151491, 3361598, 77635093,
 
 not a term in form : II ai! / II bi!
 
-'''
+#]]]]]]]'''
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 
-__all__ = '''
+__all__ = r'''
     choose
     choose_fraction
     '''.split()
@@ -12,7 +12,7 @@ from .INumberTable import INumberTable__table__concrete_mixins
 from .numbers_common import abstract_method, optional_method, override, define
 
 def C(n, i):
-    '''II(n-k for k in [0..i-1])/i!
+    r'''II(n-k for k in [0..i-1])/i!
 
 choose(n,i) ~ time O(n * log(n)^2)
 '''
@@ -66,7 +66,7 @@ def choose_fraction(fraction, i):
     return r
 
     ############# above avoid factorial in below
-    '''
+    r'''
     r = Fraction(1, 1)
     for x in range(i):
         r *= fraction - x
@@ -80,8 +80,9 @@ _data = [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1], [1, 5, 10, 10, 5
 _half_data = [[1], [1], [1, 2], [1, 3], [1, 4, 6], [1, 5, 10]]
 
 #class Choose(PascalNumberLike):
-class Choose(IPascalNumberLike, INumberTable__table__concrete_mixins):
-    '''choose(n,k) = choose(n-1,k-1)+choose(n-1,k) # n choose k
+#?not bug?:class Choose(IPascalNumberLike, INumberTable__table__concrete_mixins):
+class Choose(INumberTable__table__concrete_mixins, IPascalNumberLike):
+    r'''choose(n,k) = choose(n-1,k-1)+choose(n-1,k) # n choose k
 '''
     __slots__ = 'table'
     @override
@@ -92,6 +93,7 @@ class Choose(IPascalNumberLike, INumberTable__table__concrete_mixins):
         return n1_k1 + n1_k
         raise NotImplementedError
 
+    r'''[[[ #bug!
     @override
     def lookup_static(self, n,k):
         if k < 0: return 0
@@ -108,6 +110,29 @@ class Choose(IPascalNumberLike, INumberTable__table__concrete_mixins):
         if k == 1: return n
         if k == n-1: return n
         raise LookupError
+    #]]]'''
+    @override
+    def lookup_static(self, n,k):
+        if k < 0: return 0
+        # k >= 0
+        if n < 0:
+            # n < 0 <= k
+            n = k-1-n
+            assert n >= 0
+            assert 0 <= k <= n
+            s = (-1)**k
+        else:
+            s = 1
+        # n >= 0
+        # k >= 0
+        if k > n: return 0
+        # 0 <= k <= n
+        if k == n: return s
+        if k == 0: return s
+        if k == 1: return n*s
+        if k == n-1: return n*s
+        raise LookupError
+
     @override
     def _lookup_pos_overflow(self, n, k, table):
         assert n >= 0
@@ -118,14 +143,14 @@ class Choose(IPascalNumberLike, INumberTable__table__concrete_mixins):
     def _fill_when_neg(self, n, k):
         assert n < 0
         if k < 0: return
-        assert (k-1)-n >= 0
+        assert (k-1)-n >= k >= 0
         self.fill_len(k-1-n+1)
         return
     @override
     def _lookup_neg(self, n, k, table):
         assert n < 0
         if k < 0: return 0
-        assert (k-1)-n >= 0
+        assert (k-1)-n >= k >= 0
         return self._lookup((k-1)-n, k, table) * (-1)**k
         raise NotImplementedError
     @override
@@ -154,8 +179,12 @@ choose = Pascal_number = binomial = Choose()
 assert choose.get_first(len(_half_data)) == _half_data
 
 assert C(8, 5) == choose(8, 5)
+assert C(-1, 0) == choose(-1, 0) == 1
+assert C(-1, -1) == choose(-1, -1) == 0
+assert C(-1, 1) == choose(-1, 1) == -1
 if __name__ == '__main__':
-    print = str
+    #print = str
+    print(choose(-30, 11))
     print(choose(-30, 12))
     print(choose.get_table())
 
