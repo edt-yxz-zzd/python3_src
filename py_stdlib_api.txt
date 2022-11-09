@@ -1,7 +1,36 @@
 e ../../python3_src/py_stdlib_api.txt
+view ../../python3_src/自己的相关数据/py_modules.txt
 
 print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
 
+
+[[
+import heapq
+
+nlargest(n, iterable, key=None)
+nsmallest(n, iterable, key=None)
+    Find the n smallest elements in a dataset.
+    Equivalent to:  sorted(iterable, key=key)[:n]
+
+merge(*iterables, key=None, reverse=False)
+    Merge multiple sorted inputs into a single sorted output.
+
+heapify(heap, /)
+    Transform list into a heap, in-place, in O(len(heap)) time.
+
+heappop(heap, /)
+    Pop the smallest item off the heap, maintaining the heap invariant.
+
+heappush(heap, item, /)
+    Push item onto heap, maintaining the heap invariant.
+
+heappushpop(heap, item, /)
+    Push item on the heap, then pop and return the smallest item from the heap.
+
+heapreplace(heap, item, /)
+    Pop and return the current smallest value, and add the new item.
+
+]]
 
 [[
 view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/decimal.html
