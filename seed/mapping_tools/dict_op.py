@@ -1,7 +1,12 @@
 #__all__:goto
 r'''
-py -m nn_ns.app.debug_cmd   seed.mapping_tools.dict_op
+py -m nn_ns.app.debug_cmd   seed.mapping_tools.dict_op -x
 py -m nn_ns.app.doctest_cmd seed.mapping_tools.dict_op:f -v
+py -m nn_ns.app.doctest_cmd seed.mapping_tools.dict_op:__doc__ -ff -v
+py_adhoc_call   seed.mapping_tools.dict_op   @f
+
+
+
 
 from seed.mapping_tools.dict_op import partition_by_keyss__immutable
 
@@ -245,50 +250,60 @@ if 0:
 #################################
 #################################
 class mapping_symmetric_diff_patch_default_setting:
+    r'''
+    patch_/patcher
+    diff_
+    delta/result/patch
+    #'''
     @staticmethod
-    def diff4value(u,v,/):
+    def diff4value_(u,v,/):
         w = (u,v)
         tmay_w = (w,) if not u in [v] else ()
         return tmay_w
     @staticmethod
-    def patch4value4lhs(w,u,/):
+    def patch4value4lhs_(w,u,/):
         (_u,v) = w
         return v
     @staticmethod
-    def patch4value4rhs(w,v,/):
+    def patch4value4rhs_(w,v,/):
         (u,_v) = w
         return u
 mapping_symmetric_diff_patch_default_setting = mapping_symmetric_diff_patch_default_setting()
 
 def mapping_symmetric_diff4patch__immutable__default(lhs, rhs, /, *, validate=False):
     'Eq u v => Map (a|c) u -> Map (b|c) v -> Map (a|c|b) ((2,u)|(3,(u,v))|(1,v))'
-    patch = mapping_symmetric_diff4patch__immutable(None, None, None, rhs, lhs, validate=validate)
+    #bug:patch = mapping_symmetric_diff4patch__immutable(None, None, None, rhs, lhs, validate=validate)
+    patch = mapping_symmetric_diff4patch__immutable(None, None, None, lhs, rhs, validate=validate)
     return patch
-def mapping_symmetric_diff4patch__immutable(may_patch4value4lhs, may_patch4value4rhs, diff4value, lhs, rhs, /, *, validate=False):
-    'may (w->u->v) -> may (w->v->u) -> (u->v->tmay w) -> Map (a|c) u -> Map (b|c) v -> Map (a|c|b) ((2,u)|(3,w)|(1,v)) #for recursive diff&patch, [validate=True] should not set recursive for all'
+def mapping_symmetric_diff4patch__immutable(may_patch4value4lhs_, may_patch4value4rhs_, may_diff4value_, lhs, rhs, /, *, validate=False):
+    'may (w->u->v) -> may (w->v->u) -> _may_ (u->v->tmay w) -> Map (a|c) u -> Map (b|c) v -> Map (a|c|b) ((2,u)|(3,w)|(1,v)) #for recursive diff&patch, [validate=True] should not set recursive for all'
 
-    if diff4value is None is not may_patch4value4lhs is may_patch4value4rhs:raise TypeError
-    if diff4value is None:
+    if may_diff4value_ is None and not (may_patch4value4lhs_ is None is may_patch4value4rhs_):raise TypeError
+    if may_diff4value_ is None:
+        assert (may_patch4value4lhs_ is None is may_patch4value4rhs_)
         _ = mapping_symmetric_diff_patch_default_setting
-        diff4value = mapping_symmetric_diff_patch_default_setting.diff4value
-        may_patch4value4lhs = mapping_symmetric_diff_patch_default_setting.patch4value4lhs
-        may_patch4value4rhs = mapping_symmetric_diff_patch_default_setting.patch4value4rhs
+        diff4value_ = mapping_symmetric_diff_patch_default_setting.diff4value_
+        may_patch4value4lhs_ = mapping_symmetric_diff_patch_default_setting.patch4value4lhs_
+        may_patch4value4rhs_ = mapping_symmetric_diff_patch_default_setting.patch4value4rhs_
+    else:
+        diff4value_ = may_diff4value_
+    diff4value_
 
-    if not may_patch4value4lhs is None:
-        patch4value4lhs = may_patch4value4lhs
-        check_callable(patch4value4lhs)
+    if not may_patch4value4lhs_ is None:
+        patch4value4lhs_ = may_patch4value4lhs_
+        check_callable(patch4value4lhs_)
         def _check4lhs(u,v,w,/):
-            _v = patch4value4lhs(w,u)
+            _v = patch4value4lhs_(w,u)
             if not v==_v: raise ValueError(('lhs->rhs', c, w, u, v, _v))
     else:
         def _check4lhs(u,v,w,/):
             pass
 
-    if not may_patch4value4rhs is None:
-        patch4value4rhs = may_patch4value4rhs
-        check_callable(patch4value4rhs)
+    if not may_patch4value4rhs_ is None:
+        patch4value4rhs_ = may_patch4value4rhs_
+        check_callable(patch4value4rhs_)
         def _check4rhs(u,v,w,/):
-            _u = patch4value4rhs(w,v)
+            _u = patch4value4rhs_(w,v)
             if not u==_u: raise ValueError(('rhs->lhs', c, w, u, v, _u))
     else:
         def _check4rhs(u,v,w,/):
@@ -301,7 +316,7 @@ def mapping_symmetric_diff4patch__immutable(may_patch4value4lhs, may_patch4value
     (lonly_dict, zipped_common_dict, ronly_dict) = mapping_zipped_symmetric_partition__immutable(lhs, rhs)
     patch = {}
     for c,(u,v) in zipped_common_dict.items():
-        tmay_w = diff4value(u,v)
+        tmay_w = diff4value_(u,v)
         check_tmay(tmay_w)
         if not tmay_w:continue
         [w] = tmay_w
@@ -312,11 +327,11 @@ def mapping_symmetric_diff4patch__immutable(may_patch4value4lhs, may_patch4value
     for b,v in ronly_dict.items():
         patch[b] = (1,v)
     if validate:
-        if not may_patch4value4lhs is None:
-            rhs_ = mapping_symmetric_patch4lhs__immutable(diff4value, patch4value4lhs, patch, lhs)
+        if not may_patch4value4lhs_ is None:
+            rhs_ = mapping_symmetric_patch4lhs__immutable(diff4value_, patch4value4lhs_, patch, lhs)
             assert rhs_ == rhs, (rhs_, rhs)
-        if not may_patch4value4rhs is None:
-            lhs_ = mapping_symmetric_patch4rhs__immutable(diff4value, patch4value4rhs, patch, rhs)
+        if not may_patch4value4rhs_ is None:
+            lhs_ = mapping_symmetric_patch4rhs__immutable(diff4value_, patch4value4rhs_, patch, rhs)
             assert lhs_ == lhs, (lhs_, lhs)
     return patch
 
@@ -331,28 +346,36 @@ def mapping_symmetric_patch4rhs__immutable__default(patch, rhs, /, *, validate=F
     lhs = mapping_symmetric_patch4rhs__immutable(None, None, patch, rhs, validate=validate)
     return lhs
 
-def mapping_symmetric_patch4lhs__immutable(may_diff4value, patch4value4lhs, patch, lhs, /, *, validate=False):
-    'may (u->v->tmay w) -> (w->u->v) -> Map (a|c|b) ((2,u)|(3,w)|(1,v)) -> Map (a|c) u -> Map (b|c) v'
-    rhs = _mapping_symmetric_patch4asif_lhs__immutable(False, may_diff4value, patch4value4lhs, patch, lhs, validate=validate)
+def mapping_symmetric_patch4lhs__immutable(may_diff4value_, may_patch4value4lhs_, patch, lhs, /, *, validate=False):
+    'may (u->v->tmay w) -> _may_ (w->u->v) -> Map (a|c|b) ((2,u)|(3,w)|(1,v)) -> Map (a|c) u -> Map (b|c) v'
+    rhs = _mapping_symmetric_patch4asif_lhs__immutable(False, may_diff4value_, may_patch4value4lhs_, patch, lhs, validate=validate)
     return rhs
-def mapping_symmetric_patch4rhs__immutable(may_diff4value, patch4value4rhs, patch, rhs, /, *, validate=False):
-    'may (u->v->tmay w) -> (w->u->v) -> Map (a|c|b) ((2,u)|(3,w)|(1,v)) -> Map (b|c) v -> Map (a|c) u'
-    lhs = _mapping_symmetric_patch4asif_lhs__immutable(True, may_diff4value, patch4value4rhs, patch, rhs, validate=validate)
+def mapping_symmetric_patch4rhs__immutable(may_diff4value_, may_patch4value4rhs_, patch, rhs, /, *, validate=False):
+    'may (u->v->tmay w) -> _may_ (w->u->v) -> Map (a|c|b) ((2,u)|(3,w)|(1,v)) -> Map (b|c) v -> Map (a|c) u'
+    lhs = _mapping_symmetric_patch4asif_lhs__immutable(True, may_diff4value_, may_patch4value4rhs_, patch, rhs, validate=validate)
     return lhs
-def _mapping_symmetric_patch4asif_lhs__immutable(_4rhs, may_diff4value, patch4value4lhs, patch, lhs, /, *, validate):
-    if patch4value4lhs is None is not may_diff4value:raise TypeError
-    if patch4value4lhs is None:
+def _mapping_symmetric_patch4asif_lhs__immutable(_4rhs, may_diff4value_, may_patch4value4lhs_, patch, lhs, /, *, validate):
+    if may_patch4value4lhs_ is None is not may_diff4value_:raise TypeError
+    if may_patch4value4lhs_ is None:
+        assert may_diff4value_ is None
         _ = mapping_symmetric_diff_patch_default_setting
-        diff4value = mapping_symmetric_diff_patch_default_setting.diff4value
-        may_patch4value4lhs = mapping_symmetric_diff_patch_default_setting.patch4value4lhs
+        may_diff4value_ = mapping_symmetric_diff_patch_default_setting.diff4value_
         if _4rhs:
-            may_patch4value4lhs = mapping_symmetric_diff_patch_default_setting.patch4value4rhs
+            # .*4rhs
+            may_patch4value4lhs_ = mapping_symmetric_diff_patch_default_setting.patch4value4rhs_
+        else:
+            # .*4lhs
+            may_patch4value4lhs_ = mapping_symmetric_diff_patch_default_setting.patch4value4lhs_
+    assert not may_patch4value4lhs_ is None
+    patch4value4lhs_ = may_patch4value4lhs_
+    del may_patch4value4lhs_
+    check_callable(patch4value4lhs_)
 
-    if not may_diff4value is None:
-        diff4value = may_diff4value
-        check_callable(diff4value)
+    if not may_diff4value_ is None:
+        diff4value_ = may_diff4value_
+        check_callable(diff4value_)
         def _check(u,v,w,/):
-            tmay_w = diff4value(u,v)
+            tmay_w = diff4value_(u,v)
             if not (w,)==tmay_w: raise ValueError(('->patch', k, case, w, u, v, tmay_w))
     else:
         def _check(u,v,w,/):
@@ -381,18 +404,19 @@ def _mapping_symmetric_patch4asif_lhs__immutable(_4rhs, may_diff4value, patch4va
             del rhs[k]
         elif case == 3:
             w = x
-            v = patch4value4lhs(w,u)
+            v = patch4value4lhs_(w,u)
             _check(u,v,w)
             rhs[k] = v
         else:
-            raise 000
+            raise ValueError('not a valid patch: not case in [1,2,3]')
+    rhs
     if validate:
-        if not may_diff4value is None:
+        if not may_diff4value_ is None:
             if _4rhs:
-                patch_ = mapping_symmetric_diff4patch__immutable(None, patch4value4lhs, diff4value, rhs, lhs, validate=True)
+                _patch = mapping_symmetric_diff4patch__immutable(None, patch4value4lhs_, diff4value_, rhs, lhs, validate=True)
             else:
-                patch_ = mapping_symmetric_diff4patch__immutable(patch4value4lhs, None, diff4value, lhs, rhs, validate=True)
-            assert patch_ == patch, (patch_, patch)
+                _patch = mapping_symmetric_diff4patch__immutable(patch4value4lhs_, None, diff4value_, lhs, rhs, validate=True)
+            assert _patch == patch, (_patch, patch)
     return rhs
 def _():
     lhs = {7:111,5:333,4:444}
@@ -401,28 +425,28 @@ def _():
     patch__default = {7:(2,111),8:(1,222),5:(3, (333,999))}
     setting__default = mapping_symmetric_diff_patch_default_setting
     class setting__substract:
-        def diff4value(u,v,/):
+        def diff4value_(u,v,/):
             w = v-u
             tmay_w = (w,) if w else ()
             return tmay_w
-        def patch4value4lhs(w,u,/):
+        def patch4value4lhs_(w,u,/):
             v = u+w
             return v
-        def patch4value4rhs(w,v,/):
+        def patch4value4rhs_(w,v,/):
             u = v-w
             return u
     _2(lhs, rhs, patch__default, setting__default)
     _2(lhs, rhs, patch__substract, setting__substract)
 def _2(lhs, rhs, patch, setting, /):
-    patch4value4lhs = setting.patch4value4lhs
-    patch4value4rhs = setting.patch4value4rhs
-    diff4value = setting.diff4value
+    patch4value4lhs_ = setting.patch4value4lhs_
+    patch4value4rhs_ = setting.patch4value4rhs_
+    diff4value_ = setting.diff4value_
 
-    patch_ = mapping_symmetric_diff4patch__immutable(patch4value4lhs, patch4value4rhs, diff4value, lhs, rhs, validate=True)
-    assert patch_ == patch, (patch_, patch)
-    rhs_ = mapping_symmetric_patch4lhs__immutable(diff4value, patch4value4lhs, patch, lhs, validate=True)
+    _patch = mapping_symmetric_diff4patch__immutable(patch4value4lhs_, patch4value4rhs_, diff4value_, lhs, rhs, validate=True)
+    assert _patch == patch, (_patch, patch)
+    rhs_ = mapping_symmetric_patch4lhs__immutable(diff4value_, patch4value4lhs_, patch, lhs, validate=True)
     assert rhs_ == rhs, (rhs_, rhs)
-    lhs_ = mapping_symmetric_patch4rhs__immutable(diff4value, patch4value4rhs, patch, rhs, validate=True)
+    lhs_ = mapping_symmetric_patch4rhs__immutable(diff4value_, patch4value4rhs_, patch, rhs, validate=True)
     assert lhs_ == lhs, (lhs_, lhs)
     return
 _()
