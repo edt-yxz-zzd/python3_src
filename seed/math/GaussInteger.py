@@ -7,8 +7,23 @@ used by:
         py script/平方和.py main2__show_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt =100
 
 py -m nn_ns.app.debug_cmd   seed.math.GaussInteger
+
+[349,353,373,389,397]
+py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.GaussInteger @find_Gauss_integer_factor_coeffs_of_4k1_prime =349 =None
+(5, 18)
+py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.GaussInteger ,iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt =349 =398 +turnon__is_prime__le_pow2_64
+(349, 5, 18)
+(353, 17, 8)
+(373, 7, 18)
+(389, 17, 10)
+(397, 19, 6)
+
+
+
+
 from seed.math.GaussInteger import is_zero__Gauss_integer, neg__Gauss_integer, conj__Gauss_integer, square_len__Gauss_integer, cmp_len__Gauss_integer, cmp_square_len_ex__Gauss_integer, mul__Gauss_integer, add__Gauss_integer, sub__Gauss_integer, divmod__Gauss_integer, gcd__Gauss_integer, square_len__Gauss_integer, pow__Gauss_integer
 from seed.math.GaussInteger import find_Gauss_integer_factor_coeffs_of_4k1_prime, find_sqrt_neg1_of_4k1_prime_ex, find_sqrt_neg1_of_4k1_prime, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt, iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt
+from seed.math.GaussInteger import iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt, iter_4k1_primes__ge_lt
 
 #]]]'''
 __all__ = '''
@@ -34,6 +49,10 @@ __all__ = '''
     iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt
         iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt
         iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq
+
+
+    iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt
+    iter_4k1_primes__ge_lt
     '''.split()
     #divmod__half
     #sign_of
@@ -45,6 +64,9 @@ from seed.math.II import II
 from seed.math.gcd import gcd
 from seed.math.divmod__half import divmod__half#, mod__half
 from nn_ns.math_nn.numbers.min_factor import factor_uint__via_min_factor_list #, min_factor
+
+from itertools import count
+from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
 
 if 0:
   def sign_of(x, /):
@@ -848,12 +870,14 @@ result of N=100:[
         assert gcd(even, odd) ==1
         yield (c, odd, even)
     return
+
 def iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt(N, /):
     '-> Iter (c, factorisation_of_c)'
     N = max(2, N)
     factor_uint__via_min_factor_list(N)
         #force cache
-    for u in range(5, N, 2):
+    #for u in range(5, N, 2):
+    for u in range(5, N, 4):
         p2e = factor_uint__via_min_factor_list(u)
         if all(p%4==1 for p in p2e):
             yield u, p2e
@@ -863,3 +887,47 @@ def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt(N, /
 
 
 
+
+def iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt(may_begin, may_end, /, *, turnon__is_prime__le_pow2_64):
+    for p in iter_4k1_primes__ge_lt(may_begin, may_end, turnon__is_prime__le_pow2_64=turnon__is_prime__le_pow2_64):
+        (odd, even) = find_Gauss_integer_factor_coeffs_of_4k1_prime(p, None)
+        yield (p, odd, even)
+def iter_4k1_primes__ge_lt(may_begin, may_end, /, *, turnon__is_prime__le_pow2_64):
+    if may_begin is None:
+        begin = -1
+    else:
+        begin = may_begin
+    if begin < 5:
+        begin = 5
+    r = begin&3 #begin%4
+    if not r == 1:
+        if r==0:
+            begin += 1
+        else:
+            begin += 5-r
+    if not begin >= 5: raise logic-err
+    if not begin&3 == 1: raise logic-err
+    if may_end is None:
+        it = count(begin, 4)
+    else:
+        it = iter(range(begin, may_end, 4))
+
+    if turnon__is_prime__le_pow2_64:
+        #using is_prime__le_pow2_64
+        for u in it:
+            if is_prime__le_pow2_64(u):
+                yield u
+    else:
+        #using factor_uint__via_min_factor_list
+        if may_end is None:
+            N0 = 2*begin
+        else:
+            N0 = may_end
+        factor_uint__via_min_factor_list(N0)
+            #force cache
+
+        for u in it:
+            p2e = factor_uint__via_min_factor_list(u)
+            if len(p2e)==1 and p2e=={u:1}:
+                #and all(e==1 and p%4==1 for p,e in p2e.items()):
+                yield u

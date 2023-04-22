@@ -1,5 +1,14 @@
 
 r"""
+=====cancel:closed_rngs__www:modified:@20230414:
+#!! ,(0xe000, 0xf900): 'Private Use Area'
+#   ==>> remove:
+    #,(0xE815, 0xE86F): (81, 'PUA(GBK)部件')
+    #,(0xE400, 0xE5E8): (452, '部件扩展')
+    #,(0xE600, 0xE6CF): (207, 'PUA增补')
+
+
+=====
 rename/move file:
     script/ls笔顺码字符范围.py
     -->
@@ -9,7 +18,8 @@ rename/move file:
 
 
 ======after mv
-from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import union_ranges
+from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import union_ranges, union_ranges__exclude_Private_Use_Area
+from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import range2block_name__5__ucd__Blocks_txt__ver13_0
 
 py -m nn_ns.CJK.CJK_data.raw.汉字相关字符范围 -do ls笔顺码字符范围__closed_rngs > ~/tmp/ls笔顺码字符范围.txt
 py -m nn_ns.CJK.CJK_data.raw.汉字相关字符范围 -do cmp3
@@ -38,7 +48,13 @@ data from
 
 
 __all__ = """
+    range2block_name__5__ucd__Blocks_txt__ver13_0
+        diff___ranges5ucd__Blocks_txt__ver13_0___union_Ranges
+
     union_ranges
+    union_ranges__exclude_Private_Use_Area
+    union_Ranges
+    union_Ranges__exclude_Private_Use_Area
         mk笔顺码字符范围__rngs
             load_汉字到笔顺码
         closed_rngs__unicode_13_0_0
@@ -69,7 +85,7 @@ from seed.data_funcs.rngs import (
 
 #==== www
 #(include,include)
-closed_rngs__www =\
+closed_rngs__www = (
 {(0x4E00, 0x9FA5): (20902, '基本汉字')
 ,(0x9FA6, 0x9FEF): (74, '基本汉字补充')
 ,(0x3400, 0x4DB5): (6582, '扩展A')
@@ -82,19 +98,24 @@ closed_rngs__www =\
 ,(0x2E80, 0x2EF3): (115, '部首扩展')
 ,(0xF900, 0xFAD9): (477, '兼容汉字')
 ,(0x2F800, 0x2FA1D): (542, '兼容扩展')
-,(0xE815, 0xE86F): (81, 'PUA(GBK)部件')
-,(0xE400, 0xE5E8): (452, '部件扩展')
-,(0xE600, 0xE6CF): (207, 'PUA增补')
+#...
+#!! ,(0xe000, 0xf900): 'Private Use Area'
+#   ==>> remove:
+    ,(0xE815, 0xE86F): (81, 'PUA(GBK)部件')
+    ,(0xE400, 0xE5E8): (452, '部件扩展')
+    ,(0xE600, 0xE6CF): (207, 'PUA增补')
+#...
 ,(0x31C0, 0x31E3): (36, '汉字笔画')
 ,(0x2FF0, 0x2FFB): (12, '汉字结构')
 ,(0x3105, 0x312F): (43, '汉语注音')
 ,(0x31A0, 0x31BA): (22, '注音扩展')
 ,(0x3007, 0x3007): (1, '〇')
 }
+)
 
 #===vs unicode 13.0.0 :: charts-East_Asian_Scripts
 #(include,include)
-closed_rngs__unicode_13_0_0 =\
+closed_rngs__unicode_13_0_0 = (
 [(0x20000, 0x2A6DD) #bug:0x2A6CF
 ,(0x2A700, 0x2B734)
 ,(0x2B740, 0x2B81D)
@@ -112,10 +133,12 @@ closed_rngs__unicode_13_0_0 =\
 ,(0x4E00, 0x9FFC)
 ,(0xF900, 0xFAFF) #0xFAD9
 ]
+)
 
 # w|u|m #see below cmp3()
 #汉字相关字符范围
-union_ranges =\
+#(include,exclude)
+union_ranges = (
 ((0x2E80, 0x2FE0)
 ,(0x2FF0, 0x3000)
 ,(0x3007, 0x3008)
@@ -135,6 +158,132 @@ union_ranges =\
 ,(0x2F800, 0x2FA20)
 ,(0x30000, 0x3134B)
 )
+)
+
+rng4Private_Use_Area = (0xe000, 0xf900)
+union_ranges__exclude_Private_Use_Area  = (
+((0x2E80, 0x2FE0)
+,(0x2FF0, 0x3000)
+,(0x3007, 0x3008)
+,(0x3100, 0x3130)
+,(0x31A0, 0x31F0)
+,(0x3400, 0x4DC0)
+,(0x4E00, 0x9FFD)
+#,(0xE400, 0xE5E9)
+#,(0xE600, 0xE6D0)
+#,(0xE815, 0xE870)
+,(0xF900, 0xFB00)
+,(0x20000, 0x2A6DE)
+,(0x2A700, 0x2B735)
+,(0x2B740, 0x2B81E)
+,(0x2B820, 0x2CEA2)
+,(0x2CEB0, 0x2EBE1)
+,(0x2F800, 0x2FA20)
+,(0x30000, 0x3134B)
+)
+)
+
+assert union_ranges__exclude_Private_Use_Area == (make_Ranges(union_ranges) -make_Ranges([rng4Private_Use_Area])).ranges
+#[[
+...
+#add@20230414:
+#===:
+#view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py.out.ver13_0.txt
+# 区末尾 包含 非字符(非赋值的点)
+#(include,exclude)
+range2block_name__5__ucd__Blocks_txt__ver13_0= (
+{(0x2e80, 0x2f00)
+: 'CJK Radicals Supplement'
+,(0x2f00, 0x2fe0)
+: 'Kangxi Radicals'
+,(0x2ff0, 0x3000)
+: 'Ideographic Description Characters'
+#,(0x3000, 0x3040)
+#: 'CJK Symbols and Punctuation'
+,(0x3100, 0x3130)
+: 'Bopomofo'
+,(0x31a0, 0x31c0)
+: 'Bopomofo Extended'
+,(0x31c0, 0x31f0)
+: 'CJK Strokes'
+#,(0x3200, 0x3300)
+#: 'Enclosed CJK Letters and Months'
+#,(0x3300, 0x3400)
+#: 'CJK Compatibility'
+,(0x3400, 0x4dc0)
+: 'CJK Unified Ideographs Extension A'
+,(0x4e00, 0xa000)
+: 'CJK Unified Ideographs'
+,(0xf900, 0xfb00)
+: 'CJK Compatibility Ideographs'
+#,(0xfe30, 0xfe50)
+#: 'CJK Compatibility Forms'
+,(0x20000, 0x2a6e0)
+: 'CJK Unified Ideographs Extension B'
+,(0x2a700, 0x2b740)
+: 'CJK Unified Ideographs Extension C'
+,(0x2b740, 0x2b820)
+: 'CJK Unified Ideographs Extension D'
+,(0x2b820, 0x2ceb0)
+: 'CJK Unified Ideographs Extension E'
+,(0x2ceb0, 0x2ebf0)
+: 'CJK Unified Ideographs Extension F'
+,(0x2f800, 0x2fa20)
+: 'CJK Compatibility Ideographs Supplement'
+,(0x30000, 0x31350)
+: 'CJK Unified Ideographs Extension G'
+}
+)
+
+union_Ranges = make_NonTouchRanges(union_ranges)
+union_Ranges__exclude_Private_Use_Area = make_NonTouchRanges(union_ranges__exclude_Private_Use_Area)
+assert not union_Ranges.contains_all(range2block_name__5__ucd__Blocks_txt__ver13_0)
+    # <<== 区末尾 包含 非字符(非赋值的点)
+ranges5ucd__Blocks_txt__ver13_0 = make_Ranges(range2block_name__5__ucd__Blocks_txt__ver13_0)
+diff___ranges5ucd__Blocks_txt__ver13_0___union_Ranges = (
+#(0x3000, 0x3007)
+#,(0x3008, 0x3040)
+#,(0x3200, 0x3400)
+((0x9FFD, 0xA000)
+#,(0xFE30, 0xFE50)
+,(0x2A6DE, 0x2A6E0)
+,(0x2B735, 0x2B740)
+,(0x2B81E, 0x2B820)
+,(0x2CEA2, 0x2CEB0)
+,(0x2EBE1, 0x2EBF0)
+,(0x3134B, 0x31350)
+)
+)
+diff___union_Ranges___ranges5ucd__Blocks_txt__ver13_0 = (
+((0x3007, 0x3008)
+,(0xE400, 0xE5E9)
+,(0xE600, 0xE6D0)
+,(0xE815, 0xE870)
+)
+)
+
+assert (union_Ranges__exclude_Private_Use_Area -ranges5ucd__Blocks_txt__ver13_0).ranges == ((0x3007, 0x3008),)
+assert (union_Ranges -ranges5ucd__Blocks_txt__ver13_0).ranges == diff___union_Ranges___ranges5ucd__Blocks_txt__ver13_0
+assert 789 == make_Ranges(diff___union_Ranges___ranges5ucd__Blocks_txt__ver13_0).len_ints()
+assert (ranges5ucd__Blocks_txt__ver13_0 -union_Ranges).ranges == diff___ranges5ucd__Blocks_txt__ver13_0___union_Ranges
+assert 52 == make_Ranges(diff___ranges5ucd__Blocks_txt__ver13_0___union_Ranges).len_ints()
+#assert 659 == 52+(64-1)+256*2+32 == make_Ranges(diff___ranges5ucd__Blocks_txt__ver13_0___union_Ranges).len_ints()
+{(0x3200, 0x3300)
+: 'Enclosed CJK Letters and Months'
+,(0x3300, 0x3400)
+: 'CJK Compatibility'
+,(0xfe30, 0xfe50)
+: 'CJK Compatibility Forms'
+}
+if 0:
+    ''.join(map(chr, range(0x3200, 0x3300)))
+    ''.join(map(chr, range(0x3300, 0x3400)))
+    ''.join(map(chr, range(0xfe30, 0xfe50)))
+
+    ''.join(map(chr, range(0xE815, 0xE865)))
+    ''.join(map(chr, range))
+
+#]]
 
 
 def load_汉字到笔顺码():
@@ -168,6 +317,19 @@ def show_hex_uint_pairs(uint_pairs, *, fout):
         assert a >= 0
         assert b >= 0
         fprint(f",(0x{a:X}, 0x{b:X})", file=fout)
+#show_hex_uint_pairs((ranges5ucd__Blocks_txt__ver13_0 -union_Ranges).ranges, fout=None)
+    #diff___ranges5ucd__Blocks_txt__ver13_0___union_Ranges
+#show_hex_uint_pairs((union_Ranges -ranges5ucd__Blocks_txt__ver13_0).ranges, fout=None)
+    # diff___union_Ranges___ranges5ucd__Blocks_txt__ver13_0
+    #
+    # ,(0xE400, 0xE5E9)
+    # ,(0xE600, 0xE6D0)
+    # ,(0xE815, 0xE870)
+    #
+    #but:
+    # ,(0xe000, 0xf900)
+    # : 'Private Use Area'
+    #
 def rngs_to_closed_rngs(rngs):
     for begin, end in rngs:
         assert begin < end
@@ -247,12 +409,49 @@ def prepare_for_2汉字粗拆分2(*, fout):
 
 
 if 0 and __name__ == '__main__':
+    assert (0xE815, 0xE865) in mk笔顺码字符范围__Range()
+if 0 and __name__ == '__main__':
     if 0:
         ls笔顺码字符范围__closed_rngs(fout=None)
         #1709 lines
     else:
         cmp3(fout=None)
         r"""
+=========
+=========new@20230414:
+|w|=89340
+|u|=94396
+|m|=29759 #??? #below:29685
+=========
+|u-w|=5057
+|m-w|=80
+|w-u|=1
+|m-u|=80
+|w-m|=59661
+|u-m|=64717
+=========
+|union|=94477
+|union.ranges|=16
+=========
+union.ranges =\
+,(0x2E80, 0x2FE0)
+,(0x2FF0, 0x3000)
+,(0x3007, 0x3008)
+,(0x3100, 0x3130)
+,(0x31A0, 0x31F0)
+,(0x3400, 0x4DC0)
+,(0x4E00, 0x9FFD)
+,(0xE815, 0xE865) #??? #!! from 笔顺码字符范围？
+,(0xF900, 0xFB00)
+,(0x20000, 0x2A6DE)
+,(0x2A700, 0x2B735)
+,(0x2B740, 0x2B81E)
+,(0x2B820, 0x2CEA2)
+,(0x2CEB0, 0x2EBE1)
+,(0x2F800, 0x2FA20)
+,(0x30000, 0x3134B)
+
+=========old:
 |w|=90128
 |u|=94396
 |m|=29685
@@ -336,6 +535,15 @@ def main(args=None):
     may_ofname = args.output
     with may_open_stdout(may_ofname, omode, encoding=encoding) as fout:
         f(fout=fout)
+
+
+from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import union_ranges, union_ranges__exclude_Private_Use_Area
+from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import union_Ranges, union_Ranges__exclude_Private_Use_Area
+from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import range2block_name__5__ucd__Blocks_txt__ver13_0
+from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import diff___ranges5ucd__Blocks_txt__ver13_0___union_Ranges
+
+
+from nn_ns.CJK.CJK_data.raw.汉字相关字符范围 import *
 if __name__ == "__main__":
     main()
 

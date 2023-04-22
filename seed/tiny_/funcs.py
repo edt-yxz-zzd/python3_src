@@ -1,4 +1,3 @@
-#from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, with_key, mk_fprint, fprint, py_cmp, int2cmp
 
 
 __all__ = '''
@@ -26,6 +25,7 @@ __all__ = '''
 
     xor
     xnor
+    not_
 
     with_key
     mk_fprint
@@ -64,6 +64,7 @@ def xor(a, b, /):
     return bool(a) != bool(b)
 def xnor(a, b, /):
     return bool(a) == bool(b)
+def not_(b, /): return not b
 
 def with_key(key, iterable, /):
     '''with_key=map_with_input :: (a->k) -> Iter a -> Iter (k, a)'''
@@ -91,3 +92,5 @@ def int2cmp(i, /):
     return -1 if i < 0 else +1
 
 
+from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp
+from seed.tiny_.funcs import *

@@ -2,6 +2,48 @@
 e ../../python3_src/seed/recognize/CmdlinePrefixParser.py
 
 
+DONE:e script/matrix_chain_product.py
+  !mv script/matrix_chain_product.py script/matrix_chain_product[20221118].py
+  e others/book/matrix_chain_product/Computation of matrix chain products I,II(1984)(Hu)(Shing)[polygon partitioning].pdf.txt
+  必需:
+    DONE:e ../../python3_src/seed/types/MergeableHeap.py
+    DONE:e ../../python3_src/seed/types/MergeableHeap__immutable_tree.py
+    DONE:e ../../python3_src/seed/types/MergeableHeap__mutable_tree.py
+DONE:e ../../python3_src/seed/math/matrix_chain_product/*
+
+DONE:e ../../python3_src/seed/types/CuttableStream.py
+TODO:
+  e ../../python3_src/seed/recognize/recognizer_combinator.py
+  e ../../python3_src/seed/recognize/recognizer_combinator_executor.py
+  e ../../python3_src/seed/recognize/recognizer_combinator_utils.py
+
+
+DONE:
+  view ../../python3_src/seed/graph/DGraph4GrowingOnly.py
+  view ../../python3_src/seed/tiny_/singleton.py
+  view ../../python3_src/seed/iters/generator_iterator_capturer.py
+  view ../../python3_src/seed/mapping_tools/example4py_dict_impl.py
+  view ../../python3_src/seed/algo/computing_network.py
+DONE:
+  view ../../python3_src/seed/mapping_tools/example4py_dict_impl.py
+  view ../../python3_src/seed/mapping_tools/determine_num_slots4hash_map.py_dict_impl.txt
+
+e ../../python3_src/seed/types/DictWithNewProtocol__ver2.py
+DONE:e ../../python3_src/seed/types/DictWithNewProtocol.py
+  vs view ../../python3_src/seed/types/FrozenDict.py
+  主要意图:
+    * 用tuple实现 dict，真FrozenDict，满足 seed.lang.is_immutable_pure_value
+    * 避开type(key).__hash__/__eq__，用户定制:type(DictWithNewProtocol).__get_hash_protocol__()->HashProtocol.key_hash/key_eq/storage_key2query_key
+    * 实现get_item(outer_key)->(inner_key,value)
+  DONE:e ../../python3_src/seed/math/search_smallest_prime_ge_.py
+  DONE:e ../../python3_src/seed/math/primes4hash_mapping.py
+    e script/primes4hash_mapping.py
+  from seed.math.primes4hash_mapping import find_suitable_seq_size4hash_mapping__tabular, primes4hash_mapping__largest_prime_lt_pow2_64
+  from seed.math.search_smallest_prime_ge_ import find_suitable_seq_size4hash_mapping__search, search_smallest_prime_ge_, search_smallest_prime_gt_, search_largest_prime_le_, search_largest_prime_lt_
+
+
+e script/pairwise_parallel_schedule.py
+
 
 backup_tools
   nn_ns.filedir.backup_tools._debug
@@ -449,6 +491,12 @@ DONE:hzs_2573 --> hanzi.py
 ]]]
 
 
+TODO:
+e ../../python3_src/seed/recognize/recognizer_combinator_executor.py
+TODO:
+e script/hz/汉字笔顺码初步分解.py
+
+
 
 
 
@@ -553,6 +601,7 @@ function filterInt(value) {
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 [[[
 view others/数学/编程/永恒代码/原貌字符串.txt
+  view ../../python3_src/seed/seq_tools/mk_nonsubseq_of.py
 原貌字符串
   求一有效结束串囗特定原貌字符串(结束串的结束串，结束串字集，原貌字符串)
     前置条件:

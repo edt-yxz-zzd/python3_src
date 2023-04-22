@@ -3,6 +3,9 @@ deprecated by new version py_eval:
     #py -m nn_ns.app.hex -i "$@"
     py -m nn_ns.app.py_eval --postprocess 'hex' -i "$@"
 
+also:
+    printf $'%x\n' $[0x8000-0x80]
+    7f80
 ######################
 py -c 'print(hex(333))'
 0x14d
@@ -37,7 +40,11 @@ def main(args=None, /):
 
     parser = argparse.ArgumentParser(
         description='python eval then hex then print'
-        , epilog=''
+        , epilog=r'''
+also:
+    printf $'%x\n' $[0x8000-0x80]
+    7f80
+        '''#'''
         , formatter_class=argparse.RawDescriptionHelpFormatter
         )
     parser.add_argument('-i', '--input', type=str, nargs='*', default=[]

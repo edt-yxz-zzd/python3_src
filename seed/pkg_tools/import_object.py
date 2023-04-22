@@ -1,16 +1,26 @@
+r'''
+e ../../python3_src/seed/pkg_tools/import_object.py
+
+seed.pkg_tools.import_object
+
+from seed.pkg_tools.import_object import import_object, import4qobject
+
+#'''
 
 __all__ = '''
     import_object
+    import4qobject
     '''.split()
 
 
 
 import builtins
 from importlib import import_module
+from operator import attrgetter
 
 
 
-def import_object(qual_name, module_obj=None):
+def import_object(qual_name, module_obj=None, /):
     '''
 
 example:
@@ -74,4 +84,24 @@ if __name__ == "__main__":
         err_qname = __package__ + '.' + '__main__'
         assert err_qname not in sys.modules
 
+def check_may_str(may_s, /):
+    if not (may_s is None or type(may_s) is str): raise TypeError
+
+def import4qobject(may_qname4module, may_qname4obj, /):
+    check_may_str(may_qname4obj)
+    check_may_str(may_qname4module)
+    if may_qname4module:
+        qname4module = may_qname4module
+        module_obj = import_module(qname4module)
+    else:
+        module_obj = builtins
+
+    if may_qname4obj:
+        qname4obj = may_qname4obj
+        obj = attrgetter(qname4obj)(module_obj)
+    else:
+        obj = module_obj
+    return obj
+
+from seed.pkg_tools.import_object import import_object, import4qobject
 

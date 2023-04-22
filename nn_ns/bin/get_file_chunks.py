@@ -4,6 +4,41 @@ f.seek(chunk_size * offset);
 ValueError: cannot fit 'int' into an offset-sized integer
     NOTE:
         file_byte_offset = begin*chunk_size
+
+see:hexdump
+    /data/data/com.termux/files/usr/bin/hexdump
+[
+$ hexdump --help
+
+Usage:
+ hexdump [options] <file>...
+
+Display file contents in hexadecimal, decimal, octal, or ascii.
+
+Options:
+ -b, --one-byte-octal      one-byte octal display
+ -c, --one-byte-char       one-byte character display
+ -C, --canonical           canonical hex+ASCII display
+ -d, --two-bytes-decimal   two-byte decimal display
+ -o, --two-bytes-octal     two-byte octal display
+ -x, --two-bytes-hex       two-byte hexadecimal display
+ -L, --color[=<mode>]      interpret color formatting specifiers
+                             colors are enabled by default
+ -e, --format <format>     format string to be used for displaying data
+ -f, --format-file <file>  file that contains format strings
+ -n, --length <length>     interpret only length bytes of input
+ -s, --skip <offset>       skip offset bytes from the beginning
+ -v, --no-squeezing        output identical lines
+
+ -h, --help                display this help
+ -V, --version             display version
+
+Arguments:
+ <length> and <offset> arguments may be followed by the suffixes for
+   GiB, TiB, PiB, EiB, ZiB, and YiB (the "iB" is optional)
+
+For more details see hexdump(1).
+]
 #"""
 
 

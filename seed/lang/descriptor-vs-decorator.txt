@@ -1,0 +1,18 @@
+
+e ../../python3_src/seed/lang/descriptor-vs-decorator.txt
+
+
+@decorator
+def f...
+@decorator
+class C...
+
+
+cls.__dict__[nm] = descriptor
+  __get__
+  __set__
+  __delete__ vs __del__
+    vs __delattr__ vs __delitem__
+
+
+

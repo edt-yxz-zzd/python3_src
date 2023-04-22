@@ -1,0 +1,4 @@
+py -m nn_ns.app.args "$@"
+#py -m nn_ns.app.args "$0"
+#py -m nn_ns.app.args "$#"
+#py -m nn_ns.app.args "$*"

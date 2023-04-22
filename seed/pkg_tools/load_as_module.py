@@ -1,4 +1,21 @@
 r'''
+view ../../python3_src/seed/pkg_tools/load_as_module.py
+from seed.pkg_tools.load_as_module import load_as_module, reload_module_or_package
+m = load_as_module('m', 'script/hz/汉字笔顺码初步分解.py')
+reload_module_or_package('m')
+
+xxx drop_module_or_package('m')
+    reload()???
+
+
+importlib.reload(module_obj)->module_obj
+from importlib import reload, invalidate_caches
+import seed.pkg_tools.load_as_module
+reload(seed.pkg_tools.load_as_module)
+invalidate_caches()
+
+
+
 usage:
     import xxx.yyy
     zzz = load_as_package('xxx.yyy.zzz', 'path/to/zzz__init__.py')
@@ -41,15 +58,18 @@ see:
 '''
 
 __all__ = '''
-    load_as_package
-    load_as_module
+    reload_module_or_package
     load_as_module_or_package
+        load_as_package
+        load_as_module
     load_as_module_or_package_ex
     '''.split()
+    #drop_module_or_package
 
 from importlib.util import (spec_from_loader, spec_from_file_location, module_from_spec)
 from importlib.machinery import SourceFileLoader
 from importlib import import_module
+from importlib import reload, invalidate_caches
 import sys
 from pathlib import Path
 
@@ -59,17 +79,32 @@ if False:
     assert str(Path('.').resolve()) != str(Path('.'))
     assert Path('.').resolve().samefile(Path('.'))
 
+
+
 def load_as_package(
-    pkg_qname, pkg_source_path):
+    pkg_qname, pkg_source_path, /):
     #assert submodule_search_locations is not None
     return load_as_module_or_package(
             pkg_qname, pkg_source_path, is_package=True)
 
-def load_as_module(module_qname, module_source_path):
+def load_as_module(module_qname, module_source_path, /):
     return load_as_module_or_package(
             module_qname, module_source_path, is_package=False)
+def reload_module_or_package(qname, /):
+    if qname not in sys.modules:
+        raise ImportError(f'reload_module_or_package:not-found:{qname!r}')
+    reload(sys.modules[qname])
+        #File "/data/data/com.termux/files/usr/lib/python3.10/importlib/__init__.py", line 168, in reload
+        #ModuleNotFoundError: spec not found for the module 'm'
+def drop_module_or_package(qname, /):
+    raise 删-sys.modules[qname]-无用--因为再次加载仍使用旧.pyc或另有cache
+    if qname not in sys.modules:
+        raise ImportError(f'drop_module_or_package:not-found:{qname!r}')
+    #invalidate_caches
+    sys.modules[qname].__loader__.invalidate_caches()
+    del sys.modules[qname]
 def load_as_module_or_package(
-    qname, source_path, *, is_package:bool):
+    qname, source_path, /, *, is_package:bool):
     #assert maybe_submodule_search_locations is None or iter(maybe_submodule_search_locations)
     assert type(qname) is str
     if not (qname and qname[0] != '.'): raise ValueError
@@ -81,7 +116,7 @@ def load_as_module_or_package(
             pass
 
 
-    def make_maybe_parent_bare(may_qname):
+    def make_maybe_parent_bare(may_qname, /):
         if not may_qname: return None
         qname = may_qname
         maybe_parent_package_qname, may_sep, bare_name = qname.rpartition('.')
@@ -116,6 +151,11 @@ def load_as_module_or_package(
                                   = maybe_submodule_search_locations
                                 )
     module = module_from_spec(spec)
+    module.__spec__
+    module.__loader__
+    if module.__spec__ is None is not spec:
+        raise '因为reload(m)删了m.__spec__，使人以为这里未设置'
+        module.__spec__ = spec
 
     if is_package:
         submodule_search_locations = maybe_submodule_search_locations
@@ -126,7 +166,8 @@ def load_as_module_or_package(
         __package__ = maybe_parent_package_qname
         __path__ = None
     #rint(f'{module.__package__} == {__package__}')
-    assert module.__package__ == __package__
+    #bug:@[qname=='m']:assert module.__package__ == __package__
+    assert module.__package__ == __package__ or (module.__package__=='' and __package__ is None), (module.__package__, __package__)
     assert getattr(module, '__path__', None) is __path__
     if is_package:
         [parent_folder] = module.__path__
@@ -137,6 +178,7 @@ def load_as_module_or_package(
     new_module = sys.modules.setdefault(qname, module)
         # before exec_module to support recursive import
         # before exec_module to support relative import if is_package
+    assert qname in sys.modules
     if new_module is not module:
         return new_module
     try:
@@ -149,17 +191,19 @@ def load_as_module_or_package(
         try:
             spec.loader.exec_module(module)
         except:
-            delattr(parent_package, bare_name)
+            if maybe_parent_package_qname:
+                delattr(parent_package, bare_name)
             raise
     except:
         sys.modules.pop(qname)
         raise
+    assert qname in sys.modules
     return module
 
 def load_as_module_or_package_ex(
     may_qname_using_normal_import
     , bare_name_source_path_pairs
-    , *, is_package:bool
+    , /, *, is_package:bool
     ):
     '''(None|str) -> [(bare_name, source_path)] -> (is_package:bool) -> (module_obj|package_obj)
 

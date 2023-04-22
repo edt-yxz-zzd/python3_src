@@ -1,0 +1,2 @@
+
+view ../../python3_src/seed/pkg_tools/load_resource.py

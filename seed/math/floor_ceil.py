@@ -25,6 +25,11 @@ py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
 
 
 py -m seed.math.floor_ceil
+
+py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.floor_ceil @floor_log2 =57*59*60*61*71*72*73
+42
+
+
 from seed.math.floor_ceil import floor_div, ceil_div
 from seed.math.floor_ceil import floor_log2, ceil_log2
 from seed.math.floor_ceil import floor_log2_kth_root_, ceil_log2_kth_root_

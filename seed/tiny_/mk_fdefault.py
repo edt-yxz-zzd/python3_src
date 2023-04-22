@@ -1,4 +1,4 @@
-
+#__all__:goto
 #[[[__doc__-begin
 r'''
 
@@ -7,6 +7,23 @@ seed.tiny_.mk_fdefault
         seed.mapping_tools.fdefault
 py -m seed.tiny_.mk_fdefault
 py -m nn_ns.app.debug_cmd   seed.tiny_.mk_fdefault
+
+xdefault # imay, xdefault, ...
+    see: mk_default
+xedefault # -3- ?, ..., mirror=?
+    see: mk_default_or_raise===mk_default_or_raise__ver2
+zdefault # ... # handle all cases
+    see: mk_default__easy===mk_default5zdefault
+
+
+
+from seed.tiny_.mk_fdefault import mk_default__easy, mk_default, mk_default_or_raise
+    #def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
+    #def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
+    #def mk_default_or_raise(mirror_imay_xedefault_rank, xedefault, /, *args4xedefault, mirror:bool):
+    #   imay_xdefault_ranks = (-3)-mirror_imay_xedefault_rank if mirror_imay_xedefault_rank < -1 else mirror_imay_xedefault_rank
+    #   mirrored = (mirror_imay_xedefault_rank < -1) ^ bool(mirror)
+    #
 
 from seed.tiny_.mk_fdefault import mk_fdefault, mk_default, eliminate_tmay__mix, eliminate_tmay_or_raise__simple, BasePermissionMappingOps, SimplePermissionMappingOps, XDefaultDict, ops4XDefaultMapping
 
@@ -654,6 +671,80 @@ uniform_read_calc_update
 #>>> ops.detect_set__overwrite_or_pass(d, 2, lambda:4)
 #>>> ops.drop__delete_or_pass(d, 2)
 
+
+
+
+
+>>> from seed.tiny_.mk_fdefault import mk_default__easy, mk_default5zdefault
+>>> class ok(Exception):pass
+>>> class bad(Exception):pass
+
+>>> mk_default5zdefault is mk_default__easy
+>>> mk_default__easy(111)
+>>> mk_default__easy(111)
+111
+>>> mk_default__easy(-1, 111)
+111
+>>> mk_default__easy(0, ok)
+ok()
+>>> mk_default__easy(1, ok, 111)
+ok(111)
+>>> mk_default__easy(2, ok, 333, 222, 111)
+ok(222, 111)
+>>> mk_default__easy(1, ok, 333, 222, 111)
+ok(111)
+>>> mk_default__easy(0, ok, 333, 222, 111)
+ok()
+
+>>> mk_default__easy(-3- -1, 111, mirror=True)
+111
+>>> mk_default__easy(-3- 0, ok, mirror=True)
+ok()
+>>> mk_default__easy(-3- 1, ok, 111, mirror=True)
+ok(111)
+
+
+
+>>> mk_default__easy()
+Traceback (most recent call last):
+    ...
+TypeError: miss default value
+>>> mk_default__easy(mirror=True)
+Traceback (most recent call last):
+    ...
+TypeError: miss default value
+
+
+>>> mk_default__easy(-1, bad(111), mirror=True)
+Traceback (most recent call last):
+    ...
+bad: 111
+>>> mk_default__easy(0, bad, mirror=True)
+Traceback (most recent call last):
+    ...
+bad
+>>> mk_default__easy(1, bad, 111, mirror=True)
+Traceback (most recent call last):
+    ...
+bad: 111
+
+
+>>> mk_default__easy(-3- -1, bad(111))
+Traceback (most recent call last):
+    ...
+bad: 111
+>>> mk_default__easy(-3- 0, bad)
+Traceback (most recent call last):
+    ...
+bad
+>>> mk_default__easy(-3- 1, bad, 111)
+Traceback (most recent call last):
+    ...
+bad: 111
+
+
+
+
 #]]]doctest_examples:END
 
 #'''
@@ -698,6 +789,8 @@ __all__ = '''
 
 
 
+    mk_default__easy
+        mk_default5zdefault
     mk_default_or_raise
         mirror_rank2imay_rank
         mk_default_or_raise__ver1
@@ -727,7 +820,8 @@ __all__ = '''
             XDefaultHashMappingMixin
                 XDefaultMappingMixin
                 MappingMixin__auto_setdefault_via_slice4HashMap
-    '''.split()
+    '''.split()#'''
+__all__
 
 from types import MappingProxyType
 from seed.tiny_.check import check_type_is, check_imay, check_callable, check_pair, check_is_None
@@ -946,6 +1040,35 @@ def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
         assert len(args) == L
         default = args2default(*args)
     return default
+def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
+    L = len(tmay_Nothing___or___args4mk_default_or_raise)
+
+    if L == 0:
+        [] = tmay_Nothing = tmay_Nothing___or___args4mk_default_or_raise
+        raise TypeError('miss default value')
+    elif L == 1:
+        [Nothing] = tmay_Nothing = tmay_Nothing___or___args4mk_default_or_raise
+        if mirror:
+            exception = Nothing
+            raise exception
+        default = Nothing
+    else:
+        (mirror_imay_xedefault_rank, xedefault, *args4xedefault) = args4mk_default = tmay_Nothing___or___args4mk_default_or_raise
+        default = mk_default_or_raise(mirror_imay_xedefault_rank, xedefault, *args4xedefault, mirror=mirror)
+    default
+    return default
+mk_default5zdefault = mk_default__easy
+from seed.tiny_.mk_fdefault import mk_default__easy, mk_default, raise4mk_default_or_raise, mk_default_or_raise
+    #def mk_default_or_raise(mirror_imay_xedefault_rank, xedefault, /, *args4xedefault, mirror:bool):
+    #   imay_xdefault_ranks = (-3)-mirror_imay_xedefault_rank if mirror_imay_xedefault_rank < -1 else mirror_imay_xedefault_rank
+    #   mirrored = (mirror_imay_xedefault_rank < -1) ^ bool(mirror)
+    #
+    #def raise4mk_default_or_raise(imay_xedefault_rank, xedefault, /, *args4xedefault):
+    #def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
+    #def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
+
+
+
 
 # zzz-elimination-rule vs zzz-introduction-rule (above mk_tmay_from_...)
 def eliminate_tmay__cased(tmay_value, imay_xdefault_rank, xdefault, /, *args4xdefault):

@@ -1,0 +1,33 @@
+quote ()
+{
+    local quoted=${1//\'/\'\\\'\'};
+    printf "'%s'" "$quoted"
+} ;
+
+
+for nm ; do {
+    if which "$nm" ; then {
+        if man -c "$nm" | col -b -x > others/app/termux/help/"$nm".man.txt ; then {
+            echo ok: man -c "$nm" ;
+            grep '^ \? \? \?\S' others/app/termux/help/"$nm".man.txt > others/app/termux/help/"$nm".man.outlines.txt ;
+        } else {
+            echo fail: man -c "$nm" ;
+        } fi ;
+
+        #bug:if "$nm" --help 2>&1  1>others/app/termux/help/"$nm".help.txt ; then {
+        #   as-if: fs[2] := fs[1]; f[1] := fs[?]
+        #   xxx as-if: (fs[2], fs[1]) := (f[1], fs[?])
+        if "$nm" --help  1>others/app/termux/help/"$nm".help.txt   2>&1 ; then {
+            echo ok: "$nm" --help ;
+        } else {
+            echo fail: "$nm" --help ;
+        } fi ;
+    } else {
+        #py -m nn_ns.app.args "$nm"
+        #   use 『"$nm"』 instead of 『$nm』
+        #echo not found:  \'"$nm"\' ;
+        echo not found:  $(quote "$nm") ;
+        # /sdcard/0my_files//git_repos//python3_src//bash_script//app/h: line 22: quote: command not found
+    } fi ;
+} done ;
+

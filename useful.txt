@@ -1,6 +1,8 @@
 template4module:goto
+固定于剪贴板的源文件模板:goto
 def__main:adhoc_argparser__main__call:main:goto
-repr_helper,stable_repr__expand_top_layer,recur5yield__list__echo__echo,factor_uint__via_min_factor_list
+vim_cmd___update_def_api_to_use_slash:goto
+repr_helper,stable_repr__expand_top_layer,recur5yield__list__echo__echo,factor_uint__via_min_factor_list,safe_eval,MakeDict
 
 debug:
   __main__ 模块!! import 所有自己的东西!! 避免两套数据
@@ -13,6 +15,7 @@ debug:
 #   > py .... > log.txt
 #
 
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
 py -m nn_ns.app.debug_cmd   xxx.yyy zzz.www
   to mk __all__
   to list toplayer defs:
@@ -63,6 +66,50 @@ r'''
 
 
 #################################
+copy from:
+view others/app/keyboard/clipboard.txt
+[[
+r'''[[[#]]]'''#'''
+  #固定于剪贴板
+
+#固定于剪贴板的源文件模板
+#__all__:goto
+r'''[[[
+
+py -m nn_ns.app.debug_cmd   x
+py_adhoc_call   x   @f
+py -m nn_ns.app.doctest_cmd x:__doc__ -ff -v
+from x import f
+#]]]'''
+__all__ = r'''
+'''.split()#'''
+__all__
+
+def __():
+    from seed.tiny import check_type_is, fst, snd, at
+    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
+    from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f, expectError
+    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
+    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+    from seed.helper.repr_input import repr_helper
+
+def __():
+  class _(ABC):
+    __slots__ = ()
+    raise NotImplementedError
+    ___no_slots_ok___ = True
+    def __repr__(sf, /):
+        return repr_helper(sf, *args, **kwargs)
+        return repr_helper_ex(sf, args, ordered_attrs, kwargs, ordered_attrs_only=False)
+    from seed.helper.repr_input import repr_helper_ex
+    from seed.helper.repr_input import repr_helper
+
+
+if __name__ == "__main__":
+    pass
+
+]]
+#################################
 #[[[[[template4module:begin
 #__all__:goto
 #main_body_src_code:goto
@@ -77,6 +124,8 @@ e ../../python3_src/xxx/yyy.py
 xxx.yyy
 py -m    xxx.yyy
 py -m nn_ns.app.debug_cmd   xxx.yyy
+py -m nn_ns.app.doctest_cmd xxx.yyy:fff -v
+py_adhoc_call   xxx.yyy @not_show.fff =123 :string --kw:arg ++kw_ls:elem -flag_off +flag_on
 
 from xxx.yyy import ...
 
@@ -101,7 +150,7 @@ from xxx.yyy import ...
 #HHHHH
 __all__ = '''
 
-    '''.split()
+    '''.split()#'''
 
 #################################
 #HHHHH
@@ -207,6 +256,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
+#vim_cmd___update_def_api_to_use_slash
 ===新版:
 %s/^\(\s*def \s*\w\+\s*[(]\(\s*\w\+[^/*),]*\)\(,\s*\w\+[^/*),]*\)*\)\(\(,\s*[*][^)]*\)\?[)]:\)/\1, \/\4/g
 ===但是对『def ...(...): ...』无效:
@@ -260,8 +310,9 @@ may
   #image of "2/two/to"
   from
 6/9:69
+  『(』/『)』
   down/up
-  阴/阳
+  阴/阳 #六/九
   6:sit/under-context/bind
 int:
   uint: unsigned_int, int_ge_0
@@ -270,28 +321,122 @@ int:
   #dint: reverse-positive_int, int_le_0
   imay: imay_uint, int_ge_n1, int>=-1
 
+ex_aaa,aaa_ex:前缀『ex_』后缀『_ex』
+xaaa:前缀『x』
+  * mix:aaa_or_bbb
+      sz_or_sz_reader --> xsz
+      smay_name_or_ignoreable_tag --> xname
+  * extended
+xxx__zzz:后缀『__zzz』
+  * __version:
+    f__ver1
+  * __type4dispatch:
+    read_xxx__ipath :: ipath -> xxx
+    read_xxx__ibfile :: ibfile -> xxx
+    read_xxx__ifile :: ifile -> xxx
+    read_xxx__txt :: str -> xxx
+    read_xxx__xml_tag :: bs4.xml_tag -> xxx
+    or:
+      read5txt
+      xxx5txt_
+      txt2xxx_
+  * __easy/__human:
+    f(a, b, /, c, *, d, e)
+      no default to avoid missing args when forwarding
+    f__easy(a, b=None, /, c=None, *, d, e=None)
+      as many defaults as possible
+xxxT:后缀『T』
+  mkr<callable>
+  curry-version-template
+  logT :: base -> (x -> x)
+  log_ :: (base; x) -> x
+xxx_:后缀『_』
+  * prev_ vs _next
+    old_ vs _new
+    prefix_ vs _suffix
+    left_ vs _right
+  * callable_
+    ## indicate miss/require some more args
+    fst_ # 『fst』 is 『noun』not『verb』
+        in Haskell, (fst xxx) means (xxx.fst)
+        in Python, using fst_ to indicate miss/require some more args
+    is_xxx_ok :: bool
+    is_xxx_ok_ :: xxx -> bool
+      to_do_xxx :: bool
+      do_xxx_ :: ... -> ...
+    xxx2yyy :: {xxx:yyy}
+    xxx2yyy_ :: xxx -> yyy
+  * template_ <: callable_
+    # indicate  miss/require some more template args besides normal args
+    e.g. choose<N>(i)/choose(N; i) ==>> choose_(N, i)
+    e.g. log2(x)/log10(x)/log<base>(x)/log(base; x) ==>> log(base, x)
+
+_xxx_:class.method:双缀『_』
+  vs: _xxx:like C++.(private&&non-virtual)
+  _xxx_ vs __xxx__
+    same: like C++.(private&&virtual)
+      , both are intended to be override by user
+      , but not be called by user
+    diff:
+      xxx_(sf, ...)
+      sf.xxx(...)
+      def global.xxx_(sf, ...):
+          type(sf).__xxx__(sf, ...)
+      class ???:
+          def class.method.xxx(sf, ...):
+              sf._xxx_(...)
 mk: make :: callable
   mkr: maker :: some-IMaker # has .mk_xxx(...)
+  gmk:get_or_make/lookup_cache__or__make_new
+  bmk:bracket-make:using __setitem__ instead of __call__
+rdr:reader
 ls: list or seq
   ps: pairs
   it: iterator not reiterable
   d: dict
 sf: self
   cls: class
+    ty/typ: type
   eqv: equivalent
-  ptn: partition
+  ptn: partition<set>, pattern<regex>
+  obj: object, instance
+fmt: format
+  #str.format()
+  #datatype format/def
+  #schema
 nm: name
   f: file
     fname, fout
+    ibfile/obfile: in/out binary stream
   i:input
   o:output
     ifnm
     opath
-    iencoding
+    ie:iencoding
     itxt
+  suffix of fname:
+    u8: utf8
+    gb - gbk, gb18030
+        view ++enc=gb18030 xxx.gb
+vs,or,cased:
+  ---
+  or: concept is either...or...
+    x_or_y
+      x,y are set/type/concept
+  ---
+  vs: case
+    x_vs_y:bool
+    x_vs_y_vs_z:[-1,0,+1]/[False,None/Ellips,True]/...
+      used as case, selector, ptr/idx
+      x,y,z are set/type/concept
+  ---
+  cased:
+    cased_xxx: (case,payload)
+  ---
 k: key
   v: value
   kw:keyword
+  kwds: kwargs
 idx:index
   idc:indices
   vtx : vertex
@@ -300,6 +445,8 @@ idx:index
   d/u : directed/undirected
   u,v :: uint
   e: encoding, exp
+    ie
+    base**exp
 
 len ~ len() ~ function ~ not noun
     len_ints/len_rngs
@@ -308,6 +455,20 @@ len ~ len() ~ function ~ not noun
     len_XXXs :: (xs) -> uint
 .+1,$s/len_bits/num_bits/g
 
+『』- 〖字符串常量〗
+      例:『是』这个字
+〖〗- 〖无文术语〗
+      未有〖正式定义源文本〗但文本领域内无歧义的非自然语言的技术性用语
+      例:〖紧致块〗
+      例:〖正式定义源文本〗
+      类比于:〖抽象对象方法〗
+      类比于:〖系统调用函数〗
+      类比于:〖标准库函数〗
+      类比于:〖第三方库函数〗
+      类比于:〖语言基础特性〗
+【】- 〖明文术语〗
+      已有〖正式定义源文本〗的非自然语言的技术性用语
+      其〖正式定义源文本〗可能使用了带『〖〗』的〖无文术语〗
 
 
 
@@ -324,7 +485,7 @@ from seed.tiny import str2__all__
 __all__ = str2__all__(r'''#)
     #(''')
 __all__ = '''
-    '''.split()
+    '''.split()#'''
 from itertools import chain
 from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
     # since abc.ABC has no "__slots__ = ()"
@@ -348,9 +509,9 @@ if __name__ == '__main__':
 
 from seed.helper.repr_input import repr_helper_ex
 from seed.helper.repr_input import repr_helper
-    def __repr__(self):
-        return repr_helper(self, *args, **kwargs)
-        return repr_helper_ex(self, args, ordered_attrs, kwargs, ordered_attrs_only=False)
+    def __repr__(sf, /):
+        return repr_helper(sf, *args, **kwargs)
+        return repr_helper_ex(sf, args, ordered_attrs, kwargs, ordered_attrs_only=False)
 from seed.abc import abstractmethod, ABC, final, override
 from seed.decorators.__special_method__ import (
     __static_method__
@@ -479,6 +640,8 @@ def main(args=None, /):
     import argparse
     from seed.io.may_open import may_open_stdin, may_open_stdout
     #from seed.io.savefile.unbuffered_growonly_dict_in_file import tabular_cached_calc
+    from seed.pkg_tools.load_resource import open_under_pkg_, read_under_pkg_
+    from seed.io.may_open import open4w, open4w_err, open4r
 
     parser = argparse.ArgumentParser(
         description=description_str
@@ -500,15 +663,21 @@ def main(args=None, /):
                         , help='open mode for output file')
 
     args = parser.parse_args(args)
+    omode = 'wt' if args.force else 'xt'
     iencoding = args.iencoding
     oencoding = args.oencoding
-    omode = 'wt' if args.force else 'xt'
+    iencoding = 'utf8' if not iencoding else iencoding
+    oencoding = 'utf8' if not oencoding else oencoding
 
     may_ifname = args.input
     with may_open_stdin(may_ifname, 'rt', encoding=iencoding) as fin:
+    with open4r(may_ifname, xencoding=iencoding) as fin:
+    with open_under_pkg_('seed.pkg_tools', 'xxx.dat', xencoding='u8' or None) as fin:
+    dat = read_under_pkg_('seed.pkg_tools', 'xxx.dat', xencoding='u8' or None)
 
     may_ofname = args.output
     with may_open_stdout(may_ofname, omode, encoding=oencoding) as fout:
+    with open4w(may_ofname, force=force, xencoding=oencoding) as fout:
 if __name__ == "__main__":
     main()
 nargs
@@ -536,6 +705,19 @@ if __name__ == "__main__":
         #main()
 
 
+现在，可以 指名模块；上面仅用于 脚本
+view ../../python3_src/nn_ns/app/adhoc_argparser__main__call8module.py
+%s/^py -m nn_ns.app.adhoc_argparser__main__call8module/py_adhoc_call/g
+py_adhoc_call       seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN @matrix_chain_product__polygon_partitioning__O_NlogN  --may_imin=None  '--_turnon_debug=0'  ='[10,11,25,40,12]'
+py_adhoc_call       seed.math.matrix_chain_product.matrix_chain_product__dynamic_programming__O_NNN ,matrix_chain_product__dynamic_programming__O_NNN ='[10,11,25,40,12]'
+adhoc_argparser__main__call8module新增:
+    @g.f
+    ,g.f
+
+    g=repr|str|ascii|hex|... #builtins.*
+     |not_show
+
+
 
 
 
@@ -558,6 +740,12 @@ if __name__ == '__main__':
         unbound_names = forgots = (DetectAllUnboundNames.from_module_qname(__name__))
 
 if __name__ == '__main__':
+    now:
+      py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   %seed.abc.IReprHelper:IReprHelper    =IReprHelper
+    now:
+      py -m nn_ns.app.adhoc_argparser__main__call8module  seed.helper.print_methods  @wrapped_print_methods   %seed.abc.IReprHelper:IReprHelper    =IReprHelper
+
+    ===old:
     XXX = ???
 
     from seed.helper.print_methods import wrapped_print_methods
@@ -656,6 +844,11 @@ class TestStringMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             s.split(2)
 
+    ##test-raise:
+      with self.assertRaises(SomeException) as cm:
+        do_something()
+      the_exception = cm.exception
+      self.assertEqual(the_exception.error_code, 3)
 
     @unittest.expectedFailure
     def test_fail(self):
@@ -743,6 +936,8 @@ from seed.func_tools.recur5yield import recur5yield__list__echo__echo, recur5yie
 
 
 
+from seed.helper.safe_eval import safe_eval, safe_exec, data_eval
+
 from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
 >>> print(stable_repr__expand_top_layer({1: 2, 3: [4,5]}))
   等价于下面
@@ -797,4 +992,14 @@ py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
 from nn_ns.math_nn.numbers.min_factor import min_factor, factor_uint__via_min_factor_list
 def factor_uint__via_min_factor_list(u, /, *, turnon__try_div=False, may_upperbound4primes4try_div=None, may_primes4try_div=None, threshold4max_sz4min_factor = (1<<28)):
 
+
+
+from seed.types.MakeDict import MakeDict, MakeOrderedDict, MakeOrderedDict__replace_then_move_to_end, ListSortedItems, ListOrderedItems, ListOrderedItems__replace_then_move_to_end
+class d(MakeOrderedDict):
+class ps(ListOrderedItems):
+def _():
+    ...
+    return {**locals()}
+    return sorted(locals().items())
+d/ps = _()
 

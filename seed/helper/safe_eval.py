@@ -46,13 +46,19 @@ True
 >>> data_eval("[1, {2: 3}, {4}, (), '', b'']")
 [1, {2: 3}, {4}, (), '', b'']
 >>> data_eval('set()') #doctest: +ELLIPSIS
-Traceback (most recent call last):
+set()
+
+py3_?:Traceback (most recent call last):
     ...
 ValueError: malformed node or string: <_ast.Call object at ...
+py3_10_5:set()
 >>> data_eval('max(1,2)') #doctest: +ELLIPSIS
 Traceback (most recent call last):
     ...
-ValueError: malformed node or string: <_ast.Call object at ...
+ValueError: malformed node or string...
+
+py3_?:ValueError: malformed node or string: <_ast.Call object at ...
+py3_10_5:ValueError: malformed node or string on line 1: <ast.Call object at ...>
 >>> data_eval('import sys')
 Traceback (most recent call last):
     ...
@@ -150,6 +156,93 @@ chang API-of-safe_eval:
     only-one-place-required-fixed:
         ./nn_ns/regex/Simple/string_regex_pattern.py:    regex = safe_eval(py_expr_str, locals)
 
+
+
+kw: global, nonlocal
+
+py_help collections@UserDict
+UserDict.data
+
+[[[begin-doctest_examples:lambda
+>>> _locals = {}
+>>> _locals is safe_exec('f=lambda:1', locals=_locals)
+True
+>>> _locals is safe_exec('g=lambda:1+f()', locals=_locals)
+True
+>>> sorted(_locals)
+['f', 'g']
+>>> safe_eval('f()', locals=_locals)
+1
+>>> safe_eval('g()', locals=_locals)
+Traceback (most recent call last):
+    ...
+NameError: name 'f' is not defined
+>>> safe_eval('g()', locals=_locals, nonlocals=_locals) #??? NameError: name 'f' is not defined
+Traceback (most recent call last):
+    ...
+NameError: name 'f' is not defined
+>>> _global_eval('g()', _locals, _locals) #???
+Traceback (most recent call last):
+    ...
+NameError: name 'f' is not defined
+
+>>> h = _locals['g']
+
+#>>> dir(h)
+__closure__
+__defaults__
+__kwdefaults__
+__globals__
+>>> h.__kwdefaults__
+>>> h.__defaults__
+>>> h.__closure__ is None #??? why ???
+True
+>>> h.__globals__ #doctest: +ELLIPSIS
+ChainMap({}, mappingproxy({...}))
+>>> type(h.__globals__) is _pseudo_py_dict
+True
+
+
+>>> _locals = {}
+>>> _locals is safe_exec('def f():return 1', locals=_locals)
+True
+>>> _locals is safe_exec('def g():return 1+f()', locals=_locals)
+True
+>>> sorted(_locals)
+['f', 'g']
+>>> safe_eval('f()', locals=_locals)
+1
+>>> _global_eval('g()', _locals, _locals) #???
+Traceback (most recent call last):
+    ...
+NameError: name 'f' is not defined
+>>> h = _locals['g']
+>>> h.__closure__ is None #??? why ???
+True
+>>> def h():return h
+>>> h.__closure__ is None #??? why ???
+True
+
+
+
+>>> _locals = {}
+>>> _locals is safe_exec('f=lambda:1', locals=_locals, nonlocals=_locals)
+True
+>>> _locals is safe_exec('g=lambda:1+f()', locals=_locals, nonlocals=_locals)
+True
+>>> sorted(_locals)
+['f', 'g']
+>>> safe_eval('f()', locals=_locals)
+1
+>>> safe_eval('g()', locals=_locals)
+2
+>>> h = _locals['g']
+>>> h.__closure__ is None #??? why ???
+True
+
+
+
+]]]end-doctest_examples:lambda
 #'''
 
 
@@ -161,9 +254,20 @@ from ast import literal_eval
 from seed.types.DictKeyAsObjAttr import DictKeyAsObjAttrAndAsMapping
 from types import MappingProxyType as _MappingProxyType
 from collections import ChainMap as _ChainMap
+from collections import UserDict as _UserDict
 import builtins
 # NOTE: <built-in function __import__>
 from ._safe_eval__details import allows as _allows, forbids as _forbids
+class _pseudo_py_dict(_UserDict, dict):
+    # <<== TypeError: exec() globals must be a dict, not ChainMap
+    def __init__(sf, d, /):
+        assert not hasattr(sf, 'data')
+        _UserDict.__init__(sf)
+        assert sf.data == {}
+        assert not sf.data is d
+        sf.data = d
+            # donot 『_UserDict.__init__(sf, d)』, since .data={**d}
+        assert sf.data is d
 
 
 literal_eval = literal_eval
@@ -263,6 +367,11 @@ _builtins = _MappingProxyType(_builtins)
 _builtins = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins))
 _globals = {'__builtins__' : _builtins}
 _globals = _MappingProxyType(_globals)
+_global_print = print
+_global_eval
+_global_exec
+_pseudo_py_dict
+_UserDict
 #del _MappingProxyType
 del builtins, _allows
 del _4__import__
@@ -273,14 +382,53 @@ _allowed_modules
 _saved__import__
 _MappingProxyType
 _ChainMap
+_global_print
 #rint(list(globals()))
 __builtins__ = _builtins; del _builtins
+    #now, exec cannot be used in this module
+    #now, print cannot be used in this module
+    #using _global_print instead
 
 
 
 
 
+assert ...
 __builtins__, _global_eval, _global_eval
+def _std4args(locals, nonlocals, /, *, readonly):
+    if locals is None:
+        locals = {}
+    #type(locals).__getitem__
+    if nonlocals is ...:
+        nonlocals = locals
+    elif nonlocals is None:
+        nonlocals = {}
+
+    same = nonlocals is locals
+    if readonly:
+        locals = _MappingProxyType(locals)
+        nonlocals = _MappingProxyType(nonlocals)
+    if same:
+        nonlocals = locals
+    if same or not nonlocals:
+
+        locals_nonlocals = locals
+    else:
+        locals_nonlocals = _ChainMap(locals, nonlocals)
+
+    gd = _ChainMap(nonlocals, _globals)
+        # <<== proof from `kw:global`
+        #
+        #
+        #result = _global_eval(expression, gd, locals_nonlocals)
+            # TypeError: globals must be a real dict; try eval(expr, {}, mapping)
+        #_global_exec(script, gd, locals_nonlocals)
+            #TypeError: exec() globals must be a dict, not ChainMap
+    nonlocals_globals = _pseudo_py_dict(gd)
+    assert nonlocals_globals.data is gd
+
+    return (locals, nonlocals, locals_nonlocals, nonlocals_globals)
+
 #def safe_eval(expression, locals=None):
 #def safe_eval(expression, locals=None, /):
 #def safe_eval(expression, /,*, locals=None, nonlocals=None):
@@ -290,23 +438,16 @@ def safe_eval(expression, /,*, locals=None, nonlocals=None):
     # assume expression cannot setitem in locals
     # but expression can getitem in locals and update it
     #
-    if locals is None:
-        locals = {}
-    locals = _MappingProxyType(locals)
-
-    if 1:
+    (_locals, _nonlocals, locals_nonlocals, nonlocals_globals) = _std4args(locals, nonlocals, readonly=True)
         #although nonlocals is useless, here to match API-of-safe_eval with safe_exec
-        #r'''[[[
-        if nonlocals:
-            nonlocals = _MappingProxyType(nonlocals)
-            locals_nonlocals = _ChainMap(locals, nonlocals)
-        else:
-            locals_nonlocals = locals
-        #]]]'''
-    else:
-        locals_nonlocals = locals
 
-    return _global_eval(expression, dict(_globals), locals_nonlocals)
+
+    if 0b0:
+        return _global_eval(expression, dict(_globals), locals_nonlocals)
+
+    result = _global_eval(expression, nonlocals_globals, locals_nonlocals)
+        # TypeError: globals must be a real dict; try eval(expr, {}, mapping)
+    return result
 r'''
 Help on built-in function eval in module builtins:
 
@@ -330,16 +471,18 @@ def safe_exec(script, /,*, locals=None, nonlocals=None):
     # but script can getitem in nonlocals and update it
     #
     #forbidden __import__
-    if locals is None:
-        locals = {}
-    result = locals
 
-    if nonlocals:
-        locals_nonlocals = _ChainMap(locals, nonlocals)
-    else:
-        locals_nonlocals = locals
+    #bug:result = locals
+    #   locals may be None
+    (_locals, _nonlocals, locals_nonlocals, nonlocals_globals) = _std4args(locals, nonlocals, readonly=False)
+    result = _locals
 
-    _global_exec(script, dict(_globals), locals_nonlocals)
+    if 0b0:
+        _global_exec(script, dict(_globals), locals_nonlocals)
+        return result
+
+    _global_exec(script, nonlocals_globals, locals_nonlocals)
+        #TypeError: exec() globals must be a dict, not ChainMap
     return result
 r'''
 Help on built-in function exec in module builtins:
@@ -357,20 +500,15 @@ exec(source, globals=None, locals=None, /)
 
 
 
-try:
-    assert set(globals()) ^ {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', '__all__', 'literal_eval', 'data_eval', '_global_eval', '_global_exec', '_globals', 'safe_eval', 'safe_exec', '_ImportError__forbid_import_stmt', '_allowed_modules', '_saved__import__', '_MappingProxyType', '_ChainMap'} <= {'__annotations__'}
+if 1:
+    __nms4globals4this_module = {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', '__all__', 'literal_eval', 'data_eval', '_global_eval', '_global_exec', '_globals', 'safe_eval', 'safe_exec', '_ImportError__forbid_import_stmt', '_allowed_modules', '_saved__import__', '_MappingProxyType', '_ChainMap', '_global_print', '_pseudo_py_dict', '_UserDict', '_std4args', '__nms4globals4this_module'}
+    assert set(globals()) ^ __nms4globals4this_module <= {'__annotations__'}, set(globals()) ^ __nms4globals4this_module
 
 
-except AssertionError:
-    print(set(globals()) ^ {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', '__all__', 'literal_eval', 'data_eval', '_global_eval', '_global_exec', '_globals', 'safe_eval', 'safe_exec', '_ImportError__forbid_import_stmt', '_allowed_modules', '_saved__import__', '_MappingProxyType', '_ChainMap'})
-    raise
 
 assert safe_eval('{max(1,2)}') == {2}
-try:
-    assert safe_exec('{max(1,2)};[a]=[1]\nb=2') == {'a':1,'b':2}
-except AssertionError:
-    print(repr(safe_exec('{max(1,2)};[a]=[1]\nb=2')))
-    raise
+assert safe_exec('{max(1,2)};[a]=[1]\nb=2') == {'a':1,'b':2}, repr(safe_exec('{max(1,2)};[a]=[1]\nb=2'))
+
 def _test_safe_eval(exp, name_for_NameError, /):
     err = "name '{}' is not defined".format(name_for_NameError)
     try:
@@ -382,7 +520,23 @@ def _test_safe_eval(exp, name_for_NameError, /):
     return
 def _test_safe_exec():
     script = 'import sys'
-    exec('import sys', {}, {})
+    try:
+        exec('import sys', {}, {})
+    except NameError:
+        # NameError: name 'exec' is not defined
+        #   <<== [__builtins__ := _builtins]
+        pass
+    else:
+        raise Exception('fail _test_safe_exec')
+
+    try:
+        _global_exec('import sys', {}, {})
+    except SystemError:
+        #forbidden __import__
+        pass
+    else:
+        raise Exception('fail _test_safe_exec')
+
     try:
         #safe_exec(script)
         safe_exec('import sys')

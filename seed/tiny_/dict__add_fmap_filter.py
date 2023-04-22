@@ -1,7 +1,7 @@
 r'''
 py -m nn_ns.app.debug_cmd   seed.tiny_.dict__add_fmap_filter
 seed.tiny_.dict__add_fmap_filter
-from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, group4dict_value
+from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, dict_add__new, group4dict_value
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value_with_key, filter4dict_value_with_key, group4dict_value_with_key, filter4dict_item, group4dict_item
 
 see:
@@ -24,6 +24,7 @@ __all__ = '''
 
     dict_add__is
     dict_add__eq
+    dict_add__new
     '''.split()
 
 from seed.debug.expectError import expectError
@@ -43,20 +44,32 @@ def dict_add__is(d, k, v, /):
         if not (_v is v):
             print(v)
             print(_v)
-            raise ValueError
+            raise ValueError((k, _v, v))
     else:
-        if not (_v is v): raise ValueError
+        if not (_v is v): raise ValueError((k, _v, v))
     return
 def dict_add__eq(d, k, v, /):
     _v = d.setdefault(k, v)
-    if not (_v is v or _v == v): raise ValueError
+    if not (_v is v or _v == v): raise ValueError((k, _v, v))
     return
+def dict_add__new(d, k, v, /):
+    sz = len(d)
+    _v = d.setdefault(k, v)
+    if not (sz+1 == len(d)): raise ValueError((k, _v, v))
+    return
+
 assert expectError(ValueError, lambda:dict_add__eq({1: 2}, 1, 3))
 assert not expectError(ValueError, lambda:dict_add__eq({1: []}, 1, []))
 
 assert expectError(ValueError, lambda:dict_add__is({1: 2}, 1, 3))
 assert expectError(ValueError, lambda:dict_add__is({1: []}, 1, []))
 assert not expectError(ValueError, lambda:dict_add__is({1: True}, 1, True))
+
+assert expectError(ValueError, lambda:dict_add__new({1: 2}, 1, 3))
+assert expectError(ValueError, lambda:dict_add__new({1: []}, 1, []))
+assert expectError(ValueError, lambda:dict_add__new({1: True}, 1, True))
+assert not expectError(ValueError, lambda:dict_add__new({1: True}, 0, True))
+assert not expectError(ValueError, lambda:dict_add__new({1: True}, 0, 0))
 
 
 

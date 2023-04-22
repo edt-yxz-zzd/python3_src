@@ -1,0 +1,44 @@
+
+e ../../python3_src/nn_ns/app/OTHERS.txt
+
+  [
+$ ls $my_sh -1
+ch2nm
+curl_
+debug_pym
+dir_cmp
+duM
+g0
+g1
+g2
+g3
+g4
+g4x
+g5
+g6_
+g7
+g_add
+g_out
+g_sh
+g_st
+hex
+html2text
+inv_bs
+lsR
+my_app
+mz.sh
+py
+py_eval
+py_literal_eval
+ref_sh
+slice
+snippet
+sz
+  ]
+
+slice
+view ../../python3_src/nn_ns/bin/file_slice.py
+
+snippet
+view ../../python3_src/nn_ns/bin/get_file_chunks.py
+

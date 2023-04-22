@@ -1,6 +1,13 @@
 r'''
+echo $[340104267295-340022952607]
+81314688
+
+printf $'%x\n' $[0x8000-0x80]
+7f80
+
 py -m nn_ns.app.py_eval
 py -m nn_ns.app.debug_cmd   nn_ns.app.py_eval
+
 
 ######################
 py -c 'print(hex(333))'
@@ -302,6 +309,19 @@ def main(args=None, /):
     parser = argparse.ArgumentParser(
         description='python eval and print result'
         , epilog=r'''
+
+echo $[2**8]
+256
+
+printf $'%x\n' $[0x8000-0x80]
+7f80
+
+printf '%q\n' $'\u7684\u3000\t'
+$'的　\t'
+
+echo $(printf '%x' $[0x444])
+444
+
 arg:
     [arg not startswith "!"]
         => [arg is raw-text]
@@ -313,6 +333,74 @@ arg:
         => [arg is text from STDIN]
     [otherwise]
         => raise
+
+
+
+
+printf '%q\n' $'\u7684\u3000\t'
+$'的　\t'
+
+echo $(printf '%x' $[0x444])
+444
+
+echo $[2**8]
+256
+echo $[2-8]
+-6
+echo $[2+8]
+10
+echo $[2>>8]
+0
+echo $[2<<8]
+512
+echo $[2&8]
+0
+echo $[2&&8]
+1
+echo $[2|8]
+10
+echo $[2||8]
+1
+echo $[2^8]
+10
+echo $[2>8]
+0
+echo $[2<8]
+1
+echo $[2=8]
+bash: 2=8: attempted assignment to non-variable (error token is "=8")
+echo $[2==8]
+0
+echo $[2!=8]
+1
+echo (printf '%x' 17)
+bash: syntax error near unexpected token `printf'
+echo $(printf '%x' 17)
+11
+echo $(printf '%x' $[0x444])
+444
+
+
+printf '%q\n' $'\u7684\u3000\t'
+$'的　\t'
+
+printf '%b\n' '\u7684\u3000\x22\x39'
+的　"9
+
+echo $(printf '%x' $[0x444])
+444
+
+echo $(printf '%x' 17)
+11
+
+%% - '%'
+%b - py.f'\n'->py.'\n'
+%q - py.'\n'->py."$'\n'"
+%c - char
+%s - str
+%[diouxXfeEgG]
+    - int
+#不能将字符转化为unicode，即无py.ord()/py.hex()功能
 
 
 #'''

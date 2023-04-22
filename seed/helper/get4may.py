@@ -8,6 +8,9 @@ py -m nn_ns.app.debug_cmd   seed.helper.get4may
 used by:
     seed.mapping_tools.fdefault
 
+see:
+    from seed.tiny_.mk_fdefault import eliminate_tmay, eliminate_tmay__cased, eliminate_tmay__mix, eliminate_tmay_or_raise, eliminate_tmay_or_raise__simple
+
 
 from seed.helper.get4may import nmay2tmay, get4nmay, fget4nmay, fget4nmay__human, xget4nmay__human
     ====

@@ -9,7 +9,8 @@ diff std UserList at:
 __all__ = '''
     UserList
     '''.split()
-from collections import UserList, MutableSequence
+#from collections import UserList
+from collections.abc import MutableSequence
 
 class UserList(MutableSequence):
     """A more or less complete user-defined wrapper around list objects."""

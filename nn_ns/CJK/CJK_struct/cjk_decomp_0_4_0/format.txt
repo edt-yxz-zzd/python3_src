@@ -1,11 +1,13 @@
-c = component
-    c()
-m - modified variant
-    me(variant)     equivalent  ⺑:me(𡯂)
-    msp(variant)    special     丷:msp(八)
-    mo(variant)     outline     凸:mo(丄)凹:mo(凵)𠕄:mo(⺆)
+
+===================================
+数字编码中间部件，可能重复
+10488行部件拆分，之后是汉字拆分
+===================================
 
 
+
+[[
+===================================
 Code regex  Meaning                 Number of possible constituents
 c           component	0
 m.*         modified in some way, e.g. me=equivalent, msp=special, mo=outline, ml=left radical version	1
@@ -17,4 +19,329 @@ a       flows across	>= 2
 d       flows downwards	>= 2
 r.*     repeats and/or reflects in some way, e.g. refh=reflect horizontally, rot=rotate 180 degrees, rrefr= repeat with a reflection rightwards, ra=repeat across, r3d=repeat 3 times downwards, r3tr=repeat in a triangle, rst=repeat surrounding around the top	1
 
+
+The s, a, d, and r codes may be followed by /t, /m, /s, or /o, to show whether the join touches, molds, snaps together, or overlaps, respectively.
+===================================
+]]
+
+
+[[[举例:c(),m.*(x),w.*(x,y),ba(x,y),bd(x,y),lock(x,y),s.*(x,y),a(x,y,...),d(x,y,...),r.*(x)
+c,m,w,s,a,d,r
+ba,bd,lock,built
+# 不完整示例:{'a', 'a/m', 'a/t', 'built', 'd', 'd/m', 'd/o', 'd/t', 'lock', 's', 'sb', 'sbl', 'sl', 'sl/m', 'sl/s', 'st', 'stl', 'str', 'w', 'wbl', 'wbr', 'wl', 'wr', 'wt', 'wtl', 'wtr'}
+完整示例:108 {'a', 'a/m', 'a/s', 'a/t', 'ba', 'ba/o', 'bd', 'bd/m', 'bd/t', 'built', 'c', 'cbl/o', 'ctl/t', 'ctlbr/t', 'd', 'd/m', 'd/o', 'd/s', 'd/t', 'lock', 'mb', 'mc', 'me', 'ml', 'mo', 'mo0', 'mo2', 'mo4', 'mo5', 'mr', 'msp', 'mt', 'mtl', 'r/a', 'r3a', 'r3d', 'r3d/m', 'r3gw', 'r3st', 'r3stl', 'r3str', 'r3tr', 'r4a', 'r4d', 'r4dia', 'r4ref/t', 'r4sq', 'r5p', 'r5x', 'ra', 'ra/m', 'rd', 'rd/m', 'rd/s', 'rd/t', 'refh', 'refr', 'refv', 'rot', 'rrefd', 'rrefl', 'rrefl/m', 'rrefr', 'rrefr/m', 'rrefr/o', 'rrefr/t', 'rrotd', 'rrotr', 'rrotu', 'rs', 'rsb', 'rsbr', 'rsq', 'rst', 'rstl', 's', 's/t', 'sb', 'sbl', 'sbl/m', 'sbl/o', 'sbr', 'sl', 'sl/m', 'sl/s', 'sr', 'st', 'st/t', 'stl', 'stl/m', 'stl/s', 'str', 'str/o', 'w', 'w/o', 'w/t', 'wa', 'wb', 'wbl', 'wbr', 'wd', 'wl', 'wl/t', 'wr', 'wt', 'wt/t', 'wtl', 'wtr'}
+
+{'a': 50263, 'a/m': 56, 'a/s': 3, 'a/t': 18, 'ba': 3, 'ba/o': 1, 'bd': 1, 'bd/m': 1, 'bd/t': 3, 'built': 31, 'c': 35, 'cbl/o': 1, 'ctl/t': 1, 'ctlbr/t': 1, 'd': 22661, 'd/m': 332, 'd/o': 31, 'd/s': 67, 'd/t': 392, 'lock': 223, 'mb': 2, 'mc': 1, 'me': 116, 'ml': 10, 'mo': 11, 'mo0': 1, 'mo2': 1, 'mo4': 1, 'mo5': 2, 'mr': 1, 'msp': 105, 'mt': 14, 'mtl': 4, 'r/a': 1, 'r3a': 45, 'r3d': 10, 'r3d/m': 2, 'r3gw': 11, 'r3st': 1, 'r3stl': 1, 'r3str': 1, 'r3tr': 143, 'r4a': 3, 'r4d': 1, 'r4dia': 3, 'r4ref/t': 1, 'r4sq': 51, 'r5p': 1, 'r5x': 3, 'ra': 394, 'ra/m': 5, 'rd': 155, 'rd/m': 15, 'rd/s': 2, 'rd/t': 1, 'refh': 26, 'refr': 1, 'refv': 4, 'rot': 2, 'rrefd': 1, 'rrefl': 27, 'rrefl/m': 2, 'rrefr': 17, 'rrefr/m': 2, 'rrefr/o': 1, 'rrefr/t': 2, 'rrotd': 1, 'rrotr': 1, 'rrotu': 3, 'rs': 1, 'rsb': 1, 'rsbr': 1, 'rsq': 1, 'rst': 2, 'rstl': 3, 's': 313, 's/t': 4, 'sb': 126, 'sbl': 2851, 'sbl/m': 1, 'sbl/o': 4, 'sbr': 35, 'sl': 217, 'sl/m': 2, 'sl/s': 6, 'sr': 3, 'st': 941, 'st/t': 1, 'stl': 3269, 'stl/m': 1, 'stl/s': 2, 'str': 572, 'str/o': 1, 'w': 1107, 'w/o': 2, 'w/t': 2, 'wa': 3, 'wb': 88, 'wbl': 11, 'wbr': 25, 'wd': 3, 'wl': 15, 'wl/t': 1, 'wr': 17, 'wt': 191, 'wt/t': 1, 'wtl': 41, 'wtr': 33}
+
+===================================
+c = component
+    c()
+    ===单笔划:
+    ㇀:c()
+    ㇁:c()
+    ...
+    ㇢:c()
+    ㇣:c()
+    ===发现例外:
+    ㇘:refh(㇗)
+    ===
+    10013:ctlbr/t(㇗,㇆)
+      #毋:built(10013,𠂇)
+    ⺁:ctl/t(㇓,㇒)
+    廴:cbl/o(㇋,㇏)
+===================================
+m - modified variant
+    me(variant)     equivalent  ⺑:me(𡯂)
+    msp(variant)    special     丷:msp(八)
+    mo(variant)     outline     凸:mo(丄)凹:mo(凵)𠕄:mo(⺆)
+    ===
+    m.*(x,y)
+    ⺄:msp(㇅)
+
+    #上下左右
+    ⺈:mt(勹)
+    ⺜:mt(冃)
+    ⺋:mb(㔾)
+    龰:mb(止)
+    ⺩:ml(王)
+    ⻞:ml(𩙿)
+    ⻟:ml(食)
+      ⻏:mr(⻖)
+===================================
+w - within
+    w.*(x,y)
+    ⺌:w(㇑,丷)
+    ⺗:w(㇚,⺍)
+    㐧:wtl(才,㇔)
+    㟗:w(山,10352)
+    㡀:wt(巾,37036)
+    㣃:w(弜,99903)
+    㦚:w(辡,心)
+    㻎:w(大,玨)
+    㱐:wtr(㱏,㇔)
+    为:w(力,⺀)
+    久:wbr(勹,㇏)
+    乆:wbr(丩,㇏)
+    乖:wb(千,北)
+    乘:w(禾,北)
+    乗:w(禾,龷)
+      ??? /o
+
+    ??? #不一致
+    丩:wl(㇑,㇙)
+      ⻖:a/t(㇑,㇌)
+    㦲:wtl(成,十)
+      㢤:a/m(27003,弋)
+    丸:w(九,㇔)
+    㸦:wb(38379,㇏)
+      匆:w/o(勿,㇔)
+      刃:wl(刀,㇔)
+      刄:lock(刀,㇏)
+    七:w(㇟,㇐)
+      东:d/o(七,小)
+    街:w(行,圭)
+      𫟘:ba(行,70027)
+
+    ???  #?X轴、Y轴投影均被覆盖? 但上面部分示例并不认同...
+    㐆:wt(38263,㇔)
+    主:wt(王,㇔)
+    㔾:w(㇟,㇆)
+    㕚:wl(叉,㇔)
+    㘴:w(土,㕥)
+===================================
+b - between
+    ba(x,y),bd(x,y)
+    𫟘:ba(行,70027)
+    70006:bd(二,从)
+===================================
+lock
+    lock(x,y)
+    ⺕:lock(99721,㇐)
+    ⺺:lock(⺕,㇑)
+    丗:lock(山,㇐)
+    中:lock(口,㇑)
+
+    ???
+    㔿:lock(二,10001)
+    㶫:lock(㇐,炎)
+    䍏:lock(59349,⺆)
+        丹:built(⺆,亠)
+        舟:built(99878,10014)
+===================================
+built
+    built(x,y,...)
+    ===
+    㦮:built(㇂,三,㇒,㇔)
+    丹:built(⺆,亠)
+    弋:built(㇂,㇐,㇔)
+    戈:built(㇂,㇐,㇒,㇔)
+    戋:built(㇂,二,㇒,㇔)
+    曳:built(㇂,日,㇒)
+    曵:built(㇂,日,㇒,㇔)
+    毋:built(10013,𠂇)
+    毌:built(囗,十)
+    母:built(10013,10014)
+    舟:built(99878,10014)
+===================================
+s - surround
+    #包围
+    s.*(x,y)
+
+    #全包围
+    丼:s(井,㇔)
+    囚:s(囗,人)
+
+    #半包围
+    ⻛:st(𠘨,乂)
+    㐡:sbl(九,耎)
+    㐣:stl(庫,㇠)
+    㒺:st(𦉰,亾)
+    㓘:st(夙,玉)
+    㔨:str(勹,背)
+    㓙:sb(凵,文)
+    㦰:sbr(戈,从)
+      !!
+    以:sbr(37473,人)
+      ??? a()
+      从:ra(人)
+
+    ⺐:stl(十,㇟)
+        有:stl(𠂇,月)
+    ⺼:st(⺆,亠)
+        ??? 冫
+    ⻁:stl(99959,几)
+        ??? 虍
+        㐣:stl(庫,㇠)
+===================================
+a - across
+    a(x,y,...)
+    㐜:a(求,九)
+    㬕:a(日,示,羊)
+===================================
+d - downward
+    d(x,y,...)
+    㐱:d(人,彡)
+    㑹:d(亼,由,日)
+===================================
+r - repeat and/or reflect
+    refh=reflect horizontally
+    rot=rotate 180 degrees
+    rrefr= repeat with a reflection rightwards
+    ra=repeat across
+    r3d=repeat 3 times downwards
+    r3tr=repeat in a triangle
+    rst=repeat surrounding around the top	1
+
+    ===
+    r.*(x)
+    回:rs(囗)
+    闁:rst(門)
+
+    ⺿:ra(十)
+    㒭:ra(兄)
+      #忽略提变
+    幷:ra(37352)
+
+    ⺀:rd(㇔)
+    㕛:rd(又)
+
+    册:ra/m(27020)
+    串:rd/m(中)
+    丳:rd/m(99899)
+    哥:rd/t(可)
+
+    ㇘:refh(㇗)
+    㠯:refh(𤕪)
+    入:refh(人)
+    爿:refh(片)
+
+    卐:refh(卍)
+    凵:refv(⺆)
+
+    臦:rrefl(臣)
+    戼:rrefl(戶)
+    卯:rrefl(卩)
+    卵:rrefl(卪)
+        #?还行
+    癶:rrefr(刁)
+        ???
+    北:rrefl(匕)
+    卝:rrefl(⺊)
+    丱:rrefr(丩)
+    八:rrefr(㇒)
+    乂:rrefr/o(㇒)
+    人:rrefr/t(㇒)
+
+    臼:rrefl/m(彐)
+
+
+    㴇:r3a(水)
+    巛:r3a(㇛)
+    巜:ra(㇛)
+    川:r3a(㇑)
+    彡:r3d(㇒)
+    㐂:r3tr(七)
+    㗊:r4sq(口)
+    㙓:r4dia(土)
+
+    ???
+    門:rrefr(𠁣)
+    非:rrefl(56871)
+    龴:refh(厶)
+      ??? ref+rot???
+
+===================================
+]]]
+[[[举例:/t,/s,/m,/o
+===================================
+/t - touch
+  ⺁:ctl/t(㇓,㇒)
+  ⺆:a/t(㇑,㇆)
+  ⺙:d/t(𠂉,乂)
+  ⺪:d/t(㇖,止)
+  ⺴:d/t(冖,儿)
+  ⺻:d/t(⺺,㇐)
+  ⻖:a/t(㇑,㇌)
+
+  ???
+  屰:d/t(䒑,屮)
+
+  ???
+  ⻜:a/t(㇠,90011)
+  ⻥:d/t(⺈,田,㇐)
+      厃:d(⺈,厂)
+      #偏旁分区的？:鱼
+  ⻩:d/t(龷,由,八)
+
+  ???
+  ⺊:a(㇑,㇐)
+  月:w(⺆,二)
+  有:stl(𠂇,月)
+===================================
+/s - snap together
+    #本义:咬;射击;盖盖子;snapshot快照/拍照(快照回档)
+    #大概是；粘贴合并#严丝合缝
+    严:d/s(亚,厂)
+    釜:d/s(父,金)
+===================================
+/m - mold
+    #本义:铸塑成...;陶冶影响
+    #大概是：融合塑造#扭曲再造
+    #     将参数甲的某笔划的一部分融合塑造成参数乙的某笔划
+    #
+    ⺘:d/m(37024,㇚)
+    ⺛:d/m(𡕒,儿)
+    㐄:d/m(十,60954)
+    㔺:d/m(卉,㇟)
+    㢤:a/m(27003,弋)
+    㦳:a/m(圭,戈)
+    㬰:d/m(申,八)
+    丈:d/m(十,乂)
+    串:rd/m(中)
+    农:d/m(巾,𧘇)
+    出:rd/m(山)
+      # ==山%山\-\丨==屮%凵
+      屾:ra(山)
+      岀:rd(山)
+    史:d/m(中,乂)
+    埀:d/m(乖,土)
+    夨:d/m(㇉,大)
+    巳:d/m(尸,㇟)
+    禺:d/m(甲,禸)
+
+    ??? why not /s
+    存:d/m(𠂇,仔)
+    巿:d/m(十,巾)
+===================================
+/o - overlap
+    丑:d/o(刀,二)
+    世:sbl/o(㇗,廿)
+    东:d/o(七,小)
+    乂:rrefr/o(㇒)
+    乜:sbl/o(㇟,㇆)
+    内:d/o(人,⺆)
+    尹:d/o(⺕,㇑)
+    廴:cbl/o(㇋,㇏)
+    禸:d/o(厶,⺆)
+    禹:d/o(䖝,⺆)
+
+    ??? #不交叉#?Y轴投影交叠?
+    孕:d/o(乃,子)
+    见:d/o(⺆,儿)
+    贝:d/o(⺆,人)
+    心:d/o(𠁼,㇃)
+    忄:wt(㇑,八)
+    必:lock(心,㇓)
+
+    ???
+    曲:d/o(井,凵)
+    甴:d/o(土,凵)
+    曳:built(㇂,日,㇒)
+
+    ???
+    酉:d/o(兀,日)
+===================================
+]]]
+
+===================================
 

@@ -32,7 +32,8 @@ def is_abstract_method_attr(cls, attr):
 
 old_print = print
 def write_lines(fout, lines):
-    old_write_lines(fout, lines, line_prefix='\t', line_sep='\n', line_suffix='')
+    old_write_lines(fout, lines, line_prefix=' '*4, line_sep='\n', line_suffix='')
+    #old_write_lines(fout, lines, line_prefix='\t', line_sep='\n', line_suffix='')
 
 def to_abstract_attr(attr):
     return '`' + attr
@@ -44,17 +45,42 @@ exclude_bases_ex = [object, ABC]
 exclude_attrs_ex = '''
     __doc__
     __dict__
-    __init_subclass__
     __module__
-    __subclasshook__
     __weakref__
+
+    __init_subclass__
+    __subclasshook__
 
     __abstractmethods__
     _abc_registry
     _abc_cache
     _abc_negative_cache
     _abc_negative_cache_version
-    '''.split()
+    _abc_impl
+    '''.split()#'''
+def __():
+    class _B(ABC):
+        '...'
+        pass
+    names = {*dir(_B())}-{*dir(object())}
+    return names
+if 0:
+    print(dir(object()))
+    ['__class__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__']
+    print(__())
+    {'_abc_impl', '__abstractmethods__', '__slots__', '__module__', '__dict__', '__weakref__'}
+    print(__() - {*exclude_attrs_ex})
+    {'__slots__'}
+    print({*exclude_attrs_ex} - __())
+    {'__subclasshook__', '_abc_cache', '_abc_negative_cache', '__init_subclass__', '_abc_negative_cache_version', '_abc_registry', '__doc__'}
+    raise
+exclude_attrs_ex = (__() - {'__slots__'}) | {*r'''
+    __doc__
+    __dict__
+    __module__
+    __weakref__
+    '''.split()#'''
+    }
 
 def wrapped_print_methods(XXX, fout=None
     , *, exclude_bases=None, exclude_attrs=None, exclude=None):

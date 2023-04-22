@@ -19,6 +19,9 @@ see:
         #def&search "line"
         #using step_builder,step_predicator
 
+py -m nn_ns.app.debug_cmd   seed.iters.find
+py -m nn_ns.app.doctest_cmd seed.iters.find:__doc__ -v
+
 #'''
 
 
@@ -47,16 +50,22 @@ __all__ = '''
     seq_find
     seq_index_if
 '''.split()
-from ..types.to_container import to_tuple
+    #mk_iter_pairs5seq
+    #mk_iter_pairs5istream
+    #is_stop_location5tmay__is_stop_location_or_stop_location
+from seed.types.to_container import to_tuple
+from seed.tiny import snd
+from seed.types.WindowFIFO import WindowQueueRILRO
+from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
 
 from collections.abc import Sequence
 
 
-def mk_last_succ_pos2restart_pos__from_seq(seq):
+def mk_last_succ_pos2restart_pos__from_seq(seq, /):
     last_pos2len_longest_proper_bifix = mk_last_pos2len_longest_proper_bifix(seq)
     last_succ_pos2restart_pos = mk_last_succ_pos2restart_pos(last_pos2len_longest_proper_bifix)
     return last_succ_pos2restart_pos
-def mk_last_succ_pos2restart_pos(last_pos2len_longest_proper_bifix):
+def mk_last_succ_pos2restart_pos(last_pos2len_longest_proper_bifix, /):
     r'''last_pos2len_longest_proper_bifix -> last_succ_pos2restart_pos
     last_pos2len_longest_proper_bifix:
         see: mk_last_pos2len_longest_proper_bifix
@@ -101,7 +110,7 @@ def mk_last_succ_pos2restart_pos(last_pos2len_longest_proper_bifix):
     assert all(0 <= restart_pos <= last_succ_pos for last_succ_pos, restart_pos in enumerate(last_succ_pos2restart_pos))
     return last_succ_pos2restart_pos
 
-def mk_last_pos2len_longest_proper_bifix(seq):
+def mk_last_pos2len_longest_proper_bifix(seq, /):
     r''':: seq -> last_pos2len_longest_proper_bifix
     last_pos2len_longest_proper_bifix[] :: last_pos -> len_of_longest_proper_bifix
 
@@ -146,7 +155,7 @@ def mk_last_pos2len_longest_proper_bifix(seq):
 
 
 
-def failure_func(seq, begin=None, end=None, *, ex=False):
+def failure_func(seq, /, begin=None, end=None, *, ex=False):
     r""":: seq -> end_pos2len_longest_proper_bifix
     outdate, use below instead:
         mk_last_pos2len_longest_proper_bifix
@@ -210,7 +219,7 @@ def failure_func(seq, begin=None, end=None, *, ex=False):
 assert failure_func('0123012012012') == [-1, 0, 0, 0, 0, 1, 2, 3, 1, 2, 3, 1, 2]
 assert failure_func('0123012012012', ex=True) == [-1, 0, 0, 0, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3]
 
-def make_failure_map_for_find_subseq(subseq):
+def make_failure_map_for_find_subseq(subseq, /):
     r'''subseq -> end_pos2len_longest_proper_bifix_ex
     outdate, use below instead:
         mk_last_pos2len_longest_proper_bifix
@@ -232,7 +241,7 @@ def make_failure_map_for_find_subseq(subseq):
     #assert failure_map == [-1, *mk_last_pos2len_longest_proper_bifix(subseq)]
     return failure_map
 
-def _check(subseq, *, failure_map_or_last_pos2restart_pos, _ver_is_1):
+def _check(subseq, /, *, failure_map_or_last_pos2restart_pos, _ver_is_1):
     if not isinstance(subseq, Sequence):
         raise TypeError('not isinstance(subseq, Sequence)')
     if not isinstance(failure_map_or_last_pos2restart_pos, Sequence):
@@ -247,6 +256,62 @@ def _check(subseq, *, failure_map_or_last_pos2restart_pos, _ver_is_1):
         if len(last_pos2restart_pos) != len(subseq): raise ValueError
         if last_pos2restart_pos and last_pos2restart_pos[0] != 0: raise ValueError
 
+if 0:
+  def _():
+    class HasNoEq8non_stop_location:
+        __hash__ = None
+        __eq__ = None
+        __ne__ = None
+    _non_stop_location = HasNoEq8non_stop_location()
+
+
+
+
+def mk_iter_pairs5seq(seq, /, begin, end):
+    '-> Iter (x, post_location)'
+    #raise NotImplementedError
+    #(begin, end) = mk_seq_rng(seq, begin, end)
+    (begin, end) = mk_seq_rng(seq, begin, end, strict=False)
+    for i in range(begin, end):
+        x = seq[x]
+        yield (x, i+1)
+def is_stop_location5tmay__is_stop_location_or_stop_location(tmay__is_stop_location_or_stop_location, /):
+    if not len(tmay__is_stop_location_or_stop_location) <= 1: raise TypeError
+    if tmay__is_stop_location_or_stop_location:
+        [is_stop_location_or_stop_location] = tmay__is_stop_location_or_stop_location
+        if callable(is_stop_location_or_stop_location):
+            is_stop_location_ = is_stop_location_or_stop_location
+        else:
+            stop_location = is_stop_location_or_stop_location
+            def is_stop_location_(location, /):
+                return stop_location == location
+                return location == stop_location
+            is_stop_location_
+        is_stop_location_
+    else:
+        [] = tmay__is_stop_location_or_stop_location
+        def is_stop_location_(location, /):
+            return False
+        is_stop_location_
+    is_stop_location_
+    return is_stop_location_
+def mk_iter_pairs5istream(istream, /, *tmay__is_stop_location_or_stop_location):
+    '-> Iter (x, post_location)'
+    if not len(tmay__is_stop_location_or_stop_location) <= 1: raise TypeError
+    is_stop_location_ = is_stop_location5tmay__is_stop_location_or_stop_location(tmay__is_stop_location_or_stop_location)
+    del tmay__is_stop_location_or_stop_location
+    is_stop_location_
+    ######################
+    post_location = istream.tell()
+    while not is_stop_location_(post_location):
+        tmay_x = istream.read(1)
+        if not tmay_x:
+            [] = tmay_x
+            break
+        [x] = tmay_x
+        post_location = istream.tell()
+        yield (x, post_location)
+    return
 class FindSubseqOverlap:
     r'''
     last_pos2restart_pos
@@ -260,21 +325,21 @@ class FindSubseqOverlap:
         offset of subseq
       subseq[:offset] == prev_input[sz-offset:sz]
     #'''
-    def __init__(sf, subseq, *, last_pos2restart_pos, offset):
+    def __init__(sf, subseq, /, *, last_pos2restart_pos, offset):
         _check(subseq, failure_map_or_last_pos2restart_pos=last_pos2restart_pos, _ver_is_1=False)
         if not 0 <= offset <= len(last_pos2restart_pos) == len(subseq): raise ValueError
 
         sf.offset = offset
         sf.last_pos2restart_pos = last_pos2restart_pos
         sf.subseq = subseq
-    def is_begin(sf):
+    def is_begin(sf, /):
         return sf.offset == 0
-    def is_end(sf):
+    def is_end(sf, /):
         return sf.offset == len(sf.last_pos2restart_pos)
-    def feed(sf, x):
+    def feed(sf, x, /):
         sf._feed(x)
         return sf.is_end()
-    def _feed(sf, x):
+    def _feed(sf, x, /):
         if not sf.last_pos2restart_pos: return
         if sf.is_end():
             # assume search subseq+[nonchar]
@@ -297,23 +362,108 @@ class FindSubseqOverlap:
             last_pos = end_pos -1
             offset = restart_pos = sf.last_pos2restart_pos[last_pos]
         else:
-            raise logic-error
+            raise logic-err
         sf.offset = offset
-    def skip_util_found(sf, iterator):
+    def skip_util_found(sf, iterator, /):
         it = iter(iterator)
         assert it is iterator
         for x in it:
             if sf.feed(x):
                 break
         return it
-    def search_on_seq(sf, seq, begin=None, end=None, *, overlap):
+    def get_len_window(sf, /):
+        '-> len_window'
+        return len(sf.last_pos2restart_pos)
+    def get_len_start_locations(sf, /):
+        '-> len_start_locations'
+        return sf.offset+1
+    def _prepare4search_on_iter_pairs_(sf, start_locations, iter_pairs, /, *tmay_curr_location4check, overlap):
+        if not len(tmay_curr_location4check) <= 1:raise TypeError
+        iter_pairs = iter(iter_pairs)#check
+        not_overlap = not overlap; del overlap#check
+        iter(start_locations)#check
+
+        w = sf.get_len_window()
+        w1 = w+1
+        if type(start_locations) is WindowQueueRILRO:
+            q = start_locations
+            if (None is not q.get_may_len_window() < w1):raise ValueError
+        else:
+            start_locations = iter(start_locations)
+            q = WindowQueueRILRO(w1, start_locations)
+        assert not (None is not q.get_may_len_window() < w1)
+
+        sz4prev = sf.get_len_start_locations()
+        assert sz4prev >= 1
+        if not len(q) >= sz4prev: raise ValueError
+        #q.popLs_(len(q) - sz4prev)
+        #assert len(q) == sz4prev
+        assert len(q) >= sz4prev
+        start_locations = q
+        del start_locations
+
+        if tmay_curr_location4check:
+            [curr_location4check] = tmay_curr_location4check
+            if not curr_location4check == q[-1]:raise ValueError
+        else:
+            [] = tmay_curr_location4check
+        return (iter_pairs, not_overlap, w, w1, q)
+
+    def search_on_iter_pairs_(sf, start_locations, iter_pairs, /, *tmay_curr_location4check, overlap):
+        '(WindowQueueRILRO<len_window>|Iter start_location) -> Iter (x, post_location) -> Iter location'
+        # NOTE:donot miss sf.offset!!!
+        (iter_pairs, not_overlap, w, w1, q) = sf._prepare4search_on_iter_pairs_(start_locations, iter_pairs, *tmay_curr_location4check, overlap=overlap)
+        del start_locations, tmay_curr_location4check, overlap
+
+        if not w:
+            # [not subseq]
+            assert len(q) == 1
+            [start_location] = q
+            yield start_location
+            yield from map(snd, iter_pairs)
+            return
+        def get_begin_location():
+            return q[-sf.get_len_start_locations()]
+
+        #for i, (x, post_location) in enumerate(iter_pairs, 1):
+        for (x, post_location) in iter_pairs:
+            q.putR(post_location)
+            if sf.feed(x):
+                begin_location = get_begin_location()
+                assert len(q) >= w1
+                assert begin_location is q[-w1]
+                yield begin_location
+                if not_overlap:
+                    #skip
+                    sf.offset = 0
+        return q
+
+
+
+    def search_on_seq(sf, seq, /, begin=None, end=None, *, overlap):
+        (begin, end) = mk_seq_rng(seq, begin, end, strict=False)
+        iter_pairs = mk_iter_pairs5seq(seq, begin, end)
+        if end < begin or sf.get_len_window()==0:
+            return iter(range(begin, end+1))
+        curr_location4check = begin
+        sz4prev = sf.get_len_start_locations()
+        start_locations = range(begin+1-sz4prev, begin+1)
+        assert len(start_locations) == sz4prev > 0
+        assert start_locations[-1] == begin
+        not_overlap = not overlap
+
+        idc = sf.search_on_iter_pairs_(start_locations, iter_pairs, curr_location4check, overlap=not not_overlap)
+        return idc
+        ############################
+    def _old_ver__search_on_seq(sf, seq, /, begin=None, end=None, *, overlap):
         begin, end, _ = slice(begin, end).indices(len(seq))
         if not sf.last_pos2restart_pos:
             #bug: return range(begin, end+1)
             #   not iterator
             return iter(range(begin, end+1))
         return sf._search_on_seq(seq, begin, end, overlap=overlap)
-    def _search_on_seq(sf, seq, begin, end, *, overlap):
+    def _search_on_seq(sf, seq, begin, end, /, *, overlap):
+        # NOTE:donot miss sf.offset!!!
         assert sf.last_pos2restart_pos
         not_overlap = not overlap
         sz = len(sf.subseq)
@@ -330,7 +480,8 @@ class FindSubseqOverlap:
                 else:
                     yield begin
                     prev_end = end
-    def search_on_stream(sf, istream, *, overlap):
+    #def search_on_stream(sf, istream, /, *, overlap, stop_location=_non_stop_location):
+    def search_on_stream(sf, istream, /, *tmay__is_stop_location_or_stop_location, overlap, may_start_locations=None):
         r'''istream -> iter location
 
         istream:
@@ -339,26 +490,86 @@ class FindSubseqOverlap:
             read :: uint -> [a]
                 empty => eof
         #'''
+        # NOTE:donot miss sf.offset!!!
+        curr_location4check = istream.tell()
+        if may_start_locations is None:
+            if may_start_locations is None and not sf.get_len_start_locations() == 1: raise TypeError('require start_locations if not sf.offset == 0')
+
+            start_location = curr_location4check
+            start_locations = [start_location]
+        else:
+            start_locations = may_start_locations
+        del may_start_locations
+        start_locations
+
         not_overlap = not overlap
+        del overlap
+        not_overlap
+
+        if not len(tmay__is_stop_location_or_stop_location) <= 1: raise TypeError
+        iter_pairs = mk_iter_pairs5istream(istream, *tmay__is_stop_location_or_stop_location)
+        if 0:
+            iter_pairs = [*iter_pairs]
+            print(iter_pairs)
+        del tmay__is_stop_location_or_stop_location
+        del istream
+        iter_pairs
+        ############################
+        curr_location4check
+        start_locations
+        not_overlap
+        iter_pairs
+        ############################
+        ############################
+        if 1:
+            locations = sf.search_on_iter_pairs_(start_locations, iter_pairs, curr_location4check, overlap=not not_overlap)
+        else:
+            (iter_pairs, not_overlap, w, w1, q) = sf._prepare4search_on_iter_pairs_(start_locations, iter_pairs, curr_location4check, overlap=not not_overlap)
+            del start_locations
+            locations = sf.search_on_iter_pairs_(q, iter_pairs, overlap=not not_overlap)
+        locations
+        assert iter(locations) is locations
+        return locations
+
+        r'''
+        bug: not cinsider offset
+        if not sf.offset==0:raise NotImplementedError
+        ############################
+        not_overlap = not overlap
+        if not len(tmay_stop_location) <= 1: raise TypeError
+        if tmay_stop_location:
+            [stop_location] = tmay_stop_location
+            def _is_stop(location, /):
+                return stop_location == location
+                return location == stop_location
+        else:
+            [] = tmay_stop_location
+            def _is_stop(location, /):
+                return False
+        ######################
         sz = len(sf.subseq)
         location = istream.tell()
         if sz == 0:
             b = 1
             while b:
                 yield location
+                if _is_stop(location): return
                 bs = istream.read(1)
                 b = bool(bs)
                 location = istream.tell()
             return
+        ######################
+        #sz = len(sf.subseq)
+        #location = istream.tell()
         ###
         Nothing = object()
         old2new_sz = Nothing
         old = Nothing
-        new = location
+        new = location; del location
         if not_overlap:
             prev_found_end_idx = 0
             new_location_idx = 0
-            def to_skip(i):
+            def to_skip(i, /):
                 nonlocal prev_found_end_idx
                 curr_found_end_idx = new_location_idx +i+1
                 curr_found_begin_idx = curr_found_end_idx -sz
@@ -367,10 +578,12 @@ class FindSubseqOverlap:
                     prev_found_end_idx = curr_found_end_idx
                 return skip
         else:
-            def to_skip(i):
+            def to_skip(i, /):
                 return False
         while 1:
             for i in range(sz):
+                #bug: if _is_stop(location): return
+                #   no 'location'
                 bs = istream.read(1)
                 if not bs:
                     return
@@ -403,16 +616,17 @@ class FindSubseqOverlap:
                 if not_overlap:
                     #not update:prev_found_end_idx
                     new_location_idx += sz
+        #'''
 
 
 
-def mk_FindSubseqOverlap(subseq, *, last_pos2restart_pos=None, _ver=None, offset=0):
+def mk_FindSubseqOverlap(subseq, /, *, last_pos2restart_pos=None, _ver=None, offset=0):
     r''' :: subseq -> FindSubseqOverlap
     #'''
     finder = _mk_FindSubseqOverlap(subseq, last_pos2restart_pos=last_pos2restart_pos, _ver=_ver, offset=offset)
     return finder
 
-def _mk_FindSubseqOverlap(subseq, *, last_pos2restart_pos, _ver, offset):
+def _mk_FindSubseqOverlap(subseq, /, *, last_pos2restart_pos, _ver, offset):
     if _ver is None:
         _ver = 3
     if _ver not in [2,3]: raise ValueError
@@ -430,18 +644,19 @@ def _mk_FindSubseqOverlap(subseq, *, last_pos2restart_pos, _ver, offset):
     finder = FindSubseqOverlap(subseq, last_pos2restart_pos=last_pos2restart_pos, offset=offset)
     return finder
 
-def iter_search_subseq_on_stream(istream, subseq, *, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0):
+def iter_search_subseq_on_stream(istream, subseq, /, *tmay__is_stop_location_or_stop_location, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0, may_start_locations=None):
     r''' :: istream -> subseq -> Iter location
 
     istream:
         see: FindSubseqOverlap.search_on_stream
     #'''
+    if not len(tmay__is_stop_location_or_stop_location) <= 1: raise TypeError
     finder = _mk_FindSubseqOverlap(subseq, last_pos2restart_pos=last_pos2restart_pos, _ver=_ver, offset=offset)
-    it = finder.search_on_stream(istream, overlap=overlap)
+    it = finder.search_on_stream(istream, *tmay__is_stop_location_or_stop_location, overlap=overlap, may_start_locations=may_start_locations)
     assert it is iter(it)
     return it
 
-def iter_search_subseq_on_seq(seq, subseq, *, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0):
+def iter_search_subseq_on_seq(seq, subseq, /, *, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0):
     r''' :: seq -> subseq -> Iter idx
     #'''
     finder = _mk_FindSubseqOverlap(subseq, last_pos2restart_pos=last_pos2restart_pos, _ver=_ver, offset=offset)
@@ -451,12 +666,12 @@ def iter_search_subseq_on_seq(seq, subseq, *, overlap:bool, last_pos2restart_pos
 
 
 
-def _ver2_ver3_find_subseq_overlap(seq, subseq, begin, end, last_pos2restart_pos):
+def _ver2_ver3_find_subseq_overlap(seq, subseq, begin, end, last_pos2restart_pos, /):
     return FindSubseqOverlap(subseq, last_pos2restart_pos=last_pos2restart_pos, offset=0).search_on_seq(seq, begin, end, overlap=True)
 
 
 
-def find_subseq_overlap(seq, subseq, begin=None, end=None, failure_map_or_last_pos2restart_pos=None, *, _ver=None):
+def find_subseq_overlap(seq, subseq, /, begin=None, end=None, failure_map_or_last_pos2restart_pos=None, *, _ver=None):
     '''start for start in range(begin, end+1) if seq[start:start+len(subseq)] == subseq
 
 if _ver==1:
@@ -469,7 +684,7 @@ if _ver in {2,3}:
         see:FindSubseqOverlap
 '''
     return _find_subseq_overlap(seq, subseq, begin, end, failure_map_or_last_pos2restart_pos, _ver=_ver)
-def _find_subseq_overlap(seq, subseq, begin, end, may_failure_map_or_last_pos2restart_pos, *, _ver):
+def _find_subseq_overlap(seq, subseq, begin, end, may_failure_map_or_last_pos2restart_pos, /, *, _ver):
     if _ver is None:
         _ver = 3
     if _ver not in [1,2,3]: raise ValueError
@@ -500,7 +715,7 @@ def _find_subseq_overlap(seq, subseq, begin, end, may_failure_map_or_last_pos2re
     assert it is iter(it)
     return it
 
-def _ver1_find_subseq_overlap(seq, subseq, begin, end, failure_map):
+def _ver1_find_subseq_overlap(seq, subseq, begin, end, failure_map, /):
     begin, end, _ = slice(begin, end).indices(len(seq))
 
     subL = len(subseq)
@@ -545,7 +760,7 @@ def _ver1_find_subseq_overlap(seq, subseq, begin, end, failure_map):
             assert begin <= r < end
             yield r
 
-def find_subseq_nonoverlap(seq, subseq, begin=None, end=None, failure_map=None, _ver=None):
+def find_subseq_nonoverlap(seq, subseq, /, begin=None, end=None, failure_map=None, _ver=None):
     L = len(subseq)
     j = -L
     for i in _find_subseq_overlap(seq, subseq, begin, end, failure_map, _ver=_ver):
@@ -553,11 +768,12 @@ def find_subseq_nonoverlap(seq, subseq, begin=None, end=None, failure_map=None, 
             yield i
             j = i
 
-def find_subseq(seq, subseq, begin=None, end=None, failure_map=None, _ver=None):
+def find_subseq(seq, subseq, /, begin=None, end=None, failure_map=None, _ver=None):
     for i in _find_subseq_overlap(seq, subseq, begin, end, failure_map, _ver=_ver):
         return i
     return -1
 
+    r'''
     if j == subL:
         r = i - j
         assert 0 <= begin <= r <= i <= end <= len(seq)
@@ -565,6 +781,7 @@ def find_subseq(seq, subseq, begin=None, end=None, failure_map=None, _ver=None):
         return r
     assert i == end and j < subL
     return -1
+    #'''
 
 
 def _t0():
@@ -580,7 +797,7 @@ def _t0():
     for _ver in [2,3]:
         iter_search_subseq_on_seq
         iter_search_subseq_on_stream
-def _iter_ans(seq:bytes, subseq, *, overlap):
+def _iter_ans(seq:bytes, subseq, /, *, overlap):
     i = 0
     step = 1 if overlap else (len(subseq) or 1)
     assert step
@@ -589,13 +806,13 @@ def _iter_ans(seq:bytes, subseq, *, overlap):
         if i < 0: return
         yield i
         i += step
-def _gen_data_sz4(seq_len, subseq_len, alphabet_size, *, overlap):
+def _gen_data_sz4(seq_len, subseq_len, alphabet_size, /, *, overlap):
     pairs = _gen_data_sz2(seq_len, subseq_len, alphabet_size)
     for seq, subseq in pairs:
         ans = [*_iter_ans(seq, subseq, overlap=overlap)]
         yield seq, subseq, ans, overlap
 
-def _gen_data_sz2(seq_len, subseq_len, alphabet_size):
+def _gen_data_sz2(seq_len, subseq_len, alphabet_size, /):
     assert 1 <= alphabet_size < 2**8
     n = seq_len + subseq_len
     it = itertools.product(range(alphabet_size), repeat=n)
@@ -605,7 +822,7 @@ def _gen_data_sz2(seq_len, subseq_len, alphabet_size):
         assert len(seq) == seq_len
         assert len(subseq) == subseq_len
         yield seq, subseq
-def _t_seq(overlap):
+def _t_seq(overlap, /):
     if overlap:
         f1 = find_subseq_overlap
     else:
@@ -615,21 +832,21 @@ def _t_seq(overlap):
         G(f1, _ver=[1,2,3])
         ,G(f2, _ver=[2,3], overlap=[overlap])
         ]
-    def seq2xxx(seq):
+    def seq2xxx(seq, /):
         return seq
-    def reset_xxx(xxx):
+    def reset_xxx(xxx, /):
         pass
     return seq2xxx, reset_xxx, gs
 
 
-def _t_stream(overlap):
+def _t_stream(overlap, /):
     f3 = iter_search_subseq_on_stream
     gs = [
         G(f3, _ver=[2,3], overlap=[overlap])
         ]
-    def seq2xxx(seq):
+    def seq2xxx(seq, /):
         return io.BytesIO(seq)
-    def reset_xxx(xxx):
+    def reset_xxx(xxx, /):
         xxx.seek(0)
     return seq2xxx, reset_xxx, gs
 def _t():
@@ -661,7 +878,7 @@ def _t():
             for (seq, subseq, ans, overlap) in it4:
                 for seq2xxx, reset_xxx, gs in s2x_gs_ls:
                     _t_sl(seq, subseq, ans, overlap, seq2xxx, reset_xxx, gs)
-def _t_sl(seq, subseq, ans, overlap, seq2xxx, reset_xxx, gs):
+def _t_sl(seq, subseq, ans, overlap, seq2xxx, reset_xxx, gs, /):
     xxx = seq2xxx(seq)
     for g in gs:
         [f] = g.args
@@ -710,30 +927,30 @@ if __name__ == "__main__":
 
 
 
-def iter_find(seq, x, begin=None, end=None):
+def iter_find(seq, x, /, begin=None, end=None):
     return iter_find_if(seq, lambda e: e==x, begin, end)
 
-def iter_find_if(seq, pred, begin=None, end=None):
+def iter_find_if(seq, pred, /, begin=None, end=None):
     begin, end, _ = slice(begin, end).indices(len(seq))
     for i in range(begin, end):
         if pred(seq[i]):
             yield i
 
-def find_if(seq, pred, begin=None, end=None):
+def find_if(seq, pred, /, begin=None, end=None):
     for i in iter_find_if(seq, pred, begin, end):
         return i
     return -1
 
-def find(seq, x, begin=None, end=None):
+def find(seq, x, /, begin=None, end=None):
     return find_if(seq, lambda e: e==x, begin, end)
 
-def seq_index_if(seq, pred, begin=None, end=None):
+def seq_index_if(seq, pred, /, begin=None, end=None):
     i = find_if(seq, pred, begin, end)
     if i < 0:
         raise ValueError('seq.index_if(pred) : not found')
     return i
 
-def seq_index(seq, x, begin=None, end=None):
+def seq_index(seq, x, /, begin=None, end=None):
     i = find(seq, x, begin, end)
     if i < 0:
         raise ValueError('seq.index(x) : not found')
@@ -742,7 +959,7 @@ def seq_index(seq, x, begin=None, end=None):
 seq_find = find
 
 
-##def find(ls, v, *args):
+##def find(ls, v, /, *args):
 ##    try:
 ##        i = ls.index(v, *args)
 ##        return i

@@ -1,5 +1,6 @@
 section:
-  nn_ns.filedir.backup_tools._debug
+  py函数定义添加『/』
+    #[过气] nn_ns.filedir.backup_tools._debug
   finger_tree_ops
 
 
@@ -10,8 +11,19 @@ section:
 
 
 
+[[ section: py反转赋值两侧
+  『sf._xy = xxx,yyy』
+  --> 『xxx,yyy = sf._xy』
+.,.+4s/^\(\s*\)\([^= ]\|[^= ][^=]*[^= ]\)\s*=\s*\(\S.*\)$/\1\3 = \2/
+]]
 
-
+[[ section: py函数定义添加『/』
+  『def f(...):』
+  --> 『def f(..., /):』
+#vim_cmd___update_def_api_to_use_slash
+%s/^\(\s*def \s*\w\+\s*[(]\(\s*\w\+[^/*),]*\)\(,\s*\w\+[^/*),]*\)*\)\(\(,\s*[*][^)]*\)\?[)]:\)/\1, \/\4/g
+]]
+  [[过气:
 [section:nn_ns.filedir.backup_tools._debug]:
 #begin of nn_ns.filedir.backup_tools._debug
 
@@ -44,6 +56,7 @@ section:
 
 
 #end of nn_ns.filedir.backup_tools._debug
+  ]]
 
 
 
@@ -55,6 +68,7 @@ section:
 
 
 
+[[
 [section:finger_tree_ops]:
 #begin of finger_tree_ops
 
@@ -109,4 +123,6 @@ forward call 4 wrapper class
 ReversedFingerTreeOps
 
 #end of finger_tree_ops
+]]
+
 

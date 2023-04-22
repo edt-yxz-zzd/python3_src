@@ -1,0 +1,1 @@
+py_adhoc_call   nn_ns.bin.extract_bytes5file   @extract_bytes5file "$@"

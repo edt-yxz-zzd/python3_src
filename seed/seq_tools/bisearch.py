@@ -1,12 +1,13 @@
 
+#from seed.seq_tools.bisearch import bisearch
+
 __all__ = ['bisearch']
 
 
 import operator
 from seed.tiny import echo
 
-def bisearch(x, array, begin=None, end=None
-        , *, key=None, __lt__=None, result_case=2):
+def bisearch(x, array, begin=None, end=None, /, *, key=None, __lt__=None, result_case=2):
     '''see also : bisect
 
 bisearch(x, a) == bisect_left(a, x), bisect_right(a, x)
@@ -52,9 +53,12 @@ output:
             result = (middle_begin, middle_end)
 
 example:
+    py -m seed.seq_tools.bisearch
+
     >>> test_bisearch()
     >>> test_bisearch2()
 
+    >>> from seed.seq_tools.bisearch import bisearch
     >>> this = bisearch
     >>> this(-1, [])
     (0, 0)
@@ -108,7 +112,8 @@ example:
     (2, 2)
     >>> this(5, [-6,-6,5,5,6,6],1,1)
     (1, 1)
-'''
+
+'''#'''
     if key is None:
         key = echo
     if __lt__ is None:
@@ -249,29 +254,14 @@ this(5, [-6,-6,5,5,6,6],1,1)
 
 
 
+from seed.seq_tools.bisearch import bisearch
+
 if __name__ == '__main__':
+    from seed.seq_tools.bisearch import bisearch, test_bisearch, test_bisearch2
     test_bisearch()
     test_bisearch2()
-
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -20,10 +20,14 @@ def main(args=None):
         )
     parser.add_argument('module_qual_names', type=str, default=[], nargs='+'
                         , help='python module qual_names')
+    parser.add_argument('-x', '--exclude_exported', action='store_true'
+                        , default = False
+                        , help='exclude names listed in module.__all__')
 
     args = parser.parse_args(args)
     qnames = args.module_qual_names
-    main__print_infos_of_modules(qnames)
+    exclude_exported = args.exclude_exported
+    main__print_infos_of_modules(qnames, exclude_exported=exclude_exported)
 
 
 if __name__ == "__main__":

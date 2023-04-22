@@ -1,0 +1,382 @@
+
+e ../../python3_src/seed/mapping_tools/determine_num_slots4hash_map.py_dict_impl.txt
+view ../../python3_src/seed/mapping_tools/example4py_dict_impl.py
+
+algo:[[
+  mp :: PyDictObject
+  dk = mp->ma_keys
+  dk :: PyDictKeysObject
+
+  assert mp->ma_used == len(mp)
+
+  assert IS_POWER_OF_2(dk->dk_size)
+  max_load = USABLE_FRACTION(dk->dk_size)
+  assert 1 <= max_load < dk->dk_size
+    # at least one null entry to stop collision resolution
+    #   def__collision_resolution:goto
+
+  assert 0 <= dk->dk_usable <= max_load
+  assert 0 <= dk->dk_nentries <= max_load
+  assert dk->dk_usable + dk->dk_nentries == max_load
+  assert dk->dk_nentries >= mp->ma_used
+    #DKIX_DUMMY: del but not reused and before resize
+    #
+    #mp->ma_used = num [ix >= 0]
+    #dk->dk_nentries = num [[ix >= 0]or[ix == DKIX_DUMMY]]
+    #dk->dk_usable = num [ix == DKIX_EMPTY]
+    #
+    # Split table doesn't allow deletion.  Combine it before del.
+    #
+  #dk->dk_entries
+  DK_ENTRIES(dk) work as a stack
+    decrement dk->dk_nentries iff pop
+        we can set some middle item be NULL but cannot decrement dk->dk_nentries
+        we can overwrite existing value emplace, but cannot reuse middle NULL slot
+
+    insert new item when no dk->dk_usable , must resize
+  def__collision_resolution:goto
+]]
+
+
+
+see:
+  dict_common_h:goto
+    dict-common.h
+
+    def struct/layout
+
+  dictobject_h:goto
+    dictobject.h
+
+    decl public method api <PyObject* mp>
+
+  cpython__dictobject_h:goto
+    cpython/dictobject.h
+
+    decl nonpublic _PyDict_xxx()<PyDictObject* mp>
+        #internal convert directly, why not change signature???
+
+  dictobject_c:goto
+    dictobject.c
+
+    impl method
+    impl parameters
+
+  dictnotes_txt:goto
+    dictnotes.txt
+
+    describing explorations into dictionary design and optimization.
+      * typical dictionary use patterns
+      * the parameters for tuning dictionaries
+      * several ideas for possible optimizations
+
+
+
+
+dictobject_h
+view /storage/emulated/0/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Include/dictobject.h
+  PyDict_SetItem
+  PyDict_DelItem
+
+dictnotes_txt
+view /storage/emulated/0/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Objects/dictnotes.txt
+  [[
+  PyDict_MINSIZE_SPLIT
+  PyDict_MINSIZE_COMBINED
+    #actually:PyDict_MINSIZE
+  USABLE_FRACTION
+  GROWTH_RATE
+
+Data Layout
+-----------
+
+Dictionaries are composed of 3 components:
+The dictobject struct itself
+A dict-keys object (keys & hashes)
+A values array
+  ]]
+
+
+
+dictobject_c
+view /storage/emulated/0/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Objects/dictobject.c
+  [[
+PyDictKeysObject:
+layout:
+
++---------------+
+| dk_refcnt     |
+| dk_size       |
+| dk_lookup     |
+| dk_usable     |
+| dk_nentries   |
++---------------+
+| dk_indices    |
+|               |
++---------------+
+| dk_entries    |
+|               |
++---------------+
+
+1. Unused.  index == DKIX_EMPTY
+2. Active.  index >= 0, me_key != NULL and me_value != NULL
+3. Dummy.  index == DKIX_DUMMY  (combined only)
+    Dummy slots cannot be made Unused again else the probe sequence in case of collision would have no way to know they were once active.
+    # used as mark, not to be reused
+4. Pending. index >= 0, key != NULL, and value == NULL  (split only)
+    #prev_defined key_set
+    #key exists already
+    # Split table doesn't allow deletion.  Combine it before del.
+
+[ix==DKIX_EMPTY|DKIX_DUMMY] -> [[key == NULL][value == NULL]]
+[ix>=0] -> [key != NULL]
+  * [value == NULL] -> split.reuse/Pending
+  * [value != NULL] -> exist
+
+
+
+def__DK_ENTRIES
+#define DK_SIZE(dk) ((dk)->dk_size)
+#if SIZEOF_VOID_P > 4
+#define DK_IXSIZE(dk)                          \
+    (DK_SIZE(dk) <= 0xff ?                     \
+        1 : DK_SIZE(dk) <= 0xffff ?            \
+            2 : DK_SIZE(dk) <= 0xffffffff ?    \
+                4 : sizeof(int64_t))
+#else
+#define DK_IXSIZE(dk)                          \
+    (DK_SIZE(dk) <= 0xff ?                     \
+        1 : DK_SIZE(dk) <= 0xffff ?            \
+            2 : sizeof(int32_t))
+#endif
+#define DK_ENTRIES(dk) \
+    ((PyDictKeyEntry*)(&((int8_t*)((dk)->dk_indices))[DK_SIZE(dk) * DK_IXSIZE(dk)]))
+
+#define DK_MASK(dk) (((dk)->dk_size)-1)
+#define IS_POWER_OF_2(x) (((x) & (x-1)) == 0)
+
+
+
+
+/*Global counter used to set ma_version_tag field of dictionary.
+ * It is incremented each time that a dictionary is created and each
+ * time that a dictionary is modified. */
+static uint64_t pydict_global_version = 0;
+
+#define DICT_NEXT_VERSION() (++pydict_global_version)
+
+
+#define PyDict_MINSIZE 8
+#define PERTURB_SHIFT 5
+#define USABLE_FRACTION(n) (((n) << 1)/3)
+#define ESTIMATE_SIZE(n)  (((n)*3+1) >> 1)
+#define GROWTH_RATE(d) ((d)->ma_used*3)
+_PyDict_NewPresized(Py_ssize_t minused)
+    const Py_ssize_t max_presize = 128 * 1024;
+
+
+#PERTURB_SHIFT used in def__collision_resolution:goto
+USABLE_FRACTION is the maximum dictionary load
+ESTIMATE_SIZE is reverse function of USABLE_FRACTION
+  #used in _PyDict_NewPresized, _PyDict_FromKeys[#set/dict#], dict_merge
+#GROWTH_RATE like ESTIMATE_SIZE but used when overflow
+  #used only in insertion_resize
+
+
+#cpython__dictobject_h
+  \<_PyDict_GetItem_KnownHash\>
+    .dk_lookup@dict_common_h
+      lookdict():
+    mask = DK_MASK(dk);
+    perturb = hash;
+    i = (size_t)hash & mask;
+
+    for (;;) {
+        Py_ssize_t ix = dictkeys_get_index(dk, i); # == dk->dk_indices[i]
+        ...ix ok? return ix/DKIX_ERROR...
+        perturb >>= PERTURB_SHIFT;
+        i = (i*5 + perturb + 1) & mask;
+    }
+    # def__collision_resolution:here
+    # probe sequence
+    # collision resolution
+
+
+
+
+
+\<PyDict_SetItem\>
+\<_PyDict_SetItem_KnownHash\>
+\<insertdict\>
+    Py_ssize_t ix = mp->ma_keys->dk_lookup(mp, key, hash, &old_value);
+    if (ix == DKIX_ERROR)
+        goto Fail;
+    if (ix == DKIX_EMPTY) {
+        /* Insert into new slot. */
+        assert(old_value == NULL);
+        if (mp->ma_keys->dk_usable <= 0) {
+            /* Need to resize. */
+            if (insertion_resize(mp) < 0)
+                goto Fail;
+        }
+        Py_ssize_t hashpos = find_empty_slot(mp->ma_keys, hash);
+            # find_empty_slot:The dict must be combined.
+        ep = &DK_ENTRIES(mp->ma_keys)[mp->ma_keys->dk_nentries];
+        dictkeys_set_index(mp->ma_keys, hashpos, mp->ma_keys->dk_nentries);
+          # see:dictkeys_get_index
+          # <==> mp->ma_keys->dk_indices[hashpos] := mp->ma_keys->dk_nentries as ix #append #?remove only if resize? yes:
+          #     Preserving insertion order: It's simple for combined table.  Since dk_entries is mostly append only, we can get insertion order by just iterating dk_entries.
+        ...
+        mp->ma_used++;
+        mp->ma_version_tag = DICT_NEXT_VERSION();
+        mp->ma_keys->dk_usable--;
+        mp->ma_keys->dk_nentries++;
+        assert(mp->ma_keys->dk_usable >= 0);
+\<insertion_resize\>
+    return dictresize(mp, GROWTH_RATE(mp));
+\<dictresize\>
+\<new_keys_object\>
+    assert(size >= PyDict_MINSIZE);
+    assert(IS_POWER_OF_2(size));
+    usable = USABLE_FRACTION(size);
+    dk->dk_refcnt = 1;
+    dk->dk_size = size;
+    dk->dk_usable = usable;
+    dk->dk_lookup = lookdict_unicode_nodummy;
+    dk->dk_nentries = 0;
+
+
+\<PyDict_DelItem\>
+\<_PyDict_DelItem_KnownHash\>
+    # Split table doesn't allow deletion.  Combine it before del.
+\<delitem_common\>
+    mp->ma_used--;
+    mp->ma_version_tag = DICT_NEXT_VERSION();
+
+
+bug??: not bug:maybe shared_keys
+  ?? if (USABLE_FRACTION(mp->ma_keys->dk_size) < other->ma_used)
+  ?? if (mp->ma_keys->dk_usable < other->ma_used)
+  ===
+  override <- [0..=2]
+  on common key k:
+    0 - not override lhs[k]
+    1 - override lhs[k] := rhs[k]
+    2 - raise KeyError
+  ===
+  dict_merge(PyObject *a, PyObject *b, int override)
+        /* Do one big resize at the start, rather than
+         * incrementally resizing as we insert new items.  Expect
+         * that there will be no (or few) overlapping keys.
+         */
+        if (USABLE_FRACTION(mp->ma_keys->dk_size) < other->ma_used) {
+            if (dictresize(mp, ESTIMATE_SIZE(mp->ma_used + other->ma_used))) {
+               return -1;
+            }
+        }
+
+
+static PyDictKeysObject *
+make_keys_shared(PyObject *op)
+
+  ]]
+
+
+cpython__dictobject_h
+view /storage/emulated/0/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Include/cpython/dictobject.h
+  [[
+PyDictKeysObject = _dictkeysobject
+
+PyDictObject
+    PyObject_HEAD #base/front portion
+
+    ma_used         # == len(mp)
+
+    ma_version_tag  # see:pydict_global_version
+
+    ma_keys :: PyDictKeysObject<key if ma_keys != NULL else PyDictKeyEntry>
+        # PyDictKeysObject *ma_keys
+
+
+    ma_values :: may [may value]
+        # PyObject **ma_values
+        # [ma_values == NULL] <==> [combined table][keys and values are stored in ma_keys]
+        # split table
+
+\<_PyDict_GetItem_KnownHash\>
+\<_PyDict_SetItem_KnownHash\>
+\<_PyDict_DelItem_KnownHash\>
+
+
+#define PyDict_GET_SIZE(mp)  (assert(PyDict_Check(mp)),((PyDictObject *)mp)->ma_used)
+  ==>> [len(mp) == mp->ma_used]
+
+#define _PyDict_HasSplitTable(d) ((d)->ma_values != NULL)
+  ==>> split_table_ver vs combined_table_ver
+
+  ]]
+
+dict_common_h
+view /storage/emulated/0/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Objects/dict-common.h
+  [[
+PyDictKeyEntry:
+  me_hash
+  me_key :: may k
+  me_value :: may v
+
+
+#define DKIX_EMPTY (-1)
+#define DKIX_DUMMY (-2)  /* Used internally */
+#define DKIX_ERROR (-3)
+
+#?DictKeysObject/PyDictKeysObject?
+#   yes, see:cpython__dictobject_h
+_dictkeysobject:
+    dk_refcnt
+    dk_size == 2**i
+
+    dk_lookup :: mp -> key -> hash -> value_addr -> xix/[-3..< USABLE_FRACTION(dk_size)]
+        def__dk_lookup:goto
+
+    dk_usable   # Number of usable entries in dk_entries
+
+    dk_nentries # Number of used entries in dk_entries
+
+    dk_indices :: [ix]{len==.dk_size}
+        ix <- [-2..< USABLE_FRACTION(dk_size)]
+        -2 ~ DKIX_DUMMY(-2)
+        -1 ~ DKIX_EMPTY(-1)
+
+
+    dk_entries :: [PyDictKeyEntry]{len==USABLE_FRACTION(dk_size)}
+       # see DK_ENTRIES()
+       #    def__DK_ENTRIES:goto
+};
+
+def__dk_lookup
+.dk_lookup :: mp -> key -> hash -> value_addr -> xix
+        mp - map
+        hashpos/i - index for dk_indices
+        ix = i|DKIX_DUMMY|DKIX_EMPTY
+              if ix >= 0: DK_ENTRIES(dk)[ix]
+        xix = ix|DKIX_ERROR
+
+    case .dk_lookup of:
+    * lookdict()
+        general-purpose
+        return DKIX_ERROR if key.__eq__ raise
+    * lookdict_unicode()
+        specialized to Unicode string keys
+        never return DKIX_ERROR
+
+    * lookdict_unicode_nodummy()
+         specialized for Unicode string keys that cannot be the <dummy> value
+
+    * lookdict_split():
+        Version of lookdict() for split tables
+
+
+  ]]
+
+
+

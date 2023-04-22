@@ -1,6 +1,33 @@
-
+#__all__:goto
 r'''[[[
 py -m seed.tiny
+
+/from \(seed[.]\)\@!
+    py std lib move to seed.tiny_....
+    eg: from seed.tiny_.types5py import MapView, kwargs2Attrs, curry1
+
+from seed.func_tools.dot2 import dot
+view ../../python3_src/seed/func_tools/dot2.py
+[[
+NOTE:
+    use dot[[...],] instead of dot[[...]]
+        which <==> partial(...)
+
+dot[f,g](*args, **kwargs)
+    =[def]= f(g(*args, **kwargs))
+
+dot[[f, arg...], g](*args, **kwargs)
+    =[def]= f(args..., g(*args, **kwargs))
+
+dot[[f, a...]:kw, g](*args, **kwargs)
+    =[def]= f(a..., g(*args, **kwargs), **kw)
+
+dot[[f, a...]:kw:[b...], g](*args, **kwargs)
+    =[def]= f(a..., g(*args, **kwargs), b..., **kw)
+
+dot[[f, a...]::[b...], g](*args, **kwargs)
+    =[def]= f(a..., g(*args, **kwargs), b...)
+]]
 
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
 from seed.tiny import fst, snd, at
@@ -12,6 +39,9 @@ from seed.tiny import check_callable, check_is_obj, check_is_None
 from seed.tiny_.check import check_str, check_char
 from seed.tiny import get_abstractmethod_names, check_manifest4abstractmethods
 
+from seed.tiny import null_dev
+from seed.tiny import null_context, null_context5result_
+from seed.tiny import inf, pos_inf, neg_inf
 from seed.tiny import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter  #,    null_sequence, null_set, null_mapping
     from seed.types.FrozenDict import FrozenDict, empty_FrozenDict as null_FrozenDict
     from seed.types.empty_containers import EmptyMapping, EmptySet, EmptySequence, empty_mapping, empty_set, empty_sequence, empty_tuple, empty_iterator
@@ -22,8 +52,38 @@ from seed.tiny import null_str, null_bytes, null_int, null_tuple, null_frozenset
 
 
 
+from seed.tiny_.nmay5tmay import nmay5star_tmay_, nmay5tmay_, nmay2tmay_
+def nmay5star_tmay_(*tmay_x, mix_ok=False):
+def nmay5tmay_(tmay_x, /, *, mix_ok=False):
+def nmay2tmay_(may_x, /):
+    vs:
+        seed.helper.get4may:nmay2tmay
+        seed.helper.get4may:get4may
+        ---
+        seed.tiny_.mk_fdefault.eliminate_tmay__mix
+        ---
+def eliminate_tmay__mix(tmay_value, imay_xdefault_rank, xdefault, /, *args4xdefault):
+
+def nmay2tmay(nmay, /):
+def get4nmay(nmay, default, /):
+def get4nmay__Nothing(Nothing, nmay, default, /):
+
 from seed.helper.get4may import nmay2tmay__Nothing, nmay2tmay, get4nmay__Nothing, get4nmay, fget4nmay__Nothing, fget4nmay, fgetP4nmay__Nothing_, fgetP4nmay_, fget4nmay__human, fget4nmay__Nothing__human, xget4nmay_, xget4nmay__human
+
 from seed.mapping_tools.fdefault import mapping_get__tmay_, mapping_get_fdefault__cased_, mapping_set_fdefault__cxxxvalue_, option2mapping_get__tmay
+
+from seed.tiny_.mk_fdefault import mk_default
+    #def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
+from seed.tiny_.mk_fdefault import mk_default__easy, mk_default, mk_default_or_raise
+    #def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
+    #def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
+    #def mk_default_or_raise(mirror_imay_xedefault_rank, xedefault, /, *args4xedefault, mirror:bool):
+    #   imay_xdefault_ranks = (-3)-mirror_imay_xedefault_rank if mirror_imay_xedefault_rank < -1 else mirror_imay_xedefault_rank
+    #   mirrored = (mirror_imay_xedefault_rank < -1) ^ bool(mirror)
+    #
+
+
+
 
 from seed.tiny_.mk_fdefault import mk_fdefault, mk_default, eliminate_tmay__mix, eliminate_tmay_or_raise__simple, BasePermissionMappingOps, SimplePermissionMappingOps, XDefaultDict, ops4XDefaultMapping
 
@@ -39,6 +99,12 @@ from seed.tiny_.mk_fdefault import BasePermissionMappingOps, SimplePermissionMap
 from seed.tiny import get5cls, call5cls, get5cls_, call5cls_
 
 
+from seed.types.Namespace import namespace2items, namespace2keys, namespace2values
+from seed.types.Namespace import MutabilityFlag4Namespace, mutability_flag2namespace_type
+from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOverwriteImplicitly, NamespaceForbidNewKey, NamespaceForbidSetitem, NamespaceForbidDelitem, NamespaceForbidAlterKeySet, NamespaceForbidModify
+
+
+
 #]]]'''
 
 
@@ -48,6 +114,7 @@ __all__ = str2__all__(r'''
     no_op               # :: (*args, **kwargs) -> None
     next__tmay          # :: Iter a -> tmay a
     lookup__tmay        # :: Lookupable k v -> tmay v  # Lookupable := hasattr __getitem__ raise LookupError
+    chains              # :: Iter (Iter a) -> Iter a
 
     slice2triple        # :: slice -> (.start, .stop, .step)
     range2triple        # :: range -> (.start, .stop, .step)
@@ -74,21 +141,36 @@ __all__ = str2__all__(r'''
     is_Weakable         # :: obj -> bool
     WeakableDict        # <: Weakable&dict
 
-    check_getitemable   # :: a -> None|raise TypeError
-    icheck_getitemable  # :: a -> a|raise TypeError
+    check_Hashable__shallow
+    check_Hashable__deep
+                        # :: obj -> None|raise TypeError
+    is_Hashable__shallow
+    is_Hashable__deep
+                        # :: obj -> bool
+
+    check_subscriptable
+    icheck_subscriptable
+        check_getitemable   # :: a -> None|raise TypeError
+        icheck_getitemable  # :: a -> a|raise TypeError
+
+    check_type_in       # :: [cls] -> a -> None|raise TypeError
     check_type_le       # :: cls -> a -> None|raise TypeError
     check_type_is       # :: cls -> a -> None|raise TypeError
+    icheck_type_in      # :: [cls] -> a -> a|raise TypeError
     icheck_type_le      # :: cls -> a -> a|raise TypeError
     icheck_type_is      # :: cls -> a -> a|raise TypeError
 
     check_tmay          # :: a -> None|raise TypeError
     check_pair          # :: a -> None|raise TypeError
+    check_either        # :: a -> None|raise TypeError
     check_uint          # :: a -> None|raise TypeError
     check_imay          # :: a -> None|raise TypeError
-    icheck_tmay          # :: a -> a|raise TypeError
-    icheck_pair          # :: a -> a|raise TypeError
-    icheck_uint          # :: a -> a|raise TypeError
-    icheck_imay          # :: a -> a|raise TypeError
+    icheck_tmay         # :: a -> a|raise TypeError
+    icheck_pair         # :: a -> a|raise TypeError
+    icheck_either       # :: a -> a|raise TypeError
+    icheck_uint         # :: a -> a|raise TypeError
+    icheck_imay         # :: a -> a|raise TypeError
+    icheck_bool           # :: a -> None|raise TypeError
 
     check_pseudo_identifier
                         # :: a -> None|raise TypeError
@@ -108,6 +190,7 @@ __all__ = str2__all__(r'''
     check_is_None       # :: a -> None|raise TypeError
     check_str           # :: a -> None|raise TypeError
     check_char          # :: a -> None|raise TypeError
+    check_bool           # :: a -> None|raise TypeError
 
     get_abstractmethod_names
                         # :: cls -> frozenset<attr>
@@ -142,6 +225,14 @@ __all__ = str2__all__(r'''
     assert_eq           # :: lhs -> rhs -> (_fmt=...) -> **vars -> ()
     assert_eq_f         # :: ans -> f -> *args -> (_fmt=...) -> **vars -> ()
     mk_assert_eq_f      # :: (_fmt=...) -> **vars -> (ans -> f -> *args -> **kwargs -> ())
+
+
+    null_dev            # fileobj mimic '/dev/null'
+    null_context        # null_context<None> # with null_context as _None:pass
+    null_context5result_# a -> null_context<a> # with null_context5result_(a) as a:pass
+    inf                 # float
+    pos_inf             # float
+    neg_inf             # float
     null_str            # == ''
     null_bytes          # == b''
     null_int            # == 0
@@ -149,9 +240,13 @@ __all__ = str2__all__(r'''
     null_frozenset      # == frozenset()
     null_mapping_view   # == MapView({})
     null_iter           # :: iter('') iter([])
-    #null_sequence       # == seed.types.empty_containers.EmptySequence()
-    #null_set            # == seed.types.empty_containers.EmptySet()
-    #null_mapping        # == seed.types.empty_containers.EmptyMapping()
+    #null_sequence      # == seed.types.empty_containers.EmptySequence()
+    #null_set           # == seed.types.empty_containers.EmptySet()
+    #null_mapping       # == seed.types.empty_containers.EmptyMapping()
+
+    mk_Just             # a -> (a,) # null_tuple as Nothing
+    mk_Left             # a -> (False,a)
+    mk_Right            # a -> (True,a)
 
     fst                 # :: (a, ...) -> a
     snd                 # :: (a, b, ...) -> b
@@ -179,6 +274,7 @@ __all__ = str2__all__(r'''
     __not__             # :: Testable a => a -> bool
     not_dot             # :: (a->bool) -> (a->bool)
     xor, xnor           # :: bool -> bool -> bool
+    not_                # :: x -> (not x)
     with_if
 
     with_key            # :: (a->k) -> Iter a -> Iter (k, a)
@@ -191,17 +287,43 @@ __all__ = str2__all__(r'''
                         # does_run_as_main.alter_main_name :: String
 
     MapView             # mapping -> MappingProxyType
-    kwargs2Attrs        # (**kwargs) -> SimpleNamespace
     curry1              # ((sf, /, *args, **kwargs) -> r) -> sf -> ((*args, **kwargs) -> r)
+    kwargs2Attrs        # (**kwargs) -> SimpleNamespace
+
+    Namespace           # dict & attrs
+    NamespaceSetOnce    # dict & attrs, each key set at most once
+        NamespaceForbidOverwriteImplicitly
+        NamespaceForbidNewKey
+        NamespaceForbidSetitem
+        NamespaceForbidDelitem
+        NamespaceForbidAlterKeySet
+        NamespaceForbidModify
+
     is_iterable         # a -> Bool
     is_iterator         # a -> Bool
     is_reiterable       # a -> Bool
+
+    is_callable         # a -> Bool
+    is_subscriptable    # a -> Bool
+    is_container        # a -> Bool
+    is_sized            # a -> Bool
+
     flip                # (a->b->r) -> (b->a->r)
     neg_flip            # (a->b->r) -> (b->a->-r)
     sign_of             # RealNumber -> (-1|0|+1)
 
-    bmk_pairs            # bmk_pairs[1:2, :]
-    bmk_triples          # bmk_triples[1:2:3, ::]
+    try_                # (*args->**kwargs->r) -> *args->**kwargs->tmay r
+        #vs:seed.tiny_.mk_fdefault:mk_tmay_from_try_fvalue
+
+
+    nmay5star_tmay_     # (*tmay x) -> (mix_ok=False) -> may x | ^TypeError # [mix_ok or not x is None]
+    nmay5tmay_          # tmay x -> (mix_ok=False) -> may x | ^TypeError # [mix_ok or not x is None]
+    nmay2tmay_          # may x -> tmay x
+
+    boolexpr_wrapper    # (*args->**kwargs->(bool|err_ty)) -> *args->**kwargs->(bool|^TypeError)
+
+    bmk_pairs           # bmk_pairs[1:2, :]
+    bmk_triples         # bmk_triples[1:2:3, ::]
     show_ordered_pairs_as_bmk_pairs
                         # pairs -> 'bmk_pairs[...]'
     show_ordered_triples_as_bmk_triples
@@ -238,11 +360,19 @@ __all__ = str2__all__(r'''
     str_split__both_list_and_entry_may_be_emty
                         # sep -> str -> [str]
 
+
+    partition_xs_by_bool_
+                        # may (x->bool) -> Iter x -> (bads/[x], goods/[x])
+    xs_to_vss_          # sz/uint -> may (x->idx) -> may (x->v) -> Iter x -> tuple<[v]>{len=sz}
+    xs_to_k2vs_         # may (x->idx) -> may (x->v) -> Iter x -> *may_k2vs_or_sz/(may (k2vs/{k:[v]} | sz/uint)) -> (k2vs | tuple<[v]>{len=sz})
+
+    fmap4may            # (a->b) -> may a -> may b
     fmap4dict_value     # (a->b) -> dict<k,a> -> dict<k,b>
     filter4dict_value   # (v->bool) -> dict<k,v> -> dict<k,v>
     group4dict_value    # (Hashable g) => (v->g) -> dict<k,v> -> dict<g, dict<k,v> >
     dict_add__is        # dict<k,v> -> k -> v -> None
     dict_add__eq        # Eq v => dict<k,v> -> k -> v -> None
+    dict_add__new       # Eq v => dict<k,v> -> k -> v -> None
     fmap4dict_value_with_key
                         # (k->a->b) -> dict<k,a> -> dict<k,b>
     filter4dict_value_with_key,filter4dict_item
@@ -264,7 +394,15 @@ __all__ = str2__all__(r'''
     default_cmp         # a->a->(-1/0/+1)
                         # cmp by (<)&(==)
                         # vs default_key = echo
+
+    BaseTuple           # usage: class X(BaseTuple): def __init__(...): check(...)
+
+    mk_SingletonClass   # module_qname -> type_qname -> *bases -> **kw -> SingletonClass
+    mk_existing_type_singleton #cls -> None
+    __new4singleton__   # used in SingletonClass.__new__
+    __newobj__          #used in __reduce__,__reduce_ex__ for pickle
     #''')
+__all__
 
 from seed.math.sign_of import sign_of
 from seed.helper.ifNone import ifNone, ifNonef
@@ -277,9 +415,14 @@ from seed.debug.lazy_raise import lazy_raise
 from seed.func_tools.not_dot import __not__, not_dot
 from seed.for_libs.next__tmay import next__tmay
 from seed.for_libs.lookup__tmay import lookup__tmay
+from seed.iters.chains import chains
 
-from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs, MethodType as curry1
+from seed.tiny_.types5py import MapView, kwargs2Attrs, curry1
+#from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs, MethodType as curry1
   #SimpleNamespace(**kw)
+from seed.types.Namespace import Namespace, NamespaceSetOnce
+from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOverwriteImplicitly, NamespaceForbidNewKey, NamespaceForbidSetitem, NamespaceForbidDelitem, NamespaceForbidAlterKeySet, NamespaceForbidModify
+
 from seed.tiny_.update_attr import update_attr, iupdate_attrs, set_attrs, prepare4set_attrs, fwd_call
 
 from seed.tiny_.HexReprInt import HexReprInt
@@ -327,11 +470,19 @@ assert (4-1,-1,-1) == fix_slice_by_len_of_(tuple, range(4), echo_key[::-1])
 assert range(4-1,-1,-1) == fix_slice_by_len_of_(range, range(4), echo_key[::-1])
 
 
+from seed.tiny_.check import check_subscriptable, icheck_subscriptable
 from seed.tiny_.check import check_getitemable, icheck_getitemable
-from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
+assert check_getitemable is check_subscriptable
+assert icheck_getitemable is icheck_subscriptable
+assert expectError(TypeError, lambda:check_subscriptable(set()))
+assert check_subscriptable('') is None
+
+from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
+from seed.tiny_.check import check_type_in, icheck_type_in
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 from seed.tiny_.check import check_str, check_char
+from seed.tiny_.check import check_bool, icheck_bool
 
 
 
@@ -341,11 +492,13 @@ check_tmay((0,))
 check_pair((0, 0))
 check_type_is(str, '')
 check_type_le(object, '')
+check_type_in([int, str], '')
 assert 1 == icheck_uint(1)
 assert (0,) == icheck_tmay((0,))
 assert (0,0) == icheck_pair((0, 0))
 assert '' == icheck_type_is(str, '')
 assert '' == icheck_type_le(object, '')
+assert '' == icheck_type_in([int, str], '')
 
 
 assert 'class'.isidentifier()
@@ -374,9 +527,34 @@ assert expectError(TypeError, lambda:check_char('ab'))
 
 
 
+from seed.tiny_.nmay5tmay import nmay5star_tmay_, nmay5tmay_, nmay2tmay_
 
 
-from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple
+assert expectError(TypeError, lambda:nmay5star_tmay_(None))
+assert expectError(TypeError, lambda:nmay5star_tmay_(999, 777))
+assert 999 == nmay5star_tmay_(999)
+assert None is nmay5star_tmay_()
+assert None is nmay5star_tmay_(None, mix_ok=True)
+
+
+assert expectError(TypeError, lambda:nmay5tmay_((None,)))
+assert expectError(TypeError, lambda:nmay5tmay_([999]))
+assert expectError(TypeError, lambda:nmay5tmay_((999, 777)))
+assert 999 == nmay5tmay_((999,))
+assert None is nmay5tmay_(())
+assert () == nmay2tmay_(None)
+assert (999,) == nmay2tmay_(999)
+
+
+
+
+
+from seed.tiny_.null_dev import null_dev
+from seed.tiny_.null_dev import null_context, null_context5result_
+
+from seed.tiny_.constants import inf, pos_inf, neg_inf
+
+from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
 assert mk_tuple([]) is null_tuple
 assert mk_frozenset([]) is null_frozenset
 assert null_str == ''
@@ -398,11 +576,12 @@ assert next(null_iter, None) is None
 
 
 
-from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, with_key, mk_fprint, fprint, py_cmp, int2cmp
+from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp
 from seed.debug.lazy_raise import lazy_raise
 
 #from collections.abc import Iterable, Iterator
 from seed.tiny_.verify import is_iterable, is_iterator, is_reiterable
+from seed.tiny_.verify import is_callable, is_subscriptable, is_container, is_sized
 
 assert is_iterable(null_tuple)
 assert is_reiterable(null_tuple)
@@ -412,10 +591,35 @@ assert is_iterable(null_iter)
 assert not is_reiterable(null_iter)
 assert is_iterator(null_iter)
 
+
+assert is_callable(id)
+assert not is_callable([])
+assert is_subscriptable([])
+assert not is_subscriptable(set())
+assert not is_subscriptable(1)
+assert is_container([])
+assert is_container(set())
+assert not is_container(1)
+assert is_sized([])
+assert is_sized(set())
+assert not is_sized(1)
+
 assert next__tmay(null_iter) == ()
 assert expectError(TypeError, lambda:next__tmay([1]))
 assert expectError(TypeError, lambda:next([1]))
 
+
+from seed.tiny_.try_ import try_
+#vs: #from seed.tiny_.mk_fdefault import mk_tmay_from_try_fvalue
+assert try_(list.index, [], 999) == ()
+assert try_(list.index, [777,999,888,666], 999) == (1,)
+
+
+from seed.tiny_.boolexpr_wrapper import boolexpr_wrapper
+assert expectError(TypeError, lambda:boolexpr_wrapper(int)(1))
+assert expectError(TypeError, lambda:boolexpr_wrapper(int)(0))
+assert boolexpr_wrapper(bool)(1) is True
+assert boolexpr_wrapper(bool)(0) is False
 
 
 from seed.tiny_.catched_call__either import catched_call__either, cached_catched_call__either, get_or_cached_catched_call__either
@@ -492,12 +696,28 @@ assert call5cls_('__getitem__', [1], 0) == 1
 
 from seed.tiny_.str__split_join import str_join__list_nonemty, str_split__list_nonemty, str_join__entry_nonemty, str_split__entry_nonemty, str_join__both_list_and_entry_may_be_emty, str_split__both_list_and_entry_may_be_emty
 
-from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, group4dict_value
+from seed.tiny_.group__partition import partition_xs_by_bool_, xs_to_vss_, xs_to_k2vs_
+
+assert xs_to_k2vs_(fst, snd, [(1,2),(3,4),(1,999,5),(3,4),(5,6)]) == {1: [2, 999], 3: [4, 4], 5: [6]}
+assert xs_to_vss_(4, len, snd, [(1,2),(3,4),(1,999,5),(3,4),(5,6)]) == ([], [], [2, 4, 4, 6], [999])
+assert partition_xs_by_bool_(None, [0,1,-2,False, ...,True, None,[],(),[3]]) == ([0, False, None, [], ()], [1, -2, Ellipsis, True, [3]])
+
+
+from seed.tiny_.fmap4may import fmap4may
+
+from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, dict_add__new, group4dict_value
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value_with_key, filter4dict_value_with_key, group4dict_value_with_key, filter4dict_item, group4dict_item
 
 
 from seed.tiny_.CallCounter import CallCounter
 from seed.tiny_.default_cmp import default_cmp
+
+from seed.tiny_.BaseTuple import BaseTuple
+from seed.tiny import BaseTuple
+
+from seed.tiny_.singleton import mk_SingletonClass, mk_existing_type_singleton
+from seed.tiny_.singleton import __newobj__, __new4singleton__
+
 
 
 def does_run_as_main(__name__):

@@ -2,6 +2,12 @@
 
 '''
 test all submodules/subpackages of a package
+see:
+    seed.for_libs.for_doctest
+        nn_ns.app.doctest_cmd
+    seed.test_utils.doctest_all
+        nn_ns.app.doctest_all
+
 '''
 
 __all__ = '''

@@ -56,6 +56,11 @@ __all__ = '''
 ___begin_mark_of_excluded_global_names__0___ = ...
 ___end_mark_of_excluded_global_names__0___ = ...
 
+
+view ../../python3_src/useful.txt
+新版:
+%s/^\(\s*def \s*\w\+\s*[(]\(\s*\w\+[^/*),]*\)\(,\s*\w\+[^/*),]*\)*\)\(\(,\s*[*][^)]*\)\?[)]:\)/\1, \/\4/g
+下面已过气:见上面
 # exec these two cmds in vim
 %s/\(def [^/*]\+[^/*(]\)\(\(,\s\+[*].*\)\?[)]:\)$/\1, \/\2/g
 %s/\(def [^/*]\+[/],\)\s\+\([*],.*[)]:\)$/\1\2/g
@@ -112,7 +117,7 @@ if __name__ == '__main__':
     qnames = qnames_in_lines.split()
     del qnames_in_lines
 
-def print_unbound_names_of_modules(qnames):
+def print_unbound_names_of_modules(qnames, /):
     excludes = '''
         logic err
         '''.split()
@@ -128,7 +133,7 @@ def print_unbound_names_of_modules(qnames):
             if unbound_name not in excludes:
                 print(f'    {unbound_name!s}@{space_lineno_list}')
 
-def _f2(qnames):
+def _f2(qnames, /):
     from seed.helper.print_global_names import print_global_names
     import importlib
 
@@ -139,12 +144,12 @@ def _f2(qnames):
         print(bar)
 
 
-def print_global_names_of_modules(qnames):
+def print_global_names_of_modules(qnames, /, *, exclude_exported:bool):
     from seed.helper.print_global_names import print_global_names_ex
     import importlib
     from pathlib import Path
 
-    def f(__name__):
+    def f(__name__, /):
         if __name__ == '__main__':
             module = importlib.import_module(__name__)
             m = module.__package__
@@ -160,17 +165,23 @@ def print_global_names_of_modules(qnames):
             pass
         g(__name__)
 
-    def g(__name__):
+    def g(__name__, /):
         print(f'module: {__name__}: globals')
         module = importlib.import_module(__name__)
-        print_global_names_ex(module.__dict__,  prefix=' '*4, ___begin_mark_pattern_of_excluded_global_names___=r'___begin_mark_of_excluded_global_names__\d+___', ___end_mark_pattern_of_excluded_global_names___=r'___end_mark_of_excluded_global_names__\d+___')
+        if exclude_exported:
+            __all__ = getattr(module, '__all__', [])
+        else:
+            __all__ = []
+        print_global_names_ex(module.__dict__,  prefix=' '*4, excluded_names=__all__, ___begin_mark_pattern_of_excluded_global_names___=r'___begin_mark_of_excluded_global_names__\d+___', ___end_mark_pattern_of_excluded_global_names___=r'___end_mark_of_excluded_global_names__\d+___')
         print(bar)
-    for __name__ in qnames:
-        f(__name__)
+    def main():
+        for __name__ in qnames:
+            f(__name__)
+    return main()
 
 
 
-def print_toplevel_def_heads_of_modules(qnames):
+def print_toplevel_def_heads_of_modules(qnames, /):
     from seed.helper.print_global_names import print_global_names_ex
     import importlib
     import ast
@@ -200,15 +211,15 @@ def print_toplevel_def_heads_of_modules(qnames):
                 Assign
                 AnnAssign
                 '''.split())
-        def handle__basic(basic_top_stmt_node):
+        def handle__basic(basic_top_stmt_node, /):
             node = basic_top_stmt_node
             i = node.lineno
             i -= 1
             print(f'    {lines[i]!s}')
-        def handles(top_stmt_nodes):
+        def handles(top_stmt_nodes, /):
             for top_stmt_node in top_stmt_nodes:
                 handle(top_stmt_node)
-        def handle(top_stmt_node):
+        def handle(top_stmt_node, /):
             cls = type(top_stmt_node)
             if cls.__name__ in basic_names:
                 handle__basic(top_stmt_node)
@@ -274,10 +285,10 @@ if __name__ == '__main__':
     ___end_mark_pattern_of_excluded_global_names__9999___ = ...
 
 bar = '='*22
-def main__print_infos_of_modules(qnames):
+def main__print_infos_of_modules(qnames, /, *, exclude_exported:bool):
     print_unbound_names_of_modules(qnames)
     print(bar); print(bar); print(bar)
-    print_global_names_of_modules(qnames)
+    print_global_names_of_modules(qnames, exclude_exported=exclude_exported)
     print(bar); print(bar); print(bar)
     print_toplevel_def_heads_of_modules(qnames)
     print(bar); print(bar); print(bar)

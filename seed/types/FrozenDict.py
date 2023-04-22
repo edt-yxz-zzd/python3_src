@@ -1,5 +1,5 @@
 
-'''
+r'''
 ReadOnly mapping ==>> MappingProxyType
     mapping view
     not hashable
@@ -11,7 +11,11 @@ KeysImmutable mapping ==>> HalfFrozenDict
     not hashable
 
 from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, HalfFrozenDict
-'''
+
+see:
+    view ../../python3_src/seed/types/DictWithNewProtocol.py
+    view ../../python3_src/seed/types/FrozenDict.py
+'''#'''
 
 
 __all__ = '''
