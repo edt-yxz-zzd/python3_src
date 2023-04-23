@@ -1,0 +1,4 @@
+cp -n -t "$@"
+  #-n: silently skip instead silently overwrite
+  #-t: -t dst_dir src...
+

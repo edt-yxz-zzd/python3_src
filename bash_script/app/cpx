@@ -1,0 +1,6 @@
+#
+
+#e ../../python3_src/bash_script/app/cpx
+#view ../../python3_src/bash_script/app/cp_xr_T
+#
+cp_xr_T "$@"
