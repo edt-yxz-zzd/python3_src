@@ -4,6 +4,12 @@
 #    /foo/*
 #    !/foo/bar
 #
+#
+#vim tmp file: .xxx.txt.swp .*.swo ...
+/**/.*
+#git
+!/.git
+!/.gitignore
 #python cache
 /**/__pycache__
 /java_src/**/*.class

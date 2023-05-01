@@ -1,6 +1,10 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
+
+see:py_all@bash_script
+    py_adhoc_call ''  ,str.list '%difflib:__all__@all' =all
+
 [[
 TODO:选项:添加:『+lineno』:『,』枚举时附加行号
   py -m nn_ns.app.adhoc_argparser__main__call8module +lineno  x   ,f
@@ -18,7 +22,7 @@ py_adhoc_call =[def]=:
 
 
 seed.recognize.cmdline.adhoc_argparser
-py -m nn_ns.app.debug_cmd   seed.recognize.cmdline.adhoc_argparser
+py -m nn_ns.app.debug_cmd   seed.recognize.cmdline.adhoc_argparser -x
 py -m nn_ns.app.doctest_cmd   seed.recognize.cmdline.adhoc_argparser:__doc__
 
 py -m seed.recognize.cmdline.adhoc_argparser @_NOP_
@@ -145,7 +149,8 @@ from seed.recognize.cmdline.adhoc_argparser import import_regex
 >>> not_match_(import_regex, '%x:,a')
 
 
->>> not_match_(import_regex, '%')
+>>> not_match_(import_regex, '%') ##++smay_qnm_as__pattern
+False
 >>> not_match_(import_regex, '%.')
 >>> not_match_(import_regex, '%.x')
 >>> not_match_(import_regex, '%x.')
@@ -215,10 +220,101 @@ __all__ = '''
 
     AdhocArgParserError
     _NOP_
-    '''.split()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    '''.split()#'''
+'''
+nm__pattern
+qnm__pattern
+qnm_as__pattern
+smay_qnm_as__pattern
+import_pattern
+arg_pattern
+arg_regex
+import_regex
+AdhocArgParserError
+AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag
+AdhocArgParserError__show_help_then_exit_with_err
+eval_single_arg_payload
+adhoc_argparser__main__subcmds
+adhoc_argparser__main
+args5may_argv
+adhoc_argparse__subcmds
+adhoc_argparse
+prefixes4func_name4adhoc_argparser__main__call
+adhoc_argparser__main__call
+adhoc_argparser__main__call8module
+show_help
+help_flags
+is_help_flag_
+filter_startswith_
+adhoc_argparse__call
+checked_fullmatch__import_pattern
+adhoc_argparse__import
+adhoc_argparse__args
+adhoc_argparse__args__ver2
+adhoc_argparse__args__ver1
+    '''.split()#'''
     #adhoc_argparser__main
     #adhoc_argparse
     #eval_single_arg_payload
+#__all__:goto
 
 from importlib import import_module
 from operator import attrgetter
@@ -227,6 +323,7 @@ import sys
 import re
 import builtins
 
+from seed.lang.call_ import call_
 from seed.func_tools.detect_depth4fail import decorator4show_py_help
 from seed.helper.stable_repr import stable_repr
 from seed.helper.safe_eval import safe_eval, safe_exec
@@ -243,7 +340,8 @@ from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
 #   err: %x..y
 
 qnm_as__pattern = fr'(?:{qnm__pattern}(?:@{nm__pattern}?)?)'
-import_pattern = fr'(?:%(?P<pkg_as>{qnm_as__pattern})(?:(?P<from_import>[:])(?P<ls4import>(?:{qnm_as__pattern}(?:,{qnm_as__pattern})*)?))?)'
+smay_qnm_as__pattern = fr'(?:{qnm__pattern}?(?:@{nm__pattern}?)?)'
+import_pattern = fr'(?:%(?P<pkg_as>{smay_qnm_as__pattern})(?:(?P<from_import>[:])(?P<ls4import>(?:{qnm_as__pattern}(?:,{qnm_as__pattern})*)?))?)'##++smay_qnm_as__pattern
     # %xxx.yyy:aaa.bbb,ddd.eee@ccc
         #import the name "aaa", "ccc"
     # %xxx.yyy@:aaa.bbb@
@@ -304,8 +402,12 @@ def adhoc_argparser__main__subcmds(nm2main, may_argv, /):
     main_func = nm2main
     if not callable(main_func): raise AdhocArgParserError(subcmds)
 
-    return main_func(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    #bug:return main_func(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    #   eg:main_func=dir/locals/globals
+    return call_(main_func, *positional_args, **flag2bool, **keyword2arg, **keyword2args)
 adhoc_argparser__main = adhoc_argparser__main__subcmds
+
+
 
 def args5may_argv(may_argv, /):
     if may_argv is None:
@@ -356,7 +458,9 @@ def adhoc_argparser__main__call(nm2main, may_argv, /):
 def adhoc_argparser__main__call8module(may_argv, /):
     def options4argparser_func_name_to_main_func(options4argparser, func_name, /):
         if not len(options4argparser)==1: raise AdhocArgParserError(NotImplementedError(options4argparser))
-        [module_qname] = options4argparser
+        [smay_module_qname] = options4argparser
+        check_type_is(str, smay_module_qname)
+        module_qname = smay_module_qname if smay_module_qname else 'builtins'
         module = import_module(module_qname)
         main_func = getattr(module, func_name)
         return main_func
@@ -515,6 +619,10 @@ def _parse__import_pattern(m, /):
         qnm_as__ls = may_smay_ls4import.split(',') if may_smay_ls4import else []
     d = {}
 
+    if pkg_as.startswith('@') or not pkg_as:
+        ##++smay_qnm_as__pattern
+        pkg_as = f'builtins{pkg_as}'
+    #print(pkg_as)
     (qnm4check, qnm4obj, smay_at, as_nm) = _parse__qnm_as(pkg_as)
     module_obj4from = import_module(qnm4check)
     if smay_at or not may_from_import:

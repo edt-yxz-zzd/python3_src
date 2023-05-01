@@ -112,6 +112,7 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
+from seed.lang.call_ import call_
 from seed.for_libs.for_builtins.py_help import py_help_, py_help
 from seed.tiny import check_type_le, check_uint, print_err, ifNone
 from functools import wraps
@@ -139,14 +140,26 @@ def detect_depth4fail__exc_(may_max_depth, exc, /):
     imay_depth = depth if is_good(depth) else -1
     return imay_depth
 
+def _add4may_max_depth_(may_max_depth, i, /):
+    if not may_max_depth is None:
+        may_max_depth += i
+    return may_max_depth
 def detect_depth4fail__call_(to_reraise_, may_max_depth, may_ErrorT, f, /, *args, **kwds):
     'to_reraise_/(exc->imay_depth->bool) -> may max_depth -> may E -> f -> *args -> **kwds -> (is_ok, ((exc,imay_depth)|result))'
     ErrorT = ifNone(may_ErrorT, Exception)
+    ver = 2
     try:
-        r = f(*args, **kwds)
+        if ver == 2:
+            r = call_(f, *args, **kwds)
+        else:
+            #bug:
+            #   eg:f=dir/locals/globals
+            r = f(*args, **kwds)
     #except BaseException as exc:
     #except Exception as exc:
     except ErrorT as exc:
+        if ver == 2:
+            may_max_depth = _add4may_max_depth_(may_max_depth, 1)
         imay_depth = detect_depth4fail__exc_(may_max_depth, exc)
         if to_reraise_(exc, imay_depth):
             raise

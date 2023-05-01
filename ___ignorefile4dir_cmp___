@@ -9,4 +9,8 @@
 -glob:'script/cpp/**/*.out'
 -glob:'script/cpp/**/*.o'
 -glob:'script/cpp/**/*.gch'
+-glob:'**/_ignore__unzip'
+-glob:'**/_ignore__unzip/**'
+-glob:'**/_ignore__build'
+-glob:'**/_ignore__build/**'
 
