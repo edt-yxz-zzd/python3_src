@@ -10,13 +10,18 @@ u2vtc is a mapping if obj_graph or sequence if int_graph
 vtc is a Sequence if oriented or MultiSet/Set if not oriented
 dedges = [(a,b)] # a->b
 
-'''
+
+
+
+from seed.graph.U2Vtc_To_DigraphABC import ObjU2Vtc_To_Digraph, IntU2Vtc_To_Digraph
+from seed.graph.U2Vtc_To_DigraphABC import U2Vtc_To_DigraphABC
+'''#'''
 
 __all__ = '''
     U2Vtc_To_DigraphABC
     ObjU2Vtc_To_Digraph
     IntU2Vtc_To_Digraph
-'''.split()
+'''.split()#'''
 
 
 from collections import defaultdict
@@ -31,7 +36,7 @@ def make_int_graph_map(N):
 def make_int_graph_set(N):
     buffer = [None]*N
     return OneTimeSet(buffer)
-    
+
 def int_graph_dedges2u2vtc(dedges, missing_vtc):
     dedges, missing_vtc = map(to_container, [dedges, missing_vtc])
     iter_vtc = lambda:chain(missing_vtc, chain.from_iterable(dedges))
@@ -45,7 +50,7 @@ def int_graph_dedges2u2vtc(dedges, missing_vtc):
     if len(s) != N:
         assert len(s) < N
         raise ValueError('miss some vertices')
-    
+
     d = make_int_graph_map(N)
     dd = DefaultDict(d, list)
     _dedges2u2vtc(dedges, missing_vtc, dd, list.append)
@@ -60,7 +65,7 @@ def int_graph_dedges2u2vtc(dedges, missing_vtc):
     return u2vtc
 
 
-    
+
 
 
 
@@ -69,11 +74,11 @@ def obj_graph_dedges2u2vtc(dedges, missing_vtc):
     d = defaultdict(list)
     _dedges2u2vtc(dedges, missing_vtc, d, list.append)
     return dict(d)
-    
+
 def _dedges2u2vtc(dedges, missing_vtc, outputDefaultDict, neighbors_add):
     'isolated_vertices <= missing_vtc <= all_vertices'
     add = neighbors_add
-    d = aDefaultDict
+    d = outputDefaultDict
     for a, b in dedges:
         add(d[a], b)
         d[b]
@@ -89,7 +94,7 @@ class U2Vtc_To_DigraphABC(DigraphABC):
 ##        return dict
 ##    def make_vertex_set(self):
 ##        return set
-    
+
     def num_vertices(self):
         return len(self.u2vtc)
     def num_dedges(self):
@@ -106,8 +111,8 @@ class U2Vtc_To_DigraphABC(DigraphABC):
         return e
     def iter_neighbors(self, v):
         return iter(self.u2vtc[v])
-            
-    
+
+
 
 
 class ObjU2Vtc_To_Digraph(U2Vtc_To_DigraphABC):
@@ -130,5 +135,8 @@ class IntU2Vtc_To_Digraph(U2Vtc_To_DigraphABC):
     def from_vertex_pairs(cls, pairs, missing_vtc):
         u2vtc = int_graph_dedges2u2vtc(pairs, missing_vtc)
         return cls(u2vtc)
-        
-    
+
+
+from seed.graph.U2Vtc_To_DigraphABC import ObjU2Vtc_To_Digraph, IntU2Vtc_To_Digraph
+from seed.graph.U2Vtc_To_DigraphABC import U2Vtc_To_DigraphABC
+from seed.graph.U2Vtc_To_DigraphABC import *

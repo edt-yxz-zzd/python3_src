@@ -4,7 +4,7 @@ r'''
 e ../../python3_src/seed/math/matrix/solve_matrix.py
 seed.math.matrix.solve_matrix
 py -m seed.math.matrix.solve_matrix
-py -m nn_ns.app.debug_cmd   seed.math.matrix.solve_matrix
+py -m nn_ns.app.debug_cmd   seed.math.matrix.solve_matrix -x
 from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_ops__Fraction
 
 used in:
@@ -148,6 +148,8 @@ __all__ = '''
         linear_solver
     FractionRingExOps
         ring_ex_ops__Fraction
+    BinaryFieldRingExOps
+        ring_ex_ops__BinaryField
 
 
 
@@ -157,7 +159,6 @@ __all__ = '''
         BasicOps4MatrixOverRing
             LinearEquationSolver
                 linear_solver
-            LinearInequationSolverOverRealNumber
 
     ValidateFailure
     DataDimensionalError
@@ -171,6 +172,11 @@ __all__ = '''
 
     list_reversed
     '''.split()
+            #LinearInequationSolverOverRealNumber
+    #InequalitySign
+    #total_inequality_signs
+    #all_inequality_signs
+    #sorted_inequality_signs
 
 #################################
 #HHHHH
@@ -189,6 +195,8 @@ from seed.math.IRingOps import (
     NonInvertibleError
     ,IRingOps
         ,IRingExOps
+            ,BinaryFieldRingExOps
+                ,ring_ex_ops__BinaryField
         ,IRingOpsOverRealNumber
             ,IRingExOpsOverRealNumber
         ,IPyRingOps
@@ -1187,7 +1195,7 @@ _sorted_inequality_signs = sorted(InequalitySign, key=lambda sgn:sgn.name)
 assert sorted_inequality_signs == _sorted_inequality_signs
 #print(sorted_inequality_signs)
 
-r'''
+r'''[[[
 class LinearInequationSolverOverRealNumber(LinearEquationSolver):
     __slots__ = ()
     #def solve_equations__matrix
@@ -1256,7 +1264,10 @@ todo:MOVE OUT sizes_to_ground_idx2super_idx_inner_idx_pair...
 
         pass
         #......
-#'''
+'''#]]]'''
+
+from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
+from seed.math.matrix.solve_matrix import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

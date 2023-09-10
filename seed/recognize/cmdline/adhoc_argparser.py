@@ -82,6 +82,8 @@ xxx.yyy 模块全名
     g=repr|str|ascii|hex|... #builtins.*
      |not_show
      |stable_repr
+     |stable_repr__expand_top_layer
+     |stable_repr__expand_all_layer
 
 ?新增『+lineno』:
     or函数名之前的选项:
@@ -326,6 +328,8 @@ import builtins
 from seed.lang.call_ import call_
 from seed.func_tools.detect_depth4fail import decorator4show_py_help
 from seed.helper.stable_repr import stable_repr
+from seed.helper.stable_repr import stable_repr__expand_all_layer
+from seed.helper.stable_repr import stable_repr__expand_top_layer
 from seed.helper.safe_eval import safe_eval, safe_exec
 from seed.tiny import mk_tuple, check_type_is, check_type_le, check_callable, ifNone
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
@@ -440,6 +444,8 @@ if 0:
     _setting4using_hex = 'hex.'
     _setting4not_show = 'not_show.'
     _setting4using_stable_repr = 'stable_repr.'
+    _setting4using_stable_repr__expand_top_layer = 'stable_repr__expand_top_layer.'
+    _setting4using_stable_repr__expand_all_layer = 'stable_repr__expand_all_layer.'
 prefixes4func_name4adhoc_argparser__main__call = {_prefix4unpack_iter, _prefix4normal_call}
 
 def adhoc_argparser__main__call(nm2main, may_argv, /):
@@ -514,7 +520,7 @@ usage:
 py_adhoc_call    xxx.yyy  @g =1 :2 --p=3 ++ls=4 ++ls:5 -f +t
     <==> from xxx.yyy import g; print(repr(g(1,'2',p=3,ls=[4,'5'],f=False,t=True)))
 
-#『repr』-->『not_show/stable_repr』/py.__builtins__.『repr/str/hex/ascii/...』
+#『repr』-->『not_show/stable_repr/stable_repr__expand_top_layer/stable_repr__expand_all_layer』/py.__builtins__.『repr/str/hex/ascii/...』
 py_adhoc_call    xxx.yyy  @not_show.g
     <==> from xxx.yyy import g; g()
 py_adhoc_call    xxx.yyy  @hex.g
@@ -678,6 +684,10 @@ def _parse_payload4prefix(prefix, payload4prefix, /):
         else:
             if nm == 'stable_repr':
                 to_str = stable_repr
+            elif nm == 'stable_repr__expand_top_layer':
+                to_str = stable_repr__expand_top_layer
+            elif nm == 'stable_repr__expand_all_layer':
+                to_str = stable_repr__expand_all_layer
             elif not hasattr(builtins, nm):raise AdhocArgParserError
             else:
                 to_str = getattr(builtins, nm)

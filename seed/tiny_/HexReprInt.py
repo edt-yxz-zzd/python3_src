@@ -1,4 +1,7 @@
 r'''
+see:
+    view ../../python3_src/seed/tiny_/HexReprInt.py
+    view ../../python3_src/seed/helper/ConstantRepr.py
 
 usage:
     比如：ord(char) 就希望 显示 hex 而非 decimal

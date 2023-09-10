@@ -1,0 +1,17 @@
+e ../../python3_src/c_external/fxt/move_out_ignores.txt
+
+slow down grep,git,...
+  !du -hs  ../../python3_src/c_external/fxt/_ignore__unzip/
+    16M
+  !du -hs  ../../python3_src/c_external/fxt/_ignore__build/
+    4.4M
+
+!mkdir ../../fxt/
+xxx !mv -t ../../fxt/ ../../python3_src/c_external/fxt/_ignore__build/ ../../python3_src/c_external/fxt/_ignore__unzip/
+  命令行 移动太慢
+  系统自带 文件夹管理器 移动快，手动移
+  外存 本来也不支持 link，没理由慢
+
+!mkdir ../../python3_src/c_external/fxt/_ignore__build/ ../../python3_src/c_external/fxt/_ignore__unzip/
+
+

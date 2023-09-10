@@ -684,7 +684,7 @@ def extract_info5parameter__py3_(parameter, /):
     check_type_is(_Parameter__py3, parameter)
     return (parameter.kind, parameter.name, parameter.annotation, parameter.default)
 def get_signature_of__py3_(f, /, follow_wrapped=True):
-    r'''-> (infoss4input/(infos4idx_only, infos4idx_nm_both, tmay_info4varargs, infos4nm_only, tmay_info4varkwds), return_annotation)'
+    r'''-> (infoss4input/(infos4idx_only, infos4idx_nm_both, tmay_info4varargs, infos4nm_only, tmay_info4varkwds), tmay_return_annotation)
 
     ===
     infos4xxx :: [info4parameter]

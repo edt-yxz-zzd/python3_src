@@ -7,9 +7,14 @@ py -m   nn_ns.CJK.CJK_data.汉字繁简 -sz 16
 py -m   nn_ns.CJK.CJK_data.汉字繁简 -sz 16 -py
 py -m   nn_ns.CJK.CJK_data.汉字繁简 -sz 16 -py -o ../../python3_src/nn_ns/CJK/CJK_data/汉字繁简囗囗平凡自反囗唯一可逆.py
 view  ../../python3_src/nn_ns/CJK/CJK_data/汉字繁简囗囗平凡自反囗唯一可逆.py
+py -m   nn_ns.CJK.CJK_data.汉字繁简 -sz 16 -py -o ../../python3_src/nn_ns/CJK/CJK_data/汉字繁简囗囗平凡自反囗唯一可逆囗囗打完补丁囗简繁字对囗补丁囗㝉宁相关.py
+view  ../../python3_src/nn_ns/CJK/CJK_data/汉字繁简囗囗平凡自反囗唯一可逆囗囗打完补丁囗简繁字对囗补丁囗㝉宁相关.py
 
-py -m nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆
-from nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆 import 汉字列表囗繁简囗平凡自反, 繁简字对列表囗繁简囗唯一可逆
+py -m nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆囗囗打完补丁囗简繁字对囗补丁囗㝉宁相关
+from nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆囗囗打完补丁囗简繁字对囗补丁囗㝉宁相关 import 汉字列表囗繁简囗平凡自反, 繁简字对列表囗繁简囗唯一可逆
+deprecated:
+    py -m nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆
+    from nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆 import 汉字列表囗繁简囗平凡自反, 繁简字对列表囗繁简囗唯一可逆
 
 
 from nn_ns.CJK.CJK_data.汉字繁简 import 简繁字对集, 繁体字到简体字串, 简体字到繁体字串
@@ -419,12 +424,17 @@ def main(args=None, /):
         fprint = mk_fprint(ofile)
         fff({**locals()})
         r'''
+===起始:
 汉字列表囗繁简囗平凡自反:14520
 㓟㕕㕭㕸㖠㗅㗆㗎㞗㤻㦴㧵㨘㨢㩒㩧㩻㱦㹃
 
-
 繁简字对列表囗繁简囗唯一可逆:1966*2
 䊷䌶䋙䌺䝼䞍丟丢亂乱亙亘來来侶侣俁
+
+===打补丁-简繁字对囗补丁囗㝉宁相关:之后:
+汉字列表囗繁简囗平凡自反:14517
+汉字列表囗繁简囗平凡自反:14513
+繁简字对列表囗繁简囗唯一可逆:1965*2
 
 '''#'''
 

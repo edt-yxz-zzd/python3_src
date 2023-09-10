@@ -6,13 +6,14 @@ __all__ = '''
 '''.split()
 
 
-from .dfs import *
+#from .dfs import *
+from seed.graph.dfs import dfs, ENTER, EXIT, BACK, CROSS_OR_FORWARD
 from seed.types.pair_based_leftward_list import iter_leftward_list
 
 def is_DAG(g, roots=None):
     return not _find_one_cycle(g, roots) # bug : forgot "not"
 
-def iter_reversed_topological_ordering(dag, roots=None):
+def iter_reversed_topological_ordering(g, roots=None):
     for case, path in dfs(g, roots):
         if case == EXIT:
             yield path[0]
@@ -20,7 +21,7 @@ def iter_reversed_topological_ordering(dag, roots=None):
             raise ValueError('Not a DAG : {}'.format(find_one_cycle(dag, roots)))
 
 
-        
+
 def find_one_cycle(g, roots=None):
     'return [] or [v1, v2, ...vn] where v1->v2->...->vn->v1'
     path = _find_one_cycle(g, roots)
@@ -42,6 +43,8 @@ def _find_one_cycle(g, roots):
         if case == BACK:
             return path
 
+from seed.graph.DAG import iter_reversed_topological_ordering, is_DAG, find_one_cycle
+from seed.graph.DAG import *
 
 
 

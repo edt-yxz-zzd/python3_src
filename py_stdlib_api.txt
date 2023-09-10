@@ -1,3 +1,5 @@
+template:goto
+TODO:goto
 e ../../python3_src/py_stdlib_api.txt
 view ../../python3_src/自己的相关数据/py_modules.txt
     exception-hierarchy
@@ -32,13 +34,46 @@ super(__class__, ...obj/cls)
   super(__class__, cls).__init_subclass__(*args, **kwargs)
     #as-if classmethod
 
+[[[
+help(format)
+help('FORMATTING')
+===
+format(value, format_spec='', /)
+  Return value.__format__(format_spec)
+===
+  replacement_field ::= "{" [field_name] ["!" conversion] [":" format_spec] "}"
+  field_name        ::= arg_name ("." attribute_name | "[" element_index "]")*
+  arg_name          ::= [identifier | digit+]
+  attribute_name    ::= identifier
+  element_index     ::= digit+ | index_string
+  index_string      ::= <any source character except "]"> +
+  conversion        ::= "r" | "s" | "a"
+  format_spec       ::= <described in the next section>
+
+
+Format Specification Mini-Language
+==================================
+The general form of a *standard format specifier* is:
+  format_spec     ::= [[fill]align][sign][#][0][width][grouping_option][.precision][type]
+  fill            ::= <any character>
+  align           ::= "<" | ">" | "=" | "^"
+  sign            ::= "+" | "-" | " "
+  width           ::= digit+
+  grouping_option ::= "_" | ","
+  precision       ::= digit+
+  type            ::= "b" | "c" | "d" | "e" | "E" | "f" | "F" | "g" | "G" | "n" | "o" | "s" | "x" | "X" | "%"
+]]]
+
+
+
+
 Table of Contents
 [[template:goto
 generator_iterator:goto
 
 itertools:islice,chain
 functools:reduce
-collections:deque
+collections:deque,Counter
 
 str__bytes__float__int
 bisect
@@ -115,6 +150,19 @@ contextlib.contextmanager
 pathlib
 bz2__gzip__lzma__zlib__header4compress
 sqlite3
+binascii
+  base64
+  binhex:Deprecated
+  quopri
+  uu
+random
+  secrets
+struct
+  array
+TODO:
+hashlib
+hmac
+reprlib
 ]]
 [[
 view ../../../unzip/py_doc/python-3.8.1-docs-html/library/index.html
@@ -757,8 +805,8 @@ zipfile
 zipimport
 zlib
 zoneinfo
+time
 ]]
-
 
 [[[template:xxx
 xxx
@@ -780,8 +828,2790 @@ py_help xxx > ~/my_tmp/out4py/py_help.xxx.out.txt
 view /sdcard/0my_files/tmp/out4py/py_help.xxx.out.txt
 
 ]]]
-sqlite3
-[[[template:sqlite3
+[[[
+time
+calendar
+datetime
+timeit
+===
+
+import time
+time.__all__
+help(time)
+>>> for nm in dir(time):print(nm)
+CLOCK_BOOTTIME
+CLOCK_MONOTONIC
+CLOCK_MONOTONIC_RAW
+CLOCK_PROCESS_CPUTIME_ID
+CLOCK_REALTIME
+CLOCK_TAI
+CLOCK_THREAD_CPUTIME_ID
+altzone
+asctime
+clock_getres
+clock_gettime
+clock_gettime_ns
+clock_settime
+clock_settime_ns
+ctime
+daylight
+get_clock_info
+gmtime
+localtime
+mktime
+monotonic
+monotonic_ns
+perf_counter
+perf_counter_ns
+process_time
+process_time_ns
+pthread_getcpuclockid
+sleep
+strftime
+strptime
+struct_time
+thread_time
+thread_time_ns
+time
+time_ns
+timezone
+tzname
+
+py_help time > ~/my_tmp/out4py/py_help.time.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.time.out.txt
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/time.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/time.html > $my_tmp/out4py/html2text/py_38_doc/time.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/time.html.txt
+
+
+[[
+time — Time access and conversions¶
+
+This module provides various time-related functions.
+    For related functionality, see also the datetime and calendar modules.
+
+Although this module is always available, not all functions are available on all platforms.
+    Most of the functions defined in this module call platform C library functions with the same name.
+    It may sometimes be helpful to consult the platform documentation, because the semantics of these functions varies among platforms.
+
+
+An explanation of some terminology and conventions is in order.
+
+The epoch is the point where the time starts, and is platform dependent.
+    For Unix, the epoch is January 1, 1970, 00:00:00 (UTC).  To find out what the epoch is on a given platform, look at time.gmtime(0).
+
+
+The term seconds since the epoch refers to the total number of elapsed seconds since the epoch, typically excluding leap seconds.
+    Leap seconds are excluded from this total on all POSIX-compliant platforms.
+
+
+The functions in this module may not handle dates and times before the epoch or far in the future.
+    The cut-off point in the future is determined by the C library; for 32-bit systems, it is typically in 2038.
+
+
+Function strptime() can parse 2-digit years when given %y format code.
+    When 2-digit years are parsed, they are converted according to the POSIX and ISO C standards:
+        values 69–99 are mapped to 1969–1999
+        , and values 0–68 are mapped to 2000–2068.
+
+
+UTC is Coordinated Universal Time
+    (formerly known as Greenwich Mean Time, or GMT).
+    The acronym UTC is not a mistake but a compromise between English and French.
+
+
+DST is Daylight Saving Time
+    , an adjustment of the timezone by (usually) one hour during part of the year.
+    DST rules are magic (determined by local law) and can change from year to year.
+    The C library has a table containing the local rules (often it is read from a system file for flexibility) and is the only source of True Wisdom in this respect.
+
+
+The precision of the various real-time functions may be less than suggested by the units in which their value or argument is expressed.
+    E.g. on most Unix systems, the clock “ticks” only 50 or 100 times a second.
+On the other hand, the precision of time() and sleep() is better than their Unix equivalents:
+    times are expressed as floating point numbers
+    , time() returns the most accurate time available (using Unix gettimeofday() where available)
+    , and sleep() will accept a time with a nonzero fraction (Unix select() is used to implement this, where available).
+
+The time value as
+    returned by gmtime(), localtime(), and strptime()
+    , and accepted by asctime(), mktime() and strftime()
+    , is a sequence of 9 integers.
+    The return values of gmtime(), localtime(), and strptime() also offer attribute names for individual fields.
+See struct_time for a description of these objects.
+
+Changed in version 3.3: The struct_time type was extended to provide the tm_gmtoff and tm_zone attributes when platform supports corresponding struct tm members.
+
+
+Changed in version 3.6: The struct_time attributes tm_gmtoff and tm_zone are now available on all platforms.
+
+See also
+    datetime
+        More object-oriented interface to dates and times.
+
+    locale
+        Internationalization services.  The locale setting affects the interpretation
+    of many format specifiers in strftime() and strptime().
+
+    calendar
+        General calendar-related functions.
+        timegm() is the inverse of gmtime() from this module.
+
+
+
+
+
+
+
+duration repr:
+    * float/seconds
+    * int/seconds
+timestamp repr:
+    * seconds since undefined reference point
+        * float/seconds
+        * ??int/seconds
+        * int/nanoseconds
+        ===
+        * system-wide
+        * process-wide
+        * thread-specific
+    * seconds since the epoch
+        * float
+        * int
+    * struct_time/tuple
+        * UTC
+        * localtime
+        * ...
+S5_
+    ===
+    The reference point of the returned value is undefined
+        , so that only the difference between the results of consecutive calls is valid.
+
+system-wide vs process-wide vs thread-specific
+    * thread-specific:
+        not include time elapsed during sleep.
+    * process-wide:
+        not include time elapsed during sleep.
+    * system-wide:
+        include time elapsed during sleep
+        not includes time that the system is suspended
+
+
+let DRN := duration
+
+let S5_ := seconds since undefined reference point
+let S5E := seconds since the epoch
+let STT := struct_time
+let LCT := localtime
+let WS := system-wide
+let WP := process-wide
+let WT := thread-specific
+
+
+
+
+1 nanoseconds = 10**-9 seconds
+    十亿分之一秒
+    纳秒
+    毫微秒
+
+
+
+
+time.get_clock_info(name)¶
+    -> clock_info
+    ===
+    name: func
+        'monotonic': time.monotonic()
+        'perf_counter': time.perf_counter()
+        'process_time': time.process_time()
+        'thread_time': time.thread_time()
+        'time': time.time()
+    ===
+    clock_info:
+        adjustable:
+            True <==> the clock can be changed automatically (e.g. by a NTP daemon) or manually by the system administrator
+        monotonic:
+            True <==> the clock cannot go backward
+        resolution:
+            The resolution of the clock in seconds (float)
+        implementation:
+            The name of the underlying C function used to get the clock value.
+            Refer to Clock ID Constants for possible values.
+
+
+
+
+
+
+time.time_ns() → int¶
+    -> S5E<int/nanoseconds>
+time.time() → float¶
+    --> S5E<float/seconds>
+    The specific date of the epoch and the handling of leap seconds is platform dependent.
+        To find out what the epoch is on a given platform, look at gmtime(0).
+    Note that even though the time is always returned as a floating point number, not all systems provide time with a better precision than 1 second.
+    While this function normally returns non-decreasing values, it can return a lower value than a previous call if the system clock has been set back between the two calls.
+
+time.monotonic_ns() → int¶
+    -> WS-S5_<int/nanoseconds>
+time.monotonic() → float¶
+    -> WS-S5_<float/seconds>
+    Return the value (in fractional seconds) of a monotonic clock
+        , i.e. a clock that cannot go backwards.
+        The clock is not affected by system clock updates.
+
+
+
+time.perf_counter_ns() → int¶
+    -> WS-S5_<int/nanoseconds>
+time.perf_counter() → float¶
+    -> WS-S5_<float/seconds>
+    Return the value (in fractional seconds) of a performance counter
+        , i.e. a clock with the highest available resolution to measure a short duration.
+
+
+time.perf_counter_ns() → int¶
+    -> WP-S5_<int/nanoseconds>
+time.process_time() → float¶
+    -> WP-S5_<float/seconds>
+    Return the value (in fractional seconds) of the sum of the system and user CPU time of the current process.
+
+time.thread_time_ns() → int¶
+    -> WT-S5_<int/nanoseconds>
+time.thread_time() → float¶
+    -> WT-S5_<float/seconds>
+    Return the value (in fractional seconds) of the sum of the system and user CPU time of the current thread.  It does not include time elapsed during sleep.
+r
+
+
+time.sleep(secs)¶
+    DRN<int/float/seconds> -> None
+    Suspend execution of the calling thread for the given number of seconds.
+    suspension time may be longer than requested by an arbitrary amount because of the scheduling of other activity in the system.
+    sleeps at least secs even if the sleep is interrupted by a signal, except if the signal handler raises an exception (see PEP 475 for the rationale).
+
+
+
+
+
+
+
+calendar.timegm(struct_time) -> timestamp
+    STT<UTC> --> S5E
+    vs:time.gmtime([timestamp/seconds/float]) -> struct_time
+time.gmtime([secs])¶
+    S5E --> STT<UTC>
+    time.gmtime() === time.gmtime(time())
+    vs:calendar.timegm(struct_time) -> timestamp
+
+time.mktime(t)¶
+    STT<LCT> --> S5E<float>
+time.localtime([secs])¶
+    S5E --> STT<LCT>
+    time.localtime() === time.localtime(time())
+    vs:time.mktime(t)
+
+
+time.asctime([t])¶
+    STT -->:
+time.ctime([secs])¶
+    S5E -->:
+    -->:
+        'Sun Jun 20 23:21:05 1993'
+        'Wed Jun  9 04:26:40 1993'.
+
+    time.ctime(secs) === time.asctime(localtime(secs))
+    time.ctime() === time.ctime(time())
+    time.asctime() === time.asctime(localtime())
+
+
+time.strftime(format[, t])¶
+    fmt -> STT<UTC|LCT> -> str
+    time.strftime(format) === time.strftime(format, localtime())
+    vs:strptime()
+    timestamp_format:goto
+
+time.strptime(string, format="%a %b %d %H:%M:%S %Y")¶
+    str -> fmt -> STT<UTC|LCT>
+    vs:strftime()
+    timestamp_format:goto
+    strptime(ctime()) #<<== default format
+    default for output attributes:
+        The default values used to fill in any missing data when more accurate values cannot be inferred are
+            (1900, 1, 1, 0, 0, 0, 0, 1, -1).
+
+        >>> import time
+        >>> time.strptime("30 Nov 00", "%d %b %y")
+        time.struct_time(tm_year=2000, tm_mon=11, tm_mday=30, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=335, tm_isdst=-1)
+
+
+    Support for the %Z directive is based on the values contained in tzname and whether daylight is true.  Because of this, it is platform-specific except for recognizing UTC and GMT which are always known (and are considered to be non-daylight savings timezones).
+
+    Only the directives specified in the documentation are supported.
+        Because strftime() is implemented per platform it can sometimes offer more directives than those listed.  But strptime() is independent of any platform and thus does not necessarily support all directives available that are not documented as supported.
+
+
+
+
+[[
+timestamp_format:here
+datetime____strftime__and__strptime__Behavior:goto
+===
+timestamp format:
+Directive:Meaning:Notes
+
+
+%%
+A literal '%' character.
+
+
+%y
+Year without century as a decimal number [00,99].
+%Y
+Year with century as a decimal number.
+%m
+Month as a decimal number [01,12].
+%j
+Day of the year as a decimal number [001,366].
+%d
+Day of the month as a decimal number [01,31].
+%H
+Hour (24-hour clock) as a decimal number [00,23].
+%I
+Hour (12-hour clock) as a decimal number [01,12].
+%p
+Locale’s equivalent of either AM or PM.  (1)
+%M
+Minute as a decimal number [00,59].
+%S
+Second as a decimal number [00,61].  (2)
+
+%z
+Time zone offset indicating a positive or negative time difference from UTC/GMT of the form +HHMM or -HHMM, where H represents decimal hour digits and M represents decimal minute digits [-23:59, +23:59].
+%Z
+Time zone name (no characters if no time zone exists).
+
+
+
+
+%w
+Weekday as a decimal number [0(Sunday),6].
+
+%U
+Week number of the year (Sunday as the first day of the week) as a decimal number [00,53].
+All days in a new year preceding the first Sunday are considered to be in week 0.  (3)
+
+%W
+Week number of the year (Monday as the first day of the week) as a decimal number [00,53].
+All days in a new year preceding the first Monday are considered to be in week 0.  (3)
+
+%a
+Locale’s abbreviated weekday name.
+%A
+Locale’s full weekday name.
+
+%b
+Locale’s abbreviated month name.
+%B
+Locale’s full month name.
+
+
+%c
+Locale’s appropriate date and time representation.
+%x
+Locale’s appropriate date representation.
+%X
+Locale’s appropriate time representation.
+
+
+
+
+
+
+
+
+Notes:
+
+When used with the strptime() function, the %p directive only affects the output hour field if the %I directive is used to parse the hour.
+The range really is 0 to 61; value 60 is valid in timestamps representing leap seconds and value 61 is supported for historical reasons.
+When used with the strptime() function, %U and %W are only used in calculations when the day of the week and the year are specified.
+
+Here is an example, a format for dates compatible with that specified  in the
+RFC 2822 Internet email standard.  1
+>>> from time import gmtime, strftime
+>>> strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
+'Thu, 28 Jun 2001 14:17:15 +0000'
+
+
+]]
+
+]]
+]]]
+[[[
+calendar
+===
+__all__
+IllegalMonthError
+IllegalWeekdayError
+setfirstweekday
+firstweekday
+isleap
+leapdays
+weekday
+monthrange
+monthcalendar
+prmonth
+month
+prcal
+calendar
+timegm
+month_name
+month_abbr
+day_name
+day_abbr
+Calendar
+TextCalendar
+HTMLCalendar
+LocaleTextCalendar
+LocaleHTMLCalendar
+weekheader
+MONDAY
+TUESDAY
+WEDNESDAY
+THURSDAY
+FRIDAY
+SATURDAY
+SUNDAY
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/calendar.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/calendar.html > $my_tmp/out4py/html2text/py_38_doc/calendar.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/calendar.html.txt
+
+
+]]]
+[[[
+datetime
+===
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/datetime.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/datetime.html > $my_tmp/out4py/html2text/py_38_doc/datetime.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/datetime.html.txt
+===
+datetime — Basic date and time types¶
+===
+aware object 保存充分信息，无歧义
+naive object 保存信息不完整，一般靠本地配置(localtime之类)解释
+===
+Aware and Naive Objects¶
+Date and time objects may be categorized as “aware” or “naive.”
+
+With sufficient knowledge of applicable algorithmic and political time adjustments, such as time zone and daylight saving time information, an aware object can locate itself relative to other aware objects.
+An aware object represents a specific moment in time that is not open to interpretation. 1
+
+A naive object does not contain enough information to unambiguously locate itself relative to other date/time objects.
+    Whether a naive object represents Coordinated Universal Time (UTC), local time, or time in some other timezone is purely up to the program, just like it is up to the program whether a particular number represents metres, miles, or mass.
+    Naive objects are easy to understand and to work with, at the cost of ignoring some aspects of reality.
+
+For applications requiring aware objects, datetime and time objects have an optional time zone information attribute, tzinfo, that can be set to an instance of a subclass of the abstract tzinfo class.
+    These tzinfo objects capture information about the offset from UTC time, the time zone name, and whether daylight saving time is in effect.
+Only one concrete tzinfo class, the timezone class, is supplied by the datetime module.
+    The timezone class can represent simple timezones with fixed offsets from UTC, such as UTC itself or North American EST and EDT timezones.
+    Supporting timezones at deeper levels of detail is up to the application.
+        The rules for time adjustment across the world are more political than rational, change frequently, and there is no standard suitable for every application aside from UTC.
+
+
+===
+datetime.MINYEAR = 1
+datetime.MAXYEAR = 9999
+    The smallest/largest year number allowed in a date or datetime object.
+
+
+__all__
+('date', 'datetime', 'time', 'timedelta', 'timezone', 'tzinfo', 'MINYEAR', 'MAXYEAR')
+MAXYEAR
+MINYEAR
+
+timedelta #duration
+
+time #pure, naive #maybe aware?
+
+date #pure, naive
+  datetime #pure, naive #maybe aware?
+
+tzinfo #ABC
+  timezone
+
+
+
+class datetime.date(year, month, day)¶
+class datetime.datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)¶
+class datetime.time(hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)¶
+time.fold¶
+  In [0, 1].
+  Used to disambiguate wall times during a repeated interval.
+      (A repeated interval occurs when clocks are rolled back at the end of daylight saving time or when the UTC offset for the current zone is decreased for political reasons.)
+  The value 0 (1) represents the earlier (later) of the two moments with the same wall time representation.
+
+
+class datetime.timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)¶
+  只保留前3，其余累积进位
+>>> from datetime import timedelta
+>>> delta = timedelta(
+...     days=50,
+...     seconds=27,
+...     microseconds=10,
+...     milliseconds=29000,
+...     minutes=5,
+...     hours=8,
+...     weeks=2
+... )
+>>> # Only days, seconds, and microseconds remain
+>>> delta
+datetime.timedelta(days=64, seconds=29156, microseconds=10)
+  # out.days = 64 = 50 + 2*7 = in.days+in.weeks*7
+
+[[[
+===
+
+[[
+>>> for nm in dir(d.timedelta):print(nm)
+max
+min
+  Note that, because of normalization, timedelta.max > -timedelta.min.  -timedelta.max is not representable as a timedelta object.
+resolution = timedelta(microseconds=1)
+
+days
+seconds
+microseconds
+  0 <= microseconds < 1000000
+  0 <= seconds < 3600*24 (the number of seconds in one day)
+  -999999999 <= days <= 999999999
+  class datetime.timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)¶
+    只保留前3，其余累积进位
+
+total_seconds() -> float/seconds
+  === sf / timedelta(seconds=1)
+
+__bool__
+
+__hash__
+__eq__
+__ne__
+__ge__
+__gt__
+__le__
+__lt__
+
+__abs__
+__neg__
+__pos__
+__add__
+__sub__
+__radd__
+__rsub__
+
+__divmod__
+__mod__
+__floordiv__
+__truediv__
+__mul__
+
+__rdivmod__
+__rmod__
+__rfloordiv__
+__rtruediv__
+__rmul__
+
+__format__
+__repr__
+__str__
+__reduce__
+__reduce_ex__
+__sizeof__
+
+
+
+
+
+__class__
+__delattr__
+__dir__
+__doc__
+__getattribute__
+__init__
+__init_subclass__
+__new__
+__setattr__
+__subclasshook__
+]]
+[[
+>>> for nm in dir(d.date):print(nm)
+max
+min
+resolution = timedelta(days=1)
+
+
+replace
+year
+month
+day
+  MINYEAR <= year <= MAXYEAR
+  1 <= month <= 12
+  1 <= day <= number of days in the given month and year
+  class datetime.date(year, month, day)¶
+
+weekday() -> [0..<7]
+isoweekday() -> [1..=7]
+
+
+fromisocalendar
+isocalendar
+
+fromisoformat
+isoformat() -> str
+  fmt: 'YYYY-MM-DD'
+
+fromordinal
+toordinal() -> proleptic_Gregorian_ordinal/int{>=1???}/days_since_00010101(YYYYMMDD)
+  [date(1,1,1).toordinal() == 1]
+
+fromtimestamp(timestamp) -> date
+ctime() -> str<timestamp>
+  === time.ctime(time.mktime(d.timetuple()))
+
+today() -> date
+
+strftime
+timetuple() -> time.struct_time
+
+
+
+__hash__
+__eq__
+__ne__
+
+__ge__
+__gt__
+__le__
+__lt__
+
+__add__
+__sub__
+__radd__
+__rsub__
+
+__format__
+__repr__
+__str__
+__reduce__
+__reduce_ex__
+__sizeof__
+
+__class__
+__delattr__
+__dir__
+__doc__
+__getattribute__
+__init__
+__init_subclass__
+__new__
+__setattr__
+__subclasshook__
+
+]]
+[[
+>>> for nm in dir(d.time):print(nm)
+...
+max
+min
+resolution = timedelta(microseconds=1)
+
+replace
+hour
+minute
+second
+microsecond
+tzinfo
+fold
+  class datetime.time(hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)¶
+  0 <= hour < 24,
+  0 <= minute < 60,
+  0 <= second < 60,
+  0 <= microsecond < 1000000,
+  fold in [0, 1].
+
+
+tzname() -> may str
+  === sf.tzinfo.tzname(None)
+
+utcoffset() -> may UTC_offset
+  === sf.tzinfo.utcoffset(None)
+  [UTC_offset =[def]= timedelta{abs(sf) < timedelta(days=1)}]
+
+dst() -> may DST_offset
+  === sf.tzinfo.dst(None)
+  [DST_offset =[def]= timedelta{abs(sf) < timedelta(days=1)}]
+
+
+strftime
+
+fromisoformat
+isoformat
+  time.isoformat(timespec='auto')¶
+fmt: HH:MM:SS[.ffffff][+HH:MM[:SS[.ffffff]]]
+  ??? [.microsecond == 0]
+  ??? [.utcoffset() is None]
+
+  time_isoformat_timespec:here
+  timespec:
+      'auto':
+          HH:MM:SS[.ffffff] format
+      'microseconds':
+          HH:MM:SS.ffffff format
+      'milliseconds':
+          HH:MM:SS.sss format
+            #truncate, not round
+      'seconds':
+          HH:MM:SS format
+      'minutes':
+          HH:MM format
+      'hours':
+          HH format
+
+
+
+
+__hash__
+__eq__
+__ne__
+__ge__
+__gt__
+__le__
+__lt__
+
+__format__
+__reduce__
+__reduce_ex__
+__repr__
+__str__
+__sizeof__
+
+__class__
+__delattr__
+__dir__
+__doc__
+__getattribute__
+__init__
+__init_subclass__
+__new__
+__setattr__
+__subclasshook__
+
+]]
+[[
+>>> for nm in dir(d.datetime):print(nm)
+max
+min
+resolution = timedelta(microseconds=1)
+
+astimezone(tz=None) -> datetime
+  adjust to new timezone, not just replace
+replace
+combine(date, time, tzinfo=time.tzinfo) -> datetime
+year
+month
+day
+hour
+minute
+second
+microsecond
+tzinfo
+fold
+  class datetime.datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)¶
+  MINYEAR <= year <= MAXYEAR,
+  1 <= month <= 12,
+  1 <= day <= number of days in the given month and year,
+  0 <= hour < 24,
+  0 <= minute < 60,
+  0 <= second < 60,
+  0 <= microsecond < 1000000,
+  fold in [0, 1].
+
+date() -> date
+time() -> time #copy .fold, but .tzinfo
+timetz() -> time #copy .fold and .tzinfo
+
+tzname() -> may str
+  === sf.tzinfo.tzname(sf)
+utcoffset() -> may UTC_offset
+  === sf.tzinfo.utcoffset(sf)
+dst() -> may DST_offset
+  === sf.tzinfo.dst(sf)
+
+weekday() -> [0..<7]
+isoweekday() -> [1..=7]
+
+
+
+
+fromisocalendar
+isocalendar
+
+fromisoformat
+isoformat
+  datetime.isoformat(sep='T', timespec='auto')¶
+fmt: YYYY-MM-DD{sep}HH:MM:SS[.ffffff][+HH:MM[:SS[.ffffff]]]
+  #see:time.isoformat():kw:timespec
+  #     time_isoformat_timespec:goto
+  >>> datetime(2019, 5, 18, 15, 17, 8, 132263).isoformat()
+  '2019-05-18T15:17:08.132263'
+  >>> datetime(2019, 5, 18, 15, 17, tzinfo=timezone.utc).isoformat()
+  '2019-05-18T15:17:00+00:00'
+
+
+fromordinal
+toordinal
+
+utcfromtimestamp(timestamp) -> aware datetime object
+  === datetime(1970, 1, 1, tzinfo=timezone.utc) + timedelta(seconds=timestamp)
+  ~ datetime.fromtimestamp(timestamp, timezone.utc)
+  bug?
+  view ../../python3_src/seed/for_libs/for_time.py
+  assert None is datetime.utcfromtimestamp(0.0).tzinfo
+  view ../lots/NOTE/Python/python-bug/datetime-bug.txt
+fromtimestamp(timestamp, tz=None) -> naive datetime object if tz is None
+  >>> datetime.fromtimestamp(0)
+  datetime.datetime(1970, 1, 1, 8, 0)
+  >>> datetime.fromtimestamp(0, timezone(timedelta(days=0.5)))
+  datetime.datetime(1970, 1, 1, 12, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=43200)))
+timestamp() -> float/timestamp
+    === (aware_datetime - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()
+        weird. why? this is timestamp<epoch=1970_01_01_000000> not timestamp<platform_epoch>
+        #since termux epoch==1970_01_01_000000, donot detect diff
+        run test, impl <==>:
+          timestamp = (aware_datetime - datetime.fromtimestamp(0.0, aware_datetime.tzinfo)).total_seconds()
+                #use arbitrary tzinfo is ok, since from same timestamp==0.0
+    or:
+    === mktime(naive_datetime.timetuple())
+      ~ (naive_datetime - datetime.fromtimestamp(0.0)).total_seconds()
+      xxx ~ (naive_datetime - datetime(1970, 1, 1, tzinfo=None)).total_seconds()
+ctime() -> str<timestamp>
+  === time.ctime(time.mktime(d.timetuple()))
+    !!!drop tzinfo!!!
+
+timetuple() -> time.struct_time
+utctimetuple
+
+
+now(tz=None) -> datetime
+  === datetime.fromtimestamp(time.time(), tz)
+today() -> datetime
+  === datetime.fromtimestamp(time.time())
+  === datetime.now()
+utcnow() -> datetime
+  === datetime.utcfromtimestamp(time.time())
+  === datetime.now(timezone.utc)
+
+strftime
+strptime
+
+
+
+__add__
+__sub__
+__radd__
+__rsub__
+
+__hash__
+__eq__
+__ne__
+__ge__
+__gt__
+__le__
+__lt__
+
+
+__format__
+__repr__
+__str__
+__reduce__
+__reduce_ex__
+__sizeof__
+
+
+__class__
+__delattr__
+__dir__
+__doc__
+__getattribute__
+__init__
+__init_subclass__
+__new__
+__setattr__
+__subclasshook__
+
+
+]]
+[[
+>>> for nm in dir(d.timezone):print(nm)
+class datetime.timezone(offset, name=None)¶
+  offset = the difference between the local time and UTC
+  offset :: UTC_offset
+
+max = timezone(timedelta(seconds=86340))
+min = timezone(timedelta(days=-1, seconds=60))
+utc = timezone(timedelta(0))
+
+
+
+
+
+utcoffset(may_datetime) -> the_init_arg:offset #may_datetime is ignored
+tzname(may_datetime) -> (the_init_arg:name | UTC±HH:MM | 'UTC' if not offset) #may_datetime is ignored
+
+
+dst(may_datetime) -> None #may_datetime is ignored
+fromutc(dt/datetime) -> /datetime
+  Return dt + offset.
+  The dt argument must be an aware datetime instance, with tzinfo set to self.
+
+
+
+__hash__
+__ne__
+__eq__
+__ge__
+__gt__
+__le__
+__lt__
+
+__format__
+__reduce__
+__reduce_ex__
+__repr__
+__str__
+__sizeof__
+
+
+__class__
+__delattr__
+__dir__
+__doc__
+__getattribute__
+__getinitargs__
+__init__
+__init_subclass__
+__new__
+__setattr__
+__subclasshook__
+]]
+]]]
+
+
+
+
+
+[[
+datetime:
+datetime____strftime__and__strptime__Behavior:here
+timestamp_format:goto
+===
+strftime() and strptime() Behavior¶
+
+
+strftime(sf, format) -> date_string
+    Instance method of date; datetime; time
+strptime(cls, date_string, format) -> sf
+    Class method of datetime
+
+Directive
+Meaning
+Example
+Notes
+
+
+
+%a
+Weekday as locale’s abbreviated name.
+Sun, Mon, …, Sat (en_US);
+So, Mo, …, Sa (de_DE)
+(1)
+
+%A
+Weekday as locale’s full name.
+Sunday, Monday, …, Saturday (en_US);
+Sonntag, Montag, …, Samstag (de_DE)
+(1)
+
+%w
+Weekday as a decimal number, where 0 is Sunday and 6 is Saturday.
+0, 1, …, 6
+
+
+%d
+Day of the month as a zero-padded decimal number.
+01, 02, …, 31
+(9)
+
+%b
+Month as locale’s abbreviated name.
+Jan, Feb, …, Dec (en_US);
+Jan, Feb, …, Dez (de_DE)
+(1)
+
+%B
+Month as locale’s full name.
+January, February,…, December (en_US);
+Januar, Februar, …, Dezember (de_DE)
+(1)
+
+%m
+Month as a zero-padded decimal number.
+01, 02, …, 12
+(9)
+
+%y
+Year without century as a zero-padded decimal number.
+00, 01, …, 99
+(9)
+
+%Y
+Year with century as a decimal number.
+0001, 0002, …, 2013, 2014, …, 9998, 9999
+(2)
+
+%H
+Hour (24-hour clock) as a zero-padded decimal number.
+00, 01, …, 23
+(9)
+
+%I
+Hour (12-hour clock) as a zero-padded decimal number.
+01, 02, …, 12
+(9)
+
+%p
+Locale’s equivalent of either AM or PM.
+AM, PM (en_US);
+am, pm (de_DE)
+(1), (3)
+
+%M
+Minute as a zero-padded decimal number.
+00, 01, …, 59
+(9)
+
+%S
+Second as a zero-padded decimal number.
+00, 01, …, 59
+(4), (9)
+
+%f
+Microsecond as a decimal number, zero-padded on the left.
+000000, 000001, …, 999999
+(5)
+
+%z
+UTC offset in the form ±HHMM[SS[.ffffff]] (empty string if the object is naive).
+(empty), +0000, -0400, +1030, +063415, -030712.345216
+(6)
+
+%Z
+Time zone name (empty string if the object is naive).
+(empty), UTC, EST, CST
+
+
+%j
+Day of the year as a zero-padded decimal number.
+001, 002, …, 366
+(9)
+
+%U
+Week number of the year (Sunday as the first day of the week) as a zero padded decimal number.
+All days in a new year preceding the first Sunday are considered to be in week 0.
+00, 01, …, 53
+(7), (9)
+
+%W
+Week number of the year (Monday as the first day of the week) as a decimal number.
+All days in a new year preceding the first Monday are considered to be in week 0.
+00, 01, …, 53
+(7), (9)
+
+%c
+Locale’s appropriate date and time representation.
+Tue Aug 16 21:30:00 1988 (en_US);
+Di 16 Aug 21:30:00 1988 (de_DE)
+(1)
+
+%x
+Locale’s appropriate date representation.
+08/16/88 (None);
+08/16/1988 (en_US);
+16.08.1988 (de_DE)
+(1)
+
+%X
+Locale’s appropriate time representation.
+21:30:00 (en_US);
+21:30:00 (de_DE)
+(1)
+
+%%
+A literal '%' character.
+%
+
+
+
+
+Several additional directives not required by the C89 standard are included for convenience. These parameters all correspond to ISO 8601 date values.
+
+
+
+
+
+
+
+
+Directive
+Meaning
+Example
+Notes
+
+
+
+%G
+ISO 8601 year with century representing the year that contains the greater part of the ISO week (%V).
+0001, 0002, …, 2013, 2014, …, 9998, 9999
+(8)
+
+%u
+ISO 8601 weekday as a decimal number where 1 is Monday.
+1, 2, …, 7
+
+
+%V
+ISO 8601 week as a decimal number with Monday as the first day of the week.
+Week 01 is the week containing Jan 4.
+01, 02, …, 53
+(8), (9)
+
+
+
+These may not be available on all platforms when used with the strftime() method. The ISO 8601 year and ISO 8601 week directives are not interchangeable with the year and week number directives above. Calling strptime() with incomplete or ambiguous ISO 8601 directives will raise a ValueError.
+The full set of format codes supported varies across platforms, because Python calls the platform C library’s strftime() function, and platform variations are common. To see the full set of format codes supported on your platform, consult the strftime(3) documentation.
+
+New in version 3.6: %G, %u and %V were added.
+
+
+
+Technical Detail¶
+[[format has no sub-second components or timezone offset information] ->
+  [datetime.strptime(date_string, format) <==>
+  datetime(*(time.strptime(date_string, format)[0:6]))
+    #except when the format includes sub-second components or timezone offset information, which are supported in datetime.strptime but are discarded by time.strptime.
+  ]]
+
+
+When used with the strptime() method, the %p directive only affects the output hour field if the %I directive is used to parse the hour.
+
+Unlike the time module, the datetime module does not support leap seconds.
+
+When used with the strptime() method, the %f directive accepts from one to six digits and zero pads on the right. %f is an extension to the set of format characters in the C standard (but implemented separately in datetime objects, and therefore always available).
+
+For a naive object
+  , the %z and %Z format codes are replaced by empty strings.
+For an aware object:
+  %z - utcoffset() is transformed into a string of the form ±HHMM[SS[.ffffff]] , where
+    HH is a 2-digit string giving the number of UTC offset hours
+    , MM is a 2-digit string giving the number of UTC offset minutes
+    , SS is a 2-digit string giving the number of UTC offset seconds
+    and ffffff is a 6-digit string giving the number of UTC offset microseconds.
+    The ffffff part is omitted when the offset is a whole number of seconds
+    and both the ffffff and the SS part is omitted when the offset is a whole number of minutes.
+    For example, if utcoffset() returns timedelta(hours=-3, minutes=-30), %z is replaced with the string '-0330'.
+  ===
+  Changed in version 3.7: The UTC offset is not restricted to a whole number of minutes.
+  Changed in version 3.7: When the %z directive is provided to the  strptime() method,
+    the UTC offsets can have a colon as a separator between hours, minutes and seconds.
+    For example, '+01:00:00' will be parsed as an offset of one hour.
+    In addition, providing 'Z' is identical to '+00:00'.
+
+
+  %Z - If tzname() returns None, %Z is replaced by an empty string. Otherwise %Z is replaced by the returned value, which must be a string.
+
+  ===
+  Changed in version 3.2: When the %z directive is provided to the strptime() method, an aware datetime object will be produced. The tzinfo of the result will be set to a timezone instance.
+
+
+
+]]
+
+
+
+
+
+
+
+
+
+]]]
+[[[
+reprlib
+===
+view ~/../usr/lib/python3.10/reprlib.py
+cp ~/../usr/lib/python3.10/reprlib.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/reprlib.py
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/reprlib.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/reprlib.html > $my_tmp/out4py/html2text/py_38_doc/reprlib.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/reprlib.html.txt
+
+>>> class MyList(list):
+
+...     @recursive_repr()
+...     def __repr__(self):
+[[
+Repr.maxlevel¶
+    Depth limit on the creation of recursive representations.  The default is 6.
+Repr.maxdict¶
+Repr.maxlist¶
+Repr.maxtuple¶
+Repr.maxset¶
+Repr.maxfrozenset¶
+Repr.maxdeque¶
+Repr.maxarray¶
+    Limits on the number of entries represented for the named object type.  The
+    default is 4 for maxdict, 5 for maxarray, and  6 for the others.
+
+Repr.maxlong¶
+    Maximum number of characters in the representation for an integer.  Digits are dropped from the middle.
+    The default is 40.
+
+
+
+Repr.maxstring¶
+    Limit on the number of characters in the representation of the string.
+    Note that the “normal” representation of the string is used as the character source: if escape sequences are needed in the representation, these may be mangled when the representation is shortened.
+    The default is 30.
+
+
+
+Repr.maxother¶
+    This limit is used to control the size of object types for which no specific formatting method is available on the Repr object.
+    It is applied in a similar manner as maxstring.
+    The default is 20.
+
+
+
+Repr.repr(obj)¶
+    The equivalent to the built-in repr() that uses the formatting imposed by the instance.
+
+
+
+Repr.repr1(obj, level)¶
+    Recursive implementation used by repr().
+    This uses the type of obj to determine which formatting method to call, passing it obj and level.  The type-specific methods should call repr1() to perform recursive formatting, with level - 1 for the value of level in the recursive  call.
+
+
+
+Repr.repr_TYPE(obj, level)
+    Formatting methods for specific types are implemented as methods with a name based on the type name.  In the method name, TYPE is replaced by '_'.join(type(obj).__name__.split()).
+    Dispatch to these methods is handled by repr1(). Type-specific methods which need to recursively format a value should call self.repr1(subobj, level - 1).
+
+
+
+Subclassing Repr Objects¶
+The use of dynamic dispatching by Repr.repr1() allows subclasses of Repr to add support for additional built-in object types or to modify the handling of types already supported. This example shows how special support for file objects could be added:
+import reprlib
+import sys
+
+class MyRepr(reprlib.Repr):
+
+    def repr_TextIOWrapper(self, obj, level):
+        if obj.name in {'<stdin>', '<stdout>', '<stderr>'}:
+            return obj.name
+        return repr(obj)
+
+aRepr = MyRepr()
+print(aRepr.repr(sys.stdin))         # prints '<stdin>'
+
+
+
+
+
+
+]]
+
+
+import reprlib
+reprlib.__all__
+help(reprlib)
+
+py_help reprlib > ~/my_tmp/out4py/py_help.reprlib.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.reprlib.out.txt
+[[
+class Repr(builtins.object)
+ |  __init__(self)
+ |
+ |  repr(self, x)
+ |
+ |  repr1(self, x, level)
+ |
+ |  repr_array(self, x, level)
+ |
+ |  repr_deque(self, x, level)
+ |
+ |  repr_dict(self, x, level)
+ |
+ |  repr_frozenset(self, x, level)
+ |
+ |  repr_instance(self, x, level)
+ |
+ |  repr_int(self, x, level)
+ |
+ |  repr_list(self, x, level)
+ |
+ |  repr_set(self, x, level)
+ |
+ |  repr_str(self, x, level)
+ |
+ |  repr_tuple(self, x, level)
+ |
+
+FUNCTIONS
+    recursive_repr(fillvalue='...')
+        Decorator to make a repr function return fillvalue for a recursive call
+
+    repr(x) method of Repr instance
+
+DATA
+    __all__ = ['Repr', 'repr', 'recursive_repr']
+
+
+]]
+
+
+]]]
+[[[
+hmac
+===
+Implements the HMAC algorithm as described by RFC 2104.
+===
+cp ~/../usr/lib/python3.10/hmac.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/hmac.py
+  [hmac<k>(hash,msg) =?= hash(g(k)++hash(f(k)++msg))]
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/hmac.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/hmac.html > $my_tmp/out4py/html2text/py_38_doc/hmac.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/hmac.html.txt
+
+hmac.new(key, msg=None, digestmod='') -> HMAC
+  Return a new hmac object.
+
+  key is a bytes or bytearray object giving the secret key.
+
+  If msg is present, the method call update(msg) is made.
+
+  digestmod is the digest name, digest constructor or module for the HMAC object to use.
+    It may be any name suitable to hashlib.new().
+    Despite its argument position, it is required.
+
+Warning
+When comparing the output of hexdigest() to an externally-supplied digest during a verification routine, it is recommended to use the compare_digest() function instead of the == operator to reduce the vulnerability to timing attacks.
+
+hmac.compare_digest(a, b)¶
+Return a == b.  This function uses an approach designed to prevent timing analysis by avoiding content-based short circuiting behaviour, making it appropriate for cryptography.
+a and b must both be of the same type: either str (ASCII only, as e.g. returned by HMAC.hexdigest()), or a bytes-like object.
+
+Note
+If a and b are of different lengths, or if an error occurs, a timing attack could theoretically reveal information about the types and lengths of a and b—but not their values.
+
+HMAC:
+  HMAC.name¶
+  HMAC.block_size¶
+  HMAC.digest_size¶
+  HMAC.copy()¶
+  HMAC.update(msg)¶
+  HMAC.digest()¶
+    hmac.compare_digest(a, b)
+  HMAC.hexdigest()¶
+    hmac.compare_digest(a, b)
+
+
+
+
+
+
+]]]
+[[[
+hashlib
+===
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/hashlib.html > $my_tmp/out4py/html2text/py_38_doc/hashlib.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/hashlib.html.txt
+
+
+import hashlib
+hashlib.__all__
+('md5', 'sha1', 'sha224', 'sha256', 'sha384', 'sha512', 'blake2b', 'blake2s', 'sha3_224', 'sha3_256', 'sha3_384', 'sha3_512', 'shake_128', 'shake_256', 'new', 'algorithms_guaranteed', 'algorithms_available', 'pbkdf2_hmac')
+hashlib.new
+sorted(hashlib.algorithms_guaranteed)
+sorted(hashlib.algorithms_available)
+sorted(hashlib.algorithms_available-hashlib.algorithms_guaranteed)
+sorted(hashlib.algorithms_guaranteed-hashlib.algorithms_available)
+>>> hashlib.new
+<function __hash_new at 0x7b0d142a70>
+>>> hashlib.algorithms_guaranteed
+{'sha3_384', 'sha384', 'sha3_512', 'sha1', 'sha256', 'md5', 'blake2b', 'sha3_256', 'shake_128', 'sha224', 'sha512', 'shake_256', 'blake2s', 'sha3_224'}
+>>> hashlib.algorithms_available
+{'blake2b', 'shake_256', 'blake2s', 'shake_128', 'sha1', 'sha3_256', 'sha512_224', 'sha224', 'md5-sha1', 'sha3_384', 'sha384', 'sha3_512', 'sha256', 'sha512_256', 'md5', 'sha512', 'sha3_224', 'sm3'}
+>>> sorted(hashlib.algorithms_guaranteed)
+['blake2b', 'blake2s', 'md5', 'sha1', 'sha224', 'sha256', 'sha384', 'sha3_224', 'sha3_256', 'sha3_384', 'sha3_512', 'sha512', 'shake_128', 'shake_256']
+>>> sorted(hashlib.algorithms_available)
+['blake2b', 'blake2s', 'md5', 'md5-sha1', 'sha1', 'sha224', 'sha256', 'sha384', 'sha3_224', 'sha3_256', 'sha3_384', 'sha3_512', 'sha512', 'sha512_224', 'sha512_256', 'shake_128', 'shake_256', 'sm3']
+>>> sorted(hashlib.algorithms_available-hashlib.algorithms_guaranteed)
+['md5-sha1', 'sha512_224', 'sha512_256', 'sm3']
+>>> sorted(hashlib.algorithms_guaranteed-hashlib.algorithms_available)
+[]
+
+help(hashlib)
+
+hashlib.new('md5')
+  <==> hashlib.md5()
+all hashlib obj:
+|  copy(self, /)
+|      Return a copy of the hash object.
+|
+|  digest(self, /)
+|      Return the digest value as a bytes object.
+|
+|  hexdigest(self, /)
+|      Return the digest value as a string of hexadecimal digits.
+|
+|  update(self, data, /)
+|      Update this hash object's state with the provided bytes-like object.
+hash.digest_size¶
+    The size of the resulting hash in bytes.
+
+hash.block_size¶
+    The internal block size of the hash algorithm in bytes.
+
+hash.name¶
+    The canonical name of this hash, always lowercase and always suitable as a parameter to new() to create another hash of this type.
+
+
+
+
+new = __hash_new(name, data=b'', **kwargs)
+    new(name, data=b'') - Return a new hashing object using the named algorithm;
+    optionally initialized with data (which must be a bytes-like object).
+
+pbkdf2_hmac(hash_name, password, salt, iterations, dklen=None)
+    Password based key derivation function 2 (PKCS #5 v2.0) with HMAC as pseudorandom function.
+
+
+
+Key derivation¶
+Key derivation and key stretching algorithms are designed for secure password hashing. Naive algorithms such as sha1(password) are not resistant against brute-force attacks.
+A good password hashing function must be tunable, slow, and include a salt.
+
+
+hashlib.pbkdf2_hmac(hash_name, password, salt, iterations, dklen=None)¶
+The function provides PKCS#5 password-based key derivation function 2. It uses HMAC as pseudorandom function.
+The string hash_name is the desired name of the hash digest algorithm for HMAC, e.g. ‘sha1’ or ‘sha256’. password and salt are interpreted as buffers of bytes.
+Applications and libraries should limit password to a sensible length (e.g. 1024). salt should be about 16 or more bytes from a proper source, e.g. os.urandom().
+The number of iterations should be chosen based on the hash algorithm and computing power.
+  As of 2013, at least 100,000 iterations of SHA-256 are suggested.
+dklen is the length of the derived key. If dklen is None then the digest size of the hash algorithm hash_name is used, e.g. 64 for SHA-512.
+>>> import hashlib
+>>> dk = hashlib.pbkdf2_hmac('sha256', b'password', b'salt', 100000)
+>>> dk.hex()
+'0394a2ede332c9a13eb82e9b24631604c31df978b4e2f0fbd2c549944f9d79a5'
+
+
+
+New in version 3.4.
+
+
+Note
+A fast implementation of pbkdf2_hmac is available with OpenSSL.
+The Python implementation uses an inline version of hmac. It is about three times slower and doesn’t release the GIL.
+
+
+
+
+hashlib.scrypt(password, *, salt, n, r, p, maxmem=0, dklen=64)¶
+The function provides scrypt password-based key derivation function as
+defined in RFC 7914.
+password and salt must be bytes-like objects.  Applications and libraries should limit password to a sensible length (e.g. 1024).  salt should be about 16 or more bytes from a proper source, e.g. os.urandom().
+n is the CPU/Memory cost factor, r the block size, p parallelization factor and maxmem limits memory (OpenSSL 1.1.0 defaults to 32 MiB).
+dklen is the length of the derived key.
+Availability: OpenSSL 1.1+.
+
+New in version 3.6.
+
+
+
+
+BLAKE2¶
+BLAKE2 is a cryptographic hash function defined in RFC 7693 that comes in two flavors:
+
+BLAKE2b, optimized for 64-bit platforms and produces digests of any size between 1 and 64 bytes,
+BLAKE2s, optimized for 8- to 32-bit platforms and produces digests of any size between 1 and 32 bytes.
+
+BLAKE2 supports keyed mode (a faster and simpler replacement for HMAC), salted hashing, personalization, and tree hashing.
+
+hashlib.blake2b(data=b'', *, digest_size=64, key=b'', salt=b'', person=b'', fanout=1, depth=1, leaf_size=0, node_offset=0, node_depth=0, inner_size=0, last_node=False)¶
+
+hashlib.blake2s(data=b'', *, digest_size=32, key=b'', salt=b'', person=b'', fanout=1, depth=1, leaf_size=0, node_offset=0, node_depth=0, inner_size=0, last_node=False)¶
+data: initial chunk of data to hash, which must be bytes-like object.  It can be passed only as positional argument.
+digest_size: size of output digest in bytes.
+key: key for keyed hashing (up to 64 bytes for BLAKE2b, up to 32 bytes for BLAKE2s).
+salt: salt for randomized hashing (up to 16 bytes for BLAKE2b, up to 8 bytes for BLAKE2s).
+person: personalization string (up to 16 bytes for BLAKE2b, up to 8 bytes for BLAKE2s).
+
+
+>>> h = blake2b(digest_size=20)
+Hash objects with different digest sizes have completely different outputs (shorter hashes are not prefixes of longer hashes);
+  BLAKE2b and BLAKE2s produce different outputs even if the output length is the same:
+>>> from hashlib import blake2b, blake2s
+>>> blake2b(digest_size=10).hexdigest()
+'6fa1d8fcfd719046d762'
+>>> blake2b(digest_size=11).hexdigest()
+'eb6ec15daf9546254f0809'
+>>> blake2s(digest_size=10).hexdigest()
+'1bf21a98c78a1c376ae9'
+>>> blake2s(digest_size=11).hexdigest()
+'567004bf96e4a25773ebf4'
+
+
+
+Keyed hashing¶
+Keyed hashing can be used for authentication as a faster and simpler
+replacement for Hash-based message authentication code (HMAC).
+BLAKE2 can be securely used in prefix-MAC mode thanks to the indifferentiability property inherited from BLAKE.
+This example shows how to get a (hex-encoded) 128-bit authentication code for message b'message data' with key b'pseudorandom key':
+>>> from hashlib import blake2b
+>>> h = blake2b(key=b'pseudorandom key', digest_size=16)
+>>> h.update(b'message data')
+>>> h.hexdigest()
+'3d363ff7401e02026f4a4687d4863ced'
+
+
+As a practical example, a web application can symmetrically sign cookies sent to users and later verify them to make sure they weren’t tampered with:
+>>> from hashlib import blake2b
+>>> from hmac import compare_digest
+>>>
+>>> SECRET_KEY = b'pseudorandomly generated server secret key'
+>>> AUTH_SIZE = 16
+>>>
+>>> def sign(cookie):
+...     h = blake2b(digest_size=AUTH_SIZE, key=SECRET_KEY)
+...     h.update(cookie)
+...     return h.hexdigest().encode('utf-8')
+>>>
+>>> def verify(cookie, sig):
+...     good_sig = sign(cookie)
+...     return compare_digest(good_sig, sig)
+>>>
+>>> cookie = b'user-alice'
+>>> sig = sign(cookie)
+>>> print("{0},{1}".format(cookie.decode('utf-8'), sig))
+user-alice,b'43b3c982cf697e0c5ab22172d1ca7421'
+>>> verify(cookie, sig)
+True
+>>> verify(b'user-bob', sig)
+False
+>>> verify(cookie, b'0102030405060708090a0b0c0d0e0f00')
+False
+
+
+Even though there’s a native keyed hashing mode, BLAKE2 can, of course, be used in HMAC construction with hmac module:
+>>> import hmac, hashlib
+>>> m = hmac.new(b'secret key', digestmod=hashlib.blake2s)
+>>> m.update(b'message')
+>>> m.hexdigest()
+'e3c8102868d28b5ff85fc35dda07329970d1a01e273c37481326fe0c861c8142'
+
+
+
+
+
+
+
+
+Randomized hashing¶
+By setting salt parameter users can introduce randomization to the hash function. Randomized hashing is useful for protecting against collision attacks on the hash function used in digital signatures.
+
+Randomized hashing is designed for situations where one party, the message preparer, generates all or part of a message to be signed by a second party, the message signer.
+  If the message preparer is able to find cryptographic hash function collisions (i.e., two messages producing the same hash value), then they might prepare meaningful versions of the message that would produce the same hash value and digital signature, but with different results (e.g., transferring $1,000,000 to an account, rather than $10).
+Cryptographic hash functions have been designed with collision resistance as a major goal, but the current concentration on attacking cryptographic hash functions may result in a given cryptographic hash function providing less collision resistance than expected.
+  Randomized hashing offers the signer additional protection by reducing the likelihood that a preparer can generate two or more messages that ultimately yield the same hash value during the digital signature generation process — even if it is practical to find collisions for the hash function.
+  However, the use of randomized hashing may reduce the amount of security provided by a digital signature when all portions of the message are prepared by the signer.
+(NIST SP-800-106 “Randomized Hashing for Digital Signatures”)
+
+In BLAKE2 the salt is processed as a one-time input to the hash function during initialization, rather than as an input to each compression function.
+
+Warning
+Salted hashing (or just hashing) with BLAKE2 or any other general-purpose cryptographic hash function, such as SHA-256, is not suitable for hashing passwords.  See BLAKE2 FAQ for more information.
+
+>>> import os
+>>> from hashlib import blake2b
+>>> msg = b'some message'
+>>> # Calculate the first hash with a random salt.
+>>> salt1 = os.urandom(blake2b.SALT_SIZE)
+>>> h1 = blake2b(salt=salt1)
+>>> h1.update(msg)
+>>> # Calculate the second hash with a different random salt.
+>>> salt2 = os.urandom(blake2b.SALT_SIZE)
+>>> h2 = blake2b(salt=salt2)
+>>> h2.update(msg)
+>>> # The digests are different.
+>>> h1.digest() != h2.digest()
+True
+
+
+
+
+
+Personalization¶
+Sometimes it is useful to force hash function to produce different digests for the same input for different purposes. Quoting the authors of the Skein hash function:
+
+  We recommend that all application designers seriously consider doing this;
+  we have seen many protocols where a hash that is computed in one part of the protocol can be used in an entirely different part because two hash computations were done on similar or related data, and the attacker can force the application to make the hash inputs the same.
+  Personalizing each hash function used in the protocol summarily stops this type of attack.
+  (The Skein Hash Function Family,
+  p. 21)
+
+BLAKE2 can be personalized by passing bytes to the person argument:
+>>> from hashlib import blake2b
+>>> FILES_HASH_PERSON = b'MyApp Files Hash'
+>>> BLOCK_HASH_PERSON = b'MyApp Block Hash'
+>>> h = blake2b(digest_size=32, person=FILES_HASH_PERSON)
+>>> h.update(b'the same content')
+>>> h.hexdigest()
+'20d9cd024d4fb086aae819a1432dd2466de12947831b75c5a30cf2676095d3b4'
+>>> h = blake2b(digest_size=32, person=BLOCK_HASH_PERSON)
+>>> h.update(b'the same content')
+>>> h.hexdigest()
+'cf68fb5761b9c44e7878bfb2c4c9aea52264a80b75005e65619778de59f383a3'
+
+
+Personalization together with the keyed mode can also be used to derive different keys from a single one.
+>>> from hashlib import blake2s
+>>> from base64 import b64decode, b64encode
+>>> orig_key = b64decode(b'Rm5EPJai72qcK3RGBpW3vPNfZy5OZothY+kHY6h21KM=')
+>>> enc_key = blake2s(key=orig_key, person=b'kEncrypt').digest()
+>>> mac_key = blake2s(key=orig_key, person=b'kMAC').digest()
+>>> print(b64encode(enc_key).decode('utf-8'))
+rbPb15S/Z9t+agffno5wuhB77VbRi6F9Iv2qIxU7WHw=
+>>> print(b64encode(mac_key).decode('utf-8'))
+G9GtHFE1YluXY1zWPlYk1e/nWfu0WSEb0KRcjhDeP/o=
+
+
+
+
+
+
+
+Tree mode¶
+Here’s an example of hashing a minimal tree with two leaf nodes:
+  10
+ /  \
+00  01
+
+
+This example uses 64-byte internal digests, and returns the 32-byte final digest:
+>>> from hashlib import blake2b
+>>>
+>>> FANOUT = 2
+>>> DEPTH = 2
+>>> LEAF_SIZE = 4096
+>>> INNER_SIZE = 64
+>>>
+>>> buf = bytearray(6000)
+>>>
+>>> # Left leaf
+... h00 = blake2b(buf[0:LEAF_SIZE], fanout=FANOUT, depth=DEPTH,
+...               leaf_size=LEAF_SIZE, inner_size=INNER_SIZE,
+...               node_offset=0, node_depth=0, last_node=False)
+>>> # Right leaf
+... h01 = blake2b(buf[LEAF_SIZE:], fanout=FANOUT, depth=DEPTH,
+...               leaf_size=LEAF_SIZE, inner_size=INNER_SIZE,
+...               node_offset=1, node_depth=0, last_node=True)
+>>> # Root node
+... h10 = blake2b(digest_size=32, fanout=FANOUT, depth=DEPTH,
+...               leaf_size=LEAF_SIZE, inner_size=INNER_SIZE,
+...               node_offset=0, node_depth=1, last_node=True)
+>>> h10.update(h00.digest())
+>>> h10.update(h01.digest())
+>>> h10.hexdigest()
+'3ad2a9b37c6070e374c7a8c508fe20ca86b6ed54e286e93a0318e95e881db5aa'
+
+
+
+
+
+
+]]]
+[[[
+array
+===
+FILE
+  /data/data/com.termux/files/usr/lib/python3.10/lib-dynload/array.cpython-310.so
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/array.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/array.html > $my_tmp/out4py/html2text/py_38_doc/array.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/array.html.txt
+
+
+import array
+array.__all__
+>>> dir(array)
+['ArrayType', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', '_array_reconstructor', 'array', 'typecodes']
+help(array)
+
+py_help array > ~/my_tmp/out4py/py_help.array.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.array.out.txt
+DATA
+  typecodes = 'bBuhHiIlLqQfd'
+
+ArrayType = class array(builtins.object)
+ |  Attributes:
+ |
+ |  typecode -- the typecode character used to create the array
+ |  itemsize -- the length in bytes of one array item
+ |
+ |  array(typecode [, initializer]) -> array
+ |
+ |  Return a new array whose items are restricted by typecode, and
+ |  initialized from the optional initializer value, which must be a list,
+ |  string or iterable over elements of the appropriate type.
+ |
+ |  Arrays represent basic values and behave very much like lists, except
+ |  the type of objects stored in them is constrained. The type is specified
+ |  at object creation time by using a type code, which is a single character.
+ |  The following type codes are defined:
+ |
+ |      Type code   C Type             Minimum size in bytes
+ |      'b'         signed integer     1
+ |      'B'         unsigned integer   1
+ |      Deprecated'u'         Unicode character  2 (see note)
+ |      'h'         signed integer     2
+ |      'H'         unsigned integer   2
+ |      'i'         signed integer     2
+ |      'I'         unsigned integer   2
+ |      'l'         signed integer     4
+ |      'L'         unsigned integer   4
+ |      'q'         signed integer     8 (see note)
+ |      'Q'         unsigned integer   8 (see note)
+ |      'f'         floating point     4
+ |      'd'         floating point     8
+ |
+ |  NOTE: The 'u' typecode corresponds to Python's unicode character. On
+ |  narrow builds this is 2-bytes on wide builds this is 4-bytes.
+ |
+ |  NOTE: The 'q' and 'Q' type codes are only available if the platform
+ |  C compiler used to build Python supports 'long long', or, on Windows,
+ |  '__int64'.
+ |
+ |  Methods:
+ |
+ |  append() -- append a new item to the end of the array
+ |  buffer_info() -- return information giving the current memory info
+ |  byteswap() -- byteswap all the items of the array
+ |  count() -- return number of occurrences of an object
+ |  extend() -- extend array by appending multiple elements from an iterable
+ |  fromfile() -- read items from a file object
+ |  fromlist() -- append items from the list
+ |  frombytes() -- append items from the string
+ |  index() -- return index of first occurrence of an object
+ |  insert() -- insert a new item into the array at a provided position
+ |  pop() -- remove and return item (default last)
+ |  remove() -- remove first occurrence of an object
+ |  reverse() -- reverse the order of the items in the array
+ |  tofile() -- write all items to a file object
+ |  tolist() -- return the array converted to an ordinary list
+ |  tobytes() -- return the array converted to a string
+ |
+
+array.buffer_info() -> (address, length) of current buffer until length-changing operations
+  [sizeof(current buffer) == length*array.itemsize]
+  This is occasionally useful when working with low-level (and inherently unsafe) I/O interfaces that require memory addresses, such as certain ioctl() operations.
+
+Note
+When using array objects from code written in C or C++ (the only way to effectively make use of this information), it makes more sense to use the buffer interface supported by array objects.  This method is maintained for backward compatibility and should be avoided in new code.
+The buffer interface is documented in Buffer Protocol.
+
+
+
+
+array.byteswap()
+“Byteswap” all items of the array.  This is only supported for values which are
+  1, 2, 4, or 8 bytes in size;
+  for other types of values, RuntimeError is raised.
+  It is useful when reading data from a file written on a machine with a different byte order.
+
+
+
+
+
+array.frombytes(s)
+  extend
+  (as if it had been read from a file using the fromfile() method).
+
+array.fromfile(f, n)¶
+  extend
+  Read n items (as machine values) from the file object f and append them to the end of the array.
+  If less than n items are available, EOFError is raised, but the items that were available are still inserted into the array.
+  f must be a real built-in file object; something else with a read() method won’t do.
+
+array.fromlist(list)¶
+  extend
+  if there is a type error, the array is unchanged.
+
+
+
+array.tobytes()
+
+]]]
+[[[
+struct
+  ==>> array
+===
+view ~/../usr/lib/python3.10/struct.py
+cp ~/../usr/lib/python3.10/struct.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/struct.py
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/struct.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/struct.html > $my_tmp/out4py/html2text/py_38_doc/struct.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/struct.html.txt
+[[
+std size+alignment =[def]= omit pad
+===
+Note
+By default, the result of packing a given C struct includes pad bytes in order to maintain proper alignment for the C types involved; similarly, alignment is taken into account when unpacking.  This behavior is chosen so that the bytes of a packed struct correspond exactly to the layout in memory of the corresponding C struct.
+To handle platform-independent data formats or omit implicit pad bytes, use standard size and alignment instead of native size and alignment: see Byte Order, Size, and Alignment for details.
+
+fst-Char :Byte-order :Size   :Alignment
+@   :native         :native     :native
+=   :native         :standard   :none
+<   :little-endian  :standard   :none
+>   :big-endian     :standard   :none
+!   :network        :standard   :none
+         (= big-endian)
+
+Notes:
+
+Padding is only automatically added between successive structure members.
+  No padding is added at the beginning or the end of the encoded struct.
+  No padding is added when using non-native size and alignment, e.g.
+      with ‘<’, ‘>’, ‘=’, and ‘!’.
+
+To align the end of a structure to the alignment requirement of a particular type, end the format with the code for that type with a repeat count of zero. See Examples: "@llh0l"
+
+
+standard size:
+  N/A: x,n,N,s,p,P
+  1: c,b,B,?
+  2: e,h,H
+  4: f,i,I,l,L
+  8: d,q,Q
+
+the format string '4h' means exactly the same as 'hhhh'.
+  Whitespace characters between formats are ignored; a count and its format must not contain whitespace though.
+'10s' means a single 10-byte string, while '10c' means 10 characters.
+  As a special case, '0s' means a single, empty string (while '0c' means 0 characters).
+    # 『@』:pad using "0\w" See Examples: "@llh0l"
+
+The ordering of format characters may have an impact on size since the padding needed to satisfy alignment requirements is different:
+>>> struct.calcsize('@ci')
+8
+>>> struct.calcsize('@ic')
+5
+>>> struct.calcsize('=ci') # no pad if not 『@』
+5
+>>> struct.calcsize('=ic')
+5
+
+
+This only works when native size and alignment are in effect; standard size and alignment does not enforce any alignment.
+The following format 'llh0l' specifies two pad bytes at the end, assuming longs are aligned on 4-byte boundaries:
+>>> pack('@llh0l', 1, 2, 3)
+b'\x00\x00\x00\x01\x00\x00\x00\x02\x00\x03\x00\x00'
+
+
+
+
+
+The 'p' format character encodes a “Pascal string”, meaning a short variable-length string stored in a fixed number of bytes, given by the count.
+The first byte stored is the length of the string, or 255, whichever is smaller. The bytes of the string follow.
+If the string passed in to pack() is too long (longer than the count minus 1), only the leading count-1 bytes of the string are stored.
+If the string is shorter than count-1, it is padded with null bytes so that exactly count bytes in all are used.
+Note that for unpack(), the 'p' format character consumes count bytes, but that the string returned can never contain more than 255 bytes.
+
+
+The IEEE 754 binary16 “half precision” type was introduced in the 2008 revision of the IEEE 754 standard. It has a sign bit, a 5-bit exponent and 11-bit precision (with 10 bits explicitly stored), and can represent numbers between approximately 6.1e-05 and 6.5e+04 at full precision.
+    This type is not widely supported by C compilers: on a typical machine, an unsigned short can be used for storage, but not for math operations.
+
+]]
+
+
+
+import struct
+struct.__all__
+['calcsize', 'pack', 'pack_into', 'unpack', 'unpack_from', 'iter_unpack', 'Struct', 'error']
+help(struct)
+
+py_help struct > ~/my_tmp/out4py/py_help.struct.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.struct.out.txt
+
+
+Functions to convert between Python values and C structs.
+    Python bytes objects are used to hold the data representing the C struct and also as format strings (explained below) to describe the layout of data in the C struct.
+
+    The optional first format char indicates byte order, size and alignment:
+      @: native order, size & alignment (default)
+      =: native order, std. size & alignment
+      <: little-endian, std. size & alignment
+      >: big-endian, std. size & alignment
+      !: same as >
+
+    The remaining chars indicate types of args and must match exactly; these can be preceded by a decimal repeat count:
+      x: pad byte (no data);
+      c:char;
+      b:signed byte; B:unsigned byte;
+      ?: _Bool (requires C99; if not available, char is used instead)
+      h:short; H:unsigned short;
+      i:int; I:unsigned int;
+      l:long; L:unsigned long;
+      f:float; d:double; e:half-float.
+    * Special cases (preceding decimal count indicates length):
+      s:string (array of char); char[]
+      p: pascal string (with count byte). char[]
+    * Special cases (only available in native format):
+      n:ssize_t; N:size_t;
+      P:an integer type that is wide enough to hold a pointer. (void*)
+    * Special case (not in native mode unless 'long long' in platform C):
+      q:long long; Q:unsigned long long
+    Whitespace between formats is ignored.
+
+class Struct(builtins.object)
+ |  Struct(fmt) --> compiled struct object
+ |  iter_unpack(self, buffer, /)
+ |  pack(...)
+ |      S.pack(v1, v2, ...) -> bytes
+ |  pack_into(...)
+ |      S.pack_into(buffer, offset, v1, v2, ...)
+ |  unpack(self, buffer, /)
+ |  unpack_from(self, /, buffer, offset=0)
+ |  Data descriptors defined here:
+ |
+ |  format
+ |      struct format string
+ |
+ |  size
+ |      struct size in bytes
+    calcsize(format, /) -> size in bytes
+    iter_unpack(format, buffer, /) -> Iter tuple8struct
+        [len(buffer)%calcsize(format) == 0]
+    pack(format, v1, v2, ...) -> bytes
+    pack_into(format, buffer, offset, v1, v2, ...) -> None
+    unpack(format, buffer, /) -> tuple8struct
+        [len(buffer) == calcsize(format)]
+    unpack_from(format, /, buffer, offset=0) -> tuple8struct
+        [offset + calcsize(format) <= len(buffer)]
+]]]
+[[[
+secrets
+===
+view ~/../usr/lib/python3.10/secrets.py
+cp ~/../usr/lib/python3.10/secrets.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/secrets.py
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/secrets.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/secrets.html > $my_tmp/out4py/html2text/py_38_doc/secrets.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/secrets.html.txt
+[[
+secrets.SystemRandom := random.SystemRandom
+===
+secrets vs random
+The secrets module is used for generating cryptographically strong random numbers suitable for managing data such as passwords, account authentication, security tokens, and related secrets.
+  In particularly, secrets should be used in preference to the default pseudo-random number generator in the random module, which is designed for modelling and simulation, not security or cryptography.
+
+
+class secrets.SystemRandom¶
+    A class for generating random numbers using the highest-quality sources provided by the operating system.
+    See random.SystemRandom for additional details.
+
+from random import SystemRandom
+
+_sysrand = SystemRandom()
+
+randbits = _sysrand.getrandbits
+choice = _sysrand.choice
+
+]]
+
+secrets.choice(sequence)
+  :: nonempty[x] -> x
+secrets.randbelow(n) -> int%n
+secrets.randbits(k) -> int%2**k
+
+secrets.token_bytes([nbytes=None]) -> bytes{nbytes}
+secrets.token_hex([nbytes=None]) -> str/hex{2*nbytes}
+secrets.token_urlsafe([nbytes=None]) -> str{~~1.3*nbytes}
+  Base64 encoded
+  base64.urlsafe_b64encode()
+
+Generating tokens
+  The secrets module provides functions for generating secure tokens, suitable for applications such as password resets, hard-to-guess URLs, and similar.
+How many bytes should tokens use?¶
+  To be secure against brute-force attacks, tokens need to have sufficient randomness.
+  Unfortunately, what is considered sufficient will necessarily increase as computers get more powerful and able to make more guesses in a shorter period.
+  As of 2015, it is believed that 32 bytes (256 bits) of randomness is sufficient for the typical use-case expected for the secrets module.
+  For those who want to manage their own token length, you can explicitly specify how much randomness is used for tokens by giving an int argument to the various token_* functions.
+  That argument is taken as the number of bytes of randomness to use.
+  Otherwise, if no argument is provided, or if the argument is None, the token_* functions will use a reasonable default instead.
+
+
+
+secrets.compare_digest(a, b) -> bool
+    '-> [a==b]'
+    to reduce the risk of timing attacks.
+    #normal cmp:
+      #len not eq --> cmp time decr
+      #content not eq --> cmp time decr
+
+
+import secrets
+secrets.__all__
+['choice', 'randbelow', 'randbits', 'SystemRandom', 'token_bytes', 'token_hex', 'token_urlsafe', 'compare_digest']
+help(secrets)
+
+py_help secrets > ~/my_tmp/out4py/py_help.secrets.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.secrets.out.txt
+
+]]]
+[[[
+random
+===
+view ~/../usr/lib/python3.10/random.py
+cp ~/../usr/lib/python3.10/random.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/random.py
+[[
+General notes on the underlying Mersenne Twister core generator:
+
+* The period is 2**19937-1.
+* It is one of the most extensively tested generators in existence.
+* The random() method is implemented in C, executes in a single Python step, and is, therefore, threadsafe.
+
+
+]]
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/random.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/random.html > $my_tmp/out4py/html2text/py_38_doc/random.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/random.html.txt
+
+[[
+The random module also provides the SystemRandom class which uses the system function os.urandom() to generate random numbers from sources provided by the operating system.
+
+Warning
+The pseudo-random generators of this module should not be used for security purposes.  For security or cryptographic uses, see the secrets module.
+
+
+
+Class Random can also be subclassed if you want to use a different basic generator of your own devising: in that case, override the
+  random(), seed(), getstate(), and setstate() methods.
+  Optionally, a new generator can supply a
+    getrandbits() method
+    — this allows randrange() to produce selections over an arbitrarily large range.
+
+]]
+
+random.seed(a=None, version=2)
+  if a is None:
+    if randomness sources are provided by the operating system:
+      they are used instead of the system time (see the os.urandom() function for details on availability).
+    else:
+      the current system time is used
+  elif a is an int:
+    it is used directly.
+  elif version==...:
+
+random.getstate() -> state
+random.setstate(state)
+
+random.getrandbits(k) -> int%2**k
+  This method is supplied with the MersenneTwister generator and some other generators may also provide it as an optional part of the API.
+      When available, getrandbits() enables randrange() to handle arbitrarily large ranges.
+
+
+
+
+
+
+
+
+random.randint(a, b)
+  <==> randrange(a, b+1)
+random.randrange(stop) -> int%stop
+random.randrange(start, stop[, step]) -> int
+  <==> choice(range(start, stop, step))
+
+    def _randbelow_with_getrandbits(sf, n):
+      '-> int%n'
+        k = n.bit_length()  # don't use (n-1) here because n can be 1
+        r = sf.getrandbits(k)  # 0 <= r < 2**k > n > 0
+        while r >= n:
+              # 概率至少1/2
+            r = sf.getrandbits(k)
+        return r
+
+    def _randbelow_without_getrandbits(self, n, maxsize=1<<BPF):
+        ...using .random() float 53bit int
+    _randbelow = _randbelow_with_getrandbits
+
+
+random.choice(seq)
+  '[x] -> x|^IndexError if empty'
+  integer arithmetic
+
+random.choices(population, weights=None, *, cum_weights=None, k=1)
+  '[x] -> [x]{k}'
+  floating point arithmetic
+    .random()
+  if not weights is None:
+    if not cum_weights is None: ^TypeError
+    cum_weights = [*itertools.accumulate(weights)]
+    weights = None
+  ###
+  if not cum_weights is None:
+    if not len(cum_weights)==len(population): ^...???
+  else:
+    cum_weights = range(1,len(population)+1)
+  ...
+
+
+
+random.shuffle(seq[, random]) -> None
+  '[x] -> may (() -> float%1.0) -> None'
+  Shuffle the sequence x in place.
+  vs:not-emplace:
+    sample(seq, k=len(seq)) -> new_seq
+  Note require [len(seq) <= 2080]
+    a sequence of length 2080 is the largest that can fit within the period of the Mersenne Twister random number generator.
+
+random.sample(population, k)
+  'seq/([x]|{x}) -> k/uint -> unique-occurrence[x]{k}|^ValueError if k > len(seq) #unique idx not obj'
+  Members of the population need not be hashable or unique.
+    If the population contains repeats, then each occurrence is a possible selection in the sample.
+  sample(range(10000000), k=60)
+
+
+##float:
+random.random() -> float%1.0
+random.uniform(a, b) -> (float[a..<?=?b]|float[b=?<?..=a])
+    The end-point value b may or may not be included in the range depending on floating-point rounding in the equation a + (b-a) * random().
+
+
+
+
+import random
+random.__all__
+['Random', 'SystemRandom', 'betavariate', 'choice', 'choices', 'expovariate', 'gammavariate', 'gauss', 'getrandbits', 'getstate', 'lognormvariate', 'normalvariate', 'paretovariate', 'randbytes', 'randint', 'random', 'randrange', 'sample', 'seed', 'setstate', 'shuffle', 'triangular', 'uniform', 'vonmisesvariate', 'weibullvariate']
+help(random)
+
+py_help random > ~/my_tmp/out4py/py_help.random.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.random.out.txt
+
+]]]
+[[[
+uu
+===
+view ~/../usr/lib/python3.10/uu.py
+cp ~/../usr/lib/python3.10/uu.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/uu.py
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/uu.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/uu.html > $my_tmp/out4py/html2text/py_38_doc/uu.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/uu.html.txt
+
+
+import uu
+uu.__all__
+help(uu)
+
+py_help uu > ~/my_tmp/out4py/py_help.uu.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.uu.out.txt
+
+decode(in_file, out_file=None, mode=None, quiet=False)
+    Decode uuencoded file
+encode(in_file, out_file, name=None, mode=None, *, backtick=False)
+    Uuencode file
+
+]]]
+[[[
+quopri
+===
+view ~/../usr/lib/python3.10/quopri.py
+cp ~/../usr/lib/python3.10/quopri.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/quopri.py
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/quopri.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/quopri.html > $my_tmp/out4py/html2text/py_38_doc/quopri.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/quopri.html.txt
+
+
+import quopri
+quopri.__all__
+['encode', 'decode', 'encodestring', 'decodestring']
+help(quopri)
+
+py_help quopri > ~/my_tmp/out4py/py_help.quopri.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.quopri.out.txt
+decode(input, output, header=False)
+    Read 'input', apply quoted-printable decoding, and write to 'output'.
+    'input' and 'output' are binary file objects.
+    If 'header' is true, decode underscore as space (per RFC 1522).
+    This is used to decode “Q”-encoded headers as described in RFC 1522: “MIME (Multipurpose Internet Mail Extensions) Part Two: Message Header Extensions for Non-ASCII Text”.
+
+
+decodestring(s, header=False)
+
+encode(input, output, quotetabs, header=False)
+    Read 'input', apply quoted-printable encoding, and write to 'output'.
+
+    'input' and 'output' are binary file objects. The 'quotetabs' flag
+    indicates whether embedded tabs and spaces should be quoted. Note that
+    line-ending tabs and spaces are always encoded, as per RFC 1521.
+    The 'header' flag indicates whether we are encoding spaces as _ as per RFC
+    1522.
+
+encodestring(s, quotetabs=False, header=False)
+
+
+
+]]]
+[[[
+binhex
+DeprecationWarning: the binhex module is deprecated
+===
+
+import binhex
+binhex.__all__
+['binhex', 'hexbin', 'Error']
+help(binhex)
+
+binhex(inp, out)
+  binhex(infilename, outfilename): create binhex-encoded copy of a file
+hexbin(inp, out)
+  hexbin(infilename, outfilename) - Decode binhexed file
+
+]]]
+[[[
+binascii
+  ==>> uu, base64, quopri, binhex
+===
+FILE
+    /data/data/com.termux/files/usr/lib/python3.10/lib-dynload/binascii.cpython-310.so
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/binascii.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/binascii.html > $my_tmp/out4py/html2text/py_38_doc/binascii.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/binascii.html.txt
+Normally, you will not use these functions directly but use wrapper modules like uu, base64, quopri, or binhex instead.
+
+
+import binascii
+binascii.__all__
+>>> dir(binascii)
+['Error', 'Incomplete', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'a2b_base64', 'a2b_hex', 'a2b_hqx', 'a2b_qp', 'a2b_uu', 'b2a_base64', 'b2a_hex', 'b2a_hqx', 'b2a_qp', 'b2a_uu', 'crc32', 'crc_hqx', 'hexlify', 'rlecode_hqx', 'rledecode_hqx', 'unhexlify']
+help(binascii)
+
+py_help binascii > ~/my_tmp/out4py/py_help.binascii.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.binascii.out.txt
+
+a2b_... :: ascii -> bytes #decode
+b2a_... :: bytes -> ascii #encode
+
+a2b_base64(data, /)
+    Decode a line of base64 data.
+b2a_base64(data, /, *, newline=True)
+    Base64-code line of data.
+
+a2b_hex(hexstr:ascii-bytes, /) -> bytes
+===unhexlify(hexstr, /) -> bytes
+~~~bytes.fromhex(ascii-str) -> bytes
+    hexstr must contain an even number of hex digits (upper or lower case).
+    bytes.fromhex('B9 01EF') -> b'\\xb9\\x01\\xef'.
+
+b2a_hex(bs[, sep, [bytes_per_sep]]) -> ascii-bytes
+===hexlify(...) -> ascii-bytes
+~~~bytes.hex(...) -> ascii-str
+    Hexadecimal representation of binary data.
+    >>> binascii.b2a_hex(b'\xb9\x01\xef')
+    b'b901ef'
+    >>> binascii.hexlify(b'\xb9\x01\xef', ':')
+    b'b9:01:ef'
+    >>> binascii.b2a_hex(b'\xb9\x01\xef', b'_', 2)
+    b'b9_01ef'
+    >>> value = b'\xb9\x01\xef'
+    >>> value.hex()
+    'b901ef'
+    >>> value.hex(':')
+    'b9:01:ef'
+    >>> value.hex(':', 2)
+    'b9:01ef'
+    >>> value.hex(':', -2)
+    'b901:ef'
+
+a2b_hqx(data, /)
+    Decode .hqx coding.
+    Convert binhex4 formatted ASCII data to binary, without doing RLE-decompression.
+    The string should contain a complete number of binary bytes, or (in case of the last portion of the binhex4 data) have the remaining bits zero.
+
+b2a_hqx(data, /)
+    Encode .hqx data.
+    Perform hexbin4 binary-to-ASCII translation and return the resulting string.
+    The argument should already be RLE-coded, and have a length divisible by 3 (except possibly the last fragment).
+
+rledecode_hqx(data, /)
+    Decode hexbin RLE-coded string.
+    Perform RLE-decompression on the data, as per the binhex4 standard. The algorithm uses 0x90 after a byte as a repeat indicator, followed by a count.
+    A count of 0 specifies a byte value of 0x90. The routine returns the decompressed data, unless data input data ends in an orphaned repeat indicator, in which case the Incomplete exception is raised.
+rlecode_hqx(data, /)
+    Binhex RLE-code binary data.
+    Perform binhex4 style RLE-compression on data and return the result.
+
+
+
+a2b_qp(data, header=False)
+    Decode a string of qp-encoded data.
+    if header is true, underscores will be decoded as spaces.
+b2a_qp(data, quotetabs=False, istext=True, header=False)
+    Encode a string using quoted-printable encoding.
+
+    On encoding, when istext is set, newlines are not encoded, and white
+    space at end of lines is.  When istext is not set, \r and \n (CR/LF)
+    are both encoded.  When quotetabs is set, space and tabs are encoded.
+
+
+a2b_uu(data, /)
+    Decode a line of uuencoded data.
+    Lines normally contain 45 (binary) bytes, except for the last line.
+    Line data may be followed by whitespace.
+b2a_uu(data, /, *, backtick=False)
+    Uuencode line of data.
+    the return value is the converted line, including a newline char.
+    The length of data should be at most 45.
+    If backtick is true, zeros are represented by '`' instead of spaces.
+
+
+
+
+
+crc32(data, crc=0, /)
+    Compute CRC-32 incrementally.
+    Compute CRC-32, the 32-bit checksum of data, starting with an initial CRC of value.
+    The default initial CRC is zero.
+    The algorithm is consistent with the ZIP file checksum.
+    Since the algorithm is designed for use as a checksum algorithm, it is not suitable for use as a general hash algorithm.
+    Use as follows:
+      print(binascii.crc32(b"hello world"))
+      # Or, in two pieces:
+      crc = binascii.crc32(b"hello")
+      crc = binascii.crc32(b" world", crc)
+      print('crc32 = {:#010x}'.format(crc))
+
+
+crc_hqx(data, crc, /)
+    Compute CRC-CCITT incrementally.
+
+    Compute a 16-bit CRC value of data, starting with value as the initial CRC, and return the result.
+    This uses the CRC-CCITT polynomial
+        x^16 + x^12 + x^5 + 1, often represented as
+        0x1021.
+    This CRC is used in the binhex4 format.
+
+
+
+]]]
+[[[
+base64
+===
+view ../../python3_src/seed/int_tools/digits/generic_base85.py
+view others/数学/编程/generic_base85_encode.txt
+  [@[i,N,D :: int] -> [N >= D > 0] -> [i == (i*N //D *D +(D -1)) //N]]
+    IO都是大端序
+  #base85_padding_style decode:
+  # encode:pad: i*iradix**L #big_endian
+  # encode:pad+cutoff: i*iradix**L //oradix**L
+  # decode:pad: i*iradix**L //oradix**L *oradix**L +(oradix**L -1)  #big_endian
+  # decode:pad+cutoff: (i*iradix**L //oradix**L *oradix**L +(oradix**L -1)) //iradix**L
+
+===
+cp ~/../usr/lib/python3.10/base64.py /sdcard/0my_files/tmp/out4py/py_src/
+view /sdcard/0my_files/tmp/out4py/py_src/base64.py
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/base64.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/base64.html > $my_tmp/out4py/html2text/py_38_doc/base64.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/base64.html.txt
+
+common:
+  ascii <: bytes
+  xxx_encode(bytes) -> ascii
+  xxx_decode(ascii) -> bytes
+
+
+base64.b64encode(s, altchars=None)
+  default:altchars = b'+/'
+  pad_char = b'=' #ALWAYS
+  字母表次序[A-Za-z0-9+/]
+    1个『=』:最后2比特无效/全零
+    2个『=』:最后4比特无效/全零
+    [len(output-ascii)%4==0]
+    [len(output-ascii)==(len(input-bytes)+2)//3 *4]
+base64.b64decode(s, altchars=None, validate=False)
+  ^binascii.Error if s is incorrectly padded
+  ^binascii.Error if validate and non-alphabet characters in s
+
+
+base64.standard_b64decode(s)
+base64.standard_b64encode(s)
+  altchars = b'+/'
+  pad_char = b'='
+
+base64.urlsafe_b64decode(s)
+base64.urlsafe_b64encode(s)
+  altchars = b'-_'
+  pad_char = b'='
+  substitutes - instead of + and _ instead of / in the standard Base64 alphabet, and return the encoded bytes.  The result can still contain =.
+
+base64.b32decode(s, casefold=False, map01=None)
+  if casefold:
+    s = s.upper()
+  map01:在于0->O,1->I/L
+  ^binascii.Error if s is incorrectly padded
+  ^binascii.Error if non-alphabet characters in s
+base64.b32encode(s)
+  字母表次序[A-Z2-7]
+    # 32==26+10-2-2 #"0189"
+    # 0->O,1->I/L
+    6『=』:最后2比特无效/全零
+    4『=』:最后4比特无效/全零
+    3『=』:最后1比特无效/全零
+    1『=』:最后3比特无效/全零
+    [len(output-ascii)%8==0]
+    [len(output-ascii)==(len(input-bytes)+4)//5 *8]
+b32hexdecode(s, casefold=False)
+b32hexencode(s)
+  字母表次序[0-9A-V]
+    # 32==26+10-4 #"WXYZ"
+_b32alphabet = b'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+_b32hexalphabet = b'0123456789ABCDEFGHIJKLMNOPQRSTUV'
+
+
+
+
+base64.b16decode(s, casefold=False)
+  if casefold:
+    s = s.upper()
+  ^binascii.Error if s is incorrectly padded
+  ^binascii.Error if non-alphabet characters in s
+base64.b16encode(s)
+  <==> input.hex().upper()
+  字母表次序[0-9A-Z]
+    [len(output-ascii)%2==0]
+    [len(output-ascii)==len(input-bytes) *2]
+
+
+base64.a85decode(b, *, foldspaces=False, adobe=False, ignorechars=b' \t\n\r\v')
+base64.a85encode(b, *, foldspaces=False, wrapcol=0, pad=False, adobe=False)
+  字母表次序[!-u]
+    bytes(range(0x21, 0x21+85))
+    bytes(range(ord(' ')+1, ord('v')))
+  每4字节 -> 5单元%85
+  大端序:都是:bytes,ascii%85
+base64.b85encode(b, pad=False)
+base64.b85decode(b)
+  字母表次序[0-9A-Za-z!#$%&()*+-;<=>?@^_`{|}~]
+      除去10个:r''' "',./:[\]'''
+  每4字节 -> 5单元%85
+  大端序:都是:bytes,ascii%85
+_b85alphabet = (b"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                b"abcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~")
+>>> bytes(range(0x20,0x7F))
+b' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
+
+log2(85) = cf[6;2,2,3,1,6,...]
+>>> import math
+>>> math.log2(85)
+6.409390936137702
+>>> 1/(_-6)
+2.4426530040802916
+>>> 1/(_-2)
+2.2591058702464215
+>>> 1/(_-2)
+3.8594262609679757
+>>> 1/(_-3)
+1.1635669578838508
+>>> 1/(_-1)
+6.113704215921787
+>>> 1/(_-6)
+8.794748654595715
+>>> 1/(_-8)
+1.2582594436837338
+>>> 1/(_-1)
+3.872075250129504
+>>>
+>>> math.log(85,2)
+6.409390936137703
+>>> math.log(1<<8,85)
+1.2481685201778
+>>> math.log(1<<(8*2),85)
+2.4963370403556
+>>> math.log(1<<(8*3),85)
+3.7445055605334
+>>> math.log(1<<(8*4),85)
+4.9926740807112
+>>> math.log(1<<(8*5),85)
+6.240842600889001
+
+每4字节 -> 5单元%85？yes!
+>>> 256**4
+4294967296
+>>> 85**5
+4437053125
+
+xxx 也许可以:变长编码:
+  1 -> A
+  01 -> B
+  00 -> C
+    最后可能剩下『0$』
+>>> 1+4+16+64
+85
+>>> bytes(range(0x20,0x7F))
+b' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
+>>> len(_)
+95
+>>>
+
+[[
+for base in range(65, 96):
+  for e in range(1, 20):
+    r = math.log(1<<(8*e),base)
+    if '.9' in str(r):
+      (base, e, r)
+(65, 3, 3.9851435091825076)
+(65, 6, 7.970287018365015)
+(65, 9, 11.955430527547524)
+(65, 12, 15.94057403673003)
+(65, 15, 19.92571754591254)
+(65, 18, 23.910861055095047)
+(66, 3, 3.9706212940573997)
+(66, 6, 7.941242588114799)
+(66, 9, 11.9118638821722)
+(67, 3, 3.9564205613318486)
+(67, 6, 7.912841122663697)
+(68, 3, 3.942529199089205)
+(68, 19, 24.969351594231632)
+(69, 3, 3.9289357306851747)
+(69, 16, 20.9543238969876)
+(70, 3, 3.9156292724042583)
+(70, 13, 16.96772684708512)
+(71, 3, 3.9025994945192193)
+(71, 13, 16.91126447624995)
+(72, 10, 12.966121951449782)
+(73, 10, 12.92443739543971)
+(73, 17, 21.97154357224751)
+(74, 17, 21.90208895887644)
+(75, 7, 8.990468784305198)
+(75, 14, 17.980937568610397)
+(76, 7, 8.962972102269996)
+(76, 14, 17.92594420453999)
+(77, 7, 8.935999277516537)
+(77, 18, 22.978283856471094)
+(78, 7, 8.909533240680473)
+(78, 18, 22.910228333178356)
+(79, 11, 13.959876384572452)
+(80, 11, 13.919804002700841)
+(80, 15, 18.981550912773873)
+(81, 15, 18.927892607143722)
+(81, 19, 23.97533063571538)
+(82, 19, 23.908573597131127)
+(85, 4, 4.9926740807112)
+(85, 8, 9.9853481614224)
+(85, 12, 14.9780222421336)
+(85, 16, 19.9706963228448)
+(86, 4, 4.979564524879807)
+(86, 8, 9.959129049759614)
+(86, 12, 14.93869357463942)
+(86, 16, 19.918258099519228)
+(87, 4, 4.966674008644963)
+(87, 8, 9.933348017289926)
+(87, 12, 14.90002202593489)
+(88, 4, 4.953996247544582)
+(88, 8, 9.907992495089164)
+(89, 4, 4.941525209635524)
+(90, 4, 4.929255102536434)
+(90, 17, 20.949334185779847)
+(91, 4, 4.917180361275656)
+(91, 13, 15.98083617414588)
+(92, 4, 4.905295636885699)
+(92, 13, 15.94221081987852)
+(93, 13, 15.904186303494539)
+(94, 9, 10.984670683283468)
+(94, 18, 21.969341366566937)
+(95, 9, 10.959144963353523)
+(95, 18, 21.918289926707047)
+==>>:最佳:
+(64, 3, 4)                  === 4
+(85, 4, 4.9926740807112)    ~ 5
+(94, 9, 10.984670683283468) ~ 11
+]]
+
+
+
+import base64
+base64.__all__
+['encode', 'decode', 'encodebytes', 'decodebytes', 'b64encode', 'b64decode', 'b32encode', 'b32decode', 'b32hexencode', 'b32hexdecode', 'b16encode', 'b16decode', 'b85encode', 'b85decode', 'a85encode', 'a85decode', 'standard_b64encode', 'standard_b64decode', 'urlsafe_b64encode', 'urlsafe_b64decode']
+help(base64)
+
+py_help base64 > ~/my_tmp/out4py/py_help.base64.out.txt
+view /sdcard/0my_files/tmp/out4py/py_help.base64.out.txt
+
+for u in [9,10,35,36,61,62,63,64]:(u,base64.b64encode(bytes([u])))
+for u in range(256):(u,base64.b64encode(bytes([u])))
+>>> base64.b64encode(b'\0\0')
+b'AAA='
+>>> base64.b64encode(b'')
+b''
+>>> base64.b64encode(b'\0')
+b'AA=='
+>>> base64.b64encode(b'\1')
+b'AQ=='
+>>> base64.b64encode(b'\2')
+b'Ag=='
+>>> base64.b64encode(b'\3')
+b'Aw=='
+>>> base64.b64encode(b'\4')
+b'BA=='
+>>> base64.b64encode(b'\x68')
+b'aA=='
+>>> base64.b64encode(b'\xF7')
+b'9w=='
+>>> base64.b64encode(b'\xF8')
+b'+A=='
+>>> base64.b64encode(b'\xFB')
+b'+w=='
+>>> base64.b64encode(b'\xFC')
+b'/A=='
+
+
+#>>> base64.b64encode(b'\x68')
+b'aA=='
+b'aA==' --> (a, A==)
+  a:首6比特:于[A-Za-z0-9]的次序中排行第26
+  A==:
+    [{8*n%6 | [n <- uint]} === {0,2,4}]
+    0『=』:[n==3*m]:字节串长度为(3*m)，编码后(4*m)
+    2『=』:[n==3*m+1]:字节串长度为(3*m+1)，编码后(4*m+2+2)，最后一个非填充字符6比特中只有最高2比特有效，即最后4比特无效
+    1『=』:[n==3*m+2]:字节串长度为(3*m+2)，编码后(4*m+3+1)，最后一个非填充字符6比特中只有最高4比特有效，即最后2比特无效
+>>> bin(26)
+'0b11010'
+>>> bin(0x68)
+'0b1101000'
+>>> 0x68>>2 # 拆成0b11010++0b00???? 最后4比特无效
+26
+
+>>> for u in range(256):(u,base64.b32encode(bytes([u])))
+...
+(0, b'AA======')
+(1, b'AE======')
+(2, b'AI======')
+(3, b'AM======')
+(4, b'AQ======')
+(5, b'AU======')
+(6, b'AY======')
+(7, b'A4======')
+(8, b'BA======')
+(9, b'BE======')
+...
+(207, b'Z4======')
+(208, b'2A======')
+...
+>>> 8*26
+208
+
+    [{8*n%5 | [n <- uint]} === {0,3,1,4,2}]
+    0『=』:字节串长度为(n==5*m)，编码后(8*m)
+    6『=』:字节串长度为(n==5*m+1)，编码后(8*m+2+6)，最后一个非填充字符5比特中只有最高3比特有效，即最后2比特无效
+    4『=』:字节串长度为(n==5*m+2)，编码后(8*m+4+4)，最后一个非填充字符5比特中只有最高1比特有效，即最后4比特无效
+    3『=』:字节串长度为(n==5*m+3)，编码后(8*m+5+3)，最后一个非填充字符5比特中只有最高4比特有效，即最后1比特无效
+    1『=』:字节串长度为(n==5*m+4)，编码后(8*m+7+1)，最后一个非填充字符5比特中只有最高2比特有效，即最后3比特无效
+>>> for u in range(256):(u,base64.b16encode(bytes([u])))
+...
+(0, b'00')
+(1, b'01')
+(2, b'02')
+(3, b'03')
+(4, b'04')
+(5, b'05')
+(6, b'06')
+(7, b'07')
+(8, b'08')
+(9, b'09')
+(10, b'0A')
+...
+
+>>> base64.a85encode(b'')
+b''
+>>> base64.a85encode(b'\0')
+b'!!'
+>>> base64.a85encode(b'\0\0')
+b'!!!'
+>>> base64.a85encode(b'\0\0\0')
+b'!!!!'
+>>> base64.a85encode(b'\0\0\0\0')
+b'z'
+
+>>> base64.b85encode(b'')
+b''
+>>> base64.b85encode(b'\0')
+b'00'
+>>> base64.b85encode(b'\0\0')
+b'000'
+>>> base64.b85encode(b'\0\0\0')
+b'0000'
+>>> base64.b85encode(b'\0\0\0\0')
+b'00000'
+>>> base64.b85encode(b'\0\0\0\0\0')
+b'0000000'
+>>> base64.b85encode(b'\0\0\0\0\0\0')
+b'00000000'
+>>> 1+4+16+64
+85
+
+]]]
+[[[
+keyword.iskeyword
+str.isidentifier
+from seed.lang.is_valid_python_id import is_valid_python_id
+===
+Python 3.10.5 (main, Jun  7 2022, 03:52:12) [Clang 12.0.8 (https://android.googlesource.com/toolchain/llvm-project c935d99d7 on linux
+>>> from keyword import iskeyword, issoftkeyword
+>>> from keyword import kwlist, softkwlist
+>>> keyword.__all__
+['iskeyword', 'issoftkeyword', 'kwlist', 'softkwlist']
+>>> softkwlist
+['_', 'case', 'match']
+>>> kwlist
+['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']
+>>> sorted(kwlist, key=len)
+['as', 'if', 'in', 'is', 'or', 'and', 'def', 'del', 'for', 'not', 'try', 'None', 'True', 'elif', 'else', 'from', 'pass', 'with', 'False', 'async', 'await', 'break', 'class', 'raise', 'while', 'yield', 'assert', 'except', 'global', 'import', 'lambda', 'return', 'finally', 'continue', 'nonlocal']
+]]]
+[[[
 sqlite3
 ===
 view ~/../usr/lib/python3.10/sqlite3.py
@@ -1387,7 +4217,7 @@ Path.__exit__(self, t, v, tb)
 Path.absolute(self)
          Return an absolute version of this path.  This function works
          even if the path doesn't point to anything.
-         
+
          No normalization is done, i.e. all '.' and '..' will be kept along.
          Use resolve() to get the canonical path to a file.
 ----
@@ -1410,7 +4240,7 @@ Path.group(self)
 ----
 Path.hardlink_to(self, target)
          Make this path a hard link pointing to the same file as *target*.
-         
+
          Note the order of arguments (self, target) is the reverse of os.link's.
 ----
 Path.is_block_device(self)
@@ -1448,12 +4278,12 @@ Path.lchmod(self, mode)
 ----
 Path.link_to(self, target)
          Make the target path a hard link pointing to this path.
-         
+
          Note this function does not make this path a hard link to *target*,
          despite the implication of the function and argument names. The order
          of arguments (target, link) is the reverse of Path.symlink_to, but
          matches that of os.link.
-         
+
          Deprecated since Python 3.10 and scheduled for removal in Python 3.12.
          Use `hardlink_to()` instead.
 ----
@@ -1482,20 +4312,20 @@ Path.readlink(self)
 ----
 Path.rename(self, target)
          Rename this path to the target path.
-         
+
          The target path may be absolute or relative. Relative paths are
          interpreted relative to the current working directory, *not* the
          directory of the Path object.
-         
+
          Returns the new Path instance pointing to the target path.
 ----
 Path.replace(self, target)
          Rename this path to the target path, overwriting if that path exists.
-         
+
          The target path may be absolute or relative. Relative paths are
          interpreted relative to the current working directory, *not* the
          directory of the Path object.
-         
+
          Returns the new Path instance pointing to the target path.
 ----
 Path.resolve(self, strict=False)
@@ -1671,13 +4501,13 @@ PurePath.stem
 @property
 PurePath.suffix
              The final component's last suffix, if any.
-             
+
              This includes the leading period. For example: '.txt'
 ----
 @property
 PurePath.suffixes
              A list of the final component's suffixes, if any.
-             
+
              These include the leading periods. For example: ['.tar', '.gz']
 ----
 ----
@@ -2042,12 +4872,12 @@ BoundArguments:
       ===
     class BoundArguments(builtins.object)
      |  BoundArguments(signature, arguments)
-     |  
+     |
      |  Result of `Signature.bind` call.  Holds the mapping of arguments
      |  to the function`s parameters.
-     |  
+     |
      |  Has the following public attributes:
-     |  
+     |
      |  * arguments : dict
      |      An ordered mutable mapping of parameters` names to arguments` values.
      |      Does not contain arguments` default values.
@@ -2070,11 +4900,11 @@ Parameter:
     ===
     class Parameter(builtins.object)
      |  Parameter(name, kind, *, default, annotation)
-     |  
+     |
      |  Represents a parameter in a function signature.
-     |  
+     |
      |  Has the following public attributes:
-     |  
+     |
      |  * name : str
      |      The name of the parameter as a string.
      |  * default : object
@@ -2090,7 +4920,7 @@ Parameter:
      |      Possible values: `Parameter.POSITIONAL_ONLY`,
      |      `Parameter.POSITIONAL_OR_KEYWORD`, `Parameter.VAR_POSITIONAL`,
      |      `Parameter.KEYWORD_ONLY`, `Parameter.VAR_KEYWORD`.
-     |  
+     |
 
 Signature:
     -> return_annotation
@@ -2103,13 +4933,13 @@ Signature:
     ===
     class Signature(builtins.object)
      |  Signature(parameters=None, *, return_annotation, __validate_parameters__=True)
-     |  
+     |
      |  A Signature object represents the overall signature of a function.
      |  It stores a Parameter object for each parameter accepted by the
      |  function, as well as information specific to the function itself.
-     |  
+     |
      |  A Signature object has the following public attributes and methods:
-     |  
+     |
      |  * parameters : OrderedDict
      |      An ordered mapping of parameters` names to the corresponding
      |      Parameter objects (keyword-only arguments are in the same order
@@ -2124,7 +4954,7 @@ Signature:
      |  * bind_partial(*args, **kwargs) -> BoundArguments
      |      Creates a partial mapping from positional and keyword arguments
      |      to parameters (simulating `functools.partial` behavior.)
-     |  
+     |
 end-CLASSES
 ]]
 
@@ -2136,7 +4966,7 @@ FUNCTIONS
 begin-FUNCTIONS
     getfullargspec(func)
         Get the names and default values of a callable object`s parameters.
-        
+
         A tuple of seven things is returned:
         (args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations).
         'args' is a list of the parameter names.
@@ -2145,93 +4975,93 @@ begin-FUNCTIONS
         'kwonlyargs' is a list of keyword-only parameter names.
         'kwonlydefaults' is a dictionary mapping names from kwonlyargs to defaults.
         'annotations' is a dictionary mapping parameter names to annotations.
-        
+
         Notable differences from inspect.signature():
           - the "self" parameter is always reported, even for bound methods
           - wrapper chains defined by __wrapped__ *not* unwrapped automatically
 
     getcallargs(func, /, *positional, **named)
         Get the mapping of arguments to values.
-        
+
         A dict is returned, with keys the function argument names (including the
         names of the * and ** arguments, if any), and values the respective bound
         values from 'positional' and 'named'.
-    
+
     getargvalues(frame)
         Get information about arguments passed into a particular frame.
-        
+
         A tuple of four things is returned: (args, varargs, varkw, locals).
         'args' is a list of the argument names.
         'varargs' and 'varkw' are the names of the * and ** arguments or None.
         'locals' is the locals dictionary of the given frame.
-    
+
     getattr_static(obj, attr, default=<object object at 0x78e408cbf0>)
         Retrieve attributes without triggering dynamic lookup via the
         descriptor protocol,  __getattr__ or __getattribute__.
-        
+
         Note: this function may not be able to retrieve all attributes
         that getattr can fetch (like dynamically created attributes)
         and may find attributes that getattr can't (like descriptors
         that raise AttributeError). It can also return descriptor objects
         instead of instance members in some cases. See the
         documentation for details.
-    
+
 
     getclasstree(classes, unique=False)
         Arrange the given list of classes into a hierarchy of nested lists.
-        
+
         Where a nested list appears, it contains classes derived from the class
         whose entry immediately precedes the list.  Each entry is a 2-tuple
         containing a class and a tuple of its base classes.  If the 'unique'
         argument is true, exactly one entry appears in the returned structure
         for each class in the given list.  Otherwise, classes using multiple
         inheritance and their descendants will appear multiple times.
-    
+
     getclosurevars(func)
         Get the mapping of free variables to their current values.
-        
+
         Returns a named tuple of dicts mapping the current nonlocal, global
         and builtin references as seen by the body of the function. A final
         set of unbound names that could not be resolved is also provided.
-    
+
     getmodule(object, _filename=None)
         Return the module an object was defined in, or None if not found.
-    
+
     getmodulename(path)
         Return the module name for a given file, or None.
-    
+
     getmro(cls)
         Return tuple of base classes (including cls) in method resolution order.
 
 
     indentsize(line)
         Return the indent size, in spaces, at the start of a line of text.
-    
+
     isabstract(object)
         Return true if the object is an abstract base class (ABC).
-    
+
 
     isawaitable(object)
         Return true if object can be passed to an ``await`` expression.
-    
+
     isbuiltin(object)
         Return true if the object is a built-in function or method.
-        
+
         Built-in functions and methods provide these attributes:
             __doc__         documentation string
             __name__        original name of this function or method
             __self__        instance to which a method is bound, or None
-    
+
     isclass(object)
         Return true if the object is a class.
-        
+
         Class objects provide these attributes:
             __doc__         documentation string
             __module__      name of module in which this class was defined
-    
+
     iscode(object)
         Return true if the object is a code object.
-        
+
         Code objects provide these attributes:
             co_argcount         number of arguments (not including *, ** args
                                 or keyword only arguments)
@@ -2252,13 +5082,13 @@ begin-FUNCTIONS
             co_nlocals          number of local variables
             co_stacksize        virtual machine stack space required
             co_varnames         tuple of names of arguments and local variables
-    
+
     iscoroutine(object)
         Return true if the object is a coroutine.
 
     isframe(object)
         Return true if the object is a frame object.
-        
+
         Frame objects provide these attributes:
             f_back          next outer frame object (this frame`s caller)
             f_builtins      built-in namespace seen by this frame
@@ -2268,10 +5098,10 @@ begin-FUNCTIONS
             f_lineno        current line number in Python source code
             f_locals        local namespace seen by this frame
             f_trace         tracing function for this frame, or None
-    
+
     isfunction(object)
         Return true if the object is a user-defined function.
-        
+
         Function objects provide these attributes:
             __doc__         documentation string
             __name__        name with which this function was defined
@@ -2280,10 +5110,10 @@ begin-FUNCTIONS
             __globals__     global namespace in which this function was defined
             __annotations__ dict of parameter annotations
             __kwdefaults__  dict of keyword only parameters with defaults
-    
+
     isgenerator(object)
         Return true if the object is a generator.
-        
+
         Generator objects provide these attributes:
             __iter__        defined to support iteration over container
             close           raises a new GeneratorExit exception inside the
@@ -2296,63 +5126,63 @@ begin-FUNCTIONS
             send            resumes the generator and "sends" a value that becomes
                             the result of the current yield-expression
             throw           used to raise an exception inside the generator
-    
+
     isgeneratorfunction(obj)
         Return true if the object is a user-defined generator function.
 
     ismethod(object)
         Return true if the object is an instance method.
-        
+
         Instance method objects provide these attributes:
             __doc__         documentation string
             __name__        name with which this method was defined
             __func__        function object containing implementation of method
             __self__        instance to which this method is bound
-    
+
     ismodule(object)
         Return true if the object is a module.
-        
+
         Module objects provide these attributes:
             __cached__      pathname to byte compiled file
             __doc__         documentation string
             __file__        filename (missing for built-in modules)
-    
+
     isroutine(object)
         Return true if the object is any kind of function or method.
-    
+
     istraceback(object)
         Return true if the object is a traceback.
-        
+
         Traceback objects provide these attributes:
             tb_frame        frame object at this level
             tb_lasti        index of last attempted instruction in bytecode
             tb_lineno       current line number in Python source code
             tb_next         next inner traceback object (called by this level)
-    
+
     signature(obj, *, follow_wrapped=True, globals=None, locals=None, eval_str=False)
         Get a signature object for the passed callable.
-    
+
     stack(context=1)
         Return a list of records for the stack above the caller`s frame.
-    
+
     trace(context=1)
         Return a list of records for the stack below the current exception.
-    
+
     unwrap(func, *, stop=None)
         Get the object wrapped by *func*.
-        
+
         Follows the chain of :attr:`__wrapped__` attributes returning the last
         object in the chain.
-        
+
         *stop* is an optional callback accepting an object in the wrapper chain
         as its sole argument that allows the unwrapping to be terminated early if
         the callback returns a true value. If the callback never returns a true
         value, the last object in the chain is returned as usual. For example,
         :func:`signature` uses this to stop unwrapping if any object in the
         chain has a ``__signature__`` attribute defined.
-        
+
         :exc:`ValueError` is raised if a cycle is encountered.
-    
+
 
 end-FUNCTIONS
 ]]
@@ -5125,7 +7955,7 @@ asyncio.coroutine :: (... -> GenIter r x) -> (... -> Coroutine r)
 
 Coroutine r(Awaitable r, GenIter r x):
   __await__ :: sf -> GenIter r x
-  send :: sf -> v -> ??? 
+  send :: sf -> v -> ???
 
 
 async_def
@@ -5513,6 +8343,13 @@ unique(enumeration)
 @unique
 class xxx(Enum):
   aaa = auto()
+
+>>> Enum.__members__
+mappingproxy({})
+>>> dict(**E)
+Traceback (most recent call last):
+  ...
+TypeError: dict() argument after ** must be a mapping, not EnumMeta
 
 Functional API
 Enum :: name4cls -> (str8names|[name]|[(name,value)]|{name:value}) -> TYPE
@@ -6108,9 +8945,9 @@ le(a, b, /)
 
 length_hint(obj, default=0, /)
     Return an estimate of the number of items in obj.
-    
+
     This is useful for presizing containers when building from an iterable.
-    
+
     If the object supports len(), the result will be exact.
     Otherwise, it may over- or under-estimate by an arbitrary amount.
     The result will be an integer >= 0.
@@ -6968,7 +9805,7 @@ importlib.util.cache_from_source(path4py, deprecated debug_override=None, *, opt
   ===
   Return the PEP 3147/PEP 488 path to the byte-compiled file associated with the source path.
     For example, if path is /foo/bar/baz.py the return value would be /foo/bar/__pycache__/baz.cpython-32.pyc for Python 3.2.
-        The cpython-32 string comes from the current magic tag 
+        The cpython-32 string comes from the current magic tag
         (see get_tag(); if sys.implementation.cache_tag is not defined then NotImplementedError will be raised).
           没找到:get_tag()
   ===
@@ -8249,6 +11086,8 @@ example.py:
   if __name__ == "__main__":
       import doctest
       doctest.testmod()
+      #doctest: +ELLIPSIS
+      #doctest: +SKIP
 
 python example.py
 python example.py -v
@@ -8596,8 +11435,57 @@ to_bytes(self, /, length, byteorder, *, signed=False)
 
 ]]
 
+
+[[
+
 from collections import deque
-#deque([iterable[, maxlen]]) --> deque object
+deque([iterable[, maxlen]]) --> deque object
+rotate(self, n=1, /)
+  Rotate the deque n steps to the right (default n=1).  If n is negative, rotates left.
+popleft(...)
+appendleft(...)
+extendleft(...)??? reverse or not
+
+
+
+
+from collections import Counter
+
+Counter(iterable=None, /, **kwds)
+|  >>> c = Counter('abcdeabcdabcaba')  # count elements from a string
+|
+|  >>> c.most_common(3)                # three most common elements
+|  [('a', 5), ('b', 4), ('c', 3)]
+|  >>> sorted(c)                       # list all unique elements
+|  ['a', 'b', 'c', 'd', 'e']
+|  >>> ''.join(sorted(c.elements()))   # list elements with repetitions
+|  'aaaaabbbbcccdde'
+
+
++ - & |
++= -= &= |=
+  & min
+  | max
+  + - keeping only positive counts.
+    add/pos, sub/neg
+
+elements(self)
+most_common(self, n=None)
+total(self)
+  Sum of the counts
+update(self, iterable=None, /, **kwds)
+subtract(self, iterable=None, /, **kwds)
+  Both the inputs and outputs are allowed to contain zero and negative counts.
+>>> c = Counter()
+>>> c.update([1,2])
+>>> c
+Counter({1: 1, 2: 1})
+>>> c.subtract([1,2])
+>>> c
+Counter({1: 0, 2: 0})
+
+
+]]
 
 [[
 from functools import reduce
@@ -8632,27 +11520,27 @@ cmp_to_key(...)
 
 lru_cache(maxsize=128, typed=False)
     Least-recently-used cache decorator.
-    
+
     If *maxsize* is set to None, the LRU features are disabled and the cache can grow without bound.
-    
+
     If *typed* is True, arguments of different types will be cached separately.
     For example, f(3.0) and f(3) will be treated as distinct calls with distinct results.
-    
+
     Arguments to the cached function must be hashable.
-    
+
     View the cache statistics named tuple (hits, misses, maxsize, currsize) with f.cache_info().  Clear the cache and statistics with f.cache_clear().
     Access the underlying function with f.__wrapped__.
 
 reduce(...)
     reduce(function, iterable[, initial]) -> value
-    
+
     Apply a function of two arguments cumulatively to the items of a sequence or iterable, from left to right, so as to reduce the iterable to a single value.
     For example, reduce(lambda x, y: x+y, [1, 2, 3, 4, 5]) calculates ((((1+2)+3)+4)+5).
     If initial is present, it is placed before the items of the iterable in the calculation, and serves as a default when the iterable is empty.
 
 singledispatch(func)
     Single-dispatch generic function decorator.
-    
+
     Transforms a function into a generic function, which can have different
     behaviours depending upon the type of its first argument. The decorated
     function acts as the default implementation, and additional

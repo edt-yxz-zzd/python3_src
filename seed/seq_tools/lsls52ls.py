@@ -1,14 +1,19 @@
-check_super_idx
-bisearch
-    mk5???
-    super_idx2ground_rng_end
+#check_super_idx
+#   ???TODO
+#DONE?:bisearch
+#    mk5???
+#    super_idx2ground_rng_end
+#       neednot, use super_idx2ground_offset instead
+#   super_idx2ground_offset instead
+#       --> GroundIdx52IndirectIdxPair__list__bisearch
+#
 r'''
 e ../../python3_src/seed/seq_tools/lsls52ls.py
 seed.seq_tools.lsls52ls
 py -m seed.seq_tools.lsls52ls
-py -m nn_ns.app.debug_cmd   seed.seq_tools.lsls52ls
+py -m nn_ns.app.debug_cmd   seed.seq_tools.lsls52ls -x
 from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset
-from seed.seq_tools.lsls52ls import GroundIdx5IndirectIdxPair, GroundIdx52IndirectIdxPair__list, GroundIdx52IndirectIdxPair__func
+from seed.seq_tools.lsls52ls import GroundIdx5IndirectIdxPair, GroundIdx52IndirectIdxPair__list, GroundIdx52IndirectIdxPair__list__bisearch, GroundIdx52IndirectIdxPair__func
 from seed.seq_tools.lsls52ls import IGroundIdx5IndirectIdxPair, IGroundIdx52IndirectIdxPair
 
 used in:
@@ -19,8 +24,17 @@ see also:
         view ../../python3_src/nn_ns/app/crypt/involution/InvolutoryCipher.py
         (idx8eqvcls_ex2offset, idx8eqvcls2offset, total_num_elements) = derived5idx8eqvcls2num_elements(idx8eqvcls2num_elements)
 
+
+
+get_state___sizes__si2go
+get_state___sizes__si2go__gi2si_ni
+go - ground_offset
+si - super_idx
+gi - ground_idx
+ni - inner_idx
+
 [[[
->>> from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset, GroundIdx5IndirectIdxPair, GroundIdx52IndirectIdxPair__list, GroundIdx52IndirectIdxPair__func
+>>> from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset, GroundIdx5IndirectIdxPair, GroundIdx52IndirectIdxPair__list, GroundIdx52IndirectIdxPair__list__bisearch, GroundIdx52IndirectIdxPair__func
 
 >>> def print_dir(x, /):
 ...     for nm in dir(x):
@@ -71,6 +85,40 @@ ground_offset_ex5super_idx_ex
 ((), (), ())
 >>> g.ground_idx_ex2super_idx_ex(0)
 0
+
+>>> g = GroundIdx52IndirectIdxPair__list__bisearch([])
+>>> {g}
+{GroundIdx52IndirectIdxPair__list__bisearch(())}
+>>> print_dir(g)
+get_len_ground_seq
+get_len_inner_seq_at
+get_len_super_seq
+get_state___sizes__si2go
+ground_idx2ground_offset
+ground_idx2inner_idx
+ground_idx2super_idx
+ground_idx2super_idx_inner_idx_pair
+ground_idx5super_idx_inner_idx
+ground_idx5super_idx_inner_idx_pair
+ground_idx_ex2super_idx_ex
+ground_offset5super_idx
+ground_offset_ex5super_idx_ex
+
+>>> g.get_state___sizes__si2go()
+((), ())
+>>> g.ground_idx_ex2super_idx_ex(0)
+0
+
+
+
+
+
+
+
+
+
+
+
 
 >>> g = GroundIdx5IndirectIdxPair([0, 5, 1])
 >>> {g}
@@ -123,7 +171,55 @@ ground_offset_ex5super_idx_ex
 >>> g.ground_idx_ex2super_idx_ex(6)
 3
 
+>>> g = GroundIdx52IndirectIdxPair__list__bisearch([0, 5, 1])
+>>> {g}
+{GroundIdx52IndirectIdxPair__list__bisearch((0, 5, 1))}
+>>> g.get_state___sizes__si2go()
+((0, 5, 1), (0, 0, 5))
+>>> g.ground_idx2ground_offset(3)
+0
+>>> g.ground_idx2inner_idx(3)
+3
+>>> g.ground_idx2super_idx(3)
+1
+>>> g.ground_idx2super_idx_inner_idx_pair(3)
+(1, 3)
+>>> g.ground_idx_ex2super_idx_ex(0)
+1
+>>> g.ground_idx_ex2super_idx_ex(3)
+1
+>>> g.ground_idx_ex2super_idx_ex(4)
+1
+>>> g.ground_idx_ex2super_idx_ex(5)
+2
+>>> g.ground_idx_ex2super_idx_ex(6)
+3
 
+
+
+
+
+
+
+
+
+
+
+ground_idx2super_idx__si2gre_
+ground_idx2super_idx__si2go_
+>>> sizes = [0, 1, 2, 3, 0, 0, 0, 2, 0, 1, 0]
+
+>>> super_idx2ground_rng_end = sizes_to_super_idx2ground_rng_end(sizes)
+>>> super_idx2ground_rng_end
+[0, 1, 3, 6, 6, 6, 6, 8, 8, 9, 9]
+>>> [ground_idx2super_idx__si2gre_(super_idx2ground_rng_end, ground_idx) for ground_idx in range(sum(sizes))]
+[1, 2, 2, 3, 3, 3, 7, 7, 9]
+
+>>> super_idx2ground_offset = sizes_to_super_idx2ground_offset(sizes)
+>>> super_idx2ground_offset
+[0, 0, 1, 3, 6, 6, 6, 6, 8, 8, 9]
+>>> [ground_idx2super_idx__si2go_(super_idx2ground_offset, ground_idx) for ground_idx in range(sum(sizes))]
+[1, 2, 2, 3, 3, 3, 7, 7, 9]
 
 ]]]
 
@@ -134,13 +230,15 @@ __all__ = '''
     sizes_to_ground_idx2super_idx_inner_idx_pair
     sizes_to_ground_idx2super_idx
     sizes_to_super_idx2ground_offset
+        ground_idx2super_idx__si2go_
     sizes_to_super_idx2ground_rng_end
-
+        ground_idx2super_idx__si2gre_
 
     IGroundIdx5IndirectIdxPair
         IGroundIdx52IndirectIdxPair
         GroundIdx5IndirectIdxPair
             GroundIdx52IndirectIdxPair__list
+            GroundIdx52IndirectIdxPair__list__bisearch
             GroundIdx52IndirectIdxPair__func
 
     '''.split()
@@ -150,6 +248,7 @@ from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 #from seed.helper.repr_input import repr_helper
 from seed.tiny import mk_tuple, check_uint, check_callable
 from itertools import accumulate, chain
+from seed.seq_tools.bisearch import bisearch
 
 
 
@@ -174,19 +273,27 @@ def sizes_to_super_idx2ground_offset(sizes, /):
 def sizes_to_super_idx2ground_rng_end(sizes, /):
     super_idx2ground_rng_end = [*accumulate(sizes)]
     return super_idx2ground_rng_end
+def ground_idx2super_idx__si2gre_(super_idx2ground_rng_end, ground_idx, /):
+    (eqv_begin, eqv_end) = bisearch(ground_idx, super_idx2ground_rng_end)
+    super_idx = eqv_end
+    return super_idx
+def ground_idx2super_idx__si2go_(super_idx2ground_offset, ground_idx, /):
+    (eqv_begin, eqv_end) = bisearch(ground_idx, super_idx2ground_offset)
+    super_idx = eqv_end-1
+    return super_idx
 
 
 
 class IGroundIdx5IndirectIdxPair(ABC):
     r'''
 ground_seq :: [a]{len_ground_seq}
-    ground_idx <- [0..len_ground_seq-1]
-    ground_idx_ex <- [0..len_ground_seq]
-    ground_offset_ex <- [0..len_ground_seq]
-super_seq :: [[a]{len_inner_seq_at<super_idx>} | super_idx <- [0..len_super_seq-1]]{len_super_seq}
-    super_idx <- [0..len_super_seq-1]
-    super_idx_ex <- [0..len_super_seq]
-    inner_idx_at<super_idx> <- [0..len_inner_seq_at<super_idx> -1]
+    ground_idx <- [0..<len_ground_seq]
+    ground_idx_ex <- [0..=len_ground_seq]
+    ground_offset_ex <- [0..=len_ground_seq]
+super_seq :: [[a]{len_inner_seq_at<super_idx>} | super_idx <- [0..<len_super_seq]]{len_super_seq}
+    super_idx <- [0..<len_super_seq]
+    super_idx_ex <- [0..=len_super_seq]
+    inner_idx_at<super_idx> <- [0..<len_inner_seq_at<super_idx>]
 
 sizes = inner_seq_sizes = super_idx2len_inner_seq :: [uint]
 
@@ -228,7 +335,7 @@ query:
             .[-1] if . else 0
     -> len_inner_seq_at<super_idx>
         super_idx2ground_rng_end:   O(1)
-            super_idx2ground_rng_end[super_idx> - (super_idx2ground_rng_end[super_idx-1> if super_idx else 0)
+            super_idx2ground_rng_end<super_idx> - (super_idx2ground_rng_end<super_idx-1> if super_idx else 0)
         ground_idx_ex2super_idx_ex: O(log len_ground_seq)
             bisearch rng eq to super_idx
 
@@ -489,6 +596,16 @@ class GroundIdx52IndirectIdxPair__list(GroundIdx5IndirectIdxPair, IGroundIdx52In
         (super_idx, inner_idx_at) = sf._gi2si_ni[ground_idx]
         return (super_idx, inner_idx_at)
 #class GroundIdx52IndirectIdxPair__list(GroundIdx5IndirectIdxPair, IGroundIdx52IndirectIdxPair):
+class GroundIdx52IndirectIdxPair__list__bisearch(GroundIdx5IndirectIdxPair, IGroundIdx52IndirectIdxPair):
+    @override
+    def _ground_idx2super_idx_inner_idx_pair_(sf, ground_idx, /):
+        '-> (super_idx, inner_idx_at)'
+        _sizes, _si2goffset = sf.get_state___sizes__si2go()
+        super_idx = ground_idx2super_idx__si2go_(_si2goffset, ground_idx)
+        inner_idx_at = ground_idx -_si2goffset[super_idx]
+        return (super_idx, inner_idx_at)
+
+
 class GroundIdx52IndirectIdxPair__func(GroundIdx5IndirectIdxPair, IGroundIdx52IndirectIdxPair):
     def __init__(sf, sizes, ground_idx2super_idx_inner_idx_pair__callable, /):
         check_callable(ground_idx2super_idx_inner_idx_pair__callable)

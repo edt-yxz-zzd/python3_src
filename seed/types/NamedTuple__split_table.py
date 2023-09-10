@@ -6,11 +6,31 @@ used in:
 
 
 seed.types.NamedTuple__split_table
-py -m nn_ns.app.debug_cmd   seed.types.NamedTuple__split_table
+py -m nn_ns.app.debug_cmd   seed.types.NamedTuple__split_table -x
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.NamedTuple__split_table   @f
 py -m nn_ns.app.doctest_cmd seed.types.NamedTuple__split_table:__doc__ -v
 from seed.types.NamedTuple__split_table import NamedTuple, Descriptor4NamedTuple, gmk_Descriptor4NamedTuple
 
+
+[[
+class Descriptor4NamedTuple
+    .name2idx[]
+    .idx2name[]
+    .names
+    .idc
+    #no:__iter__
+    __len__
+    __hash__
+    __ne__
+    __eq__
+    .mk_tuple__fold()
+    .mk_tuple__star()
+    .mk_dict__fold()
+    .mk_dict__star()
+    .mk_partial_dict__fold()
+    .mk_partial_dict__star()
+gmk_Descriptor4NamedTuple = get_or_mk_Descriptor4NamedTuple = echo_or_lookup_or_mk_Descriptor4NamedTuple
+]]
 
 
 
@@ -249,6 +269,7 @@ __all__
 
 from seed.tiny import MapView, check_pseudo_identifier, check_type_is, mk_tuple
 from seed.tiny import echo, fst as fst_, snd as snd_
+from seed.tiny import ifNone
 from seed.helper.repr_input import repr_helper
 from seed.iters.duplicate_elements import iter_duplicate_representative_elements
 
@@ -284,6 +305,8 @@ def _lookup_or_mk_Descriptor4NamedTuple(names, /):
     return descriptor4named_tuple
 
 class _MIXINS:
+    def __ne__(sf, ot, /):
+        return not sf == ot
     def __eq__(sf, ot, /):
         return sf is ot or (type(sf) is type(ot) and (sf._h is None or ot._h is None or sf._h==ot._h) and sf._get_args_used_in_hash() == ot._get_args_used_in_hash())
     def __hash__(sf, /):
@@ -323,11 +346,76 @@ class Descriptor4NamedTuple(_MIXINS):
     def idx2name(sf, /):
         return sf._i2nm
     names = idx2name
+    @property
+    def idc(sf, /):
+        return range(len(sf))
+    #def __iter__(sf, /): #use idx2name/names instead
     def __len__(sf, /):
         return len(sf.names)
     def _get_args_used_in_hash(sf, /):
         return (id(type(sf)), len(sf), sf.names)
+    def mk_tuple__star(sf, /, *args, **kwargs):
+        return sf.mk_tuple__fold(args, kwargs)
+    def mk_tuple__fold(sf, args, kwargs, /, *, name2default=None):
+        if 0:
+            nm2obj = sf.mk_dict__fold(args, kwargs)
+            return tuple(nm2obj[nm] for nm in sf.idx2name)
+        (objs, nm2obj) = _prepare4mk_dict__fold(sf, args, kwargs, partial=False, may_name2default=name2default)
+        for nm in sf.idx2name[len(objs):]:
+            objs.append(nm2obj[nm])
+        if not len(objs) == len(sf):raise logic-err
+        return tuple(objs)
+    def mk_dict__star(sf, /, *args, **kwargs):
+        return sf.mk_dict__fold(args, kwargs)
+    def mk_dict__fold(sf, args, kwargs, /, *, partial=False, name2default=None):
+        partial = bool(partial)
+        (objs, nm2obj) = _prepare4mk_dict__fold(sf, args, kwargs, partial=partial, may_name2default=name2default)
+        for nm, obj in zip(sf.idx2name, objs):
+            #if nm in nm2obj: raise logic-err
+            nm2obj[nm] = obj
+        if not partial:
+            if not len(nm2obj) == len(sf):raise logic-err
+            if not nm2obj.keys() == sf.name2idx.keys():raise logic-err
+        else:
+            if not len(nm2obj) <= len(sf):raise logic-err
+            if not nm2obj.keys() <= sf.name2idx.keys():raise logic-err
+        return nm2obj
+    def mk_partial_dict__star(sf, /, *args, **kwargs):
+        return sf.mk_partial_dict__fold(args, kwargs)
+    def mk_partial_dict__fold(sf, args, kwargs, /):
+        return sf.mk_dict__fold(args, kwargs, partial=True)
+
 #end-class Descriptor4NamedTuple:
+def _prepare4mk_dict__fold(sf, args, kwargs, /, *, partial, may_name2default):
+    #args = mk_tuple(args)
+    objs = [*args]
+    if not len(objs) <= len(sf):raise TypeError
+    nm2obj = {**kwargs}
+    _nms = {*sf.idx2name[len(objs):]}
+
+    name2default = ifNone(may_name2default, {})
+    while 1:
+        if 1:
+            #partial____pass
+            if not len(objs)+len(nm2obj) <= len(sf):raise TypeError
+            if not nm2obj.keys() <= _nms:raise TypeError
+
+        unfill_nms = _nms - nm2obj.keys()
+        #filling_nms = (unfill_nms & name2default.keys())
+        filling_nms = {nm for nm in unfill_nms if nm in name2default}
+        if not filling_nms:
+            break
+        for nm in filling_nms:
+            nm2obj[nm] = name2default[nm]
+    nm2obj, unfill_nms
+
+    if partial:
+        #see:above:partial____pass
+        pass
+    else:
+        if not len(objs)+len(nm2obj) == len(sf):raise TypeError
+        if not nm2obj.keys() == _nms:raise TypeError
+    return (objs, nm2obj)
 
 _og = object.__getattribute__
 class _Getter4NamedTuple:
@@ -348,11 +436,18 @@ class _Getter4NamedTuple:
         return iter(sf[...])
     def __reversed__(sf, /):
         return reversed(sf[...])
+    def __ne__(sf, ot, /):
+        return not sf == ot
     def __eq__(sf, ot, /):
         return sf is ot or (type(sf) is type(ot) and sf[...] == ot[...])
     def __hash__(sf, /):
         #bug:return hash((id(type(sf)), sf[...]))
         return hash((id(type(sf)), hash(sf[...])))
+    if 0:
+        def __dir__(sf, /):
+            return sorted(sf[...].idx2name)
+                #py.dir() will sorted() result from __dir__
+        #xxx:no ".__vars__":???vars() get .__dict__ bypass __getattribute__???: def __vars__(sf, /):
 
 
 class NamedTuple(_MIXINS):

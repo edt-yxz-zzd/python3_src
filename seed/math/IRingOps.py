@@ -25,6 +25,8 @@ from seed.math.IRingOps import (
     NonInvertibleError
     ,IRingOps
         ,IRingExOps
+            ,BinaryFieldRingExOps
+                ,ring_ex_ops__BinaryField
         ,IRingOpsOverRealNumber
             ,IRingExOpsOverRealNumber
         ,IPyRingOps
@@ -44,6 +46,8 @@ __all__ = '''
 
     IRingOps
         IRingExOps
+            BinaryFieldRingExOps
+                ring_ex_ops__BinaryField
         IRingOpsOverRealNumber
             IRingExOpsOverRealNumber
         IPyRingOps
@@ -299,6 +303,50 @@ class IRingExOps(IRingOps):
 
 
 #class IRingExOps(IRingOps):
+class BinaryFieldRingExOps(IRingExOps):
+    __slots__ = ()
+    _zero = False
+    _one = True
+    _neg_one = True
+    @override
+    def _add_(ops, x, y, /):
+        'element -> element -> element #x+y'
+        return x ^ y
+    @override
+    def _mul_(ops, x, y, /):
+        'element -> element -> element #x*y'
+        return x and y
+    @override
+    def _neg_(ops, y, /):
+        'element -> element #-y'
+        return y
+    @override
+    def _eq_(ops, x, y, /):
+        'element -> element -> bool #x==y'
+        return x == y
+    @override
+    def _get_characteristic_(ops, /):
+        '-> uint # like field characteristic==0'
+        return 2
+    @override
+    def _inv__tmay_(ops, y, /):
+        'element -> tmay element #tmay (1/y) __truediv__'
+        if y:
+            inv_y = y
+            tmay_inv_y = (inv_y,)
+        else:
+            tmay_inv_y = ()
+        return tmay_inv_y
+    @override
+    def _mk_ring_element5int_(ops, i, /):
+        'int%characteristic -> Element'
+        return bool(i&1)
+ring_ex_ops__BinaryField = BinaryFieldRingExOps()
+
+
+
+
+
 
 
 class IRingOpsOverRealNumber(IRingOps):
@@ -443,3 +491,4 @@ class FractionRingExOps(IPyRingExOpsOverRealNumber):
 
 
 
+ring_ex_ops__Fraction = FractionRingExOps()

@@ -1,0 +1,134 @@
+
+e ../../python3_src/seed/types/namedtuple.txt
+
+
+
+
+view ../../python3_src/seed/types/NamedTuple__split_table.py
+from seed.types.NamedTuple__split_table import NamedTuple, Descriptor4NamedTuple, gmk_Descriptor4NamedTuple
+  同一类型，『属性列表』是实例构建参数
+
+view ../../python3_src/seed/types/namedtuple.py
+from collections import namedtuple as _namedtuple
+from seed.types.namedtuple import namedtuple
+  不同类型，基于py.namedtuple，不同之处在于『seed版hash考虑类型区别，py版继承使用tuple.__hash__』
+
+view ../../python3_src/seed/types/NamedTupleBase.py
+from seed.types.NamedTupleBase import NamedTupleBase, mk_NamedTuple, as_dict, replace, extract_as, format_as, as_mapping_view
+#def mk_NamedTuple(qname4type, field_names, /, *, defaults=None, module=None, ):
+  不同类型，『属性列表』是类型构建参数，使用`class` keyword 'ordered_field_name_seq/type2ordered_field_name_seq/type_field_name4ordered_field_name_seq'
+  vs seed.types.namedtuple(collections.namedtuple)
+      py.namedtuple 不允许 下划线 开头的属性名，这个约束太强
+      py.namedtuple 不允许 语言保留字 用作 属性名，这个约束太强
+      避开这些约束==>>NamedTupleBase:
+        from seed.types.NamedTuple__split_table import Descriptor4NamedTuple, gmk_Descriptor4NamedTuple
+        Descriptor4NamedTuple.__new__() using 'check_pseudo_identifier(nm)' to check field name
+  ######################
+  >>> from collections import namedtuple
+  >>> namedtuple('C', '_xxx')
+  Traceback (most recent call last):
+  ValueError: Field names cannot start with an underscore: '_xxx'
+  >>> namedtuple('C', 'def')
+  Traceback (most recent call last):
+  ValueError: Type names and field names cannot be a keyword: 'def'
+
+
+
+
+
+
+view ../../python3_src/seed/tiny_/CompactData.py
+from seed.tiny_.CompactData import Base4CompactData, mk_CompactDataType, mk_CompactDataType_then_write_to_module
+  不同类型，使用__slots__
+
+view ../../python3_src/seed/types/NamespaceABC.py
+from seed.types.NamespaceABC import StaticImmutableNamespaceBase, DynamicImmutableNamespace
+  StaticImmutableNamespaceBase
+    不同类型，『属性列表』是类型构建参数，使用`class` keyword 'ordered_user_attr_seq'
+    ~ImmutableNamespaceBase
+  DynamicImmutableNamespace
+    同一类型，随意构造
+    ~ImmutableNamespace
+  ######################
+  >>> class S(StaticImmutableNamespaceBase, ordered_user_attr_seq='ab'):pass
+  >>> ns = S(b=-1, a=2)
+  >>> ns = DynamicImmutableNamespace(b=-1, a=2)
+
+
+view ../../python3_src/seed/types/Namespace.py
+from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOverwriteImplicitly, NamespaceForbidNewKey, NamespaceForbidSetitem, NamespaceForbidDelitem, NamespaceForbidAlterKeySet, NamespaceForbidModify
+  NamespaceForbidModify
+    immutable
+    同一类型，随意构造
+      类似ImmutableNamespace/DynamicImmutableNamespace，但允许__getitem__任意键值
+
+
+view ../../python3_src/seed/types/ImmutableNamespace.py
+from seed.types.ImmutableNamespace import ImmutableNamespace
+    同一类型，随意构造
+    ~DynamicImmutableNamespace
+
+view ../../python3_src/seed/types/ImmutableNamespaceBase.py
+from seed.types.ImmutableNamespaceBase import ImmutableNamespaceBase
+  不同类型，『属性列表』是类型构建参数，使用`class` keyword 'ordered_attr_name_seq^type2ordered_attr_name_seq^type_attr4ordered_attr_name_seq'
+  ~StaticImmutableNamespaceBase
+  ######################
+  >>> class AB(ImmutableNamespaceBase, ordered_attr_name_seq='ab'):pass
+  >>> AB(b = 0, a = 1)
+  AB(a = 1, b = 0)
+
+
+
+
+view ../../python3_src/seed/types/DictKeyAsObjAttr.py
+from seed.types.DictKeyAsObjAttr import DictKeyAsObjAttr, DictKeyAsObjAttrAndAsMapping, SetAsNamespace, SetAsNamespaceAndAsMapping, namespace5iterable, namespace5names_str
+
+view ../../python3_src/seed/mapping_tools/key_as_attr.py
+from seed.mapping_tools.key_as_attr import key_as_attr, key_as_attr_ex
+
+
+
+
+view ../../python3_src/seed/types/GrowingDict.py
+from seed.types.GrowingDict import GrowingDict, GrowingDictView
+
+view ../../python3_src/seed/types/FrozenDict.py
+from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, HalfFrozenDict
+
+view ../../python3_src/seed/types/SingleItemDict.py
+from seed.types.SingleItemDict import SingleItemDict
+
+view ../../python3_src/seed/tiny_/containers.py
+from seed.tiny_.containers import null_mapping_view
+
+grep record -i -r ../../python3_src/seed/ -a -l
+grep 'class .*Mapping' -r ../../python3_src/seed/ -a -l
+view ../../python3_src/seed/types/empty_containers.py
+from seed.types.empty_containers import EmptyMapping, empty_mapping
+
+view ../../python3_src/seed/types/DictWithNewProtocol__ver2.py
+view ../../python3_src/seed/types/DictWithNewProtocol.py
+from seed.types.DictWithNewProtocol import hash_protocol__default, FrozenDictWithNewProtocol__default
+
+
+
+
+
+
+
+view ../../python3_src/seed/types/flag/IHybridFlag.py
+from seed.types.flag.IHybridFlag import (
+    Flag__discrete_mutex_groups_only_ie_no_key_pair_mutex__without_active_keys_constraints__all_keys_are_legal__instance_state_is_active_keys_only__key_is_str
+    ,Case__single_mutex_group_only_ie_pairwise_key_mutex__without_active_keys_constraints__all_keys_are_legal__instance_state_is_active_keys_only__key_is_str
+    ,Case__single_mutex_group_only_ie_pairwise_key_mutex__active_keys_constraints_check_nonempty_only__all_keys_are_legal__instance_state_is_active_keys_only__key_is_str
+    )
+
+
+
+
+
+
+
+
+
+

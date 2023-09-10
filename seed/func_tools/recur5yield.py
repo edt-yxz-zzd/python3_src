@@ -8,7 +8,9 @@ see also:
 
 e ../../python3_src/seed/func_tools/recur5yield.py
 py -m seed.func_tools.recur5yield
-py -m nn_ns.app.debug_cmd   seed.func_tools.recur5yield
+py -m nn_ns.app.debug_cmd   seed.func_tools.recur5yield -x
+py -m nn_ns.app.doctest_cmd seed.func_tools.recur5yield:__doc__ -ff -v
+
 
 from seed.func_tools.recur5yield import HelperPseudoMeta8Recur5Yield
 
@@ -383,7 +385,7 @@ __all__ = '''
 
     HelperPseudoMeta8Recur5Yield
         RecurGroupCollector4Recur5Yield
-    '''.split()
+    '''.split()#'''
 r'''
 xxxxxxx
     recur5yield__echo__echo
@@ -391,19 +393,60 @@ xxxxxxx
     recur5yield__0func__echo
     recur5yield__0func__off
 #'''
+__all__
 
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from functools import wraps
-from collections.abc import Generator as GeneratorIterator #, Callable
-from seed.tiny_.check import check_getitemable, check_callable, check_type_is, check_type_le, check_pair #no check_tuple
-from seed.tiny_.dict__add_fmap_filter import dict_add__is
-from seed.tiny import curry1
+from seed.for_libs.for_time import (
+Timer__print_err
+    ,timer__print_err__thread_wide
+    ,timer__print_err__process_wide
+    ,timer__print_err__system_wide__highest_resolution
+    ,timer__print_err__system_wide__monotonic
+)
 
-from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
-from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
+timer = timer__print_err__thread_wide
+_to_show_ = __name__ == "__main__"
+
+with timer(prefix='py:std...', _to_show_=_to_show_):
+    from functools import wraps
+    from collections.abc import Generator as GeneratorIterator #, Callable
+
+with timer(prefix='seed:basic...', _to_show_=_to_show_):
+    from seed.tiny_.check import check_getitemable, check_callable, check_type_is, check_type_le, check_pair #no check_tuple
+    from seed.tiny_.dict__add_fmap_filter import dict_add__is
+    from seed.tiny import curry1
+
+with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
+    from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
+    from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
+
 ___end_mark_of_excluded_global_names__0___ = ...
+
+r'''[[[
+py -m seed.func_tools.recur5yield
+py:std...:duration: 0.0001646160000000063 *(unit: 0:00:01)
+seed:basic...:duration: 0.00011753899999999984 *(unit: 0:00:01)
+seed.types.ops.IEmplaceStackOps:duration: 0.01057238299999999 *(unit: 0:00:01)
+
+seed.types.ops.IEmplaceStackOps
+e ../../python3_src/seed/types/ops/IEmplaceStackOps.py
+
+py -m seed.types.ops.IEmplaceStackOps
+seed:basic...:duration: 0.00015761600000002707 *(unit: 0:00:01)
+seed.abc.abc__ver1:duration: 0.004998077999999989 *(unit: 0:00:01)
+seed.abc.IHashable:duration: 0.001823384999999983 *(unit: 0:00:01)
+seed.types.ops.IEmplaceStackOps:duration: 0.003220001 *(unit: 0:00:01)
+
+
+#]]]'''#'''
+
+
+
+
+
+
 
 def _t():
     #generator_iterator 并没有保留 返回值
@@ -861,9 +904,28 @@ def HelperPseudoMeta8Recur5Yield(name, bases, namespace, /, *, emplace_stack_ops
     main4recur5yield = collector.mk_main(main_name)
     return main4recur5yield
 
+__all__
+from seed.func_tools.recur5yield import HelperPseudoMeta8Recur5Yield
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+from seed.func_tools.recur5yield import recur5yield__list__echo__echo, recur5yield__list__echo__off, recur5yield__list__0func__echo, recur5yield__list__0func__off
+
+from seed.func_tools.recur5yield import recur5yield__huge__echo__echo, recur5yield__huge__echo__off, recur5yield__huge__0func__echo, recur5yield__huge__0func__off
+
+from seed.func_tools.recur5yield import recur5yield__eval__main_generator_iterator
+from seed.func_tools.recur5yield import recur5yield__decoratorT__all_gi_protocols, child_gi_protocol__echo, child_gi_protocol__0func, child_gi_protocolT__0func5ref, tail_recur_gi_protocol__echo, tail_recur_gi_protocol__off
+
+from seed.func_tools.recur5yield import RecurGroupCollector4Recur5Yield
+from seed.func_tools.recur5yield import explain__child_gi_protocol_vs_may_0ref4func_vs_echo, explain__tail_recur_gi_protocol_vs_may_echo_vs_turnoff, explain__emplace_stack_ops_vs_may_ops4list_vs_ops4huge, explain__may_child_gi_protocol6getitemable_vs_0ref4func_vs_0case
+from seed.func_tools.recur5yield import child_gi_protocol6getitemable__0case, child_gi_protocol6getitemable__0func, child_gi_protocol6getitemableT__0func5ref
+
+
+from seed.func_tools.recur5yield import *
+
+if 0:
+    #use instead: py -m nn_ns.app.doctest_cmd seed.func_tools.recur5yield:__doc__ -ff -v
+    #
+    if __name__ == "__main__":
+        import doctest
+        doctest.testmod()
 
 

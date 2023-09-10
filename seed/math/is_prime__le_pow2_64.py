@@ -1,4 +1,6 @@
 r'''[[[
+from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
+
 ===
 py -m nn_ns.app.adhoc_argparser__main__call8module    seed.math.is_prime__le_pow2_64 @trailing =0b1000
 py -m nn_ns.app.adhoc_argparser__main__call8module    seed.math.is_prime__le_pow2_64 @trailing =0b1001
@@ -172,7 +174,7 @@ def is_prime__le_pow2_64(n, /):
     assert n >= _square_of_primes_lt60[-1] == 3481
 
     if n <= 23001:
-        return pow(2, n, n) == 2 and n not in [7957, 8321, 13747, 18721, 19951]
+        return pow(2, n, n) == 2 and n not in (7957, 8321, 13747, 18721, 19951)
 
     for up, bases in _table4mr:
         if n < up:
@@ -192,7 +194,7 @@ _table4mr = (
     ,(18446744073709551616, [2, 325, 9375, 28178, 450775, 9780504, 1795265022])
     ])
 
- 
+
 def _isprime(n):
     """
     Test if n is a prime number (True) or not (False). For n < 2^64 the
@@ -368,3 +370,5 @@ def _isprime(n):
 
 
 isprime = is_prime__le_pow2_64
+
+from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64

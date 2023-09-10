@@ -233,6 +233,8 @@ def _2_search_largest_prime_le_(n, /):
 _pow2_64 = 1<<64
 _largest_prime_lt_pow2_64 = 18446744073709551557
 assert _largest_prime_lt_pow2_64 == search_largest_prime_lt_(_pow2_64)
+assert _pow2_64 == 18446744073709551616 == 2**64
+assert _largest_prime_lt_pow2_64 == _pow2_64 -59
 
 
 

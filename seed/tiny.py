@@ -201,6 +201,12 @@ __all__ = str2__all__(r'''
     echo_key            # echo_key[k...] -> (k...)
     mk_frozenset        # :: Iter a -> frozenset a
     mk_tuple            # :: Iter a -> tuple a
+    mk_reiterable       # :: Iter a -> ReIter a
+    mk_reiterables      # :: Iter<Iter a> -> ReIter<ReIter a>
+    mk_reiterable__depth_
+                        # :: depth/uint -> Iter**(depth+1) a -> ReIter**(depth+1) a
+                        # mk_reiterable__depth_ 0 <==> mk_reiterable
+                        # mk_reiterable__depth_ 1 <==> mk_reiterables
     echo_args_kwargs    # :: (*args, **kwargs) -> (args, kwargs)
     echo_args           # :: *args -> args
     echo_kwargs         # :: (**kwargs) -> kwargs
@@ -379,6 +385,8 @@ __all__ = str2__all__(r'''
                         # (k->v->bool) -> dict<k,v> -> dict<k,v>
     group4dict_value_with_key,group4dict_item
                         # (Hashable g) => (k->v->g) -> dict<k,v> -> dict<g, dict<k,v> >
+    filter4dict_key     # (k->bool) -> dict<k,v> -> dict<k,v>
+    group4dict_key      # (Hashable g) => (k->g) -> dict<k,v> -> dict<g, dict<k,v> >
 
 
 
@@ -575,6 +583,11 @@ assert next(null_iter, None) is None
 #null_mapping = empty_mapping
 
 
+from seed.tiny_.mk_reiterable import mk_reiterable, mk_reiterables, mk_reiterable__depth_
+assert mk_reiterable([0, {}, null_iter]) == [0, {}, null_iter]
+assert mk_reiterables([{}, null_iter, []]) == ({}, (), [])
+assert mk_reiterables(iter([{}, null_iter, []])) == ({}, (), [])
+
 
 from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp
 from seed.debug.lazy_raise import lazy_raise
@@ -707,6 +720,11 @@ from seed.tiny_.fmap4may import fmap4may
 
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, dict_add__new, group4dict_value
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value_with_key, filter4dict_value_with_key, group4dict_value_with_key, filter4dict_item, group4dict_item
+
+from seed.tiny_.dict__add_fmap_filter import filter4dict_key, group4dict_key
+assert filter4dict_value(bool, {0: 1, 1: 0}) == {0: 1}
+assert filter4dict_key(bool, {0: 1, 1: 0}) == {1: 0}
+assert group4dict_key(len, {'':0, '1':1, ():0, '22':2}) == {0:{'':0, ():0}, 1:{'1':1}, 2:{'22':2}}
 
 
 from seed.tiny_.CallCounter import CallCounter

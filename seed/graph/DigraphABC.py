@@ -1,5 +1,10 @@
+__all__ = '''
+    DigraphABC
+'''.split()
 
-from seed.types.ABC import *
+
+#from seed.types.ABC import *
+from seed.abc.abc__ver1 import ABC, not_implemented
 
 
 class DigraphABC(ABC):
@@ -11,13 +16,13 @@ class DigraphABC(ABC):
         # O(N) time/space
         # just suitable for for fixed self.vertices
         # e.g. return [None]*self.num_vertices()
-        ... 
+        ...
     @not_implemented
     def make_vertex_set(self):
         # O(N) time/space
         # just suitable for for fixed self.vertices
         ...
-    
+
     @not_implemented
     def num_vertices(self):...
     @not_implemented
@@ -32,7 +37,7 @@ class DigraphABC(ABC):
         for e in self.iter_adjacent_dedges(v):
             _v, u = self.dedge2ends(e)
             yield u
-            
+
     @classmethod
     @not_implemented
     def from_vertex_pairs(cls, pairs, missing_vtc):
@@ -42,11 +47,13 @@ class DigraphABC(ABC):
         #     count of same pair is important for multi-edged digraph
         # isolated_vtc <= missing_vtc <= all_vtc
         ...
-        
 
 
 
 
-    
-    
 
+
+
+
+from seed.graph.DigraphABC import DigraphABC
+from seed.graph.DigraphABC import *

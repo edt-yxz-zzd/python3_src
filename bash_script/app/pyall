@@ -1,0 +1,5 @@
+for qnm4mdl in "$@" ; do {
+  #py_adhoc_call ''  ,str.list "%:${qnm4mdl}__all__@all" =all
+    #AttributeError: module 'builtins' has no attribute '__all__'. Did you mean: '__name__'?
+  py_adhoc_call '' ,str.list  '%@B' "%${qnm4mdl}@mdl" '%!m=B.getattr(mdl, "__all__", None)' '= dir(mdl) if m is None else m'
+} ; done

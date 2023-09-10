@@ -1,7 +1,8 @@
 #__all__:goto
 r'''[[[[[
 py -m seed.types.ops.IEmplaceStackOps
-py -m nn_ns.app.debug_cmd   seed.types.ops.IEmplaceStackOps
+py -m nn_ns.app.debug_cmd   seed.types.ops.IEmplaceStackOps -x
+py -m nn_ns.app.doctest_cmd seed.types.ops.IEmplaceStackOps:__doc__ -ff -v
 
 from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
 
@@ -232,14 +233,42 @@ __all__ = '''
             the_emplace_stack_ops4HugeStack
     '''.split()
 
-
+__all__
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.abc.abc__ver1 import abstractmethod, ABC, override
-from seed.abc.IHashable import IHashable
-from seed.tiny import check_type_is, check_tmay
-from seed.tiny import print_err
+from seed.for_libs.for_time import (
+Timer__print_err
+    ,timer__print_err__thread_wide
+    ,timer__print_err__process_wide
+    ,timer__print_err__system_wide__highest_resolution
+    ,timer__print_err__system_wide__monotonic
+)
+
+timer = timer__print_err__thread_wide
+_to_show_ = __name__ == "__main__"
+
+with timer(prefix='seed:basic...', _to_show_=_to_show_):
+    from seed.tiny import check_type_is, check_tmay
+    from seed.tiny import print_err
+
+with timer(prefix='seed.abc.abc__ver1', _to_show_=_to_show_):
+    from seed.abc.abc__ver1 import abstractmethod, ABC, override
+with timer(prefix='seed.abc.IHashable', _to_show_=_to_show_):
+    from seed.abc.IHashable import IHashable
+
+with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
+    if __name__ == "__main__":
+        from seed.types.ops.IEmplaceStackOps import *
 ___end_mark_of_excluded_global_names__0___ = ...
+r'''[[[
+py -m seed.types.ops.IEmplaceStackOps
+seed:basic...:duration: 0.00015761600000002707 *(unit: 0:00:01)
+seed.abc.abc__ver1:duration: 0.004998077999999989 *(unit: 0:00:01)
+seed.abc.IHashable:duration: 0.001823384999999983 *(unit: 0:00:01)
+seed.types.ops.IEmplaceStackOps:duration: 0.003220001 *(unit: 0:00:01)
+
+
+#]]]'''#'''
 
 
 
@@ -440,6 +469,35 @@ the_emplace_stack_ops4HugeStack = EmplaceStackOps4HugeStack()
 
 
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+__all__
+from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
+
+from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
+
+from seed.types.ops.IEmplaceStackOps import EmplaceStackOps4list, EmplaceStackOps4HugeStack
+
+
+from seed.types.ops.IEmplaceStackOps import *
+if 0:
+    #use: py -m nn_ns.app.doctest_cmd seed.types.ops.IEmplaceStackOps:__doc__ -ff -v
+    #
+    if __name__ == "__main__":
+        import doctest
+        doctest.testmod()

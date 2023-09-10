@@ -219,6 +219,7 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     #doctest: +ELLIPSIS
+    #doctest: +SKIP
     #doctest: +NORMALIZE_WHITESPACE
     #doctest: +IGNORE_EXCEPTION_DETAIL
     #<BLANKLINE>
@@ -289,7 +290,8 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 may
   nmay T = (None|T)
-  tmay T = (()|(T,))
+  lmay T = ([]|[*(T,)])
+  tmay T = (()|(T,)) #sometime be lmay too...
     why not (None|(T,))?
       mapping.pop(key, /, *tmay_default)
       if tmay_xxx: check_xxx(*tmay_xxx)
@@ -321,7 +323,21 @@ int:
   #dint: reverse-positive_int, int_le_0
   imay: imay_uint, int_ge_n1, int>=-1
 
+max1__aaa:前缀『max1__』
+  upperbound/end
+  [max1__aaa =[def]= 1+max<aaa>]
+  [aaa < max1__aaa]
+  vs: min__aaa, max__aaa, max1__aaa
+  maxpp === max1
+  __pp === __plusplus
+  __mm === __minusminus
+  XXXpp === XXX+1
+    maxpp === max+1 === upperbound
+  XXXmm === XXX-1
+    pmm === p-1
 ex_aaa,aaa_ex:前缀『ex_』后缀『_ex』
+  extend,extra,extension
+  ver:version
 xaaa:前缀『x』
   * mix:aaa_or_bbb
       sz_or_sz_reader --> xsz
@@ -390,25 +406,46 @@ mk: make :: callable
   gmk:get_or_make/lookup_cache__or__make_new
   bmk:bracket-make:using __setitem__ instead of __call__
 rdr:reader
+  tgt:target
+  dst:destination
+  src:source
+    src->dst
+  impl:implement,details
+h:
+  hdl:hndl:handler
+  helper
+  height
+    w:width
 ls: list or seq
   ps: pairs
   it: iterator not reiterable
   d: dict
+  s: str,set
+  lss/lsls:seq<seq>
 sf: self
   cls: class
-    ty/typ: type
+    ty/typ/T: type
+    klass:class
   eqv: equivalent
   ptn: partition<set>, pattern<regex>
   obj: object, instance
+  st: state
+  sz: size
+  arr: arrow
 fmt: format
   #str.format()
   #datatype format/def
   #schema
-nm: name
+nm: name #vs: k,idx,sym
   f: file
     fname, fout
     ibfile/obfile: in/out binary stream
-  i:input
+    func,callable
+  i:input: iencoding,ipath
+    ixxx - 前缀『i』
+      inplace/emplace method: iadd
+      immutable method: ireplace, ipush
+      idx4???: istr[#str===strings[istr]#]
   o:output
     ifnm
     opath
@@ -433,21 +470,30 @@ vs,or,cased:
   cased:
     cased_xxx: (case,payload)
   ---
-k: key
+k: key/hashable
   v: value
   kw:keyword
   kwds: kwargs
-idx:index
+idx:index #.ndx,.db
   idc:indices
   vtx : vertex
   vtc : vertices
   e : edge
   d/u : directed/undirected
-  u,v :: uint
+  u,v :: uint, vertex
   e: encoding, exp
-    ie
+    ie/iencoding
     base**exp
-
+fwd:forward
+  bwd:backward
+  xxxL:后缀『L』:left
+  xxxR:后缀『R』:right
+  xxxLE:后缀『LE』:little_endian
+  xxxBE:后缀『BE』:big_endian
+sys:system
+sym:
+  * symbol
+  * symmetric对称的
 len ~ len() ~ function ~ not noun
     len_ints/len_rngs
     iter_ints/iter_rngs
@@ -716,6 +762,10 @@ adhoc_argparser__main__call8module新增:
 
     g=repr|str|ascii|hex|... #builtins.*
      |not_show
+     |stable_repr
+     |stable_repr__expand_top_layer
+     |stable_repr__expand_all_layer
+
 
 
 
@@ -938,6 +988,7 @@ from seed.func_tools.recur5yield import recur5yield__list__echo__echo, recur5yie
 
 from seed.helper.safe_eval import safe_eval, safe_exec, data_eval
 
+from seed.helper.stable_repr import stable_repr__expand_all_layer, stable_repr_print__expand_all_layer
 from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
 >>> print(stable_repr__expand_top_layer({1: 2, 3: [4,5]}))
   等价于下面
@@ -952,6 +1003,12 @@ from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_pri
 : [4, 5]
 }
 
+from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
+>>> class X(IGetFuncNameArgsOrderedKwds4stable_repr):
+...     def ___get__funcname__args__ordered_kwdxxxs___(sf):
+...         return (None, [0, 1, [2]], [('a', 111), ('b', 222), ('c', [333])])
+>>> stable_repr(X())
+'X(0, 1, [2], a= 111, b= 222, c= [333])'
 
 
 

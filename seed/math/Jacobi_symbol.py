@@ -155,7 +155,7 @@ from seed.math.max_power_of_base_as_factor_of_ import factor_nonzero_int_out_sig
 
 def _():
     def Jacobi_symbol(M, x, /):
-        'M -> x -> Jacobi_symbol(x::/M)'
+        'M/int{%2==1} -> x/int -> Jacobi_symbol(x::/M)/(-1|0|+1)'
         if not type(M) is int: raise TypeError
         if not type(x) is int: raise TypeError
         if not M%2==1: raise ValueError

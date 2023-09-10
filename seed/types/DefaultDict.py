@@ -1,5 +1,10 @@
 
-from collections import MutableMapping
+__all__ = '''
+    DefaultDict
+    curryDefaultDict
+'''.split()
+
+from collections.abc import MutableMapping
 
 curryDefaultDict = lambda mapping: lambda default_factory:\
                      DefaultDict(mapping, default_factory)
@@ -30,3 +35,5 @@ del MutableMapping
 
 
 
+from seed.types.DefaultDict import DefaultDict, curryDefaultDict
+from seed.types.DefaultDict import *

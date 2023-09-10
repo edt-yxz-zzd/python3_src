@@ -2,6 +2,18 @@
 #__main__:goto
 #cmds:goto
 r'''[[[[[
+[[
+deprecated:
+    cjk_common_subset_2513_nontrivial_TS_286
+    cjk_common_subset_1869_nontrivial_TS_238
+    cjk_common_subset_2513_trivial_TS_2227/平凡繁简囗共享汉字字集
+    cjk_common_subset_1869_trivial_TS_1631/平凡繁简囗初步缩减囗共享汉字字集
+now using:
+    cjk_common_subset_2513_trivial_TS_2230
+    cjk_common_subset_1869_trivial_TS_1632
+]]
+
+
 字汇
     收集各种字汇，并直接列出，供人眼浏览、程序搜索
     注意:可能含空格、换行
@@ -75,27 +87,57 @@ cjk_common_subset_1869
         ._test_cjk_common_subset_2513
 
 
+[[[
+修正简繁字对集后囗副作用
+    囗修正简繁字对集后囗副作用囗平凡自反共享汉字增加囗:goto
+===
+简繁字对集
+简繁字对 数据有毛病
+修正后，cjk_common_subset_2513_trivial_TS_2227 应当补上: [珊淙瑙]
+===
+grep '[珊淙瑙]' -r ../../python3_src/nn_ns/CJK/ -a -l
+
+view  ../../python3_src/nn_ns/CJK/CJK_data/汉字繁简囗囗平凡自反囗唯一可逆.py
+view  ../../python3_src/nn_ns/CJK/CJK_data/汉字繁简.py
+view  ../../python3_src/nn_ns/CJK/CJK_data/raw/汉字繁简.py
+view ../../python3_src/nn_ns/CJK/CJK_data/output/parse_繁简.py.out/简繁.txt
+    简繁字对 数据有毛病
+    修正后，cjk_common_subset_2513_trivial_TS_2227 应当补上: [珊淙瑙]
+view ../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对比/简繁字信息对比.py.显示消除非平凡繁简属性字后的1869与2513.out.txt
+view  ../../python3_src/nn_ns/CJK/cjk_subsets/hanzi.py
+]]]
 
 #进一步缩水，除去 非平凡繁简字
 cjk_common_subset_2513_nontrivial_TS_286
+    # [deprecated by 修正简繁字对集后囗副作用]
     =[def]= cjk_common_subset_2513 /-\ 非平凡繁简字
     == ....out.txt::cjk_common_subset_2513__TS_hz286
     view ../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对比/简繁字信息对比.py.显示消除非平凡繁简属性字后的1869与2513.out.txt
     view ../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对比/简繁字信息对比.py
         #非平凡繁简字 来源: 部分自己搜集+Unihan-ver13_0
 
+cjk_common_subset_2513_trivial_TS_2230
+    #new-ver after fixed 简繁字对集
+    #2230比2227增加『珊淙瑙』
 cjk_common_subset_2513_trivial_TS_2227
+    # [deprecated by 修正简繁字对集后囗副作用]
     =[def]= cjk_common_subset_2513 \-\ 非平凡繁简字
     == cjk_common_subset_2513 - cjk_common_subset_2513_nontrivial_TS_286
     == ....out.txt::cjk_common_subset_2513__removed_TS_hz286__2227
 
 
 cjk_common_subset_1869_nontrivial_TS_238
+    # [deprecated by 修正简繁字对集后囗副作用]
     =[def]= cjk_common_subset_1869 /-\ 非平凡繁简字
     == cjk_common_subset_1869 /-\ cjk_common_subset_2513_nontrivial_TS_286
     == ....out.txt::cjk_common_subset_1869__TS_hz238
 
+
+cjk_common_subset_1869_trivial_TS_1632
+    #new-ver after fixed 简繁字对集
+    #1632比1631增加『珊』
 cjk_common_subset_1869_trivial_TS_1631
+    # [deprecated by 修正简繁字对集后囗副作用]
     =[def]= cjk_common_subset_1869 \-\ 非平凡繁简字
     == cjk_common_subset_1869 - cjk_common_subset_1869_nontrivial_TS_238
     == ....out.txt::cjk_common_subset_1869__removed_TS_hz238__1631
@@ -104,8 +146,10 @@ cjk_common_subset_1869_trivial_TS_1631
 释名:
     cjk_common_subset_2513/共享汉字字集
     cjk_common_subset_1869/初步缩减囗共享汉字字集
-    cjk_common_subset_1869_trivial_TS_1631/平凡繁简囗初步缩减囗共享汉字字集
-    cjk_common_subset_2513_trivial_TS_2227/平凡繁简囗共享汉字字集
+    cjk_common_subset_2513_trivial_TS_2230
+        cjk_common_subset_2513_trivial_TS_2227/平凡繁简囗共享汉字字集
+    cjk_common_subset_1869_trivial_TS_1632
+        cjk_common_subset_1869_trivial_TS_1631/平凡繁简囗初步缩减囗共享汉字字集
 
 
 
@@ -251,6 +295,7 @@ sorted_hz_str5set_diff4hz_sp_str
 hz_sp_str2hz_str
 hz_sp_str2hz_set
 hz_set2sorted_hz_str
+filter_hzs_by_
 )
 
 from nn_ns.CJK.cjk_subsets.hanzi import (
@@ -263,8 +308,10 @@ gb2312_1980_二级汉字3008
 汉字单字字频总表_cedict_12041
 cjk_common_subset_2513
 cjk_common_subset_1869
-cjk_common_subset_2513_trivial_TS_2227
-cjk_common_subset_1869_trivial_TS_1631
+cjk_common_subset_2513_trivial_TS_2230
+cjk_common_subset_1869_trivial_TS_1632
+    cjk_common_subset_2513_trivial_TS_2227
+    cjk_common_subset_1869_trivial_TS_1631
 按横捺为零竖撇为一忽略折笔记为二进制数时前四笔的十六个代表字
 按横为零零撇为零一捺为一零竖为一一忽略折笔记为二进制数时前两笔的十六个代表字
 按横捺为零竖撇为一忽略折笔记为二进制数时前六笔的六十四个代表字
@@ -282,10 +329,12 @@ cjk_common_subset_2513
     共享汉字字集
 cjk_common_subset_1869
     初步缩减囗共享汉字字集
-cjk_common_subset_1869_trivial_TS_1631
-    平凡繁简囗初步缩减囗共享汉字字集
-cjk_common_subset_2513_trivial_TS_2227
-    平凡繁简囗共享汉字字集
+cjk_common_subset_2513_trivial_TS_2230
+    cjk_common_subset_2513_trivial_TS_2227
+        平凡繁简囗共享汉字字集
+cjk_common_subset_1869_trivial_TS_1632
+    cjk_common_subset_1869_trivial_TS_1631
+        平凡繁简囗初步缩减囗共享汉字字集
 )
 
 from nn_ns.CJK.cjk_subsets.hanzi import (
@@ -327,7 +376,7 @@ from nn_ns.CJK.cjk_subsets.hanzi import (
 
 
 ====
-py -m nn_ns.app.debug_cmd   nn_ns.CJK.cjk_subsets.hanzi
+py -m nn_ns.app.debug_cmd   nn_ns.CJK.cjk_subsets.hanzi -x
 py -m nn_ns.CJK.cjk_subsets.hanzi
 py others/汉语/hanzi.py > ~/tmp/gb2312_and_cjk_common_set_1869.txt
 py -m nn_ns.CJK.cjk_subsets.hanzi > /sdcard/0my_files/tmp/_.txt
@@ -360,6 +409,7 @@ __all__ = """
     hz_sp_str2hz_str
     hz_sp_str2hz_set
     hz_set2sorted_hz_str
+    filter_hzs_by_
 
     中华字经2003__重复字4000_不同字3980
     通用规范汉字表2013_一级字3500
@@ -370,8 +420,10 @@ __all__ = """
     汉字单字字频总表_cedict_12041
     cjk_common_subset_2513
     cjk_common_subset_1869
-    cjk_common_subset_2513_trivial_TS_2227
-    cjk_common_subset_1869_trivial_TS_1631
+    cjk_common_subset_2513_trivial_TS_2230
+    cjk_common_subset_1869_trivial_TS_1632
+        cjk_common_subset_2513_trivial_TS_2227
+        cjk_common_subset_1869_trivial_TS_1631
     按横捺为零竖撇为一忽略折笔记为二进制数时前四笔的十六个代表字
     按横为零零撇为零一捺为一零竖为一一忽略折笔记为二进制数时前两笔的十六个代表字
     按横捺为零竖撇为一忽略折笔记为二进制数时前六笔的六十四个代表字
@@ -394,10 +446,12 @@ cjk_common_subset_2513
     共享汉字字集
 cjk_common_subset_1869
     初步缩减囗共享汉字字集
-cjk_common_subset_1869_trivial_TS_1631
-    平凡繁简囗初步缩减囗共享汉字字集
-cjk_common_subset_2513_trivial_TS_2227
-    平凡繁简囗共享汉字字集
+cjk_common_subset_2513_trivial_TS_2230
+    cjk_common_subset_2513_trivial_TS_2227
+        平凡繁简囗共享汉字字集
+cjk_common_subset_1869_trivial_TS_1632
+    cjk_common_subset_1869_trivial_TS_1631
+        平凡繁简囗初步缩减囗共享汉字字集
 
 
 
@@ -463,6 +517,8 @@ unihan_kUnihanCore2020_common_hz_str__U13_0___2573
     一百零六部平水韵韵目_入声17
 
 """.split()#"""
+    #hz_set2sorted_hz_str__by_reversed_freq
+    #hz_set2freq_sorted_rng_ex
 #__all__
 r"""
 字串-有序囗可重复
@@ -493,6 +549,10 @@ def hz_set2freq_sorted_rng_ex(hz_set):
     字集在频度表中的跨度以及不在其中的字符数
 def hz_set2sorted_hz_str__by_reversed_freq(s):
     逆频度排序
+
+def filter_hzs_by_(hz_set, hzs, /):
+    字串只保留字集中的字符
+
 #"""
 
 
@@ -5193,6 +5253,7 @@ cjk_common_subset_2513_nontrivial_TS_286 = """
 
 
 
+#new:cjk_common_subset_2513_trivial_TS_2230
 # cjk_common_subset_2513__removed_TS_hz286__2227 =>
 cjk_common_subset_2513_trivial_TS_2227 = """
 一丁七丈上下不且
@@ -5516,6 +5577,7 @@ cjk_common_subset_1869_nontrivial_TS_238 = """
 
 
 
+#new:cjk_common_subset_1869_trivial_TS_1632
 # cjk_common_subset_1869__removed_TS_hz238__1631 =>
 cjk_common_subset_1869_trivial_TS_1631 = """
 一丁七丈上下不且
@@ -6722,6 +6784,523 @@ assert hz_sp_str2hz_set(common__hzs_2143_vs_hzs_1869___1755) < hz_sp_str2hz_set(
 
 
 
+def filter_hzs_by_(hz_set, hzs, /):
+    hz_set = frozenset(hz_set)
+    s = ''.join(hz for hz in hzs if hz in hz_set)
+    return s
+def 囗修正简繁字对集后囗副作用囗平凡自反共享汉字增加囗():
+    from nn_ns.CJK.CJK_data.汉字繁简 import 简繁字对集
+    from nn_ns.CJK.cjk_subsets.hanzi import cjk_common_subset_2513_trivial_TS_2227, cjk_common_subset_2513
+    from nn_ns.CJK.cjk_subsets.hanzi import cjk_common_subset_1869_trivial_TS_1631, cjk_common_subset_1869
+    #deprecated:from nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆 import 汉字列表囗繁简囗平凡自反, 繁简字对列表囗繁简囗唯一可逆
+    from nn_ns.CJK.CJK_data.汉字繁简囗囗平凡自反囗唯一可逆囗囗打完补丁囗简繁字对囗补丁囗㝉宁相关 import 汉字列表囗繁简囗平凡自反, 繁简字对列表囗繁简囗唯一可逆
+    assert set(cjk_common_subset_2513_trivial_TS_2227) < set(汉字列表囗繁简囗平凡自反)
+
+    cjk_common_subset_2513_trivial_TS_2230 = filter_hzs_by_(汉字列表囗繁简囗平凡自反, cjk_common_subset_2513)
+    assert {*cjk_common_subset_2513_trivial_TS_2227} ^ {*cjk_common_subset_2513_trivial_TS_2230} == {'珊', '淙', '瑙'} == {*cjk_common_subset_2513_trivial_TS_2230} - {*cjk_common_subset_2513_trivial_TS_2227}
+    assert len(cjk_common_subset_2513_trivial_TS_2230) == 2230
+    #return cjk_common_subset_2513_trivial_TS_2230
+
+    cjk_common_subset_1869_trivial_TS_1632 = filter_hzs_by_(汉字列表囗繁简囗平凡自反, cjk_common_subset_1869)
+    assert {*cjk_common_subset_1869_trivial_TS_1631} ^ {*cjk_common_subset_1869_trivial_TS_1632} == {'珊'} == {*cjk_common_subset_1869_trivial_TS_1632} - {*cjk_common_subset_1869_trivial_TS_1631}
+    assert len(cjk_common_subset_1869_trivial_TS_1632) == 1632
+    return cjk_common_subset_2513_trivial_TS_2230, cjk_common_subset_1869_trivial_TS_1632
+if __name__ == "__main__":
+    cjk_common_subset_2513_trivial_TS_2230, cjk_common_subset_1869_trivial_TS_1632 = 囗修正简繁字对集后囗副作用囗平凡自反共享汉字增加囗()
+    print('cjk_common_subset_2513_trivial_TS_2230')
+    if 0b0:print(cjk_common_subset_2513_trivial_TS_2230)
+    print('cjk_common_subset_1869_trivial_TS_1632')
+    if 0b0:print(cjk_common_subset_1869_trivial_TS_1632)
+
+#汉字列表囗繁简囗平凡自反 /-\ cjk_common_subset_2513 =>
+cjk_common_subset_2513_trivial_TS_2230 = """
+一丁七丈上下不且
+丕世丘丙丞中串丸
+丹主久之乍乎乏乖
+乙九乞也乳予事二
+互五井些亡亢交亥
+亦亨享京亭亮人什
+仁仄今介仍仔仕仗
+付仟代令以仰仲件
+任企伉伊伍伎伏伐
+休伯伴伶伸伺似伽
+佃但位低住佐何佚
+作佯佰佳佶使侃侈
+例侍侏侑供依侮侯
+侵便促俄俊俎俑俗
+俚保俟信俳俸俺倍
+倒候倚倡倦倨倪倬
+倭偃假偈偏偕做停
+健偶傀傅傍催傲僖
+僚僧僭僻儒儡兀允
+元兄充兆先光免兜
+兢入全八公六兮共
+兵其具典兼冀再冒
+冕冗冠冥冶冷冽凝
+凡凰凸凹函刀刃分
+切刈刊刎刑列初判
+利到刷券刺刻削剌
+前剔剖剪副割剽力
+功加劣努劾勃勇勉
+勒勘募勺勾勿包匈
+匍匏匐匕化北匙匠
+匣匪匿十午卉半卑
+卒卓南博卞卦卯印
+危卵卿厚厥去又叉
+及友反叔取受叛口
+古句叩叫召叭可叱
+史右司各吉名吏吐
+君吝吟吠否吩含吸
+吹吻吼吾呈告味呻
+命咀咆咎咐咫咬咳
+哀品哈哉哥哨哭哮
+哺唆唐唯唱唾啄商
+啼喀善喇喉喊喘喙
+喜喝嗅嗜嗟嗣嗤嗽
+嗾嘉嘲嘴嘶器噫嚆
+嚼囚四因囹固圃圄
+土在地圻均坊坎坐
+坡坦坪垂型垓垠垢
+垣埃埋城域埠埴培
+基堀堂堆堡堪堰堵
+塑塔塘塞塾境墅墓
+墟墨壁壅壑壕壤士
+壬壹夏夕外夙多夜
+大天太央失夷奄奇
+奈奉奎奏契奕套奚
+奠奢女奴好如妃妄
+妓妖妙妥妨妹妻妾
+姆始姐姑姓委姚姨
+姻姿威娃娑娜娟娠
+娥娩娶娼婆婉婚婢
+媒媚媛嫁嫂嫉嫌嫡
+嫦嫩嬉嬖孀子孑孔
+孕字存孚孜孝孟季
+孤孩孰孱孵孺宅宇
+守安宋完宏宕宗官
+宙定宛宜客宣室宥
+宦宰害宵宸容宿寂
+寄寅密寇富寐寒寓
+寞察寡寤寥寨寮寺
+封射尉尊小少尖尤
+就尹尻尼尾尿居屈
+屋屎屑展屠履屯山
+屹岐岑岫岬岱岷岸
+峙峰峻崇崔崖崩嵋
+嵌嵬嵯嶝巍川州巡
+工左巧巫差己已巳
+巴巷巽巾市帆希帑
+帖帙帛帝常帽幄幅
+幌幕平年幻幼幽庇
+序底店庚府庠度座
+庭庶康庸廉廊廓廖
+廛延廷建弁弄弊式
+弓引弗弘弛弟弧弩
+弱弼彖形彪彬彭彰
+影役彼往待徇徊律
+徐徒得徘徙徨循微
+徽心必忌忍忖忘忙
+忠快忽忿怏怒怖思
+怠怡急性怨怪怯恁
+恂恃恍恐恕恙恢恣
+恨恩恪恬恭息恰悉
+悌悍悔悖悚悛悟悠
+患悲悴悸悼情惑惚
+惜惟惰想惶惹惺愁
+愆愉愎意愕愚感慈
+慊慌慕慝慢慧慨慰
+慷憎憔憧憩憬憾懈
+懊懋懦懿戈戊戌戍
+戎成我戒或戟戡截
+戮戴房所扁扇扈扉
+手打扮扶批扼承技
+抉把抑抒投抗披抱
+抹押抽拇拉拌拍拒
+拔拗拘拙招括拭拮
+拯拱拳拷拾拿持指
+按挑挫振挺捉捌捏
+捐捕捧捷捺授掉掌
+排掖掘掠探接控推
+掩措揄揆描提揖握
+援揶搏搬搭摘摩摸
+撒撞撤播撮撰擅操
+擒擘擢擦攀攘攫支
+收攸改攻放政故敏
+救敖敞敢散敦敬敲
+整敷文斌斐斑料斛
+斜斟斡斥斧斫斯新
+方施旁旅旌族旒日
+旦旨早旬旭旱旺昊
+昌明昏易昔星映春
+昧昨昭是昴昶晁晃
+晏晟晤晦晨普景晴
+晶智暄暇暑暝暮暴
+暹暾曙曜曝曦曰曳
+更曷曹曼曾替最月
+有朋服朔朕朗望朝
+期朦木未末本朽杉
+李杏材杓杖杜杞束
+杭杳杵杷枇枉枋析
+枕林枚枝枯架枷枸
+柄柏某柑染柔柚柝
+柩柬柯柱柳柴栓校
+株根格栽桀桁桂桃
+桎桐桑桓桔桶梅梏
+梓梗梢梧梨梭梯械
+梳梵棉棍棒棕棘棚
+棠森棺椅植椎椒椰
+椽椿楔楚楠楫楮楷
+楸楹榕榛榜榧榴榻
+槌槐槽槿樊樗樟樵
+樽橄橘橙橡檀檄檎
+檗欠次欺款歇歌止
+正此武歪死殃殄殆
+殉殊殖段殿毅母毒
+毓比毛毫氏民氓水
+永汀汁求汐汕汗汝
+汞江池汨汪汰汲汽
+汾沁沂沃沌沐沙沛
+沫沮河沸油治沼沽
+沿泉泊泌泓法泗泡
+波泣泥泯泰泳洋洌
+洗洙洛洞津洪洲洵
+活洽派流浙浣浦浪
+浮浴海浸涅消涎涓
+涕涯液涵淅淆淇淑
+淘淙淞淮深淳淹添
+渚渠渡渣渤渥渫渭
+港湃湍湖湘湛湟湫
+湮源溟溢溥溯溶溺
+滂滋滑滓滔滴漂漆
+漏漕漠漫漱潘潭潮
+潺潼澎澳激濂濠濡
+濯瀑瀚瀛火灰灸灼
+炊炎炒炙炬炭炯炳
+炸烈烙烹烽焉焙焚
+焦然煌煎煤煦煮煽
+熄熊熔熙熟熬熹燃
+燎燔燥燧燮爆爪爬
+爰爵父爻爽片版牌
+牒牙牛牝牟牡牢牧
+物牲特犀犁犯狂狄
+狎狐狗狙狡狩狼猊
+猖猜猝猥猩猷猾猿
+獗玄率玉王玖玩玲
+玳珀珂珊珍珞珠珥
+班理琉琢琥琳琴琵
+琶瑁瑕瑙瑚瑛瑜瑞
+瑟瑾璋璞璧瓜瓠瓢
+瓣瓦瓷甄甑甘甚生
+甥用甫甬田由甲申
+男甸町界畏畔畛畜
+略畦番畸畿疆疏疑
+疝疥疫疲疳疵疸疹
+疼疽疾痂病痍痔痕
+痘痛痢痰痼瘟瘠瘢
+瘤癌癖癸登白百的
+皆皇皎皓皮皿盂盆
+盈益盒盛盟目盲直
+相盾省眄眈眉看眠
+眩眷眸眼睛睡督睦
+睫睹睿瞑瞥瞬瞰瞳
+瞻瞿矗矛矜矢矣知
+矩短矮石砂砒砥砦
+砧破硝硫硬硼碇碌
+碎碑碗碣碧磁磅磊
+磋磨磬礁示社祀祁
+祈祉祖祚祝神祠祥
+票祭祺禁福禧禳禹
+禽禾秀私秉科秒秕
+租秤秦秧秩稀程稍
+稔稗稚稠稷稼稽稿
+穆穰穴究穹空穿突
+窄窈窒窕窘窟立站
+竟章竣童竭竹竺竿
+笏笑笙笛笞笠符第
+等筌筏筐筒策筮筵
+箔箕算箭箱箴箸篁
+篆篇簇簧簿籍米粉
+粒粕粘粟粥粱粲粳
+粹精糖糠紊素索紫
+絮繁纂纛缶缸缺罔
+罕罪置署罹羊羌美
+羔羚羞群羲羸羹羽
+翁翅翊翌翔翕翠翡
+翩翰翼老者耆而耐
+耕耗耘耳耶耽耿聆
+聊聘聚聿肄肆肇肉
+肋肌肖肛肝股肢肥
+肩肪肯肱育肺胃胎
+胚胛胞胤胥胱胴胸
+能脂脆脯脾腋腐腑
+腔腕腰腱腹腺腿膀
+膈膊膏膜膝膣膨膳
+膺臀臂臆臣臧自臭
+至臻臼臾舅舌舒舛
+舜舞舟航舫般舵舶
+舷船艇艮良色艾芋
+芍芒芙芝芟芥芬芭
+芯花芳芹芽苑苒苔
+苗苛苞苡若苦英茂
+茄茅茉茗茨茫茯茱
+茴茵茶茸茹荀草荏
+荒荷荻莉莎莞莪莫
+莽菁菅菊菌菖菜菩
+菲菽萃萄萌萍萎萱
+萸落葛葡董葫葬葵
+葺蒜蒡蒲蒸蒿蓄蓉
+蓍蓬蓼蔓蔗蔚蔡蔬
+蔽蕃蕉蕨薄薇薛薨
+薪藏藕藜藩藻虎虐
+虔虞虹蚊蚌蚓蚣蚤
+蚩蛇蛋蛙蛛蛟蛤蛭
+蛾蜀蜂蜃蜈蜘蜚蜜
+蝗蝴蝶螂融螟螳螺
+蟠蟹蟾蠢血行衍街
+衙衡衢衣衫衰衲衷
+衾衿袁袂袈袋袍袒
+袖被裁裂裔裕裙裟
+裨裳裴裸褐褒褓褥
+褪褶襄襟西要覃角
+解言誓警譬豁豌豕
+豚豪豫豹豺貂貊貌
+赤赦赫走赳赴起超
+越趣足趺趾跋跌跏
+跛距跣跨路跳踏踞
+踵蹂蹄蹇蹈蹉蹊蹙
+蹴蹶躁躇身躬辛辜
+辣辨辰辱迂迅近返
+迦迪迫述迷追送逃
+逅逆逋逍透逐逑途
+逗通逝逞速造逡逢
+逮逵逸逼遁遂遇遍
+遐遑道遣遭遮遵遽
+避邀邂邃邑那邦邪
+邯邱邵邸郊郡部郭
+都鄂鄙酉酊酋酌配
+酎酒酢酩酪酵酷醇
+醉醋醍醒醴醵釉重
+野量金釜阜阡阮防
+阻阿陀陂附陋陌降
+限陛陟院除陪陵陶
+隅隆隋隍隔隘隙障
+隧雀雁雄雅集雉雌
+雍雎雨雪零雷雹需
+霆震霓霖霜霞霰露
+霹靖非靡革靴鞋鞍
+鞠鞫鞭音韶食餐首
+香馥馨骨骸髓高鬼
+魁魂魃魄魅魏魔鹿
+麒麓麝麟麾黍黎黔
+默黛黜鼎鼓鼻
+""" #""" cjk_common_subset_2513_trivial_TS_2230
+#汉字列表囗繁简囗平凡自反 /-\ cjk_common_subset_1869 =>
+cjk_common_subset_1869_trivial_TS_1632 = """
+一丁七丈上下不且
+世丘丙中串丸丹主
+久之乍乎乏乖乙九
+乞也乳予事二互五
+井些亡亢交亥亦享
+京亭亮人什仁今介
+仍仔仗付代令以仰
+仲件任企伊伍伏伐
+休伯伴伶伸伺似佃
+但位低住佐何作佳
+使侈例侍供依侮侯
+侵便促俄俊俗保信
+俺倍倒候倚倡倦假
+偏做停健偶傅傍催
+傲僚僧僻儒允元兄
+充兆先光免兜兢入
+全八公六共兵其具
+典兼冀再冒冗冠冶
+冷凝凡凰凸凹函刀
+刃分切刊刑列初判
+利到刷券刺刻削前
+剔剖剪副割力功加
+劣努勃勇勉勒勘募
+勺勾勿包匈化北匙
+匠匣匪匿十午卉半
+卑卒卓南博卯印危
+卵卿厚去又叉及友
+反叔取受叛口古句
+叫召叭可史右司各
+吉名吏吐君吝吟吠
+否吩含吸吹吻吼吾
+呈告味呻命咐咬咳
+哀品哈哉哥哨哭哮
+哺唆唐唯唱唾啄商
+啼善喇喉喊喘喜喝
+嗅嗜嗽嘉嘲嘴嘶器
+嚼囚四因固圃土在
+地均坊坎坐坡坦坪
+垂型垢埃埋城域埠
+培基堂堆堡堪堰堵
+塑塔塘塞境墅墓墟
+墨壁壤士壬壹夏夕
+外多夜大天太央失
+夷奇奈奉奏契套奠
+奢女奴好如妄妓妖
+妙妥妨妹妻姆始姐
+姑姓委姚姨姻姿威
+娃娜娟娥娶婆婉婚
+媒媚嫁嫂嫉嫌嫩子
+孔孕字存孝孟季孤
+孩孵宅宇守安宋完
+宏宗官宙定宛宜客
+宣室宦宰害宵容宿
+寂寄寅密寇富寒寓
+寞察寡寥寨寺封射
+尉尊小少尖尤就尼
+尾尿居屈屋屎屑展
+屠履屯山屹岸峰峻
+崇崔崖崩嵌巍川州
+巡工左巧巫差己已
+巳巴巷巾市帆希帖
+帝常帽幅幌幕平年
+幻幼幽庇序底店庚
+府度座庭庶康庸廉
+廊廓延廷建弄弊式
+弓引弗弘弛弟弧弱
+形彪彬彭彰影役彼
+往待徊律徐徒得徘
+循微徽心必忌忍忘
+忙忠快忽忿怒怖思
+怠急性怨怪怯恃恍
+恐恕恢恨恩恬恭息
+恰悉悍悔悟悠患悲
+悼情惑惜惟惰想惶
+惹愁愉意愚感慈慌
+慕慢慧慨慰慷憎憾
+懈懊懦戈戊戌戎成
+我戒或截戴房所扁
+扇手打扮扶批扼承
+技把抑抒投抗披抱
+抹押抽拇拉拌拍拒
+拔拘拙招括拭拯拱
+拳拷拾拿持指按挑
+挫振挺捉捌捏捐捕
+捧捷授掉掌排掘掠
+探接控推掩措描提
+握援搏搬搭摘摩摸
+撒撞撤播撮撰擅操
+擒擦攀支收改攻放
+政故敏救敞敢散敦
+敬敲整敷文斌斑料
+斜斟斥斧斯新方施
+旁旅族日旦旨早旬
+旭旱旺昌明昏易昔
+星映春昧昨昭是晃
+晦晨普景晴晶智暇
+暑暮暴曙曰更曹曼
+曾替最月有朋服朗
+望朝期木未末本朽
+杉李杏材杖杜束杭
+枉析枕林枚枝枯架
+柄柏某柑染柔柬柱
+柳柴栓校株根格栽
+桂桃桐桑桔桶梅梗
+梢梧梨梭梯械梳棉
+棍棒棕棘棚棠森棺
+椅植椎椒椰椿楚楷
+榜榴槐槽樟橙橡檀
+欠次欺款歇歌止正
+此武歪死殃殉殊殖
+段殿毅母毒比毛毫
+氏民氓水永汁求汗
+汝汞江池汪汰汽沁
+沃沙沛沫沮河沸油
+治沼沽沿泉泊泌法
+泡波泣泥泰泳洋洗
+洛洞津洪洲活洽派
+流浙浦浪浮浴海浸
+消涕涯液涵淆淑淘
+淮深淳淹添渠渡渣
+渤港湃湖湘源溢溯
+溶溺滋滑滔滴漂漆
+漏漠漫漱潘潭潮澎
+澳激瀑火灰灸灼炊
+炎炒炬炭炸烈烙烹
+焉焚焦然煌煎煤煮
+煽熄熊熔熙熟熬燃
+燥爆爪爬爵父爽片
+版牌牙牛牡牢牧物
+牲特犀犁犯狂狐狗
+狡狼猖猜猩猾猿玄
+率玉王玖玩玲珊珍
+珠班理琉琢琳琴瑞
+瑟瓜瓢瓣瓦瓷甘甚
+生甥用甫田由甲申
+男甸界畏畔畜略番
+畸疆疏疑疫疲疹疼
+疾病痕痘痛痢痰瘟
+瘤癌癸登白百的皆
+皇皮皿盆盈益盒盛
+盟目盲直相盾省眉
+看眠眷眼睛睡督睦
+睫睹瞬瞳瞻矗矛矢
+矣知矩短矮石砂破
+硝硫硬碌碎碑碗碧
+磁磅磨礁示社祈祖
+祝神祥票祭禁福禹
+禽禾秀私秉科秒租
+秤秦秧秩稀程稍稚
+稠稼稽稿穆穴究空
+穿突窄窒窘窟立站
+竟章竣童竭竹竿笑
+笛符第等筏筐筒策
+箕算箭箱篇簇簧簿
+籍米粉粒粘粟粥粱
+粹精糖糠紊素索紫
+絮繁缸缺罕罪置署
+羊美羔羚羞群羹羽
+翁翅翔翠翰翼老者
+而耐耕耗耘耳耽耿
+聊聘聚肆肇肉肋肌
+肖肛肝股肢肥肩肪
+肯育肺胃胎胚胞胸
+能脂脆脯脾腋腐腔
+腕腰腹腺腿膀膊膏
+膜膝膨臀臂臣自臭
+至臼舅舌舒舞舟航
+般舵舶船艇良色艾
+芋芒芝芥芬芭芯花
+芳芹芽苑苔苗苛苞
+若苦英茂茄茅茫茵
+茶茸草荒荷莉莫莽
+菊菌菜菩菲萄萌萍
+萎落葛葡董葫葬葵
+蒜蒲蒸蓄蓉蓬蔓蔗
+蔚蔡蔬蔽蕉薄薛薪
+藏藕藻虎虐虹蚊蚌
+蚤蛇蛋蛙蛛蛤蛾蜀
+蜂蜘蜜蝗蝴蝶融螺
+蟹蠢血行衍街衙衡
+衣衫衰衷袁袋袍袖
+被裁裂裕裙裳裸褐
+褒褥褪襟西要角解
+言誓警譬豁豌豪豫
+豹豺貌赤赦赫走赴
+起超越趣足趾跋跌
+距跨路跳踏蹄蹈躁
+身躬辛辜辣辨辰辱
+迂迅近返迪迫述迷
+追送逃逆透逐途逗
+通逝逞速造逢逮逸
+逼遂遇遍道遣遭遮
+遵避邀邑那邦邪郊
+部郭都鄂鄙酉酌配
+酒酪酵酷醇醉醋醒
+重野量金防阻阿附
+陋陌降限院除陪陵
+陶隅隆隋隔隘隙障
+隧雀雁雄雅集雌雨
+雪零雷雹需震霜霞
+露霹靖非靡革靴鞋
+鞍鞠鞭音食餐首香
+骨髓高鬼魁魂魄魏
+魔鹿黎黔默鼎鼓鼻
+""" #""" cjk_common_subset_1869_trivial_TS_1632
 
 
 

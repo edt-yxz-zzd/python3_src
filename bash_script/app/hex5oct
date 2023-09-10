@@ -1,0 +1,2 @@
+##printf $'0x%X\n' "0$@"
+for uuu ; do printf $'0x%X\n' "0$uuu" ; done

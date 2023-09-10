@@ -1,0 +1,39 @@
+
+双值:diff/delta:差量计算
+  Mapping
+  Set
+  Int
+  tuple of same len
+  ===???
+  Seq??? text???
+    不稳定vs低效率vs低质量
+    难以兼顾
+
+单值:fold:visit
+    repr/dump/write/encode
+    hash
+    fmap
+单值:update-inplace:
+单值:patch-inplace:
+
+无值:make:eval/load/read/parse/decode
+  typ_obj to guide
+
+
+view ../../python3_src/nn_ns/codec/DecodeUtils.py
+from nn_ns.codec.DecodeUtils import ArrayReader, TupleReader, DependentPairReader, NamedTupleReader, NamedDependentTupleReader, ipop_and_drop4list, UntilEndValueArrayReader, UntilReadEndValueArrayReader #!!! NOTE:NamedTupleReader/NamedDependentTupleReader read result NamedTuple, using 『NamedTuple.as_getter4named_tuple()』to access attr !!!
+
+
+view ../../python3_src/seed/mapping_tools/dict_op.py
+from seed.mapping_tools.dict_op import mapping_symmetric_diff4patch__immutable, mapping_symmetric_patch4lhs__immutable, mapping_symmetric_patch4rhs__immutable, mapping_symmetric_diff_patch_default_setting
+from seed.mapping_tools.dict_op import mapping_symmetric_diff4patch__immutable__default, mapping_symmetric_patch4lhs__immutable__default, mapping_symmetric_patch4rhs__immutable__default
+
+
+view ../../python3_src/nn_ns/filedir/file_cmp.py
+from nn_ns.filedir.file_cmp import uints_diff, bytes_diff, file_diff
+from nn_ns.filedir.file_cmp import uints_patch, bytes_patch, file_patch
+
+view ../../python3_src/nn_ns/filedir/dir_cmp.py
+from nn_ns.filedir.dir_cmp import dir_cmp, dir_cmp__relative
+
+view ../../python3_src/nn_ns/filedir/backup_tools/fsys_mapping_patch.py

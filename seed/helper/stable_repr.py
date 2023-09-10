@@ -8,14 +8,75 @@ see:
     seed.helper.safe_eval
         # for "set()"
 
-py -m nn_ns.app.debug_cmd   seed.helper.stable_repr
+e ../../python3_src/seed/helper/stable_repr.py
+    view ../../python3_src/seed/helper/repr_input.py
+    view ../../python3_src/seed/types/NamedTupleBase.py
+    view ../../python3_src/seed/helper/stable_repr.py
+
+[[
+w_
+wobject - wrapped obj; match with iter_repr_element()
+    iter_repr_element :: wobject -> iter_eol_indents -> Iter str
+        eg. if [transform obj into wobject/SortableIterReprable4builtins]: then [iter_repr_element := method_caller('stable_iter_repr_data', has_head_eol_when_indent=has_head_eol_when_indent)]
+]]
+[[
+iter_eol_indents/IterEOLIndentsABC
+    --> eof, indents, eof, indents, ...
+has_head_eol_when_indent/bool
+    if has_head_eol_when_indent:
+        [
+            xxx
+            ,yyy
+        ]
+    else:
+        [xxx
+            ,yyy
+        ]
+]]
+[[
+TODO:
+    ': ' --> (':', any_spaces)
+
+TODO:
+    (iter_repr_element :: wobject -> iter_eol_indents -> Iter str)
+        --> (iter_repr_element :: wobject -> iter_eol_indents -> has_head_eol_when_indent -> Iter str)
+            # <<== def stable_iter_repr_data(self, *, iter_eol_indents, has_head_eol_when_indent):
+        or: using env/namedtuple
+]]
+
+
+
+
+
+py -m nn_ns.app.debug_cmd   seed.helper.stable_repr -x
 py -m seed.helper.stable_repr
+py -m nn_ns.app.doctest_cmd seed.helper.stable_repr:__doc__ -ff -v
 
 from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
 from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
+from seed.helper.stable_repr import stable_repr__expand_all_layer, stable_repr_print__expand_all_layer
+
 
 SortableIterReprable4builtins.register_datatype_and_name_and_SortableIterReprable
-    后来注册了个HexReprInt
+    后来注册了个seed.tiny.HexReprInt
+
+from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
+    [seed.types.NamedTupleBase <: seed.helper.stable_repr.IGetFuncNameArgsOrderedKwds4stable_repr]
+
+
+
+
+
+#################################
+#################################
+#################################
+
+>>> from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
+>>> from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
+>>> from seed.helper.stable_repr import stable_repr__expand_all_layer, stable_repr_print__expand_all_layer
+
+>>> from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
+
 
 
 >>> stable_repr(None)
@@ -288,11 +349,138 @@ OrderedDict([
 
 
 
+
+
+>>> from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
+
+>>> class X(IGetFuncNameArgsOrderedKwds4stable_repr):
+...     def ___get__funcname__args__ordered_kwdxxxs___(sf):
+...         return (None, [0, 1, [2]], [('a', 111), ('b', 222), ('c', [333])])
+>>> stable_repr(X())
+'X(0, 1, [2], a= 111, b= 222, c= [333])'
+>>> stable_repr_print__expand_top_layer(None, X())
+X(0
+,1
+,[2]
+,a
+= 111
+,b
+= 222
+,c
+= [333]
+)
+>>> stable_repr_print(None, X(), depth=0)
+X(
+    0
+    ,1
+    ,[
+        2
+    ]
+    ,a
+    = 111
+    ,b
+    = 222
+    ,c
+    = [
+        333
+    ]
+)
+
+>>> dict(**{'def':1})
+{'def': 1}
+>>> dict(def=1)
+Traceback (most recent call last):
+    dict(def=1)
+         ^^^
+SyntaxError: invalid syntax
+
+
+[[
+from keyword import iskeyword
+not is_valid_python_id(nm)
+iskeyword(nm)
+==>>:
+,open4py_kw:str, close4py_kw:str, item_sep4py_kw:str
+]]
+
+>>> class XX(IGetFuncNameArgsOrderedKwds4stable_repr):
+...     def ___get__funcname__args__ordered_kwdxxxs___(sf):
+...         return (None, [0, 1, [2]], [('a', 111), ('def', [222, [444]]), ('c', [333])])
+
+>>> stable_repr(XX())
+"XX(0, 1, [2], a= 111, **{'def': [222, [444]]}, c= [333])"
+
+>>> stable_repr_print__expand_top_layer(None, XX())
+XX(0
+,1
+,[2]
+,a
+= 111
+,**{'def': [222, [444]]}
+,c
+= [333]
+)
+
+>>> stable_repr_print(None, XX(), depth=0)
+XX(
+    0
+    ,1
+    ,[
+        2
+    ]
+    ,a
+    = 111
+    ,**{
+        'def'
+        : [
+            222
+            ,[
+                444
+            ]
+        ]
+    }
+    ,c
+    = [
+        333
+    ]
+)
+
+
+
+
+>>> stable_repr_print__expand_all_layer(None, [(0, 1, [2, [3, {4:{5:{6}}}]]), []])
+[
+  (
+    0
+    ,1
+    ,[
+      2
+      ,[
+        3
+        ,{
+          4
+          : {
+            5
+            : {
+              6
+            }
+          }
+        }
+      ]
+    ]
+  )
+  ,[]
+]
+
+
 #]]]]]'''
 
-__all__ = '''
+__all__ = r'''
     stable_repr__expand_top_layer
     stable_repr_print__expand_top_layer
+
+    stable_repr__expand_all_layer
+    stable_repr_print__expand_all_layer
 
     stable_repr
     stable_repr_ex
@@ -313,6 +501,7 @@ __all__ = '''
 
     SortableIterReprableABC
         SortableIterReprable4builtins
+            SortableIterReprable__funcname_args_kwds
             SortableIterReprable__directly
             SortableIterReprable__iterable
                 SortableIterReprable__tuple_list
@@ -330,8 +519,20 @@ __all__ = '''
         iter_repr_on_ordered_iterable__is_empty
             iter_repr_on_ordered_sized_iterable
             iter_repr_on_mapping__by_ordered_items
-    '''.split()
+
+    iter_eithers5input4call
+        iter_repr_on_input4call
+        iter_repr_on_call__by_args_kwds
+
+IGetFuncNameArgsOrderedKwds4stable_repr
+    register4get__funcname__args__ordered_kwdxxxs
+    get4get__funcname__args__ordered_kwdxxxs
+    apply4get__funcname__args__ordered_kwdxxxs
+    get__funcname__args__ordered_kwdxxxs____ex
+
+    '''.split()#'''
     #check_echo
+__all__
 
 from seed.abc.abc__ver0 import abstractmethod, override, ABC, final
 from seed.for_libs.for_operator.method_caller import method_caller
@@ -341,8 +542,23 @@ from itertools import repeat
 from types import MappingProxyType
 from fractions import Fraction
 from collections import OrderedDict
-from functools import cmp_to_key
+from functools import cmp_to_key, partial
 import operator # __lt__, methodcaller
+
+
+from seed.tiny_.check import check_pseudo_qual_name, check_pseudo_identifier, check_smay_pseudo_qual_name
+from seed.tiny_.check import check_str, check_type_le, check_callable
+from seed.tiny import ifNone, mk_tuple
+from seed.lang.is_valid_python_id import is_valid_python_id
+from keyword import iskeyword
+
+#grep 'is.*abstrac' -i -r ../../python3_src/seed/ -l -a
+import inspect #.isabstract
+inspect.isabstract
+import sys
+sys.stdout
+
+__all__
 
 def check_echo(type_, obj):
     try:
@@ -590,8 +806,16 @@ def sorted_mapping_by_SortableIterReprable(mapping, *
 _kwargs4expand_top_layer = dict(indent='', depth=0, maybe_max_depth=1, has_head_eol_when_indent=False)
 def stable_repr__expand_top_layer(obj, /):
     return stable_repr(obj, **_kwargs4expand_top_layer)
-def stable_repr_print__expand_top_layer(ofile, obj, /):
-    return stable_repr_print(ofile, obj, **_kwargs4expand_top_layer)
+def stable_repr_print__expand_top_layer(may_ofile, obj, /):
+    return stable_repr_print(may_ofile, obj, **_kwargs4expand_top_layer)
+##################################
+_kwargs4expand_all_layer = dict(indent='  ', depth=0, maybe_max_depth=None, has_head_eol_when_indent=True)
+def stable_repr__expand_all_layer(obj, /):
+    return stable_repr(obj, **_kwargs4expand_all_layer)
+def stable_repr_print__expand_all_layer(may_ofile, obj, /):
+    return stable_repr_print(may_ofile, obj, **_kwargs4expand_all_layer)
+##################################
+##################################
 
 def stable_repr(obj, *
     , indent:str='    ', depth:int=-1, maybe_max_depth:[None, int]=None
@@ -614,17 +838,17 @@ def stable_repr_ex(obj, *
             ,has_head_eol_when_indent=has_head_eol_when_indent
             )
 
-def stable_repr_print(ofile, obj, *
+def stable_repr_print(may_ofile, obj, *
     , indent:str='    ', depth:int=-1, maybe_max_depth:[None, int]=None
     , has_head_eol_when_indent:bool=True
     ):
     iter_eol_indents = make_iter_eol_indents(
         indent=indent, depth=depth, maybe_max_depth=maybe_max_depth)
-    stable_repr_print_ex(ofile, obj
+    stable_repr_print_ex(may_ofile, obj
         ,iter_eol_indents=iter_eol_indents
         ,has_head_eol_when_indent=has_head_eol_when_indent
         )
-def stable_repr_print_ex(ofile, obj, *
+def stable_repr_print_ex(may_ofile, obj, *
     ,iter_eol_indents:IterEOLIndentsABC
     ,has_head_eol_when_indent:bool#default True
     ):
@@ -634,6 +858,8 @@ def stable_repr_print_ex(ofile, obj, *
             iter_eol_indents=iter_eol_indents
             ,has_head_eol_when_indent=has_head_eol_when_indent
             )
+
+    ofile = ifNone(may_ofile, sys.stdout)
     for _ in map(ofile.write, it):pass
 
 
@@ -675,18 +901,19 @@ def iter_repr_on_ordered_sized_iterable(
     , whole4empty:[None,str]
     ,has_head_eol_when_indent:bool#default True
     ):
-    return iter_repr_on_ordered_iterable__is_empty(
-            iter_repr_element, sized_iterable
-            ,is_empty=not sized_iterable
-            ,open=open, close=close
-            ,sep=sep, iter_eol_indents=iter_eol_indents
-            ,end4singleton=end4singleton
-            ,whole4empty=whole4empty
-            ,iter_repr_on_ordered_iterable=iter_repr_on_ordered_iterable
-            ,has_head_eol_when_indent=has_head_eol_when_indent
-            )
+    return (iter_repr_on_ordered_iterable__is_empty
+    (iter_repr_element, sized_iterable
+    ,is_empty=not sized_iterable
+    ,open=open, close=close
+    ,sep=sep, iter_eol_indents=iter_eol_indents
+    ,end4singleton=end4singleton
+    ,whole4empty=whole4empty
+    ,iter_repr_on_ordered_iterable=iter_repr_on_ordered_iterable
+    ,has_head_eol_when_indent=has_head_eol_when_indent
+    ))
 
 
+#[def____iter_repr_on_ordered_iterable__is_empty]:here
 def iter_repr_on_ordered_iterable__is_empty(
     iter_repr_element, iterable, *
     ,is_empty:bool
@@ -721,6 +948,8 @@ def iter_repr_on_ordered_iterable__is_empty(
     if not iter_eol_indents.has_no_more_intents():
         yield from iter_eol_indents.iter_eol_indents()
     yield close
+
+#[def____iter_repr_on_ordered_iterable]:here
 def iter_repr_on_ordered_iterable(
     iter_repr_element, iterable, *
     , sep:str, iter_eol_indents:IterEOLIndentsABC
@@ -758,6 +987,7 @@ def iter_repr_on_ordered_iterable(
         yield end4singleton
 
 
+#[def____iter_repr_on_mapping__by_ordered_items]:here
 def iter_repr_on_mapping__by_ordered_items(iter_repr_element, pairs, *
     ,is_empty:bool
     ,open:str, close:str
@@ -766,7 +996,8 @@ def iter_repr_on_mapping__by_ordered_items(iter_repr_element, pairs, *
     ,whole4empty:[None,str]
     ,has_head_eol_when_indent:bool#default True
     ):
-    def iter_repr_on_ordered_iterable(
+    if 0:
+      def iter_repr_on_ordered_iterable(
         iter_repr_element, pairs, *
         , sep:str, iter_eol_indents:IterEOLIndentsABC
         , end4singleton:str, has_head_eol_when_indent:bool#default True
@@ -779,17 +1010,20 @@ def iter_repr_on_mapping__by_ordered_items(iter_repr_element, pairs, *
             ,end4singleton=end4singleton
             ,has_head_eol_when_indent=has_head_eol_when_indent
             )
-    return iter_repr_on_ordered_iterable__is_empty(
-            iter_repr_element, pairs
-            ,is_empty=is_empty
-            ,open=open, close=close
-            ,sep=sep, iter_eol_indents=iter_eol_indents
-            ,end4singleton=end4singleton
-            ,whole4empty=whole4empty
-            ,iter_repr_on_ordered_iterable=iter_repr_on_ordered_iterable
-            ,has_head_eol_when_indent=has_head_eol_when_indent
-            )
+    iter_repr_on_ordered_iterable = partial(iter_repr_on_ordered_mapping_items, item_sep=item_sep)
 
+    return (iter_repr_on_ordered_iterable__is_empty
+    (iter_repr_element, pairs
+    ,is_empty=is_empty
+    ,open=open, close=close
+    ,sep=sep, iter_eol_indents=iter_eol_indents
+    ,end4singleton=end4singleton
+    ,whole4empty=whole4empty
+    ,iter_repr_on_ordered_iterable=iter_repr_on_ordered_iterable
+    ,has_head_eol_when_indent=has_head_eol_when_indent
+    ))
+
+#[def____iter_repr_on_ordered_mapping_items]:here
 def iter_repr_on_ordered_mapping_items(iter_repr_element, pairs, *
     ,item_sep:str, sep:str
     ,iter_eol_indents:IterEOLIndentsABC, end4singleton:str
@@ -811,12 +1045,142 @@ def iter_repr_on_ordered_mapping_items(iter_repr_element, pairs, *
                 ,end4singleton=''
                 ,has_head_eol_when_indent=False
                 )
-    return iter_repr_on_ordered_iterable(iter_repr_pair, pairs
-            ,sep=sep
-            ,iter_eol_indents=iter_eol_indents
-            ,end4singleton=end4singleton
-            ,has_head_eol_when_indent=has_head_eol_when_indent
-            )
+    return (iter_repr_on_ordered_iterable
+    (iter_repr_pair, pairs
+    ,sep=sep
+    ,iter_eol_indents=iter_eol_indents
+    ,end4singleton=end4singleton
+    ,has_head_eol_when_indent=has_head_eol_when_indent
+    ))
+
+
+#[def____iter_repr_on_ordered_iterable]:goto
+def iter_eithers5input4call(args, ordered_kwd_pairs):
+    for x in args:
+        yield False, x
+    for nm, v in ordered_kwd_pairs:
+        yield True, (nm, v)
+def iter_repr_on_input4call(iter_repr_element, args, ordered_kwd_pairs, *
+    ,item_sep:str, sep:str
+    ,iter_eol_indents:IterEOLIndentsABC, end4singleton:str
+    ,has_head_eol_when_indent:bool#default True
+    ,open4py_kw:str, close4py_kw:str, item_sep4py_kw:str
+    ):
+    'iter_repr_element::element->Iter str'
+    eithers = iter_eithers5input4call(args, ordered_kwd_pairs)
+    return (_iter_repr_on_eithers5input4call
+    (iter_repr_element, eithers
+    ,item_sep=item_sep
+    ,sep=sep
+    ,iter_eol_indents=iter_eol_indents
+    ,end4singleton=end4singleton
+    ,has_head_eol_when_indent=has_head_eol_when_indent
+    ,open4py_kw=open4py_kw, close4py_kw=close4py_kw, item_sep4py_kw=item_sep4py_kw
+    ))
+def _iter_repr_on_eithers5input4call(iter_repr_element, eithers, *
+    ,item_sep:str, sep:str
+    ,iter_eol_indents:IterEOLIndentsABC, end4singleton:str
+    ,has_head_eol_when_indent:bool#default True
+    ,open4py_kw:str, close4py_kw:str, item_sep4py_kw:str
+    ):
+    'iter_repr_element::element->Iter str'
+    open4py_kw = ifNone(open4py_kw, '**{')
+    close4py_kw = ifNone(close4py_kw, '}')
+    item_sep4py_kw = ifNone(item_sep4py_kw, ': ')
+
+    if item_sep is None:
+        item_sep = '= ' # always
+        # if iter_eol_indents.has_no_intents() else
+
+    #[def____iter_repr_on_ordered_mapping_items]:goto
+    #def iter_repr_pair(item, *, iter_eol_indents):
+    def iter_repr_either(either_arg_or_kwd_pair, *, iter_eol_indents):
+        #end4singleton=''
+        #has_head_eol_when_indent=False
+        is_kwd_pair, x = either_arg_or_kwd_pair
+        if is_kwd_pair:
+            #ordered_kwd_pairs
+            nm, v = x
+            if is_valid_python_id(nm):
+                yield nm
+                yield from iter_eol_indents.iter_eol_indents()
+                yield item_sep
+                yield from iter_repr_element(v, iter_eol_indents=iter_eol_indents)
+            else:
+                #[def____iter_repr_on_ordered_iterable__is_empty]:goto
+                yield open4py_kw # '**{'
+                if 1:
+                    _iter_eol_indents = iter_eol_indents.deeper()
+                    if has_head_eol_when_indent:
+                        yield from _iter_eol_indents.iter_eol_indents()
+                    yield repr(nm)
+                    yield from _iter_eol_indents.iter_eol_indents()
+                    yield item_sep4py_kw # ': '
+                    yield from iter_repr_element(v, iter_eol_indents=_iter_eol_indents)
+                if not iter_eol_indents.has_no_more_intents():
+                    yield from iter_eol_indents.iter_eol_indents()
+                yield close4py_kw # '}'
+        else:
+            #args
+            v = x
+            yield from iter_repr_element(v, iter_eol_indents=iter_eol_indents)
+    return (iter_repr_on_ordered_iterable
+    (iter_repr_either, eithers
+    ,sep=sep
+    ,iter_eol_indents=iter_eol_indents
+    ,end4singleton=end4singleton
+    ,has_head_eol_when_indent=has_head_eol_when_indent
+    ))
+
+#[def____iter_repr_on_mapping__by_ordered_items]:goto
+def iter_repr_on_call__by_args_kwds(iter_repr_element, func_name, args, ordered_kwd_pairs, *
+    ,is_empty:bool
+    #,open:str, close:str
+    ,item_sep:str, sep:str
+    ,iter_eol_indents:IterEOLIndentsABC
+    #,end4singleton:str
+    #,whole4empty:[None,str]
+    ,has_head_eol_when_indent:bool#default True
+    #,open4py_kw:[None,str], close4py_kw:[None,str], item_sep4py_kw:[None,str]
+    ):
+    return (_iter_repr_on_call__by_args_kwds_
+    (iter_repr_element, args, ordered_kwd_pairs
+    ,open4py_kw=None, close4py_kw=None, item_sep4py_kw=None
+    ,open=func_name+'(', close=')'
+    ,end4singleton='' #(1,) vs f(1)
+    ,whole4empty=None
+    ,is_empty=is_empty
+    ,item_sep=item_sep
+    ,sep=sep
+    ,iter_eol_indents=iter_eol_indents
+    ,has_head_eol_when_indent=has_head_eol_when_indent
+    #,open4py_kw=open4py_kw, close4py_kw=close4py_kw, item_sep4py_kw=item_sep4py_kw
+    ))
+
+def _iter_repr_on_call__by_args_kwds_(iter_repr_element, args, ordered_kwd_pairs, *
+    ,is_empty:bool
+    ,open:str, close:str
+    ,item_sep:str, sep:str
+    ,iter_eol_indents:IterEOLIndentsABC, end4singleton:str
+    ,whole4empty:[None,str]
+    ,has_head_eol_when_indent:bool#default True
+    ,open4py_kw:str, close4py_kw:str, item_sep4py_kw:str
+    ):
+    eithers = iter_eithers5input4call(args, ordered_kwd_pairs)
+
+    iter_repr_on_ordered_iterable = partial(_iter_repr_on_eithers5input4call, item_sep=item_sep, open4py_kw=open4py_kw, close4py_kw=close4py_kw, item_sep4py_kw=item_sep4py_kw)
+
+    return (iter_repr_on_ordered_iterable__is_empty
+    (iter_repr_element, eithers
+    ,is_empty=is_empty
+    ,open=open, close=close
+    ,sep=sep, iter_eol_indents=iter_eol_indents
+    ,end4singleton=end4singleton
+    ,whole4empty=whole4empty
+    ,iter_repr_on_ordered_iterable=iter_repr_on_ordered_iterable
+    ,has_head_eol_when_indent=has_head_eol_when_indent
+    ))
+
 
 
 
@@ -947,6 +1311,119 @@ class SortableIterReprableABC(ABC):
             assert n2t[name] is datatype
             assert t2n[datatype] == name
 
+class _IGetFuncNameArgsOrderedKwds4stable_repr(ABC):
+    __slots__ = ()
+    _ty2nm = {}
+    _nm2ty = {}
+    _ty2f = {}
+class IGetFuncNameArgsOrderedKwds4stable_repr(ABC):
+    r'''[[[
+    'see:SortableIterReprable__funcname_args_kwds'
+    'see:IGetFuncNameArgsOrderedKwds4stable_repr'
+    'see:register4get__funcname__args__ordered_kwdxxxs'
+    'see:get4get__funcname__args__ordered_kwdxxxs'
+    #]]]'''#'''
+    __slots__ = ()
+    @abstractmethod
+    def ___get__funcname__args__ordered_kwdxxxs___(sf):
+        '-> (may func_name, args, (ordered_kwd_pairs/[(nm,v)]|ordered_field_names__str/str|ordered_either_Ellipsis_field_name_pair_or_kwd_pair__seq)/[((nm,v)|(Ellipsis,nm))])'
+    @classmethod
+    def __init_subclass__(cls, /, **kwargs):
+        if not inspect.isabstract(cls):
+            get4get__funcname__args__ordered_kwdxxxs(cls)
+                #==>> register4get__funcname__args__ordered_kwdxxxs(cls, None, None)
+        super().__init_subclass__(**kwargs)
+    #end-def __init_subclass__(cls, /, *, ...):
+
+def register4get__funcname__args__ordered_kwdxxxs(datatype, may_xname, ___get__funcname__args__ordered_kwdxxxs___):
+    check_type_le(type, datatype)
+
+    xname = ifNone(may_xname, f'{datatype.__module__}:{datatype.__qualname__}')
+    check_str(xname) #neednot check_pseudo_qual_name
+
+    if ___get__funcname__args__ordered_kwdxxxs___ is None:
+        m = getattr(datatype, '___get__funcname__args__ordered_kwdxxxs___', None)
+        if m is None:
+            raise LookupError(datatype)
+            raise TypeError(datatype)
+        ___get__funcname__args__ordered_kwdxxxs___ = m
+    check_callable(___get__funcname__args__ordered_kwdxxxs___)
+
+    T = _IGetFuncNameArgsOrderedKwds4stable_repr
+    t2n = T._ty2nm
+    n2t = T._nm2ty
+    t2f = T._ty2f
+    if datatype in t2n: raise KeyError(datatype)
+    if xname in n2t: raise KeyError(xname)
+
+    if 1:
+        SortableIterReprable4builtins.register_datatype_and_name_and_SortableIterReprable(datatype, xname, SortableIterReprable__funcname_args_kwds)
+
+    t2n[datatype] = xname
+    n2t[xname] = datatype
+    t2f[datatype] = ___get__funcname__args__ordered_kwdxxxs___
+def get4get__funcname__args__ordered_kwdxxxs(datatype):
+    'datatype -> (xname, ___get__funcname__args__ordered_kwdxxxs___)'
+    check_type_le(type, datatype)
+    T = _IGetFuncNameArgsOrderedKwds4stable_repr
+    t2n = T._ty2nm
+    n2t = T._nm2ty
+    t2f = T._ty2f
+
+    m = t2f.get(datatype)
+    while m is None:
+        ___get__funcname__args__ordered_kwdxxxs___ = None
+        may_xname = None
+        register4get__funcname__args__ordered_kwdxxxs(datatype, may_xname, ___get__funcname__args__ordered_kwdxxxs___)
+        m = t2f.get(datatype)
+    else:
+        ___get__funcname__args__ordered_kwdxxxs___ = m
+        xname = t2n[datatype]
+    return (xname, ___get__funcname__args__ordered_kwdxxxs___)
+
+
+
+def apply4get__funcname__args__ordered_kwdxxxs(___get__funcname__args__ordered_kwdxxxs___, sf):
+    '-> (func_name, args, ordered_kwd_pairs)'
+    (may_func_name, args, ordered_kwdxxxs) = ___get__funcname__args__ordered_kwdxxxs___(sf)
+    if type(ordered_kwdxxxs) is str:
+        ordered_field_names__str = ordered_kwdxxxs
+        ordered_field_names__str.replace(',', ' ')
+        ordered_field_names = ordered_field_names__str.split()
+        ordered_either_pairs = [(..., nm) for nm in ordered_field_names]
+    else:
+        ordered_either_pairs = ordered_kwdxxxs
+    ordered_either_pairs
+
+    ordered_kwd_pairs = []
+    for a, b in ordered_either_pairs:
+        if a is ...:
+            nm = b
+            v = getattr(sf, nm)
+        else:
+            nm = a
+            v = b
+        #if not str.isidentifier(nm):raise ValueError(nm)
+        check_pseudo_identifier(nm)
+        #check_pseudo_qual_name
+        ordered_kwd_pairs.append((nm, v))
+    ordered_kwd_pairs
+
+
+    ordered_kwd_pairs = mk_tuple(ordered_kwd_pairs)
+    args = mk_tuple(args)
+    func_name = ifNone(may_func_name, type(sf).__qualname__)
+    check_str(func_name)
+    return (func_name, args, ordered_kwd_pairs)
+
+
+def get__funcname__args__ordered_kwdxxxs____ex(data):
+    'data -> (xname, func_name, args, ordered_kwd_pairs)'
+    datatype = type(data)
+    (xname, ___get__funcname__args__ordered_kwdxxxs___) = get4get__funcname__args__ordered_kwdxxxs(datatype)
+    (func_name, args, ordered_kwd_pairs) = apply4get__funcname__args__ordered_kwdxxxs(___get__funcname__args__ordered_kwdxxxs___, data)
+    return (xname, func_name, args, ordered_kwd_pairs)
+
 class SortableIterReprable4builtins(SortableIterReprableABC):
     '''
     def _from_data_(cls, data):
@@ -972,6 +1449,101 @@ class SortableIterReprable4builtins(SortableIterReprableABC):
     @override
     def _get_name2datatype_(cls):
         return cls.name2datatype
+SortableIterReprable4builtins
+
+#class SortableIterReprable__funcname_args_kwds(SortableIterReprableABC):
+class SortableIterReprable__funcname_args_kwds(SortableIterReprable4builtins):
+    r'''[[[
+    'see:IGetFuncNameArgsOrderedKwds4stable_repr'
+    'see:SortableIterReprable__funcname_args_kwds'
+    'see:iter_repr_on_call__by_args_kwds'
+    #]]]'''#'''
+    def __init__(sf, data, /):
+        #sf.data = data
+        datatype = type(data)
+        (xname, ___get__funcname__args__ordered_kwdxxxs___) = get4get__funcname__args__ordered_kwdxxxs(datatype)
+        sf.datatype = datatype
+        sf._xname = xname
+        sf._3 = sf._explain_data(___get__funcname__args__ordered_kwdxxxs___, data)
+    def _explain_data(sf, ___get__funcname__args__ordered_kwdxxxs___, data, /):
+        (func_name, args, ordered_kwd_pairs) = apply4get__funcname__args__ordered_kwdxxxs(___get__funcname__args__ordered_kwdxxxs___, data)
+        mk = SortableIterReprable4builtins._make_sortable_iter_reprable_
+        #wrapped:args,ordered_kwd_pairs
+        wargs = tuple(map(mk, args))
+        wordered_kwd_pairs = tuple((nm, mk(v)) for nm, v in ordered_kwd_pairs)
+        return (func_name, wargs, wordered_kwd_pairs)
+
+    @classmethod
+    @override
+    def _from_data_(cls, data):
+        return cls(data)
+
+    if 0:
+        #since now [__class__ <: SortableIterReprable4builtins]
+        #bug:
+        @classmethod
+        @override
+        def _get_datatype2SortableIterReprable_(cls):
+            '-> Map datatype subclass-of-SortableIterReprable'
+            raise logic-err
+            return __class__
+    if 0:
+        #since now [__class__ <: SortableIterReprable4builtins]
+        @classmethod
+        @override
+        def _get_datatype2name_(cls):
+            T = _IGetFuncNameArgsOrderedKwds4stable_repr
+            t2n = T._ty2nm
+            return t2n
+        @classmethod
+        @override
+        def _get_name2datatype_(cls):
+            T = _IGetFuncNameArgsOrderedKwds4stable_repr
+            n2t = T._nm2ty
+            return n2t
+    ##############
+    @override
+    def get_datatype(self):
+        return self.datatype
+    @override
+    def stable_iter_repr_data(self, *
+        ,iter_eol_indents:IterEOLIndentsABC
+        ,has_head_eol_when_indent:bool#default True
+        ):
+        #(func_name, args, ordered_kwd_pairs) = self._explain_data()
+        (func_name, wargs, wordered_kwd_pairs) = self._3
+
+        datatype = self.datatype
+        f = method_caller('stable_iter_repr_data', has_head_eol_when_indent=has_head_eol_when_indent)
+        return (iter_repr_on_call__by_args_kwds
+        (f, func_name, wargs, wordered_kwd_pairs
+        ,is_empty= 0 == (len(wargs) + len(wordered_kwd_pairs))
+        ,sep=None
+        ,item_sep=None
+        ,iter_eol_indents=iter_eol_indents
+        ,has_head_eol_when_indent=has_head_eol_when_indent
+        ))
+
+
+    @override
+    def compare_wobject_of_same_datatype(self, other):
+        (func_nameL, wargsL, wordered_kwd_pairsL) = self._3
+        (func_nameR, wargsR, wordered_kwd_pairsR) = other._3
+        cmp = SortableIterReprableABC.compare_wobject
+        cmp_ls = directly_compare, cmp, cmp
+        for _cmp, _x, _y in zip(self._3, other._3):
+            r = _cmp(_x, _y)
+            if r:
+                break
+        else:
+            r = 0
+        return r
+        #return compare_on_sized_ordered_iterable(cmp, self._explain_data(), other._explain_data())
+SortableIterReprable__funcname_args_kwds
+r'''[[[
+#]]]'''#'''
+
+
 
 class SortableIterReprable__directly(SortableIterReprable4builtins):
     supported_types = {
@@ -1065,9 +1637,8 @@ class SortableIterReprable__iterable(SortableIterReprable4builtins):
 
     @override
     def compare_wobject_of_same_datatype(self, other):
-        cmp = SortableIterReprable4builtins.compare_wobject
+        cmp = SortableIterReprableABC.compare_wobject
         return compare_on_sized_ordered_iterable(cmp, self.wobjects, other.wobjects)
-
 
 
 class SortableIterReprable__tuple_list(SortableIterReprable__iterable):
@@ -1112,7 +1683,7 @@ class SortableIterReprable__set_frozenset(SortableIterReprable__iterable):
     @override
     def _data2wobjects_(cls, data):
         mk = SortableIterReprable4builtins._make_sortable_iter_reprable_
-        cmp = SortableIterReprable4builtins.compare_wobject
+        cmp = SortableIterReprableABC.compare_wobject
         wobjects = tuple(sort_iterable(cmp, map(mk, data)))
         return wobjects
     @override
@@ -1198,17 +1769,17 @@ class SortableIterReprable__dict(SortableIterReprable4builtins):
         datatype = self.datatype
         kwargs = self.get_kwargs_for_repr_mapping()
         f = method_caller('stable_iter_repr_data', has_head_eol_when_indent=has_head_eol_when_indent)
-        return iter_repr_on_mapping__by_ordered_items(
-                f, self.wobject_pairs
-                ,is_empty=not self.wobject_pairs
-                ,sep=None
-                ,item_sep=None
-                ,iter_eol_indents=iter_eol_indents
-                ,has_head_eol_when_indent=has_head_eol_when_indent
-                ,**kwargs
-                )
+        return (iter_repr_on_mapping__by_ordered_items
+        (f, self.wobject_pairs
+        ,is_empty=not self.wobject_pairs
+        ,sep=None
+        ,item_sep=None
+        ,iter_eol_indents=iter_eol_indents
+        ,has_head_eol_when_indent=has_head_eol_when_indent
+        ,**kwargs
+        ))
 
-    _cmp1 = SortableIterReprable4builtins.compare_wobject
+    _cmp1 = SortableIterReprableABC.compare_wobject
     @classmethod
     def _cmp_pair(cls, lhs_pair, rhs_pair):
         return compare_on_sized_ordered_iterable(cls._cmp1, lhs_pair, rhs_pair)
@@ -1244,6 +1815,25 @@ __register(); del __register
 
 
 
+
+
+
+
+
+
+
+
+
+
+from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
+from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
+from seed.helper.stable_repr import stable_repr__expand_all_layer, stable_repr_print__expand_all_layer
+
+
+from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
+
+from seed.helper.stable_repr import *
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -1251,17 +1841,6 @@ if __name__ == "__main__":
     #doctest: +NORMALIZE_WHITESPACE
     #doctest: +IGNORE_EXCEPTION_DETAIL
     #Traceback (most recent call last):
-
-
-
-
-
-
-
-
-
-
-
 
 
 

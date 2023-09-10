@@ -6,9 +6,12 @@ __all__ = ['bisearch']
 
 import operator
 from seed.tiny import echo
+from seed.lang.calc_len_of_py_range_ import calc_len_of_py_range_
 
-def bisearch(x, array, begin=None, end=None, /, *, key=None, __lt__=None, result_case=2):
-    '''see also : bisect
+#"../../python3_src/seed/int_tools/digits/uint2radix_repr.py"._uint2radix_repr__big_endian__split__tail use kw "begin/end"
+#def bisearch(x, array, begin=None, end=None, /, *, key=None, __lt__=None, result_case=2):
+def bisearch(x, array, /, begin=None, end=None, *, key=None, __lt__=None, result_case=2):
+    r'''see also : bisect
 
 bisearch(x, a) == bisect_left(a, x), bisect_right(a, x)
 bisearch(x, a, result_case=2) == bisect_left(a, x), bisect_right(a, x)
@@ -46,11 +49,11 @@ output:
                 ==>> [x not in array]
 
         if result_case == 0:
-            result = middle_begin
+            result = middle_begin/eqv_begin
         if result_case == 1:
-            result = middle_end
+            result = middle_end/eqv_end
         if result_case == 2:
-            result = (middle_begin, middle_end)
+            result = (middle_begin, middle_end)/(eqv_begin, eqv_end)
 
 example:
     py -m seed.seq_tools.bisearch
@@ -113,7 +116,26 @@ example:
     >>> this(5, [-6,-6,5,5,6,6],1,1)
     (1, 1)
 
+# e ../lots/NOTE/Python/python-bug/len-bug.txt
+>>> len(range(2**80))
+Traceback (most recent call last):
+    ...
+OverflowError: Python int too large to convert to C ssize_t
+>>> range(2**80).__len__()
+Traceback (most recent call last):
+    ...
+OverflowError: Python int too large to convert to C ssize_t
+
+
+
 '''#'''
+    try:
+        len_array = len(array)
+    except OverflowError:
+        if isinstance(array, range):
+            len_array = calc_len_of_py_range_(array)
+        else:
+            raise
     if key is None:
         key = echo
     if __lt__ is None:
@@ -121,11 +143,11 @@ example:
     if begin is None:
         begin = 0
     if end is None:
-        end = len(array)
+        end = len_array
 
     if result_case not in (-1,0,1,2):
         raise ValueError(f'result_case == {result_case} not in [-1,0,1,2]')
-    if not 0 <= begin <= end <= len(array):
+    if not 0 <= begin <= end <= len_array:
         raise ValueError('not 0 <= begin <= end <= len(array)')
 
 

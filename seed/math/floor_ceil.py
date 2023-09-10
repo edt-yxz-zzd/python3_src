@@ -1,5 +1,25 @@
 #__all__:goto
 r'''[[[
+# now:see: math.isqrt() vs floor_sqrt
+#bug: O(bisearch-ver:floor_kth_root_) ~ O(log2(k)*log2(n)**2)
+O(bisearch-ver:floor_kth_root_) ~ O(log2(n)**3/k)
+O(floor_sqrt) ~ O(log2(n)**2)
+O(floor_kth_root_) ~:
+    ######################
+    let [mmm:=min{k*log2(k), log2(n)}]
+    let [lbN:=log2(n)][lblbN:=log2(log2(n))]
+    let [lbK:=log2(k)]
+    ######################
+    ~ O(mmm**3 /k + (lbN -mmm)**2)
+    ######################
+    ~ [0 <= lbN < k]:O(1)
+    ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
+    ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
+    ~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
+    ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+    ######################
+
+
 [[TODO:
     主要模式:floor_scale_(n/d;expr)
         使用 分数/进一步:分子分母粗略整数分解(c*radix**exp)
@@ -19,14 +39,17 @@ r'''[[[
 e ../../python3_src/seed/math/floor_ceil.py
 view others/数学/divmod加速.txt
 
-py -m nn_ns.app.debug_cmd   seed.math.floor_ceil
+py -m nn_ns.app.debug_cmd   seed.math.floor_ceil -x
 
 py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_sqrt -v
 
+python -m unittest seed.math.floor_ceil
 
 py -m seed.math.floor_ceil
+    now turnoff "timer" related code
 
-py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.floor_ceil @floor_log2 =57*59*60*61*71*72*73
+py_adhoc_call   seed.math.floor_ceil @floor_log2 =57*59*60*61*71*72*73
 42
 
 
@@ -36,11 +59,13 @@ from seed.math.floor_ceil import floor_log2_kth_root_, ceil_log2_kth_root_
 from seed.math.floor_ceil import floor_log2_sqrt, ceil_log2_sqrt
 from seed.math.floor_ceil import floor_log_, ceil_log_
 
+# now: math.isqrt
 from seed.math.floor_ceil import floor_sqrt, ceil_sqrt
+from seed.math.floor_ceil import floor_kth_root_, ceil_kth_root_
 
 #]]]'''
 
-__all__ = '''
+__all__ = r'''
     floor_log2
     ceil_log2
     floor_log2_kth_root_
@@ -57,6 +82,7 @@ __all__ = '''
     ceil_div
 
     offsetted_divmod
+
 
 
     floor_div
@@ -82,7 +108,7 @@ __all__ = '''
     count_num_high_same_bits_of_two_uints
     ceil_log_
     floor_log_
-    '''.split()
+    '''.split()#'''
     #load_tests
     #NotImplementedError:
         #floor_log2_pow
@@ -90,14 +116,59 @@ __all__ = '''
 
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
-#from seed.math.max_power_of_base_as_factor_of_ import count_num_low_0bits_of_pint, count_num_low_1bits_of_uint
-from seed.func_tools.recur5yield import recur5yield__list__echo__echo
+def __():
+    from seed.for_libs.for_time import (
+    Timer__print_err
+        ,timer__print_err__thread_wide
+        ,timer__print_err__process_wide
+        ,timer__print_err__system_wide__highest_resolution
+        ,timer__print_err__system_wide__monotonic
+    )
+
+    timer = timer__print_err__thread_wide
+    _to_show_ = __name__ == "__main__"
+
+    with timer(prefix='seed.math.max_power_of_base_as_factor_of_', _to_show_=_to_show_):
+        from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
+        #from seed.math.max_power_of_base_as_factor_of_ import count_num_low_0bits_of_pint, count_num_low_1bits_of_uint
+    with timer(prefix='seed.func_tools.recur5yield', _to_show_=_to_show_):
+        from seed.func_tools.recur5yield import recur5yield__list__echo__echo
+
+    if 0:
+        with timer(prefix='unittest', _to_show_=_to_show_):
+            import unittest
+        with timer(prefix='doctest', _to_show_=_to_show_):
+            import doctest
+    with timer(prefix='seed.math.floor_ceil', _to_show_=_to_show_):
+        if __name__ == "__main__":
+            #from seed.math.floor_ceil import *
+            pass
+
+r'''[[[
+py -m seed.math.floor_ceil
+seed.math.max_power_of_base_as_factor_of_:duration: 0.0019553069999999895 *(unit: 0:00:01)
+seed.func_tools.recur5yield:duration: 0.012787081000000033 *(unit: 0:00:01)
+seed.math.floor_ceil:duration: 0.11146261600000001 *(unit: 0:00:01)
+    ===
+    timing 'import unittest, doctest' out from 'import seed.math.floor_ceil' -->:
+    unittest:duration: 0.08069130800000002 *(unit: 0:00:01)
+    doctest:duration: 0.029753538999999996 *(unit: 0:00:01)
+    seed.math.floor_ceil:duration: 0.002877385999999982 *(unit: 0:00:01)
+
+move 'import unittest, doctest' into seed.math.floor_ceil:load_tests() body -->:
+    seed.math.max_power_of_base_as_factor_of_:duration: 0.0019774619999999854 *(unit: 0:00:01)
+    seed.func_tools.recur5yield:duration: 0.012657305000000008 *(unit: 0:00:01)
+    seed.math.floor_ceil:duration: 0.002952691999999979 *(unit: 0:00:01)
+
+
+#]]]'''
+
 ___end_mark_of_excluded_global_names__0___ = ...
+__all__
 
 
 def floor_div(n, d, /):
-    '''floor_div n d = n//d where d != 0
+    r'''floor_div n d = n//d where d != 0
 
 floor_div(-n, -d) = floor_div(n, d)
 
@@ -133,7 +204,7 @@ example:
     return n//d
 
 def ceil_div(n, d, /):
-    '''ceil_div n d = ceil(n/d) where d != 0
+    r'''ceil_div n d = ceil(n/d) where d != 0
 
 ceil_div(-n, -d) = ceil_div(n, d)
 
@@ -178,7 +249,7 @@ example:
     return n//d + 1
 
 def ceil_log2(pint, /):
-    '''ceil_log2(p) = ceil(log2(p)) where p > 0
+    r'''ceil_log2(p) = ceil(log2(p)) where p > 0
 
 ceil_log2(p)
     | p == 2**power = power = floor_log2(p)
@@ -223,7 +294,7 @@ example:
 
 
 def floor_log2(pint, /):
-    '''floor_log2(p) = floor(log2(p)) where p > 0
+    r'''floor_log2(p) = floor(log2(p)) where p > 0
 
 assume:
     u >= 0
@@ -290,6 +361,8 @@ example:
 
 def floor_log2_kth_root_(k, n, /):
     r'''[[[
+    :: k{>=1} -> n{>=1} -> floor(log2(n**(1/k)))
+
     [k >= 1]
     [n >= 1]
     [w**k == n]
@@ -305,6 +378,36 @@ def floor_log2_kth_root_(k, n, /):
     e = floor_log2(n)//k
     assert (1<<(k*e)) <= n < (1<<(k*(e+1)))
     return e
+def __():
+  if 1:
+    r'''[[[
+    to proof correctness
+    #]]]'''#'''
+    check_type_is = None
+  def floor_log2_kth_root_(k, n, /):
+    check_type_is(int, k)
+    if not k >= 1:raise ValueError(k)
+    check_type_is(int, n)
+    if not n >= 1:raise ValueError(n)
+    # [k >= 1]
+    # [n >= 1]
+
+    lb_n = floor_log2(n)
+    # [2**lb_n <= n < 2**(lb_n+1)]
+    # [2**(lb_n/k) <= n**(1/k) < 2**((lb_n+1)/k)]
+    # [rt := n**(1/k)]
+    # [2**(lb_n/k) <= rt < 2**((lb_n+1)/k)]
+    # [(lb_n/k) <= floor_log2(rt) < ((lb_n+1)/k)]
+    # [(lb_n/k) <= floor_log2(rt) < ((lb_n+1)/k)]
+    # [floor(lb_n/k) <= floor_log2(rt) < ceil((lb_n+1)/k)]
+    # [(lb_n//k) <= floor_log2(rt) < (lb_n//k +1)]
+    # [floor_log2(rt) == (lb_n//k)]
+    lb_rt = lb_n//k
+    #assert lb_rt >= 0
+    # [lb_rt >= 0]
+    return lb_rt
+
+
 def ceil_log2_kth_root_(k, n, /):
     r'''[[[
     [k >= 1]
@@ -341,6 +444,8 @@ def ceil_sqrt(n, /):
 def floor_sqrt(n, /):
     r'''[[[
     [floor_sqrt(n) =[def]= floor(sqrt(n))]
+    # O(log2(n)**2)
+
 
     [n>=0]
 [n>=1]:
@@ -427,6 +532,32 @@ def floor_sqrt(n, /):
         [[3 <= (flbN+2)//4] -> [n>=1024]]
 
 
+>>> from math import isqrt
+>>> from seed.tiny import print_err
+>>> floor_sqrt(0)
+0
+>>> floor_sqrt(1)
+1
+>>> floor_sqrt(2)
+1
+>>> floor_sqrt(3)
+1
+>>> floor_sqrt(4)
+2
+>>> floor_sqrt(5)
+2
+>>> floor_sqrt(6)
+2
+>>> floor_sqrt(7)
+2
+>>> floor_sqrt(8)
+2
+>>> floor_sqrt(9)
+3
+>>> for n in range(200):
+...     #print_err(n)
+...     if not floor_sqrt(n) == isqrt(n):
+...         print(n, floor_sqrt(n), isqrt(n), floor_sqrt(n)**2, isqrt(n)**2)
 
 
 
@@ -435,32 +566,82 @@ def floor_sqrt(n, /):
     if 0:
         if n < 4:
             fsqrtN = 0 if n==0 else 1
-    while 1:
+    while 1: # not loop indeed, just to use "break" instead of "return"
         if n == 0:
             fsqrtN = 0
             break
 
+        # [n >= 1]
         flbN = floor_log2(n)
+        # [flbN >= 0]
         if 0 == flbN&1 and n == (1<<flbN):
+            # perfect square
+            # [n==2**(2*e)]
             fsqrtN = (1<<(flbN>>1))
             break
-
+        assert n >= 2
+        # [n >= 2][flbN >= 1][flbN == floor_log2(n)]
         ls = [(n, flbN)]
+            # [@[(n, flbN) :<- ls] -> [[n >= 1][flbN >= 0][flbN == floor_log2(n)]]]
+            #
         while 1:
             (n, flbN) = ls[-1]
+            # [n >= 1][flbN >= 0][flbN == floor_log2(n)]
+
+            #bug:if flbN == 1:break
             #if n < 4:break
-            if flbN == 1:break
+            if flbN < 2:
+                # [1 <= n < 4][0 <= flbN < 2][flbN == floor_log2(n)]
+                # [1 <= ls[-1][0] < 4]
+                # [0 <= ls[-1][1] < 2]
+                break
+            # [n >= 4][flbN >= 2]
             e = (flbN+2)//4
+            # [e >= 1]
+            # [4 <= 4*e <= flbN+2]
             _2e = e << 1
+            # [2 <= 2*e <= (flbN+2)/2 <= flbN]
+            # [4 == 2**2 <= 2**(2*e) <= 2**flbN <= n]
             q = n >> _2e
+            # [q == n//2**(2*e) >= 1]
+            # [q >= 1]
             flbQ = flbN -_2e
+            # [flbQ >= 0]
+            # !! [flbN == floor_log2(n)]
+            # [flbQ == flbN -2*e == floor_log2(n) -2*e == floor_log2(n//2**(2*e)) == floor_log2(q)]
+            # [flbQ == floor_log2(q)]
+            #assert q >= 1
+            #assert flbQ >= 0
             ls.append((q, flbQ))
+                # [q >= 1][flbQ >= 0][flbQ == floor_log2(q)]
+
+            ######################
+            # !! [e := (flbN+2)//4]
+            # !! [flbQ := flbN -2*e]
+            # [flbQ == flbN -(flbN+2)//4*2]
+            # [flbQ >= flbN -(flbN+2)/4*2 == flbN/2 -1]
+            # [flbQ <= flbN -(flbN+2-3)/4*2 == flbN/2 +1/2]
+            # [flbN >= 2*flbQ-1]
+            # [flbN+1 >= 2*flbQ]
+            # [(flbN+1)/2 >= flbQ]
+            # [flbQ <= ceil_div(flbN,2)]
+            ######################
+        #end-while 1:
+        # [1 <= ls[-1][0] < 4]
+        # [0 <= ls[-1][1] < 2]
+        # [[i :<- [0..=len(ls)-2]] -> [(q, flbQ) := ls[i]] -> [(n, flbN) := ls[i+1]] -> [[flbQ <= ceil_div(flbN,2)][flbN >= 2*flbQ-1]]]
+        # [O(len(ls)) == O(log2(flbN))]
 
         (n, flbN) = ls.pop()
+        # [1 <= n < 4][0 <= flbN < 2][flbN == floor_log2(n)]
+        assert 1 <= n < 4
+        assert 0 <= flbN < 2
+        assert flbN == floor_log2(n)
+
         fsqrtN = 1
         while ls:
             (q, flbQ) = (n, flbN)
-            fsqrtQ = fsqrtN
+            fsqrtQ, fsqrtN = fsqrtN, None
             (n, flbN) = ls.pop()
             _2e = flbN -flbQ
             e = _2e >> 1
@@ -474,18 +655,31 @@ def floor_sqrt(n, /):
             else:
                 D_e1 = (n>>(e+1)) -((fsqrtQ**2) << (e-1))
                 upper_dd = D_e1//fsqrtQ
+                # ~ O((flbQ/2)**2)
+                # ~ O((flbN/4)**2)
+                # ~ O(flbN**2)
+                '...+O(flbN**2)'
 
             # [fsqrtN == (fsqrtQ*2**e+dd)]
             upper_fsqrtN = (fsqrtQ<<e)+upper_dd
+            # EVAL(upper_fsqrtN**2) ~ O((flbN/2)**2)
+            '...+O(flbN**2)'
             if n < upper_fsqrtN**2:
                 fsqrtN = upper_fsqrtN -1
             else:
                 fsqrtN = upper_fsqrtN
             fsqrtN
-        #end-while
+        #end-while ls # ls.pop until []
+        # O(while ls) ~= O(sum flbN**2 {flbN})
+        # !! [O(len(ls)) == O(log2(flbN))]
+        # ~= O(sum (2**i)**2 {i :<- [0..=log2(flbN)]})
+        # ~<= O((sum 2**i {i :<- [0..=log2(flbN)]})**2)
+        # ~<= O((2**log2(flbN)) **2)
+        # ~<= O(flbN **2)
+        '...+O(flbN**2)'
         fsqrtN
         break
-    #end-while-main
+    #end-main-while 1: # not loop indeed, just to use "break" instead of "return"
     assert fsqrtN**2 <= n < (1+fsqrtN)**2
     return fsqrtN
 
@@ -506,6 +700,7 @@ if 0 and __name__ == "__main__":
 
 def _iter_partial_floor_kth_root__bisearch_(k, n, /):
     'k -> n -> Iter<(partial_lead_bits4fKrtN, num_remain_bits)> # [partial_lead_bits4fKrtN == fKrtN//2**num_remain_bits][num_remain_bits <- reversed[0..=floor_log2_fKrtN]]'
+    #bisearch, one bit per round
     assert k >= 2
     assert n >= 1
     flbN = floor_log2(n)
@@ -521,6 +716,11 @@ def _iter_partial_floor_kth_root__bisearch_(k, n, /):
         fKrtQ1 = (fKrtQ0<<1)^1
         if n1 < fKrtQ1**k:
             fKrtQ1 ^= 1
+        # EVAL(fKrtQ1**k)
+        # ~O(last-square)
+        # ~O(log2(fKrtQ1**k)**2)
+        # ~O(k**2 * log2(fKrtQ1)**2)
+        # ~O(k**2 * (loop-round-idx)**2)
         #####
         fKrtQ0 = fKrtQ1
         num_remain_bits -= 1
@@ -542,6 +742,20 @@ def floor_kth_root_(k, n, /):
     [kth_root_(k,n) =[def]= n**(1/k)]
     [floor_kth_root_(k,n) =[def]= floor(kth_root_(k,n))]
     [floor_sqrt === floor_kth_root_<2>]
+
+    ######################
+    let [mmm:=min{k*log2(k), log2(n)}]
+    let [lbN:=log2(n)][lblbN:=log2(log2(n))]
+    let [lbK:=log2(k)]
+    ######################
+    ~ O(mmm**3 /k + (lbN -mmm)**2)
+    ######################
+    ~ [0 <= lbN < k]:O(1)
+    ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
+    ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
+    ~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
+    ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+    ######################
 
     [k>=1][n>=0]
 [k>=2][e>=1][n>=1]:
@@ -1031,6 +1245,45 @@ def floor_kth_root_(k, n, /):
     assert fKrtN**k <= n < (fKrtN+1)**k
     return fKrtN
 def _floor_kth_root__impl_(k, n, /):
+    r'''[[[
+    ######################
+    let [mmm:=min{k*log2(k), log2(n)}]
+    let [lbN:=log2(n)][lblbN:=log2(log2(n))]
+    ~ O(mmm**3 /k + (lbN -mmm)**2)
+    ~ worst[k==lbN/lblbN]:O(lbN**2 *lblbN)
+    ######################
+    ######################
+    ######################
+    ######################
+    ######################
+    ######################
+    #xxx '...+O(log2(n)**2)'
+    '...+O(1/k * min{k*log2(k), log2(n)}**3)'
+        'or:  ...+O(log2(n)**2 *log2(log2(n)))'
+    '...+O((log2(n) -min{k*log2(k), log2(n)})**2)'
+    ######################
+    let [mmm:=min{k*log2(k), log2(n)}]
+    #xxx total ~= O(log2(n)**2 + (1/k * mmm**3) + ((log2(n) -mmm)**2))
+    total ~= O((1/k * mmm**3) + ((log2(n) -mmm)**2))
+
+    let [lbN:=log2(n)]
+    ~ O(mmm**3 /k + (lbN -mmm)**2)
+
+    let [lblbN:=log2(log2(n))]
+    let [lbK:=log2(k)]
+    !! [max(mmm**3 /k) == (mmm**3 /k){k:=lbN/lblbN} == (lbN**2*lblbN)]
+    ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
+    ######################
+    ~ [0 <= lbN < k]:O(1)
+    ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
+    ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
+    ~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
+    ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+    ######################
+
+
+
+    #]]]'''
     assert k >= 1
     assert n >= 0
     if k == 1 or n < 2:
@@ -1041,18 +1294,28 @@ def _floor_kth_root__impl_(k, n, /):
     if flbN < k:
         return 1
     # [n >= 2**k]
+    # [n**(1/k) >= 2]
+    # [2 <= k <= log2(n)]
 
 
     # [k >= 2][n >= 2**k >= 4]
     floor_log2_fKrtN = floor_log2_kth_root_(k, n)
     assert floor_log2_fKrtN >= 1
-    fKrtN = 1<<floor_log2_fKrtN
-    if n < (fKrtN^1)**k:
-        return fKrtN
-    fKrtN = (1<<(floor_log2_fKrtN+1))-1
-    if fKrtN**k <= n:
-        return fKrtN
-    del fKrtN
+    if 0:
+        fKrtN = 1<<floor_log2_fKrtN
+        # [fKrtN == 2**floor_log2_fKrtN >= 2]
+        # [fKrtN^1 == fKrtN+1]
+        if n < (fKrtN^1)**k:
+            return fKrtN
+        # EVAL((fKrtN^1)**k)
+        # ~ O(sum (2**i*(log2(n)/k))**2 {i :<- [0..=log2(k)]})
+        # ~ O(log2(n)**2)
+        '...+O(log2(n)**2)'
+        fKrtN = (1<<(floor_log2_fKrtN+1))-1
+        if fKrtN**k <= n:
+            return fKrtN
+        del fKrtN
+        '...+O(log2(n)**2)'
 
     r'''[[[
     [[e <= max_e(k;flbN)] -> [dd <- {D//lower_D_dd,D//lower_D_dd-1}]]
@@ -1074,8 +1337,34 @@ def _floor_kth_root__impl_(k, n, /):
 
     #for floor_log2_partial_lead_bits4fKrtN, (partial_lead_bits4fKrtN, num_remain_bits) in enumerate(_iter_partial_floor_kth_root__bisearch_(k, n)):
     for floor_log2_fKrtQ, (fKrtQ, num_remain_bits) in enumerate(_iter_partial_floor_kth_root__bisearch_(k, n)):
+        # ~O(k**2 * (loop-round-idx)**2)
+        # ~O(k**2 * floor_log2_fKrtQ**2)
         if floor_log2_fKrtQ == min_floor_log2_fKrtQ:
             break
+    # O(for-loop)
+    # * [num_remain_bits =!= 0]:
+    #   # [floor_log2_fKrtQ == min_floor_log2_fKrtQ < floor_log2_fKrtN]
+    #   # ~O(sum k**2 * floor_log2_fKrtQ**2 {floor_log2_fKrtQ :<- [1..=min_floor_log2_fKrtQ]})
+    #   # ~O(k**2 * min_floor_log2_fKrtQ**3)
+    #   # ~O(k**2 * log2(k)**3)
+    #   #   # !! [min_floor_log2_fKrtQ < floor_log2_fKrtN]
+    #   #   # [log2(k) < log2(n)/k]
+    #   #   # [k*log2(k) < log2(n)]
+    #   #   # ~<=O(log2(k) * log2(n)**2)
+    #   #   #    # bisearch，效率确实低
+    #   # ~O(1/k * (k*log2(k))**3)
+    # * [num_remain_bits == 0]:
+    #   # [floor_log2_fKrtQ == floor_log2_fKrtN <= min_floor_log2_fKrtQ]
+    #   # ~O(sum k**2 * floor_log2_fKrtQ**2 {floor_log2_fKrtQ :<- [1..=floor_log2_fKrtN]})
+    #   # ~O(k**2 * floor_log2_fKrtN**3)
+    #   # ~O(k**2 * (log2(n)/k)**3)
+    #   # ~O(1/k * log2(n)**3)
+    '...+O(1/k * min{k*log2(k), log2(n)}**3)'
+    'or:  ...+O(log2(n)**2 *log2(log2(n)))'
+        # [k*log2(k) == log2(n)] -> [k ~= log2(n)/log2(log2(n))]
+        #   O((lbN/lblbN)**2 * lblbN**3)
+        #   O(lbN**2 * lblbN)
+    # [2 <= k <= log2(n)]
     assert floor_log2_fKrtQ == floor_log2(fKrtQ)
     assert floor_log2_fKrtN == floor_log2_fKrtQ+num_remain_bits
     pow_fKrtQ_k = fKrtQ**k
@@ -1096,6 +1385,8 @@ def _floor_kth_root__impl_(k, n, /):
         E_fKrtQ = (fKrtQ<<e)
         pow_EfKrtQ_k = pow_fKrtQ_k << k_e
         pow_1EfKrtQ_k = (E_fKrtQ^1)**k
+            # EVAL(pow_1EfKrtQ_k) ~ EVAL(pow_fKrtN__k)
+            # 计算量等价合并
         D = n_ -pow_EfKrtQ_k
         lower_D_dd = pow_1EfKrtQ_k -pow_EfKrtQ_k
         dd = D//lower_D_dd
@@ -1105,6 +1396,15 @@ def _floor_kth_root__impl_(k, n, /):
 
         fKrtN_ = E_fKrtQ^dd_
         pow_fKrtN__k = fKrtN_**k
+            # ~O(last-square)
+            # ~O(log2(fKrtN_**k)**2)
+            # ~O(k**2 * log2(fKrtN_)**2)
+            # ~O(k**2 * log2(E_fKrtQ)**2)
+            # ~O(k**2 * log2(2**e*fKrtQ)**2)
+            # ~O(k**2 * (e+log2(fKrtQ))**2)
+            # ~O(k**2 * (floor_log2_fKrtQ*2-t)**2)
+            # ~O(k**2 * (floor_log2_fKrtQ*2-log2(k))**2)
+            # ~O(k**2 * floor_log2_fKrtQ**2)
         if n_ < pow_fKrtN__k:
             assert 1 <= dd_==dd < E
             fKrtN_ -= 1
@@ -1117,6 +1417,20 @@ def _floor_kth_root__impl_(k, n, /):
         pow_fKrtQ_k = pow_fKrtN__k
         floor_log2_fKrtQ += e
     fKrtN = fKrtQ
+    # [ttrn := total rounds]
+    # * [floor_log2_fKrtN > t]:
+    #   # [floor_log2_fKrtN -t == sum e<i> {i :<- [0..<ttrn]} == e<0> * sum 2**i {i :<- [0..<ttrn-1]} + e<-1> >= 2**(ttrn-1)]
+    #   # [ttrn <= log2(floor_log2_fKrtN -t)]
+    #   # [ttrn ~= log2(log2(n)/k -log(k))]
+    #   # O(loop) ~ O(sum (k**2 * floor_log2_fKrtQ**2) {i :<- [0..<ttrn]})
+    #   # ~ O(sum (k**2 * (t+2**i)**2) {i :<- [0..<ttrn]})
+    #   # ~ O(k**2 * (2**ttrn)**2)
+    #   # ~ O(k**2 * (log2(n)/k -log(k))**2)
+    #   # ~ O((log2(n) -k*log(k))**2)
+    # * [floor_log2_fKrtN <= t]:
+    #   # [ttrn == 0]
+    '...+O(max{0,log2(n) -k*log(k)}**2)'
+    'or:  ...+O((log2(n) -min{k*log2(k), log2(n)})**2)'
     return fKrtN
 
 def floor_lshift_kth_root_(e, k, n, /):
@@ -1427,7 +1741,8 @@ floor_lshift_log2_
     if 0:
         return floor_log2_pow(n, 2**k)
 
-def _(t, /):
+r'''[[[
+def _mk__floor_lshift_log2_(t, /):
   @recur5yield__list__echo__echo
   def floor_lshift_log2_(k, n, /):
     assert k >= 0
@@ -1475,9 +1790,10 @@ def _(t, /):
 
     return True, r;yield
   return floor_lshift_log2_
-if 0:floor_lshift_log2_ = _()
+if 0:floor_lshift_log2_ = _mk__floor_lshift_log2_()
     #还是太慢
-#_floor_lshift_log2__via_even_odd_ = _()
+#_floor_lshift_log2__via_even_odd_ = _mk__floor_lshift_log2_()
+#]]]'''#'''
 
 
 
@@ -1926,34 +2242,44 @@ def _t2__floor_log_():
             floor_log_(B, 7**e)
     floor_log_(3, 7**2_0000)
 
+
+from seed.math.floor_ceil import *
 ___begin_mark_of_excluded_global_names__1___ = ...
-if 0 and __name__ == "__main__":
-    _t2__floor_log_()
-    _t1__floor_log_()
-    #raise #0b01 #0b00
-if 0 and __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+def __():
+    if 0 and __name__ == "__main__":
+        _t2__floor_log_()
+        _t1__floor_log_()
+        #raise #0b01 #0b00
+    if 0 and __name__ == "__main__":
+        import doctest
+        doctest.testmod()
 
 
-if 0 and __name__ == "__main__":
-    assert (1<<1000_000) < float('inf')
-    #print(_1_floor_log_.__doc__)
+    if 0 and __name__ == "__main__":
+        assert (1<<1000_000) < float('inf')
+        #print(_1_floor_log_.__doc__)
 
 #if __name__ == "__main__":
 if 1:
-    import unittest
-    import doctest
+    def __():
+        #move into load_tests() body
+        #   see: timer()
+        import unittest
+        import doctest
     def load_tests(loader, tests, ignore):
+        import doctest
         tests.addTests(doctest.DocTestSuite(__name__))
         return tests
     #考虑使用unittest+doctest
 
 
-if __name__ == "__main__":
-    from seed.recognize.cmdline.adhoc_argparser import adhoc_argparser__main__call, AdhocArgParserError, _NOP_
-    adhoc_argparser__main__call(globals(), None)
-        #main()
+def __():
+    if __name__ == "__main__":
+        from seed.recognize.cmdline.adhoc_argparser import adhoc_argparser__main__call, AdhocArgParserError, _NOP_
+        adhoc_argparser__main__call(globals(), None)
+            #main()
 ___end_mark_of_excluded_global_names__1___ = ...
 
 
+
+from seed.math.floor_ceil import *

@@ -4,6 +4,8 @@ seed.tiny_.dict__add_fmap_filter
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, dict_add__new, group4dict_value
 from seed.tiny_.dict__add_fmap_filter import fmap4dict_value_with_key, filter4dict_value_with_key, group4dict_value_with_key, filter4dict_item, group4dict_item
 
+from seed.tiny_.dict__add_fmap_filter import filter4dict_key, group4dict_key
+
 see:
     from seed.mapping_tools.dict_op import inv__k2v_to_v2k, inv__k2v_to_v2ks, inv__k2vs_to_v2k, inv__k2vs_to_v2ks
 
@@ -21,6 +23,9 @@ __all__ = '''
     group4dict_value_with_key
         filter4dict_item
         group4dict_item
+
+    filter4dict_key
+    group4dict_key
 
     dict_add__is
     dict_add__eq
@@ -101,3 +106,25 @@ def filter4dict_value_with_key(f, d, /):
     return {k:v for k, v in d.items() if f(k,v)}
 filter4dict_item = filter4dict_value_with_key
 
+
+
+
+def filter4dict_key(f, d, /):
+    return {k:v for k, v in d.items() if f(k)}
+assert filter4dict_value(bool, {0: 1, 1: 0}) == {0: 1}
+assert filter4dict_key(bool, {0: 1, 1: 0}) == {1: 0}
+
+
+def group4dict_key(f, d, /):
+    #partition4dict_key??
+    g2k2v = group2part = {}
+    for k, v in d.items():
+        g = f(k)
+        k2v = g2k2v.setdefault(g, {})
+        k2v[k] = v
+    return g2k2v
+assert group4dict_key(len, {'':0, '1':1, ():0, '22':2}) == {0:{'':0, ():0}, 1:{'1':1}, 2:{'22':2}}
+
+
+
+from seed.tiny_.dict__add_fmap_filter import *

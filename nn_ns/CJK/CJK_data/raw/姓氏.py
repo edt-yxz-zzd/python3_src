@@ -3,6 +3,9 @@ r'''[[[
 e ../../python3_src/nn_ns/CJK/CJK_data/raw/姓氏.py
 see:
     view script/字词典囗姓氏提取囗.py
+    view script/字词典囗姓氏提取囗二囗.py
+        cedict_1_0_ts.u8
+        view ../../../unzip/e_book/字词典/\[Chinese-English\ dictionary]cedict_1_0_ts.u8
 
 
 nn_ns.CJK.CJK_data.raw.姓氏
@@ -170,6 +173,9 @@ from itertools import combinations
 _nms4skip = set('''
 __init__.py
 __main__.py
+script.姓氏收集囗..百家姓囗囗简繁对照.out.txt
+script.姓氏收集囗..四百大姓囗二零一三年.out.txt
+script.字词典囗姓氏提取囗二囗..grep.surname.-i..cedict_1_0_ts..中英词典囗姓氏囗繁简对照囗带拼音囗囗文本.out.txt
 '''.split())#'''
 _pkg = f'{__package__}.姓氏汇总'
 def __(pkg, nms4skip, /):

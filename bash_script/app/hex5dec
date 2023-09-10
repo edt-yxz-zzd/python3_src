@@ -1,0 +1,1 @@
+for uuu ; do printf $'0x%X\n' "$uuu" ; done

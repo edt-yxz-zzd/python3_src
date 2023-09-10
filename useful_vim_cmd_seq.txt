@@ -7,6 +7,17 @@ section:
 
 
 
+[[ section: doctest删去其余只留输出
+********
+Line xxx, in xxx file
+Failed example:
+    ...
+Expected nothing
+Got:
+    ...
+
+.+1,.+55s/\*\+\([^*]\|\n\)*Got:\n *//
+]]
 
 
 

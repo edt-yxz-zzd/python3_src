@@ -1,3 +1,10 @@
+r'''[[[
+bad naming:
+    dfs
+      --> depth-first graph traversal
+
+
+#]]]'''#'''
 
 __all__ = '''
     dfs
@@ -5,8 +12,7 @@ __all__ = '''
     EXIT
     BACK
     CROSS_OR_FORWARD
-    
-'''.split()
+'''.split()#'''
 
 
 
@@ -14,7 +20,7 @@ __all__ = '''
 from seed.cases.ENUM import ENTER, EXIT, BACK, CROSS_OR_FORWARD
 
 def dfs(g, roots=None):
-    '''yield (Case, Path)
+    r'''yield (Case, Path)
 
 output iterator about (Case, Path):
     Case = ENTER | EXIT | BACK | CROSS_OR_FORWARD
@@ -32,14 +38,14 @@ output iterator about (Case, Path):
 input:
     graph g requirements:
         .iter_vertices()
-        .make_vertex_map()
+        .make_vertex_mapping()
         .iter_neighbors(v)
     roots:
         default = g.iter_vertices()
         if provided:
             only descendants of roots will be visited
-        
-'''
+
+'''#'''
     if roots is None:
         roots = g.iter_vertices()
 
@@ -47,10 +53,10 @@ input:
     #    unvisited : v not in processed
     #    visiting  : processed2is_ancestor[v]
     #    visited   : not processed2is_ancestor[v]
-    processed = processed2is_ancestor = g.make_vertex_map()
+    processed = processed2is_ancestor = g.make_vertex_mapping()
     stack = [] # stack of remain neighors
     path = ()  # output leftward list, (me, ...(root, ()))
-    
+
     def enter(v):
         nonlocal path
         if v in processed2is_ancestor:
@@ -64,11 +70,11 @@ input:
         v, path = path
         processed2is_ancestor[v] = False
 
-        
+
     for root in roots:
         if root in processed:
             continue
-        
+
         enter(root) # enter before yield
         yield ENTER, path
         while stack:
@@ -78,7 +84,7 @@ input:
                 yield EXIT, path
                 exit() # exit after yield
                 continue
-            
+
             if v not in processed:
                 enter(v)
                 yield ENTER, path
@@ -101,6 +107,8 @@ input:
 
 
 
+from seed.graph.dfs import dfs, ENTER, EXIT, BACK, CROSS_OR_FORWARD
+from seed.graph.dfs import *
 
 
 

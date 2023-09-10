@@ -82,12 +82,22 @@ exclude_attrs_ex = (__() - {'__slots__'}) | {*r'''
     '''.split()#'''
     }
 
-def wrapped_print_methods(XXX, fout=None
-    , *, exclude_bases=None, exclude_attrs=None, exclude=None):
-    '''
+if 0:
+    def wrapped_print_methods(XXX, fout=None
+        , *, exclude_bases=None, exclude_attrs=None, exclude=None):
+        if not isinstance(XXX, type):
+            XXXs = iter(XXX)
+        else:
+            XXXs = [XXX]
+def wrapped_print_methods(*XXXs, fout=None
+    , exclude_bases=None, exclude_attrs=None, exclude_prefixes=None, exclude=None):
+    # __doc__ SHOULD NOT BE f''
+    #   see below: [wrapped_print_methods.__doc__ := .format(...)]
+    r'''
 exclude_bases += {exclude_bases_ex}
 exclude_attrs += {exclude_attrs_ex}
-'''
+exclude_prefixes += []
+'''#'''
 
     if exclude_bases is None:
         exclude_bases = exclude_bases_ex
@@ -98,9 +108,12 @@ exclude_attrs += {exclude_attrs_ex}
     else:
         exclude_attrs = chain(exclude_attrs, exclude_attrs_ex)
 
-    print_methods(XXX, fout=fout
+    for XXX in XXXs:
+        print(f'>>>>>{XXX!r}<<<<<', file=fout)
+        print_methods(XXX, fout=fout
                 , exclude_bases=exclude_bases
                 , exclude_attrs=exclude_attrs
+                , exclude_prefixes=exclude_prefixes
                 , exclude=exclude)
     return
 wrapped_print_methods.__doc__ = wrapped_print_methods.__doc__.format(
@@ -108,7 +121,7 @@ wrapped_print_methods.__doc__ = wrapped_print_methods.__doc__.format(
         , exclude_attrs_ex=exclude_attrs_ex)
 
 def print_methods(XXX, fout=None
-    , *, exclude_bases=None, exclude_attrs=None, exclude=None):
+    , *, exclude_bases=None, exclude_attrs=None, exclude_prefixes=None, exclude=None):
     '''
 
 input:
@@ -116,6 +129,7 @@ input:
     fout :: None | ostream
     exclude_bases :: None | Iter type
     exclude_attrs :: None | Iter str
+    exclude_prefixes :: None | Iter str
     exclude :: None | (str -> bool)
         exclude attr?
 
@@ -210,8 +224,10 @@ example:
     assert isinstance(XXX, type)
     exclude_bases = () if exclude_bases is None else tuple(exclude_bases)
     exclude_attrs = () if exclude_attrs is None else frozenset(exclude_attrs)
+    exclude_prefixes = () if exclude_prefixes is None else frozenset(exclude_prefixes)
     assert all(isinstance(base, type) for base in exclude_bases)
     assert all(isinstance(attr, str) for attr in exclude_attrs)
+    assert all(isinstance(prefix, str) for prefix in exclude_prefixes)
 
     # exclude :: None | (attr -> bool)
     if exclude is None:
@@ -235,6 +251,8 @@ example:
         if exclude(attr):
             return False
         if attr in exclude_attrs:
+            return False
+        if any(attr.startswith(prefix) for prefix in exclude_prefixes):
             return False
 
         obj = getattr(XXX, attr)
