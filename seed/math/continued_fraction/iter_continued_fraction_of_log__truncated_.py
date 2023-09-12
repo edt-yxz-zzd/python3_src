@@ -683,8 +683,33 @@ found bug:『default_num_bits4k = 1<<32』huge!!
 
 ######################
 test rational result
->>> [*iter_continued_fraction_of_irrational_log_Fraction_(3,2,27,8)]
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(3,2,27,8)] #2 cancelled by k=2**num_bits4k, this test is useless
 [3]
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(7,3,7**3,3**3)]
+[3]
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(7,3,7**3,3**3, to_detect_rational_result_when_troubleshooting=False)]
+Traceback (most recent call last):
+    ...
+seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_.Error__continued_fraction_of_log__result_is_probably_rational: (7, 3, 343, 27)
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(12**6,7**6,12**10,7**10)]
+[1, 1, 2]
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(27*12**6,27*7**6,27*12**10,27*7**10)]
+[1, 1, 2]
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(4,2,8,1)]
+[3]
+
+######################
+test rational result:gcd on exp
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(17*625**13,17*81**13,19*625**21,19*81**21)]
+[1, 1, 1, 1, 1, 2]
+
+######################
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(4,4,2,1)]
+[]
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(4,4,1,1)]
+[]
+>>> [*iter_continued_fraction_of_irrational_log_Fraction_(5,4,1,1)]
+[0]
 
 ######################
 test iter_num_bits4k: no duplicate output between switch k
@@ -709,6 +734,63 @@ test default_num_bits4k : expect 10 cf_digit
 
 ######################
 ######################
+>>> [*iter_continued_fraction_of_irrational_ln_Fraction_(2, 1, iter_num_bits4k=[64])]
+[0, 1, 2, 3, 1, 6, 3, 1, 1, 2, 1, 1, 1, 1, 3, 10, 1, 1, 1, 2, 1, 1, 1, 1, 3, 2, 3, 1]
+
+[[
+view ../../python3_src/nn_ns/math_nn/numbers/A016730-continued_fraction_for_ln_2__fst_20000.txt
+
+1 0
+2 1
+3 2
+4 3
+5 1
+6 6
+7 3
+8 1
+9 1
+10 2
+11 1
+12 1
+13 1
+14 1
+15 3
+16 10
+17 1
+18 1
+19 1
+20 2
+21 1
+22 1
+23 1
+24 1
+25 3
+26 2
+27 3
+28 1
+29 13
+]]
+
+
+######################
+>>> (ln2 := cf_ln_(2))
+ContinuedFraction(LazyList([<...>]))
+>>> ln2[:30]
+(0, 1, 2, 3, 1, 6, 3, 1, 1, 2, 1, 1, 1, 1, 3, 10, 1, 1, 1, 2, 1, 1, 1, 1, 3, 2, 3, 1, 13, 7)
+>>> ln2
+ContinuedFraction(LazyList([0, 1, 2, 3, 1, 6, 3, 1, 1, 2, 1, 1, 1, 1, 3, 10, 1, 1, 1, 2, 1, 1, 1, 1, 3, 2, 3, 1, 13, 7, <...>]))
+>>> (ln_inv2 := cf_ln_((1,2)))
+ContinuedFraction(LazyList([-1, 3, <...>]))
+>>> ln_inv2[:30]
+(-1, 3, 3, 1, 6, 3, 1, 1, 2, 1, 1, 1, 1, 3, 10, 1, 1, 1, 2, 1, 1, 1, 1, 3, 2, 3, 1, 13, 7, 4)
+>>> (cf := cf_log_((1,4), (9*8, 9)))
+ContinuedFraction(LazyList([-2, 1, 1, <...>]))
+>>> cf[:10]
+(-2, 1, 1)
+>>> cf
+ContinuedFraction(LazyList([-2, 1, 1]))
+
+######################
 ######################
 ######################
 #]]]'''
@@ -717,8 +799,8 @@ __all__ = r'''
 iter_continued_fraction_of_log_Fraction__truncated_
     iter_continued_fraction_of_log__truncated_
     iter_continued_fraction_of_irrational_log_Fraction_
-        upperbound4num_bits4k
-        upperbound4failure_num_bits4k
+        default_upperbound4num_bits4k
+        default_upperbound4failure_num_bits4k
         mk_default_iter_num_bits4k
             default_num_bits4k
             default_grow_rateND4num_bits4k
@@ -727,27 +809,95 @@ iter_xbound_continued_fraction_of_log_
     dfloor_log_ex_
     ufloor_log_ex_
 
+detect_rational_log__pint_
+    detect_rational_log__Fraction_
+
 BaseError__continued_fraction_of_log
+    Error__log__base_eq_1
     Error__continued_fraction_of_log__result_is_probably_rational
     Error__continued_fraction_of_log__num_bits4k_too_big
 
+
+
+iter_continued_fraction_of_log_Fraction_interval__truncated_
+    iter_continued_fraction_of_irrational_log_cf_
+        iter_continued_fraction_of_irrational_ln_cf_
+            iter_continued_fraction_of_irrational_ln_Fraction_
+
+
+cf_log_
+    convert_to_ContinuedFraction_
+    cf_ln_
+    cf_log2_
+
 '''.split()#'''
+__all__
+from seed.math.floor_ceil import perfect_div, perfect_kth_root_, NotPerfectError__kth_root
+from seed.math.floor_ceil import floor_div, ceil_div
+from seed.math.floor_ceil import floor_log2, ceil_log2
+from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+from seed.math.gcd import gcd_ex, gcd
+from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+from seed.tiny_.iter_stop_with_ import iter_stop_with_, GetStopIterationValue
+from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction_
+from seed.types.LazyList import LazyList
+from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import raw_iter_cf_digits4e_the_natural_logarithm_base_
+from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction, cf_0, cf_1, cf_neg1
+from seed.tiny import is_iterator
+
+from itertools import islice
+from numbers import Rational
 
 
 def __():
     # API:here
+    ######################
     iter_continued_fraction_of_log_Fraction__truncated_
-        # finite truncated correct cf_digits
-        # input are Fraction
+        # input: fraction/(N,D)
+        # output: finite truncated correct cf_digits
     iter_continued_fraction_of_log__truncated_
-        # finite truncated correct cf_digits
-        # input are ints
+        # input: int
+        # others see:above
+    iter_continued_fraction_of_log_Fraction_interval__truncated_
+        # input: fraction_interval/(N4min,D4min,N4max,D4max)
+        # others see:above
+    ######################
+
+    detect_rational_log__pint_
+    detect_rational_log__Fraction_
+
+
+    ######################
     iter_continued_fraction_of_irrational_log_Fraction_
-        # infinite non-truncated correct cf_digits
+        # input: fraction/(N,D)
+        # output: infinite non-truncated correct cf_digits
         #       # (if `kw:iter_num_bits4k` infinite and result is irrational)
-        # input are Fraction
         # but when use bigger k to avoid truncate, it will regenerate all output, time consuming
         #
+    iter_continued_fraction_of_irrational_log_cf_
+        # input: continued_fraction/Iter int{>=1}
+        # others see:above
+    iter_continued_fraction_of_irrational_ln_cf_
+        # input: continued_fraction/Iter int{>=1}
+        # base is e--the_natural_logarithm_base
+        # others see:above
+    iter_continued_fraction_of_irrational_ln_Fraction_
+        # input: fraction/(N,D)
+        # base is e--the_natural_logarithm_base
+        # others see:above
+    ######################
+    cf_log_
+        # input: cf_like/(Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction)
+        # output: ContinuedFraction
+        # diff iter_continued_fraction_of_irrational_log_cf_: allow:[0<base<1][0<y<1] but forbid:[base==1]
+        # others see:iter_continued_fraction_of_irrational_log_cf_
+    cf_ln_
+        # base is e--the_natural_logarithm_base
+        # others see:above
+    cf_log2_
+        # base is 2
+        # others see:above
+
     def iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, N4base, D4base, N4y, D4y, /):
         r'''[[[
     param4memory_consume -> N4base/int{>=1} -> D4base/int{>=1,<=N4base} -> N4y/int{>=1} -> D4y/int{>=1,<=N4y} -> cf/iter continued_fraction_of_log_(base; y)[:?]
@@ -756,10 +906,11 @@ def __():
     [y == N4y/D4y]
 
     [[base==1] -> [cf == []/+oo]]
-    StopIteration(sign_of(len lcf - len gcf))
-        if StopIteration.value == 0:
+    StopIteration((emay_sign, emay lcf_digit, emay gcf_digit))
+        if emay_sign == 0:
             [lcf == cf == gcf]
 
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
     [lcf <= cf <= gcf]
     [cf == log_(base;y)]
 
@@ -769,10 +920,11 @@ def __():
     param4memory_consume -> base/int{>=1} -> y/int{>=1} -> cf/iter continued_fraction_of_log_(base; y)[:?]
 
     [[base==1] -> [cf == []/+oo]]
-    StopIteration(sign_of(len lcf - len gcf))
-        if StopIteration.value == 0:
+    StopIteration((emay_sign, emay lcf_digit, emay gcf_digit))
+        if emay_sign == 0:
             [lcf == cf == gcf]
 
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
     [lcf <= cf <= gcf]
     [cf == log_(base;y)]
 
@@ -785,16 +937,95 @@ def __():
     [y == N4y/D4y]
 
     [[base==1] -> [cf == []/+oo]]
-    StopIteration(may sign_of(len lcf - len gcf)) #(None|+1|-1|0)
-        # None if no k
-        if StopIteration.value == 0:
+    StopIteration(emay (emay_sign, emay lcf_digit, emay gcf_digit))
+        ... if no k
+        if emay_sign == 0:
             [lcf == cf == gcf]
 
-
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
     [lcf <= cf <= gcf]
     [cf == log_(base;y)]
 
     #]]]'''#'''
+
+    ######################
+
+    def iter_continued_fraction_of_log_Fraction_interval__truncated_(param4memory_consume, N4min_base, D4min_base, N4max_base, D4max_base, N4min_y, D4min_y, N4max_y, D4max_y, /):
+        r'''[[[
+        param4memory_consume -> N4min_base/int{>=1} -> D4min_base/int{>=1,<=N4min_base} -> N4max_base/int{>=1} -> D4max_base/int{>=1,<=N4max_base} -> N4min_y/int{>=1} -> D4min_y/int{>=1,<=N4min_y} -> N4max_y/int{>=1} -> D4max_y/int{>=1,<=N4max_y} -> cf/iter continued_fraction_of_log_(base; y)[:?]
+
+        [N4min_base/D4min_base == min_base <= base <= max_base == N4max_base/D4max_base]
+        [N4min_y/D4min_y == min_y <= y <= max_y == N4max_y/D4max_y]
+
+        [[base==1] -> [cf == []/+oo]]
+        StopIteration((emay_sign, emay lcf_digit, emay gcf_digit))
+            if emay_sign == 0:
+                [lcf == cf == gcf]
+
+        [emay_sign == ...|sign_of(len lcf - len gcf)]
+        [lcf <= cf <= gcf]
+        [cf == log_(base;y)]
+
+        #]]]'''#'''
+
+    ######################
+    def detect_rational_log__pint_(n0, n1, /):
+        '-> ...|(g,en,ed) |^Error__log__base_eq_1 # [n0**(en/ed) == n1][g**ed == n0][g**en == n1][gcd(en,ed) == 1]'
+    def detect_rational_log__Fraction_(n0, d0, n1, d1, /):
+        '-> ...|(g0,g1,gn,gd,en,ed) |^Error__log__base_eq_1 # [(n0/d0)**(en/ed) == (n1/d1)][(gn/gd)**ed == n0/d0][(gn/gd)**en == n1/d1][gcd(en,ed) == 1][gcd(gn,gd) >= 1][gn**ed *g0 == n0][gd**ed *g0 == d0][gn**en *g1 == n1][gd**en *g1 == d1]'
+    ######################
+    def iter_continued_fraction_of_irrational_log_cf_(cf_digits4base, cf_digits4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
+        r'''[[[
+        cf_digits4base/Iter int{>=1} -> cf_digits4y/Iter int{>=1} -> (iter_num_bits4k/(Iter param4memory_consume)=None) -> cf/iter continued_fraction_of_log_(base; y)[:?depends on iter_num_bits4k?]
+
+        [base == cf_(cf_digits4base)]
+        [y == cf_(cf_digits4y)]
+
+        [base >= 1]
+        [y >= 1]
+
+        [[base==1] -> [cf == []/+oo]]
+        StopIteration(emay (emay_sign, emay lcf_digit, emay gcf_digit))
+            ... if no k
+            if emay_sign == 0:
+                [lcf == cf == gcf]
+
+        [emay_sign == ...|sign_of(len lcf - len gcf)]
+        [lcf <= cf <= gcf]
+        [cf == log_(base;y)]
+
+        #]]]'''#'''
+    def iter_continued_fraction_of_irrational_ln_cf_(cf_digits4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
+        'see:iter_continued_fraction_of_irrational_log_cf_<base=the_natural_logarithm_base>'
+    def iter_continued_fraction_of_irrational_ln_Fraction_(N4y, D4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
+        'see:iter_continued_fraction_of_irrational_log_cf_<base=the_natural_logarithm_base;y=(N4y/D4y)>'
+
+
+
+    ######################
+    def convert_to_ContinuedFraction_(rational_or_pair_or_list_or_iterator, /):
+        'cf_like/(Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction) -> cf/ContinuedFraction'
+    def cf_log_(base, y, /, **kwds):
+        r'''[[[
+        :: base/cf_like -> y/cf_like -> cf/ContinuedFraction
+
+
+        [cf_like = (Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction)]
+        [base > 0]
+        [base =!= 1]
+        [y > 0]
+        [cf == log_(base;y)]
+        #ContinuedFraction no support: xxx: [[base==1] -> [cf == []/+oo]]
+        # diff iter_continued_fraction_of_irrational_log_cf_: allow:[0<base<1][0<y<1] but forbid:[base==1]
+        # others see:iter_continued_fraction_of_irrational_log_cf_
+
+        #]]]'''#'''
+    def cf_ln_(y, /, **kwds):
+        'see:cf_log_'
+    def cf_log2_(y, /, **kwds):
+        'see:cf_log_'
+
+    ######################
 
 
 def __():
@@ -806,16 +1037,69 @@ def __():
             raise 000
     return _raise_
 if 0b00:
-    _raise_ = _()
+    _raise_ = __()
 else:
     def _raise_():
         pass
 
 
-def dfloor_log_ex_(k, kb, ky, /):
+def _mk__may_num_bits4k_(k, /):
+    flb_k = floor_log2(k)
+    if k == (1<<flb_k):
+        num_bits4k = flb_k
+        may_num_bits4k = num_bits4k
+    else:
+        may_num_bits4k = None
+    return may_num_bits4k
+
+def _mk__mul_k_(k, kb, ky, may_num_bits4k, /):
+    #assert type(k_or_num_bits4k) is int
+    #assert type(mul_vs_lshift) is bool
+    mul_vs_lshift = not may_num_bits4k is None
+    if mul_vs_lshift is True:
+        #lshift
+        #num_bits4k = k_or_num_bits4k
+        #k = 1 << num_bits4k
+        num_bits4k = may_num_bits4k
+        assert k == 1 << num_bits4k
+        #assert 0 <= num_bits4k
+        #assert num_bits4k < ceil_log2(kb)
+        #assert num_bits4k <= floor_log2(ky)
+        # [1 == 2**0 <= 2**num_bits4k]
+        # [2**num_bits4k <= 2**(ceil_log2(kb)-1) < kb <= 2**ceil_log2(kb)]
+        # [2**num_bits4k <= 2**floor_log2(ky) <= ky < 2**(floor_log2(ky)+1)]
+        # [k := 2**num_bits4k]
+        # [1 <= k]
+        # [k < kb]
+        # [k <= ky]
+        if 0:
+            def mul_k_(x, /):
+                return x << num_bits4k
+        mul_k_ = num_bits4k.__rlshift__
+    else:
+        #mul
+        #k = k_or_num_bits4k
+        k
+        #assert 1 <= k
+        #assert k < kb
+        #assert k <= ky
+        # [1 <= k]
+        # [k < kb]
+        # [k <= ky]
+        if 0:
+            def mul_k_(x, /):
+                return k*x
+        mul_k_ = k.__mul__
     assert 1 <= k
     assert k < kb
     assert k <= ky
+    # [1 <= k]
+    # [k < kb]
+    # [k <= ky]
+    return k, mul_k_
+def dfloor_log_ex_(k, kb, ky, /, *, may_num_bits4k):
+    k, mul_k_ = _mk__mul_k_(k, kb, ky, may_num_bits4k)
+    # [1 <= k]
     # [k < kb]
     # [k <= ky]
     e = 0
@@ -825,8 +1109,9 @@ def dfloor_log_ex_(k, kb, ky, /):
         # [k < k*kb <= k*ky]
         # [k <= k*ky/kb]
         # [k <= k*ky//kb]
-        new_ky = (k*ky)//kb
-        assert new_ky < ky, (new_ky, ky, kb)
+        new_ky = floor_div(mul_k_(ky), kb)
+        #new_ky = (k*ky)//kb
+        assert k <= new_ky < ky, (k, new_ky, ky, kb)
         ky = new_ky
         # [k <= ky]
         ######################
@@ -845,10 +1130,9 @@ def dfloor_log_ex_(k, kb, ky, /):
     return ky, e
 
 
-def ufloor_log_ex_(k, kb, ky, /):
-    assert 1 <= k
-    assert k < kb
-    assert k <= ky
+def ufloor_log_ex_(k, kb, ky, /, *, may_num_bits4k):
+    k, mul_k_ = _mk__mul_k_(k, kb, ky, may_num_bits4k)
+    # [1 <= k]
     # [k < kb]
     # [k <= ky]
     e = 0
@@ -858,8 +1142,9 @@ def ufloor_log_ex_(k, kb, ky, /):
         # [k < k*kb <= k*ky]
         # [k <= k*ky/kb]
         # [k <= ceil(k*ky/kb) == (k*ky-1)//kb +1]
-        new_ky = (k*ky-1)//kb +1
-        assert new_ky < ky, (new_ky, ky, kb)
+        new_ky = ceil_div(mul_k_(ky), kb)
+        #new_ky = (k*ky-1)//kb +1
+        assert k <= new_ky < ky, (k, new_ky, ky, kb)
         ky = new_ky
         # [k <= ky]
         ######################
@@ -890,22 +1175,24 @@ def iter_xbound_continued_fraction_of_log_(lower_vs_upper, k, kb, ky, /):
     assert 1 <= k
     assert k <= kb
     assert k <= ky
+    may_num_bits4k = _mk__may_num_bits4k_(k)
     fs = _fs
     while k < kb:
         _raise_()
-        _kb, cf_digit = fs[lower_vs_upper](k, kb, ky)
+        _kb, cf_digit = fs[lower_vs_upper](k, kb, ky, may_num_bits4k=may_num_bits4k)
         yield cf_digit
         kb, ky = _kb, kb
         lower_vs_upper = not lower_vs_upper
-def iter_continued_fraction_of_log__truncated_(param4memory_consume, base, y, /):
+def iter_continued_fraction_of_log__truncated_(param4memory_consume, base, y, /, *, to_detect_rational_result=False):
     r'''[[[
     param4memory_consume -> base/int{>=1} -> y/int{>=1} -> cf/iter continued_fraction_of_log_(base; y)[:?]
 
     [[base==1] -> [cf == []/+oo]]
-    StopIteration(sign_of(len lcf - len gcf))
-        if StopIteration.value == 0:
+    StopIteration((emay_sign, emay lcf_digit, emay gcf_digit))
+        if emay_sign == 0:
             [lcf == cf == gcf]
 
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
     [lcf <= cf <= gcf]
     [cf == log_(base;y)]
 
@@ -921,8 +1208,9 @@ def iter_continued_fraction_of_log__truncated_(param4memory_consume, base, y, /)
     assert k <= kb
     assert k <= ky
     if 1:
-        return iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, base, 1, y, 1)
+        return iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, base, 1, y, 1, to_detect_rational_result=to_detect_rational_result)
     else:
+        detect_rational_log__pint_
 
         lcf = iter_xbound_continued_fraction_of_log_(False, k, kb, ky)
         gcf = iter_xbound_continued_fraction_of_log_(True, k, kb, ky)
@@ -937,22 +1225,24 @@ def _zip(lcf, gcf, /):
         if a is ...:
             if b is ...:
                 # [lcf == cf == gcf]
-                return 0 # len lcf == len gcf
-            return -1 # len lcf < len gcf
+                return (0, a, b) # len lcf == len gcf
+            return (-1, a, b) # len lcf < len gcf
         if b is ...:
-            return +1 # len lcf > len gcf
+            return (+1, a, b) # len lcf > len gcf
 
         if a == b:
             yield a
         else:
             #truncate
+            return (..., a, b)
+                #^StopIteration
+            return ...
             break
 
-#null_iter = iter('')
+_null_iter = iter('')
 
 
-
-def iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, N4base, D4base, N4y, D4y, /):
+def iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, N4base, D4base, N4y, D4y, /, *, to_detect_rational_result=False):
     r'''[[[
     param4memory_consume -> N4base/int{>=1} -> D4base/int{>=1,<=N4base} -> N4y/int{>=1} -> D4y/int{>=1,<=N4y} -> cf/iter continued_fraction_of_log_(base; y)[:?]
 
@@ -960,10 +1250,11 @@ def iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, N4
     [y == N4y/D4y]
 
     [[base==1] -> [cf == []/+oo]]
-    StopIteration(sign_of(len lcf - len gcf))
-        if StopIteration.value == 0:
+    StopIteration((emay_sign, emay lcf_digit, emay gcf_digit))
+        if emay_sign == 0:
             [lcf == cf == gcf]
 
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
     [lcf <= cf <= gcf]
     [cf == log_(base;y)]
 
@@ -971,13 +1262,93 @@ def iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, N4
     assert 1 <= param4memory_consume
     assert 1 <= D4base <= N4base
     assert 1 <= D4y <= N4y
+    if N4base == D4base:
+        # [[base == 1] -> [cf==[]]] #+oo
+        return iter_stop_with_((0, ..., ...), _null_iter)
+    if N4y == D4y:
+        # [[base =!= 1] -> [y == 1] -> [cf==[0]]] #0
+        return iter_stop_with_((0, ..., ...), [0])
+    if to_detect_rational_result:
+        m = detect_rational_log__Fraction_(N4base, D4base, N4y, D4y)
+            # ^Error__log__base_eq_1
+        if not m is ...:
+            it = iter_continued_fraction_digits5ND_(*m[-2:])
+            #bug:return it
+            #    # StopIteration(???)!!!
+            return iter_stop_with_((0, ..., ...), it)
+
+    if 1:
+        return iter_continued_fraction_of_log_Fraction_interval__truncated_(param4memory_consume, N4base, D4base, N4base, D4base, N4y, D4y, N4y, D4y)
+    else:
+        k = param4memory_consume
+        gkb, r = divmod(k*N4base, D4base)
+        lkb = gkb +(not r==0)
+
+        lky, r = divmod(k*N4y, D4y)
+        gky = lky +(not r==0)
+        assert 1 <= k
+        assert k <= gkb <= lkb
+        assert k <= lky <= gky
+
+        lcf = iter_xbound_continued_fraction_of_log_(False, k, lkb, lky)
+        gcf = iter_xbound_continued_fraction_of_log_(True, k, gkb, gky)
+        return _zip(lcf, gcf)
+
+
+
+#upper bound
+#lower bound
+#interval = [=min, max=]
+def _le_ND_(n0, d0, n1, d1, /):
+    '[n0, d0, n1, d1 >= 1]'
+    if d0 >= d1:
+        #bug:return n0 <= n1
+        if n0 <= n1:
+            return True
+    else:
+        # [d0 < d1]
+        if n0 >= n1:
+            return False
+    return n0*d1 <= n1*d0
+def iter_continued_fraction_of_log_Fraction_interval__truncated_(param4memory_consume, N4min_base, D4min_base, N4max_base, D4max_base, N4min_y, D4min_y, N4max_y, D4max_y, /):
+    r'''[[[
+    param4memory_consume -> N4min_base/int{>=1} -> D4min_base/int{>=1,<=N4min_base} -> N4max_base/int{>=1} -> D4max_base/int{>=1,<=N4max_base} -> N4min_y/int{>=1} -> D4min_y/int{>=1,<=N4min_y} -> N4max_y/int{>=1} -> D4max_y/int{>=1,<=N4max_y} -> cf/iter continued_fraction_of_log_(base; y)[:?]
+
+    [N4min_base/D4min_base == min_base <= base <= max_base == N4max_base/D4max_base]
+    [N4min_y/D4min_y == min_y <= y <= max_y == N4max_y/D4max_y]
+
+    [[base==1] -> [cf == []/+oo]]
+    StopIteration((emay_sign, emay lcf_digit, emay gcf_digit))
+        if emay_sign == 0:
+            [lcf == cf == gcf]
+
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
+    [lcf <= cf <= gcf]
+    [cf == log_(base;y)]
+
+    #]]]'''#'''
+    assert 1 <= param4memory_consume
+    assert 1 <= D4min_base <= N4min_base
+    assert 1 <= D4max_base <= N4max_base
+    assert 1 <= D4min_y <= N4min_y
+    assert 1 <= D4max_y <= N4max_y
+
+    # (N4min_base, D4min_base)
+    # (N4max_base, D4max_base)
+    # (N4min_y, D4min_y)
+    # (N4max_y, D4max_y)
+
+    assert _le_ND_(N4min_base, D4min_base, N4max_base, D4max_base), (N4min_base, D4min_base, N4max_base, D4max_base)
+    assert _le_ND_(N4min_y, D4min_y, N4max_y, D4max_y)
+
 
     k = param4memory_consume
-    gkb, r = divmod(k*N4base, D4base)
-    lkb = gkb +(not r==0)
+    gkb = floor_div(k*N4min_base, D4min_base)
+    lkb = ceil_div(k*N4max_base, D4max_base)
 
-    lky, r = divmod(k*N4y, D4y)
-    gky = lky +(not r==0)
+    lky = floor_div(k*N4min_y, D4min_y)
+    gky = ceil_div(k*N4max_y, D4max_y)
+
     assert 1 <= k
     assert k <= gkb <= lkb
     assert k <= lky <= gky
@@ -988,7 +1359,8 @@ def iter_continued_fraction_of_log_Fraction__truncated_(param4memory_consume, N4
 
 
 
-upperbound4num_bits4k = (1<<16) +1
+default_upperbound4failure_num_bits4k = (1<<8)+1
+default_upperbound4num_bits4k = (1<<16) +1
 #bug:default_num_bits4k = 1<<32
 default_num_bits4k = 32
     #expect yield 10 cf_digit
@@ -1002,11 +1374,218 @@ def mk_default_iter_num_bits4k():
         _raise_()
         yield nbits
         nbits = (nbits*N-1)//D+1 #ceil
-upperbound4failure_num_bits4k = (1<<8)+1
 class BaseError__continued_fraction_of_log(Exception):pass
-class Error__continued_fraction_of_log__result_is_probably_rational(BaseError__continued_fraction_of_log):pass
+class Error__log__base_eq_1(BaseError__continued_fraction_of_log):pass
 class Error__continued_fraction_of_log__num_bits4k_too_big(BaseError__continued_fraction_of_log):pass
-def iter_continued_fraction_of_irrational_log_Fraction_(N4base, D4base, N4y, D4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False):
+class Error__continued_fraction_of_log__result_is_probably_rational(BaseError__continued_fraction_of_log):
+    r'''[[[
+    [log_(7**2;7**3) == 3/2]
+    but since input are are both rational, if log_(b;y) is rational too, then (b;y) must share same prime factors!
+    #]]]'''#'''
+
+def detect_rational_log__pint_(n0, n1, /):
+    '-> ...|(g,en,ed) |^Error__log__base_eq_1 # [n0**(en/ed) == n1][g**ed == n0][g**en == n1][gcd(en,ed) == 1]'
+    m = _detect_rational_log__pint_(n0, n1)
+    if m is ...:
+        return ...
+    (swap_01, g, en, ed) = m
+    if swap_01:
+        ed, en = en, ed
+    #danger:assert n0**en == n1**ed
+    if not gcd(ed, en) == 1: raise 000
+    assert n0 == g**ed
+    assert n1 == g**en
+    return (g,en,ed)
+def _detect_rational_log__pint_(n0, n1, /):
+    '-> ...|(swap_01, g,en,ed) # [n0**(en/ed) == n1][g**ed == n0][g**en == n1][gcd(en,ed) == 1]'
+    assert n0 >= 1
+    assert n1 >= 1
+    swap_01 = False
+    if n0 == 1: raise Error__log__base_eq_1
+    # [n0 =!= 1]
+
+    if n1 == 1:
+        (g,en,ed) = (n0, 0, 1)
+        return (swap_01, g,en,ed)
+    # [n1 =!= 1]
+
+    if n0 == n1:
+        (g,en,ed) = (n0, 1, 1)
+        return (swap_01, g,en,ed)
+    # [n0 =!= n1]
+
+    if n0 > n1:
+        n0, n1 = n1, n0
+        swap_01 = not swap_01
+    # [n0 < n1]
+
+    # [2 <= n0 < n1]
+    #
+    # [n0**(en/ed) == n1]:
+    #   [n0**en == n1**ed]
+    #   xxx [n0**(1/ed) == n1**(1/en) == gcd(n0,n1) >= 2]
+    #       [gcd(2**6,2**10) == 2**6]
+    #       [(2**6)**5 == (2**10)**3]
+    # !!!gcd on exp!!!
+    # [2 <= n0 < n1]
+    n = n1
+    d = n0
+    qs = []
+    # [n > d >= 2]
+    while 1:
+        # !!!gcd on exp!!!
+        # [n > d >= 2]
+        e8q, unfactored_part = factor_pint_out_power_of_base_(d, n)
+        # [n == d**e8q * unfactored_part]
+        # [n == g**e4n][d == g**e4d]:
+        #   [unfactored_part == g**(e4n-e8q*e4d) == g**(e4n%e4d)]
+        if not unfactored_part < d:
+            return ...
+        # [1 <= unfactored_part < d]
+        qs.append(e8q)
+        if unfactored_part == 1:
+            g = d
+            # !! [n > d >= 2]
+            # [g >= 2]
+            break
+        # [2 <= unfactored_part < d]
+        n, d = d, unfactored_part
+        # [2 <= d < n]
+    # [g >= 2]
+    if 0:
+        ed, unfactored_part = factor_pint_out_power_of_base_(g, n0)
+        if not unfactored_part == 1:
+            raise 000
+        # [g**ed == n0]
+
+        en, unfactored_part = factor_pint_out_power_of_base_(g, n1)
+        if not unfactored_part == 1:
+            raise 000
+        # [g**en == n1]
+    else:
+        NDs = [*iter_approximate_fraction_NDs5continued_fraction_(qs)]
+        (en, ed) = NDs[-1]
+        assert en >= ed
+        # [g**en == n1]
+        # [g**ed == n0]
+
+    # [gcd(ed, en) == 1]
+    # [g**ed == n0]
+    # [g**en == n1]
+    # [n0**en == n1**ed]
+    # [n0**(en/ed) == n1]
+    # [(en/ed) == log_(n0;n1)]
+    #assert save == n0, n1
+    return (swap_01, g,en,ed)
+#end-def detect_rational_log__pint_(n0, n1, /):
+
+def detect_rational_log__Fraction_(n0, d0, n1, d1, /):
+    '-> ...|(g0,g1,gn,gd,en,ed) |^Error__log__base_eq_1 # [(n0/d0)**(en/ed) == (n1/d1)][(gn/gd)**ed == n0/d0][(gn/gd)**en == n1/d1][gcd(en,ed) == 1][gcd(gn,gd) >= 1][gn**ed *g0 == n0][gd**ed *g0 == d0][gn**en *g1 == n1][gd**en *g1 == d1]'
+    assert n0 >= 1
+    assert d0 >= 1
+    assert n1 >= 1
+    assert d1 >= 1
+    m = _detect_rational_log_(n0, d0, n1, d1)
+    if m is ...:
+        return ...
+    (swap_01, swap_nd, g0,g1,gn,gd,en,ed) = m
+    if swap_01:
+        (g0,g1,en,ed) = (g1,g0,ed,en)
+    if swap_nd:
+        (gn,gd) = (gd,gn)
+    #danger:assert n0**en * d1**ed == n1**ed * d0**en
+    assert gcd(en,ed) == 1
+    assert gn**ed *g0 == n0
+    assert gd**ed *g0 == d0
+    assert gn**en *g1 == n1
+    assert gd**en *g1 == d1
+    # [gcd(en,ed) == 1][gn**ed *g0 == n0][gd**ed *g0 == d0][gn**en *g1 == n1][gd**en *g1 == d1]
+    # [gcd(gn,gd) >= 1]
+    return (g0,g1,gn,gd,en,ed)
+
+def _detect_rational_log_(n0, d0, n1, d1, /):
+    '-> ...|(swap_01, swap_nd, g0,g1,gn,gd,en,ed)'
+    swap_01 = False
+    swap_nd = False
+    if n0 == d0: raise Error__log__base_eq_1
+    if n1 == d1:
+        (g0,g1,gn,gd,en,ed) = (1,n1,n0,d0,0,1)
+        return (swap_01, swap_nd, g0,g1,gn,gd,en,ed)
+    # [n0 =!= d0]
+    # [n1 =!= d1]
+    if n0 < d0:
+        (n0, d0, n1, d1) = (d0, n0, d1, n1)
+        swap_nd = not swap_nd
+    # [n0 > d0]
+    if n1 < d1:
+        return ...
+    # [n0 > d0]
+    # [n1 > d1]
+
+    # [1 < 2 < 4 < 8]: [log_(4/2;8/1) == 3]
+    if d0 == d1 and n0 == n1:
+        (g0,g1,gn,gd,en,ed) = (1,1,n0,d0,1,1)
+        return (swap_01, swap_nd, g0,g1,gn,gd,en,ed)
+    n0, g0, d0 = gcd_ex(n0, d0)
+    n1, g1, d1 = gcd_ex(n1, d1)
+    # [gcd(n0, d0) == 1]
+    # [gcd(n1, d1) == 1]
+    if d0 == d1:
+        if d0 == 1:
+            (gn,en,ed) = detect_rational_log__pint_(n0, n1)
+        elif n0 == n1:
+            (gn,en,ed) = (n0, 1, 1)
+        else:
+            return ...
+        gd = d0
+        return (swap_01, swap_nd, g0,g1,gn,gd,en,ed)
+    # [d0 =!= d1]
+    if d0 == 1:
+        return ...
+    if d1 == 1:
+        return ...
+    if d0 > d1:
+        n0, d0, n1, d1 = n1, d1, n0, d0
+        swap_01 = not swap_01
+    # [2 <= d0 < d1]
+    # [n0 > d0]
+    # [n1 > d1]
+    # [gcd(n0, d0) == 1]
+    # [gcd(n1, d1) == 1]
+    if not n0 < n1:
+        return ...
+    # [n0 < n1]
+
+    # [2 <= d0 < {n0,d1} < n1]
+    m = detect_rational_log__pint_(d0, d1)
+    if m is ...:
+        return ...
+    gd, en, ed = m
+    # [gd**en == d1]
+    # [gd**ed == d0]
+    #
+    # [d0**(en/ed) == d1]
+    # [d0**en == d1**ed]
+    if 0:
+        m = detect_rational_log__pint_(n0, n1)
+        if m is ...:
+            return ...
+        if not (en, ed) == m[-2:]:
+            return ...
+        gn, _en, _ed = m
+    else:
+        try:
+            gn = perfect_kth_root_(ed, n0)
+        except NotPerfectError__kth_root:
+            return ...
+        # [gn**ed == n0]
+        if not gn**en == n1:
+            return ...
+        # [gn**en == n1]
+    return (swap_01, swap_nd, g0,g1,gn,gd,en,ed)
+
+
+def iter_continued_fraction_of_irrational_log_Fraction_(N4base, D4base, N4y, D4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, to_detect_rational_result=False, to_detect_rational_result_when_troubleshooting=True, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
     r'''[[[
     N4base/int{>=1} -> D4base/int{>=1,<=N4base} -> N4y/int{>=1} -> D4y/int{>=1,<=N4y} -> (iter_num_bits4k/(Iter param4memory_consume)=None) -> cf/iter continued_fraction_of_log_(base; y)[:?depends on iter_num_bits4k?]
 
@@ -1014,25 +1593,64 @@ def iter_continued_fraction_of_irrational_log_Fraction_(N4base, D4base, N4y, D4y
     [y == N4y/D4y]
 
     [[base==1] -> [cf == []/+oo]]
-    StopIteration(may sign_of(len lcf - len gcf)) #(None|+1|-1|0)
-        # None if no k
-        if StopIteration.value == 0:
+    StopIteration(emay (emay_sign, emay lcf_digit, emay gcf_digit))
+        ... if no k
+        if emay_sign == 0:
             [lcf == cf == gcf]
 
-
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
     [lcf <= cf <= gcf]
     [cf == log_(base;y)]
 
     #]]]'''#'''
     assert 1 <= D4base <= N4base
     assert 1 <= D4y <= N4y
+    #N4base, _, D4base = gcd_ex(N4base, D4base)
+    #N4y, _, D4y = gcd_ex(N4y, D4y)
+
+    def main():
+        to_detect_rational_result
+        detected = False
+        st = (to_detect_rational_result, detected)
+        return _iter_continued_fraction_of_irrational_log_Fraction_(st, args5num_bits4k_, troubleshoot_, iter_num_bits4k=iter_num_bits4k, force4using_big_num_bits4k=force4using_big_num_bits4k, upperbound4num_bits4k=upperbound4num_bits4k, upperbound4failure_num_bits4k=upperbound4failure_num_bits4k)
+
+    def args5num_bits4k_(st, num_bits4k, /):
+        (to_detect_rational_result, detected) = st
+        case = 1
+        args = (N4base, D4base, N4y, D4y, to_detect_rational_result)
+        if to_detect_rational_result:
+            to_detect_rational_result = False
+            detected = True
+            st = (to_detect_rational_result, detected)
+        #bug:args = (N4base, D4base, N4y, D4y, to_detect_rational_result)
+        #   should use old-to_detect_rational_result
+        return st, case, args
+    def troubleshoot_(st, case, args, num_bits4k, prev_num_bits4k_which_yield_cf_digit, upperbound4failure_num_bits4k, /):
+        (to_detect_rational_result, detected) = st
+        #(N4base, D4base, N4y, D4y, to_detect_rational_result) = args
+        if not detected:
+            if to_detect_rational_result_when_troubleshooting:
+                to_detect_rational_result = True
+                #detected = True
+                st = (to_detect_rational_result, detected)
+                ok = True
+            else:
+                #raise Error__continued_fraction_of_log__result_is_probably_rational(N4base, D4base, N4y, D4y)
+                ok = False
+        else:
+                ok = True
+        return st, ok
+    return main()
+
+def _iter_continued_fraction_of_irrational_log_Fraction_(st, args5num_bits4k_, troubleshoot_, /, *, iter_num_bits4k, force4using_big_num_bits4k, upperbound4num_bits4k, upperbound4failure_num_bits4k):
     if iter_num_bits4k is None:
         iter_num_bits4k = mk_default_iter_num_bits4k()
+    iter_num_bits4k = iter(iter_num_bits4k)
 
     prev_total_cf_digits = 0
     prev_num_bits4k = -1
     prev_num_bits4k_which_yield_cf_digit = 0
-    r = None
+    emay_t = ...
     for num_bits4k in iter_num_bits4k:
         _raise_()
         if not force4using_big_num_bits4k:
@@ -1041,58 +1659,251 @@ def iter_continued_fraction_of_irrational_log_Fraction_(N4base, D4base, N4y, D4y
         prev_num_bits4k = num_bits4k
 
         k = 1<<num_bits4k
-        it = iter_continued_fraction_of_log_Fraction__truncated_(k, N4base, D4base, N4y, D4y)
-        try:
-            i = 0
-            while 1:
-                _raise_()
-                # [cf_digit == cf[i-1]]
-                cf_digit = next(it)
-                    # ^StopIteration
-                    # [cf_digit == cf[i-1]]
-                # [cf_digit == cf[i]]
-                if i == prev_total_cf_digits:
-                    # [cf_digit == cf[i]]
-                    break
-                # discard cf_digit since yielded before
-                i += 1
-                # [cf_digit == cf[i-1]]
+
+        st, case, args = args5num_bits4k_(st, num_bits4k)
+        if case == 1:
+            (N4base, D4base, N4y, D4y, to_detect_rational_result) = args
+            it = iter_continued_fraction_of_log_Fraction__truncated_(k, N4base, D4base, N4y, D4y, to_detect_rational_result=to_detect_rational_result)
+        elif case == 2:
+            (N4min_base, D4min_base, N4max_base, D4max_base, N4min_y, D4min_y, N4max_y, D4max_y) = args
+            it = iter_continued_fraction_of_log_Fraction_interval__truncated_(k, N4min_base, D4min_base, N4max_base, D4max_base, N4min_y, D4min_y, N4max_y, D4max_y)
+        else:
+            raise 000
+
+        it = GetStopIterationValue(it)
+        i = -1
+        # [cf_digit == cf[i]]
+        for i, cf_digit in enumerate(it):
             # [cf_digit == cf[i]]
-            while 1:
-                _raise_()
+            _raise_()
+            if i == prev_total_cf_digits:
                 # [cf_digit == cf[i]]
                 yield cf_digit
-                i += 1
-                # [cf_digit == cf[i-1]]
-                cf_digit = next(it)
-                    # ^StopIteration
-                    # [cf_digit == cf[i-1]]
-                # [cf_digit == cf[i]]
-        except StopIteration as e:
+                break
+            else:
+                # discard cf_digit since yielded before
+                pass
+        # [cf_digit == cf[i]]
+        for i, cf_digit in enumerate(it, i+1):
+            # [cf_digit == cf[i]]
+            _raise_()
+            yield cf_digit
+        else:
+            # [cf_digit == cf[i]]
+            i += 1
             # [cf_digit == cf[i-1]]
-            r = e.value
+        # [cf_digit == cf[i-1]]
+        tm = it.get_tmay_value5StopIteration()
+        if not tm: raise 000
+        [emay_t] = tm
+            #update emay_t
+        if emay_t is None:raise 000
+        emay_sign, emay_lcf_digit, emay_gcf_digit = emay_t
+
         # [cf_digit == cf[i-1]]
         total_cf_digits = i
-        if total_cf_digits < prev_total_cf_digits: raise 000
+        if total_cf_digits < prev_total_cf_digits:#raise 000
+            raise Exception(total_cf_digits, prev_total_cf_digits)
 
         elif prev_total_cf_digits < total_cf_digits:
             prev_total_cf_digits = total_cf_digits
             prev_num_bits4k_which_yield_cf_digit = num_bits4k
         else:
-            if num_bits4k -prev_num_bits4k_which_yield_cf_digit >= upperbound4failure_num_bits4k: raise Error__continued_fraction_of_log__result_is_probably_rational(N4base, D4base, N4y, D4y)
+            assert prev_total_cf_digits == total_cf_digits
+            if num_bits4k -prev_num_bits4k_which_yield_cf_digit >= upperbound4failure_num_bits4k:
+                # troubleshooting
+                st, ok = troubleshoot_(st, case, args, num_bits4k, prev_num_bits4k_which_yield_cf_digit, upperbound4failure_num_bits4k)
+                if not ok:
+                    raise Error__continued_fraction_of_log__result_is_probably_rational(N4base, D4base, N4y, D4y)
 
-        if r == 0:
+        if emay_sign is ...:
+            # [lcf_digit =!= gcf_digit]
+            pass
+        elif emay_sign == 0:
             # [lcf == cf == gcf]
             # [cf is not irrational]
             break
-            return 0
         # [lcf =!= gcf]
         # refine
         continue
         ...
-    return r # (None|+1|-1|0)
-        # None if no k
+    return emay_t # (...|(emay_sign,emay_lcf_digit,emay_gcf_digit))
+        # ... if no k
+        # ^StopIteration
 
+
+
+def iter_continued_fraction_of_irrational_ln_Fraction_(N4y, D4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
+    'see:iter_continued_fraction_of_irrational_log_cf_<base=the_natural_logarithm_base;y=(N4y/D4y)>'
+    assert 1 <= D4y <= N4y
+    cf_digits4y = iter_continued_fraction_digits5ND_(N4y, D4y)
+    return iter_continued_fraction_of_irrational_ln_cf_(cf_digits4y, iter_num_bits4k=iter_num_bits4k, force4using_big_num_bits4k=force4using_big_num_bits4k, upperbound4num_bits4k=upperbound4num_bits4k, upperbound4failure_num_bits4k=upperbound4failure_num_bits4k)
+def iter_continued_fraction_of_irrational_ln_cf_(cf_digits4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
+    'see:iter_continued_fraction_of_irrational_log_cf_<base=the_natural_logarithm_base>'
+    cf_digits4e = raw_iter_cf_digits4e_the_natural_logarithm_base_()
+    return iter_continued_fraction_of_irrational_log_cf_(cf_digits4e, cf_digits4y, iter_num_bits4k=iter_num_bits4k, force4using_big_num_bits4k=force4using_big_num_bits4k, upperbound4num_bits4k=upperbound4num_bits4k, upperbound4failure_num_bits4k=upperbound4failure_num_bits4k)
+def iter_continued_fraction_of_irrational_log_cf_(cf_digits4base, cf_digits4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
+    r'''[[[
+    cf_digits4base/Iter int{>=1} -> cf_digits4y/Iter int{>=1} -> (iter_num_bits4k/(Iter param4memory_consume)=None) -> cf/iter continued_fraction_of_log_(base; y)[:?depends on iter_num_bits4k?]
+
+    [base == cf_(cf_digits4base)]
+    [y == cf_(cf_digits4y)]
+
+    [base >= 1]
+    [y >= 1]
+
+    [[base==1] -> [cf == []/+oo]]
+    StopIteration(emay (emay_sign, emay lcf_digit, emay gcf_digit))
+        ... if no k
+        if emay_sign == 0:
+            [lcf == cf == gcf]
+
+    [emay_sign == ...|sign_of(len lcf - len gcf)]
+    [lcf <= cf <= gcf]
+    [cf == log_(base;y)]
+
+    #]]]'''#'''
+
+    cf_digits4base = iter(cf_digits4base)
+    cf_digits4y = iter(cf_digits4y)
+
+    def main():
+        NDs4base, base_eq1 = _mk_NDs5cf__ex_(cf_digits4base)
+        NDs4y, y_eq1 = _mk_NDs5cf__ex_(cf_digits4y)
+        if base_eq1:
+            # [[base == 1] -> [cf==[]]] #+oo
+            return iter_stop_with_((0, ..., ...), _null_iter)
+        if y_eq1:
+            # [[base =!= 1] -> [y == 1] -> [cf==[0]]] #0
+            return iter_stop_with_((0, ..., ...), [0])
+
+        st = (0, NDs4base, 0, NDs4y)
+        return _iter_continued_fraction_of_irrational_log_Fraction_(st, args5num_bits4k_, troubleshoot_, iter_num_bits4k=iter_num_bits4k, force4using_big_num_bits4k=force4using_big_num_bits4k, upperbound4num_bits4k=upperbound4num_bits4k, upperbound4failure_num_bits4k=upperbound4failure_num_bits4k)
+
+    def _icheck_(cf_digits, /):
+        for d in cf_digits:
+            assert d >= 1
+            yield d
+    def _mk_NDs5cf__ex_(cf_digits, /):
+        cf_digits = _icheck_(cf_digits)
+        NDs = iter_approximate_fraction_NDs5continued_fraction_(cf_digits)
+
+        NDs = LazyList(NDs)
+        ls = NDs.extract_prefix__le(2, relax=False)
+        if not ls:
+            # +oo?
+            raise Exception('??[cf == +oo]??')
+        is_one = ls == [(1, 1)]
+        return NDs, is_one
+
+    def _search_ND_(i, NDs, num_bits4k, /):
+        ls = NDs.extract_prefix__le(2, relax=False)
+        if not ls:
+            # +oo?
+            raise Exception('??[cf == +oo]??')
+        while 1:
+            if len(ls) == 1:
+                break
+            [(N0,D0), (N1,D1)] = ls
+            if floor_log2(D0)+floor_log2(D1) >= num_bits4k:
+                break
+            NDs = NDs.extract_tail_or_raise()
+            i += 1
+            ls = NDs.extract_prefix__le(2, relax=False)
+        (N0,D0) = ls[0]
+        (N1,D1) = ls[-1]
+        if i&1:
+            (N0, D0), (N1, D1) = (N1, D1), (N0, D0)
+        # [N0/D0 <= N1/D1]
+        return i, NDs, (N0, D0, N1, D1)
+
+    def args5num_bits4k_(st, num_bits4k, /):
+        (idx4base, NDs4base, idx4y, NDs4y) = st
+        idx4base, NDs4base, (N4min_base, D4min_base, N4max_base, D4max_base) = _search_ND_(idx4base, NDs4base, num_bits4k)
+        idx4y, NDs4y, (N4min_y, D4min_y, N4max_y, D4max_y) = _search_ND_(idx4y, NDs4y, num_bits4k)
+
+        st = (idx4base, NDs4base, idx4y, NDs4y)
+        case = 2
+        args = (N4min_base, D4min_base, N4max_base, D4max_base, N4min_y, D4min_y, N4max_y, D4max_y)
+        return st, case, args
+    def troubleshoot_(st, case, args, num_bits4k, prev_num_bits4k_which_yield_cf_digit, upperbound4failure_num_bits4k, /):
+        #(N4min_base, D4min_base, N4max_base, D4max_base, N4min_y, D4min_y, N4max_y, D4max_y) = args
+        ok = False
+        return st, ok
+    return main()
+
+
+
+def convert_to_ContinuedFraction_(rational_or_pair_or_list_or_iterator, /):
+    'cf_like/(Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction) -> cf/ContinuedFraction'
+    x = rational_or_pair_or_list_or_iterator
+    cls = type(x)
+    if cls is LazyList or cls is ContinuedFraction:
+        cf_digits = x
+    if cls is list:
+        cf_digits = iter(cf_digits)
+    elif cls is tuple:
+        pair = x
+        if not len(pair) == 2: raise TypeError
+        N, D = pair
+        cf_digits = iter_continued_fraction_digits5ND_(N, D)
+    elif cls is int or isinstance(x, Rational):
+        N, D = x.as_integer_ratio()
+        cf_digits = iter_continued_fraction_digits5ND_(N, D)
+    elif is_iterator(x):
+        cf_digits = x
+    else:
+        raise TypeError(cls)
+    #cf_digits = LazyList(cf_digits)
+    cf = ContinuedFraction(cf_digits)
+    return cf
+def cf_log_(base, y, /, **kwds):
+    r'''[[[
+    :: base/cf_like -> y/cf_like -> cf/ContinuedFraction
+
+
+    [cf_like = (Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction)]
+    [base > 0]
+    [base =!= 1]
+    [y > 0]
+    [cf == log_(base;y)]
+    #ContinuedFraction no support: xxx: [[base==1] -> [cf == []/+oo]]
+    # diff iter_continued_fraction_of_irrational_log_cf_: allow:[0<base<1][0<y<1] but forbid:[base==1]
+    # others see:iter_continued_fraction_of_irrational_log_cf_
+
+    #]]]'''#'''
+    cf4base = convert_to_ContinuedFraction_(base)
+    cf4y = convert_to_ContinuedFraction_(y)
+    if not cf4base > cf_0: raise TypeError
+    if not cf4y > cf_0: raise TypeError
+    to_neg = False
+    if cf4base <= cf_1:
+        if cf4base == cf_1: raise TypeError
+        cf4base = cf4base.inv_()
+        to_neg = not to_neg
+
+    if cf4y <= cf_1:
+        if cf4y == cf_1:
+            return cf_0
+        cf4y = cf4y.inv_()
+        to_neg = not to_neg
+
+    cf_digits4base = iter(cf4base)
+    cf_digits4y = iter(cf4y)
+    cf_digits4log_base_y = iter_continued_fraction_of_irrational_log_cf_(cf_digits4base, cf_digits4y, **kwds)
+    cf4log_base_y = ContinuedFraction(cf_digits4log_base_y)
+
+    if to_neg:
+        cf4log_base_y = -cf4log_base_y
+    return cf4log_base_y
+def cf_ln_(y, /, **kwds):
+    'see:cf_log_'
+    cf_digits4e = raw_iter_cf_digits4e_the_natural_logarithm_base_()
+    return cf_log_(cf_digits4e, y, **kwds)
+def cf_log2_(y, /, **kwds):
+    'see:cf_log_'
+    return cf_log_(2, y, **kwds)
+ContinuedFraction
 
 
 

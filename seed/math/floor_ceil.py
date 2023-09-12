@@ -2,7 +2,7 @@
 r'''[[[
 # now:see: math.isqrt() vs floor_sqrt
 #bug: O(bisearch-ver:floor_kth_root_) ~ O(log2(k)*log2(n)**2)
-O(bisearch-ver:floor_kth_root_) ~ O(log2(n)**3/k)
+O(bisearch-ver:floor_kth_root_) ~ O(log2(n)**3/k) #bisection
 O(floor_sqrt) ~ O(log2(n)**2)
 O(floor_kth_root_) ~:
     ######################
@@ -108,6 +108,15 @@ __all__ = r'''
     count_num_high_same_bits_of_two_uints
     ceil_log_
     floor_log_
+
+    BaseError
+        NotPerfectError
+        NotPerfectError__div
+        NotPerfectError__kth_root
+    perfect_div
+    perfect_kth_root_
+    floor_ceil_div
+
     '''.split()#'''
     #load_tests
     #NotImplementedError:
@@ -162,9 +171,45 @@ move 'import unittest, doctest' into seed.math.floor_ceil:load_tests() body -->:
 
 
 #]]]'''
+from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
 
 ___end_mark_of_excluded_global_names__0___ = ...
 __all__
+
+class BaseError(Exception):pass
+class NotPerfectError(BaseError):pass
+class NotPerfectError__div(NotPerfectError):pass
+class NotPerfectError__kth_root(NotPerfectError):pass
+def perfect_div(n, d, lazy_err_=None, /):
+    'n -> d -> (q:=n///d)/int |^NotPerfectError__div # [q*d == n]'
+    q, r = divmod(n,d)
+    if not r==0:
+        if lazy_err_ is None:
+            lazy_err_ = NotPerfectError__div
+        raise lazy_err_()
+    return q
+def perfect_kth_root_(k, n, lazy_err_=None, /):
+    'k/{>=1} -> n/{>=0} -> (rt:=n**(1/k))/int |^NotPerfectError__kth_root # [rt**k == n]'
+    if lazy_err_ is None:
+        lazy_err_ = NotPerfectError__kth_root
+    #check_type_is(int, n)
+    if not n >= 0: raise TypeError
+    if n < 2: return n
+
+    (e, odd) = factor_pint_out_2_powers(n)
+    e4rt = perfect_div(e, k, lazy_err_)
+    rt4odd = floor_kth_root_(k, odd)
+    if not rt4odd**k == odd:
+        raise lazy_err_()
+    rt = rt4odd << e4rt
+    return rt
+
+
+def floor_ceil_div(n, d, /):
+    'n -> d -> (fq:=n//d, cq:=(n-1)//d+1)/(int,int) # [[d>0]->[fq*d <= n <= cq*d]][0 <= (cq-fq) <= 1]'
+    fq, r = divmod(n, d)
+    cq = fq +bool(r)
+    return fq, cq
 
 
 def floor_div(n, d, /):
@@ -700,7 +745,7 @@ if 0 and __name__ == "__main__":
 
 def _iter_partial_floor_kth_root__bisearch_(k, n, /):
     'k -> n -> Iter<(partial_lead_bits4fKrtN, num_remain_bits)> # [partial_lead_bits4fKrtN == fKrtN//2**num_remain_bits][num_remain_bits <- reversed[0..=floor_log2_fKrtN]]'
-    #bisearch, one bit per round
+    #bisearch, one bit per round #bisection
     assert k >= 2
     assert n >= 1
     flbN = floor_log2(n)
@@ -1351,7 +1396,7 @@ def _floor_kth_root__impl_(k, n, /):
     #   #   # [log2(k) < log2(n)/k]
     #   #   # [k*log2(k) < log2(n)]
     #   #   # ~<=O(log2(k) * log2(n)**2)
-    #   #   #    # bisearch，效率确实低
+    #   #   #    # bisearch，效率确实低 #bisection
     #   # ~O(1/k * (k*log2(k))**3)
     # * [num_remain_bits == 0]:
     #   # [floor_log2_fKrtQ == floor_log2_fKrtN <= min_floor_log2_fKrtQ]
@@ -2282,4 +2327,5 @@ ___end_mark_of_excluded_global_names__1___ = ...
 
 
 
+from seed.math.floor_ceil import perfect_div, perfect_kth_root_
 from seed.math.floor_ceil import *

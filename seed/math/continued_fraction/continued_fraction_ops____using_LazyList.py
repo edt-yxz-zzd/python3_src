@@ -6,6 +6,8 @@ see:
     view ../../python3_src/seed/math/continued_fraction/continued_fraction_ops.py
     view ../../python3_src/seed/math/continued_fraction/continued_fraction_ops____using_LazyList.py
     view ../../python3_src/seed/math/binary_float/binary_float_ops____using_LazyList.py
+    view ../../python3_src/seed/math/continued_fraction/iter_continued_fraction_of_log__truncated_.py
+        from seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_ import cf_log_, cf_ln_
 
 
 
@@ -1314,11 +1316,14 @@ ContinuedFraction
     cf_neg1
 
     cf_e
-        cf_the_base_of_the_natural_logarithm_e
+        cf_the_natural_logarithm_base_e
+        raw_iter_cf_digits4e_the_natural_logarithm_base_
     cf_phi
         cf_golden_ratio_phi
+        raw_iter_cf_digits4phi_the_golden_ratio_
     cf_sqrt2
         cf_square_root_of_2
+        raw_iter_cf_digits4sqrt2_
     cf_pi__prefix2001
         cf_circumference_diameter_ratio_pi__prefix2001
 
@@ -1855,6 +1860,7 @@ TODO:
 def pow__cf__int_(cf_digits, e, /):
     bin
 cf_log_(lhs, rhs, /):
+view ../../python3_src/seed/math/continued_fraction/iter_continued_fraction_of_log__truncated_.py
 #]]]'''#'''
 
 
@@ -2105,8 +2111,8 @@ cf_pi[:1+100*??!] =: [
 ]
 
 #]]]'''#'''
-def __():
-    'e = [2;1,2,1,1,4,1,1,6,1,1,8,...] = 1+[1;1,2,   1,1,4,   1,1,6...] = [2;  1,2,1, 1,4,1,  1,6,1,  1,8,...]'
+def raw_iter_cf_digits4e_the_natural_logarithm_base_():
+    'natural logarithm base e = 1+[1;1,2,   1,1,4,   1,1,6...] = [2;  1,2,1, 1,4,1,  1,6,1,  1,8,...]'
     yield 2
     x = 0
     while 1:
@@ -2115,20 +2121,20 @@ def __():
         yield x
         yield 1
 
-cf_e = cf_the_base_of_the_natural_logarithm_e = ContinuedFraction(__())
-def __():
+cf_e = cf_the_natural_logarithm_base_e = ContinuedFraction(raw_iter_cf_digits4e_the_natural_logarithm_base_())
+def raw_iter_cf_digits4phi_the_golden_ratio_():
     'golden ratio phi = [1;1...]'
     while 1:
         yield 1
-cf_phi = cf_golden_ratio_phi = ContinuedFraction(__())
-def __():
+cf_phi = cf_golden_ratio_phi = ContinuedFraction(raw_iter_cf_digits4phi_the_golden_ratio_())
+def raw_iter_cf_digits4sqrt2_():
     'square root of 2 = [1;2,2...]'
     yield 1
     while 1:
         yield 2
-cf_sqrt2 = cf_square_root_of_2 = ContinuedFraction(__())
+cf_sqrt2 = cf_square_root_of_2 = ContinuedFraction(raw_iter_cf_digits4sqrt2_())
 
-cf_pi__prefix2001 = [
+cf_pi__prefix2001 = (
 3,
 7, 15, 1, 292, 1, 1, 1, 2, 1, 3, 1, 14, 2, 1, 1, 2, 2, 2, 2, 1, 84, 2, 1, 1, 15, 3, 13, 1, 4, 2, 6, 6, 99, 1, 2, 2, 6, 3, 5, 1, 1, 6, 8, 1, 7, 1, 2, 3, 7, 1, 2, 1, 1, 12, 1, 1, 1, 3, 1, 1, 8, 1, 1, 2, 1, 6, 1, 1, 5, 2, 2, 3, 1, 2, 4, 4, 16, 1, 161, 45, 1, 22, 1, 2, 2, 1, 4, 1, 2, 24, 1, 2, 1, 3, 1, 2, 1, 1, 10, 2,
 5, 4, 1, 2, 2, 8, 1, 5, 2, 2, 26, 1, 4, 1, 1, 8, 2, 42, 2, 1, 7, 3, 3, 1, 1, 7, 2, 4, 9, 7, 2, 3, 1, 57, 1, 18, 1, 9, 19, 1, 2, 18, 1, 3, 7, 30, 1, 1, 1, 3, 3, 3, 1, 2, 8, 1, 1, 2, 1, 15, 1, 2, 13, 1, 2, 1, 4, 1, 12, 1, 1, 3, 3, 28, 1, 10, 3, 2, 20, 1, 1, 1, 1, 4, 1, 1, 1, 5, 3, 2, 1, 6, 1, 4, 1, 120, 2, 1, 1, 3,
@@ -2150,7 +2156,7 @@ cf_pi__prefix2001 = [
 4, 1, 1, 2, 2, 1, 34, 1, 2, 5, 8, 3, 2, 1, 2, 13, 4, 3, 2, 1, 1, 1, 1, 25, 1, 5, 1, 94, 2, 4, 3, 4, 5, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 41, 1, 5, 1, 4, 4, 1, 155, 1, 8, 1, 1, 1, 1, 4, 1, 1, 2, 9, 2, 1, 2, 1, 1, 1, 6, 23, 1, 2, 3, 5, 2, 1, 1, 1, 1, 7, 67, 5, 7, 1, 23, 3, 3, 1, 6, 1, 11, 1, 57,
 1, 4, 1, 5, 1, 1, 8, 1, 1, 2, 5, 2, 10, 1, 1, 2, 1, 1, 3, 1, 2, 1, 3, 1, 11, 2, 10, 1, 4, 18, 1, 2, 3, 1, 1, 6, 3, 6, 4, 31, 3, 4, 1, 18, 3, 9, 7, 5, 1, 2, 2, 1, 7, 1, 23, 2, 217, 1, 2, 1, 4, 1, 54, 2, 196, 10, 3, 1, 32, 1, 40, 55, 1, 5, 1, 3, 3, 1, 2, 2, 1, 3, 6, 3, 16, 1, 31, 1, 5, 6, 1, 4, 42, 4, 1, 10, 1, 3, 1, 3,
 3, 1, 2, 1, 1, 1, 4, 1, 13, 1, 88, 1, 1, 1, 14, 3, 27, 3, 1, 1, 16, 4, 1, 2, 4, 1, 4, 1, 1, 17, 2, 4, 1, 1, 9, 2, 1, 1, 3, 1, 1, 30, 1, 1, 3, 2, 2, 1, 1, 4, 10, 1, 7, 1, 6, 1, 35, 1, 1, 2, 3, 6, 1, 1, 2, 4, 4, 24, 1, 1, 1, 1, 1, 1, 3, 1, 1, 2, 1, 2, 1, 6, 6, 2, 1, 1, 10, 6, 4, 2, 1, 3, 9, 1, 2, 16, 1, 5, 1, 1,
-]
+)
 assert len(cf_pi__prefix2001) == 2001
 cf_pi__prefix2001 = cf_circumference_diameter_ratio_pi__prefix2001 = ContinuedFraction(cf_pi__prefix2001)
 

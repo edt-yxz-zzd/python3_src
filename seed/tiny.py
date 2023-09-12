@@ -409,6 +409,14 @@ __all__ = str2__all__(r'''
     mk_existing_type_singleton #cls -> None
     __new4singleton__   # used in SingletonClass.__new__
     __newobj__          #used in __reduce__,__reduce_ex__ for pickle
+
+    iter_stop_with_
+            # :: r -> Iter x -> Iter<StopIteration(r);x>
+    GetStopIterationValue
+            # .__iter__, .get_tmay_value5StopIteration
+            # list(g:=GetStopIterationValue(iter_stop_with_(r, it)))
+            # assert g.get_tmay_value5StopIteration()==(r,)
+
     #''')
 __all__
 
@@ -735,6 +743,8 @@ from seed.tiny import BaseTuple
 
 from seed.tiny_.singleton import mk_SingletonClass, mk_existing_type_singleton
 from seed.tiny_.singleton import __newobj__, __new4singleton__
+
+from seed.tiny_.iter_stop_with_ import iter_stop_with_, GetStopIterationValue
 
 
 

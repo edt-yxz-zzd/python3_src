@@ -290,6 +290,7 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 may
   nmay T = (None|T)
+  emay_xxx = (...|xxx) #Ellipsis
   lmay T = ([]|[*(T,)])
   tmay T = (()|(T,)) #sometime be lmay too...
     why not (None|(T,))?
@@ -463,7 +464,7 @@ vs,or,cased:
   ---
   vs: case
     x_vs_y:bool
-    x_vs_y_vs_z:[-1,0,+1]/[False,None/Ellips,True]/...
+    x_vs_y_vs_z:[-1,0,+1]/[False,None/Ellipsis,True]/...
       used as case, selector, ptr/idx
       x,y,z are set/type/concept
   ---
