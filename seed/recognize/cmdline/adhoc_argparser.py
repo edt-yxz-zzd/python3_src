@@ -85,6 +85,12 @@ xxx.yyy 模块全名
      |stable_repr__expand_top_layer
      |stable_repr__expand_all_layer
 
+新增:islice
+    @233:f
+    @g.233:f
+    ,233:f
+    ,g.233:f
+
 ?新增『+lineno』:
     or函数名之前的选项:
         xxx.yyy +lineno ,f
@@ -324,6 +330,7 @@ from collections.abc import Mapping
 import sys
 import re
 import builtins
+from itertools import islice
 
 from seed.lang.call_ import call_
 from seed.func_tools.detect_depth4fail import decorator4show_py_help
@@ -331,7 +338,7 @@ from seed.helper.stable_repr import stable_repr
 from seed.helper.stable_repr import stable_repr__expand_all_layer
 from seed.helper.stable_repr import stable_repr__expand_top_layer
 from seed.helper.safe_eval import safe_eval, safe_exec
-from seed.tiny import mk_tuple, check_type_is, check_type_le, check_callable, ifNone
+from seed.tiny import mk_tuple, check_type_is, check_type_le, check_callable, ifNone, echo
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
     #nm__pattern = r'(?:(?!\d)\w+)'
     #qnm__pattern = fr'(?:{nm__pattern}(?:[.]{nm__pattern})*)'
@@ -483,13 +490,14 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
 
 
     setting4prefix = _parse_payload4prefix(prefix, payload4prefix)
-    to_show = setting4prefix
+    to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
 
     main_func = options4argparser_func_name_to_main_func(options4argparser, func_name)
     if not callable(main_func): raise AdhocArgParserError(func_name)
 
     r = decorator4show_py_help(main_func)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    r = islice_(r)
     if prefix == _prefix4normal_call:
         if r is not None:
             to_show(r)
@@ -668,33 +676,67 @@ def _mk__to_show(to_str, /):
     def to_show(x, /):
         print(to_str(x))
     return to_show
+
+_payload4prefix__regex = re.compile(r'(?P<nm>(?:\w+[.])?)(?P<num4islice>(?:\d+[:])?)')
 def _parse_payload4prefix(prefix, payload4prefix, /):
     'prefix -> payload4prefix -> setting4prefix'
     check_type_is(str, payload4prefix)
+    m = _payload4prefix__regex.fullmatch(payload4prefix)
+    if m is None:
+        raise AdhocArgParserError(payload4prefix)
+    smay_nm_dot = m['nm']
+    smay_num4islice_colon = m['num4islice']
+    if not smay_num4islice_colon:
+        islice_ = echo
+    else:
+        num4islice = int(smay_num4islice_colon[:-1])
+        if prefix == ',':
+            def islice_(r, /):
+                it = r
+                return islice(it, num4islice)
+        elif prefix == '@':
+            def islice_(r, /):
+                ls = r
+                return ls[:num4islice]
+        else:
+            raise AdhocArgParserError(prefix)
+        islice_
+    islice_
+
+
     #if payload4prefix: raise NotImplementedError
-    if not payload4prefix:
+    #if payload4prefix.endswith(':'): ...
+    #smay_nm_dot = payload4prefix
+    to_show = _payload4prefix_smay_nm_dot2to_show(smay_nm_dot)
+    setting4prefix = to_show, islice_
+    return setting4prefix
+
+def _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, /):
+    if not smay_nm_dot:
         to_str = repr
         to_show = _mk__to_show(to_str)
         to_str = None
-    elif not payload4prefix.endswith('.'):raise AdhocArgParserError
+    elif not smay_nm_dot.endswith('.'):raise AdhocArgParserError(smay_nm_dot)
     else:
-        nm = payload4prefix[:-1]
-        if nm == 'not_show':
-            to_show = _not_show
+        nm = smay_nm_dot[:-1]
+        to_show = _payload4prefix_nm2to_show(nm)
+    return to_show
+def _payload4prefix_nm2to_show(nm, /):
+    if nm == 'not_show':
+        to_show = _not_show
+    else:
+        if nm == 'stable_repr':
+            to_str = stable_repr
+        elif nm == 'stable_repr__expand_top_layer':
+            to_str = stable_repr__expand_top_layer
+        elif nm == 'stable_repr__expand_all_layer':
+            to_str = stable_repr__expand_all_layer
+        elif not hasattr(builtins, nm):raise AdhocArgParserError(nm)
         else:
-            if nm == 'stable_repr':
-                to_str = stable_repr
-            elif nm == 'stable_repr__expand_top_layer':
-                to_str = stable_repr__expand_top_layer
-            elif nm == 'stable_repr__expand_all_layer':
-                to_str = stable_repr__expand_all_layer
-            elif not hasattr(builtins, nm):raise AdhocArgParserError
-            else:
-                to_str = getattr(builtins, nm)
-            to_show = _mk__to_show(to_str)
-            to_str = None
-    setting4prefix = to_show
-    return setting4prefix
+            to_str = getattr(builtins, nm)
+        to_show = _mk__to_show(to_str)
+        to_str = None
+    return to_show
 
 def adhoc_argparse__args(args, /, *, locals=None):
     '[str] -> (positional_args, flag2bool, keyword2arg, keyword2args)'

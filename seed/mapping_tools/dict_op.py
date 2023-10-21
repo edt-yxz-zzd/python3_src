@@ -469,11 +469,27 @@ def inv__bijection__immutable(k2v, /):
     if not len(v2k) == len(k2v): raise TypeError('not bijection mapping')
     return v2k
 
-def inv__group_keys_by_value__immutable(k2v, /):
+def inv__group_keys_by_value__immutable(k2v, ks=None, /, *, set_vs_list=False):
     'Map k v -> Map v (Set k) #see also: seed.tiny_.dict__add_fmap_filter.group4dict_value'
-    v2ks = defaultdict(set)
-    for k, v in k2v.items():
-        v2ks[v].add(k)
+    if set_vs_list:
+        T = list
+        add = T.append
+    else:
+        T = set
+        add = T.add
+    T, add
+    v2ks = defaultdict(T)
+
+    if ks is True:
+        ks = range(len(k2v))
+
+    if ks is None:
+        kv_pairs = k2v.items()
+    else:
+        kv_pairs = ((k, k2v[k]) for k in ks)
+
+    for k, v in kv_pairs:
+        add(v2ks[v], k)
     v2ks = {**v2ks}
     return v2ks
 inv__k2v_to_v2ks = inv__group_keys_by_value__immutable

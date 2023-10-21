@@ -8,4 +8,9 @@ def split_tuples(length, tuples):
             lsls[i].append(t[i])
     return lsls
 
+def unzip_pairs(pairs, /):
+    (fsts, snds) = split_tuples(2, pairs)
+    return (fsts, snds)
+
+from seed.seq_tools.split_tuples import split_tuples, unzip_pairs
 

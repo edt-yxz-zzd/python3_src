@@ -2340,25 +2340,35 @@ def rngs_op__iter_intersect_range_ex(rngs, rng, /):
         _, begin = common_rng
     return
 
-def rngs_op__iter_gaps(rngs, /):
+def rngs_op__iter_gaps(rngs, /, *, whole_rng=None):
     it = iter(rngs)
+    if not whole_rng is None:
+        whole_begin, whole_end = whole_rng
+        it = chain([(whole_begin, whole_begin)], it, [(whole_end, whole_end)])
+
     for _, pre_end in it:
         break
     for begin, end in it:
-        if begin != pre_end:
+        if not begin == pre_end:
             yield pre_end, begin
         pre_end = end
-def rngs_op__reversed_gaps(rngs, /):
+def rngs_op__reversed_gaps(rngs, /, *, whole_rng=None):
     it = reversed(rngs)
+    if not whole_rng is None:
+        whole_begin, whole_end = whole_rng
+        it = chain([(whole_end, whole_end)], it, [(whole_begin, whole_begin)])
+
     for next_begin, _ in it:
         break
     for begin, end in it:
-        if end != next_begin:
+        if not end == next_begin:
             yield end, next_begin
         next_begin = begin
-def rngs_op__iter_gaps_(rngs, /, *, reverse):
+
+def rngs_op__iter_gaps_(rngs, /, *, reverse, whole_rng=None):
+    #whole_rng:see:difference__xtouch_ranges
     f = rngs_op__reversed_gaps if reverse else rngs_op__iter_gaps
-    return f(rngs)
+    return f(rngs, whole_rng=whole_rng)
 
 class IMixin4_get_rngs_:
     #no len_ints
