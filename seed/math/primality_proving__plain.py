@@ -12,6 +12,12 @@ py_adhoc_call   seed.math.primality_proving__plain   @f
 from seed.math.primality_proving__plain import *
 
 
+[[buggy:from old version:
+git mv seed/math/_output_/seed.math.primality_proving..filter_out_composites___output5iter_odd_primes__one_prime_per_bit_length_.end-719.txt seed/math/_output_/seed.math.primality_proving..filter_out_composites___output5iter_odd_primes__one_prime_per_bit_length_.end-719.buggy.txt
+    view ../../python3_src/seed/math/_output_/seed.math.primality_proving__plain..iter_continue4iter_xxx_odd_prime_exs__radix_pow_dominance_Pmm__P_per_num_digits4N_.10.out.txt
+    view ../../python3_src/seed/math/_output_/seed.math.primality_proving__plain..iter_continue4iter_odd_prime_exs__zpow_dominance_Pmm__P_per_bit_length_.out.txt
+]]
+
 
 view others/数学/prime/primality_test.txt
     view ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_.py
