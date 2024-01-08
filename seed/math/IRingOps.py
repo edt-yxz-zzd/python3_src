@@ -20,7 +20,12 @@ view ../../python3_src/seed/math/IRingOps.py
 py -m seed.math.IRingOps
 py -m nn_ns.app.debug_cmd   seed.math.IRingOps
 
-from seed.math.IRingOps import
+vs:
+    ring_ops__integer: domain not field, no div
+    ring_ex_ops__int: semi-support div for domain-unit
+
+from seed.math.IRingOps import ring_ops__integer, ring_ex_ops__int, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
+
 from seed.math.IRingOps import (
     NonInvertibleError
     ,IRingOps
@@ -32,10 +37,13 @@ from seed.math.IRingOps import (
         ,IPyRingOps
             ,IPyRingExOps
             ,IPyRingOpsOverRealNumber
+                ,IntegerRingOps
+                    ,ring_ops__integer
                 ,IPyRingExOpsOverRealNumber
+                    ,IntRingExOps
+                        ,ring_ex_ops__int
                     ,FractionRingExOps
                         ,ring_ex_ops__Fraction
-                ,IntegerRingOps
     )
 
 
@@ -53,10 +61,13 @@ __all__ = '''
         IPyRingOps
             IPyRingExOps
             IPyRingOpsOverRealNumber
+                IntegerRingOps
+                    ring_ops__integer
                 IPyRingExOpsOverRealNumber
+                    IntRingExOps
+                        ring_ex_ops__int
                     FractionRingExOps
                         ring_ex_ops__Fraction
-                IntegerRingOps
 
 
     '''.split()
@@ -227,6 +238,7 @@ class IRingOps(ABC):
 
 #class IRingOps(ABC):
 class IRingExOps(IRingOps):
+    #IRingExOps._inv__tmay_
     __slots__ = ()
     #bug:def invL__tmay_arbitrary(ops, y, /):
     @abstractmethod
@@ -434,6 +446,7 @@ class IPyRingExOpsOverRealNumber(IPyRingOpsOverRealNumber, IPyRingExOps, IRingEx
 
 
 class IntegerRingOps(IPyRingOpsOverRealNumber):
+    #not <: IRingExOps._inv__tmay_
     __slots__ = ()
 
     @override
@@ -455,6 +468,46 @@ class IntegerRingOps(IPyRingOpsOverRealNumber):
     def _sketchy_check_element_(ops, x, /):
         'element -> None|raise TypeError'
         check_type_is(int, x)
+ring_ops__integer = IntegerRingOps()
+
+class IntRingExOps(IPyRingExOpsOverRealNumber):
+    # <: IRingExOps._inv__tmay_
+    __slots__ = ()
+
+    @override
+    def _mk_ring_element5int_(ops, i, /):
+        'int%characteristic -> Element'
+        return i
+    @override
+    def _get_characteristic_(ops, /):
+        '-> uint # like field characteristic==0'
+        return 0
+
+    @override
+    def _sketchy_check_element_(ops, x, /):
+        'element -> None|raise TypeError'
+        try:
+            check_type_is(int, x)
+        except:
+            print_err(type(x))
+            print_err(f'{x!r}')
+            raise
+
+    @override
+    def _inv__tmay_(ops, y, /):
+        'element -> tmay element #tmay (1/y) __truediv__'
+        if abs(y) == 1:
+            inv_y = y
+            tmay_inv_y = (inv_y,)
+        else:
+            tmay_inv_y = ()
+        return tmay_inv_y
+ring_ex_ops__int = IntRingExOps()
+
+#vs:
+#   ring_ops__integer: domain not field, no div
+#   ring_ex_ops__int: semi-support div for domain-unit
+
 
 class FractionRingExOps(IPyRingExOpsOverRealNumber):
     __slots__ = ()
@@ -488,7 +541,14 @@ class FractionRingExOps(IPyRingExOpsOverRealNumber):
             print_err(type(x))
             print_err(f'{x!r}')
             raise
-
-
-
 ring_ex_ops__Fraction = FractionRingExOps()
+
+
+
+
+
+
+
+
+from seed.math.IRingOps import ring_ops__integer, ring_ex_ops__int, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
+from seed.math.IRingOps import *

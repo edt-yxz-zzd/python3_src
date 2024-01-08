@@ -646,7 +646,7 @@ class 囗矩阵乘法链维数序列囗相关函数:
             tmp4curr_arc_.rightmost_above_or_side_arc_ = _init_find_rightmost_above_or_side_arc4curr_arc_(curr_arc_)
             _check_tmp4curr_arc_(tmp4curr_arc_)
             while unorder_above_arcs_:
-                above_arc_ = unorder_above_arcs_.peak()
+                above_arc_ = unorder_above_arcs_.peek()
                 if above_arc_.supporting_weight < min_weight4curr_arc_:
                     break
                 #discard above_arc_
@@ -776,7 +776,7 @@ class 囗矩阵乘法链维数序列囗相关函数:
 
             (i_, j_) = sf.two_vtx5curr_arc_(curr_arc_)
             while heap:
-                ceil_arc_ = heap.peak()
+                ceil_arc_ = heap.peek()
                 assert ceil_arc_.supporting_weight < min_weight4curr_arc_
                 if ceil_arc_.supporting_weight < supporting_weight4curr_arc_:
                     break

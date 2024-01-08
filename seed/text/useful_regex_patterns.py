@@ -460,7 +460,58 @@ SyntaxError: invalid hexadecimal literal
 
 
 
+py_str__single_APOSTROPHE__regex
+>>> match_(py_str__single_APOSTROPHE__regex, "''")
+>>> match_(py_str__single_APOSTROPHE__regex, "kkkkkk' aaa  \"  \\' \\\n '")
 
+>>> not_match_(py_str__single_APOSTROPHE__regex, "'")
+>>> not_match_(py_str__single_APOSTROPHE__regex, "\'''")
+>>> not_match_(py_str__single_APOSTROPHE__regex, "\''\''")
+>>> not_match_(py_str__single_APOSTROPHE__regex, "''k")
+>>> not_match_(py_str__single_APOSTROPHE__regex, "'a' '")
+>>> not_match_(py_str__single_APOSTROPHE__regex, "'a\n '")
+>>> not_match_(py_str__single_APOSTROPHE__regex, "'\\'")
+
+
+
+
+py_str__single_QUOTATION_MARK__regex
+>>> match_(py_str__single_QUOTATION_MARK__regex, '""')
+>>> match_(py_str__single_QUOTATION_MARK__regex, 'kkkkkk" aaa  \'  \\" \\\n "')
+
+>>> not_match_(py_str__single_QUOTATION_MARK__regex, '"')
+>>> not_match_(py_str__single_QUOTATION_MARK__regex, '\"""')
+>>> not_match_(py_str__single_QUOTATION_MARK__regex, '\""\""')
+>>> not_match_(py_str__single_QUOTATION_MARK__regex, '""k')
+>>> not_match_(py_str__single_QUOTATION_MARK__regex, '"a" "')
+>>> not_match_(py_str__single_QUOTATION_MARK__regex, '"a\n "')
+>>> not_match_(py_str__single_QUOTATION_MARK__regex, '"\\"')
+
+
+py_str__triple_APOSTROPHE__regex
+>>> match_(py_str__triple_APOSTROPHE__regex, "\'''\'''")
+>>> match_(py_str__triple_APOSTROPHE__regex, "kkk\'''\'''")
+>>> match_(py_str__triple_APOSTROPHE__regex, "\''' aaa \"\"\" '' \\''\' \n \\\n \'''")
+
+
+py_str__triple_QUOTATION_MARK__regex
+>>> match_(py_str__triple_QUOTATION_MARK__regex, '""""""')
+>>> match_(py_str__triple_QUOTATION_MARK__regex, 'kkk""""""')
+>>> match_(py_str__triple_QUOTATION_MARK__regex, '""" aaa \'\'\' "" \\""" \n \\\n """')
+
+py_short_str__regex
+>>> match_(py_short_str__regex, "''")
+>>> match_(py_short_str__regex, '""')
+
+py_long_str__regex
+>>> match_(py_long_str__regex, "''\'''\'")
+>>> match_(py_long_str__regex, '""""""')
+
+py_str__regex
+>>> match_(py_str__regex, "''")
+>>> match_(py_str__regex, '""')
+>>> match_(py_str__regex, "''\'''\'")
+>>> match_(py_str__regex, '""""""')
 
 
 #]]]'''
@@ -501,6 +552,14 @@ nonspace__pattern
 nonspaces0__pattern
 nonspaces1__pattern
 
+
+py_str__single_APOSTROPHE__pattern
+py_str__single_QUOTATION_MARK__pattern
+py_str__triple_APOSTROPHE__pattern
+py_str__triple_QUOTATION_MARK__pattern
+py_short_str__pattern
+py_long_str__pattern
+py_str__pattern
 
 
 
@@ -544,6 +603,13 @@ nonspaces0__regex
 nonspaces1__regex
 
 
+py_str__single_APOSTROPHE__regex
+py_str__single_QUOTATION_MARK__regex
+py_str__triple_APOSTROPHE__regex
+py_str__triple_QUOTATION_MARK__regex
+py_short_str__regex
+py_long_str__regex
+py_str__regex
 
 
 
@@ -661,6 +727,36 @@ nonspaces0__regex = re.compile(nonspaces0__pattern)
 nonspaces1__regex = re.compile(nonspaces1__pattern)
 
 
+'" : QUOTATION MARK'
+"' : APOSTROPHE"
+py_str__single_APOSTROPHE__pattern = r"(?:\w*'(?!'')(?:[^\\'\n]+|\\.|\\\n)*')"
+'xxx' 'yyy' # not include this case
+py_str__single_QUOTATION_MARK__pattern = r'(?:\w*"(?!"")(?:[^\\"\n]+|\\.|\\\n)*")'
+
+py_str__triple_APOSTROPHE__pattern = r"(?:\w*'''(?:[^\\']+|\n|'(?!'')|\\.|\\\n)*''')"
+py_str__triple_QUOTATION_MARK__pattern = r'(?:\w*"""(?:[^\\"]+|\n|"(?!"")|\\.|\\\n)*""")'
+
+py_short_str__pattern = fr'(?:{py_str__single_APOSTROPHE__pattern}|{py_str__single_QUOTATION_MARK__pattern})'
+py_long_str__pattern = fr'(?:{py_str__triple_APOSTROPHE__pattern}|{py_str__triple_QUOTATION_MARK__pattern})'
+
+py_str__pattern = fr'(?:{py_short_str__pattern}|{py_long_str__pattern})'
+
+
+
+
+py_str__single_APOSTROPHE__regex = re.compile(py_str__single_APOSTROPHE__pattern)
+py_str__single_QUOTATION_MARK__regex = re.compile(py_str__single_QUOTATION_MARK__pattern)
+py_str__triple_APOSTROPHE__regex = re.compile(py_str__triple_APOSTROPHE__pattern)
+py_str__triple_QUOTATION_MARK__regex = re.compile(py_str__triple_QUOTATION_MARK__pattern)
+
+py_short_str__regex = re.compile(py_short_str__pattern)
+py_long_str__regex = re.compile(py_long_str__pattern)
+
+py_str__regex = re.compile(py_str__pattern)
+
+
+
 del re
+from seed.text.useful_regex_patterns import py_str__pattern, py_str__regex
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern, nm__regex, qnm__regex
 from seed.text.useful_regex_patterns import *

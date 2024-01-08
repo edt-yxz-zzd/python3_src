@@ -83,7 +83,7 @@ False
 >>> stream = mk_CuttableStream_from_ground_level_tokens(mk_userdata__pair, 0, '0123456789')
 >>> stream.tell()
 Position(0, None)
->>> stream.peak1()
+>>> stream.peek1()
 (Position(0, None), '0')
 
 
@@ -168,7 +168,7 @@ Position(1, None)
 Position(0, None)
 
 
->>> stream.peak1()
+>>> stream.peek1()
 '0'
 >>> stream.read_le(0)
 ()
@@ -189,7 +189,7 @@ Position(2, None)
 
 
 
->>> stream.peak_le(2)
+>>> stream.peek_le(2)
 ('2', '3')
 >>> stream.tell()
 Position(2, None)
@@ -198,11 +198,11 @@ Position(2, None)
 >>> stream.get_num_relax_tokens()
 2
 
->>> stream.peak_le__relax(1)
+>>> stream.peek_le__relax(1)
 ('2',)
->>> stream.peak_le__relax(2)
+>>> stream.peek_le__relax(2)
 ('2', '3')
->>> stream.peak_le__relax(3)
+>>> stream.peek_le__relax(3)
 ('2', '3')
 >>> stream.tell()
 Position(2, None)
@@ -220,7 +220,7 @@ Position(4, None)
 4
 >>> stream.get_num_relax_tokens()
 0
->>> stream.peak_le__relax(3)
+>>> stream.peek_le__relax(3)
 ()
 >>> stream.read_le__relax(3)
 ()
@@ -364,7 +364,7 @@ news:
     unregister_callback4before_cutting
     unregister_callback4after_filling
     get_huserdata8filling_begin_position
-    peak1__xuserdata__relax
+    peek1__xuserdata__relax
 
     IMkUserData4CuttableStream
     MkUserData4CuttableStream5callable__mk_userdata
@@ -382,14 +382,14 @@ news:
 >>> stream = mk_CuttableStream_from_ground_level_tokens(mk_userdata, -3, range(6, 16))
 >>> stream.get_huserdata8filling_begin_position()
 Position(-3, None)
->>> stream.peak1__xuserdata__relax()
+>>> stream.peek1__xuserdata__relax()
 Position(-3, None)
 >>> stream.detect_required_cutting()
 False
 >>> stream.detect_required_filling()
 True
 
->>> stream.peak1()
+>>> stream.peek1()
 (Position(-3, None), 6)
 >>> stream.detect_required_cutting()
 False
@@ -397,7 +397,7 @@ False
 False
 >>> stream.get_huserdata8filling_begin_position()
 Position(-2, None)
->>> stream.peak1__xuserdata__relax()
+>>> stream.peek1__xuserdata__relax()
 (Position(-3, None), 6)
 
 >>> stream.read_le(3)
@@ -406,7 +406,7 @@ Position(-2, None)
 True
 >>> stream.detect_required_filling()
 True
->>> stream.peak1()
+>>> stream.peek1()
 (Position(0, None), 9)
 >>> stream.detect_required_cutting()
 True
@@ -427,13 +427,13 @@ Position(0, None)
 >>> stream.cut__relative(-3)
 >>> stream.cut__relative(-2)
 9999 Position(-2, None)
->>> stream.peak1()
+>>> stream.peek1()
 (Position(0, None), 9)
 >>> stream.read_le(3)
 77 10 (Position(1, None), 10) Position(2, None) Position(2, None)
 77 11 (Position(2, None), 11) Position(3, None) Position(3, None)
 ((Position(0, None), 9), (Position(1, None), 10), (Position(2, None), 11))
->>> stream.peak1()
+>>> stream.peek1()
 77 12 (Position(3, None), 12) Position(4, None) Position(4, None)
 (Position(3, None), 12)
 >>> stream.unregister_callback4before_cutting(f4c)
@@ -451,14 +451,14 @@ Position(0, None)
 >>> stream = mk_CuttableStream_from_ground_level_tokens(mk_userdata, -3, range(6, 16))
 >>> stream.get_huserdata8filling_begin_position()
 XUserData4CuttableStream(Position(-3, None), {})
->>> stream.peak1__xuserdata__relax()
+>>> stream.peek1__xuserdata__relax()
 XUserData4CuttableStream(Position(-3, None), {})
 
->>> stream.peak1()
+>>> stream.peek1()
 XUserData4CuttableStream(Position(-3, None), {}, 6)
 >>> stream.get_huserdata8filling_begin_position()
 XUserData4CuttableStream(Position(-2, None), {})
->>> stream.peak1__xuserdata__relax()
+>>> stream.peek1__xuserdata__relax()
 XUserData4CuttableStream(Position(-3, None), {}, 6)
 
 
@@ -486,12 +486,12 @@ Traceback (most recent call last):
     ...
 seed.types.CuttableStream.CuttableStreamError__seek_when_filling
 >>> stream.unregister_callback4after_filling(f4f)
->>> f4f = lambda stream, old_position, token, userdata, new_position, huserdata:stream.peak1()
+>>> f4f = lambda stream, old_position, token, userdata, new_position, huserdata:stream.peek1()
 >>> stream.register_callback4after_filling(f4f)
 >>> stream.read1()
 XUserData4CuttableStream(Position(-1, None), {}, 8)
 >>> stream.unregister_callback4after_filling(f4f)
->>> f4f = lambda stream, old_position, token, userdata, new_position, huserdata:stream.peak_le(2)
+>>> f4f = lambda stream, old_position, token, userdata, new_position, huserdata:stream.peek_le(2)
 >>> stream.register_callback4after_filling(f4f)
 >>> stream.read1()
 Traceback (most recent call last):
@@ -514,7 +514,7 @@ seed.types.CuttableStream.CuttableStreamError__seek_when_cutting
 fill when cutting
 >>> mk_userdata = Mkr4XUserData4CuttableStream(dict)
 >>> stream = mk_CuttableStream_from_ground_level_tokens(mk_userdata, -3, range(6, 16))
->>> f4c = lambda stream, position:stream.peak_le(2)
+>>> f4c = lambda stream, position:stream.peek_le(2)
 >>> stream.register_callback4before_cutting(f4c)
 
 >>> stream.detect_required_cutting()
@@ -543,7 +543,7 @@ True
 >>> p3_(stream)
 (Position(-2, None), Position(0, None), Position(0, None))
 
->>> stream.peak1()
+>>> stream.peek1()
 XUserData4CuttableStream(Position(0, None), {}, 9)
 >>> stream.detect_required_cutting()
 True
@@ -945,7 +945,7 @@ class CuttableStream:
     def get_num_relax_tokens(sf, /):
         return sf._filling_begin_position.as_int() -sf._curr_position.as_int()
     def detect_eof(sf, /):
-        return len(sf.peak_le(1)) == 0
+        return len(sf.peek_le(1)) == 0
     #__bool__ = detect_eof
     def detect_required_filling(sf, /):
         return sf._curr_position is sf._filling_begin_position
@@ -1104,18 +1104,18 @@ class CuttableStream:
         save = sf.tell()
         try:
             sf.seek__position(position)
-            return sf.peak1__xuserdata__relax()
+            return sf.peek1__xuserdata__relax()
         finally:
             sf.seek__position(save)
     def get_huserdata8filling_begin_position(sf, /):
         return sf._huserdata
-    def peak1__xuserdata__relax(sf, /):
+    def peek1__xuserdata__relax(sf, /):
         'xuserdata = userdata | huserdata'
         if sf._curr_position is sf._filling_begin_position:
             return sf.get_huserdata8filling_begin_position()
-        return sf.peak1()
+        return sf.peek1()
 
-    def peak1(sf, /):
+    def peek1(sf, /):
         if sf._curr_position is sf._filling_begin_position:
             sf._fill1()
         assert not sf._curr_position is sf._filling_begin_position
@@ -1123,7 +1123,7 @@ class CuttableStream:
         k, data = sf._get_k_data5addr(addr)
         return data.userdata
     def read1(sf, /):
-        userdata = sf.peak1()
+        userdata = sf.peek1()
         sf.seek__relative(1)
         return userdata
 
@@ -1137,14 +1137,14 @@ class CuttableStream:
         except CuttableStreamError__EOF:
             pass
         return (*ls,)
-    def peak_le(sf, sz, /):
+    def peek_le(sf, sz, /):
         position = sf.tell()
         ls = sf.read_le(sz)
         del sz
         #sf.seek__relative(-len(ls))
         sf.seek__position(position)
         return ls
-    def peak_le__relax(sf, sz, /):
+    def peek_le__relax(sf, sz, /):
         check_type_is(int, sz)
         sz = min(sz, sf.get_num_relax_tokens())
         if sz < 1:
@@ -1155,7 +1155,7 @@ class CuttableStream:
         assert len(ls) == sz
         return ls
     def read_le__relax(sf, sz, /):
-        ls = sf.peak_le__relax(sz)
+        ls = sf.peek_le__relax(sz)
         sf.seek__relative(len(ls))
         return ls
 

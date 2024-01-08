@@ -4,6 +4,7 @@ e ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
 
 see:py_all@bash_script
     py_adhoc_call ''  ,str.list '%difflib:__all__@all' =all
+    py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
 
 [[
 TODO:选项:添加:『+lineno』:『,』枚举时附加行号
@@ -107,6 +108,8 @@ xxx.yyy 模块全名
     %...:new=old,xx,yy  from ... import old as new, xx, yy
     ----or:
     _.pkg.xxx().obj.yyy
+新增:
+    %%:@zzz     [zzz:=rjstplr]
 
 py_adhoc_call       seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN @matrix_chain_product__polygon_partitioning__O_NlogN  --may_imin=None  '--_turnon_debug=0'  ='[10,11,25,40,12]'
 
@@ -175,6 +178,9 @@ False
 >>> not_match_(import_regex, '%x:a..b')
 
 
+>>> match_(import_regex, '%%:@loader')
+>>> not_match_(import_regex, '%%:@0')
+>>> not_match_(import_regex, '%%:@a.b')
 
 
 py_adhoc_call   seed.recognize.cmdline.adhoc_argparser @_fwd_call_    %seed.math.matrix_chain_product.test4matrix_chain_product__polygon_partitioning__O_NlogN:随机测试囗囗矩阵乘法链囗多边形囗词典序最先的最优三角化方案囗类同排序算法耗时@f  =f '--L2num_tests={L:1000//L for L in range(2,100)}' '--upper4weight=10000' '--version=3' '--_turnon_debug=0'
@@ -332,6 +338,7 @@ import re
 import builtins
 from itertools import islice
 
+from seed.pkg_tools.load_module5attr import Rjstplr, rjstplr
 from seed.lang.call_ import call_
 from seed.func_tools.detect_depth4fail import decorator4show_py_help
 from seed.helper.stable_repr import stable_repr
@@ -352,7 +359,7 @@ from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
 
 qnm_as__pattern = fr'(?:{qnm__pattern}(?:@{nm__pattern}?)?)'
 smay_qnm_as__pattern = fr'(?:{qnm__pattern}?(?:@{nm__pattern}?)?)'
-import_pattern = fr'(?:%(?P<pkg_as>{smay_qnm_as__pattern})(?:(?P<from_import>[:])(?P<ls4import>(?:{qnm_as__pattern}(?:,{qnm_as__pattern})*)?))?)'##++smay_qnm_as__pattern
+import_pattern = fr'(?:%%:@(?P<rjstplr>{nm__pattern})|%(?P<pkg_as>{smay_qnm_as__pattern})(?:(?P<from_import>[:])(?P<ls4import>(?:{qnm_as__pattern}(?:,{qnm_as__pattern})*)?))?)'##++smay_qnm_as__pattern
     # %xxx.yyy:aaa.bbb,ddd.eee@ccc
         #import the name "aaa", "ccc"
     # %xxx.yyy@:aaa.bbb@
@@ -367,6 +374,12 @@ import_pattern = fr'(?:%(?P<pkg_as>{smay_qnm_as__pattern})(?:(?P<from_import>[:]
     # %xxx.yyy@zzz:
     # %xxx.yyy@zzz
         #import the name "zzz"
+    #
+    # news:
+    # %%:@zzz
+    #   <==> %seed.pkg_tools.load_module5attr:rjstplr
+    #   <==> from seed.pkg_tools.load_module5attr import rjstplr as zzz
+    #
 
 arg_pattern = r'(?:(?P<pos_or_kw>(?P<sgl_or_ls>[-][-]|[+][+])(?P<kw_nm>[^:=+-]+))?(?P<str_or_expr>[:=].*)|(?P<off_or_on>[-]|[+])(?P<flag_nm>[^:=+-]+))'
     #positional:
@@ -542,6 +555,11 @@ py_adhoc_call    xxx.yyy  ,g
 py_adhoc_call    xxx.yyy  @g  %qqq.ppp@:a.b,c.d@,s.t@u  '=(ppp,a,d,u)'
     <==> from xxx.yyy import g; import qqq.ppp as ppp; from qqq.ppp import a,c,s;a.b;d=c.d;u=s.t;del c,s;print(repr(g((ppp,a,d,u))))
 
+py_adhoc_call    xxx.yyy  @g  %%:@loader  '=loader._.math.pi'
+    <==> from xxx.yyy import g; from seed.pkg_tools.load_module5attr import rjstplr as loader;print(repr(g(loader._.math.pi)))
+    ~= from xxx.yyy import g; import math;print(repr(g(math.pi)))
+
+
 #exec without import-support #__import__ is removed
 py_adhoc_call    xxx.yyy  @g  '%!a=0xfff' =a '=a+a'
     <==> from xxx.yyy import g;a=0xfff;print(repr(g(a,a+a)))
@@ -620,6 +638,9 @@ def _parse__qnm_as(s, /):
         qnm4obj = first_nm
     return (qnm4check, qnm4obj, smay_at, as_nm)
 def _parse__import_pattern(m, /):
+    if (alias4rjstplr := m['rjstplr']):
+        return {alias4rjstplr:rjstplr}
+
     pkg_as = m['pkg_as']
     may_from_import = m['from_import']
     #smay_ls4import = m.get('ls4import', '')
@@ -657,7 +678,8 @@ def checked_fullmatch__import_pattern(s, /):
         raise ValueError(f'not satisfy import_pattern:『%xxx.yyy@zzz:aaa.bbb,ccc.ddd@,e.f@g』:{s!r}')
     return m
 def adhoc_argparse__import(strs, /):
-    # "import_pattern": 『%xxx.yyy@zzz:aaa.bbb,ccc.ddd@,e.f@g』
+    # "import_pattern": 『%xxx.yyy@zzz:aaa.bbb,ccc.ddd@,e.f@g』|『%%:@zzz』
+    #   see:rjstplr
     def import_(d, m, /):
         _d = _parse__import_pattern(m)
         d.update(_d) #permitted__overwrite!!!

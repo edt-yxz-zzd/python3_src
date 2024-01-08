@@ -11,6 +11,7 @@ py -m nn_ns.app.debug_cmd -x   seed.seq_tools.remove_strict_sorted_indices
 __all__ = r'''
     iter_rngs__via_idc_
     iter_values__via_idc_
+    iter_ints_in_gaps_
     iter_idc4reserve_
         iter_complement_idc_
 
@@ -37,6 +38,20 @@ def iter_rngs__via_idc_(strict_sorted_idc, /):
 def iter_values__via_idc_(idc, seq, /):
     for i in idc:
         yield seq[i]
+
+#def iter_idc4gaps_(idc4remove, /):
+def iter_ints_in_gaps_(strict_sorted_ints, /):
+    'strict_sorted Iter int -> strict_sorted Iter int # without whole (begin,end)'
+    strict_sorted_ints = iter(strict_sorted_ints)
+    for end_j in strict_sorted_ints:
+        next_j = end_j + 1
+        break
+    for end_j in strict_sorted_ints:
+        if not next_j == end_j:
+            if not next_j < end_j: raise ValueError('not strict_sorted')
+            yield from range(next_j, end_j)
+        next_j = end_j +1 #skip ==>> gaps
+    return
 
 def __():
   def iter_idc4reserve_(length, idc4remove, /):
@@ -163,6 +178,8 @@ def remove_strict_sorted_indices__emplace_(idc4remove, seq, /):
 
 
 
+
+from seed.seq_tools.remove_strict_sorted_indices import iter_ints_in_gaps_
 
 from seed.seq_tools.remove_strict_sorted_indices import remove_strict_sorted_indices__emplace_
 from seed.seq_tools.remove_strict_sorted_indices import iter_rngs__via_idc_, iter_values__via_idc_, iter_idc4reserve_, iter_complement_idc_

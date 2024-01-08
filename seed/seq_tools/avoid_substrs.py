@@ -18,6 +18,50 @@ from seed.seq_tools.avoid_substrs import iter_num_strs_ex__multi_cell_delimiter_
 
 
 
+[[
+20231126:
+===
+directly
+===
+bits encode: regex"1{n}[01]*0{n}" where [n>=2] && middle part doesnot contain prefix/suffix
+    st:curr suffix regex'(^$)|(((^|0)1{m}|(^|1)0{m})$)', [1 <= m <= n], [0 <= st < 2*n+1]
+        special st:
+            0 - curr suffix: regex'(^$)'
+            n - curr suffix: regex'((^|0)1{n}$)'
+                ???
+                bug:indeed two states instead of one as definition:
+                * curr suffix: regex'(^1{n}$)'
+                    intermedia state: next state is '10$'
+                * curr suffix: regex'(01{n}$)'
+                    dead state: no next state
+            2*n - curr suffix: regex'((^|1)0{n}$)'
+                #indeed: 2*n - curr suffix: regex'(10{n}$)'
+                    terminal state: no next state
+            ===
+        normal st:
+            m - curr suffix: regex'((^|0)1{m}$)' where [1<=m<n]
+            m - curr suffix: regex'((^|1)0{m}$)' where [n+1<=m<2*n]
+                #indeed: m - curr suffix: regex'(10{m}$)' where [n+1<=m<2*n]
+            ===
+===
+def iter_num_strs_ex__multi_cell_delimiter_token__layout_with_std_both_marker__via_directly_(sz4alphabet, len4both_marker, sz4alphabet4k4begin_marker, sz4alphabet4k4end_marker, /, *, with_st2cnt=True, may_args4islice=None):
+    #see:iter_num_strs_ex__multi_cell_delimiter_token__layout_with_std_both_marker__via_avoid_substrs_{directly:=True}
+===
+py_adhoc_call   seed.seq_tools.avoid_substrs   ,11:iter_num_strs_ex__multi_cell_delimiter_token__layout_with_std_both_marker__via_directly_  =2  =2 =1 =1
+(0, 0, [1, 0, 0, 0, 0]) # ''
+(1, 0, [0, 1, 0, 0, 0]) # '1'
+(2, 0, [0, 0, 1, 0, 0]) # '11'
+(3, 0, [0, 0, 0, 1, 0]) # '110'
+(4, 1, [0, 1, 0, 0, 1]) # '1101', '1100'
+(5, 0, [0, 0, 1, 1, 0]) # '11011', '11010'
+(6, 1, [0, 1, 0, 0, 1]) # '110101', '110100'
+(7, 0, [0, 0, 1, 1, 0]) # '1101011', '1101010'
+(8, 1, [0, 1, 0, 0, 1]) # '11010101', '11010100'
+(9, 0, [0, 0, 1, 1, 0]) # '110101011', '110101010'
+(10, 1, [0, 1, 0, 0, 1]) # '1101010101', '1101010100'
+===
+]]
+
 
 
 
@@ -3109,6 +3153,7 @@ def check_settings4layout_with_std_both_marker(sz4alphabet, len4both_marker, sz4
 
 def iter_num_strs_ex__multi_cell_delimiter_token__layout_with_std_both_marker__via_directly_(sz4alphabet, len4both_marker, sz4alphabet4k4begin_marker, sz4alphabet4k4end_marker, /, *, with_st2cnt=True, may_args4islice=None):
     '-> Iter (len4curr_str, total_count, st2cnt/[uint])'
+    #see:iter_num_strs_ex__multi_cell_delimiter_token__layout_with_std_both_marker__via_avoid_substrs_{directly:=True}
     it = _impl4iter_num_strs_ex__multi_cell_delimiter_token__layout_with_std_both_marker__via_directly_(sz4alphabet, len4both_marker, sz4alphabet4k4begin_marker, sz4alphabet4k4end_marker, with_st2cnt=with_st2cnt)
     it = apply_may_args4islice_(may_args4islice, it)
     return it

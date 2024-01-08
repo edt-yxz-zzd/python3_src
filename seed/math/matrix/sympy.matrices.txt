@@ -1,0 +1,1258 @@
+
+e ../../python3_src/seed/math/matrix/sympy.matrices.txt
+
+
+/sdcard/0my_files/unzip/py_doc/sympy-docs-html-1.5/modules/matrices/matrices.html
+/sdcard/0my_files/unzip/py_doc/sympy-docs-html-1.5/modules/matrices/common.html
+
+
+[[[
+content
+===
+pinv, cholesky, QRdecomposition, LDLdecomposition, LUdecomposition, LUdecomposition_Simple, LUdecompositionFF
+lower_triangular_solve, upper_triangular_solve, gauss_jordan_solve, cholesky_solve, diagonal_solve, LDLsolve, LUsolve, QRsolve, pinv_solve
+diagonalize, jordan_form
+===
+conjugate
+transpose
+property C¶
+property H¶
+property T¶
+property D¶
+property is_echelon¶
+property is_indefinite¶
+property is_negative_definite¶
+property is_negative_semidefinite¶
+property is_positive_definite¶
+property is_positive_semidefinite¶
+
+===
+]]]
+
+
+
+
+
+
+
+[[
+conjugate
+transpose
+===
+class sympy.matrices.common.MatrixCommon[source]¶
+def conjugate()[source]¶
+Return the by-element conjugation.
+
+Examples
+
+>>> from sympy.matrices import SparseMatrix
+>>> from sympy import I
+>>> a = SparseMatrix(((1, 2 + I), (3, 4), (I, -I)))
+>>> a
+Matrix([
+[1, 2 + I],
+[3,     4],
+[I,    -I]])
+>>> a.C
+Matrix([
+[ 1, 2 - I],
+[ 3,     4],
+[-I,     I]])
+===
+def transpose()[source]¶
+Returns the transpose of the matrix.
+
+Examples
+
+>>> from sympy import Matrix
+>>> A = Matrix(2, 2, [1, 2, 3, 4])
+>>> A.transpose()
+Matrix([
+[1, 3],
+[2, 4]])
+>>> from sympy import Matrix, I
+>>> m=Matrix(((1, 2+I), (3, 4)))
+>>> m
+Matrix([
+[1, 2 + I],
+[3,     4]])
+>>> m.transpose()
+Matrix([
+[    1, 3],
+[2 + I, 4]])
+>>> m.T == m.transpose()
+True
+===
+===
+]]
+
+[[
+property C¶
+property H¶
+property T¶
+property D¶
+property is_echelon¶
+property is_indefinite¶
+property is_negative_definite¶
+property is_negative_semidefinite¶
+property is_positive_definite¶
+property is_positive_semidefinite¶
+
+===
+Common Matrices¶
+MatrixCommon Class Reference¶
+class sympy.matrices.common.MatrixCommon[source]¶
+All common matrix operations including basic arithmetic, shaping, and special matrices like \(zeros\), and \(eye\).
+
+property C¶
+By-element conjugation.
+
+property H¶
+Return Hermite conjugate.
+
+Examples
+
+>>> from sympy import Matrix, I
+>>> m = Matrix((0, 1 + I, 2, 3))
+>>> m
+Matrix([
+[    0],
+[1 + I],
+[    2],
+[    3]])
+>>> m.H
+Matrix([[0, 1 - I, 2, 3]])
+See also
+
+conjugate
+By-element conjugation
+
+sympy.matrices.matrices.MatrixBase.D
+Dirac conjugation
+
+property T¶
+Matrix transposition.
+===
+MatrixReductions Class Reference¶
+class sympy.matrices.matrices.MatrixReductions[source]¶
+Provides basic matrix row/column operations. Should not be instantiated directly.
+===
+MatrixBase Class Reference¶
+class sympy.matrices.matrices.MatrixBase[source]¶
+Base class for matrix objects.
+
+property D¶
+Return Dirac conjugate (if self.rows == 4).
+
+Examples
+
+>>> from sympy import Matrix, I, eye
+>>> m = Matrix((0, 1 + I, 2, 3))
+>>> m.D
+Matrix([[0, 1 - I, -2, -3]])
+>>> m = (eye(4) + I*eye(4))
+>>> m[0, 3] = 2
+>>> m.D
+Matrix([
+[1 - I,     0,      0,      0],
+[    0, 1 - I,      0,      0],
+[    0,     0, -1 + I,      0],
+[    2,     0,      0, -1 + I]])
+If the matrix does not have 4 rows an AttributeError will be raised because this property is only defined for matrices with 4 rows.
+
+>>> Matrix(eye(2)).D
+Traceback (most recent call last):
+...
+AttributeError: Matrix has no attribute D.
+See also
+
+sympy.matrices.common.MatrixCommon.conjugate
+By-element conjugation
+
+sympy.matrices.common.MatrixCommon.H
+Hermite conjugation
+===
+property is_echelon¶
+Returns \(True\) if the matrix is in echelon form. That is, all rows of zeros are at the bottom, and below each leading non-zero in a row are exclusively zeros.
+===
+MatrixEigen Class Reference¶
+class sympy.matrices.matrices.MatrixEigen[source]¶
+Provides basic matrix eigenvalue/vector operations. Should not be instantiated directly.
+
+property is_indefinite¶
+property is_negative_definite¶
+property is_negative_semidefinite¶
+property is_positive_definite¶
+property is_positive_semidefinite¶
+
+Finds out the definiteness of a matrix.
+
+Examples
+
+An example of numeric positive definite matrix:
+
+>>> from sympy import Matrix
+>>> A = Matrix([[1, -2], [-2, 6]])
+>>> A.is_positive_definite
+True
+>>> A.is_positive_semidefinite
+True
+>>> A.is_negative_definite
+False
+>>> A.is_negative_semidefinite
+False
+>>> A.is_indefinite
+False
+An example of numeric negative definite matrix:
+
+>>> A = Matrix([[-1, 2], [2, -6]])
+>>> A.is_positive_definite
+False
+>>> A.is_positive_semidefinite
+False
+>>> A.is_negative_definite
+True
+>>> A.is_negative_semidefinite
+True
+>>> A.is_indefinite
+False
+An example of numeric indefinite matrix:
+
+>>> A = Matrix([[1, 2], [2, 1]])
+>>> A.is_positive_definite
+False
+>>> A.is_positive_semidefinite
+False
+>>> A.is_negative_definite
+True
+>>> A.is_negative_semidefinite
+True
+>>> A.is_indefinite
+False
+Notes
+
+Definitiveness is not very commonly discussed for non-hermitian matrices.
+
+However, computing the definitiveness of a matrix can be generalized over any real matrix by taking the symmetric part:
+
+\(A_S = 1/2 (A + A^{T})\)
+
+Or over any complex matrix by taking the hermitian part:
+
+\(A_H = 1/2 (A + A^{H})\)
+
+And computing the eigenvalues.
+
+References
+
+R498
+https://en.wikipedia.org/wiki/Definiteness_of_a_matrix#Eigenvalues
+
+R499
+http://mathworld.wolfram.com/PositiveDefiniteMatrix.html
+
+R500
+Johnson, C. R. “Positive Definite Matrices.” Amer. Math. Monthly 77, 259-264 1970.
+
+===
+===
+]]
+
+
+[[
+pinv, cholesky, QRdecomposition, LDLdecomposition, LUdecomposition, LUdecomposition_Simple, LUdecompositionFF
+===
+def pinv(method='RD')[source]¶
+Calculate the Moore-Penrose pseudoinverse of the matrix.
+
+The Moore-Penrose pseudoinverse exists and is unique for any matrix. If the matrix is invertible, the pseudoinverse is the same as the inverse.
+
+Parameters
+method : String, optional
+
+Specifies the method for computing the pseudoinverse.
+
+If 'RD', Rank-Decomposition will be used.
+
+If 'ED', Diagonalization will be used.
+
+Examples
+
+Computing pseudoinverse by rank decomposition :
+
+>>> from sympy import Matrix
+>>> A = Matrix([[1, 2, 3], [4, 5, 6]])
+>>> A.pinv()
+Matrix([
+[-17/18,  4/9],
+[  -1/9,  1/9],
+[ 13/18, -2/9]])
+Computing pseudoinverse by diagonalization :
+
+>>> B = A.pinv(method='ED')
+>>> B.simplify()
+>>> B
+Matrix([
+[-17/18,  4/9],
+[  -1/9,  1/9],
+[ 13/18, -2/9]])
+See also
+
+inv, pinv_solve
+
+References
+
+R514
+https://en.wikipedia.org/wiki/Moore-Penrose_pseudoinverse
+
+===
+def QRdecomposition()[source]¶
+Return Q, R where A = Q*R, Q is orthogonal and R is upper triangular.
+
+Examples
+
+This is the example from wikipedia:
+
+>>> from sympy import Matrix
+>>> A = Matrix([[12, -51, 4], [6, 167, -68], [-4, 24, -41]])
+>>> Q, R = A.QRdecomposition()
+>>> Q
+Matrix([
+[ 6/7, -69/175, -58/175],
+[ 3/7, 158/175,   6/175],
+[-2/7,    6/35,  -33/35]])
+>>> R
+Matrix([
+[14,  21, -14],
+[ 0, 175, -70],
+[ 0,   0,  35]])
+>>> A == Q*R
+True
+QR factorization of an identity matrix:
+
+>>> A = Matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+>>> Q, R = A.QRdecomposition()
+>>> Q
+Matrix([
+[1, 0, 0],
+[0, 1, 0],
+[0, 0, 1]])
+>>> R
+Matrix([
+[1, 0, 0],
+[0, 1, 0],
+[0, 0, 1]])
+===
+def cholesky(hermitian=True)[source]¶
+Returns the Cholesky-type decomposition L of a matrix A such that L * L.H == A if hermitian flag is True, or L * L.T == A if hermitian is False.
+
+A must be a Hermitian positive-definite matrix if hermitian is True, or a symmetric matrix if it is False.
+
+Examples
+
+>>> from sympy.matrices import Matrix
+>>> A = Matrix(((25, 15, -5), (15, 18, 0), (-5, 0, 11)))
+>>> A.cholesky()
+Matrix([
+[ 5, 0, 0],
+[ 3, 3, 0],
+[-1, 1, 3]])
+>>> A.cholesky() * A.cholesky().T
+Matrix([
+[25, 15, -5],
+[15, 18,  0],
+[-5,  0, 11]])
+The matrix can have complex entries:
+
+>>> from sympy import I
+>>> A = Matrix(((9, 3*I), (-3*I, 5)))
+>>> A.cholesky()
+Matrix([
+[ 3, 0],
+[-I, 2]])
+>>> A.cholesky() * A.cholesky().H
+Matrix([
+[   9, 3*I],
+[-3*I,   5]])
+Non-hermitian Cholesky-type decomposition may be useful when the matrix is not positive-definite.
+
+>>> A = Matrix([[1, 2], [2, 1]])
+>>> L = A.cholesky(hermitian=False)
+>>> L
+Matrix([
+[1,         0],
+[2, sqrt(3)*I]])
+>>> L*L.T == A
+True
+===
+def LDLdecomposition(hermitian=True)[source]¶
+Returns the LDL Decomposition (L, D) of matrix A, such that L * D * L.H == A if hermitian flag is True, or L * D * L.T == A if hermitian is False. This method eliminates the use of square root. Further this ensures that all the diagonal entries of L are 1. A must be a Hermitian positive-definite matrix if hermitian is True, or a symmetric matrix otherwise.
+
+Examples
+
+>>> from sympy.matrices import Matrix, eye
+>>> A = Matrix(((25, 15, -5), (15, 18, 0), (-5, 0, 11)))
+>>> L, D = A.LDLdecomposition()
+>>> L
+Matrix([
+[   1,   0, 0],
+[ 3/5,   1, 0],
+[-1/5, 1/3, 1]])
+>>> D
+Matrix([
+[25, 0, 0],
+[ 0, 9, 0],
+[ 0, 0, 9]])
+>>> L * D * L.T * A.inv() == eye(A.rows)
+True
+The matrix can have complex entries:
+
+>>> from sympy import I
+>>> A = Matrix(((9, 3*I), (-3*I, 5)))
+>>> L, D = A.LDLdecomposition()
+>>> L
+Matrix([
+[   1, 0],
+[-I/3, 1]])
+>>> D
+Matrix([
+[9, 0],
+[0, 4]])
+>>> L*D*L.H == A
+True
+===
+def LUdecomposition(iszerofunc=<function _iszero>, simpfunc=None, rankcheck=False)[source]¶
+Returns (L, U, perm) where L is a lower triangular matrix with unit diagonal, U is an upper triangular matrix, and perm is a list of row swap index pairs. If A is the original matrix, then A = (L*U).permuteBkwd(perm), and the row permutation matrix P such that P*A = L*U can be computed by P=eye(A.row).permuteFwd(perm).
+
+See documentation for LUCombined for details about the keyword argument rankcheck, iszerofunc, and simpfunc.
+
+Examples
+
+>>> from sympy import Matrix
+>>> a = Matrix([[4, 3], [6, 3]])
+>>> L, U, _ = a.LUdecomposition()
+>>> L
+Matrix([
+[  1, 0],
+[3/2, 1]])
+>>> U
+Matrix([
+[4,    3],
+[0, -3/2]])
+
+===
+def LUdecompositionFF()[source]¶
+Compute a fraction-free LU decomposition.
+
+Returns 4 matrices P, L, D, U such that PA = L D**-1 U. If the elements of the matrix belong to some integral domain I, then all elements of L, D and U are guaranteed to belong to I.
+
+Reference
+W. Zhou & D.J. Jeffrey, “Fraction-free matrix factors: new forms for LU and QR factors”. Frontiers in Computer Science in China, Vol 2, no. 1, pp. 67-80, 2008.
+
+
+===
+def LUdecomposition_Simple(iszerofunc=<function _iszero>, simpfunc=None, rankcheck=False)[source]¶
+Compute an lu decomposition of m x n matrix A, where P*A = L*U
+
+L is m x m lower triangular with unit diagonal
+
+U is m x n upper triangular
+
+P is an m x m permutation matrix
+
+Returns an m x n matrix lu, and an m element list perm where each element of perm is a pair of row exchange indices.
+
+The factors L and U are stored in lu as follows: The subdiagonal elements of L are stored in the subdiagonal elements of lu, that is lu[i, j] = L[i, j] whenever i > j. The elements on the diagonal of L are all 1, and are not explicitly stored. U is stored in the upper triangular portion of lu, that is lu[i ,j] = U[i, j] whenever i <= j. The output matrix can be visualized as:
+
+Matrix([
+[u, u, u, u], [l, u, u, u], [l, l, u, u], [l, l, l, u]])
+
+where l represents a subdiagonal entry of the L factor, and u represents an entry from the upper triangular entry of the U factor.
+
+perm is a list row swap index pairs such that if A is the original matrix, then A = (L*U).permuteBkwd(perm), and the row permutation matrix P such that P*A = L*U can be computed by P=eye(A.row).permuteFwd(perm).
+
+The keyword argument rankcheck determines if this function raises a ValueError when passed a matrix whose rank is strictly less than min(num rows, num cols). The default behavior is to decompose a rank deficient matrix. Pass rankcheck=True to raise a ValueError instead. (This mimics the previous behavior of this function).
+
+The keyword arguments iszerofunc and simpfunc are used by the pivot search algorithm. iszerofunc is a callable that returns a boolean indicating if its input is zero, or None if it cannot make the determination. simpfunc is a callable that simplifies its input. The default is simpfunc=None, which indicate that the pivot search algorithm should not attempt to simplify any candidate pivots. If simpfunc fails to simplify its input, then it must return its input instead of a copy.
+
+When a matrix contains symbolic entries, the pivot search algorithm differs from the case where every entry can be categorized as zero or nonzero. The algorithm searches column by column through the submatrix whose top left entry coincides with the pivot position. If it exists, the pivot is the first entry in the current search column that iszerofunc guarantees is nonzero. If no such candidate exists, then each candidate pivot is simplified if simpfunc is not None. The search is repeated, with the difference that a candidate may be the pivot if iszerofunc() cannot guarantee that it is nonzero. In the second search the pivot is the first candidate that iszerofunc can guarantee is nonzero. If no such candidate exists, then the pivot is the first candidate for which iszerofunc returns None. If no such candidate exists, then the search is repeated in the next column to the right. The pivot search algorithm differs from the one in rref(), which relies on _find_reasonable_pivot(). Future versions of LUdecomposition_simple() may use _find_reasonable_pivot().
+
+===
+
+]]
+
+[[
+lower_triangular_solve, upper_triangular_solve, gauss_jordan_solve, cholesky_solve, diagonal_solve, LDLsolve, LUsolve, QRsolve, pinv_solve
+===
+def lower_triangular_solve(rhs)[source]¶
+Solves Ax = B, where A is a lower triangular matrix.
+===
+def upper_triangular_solve(rhs)[source]¶
+Solves Ax = B, where A is an upper triangular matrix.
+===
+def cholesky_solve(rhs)[source]¶
+Solves Ax = B using Cholesky decomposition, for a general square non-singular matrix. For a non-square matrix with rows > cols, the least squares solution is returned.
+===
+def diagonal_solve(rhs)[source]¶
+Solves Ax = B efficiently, where A is a diagonal Matrix, with non-zero diagonal entries.
+
+Examples
+
+>>> from sympy.matrices import Matrix, eye
+>>> A = eye(2)*2
+>>> B = Matrix([[1, 2], [3, 4]])
+>>> A.diagonal_solve(B) == B/2
+True
+===
+def LDLsolve(rhs)[source]¶
+Solves Ax = B using LDL decomposition, for a general square and non-singular matrix.
+
+For a non-square matrix with rows > cols, the least squares solution is returned.
+
+Examples
+
+>>> from sympy.matrices import Matrix, eye
+>>> A = eye(2)*2
+>>> B = Matrix([[1, 2], [3, 4]])
+>>> A.LDLsolve(B) == B/2
+True
+===
+def LUsolve(rhs, iszerofunc=<function _iszero>)[source]¶
+Solve the linear system Ax = rhs for x where A = self.
+
+This is for symbolic matrices, for real or complex ones use mpmath.lu_solve or mpmath.qr_solve.
+===
+def QRsolve(b)[source]¶
+Solve the linear system Ax = b.
+
+self is the matrix A, the method argument is the vector b. The method returns the solution vector x. If b is a matrix, the system is solved for each column of b and the return value is a matrix of the same shape as b.
+
+This method is slower (approximately by a factor of 2) but more stable for floating-point arithmetic than the LUsolve method. However, LUsolve usually uses an exact arithmetic, so you don’t need to use QRsolve.
+
+This is mainly for educational purposes and symbolic matrices, for real (or complex) matrices use mpmath.qr_solve.
+
+===
+def pinv_solve(B, arbitrary_matrix=None)[source]¶
+Solve Ax = B using the Moore-Penrose pseudoinverse.
+
+There may be zero, one, or infinite solutions. If one solution exists, it will be returned. If infinite solutions exist, one will be returned based on the value of arbitrary_matrix. If no solutions exist, the least-squares solution is returned.
+
+Parameters
+B : Matrix
+
+The right hand side of the equation to be solved for. Must have the same number of rows as matrix A.
+
+arbitrary_matrix : Matrix
+
+If the system is underdetermined (e.g. A has more columns than rows), infinite solutions are possible, in terms of an arbitrary matrix. This parameter may be set to a specific matrix to use for that purpose; if so, it must be the same shape as x, with as many rows as matrix A has columns, and as many columns as matrix B. If left as None, an appropriate matrix containing dummy symbols in the form of wn_m will be used, with n and m being row and column position of each symbol.
+
+Returns
+x : Matrix
+
+The matrix that will satisfy Ax = B. Will have as many rows as matrix A has columns, and as many columns as matrix B.
+
+Examples
+
+>>> from sympy import Matrix
+>>> A = Matrix([[1, 2, 3], [4, 5, 6]])
+>>> B = Matrix([7, 8])
+>>> A.pinv_solve(B)
+Matrix([
+[ _w0_0/6 - _w1_0/3 + _w2_0/6 - 55/18],
+[-_w0_0/3 + 2*_w1_0/3 - _w2_0/3 + 1/9],
+[ _w0_0/6 - _w1_0/3 + _w2_0/6 + 59/18]])
+>>> A.pinv_solve(B, arbitrary_matrix=Matrix([0, 0, 0]))
+Matrix([
+[-55/18],
+[   1/9],
+[ 59/18]])
+Notes
+
+This may return either exact solutions or least squares solutions. To determine which, check A * A.pinv() * B == B. It will be True if exact solutions exist, and False if only a least-squares solution exists. Be aware that the left hand side of that equation may need to be simplified to correctly compare to the right hand side.
+
+===
+def gauss_jordan_solve(B, freevar=False)[source]¶
+Solves Ax = B using Gauss Jordan elimination.
+
+There may be zero, one, or infinite solutions. If one solution exists, it will be returned. If infinite solutions exist, it will be returned parametrically. If no solutions exist, It will throw ValueError.
+
+Parameters
+B : Matrix
+
+The right hand side of the equation to be solved for. Must have the same number of rows as matrix A.
+
+freevar : List
+
+If the system is underdetermined (e.g. A has more columns than rows), infinite solutions are possible, in terms of arbitrary values of free variables. Then the index of the free variables in the solutions (column Matrix) will be returned by freevar, if the flag \(freevar\) is set to \(True\).
+
+Returns
+x : Matrix
+
+The matrix that will satisfy Ax = B. Will have as many rows as matrix A has columns, and as many columns as matrix B.
+
+params : Matrix
+
+If the system is underdetermined (e.g. A has more columns than rows), infinite solutions are possible, in terms of arbitrary parameters. These arbitrary parameters are returned as params Matrix.
+
+Examples
+
+>>> from sympy import Matrix
+>>> A = Matrix([[1, 2, 1, 1], [1, 2, 2, -1], [2, 4, 0, 6]])
+>>> B = Matrix([7, 12, 4])
+>>> sol, params = A.gauss_jordan_solve(B)
+>>> sol
+Matrix([
+[-2*tau0 - 3*tau1 + 2],
+[                 tau0],
+[           2*tau1 + 5],
+[                 tau1]])
+>>> params
+Matrix([
+[tau0],
+[tau1]])
+>>> taus_zeroes = { tau:0 for tau in params }
+>>> sol_unique = sol.xreplace(taus_zeroes)
+>>> sol_unique
+ Matrix([
+[2],
+[0],
+[5],
+[0]])
+>>> A = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 10]])
+>>> B = Matrix([3, 6, 9])
+>>> sol, params = A.gauss_jordan_solve(B)
+>>> sol
+Matrix([
+[-1],
+[ 2],
+[ 0]])
+>>> params
+Matrix(0, 1, [])
+>>> A = Matrix([[2, -7], [-1, 4]])
+>>> B = Matrix([[-21, 3], [12, -2]])
+>>> sol, params = A.gauss_jordan_solve(B)
+>>> sol
+Matrix([
+[0, -2],
+[3, -1]])
+>>> params
+Matrix(0, 2, [])
+See also
+
+lower_triangular_solve, upper_triangular_solve, cholesky_solve, diagonal_solve, LDLsolve, LUsolve, QRsolve, pinv
+
+References
+
+R513
+https://en.wikipedia.org/wiki/Gaussian_elimination
+===
+]]
+
+[[[
+# mx=[3,2;4,3;] from: view ../../python3_src/seed/math/right_angled_triangle_side_length.py
+#
+from sympy import Matrix
+mx = Matrix([[3,2], [4,3]])
+(P, J) = mx.jordan_form() # mx == P*J*P**-1
+(B, D) = mx.diagonalize(reals_only=True, sort=True, normalize=True) # mx == B*D*B**-1
+===
+>>> J
+Matrix([
+[3 - 2*sqrt(2),             0],
+[            0, 2*sqrt(2) + 3]])
+>>> P
+Matrix([
+[-sqrt(2)/2, sqrt(2)/2],
+[         1,         1]])
+>>> P.inv()
+Matrix([
+[-sqrt(2)/2, 1/2],
+[ sqrt(2)/2, 1/2]])
+>>> P.transpose()
+Matrix([
+[-sqrt(2)/2, 1],
+[ sqrt(2)/2, 1]])
+>>> P.transpose() == P.inv()
+False
+>>> (MM := (P*J*P.inv())).simplify(); MM
+Matrix([
+[3, 2],
+[4, 3]])
+>>> (I := (P*P.inv())).simplify(); I
+Matrix([
+[1, 0],
+[0, 1]])
+>>> (X := (P*P.transpose())).simplify(); X
+Matrix([
+[1, 0],
+[0, 2]])
+===
+>>> D
+Matrix([
+[3 - 2*sqrt(2),             0],
+[            0, 2*sqrt(2) + 3]])
+>>> B
+Matrix([
+[-sqrt(3)/3, sqrt(3)/3],
+[ sqrt(6)/3, sqrt(6)/3]])
+>>> B.inv()
+Matrix([
+[-sqrt(3)/2, sqrt(6)/4],
+[ sqrt(3)/2, sqrt(6)/4]])
+>>> (I := (B*B.inv())).simplify(); I
+Matrix([
+[1, 0],
+[0, 1]])
+>>> (MM := (B*D*B.inv())).simplify(); MM
+Matrix([
+[3, 2],
+[4, 3]])
+===
+]]]
+
+
+[[[[[[[
+/sdcard/0my_files/unzip/py_doc/sympy-docs-html-1.5/modules/matrices/matrices.html
+Matrices (linear algebra)¶
+=======
+MatrixEigen Class Reference¶
+=====
+class sympy.matrices.matrices.MatrixEigen[source]¶
+Provides basic matrix eigenvalue/vector operations. Should not be instantiated directly.
+
+===
+def diagonalize(reals_only=False, sort=False, normalize=False)[source]¶
+    Return (P, D), where D is diagonal and
+
+    D = P^-1 * M * P
+
+    where M is current matrix.
+
+    Parameters
+    reals_only : bool. Whether to throw an error if complex numbers are need
+
+    to diagonalize. (Default: False)
+
+    sort : bool. Sort the eigenvalues along the diagonal. (Default: False)
+
+    normalize : bool. If True, normalize the columns of P. (Default: False)
+
+    Examples
+
+    >>> from sympy import Matrix
+    >>> m = Matrix(3, 3, [1, 2, 0, 0, 3, 0, 2, -4, 2])
+    >>> m
+    Matrix([
+    [1,  2, 0],
+    [0,  3, 0],
+    [2, -4, 2]])
+    >>> (P, D) = m.diagonalize()
+    >>> D
+    Matrix([
+    [1, 0, 0],
+    [0, 2, 0],
+    [0, 0, 3]])
+    >>> P
+    Matrix([
+    [-1, 0, -1],
+    [ 0, 0, -1],
+    [ 2, 1,  2]])
+    >>> P.inv() * m * P
+    Matrix([
+    [1, 0, 0],
+    [0, 2, 0],
+    [0, 0, 3]])
+    See also
+
+    is_diagonal, is_diagonalizable
+
+===
+def jordan_form(calc_transform=True, **kwargs)[source]¶
+    Return (P, J) where \(J\) is a Jordan block matrix and \(P\) is a matrix such that
+
+    self == P*J*P**-1
+
+    Parameters
+    calc_transform : bool
+
+    If False, then only \(J\) is returned.
+
+    chop : bool
+
+    All matrices are converted to exact types when computing eigenvalues and eigenvectors. As a result, there may be approximation errors. If chop==True, these errors will be truncated.
+
+    Examples
+
+    >>> from sympy import Matrix
+    >>> m = Matrix([[ 6,  5, -2, -3], [-3, -1,  3,  3], [ 2,  1, -2, -3], [-1,  1,  5,  5]])
+    >>> P, J = m.jordan_form()
+    >>> J
+    Matrix([
+    [2, 1, 0, 0],
+    [0, 2, 0, 0],
+    [0, 0, 2, 1],
+    [0, 0, 0, 2]])
+    See also
+
+    jordan_block
+===
+=====
+Creating Matrices¶
+The linear algebra module is designed to be as simple as possible. First, we import and declare our first Matrix object:
+
+>>> from sympy.interactive.printing import init_printing
+>>> init_printing(use_unicode=False, wrap_line=False)
+>>> from sympy.matrices import Matrix, eye, zeros, ones, diag, GramSchmidt
+>>> M = Matrix([[1,0,0], [0,0,0]]); M
+[1  0  0]
+[       ]
+[0  0  0]
+>>> Matrix([M, (0, 0, -1)])
+[1  0  0 ]
+[        ]
+[0  0  0 ]
+[        ]
+[0  0  -1]
+>>> Matrix([[1, 2, 3]])
+[1 2 3]
+>>> Matrix([1, 2, 3])
+[1]
+[ ]
+[2]
+[ ]
+[3]
+In addition to creating a matrix from a list of appropriately-sized lists and/or matrices, SymPy also supports more advanced methods of matrix creation including a single list of values and dimension inputs:
+
+>>> Matrix(2, 3, [1, 2, 3, 4, 5, 6])
+[1  2  3]
+[       ]
+[4  5  6]
+More interesting (and useful), is the ability to use a 2-variable function (or lambda) to create a matrix. Here we create an indicator function which is 1 on the diagonal and then use it to make the identity matrix:
+
+>>> def f(i,j):
+...     if i == j:
+...         return 1
+...     else:
+...         return 0
+...
+>>> Matrix(4, 4, f)
+[1  0  0  0]
+[          ]
+[0  1  0  0]
+[          ]
+[0  0  1  0]
+[          ]
+[0  0  0  1]
+Finally let’s use lambda to create a 1-line matrix with 1’s in the even permutation entries:
+
+>>> Matrix(3, 4, lambda i,j: 1 - (i+j) % 2)
+[1  0  1  0]
+[          ]
+[0  1  0  1]
+[          ]
+[1  0  1  0]
+There are also a couple of special constructors for quick matrix construction: eye is the identity matrix, zeros and ones for matrices of all zeros and ones, respectively, and diag to put matrices or elements along the diagonal:
+
+>>> eye(4)
+[1  0  0  0]
+[          ]
+[0  1  0  0]
+[          ]
+[0  0  1  0]
+[          ]
+[0  0  0  1]
+>>> zeros(2)
+[0  0]
+[    ]
+[0  0]
+>>> zeros(2, 5)
+[0  0  0  0  0]
+[             ]
+[0  0  0  0  0]
+>>> ones(3)
+[1  1  1]
+[       ]
+[1  1  1]
+[       ]
+[1  1  1]
+>>> ones(1, 3)
+[1  1  1]
+>>> diag(1, Matrix([[1, 2], [3, 4]]))
+[1  0  0]
+[       ]
+[0  1  2]
+[       ]
+[0  3  4]
+
+===
+Basic Manipulation¶
+While learning to work with matrices, let’s choose one where the entries are readily identifiable. One useful thing to know is that while matrices are 2-dimensional, the storage is not and so it is allowable - though one should be careful - to access the entries as if they were a 1-d list.
+
+>>> M = Matrix(2, 3, [1, 2, 3, 4, 5, 6])
+>>> M[4]
+5
+Now, the more standard entry access is a pair of indices which will always return the value at the corresponding row and column of the matrix:
+
+>>> M[1, 2]
+6
+>>> M[0, 0]
+1
+>>> M[1, 1]
+5
+Since this is Python we’re also able to slice submatrices; slices always give a matrix in return, even if the dimension is 1 x 1:
+
+>>> M[0:2, 0:2]
+[1  2]
+[    ]
+[4  5]
+>>> M[2:2, 2]
+[]
+>>> M[:, 2]
+[3]
+[ ]
+[6]
+>>> M[:1, 2]
+[3]
+In the second example above notice that the slice 2:2 gives an empty range. Note also (in keeping with 0-based indexing of Python) the first row/column is 0.
+
+You cannot access rows or columns that are not present unless they are in a slice:
+
+>>> M[:, 10] # the 10-th column (not there)
+Traceback (most recent call last):
+...
+IndexError: Index out of range: a[[0, 10]]
+>>> M[:, 10:11] # the 10-th column (if there)
+[]
+>>> M[:, :10] # all columns up to the 10-th
+[1  2  3]
+[       ]
+[4  5  6]
+Slicing an empty matrix works as long as you use a slice for the coordinate that has no size:
+
+>>> Matrix(0, 3, [])[:, 1]
+[]
+Slicing gives a copy of what is sliced, so modifications of one object do not affect the other:
+
+>>> M2 = M[:, :]
+>>> M2[0, 0] = 100
+>>> M[0, 0] == 100
+False
+Notice that changing M2 didn’t change M. Since we can slice, we can also assign entries:
+
+>>> M = Matrix(([1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]))
+>>> M
+[1   2   3   4 ]
+[              ]
+[5   6   7   8 ]
+[              ]
+[9   10  11  12]
+[              ]
+[13  14  15  16]
+>>> M[2,2] = M[0,3] = 0
+>>> M
+[1   2   3   0 ]
+[              ]
+[5   6   7   8 ]
+[              ]
+[9   10  0   12]
+[              ]
+[13  14  15  16]
+as well as assign slices:
+
+>>> M = Matrix(([1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]))
+>>> M[2:,2:] = Matrix(2,2,lambda i,j: 0)
+>>> M
+[1   2   3  4]
+[            ]
+[5   6   7  8]
+[            ]
+[9   10  0  0]
+[            ]
+[13  14  0  0]
+All the standard arithmetic operations are supported:
+
+>>> M = Matrix(([1,2,3],[4,5,6],[7,8,9]))
+>>> M - M
+[0  0  0]
+[       ]
+[0  0  0]
+[       ]
+[0  0  0]
+>>> M + M
+[2   4   6 ]
+[          ]
+[8   10  12]
+[          ]
+[14  16  18]
+>>> M * M
+[30   36   42 ]
+[             ]
+[66   81   96 ]
+[             ]
+[102  126  150]
+>>> M2 = Matrix(3,1,[1,5,0])
+>>> M*M2
+[11]
+[  ]
+[29]
+[  ]
+[47]
+>>> M**2
+[30   36   42 ]
+[             ]
+[66   81   96 ]
+[             ]
+[102  126  150]
+As well as some useful vector operations:
+
+>>> M.row_del(0)
+>>> M
+[4  5  6]
+[       ]
+[7  8  9]
+>>> M.col_del(1)
+>>> M
+[4  6]
+[    ]
+[7  9]
+>>> v1 = Matrix([1,2,3])
+>>> v2 = Matrix([4,5,6])
+>>> v3 = v1.cross(v2)
+>>> v1.dot(v2)
+32
+>>> v2.dot(v3)
+0
+>>> v1.dot(v3)
+0
+Recall that the row_del() and col_del() operations don’t return a value - they simply change the matrix object. We can also ‘’glue’’ together matrices of the appropriate size:
+
+>>> M1 = eye(3)
+>>> M2 = zeros(3, 4)
+>>> M1.row_join(M2)
+[1  0  0  0  0  0  0]
+[                   ]
+[0  1  0  0  0  0  0]
+[                   ]
+[0  0  1  0  0  0  0]
+>>> M3 = zeros(4, 3)
+>>> M1.col_join(M3)
+[1  0  0]
+[       ]
+[0  1  0]
+[       ]
+[0  0  1]
+[       ]
+[0  0  0]
+[       ]
+[0  0  0]
+[       ]
+[0  0  0]
+[       ]
+[0  0  0]
+
+
+===
+Operations on entries¶
+We are not restricted to having multiplication between two matrices:
+
+>>> M = eye(3)
+>>> 2*M
+[2  0  0]
+[       ]
+[0  2  0]
+[       ]
+[0  0  2]
+>>> 3*M
+[3  0  0]
+[       ]
+[0  3  0]
+[       ]
+[0  0  3]
+but we can also apply functions to our matrix entries using applyfunc(). Here we’ll declare a function that double any input number. Then we apply it to the 3x3 identity matrix:
+
+>>> f = lambda x: 2*x
+>>> eye(3).applyfunc(f)
+[2  0  0]
+[       ]
+[0  2  0]
+[       ]
+[0  0  2]
+If you want to extract a common factor from a matrix you can do so by applying gcd to the data of the matrix:
+
+>>> from sympy.abc import x, y
+>>> from sympy import gcd
+>>> m = Matrix([[x, y], [1, x*y]]).inv(); m
+[  -x*y          y     ]
+[----------  ----------]
+[   2           2      ]
+[- x *y + y  - x *y + y]
+[                      ]
+[    1          -x     ]
+[----------  ----------]
+[   2           2      ]
+[- x *y + y  - x *y + y]
+>>> gcd(tuple(_))
+    1
+----------
+   2
+- x *y + y
+>>> m/_
+[-x*y  y ]
+[        ]
+[ 1    -x]
+One more useful matrix-wide entry application function is the substitution function. Let’s declare a matrix with symbolic entries then substitute a value. Remember we can substitute anything - even another symbol!:
+
+>>> from sympy import Symbol
+>>> x = Symbol('x')
+>>> M = eye(3) * x
+>>> M
+[x  0  0]
+[       ]
+[0  x  0]
+[       ]
+[0  0  x]
+>>> M.subs(x, 4)
+[4  0  0]
+[       ]
+[0  4  0]
+[       ]
+[0  0  4]
+>>> y = Symbol('y')
+>>> M.subs(x, y)
+[y  0  0]
+[       ]
+[0  y  0]
+[       ]
+[0  0  y]
+
+
+===
+Linear algebra¶
+Now that we have the basics out of the way, let’s see what we can do with the actual matrices. Of course, one of the first things that comes to mind is the determinant:
+
+>>> M = Matrix(( [1, 2, 3], [3, 6, 2], [2, 0, 1] ))
+>>> M.det()
+-28
+>>> M2 = eye(3)
+>>> M2.det()
+1
+>>> M3 = Matrix(( [1, 0, 0], [1, 0, 0], [1, 0, 0] ))
+>>> M3.det()
+0
+Another common operation is the inverse: In SymPy, this is computed by Gaussian elimination by default (for dense matrices) but we can specify it be done by \(LU\) decomposition as well:
+
+>>> M2.inv()
+[1  0  0]
+[       ]
+[0  1  0]
+[       ]
+[0  0  1]
+>>> M2.inv(method="LU")
+[1  0  0]
+[       ]
+[0  1  0]
+[       ]
+[0  0  1]
+>>> M.inv(method="LU")
+[-3/14  1/14  1/2 ]
+[                 ]
+[-1/28  5/28  -1/4]
+[                 ]
+[ 3/7   -1/7   0  ]
+>>> M * M.inv(method="LU")
+[1  0  0]
+[       ]
+[0  1  0]
+[       ]
+[0  0  1]
+We can perform a \(QR\) factorization which is handy for solving systems:
+
+>>> A = Matrix([[1,1,1],[1,1,3],[2,3,4]])
+>>> Q, R = A.QRdecomposition()
+>>> Q
+[  ___     ___      ___ ]
+[\/ 6   -\/ 3    -\/ 2  ]
+[-----  -------  -------]
+[  6       3        2   ]
+[                       ]
+[  ___     ___      ___ ]
+[\/ 6   -\/ 3     \/ 2  ]
+[-----  -------   ----- ]
+[  6       3        2   ]
+[                       ]
+[  ___     ___          ]
+[\/ 6    \/ 3           ]
+[-----   -----      0   ]
+[  3       3            ]
+>>> R
+[           ___         ]
+[  ___  4*\/ 6       ___]
+[\/ 6   -------  2*\/ 6 ]
+[          3            ]
+[                       ]
+[          ___          ]
+[        \/ 3           ]
+[  0     -----      0   ]
+[          3            ]
+[                       ]
+[                   ___ ]
+[  0       0      \/ 2  ]
+>>> Q*R
+[1  1  1]
+[       ]
+[1  1  3]
+[       ]
+[2  3  4]
+In addition to the solvers in the solver.py file, we can solve the system Ax=b by passing the b vector to the matrix A’s LUsolve function. Here we’ll cheat a little choose A and x then multiply to get b. Then we can solve for x and check that it’s correct:
+
+>>> A = Matrix([ [2, 3, 5], [3, 6, 2], [8, 3, 6] ])
+>>> x = Matrix(3,1,[3,7,5])
+>>> b = A*x
+>>> soln = A.LUsolve(b)
+>>> soln
+[3]
+[ ]
+[7]
+[ ]
+[5]
+There’s also a nice Gram-Schmidt orthogonalizer which will take a set of vectors and orthogonalize them with respect to another. There is an optional argument which specifies whether or not the output should also be normalized, it defaults to False. Let’s take some vectors and orthogonalize them - one normalized and one not:
+
+>>> L = [Matrix([2,3,5]), Matrix([3,6,2]), Matrix([8,3,6])]
+>>> out1 = GramSchmidt(L)
+>>> out2 = GramSchmidt(L, True)
+Let’s take a look at the vectors:
+
+>>> for i in out1:
+...     print(i)
+...
+Matrix([[2], [3], [5]])
+Matrix([[23/19], [63/19], [-47/19]])
+Matrix([[1692/353], [-1551/706], [-423/706]])
+>>> for i in out2:
+...      print(i)
+...
+Matrix([[sqrt(38)/19], [3*sqrt(38)/38], [5*sqrt(38)/38]])
+Matrix([[23*sqrt(6707)/6707], [63*sqrt(6707)/6707], [-47*sqrt(6707)/6707]])
+Matrix([[12*sqrt(706)/353], [-11*sqrt(706)/706], [-3*sqrt(706)/706]])
+We can spot-check their orthogonality with dot() and their normality with norm():
+
+>>> out1[0].dot(out1[1])
+0
+>>> out1[0].dot(out1[2])
+0
+>>> out1[1].dot(out1[2])
+0
+>>> out2[0].norm()
+1
+>>> out2[1].norm()
+1
+>>> out2[2].norm()
+1
+So there is quite a bit that can be done with the module including eigenvalues, eigenvectors, nullspace calculation, cofactor expansion tools, and so on. From here one might want to look over the matrices.py file for all functionality.
+
+===
+===
+===
+
+]]]]]]]
+

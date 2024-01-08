@@ -20,6 +20,8 @@ py -m seed.for_libs.for_doctest __main__:_Test._f,_Test._g  __main__:_Test -v
 py -m seed.for_libs.for_doctest __main__:_Test._f,_Test._g  __main__:_Test -ff --optionflag REPORT_NDIFF
 py -m seed.for_libs.for_doctest __main__:_Test._f,_Test._g  __main__:_Test -ff --optionflag REPORT_NDIFF --verbose
 
+py -m seed.for_libs.for_doctest __main__:_Test._f,_Test._g  __main__:_Test -ff --ndiff
+py -m seed.for_libs.for_doctest __main__:_Test._f,_Test._g  __main__:_Test -ff --df
 
 py -m seed.for_libs.for_doctest __main__! -v
 py -m seed.for_libs.for_doctest __main__:__doc__ -v
@@ -74,6 +76,16 @@ if __name__ == '__main__':
     else:
         fail, total = doctest.testmod(optionflags=flags)
         print("{} failures out of {} tests".format(fail, total))
+
+
+doctest.REPORT_NDIFF¶
+When specified, differences are computed by difflib.Differ, using the same
+algorithm as the popular ndiff.py utility. This is the only method that
+marks differences within lines as well as across lines.  For example, if a line
+of expected output contains digit 1 where actual output contains letter
+l, a line is inserted with a caret marking the mismatching column positions.
+
+
 ]]
 
 
@@ -181,6 +193,9 @@ def main(args=None, /):
         , help='print very verbose output for all tests')
     parser.add_argument('-ff', '--fail_fast', action='store_true', default = False
         , help='stop running tests after first failure; <==> --optionflags FAIL_FAST')
+    parser.add_argument('-df', '--ndiff', action='store_true', default = False
+        , help='marks differences within lines as well as across lines; <==> --optionflags REPORT_NDIFF')
+
     parser.add_argument('-opt_flg', '--optionflag', action='append', default=[]
         , type=str
         , choices=doctest_optionflag_names
@@ -190,6 +205,7 @@ def main(args=None, /):
     module_qname_and_obj_qnames__strs = args.module_qname_and_obj_qnames
     verbose = args.verbose
     fail_fast = args.fail_fast
+    ndiff = args.ndiff
     optionflag_names = args.optionflag
 
 
@@ -198,6 +214,8 @@ def main(args=None, /):
     flags = 0 #default
     if fail_fast:
         flags |= doctest.FAIL_FAST
+    if ndiff:
+        flags |= doctest.REPORT_NDIFF
     for optionflag_name in optionflag_names:
         flags |= getattr(doctest, optionflag_name)
 

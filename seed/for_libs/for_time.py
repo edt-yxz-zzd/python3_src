@@ -1453,6 +1453,9 @@ Timer__print_err
 timer = timer__print_err__thread_wide
 _to_show_ = __name__ == "__main__"
 
+with timer(prefix='basic...', _to_show_=True, _show_hint_on_enter_=True):
+    do...
+
 with timer(prefix='basic...', _to_show_=_to_show_):
     from math import isqrt as floor_sqrt_
 with timer(prefix='prime_gens', _to_show_=_to_show_):
@@ -1489,7 +1492,7 @@ uint2radix_repr:duration: 0.007977075 *(unit: 0:00:01)
                 s = _fmt_.format(*args, prefix=prefix, duration=duration_without_unit, unit=unit, **kwds)
                 print_err = sf._pr
                 #if not _to_show_: return
-                print_err(s)
+                print_err(s, flush=True)
             may_callback_on_exit_ = callback_on_exit_
         may_callback_on_exit_
 
@@ -1499,7 +1502,7 @@ uint2radix_repr:duration: 0.007977075 *(unit: 0:00:01)
             def setup_on_enter_():
                 s = f'{prefix}: ... ...'
                 print_err = sf._pr
-                print_err(s)
+                print_err(s, flush=True)
             may_setup_on_enter_ = setup_on_enter_
         may_setup_on_enter_
         may_callback_on_exit_

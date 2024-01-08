@@ -1,3 +1,4 @@
+#__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/GaussInteger.py
 
@@ -6,12 +7,25 @@ used by:
         py script/平方和.py main1__show_Gauss_integer_factor_coeffs_of_4k1_prime_lt =100
         py script/平方和.py main2__show_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt =100
 
-py -m nn_ns.app.debug_cmd   seed.math.GaussInteger
+[[
+why__HOE
+[:why_use_form_1odd_1jeven]:here
+===
+why (odd +/- 1j*even)?
+    + [(%2) unchanged under __mul__]
+        [(odd1 + 1j*even2)*(odd3 + 1j*even4) == (odd1*odd3 -even2*even4) + 1j*(odd1*even4 +even2*odd3) == odd5 + 1j*even6]
+    + [unity is (1+0j)]
+]]
+
+py -m nn_ns.app.debug_cmd   seed.math.GaussInteger -x
+py -m nn_ns.app.doctest_cmd seed.math.GaussInteger:__doc__ -df -ff -v
+
+
 
 [349,353,373,389,397]
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.GaussInteger @find_Gauss_integer_factor_coeffs_of_4k1_prime =349 =None
 (5, 18)
-py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.GaussInteger ,iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt =349 =398 +turnon__is_prime__le_pow2_64
+py_adhoc_call   seed.math.GaussInteger ,iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt =349 =398 +turnon__is_prime__le_pow2_64
 (349, 5, 18)
 (353, 17, 8)
 (373, 7, 18)
@@ -19,11 +33,188 @@ py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.GaussInteger ,ite
 (397, 19, 6)
 
 
+[[[
+py_adhoc_call   seed.math.GaussInteger ,iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt =100 +SML_vs_HOE +to_sort -turnoff__coprime
+===
+(5, 3, 4)
+(13, 5, 12)
+(17, 15, 8)
+(25, 7, 24)
+(29, 21, 20)
+(37, 35, 12)
+(41, 9, 40)
+(53, 45, 28)
+(61, 11, 60)
+(65, 33, 56)
+(65, 63, 16)
+(73, 55, 48)
+(85, 13, 84)
+(85, 77, 36)
+(89, 39, 80)
+(97, 65, 72)
+===
+]]]
+[[[
+py_adhoc_call   seed.math.GaussInteger ,iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt =100 +SML_vs_HOE +to_sort +turnoff__coprime
+===
+(5, 3, 4)
+(10, 6, 8)
+(13, 5, 12)
+(15, 9, 12)
+(17, 15, 8)
+(20, 12, 16)
+(25, 7, 24)
+(25, 15, 20)
+(26, 10, 24)
+(29, 21, 20)
+(30, 18, 24)
+(34, 30, 16)
+(35, 21, 28)
+(37, 35, 12)
+(39, 15, 36)
+(40, 24, 32)
+(41, 9, 40)
+(45, 27, 36)
+(50, 14, 48)
+(50, 30, 40)
+(51, 45, 24)
+(52, 20, 48)
+(53, 45, 28)
+(55, 33, 44)
+(58, 42, 40)
+(60, 36, 48)
+(61, 11, 60)
+(65, 25, 60)
+(65, 33, 56)
+(65, 39, 52)
+(65, 63, 16)
+(68, 60, 32)
+(70, 42, 56)
+(73, 55, 48)
+(74, 70, 24)
+(75, 21, 72)
+(75, 45, 60)
+(78, 30, 72)
+(80, 48, 64)
+(82, 18, 80)
+(85, 13, 84)
+(85, 51, 68)
+(85, 75, 40)
+(85, 77, 36)
+(87, 63, 60)
+(89, 39, 80)
+(90, 54, 72)
+(91, 35, 84)
+(95, 57, 76)
+(97, 65, 72)
+===
+]]]
+[[[
+py_adhoc_call   seed.math.GaussInteger ,100:iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt =None +SML_vs_HOE +to_sort -turnoff__coprime
+===
+(5, 3, 4)
+(13, 5, 12)
+(17, 15, 8)
+(25, 7, 24)
+(29, 21, 20)
+(37, 35, 12)
+(41, 9, 40)
+(53, 45, 28)
+(61, 11, 60)
+(65, 33, 56)
+(65, 63, 16)
+(73, 55, 48)
+(85, 13, 84)
+(85, 77, 36)
+(89, 39, 80)
+(97, 65, 72)
+(101, 99, 20)
+(109, 91, 60)
+(113, 15, 112)
+(125, 117, 44)
+(137, 105, 88)
+(145, 17, 144)
+(145, 143, 24)
+(149, 51, 140)
+(157, 85, 132)
+(169, 119, 120)
+(173, 165, 52)
+(181, 19, 180)
+(185, 57, 176)
+(185, 153, 104)
+(193, 95, 168)
+(197, 195, 28)
+(205, 133, 156)
+(205, 187, 84)
+(221, 21, 220)
+(221, 171, 140)
+(229, 221, 60)
+(233, 105, 208)
+(241, 209, 120)
+(257, 255, 32)
+(265, 23, 264)
+(265, 247, 96)
+(269, 69, 260)
+(277, 115, 252)
+(281, 231, 160)
+(289, 161, 240)
+(293, 285, 68)
+(305, 207, 224)
+(305, 273, 136)
+(313, 25, 312)
+(317, 75, 308)
+(325, 253, 204)
+(325, 323, 36)
+(337, 175, 288)
+(349, 299, 180)
+(353, 225, 272)
+(365, 27, 364)
+(365, 357, 76)
+(373, 275, 252)
+(377, 135, 352)
+(377, 345, 152)
+(389, 189, 340)
+(397, 325, 228)
+(401, 399, 40)
+(409, 391, 120)
+(421, 29, 420)
+(425, 87, 416)
+(425, 297, 304)
+(433, 145, 408)
+(445, 203, 396)
+(445, 437, 84)
+(449, 351, 280)
+(457, 425, 168)
+(461, 261, 380)
+(481, 31, 480)
+(481, 319, 360)
+(485, 93, 476)
+(485, 483, 44)
+(493, 155, 468)
+(493, 475, 132)
+(505, 217, 456)
+(505, 377, 336)
+(509, 459, 220)
+(521, 279, 440)
+(533, 435, 308)
+(533, 525, 92)
+(541, 341, 420)
+(545, 33, 544)
+(545, 513, 184)
+(557, 165, 532)
+(565, 403, 396)
+(565, 493, 276)
+(569, 231, 520)
+(577, 575, 48)
+(593, 465, 368)
+(601, 551, 240)
+(613, 35, 612)
+(617, 105, 608)
+(625, 527, 336)
+(629, 429, 460)
+===
+]]]
 
-
-from seed.math.GaussInteger import is_zero__Gauss_integer, neg__Gauss_integer, conj__Gauss_integer, square_len__Gauss_integer, cmp_len__Gauss_integer, cmp_square_len_ex__Gauss_integer, mul__Gauss_integer, add__Gauss_integer, sub__Gauss_integer, divmod__Gauss_integer, gcd__Gauss_integer, square_len__Gauss_integer, pow__Gauss_integer
-from seed.math.GaussInteger import find_Gauss_integer_factor_coeffs_of_4k1_prime, find_sqrt_neg1_of_4k1_prime_ex, find_sqrt_neg1_of_4k1_prime, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt, iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt
-from seed.math.GaussInteger import iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt, iter_4k1_primes__ge_lt
 
 #]]]'''
 __all__ = '''
@@ -53,19 +244,24 @@ __all__ = '''
 
     iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt
     iter_4k1_primes__ge_lt
+
+
     '''.split()
     #divmod__half
     #sign_of
+__all__
 
+from itertools import count, islice
+
+from seed.tiny import curry1
+from seed.iters.iterate import iterate
 
 from seed.math.max_power_of_base_as_factor_of_ import max_power_of_base_as_factor_of_
 from seed.math.sign_of import sign_of
 from seed.math.II import II
 from seed.math.gcd import gcd
 from seed.math.divmod__half import divmod__half#, mod__half
-from nn_ns.math_nn.numbers.min_factor import factor_uint__via_min_factor_list #, min_factor
 
-from itertools import count
 from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
 
 if 0:
@@ -163,11 +359,12 @@ def find_Gauss_integer_factor_coeffs_of_4k1_prime(p__4k1, may_sqrt_neg1, /):
     (a,b) = gcd__Gauss_integer((p,0), (sqrt_neg1,1))
     a = abs(a)
     b = abs(b)
-    #sqrt_p = floor_sqrt(p)
+    #sqrt_p = floor_sqrt_(p)
     #assert 0 < a <= sqrt_p
     #assert 0 < b <= sqrt_p
     #assert a**2 + b**2 == p
     (odd, even) = (a, b) if a%2==1 else (b, a)
+        # [:why_use_form_1odd_1jeven]:goto
     assert even%2==0
     assert odd%2==1
     assert odd > 0
@@ -175,8 +372,8 @@ def find_Gauss_integer_factor_coeffs_of_4k1_prime(p__4k1, may_sqrt_neg1, /):
     assert odd**2 + even**2 == p
     return (odd, even)
     r'''
-    [lhs = a**2 + b**2 =[%p]= 0][0 < a,b <= floor_sqrt(p)]:
-        [0 < lhs <= 2*floor_sqrt(p)**2 <= 2*(p-1) <= 2*p-2]
+    [lhs = a**2 + b**2 =[%p]= 0][0 < a,b <= floor_sqrt_(p)]:
+        [0 < lhs <= 2*floor_sqrt_(p)**2 <= 2*(p-1) <= 2*p-2]
         !![lhs%p==0]
         [lhs==p]
         [b = a*sqrt_neg1%p]or[b = a*(-sqrt_neg1)%p]
@@ -238,9 +435,9 @@ def find_sqrt_neg1_of_4k1_prime_ex(p__4k1, /):
         # (i+1)**2 -i**2 == 2*i+1
         i += 1
     #'''
-    #r = floor_sqrt(p)
+    #r = floor_sqrt_(p)
     #for r in range(r, p//2+1):
-    #for r in range(p//2+1, p-floor_sqrt(p)):
+    #for r in range(p//2+1, p-floor_sqrt_(p)):
     num_tries = 0
     for x in range(p//2, 0, -1):
         num_tries += 1
@@ -291,15 +488,35 @@ assert pow__Gauss_integer((1,1), 6) == (0,-8)
 assert pow__Gauss_integer((1,1), 7) == (8,-8)
 
 #def mul__Gauss_integer(ab, cd, /):
-def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, /):
-    r'''len_hypotenuse -> factorisation_of<len_hypotenuse>-> Iter (len_hypotenuse, odd, even)
+#def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, /):
+def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, /, *, SML_vs_HOE, to_sort, turnoff__coprime):
+    r'''[[[
+:: len_hypotenuse -> factorisation_of<len_hypotenuse>-> Iter (len_hypotenuse, odd, even)
 
+这里用到的算法:参数:斜边的整数分解
+    以斜边平方的整数分解组合出斜边平方的所有共轭高斯整数分解并以实部虚部作为直角边边长
+    [j2pe := factorisation_of_(hypotenuse_side).items()]
+    [j2sign :: [{+1,-1}]{len==len(j2pe}]
+    [j2sign[0] == +1]
+    [hypotenuse_side**2 == II{(odd4p -1j*even4p)**(2*e4p) *(odd4p +1j*even4p)**(2*e4p) | [[(p,e4p) :<- j2pe][(odd4p, even4p) :=> [[p == odd4p**2 +even4p**2][even4p%2==0]]]]} == (xy:=II{(odd4p -1j*j2sign[j4p]*even4p)**(2*e4p) | ...}) * conj__Gauss_integer(xy) == (odd_side -1j*even_side)*(odd_side +1j*even_side) == odd_side**2 +even_side**2]
 或 其他算法:
     参数: k,s,t
-    [k >= 1][1 <= t < s][gcd(s,t)==1]
+    bug:[k >= 1][1 <= t < s][gcd(s,t)==1]
+    [k >= 1][1 <= t < s][gcd(s,t)==1][s%2 =!= t%2]
     (len_hypotenuse, maybe_odd, must_even) := k*(s**2+t**2, s**2-t**2, 2*s*t)
+    view ../../python3_src/seed/math/right_angled_triangle_infos__sorted_by.py
+        # [:互素整数边长直角三角形的边长表达型式囗囗以斜边的共轭高斯整数分解的实部虚部为参数:[(hypotenuse_side,odd_side,even_side) == (s*s +t*t, s*s -t*t, 2*s*t]]:goto
 
-[[
+######################
+output Iter<(S, M, L)> but sorted by key (L, S, M)/(long,short,middle) if SML_vs_HOE is False
+output Iter<(hypotenuse,odd,even)> sorted by key echo if SML_vs_HOE is True
+#
+[SML =[def]= (short_side, middle_side, long_side)]
+[HOE =[def]= (hypotenuse_side, odd_side, even_side)]
+######################
+
+
+[[[[[
 Hypotenuse
     hypotenuse 直角三角形的斜边
     What Is The Longest Side Of A Triangle Called?
@@ -817,7 +1034,16 @@ An integer triangle or integral triangle is a triangle all of whose sides have l
 
 
 
-result of N=100:[
+]]]]]
+
+
+
+
+
+
+
+iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt(100)
+result of lt N=100:[
 (5, 3, 4)
 (13, 5, 12)
 (17, 15, 8)
@@ -835,20 +1061,160 @@ result of N=100:[
 (89, 39, 80)
 (97, 65, 72)
 ]
-    #]]'''
+===
+(65, 33, 56)
+(65, 63, 16)
+... ...
+(85, 77, 36)
+(85, 13, 84)
+    ==>> not sorted
+===
 
+
+    #]]]'''#'''
+#def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, /):
+    assert type(to_sort) is bool
+    assert type(SML_vs_HOE) is bool
+    ######################
+    if to_sort:
+        ls = [*iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, SML_vs_HOE=SML_vs_HOE, to_sort=False, turnoff__coprime=turnoff__coprime)]
+        _es = [e for p,e in factorisation_of_c.items() if p%4==1]
+            # unsorted
+        if turnoff__coprime:
+            assert len(ls) == _total4iter_ess_(_es)
+        else:
+            assert len(ls) == 2**(len(_es)-1)
+
+        if SML_vs_HOE is False:
+            #SML
+            key = None
+                # sorted by LSM
+                # !! [L eq]
+                # sorted by S
+                # sorted by SML
+        elif SML_vs_HOE is True:
+            #HOE
+            key = None
+                # sorted by HOE
+                # !! [H eq]
+                # sorted by O
+        else:
+            raise 000
+        key
+        ls.sort(key=key)
+        return iter(ls)
+        #yield from ls
+        return
+    ######################
+    if SML_vs_HOE is False:
+        #SML
+        def _outfmt5Lxy(L, x, y, /):
+            (short_side,middle_side) = (x,y) if x < y else (y,x)
+            SML = (short_side, middle_side, L)
+            return SML
+    elif SML_vs_HOE is True:
+        #HOE
+        def _outfmt5Lxy(L, x, y, /):
+            # (odd,even) = (x,y) if x&1 == 1 else (y,x)
+                #bug:@[turnoff__coprime==True]
+            # [g := c2_43*II(p41**e4both<p41> for p41 in factorisation_of_c)]
+            # [x == odd*g]
+            # [y == even*g]
+            assert y%2 == 0
+            #(odd,even) = (x,y)
+                # [odd MAYBE even] if [turnoff__coprime==True]
+            (gcdXodd,gcdXeven) = (x,y)
+            HOE = (L, gcdXodd, gcdXeven)
+            return HOE
+    else:
+        raise 000
+    _outfmt5Lxy
+    ######################
     if not c >= 5: raise ValueError
-    if not c%4==1: raise ValueError
-    if not all(p >= 5 for p in factorisation_of_c): raise ValueError
-    if not all(p%4==1 for p in factorisation_of_c): raise ValueError
+    if not turnoff__coprime:
+        if not c%4==1: raise ValueError
+        if not all(p >= 5 for p in factorisation_of_c): raise ValueError
+        if not all(p%4==1 for p in factorisation_of_c): raise ValueError
+    else:
+        if not all(p >= 2 for p in factorisation_of_c): raise ValueError
+        if not all(p%2==1 or p==2 for p in factorisation_of_c): raise ValueError
+    #
+    if not any(p%4==1 for p in factorisation_of_c): raise ValueError
     if not all(e>=1 for e in factorisation_of_c.values()): raise ValueError
     if not c == II(p**e for p,e in factorisation_of_c.items()): raise ValueError
 
-    p2e = factorisation_of_c
+
+    if not turnoff__coprime:
+        p2e = factorisation_of_c
+        c41 = c
+        c2_43 = 1
+    else:
+        p2e = {p:e for p,e in factorisation_of_c.items() if p%4==1}
+        c41 = II(p**e for p,e in p2e.items())
+        c2_43 = c//c41
+    factorisation_of_c = None
+
     p2xy = {p:find_Gauss_integer_factor_coeffs_of_4k1_prime(p, None) for p in p2e}
-    #bug:miss"2" c->c**2 : p2component = {p: pow__Gauss_integer(p2xy[p], p2e[p]) for p in p2e}
-    p2component = {p: pow__Gauss_integer(p2xy[p], 2*p2e[p]) for p in p2e}
     ps = sorted(p2e)
+    if turnoff__coprime:
+        f = _on___turnoff__coprime
+    else:
+        f = _on___not_turnoff__coprime
+    return f(_outfmt5Lxy, c, p2e, p2xy, ps, c2_43)
+#end-def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, /, *, SML_vs_HOE, to_sort, turnoff__coprime):
+def _on___turnoff__coprime(_outfmt5Lxy, c, p2e, p2xy, ps, c2_43, /):
+    es = [p2e[p] for p in ps]
+    j2xy = [p2xy[p] for p in ps]
+    one = (1,0)
+    #j2e2pow4xy4p = [*iterate(curry1(mul__Gauss_integer, xy), one, 1+2*e4p) for p, xy, e4p in zip(ps, j2xy, es)]
+    j2e2pow4xy4p = [[*iterate(curry1(mul__Gauss_integer, square__Gauss_integer(xy)), one, 1+e4p)] for p, xy, e4p in zip(ps, j2xy, es)]
+    j2e2pow4p = [[*iterate(p.__mul__, 1, 1+e4p)] for p, xy, e4p in zip(ps, j2xy, es)]
+
+    def _iter_xy_pows5es4xy(es4xy, /):
+        for p, xy, e4p, e4xy, e2pow4p, e2pow4xy4p in zip(ps, j2xy, es, es4xy, j2e2pow4p, j2e2pow4xy4p):
+            # (odd,even) = xy
+            # [p == odd**2 +even**2]
+            # [0 <= e4xy < 1+2*e4p]
+            assert 0 <= e4xy < 1+2*e4p
+            e4xy
+            e4conj = 2*e4p -e4xy
+            # [0 <= e4xy <= 2*e4p]
+            # [e4xy +e4conj == 2*e4p]
+            # [(e4xy +e4conj)%2 == 0]
+            # [e4xy%2 == e4conj%2]
+            #
+            e4both = min(e4xy, e4conj)
+            # [e4both%2 == e4xy%2 == e4conj%2]
+            # [0 <= e4both <= e4p]
+            e4xy -= e4both
+            e4conj -= e4both
+            # [0 == min(e4xy, e4conj)]
+            # [0 == e4xy%2 == e4conj%2]
+            # [e4xy +e4conj == 2*e4p -2*e4both <= 2*e4p]
+            # [0 <= e4xy <= 2*e4p-e4both <= 2*e4p]
+            #
+            e4xy //= 2
+            e4conj //= 2
+            # [0 <= e4xy <= e4p]
+
+            pow4p = e2pow4p[e4both]
+            pow4xy4p = e2pow4xy4p[e4xy]
+            pow4even4p = conj__Gauss_integer(e2pow4xy4p[e4conj])
+            yield (pow4p,0) # real +1j*imag
+            yield pow4xy4p
+            yield pow4even4p
+    for es4xy in _iter_ess_(es):
+        a,b = II(_iter_xy_pows5es4xy(es4xy), one=one, mul=mul__Gauss_integer)
+        a = abs(a)
+        b = abs(b)
+        a *= c2_43
+        b *= c2_43
+        yield _outfmt5Lxy(c,a,b)
+    return
+def _on___not_turnoff__coprime(_outfmt5Lxy, c, p2e, p2xy, ps, c2_43, /):
+    # p2component = {p: pow__Gauss_integer(p2xy[p], p2e[p]) for p in p2e}
+        #bug:miss"2" c->c**2
+    p2component = {p: pow__Gauss_integer(p2xy[p], 2*p2e[p]) for p in p2e}
     components = [p2component[p] for p in ps]
     L = len(ps)
     assert L > 0
@@ -861,29 +1227,181 @@ result of N=100:[
         if 1: #bug: a,b < 0
             a = abs(a)
             b = abs(b)
-        (odd, even) = (a,b) if a%2==1 else (b,a)
+        if 1:
+            # [:why_use_form_1odd_1jeven]:goto
+            #(odd, even) = (a,b) if a%2==1 else (b,a)
+            (odd, even) = (a,b)
         assert odd%2==1
         assert even%2==0
         assert odd > 0, (c, odd, even)
         assert even > 0
         assert odd**2 + even**2 == c**2, (c, odd, even, odd**2, even**2, odd**2 + even**2, c**2)
         assert gcd(even, odd) ==1
-        yield (c, odd, even)
+        #yield (c, odd, even)
+        yield _outfmt5Lxy(c,a,b)
     return
 
-def iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt(N, /):
+def _total4iter_ess_(es, /):
+    es = tuple(es)
+    assert all(e >= 1 for e in es)
+    return (II(1+2*e for e in es) -1)//2
+def _iter_ess_(es, /):
+    '[total == ((II (1+2*e4p) {(p,e4p) :<- factorisation_of_c.items() | [p%4==1]} -1)///2)]'
+    es = tuple(es)
+    assert all(e >= 1 for e in es)
+    j2end = [1+2*e for e in es]
+    L = len(j2end)
+    j2e = [0]*L
+        # [?[j :<- [0..<L]] -> [[j2e[:j] == es[:j]][j2e[j] =!= es[j]]]]
+        #   anti-symmetry
+        #   floor_half
+    j2all_prev_eq_ej = [False]*(L+1)
+        # <<== all(es)
+    j2all_prev_eq_ej[0] = True
+        # [j2prev_eq_ej[j] == (j2e[:j] == es[:j])]
+        # [j2prev_eq_ej[0] == True]
+
+    # [L >= 0]
+    if not L: return
+    j = L
+        # [-1 <= j <= L]
+        # [j2e[j+1:] == [0]*(L-(j+1))]
+        # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+    while not j == -1:
+        # [0 <= j <= L]
+        # [j2e[j+1:] == [0]*(L-(j+1))]
+        # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+        #
+        # target:to inc j2e[j]
+        #
+        if j == L:
+            if j2all_prev_eq_ej[j]:
+                break
+            yield tuple(j2e)
+            j -= 1
+            # [-1 <= j == L-1 < L]
+            # [j2e[j+1:] == [] == [0]*(L-(j+1))]
+            # [j2all_prev_eq_ej[j+2:] == [] == [False]*(L-(j+2))]
+            continue
+        # [0 <= j < L]
+        # [0 <= j2e[j] < j2end[j]]
+        # [j2e[j+1:] == [0]*(L-(j+1))]
+        # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+        if j2all_prev_eq_ej[j] and j2e[j] == es[j]:
+            # [j2e[j+1:] == [0]*(L-(j+1))]
+            # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+            j2e[j] = 0
+            j2all_prev_eq_ej[j+1] = False # (j2all_prev_eq_ej[j] and j2e[j] == es[j]) # <<== all(es)
+            # [j2e[j:] == [0]*(L-j)]
+            # [j2all_prev_eq_ej[j+1:] == [False]*(L-(j+1))]
+            j -= 1
+            # [-1 <= j < L-1 < L]
+            # [j2e[j+1:] == [0]*(L-(j+1))]
+            # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+            continue
+        j2e[j] += 1
+        j2all_prev_eq_ej[j+1] = (j2all_prev_eq_ej[j] and j2e[j] == es[j])
+        # [1 <= j2e[j] <= j2end[j]]
+        # [j2e[j+1:] == [0]*(L-(j+1))]
+        # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+        if j2e[j] == j2end[j]:
+            # [j2e[j+1:] == [0]*(L-(j+1))]
+            # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+            j2e[j] = 0
+            j2all_prev_eq_ej[j+1] = False # (j2all_prev_eq_ej[j] and j2e[j] == es[j]) # <<== all(es)
+            # [j2e[j:] == [0]*(L-j)]
+            # [j2all_prev_eq_ej[j+1:] == [False]*(L-(j+1))]
+            j -= 1
+            # [-1 <= j < L-1 < L]
+            # [j2e[j+1:] == [0]*(L-(j+1))]
+            # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+            continue
+        # [1 <= j2e[j] < j2end[j]]
+        # [j2e[j+1:] == [0]*(L-(j+1))]
+        # [j2all_prev_eq_ej[j+2:] == [False]*(L-(j+2))]
+        j = L
+            # to yield...
+        # [1 <= j <= L]
+        # [-1 <= j <= L]
+    else:
+        # [j==-1] is impossible since 『break』
+        raise 000
+    return
+def _test4iter_ess_():
+    assert all(len([*_iter_ess_(es := range(1,L))]) == _total4iter_ess_(es) for L in range(4))
+    assert all((ess := [*_iter_ess_(es := range(1,L))]) == sorted(ess) for L in range(4))
+    assert [*_iter_ess_([])] == []
+    assert [*_iter_ess_([1])] == [(0,)]
+    assert [*_iter_ess_([2])] == [(0,), (1,)]
+    assert [*_iter_ess_([1,2])] == [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1)]
+    assert [*_iter_ess_([1,2,3])] == (
+    [(0, 0, 0), (0, 0, 1), (0, 0, 2), (0, 0, 3), (0, 0, 4), (0, 0, 5), (0, 0, 6)
+    , (0, 1, 0), (0, 1, 1), (0, 1, 2), (0, 1, 3), (0, 1, 4), (0, 1, 5), (0, 1, 6)
+    , (0, 2, 0), (0, 2, 1), (0, 2, 2), (0, 2, 3), (0, 2, 4), (0, 2, 5), (0, 2, 6)
+    , (0, 3, 0), (0, 3, 1), (0, 3, 2), (0, 3, 3), (0, 3, 4), (0, 3, 5), (0, 3, 6)
+    , (0, 4, 0), (0, 4, 1), (0, 4, 2), (0, 4, 3), (0, 4, 4), (0, 4, 5), (0, 4, 6)
+    , (1, 0, 0), (1, 0, 1), (1, 0, 2), (1, 0, 3), (1, 0, 4), (1, 0, 5), (1, 0, 6)
+    , (1, 1, 0), (1, 1, 1), (1, 1, 2), (1, 1, 3), (1, 1, 4), (1, 1, 5), (1, 1, 6)
+    , (1, 2, 0), (1, 2, 1), (1, 2, 2)
+    ])
+if 1:
+    _test4iter_ess_()
+
+#end2-def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, /, *, SML_vs_HOE, to_sort, turnoff__coprime):
+
+
+def iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt(may_max1_hypotenuse, /, *, turnoff__coprime):
     '-> Iter (c, factorisation_of_c)'
+    if may_max1_hypotenuse is None:
+        from seed.math.prime_gens import all_prime_factors_gen
+        from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+        #all_prime_factors_gen.get_or_mk_lazy_seq_()
+        for u, may_prime_factors4u in enumerate(all_prime_factors_gen, 0):
+            #if u < 2: continue
+            if u < 5: continue
+            prime_factors4u = may_prime_factors4u
+            (p2e, _1) = semi_factor_pint_via_trial_division(prime_factors4u, u)
+            assert _1 == 1
+            if not turnoff__coprime:
+                if u%4 == 1 and all(p%4==1 for p in p2e):
+                    yield u, p2e
+            else:
+                if any(p%4==1 for p in p2e):
+                    yield u, p2e
+        return
+
+    ######################
+    from nn_ns.math_nn.numbers.min_factor import factor_uint__via_min_factor_list #, min_factor
+
+    assert not may_max1_hypotenuse is None
+    N = max1_hypotenuse = may_max1_hypotenuse
     N = max(2, N)
     factor_uint__via_min_factor_list(N)
         #force cache
-    #for u in range(5, N, 2):
-    for u in range(5, N, 4):
-        p2e = factor_uint__via_min_factor_list(u)
-        if all(p%4==1 for p in p2e):
-            yield u, p2e
-def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt(N, /):
-    for c, p2e in iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt(N):
-        yield from iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, p2e)
+    if not turnoff__coprime:
+        #for u in range(5, N, 2):
+        for u in range(5, N, 4):
+            p2e = factor_uint__via_min_factor_list(u)
+            if all(p%4==1 for p in p2e):
+                yield u, p2e
+    else:
+        for u in range(5, N):
+            p2e = factor_uint__via_min_factor_list(u)
+            if any(p%4==1 for p in p2e):
+                yield u, p2e
+def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt(may_max1_hypotenuse, /, *, SML_vs_HOE, to_sort, turnoff__coprime):
+    assert type(to_sort) is bool
+    assert type(SML_vs_HOE) is bool
+    ######################
+    for c, p2e in iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt(may_max1_hypotenuse, turnoff__coprime=turnoff__coprime):
+        yield from iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, p2e, SML_vs_HOE=SML_vs_HOE, to_sort=to_sort, turnoff__coprime=turnoff__coprime)
+
+
+
+
+
+
+
 
 
 
@@ -897,20 +1415,16 @@ def iter_4k1_primes__ge_lt(may_begin, may_end, /, *, turnon__is_prime__le_pow2_6
         begin = -1
     else:
         begin = may_begin
-    if begin < 5:
-        begin = 5
-    r = begin&3 #begin%4
-    if not r == 1:
-        if r==0:
-            begin += 1
-        else:
-            begin += 5-r
+    begin = max(5, begin)
+    begin = (begin +2)//4 *4 +1
+
     if not begin >= 5: raise logic-err
     if not begin&3 == 1: raise logic-err
     if may_end is None:
         it = count(begin, 4)
     else:
-        it = iter(range(begin, may_end, 4))
+        end = may_end
+        it = iter(range(begin, end, 4))
 
     if turnon__is_prime__le_pow2_64:
         #using is_prime__le_pow2_64
@@ -919,6 +1433,8 @@ def iter_4k1_primes__ge_lt(may_begin, may_end, /, *, turnon__is_prime__le_pow2_6
                 yield u
     else:
         #using factor_uint__via_min_factor_list
+        from nn_ns.math_nn.numbers.min_factor import factor_uint__via_min_factor_list #, min_factor
+
         if may_end is None:
             N0 = 2*begin
         else:
@@ -931,3 +1447,13 @@ def iter_4k1_primes__ge_lt(may_begin, may_end, /, *, turnon__is_prime__le_pow2_6
             if len(p2e)==1 and p2e=={u:1}:
                 #and all(e==1 and p%4==1 for p,e in p2e.items()):
                 yield u
+
+
+from seed.math.GaussInteger import iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt
+
+from seed.math.GaussInteger import is_zero__Gauss_integer, neg__Gauss_integer, conj__Gauss_integer, square_len__Gauss_integer, cmp_len__Gauss_integer, cmp_square_len_ex__Gauss_integer, mul__Gauss_integer, add__Gauss_integer, sub__Gauss_integer, divmod__Gauss_integer, gcd__Gauss_integer, square_len__Gauss_integer, pow__Gauss_integer
+from seed.math.GaussInteger import find_Gauss_integer_factor_coeffs_of_4k1_prime, find_sqrt_neg1_of_4k1_prime_ex, find_sqrt_neg1_of_4k1_prime, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq, iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt, iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt
+from seed.math.GaussInteger import iter_Gauss_integer_factor_coeffs_of_4k1_prime__ge_lt, iter_4k1_primes__ge_lt
+
+from seed.math.GaussInteger import *
+

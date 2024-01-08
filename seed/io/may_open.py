@@ -74,11 +74,11 @@ from seed.io.may_open import may_open, may_open_stdin, may_open_stdout, may_open
 
 from seed.io.may_open import open4w, open4w_err, open4r
 #def open4w(may_opath, /, *, force, xencoding):
-#def open4r(may_opath, /, *, xencoding):
+#def open4r(may_ipath, /, *, xencoding):
 
 from seed.io.may_open import open4wt, open4wt_err, open4rt
 #def open4wt(may_opath, /, *, force, encoding):
-#def open4rt(may_opath, /, *, encoding):
+#def open4rt(may_ipath, /, *, encoding):
 
 from seed.io.may_open import check_encoding
 
@@ -144,9 +144,9 @@ def open4w(may_opath, /, *, force, xencoding, **kwargs):
 def open4w_err(may_opath, /, *, force, xencoding, **kwargs):
     (mode, may_encoding) = mk_mode_ex4open4w(force=force, xencoding=xencoding)
     return may_open_stderr(may_opath, mode, encoding=may_encoding, **kwargs)
-def open4r(may_opath, /, *, xencoding, **kwargs):
+def open4r(may_ipath, /, *, xencoding, **kwargs):
     (mode, may_encoding) = mk_mode_ex4open4r(xencoding=xencoding)
-    return may_open_stdin(may_opath, mode, encoding=may_encoding, **kwargs)
+    return may_open_stdin(may_ipath, mode, encoding=may_encoding, **kwargs)
 
 
 
@@ -166,9 +166,9 @@ def open4wt(may_opath, /, *, force, encoding, may_smay_newline=default_may_smay_
 def open4wt_err(may_opath, /, *, force, encoding, may_smay_newline=default_may_smay_newline4write):
     check_encoding(encoding)
     return open4w_err(may_opath, force=force, xencoding=encoding, newline=may_smay_newline, **kwargs)
-def open4rt(may_opath, /, *, encoding, may_smay_newline=default_may_smay_newline4read, **kwargs):
+def open4rt(may_ipath, /, *, encoding, may_smay_newline=default_may_smay_newline4read, **kwargs):
     check_encoding(encoding)
-    return open4r(may_opath, xencoding=encoding, newline=may_smay_newline, **kwargs)
+    return open4r(may_ipath, xencoding=encoding, newline=may_smay_newline, **kwargs)
 
 
 

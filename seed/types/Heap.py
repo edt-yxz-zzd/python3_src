@@ -1,12 +1,40 @@
 
 
 '''
-wrapper for heapq
+wrapper for py.heapq
+    now:HeapOverrideOrdering
+    ########
+    ++key
+    ++__le__
+    ++reverse
+    ########
+
+view ../../python3_src/seed/for_libs/for_heapq.py
+    more powerful version than py.heapq
+    ++__le__
+    ########
+    ++key
+    ++__le__
+    ++reverse
+    ########
+    ++item5obj_
+    ++item2val_
+    ########
+    ++obj_vs_item
+    ++applied__heapify
+    ########
+    ++obj_vs_item
+    ++val_vs_item
+    ########
+
+
+
 '''
 
 __all__ = '''
     Heap
     HeapWithKey
+    HeapOverrideOrdering
     '''.split()
 
 from collections.abc import Sequence
@@ -15,6 +43,11 @@ from seed.types.WithKey import WithSortKey, get_obj_with
 from seed.special_funcs import identity_func
 from abc import ABCMeta, abstractmethod
 
+from seed.types.OverrideOrdering import OrderingSetting, OverrideOrdering
+#class OrderingSetting:
+#    def __init__(sf, key, __le__, reverse, /):
+#class OverrideOrdering:
+#    def __init__(sf, ordering_setting, obj, /):
 
 class IHeap(metaclass=ABCMeta):
     '''heap
@@ -26,9 +59,11 @@ obj2item :: Obj->Item
 item2obj :: Item->Obj
 '''
     @abstractmethod
-    def obj2item(self):pass
+    def obj2item(self, obj, /):
+        'obj -> heap_item'
     @abstractmethod
-    def item2obj(self):pass
+    def item2obj(self, heap_item, /):
+        'heap_item -> obj'
 
     def __init__(self, iterable, *, sorted, copy, are_heap_items):
         '''
@@ -61,12 +96,24 @@ item2obj - (item->obj)
         return self.__heap
 
 
-    def peek(self):
-        return self.item2obj(self.the_heap[0])
     def __len__(self):
         return len(self.the_heap)
+    def pop_eqvs(self):
+        hp = self.the_heap
+        heap_item0 = hp[0]
+        obj = self.pop()
+        eqvs = [obj]
+        while hp and heap_item0 == hp[0]:
+            obj = self.pop()
+            eqvs.append(obj)
+        return eqvs
     def pop(self):
         item = heappop(self.the_heap)
+            # ^IndexError
+        return self.item2obj(item)
+    def peek(self):
+        item = self.the_heap[0]
+            # ^IndexError
         return self.item2obj(item)
     def push(self, obj):
         item = self.obj2item(obj)
@@ -101,8 +148,17 @@ item2obj - (item->obj)
         ## assert __obj2item before super.__init__
         super().__init__(iterable
             , sorted=sorted, copy=copy, are_heap_items=are_heap_items)
+    if 0:
+        #@override
+        def obj2item(self, obj, /):
+            'obj -> heap_item'
+        #@override
+        def item2obj(self, heap_item, /):
+            'heap_item -> obj'
+    @property
     def obj2item(self):
         return self.__obj2item
+    @property
     def item2obj(self):
         return self.__item2obj
 
@@ -115,10 +171,40 @@ class HeapWithKey(IHeap):
         ### assign __obj2key first to use __obj2item
         super().__init__(iterable
             , sorted=sorted, copy=copy, are_heap_items=are_heap_items)
-    def obj2item(self, obj):
-        return WithSortKey(self.__obj2key(obj), obj)
-    def item2obj(self, item):
-        return get_obj_with(item)
+    #@override
+    def obj2item(self, obj, /):
+        'obj -> heap_item'
+        heap_item = WithSortKey(self.__obj2key(obj), obj)
+        return heap_item
+    #@override
+    def item2obj(self, heap_item, /):
+        'heap_item -> obj'
+        return get_obj_with(heap_item)
+
+class HeapOverrideOrdering(IHeap):
+    def __init__(self, iterable, *
+            , key=None, __le__=None, reverse=False
+            , sorted=False, copy=True, are_heap_items=False):
+        ordering_setting = OrderingSetting(key, __le__, reverse)
+        sf._ordering_setting = ordering_setting
+        ### assign _ordering_setting first to use obj2item
+        super().__init__(iterable
+            , sorted=sorted, copy=copy, are_heap_items=are_heap_items)
+    @property
+    def ordering_setting(self):
+        return self._ordering_setting
+
+    #@override
+    def obj2item(self, obj, /):
+        'obj -> heap_item'
+        heap_item = OverrideOrdering(sf.ordering_setting, obj)
+        return heap_item
+    #@override
+    def item2obj(self, heap_item, /):
+        'heap_item -> obj'
+        return heap_item.obj
 
 
-
+from seed.types.Heap import IHeap
+from seed.types.Heap import Heap, HeapWithKey
+from seed.types.Heap import *

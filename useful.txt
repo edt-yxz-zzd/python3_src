@@ -78,7 +78,7 @@ r'''[[[
 
 py -m nn_ns.app.debug_cmd   x
 py_adhoc_call   x   @f
-py -m nn_ns.app.doctest_cmd x:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd x:__doc__ --ndiff -ff -v
 from x import f
 #]]]'''
 __all__ = r'''
@@ -288,16 +288,36 @@ ___end_mark_of_excluded_global_names__0___ = ...
                 def xxx(..., /, **kwargs, ...):
 
 
+conventions:
+  define:name4proposition:
+    [proposition]
+        # [:name4proposition]:here
+  using:name4proposition:
+    [proposition2]
+        # !! [:name4proposition]:goto
+naming:
 may
   nmay T = (None|T)
+    nmay - None-may
   emay_xxx = (...|xxx) #Ellipsis
+    nmay - Ellipsis-may
   lmay T = ([]|[*(T,)])
+    lmay - list-may
   tmay T = (()|(T,)) #sometime be lmay too...
+    tmay - tuple-may
     why not (None|(T,))?
       mapping.pop(key, /, *tmay_default)
       if tmay_xxx: check_xxx(*tmay_xxx)
-  imay uint = (-1|uint) = [-1..]
   smay nestr = (''|nonempty_str) = str
+    smay - str-may
+  imay uint = (-1|uint) = [-1..]
+    imay - int-may
+  omay pint = (0|pint) = [0..]
+    omay - 0-may
+    #or zmay? zero-may but:
+      z ~ 2
+      ez ~ e2 ~ e<2> ~ exp4two
+      zpow ~ two_pow ~ 2**ez
   tribool = (...|bool) #TriBoolOps
   cmp = (-1|0|+1) = (<|=|>) = (LT|EQ|GT)
   partial_order_cmp = tmay cmp or [-2..+1]
@@ -317,6 +337,11 @@ may
   down/up
   阴/阳 #六/九
   6:sit/under-context/bind
+  9:per
+    sep9element
+    sep9row
+    mx = [[x sep9element x] sep9row [x sep9element x]]
+#unused yet: 0/1/3/7 #view  others/数学/编程/永恒代码/操作符-数字前缀编码.txt
 int:
   uint: unsigned_int, int_ge_0
   nint: negative_int, int_lt_0
@@ -325,7 +350,7 @@ int:
   imay: imay_uint, int_ge_n1, int>=-1
 
 max1__aaa:前缀『max1__』
-  upperbound/end
+  upperbound/end/upperbound1
   [max1__aaa =[def]= 1+max<aaa>]
   [aaa < max1__aaa]
   vs: min__aaa, max__aaa, max1__aaa
@@ -362,6 +387,11 @@ xxx__zzz:后缀『__zzz』
       no default to avoid missing args when forwarding
     f__easy(a, b=None, /, c=None, *, d, e=None)
       as many defaults as possible
+
+  xxx__ vs xxx/xxx_/xxx__easy/xxx__human:
+    view ../../python3_src/seed/types/linked_list.py
+    xxx__: nodefaults
+    xxx__human: set defaults
 xxxT:后缀『T』
   mkr<callable>
   curry-version-template
@@ -402,6 +432,9 @@ _xxx_:class.method:双缀『_』
       class ???:
           def class.method.xxx(sf, ...):
               sf._xxx_(...)
+fst,snd,thd,frh,ffh,sxh,svh,ehh,nnh,tnh
+  first,second,third,fourth,fifth,sixth,seventh,,eighth,,ninth,tenth
+fr - fraction?
 mk: make :: callable
   mkr: maker :: some-IMaker # has .mk_xxx(...)
   gmk:get_or_make/lookup_cache__or__make_new
@@ -710,6 +743,7 @@ def main(args=None, /):
                         , help='open mode for output file')
 
     args = parser.parse_args(args)
+    force = args.force
     omode = 'wt' if args.force else 'xt'
     iencoding = args.iencoding
     oencoding = args.oencoding

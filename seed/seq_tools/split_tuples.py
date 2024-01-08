@@ -1,10 +1,9 @@
 
 def split_tuples(length, tuples):
-    def mk_iter():
-        return range(length)
-    lsls = tuple([] for _ in mk_iter())
+    rg = range(length)
+    lsls = tuple([] for _ in rg)
     for t in tuples:
-        for i in mk_iter():
+        for i in rg:
             lsls[i].append(t[i])
     return lsls
 

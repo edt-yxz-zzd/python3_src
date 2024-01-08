@@ -42,7 +42,7 @@ from seed.lang.is_immutable_pure_value import is_immutable_pure_value
 Recognizer
     input:
         stream:
-            peak*
+            peek*
             read*
             detect_eof
             ++seek__forward

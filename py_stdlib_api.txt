@@ -4557,12 +4557,22 @@ contextmanager(func)
 
 from contextlib import contextmanager
 from contextlib import redirect_stdout, redirect_stderr
+from contextlib import ExitStack
 py_help contextlib@redirect_stdout
 py_help contextlib@redirect_stderr
 class redirect_stderr(_RedirectStream)
  |  redirect_stderr(new_target)
  |
  |  Context manager for temporarily redirecting stderr to another file.
+
+class ExitStack(_BaseExitStack, AbstractContextManager)
+ |  For example:
+ |      with ExitStack() as stack:
+ |          files = [stack.enter_context(open(fname)) for fname in filenames]
+ |          # All opened files will automatically be closed at the end of
+ |          # the with statement, even if attempts to open files later
+ |          # in the list raise an exception.
+
 
 ]]]
 [[[
@@ -11080,6 +11090,12 @@ mkdir $my_tmp/out4py/html2text/
 mkdir $my_tmp/out4py/html2text/py_38_doc/
 html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/doctest.html > $my_tmp/out4py/html2text/py_38_doc/doctest.html.txt
 view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/doctest.html.txt
+定位输出不同处:
+  REPORT_UDIFF
+  REPORT_CDIFF
+  REPORT_NDIFF
+  REPORT_ONLY_FIRST_FAILURE
+  FAIL_FAST
 
 example.py:
   ...

@@ -40,11 +40,11 @@ step_success_noninitial_inner_st2prev_lock_mask
 input:
     cuttable_stream :: (stream<(token,userdata)>, huserdata)
         .get_xuserdata__relative
-        .peak1__xuserdata__relax
+        .peek1__xuserdata__relax
         .read_le
         .read1
-        .peak_le
-        .peak1
+        .peek_le
+        .peek1
         .cut__position
 
 
@@ -403,7 +403,7 @@ class RecognizerCombinatorExecutor:
         stream.seek__position(the_pruning_position)
         assert stream.tell__relative(sz) is position
         while the_pruning_position is not position:
-            xuserdata = stream.peak1__xuserdata__relax()
+            xuserdata = stream.peek1__xuserdata__relax()
             sf._0clear_cache4the_prune__position(the_pruning_position, xuserdata)
             ######################
             #next round
@@ -643,7 +643,7 @@ class RecognizerCombinatorExecutor:
     def _get_xuserdata__position(sf, position, /):
         stream = sf.cuttable_stream
         stream.seek__position(position)
-        xuserdata = stream.peak1__xuserdata__relax()
+        xuserdata = stream.peek1__xuserdata__relax()
         return xuserdata
     def _get_stack_idc__stack_item(sf, stack_item, /):
         begin_position = stack_item.begin_position

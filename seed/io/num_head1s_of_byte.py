@@ -1013,7 +1013,7 @@ class Case4ByteDecoder(Enum):
 assert len(Case4ByteDecoder) == 4
 #assert len(Case4ByteDecoder) == 16
 
-def _peak_case_at(sf, addr, ibstream, lazy_exc=EOF_Error, /):
+def _peek_case_at(sf, addr, ibstream, lazy_exc=EOF_Error, /):
     ibstream.seek(addr)
     bs = ibstream.peek(1)
     if not bs:
@@ -1060,7 +1060,7 @@ class IByteDecoder(ABC):
         if not sf.seekable(): raise UnsupportedOperation
         addr0 = ibstream.tell()
         for addr in reversed(range(addr0+1)):
-            byte_case = _peak_case_at(sf, addr, ibstream)
+            byte_case = _peek_case_at(sf, addr, ibstream)
                 # ^EOF_Error
             if byte_case is Case4ByteDecoder.fragment:
                 continue
@@ -1087,7 +1087,7 @@ class IByteDecoder(ABC):
         addr0 = ibstream.tell()
         lazy_exc = lambda:EOF_Error if addr==addr0 else TokenMissLastByte__EOF('EOF:pattern: ( first | fragment ) fragment* $')
         for addr in count(addr0):
-            byte_case = _peak_case_at(sf, addr, ibstream, lazy_exc)
+            byte_case = _peek_case_at(sf, addr, ibstream, lazy_exc)
                 # ^EOF_Error
             if byte_case is Case4ByteDecoder.fragment:
                 continue
@@ -1150,13 +1150,13 @@ class IByteDecoder(ABC):
     def is_on_last_of_token4decode(sf, ibstream, /):
         '-> bool|^EOF_Error'
         addr = ibstream.tell()
-        byte_case = _peak_case_at(sf, addr, ibstream)
+        byte_case = _peek_case_at(sf, addr, ibstream)
             # ^EOF_Error
         return byte_case is Case4ByteDecoder.singleton or byte_case is Case4ByteDecoder.last or (not sf.does_support_forward_decode())
     def is_on_first_of_token4decode(sf, ibstream, /):
         '-> bool|^EOF_Error'
         addr = ibstream.tell()
-        byte_case = _peak_case_at(sf, addr, ibstream)
+        byte_case = _peek_case_at(sf, addr, ibstream)
             # ^EOF_Error
         return byte_case is Case4ByteDecoder.singleton or byte_case is Case4ByteDecoder.first or (not sf.does_support_backward_decode())
         #eg:ByteDecoder__1s0

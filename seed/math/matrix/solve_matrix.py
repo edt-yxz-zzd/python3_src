@@ -146,6 +146,8 @@ __all__ = '''
     NoRowMatrix
     LinearEquationSolver
         linear_solver
+    IntRingExOps
+        ring_ex_ops__int
     FractionRingExOps
         ring_ex_ops__Fraction
     BinaryFieldRingExOps
@@ -191,6 +193,9 @@ from seed.tiny import curry1
 from seed.helper.repr_input import repr_helper
 from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset
 from functools import reduce
+
+from seed.math.IRingOps import ring_ops__integer, ring_ex_ops__int, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
+
 from seed.math.IRingOps import (
     NonInvertibleError
     ,IRingOps
@@ -202,10 +207,13 @@ from seed.math.IRingOps import (
         ,IPyRingOps
             ,IPyRingExOps
             ,IPyRingOpsOverRealNumber
+                ,IntegerRingOps
+                    ,ring_ops__integer
                 ,IPyRingExOpsOverRealNumber
+                    ,IntRingExOps
+                        ,ring_ex_ops__int
                     ,FractionRingExOps
                         ,ring_ex_ops__Fraction
-                ,IntegerRingOps
     )
 
 
@@ -289,6 +297,7 @@ class BasicMatrixOps(ABC):
 
 
     def get_matrix_shape(sf, mx, /):
+        '-> (num_rows, num_cols)'
         M = len(mx)
         if not M:
             N = mx.get_num_columns()
@@ -385,11 +394,47 @@ class BasicMatrixOps(ABC):
         sf.check_matrix_shape(num_rows, num_cols, mx)
         return mx
 
-    def mk_matrix__ij2v(sf, num_rows, num_cols, ij2v, /):
+    def mk_matrix__ij2v(sf, num_rows, num_cols, ij2v, /, *, convertor=None):
+        if convertor is None:
+            convertor = echo
+        check_callable(convertor)
         check_callable(ij2v)
-        return sf.mk_matrix__using_NoRowMatrix(num_rows, num_cols, sf._mk_matrix__ij2v_, ij2v)
-    def _mk_matrix__ij2v_(sf, num_rows, num_cols, ij2v, /):
-        return [[ij2v(i,j) for j in range(num_cols)] for i in range(num_rows)]
+        return sf.mk_matrix__using_NoRowMatrix(num_rows, num_cols, sf._mk_matrix__ij2v_, ij2v, convertor)
+    def _mk_matrix__ij2v_(sf, num_rows, num_cols, ij2v, convertor, /):
+        return [[convertor(ij2v(i,j)) for j in range(num_cols)] for i in range(num_rows)]
+    def mk_matrix__mx(sf, num_rows, num_cols, mx, j2irow=None, j2icolumn=None, /, *, convertor=None):
+        if j2irow is None:
+            j2irow = range(num_rows)
+        if j2icolumn is None:
+            j2icolumn = range(num_cols)
+        j2irow[:0]
+        j2icolumn[:0]
+        if not len(j2irow) == num_rows: raise TypeError
+        if not len(j2icolumn) == num_cols: raise TypeError
+
+        def ij2v(i, j, /):
+            i_ = j2irow[i]
+            j_ = j2icolumn[j]
+            return mx[i_][j_]
+        return sf.mk_matrix__ij2v(num_rows, num_cols, ij2v, convertor=convertor)
+    def mk_matrix__seq(sf, num_rows, num_cols, seq, begin=None, end=None, step=None, /, *, row_oriented__vs__column_oriented=False, convertor=None):
+        seq[:0]
+        j2k = range(len(seq))[begin:end:step]
+        if not 0 <= num_rows*num_cols <= len(j2k): raise TypeError
+        if row_oriented__vs__column_oriented is False:
+            # row_oriented
+            def ij2v(i, j, /):
+                k = j2k[i*num_cols +j]
+                return seq[k]
+        elif row_oriented__vs__column_oriented is True:
+            # column_oriented
+            def ij2v(i, j, /):
+                k = j2k[j*num_rows +i]
+                return seq[k]
+        else:
+            raise 000
+        return sf.mk_matrix__ij2v(num_rows, num_cols, ij2v, convertor=convertor)
+
     def mk_matrix__repeat_row(sf, num_rows, num_cols, row, /, *, copy_row):
         if type(copy_row) is bool:
             copy_row = list if copy_row else echo
@@ -1266,7 +1311,7 @@ todo:MOVE OUT sizes_to_ground_idx2super_idx_inner_idx_pair...
         #......
 '''#]]]'''
 
-from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
+from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_ops__int, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
 from seed.math.matrix.solve_matrix import *
 if __name__ == "__main__":
     import doctest

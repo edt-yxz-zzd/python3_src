@@ -1,6 +1,9 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/iter_sorted_products_of_uints.py
+see:
+    view ../../python3_src/seed/math/generate_partition4additive_semigroup__total_ordering__increasing.py
+
 !mv ../../python3_src/seed/math/iter_sorted_products_of_pairwise_coprime_uints.py ../../python3_src/seed/math/iter_sorted_products_of_uints.py
 from seed.math.iter_sorted_products_of_uints import iter_sorted_products_of_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs
 

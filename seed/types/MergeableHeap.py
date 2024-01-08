@@ -77,7 +77,7 @@ bug: [min_num_nodes_of_height(h) =[def]= if h==0 then 0 else if h==1 then 1 else
 O(1)操作:
     len(heap) -> size
     bool(heap) -> bool
-    heap.peak() -> min_item
+    heap.peek() -> min_item
 O(log(N))操作:
     heap.push(item)
     heap.pop() -> min_item
@@ -139,11 +139,11 @@ True
 [999]
 >>> heap.as_tree()
 (999, (), ())
->>> heap.peak()
+>>> heap.peek()
 999
 >>> [*heap.iter_pops()]
 [999]
->>> heap.peak() #doctest: +IGNORE_EXCEPTION_DETAIL
+>>> heap.peek() #doctest: +IGNORE_EXCEPTION_DETAIL
 Traceback (most recent call last):
     ...
 HeapError__Empty
@@ -225,7 +225,7 @@ True
 9
 >>> [*iter(heap)]
 [999, 666, 777, 222, 444, 888, 555, 333, 111]
->>> heap.peak()
+>>> heap.peek()
 111
 >>> heap.pop()
 111
@@ -417,21 +417,21 @@ MergeableHeap()
 >>> heap = MergeableHeap(key=len)
 >>> heap.push({1,2,3})
 >>> heap.push(range(100))
->>> heap.peak()
+>>> heap.peek()
 {1, 2, 3}
 >>> heap.verify()
 
 >>> heap = MergeableHeap(key=len, __lt__=opss.__gt__)
 >>> heap.push({1,2,3})
 >>> heap.push(range(100))
->>> heap.peak()
+>>> heap.peek()
 range(0, 100)
 >>> heap.verify()
 
 >>> heap = MergeableHeap(key=len, __lt__=opss.__gt__, reverse=True)
 >>> heap.push({1,2,3})
 >>> heap.push(range(100))
->>> heap.peak()
+>>> heap.peek()
 {1, 2, 3}
 >>> heap.verify()
 
@@ -620,7 +620,7 @@ class MergeableHeap:
         args = [iterable] if iterable else []
         return repr_helper(sf, *args, **kwargs)
 
-    def peak(sf, /):
+    def peek(sf, /):
         if not sf:
             raise HeapError__Empty
         return sf._node.min_payload
