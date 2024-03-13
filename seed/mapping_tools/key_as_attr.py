@@ -119,7 +119,7 @@ IKeyAsAttrBase
 
 
 from itertools import compress
-from seed.abc import ABC, abstractmethod
+from seed.abc.abc__ver1 import abstractmethod, ABC
 from seed.abc.IReprHelper import IReprHelper
 
 def key_as_attr(mapping, *, mutable=True, readable=True):
@@ -437,6 +437,8 @@ def _t():
 _t()
 
 
+from seed.mapping_tools.key_as_attr import key_as_attr
+from seed.mapping_tools.key_as_attr import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

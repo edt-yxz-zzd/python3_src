@@ -23,6 +23,7 @@ AttributeError: 'tuple_iterator' object has no attribute '__contains__'
 
 ]]
 
+from seed.tiny_.check import check_may_, check_not_
 
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     from seed.tiny_.check import check_getitemable, icheck_getitemable
@@ -37,6 +38,9 @@ from seed.tiny_.check import icheck_str, icheck_char, icheck_bool
 ]]]'''#'''
 
 __all__ = '''
+    check_may_
+    check_not_
+
     check_subscriptable
         check_getitemable
 
@@ -85,49 +89,68 @@ __all__ = '''
     icheck_bool
     '''.split()
 
+def _call_(check_, obj, /):
+    'check_ :: (obj->None) | ((obj->None), *args)'
+    if callable(check_):
+        check_(obj)
+    else:
+        check_, *args = check_
+        check_(*args, obj)
 
-def check_subscriptable(x, /):
-    if not hasattr(type(x), '__getitem__'): raise TypeError(type(x))
+def check_may_(check_, obj, /):
+    if not obj is None:
+        _call_(check_, obj)
+def check_not_(check_, obj, Types=(TypeError, ValueError, AssertionError), /):
+    try:
+        _call_(check_, obj)
+    #except Exception:
+    except Types:
+        pass
+    else:
+        raise TypeError(type(obj))
+
+def check_subscriptable(obj, /):
+    if not hasattr(type(obj), '__getitem__'): raise TypeError(type(obj))
 check_getitemable = check_subscriptable
 
 def check_type_in(clss, obj, /):
-    if not type(obj) in clss: raise TypeError
+    if not type(obj) in clss: raise TypeError(type(obj))
 def check_type_le(cls, obj, /):
-    if not isinstance(obj, cls): raise TypeError
+    if not isinstance(obj, cls): raise TypeError(type(obj))
 def check_type_is(cls, obj, /):
-    if not type(obj) is cls: raise TypeError
+    if not type(obj) is cls: raise TypeError(type(obj))
 #no check_tuple
-def check_tmay(obj, /):
-    check_type_is(tuple, obj)
-    if not len(obj) < 2: raise TypeError
-def check_pair(obj, /):
-    check_type_is(tuple, obj)
-    if not len(obj) == 2: raise TypeError
-def check_either(obj, /):
-    check_pair(obj); check_type_is(bool, obj[0])
+def check_tmay(tpl, /):
+    check_type_is(tuple, tpl)
+    if not len(tpl) < 2: raise TypeError(len(tpl))
+def check_pair(tpl, /):
+    check_type_is(tuple, tpl)
+    if not len(tpl) == 2: raise TypeError(len(tpl))
+def check_either(tpl, /):
+    check_pair(tpl); check_type_is(bool, tpl[0])
 
-def check_int_ge(min, obj, /):
-    check_type_is(int, obj)
-    if not min <= obj: raise TypeError
-def check_int_ge_le(min, max, obj, /):
-    check_type_is(int, obj)
-    if not min <= obj <= max: raise TypeError
+def check_int_ge(min, i, /):
+    check_type_is(int, i)
+    if not min <= i: raise TypeError(i)
+def check_int_ge_le(min, max, i, /):
+    check_type_is(int, i)
+    if not min <= i <= max: raise TypeError(i)
 
 def check_uint_lt(M, i, /):
     check_int_ge_lt(0, M, i)
 def check_int_ge_lt(m, M, i, /):
     check_type_is(int, i)
-    if not (m <= i < M): raise TypeError
+    if not (m <= i < M): raise TypeError(i)
 check_int_between = check_int_ge_lt
-def check_uint(obj, /):
-    check_int_ge(0, obj)
-def check_imay(obj, /):
-    check_int_ge(-1, obj)
+def check_uint(i, /):
+    check_int_ge(0, i)
+def check_imay(i, /):
+    check_int_ge(-1, i)
 
-def check_uint_le(max, obj, /):
-    check_int_ge_le(0, max, obj)
-def check_imay_le(max, obj, /):
-    check_int_ge_le(-1, max, obj)
+def check_uint_le(max, i, /):
+    check_int_ge_le(0, max, i)
+def check_imay_le(max, i, /):
+    check_int_ge_le(-1, max, i)
 
 def icheck_subscriptable(obj, /):
     check_subscriptable(obj)
@@ -142,35 +165,35 @@ def icheck_type_le(cls, obj, /):
 def icheck_type_is(cls, obj, /):
     check_type_is(cls, obj)
     return obj
-def icheck_tmay(obj, /):
-    check_tmay(obj)
-    return obj
-def icheck_pair(obj, /):
-    check_pair(obj)
-    return obj
-def icheck_either(obj, /):
-    check_either(obj)
-    return obj
+def icheck_tmay(tpl, /):
+    check_tmay(tpl)
+    return tpl
+def icheck_pair(tpl, /):
+    check_pair(tpl)
+    return tpl
+def icheck_either(tpl, /):
+    check_either(tpl)
+    return tpl
 
-def icheck_int_ge(min, obj, /):
-    check_int_ge(min, obj)
-    return obj
-def icheck_uint(obj, /):
-    check_uint(obj)
-    return obj
-def icheck_imay(obj, /):
-    check_imay(obj)
-    return obj
+def icheck_int_ge(min, i, /):
+    check_int_ge(min, i)
+    return i
+def icheck_uint(i, /):
+    check_uint(i)
+    return i
+def icheck_imay(i, /):
+    check_imay(i)
+    return i
 
-def icheck_int_ge_le(min, max, obj, /):
-    check_int_ge_le(min, max, obj)
-    return obj
-def icheck_uint_le(max, obj, /):
-    check_uint_le(max, obj)
-    return obj
-def icheck_imay_le(max, obj, /):
-    check_imay_le(max, obj)
-    return obj
+def icheck_int_ge_le(min, max, i, /):
+    check_int_ge_le(min, max, i)
+    return i
+def icheck_uint_le(max, i, /):
+    check_uint_le(max, i)
+    return i
+def icheck_imay_le(max, i, /):
+    check_imay_le(max, i)
+    return i
 
 check_uint(1)
 check_tmay(())
@@ -187,30 +210,30 @@ assert '' == icheck_type_is(str, '')
 assert '' == icheck_type_le(object, '')
 
 
-def check_pseudo_identifier(obj, /):
+def check_pseudo_identifier(s, /):
     'pseudo_identifier identifier includes py-keyword'
-    check_type_is(str, obj)
-    if not obj.isidentifier(): raise TypeError
-def check_smay_pseudo_qual_name(obj, /):
+    check_type_is(str, s)
+    if not s.isidentifier(): raise TypeError(repr(s))
+def check_smay_pseudo_qual_name(s, /):
     'qual_name qualified-name includes py-keyword'
-    check_type_is(str, obj)
-    if obj:
-        check_pseudo_qual_name(obj)
-def check_pseudo_qual_name(obj, /):
-    #check_smay_pseudo_qual_name(obj)
-    check_type_is(str, obj)
-    if not all(x.isidentifier() for x in obj.split('.')): raise TypeError
+    check_type_is(str, s)
+    if s:
+        check_pseudo_qual_name(s)
+def check_pseudo_qual_name(s, /):
+    #check_smay_pseudo_qual_name(s)
+    check_type_is(str, s)
+    if not all(x.isidentifier() for x in s.split('.')): raise TypeError(repr(s))
 
 
-def icheck_pseudo_identifier(obj, /):
-    check_pseudo_identifier(obj)
-    return obj
-def icheck_smay_pseudo_qual_name(obj, /):
-    check_smay_pseudo_qual_name(obj)
-    return obj
-def icheck_pseudo_qual_name(obj, /):
-    check_pseudo_qual_name(obj)
-    return obj
+def icheck_pseudo_identifier(s, /):
+    check_pseudo_identifier(s)
+    return s
+def icheck_smay_pseudo_qual_name(s, /):
+    check_smay_pseudo_qual_name(s)
+    return s
+def icheck_pseudo_qual_name(s, /):
+    check_pseudo_qual_name(s)
+    return s
 
 assert 'class'.isidentifier()
 assert 'def'.isidentifier()
@@ -223,12 +246,12 @@ check_pseudo_qual_name('x')
 check_pseudo_qual_name('x.def')
 
 def check_callable(obj, /):
-    if not callable(obj): raise TypeError
+    if not callable(obj): raise TypeError(type(obj))
 
 check_callable(check_callable)
 
 def check_is_obj(expected, obj, /):
-    if not obj is expected: raise TypeError
+    if not obj is expected: raise TypeError(type(obj))
 def check_is_None(obj, /):
     check_is_obj(None, obj)
 
@@ -236,22 +259,22 @@ def check_is_None(obj, /):
 def check_str(s, /):
     check_type_is(str, s)
 
-def check_char(char, /):
-    check_type_is(str, char)
-    if not len(char) == 1: raise TypeError
+def check_char(s, /):
+    check_type_is(str, s)
+    if not len(s) == 1: raise TypeError(repr(s))
 
 def check_bool(b, /):
     check_type_is(bool, b)
 
-def icheck_str(obj, /):
-    check_str(obj)
-    return obj
-def icheck_char(obj, /):
-    check_char(obj)
-    return obj
-def icheck_bool(obj, /):
-    check_bool(obj)
-    return obj
+def icheck_str(s, /):
+    check_str(s)
+    return s
+def icheck_char(s, /):
+    check_char(s)
+    return s
+def icheck_bool(b, /):
+    check_bool(b)
+    return b
 
 
 

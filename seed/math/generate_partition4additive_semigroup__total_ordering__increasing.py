@@ -3,6 +3,9 @@ r'''[[[
 e ../../python3_src/seed/math/generate_partition4additive_semigroup__total_ordering__increasing.py
     view ../../python3_src/seed/math/iter_sorted_products_of_uints.py
     view ../../python3_src/seed/for_libs/for_heapq.py
+vs:
+    view ../../python3_src/seed/math/cut_uint_into_uints.py
+
 
 
 seed.math.generate_partition4additive_semigroup__total_ordering__increasing
@@ -284,11 +287,76 @@ Traceback (most recent call last):
 seed.math.generate_partition4additive_semigroup__total_ordering__increasing.ValildFail__not_unique_jpartition_per_element: (27, [(27, ((((1, 1),), 27), ())), (27, ((((0, 9),), 27), ((((0, 8),), 24), ((((0, 7),), 21), ((((0, 6),), 18), ((((0, 5),), 15), ((((0, 4),), 12), ((((0, 3),), 9), ((((0, 2),), 6), ((((0, 1),), 3), ()))))))))))])
 
 
+
+
+>>> search_max_miss_ex__pint_additive_generators_([])
+Traceback (most recent call last):
+    ...
+seed.math.generate_partition4additive_semigroup__total_ordering__increasing.Error__generators_gcd_not_eq1: []
+>>> search_max_miss_ex__pint_additive_generators_([4,6])
+Traceback (most recent call last):
+    ...
+seed.math.generate_partition4additive_semigroup__total_ordering__increasing.Error__generators_gcd_not_eq1: [4, 6]
+>>> search_max_miss_ex__pint_additive_generators_([-3,4,6])
+Traceback (most recent call last):
+    ...
+TypeError
+>>> search_max_miss_ex__pint_additive_generators_([3,4,6], uint_count__vs__pint_count=True)
+(5, (6, 9), (3, 4, 6), ((0, 0, 1), (1, 1, 0), (0, 2, 0)))
+>>> search_max_miss_ex__pint_additive_generators_([1], uint_count__vs__pint_count=True)
+(0, (1, 2), (1,), ((1,),))
+>>> search_max_miss_ex__pint_additive_generators_([7,11], uint_count__vs__pint_count=True)
+(59, (60, 67), (7, 11), ((7, 1), (4, 3), (1, 5), (9, 0), (6, 2), (3, 4), (0, 6)))
+
+>>> search_max_miss_ex__pint_additive_generators_([3,4,6], uint_count__vs__pint_count=False)
+(5, (6, 9), (3, 4, 6), (((2, 1),), ((1, 1), (0, 1)), ((1, 2),)))
+>>> search_max_miss_ex__pint_additive_generators_([1], uint_count__vs__pint_count=False)
+(0, (1, 2), (1,), (((0, 1),),))
+>>> search_max_miss_ex__pint_additive_generators_([7,11], uint_count__vs__pint_count=False)
+(59, (60, 67), (7, 11), (((1, 1), (0, 7)), ((1, 3), (0, 4)), ((1, 5), (0, 1)), ((0, 9),), ((1, 2), (0, 6)), ((1, 4), (0, 3)), ((1, 6),)))
+
+>>> search_max_miss_ex__pint_additive_generators_([3,4,6], may_max_begin=6)
+(5, (6, 9), (3, 4, 6), (((2, 1),), ((1, 1), (0, 1)), ((1, 2),)))
+>>> search_max_miss_ex__pint_additive_generators_([3,4,6], may_max_begin=5)
+False
+
+
+
+
+
+
+>>> max_miss_ex_7_11 = search_max_miss_ex__pint_additive_generators_([7,11])
+>>> partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex_7_11, 59)
+Traceback (most recent call last):
+    ...
+TypeError
+>>> partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex_7_11, 60)
+((1, 1), (0, 7))
+>>> partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex_7_11, 70)
+((0, 10),)
+>>> partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex_7_11, 71)
+((1, 2), (0, 7))
+>>> partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex_7_11, 78)
+((1, 2), (0, 8))
+
+>>> max_miss_ex_3_4_6 = search_max_miss_ex__pint_additive_generators_([3,4,6])
+>>> partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex_3_4_6, 6)
+((2, 1),)
+>>> partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex_3_4_6, 17)
+((2, 1), (1, 2), (0, 1))
+
+
 #]]]'''
 __all__ = r'''
 iter_strict_sorted_elements4additive_semigroup__total_ordering__increasing_
     generate4additive_semigroup__total_ordering__increasing_
 ValildFail__not_unique_jpartition_per_element
+
+
+
+search_max_miss_ex__pint_additive_generators_
+    Error__generators_gcd_not_eq1
+    partition_pint4max_miss_ex__pint_additive_generators_
 
 '''.split()#'''
 __all__
@@ -358,6 +426,7 @@ def generate4additive_semigroup__total_ordering__increasing_(strict_sorted_gener
         [g :: x]
         [k4x =[def]= k<x> :: k]
         [jpartition4x =[def]= jpartition<x> :: reversed_sorted[(j4g/uint, count/pint)]]
+            #NOTE: remove [count==0]
 
     precondition:
         #xxx partition_collector :: j2k_g -> k4x -> x -> partition_collector4x/((jpartition4x -> None) +++ (None -> info4x))
@@ -607,10 +676,189 @@ def generate4additive_semigroup__total_ordering__increasing_(strict_sorted_gener
     return main()
 
 
+class Error__generators_gcd_not_eq1(Exception):pass
+def search_max_miss_ex__pint_additive_generators_(pint_additive_generators, /, *, uint_count__vs__pint_count=False, may_max_begin=None):
+    r'''[[[
+    :: may_max_begin/(may int)
+    -> pint_additive_generators/(SizedContainer<pint>)
+    ->:
+    | -> ^Error__generators_gcd_not_eq1 iff [not gcd(strict_sorted_generators)==1]
+    | -> False iff [not may_max_begin is None][max_miss >= max_begin]
+    | -> (max_miss, (begin, end), j2generator, offset2jpartition) iff uint_count__vs__pint_count is False
+    | -> (max_miss, (begin, end), j2generator, offset2j2count) iff uint_count__vs__pint_count is True
+        + max_miss :: uint # 0!!
+        + (begin, end) :: (pint, pint)
+            [begin == max_miss +1]
+            [end == begin +min_g]
+        + j2generator/strict_sorted_generators :: unique-sorted[pint]
+        ########################
+        + offset2j2count :: [[count/uint]]{len=min_g}
+            [count may be 0]
+            [[offset :<- [0..<min_g]] -> [begin+offset == sum[j2generator[j]*offset2j2count[offset][j] | [j :<- [0..<len(j2generator)]]]]]
+            # O(num_gs**2) too big!!!
+        ########################
+        + offset2jpartition :: [[(j4g, count/pint)]]{len=min_g}
+            [count =!= 0]
+            [min_g == min(strict_sorted_generators)]
+            [j4g :: idx<strict_sorted_generators>]
+            [offset2jpartition ::jpartitions<[begin..<end]>]
+
+    ===
+    how?
+        min_g
+        u%min_g
+        * [gcd(generators) =!= 1]:
+            ^Error__generators_gcd_not_eq1
+        * [gcd(generators) == 1]:
+            [must occur continuous range of length min_g]
+            [(begin, end) :=> [[begin + min_g == end][[begin..<end] |<| span<generators>][not$ (begin-1) <- span<generators>]]]
+            [max_miss := begin-1]
+            @[u > max_miss]:
+                [(q,r) := (u-(max_miss+1))/%min_g]
+                [0 <= r < min_g]
+                [u == q*min_g +r +(max_miss+1)]
+                [u - q*min_g  == (begin+r) <- [begin..<end]]
+    ===
+    #]]]'''#'''
+    len(pint_additive_generators)
+        #MUST BE finite to check gcd==1
+        #   !! infinite generators may not coprime
+    from math import gcd
+    from collections import deque
+
+    check_type_is(bool, uint_count__vs__pint_count)
+    if not may_max_begin is None:
+        max_begin = may_max_begin
+        check_type_is(int, max_begin)
+
+    gs = sorted({*pint_additive_generators})
+    for g in gs:
+        check_type_is(int, g)
+
+    if not gcd(*gs) == 1:
+        raise Error__generators_gcd_not_eq1(gs)
+    assert gs
+    min_g = gs[0]
+    if not min_g > 0: raise TypeError
+
+
+    if may_max_begin is None:
+        def is_ok_(x, /):
+            return True
+    else:
+        max_end = max_begin +min_g
+        def is_ok_(x, /):
+            #bug:return x < max_begin
+            #x is last
+            return x < max_end
+    is_ok_
+
+    dq = deque([], min_g)
+    it = generate4additive_semigroup__total_ordering__increasing_(gs)
+
+    prev = -1
+    for (k4x, jpartition4x, x) in it:
+        if not is_ok_(x):
+            return False
+        prev += 1
+        if not prev == x:
+            #miss
+            prev = x
+            dq.clear()
+        else:
+            #continuous
+            pass
+        dq.append(jpartition4x)
+        if len(dq) == min_g:
+            last = x
+            max_miss = last -min_g
+            break
+    ######################
+    max_miss
+    begin = max_miss +1
+    end = begin +min_g
+    strict_sorted_generators = tuple(gs)
+    j2generator = strict_sorted_generators
+    offset2jpartition = tuple(dq)
+    assert max_miss >= 0
+    assert all(count > 0 for jpartition in offset2jpartition for j, count in jpartition)
+    assert all(begin+offset==sum(j2generator[j]*c for j, c in jpartition) for offset, jpartition in enumerate(offset2jpartition))
+
+    if uint_count__vs__pint_count is False:
+        return (max_miss, (begin, end), j2generator, offset2jpartition)
+    ######################
+    num_gs = len(j2generator)
+    offset2j2count = tuple(_simplify_jpartition_(num_gs, jpartition) for jpartition in offset2jpartition)
+
+    assert all(begin+offset==sum(map(int.__mul__, j2generator, j2count)) for offset, j2count in enumerate(offset2j2count))
+
+    return (max_miss, (begin, end), j2generator, offset2j2count)
+#simplified_jpartition
+def _simplify_jpartition_(num_gs, jpartition, /):
+    #patch zero count
+    j2count = [0]*num_gs
+    for j, count in jpartition:
+        j2count[j] = count
+    j2count = tuple(j2count)
+    return j2count
+
+def partition_pint4max_miss_ex__pint_additive_generators_(max_miss_ex, pint, /):
+    r'''
+    -> jpartition/[(j4g,count)]
+
+precondition:
+    #search_max_miss_ex__pint_additive_generators_():goto
+    [max_miss_ex :: result of search_max_miss_ex__pint_additive_generators_<uint_count__vs__pint_count=False>]
+    [(max_miss, (begin, end), j2generator, offset2jpartition) == max_miss_ex]
+    [pint > max_miss >= 0]
+postcondition:
+    [pint == sum(j2generator[j]*c for j, c in jpartition)]
+
+    '''#'''
+    check_type_is(int, pint)
+    (max_miss, (begin, end), j2generator, offset2jpartition) = max_miss_ex
+    if not pint > max_miss: raise TypeError
+    min_g = j2generator[0] #strict_sorted_generators
+    if 0:
+        #取消 <<== 取大优先
+        q, r = divmod(pint -begin, min_g)
+        jpartition = offset2jpartition[r]
+        jpartition, q, min_g
+    r = pint -begin
+    jpartition = []
+    for j in reversed(range(len(j2generator))):
+        if r < min_g:
+            break
+        g = j2generator[j]
+        q, r = divmod(r, g)
+        if q > 0:
+            jpartition.append((j,q))
+    assert 0 <= r < min_g
+    _jpartition = offset2jpartition[r]
+    #merge:jpartition,_jpartition
+    d = dict(_jpartition)
+    _jpartition = None
+    for j, count in jpartition:
+        if j in d:
+            d[j] += count
+        else:
+            d[j] = count
+    jpartition = sorted(d.items(), reverse=True)
+    d = None
+    jpartition = tuple(jpartition)
+    assert pint == sum(j2generator[j]*c for j, c in jpartition)
+    return jpartition
+
+
 
 __all__
 
 
 from seed.math.generate_partition4additive_semigroup__total_ordering__increasing import iter_strict_sorted_elements4additive_semigroup__total_ordering__increasing_
+
 from seed.math.generate_partition4additive_semigroup__total_ordering__increasing import generate4additive_semigroup__total_ordering__increasing_
+
+
+from seed.math.generate_partition4additive_semigroup__total_ordering__increasing import search_max_miss_ex__pint_additive_generators_, partition_pint4max_miss_ex__pint_additive_generators_
+
 from seed.math.generate_partition4additive_semigroup__total_ordering__increasing import *

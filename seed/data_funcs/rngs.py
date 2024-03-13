@@ -23,6 +23,8 @@ IRangeBasedIntMapping
     ranges5len_rng2hexbegins
     ranges2len_rng2hexbegins_str
     ranges5len_rng2hexbegins_str
+        ranges2compact_txt_
+        ranges5compact_txt_
     ranges2len_rng2begin_chars
     ranges5len_rng2begin_chars
 
@@ -1408,6 +1410,7 @@ from seed.func_tools.fmapT.fmapT__tiny import fmap_rngs2hex_repr, fmapT__pairs, 
 #from seed.func_tools.dot2 import dot
 from seed.tiny_.HexReprInt import HexReprInt
 from seed.tiny import fmap4dict_value
+from seed.tiny import check_type_is
 
 def all_map(pred, iterable, /):
     return all(map(pred, iterable))
@@ -3305,6 +3308,7 @@ def ranges5len_rng2hexbegins_str(len_rng2hexbegins_str, /):
 ranges2len_rng2hexbegins_str
 ranges5len_rng2hexbegins_str
 
+
 def hexbegins2chars(hexbegins, /):
     return ''.join(map(chr, hexbegins))
 def hexbegins5chars(begin_chars, /):
@@ -3355,7 +3359,62 @@ ranges5char_pairs__str = dot[ranges5iter_rngs, char_pt_rngs5char_pairs__str]
 
 
 
+ranges2len_rng2hexbegins_str
+ranges5len_rng2hexbegins_str
 
+def ranges2compact_txt_(ranges, /, *, validate=False, join_by_newline=True):
+    compact_txt = _ranges2compact_txt_(ranges, join_by_newline=join_by_newline)
+    if validate:
+        assert ranges == ranges5compact_txt_(compact_txt)
+        #if 0b001:print_err('validate:ok')
+    return compact_txt
+def _ranges2compact_txt_(ranges, /, *, join_by_newline):
+    total_chars = ranges.len_ints()
+    len2t = ranges2len_rng2hexbegins_str(ranges)
+    ps = sorted(len2t.items())
+    def __():
+        yield f'#{total_chars}'
+        for sz, t in ps:
+            s = f';{sz:X}:{t}'
+            yield s
+    sep = '\n' if join_by_newline else ''
+    return sep.join(__())
+    ######################old:
+    len2begins = {}
+    for rng in ranges.ranges:
+        (begin, end) = rng
+        sz = end-begin
+        len2begins.setdefault(sz, []).append(begin)
+    ps = sorted(len2begins.items())
+    def __():
+        yield f'#{total_chars}'
+        for sz, begins in ps:
+            t = ','.join(f'{a:X}' for a in begins)
+            s = f';{sz:X}:{t}'
+            yield s
+    return '\n'.join(__())
+def ranges5compact_txt_(compact_txt, /):
+    check_type_is(str, compact_txt)
+    s = ''.join(compact_txt.split())
+    if not s.startswith('#'):raise Exception('bad format')
+    ls = s.split(';')
+    def mk_int(s, /):
+        return int(s, 16)
+    s = ls[0]
+    if not s[0] == '#': raise Exception('bad format')
+    total_chars = mk_int(s[1:])
+    def __():
+        for s in ls[1:]:
+            sz, t = s.split(':')
+            sz = mk_int(sz)
+            yield sz, t
+    len2t = dict(__())
+    ranges = ranges5len_rng2hexbegins_str(len2t)
+    if not total_chars == ranges.len_ints(): Exception('bad format')
+    return ranges
+
+ranges2compact_txt_
+ranges5compact_txt_
 
 
 

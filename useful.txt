@@ -296,6 +296,12 @@ conventions:
     [proposition2]
         # !! [:name4proposition]:goto
 naming:
+中文标识:
+  囗 ~ 空格 或 '_'
+  魊 ~ may/maybe #Haskell.Maybr
+    魊囗 ~ may_
+  ...
+  view ../../python3_src/useful__cjk_naming.txt
 may
   nmay T = (None|T)
     nmay - None-may
@@ -826,7 +832,7 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     now:
-      py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   %seed.abc.IReprHelper:IReprHelper    =IReprHelper
+      py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   %seed.abc.IReprHelper:IReprHelper@T    =T   +exclude_attrs5listed_in_cls_doc
     now:
       py -m nn_ns.app.adhoc_argparser__main__call8module  seed.helper.print_methods  @wrapped_print_methods   %seed.abc.IReprHelper:IReprHelper    =IReprHelper
 

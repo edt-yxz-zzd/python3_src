@@ -20,7 +20,7 @@ see:
 ]]
 
 seed.for_libs.for_inspect
-py -m nn_ns.app.debug_cmd   seed.for_libs.for_inspect
+py -m nn_ns.app.debug_cmd   seed.for_libs.for_inspect -x
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.for_libs.for_inspect   @f
 py -m nn_ns.app.doctest_cmd seed.for_libs.for_inspect:__doc__ -v
 
@@ -123,6 +123,11 @@ ValueError: Function has keyword-only parameters or annotations, use inspect.sig
 (((), (('a', (), ()), ('b', (), ('bbb',))), (), (), ()), ())
 >>> get_signature_of__py2_(f)
 ((('a', ()), ('b', ('bbb',))), None, None)
+>>> f = bool
+>>> get_signature_of__py3_(f)
+Traceback (most recent call last):
+    ...
+ValueError: no signature found for builtin type <class 'bool'>
 >>> f = set.add
 >>> get_signature_of__py3_(f)
 Traceback (most recent call last):
@@ -413,6 +418,9 @@ bad: 999
 
 #]]]'''
 __all__ = r'''
+    check_num_args_ok_
+        is_num_args_ok_
+
     extract_info5parameter__py3_
     get_signature_of__py3_
     get_signature_of__py2_
@@ -437,9 +445,13 @@ import inspect
 from inspect import getargspec as _getargspec__py2
     #Deprecated since version 3.0:inspect.getargspec(func) -> ArgSpec(args, varargs, keywords, defaults)
 from inspect import signature as _get_signature_of__py3 #py2/py3 api diff, py3/py4 may be diff too.
+    #inspect.signature(callable, *, follow_wrapped=True) -> Signature
+    #.__wrapped__=f
+    #_test4follow_wrapped():goto
 from inspect import Parameter as _Parameter__py3, Signature as _Signature__py3 # py3/py4 may has diff Parameter, Signature
 from seed.helper.get4may import nmay2tmay__Nothing
     #nmay2tmay__Nothing(Nothing, nmay)
+from seed.debug.expectError import expectError
 from seed.tiny import check_type_is
 from seed.tiny_.mk_fdefault import eliminate_tmay, eliminate_tmay__cased, eliminate_tmay__mix, eliminate_tmay_or_raise, eliminate_tmay_or_raise__simple
 from seed.tiny_.mk_fdefault import mk_default__easy#, mk_default, mk_default_or_raise
@@ -454,6 +466,116 @@ from seed.tiny_.mk_fdefault import mk_default__easy#, mk_default, mk_default_or_
 
 
 
+def is_num_args_ok_(num_args, f, /, *, imay_num_ok=False, follow_wrapped=True, ok_if_no_signature=False):
+    '-> bool | ^TypeError | ^ValueError'
+    return _check_num_args_ok_(_ask=True, **locals())
+def check_num_args_ok_(num_args, f, /, *, imay_num_ok=False, follow_wrapped=True, ok_if_no_signature=False):
+    '-> None | ^TypeError | ^ValueError'
+    return _check_num_args_ok_(_ask=False, **locals())
+def _check_num_args_ok_(*, num_args, f, imay_num_ok, _ask, follow_wrapped, ok_if_no_signature):
+    '-> None | bool | ^TypeError | ^ValueError'
+    if num_args < 0:
+        if imay_num_ok and num_args == -1:
+            #non_callable
+            x = f
+            if _ask:
+                return not callable(x)
+                    # -> bool
+            if callable(x):raise TypeError(type(x))
+                    # ^TypeError
+            return
+                    # -> None
+        raise TypeError(num_args)
+                    # ^TypeError
+
+    ######################
+    assert num_args >= 0
+    if _ask and not callable(f):
+        # !! get_: ^TypeError
+        return False
+                    # -> bool
+    def get_():
+        return _get_signature_of__py3(f, follow_wrapped=follow_wrapped)
+            #ValueError: no signature found for builtin type <class 'bool'>
+            #TypeError: 0 is not a callable object
+    if ok_if_no_signature:
+        try:
+            sig = get_()
+        except ValueError:
+            #ok@no signature
+            if _ask:
+                return callable(f)
+                    # -> bool
+            if not callable(f):raise TypeError(type(f))
+                    # ^TypeError
+            return
+                    # -> None
+        sig
+    else:
+        sig = get_()
+                    # ^ValueError
+    sig
+    bind_ = lambda:sig.bind(*range(num_args))
+    if _ask:
+        return not expectError(TypeError, bind_)
+                    # -> bool
+    bind_()
+                    # ^TypeError
+    return
+                    # -> None
+
+assert is_num_args_ok_(-1, 0, imay_num_ok=True)
+assert not is_num_args_ok_(-1, lambda:0, imay_num_ok=True)
+assert is_num_args_ok_(0, lambda:0)
+assert not is_num_args_ok_(1, lambda:0)
+assert is_num_args_ok_(1, lambda x:0)
+assert expectError(ValueError, lambda:is_num_args_ok_(1, bool))
+assert is_num_args_ok_(1, bool, ok_if_no_signature=True)
+assert not is_num_args_ok_(1, 0)
+assert expectError(ValueError, lambda:check_num_args_ok_(1, bool))
+assert expectError(TypeError, lambda:check_num_args_ok_(1, lambda:0))
+assert not expectError(TypeError, lambda:check_num_args_ok_(1, lambda x:0))
+assert expectError(TypeError, lambda:check_num_args_ok_(1, 0))
+assert expectError(TypeError, lambda:check_num_args_ok_(-1, 0))
+assert not expectError(TypeError, lambda:check_num_args_ok_(-1, 0, imay_num_ok=True))
+
+def _test4follow_wrapped():
+    #inspect.signature(callable, *, follow_wrapped=True) -> Signature
+    #.__wrapped__=f
+    class F:
+        def __call__(sf, /):
+            pass
+    fff = F()
+    ######################
+    assert is_num_args_ok_(0, fff)
+    assert not is_num_args_ok_(1, fff)
+    assert not is_num_args_ok_(2, fff)
+    ######################
+    def g(a, b):
+        pass
+    fff = F()
+    fff.__wrapped__ = g #ok
+    ######################
+    assert not is_num_args_ok_(0, fff) #ok
+    assert not is_num_args_ok_(1, fff)
+    assert is_num_args_ok_(2, fff) #ok
+    ######################
+    assert is_num_args_ok_(0, fff, follow_wrapped=False)
+    assert not is_num_args_ok_(1, fff, follow_wrapped=False)
+    assert not is_num_args_ok_(2, fff, follow_wrapped=False)
+    ######################
+    ######################
+    from functools import update_wrapper
+    f = F()
+    h = update_wrapper(f, g)
+    assert h is f, h
+    assert f.__wrapped__ is g
+    assert not is_num_args_ok_(0, f)
+    assert is_num_args_ok_(2, f)
+    assert is_num_args_ok_(0, f, follow_wrapped=False)
+    assert not is_num_args_ok_(2, f, follow_wrapped=False)
+    #print(dir(f))
+_test4follow_wrapped()
 
 #def pairs5api__xdefault_(imay_xdefault_rank, xdefault, /, *args4xdefault):
 def _mk_nm2default(*tmay_Nothing___or___args4mk_default_or_raise):
@@ -725,6 +847,7 @@ def get_signature_of__py3_(f, /, follow_wrapped=True):
 
 
 
+from seed.for_libs.for_inspect import check_num_args_ok_, is_num_args_ok_
 from seed.for_libs.for_inspect import get_signature_of__py3_
 from seed.for_libs.for_inspect import pairs5api_, pairs5api__zdefault_
 from seed.for_libs.for_inspect import pairs5api__raise, pairs5api__Nothing_, pairs5api__None

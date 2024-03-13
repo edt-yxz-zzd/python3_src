@@ -10,6 +10,24 @@ see:
     #view ../../python3_src/nn_ns/app/sqlite3_dump_.py
 
 
+[[
+news:
+    old: [fmtr4row::may callable]
+    -->:
+    [fmtr4row::may callable | str]
+        add [fmtr4row::str] to save nms4columns
+===
+example:fmtr4row:
+    --fmtr4row:'\ nm4columnA, paramB=nm4columnB -> (nm4columnA, paramB)'
+    <==>
+    --nms4columns:'nm4columnA,nm4columnB' --fmtr4row='lambda nm4columnA, paramB : (nm4columnA, paramB)'
+===
+usage:
+py_adhoc_call   nn_ns.fileformat.sqlite3_dump_cmd   @sqlite3_dump_cmd --ipath:/sdcard/0my_files/unzip/apk/dictionary/han_yu_zi_dian-assets-x0x1x2x3/x0x1x2x3  --nm4table:zi   --fmtr4row:'\zi,bishun -> f"{zi!s}:{bishun!s}"' =4
+===
+]]
+
+
 seed.for_libs.for_sqlite3
 py -m nn_ns.app.debug_cmd   seed.for_libs.for_sqlite3 -x
 py -m nn_ns.app.doctest_cmd seed.for_libs.for_sqlite3:__doc__ -ff -v
@@ -63,6 +81,8 @@ __all__
 from seed.tiny import check_callable, echo_args
 from itertools import islice, starmap
 import sqlite3
+import re
+from seed.tiny import check_type_is
 
 
 def sqlite3_dump_meta_(ipath, /):
@@ -70,7 +90,44 @@ def sqlite3_dump_meta_(ipath, /):
 
 #copy from:
 #   view ../../python3_src/nn_ns/fileformat/sqlite3_dump_cmd.py
+_tmp = r'(?:\w+\s*(?:=\s*\w+\s*)?)'
+regex4fmtr4row = re.compile(fr'\\s*(?P<params__assign__nms4columns>{_tmp}(?:,\s*{_tmp})*)->\s*(?P<body>.*)')
+def parse_fmtr4row_(fmtr4row__str, /):
+    'example<fmtr4row__str> : "\ nm4columnA, paramB=nm4columnB -> (nm4columnA, paramB)"'
+    from seed.helper.safe_eval import safe_eval
+    check_type_is(str, fmtr4row__str)
+
+    if not fmtr4row__str.startswith('\\'):raise TypeError('bad format')
+    if None is (m := regex4fmtr4row.fullmatch(fmtr4row__str)):
+        raise TypeError(f'bad format:    {regex4fmtr4row.pattern!r}   :   {fmtr4row__str!r}')
+    params__assign__nms4columns = m['params__assign__nms4columns']
+    body = m['body']
+    ls4param__assign__nm4column = params__assign__nms4columns.split(',')
+    params = []
+    nms4columns = []
+    for param__assign__nm4column in ls4param__assign__nm4column:
+        #param, smay_nm4column
+        ls = param__assign__nm4column.split('=')
+        assert 1 <= len(ls) < 3
+        ls = [*map(str.strip, ls)]
+        param = ls[0]
+        nm4column = ls[-1]
+        params.append(param)
+        nms4columns.append(nm4column)
+    params
+    nms4columns
+    body
+    params__str = ','.join(params)
+    nms4columns__str = ','.join(nms4columns)
+    fmtr4row = safe_eval(f'lambda {params__str}:({body})')
+    return (nms4columns__str, fmtr4row)
+
+
 def sqlite3_iter_dump_(*args4islice, ipath, nm4table='', nms4columns='*', condition='', fmtr4row=None):
+    check_type_is(str, nm4table)
+    check_type_is(str, nms4columns)
+    check_type_is(str, condition)
+
     if not ipath:
         ipath = None
         #ipath = sys.stdin
@@ -88,6 +145,12 @@ def sqlite3_iter_dump_(*args4islice, ipath, nm4table='', nms4columns='*', condit
             smay_where = ''
     if fmtr4row is None:
         fmtr4row = echo_args
+    elif type(fmtr4row) is str:
+        fmtr4row__str = fmtr4row
+        if not nms4columns == '*': raise TypeError('[fmtr4row :: str] but not [nms4columns == "*"]')
+        (nms4columns__str, fmtr4row) = parse_fmtr4row_(fmtr4row__str)
+        nms4columns = nms4columns__str
+    fmtr4row, nms4columns
     check_callable(fmtr4row)
 
 

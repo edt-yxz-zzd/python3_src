@@ -61,8 +61,23 @@ view /sdcard/0my_files/tmp/src/glob.py
   DONE
 
 
+[[
 finger_tree_ops
   e ../../python3_src/script/finger_tree_ops.py
+  -->:
+  e ../../python3_src/seed/data_funcs/finger_tree/finger_tree_common.py
+<<==:
+e ./script/hz/部件拆分.py
+    基本位面汉字纵横拆分
+e ../汉字粗拆分/script.hz.部件拆分..提取基本面编码空间里的汉字囗.out-modified.txt
+    编辑处
+e ../../python3_src/seed/recognize/toy/poor_efficiency_toy_recognizer.py
+    识别部件名
+e ../../python3_src/seed/data_funcs/finger_tree/finger_tree_common.py
+    漂移识别器 需要 双侧展翅树
+e ../../python3_src/useful__cjk_naming.txt
+    有用汉字命名
+]]
 
 repr_sys
   e ../../python3_src/seed/helper/repr/repr_sys.py
@@ -1193,4 +1208,10 @@ view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__PropL
 DONE！
 
 ]]
+[[
+参赛队伍数量为偶数，所有队伍分别交手，如何安排？
+  e ./script/循环对抗赛配对方案.py
+    DONE@20240311
+]]
+
 ]

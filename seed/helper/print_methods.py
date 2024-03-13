@@ -90,7 +90,7 @@ if 0:
         else:
             XXXs = [XXX]
 def wrapped_print_methods(*XXXs, fout=None
-    , exclude_bases=None, exclude_attrs=None, exclude_prefixes=None, exclude=None):
+    , exclude_bases=None, exclude_attrs=None, exclude_prefixes=None, exclude=None, exclude_attrs5listed_in_cls_doc=False):
     # __doc__ SHOULD NOT BE f''
     #   see below: [wrapped_print_methods.__doc__ := .format(...)]
     r'''
@@ -114,14 +114,42 @@ exclude_prefixes += []
                 , exclude_bases=exclude_bases
                 , exclude_attrs=exclude_attrs
                 , exclude_prefixes=exclude_prefixes
-                , exclude=exclude)
+                , exclude=exclude
+                , exclude_attrs5listed_in_cls_doc=exclude_attrs5listed_in_cls_doc
+                )
     return
 wrapped_print_methods.__doc__ = wrapped_print_methods.__doc__.format(
         exclude_bases_ex=exclude_bases_ex
         , exclude_attrs_ex=exclude_attrs_ex)
 
+#import re
+#re.compile(f'^(?:[ ]{4})?`?\w+$')
+def find_attrs5listed_in_cls_doc(exclude_attrs5listed_in_cls_doc, XXX):
+    nms5doc4concrete = set()
+    nms5doc4abstract = set()
+    if not exclude_attrs5listed_in_cls_doc:
+        return nms5doc4concrete, nms5doc4abstract
+
+    doc = XXX.__doc__
+    if doc is None:
+        doc = ''
+    nmss = nms5doc4concrete, nms5doc4abstract
+    for line in doc.split('\n'):
+        ls = line.split()
+        if not len(ls) == 1:
+            continue
+        [s] = ls
+        decl_abstract = s[0] == '`'
+        if decl_abstract:
+            s = s[1:]
+        if s.isidentifier():
+            nm = s
+            nmss[decl_abstract].add(nm)
+    return nms5doc4concrete, nms5doc4abstract
+
+
 def print_methods(XXX, fout=None
-    , *, exclude_bases=None, exclude_attrs=None, exclude_prefixes=None, exclude=None):
+    , *, exclude_bases=None, exclude_attrs=None, exclude_prefixes=None, exclude=None, exclude_attrs5listed_in_cls_doc=False):
     '''
 
 input:
@@ -236,6 +264,10 @@ example:
     else:
         assert callable(exclude)
 
+    ######################
+    nms5doc4concrete, nms5doc4abstract = find_attrs5listed_in_cls_doc(exclude_attrs5listed_in_cls_doc, XXX)
+    ######################
+
     if fout is None:
         fout = sys.stdout
     def print(*args, **kwargs):
@@ -254,6 +286,15 @@ example:
             return False
         if any(attr.startswith(prefix) for prefix in exclude_prefixes):
             return False
+        ######################
+        if exclude_attrs5listed_in_cls_doc:
+            if is_abstract_method_attr(XXX, attr):
+                if attr in nms5doc4abstract:
+                    return False
+            else:
+                if attr in nms5doc4concrete:
+                    return False
+        ######################
 
         obj = getattr(XXX, attr)
         Nothing = []

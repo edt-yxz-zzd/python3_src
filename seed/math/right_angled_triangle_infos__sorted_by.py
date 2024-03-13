@@ -444,6 +444,7 @@ show_all_names_used_in_output_fmt:here
 
 
 effective_combinations__of__fst_key__snd_key:goto
+    #obsolete:
     (j2nm4key_combination
     ,j5nm4key_combination
     ,j2xnm4key_combination
@@ -546,17 +547,87 @@ show_all_effective_combinations__of__fst_key__snd_key:here
 ,'W__revRHLM_OE_EO_OT_EnT'
 : frozenset({'W-E+T', 'W-E-O', 'W-H', 'W-L', 'W-M', 'W-O-E', 'W-O-T', 'W-R'})
 }
->>> stable_repr_print__expand_top_layer(None, {**Boundary_about___ST_HOE_LSM.snms4whole_key5nm4key_combination})
+
+effective_combinations__of__fst_key__snd_key__thd_key:goto
+    #new:
+    ((j2tnm4key_combination, tnm2j, j2snms, snm2j, j2xnmsss)
+    j2nm4key_combination
+    snms4whole_key5nm4key_combination
+>>> len(Boundary_about___ST_HOE_LSM.j2nm4key_combination) == len(Boundary_about___ST_HOE_LSM.j2xnmsss) == 30
+True
+>>> stable_repr_print__expand_top_layer(None, dict(zip(Boundary_about___ST_HOE_LSM.j2nm4key_combination, Boundary_about___ST_HOE_LSM.j2xnmsss)))
+{'pE_nM_pWpRpOpHpLnT'
+: ((('+E',), ('-M',), ('+W', '+R', '+O', '+H', '+L', '-T')),)
+,'pE_nRnOnHnLpT__pE_nW_nMnRnOnHnLpT__pE_nM_nWnRnOnHnLpT'
+: ((('+E',), ('-R', '-O', '-H', '-L', '+T')), (('+E',), ('-W',), ('-M', '-R', '-O', '-H', '-L', '+T')), (('+E',), ('-M',), ('-W', '-R', '-O', '-H', '-L', '+T')))
+,'pE_nW_pMpRpOpHpLnT'
+: ((('+E',), ('-W',), ('+M', '+R', '+O', '+H', '+L', '-T')),)
+,'pE_pM_nWnRnOnHnLpT'
+: ((('+E',), ('+M',), ('-W', '-R', '-O', '-H', '-L', '+T')),)
+,'pE_pRpOpHpLnT__pE_pW_pMpRpOpHpLnT__pE_pM_pWpRpOpHpLnT'
+: ((('+E',), ('+R', '+O', '+H', '+L', '-T')), (('+E',), ('+W',), ('+M', '+R', '+O', '+H', '+L', '-T')), (('+E',), ('+M',), ('+W', '+R', '+O', '+H', '+L', '-T')))
+,'pE_pW_nMnRnOnHnLpT'
+: ((('+E',), ('+W',), ('-M', '-R', '-O', '-H', '-L', '+T')),)
+,'pHpL_nRnOpTpE'
+: ((('+H', '+L'), ('-R', '-O', '+T', '+E')),)
+,'pHpL_nWpM'
+: ((('+H', '+L'), ('-W', '+M')),)
+,'pHpL_pRpOnTnE'
+: ((('+H', '+L'), ('+R', '+O', '-T', '-E')),)
+,'pHpL_pWnM'
+: ((('+H', '+L'), ('+W', '-M')),)
+,'pM_nRnHnLnW__pM_nO_nEnRnHnLnWnT__pM_nE_nOnRnHnLnW__pM_nE_pT'
+: ((('+M',), ('-R', '-H', '-L', '-W')), (('+M',), ('-O',), ('-E', '-R', '-H', '-L', '-W', '-T')), (('+M',), ('-E',), ('-O', '-R', '-H', '-L', '-W')), (('+M',), ('-E',), ('+T',)))
+,'pM_nT__pM_pO_nEnRnHnLnWnT__pM_nE_pOpRpHpLpW__pM_nE_nT'
+: ((('+M',), ('-T',)), (('+M',), ('+O',), ('-E', '-R', '-H', '-L', '-W', '-T')), (('+M',), ('-E',), ('+O', '+R', '+H', '+L', '+W')), (('+M',), ('-E',), ('-T',)))
+,'pM_pRpHpLpW__pM_pO_pEpRpHpLpWpT__pM_pE_pOpRpHpLpW__pM_pE_nT'
+: ((('+M',), ('+R', '+H', '+L', '+W')), (('+M',), ('+O',), ('+E', '+R', '+H', '+L', '+W', '+T')), (('+M',), ('+E',), ('+O', '+R', '+H', '+L', '+W')), (('+M',), ('+E',), ('-T',)))
+,'pM_pT__pM_nO_pEpRpHpLpWpT__pM_pE_nOnRnHnLnW__pM_pE_pT'
+: ((('+M',), ('+T',)), (('+M',), ('-O',), ('+E', '+R', '+H', '+L', '+W', '+T')), (('+M',), ('+E',), ('-O', '-R', '-H', '-L', '-W')), (('+M',), ('+E',), ('+T',)))
+,'pO_nM_pWpRpTpHpLpE'
+: ((('+O',), ('-M',), ('+W', '+R', '+T', '+H', '+L', '+E')),)
+,'pO_nRnTnHnLnE__pO_nW_nMnRnTnHnLnE__pO_nM_nWnRnTnHnLnE'
+: ((('+O',), ('-R', '-T', '-H', '-L', '-E')), (('+O',), ('-W',), ('-M', '-R', '-T', '-H', '-L', '-E')), (('+O',), ('-M',), ('-W', '-R', '-T', '-H', '-L', '-E')))
+,'pO_nW_pMpRpTpHpLpE'
+: ((('+O',), ('-W',), ('+M', '+R', '+T', '+H', '+L', '+E')),)
+,'pO_pM_nWnRnTnHnLnE'
+: ((('+O',), ('+M',), ('-W', '-R', '-T', '-H', '-L', '-E')),)
+,'pO_pRpTpHpLpE__pO_pW_pMpRpTpHpLpE__pO_pM_pWpRpTpHpLpE'
+: ((('+O',), ('+R', '+T', '+H', '+L', '+E')), (('+O',), ('+W',), ('+M', '+R', '+T', '+H', '+L', '+E')), (('+O',), ('+M',), ('+W', '+R', '+T', '+H', '+L', '+E')))
+,'pO_pW_nMnRnTnHnLnE'
+: ((('+O',), ('+W',), ('-M', '-R', '-T', '-H', '-L', '-E')),)
+,'pR_nM'
+: ((('+R',), ('-M',)),)
+,'pR_nTnHnLnEpO'
+: ((('+R',), ('-T', '-H', '-L', '-E', '+O')),)
+,'pR_nW'
+: ((('+R',), ('-W',)),)
+,'pR_pM'
+: ((('+R',), ('+M',)),)
+,'pR_pTpHpLpEnO'
+: ((('+R',), ('+T', '+H', '+L', '+E', '-O')),)
+,'pR_pW'
+: ((('+R',), ('+W',)),)
+,'pW_nRnHnLnM__pW_nO_nEnRnHnLnMnT__pW_nE_nOnRnHnLnM__pW_nE_pT'
+: ((('+W',), ('-R', '-H', '-L', '-M')), (('+W',), ('-O',), ('-E', '-R', '-H', '-L', '-M', '-T')), (('+W',), ('-E',), ('-O', '-R', '-H', '-L', '-M')), (('+W',), ('-E',), ('+T',)))
+,'pW_nT__pW_pO_nEnRnHnLnMnT__pW_nE_pOpRpHpLpM__pW_nE_nT'
+: ((('+W',), ('-T',)), (('+W',), ('+O',), ('-E', '-R', '-H', '-L', '-M', '-T')), (('+W',), ('-E',), ('+O', '+R', '+H', '+L', '+M')), (('+W',), ('-E',), ('-T',)))
+,'pW_pRpHpLpM__pW_pO_pEpRpHpLpMpT__pW_pE_pOpRpHpLpM__pW_pE_nT'
+: ((('+W',), ('+R', '+H', '+L', '+M')), (('+W',), ('+O',), ('+E', '+R', '+H', '+L', '+M', '+T')), (('+W',), ('+E',), ('+O', '+R', '+H', '+L', '+M')), (('+W',), ('+E',), ('-T',)))
+,'pW_pT__pW_nO_pEpRpHpLpMpT__pW_pE_nOnRnHnLnM__pW_pE_pT'
+: ((('+W',), ('+T',)), (('+W',), ('-O',), ('+E', '+R', '+H', '+L', '+M', '+T')), (('+W',), ('+E',), ('-O', '-R', '-H', '-L', '-M')), (('+W',), ('+E',), ('+T',)))
+}
+>>> stable_repr_print__expand_top_layer(None, {**Boundary_about___ST_HOE_LSM.snms4whole_key5nm4key_combination}) #j2snms#sorted~len
 {'pE_nM_pWpRpOpHpLnT'
 : ('+E-M+H', '+E-M+L', '+E-M+O', '+E-M+R', '+E-M+W', '+E-M-T')
 ,'pE_nRnOnHnLpT__pE_nW_nMnRnOnHnLpT__pE_nM_nWnRnOnHnLpT'
-: ('+E+T', '+E-H', '+E-L', '+E-M+T', '+E-M-H', '+E-M-L', '+E-M-O', '+E-M-R', '+E-M-W', '+E-O', '+E-R', '+E-W+T', '+E-W-H', '+E-W-L', '+E-W-M', '+E-W-O', '+E-W-R')
+: ('+E+T', '+E-H', '+E-L', '+E-O', '+E-R', '+E-M+T', '+E-M-H', '+E-M-L', '+E-M-O', '+E-M-R', '+E-M-W', '+E-W+T', '+E-W-H', '+E-W-L', '+E-W-M', '+E-W-O', '+E-W-R')
 ,'pE_nW_pMpRpOpHpLnT'
 : ('+E-W+H', '+E-W+L', '+E-W+M', '+E-W+O', '+E-W+R', '+E-W-T')
 ,'pE_pM_nWnRnOnHnLpT'
 : ('+E+M+T', '+E+M-H', '+E+M-L', '+E+M-O', '+E+M-R', '+E+M-W')
 ,'pE_pRpOpHpLnT__pE_pW_pMpRpOpHpLnT__pE_pM_pWpRpOpHpLnT'
-: ('+E+H', '+E+L', '+E+M+H', '+E+M+L', '+E+M+O', '+E+M+R', '+E+M+W', '+E+M-T', '+E+O', '+E+R', '+E+W+H', '+E+W+L', '+E+W+M', '+E+W+O', '+E+W+R', '+E+W-T', '+E-T')
+: ('+E+H', '+E+L', '+E+O', '+E+R', '+E-T', '+E+M+H', '+E+M+L', '+E+M+O', '+E+M+R', '+E+M+W', '+E+M-T', '+E+W+H', '+E+W+L', '+E+W+M', '+E+W+O', '+E+W+R', '+E+W-T')
 ,'pE_pW_nMnRnOnHnLpT'
 : ('+E+W+T', '+E+W-H', '+E+W-L', '+E+W-M', '+E+W-O', '+E+W-R')
 ,'pHpL_nRnOpTpE'
@@ -568,23 +639,23 @@ show_all_effective_combinations__of__fst_key__snd_key:here
 ,'pHpL_pWnM'
 : ('+H+W', '+H-M', '+L+W', '+L-M')
 ,'pM_nRnHnLnW__pM_nO_nEnRnHnLnWnT__pM_nE_nOnRnHnLnW__pM_nE_pT'
-: ('+M-E+T', '+M-E-H', '+M-E-L', '+M-E-O', '+M-E-R', '+M-E-W', '+M-H', '+M-L', '+M-O-E', '+M-O-H', '+M-O-L', '+M-O-R', '+M-O-T', '+M-O-W', '+M-R', '+M-W')
+: ('+M-H', '+M-L', '+M-R', '+M-W', '+M-E+T', '+M-E-H', '+M-E-L', '+M-E-O', '+M-E-R', '+M-E-W', '+M-O-E', '+M-O-H', '+M-O-L', '+M-O-R', '+M-O-T', '+M-O-W')
 ,'pM_nT__pM_pO_nEnRnHnLnWnT__pM_nE_pOpRpHpLpW__pM_nE_nT'
-: ('+M+O-E', '+M+O-H', '+M+O-L', '+M+O-R', '+M+O-T', '+M+O-W', '+M-E+H', '+M-E+L', '+M-E+O', '+M-E+R', '+M-E+W', '+M-E-T', '+M-T')
+: ('+M-T', '+M+O-E', '+M+O-H', '+M+O-L', '+M+O-R', '+M+O-T', '+M+O-W', '+M-E+H', '+M-E+L', '+M-E+O', '+M-E+R', '+M-E+W', '+M-E-T')
 ,'pM_pRpHpLpW__pM_pO_pEpRpHpLpWpT__pM_pE_pOpRpHpLpW__pM_pE_nT'
-: ('+M+E+H', '+M+E+L', '+M+E+O', '+M+E+R', '+M+E+W', '+M+E-T', '+M+H', '+M+L', '+M+O+E', '+M+O+H', '+M+O+L', '+M+O+R', '+M+O+T', '+M+O+W', '+M+R', '+M+W')
+: ('+M+H', '+M+L', '+M+R', '+M+W', '+M+E+H', '+M+E+L', '+M+E+O', '+M+E+R', '+M+E+W', '+M+E-T', '+M+O+E', '+M+O+H', '+M+O+L', '+M+O+R', '+M+O+T', '+M+O+W')
 ,'pM_pT__pM_nO_pEpRpHpLpWpT__pM_pE_nOnRnHnLnW__pM_pE_pT'
-: ('+M+E+T', '+M+E-H', '+M+E-L', '+M+E-O', '+M+E-R', '+M+E-W', '+M+T', '+M-O+E', '+M-O+H', '+M-O+L', '+M-O+R', '+M-O+T', '+M-O+W')
+: ('+M+T', '+M+E+T', '+M+E-H', '+M+E-L', '+M+E-O', '+M+E-R', '+M+E-W', '+M-O+E', '+M-O+H', '+M-O+L', '+M-O+R', '+M-O+T', '+M-O+W')
 ,'pO_nM_pWpRpTpHpLpE'
 : ('+O-M+E', '+O-M+H', '+O-M+L', '+O-M+R', '+O-M+T', '+O-M+W')
 ,'pO_nRnTnHnLnE__pO_nW_nMnRnTnHnLnE__pO_nM_nWnRnTnHnLnE'
-: ('+O-E', '+O-H', '+O-L', '+O-M-E', '+O-M-H', '+O-M-L', '+O-M-R', '+O-M-T', '+O-M-W', '+O-R', '+O-T', '+O-W-E', '+O-W-H', '+O-W-L', '+O-W-M', '+O-W-R', '+O-W-T')
+: ('+O-E', '+O-H', '+O-L', '+O-R', '+O-T', '+O-M-E', '+O-M-H', '+O-M-L', '+O-M-R', '+O-M-T', '+O-M-W', '+O-W-E', '+O-W-H', '+O-W-L', '+O-W-M', '+O-W-R', '+O-W-T')
 ,'pO_nW_pMpRpTpHpLpE'
 : ('+O-W+E', '+O-W+H', '+O-W+L', '+O-W+M', '+O-W+R', '+O-W+T')
 ,'pO_pM_nWnRnTnHnLnE'
 : ('+O+M-E', '+O+M-H', '+O+M-L', '+O+M-R', '+O+M-T', '+O+M-W')
 ,'pO_pRpTpHpLpE__pO_pW_pMpRpTpHpLpE__pO_pM_pWpRpTpHpLpE'
-: ('+O+E', '+O+H', '+O+L', '+O+M+E', '+O+M+H', '+O+M+L', '+O+M+R', '+O+M+T', '+O+M+W', '+O+R', '+O+T', '+O+W+E', '+O+W+H', '+O+W+L', '+O+W+M', '+O+W+R', '+O+W+T')
+: ('+O+E', '+O+H', '+O+L', '+O+R', '+O+T', '+O+M+E', '+O+M+H', '+O+M+L', '+O+M+R', '+O+M+T', '+O+M+W', '+O+W+E', '+O+W+H', '+O+W+L', '+O+W+M', '+O+W+R', '+O+W+T')
 ,'pO_pW_nMnRnTnHnLnE'
 : ('+O+W-E', '+O+W-H', '+O+W-L', '+O+W-M', '+O+W-R', '+O+W-T')
 ,'pR_nM'
@@ -600,13 +671,13 @@ show_all_effective_combinations__of__fst_key__snd_key:here
 ,'pR_pW'
 : ('+R+W',)
 ,'pW_nRnHnLnM__pW_nO_nEnRnHnLnMnT__pW_nE_nOnRnHnLnM__pW_nE_pT'
-: ('+W-E+T', '+W-E-H', '+W-E-L', '+W-E-M', '+W-E-O', '+W-E-R', '+W-H', '+W-L', '+W-M', '+W-O-E', '+W-O-H', '+W-O-L', '+W-O-M', '+W-O-R', '+W-O-T', '+W-R')
+: ('+W-H', '+W-L', '+W-M', '+W-R', '+W-E+T', '+W-E-H', '+W-E-L', '+W-E-M', '+W-E-O', '+W-E-R', '+W-O-E', '+W-O-H', '+W-O-L', '+W-O-M', '+W-O-R', '+W-O-T')
 ,'pW_nT__pW_pO_nEnRnHnLnMnT__pW_nE_pOpRpHpLpM__pW_nE_nT'
-: ('+W+O-E', '+W+O-H', '+W+O-L', '+W+O-M', '+W+O-R', '+W+O-T', '+W-E+H', '+W-E+L', '+W-E+M', '+W-E+O', '+W-E+R', '+W-E-T', '+W-T')
+: ('+W-T', '+W+O-E', '+W+O-H', '+W+O-L', '+W+O-M', '+W+O-R', '+W+O-T', '+W-E+H', '+W-E+L', '+W-E+M', '+W-E+O', '+W-E+R', '+W-E-T')
 ,'pW_pRpHpLpM__pW_pO_pEpRpHpLpMpT__pW_pE_pOpRpHpLpM__pW_pE_nT'
-: ('+W+E+H', '+W+E+L', '+W+E+M', '+W+E+O', '+W+E+R', '+W+E-T', '+W+H', '+W+L', '+W+M', '+W+O+E', '+W+O+H', '+W+O+L', '+W+O+M', '+W+O+R', '+W+O+T', '+W+R')
+: ('+W+H', '+W+L', '+W+M', '+W+R', '+W+E+H', '+W+E+L', '+W+E+M', '+W+E+O', '+W+E+R', '+W+E-T', '+W+O+E', '+W+O+H', '+W+O+L', '+W+O+M', '+W+O+R', '+W+O+T')
 ,'pW_pT__pW_nO_pEpRpHpLpMpT__pW_pE_nOnRnHnLnM__pW_pE_pT'
-: ('+W+E+T', '+W+E-H', '+W+E-L', '+W+E-M', '+W+E-O', '+W+E-R', '+W+T', '+W-O+E', '+W-O+H', '+W-O+L', '+W-O+M', '+W-O+R', '+W-O+T')
+: ('+W+T', '+W+E+T', '+W+E-H', '+W+E-L', '+W+E-M', '+W+E-O', '+W+E-R', '+W-O+E', '+W-O+H', '+W-O+L', '+W-O+M', '+W-O+R', '+W-O+T')
 }
 
 ]]]
@@ -902,6 +973,7 @@ py_adhoc_call   seed.math.right_angled_triangle_infos__sorted_by ,iter_find_min_
 
 ===
 >>> show_islice_(2*100**2, iter_find_min_distinguish_outputs4key_combinations_(verbose=False, output___int_vs_str=True))  #doctest: +SKIP
+>>> show_islice_(2*100**2, iter_find_min_distinguish_outputs4key_combinations_(verbose=False, output___int_vs_str=True))
 'j2str___i2fst_key4ij__k__RTpair:'
 ''
 '=4@2:4_1,4_3'
@@ -1003,10 +1075,10 @@ py_adhoc_call   seed.math.right_angled_triangle_infos__sorted_by ,iter_find_min_
 ('pE_pRpOpHpLnT__pE_pW_pMpRpOpHpLnT__pE_pM_pWpRpOpHpLnT', '+E+H', ['=12@2:3_2-13_5_12,6_1-37_35_12', '=20@5:5_2-29_21_20,10_1-101_99_20', '=420@259:15_14-421_29_420'])
 ('pE_pW_nMnRnOnHnLpT', '+E+W+T', ['=12@2:3_2-13_5_12,6_1-37_35_12', '=20@5:10_1-101_99_20'])
 ('pE_pM_nWnRnOnHnLpT', '+E+M+T', ['=12@2:3_2-13_5_12,6_1-37_35_12', '=20@5:5_2-29_21_20,10_1-101_99_20', '=420@259:21_10-541_341_420'])
-('pW_pRpHpLpM__pW_pO_pEpRpHpLpMpT__pW_pE_pOpRpHpLpM__pW_pE_nT', '+W+E+H', ['=20@12:5_2-29_21_20,10_1-101_99_20', '=33@24:7_4-65_33_56'])
-('pW_pT__pW_nO_pEpRpHpLpMpT__pW_pE_nOnRnHnLnM__pW_pE_pT', '+W+E+T', ['=20@12:10_1-101_99_20,5_2-29_21_20', '=33@24:7_4-65_33_56'])
-('pM_pRpHpLpW__pM_pO_pEpRpHpLpWpT__pM_pE_pOpRpHpLpW__pM_pE_nT', '+M+E+H', ['=420@74:15_14-421_29_420,21_10-541_341_420', '=2145@382:47_8-2273_2145_752'])
-('pM_pT__pM_nO_pEpRpHpLpWpT__pM_pE_nOnRnHnLnW__pM_pE_pT', '+M+E+T', ['=420@74:21_10-541_341_420,15_14-421_29_420', '=2145@382:47_8-2273_2145_752'])
+('pW_pRpHpLpM__pW_pO_pEpRpHpLpMpT__pW_pE_pOpRpHpLpM__pW_pE_nT', '+W+H', ['=20@12:5_2-29_21_20,10_1-101_99_20', '=33@24:7_4-65_33_56'])
+('pW_pT__pW_nO_pEpRpHpLpMpT__pW_pE_nOnRnHnLnM__pW_pE_pT', '+W+T', ['=20@12:10_1-101_99_20,5_2-29_21_20', '=33@24:7_4-65_33_56'])
+('pM_pRpHpLpW__pM_pO_pEpRpHpLpWpT__pM_pE_pOpRpHpLpW__pM_pE_nT', '+M+H', ['=420@74:15_14-421_29_420,21_10-541_341_420', '=2145@382:47_8-2273_2145_752'])
+('pM_pT__pM_nO_pEpRpHpLpWpT__pM_pE_nOnRnHnLnW__pM_pE_pT', '+M+T', ['=420@74:21_10-541_341_420,15_14-421_29_420', '=2145@382:47_8-2273_2145_752'])
 ('pR_nTnHnLnEpO', '+R+O', ['=4@2:4_3-25_7_24,4_1-17_15_8', '=7@8:7_6-85_13_84,7_4-65_33_56,7_2-53_45_28', '=8@11:8_7-113_15_112,8_5-89_39_80,8_3-73_55_48'])
 ('pR_nW', '+R-W', ['=4@2:4_1-17_15_8,4_3-25_7_24', '=7@8:7_4-65_33_56'])
 ('pR_nM', '+R-M', ['=4@2:4_3-25_7_24,4_1-17_15_8', '=7@8:7_6-85_13_84,7_4-65_33_56,7_2-53_45_28', '=8@11:8_7-113_15_112,8_5-89_39_80,8_1-65_63_16'])
@@ -1018,10 +1090,10 @@ py_adhoc_call   seed.math.right_angled_triangle_infos__sorted_by ,iter_find_min_
 ('pE_nRnOnHnLpT__pE_nW_nMnRnOnHnLpT__pE_nM_nWnRnOnHnLpT', '+E+T', ['=12@2:6_1-37_35_12,3_2-13_5_12', '=20@5:10_1-101_99_20,5_2-29_21_20', '=420@259:210_1-44101_44099_420,105_2-11029_11021_420,70_3-4909_4891_420,42_5-1789_1739_420,35_6-1261_1189_420,30_7-949_851_420,21_10-541_341_420'])
 ('pE_nW_pMpRpOpHpLnT', '+E-W+H', ['=12@2:6_1-37_35_12,3_2-13_5_12', '=20@5:5_2-29_21_20'])
 ('pE_nM_pWpRpOpHpLnT', '+E-M+H', ['=12@2:6_1-37_35_12,3_2-13_5_12', '=20@5:10_1-101_99_20,5_2-29_21_20', '=420@259:210_1-44101_44099_420,105_2-11029_11021_420,70_3-4909_4891_420,42_5-1789_1739_420,35_6-1261_1189_420,30_7-949_851_420,15_14-421_29_420'])
-('pW_nRnHnLnM__pW_nO_nEnRnHnLnMnT__pW_nE_nOnRnHnLnM__pW_nE_pT', '+W-E+T', ['=20@12:10_1-101_99_20,5_2-29_21_20', '=33@24:17_16-545_33_544'])
-('pW_nT__pW_pO_nEnRnHnLnMnT__pW_nE_pOpRpHpLpM__pW_nE_nT', '+W+O-E', ['=20@12:5_2-29_21_20,10_1-101_99_20', '=33@24:17_16-545_33_544'])
-('pM_nRnHnLnW__pM_nO_nEnRnHnLnWnT__pM_nE_nOnRnHnLnW__pM_nE_pT', '+M-E+T', ['=420@74:21_10-541_341_420,15_14-421_29_420', '=2145@382:49_16-2657_2145_1568'])
-('pM_nT__pM_pO_nEnRnHnLnWnT__pM_nE_pOpRpHpLpW__pM_nE_nT', '+M+O-E', ['=420@74:15_14-421_29_420,21_10-541_341_420', '=2145@382:49_16-2657_2145_1568'])
+('pW_nRnHnLnM__pW_nO_nEnRnHnLnMnT__pW_nE_nOnRnHnLnM__pW_nE_pT', '+W-H', ['=20@12:10_1-101_99_20,5_2-29_21_20', '=33@24:17_16-545_33_544'])
+('pW_nT__pW_pO_nEnRnHnLnMnT__pW_nE_pOpRpHpLpM__pW_nE_nT', '+W-T', ['=20@12:5_2-29_21_20,10_1-101_99_20', '=33@24:17_16-545_33_544'])
+('pM_nRnHnLnW__pM_nO_nEnRnHnLnWnT__pM_nE_nOnRnHnLnW__pM_nE_pT', '+M-H', ['=420@74:21_10-541_341_420,15_14-421_29_420', '=2145@382:49_16-2657_2145_1568'])
+('pM_nT__pM_pO_nEnRnHnLnWnT__pM_nE_pOpRpHpLpW__pM_nE_nT', '+M-T', ['=420@74:15_14-421_29_420,21_10-541_341_420', '=2145@382:49_16-2657_2145_1568'])
 
 ===
 ]]]
@@ -4084,8 +4156,15 @@ def _prepare4names4effective_combinations__of__fst_key__snd_key__thd_key(the__do
         assert len(snm2j) == 270, len(snm2j)
 
         j2snms = inv__k2v_to_v2ks(snm2j)
-        #j2snms = tuple(frozenset(j2snms[j]) for j in range(len(j2snms)))
-        j2snms = tuple(tuple(sorted(j2snms[j])) for j in range(len(j2snms)))
+            # :: dict
+        j2snms = [j2snms[j] for j in range(len(j2snms))]
+            # :: seq
+        #j2snms = tuple(frozenset(snms) for snms in j2snms)
+            # :: seq<set>
+        #j2snms = tuple(tuple(sorted(snms)) for snms in j2snms)
+            # :: seq<seq>
+        j2snms = tuple(tuple(sorted(snms, key=lambda snm:(len(snm),snm))) for snms in j2snms)
+            # :: seq<seq>
         assert len(j2snms) == len(j2tnm4key_combination)
 
         tnm2j = MapView({tnm:j for j, tnm in enumerate(j2tnm4key_combination)})
@@ -4462,14 +4541,13 @@ def _mk_func4Boundary_about__ST__HOE():
         if 0:
             #???now ++thd_key
             @abstractmethod
-            def _iter_find_next_T_exs_____free_T_(sf, s, t, new_S, /, *, reverse):
+            def _iter_find_next_T_exs_____free_S_T_(sf, s, t, new_S, /, *, reverse):
                 '-> Iter (dec_T__vs__inc_T, next T<new_S>, end_T)'
             def iter_find_new_Ts4continue_(sf, s, t, new_S, /, *, reverse):
                 '-> Iter new_T4continue<new_S> #see:kw:may_ST4continue/ST4continue #bisearch???'
-                assert 1 <= t < s
-                assert not s&1 == t&1
+                assert 0 <= t <= s
                 assert new_S >= 2
-                next_T_exs = sf._iter_find_next_Ts_____free_T_(s, t, new_S, reverse)
+                next_T_exs = sf._iter_find_next_Ts_____free_S_T_(s, t, new_S, reverse)
                 #xxx:assert next_T >= 0
                 #case = sf.monotone_range_case_about_T
                 for dec_T__vs__inc_T, next_T, end_T in next_T_exs:
@@ -4491,13 +4569,14 @@ def _mk_func4Boundary_about__ST__HOE():
                             yield next_T
                             break
 
-        def XXX5S_T_____maybe_non_coprime_S_T_(sf, s, t, /, *, free_T=False):
+        def XXX5S_T_____maybe_non_coprime_S_T_(sf, s, t, /, *, free_S_T=False):
             '-> XXX'
-            if not free_T:
+            if not free_S_T:
                 assert 1 <= t < s
                 assert not s&1 == t&1
                 #not check:gcd
             else:
+                #assert 0 <= t <= s
                 assert t >= 0
                 assert s >= 0
             XXX4st = sf._XXX5S_T_____maybe_non_coprime_S_T_(s,t)
@@ -5862,7 +5941,8 @@ def _iter_prepare_args4generate_ST_HOE_LSMs5nms4key_combination_(nms4key_combina
 
     for nm4key_combination in nms4key_combination:
         snms4whole_key = snms4whole_key5nm4key_combination[nm4key_combination]
-        snm4whole_key = min(snms4whole_key)
+        #snm4whole_key = min(snms4whole_key)
+        snm4whole_key = min(snms4whole_key, key=lambda snm:(len(snm),snm))
         (nm4fst_key, nm4snd_key, reverse4snd_key, may_nm4thd_key, reverse4thd_key) = unpack_snm4whole_key_(snm4whole_key)
         args_ex = (nm4key_combination, snm4whole_key, nm4fst_key, nm4snd_key, reverse4snd_key, may_nm4thd_key, reverse4thd_key)
         yield args_ex

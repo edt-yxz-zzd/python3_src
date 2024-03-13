@@ -29,13 +29,23 @@ def to_char2name_dict(s):
 
 def main(args=None):
     import sys
-    from pprint import pprint
-    
+    try:
+        from seed.helper.stable_repr import stable_repr_print__expand_all_layer
+    except ImportError:
+        from pprint import pprint
+    else:
+        def pprint(x, /, *, file=None):
+            stable_repr_print__expand_all_layer(file, x)
+
     if args is None:
         args = sys.argv
 
     for s in args[1:]: # skip script name
-        pprint((s, to_char2name_dict(s)))
+        if 1:
+            pprint((s, to_char2name_dict(s)))
+        else:
+            print(s)
+            pprint(to_char2name_dict(s))
         print()
 
     return 0
@@ -48,4 +58,4 @@ if __name__ == '__main__':
 
 
 
-    
+

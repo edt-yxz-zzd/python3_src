@@ -1,0 +1,630 @@
+
+e ../../python3_src/nn_ns/fileformat/font/freetype2/freetype2-note.txt
+源自:
+  view ./script/hz/部件拆分.py
+    哪些汉字能在手机显示
+      查看手机字体包括哪些汉字
+
+[[
+mkdir -p /sdcard/0my_files/zip/font/freetype2/
+cd /sdcard/0my_files/tmp-download/font/
+mv freetype-2.10.2.tar.xz freetype-doc-2.10.2.tar.xz ft2demos-2.10.2.tar.xz    /sdcard/0my_files/zip/font/freetype2/
+ls /sdcard/0my_files/zip/font/freetype2/ -1
+freetype-2.10.2.tar.xz
+freetype-doc-2.10.2.tar.xz
+ft2demos-2.10.2.tar.xz
+===
+see:below:tar xf
+===
+xxx:grep FT_Get_CMap_Language_ID -i  -l -r /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/src/
+grep FT_Get_CMap_Language_ID -i  -l -r /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/include/
+
+view /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/include/freetype/tttables.h
+   *   Definitions of language ID values are in file @FT_TRUETYPE_IDS_H.
+grep FT_TRUETYPE_IDS_H -i  -l -r /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/include/
+view /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/include/freetype/config/ftheader.h
+#define FT_TRUETYPE_IDS_H  <freetype/ttnameid.h>
+
+view /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/include/freetype/ttnameid.h
+grep CHINESE /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/include/freetype/ttnameid.h
+[
+#define TT_MAC_ID_TRADITIONAL_CHINESE   2
+#define TT_MAC_ID_SIMPLIFIED_CHINESE   25
+#define TT_MAC_LANGID_CHINESE_TRADITIONAL          19
+#define TT_MAC_LANGID_CHINESE_SIMPLIFIED           33
+#define TT_MS_LANGID_CHINESE_TAIWAN                    0x0404
+#define TT_MS_LANGID_CHINESE_PRC                       0x0804
+#define TT_MS_LANGID_CHINESE_HONG_KONG                 0x0C04
+#define TT_MS_LANGID_CHINESE_SINGAPORE                 0x1004
+#define TT_MS_LANGID_CHINESE_MACAO                     0x1404
+#define TT_MS_LANGID_CHINESE_GENERAL                   0x0004
+#define TT_MS_LANGID_CHINESE_MACAU \                            TT_MS_LANGID_CHINESE_MACAO
+]
+===
+===
+]]
+
+[[
+===
+view ./script/hz/打印字符区.py
+===
+ls /system/fonts -1 -S
+NotoSerifCJK-Regular.ttc
+SysSans-Hans-Regular.ttf
+NotoSansCJK-Regular.ttc
+SysSans-Hant-Regular.ttf
+NotoColorEmoji.ttf
+DroidSansFallback.ttf
+...
+NotoSansLydian-Regular.ttf
+...
+...symlink...
+...
+===
+du -h -L -a /system/fonts
+cd /system/fonts
+du -h NotoSerifCJK-Regular.ttc SysSans-Hans-Regular.ttf NotoSansCJK-Regular.ttc SysSans-Hant-Regular.ttf NotoColorEmoji.ttf DroidSansFallback.ttf
+24M     NotoSerifCJK-Regular.ttc
+22M     SysSans-Hans-Regular.ttf
+20M     NotoSansCJK-Regular.ttc
+11M     SysSans-Hant-Regular.ttf
+9.3M    NotoColorEmoji.ttf
+3.8M    DroidSansFallback.ttf
+===
+ls SysFont-Regular.ttf NotoSansHans.ttc DroidSans.ttf -l
+lrw-r--r-- 1 root root 19 Jan  1  2009 DroidSans.ttf -> SysFont-Regular.ttf
+lrw-r--r-- 1 root root 23 Jan  1  2009 NotoSansHans.ttc -> NotoSansCJK-Regular.ttc
+lrw-r--r-- 1 root root 47 Jan  1  2009 SysFont-Regular.ttf -> /data/format_unclear/font/OplusOSUI-Regular.ttf
+===
+ls /data/format_unclear/font/
+===
+du -b NotoSerifCJK-Regular.ttc
+24776440
+hexdump -C -s 0x0 -n 1024 NotoSerifCJK-Regular.ttc
+00000000  74 74 63 66 00 01 00 00  00 00 00 04 00 00 00 1c  |ttcf............|
+00000010  00 00 01 18 00 00 02 14  00 00 03 10 4f 54 54 4f  |............OTTO|
+00000020  00 0f 00 80 00 03 00 70  42 41 53 45 ed fa f5 16  |.......pBASE....|
+00000030  00 00 04 0c 00 00 00 f0  43 46 46 20 51 8f b7 d1  |........CFF Q...|
+    OTTO ... pBASE
+
+search_bytes_in_file  -e4bs u8 pBASE -i NotoSerifCJK-Regular.ttc  -begin 0x000000 -end 0x004000
+
+chr2hex 日旦旧旨早旪旫旬旭旮旯
+    日0x65E5旦0x65E6旧0x65E7旨0x65E8早0x65E9旪0x65EA旫0x65EB旬0x65EC旭0x65ED旮0x65EE旯0x65EF
+search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32be 日旦旧旨早旪旫旬旭旮旯
+search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32le 日旦旧旨早旪旫旬旭旮旯
+search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_16le 日旦旧旨早旪旫旬旭旮旯
+search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_16be 日旦旧旨早旪旫旬旭旮旯
+
+/system/fonts $ search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32be 日
+23395654
+23417742
+23527755
+23654108
+23676676
+23888484
+23911396
+24121856
+/system/fonts $ search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32be 旦
+23395658
+23654112
+23888492
+24121864
+24143712
+/system/fonts $ search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32be 旧
+23395666
+23417754
+23654120
+23676688
+24121868
+/system/fonts $ search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32be 旨
+23395670
+23654124
+23888496
+23911408
+24121876
+/system/fonts $ search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32be 早
+23395678
+23654132
+23888504
+24143724
+/system/fonts $ search_bytes_in_file  -i NotoSerifCJK-Regular.ttc -e4bs utf_32be 旪
+23417766
+23676700
+23911420
+
+
+23395654
+23395658
+23395666
+23395670
+23395678
+?旪
+
+23654108
+23654112
+23654120
+
+24121856
+24121864
+24121868
+
+hex 24121868
+'0x170120c'
+search_bytes_in_file  -i NotoSerifCJK-Regular.ttc '01 70 12 0c'
+search_bytes_in_file  -i NotoSerifCJK-Regular.ttc '0c 12 70 01 '
+
+
+hexdump -C -s 24774000 -n 4000 NotoSerifCJK-Regular.ttc
+hexdump -C -s 24760000 -n 4000 NotoSerifCJK-Regular.ttc
+view ++enc=utf-32-le /system/fonts/NotoSerifCJK-Regular.ttc
+===
+mkdir -p /sdcard/0my_files/tmp/font/freetype
+cd /sdcard/0my_files/tmp/font/freetype
+#xxx:7z x /sdcard/0my_files/tmp-download/font/freetype-2.10.2.tar.xz
+tar xf /sdcard/0my_files/tmp-download/font/freetype-2.10.2.tar.xz
+view /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/README
+===
+make -v
+$ make
+... ...
+* module: psnames   (Postscript & Unicode Glyph name handling)
+cd builds/unix; \
+        ./configure
+/data/data/com.termux/files/usr/bin/sh: 2: ./configure: Permission denied
+make: *** [builds/unix/detect.mk:91: setup] Error 126
+==>>sdcard无『可执行』权限=>移至 termux 控制目录
+mkdir ~/ex_src/font/
+cd ~/ex_src/font/
+tar xf /sdcard/0my_files/tmp-download/font/freetype-2.10.2.tar.xz
+cd ~/ex_src/font/freetype-2.10.2/
+make
+    第一次『make』检测环境，生成配置文件
+make
+    第二次『make』编译
+===
+~/.../font/freetype-2.10.2 $ ls ~/../usr/lib/libfreetype.so -l
+-rwx------ 1 u0_a278 u0_a278 601744 May  4  2022 /data/data/com.termux/files/home/../usr/lib/libfreetype.so
+    已经有了？！
+    panda之类需要？
+-rwx------  1 u0_a278 u0_a278   3605080 May  4  2022 libcrypto.so.3
+-rwx------  1 u0_a278 u0_a278    556152 May  4  2022 libssl.so.3
+-rwx------  1 u0_a278 u0_a278    601744 May  4  2022 libfreetype.so
+    crypto? ssl? freetype?
+
+===
+/data/data/com.termux/files/usr/lib/python3.10/
+~/../usr/lib/python3.10/
+.../lib/python3.10 $ grep freetype -i -r . -l
+./site-packages/numpy/distutils/system_info.py
+./site-packages/cairocffi/constants.py
+./site-packages/PIL/features.py
+./site-packages/PIL/ImageFont.py
+    --> _imagingft.cpython-310.so
+
+from PIL.ImageFont import truetype
+t = truetype('/system/fonts/NotoSansLydian-Regular.ttf')
+f = t.font
+dir(f)
+nms = ['ascent', 'descent', 'family', 'getlength', 'getsize', 'getvaraxes', 'getvarnames', 'glyphs', 'height', 'render', 'setvaraxes', 'setvarname', 'style', 'x_ppem', 'y_ppem']
+for nm in nms: getattr(f, nm)
+
+cd ~/../usr/lib/python3.10/site-packages/PIL/
+grep '\.render(' -r .
+===
+cd ~/ex_src/font/
+tar xf /sdcard/0my_files/tmp-download/font/ft2demos-2.10.2.tar.xz
+less ft2demos-2.10.2/README
+ln --symbolic -T freetype-2.10.2/  freetype2
+
+cd ~/ex_src/font/ft2demos-2.10.2
+mv ~/../usr/include/freetype2  ~/../usr/include/freetype2----
+    /data/data/com.termux/files/usr/include/freetype2
+    暂时移除的原因:这是py.PIL依赖带来的freetype2版本，而『-I~/../usr/include』优先于『-I../freetype2-2.10.2/include』，导致原文件『#include <...>』出毛病
+make TOP_DIR='../freetype-2.10.2' EXES=ftdump exes
+make TOP_DIR='../freetype-2.10.2' exes
+mv ~/../usr/include/freetype2----  ~/../usr/include/freetype2
+    还原
+cd ~/ex_src/font/ft2demos-2.10.2/bin
+./ftdump -c '/system/fonts/NotoSansLydian-Regular.ttf'
+./ftdump -c '/system/fonts/NotoSerifCJK-Regular.ttc'
+
+===
+cd /sdcard/0my_files/tmp/font/freetype
+tar xf /sdcard/0my_files/tmp-download/font/freetype-doc-2.10.2.tar.xz
+tar xf /sdcard/0my_files/tmp-download/font/ft2demos-2.10.2.tar.xz
+
+cd /sdcard/0my_files/tmp/font/freetype/ft2demos-2.10.2/
+view /sdcard/0my_files/tmp/font/freetype/ft2demos-2.10.2/README
+view /sdcard/0my_files/tmp/font/freetype/ft2demos-2.10.2/Makefile
+
+grep charmap -r .
+view /sdcard/0my_files/tmp/font/freetype/ft2demos-2.10.2/src/ftdump.c
+
+content://com.android.externalstorage.documents/document/primary%3A0my_files%2Ftmp%2Ffont%2Ffreetype%2Ffreetype-2.10.2%2Fdocs%2Findex.html
+===
+content://com.android.externalstorage.documents/document/primary%3A0my_files%2Ftmp%2Ffont%2Ffreetype%2Ffreetype-2.10.2%2Fdocs%2Fglyphs%2Fglyphs-2.html
+
+It is thus common to define a device's characteristics through two numbers expressed in dpi (dots per inch). For example, a printer with a resolution of 300×600 dpi has 300 pixels per inch in the horizontal direction, and 600 in the vertical one.
+Points are a physical unit, where 1 point equals 1/72th of an inch in digital typography.
+
+dpi (dots per inch)
+pixel_size = point_size * resolution / 72
+
+ppem (pixel per EM)
+pixel_coord = grid_coord * pixel_size / EM_size
+
+[physical_length~inch == pixel_size~dot / (resolution~dot/inch) == point_size~pt / (72~pt/inch)]
+    [pt === point]
+    [dpi === dot/inch]
+[pixel_coord~dot == grid_coord~grid * pixel_size~dot / EM_size~grid]
+    ???[ppem == pixel_size / EM_size]???
+    [pixel_coord~dot == grid_coord~grid * (pixel_size/EM_size)~(dot/grid)]
+    [pixel_coord~dot == grid_coord~grid * ppem~(dot/grid)]
+
+
+The source format of outlines is a collection of closed paths called contours. Each contour delimits an outer or inner region of the glyph, and can be made of either line segments or Bézier arcs.
+
+The arcs are defined through control points, and can be either second-order (these are conic Béziers) or third-order (cubic Béziers) polynomials, depending on the font format. Note that conic Béziers are usually called quadratic Béziers in the literature. Hence, FreeType associates each point of the outline with flags to indicate its type (normal or control point). As a consequence, scaling the points will scale the whole outline.
+
+Each glyph's original outline points are located on a grid of indivisible units. The points are usually stored in a font file as 16-bit integer grid coordinates, with the grid's origin being at (0,0); they thus range from -32768 to 32767. (Even though point coordinates can be floats in other formats such as Type 1, we will restrict our analysis to integer values for simplicity).
+
+The grid is always oriented like the traditional mathematical two-dimensional plane, i.e., the X axis goes from the left to the right, and the Y axis from bottom to top.
+
+Note that glyphs can freely extend beyond the EM square if the font designer wants so. The EM square is thus just a convention in traditional typography.
+
+Grid units are very often called font units or EM units.
+
+As said before, pixel_size computed in the above formula does not directly relate to the size of characters on the screen. It simply is the size of the EM square if it was to be displayed. Each font designer is free to place its glyphs as it pleases him within the square.
+
+
+===
+content://com.android.externalstorage.documents/document/primary%3A0my_files%2Ftmp%2Ffont%2Ffreetype%2Ffreetype-2.10.2%2Fdocs%2Fglyphs%2Fglyphs-3.html
+linespace = ascent - descent + linegap
+[行距 == 最大行高 -最小行低 +行间距]
+    [ascent >= 0]
+    [descent <= 0]
+internal leading = ascent - descent - EM_size
+external leading === linegap
+
+Bounding box
+
+This is an imaginary box that encloses all glyphs from the font, usually as tightly as possible. It is represented by four parameters, namely xMin, yMin, xMax, and yMax, that can be computed for any outline. Their values can be in font units if measured in the original outline, or in integer (or fractional) pixel units when measured on scaled outlines.
+
+A common shorthand for the bounding box is ‘bbox’.
+
+glyph width = bbox.xMax - bbox.xMin
+
+glyph height = bbox.yMax - bbox.yMin
+
+right side bearing = advance_width - left_side_bearing - (xMax-xMin)
+
+
+===
+view /sdcard/0my_files/tmp/font/freetype/freetype-2.10.2/docs/formats.txt
+===
+]]
+[[
+ftdump#-->charmap
+cp /sdcard/0my_files/tmp/font/freetype/ft2demos-2.10.2/src/ftdump.c ../../python3_src/nn_ns/fileformat/font/freetype2/
+view  ../../python3_src/nn_ns/fileformat/font/freetype2/ftdump.c
+
+cp ~/ex_src/font/ft2demos-2.10.2/bin/ftdump ../../python3_src/nn_ns/fileformat/font/freetype2/
+    失去『可执行性』
+view ../../python3_src/nn_ns/fileformat/font/freetype2/ftdump
+
+../../python3_src/nn_ns/fileformat/font/freetype2/ftdump
+  bash: ...: Permission denied
+
+>>> from subprocess import run
+>>> run('../../python3_src/nn_ns/fileformat/font/freetype2/ftdump')
+Traceback (most recent call last):
+    ...
+PermissionError: [Errno 13] Permission denied: '../../python3_src/nn_ns/fileformat/font/freetype2/ftdump'
+>>>
+
+cd ../../python3_src/nn_ns/fileformat/font/freetype2/
+chmod +x ftdump
+  无效@sdcard
+
+===
+#wrapper-script:xxx:
+  xxx:cp ~/ex_src/font/ft2demos-2.10.2/bin/ftdump ~/../usr/bin/
+  /data/data/com.termux/files/usr/bin/ftdump: error: '/data/data/com.termux/files/usr/bin/.libs/ftdump' does not exist
+  This script is just a wrapper for ftdump.
+  See the libtool documentation for more information.
+
+~/.../ft2demos-2.10.2/bin $ du -h ./.libs/ftdump
+76K     ./.libs/ftdump
+
+~/.../ft2demos-2.10.2/bin $ ./.libs/ftdump
+CANNOT LINK EXECUTABLE "./.libs/ftdump": library "libfreetype.so.6" not found: needed by main executable
+
+ls ~/ex_src/font/freetype-2.10.2/objs/.libs/
+du -h ~/ex_src/font/freetype-2.10.2/objs/.libs/*free*
+5.5M    libfreetype.a
+0       libfreetype.la
+4.0K    libfreetype.lai
+0       libfreetype.so
+0       libfreetype.so.6
+3.2M    libfreetype.so.6.17.2
+8.0K    libfreetype.ver
+
+mkdir ~/ex_src/font/freetype2__bin/
+cp ~/ex_src/font/freetype-2.10.2/objs/.libs/*free* ~/ex_src/font/freetype2__bin/
+cp ~/ex_src/font/ft2demos-2.10.2/bin/.libs/ftdump ~/ex_src/font/freetype2__bin/
+view ../../python3_src/nn_ns/fileformat/font/freetype2/ftdump
+  [
+    # Add our own library path to LD_LIBRARY_PATH
+    LD_LIBRARY_PATH="/data/data/com.termux/files/home/ex_src/font/freetype-2.10.2/objs/.libs:$LD_LIBRARY_PATH"
+
+    # Some systems cannot cope with colon-terminated LD_LIBRARY_PATH
+    # The second colon is a workaround for a bug in BeOS R4 sed
+    LD_LIBRARY_PATH=`$ECHO "$LD_LIBRARY_PATH" | /data/data/com.termux/files/usr/bin/sed 's/::*$//'`
+
+    export LD_LIBRARY_PATH
+  ]
+
+fail:echo `~/ex_src/font/freetype2__bin:$LD_LIBRARY_PATH`
+  ==>> bash: /data/data/com.termux/files/home/ex_src/font/freetype2__bin:: No such file or directory
+echo "~/ex_src/font/freetype2__bin:$LD_LIBRARY_PATH"
+  ==>> ~/ex_src/font/freetype2__bin:
+fail:env - LD_LIBRARY_PATH="~/ex_src/font/freetype2__bin:$LD_LIBRARY_PATH"  echo '$LD_LIBRARY_PATH'
+  ==>> $LD_LIBRARY_PATH
+
+env - LD_LIBRARY_PATH=~/ex_src/font/freetype2__bin":$LD_LIBRARY_PATH"  ~/ex_src/font/freetype2__bin/ftdump  -c '/system/fonts/NotoSansLydian-Regular.ttf'
+
+cd ~/ex_src/font/freetype2__bin/
+
+===
+e ../../python3_src/nn_ns/fileformat/font/freetype2/freetype2_ftdump.py
+===
+===
+===
+
+cd ~/ex_src/font/ft2demos-2.10.2/bin
+===
+===
+输出格式:[
+There are ??? faces in this file.
+
+----- Face number: ??? -----
+
+font name entries
+   ...
+font type entries
+   ...
+charmaps (???)
+   ???: format  ???, platform ???, encoding  ???   language ???
+     ...
+   ???: format  ???, platform ???, encoding  ???   language ??? (active)
+     ...
+
+----- Face number: ??? -----
+...
+]
+===
+[
+./ftdump -c '/system/fonts/NotoSansLydian-Regular.ttf'
+There is 1 face in this file.
+
+----- Face number: 0 -----
+
+font name entries
+   family:              Noto Sans Lydian
+   style:               Regular
+   postscript:          NotoSansLydian
+   created:             2012-08-10
+   modified:            2016-03-24
+   revision:            1.03
+
+font type entries
+   FreeType driver:     truetype
+   sfnt wrapped:        yes
+   type:                scalable
+   direction:           horizontal
+   fixed width:         no
+   glyph names:         no
+   EM size:             2048
+   global BBox:         (20,-40):(1883,1483)
+   ascender:            2189
+   descender:           -600
+   height:              2789
+   max_advance_width:   1913
+   max_advance_height:  2789
+   underline_position:  -205
+   underline_thickness: 102
+   glyph count:         31
+
+charmaps (2)
+   0: format  4, platform 3, encoding  1   language 0
+     0000,000d,0020,00a0,feff
+   1: format 12, platform 3, encoding 10   language 0 (active)
+     0000,000d,0020,00a0,feff,10920-10939,1093f
+]
+===
+===
+[
+mkdir /sdcard/0my_files/tmp/out4freetype/
+./ftdump -c '/system/fonts/NotoSerifCJK-Regular.ttc' > /sdcard/0my_files/tmp/out4freetype/ftdump..NotoSerifCJK-Regular.ttc..out.txt
+view /sdcard/0my_files/tmp/out4freetype/ftdump..NotoSerifCJK-Regular.ttc..out.txt
+There are 4 faces in this file.
+
+----- Face number: 0 -----
+
+font name entries
+   family:              Noto Serif CJK JP
+   style:               Regular
+   postscript:          NotoSerifCJKjp-Regular
+   created:             2017-05-01
+   modified:            2019-03-12
+   revision:            1.00
+
+font type entries
+   FreeType driver:     cff
+   sfnt wrapped:        yes
+   type:                scalable
+   direction:           horizontal, vertical
+   fixed width:         no
+   glyph names:         no
+   EM size:             1000
+   global BBox:         (-997,-1049):(2929,1809)
+   ascender:            1151
+   descender:           -286
+   height:              1437
+   max_advance_width:   3000
+   max_advance_height:  3000
+   underline_position:  -150
+   underline_thickness: 50
+   glyph count:         65535
+
+charmaps (6)
+   0: format  4, platform 0, encoding  3   language 0
+     0020-007e,00a0-0103,0110-0113,011a,011b,0128-012b,0143,0144,0147,0148,014c-014f,0152,0153,0168-016d,0192,01a0,01a1,01af,01b0,...,ffc2-ffc7,ffca-ffcf,ffd2-ffd7,ffda-ffdc,ffe0-ffe6,ffe8-ffee
+   1: format 12, platform 0, encoding  4   language 0
+     0020-007e,...,2f90f,2f91a,2f920,2f921,2f945,2f947,2f96c,2f995,2f9d0,2f9de,2f9df,2f9f4
+   2: format 14, platform 0, encoding  5   (Unicode Variation Sequences)
+     0020-007e,...
+   3: format  6, platform 1, encoding  1   language 0
+
+   4: format  4, platform 3, encoding  1   language 0
+     0020-007e,...
+   5: format 12, platform 3, encoding 10   language 0 (active)
+     0020-007e,...
+
+----- Face number: 1 -----
+
+font name entries
+   family:              Noto Serif CJK KR
+   style:               Regular
+   postscript:          NotoSerifCJKkr-Regular
+   created:             2017-05-01
+   modified:            2019-03-12
+   revision:            1.00
+
+font type entries
+   FreeType driver:     cff
+   sfnt wrapped:        yes
+   type:                scalable
+   direction:           horizontal, vertical
+   fixed width:         no
+   glyph names:         no
+   EM size:             1000
+   global BBox:         (-997,-1049):(2929,1809)
+   ascender:            1151
+   descender:           -286
+   height:              1437
+   max_advance_width:   3000
+   max_advance_height:  3000
+   underline_position:  -150
+   underline_thickness: 50
+   glyph count:         65535
+
+charmaps (6)
+   0: format  4, platform 0, encoding  3   language 0
+     0020-007e,...
+   1: format 12, platform 0, encoding  4   language 0
+     0020-007e,...
+   2: format 14, platform 0, encoding  5   (Unicode Variation Sequences)
+     0020-007e,...
+   3: format  6, platform 1, encoding  3   language 0
+
+   4: format  4, platform 3, encoding  1   language 0
+     0020-007e,...
+   5: format 12, platform 3, encoding 10   language 0 (active)
+     0020-007e,...
+
+----- Face number: 2 -----
+
+font name entries
+   family:              Noto Serif CJK SC
+   style:               Regular
+   postscript:          NotoSerifCJKsc-Regular
+   created:             2017-05-01
+   modified:            2019-03-12
+   revision:            1.00
+
+font type entries
+   FreeType driver:     cff
+   sfnt wrapped:        yes
+   type:                scalable
+   direction:           horizontal, vertical
+   fixed width:         no
+   glyph names:         no
+   EM size:             1000
+   global BBox:         (-997,-1049):(2929,1809)
+   ascender:            1151
+   descender:           -286
+   height:              1437
+   max_advance_width:   3000
+   max_advance_height:  3000
+   underline_position:  -150
+   underline_thickness: 50
+   glyph count:         65535
+
+charmaps (6)
+   0: format  4, platform 0, encoding  3   language 0
+     0020-007e,...
+   1: format 12, platform 0, encoding  4   language 0
+     0020-007e,...
+   2: format 14, platform 0, encoding  5   (Unicode Variation Sequences)
+     0020-007e,...
+   3: format  6, platform 1, encoding 25   language 0
+
+   4: format  4, platform 3, encoding  1   language 0
+     0020-007e,...
+   5: format 12, platform 3, encoding 10   language 0 (active)
+     0020-007e,...
+
+----- Face number: 3 -----
+
+font name entries
+   family:              Noto Serif CJK TC
+   style:               Regular
+   postscript:          NotoSerifCJKtc-Regular
+   created:             2017-05-01
+   modified:            2019-03-12
+   revision:            1.00
+
+font type entries
+   FreeType driver:     cff
+   sfnt wrapped:        yes
+   type:                scalable
+   direction:           horizontal, vertical
+   fixed width:         no
+   glyph names:         no
+   EM size:             1000
+   global BBox:         (-997,-1049):(2929,1809)
+   ascender:            1151
+   descender:           -286
+   height:              1437
+   max_advance_width:   3000
+   max_advance_height:  3000
+   underline_position:  -150
+   underline_thickness: 50
+   glyph count:         65535
+
+charmaps (6)
+   0: format  4, platform 0, encoding  3   language 0
+     0020-007e,...
+   1: format 12, platform 0, encoding  4   language 0
+     0020-007e,...
+   2: format 14, platform 0, encoding  5   (Unicode Variation Sequences)
+     0020-007e,...
+   3: format  6, platform 1, encoding  2   language 0
+
+   4: format  4, platform 3, encoding  1   language 0
+     0020-007e,...
+   5: format 12, platform 3, encoding 10   language 0 (active)
+     0020-007e,...
+]
+===
+===
+]]
+
+
+
+py_adhoc_call script.hz.部件拆分 @print_chars_  =16 =0x20000 =0x30000 >  /sdcard/0my_files/tmp/out4py/script.hz.部件拆分..print_chars_.out.txt
+view /sdcard/0my_files/tmp/out4py/script.hz.部件拆分..print_chars_.out.txt
+
+

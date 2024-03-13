@@ -1,4 +1,4 @@
-
+#__all__:goto
 r'''
 ReadOnly mapping ==>> MappingProxyType
     mapping view
@@ -10,7 +10,7 @@ KeysImmutable mapping ==>> HalfFrozenDict
     frozen keys
     not hashable
 
-from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, HalfFrozenDict
+py -m seed.types.FrozenDict
 
 see:
     view ../../python3_src/seed/types/DictWithNewProtocol.py
@@ -24,6 +24,8 @@ __all__ = '''
         mk_FrozenDict
         empty_FrozenDict
     HalfFrozenDict
+        mk_HalfFrozenDict
+        empty_HalfFrozenDict
 
     HashableMapping
 '''.split()
@@ -35,17 +37,36 @@ from types import MappingProxyType
 from collections.abc import Mapping, Set, Hashable
 import itertools
 
-def mk_FrozenDict(mapping_or_pairs=(), /, **kwargs):
-    if not kwargs and type(mapping_or_pairs) is FrozenDict:
-        d = mapping_or_pairs
-    else:
-        d = FrozenDict(mapping_or_pairs, **kwargs)
-    assert type(d) is FrozenDict
+def __():
+    'logic-err:HalfFrozenDict is Mutable, except empty_HalfFrozenDict'
+    _Types = (FrozenDict, HalfFrozenDict)
+    def mk_HalfFrozenDict(mapping_or_pairs=(), /, **kwargs):
+        if not kwargs and type(mapping_or_pairs) in _Types:
+            d = mapping_or_pairs
+        else:
+            d = HalfFrozenDict(mapping_or_pairs, **kwargs)
+        assert type(d) in _Types
 
-    if not d:
-        d = empty_FrozenDict
-    assert type(d) is FrozenDict
-    return d
+        if not d:
+            d = empty_HalfFrozenDict
+        assert type(d) in _Types
+        return d
+
+
+
+def __():
+    'now using __new__'
+    def mk_FrozenDict(mapping_or_pairs=(), /, **kwargs):
+        if not kwargs and type(mapping_or_pairs) is FrozenDict:
+            d = mapping_or_pairs
+        else:
+            d = FrozenDict(mapping_or_pairs, **kwargs)
+        assert type(d) is FrozenDict
+
+        if not d:
+            d = empty_FrozenDict
+        assert type(d) is FrozenDict
+        return d
 
 def mapping_hash(mapping):
     'like Set._hash; to provide a std algo for all mapping'
@@ -58,7 +79,7 @@ class __Mapping2Set_for_hash(Set):
         return self._hash()
     @classmethod
     def _from_iterable(cls, it):
-        return frozenset(it) 
+        return frozenset(it)
     def __contains__(self, x):
         if type(x) is tuple and len(x) == 2:
             k, v = x
@@ -100,7 +121,12 @@ def default_on_both(k, r, b, /):
 
 class __Dict(Mapping):
     'should not reassigned .__d!'
-    def __init__(self, d):
+    def __new__(cls, d, /):
+        self = super(__class__, cls).__new__(cls)
+        self.__init(d)
+        return self
+    #def __init__(self, d, /):
+    def __init(self, d, /):
         assert type(d) is dict
         self.__d = d
     def __getitem__(self, key):
@@ -211,7 +237,26 @@ class __Dict(Mapping):
 
 class FrozenDict(__Dict, HashableMapping):
     'should not modify .__d!'
-    def __init__(self, mapping_or_pairs=(), /, **kwargs):
+    def __new__(cls, mapping_or_pairs=(), /, **kwargs):
+        if not kwargs:
+            if type(mapping_or_pairs) is __class__:
+                self = mapping_or_pairs
+                return self
+        if not kwargs and isinstance(mapping_or_pairs, __class__):
+            d = mapping_or_pairs._Dict__d
+        else:
+            d = dict(mapping_or_pairs, **kwargs)
+        d
+        if not d and cls is __class__:
+            try:
+                return empty_FrozenDict
+            except NameError:
+                pass
+        self = super(__class__, cls).__new__(cls, d)
+        self.__hash = None
+        return self
+    #def __init__(self, mapping_or_pairs=(), /, **kwargs):
+    def __init(self, mapping_or_pairs=(), /, **kwargs):
         if not kwargs and isinstance(mapping_or_pairs, __class__):
             # bug: d = mapping_or_pairs.__d
             d = mapping_or_pairs._Dict__d
@@ -227,10 +272,20 @@ class FrozenDict(__Dict, HashableMapping):
         return self.ireplace(mapping)
     __ior__ = __or__
 empty_FrozenDict = FrozenDict()
-
+mk_FrozenDict = FrozenDict
 
 class HalfFrozenDict(__Dict):
-    def __init__(self, mapping_or_pairs=(), **kwargs):
+    def __new__(cls, mapping_or_pairs=(), **kwargs):
+        d = dict(mapping_or_pairs, **kwargs)
+        if not d and cls is __class__:
+            try:
+                return empty_HalfFrozenDict
+            except NameError:
+                pass
+        self = super(__class__, cls).__new__(cls, d)
+        return self
+    #def __init__(self, mapping_or_pairs=(), **kwargs):
+    def __init(self, mapping_or_pairs=(), **kwargs):
         d = dict(mapping_or_pairs, **kwargs)
         super().__init__(d)
     def __setitem__(self, key, value):
@@ -243,6 +298,16 @@ class HalfFrozenDict(__Dict):
     def __or__(self, mapping, /):
         return self.ireplace(mapping)
     __ior__ = __or__
+#empty_HalfFrozenDict = HalfFrozenDict()
+empty_HalfFrozenDict = empty_FrozenDict
+mk_HalfFrozenDict = HalfFrozenDict
+
+
+
+
+
+assert empty_HalfFrozenDict is mk_HalfFrozenDict()
+assert empty_FrozenDict is mk_FrozenDict()
 
 
 {FrozenDict({1:2, 3:3})}
@@ -262,7 +327,7 @@ else: raise ...
 
 
 
-if 0:
+def __():
 
     '''
     # fail
@@ -270,7 +335,7 @@ if 0:
         then we need get element in set
         since that is not a std interface
         it would be an O(n) operation; e.g. next(set - (set - {elem}))
-        
+
 
 
     '''
@@ -317,7 +382,6 @@ if 0:
             for b in gots:
                 if b is not a:
                     return b
-                
 
 
 
@@ -328,3 +392,10 @@ if 0:
 
 
 
+
+from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, empty_FrozenDict
+from seed.types.FrozenDict import HalfFrozenDict, mk_HalfFrozenDict, empty_HalfFrozenDict
+
+from seed.types.FrozenDict import mapping_hash
+from seed.types.FrozenDict import HashableMapping
+from seed.types.FrozenDict import *

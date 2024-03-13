@@ -1,4 +1,3 @@
-
 r'''
 example:
     >>> text_of_stdout_of_call('py -c print(1)'.split())
@@ -7,7 +6,13 @@ example:
     Traceback (most recent call last):
         ...
     subprocess.CalledProcessError:...
-'''
+
+import subprocess
+subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, capture_output=False, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None, text=None, env=None, universal_newlines=None)¶
+from seed.exec.text_of_stdout_of_call import text_of_stdout_of_call
+def text_of_stdout_of_call(args, **kwargs):
+
+#'''
 
 __all__ = '''
     text_of_stdout_of_call
@@ -40,6 +45,7 @@ def text_of_stdout_of_call(args, **kwargs):
                 print(line, end='')
 
 
+from seed.exec.text_of_stdout_of_call import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -47,3 +53,6 @@ if __name__ == "__main__":
     #doctest: +NORMALIZE_WHITESPACE
     #doctest: +IGNORE_EXCEPTION_DETAIL
     #Traceback (most recent call last):
+
+from seed.exec.text_of_stdout_of_call import text_of_stdout_of_call
+from seed.exec.text_of_stdout_of_call import *

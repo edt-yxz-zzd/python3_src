@@ -1,13 +1,23 @@
 
 __all__ = '''
     PeekableIterator
+    echo_or_mk_PeekableIterator
     '''.split()
+
+if __name__ == "__main__":
+    from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
 
 
 from collections import deque
 from itertools import islice, chain
 from seed.tiny import null_iter
 
+
+def echo_or_mk_PeekableIterator(iterable):
+    'avoid duplicate PeekableIterator; although the two cases are diff'
+    if not isinstance(iterable, PeekableIterator):
+        iterable = PeekableIterator(iterable)
+    return iterable
 
 def deque_popleftN(dq, n):
     # return tuple(dq[:n]) and del dq[:n]
@@ -491,3 +501,5 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
+from seed.iters.PeekableIterator import *

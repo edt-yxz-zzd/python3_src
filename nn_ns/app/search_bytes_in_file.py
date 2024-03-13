@@ -189,7 +189,8 @@ def iter_search_bytes_in_bfile_(ibfile, bs, /, *tmay_stop_location, overlap:bool
     else:
         may_stop_location = eliminate_tmay__mix(tmay_stop_location, -1, None)
         return iter_find_bytes__naive_(bs, ibfile, may_negativeable_end_location=may_stop_location, overlap=overlap)
-_fmt = r'{0}\n'
+#bug:_fmt = r'{0}\n'
+_fmt = '{0}\n'
 def show_search_bytes_in_file(bs, /, *, ipath, opath=None, force=False, show_args=False, format4show_address=_fmt, may_begin_idx=None, may_end_idx=None, overlap=True, fancy=True):
     bs = bytes(bs) # [uint%256] -> bytes
     may_ipath = ipath; del ipath

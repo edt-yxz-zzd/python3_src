@@ -163,6 +163,7 @@ TODO:
 hashlib
 hmac
 reprlib
+subprocess
 ]]
 [[
 view ../../../unzip/py_doc/python-3.8.1-docs-html/library/index.html
@@ -826,6 +827,22 @@ help(xxx)
 
 py_help xxx > ~/my_tmp/out4py/py_help.xxx.out.txt
 view /sdcard/0my_files/tmp/out4py/py_help.xxx.out.txt
+
+]]]
+[[[template:xxx
+subprocess
+===
+
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/subprocess.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/subprocess.html > $my_tmp/out4py/html2text/py_38_doc/subprocess.html.txt
+view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/subprocess.html.txt
+
+import subprocess
+subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, capture_output=False, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None, text=None, env=None, universal_newlines=None)¶
+from seed.exec.text_of_stdout_of_call import text_of_stdout_of_call
+def text_of_stdout_of_call(args, **kwargs):
+
+
 
 ]]]
 [[[

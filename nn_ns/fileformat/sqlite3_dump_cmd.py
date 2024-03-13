@@ -9,6 +9,24 @@ see:
     view script/汉语辞海囗.py
     #view ../../python3_src/nn_ns/app/sqlite3_dump_.py
 
+[[
+news:
+    old: [fmtr4row::may callable]
+    -->:
+    [fmtr4row::may callable | str]
+        add [fmtr4row::str] to save nms4columns
+===
+example:fmtr4row:
+    --fmtr4row:'\ nm4columnA, paramB=nm4columnB -> (nm4columnA, paramB)'
+    <==>
+    --nms4columns:'nm4columnA,nm4columnB' --fmtr4row='lambda nm4columnA, paramB : (nm4columnA, paramB)'
+===
+usage:
+py_adhoc_call   nn_ns.fileformat.sqlite3_dump_cmd   @sqlite3_dump_cmd --ipath:/sdcard/0my_files/unzip/apk/dictionary/han_yu_zi_dian-assets-x0x1x2x3/x0x1x2x3  --nm4table:zi   --fmtr4row:'\zi,bishun -> f"{zi!s}:{bishun!s}"' =4
+===
+]]
+
+
 
 nn_ns.fileformat.sqlite3_dump_cmd
 py -m nn_ns.app.debug_cmd   nn_ns.fileformat.sqlite3_dump_cmd -x

@@ -89,7 +89,8 @@ from seed.types.empty_containers import empty_mapping
 from seed.verify.common_verify import is_Sequence
 from seed.tiny import null_iter, print_err
 from seed.helper.repr_input import repr_helper_ex
-from seed.abc import abstractmethod, ABC, final, override
+#from seed.abc import abstractmethod, ABC, final, override
+from seed.abc.abc__ver1 import abstractmethod, override, final, ABC #, ABC__no_slots
 from seed.decorators.__special_method__ import (
     __static_method__
     ,__class_method__
@@ -880,3 +881,7 @@ if __name__ == '__main__':
 
     from seed.helper.ongo import main
     main(modules=[__name__], classes=classes, excludes=excludes)
+
+from seed.types.NamespaceABC import StaticImmutableNamespaceBase
+from seed.types.NamespaceABC import DynamicImmutableNamespace
+from seed.types.NamespaceABC import *

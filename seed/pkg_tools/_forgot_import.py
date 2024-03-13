@@ -17,6 +17,27 @@ usage:
 # put the following code at top:
 from ??? import raise_when_forgot
 assert not raise_when_forgot(__file__, 'error logic')
+
+
+[[
+bug4class_namespace:here
+patch4class_namespace:goto
+===
+found bug@nn_ns.app.debug_cmd
+    from:seed.types.PruneableArray
+bug:cannot found unbound_name:『begin』
+    -->from seed.pkg_tools.detect_all_unbound_names import DetectAllUnboundNames
+    -->from ._forgot_import import symtable2forgots
+    -->def _collect_forgots(table, may_context, /):
+        patch...
+class PruneableArray:
+    @property
+    def begin(sf, /):
+        return sf._begin
+    def __contains__(sf, v, /):
+        j = sf.index(v, begin, end)
+        ...
+]]
 '''
 
 __all__ = '''
@@ -183,8 +204,17 @@ def _collect_forgots(table, may_context, /):
         table2forgots[table] = forgots
 
         check_type_is(frozenset, context)
-        context |= all_locals
         typ = table.get_type()
+        if 0:
+            context |= all_locals
+        else:
+            #patch4class_namespace:here
+            #   20240129:see:seed.types.PruneableArray
+            #bug4class_namespace:goto
+            #
+            #if 0x0001:print()
+            if not typ == 'class':
+                context |= all_locals
         if typ == 'class':
             context4method = context | {'__class__'}
         else:
@@ -383,3 +413,5 @@ def _table2forgots__impl(table, output_dict):
 
 
 
+from seed.pkg_tools._forgot_import import symtable2forgots, fname2forgots
+from seed.pkg_tools._forgot_import import *

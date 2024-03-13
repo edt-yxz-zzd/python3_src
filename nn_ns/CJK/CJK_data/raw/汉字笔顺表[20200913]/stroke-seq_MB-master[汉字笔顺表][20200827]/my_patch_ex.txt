@@ -1,0 +1,7 @@
+#
+#TODO:view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/EquivalentUnifiedIdeograph.txt
+#
+龸=头囗尝:24345
+龷=头囗共=头囗昔:1221
+空心彐=右上叚=缺丨口:51
+#not copied to nn_ns/CJK/CJK_data/raw/汉字笔顺表\[20200913]/stroke-seq_MB-master\[汉字笔顺表]\[20200827]/单字_笔顺码_29685个.txt
