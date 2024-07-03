@@ -146,10 +146,16 @@ permutations
     枚举冫排列扌
 product
     枚举冫正交外直积元组扌
+
+iter_partitions_of_sum_
 '''.split()#'''
 __all__
 
-
+from itertools import pairwise
+from seed.tiny_.check import check_int_ge
+######################
+######################
+######################
 
 from itertools import accumulate
 from functools import reduce
@@ -190,6 +196,20 @@ II = prod
 #枚举冫笛卡儿积扌 = product
     #Cartesian product:笛卡儿积
 
+######################
+##news:
+######################
+def iter_partitions_of_sum_(M, L, /):
+    'M/the_sum/uint -> L/num_parts/pint -> parts/[uint] #[position matters] #used in: "(x+y+z)**n"'
+    check_int_ge(0, M)
+    check_int_ge(1, L)
+    for js in combinations_with_replacement(range(1+M), L-1):
+        js = (0, *js, M)
+        ns = tuple(j-i for i,j in pairwise(js))
+        assert len(ns) == L
+        assert sum(ns) == M
+        yield ns
+枚举冫整数拆分牜位次相关扌=iter_partitions_of_sum_
 
 
 __all__
@@ -226,5 +246,7 @@ from seed.math.combination import combinations,枚举冫组合牜无重复扌
 from seed.math.combination import combinations_with_replacement,枚举冫组合牜带重复扌
 from seed.math.combination import permutations,枚举冫排列扌
 from seed.math.combination import product,枚举冫正交外直积元组扌
+######################
+from seed.math.combination import iter_partitions_of_sum_, 枚举冫整数拆分牜位次相关扌
 ######################
 from seed.math.combination import *

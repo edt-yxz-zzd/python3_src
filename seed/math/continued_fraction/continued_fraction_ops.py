@@ -8,6 +8,7 @@ doctest____end:goto
 seed.math.continued_fraction.continued_fraction_ops
 py -m nn_ns.app.debug_cmd   seed.math.continued_fraction.continued_fraction_ops -x
 py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_ops:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_ops:__doc__ -ht
 py_adhoc_call   seed.math.continued_fraction.continued_fraction_ops   @f
 from seed.math.continued_fraction.continued_fraction_ops import *
 
@@ -152,6 +153,7 @@ cf_sub(lhs, rhs):
     -> cf_add(lhs, cf_neg(rhs))
 ===
 cf_add(lhs, rhs):
+    #update:针对整数优化
     双变量模式y,z
     st4cf_add.init := (0 + 1*y + 1*z + (cf0L+cf0R)*y*z)/(0 + 0*y + 0*z + y*z)
         #init
@@ -887,8 +889,10 @@ Traceback (most recent call last):
 seed.math.continued_fraction.continued_fraction_fold.ContinuedFractionError__inf__no_cf0
 >>> list(cf_add([0], [0]))
 [0]
->>> list(cf_add([0, 1], [0]))
+>>> list(cf_add([0, 1], [0], _optimize_on_int=False))
 [1]
+>>> list(cf_add([0, 1], [0], _optimize_on_int=True))
+[0, 1]
 >>> list(cf_add([-2, 1,3,4,2], [0,4,2,2,1]))
 [-2, 1, 89, 1, 1, 1, 1, 2]
 >>> from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, iter_approximate_fractions5continued_fraction_
@@ -1073,6 +1077,7 @@ cf_is_int_
 cf_floor_
 cf_ceil_
 cf_floor_ex_
+    icf_floor_ex_
 cf_mul
     cf_truediv
         cf_divmod
@@ -1109,6 +1114,7 @@ from seed.math.continued_fraction.continued_fraction_fold import iter_continued_
 
 from seed.helper.repr_input import repr_helper
 from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
+from seed.types.exc.UnsupportedOperation import Attr4UnsupportedOperation
 
 NaN = object()
 class ContinuedFractionState__2vars:
@@ -1502,11 +1508,52 @@ def cf_neg(cf_digits, /):
         # <==> [cf_digits==[cf0;1,cf2,...]]
         return chain([-1-cf0, cf2+1], _3_cf_digits)
 
-def cf_sub(lhs, rhs, /):
-    return cf_add(lhs, cf_neg(rhs))
-def cf_add(lhs, rhs, /):
+def cf_sub(lhs, rhs, /, *, _optimize_on_int=None):
+    return cf_add(lhs, cf_neg(rhs), _optimize_on_int=_optimize_on_int)
+def _cf_add__optimize_on_int(lhs, rhs, /):
+    j2xhs = [lhs, rhs]
+    #bug:for lhs, rhs in [(rhs, lhs), (lhs, rhs)]:
+    #   cannot restore original value: lhs/rhs
+    for j4rhs in (0, 1):
+        j4lhs = 1-j4rhs
+        lhs = j2xhs[j4lhs]
+        rhs = j2xhs[j4rhs]
+        try:
+            (lhs, (is_int4lhs, floor4lhs)) = icf_floor_ex_(lhs)
+        except ContinuedFractionError__inf__no_cf0:
+            return (done:=True, result:=null_iter)
+        j2xhs[j4lhs] = lhs
+            #restore original value: lhs/rhs
+        if not is_int4lhs:
+            continue
+        i8lhs = floor4lhs
+        rhs = iter(rhs)
+        for cf0 in rhs:
+            break
+        else:
+            return (done:=True, result:=null_iter)
+            raise ContinuedFractionError__inf__no_cf0
+        _1_rhs = rhs; rhs = None
+        i8lhs, cf0, _1_rhs
+        result = chain([i8lhs+cf0], _1_rhs)
+        return (done:=True, result)
+    [lhs, rhs] = j2xhs
+        #restore original value: lhs/rhs
+    return (done:=False, j2xhs)
+#_optimize_on_int4cf_add = True
+_optimize_on_int4cf_add = False
+def cf_add(lhs, rhs, /, *, _optimize_on_int=None):
     'st4cf_add := (0 + 1*y + 1*z + (cf0L+cf0R)*y*z)/(0 + 0*y + 0*z + y*z)'
+    ######################
+    if _optimize_on_int is None:
+        _optimize_on_int = _optimize_on_int4cf_add
 
+    if _optimize_on_int:
+        (done, x) = _cf_add__optimize_on_int(lhs, rhs)
+        if done:
+            return x
+        [lhs, rhs] = x
+    ######################
     #st4cf_add = ContinuedFractionState__2vars(0,1,1,cf0L+cf0R,  0,0,0,1)
     st4cf_add = ContinuedFractionState__2vars(0,1,1,0,  1,0,0,0)
     return st4cf_add.iter_cf_digitsO__if_determined_by_1_and_inf_(lhs, rhs)
@@ -1519,6 +1566,11 @@ def cf_floor_(cf_digits, /):
 def cf_ceil_(cf_digits, /):
     (is_int, cf0_x) = cf_floor_ex_(cf_digits)
     return cf0_x if is_int else cf0_x+1
+def icf_floor_ex_(cf_digits, /):
+    cf_digits = CachedIterator(cf_digits)
+    (is_int, cf0_x) = cf_floor_ex_(cf_digits)
+    cf_digits = cf_digits.chain_detach()
+    return (cf_digits, (is_int, cf0_x))
 def cf_floor_ex_(cf_digits, /):
     cf_digits = iter(cf_digits)
     for cf0 in cf_digits:
@@ -1746,6 +1798,9 @@ class ContinuedFraction:
     _attr_nms = r'''
     _cf_digits
     '''.split()#'''
+    __bool__ = Attr4UnsupportedOperation()
+    __len__ = Attr4UnsupportedOperation()
+    __contains__ = Attr4UnsupportedOperation()
 
     if 0:
         def get_args(sf, /):

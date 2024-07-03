@@ -5,6 +5,12 @@ echo $[340104267295-340022952607]
 printf $'%x\n' $[0x8000-0x80]
 7f80
 
+also:
+    view others/app/gvim/call_function_and_show_result.txt
+    vim:
+    :echo printf('0x%X', char2nr('一'))
+    0x4E00
+
 py -m nn_ns.app.py_eval
 py -m nn_ns.app.debug_cmd   nn_ns.app.py_eval
 
@@ -402,6 +408,11 @@ echo $(printf '%x' 17)
     - int
 #不能将字符转化为unicode，即无py.ord()/py.hex()功能
 
+also:
+    view others/app/gvim/call_function_and_show_result.txt
+    vim:
+    :echo printf('0x%X', char2nr('一'))
+    0x4E00
 
 #'''
         , formatter_class=argparse.RawDescriptionHelpFormatter

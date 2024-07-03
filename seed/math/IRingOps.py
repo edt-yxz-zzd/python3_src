@@ -79,6 +79,7 @@ from fractions import Fraction
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.tiny import print_err
 from seed.tiny import check_callable, check_uint, check_tmay, check_type_is
+from seed.math.pow_accelerate_framework import pow_uint_0M
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -93,6 +94,9 @@ class NonInvertibleError(ZeroDivisionError):pass
 class IRingOps(ABC):
     __slots__ = ()
 
+    @abstractmethod
+    def _try_convert_ring_element2int_(ops, x, /):
+        'Element -> int|^IndexError'
     @abstractmethod
     def _mk_ring_element5int_(ops, i, /):
         'int%characteristic -> Element'
@@ -163,8 +167,19 @@ class IRingOps(ABC):
         return ops.eq(x, neg_one)
 
 
+    def try_convert_ring_element2int(ops, x, /):
+        'Element -> int%characteristic|^IndexError'
+        ops.sketchy_check_element(x)
+        i = ops._try_convert_ring_element2int_(x)
+            # ^IndexError
+        check_type_is(int, i)
+        characteristic = ops.get_characteristic()
+        if characteristic:
+            i %= characteristic
+        return i
     def mk_ring_element5int(ops, i, /):
         'int -> Element'
+        check_type_is(int, i)
         characteristic = ops.get_characteristic()
         if characteristic:
             i %= characteristic
@@ -236,6 +251,38 @@ class IRingOps(ABC):
         'element -> element -> bool #x==y'
         return ops._4bool_op(ops._eq_, x, y)
 
+    ######################
+    ##news:
+    ######################
+    #@abstractmethod
+    def _pow_uint_(ops, x, exp, /):
+        'element{=!= (0|-1|+1)} -> exp/uint{>=2} -> element'
+        #e.g. (x+y)**n == (choose(n,i)*x**i*y**(n-i))
+        #   see:from seed.math.pow__via_binomial_formula import iter_parts5pow__via_binomial_formula__
+        #
+        # naive-impl:
+        one = ops.get_one()
+        return pow_uint_0M(one, ops.mul, x, exp)
+    def pow_uint(ops, x, exp, /):
+        'element -> exp/uint -> element'
+        #if 0:
+        #    check_type_is(int, exp)
+        #    if not exp >= 0:raise ValueError
+        check_uint(exp)
+        if exp == 1 or ops.is_one(x) or ops.is_zero(x):
+            return x
+        one = ops.get_one()
+        if exp == 0:
+            return one
+        if ops.is_neg_one(x):
+            if exp&1:
+                return x
+            return one
+        assert exp >= 2
+        return ops._pow_uint_(x, exp)
+
+
+#end-class IRingOps(ABC):
 #class IRingOps(ABC):
 class IRingExOps(IRingOps):
     #IRingExOps._inv__tmay_
@@ -350,6 +397,10 @@ class BinaryFieldRingExOps(IRingExOps):
             tmay_inv_y = ()
         return tmay_inv_y
     @override
+    def _try_convert_ring_element2int_(ops, x, /):
+        'Element -> int|^IndexError'
+        return int(x)
+    @override
     def _mk_ring_element5int_(ops, i, /):
         'int%characteristic -> Element'
         return bool(i&1)
@@ -450,6 +501,10 @@ class IntegerRingOps(IPyRingOpsOverRealNumber):
     __slots__ = ()
 
     @override
+    def _try_convert_ring_element2int_(ops, x, /):
+        'Element -> int|^IndexError'
+        return x
+    @override
     def _mk_ring_element5int_(ops, i, /):
         'int%characteristic -> Element'
         return i
@@ -470,10 +525,18 @@ class IntegerRingOps(IPyRingOpsOverRealNumber):
         check_type_is(int, x)
 ring_ops__integer = IntegerRingOps()
 
+#IntegerRingOps(IPyRingOpsOverRealNumber)
+#   not-hasattr:_inv__tmay_
+#IntRingExOps(IPyRingExOpsOverRealNumber)
+#   hasattr:_inv__tmay_
 class IntRingExOps(IPyRingExOpsOverRealNumber):
     # <: IRingExOps._inv__tmay_
     __slots__ = ()
 
+    @override
+    def _try_convert_ring_element2int_(ops, x, /):
+        'Element -> int|^IndexError'
+        return x
     @override
     def _mk_ring_element5int_(ops, i, /):
         'int%characteristic -> Element'
@@ -486,6 +549,8 @@ class IntRingExOps(IPyRingExOpsOverRealNumber):
     @override
     def _sketchy_check_element_(ops, x, /):
         'element -> None|raise TypeError'
+        check_type_is(int, x)
+        return
         try:
             check_type_is(int, x)
         except:
@@ -516,6 +581,13 @@ class FractionRingExOps(IPyRingExOpsOverRealNumber):
     _neg_one = Fraction(-1)
 
     @override
+    def _try_convert_ring_element2int_(ops, x, /):
+        'Element -> int|^IndexError'
+        n,d = x.as_integer_ratio()
+        if not d == 1:
+            raise IndexError(x)
+        return n
+    @override
     def _mk_ring_element5int_(ops, i, /):
         'int%characteristic -> Element'
         return Fraction(i)
@@ -535,6 +607,8 @@ class FractionRingExOps(IPyRingExOpsOverRealNumber):
     @override
     def _sketchy_check_element_(ops, x, /):
         'element -> None|raise TypeError'
+        check_type_is(Fraction, x)
+        return
         try:
             check_type_is(Fraction, x)
         except:

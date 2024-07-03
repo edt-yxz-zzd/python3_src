@@ -7,7 +7,9 @@ see:py_all@bash_script
     py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
 
 [[
-TODO:选项:添加:『+lineno』:『,』枚举时附加行号
+py_adhoc_call { -lineno } xxx.yyy ,f
+<<==:
+DONE?:TODO:选项:添加:『+lineno』:『,』枚举时附加行号
   py -m nn_ns.app.adhoc_argparser__main__call8module +lineno  x   ,f
   0:...
   1:...
@@ -98,6 +100,14 @@ xxx.yyy 模块全名
     or模块名之前的选项:
         +lineno xxx.yyy ,f
         def____adhoc_argparser__main__call8module.options4argparser_func_name_to_main_func.options4argparser 处理的是 模块名之后~函数名之前 的选项！
+新增『+lineno』:
+    py_adhoc_call { --lineno=233 } xxx.yyy ,f
+    py_adhoc_call { --lineno=None } xxx.yyy ,f
+        <==> py_adhoc_call xxx.yyy ,f
+    py_adhoc_call { -lineno } xxx.yyy ,f
+        <==> py_adhoc_call { --lineno=0 } xxx.yyy ,f
+    py_adhoc_call { +lineno } xxx.yyy ,f
+        <==> py_adhoc_call { --lineno=1 } xxx.yyy ,f
 
 新增:
     %!<py_script>
@@ -220,6 +230,28 @@ py_adhoc_call   seed.recognize.cmdline.adhoc_argparser @_fwd_call_    '%!from se
     #   SystemError: /home/builder/.termux-build/python/src/Objects/dictobject.c:1490: bad argument to internal function
 
 
+
+py_adhoc_call  { -lineno } seed.math.continued_fraction.iter_radix_digits_of_continued_fraction_  ,5:iter_radix_digits_of_continued_fraction__with_int__via_cf_ops_   %itertools:repeat   =10 '=repeat(1)'  +to_chain_integer_part +using_LazyList
+0:1
+1:6
+2:1
+3:8
+4:0
+
+
+py_adhoc_call  { +lineno } seed.math.continued_fraction.iter_radix_digits_of_continued_fraction_  ,5:iter_radix_digits_of_continued_fraction__with_int__via_cf_ops_   %itertools:repeat   =10 '=repeat(1)'  +to_chain_integer_part +using_LazyList
+1:1
+2:6
+3:1
+4:8
+5:0
+
+py_adhoc_call  { --lineno=-10 } seed.math.continued_fraction.iter_radix_digits_of_continued_fraction_  ,5:iter_radix_digits_of_continued_fraction__with_int__via_cf_ops_   %itertools:repeat   =10 '=repeat(1)'  +to_chain_integer_part +using_LazyList
+-10:1
+-9:6
+-8:1
+-7:8
+-6:0
 
 
 
@@ -492,6 +524,37 @@ def adhoc_argparser__main__call8module(may_argv, /):
         return main_func
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
+def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
+    def _mk_postprocess(*, lineno=None):
+        if type(lineno) is bool:
+            #lineno = None if not lineno else 0
+            lineno = int(lineno)
+        ######################
+        if lineno is None:
+            def _postprocess(*, lineno):
+                pass
+        else:
+            check_type_is(int, lineno)
+            offset = lineno
+            def _postprocess(*, lineno):
+                lineno += offset
+                print(lineno, end=':')
+                pass
+        return _postprocess
+
+    #raise Exception(options4argparser)
+    if options4argparser[0] == '{':
+        j = options4argparser.index('}')
+        args4postprocess = options4argparser[1:j]
+        options4argparser = options4argparser[j+1:]
+    else:
+        args4postprocess = []
+        options4argparser
+    (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
+    _mk_postprocess
+    _postprocess = decorator4show_py_help(_mk_postprocess)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    return (_postprocess, options4argparser)
+
 def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv, /):
     try:
         ((options4argparser, (prefix, payload4prefix, func_name), args4call), (positional_args, flag2bool, keyword2arg, keyword2args)) = adhoc_argparse__call(prefixes4func_name4adhoc_argparser__main__call, may_argv)
@@ -501,6 +564,9 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     except AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag:
         show_help();exit(0);
 
+    (_postprocess, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
+        # cut prefix of options4argparser
+        # prefix === '{' ... '}'
 
     setting4prefix = _parse_payload4prefix(prefix, payload4prefix)
     to_show, islice_ = setting4prefix
@@ -515,7 +581,8 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
         if r is not None:
             to_show(r)
     elif prefix == _prefix4unpack_iter:
-        for x in r:
+        for lineno, x in enumerate(r):
+            _postprocess(lineno=lineno)
             to_show(x)
     else:
         raise Exception(f'logic-err:unknown prefix: {prefix!r}')

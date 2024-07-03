@@ -17,6 +17,7 @@ seed.math.prime_gens
 py -m seed.math.prime_gens
 py -m nn_ns.app.debug_cmd   seed.math.prime_gens -x
 py -m nn_ns.app.doctest_cmd seed.math.prime_gens:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.math.prime_gens:__doc__ -ht
 
 
 
@@ -1158,7 +1159,7 @@ LazySeq(LazyList([<...>]))
 >>> tabulate_may_min_prime_factor4uint_lt_(-1)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: -1
 
 >>> tabulate_may_factorization4uint_lt_(2)
 (None, {})
@@ -1169,7 +1170,7 @@ TypeError
 >>> tabulate_may_factorization4uint_lt_(-1)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: -1
 
 
 
@@ -1190,7 +1191,7 @@ LazySeq(LazyList([<...>]))
 >>> tabulate_may_all_prime_factors4uint_lt_(-1)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: -1
 
 
     is_prime__le_pow2_81_
@@ -1266,6 +1267,60 @@ True
 
 
 
+
+    iter_pseudoprimes__ge_
+    reversed_iter_pseudoprimes__lt_
+    iter_primes__le_pow2_81__ge_
+    reversed_iter_primes__le_pow2_81__lt_
+
+>>> list_islice_(9, iter_pseudoprimes__ge_(-4))
+[2, 3, 5, 7, 11, 13, 17, 19, 23]
+>>> list_islice_(9, iter_pseudoprimes__ge_(0))
+[2, 3, 5, 7, 11, 13, 17, 19, 23]
+>>> list_islice_(9, iter_pseudoprimes__ge_(7))
+[7, 11, 13, 17, 19, 23, 29, 31, 37]
+
+>>> list_islice_(9, iter_primes__le_pow2_81__ge_(-4))
+[2, 3, 5, 7, 11, 13, 17, 19, 23]
+>>> list_islice_(9, iter_primes__le_pow2_81__ge_(0))
+[2, 3, 5, 7, 11, 13, 17, 19, 23]
+>>> list_islice_(9, iter_primes__le_pow2_81__ge_(7))
+[7, 11, 13, 17, 19, 23, 29, 31, 37]
+
+>>> list_islice_(9, reversed_iter_pseudoprimes__lt_(-4))
+[]
+>>> list_islice_(9, reversed_iter_pseudoprimes__lt_(0))
+[]
+>>> list_islice_(9, reversed_iter_pseudoprimes__lt_(7))
+[5, 3, 2]
+
+>>> list_islice_(9, reversed_iter_primes__le_pow2_81__lt_(-4))
+[]
+>>> list_islice_(9, reversed_iter_primes__le_pow2_81__lt_(0))
+[]
+>>> list_islice_(9, reversed_iter_primes__le_pow2_81__lt_(7))
+[5, 3, 2]
+
+#>>> for a, b in zip(iter_pseudoprimes__ge_(0), iter_primes__le_pow2_81__ge_(0)):
+#...     if not a == b:break
+#>>> (a, b)
+[:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+>>> A014233[12] == (3317044064679887385961981)
+True
+>>> next_pseudoprime__ge_(3317044064679887385961981)
+3317044064679887385962123
+>>> next_pseudoprime__ge_(3317044064679887385961980)
+3317044064679887385962123
+>>> next_pseudoprime__ge_(3317044064679887385961981) -3317044064679887385961981
+142
+
+    iter_pairwise_diff_pseudoprimes__ge_
+    iter_pairwise_diff_primes__le_pow2_81__ge_
+>>> list_islice_(9, iter_pairwise_diff_pseudoprimes__ge_(0))
+[1, 2, 2, 4, 2, 4, 2, 4, 6]
+>>> list_islice_(9, iter_pairwise_diff_primes__le_pow2_81__ge_(0))
+[1, 2, 2, 4, 2, 4, 2, 4, 6]
+
 #]]]'''
 __all__ = r'''
 
@@ -1277,13 +1332,19 @@ is_strong_pseudoprime__basis_
         prime_filter__using_primality_test_
             raw_iter_all_strict_sorted_primes__using_primality_test__lt_
                 prev_may_prime__lt_
+                    reversed_iter_primes__le_pow2_81__lt_
             raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
                 next_may_prime__le_pow2_81__ge_
+                    iter_primes__le_pow2_81__ge_
+                        iter_pairwise_diff_primes__le_pow2_81__ge_
         is_prime__tribool_
             Case4is_prime__tribool_
             detect_strong_pseudoprime__not_waste_too_much_time_
             next_pseudoprime__ge_
             prev_may_pseudoprime__lt_
+                reversed_iter_pseudoprimes__lt_
+                iter_pseudoprimes__ge_
+                    iter_pairwise_diff_pseudoprimes__ge_
 
 
 
@@ -1384,7 +1445,7 @@ with timer(prefix='py:std...', _to_show_=_to_show_):
     from weakref import ref as _ref
     import itertools
     from itertools import count as _count, repeat as _repeat
-    from itertools import islice, chain
+    from itertools import islice, chain, pairwise
 
 with timer(prefix='seed:basic...', _to_show_=_to_show_):
     from seed.iters.apply_may_args4islice_ import apply_may_args4islice_
@@ -2881,6 +2942,7 @@ if 0b000:
         # II_prime_basis_gtN___vs___A014233:here
         # def____II_prime_basis_gtN:goto
         # II_prime_basis_gtN
+        # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     calc_len_prime_basis4II_prime_basis_gtN_
 
 
@@ -2909,16 +2971,27 @@ def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_(beg
     return prime_filter__using_primality_test_(ints, is_prime_and_may_upperbound=is_prime_and_may_upperbound)
 def prev_may_pseudoprime__lt_(end, /):
     'using Miller_Rabin_primality_test: end -> (may pseudoprime){[[pseudoprime < end][next pseudoprime >= end]]} #see:prev_may_prime__lt_'
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     case = Case4is_prime__tribool_.II_prime_basis_gtN
     for n in reversed(range(2, end)):
         r = is_prime__tribool_(n, case=Case4is_prime__tribool_.II_prime_basis_gtN)
         if not r is False:
+            pseudoprime = n
+            return pseudoprime
             break
-    pseudoprime = n
-    return pseudoprime
+    return None
 
 def next_pseudoprime__ge_(begin, /):
-    'using Miller_Rabin_primality_test: begin -> (pseudoprime){[[prev pseudoprime < begin][pseudoprime >= begin]]} #see:next_may_prime__le_pow2_81__ge_'
+    'using Miller_Rabin_primality_test: begin -> (pseudoprime){[[prev pseudoprime < begin][pseudoprime >= begin]]} #see:next_may_prime__le_pow2_81__ge_' \
+    r'''
+
+!! II_prime_basis_gtN___vs___A014233:goto
+=> [II_prime_basis_gtN `better_than` A014233[:13]]
+=> [II_prime_basis_gtN `better_than` __le_pow2_81]
+=> [next_pseudoprime__ge_ `better_than` next_may_prime__le_pow2_81__ge_]
+=> [[n <= 2**81] -> [next_pseudoprime__ge_(n) == next_may_prime__le_pow2_81__ge_(n)]]
+    [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:here
+'''#'''
     case = Case4is_prime__tribool_.II_prime_basis_gtN
     for n in _count(max(2, begin)):
         r = is_prime__tribool_(n, case=Case4is_prime__tribool_.II_prime_basis_gtN)
@@ -2928,6 +3001,7 @@ def next_pseudoprime__ge_(begin, /):
     return pseudoprime
 def next_may_prime__le_pow2_81__ge_(begin, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
     'using Miller_Rabin_primality_test: begin -> (may prime){[[prev prime < begin][prime >= begin]]} #see:next_pseudoprime__ge_'
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     it = raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_(begin, is_prime_and_may_upperbound=is_prime_and_may_upperbound)
     return _next__may_head_(it)
 def _next__may_head_(it, /):
@@ -2936,8 +3010,48 @@ def _next__may_head_(it, /):
     return None
 def prev_may_prime__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
     'using Miller_Rabin_primality_test: end -> (may prime){[[prime < end][next prime >= end]]} #see:prev_may_pseudoprime__lt_'
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     it = raw_iter_all_strict_sorted_primes__using_primality_test__lt_(end, is_prime_and_may_upperbound=is_prime_and_may_upperbound, reverse=True)
     return _next__may_head_(it)
+def _iter_xs_ge_(next_may_x__ge_, begin, /):
+    while 1:
+        m = next_may_x__ge_(begin)
+        if m is None:break
+        x = m
+        yield x
+        begin = x+1
+def _reversed_iter_xs_lt_(prev_may_x__lt_, end, /):
+    while 1:
+        m = prev_may_x__lt_(end)
+        if m is None:break
+        x = m
+        yield x
+        #bug:end = x-1
+        end = x
+def iter_pseudoprimes__ge_(begin, /):
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+    return _iter_xs_ge_(next_pseudoprime__ge_, begin)
+def reversed_iter_pseudoprimes__lt_(end, /):
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+    return _reversed_iter_xs_lt_(prev_may_pseudoprime__lt_, end)
+def iter_primes__le_pow2_81__ge_(begin, /):
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+    return _iter_xs_ge_(next_may_prime__le_pow2_81__ge_, begin)
+def reversed_iter_primes__le_pow2_81__lt_(end, /):
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+    return _reversed_iter_xs_lt_(prev_may_prime__lt_, end)
+
+def pairwise_diff_(xs, /):
+    xs = iter(xs)
+    for a, b in pairwise(xs):
+        yield b-a
+def iter_pairwise_diff_pseudoprimes__ge_(begin, /):
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+    return pairwise_diff_(iter_pseudoprimes__ge_(begin))
+def iter_pairwise_diff_primes__le_pow2_81__ge_(begin, /):
+    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+    return pairwise_diff_(iter_primes__le_pow2_81__ge_(begin))
+
 def raw_iter_all_strict_sorted_primes__using_primality_test__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound, reverse=False):
     'using Miller_Rabin_primality_test: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__lt_<Eratosthenes_sieve>'
     check_type_is(int, end)

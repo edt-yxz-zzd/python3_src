@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en-US">
+<head>
+  <title>Show Colors </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style type="text/css">
+    body {color:#888; background-color:#fff; background: black none;}
+    body {font-size: 500%;}
+    code {color:green;}
+    .c_00f {color: #00f;}  /* 通过p.class配色 */
+  </style>
+
+  <style>
+    p {
+      border:36px solid blue;
+      padding:0px;
+      /*
+      font-size:500%;
+      */
+      margin:0px;
+    }
+    body {
+      color:lightgreen;
+      background-color:#222;
+      padding:0px;
+      margin:0px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Show Colors</h1>
+  <hr>
+  <code lang=html>
+  <p class=c_00f > #00f -- 通过p.class配色 </p>
+    <style type="text/css"> .c_00f {color: #00f;} </style>
+  <p style="color: #0f0;" > #0f0 -- 通过p.style配色 </p>
+  </code>
+
+  <hr>
+  <code lang=html><xmp>
+  <p class=c_00f > #00f -- 通过p.class配色 </p>
+    <style type="text/css"> .c_00f {color: #00f;} </style>
+  <p style="color: #0f0;" > #0f0 -- 通过p.style配色 </p>
+  </xmp></code>
+
+  <hr>
+  <script>
+  ;class Range {
+    constructor(begin, end) {
+      ;this.begin = begin
+      ;this.end = end
+    ;}
+    *[Symbol.iterator]() {
+      ;for (let j = this.begin; j < this.end; j++) {
+        yield j;
+      }
+    ;}
+  ;}
+  ;function range(n){
+    ;return new Range(0, n)
+  ;}
+  ;function* iter_idcs4level(num_levels){
+    ;let rng = range(num_levels)
+    ;for (let jR of rng){
+    ;for (let jG of rng){
+    ;for (let jB of rng){
+      yield [jR, jG, jB]
+    ;} ;} ;}
+  ;}
+  ;function mk_key4cmp(js){
+    ;_js = [...js]
+    ;_js.sort()
+    ;_js.reverse()
+    ;[max_j, mid_j, min_j] = _js
+    ;num_kinds = (new Set(js)).size
+    ;gap4js = max_j -min_j
+    return [num_kinds, max_j, gap4js, ..._js, ...js]
+  ;}
+  ;function cmp_key4js(ks0, ks1){
+    ;for (let i of range(ks0.length)){
+      ;let k0 = ks0[i]
+      ;let k1 = ks1[i]
+      ;if (k0 === k1) {continue;}
+      ;if (k0 < k1) {return -1;}
+      ;if (k0 > k1) {return +1;}
+    ;}
+    ;return 0
+  ;}
+  ;function cmp_js(js0, js1){
+    ;let ks0 = mk_key4cmp(js0)
+    ;let ks1 = mk_key4cmp(js1)
+    ;return cmp_key4js(ks0, ks1)
+  ;}
+  ;function mk_color_names(levels){
+    ;let jss = Array.from(iter_idcs4level(levels.length))
+    ;jss.sort(cmp_js)
+    ;let nms = jss.map(js => js.map(j => levels[j]).join(''))
+    ;return nms
+  ;}
+//;alert(999)
+  ;</script>
+  <script>
+//;alert(777)
+  ;function append_html(elem, html){
+      //;elem.append(html)
+      ;elem.insertAdjacentHTML("beforeend", html)
+  ;}
+  ;function gen_html(levels){
+    ;let nms = mk_color_names(levels)
+    ;let nms__str = nms.map(nm=>'#'+nm).join(', ')
+    ;append_html(document.body, '<hr>')
+    ;append_html(document.body, `<div>all_colors === [${nms__str}]</div>`)
+    ;append_html(document.body, '<hr>')
+    ;nms.forEach(nm => {
+      ;let extra = (nm==='000')
+        ? (` background-color: #fff;`)
+        : ''
+      ;let s = (`<p style="border:36px solid #${nm}; color: #${nm};${extra}" > #${nm} </p>`)
+      ;append_html(document.body, s)
+    ;})
+    ;append_html(document.body, '<hr>')
+    ;return nms__str
+  ;}
+  //;levels = '0f84c'
+//;alert(555)
+  ;let nms__str = gen_html('0f84c')
+;if (`[${nms__str}]` != '[#000, #fff, #888, #444, #ccc, #00f, #0f0, #f00, #0ff, #f0f, #ff0, #ff8, #f8f, #8ff, #f88, #8f8, #88f, #008, #080, #800, #088, #808, #880, #884, #848, #488, #844, #484, #448, #ff4, #f4f, #4ff, #f44, #4f4, #44f, #004, #040, #400, #044, #404, #440, #44c, #4c4, #c44, #4cc, #c4c, #cc4, #88c, #8c8, #c88, #8cc, #c8c, #cc8, #ffc, #fcf, #cff, #fcc, #cfc, #ccf, #00c, #0c0, #c00, #0cc, #c0c, #cc0, #0f8, #08f, #f08, #f80, #80f, #8f0, #f84, #f48, #8f4, #84f, #4f8, #48f, #0f4, #04f, #f04, #f40, #40f, #4f0, #084, #048, #804, #840, #408, #480, #84c, #8c4, #48c, #4c8, #c84, #c48, #f8c, #fc8, #8fc, #8cf, #cf8, #c8f, #f4c, #fc4, #4fc, #4cf, #cf4, #c4f, #0fc, #0cf, #f0c, #fc0, #c0f, #cf0, #08c, #0c8, #80c, #8c0, #c08, #c80, #04c, #0c4, #40c, #4c0, #c04, #c40]') {alert(nms__str);}
+  ;</script>
+  <hr>
+
+
+  <!--
+  <hr>
+  <p> python源代码:用于生成:125色: </p>
+  <code lang=python><xmp>
+# view ../lots/NOTE/html/xmp pre CDATA/CDATA vs pre vs xmp vs script.html
+from itertools import product
+levels = '0f84c'
+
+
+### nms = [''.join(cs) for cs in product(levels, levels, levels)]
+###
+### for nm in nms:
+###     print(f'<p class=c_{nm} > #{nm} </p>')
+###
+### for nm in nms:
+###     print(f'.c_{nm} {{color: #{nm};}}')
+
+
+js = range(len(levels))
+jss = [*product(js, js, js)]
+# jss.sort(key=max)
+def f(js, /):
+    _js = sorted(js, reverse=True)
+    max_j, mid_j, min_j = _js
+    num_kinds = len(set(js))
+    gap4js = max_j -min_j
+    return (num_kinds, max_j, gap4js, _js, js)
+
+jss.sort(key=f)
+nms = [''.join(levels[j] for j in js) for js in jss]
+
+for nm in nms:
+    if nm == '000':
+        print(f'<p style="color: #{nm}; background-color: #fff;" > #{nm} </p>')
+    else:
+        print(f'<p style="color: #{nm};" > #{nm} </p>')
+
+  </xmp></code>
+  -->
+
+  <!--
+  <hr>
+  <script type="text/javascript">
+    // <![CDATA[
+    document.write(`
+
+... ...
+<p style="color: #c40;" > #c40 </p>
+        `);
+    // ]]>
+  </script>
+  -->
+
+
+
+
+
+
+  <!--
+  <hr>
+  <script type="text/javascript">
+    // <![CDATA[
+  // <!-- 以下自动生成: -:->
+    let generated_html = `
+<p style="color: #c40;" > #c40 </p>
+... ...
+`;
+    // ]]>
+  </script>
+
+
+  <hr>
+  <p> 生成的125色: </p>
+  <code lang=html id=area4generated_html>
+    <script type="text/javascript">
+      document.write(generated_html);
+    </script>
+  </code>
+
+
+  <hr>
+  <p> 生成的html源代码: </p>
+  <code lang=html id=area4show4generated_html>
+    <script type="text/javascript">
+      document.write("<xmp>"+generated_html+"</xmp>");
+    </script>
+  </code>
+  <hr>
+
+  -->
+
+
+</body>
+</html>

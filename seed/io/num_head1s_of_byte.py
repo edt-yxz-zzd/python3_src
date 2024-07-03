@@ -4,6 +4,20 @@ e ../../python3_src/seed/io/num_head1s_of_byte.py
 seed.io.num_head1s_of_byte
 
 
+
+不使用动态字节『方案:1s0』的原因:存在重叠:码元是另一些码元的后缀
+
+充分条件:
+搜索有效性<<==:
+    码元两两不交叠<<==:
+        集合纟独字节/-\集合纟首字节=={}
+        集合纟独字节/-\集合纟体字节=={}
+        集合纟独字节/-\集合纟尾字节=={}
+        集合纟体字节/-\集合纟首字节=={}
+        集合纟体字节/-\集合纟尾字节=={}
+        集合纟首字节/-\集合纟尾字节=={}
+
+
 py -m nn_ns.app.debug_cmd seed.io.num_head1s_of_byte
 py -m nn_ns.app.adhoc_argparser__main__call8module seed.io.num_head1s_of_byte
 py -m seed.io.num_head1s_of_byte

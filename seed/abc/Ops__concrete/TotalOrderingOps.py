@@ -1,4 +1,5 @@
 
+#e ../../python3_src/seed/abc/Ops__concrete/ITotalOrderingOps.py
 
 __all__ = '''
     TotalOrderingOps
@@ -8,7 +9,7 @@ __all__ = '''
 
 
 from .abc import override
-from .ITotalOrderingOps import ITotalOrderingOps
+from .ITotalOrderingOps import ITotalOrderingOps, ITotalOrderingOps__via_cmp
 
 
 class TotalOrderingOps(ITotalOrderingOps):
@@ -64,6 +65,10 @@ def _t():
     assert not python_total_key_ops.lt(1, 1)
     assert python_total_key_ops.ge(1, 1)
     assert not python_total_key_ops.gt(1, 1)
+
+
+from seed.abc.Ops__concrete.TotalOrderingOps import TotalOrderingOps
+from seed.abc.Ops__concrete.TotalOrderingOps import *
 
 if __name__ == '__main__':
     _t()

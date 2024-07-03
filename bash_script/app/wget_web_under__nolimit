@@ -1,0 +1,21 @@
+
+wget_U -m -r -l inf --no-remove-listing --no-parent -p -k  -N --no-use-server-timestamps -c --tries=30 --compression=auto    -nc "$@"
+  #cancel:remove『-nc』<<==『-k』覆盖『-nc』
+  #add『-m』<==>『-N -r -l inf --no-remove-listing』
+  #remove: --random-wait --wait=8 --limit-rate=200K
+
+
+# #wget_U -r -l inf --no-remove-listing --no-parent -p -k -nc -N --no-use-server-timestamps -c --random-wait --wait=8 --tries=30 --limit-rate=200K --compression=auto   "$@"
+# #Both --no-clobber and --convert-links were specified, only --convert-links will be used.
+
+echo <<HereDocuments___download_website_under_URL
+e ../../python3_src/bash_script/app/wget_web_under
+e ../../python3_src/bash_script/app/wget_web_under__nolimit
+
+view others/app/termux/wget/wget_usage.txt
+下载某网站一隅之地:
+cd /sdcard/0my_files/tmp/wget_/w3schools/html/TAGs/ ; wget_web_under__nolimit  https://www.w3schools.com/TAGs/
+
+HereDocuments___download_website_under_URL
+
+

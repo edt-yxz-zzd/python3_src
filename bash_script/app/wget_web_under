@@ -1,0 +1,21 @@
+
+wget_U -m -r -l inf --no-remove-listing --no-parent -p -k  -N --no-use-server-timestamps -c --random-wait --wait=8 --tries=30 --limit-rate=200K --compression=auto   "$@"
+  #remove『-nc』<<==『-k』覆盖『-nc』
+  #add『-m』<==>『-N -r -l inf --no-remove-listing』
+
+
+# #wget_U -r -l inf --no-remove-listing --no-parent -p -k -nc -N --no-use-server-timestamps -c --random-wait --wait=8 --tries=30 --limit-rate=200K --compression=auto   "$@"
+# #Both --no-clobber and --convert-links were specified, only --convert-links will be used.
+
+echo <<HereDocuments___download_website_under_URL
+e ../../python3_src/bash_script/app/wget_web_under
+
+view others/app/termux/wget/wget_usage.txt
+下载某网站一隅之地:
+wget -r -l inf --no-remove-listing --no-parent -p -k -nc -N --no-use-server-timestamps -c --random-wait --wait=8 --tries=30 --limit-rate=200K --compression=auto -U "Mozilla/5.0 (iPhone; CPU iPhone OS 12_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1"     https://spinsel.dev/assets/2020-06-17-ghidra-brainfuck-processor-1/ghidra_docs/language_spec/html/pcoderef.html
+==>>:
+wget_web_under https://spinsel.dev/assets/2020-06-17-ghidra-brainfuck-processor-1/ghidra_docs/language_spec/html/pcoderef.html
+
+HereDocuments___download_website_under_URL
+
+

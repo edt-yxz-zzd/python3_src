@@ -491,7 +491,7 @@ class IDescriptor(ABC):
         if 0:
             r'''
             why "return sf"?
-                since deine any one of __get__, __set__, __delete__ ==>> IDescriptor
+                since define any one of __get__, __set__, __delete__ ==>> IDescriptor
                 but ABC cannot express that
                 by "return sf", INonDataDescriptor work-as-if not-a-descriptor
             #'''

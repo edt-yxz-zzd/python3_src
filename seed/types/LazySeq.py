@@ -83,6 +83,7 @@ from seed.tiny_.check import check_uint, check_int_ge
 from seed.tiny import echo, null_iter, is_iterable, null_tuple
 from seed.helper.repr_input import repr_helper
 from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
+from seed.types.exc.UnsupportedOperation import Attr4UnsupportedOperation
 
 
 class LazySeq:
@@ -261,6 +262,9 @@ class LazySeq:
     __bool__ = ...
     __len__ = ...
     __contains__ = ...
+    __bool__ = Attr4UnsupportedOperation()
+    __len__ = Attr4UnsupportedOperation()
+    __contains__ = Attr4UnsupportedOperation()
 
 
 if 1:

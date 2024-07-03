@@ -1,4 +1,13 @@
+r'''[[[
+e ../../python3_src/seed/for_libs/for_colorsys/color_names_impl/colors_in_tkinter.py
+    [len(color) == 13]
+e ../../python3_src/seed/for_libs/for_colorsys/color_names_impl/colors_in_tkinter__degraded.py
+    [len(color) == 7]
+    to used color in html
+e ../../python3_src/seed/for_libs/for_colorsys/color_names_impl/colors_in_tkinter__degraded__rm_space.py
+    [not ' ' in nm4color]
 
+#]]]'''#'''
 
 
 
@@ -764,3 +773,4 @@ colors_in_tkinter = {
 
 
 
+from seed.for_libs.for_colorsys.color_names_impl.colors_in_tkinter import colors_in_tkinter

@@ -20,13 +20,26 @@ see:
 seed.types.LazyList
 py -m nn_ns.app.debug_cmd   seed.types.LazyList -x
 py -m nn_ns.app.doctest_cmd seed.types.LazyList:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.types.LazyList:__doc__ -ht
 py_adhoc_call   seed.types.LazyList   @f
 
 
 
+news:
+    _LazyListIter.fork()
+        snapshot/save-state
+    _LazyListIter.get_curr_lazylist()
+        NOTE: _LazyListIter.does_iter_pairs()
+    _LazyListIter.to_LazyList()
+    _LazyListIter.from_iterable()
+    to_LazyListIter()
+        'to use "iterator.fork()"'
+    to_LazyList()
+        'to avoid "non_iterator_ok=True"'
 
 
 >>> from seed.types.LazyList import LazyList, LazyListError
+>>> from seed.types.LazyList import to_LazyList, to_LazyListIter
 >>> LazyList()
 LazyList()
 >>> LazyList(None)
@@ -37,14 +50,29 @@ Traceback (most recent call last):
 TypeError: not iterator
 >>> LazyList([], non_iterator_ok=True)
 LazyList([<...>])
+>>> to_LazyList([])
+LazyList([<...>])
+
 
 
 >>> null_lazylist = LazyList()
 >>> _5 = LazyList(range(5), non_iterator_ok=True)
+>>> _5_1 = LazyList(_5)
+>>> _5_2 = LazyList(iter(_5))
+>>> type(iter(_5)) is _LazyListIter
+True
+>>> type(_5) is LazyList is not _LazyListIter
+True
+>>> not (iter(_5) is _5)
+True
 >>> null_lazylist
 LazyList()
 >>> _5
 LazyList([<...>])
+>>> _5_1 is _5
+True
+>>> _5_2 is _5
+True
 >>> null_lazylist.is_empty__hardwork()
 True
 >>> _5.is_empty__hardwork()
@@ -403,8 +431,80 @@ False
 # restore:here
 >>> M._log = M._dummy_log
 
+
+
+
+
+
+######################
+######################
+# to_LazyListIter, to_LazyList
+# _LazyListIter.fork()
+######################
+######################
+>>> ls1 = to_LazyList([1,2,3])
+>>> ls1
+LazyList([<...>])
+>>> [*ls1]
+[1, 2, 3]
+>>> ls1
+LazyList([1, 2, 3])
+
+>>> it1 = to_LazyListIter([1,2,3])
+>>> type(it1) is _LazyListIter
+True
+>>> it2 = it1.fork()
+>>> type(it2) is _LazyListIter
+True
+>>> it2 is not it1
+True
+>>> [*it1]
+[1, 2, 3]
+>>> [*it1]
+[]
+>>> [*it2]
+[1, 2, 3]
+>>> [*it2]
+[]
+>>> it3 = it1.fork()
+>>> [*it3]
+[]
+
+>>> ls1 = to_LazyList([1,2,3])
+>>> ps1 = ls1.iter__hardwork(to_iter_pairs=True)
+>>> ps2 = ps1.fork()
+>>> ls2 = ps2.to_LazyList()
+
+>>> ls1
+LazyList([<...>])
+>>> ls2
+LazyList([<...>])
+>>> [*ps1]
+[(1, LazyList([2, 3])), (2, LazyList([3])), (3, LazyList())]
+>>> ls1 # [ls1 changed] <<== ps1(ls1)
+LazyList([1, 2, 3])
+>>> ls2
+LazyList([<...>])
+>>> [*ps2]
+[(1, LazyList([2, 3])), (2, LazyList([3])), (3, LazyList())]
+>>> ls2 # [ls2 not changed] <<== ls2(ps2(ls1))
+LazyList([<...>])
+>>> [*ls2]
+[(1, LazyList([2, 3])), (2, LazyList([3])), (3, LazyList())]
+>>> ls2
+LazyList([(1, LazyList([2, 3])), (2, LazyList([3])), (3, LazyList())])
+>>> [*ps1]
+[]
+>>> [*ps2]
+[]
+
+
 #]]]'''
 __all__ = r'''
+to_LazyList
+    to_LazyListIter
+
+
 LazyListError
     LazyListError__unpack_empty_lazylist
 
@@ -489,12 +589,56 @@ class _LazyListRelaxIter:
         return x
 
 
+def to_LazyListIter(iterable, /):
+    'to use "iterator.fork()"'
+    lazylist = to_LazyList(iterable)
+    return iter(lazylist)
+def to_LazyList(iterable, /):
+    r'''[[[
+    !!!NON_UNIFORM_TREATMENT_ABOUT_ITERATOR:here!!!
+        ???
+    iterable:
+        * non-iterator:
+                it donot affect the input iterable to handle the output lazylist
+        * iterator:
+            * _LazyListIter:
+                it donot affect the input lazylist_iter to handle the output lazylist
+            * not-_LazyListIter:
+                it affect the input iterator to handle the output lazylist
+    #]]]'''#'''
+    'to avoid "non_iterator_ok=True"'
+    return LazyList(iterable, non_iterator_ok=True)
 class _LazyListIter:
+    r'''[[[
+    #see:LazyList.iter__hardwork/__iter__
+    #
+    .to_LazyList() vs .get_curr_lazylist():
+        diff@[.does_iter_pairs() is True]
+        .to_LazyList():
+            consider .does_iter_pairs()
+        .get_curr_lazylist():
+            not consider .does_iter_pairs()
+        same:
+            it donot affect lazylist_iter@sf to handle the output lazylist
+    #]]]'''#'''
+    def to_LazyList(sf, /):
+        '.to_LazyList() vs .get_curr_lazylist(): diff@[.does_iter_pairs() is True]'
+        return to_LazyList(sf)
+    @classmethod
+    def from_iterable(cls, iterable, /):
+        return to_LazyListIter(iterable)
+
     def __init__(sf, lazylist, /, *, to_iter_pairs):
         check_type_is(LazyList, lazylist)
         check_type_is(bool, to_iter_pairs)
         sf._ls = lazylist
         sf._ps = to_iter_pairs
+    def get_curr_lazylist(sf, /):
+        return sf._ls
+    def does_iter_pairs(sf, /):
+        return sf._ps
+    def fork(sf, /):
+        return type(sf)(sf.get_curr_lazylist(), to_iter_pairs=sf.does_iter_pairs())
     def __iter__(sf, /):
         return sf
     def __next__(sf, /):
@@ -576,7 +720,10 @@ class LazyListError(Exception):pass
 class LazyListError__unpack_empty_lazylist(LazyListError):pass
 
 class LazyList:
+    r'''[[[
     'vivi Haskell.List'
+        'see:to_LazyList():NON_UNIFORM_TREATMENT_ABOUT_ITERATOR'
+    #]]]'''#'''
     r'''[[[
     sf._z :: (None | (x, LazyList x) | Iterator x)
         * None
@@ -611,6 +758,7 @@ class LazyList:
     #def __init__(sf, may_xs=None, /, *, non_iterator_ok=False):
     #def __new__(cls, lazylist_or_may_xs=None, /, *, non_iterator_ok=False):
     def __new__(cls, lazylist_or_may_xs_or_head_or_initial_xs=None, may_tail_lazylist=None, /, *, non_iterator_ok=False, head__vs__initial_iterator__vs__initial_seq=False, initial_seq_is_reversed=False, input_raise_ToConcatLazyList_ok=False):
+        'see:to_LazyList():NON_UNIFORM_TREATMENT_ABOUT_ITERATOR'
         if not may_tail_lazylist is None:
             tail_lazylist = may_tail_lazylist
             head_or_initial_xs = lazylist_or_may_xs_or_head_or_initial_xs
@@ -623,18 +771,30 @@ class LazyList:
     @basic_method
     #@classmethod
     def _new1_(cls, lazylist_or_may_xs, /, *, non_iterator_ok, input_raise_ToConcatLazyList_ok):
+        is_may_xs = False
         if isinstance(lazylist_or_may_xs, __class__):
             lazylist = lazylist_or_may_xs
             sf = lazylist
         elif isinstance(lazylist_or_may_xs, _LazyListIter):
+            #elif isinstance(lazylist_or_may_xs, _LazyListIter) and not lazylist_or_may_xs.does_iter_pairs():
             #not _LazyListRelaxIter
             lazylist_iter = lazylist_or_may_xs
-            lazylist = lazylist_iter._ls
-            sf = lazylist
+            #if lazylist_iter.does_iter_pairs():raise NotImplementedError
+            if lazylist_iter.does_iter_pairs():
+                may_xs = lazylist_iter.fork()
+                is_may_xs = True
+            else:
+                lazylist = lazylist_iter.get_curr_lazylist()
+                sf = lazylist
         else:
             may_xs = lazylist_or_may_xs
+            is_may_xs = True
+        if is_may_xs:
+            may_xs
             sf = super(__class__, cls).__new__(cls)
             sf._init1_(may_xs, non_iterator_ok=non_iterator_ok, input_raise_ToConcatLazyList_ok=input_raise_ToConcatLazyList_ok)
+        else:
+            sf
         return sf
     @basic_method
     #@classmethod
@@ -874,4 +1034,5 @@ __all__
 
 from seed.types.LazyList import ToConcatLazyList, decorator4protocol4ToConcatLazyList_
 from seed.types.LazyList import LazyList, LazyListError
+from seed.types.LazyList import to_LazyList, to_LazyListIter
 from seed.types.LazyList import *

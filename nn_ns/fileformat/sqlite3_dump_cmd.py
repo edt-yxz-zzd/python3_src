@@ -176,12 +176,12 @@ def sqlite3_dump_cmd(*args, **kwds):
     raise 000
 
 Ellipsis
-def sqlite3_dump_(*args4islice, ipath, opath=None, force=False, nm4table='', nms4columns='*', condition='', fmtr4row=None) -> '(Iter (sql_stmt if not nm4table else row)) if opath is Ellipsis else None':
+def sqlite3_dump_(*args4islice, ipath, opath=None, force=False, nm4table='', nms4columns='*', condition='', fmtr4row=None, py_condition=None) -> '(Iter (sql_stmt if not nm4table else row)) if opath is Ellipsis else None':
     'opath=Ellipsis => return iterator; opath=None => print result to sys.stdout'
     global __xxx
     __xxx = False
 
-    it = sqlite3_iter_dump_(*args4islice, ipath=ipath, nm4table=nm4table, nms4columns=nms4columns, condition=condition, fmtr4row=fmtr4row)
+    it = sqlite3_iter_dump_(*args4islice, ipath=ipath, nm4table=nm4table, nms4columns=nms4columns, condition=condition, fmtr4row=fmtr4row, py_condition=py_condition)
 
     if ... is opath:
         return it

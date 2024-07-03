@@ -1,3 +1,4 @@
+#__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/semi_factor_pint_via_trial_division.py
 seed.math.semi_factor_pint_via_trial_division
@@ -9,15 +10,16 @@ py_adhoc_call   seed.math.semi_factor_pint_via_trial_division   @_test1__iter_un
 py_adhoc_call   seed.math.semi_factor_pint_via_trial_division   @_test1__iter_unsorted_products_of_coprime_factors__ge_le
 
 
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le, iter_unsorted_products_of_coprime_factors__ge_le
+from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, complete_factor_pint_via_trial_division, calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le, iter_unsorted_products_of_coprime_factors__ge_le
 
 #]]]'''
 __all__ = '''
     semi_factor_pint_via_trial_division
+        complete_factor_pint_via_trial_division
     calc_num_products_of_coprime_factors__ge1_le
         calc_num_products_of_coprime_factors__ge_le
     iter_unsorted_products_of_coprime_factors__ge_le
-    '''.split()
+    '''.split()#'''
 
 __all__
 from seed.for_libs.for_time import (
@@ -125,6 +127,12 @@ e ../../python3_src/seed/func_tools/checkT__tiny.py
 #]]]'''#'''
 __all__
 
+
+def complete_factor_pint_via_trial_division(candidate_factors, pint, /):
+    'Iter factor{>=2} -> pint -> (factor2exp/{factor:exp{>=1}})'
+    (factor2exp, unfactored_part) = semi_factor_pint_via_trial_division(candidate_factors, pint)
+    if not unfactored_part == 1: raise ValueError('candidate_factors is incomplete')
+    return factor2exp
 
 def semi_factor_pint_via_trial_division(candidate_factors, pint, /):
     'Iter factor{>=2} -> pint -> (factor2exp/{factor:exp{>=1}}, unfactored_part{>=1})'
@@ -391,6 +399,10 @@ def _test1__iter_unsorted_products_of_coprime_factors__ge_le(*, show=False):
 
 
 
+from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division
+from seed.math.semi_factor_pint_via_trial_division import calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le
+from seed.math.semi_factor_pint_via_trial_division import iter_unsorted_products_of_coprime_factors__ge_le
 from seed.math.semi_factor_pint_via_trial_division import *
 if 0:
     def _NOP_():pass #nop:no-op:无操作:用于 adhoc_argparser__main

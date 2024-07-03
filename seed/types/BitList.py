@@ -1,3 +1,5 @@
+#__all__:goto
+#[:BitList_doctest]:goto
 r'''[[[
 e ../../python3_src/seed/types/BitList.py
 seed.types.BitList
@@ -278,6 +280,7 @@ class BitList(MutableSequence):
         (sz, tail, bs) = self._unbox__BitList()
         if not 0 <= len(tail) < 8: raise Exception
         if not len(bs)*8 + len(tail) == sz: raise Exception
+        if not all(type(b) is int for b in tail): raise Exception
         if not set(tail) <= {0,1}: raise Exception
     def _iter_as_01s(self, /):
         self._verify__BitList()
@@ -376,9 +379,10 @@ class BitList(MutableSequence):
         #not classmethod!!
         return type(self)(iter(_01s))
 
-    def __setitem__(self, i, x, /):
+    def __setitem__(self, i_or_sl, x_or_xs, /):
         (sz, tail, bs) = self._unbox__BitList()
         def _set(i, x, /):
+            x = self._check_and_convert__element4BitList(x)
             assert 0 <= i < sz
             (q, r) = divmod_8_(i)
             if q == len(bs):
@@ -392,16 +396,17 @@ class BitList(MutableSequence):
                     bs[q] = u
             return None
 
-        if type(i) is int:
+        if type(i_or_sl) is int:
+            i = i_or_sl
+            x = x_or_xs
             if not -sz <= i < sz: raise IndexError(i)
             if i < 0:
                 i += sz
             return _set(i, x)
 
-        elif type(i) is slice:
-            sl = i
-            xs = x
-            del i, x
+        elif type(i_or_sl) is slice:
+            sl = i_or_sl
+            xs = x_or_xs
             (start, stop, stride) = sl.indices(sz)
             rs = range(start, stop, stride)
             L = len(rs)
@@ -422,7 +427,7 @@ class BitList(MutableSequence):
                 for _ in map(_set, rs, xs):pass
 
             return None
-        raise TypeError(type(i))
+        raise TypeError(type(i_or_sl))
 
     def _del_tail_from__mod8(self, i, /):
         assert 0 <= i
@@ -638,6 +643,14 @@ class BitList(MutableSequence):
         other = self.copy()
         other.flip_01s__emplace()
         return other
+    def flip_01__at__emplace(self, k, /):
+        bs = self
+        b = bs[k]
+        bs[k] = not b
+        return
+    def flip_01s__at__emplace(self, ks, /):
+        for k in ks:
+            self.flip_01__at__emplace(k)
 
     #def index(self, x, /, *args):
     def index(self, x, start=None, stop=None, /):
@@ -747,7 +760,7 @@ class BitList(MutableSequence):
         tmp = self & other
         self._swap__BitList(tmp)
         return self
-
+#[:BitList_doctest]:here
 BitList.__doc__ = r'''[[[
 
 >>> from seed.types.BitList import BitList
@@ -1045,6 +1058,18 @@ BitList('10001100001110000010')
 >>> ls
 BitList('01110011110001111101')
 
+#flip_01__at__emplace
+#flip_01s__at__emplace
+>>> ls = BitList('10001100001110000010')
+>>> ls.flip_01__at__emplace(0)
+>>> ls
+BitList('00001100001110000010')
+>>> ls.flip_01__at__emplace(1)
+>>> ls
+BitList('01001100001110000010')
+>>> ls.flip_01s__at__emplace([3,5,7])
+>>> ls
+BitList('01011001001110000010')
 
 #index
 >>> ls = BitList('10001100001110000010')

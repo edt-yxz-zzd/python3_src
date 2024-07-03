@@ -164,6 +164,8 @@ hashlib
 hmac
 reprlib
 subprocess
+types
+  py_stdlib__types:goto
 ]]
 [[
 view ../../../unzip/py_doc/python-3.8.1-docs-html/library/index.html
@@ -829,7 +831,21 @@ py_help xxx > ~/my_tmp/out4py/py_help.xxx.out.txt
 view /sdcard/0my_files/tmp/out4py/py_help.xxx.out.txt
 
 ]]]
-[[[template:xxx
+[[[
+types
+  py_stdlib__types:here
+===
+:class_property
+types.DynamicClassAttribute(fget=None, fset=None, fdel=None, doc=None)¶
+Route attribute access on a class to __getattr__.
+
+This is a descriptor, used to define attributes that act differently when accessed through an instance and through a class. Instance access remains normal, but access to an attribute through a class will be routed to the class’s __getattr__ method; this is done by raising AttributeError.
+
+This allows one to have properties active on an instance, and have virtual attributes on the class with the same name (see Enum for an example).
+
+New in version 3.4.
+]]]
+[[[
 subprocess
 ===
 

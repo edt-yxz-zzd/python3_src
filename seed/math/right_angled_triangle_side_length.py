@@ -1,6 +1,7 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/right_angled_triangle_side_length.py
+    view others/数学/condition4_WW1_eq_2VV.txt
 
 
 

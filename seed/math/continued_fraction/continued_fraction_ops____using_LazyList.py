@@ -26,6 +26,7 @@ doctest____end:goto
 seed.math.continued_fraction.continued_fraction_ops____using_LazyList
 py -m nn_ns.app.debug_cmd   seed.math.continued_fraction.continued_fraction_ops____using_LazyList -x
 py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_ops____using_LazyList:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_ops____using_LazyList:__doc__ -ht
 py_adhoc_call   seed.math.continued_fraction.continued_fraction_ops____using_LazyList   @f
 
 from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction
@@ -936,8 +937,10 @@ Traceback (most recent call last):
 seed.math.continued_fraction.continued_fraction_fold.ContinuedFractionError__inf__no_cf0
 >>> list(cf_add(mk[0], mk[0]))
 [0]
->>> list(cf_add(mk[0, 1], mk[0]))
+>>> list(cf_add(mk[0, 1], mk[0], _optimize_on_int=False))
 [1]
+>>> list(cf_add(mk[0, 1], mk[0], _optimize_on_int=True))
+[0, 1]
 >>> list(cf_add(mk[-2, 1,3,4,2], mk[0,4,2,2,1]))
 [-2, 1, 89, 1, 1, 1, 1, 2]
 >>> from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, iter_approximate_fractions5continued_fraction_
@@ -1118,18 +1121,18 @@ abs + - inv_
 
 >>> cf_0
 ContinuedFraction(LazyList([<...>]))
->>> bool(cf_0)
+>>> bool(cf_0) #old:TypeError: 'ellipsis' object is not callable
 Traceback (most recent call last):
     ...
-TypeError: 'ellipsis' object is not callable
->>> len(cf_0)
+seed.types.exc.UnsupportedOperation.UnsupportedOperation: UnsupportedOperation:'__bool__'
+>>> len(cf_0) #old:TypeError: 'ellipsis' object is not callable
 Traceback (most recent call last):
     ...
-TypeError: 'ellipsis' object is not callable
->>> 0 in cf_0
+seed.types.exc.UnsupportedOperation.UnsupportedOperation: UnsupportedOperation:'__len__'
+>>> 0 in cf_0 #old:TypeError: 'ellipsis' object is not callable
 Traceback (most recent call last):
     ...
-TypeError: 'ellipsis' object is not callable
+seed.types.exc.UnsupportedOperation.UnsupportedOperation: UnsupportedOperation:'__contains__'
 
 >>> cf_0 == cf_0
 True
@@ -1728,10 +1731,45 @@ def cf_neg(cf_digits, /):
         # <==> [cf_digits==[cf0;1,cf2,...]]
         return chain__strict_([-1-cf0, cf2+1], _3_cf_digits)
 
-def cf_sub(lhs, rhs, /):
-    return cf_add(lhs, cf_neg(rhs))
-def cf_add(lhs, rhs, /):
+#def cf_sub(lhs, rhs, /):
+#    return cf_add(lhs, cf_neg(rhs))
+#def cf_add(lhs, rhs, /):
+
+def cf_sub(lhs, rhs, /, *, _optimize_on_int=None):
+    return cf_add(lhs, cf_neg(rhs), _optimize_on_int=_optimize_on_int)
+def _cf_add__optimize_on_int(lhs, rhs, /):
+    for xhs in (lhs, rhs):
+        m = xhs.may_unpack()
+        if m is None:
+            return (done:=True, result:=null_iter)
+            raise ContinuedFractionError__inf__no_cf0
+
+    for lhs, rhs in [(rhs, lhs), (lhs, rhs)]:
+        (is_int4lhs, floor4lhs) = cf_floor_ex_(lhs)
+        if not is_int4lhs:
+            continue
+        i8lhs = floor4lhs
+        cf0, _1_rhs = rhs.may_unpack()
+        i8lhs, cf0, _1_rhs
+        result = chain__strict_([i8lhs+cf0], _1_rhs)
+        return (done:=True, result)
+    return (done:=False, None)
+#_optimize_on_int4cf_add = False
+_optimize_on_int4cf_add = True
+    # diff from continued_fraction_ops:
+    #   continued_fraction_ops____using_LazyList.cf_add() input does not changed
+    # => _optimize_on_int4cf_add default be True
+def cf_add(lhs, rhs, /, *, _optimize_on_int=None):
     'st4cf_add := (0 + 1*y + 1*z + (cf0L+cf0R)*y*z)/(0 + 0*y + 0*z + y*z)'
+    ######################
+    if _optimize_on_int is None:
+        _optimize_on_int = _optimize_on_int4cf_add
+
+    if _optimize_on_int:
+        (done, x) = _cf_add__optimize_on_int(lhs, rhs)
+        if done:
+            return x
+    ######################
 
     #st4cf_add = ContinuedFractionState__2vars(0,1,1,cf0L+cf0R,  0,0,0,1)
     st4cf_add = ContinuedFractionState__2vars(0,1,1,0,  1,0,0,0)

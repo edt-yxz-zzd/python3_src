@@ -1,0 +1,6 @@
+cp -i -v "$@"
+#cp -i -v -t "$@"
+  #-v: verbose:show which files are actually copied
+  #-t: -t dst_dir src...
+  #-i: ask instead silently overwrite
+  #-n: silently skip instead silently overwrite

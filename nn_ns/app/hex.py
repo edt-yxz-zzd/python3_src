@@ -6,6 +6,11 @@ deprecated by new version py_eval:
 also:
     printf $'%x\n' $[0x8000-0x80]
     7f80
+also:
+    view others/app/gvim/call_function_and_show_result.txt
+    vim:
+    :echo printf('0x%X', char2nr('一'))
+    0x4E00
 ######################
 py -c 'print(hex(333))'
 0x14d
@@ -44,6 +49,11 @@ def main(args=None, /):
 also:
     printf $'%x\n' $[0x8000-0x80]
     7f80
+also:
+    view others/app/gvim/call_function_and_show_result.txt
+    vim:
+    :echo printf('0x%X', char2nr('一'))
+    0x4E00
         '''#'''
         , formatter_class=argparse.RawDescriptionHelpFormatter
         )

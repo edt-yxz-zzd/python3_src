@@ -23,10 +23,13 @@ __all__ = r'''
     Key4sorted_via_lt_
     key_mkr5lt_
     sorted_via_lt_
+    sorted_via_le_
 '''.split()#'''
 __all__
 from seed.tiny import echo
 import operator #__lt__
+#from seed.abc.Ops__concrete.TotalOrderingOps import TotalOrderingOps
+#from seed.abc.ITotalOrdering import ITotalOrdering
 
 class KeyMkr5lt:
     def __init__(sf, key, lt, /):
@@ -59,17 +62,31 @@ class Key4sorted_via_lt_:
         return not (sf > ot)
     def __ge__(sf, ot, /):
         return not (sf < ot)
+    def __eq__(sf, ot, /):
+        return (sf <= ot) and (sf >= ot)
+    def __ne__(sf, ot, /):
+        return not sf == ot
 
 def key_mkr5lt_(*, key=None, __lt__=None):
     key_mkr = KeyMkr5lt(key, __lt__)
     return key_mkr
 def sorted_via_lt_(xs, /, *, key=None, __lt__=None):
+    if __lt__ is None or __lt__ is operator.__lt__:
+        return sorted(xs, key=key)
     key_mkr = key_mkr5lt_(key=key, __lt__=__lt__)
     sorted_xs = sorted(xs, key=key_mkr)
     return sorted_xs
+def sorted_via_le_(xs, /, *, key=None, __le__=None):
+    if __le__ is None or __le__ is operator.__le__:
+        return sorted(xs, key=key)
+    def __lt__(sf, ot):
+        # !! [sf < ot] <==> [not$ [sf >= ot]] <==> [not$ [ot <= sf]]
+        return not __le__(ot, sf)
+    return sorted_via_lt_(xs, key=key, __lt__=__lt__)
 __all__
 
 
+from seed.seq_tools.sorted_via_lt_ import sorted_via_le_
 from seed.seq_tools.sorted_via_lt_ import sorted_via_lt_
 from seed.seq_tools.sorted_via_lt_ import KeyMkr5lt, Key4sorted_via_lt_, key_mkr5lt_, sorted_via_lt_
 from seed.seq_tools.sorted_via_lt_ import *

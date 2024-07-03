@@ -872,6 +872,8 @@ iter_continued_fraction_digits5ND_
 ContinuedFractionError__inf__no_cf0
 iter_approximate_fraction_NDs5continued_fraction_
     iter_approximate_fractions5continued_fraction_
+    calc_ND5finite_continued_fraction_
+    calc_Fraction5finite_continued_fraction_
 
     iter_approximate_fraction_NDs5continued_fraction__by_limit_denominator_
         iter_approximate_fraction_NDs_le5continued_fraction__by_limit_denominator_
@@ -2228,6 +2230,7 @@ def _unsafe_ND2Fraction(ND, /):
     return _unsafe_ND2Fraction_(N, D)
 def _unsafe_NDs2Fractions(NDs, /):
     return map(_unsafe_ND2Fraction, NDs)
+
 def iter_approximate_fraction_NDs5continued_fraction_(cf_digits, /):
     '-> Iter (N,D)|^ContinuedFractionError__inf__no_cf0'
     #bug:yield (0,1) # Fraction()
@@ -2244,6 +2247,17 @@ def iter_approximate_fractions5continued_fraction_(cf_digits, /):
     NDs = iter_approximate_fraction_NDs5continued_fraction_(cf_digits)
         # ^ContinuedFractionError__inf__no_cf0
     return _unsafe_NDs2Fractions(NDs)
+def calc_ND5finite_continued_fraction_(cf_digits, /):
+    '-> (N,D)|^ContinuedFractionError__inf__no_cf0'
+    NDs = iter_approximate_fraction_NDs5continued_fraction_(cf_digits)
+        # ^ContinuedFractionError__inf__no_cf0
+    for ND in NDs:pass
+    return ND
+def calc_Fraction5finite_continued_fraction_(cf_digits, /):
+    '-> Fraction|^ContinuedFractionError__inf__no_cf0'
+    ND = calc_ND5finite_continued_fraction_(cf_digits)
+    return _unsafe_ND2Fraction(ND)
+
 
 def iter_approximate_fraction_NDs5continued_fraction__by_limit_denominator_(may_max1_denominator, cf_digits, /, *, le_vs_any_vs_ge=0):
     '-> Iter (N,D){.denominator<max1_denominator}|^ContinuedFractionError__inf__no_cf0'
@@ -2449,6 +2463,7 @@ from seed.math.continued_fraction.continued_fraction_fold import iter_continued_
 
 from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionError__inf__no_cf0
 from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction_, iter_approximate_fractions5continued_fraction_
+from seed.math.continued_fraction.continued_fraction_fold import calc_ND5finite_continued_fraction_, calc_Fraction5finite_continued_fraction_
 from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction__by_limit_denominator_, iter_approximate_fractions5continued_fraction__by_limit_denominator_, approximate_fraction5continued_fraction__by_limit_denominator_
 
 

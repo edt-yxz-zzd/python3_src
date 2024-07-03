@@ -24,6 +24,11 @@ example:fmtr4row:
 ===
 usage:
 py_adhoc_call   nn_ns.fileformat.sqlite3_dump_cmd   @sqlite3_dump_cmd --ipath:/sdcard/0my_files/unzip/apk/dictionary/han_yu_zi_dian-assets-x0x1x2x3/x0x1x2x3  --nm4table:zi   --fmtr4row:'\zi,bishun -> f"{zi!s}:{bishun!s}"' =4
+py_adhoc_call   nn_ns.fileformat.sqlite3_dump_cmd   @sqlite3_dump_cmd --ipath:/sdcard/0my_files/unzip/apk/dictionary/han_yu_zi_dian-assets-x0x1x2x3/x0x1x2x3  --nm4table:zi --nms4columns:zi,py,pinyin,jijie --condition:'jijie NOT NULL' --py_condition='lambda zi,py,pinyin,jijie:("未详" in jijie)'  --fmtr4row='lambda zi,py,pinyin,jijie:f"{zi}:{pinyin}"' =4
+丆:mo,ye,o,ne
+乛:wan
+乧:dou
+乯:o,lo
 ===
 ]]
 
@@ -83,6 +88,7 @@ from itertools import islice, starmap
 import sqlite3
 import re
 from seed.tiny import check_type_is
+from seed.tiny_.check import check_may_
 
 
 def sqlite3_dump_meta_(ipath, /):
@@ -123,10 +129,11 @@ def parse_fmtr4row_(fmtr4row__str, /):
     return (nms4columns__str, fmtr4row)
 
 
-def sqlite3_iter_dump_(*args4islice, ipath, nm4table='', nms4columns='*', condition='', fmtr4row=None):
+def sqlite3_iter_dump_(*args4islice, ipath, nm4table='', nms4columns='*', condition='', fmtr4row=None, py_condition=None):
     check_type_is(str, nm4table)
     check_type_is(str, nms4columns)
     check_type_is(str, condition)
+    check_may_([check_callable], py_condition)
 
     if not ipath:
         ipath = None
@@ -157,6 +164,9 @@ def sqlite3_iter_dump_(*args4islice, ipath, nm4table='', nms4columns='*', condit
     with sqlite3.connect(ipath) as cx:
         if not nm4table:
             it = sql_stmts = cx.iterdump()
+            if not py_condition is None:
+                def f(sql_stmt, /):
+                    return py_condition(sql_stmt)
         else:
             #it = rows = cx.execute(r'SELECT * FROM ?', [nm4table])
                 #sqlite3.OperationalError: near "?": syntax error
@@ -165,7 +175,12 @@ def sqlite3_iter_dump_(*args4islice, ipath, nm4table='', nms4columns='*', condit
             #cu = cx.execute(fr'SELECT * FROM {nm4table!r}')
             cu = cx.execute(fr'SELECT {nms4columns!s} FROM {nm4table!r} {smay_where!s}')
             it = rows = iter(cu)
+            if not py_condition is None:
+                def f(row, /):
+                    return py_condition(*row)
         it # Iter (sql_stmt | row)
+        if not py_condition is None:
+            it = filter(f, it)
         if args4islice:
             it = islice(it, *args4islice)
         it

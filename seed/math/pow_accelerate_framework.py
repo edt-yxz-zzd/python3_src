@@ -1,7 +1,6 @@
 r'''[[[
 e ../../python3_src/seed/math/pow_accelerate_framework.py
 py -m seed.math.pow_accelerate_framework
-from seed.math.pow_accelerate_framework import IPowAccelerateFramework__succ1_double1, IPowAccelerateFramework__succ2_double1_odd2
 
 LucasSequence:
     A[2m] = f1<m>(A[m])
@@ -14,11 +13,50 @@ LucasSequence:
         = (f3<m>(A[m+1], A[m]), echo(A[m+1]))
 #]]]'''
 __all__ = '''
+    pow_uint_0M
+    pow_uint_0SD
     IPowAccelerateFramework__succ1_double1
     IPowAccelerateFramework__succ2_double1_odd2
     '''.split()
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
 from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
+from seed.tiny import check_type_is
+
+
+def pow_uint_0M(A0, mul, A1, n, /):
+    'A[0]/x -> mul/(A[m]/x -> A[n]/x -> A[m+n]/x) -> A[1]/x -> n/uint -> A[n]/x'
+    def to_succ(n, An, /):
+        if n == 0:
+            return A1
+        return mul(A1, An)
+    def to_double(n, An, /):
+        if n == 0:
+            return A0
+        return mul(An, An)
+    return pow_uint_0SD(A0, to_succ, to_double, n)
+
+
+
+
+
+def pow_uint_0SD(A0, to_succ, to_double, n, /):
+    'A[0]/x -> to_succ/(n/uint -> A[n]/x -> A[n+1]/x) -> to_double/(n/uint -> A[n]/x -> A[2*n]/x) -> A[1]/x -> n/uint -> A[n]/x'
+    #check_uint(n)
+    check_type_is(int, n)
+    if not n >= 0: raise ValueError
+    if n == 0: return A0
+    n0 = n
+    A1 = to_succ(0, A0)
+    n, An = 1, A1
+    s = bin(n0)
+    assert s[:3] == '0b1'
+    s = s[3:]
+    for bit in s:
+        n, An = 2*n, to_double(n, An)
+        if bit=='1':
+            n, An = n+1, to_succ(n, An)
+    assert n == n0
+    return An
 
 
 class IPowAccelerateFramework__succ1_double1(ABC):
@@ -33,19 +71,7 @@ class IPowAccelerateFramework__succ1_double1(ABC):
 
     def accelerate_to(sf, A0, n, /):
         'A[0] -> n -> A[n]'
-        if not n >= 0: raise ValueError
-        if n == 0: return A0
-        m = n
-        A1 = sf.to_succ(0, A0)
-        n, An = 1, A1
-        s = bin(n)
-        assert s[:3] == '0b1'
-        s = s[3:]
-        for bit in s:
-            n, An = 2*n, sf.to_double(n, An)
-            if bit=='1':
-                n, An = n+1, sf.to_succ(n, An)
-        assert n == m
+        An = pow_uint_0SD(A0, sf.to_succ, sf.to_double, n)
         return An
 
 class _PowAccelerateFramework__succ1_double1__to_impl_succ2_double1_odd2(IPowAccelerateFramework__succ1_double1):
@@ -79,7 +105,7 @@ class IPowAccelerateFramework__succ2_double1_odd2(ABC):
     __slots__ = ()
 
     @abstractmethod
-    def to_succ(sf, n, An, An1/):
+    def to_succ(sf, n, An, An1, /):
         'n -> A[n] -> A[n+1] -> A[n+2]'
     @abstractmethod
     def to_double(sf, n, An, /):
@@ -110,3 +136,7 @@ class IPowAccelerateFramework__succ2_double1_odd2(ABC):
             n, An = 2*n, sf.to_double(n, An)
         return An
 
+from seed.math.pow_accelerate_framework import IPowAccelerateFramework__succ1_double1, IPowAccelerateFramework__succ2_double1_odd2
+from seed.math.pow_accelerate_framework import pow_uint_0SD
+from seed.math.pow_accelerate_framework import pow_uint_0M
+from seed.math.pow_accelerate_framework import *

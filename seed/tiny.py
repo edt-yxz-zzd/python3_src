@@ -417,6 +417,13 @@ __all__ = str2__all__(r'''
             # list(g:=GetStopIterationValue(iter_stop_with_(r, it)))
             # assert g.get_tmay_value5StopIteration()==(r,)
 
+    class_property
+        # types.DynamicClassAttribute(fget=None, fset=None, fdel=None, doc=None)
+        # via cls.__getattr__
+        # .deleter(self, fdel) -> new_sf
+        # .getter(self, fget) -> new_sf
+        # .setter(self, fset) -> new_sf
+
     #''')
 __all__
 
@@ -745,6 +752,7 @@ from seed.tiny_.singleton import mk_SingletonClass, mk_existing_type_singleton
 from seed.tiny_.singleton import __newobj__, __new4singleton__
 
 from seed.tiny_.iter_stop_with_ import iter_stop_with_, GetStopIterationValue
+from seed.tiny_.class_property import class_property
 
 
 

@@ -15,7 +15,7 @@ debug:
 #   > py .... > log.txt
 #
 
-py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v -ht -ff -df
 py -m nn_ns.app.debug_cmd   xxx.yyy zzz.www
   to mk __all__
   to list toplayer defs:
@@ -78,7 +78,7 @@ r'''[[[
 
 py -m nn_ns.app.debug_cmd   x
 py_adhoc_call   x   @f
-py -m nn_ns.app.doctest_cmd x:__doc__ --ndiff -ff -v
+py -m nn_ns.app.doctest_cmd x:__doc__ --df -ff -v -ht
 from x import f
 #]]]'''
 __all__ = r'''
@@ -124,7 +124,7 @@ e ../../python3_src/xxx/yyy.py
 xxx.yyy
 py -m    xxx.yyy
 py -m nn_ns.app.debug_cmd   xxx.yyy
-py -m nn_ns.app.doctest_cmd xxx.yyy:fff -v
+py -m nn_ns.app.doctest_cmd xxx.yyy:fff -v -ht -ff -df
 py_adhoc_call   xxx.yyy @not_show.fff =123 :string --kw:arg ++kw_ls:elem -flag_off +flag_on
 
 from xxx.yyy import ...
@@ -1084,7 +1084,7 @@ def bisearch(x, array, begin=None, end=None, *, key=None, __lt__=None, result_ca
 
 
 #py -m seed.for_libs.for_doctest -h
-py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v -ht -ff -df
 
 
 from nn_ns.math_nn.numbers.min_factor import min_factor, factor_uint__via_min_factor_list

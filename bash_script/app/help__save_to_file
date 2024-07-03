@@ -1,0 +1,9 @@
+
+prog_name="$@"
+#echo "${prog_name}"
+if ! [[ ${prog_name} =~ ^[[:alnum:]a-zA-Z0-9_.+-]+$ ]] ; then { echo 'prog_name is not identifier' >&2 ; exit 1 ; } ; fi
+if [[ -a others/app/termux/help/${prog_name}.help.txt ]] ; then { echo "existed: others/app/termux/help/${prog_name}.help.txt" >&2 ; exit 1 ; } ; fi
+#${prog_name} --help > others/app/termux/help/${prog_name}.help.txt
+# ffmpeg -h --> some msg into stderr
+${prog_name} --help  > others/app/termux/help/${prog_name}.help.txt   2>&1
+echo "view others/app/termux/help/${prog_name}.help.txt"

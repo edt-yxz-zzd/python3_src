@@ -1,6 +1,7 @@
 ##
 #if [[ $(pwd) != /sdcard/Download* ]] ; then { echo 'pwd is not under /sdcard/Download/' >&2 ; exit 1 ; } ; fi
-if ! [[ $(pwd) =~ ^/sdcard/Download?(/*)$ ]] ; then { echo 'pwd is not under /sdcard/Download/' >&2 ; exit 1 ; } ; fi
+##if ! [[ $(pwd) =~ ^/sdcard/Download(/.*)?$ ]] ; then { echo 'pwd is not under /sdcard/Download/' >&2 ; exit 1 ; } ; fi
+if ! ( [[ $(pwd) =~ ^/sdcard/Download(/.*)?$ ]]  ||  [[ $(pwd) =~ ^/sdcard/0my_files/tmp/wget_(/.*)?$ ]] ) ; then { echo 'pwd is not under /sdcard/Download/ or /sdcard/0my_files/tmp/wget_/' >&2 ; exit 1 ; } ; fi
 
 
 wget -U 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0'  "$@"

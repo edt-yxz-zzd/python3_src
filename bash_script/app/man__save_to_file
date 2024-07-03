@@ -1,0 +1,7 @@
+
+prog_name="$@"
+#echo "${prog_name}"
+if ! [[ ${prog_name} =~ ^[[:alnum:]a-zA-Z0-9_.+-]+$ ]] ; then { echo 'prog_name is not identifier' >&2 ; exit 1 ; } ; fi
+if [[ -a others/app/termux/help/${prog_name}.man.txt ]] ; then { echo "existed: others/app/termux/help/${prog_name}.man.txt" >&2 ; exit 1 ; } ; fi
+man -c ${prog_name} | col -b -x > others/app/termux/help/${prog_name}.man.txt
+echo "view others/app/termux/help/${prog_name}.man.txt"

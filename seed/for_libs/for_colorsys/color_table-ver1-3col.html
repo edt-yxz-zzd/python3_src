@@ -1,0 +1,123 @@
+<!DOCTYPE HTML><html><head>
+  <style>
+    body {color:lightgreen; background-color:#444;}
+    td {
+      /*border:36px solid blue;*/
+      padding:0px;
+      font-size:500%;
+      margin:0px;
+    }
+  </style>
+<script>
+/*
+colors
+表格:纵向三基色圆，横向共同色/白色
+单、双、主辅
+ACC,AAC,ABC
+ABC-->210 420 432
+:       000------------->444
+ACC:400     200 400 422
+ABC:420     210 420 432
+AAC:440     220 440 442
+BAC:240     120 240 342
+CAC:040     020 040 242
+CAB:042     021 042 243
+CAA:044     022 044 244
+CBA:024     012 024 234
+CCA:004     002 004 224
+BCA:204     102 204 324
+ACA:404     202 404 424
+ACB:402     201 402 423
+ACC:400     200 400 422
+:           c/2 c   c/2+222
+
+<table><tr><th>
+<table><tr><td>
+*/
+</script>
+<script>
+;function ptn2color(ptn, mapping) {
+  ;return '#' + ptn.split('').map(ch => mapping.get(ch)).join('')
+  ;return '#' + ptn.split('').map(ch => mapping[ch]).join('')
+;}
+;//alert(ptn2color('ABC', {A:'f', B:'8', C:'0'}))
+;function _mk_mapping(ks, vs) {
+  ;return Object.fromEntries(ks.split('').map((k,j) => [k,vs[j]]))
+;}
+;function mk_mapping(ks, vs) {
+  ;let ps = ks.split('').map((k,j) => [k,vs[j]])
+  ;//alert(ps.length)
+  ;//alert(ps)
+  ;let d = new Map()
+  ;ps.forEach(kv => d.set(...kv))
+  ;return d
+;}
+;//alert(mk_mapping('ABC', 'f80'))
+;//alert(Array.from(mk_mapping('ABC', 'f80').entries()))
+;//alert(mk_mapping('ABC', 'f80')['A'])
+;//alert(mk_mapping('ABC', 'f80').get('A'))
+;//alert(ptn2color('ABC', mk_mapping('ABC', 'f80')))
+;function mk_jc2mapping(ks, jc2vs){
+  ;let jc2mapping = jc2vs.map(vs => mk_mapping(ks, vs))
+  ;return jc2mapping
+;}
+;//alert('ok:end:mk_jc2mapping')
+;
+</script>
+<script>
+;let nm4table = 'the_color_table'
+;let jr2ptn = 'ACC ABC AAC BAC CAC CAB CAA CBA CCA BCA ACA ACB ACC'.split(' ')
+;//let jc2vs = '210 420 432'.split(' ')
+;let jc2vs = '840 f80 fc8'.split(' ')
+;
+;let jc2mapping = mk_jc2mapping('ABC', jc2vs)
+;//alert('ok:end:data:jc2mapping')
+;//alert(jc2mapping)
+;//alert(Array.isArray(jc2mapping))
+;//alert(jc2mapping.length)
+;//alert(jc2vs.length)
+</script>
+<script>
+;function gen_table(nm4table, jr2ptn, jc2mapping){
+  ;let tbl = document.getElementById(nm4table)//.tbody
+  ;//alert(tbl)
+  ;jr2ptn.forEach(ptn => {
+    ;let row = document.createElement('tr')
+    ;tbl.append(row)
+    ;{
+      ;let cell = document.createElement('td')
+      ;row.append(cell)
+      ;cell.textContent = ptn
+    ;}
+    ;jc2mapping.forEach(mapping => {
+      ;let cell = document.createElement('td')
+      ;row.append(cell)
+      ;let color = ptn2color(ptn, mapping)
+      ;//alert([ptn,color])
+      ;cell.style.color = color
+      ;cell.textContent = color
+      ;cell.style.border = `36px solid ${color}`
+      ;//cell.style.border = '36px solid blue'
+    ;})
+  ;})
+;}
+;//alert('ok:end:gen_table')
+;</script>
+</head>
+<body>
+  <table id='the_color_table'>
+    <caption> color table </caption>
+    <tr>
+      <th>pattern</th>
+      <td style='color: #000; border:36px solid #000;'>#000</td>
+      <td style='color: #888; border:36px solid #888;'>#888</td>
+      <td style='color: #fff; border:36px solid #fff;'>#fff</td>
+    </tr>
+  </table>
+  <script>
+  ;gen_table(nm4table, jr2ptn, jc2mapping)
+  ;</script>
+</body></html>
+
+
+

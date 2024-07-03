@@ -28,7 +28,7 @@ from seed.tiny_.check import check_may_, check_not_
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     from seed.tiny_.check import check_getitemable, icheck_getitemable
 from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
-from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
+from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
@@ -69,10 +69,12 @@ __all__ = '''
     icheck_imay
 
     check_pseudo_identifier
+    check_smay_pseudo_identifier
     check_smay_pseudo_qual_name
     check_pseudo_qual_name
 
     icheck_pseudo_identifier
+    icheck_smay_pseudo_identifier
     icheck_smay_pseudo_qual_name
     icheck_pseudo_qual_name
 
@@ -214,6 +216,10 @@ def check_pseudo_identifier(s, /):
     'pseudo_identifier identifier includes py-keyword'
     check_type_is(str, s)
     if not s.isidentifier(): raise TypeError(repr(s))
+def check_smay_pseudo_identifier(s, /):
+    check_type_is(str, s)
+    if s:
+        check_pseudo_identifier(s)
 def check_smay_pseudo_qual_name(s, /):
     'qual_name qualified-name includes py-keyword'
     check_type_is(str, s)
@@ -228,6 +234,9 @@ def check_pseudo_qual_name(s, /):
 def icheck_pseudo_identifier(s, /):
     check_pseudo_identifier(s)
     return s
+def icheck_smay_pseudo_identifier(s, /):
+    check_smay_pseudo_identifier(s)
+    return s
 def icheck_smay_pseudo_qual_name(s, /):
     check_smay_pseudo_qual_name(s)
     return s
@@ -239,6 +248,8 @@ assert 'class'.isidentifier()
 assert 'def'.isidentifier()
 assert ''.split('.') == ['']
 check_pseudo_identifier('def')
+check_smay_pseudo_identifier('')
+check_smay_pseudo_identifier('def')
 check_smay_pseudo_qual_name('')
 check_smay_pseudo_qual_name('x')
 check_smay_pseudo_qual_name('x.def')
@@ -282,7 +293,7 @@ def icheck_bool(b, /):
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     #from seed.tiny_.check import check_getitemable, icheck_getitemable
 from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
-from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
+from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
