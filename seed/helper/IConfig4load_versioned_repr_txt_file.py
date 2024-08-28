@@ -1,4 +1,6 @@
 #__all__:goto
+#[:convertion4dump_load]:goto
+#[:oneway_convertion4parse]:goto
 #main_body_src_code:goto
 #HHHHH
 #[[[__doc__:begin
@@ -78,9 +80,37 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 _basename_fmt__rex = re.compile(r'^[^?*{}]*[{][}][^?*{}]*$')
 class IConfig4load_versioned_repr_txt_file(ABC):
+    r'''[[[
+version_str ->:
+    .state{ver}
+    .dataobj{ver}
+
+===
+[:convertion4dump_load]:here
+
+io:file <-> txt <-> state <-> dataobj <-> readonly_dataobj:user
+
+file2text___read__path
+file5text___write__path
+    file <-> txt
+
+text2state___eval
+text5state___repr
+    txt <-> state
+
+state2dataobj___create
+state5dataobj___save
+    state <-> dataobj
+
+dataobj2readonly___recur_view
+dataobj5readonly___literal_rebuild
+    dataobj <-> readonly_dataobj
+
+
+    #]]]'''#'''
     #state2dataobj___create
     #state5dataobj___save
-    def __init__(sf, /, *, __file__, data_dir_rpath, basename_fmt, version_str__rex, encoding, dataobj_immutable, state_immutable):#, state2dataobj___create=None, state5dataobj___save=None
+    def __init__(sf, /, *, __file__, data_dir_rpath, basename_fmt, version_str__rex, encoding, dataobj_immutable:bool, state_immutable:bool):#, state2dataobj___create=None, state5dataobj___save=None
         #, py_literal_vs_json
         #   removed, since json.dict.key MUST BE str!!!
         r'''now become ABC
@@ -343,15 +373,54 @@ copy from:
 class Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer(IConfig4load_versioned_repr_txt_file):
     r'''
     dataobj = (parsed_result, extra_derived_result, compact_result)
-    st = compact_result
+    st = state = compact_result
+        used for IO: save/load
     ----:
     xxx ++kw: str_instead_repr
     ++kw: state_rawtxt
     xxx ++kw: override__text5state___repr
     ++kw: override__text52state
 
+===
+#[:convertion4dump_load]:goto
+
+===
+#[:oneway_convertion4parse]:here
+???weird???
+    !!!about "dump_load" instead of "parse"!!!
+
+state2dataobj___create
+state5dataobj___save
+    _helper4parse.state2dataobj___create
+    _helper4parse.state5dataobj___save
+
+dataobj2readonly___recur_view
+dataobj5readonly___literal_rebuild
+    _helper4parse.dataobj2readonly
+    _helper4parse.dataobj5readonly
+
+[[
+IHelper4parse__xxx_txt:
+===
+ifile
+    -> parsed_result
+        -> extra_derived_result
+            <-> readonly__extra_derived_result
+        <-> readonly__parsed_result
+        <-> compact_result
+            <-> state
+        :::
+        <-> dataobj
+            <-> readonly__dataobj
+
+<<==:
+[state == compact_result]
+[dataobj == (parsed_result, extra_derived_result)]
+[readonly__dataobj == (readonly__parsed_result, readonly__extra_derived_result)]
+]]
+
     #'''
-    def __init__(sf, helper4parse__xxx_txt, /, *, __file__, data_dir_rpath, basename_fmt, version_str__rex, encoding, dataobj_immutable, state_immutable, override__text52state=None, state_rawtxt=False):#, str_instead_repr=False
+    def __init__(sf, helper4parse__xxx_txt:IHelper4parse__xxx_txt, /, *, __file__, data_dir_rpath, basename_fmt, version_str__rex, encoding, dataobj_immutable:bool, state_immutable:bool, override__text52state=None, state_rawtxt:bool=False):#, str_instead_repr=False
         assert isinstance(helper4parse__xxx_txt, IHelper4parse__xxx_txt)
         if override__text52state is not None:
             check_pair(override__text52state)

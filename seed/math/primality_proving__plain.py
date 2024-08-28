@@ -2,6 +2,19 @@
 #doing:goto
 r'''[[[
 e ../../python3_src/seed/math/primality_proving__plain.py
+view ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_..b001918.b002233.out.txt
+    索引纟素数:素数:最小正本原根:最小素本原根
+    1 3 2 2
+    3 7 3 3
+    8 23 5 5
+view ../../python3_src/nn_ns/math_nn/numbers/b001918-least_positive_primitive_root_of_n_th_prime__fst_10000.txt
+    最小正本原根
+    注意:第一列是:索引纟素数，不是:素数
+view ../../python3_src/nn_ns/math_nn/numbers/b002233-least_positive_prime_primitive_root_of_n_th_prime__except_0th__fst_10000.txt
+    最小素本原根
+    最小『素』本原根
+
+
 
 seed.math.primality_proving__plain
 py -m seed.math.primality_proving__plain
@@ -2124,6 +2137,13 @@ class Tester4prime_via_Nmm__sqrt_case:
             #init _data2!
 
         return
+    def __repr__(sf, /):
+        'tmp-for-debug'
+        #sf._data = (N, Nmm, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, using_gcd, js4todo, j2g)
+        #sf._data2 = (js, ps, Nmm__IIps)
+        s = repr_helper(sf, _data=sf._data, _data2=sf._data2)
+        s = f'[<{s}>]'
+        return s
     @property
     def j2g(sf, /):
         (N, Nmm, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, using_gcd, js4todo, j2g) = sf._data
@@ -2247,8 +2267,10 @@ def return_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4f
     else:
         raise 000
     raise 000
+#end-def return_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, /, *, complete_factorization__vs__using_gcd=True):
 
 
+_p2least_positive_primitive_root = {3:2,7:3,23:5}
 def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, /, *, complete_factorization__vs__using_gcd=True):
     # not-require: [gcd(ft4Nmm, Nmm///ft4Nmm) == 1]
     #
@@ -2312,9 +2334,32 @@ def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft
         #
         # extra:[@[n <- [2**48..]] -> [2*ln(n)**2 < 1+floor_log2(n)**2]]
     max1_witness4composite = min(max1_witness4composite5ERH, max1_witness4composite5trial_division)
-    if N == 3:
-        max1_witness4composite = max(3, max1_witness4composite)
-        # max(3, ...) for [N==3][primitive_root==2]
+
+    _p2least_positive_primitive_root
+    if N in _p2least_positive_primitive_root:
+        max1_witness4composite = max(1+_p2least_positive_primitive_root[N], max1_witness4composite)
+
+    #_p2least_positive_primitive_root = {3:2,7:3,23:5}
+    #if N == 3:
+    #    max1_witness4composite = max(3, max1_witness4composite)
+    #    # max(3, ...) for [N==3][primitive_root==2]
+    #elif N == 7:
+    #    max1_witness4composite = max(4, max1_witness4composite)
+    #    # max(4, ...) for [N==7][primitive_root==3]
+            #<<==:
+            #view ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_..b001918.b002233.out.txt
+            #   索引纟素数:素数:最小正本原根:最小素本原根
+            #   1 3 2 2
+            #   3 7 3 3
+            #   8 23 5 5
+            #
+            #
+            # Fail__unknown_fine_upperbound4primitive_root: (7, [2, 3], [1, 1], False, 3)
+            # Fail__unknown_fine_upperbound4primitive_root: (23, (2, 11), (1, 1), False, 5)
+            # Fail__unknown_fine_upperbound4primitive_root: (23, [2, 11], [1, 1], False, 5, [<Tester4prime_via_Nmm__sqrt_case(_data = (23, 22, [2, 11], [1, 1], False, {0}, {1: 2}), _data2 = ([0], [2], 11))>])
+            #   why?
+            #
+            #
     assert 3 <= max1_witness4composite <= N
     # !! 最小正本原根的上限估值未明确
     if 1:
@@ -2375,7 +2420,7 @@ def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft
                     # ^PrimeCertificate__complete_factorization
         ######################
 
-    raise Fail__unknown_fine_upperbound4primitive_root(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, complete_factorization__vs__using_gcd)
+    raise Fail__unknown_fine_upperbound4primitive_root(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, complete_factorization__vs__using_gcd, max1_partial_pseudo_primitive_root4prime, tp)
     raise ERH__fail(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, complete_factorization__vs__using_gcd)
     ######################old-version:
     def iter2(tp, /):
@@ -2443,6 +2488,16 @@ def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft
         pass
     raise ERH__fail(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, complete_factorization__vs__using_gcd)
 #end-def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, /, *, complete_factorization__vs__using_gcd=True):
+def __():
+    assert (0, (2,)) == return_version____primality_test__Nmm__plain__sqrt_case_(3, [2], [1], complete_factorization__vs__using_gcd=False)
+    assert (0, (3, 2)) == return_version____primality_test__Nmm__plain__sqrt_case_(7, [2,3], [1,1], complete_factorization__vs__using_gcd=False)
+        # Fail__unknown_fine_upperbound4primitive_root: (7, [2, 3], [1, 1], False, 3)
+    assert (0, (5, 2)) == return_version____primality_test__Nmm__plain__sqrt_case_(23, [2,11], [1,1], complete_factorization__vs__using_gcd=False)
+        # Fail__unknown_fine_upperbound4primitive_root: (23, [2, 11], [1, 1], False, 5)
+        # Fail__unknown_fine_upperbound4primitive_root: (23, [2, 11], [1, 1], False, 5, [<Tester4prime_via_Nmm__sqrt_case(_data = (23, 22, [2, 11], [1, 1], False, {0}, {1: 2}), _data2 = ([0], [2], 11))>])
+        #
+__()
+
 
 #CompositeCertificate__nontrivial_factor
 #CompositeCertificate__witness4composite

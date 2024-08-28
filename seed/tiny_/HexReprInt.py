@@ -1,3 +1,9 @@
+    # using HEXReprInt to replace HexReprInt
+    #   API.output.format changed!
+    #   !!!maybe cause some doctest fail!!!
+    #   ???to change:fmap_rngs2hex_repr
+    #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
+
 r'''
 see:
     view ../../python3_src/seed/tiny_/HexReprInt.py
@@ -16,12 +22,39 @@ used by:
 #'''
 
 
-class HexReprInt(int):
+#class HexReprInt(int):
+#   rename:HexReprInt-->LowHexReprInt
+class LowHexReprInt(int):
     __slots__ = ()
     def __repr__(sf, /):
         return hex(sf)
-assert repr(HexReprInt(15)) == hex(15) == '0xf'
-assert repr(HexReprInt(-15)) == hex(-15) == '-0xf'
+assert repr(LowHexReprInt(15)) == hex(15) == '0xf'
+assert repr(LowHexReprInt(-15)) == hex(-15) == '-0xf'
+
+class HEXReprInt(int):
+    __slots__ = ()
+    def __repr__(sf, /):
+        return hex(sf).upper().replace('X', 'x', 1)
+assert repr(HEXReprInt(15)) == '0xF'
+assert repr(HEXReprInt(-15)) == '-0xF'
+
+
+class HEXReprInt__without_0x(int):
+    __slots__ = ()
+    def __repr__(sf, /):
+        return hex(sf).upper().replace('0X', '', 1)
+assert repr(HEXReprInt__without_0x(15)) == 'F' == f'{(15):X}'
+assert repr(HEXReprInt__without_0x(-15)) == '-F' == f'{(-15):X}'
+
+HexReprInt = HEXReprInt
+
+
+HexReprInt = HEXReprInt
+
+from seed.tiny_.HexReprInt import LowHexReprInt
+
+from seed.tiny_.HexReprInt import HEXReprInt__without_0x
 
 from seed.tiny_.HexReprInt import HexReprInt
+from seed.tiny_.HexReprInt import HEXReprInt as HexReprInt
 

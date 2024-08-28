@@ -202,6 +202,9 @@ class CharsetCharFilter(ICharFilter):
     @property
     def ranges(self, /):
         return self.__rngs.ranges
+    def get_Ranges(self, /):
+        'for:self.get_Ranges()  .to_char_pairs__str()/.to_hexXhexszpair_list()/.to_hex_repr_pair_list()/.to_len_rng2begin_chars()'
+        return self.__rngs
     def len(self, /):
         return self.__rngs.len_ints()
     def _get_init_args(self, /):

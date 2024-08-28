@@ -1,0 +1,270 @@
+
+e ../../python3_src/seed/recognize/recognizer_LLoo_/syntax.txt
+
+
+view ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__wrapper.py
+view ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__serial.py
+view ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__parallel.py
+
+
+parallel/the_only_one:
+  {:| rgnr :| rgnr :|}
+parallel-tagged:
+  {+:| rgnr +:| rgnr +|}
+parallel-Cased:
+  {*:| rgnr *:| rgnr *:|}
+choice/the_first_one:
+  {>| rgnr >| rgnr >|}
+choice-tagged:
+  {+>| rgnr +>| rgnr +>|}
+choice-Cased:
+  {*>| rgnr *>| rgnr *>|}
+
+tuple:
+  (, rgnr , -^-rgnr , -^- , rgnr , rgnr ,)
+array/many:
+  rgnr[min:max1:uhidx4hdr]
+sep_by:
+  rgnr[min:max1:uhidx4hdr:%rgnr8sep]
+end_by__pre:
+  rgnr[min:max1:uhidx4hdr:/rgnr8end]
+end_by__post:
+  rgnr[min:max1:uhidx4hdr:://rgnr8end]
+
+wrapper:
+  skip:
+    -rgnr
+  pack:
+    .rgnr
+  unpack:
+    ...rgnr
+  unbox:
+    rgnr.!
+  invert_err_ok:
+    rgnr~!
+  skip_header_signal:
+    rgnr^$
+  header_signal_at_beginning:
+    rgnr^^
+
+  not_followed_by4hdr:
+    rgnr!^
+  not_followed_by4whole:
+    rgnr!$
+  look_ahead-whole:
+    rgnr?$
+  look_ahead-hdr:
+    rgnr?^
+  #xxx:try:try__rollback_if_fail_before_hdr_sgnl_else_lift:
+    rgnr?#
+        # [#fail-before-hdr_sgnl<==>not ok#]
+        reply-lifted
+  tmay:
+    rgnr?/
+  either:
+    rgnr?%
+  default:
+    rgnr?=oresult
+  simple_postprocess:
+    rgnr$%f4eresult
+  simple_postprocess6ok:
+    rgnr$&f4oresult
+  simple_postprocess6err:
+    rgnr$|f4errmsg
+  constant_overwrite:
+    rgnr$=eresult
+  constant_overwrite6ok:
+    rgnr$>oresult
+  constant_overwrite6err:
+    rgnr$<errmsg
+  tag:
+    rgnr$+tag
+  Cased:
+    rgnr$*tag
+  traced__simple:
+    rgnr:*label
+
+mkr:
+  trace(label)
+  constant_eresult:
+    load(eresult)
+    ok(oresult)
+    err(errmsg)
+  named:
+    ### name := ...
+    auto recognize via syntax
+  ref:
+    ### &kinded_name
+    auto recognize via syntax
+  ignore:
+    ignore
+  any_tkey:
+    any_tkey
+  eof:
+    eof
+  tkey_set(token_set_query)
+  match_constant_tkeys(tkeys)
+  match_constant_tkey(tkey)
+  match_one_of_tkeys(tkeys)
+  raw_string(set4sep8open, set4sep8close, set4token6tag)
+    [< nm4set4sep8open , nm4set4sep8close , nm4set4token6tag >]
+  trace(label)
+  ###traced__simple(label, rgnr):
+    ###rgnr:*label
+
+  if_then_else:
+  switch_branches:
+  dependent_pair:
+    view ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__switch.py
+  gi8flow__all_in_one
+    [; oresult <- rgnr ; -^- ; oresult <- -^-rgnr ; let (x.x, y[i]) = z；if expr; then stmts ; else stmts ; while expr; do stmts; :label ; goto :label ; return oresult ;]
+      stmts = {; ... ;}
+
+assign:oresult:
+  rgnr@xxx
+    view ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__flow.py
+call:
+  mkr(xxx)
+
+py_expr:
+  &'py_expr:(\w*)\(.*?\)\1'
+  #eg: &'py_expr:xxx(...)xxx'
+
+
+
+
+[[
+#
+grammar = end_by[<'..',line>]
+line = ';;' skip_case nm_ex postprocess '=' rgnr_expr
+nm_ex = nm | nm(sep_by[<',',nm>])
+rgnr_expr = skip_case atom_rgnr_expr postprocess
+atom_rgnr_expr
+  = nm
+  | nm(sep_by[<',',py_expr>])
+  # ??? | ( rgnr_expr )
+  | {:| sep_by[<':|',rgnr_expr>] :|}
+  | {+:| sep_by[<'+:|',rgnr_expr>] +:|}
+  | {*:| sep_by[<'*:|',rgnr_expr>] *:|}
+  | {>| sep_by[<'>|',rgnr_expr>] >|}
+  | {+>| sep_by[<'+>|',rgnr_expr>] +>|}
+  | {*>| sep_by[<'*>|',rgnr_expr>] *>|}
+  | (, sep_by[<',',yield_rgnr_expr>] ,)
+  | [; sep_by[<';',stmt>] ;]
+  | [< nm4set4sep8open , nm4set4sep8close , nm4set4token6tag >] #raw_string
+yield_rgnr_expr = '-^-'? rgnr_expr?
+skip_case
+  = -
+  | .
+  | ...
+postprocess
+  = [min:max1:uhidx4hdr]
+  | [min:max1:uhidx4hdr:%rgnr8sep]
+  | [min:max1:uhidx4hdr:/rgnr8end]
+  | [min:max1:uhidx4hdr:://rgnr8end]
+
+  | .!
+  | ~!
+  | ^$
+  | ^^
+
+  | !^
+  | !$
+  | ?$
+  | ?^
+  | ?/
+  | ?%
+  | ?=oresult
+  | $%f4eresult
+  | $&f4oresult
+  | $|f4errmsg
+  | $=eresult
+  | $>oresult
+  | $<errmsg
+  | $+tag
+  | $*tag
+  | :*label
+
+
+py_expr = "&'py_expr:"  [< char'(' , char')' , regex'\w' >]  "'"
+  # &'py_expr:(\w*)\(.*?\)\1'
+  # eval
+py_stmts = "&'py_stmts:"  [< char'(' , char')' , regex'\w' >]  "'"
+  # exec
+stmt
+  = yield_rgnr_expr
+  | target_expr <- yield_rgnr_expr
+  | target_expr := py_expr
+  | :label
+  | goto :label
+  | return py_expr
+  | if xpy_expr then stmts else stmts
+  | while xpy_expr do stmts
+stmts
+  = stmt
+  | {; sep_by[<';',xstmt>] ;}
+xstmt
+  = stmt
+  | break
+  | continue
+xpy_expr
+  = py_expr
+  | target_expr <- yield_rgnr_expr
+  | target_expr := py_expr
+  = py_expr
+]]
+
+
+
+
+
+
+[[
+simplified_grammar:
+simplified:
+grammar = end_by[<'..',line>]
+line = ';;' skip_case nm postprocess '=' rgnr_expr
+rgnr_expr = skip_case atom_rgnr_expr postprocess
+atom_rgnr_expr
+  = nm
+  | str
+  | {:| sep_by[<':|',rgnr_expr>] :|}
+  | {+:| sep_by[<'+:|',rgnr_expr>] +:|}
+  | {*:| sep_by[<'*:|',rgnr_expr>] *:|}
+  | {>| sep_by[<'>|',rgnr_expr>] >|}
+  | {+>| sep_by[<'+>|',rgnr_expr>] +>|}
+  | {*>| sep_by[<'*>|',rgnr_expr>] *>|}
+  | (, sep_by[<',',yield_rgnr_expr>] ,)
+yield_rgnr_expr = '-^-'? rgnr_expr?
+skip_case
+  = -
+  | .
+  | ...
+postprocess
+  = [min:max1:uhidx4hdr]
+  | [min:max1:uhidx4hdr:%rgnr8sep]
+  | [min:max1:uhidx4hdr:/rgnr8end]
+  | [min:max1:uhidx4hdr:://rgnr8end]
+
+  | .!
+  | ~!
+  | ^$
+  | ^^
+
+  | !^
+  | !$
+  | ?$
+  | ?^
+  | ?/
+  | ?%
+  | ?=oresult
+  | $%f4eresult
+  | $&f4oresult
+  | $|f4errmsg
+  | $=eresult
+  | $>oresult
+  | $<errmsg
+  | $+tag
+  | $*tag
+  | :*label
+]]

@@ -116,7 +116,8 @@ _example4txt_parser4UCD_Blocks_txt = lines_handler2txt_handler(_example4lines_pa
 
 
 def parse__Blocks_txt(lines, /):
-    '-> parsed_result::(char_pt2code_block_name, code_block_name2char_pt_rngs)'
+    '-> parsed_result::char_pt2code_block_name'
+    #'-> parsed_result::(char_pt2code_block_name, code_block_name2char_pt_rngs)'
 
     fieldss = _example4lines_parser4UCD_Blocks_txt(lines)
     rng_name_pairs = fieldss

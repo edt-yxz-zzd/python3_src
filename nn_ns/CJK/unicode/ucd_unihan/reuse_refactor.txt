@@ -1,0 +1,292 @@
+
+e ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/reuse_refactor.txt
+e ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/parse_per_file_type.py
+
+针对不同类型的文件，复用相同算法
+  重构代码=>更有利于复用
+注意:输入类型相同，但允许不同保存形式
+
+注意:missing:缺省值？<none>
+  ea/EastAsianWidth:有两个默认值:N/W
+
+文件类型:
+  #例外处理:文本属性
+  * <孤例型文件>:
+    ###
+    没有同一格式，各自为战
+    代码不复用
+    ###
+    UCD/CJKRadicals.txt
+    ... ...
+    ###
+  * 真值属性汇编文件
+    ###
+    行格式 = 范围 『;』 真值属性名
+    ###
+    格式纟保存 :: {真值属性名:列表纟范围}
+    ##:
+    UCD/PropList.txt
+    UCD/emoji/emoji-data.txt
+    UCD/DerivedCoreProperties.txt
+    ###
+  * 真值属性独占文件 <: 真值属性汇编文件
+    ###
+    UCD/extracted/DerivedBinaryProperties.txt
+    ###
+  * 多值属性独占文件
+    ###
+    行格式 = 范围 『;』 属性值
+    ###
+    格式纟保存 :: {范围:属性值}
+    ##:
+    UCD/Blocks.txt
+    ###
+    行格式纟保存 = 属性值 『@0x』 起点纟范围牜十六进制表达 『+』 规模纟范围
+      #排序: (属性值,起点纟范围)
+    ##:
+    UCD/extracted/DerivedEastAsianWidth.txt
+    UCD/extracted/DerivedGeneralCategory.txt
+    UCD/VerticalOrientation.txt
+      多个缺省值
+    UCD/DerivedAge.txt
+      1.1 --> V1_1
+    UCD/Scripts.txt
+    UCD/extracted/DerivedNumericType.txt
+    ###
+  * 真多属性混编文件
+    ###
+    行格式 = 范围 『;』 多值属性名 『;』 属性值  |  范围 『;』 真值属性名
+    ###
+    格式纟保存 = ({真值属性名:(缺省值,列表纟范围)}, {多值属性名:{属性值:列表纟范围}})
+    ##:
+    UCD/DerivedNormalizationProps.txt
+    ###
+  * 集合属性独占文件
+    ###
+    行格式 = 范围 『;』 属性值列表牜空格分隔
+    ###
+    #xxx:格式纟保存 :: {范围:[属性值]}
+    #xxx:格式纟保存 :: {属性值:[范围]}
+    格式纟保存 :: {列表纟属性值:列表纟范围}
+    ###
+    UCD/ScriptExtensions.txt
+    ###
+  * 三元组属性独占文件
+    ###
+    行格式 = 范围 『;』 属性值 『;』 属性值 『;』 属性值
+    ###
+    格式纟保存 :: {范围:(属性值,属性值,属性值)}
+      #or:格式纟保存 :: {范围:母属性值}
+      #or:格式纟保存 :: {母属性值:列表纟范围}
+    ###
+    UCD/extracted/DerivedNumericValues.txt
+      按数值大小排序归组
+      最后的有理数表达决定所有==>>等价于:多值属性独占文件
+    ###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[[[
+tree /sdcard/0my_files/unzip/unicode14_0/UCD/ > ~/my_tmp/0tmp
+view /sdcard/0my_files/tmp/0tmp
+===
+/sdcard/0my_files/unzip/unicode14_0/UCD/
+├── ArabicShaping.txt
+├── BidiBrackets.txt
+├── BidiCharacterTest.txt
+├── BidiMirroring.txt
+├── BidiTest.txt
+├── Blocks.txt
+├── CJKRadicals.txt
+├── CaseFolding.txt
+├── CompositionExclusions.txt
+├── DerivedAge.txt
+├── DerivedCoreProperties.txt
+├── DerivedNormalizationProps.txt
+├── EastAsianWidth.txt
+├── EmojiSources.txt
+├── EquivalentUnifiedIdeograph.txt
+├── HangulSyllableType.txt
+├── Index.txt
+├── IndicPositionalCategory.txt
+├── IndicSyllabicCategory.txt
+├── Jamo.txt
+├── LineBreak.txt
+├── NameAliases.txt
+├── NamedSequences.txt
+├── NamedSequencesProv.txt
+├── NamesList.html
+├── NamesList.txt
+├── NormalizationCorrections.txt
+├── NormalizationTest.txt
+├── NushuSources.txt
+├── PropList.txt
+├── PropertyAliases.txt
+├── PropertyValueAliases.txt
+├── ReadMe.txt
+├── ScriptExtensions.txt
+├── Scripts.txt
+├── SpecialCasing.txt
+├── StandardizedVariants.txt
+├── TangutSources.txt
+├── USourceData.txt
+├── USourceGlyphs.pdf
+├── USourceRSChart.pdf
+├── UnicodeData.txt
+├── VerticalOrientation.txt
+├── auxiliary
+│   ├── GraphemeBreakProperty.txt
+│   ├── GraphemeBreakTest.html
+│   ├── GraphemeBreakTest.txt
+│   ├── LineBreakTest.html
+│   ├── LineBreakTest.txt
+│   ├── SentenceBreakProperty.txt
+│   ├── SentenceBreakTest.html
+│   ├── SentenceBreakTest.txt
+│   ├── WordBreakProperty.txt
+│   ├── WordBreakTest.html
+│   └── WordBreakTest.txt
+├── emoji
+│   ├── ReadMe.txt
+│   ├── emoji-data.txt
+│   └── emoji-variation-sequences.txt
+└── extracted
+    ├── DerivedBidiClass.txt
+    ├── DerivedBinaryProperties.txt
+    ├── DerivedCombiningClass.txt
+    ├── DerivedDecompositionType.txt
+    ├── DerivedEastAsianWidth.txt
+    ├── DerivedGeneralCategory.txt
+    ├── DerivedJoiningGroup.txt
+    ├── DerivedJoiningType.txt
+    ├── DerivedLineBreak.txt
+    ├── DerivedName.txt
+    ├── DerivedNumericType.txt
+    └── DerivedNumericValues.txt
+
+4 directories, 69 files
+]]]
+######################
+ls ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd
+ls -1F /sdcard/0my_files/unzip/unicode14_0/UCD/
+tree /sdcard/0my_files/unzip/unicode14_0/UCD/
+######################
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__CJKRadicals_txt.py
+<孤例型文件>
+
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/DerivedNormalizationProps.txt
+真值属性多值属性混合汇编文件
+真多属性混编文件
+  2列每行 与 3列每行 混编
+  * 2列: 范围-属性名
+  * 3列: 范围-属性名-属性值
+真值属性:缺省值:可能是:『Yes』/『No』
+# Property:	NFD_Quick_Check
+# @missing: 0000..10FFFF; NFD_QC; Yes
+
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/DerivedCoreProperties.txt
+真值属性汇编文件
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/extracted/DerivedBinaryProperties.txt
+Bidi_Mirrored
+真值属性独占文件
+
+######################
+多值属性独占文件
+DerivedAge.txt
+Scripts.txt
+VerticalOrientation.txt
+  多个缺省值
+extracted/DerivedNumericType.txt
+
+集合属性独占文件
+ScriptExtensions.txt
+
+三元组属性独占文件
+extracted/DerivedNumericValues.txt
+  按数值大小排序归组
+  最后的有理数表达决定所有==>>等价于:多值属性独占文件
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/DerivedAge.txt
+多值属性独占文件
+# Age=V1_1
+4E00..9FA5    ; 1.1 # [20902] CJK UNIFIED IDEOGRAPH-4E00..CJK UNIFIED IDEOGRAPH-9FA5
+F900..FA2D    ; 1.1 # [302] CJK COMPATIBILITY IDEOGRAPH-F900..CJK COMPATIBILITY IDEOGRAPH-FA2D
+
+e ../lots/NOTE/unicode/cjk/汉字区.txt
+
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/Scripts.txt
+多值属性独占文件
+#  have the value Unknown (Zzzz).
+# @missing: 0000..10FFFF; Unknown
+
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/ScriptExtensions.txt
+集合属性独占文件
+
+
+# @missing: 0000..10FFFF; <script>
+# Script_Extensions=Beng
+1CF7          ; Beng # Mc       VEDIC SIGN ATIKRAMA
+# Script_Extensions=Arab Copt
+102E0         ; Arab Copt # Mn       COPTIC EPACT THOUSANDS MARK
+
+/=.*Hani[ ]\|=.*[ ]Hani
+# Script_Extensions=Bopo Hani
+# Script_Extensions=Hani Latn
+# Script_Extensions=Hani Hira Kana
+# Script_Extensions=Bopo Hang Hani Hira Kana
+# Script_Extensions=Bopo Hang Hani Hira Kana Yiii
+
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/VerticalOrientation.txt
+多值属性独占文件
+多个缺省值
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/extracted/DerivedNumericType.txt
+多值属性独占文件
+
+# @missing: 0000..10FFFF; None
+00BC..00BE    ; Numeric # No   [3] VULGAR FRACTION ONE QUARTER..VULGAR FRACTION THREE QUARTERS
+00B2..00B3    ; Digit # No   [2] SUPERSCRIPT TWO..SUPERSCRIPT THREE
+0030..0039    ; Decimal # Nd  [10] DIGIT ZERO..DIGIT NINE
+
+######################
+view /sdcard/0my_files/unzip/unicode14_0/UCD/extracted/DerivedNumericValues.txt
+三元组属性独占文件
+按数值大小排序归组
+最后的有理数表达决定所有==>>等价于:多值属性独占文件
+
+0F33          ; -0.5 ; ; -1/2 # No       TIBETAN DIGIT HALF ZERO
+0030          ; 0.0 ; ; 0 # Nd       DIGIT ZERO
+11FC0         ; 0.003125 ; ; 1/320 # No       TAMIL FRACTION ONE THREE-HUNDRED-AND-TWENTIETH
+109F6         ; 0.08333333 ; ; 1/12 # No       MEROITIC CURSIVE FRACTION ONE TWELFTH
+109BC         ; 0.91666667 ; ; 11/12 # No       MEROITIC CURSIVE FRACTION ELEVEN TWELFTHS
+0F32          ; 8.5 ; ; 17/2 # No       TIBETAN DIGIT HALF NINE
+5146          ; 1000000000000.0 ; ; 1000000000000 # Lo       CJK UNIFIED IDEOGRAPH-5146
+
+######################
+du -h /sdcard/0my_files/unzip/unicode14_0/UCD/UnicodeData.txt
+  1.9M
+view /sdcard/0my_files/unzip/unicode14_0/UCD/UnicodeData.txt
+######################
+
+######################
+
+

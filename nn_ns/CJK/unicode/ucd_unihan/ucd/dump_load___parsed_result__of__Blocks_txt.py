@@ -63,10 +63,98 @@ e ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/dump_load___parsed_result__
 
 py -m nn_ns.app.debug_cmd   nn_ns.CJK.unicode.ucd_unihan.ucd.dump_load___parsed_result__of__Blocks_txt
 
+
+
+######################
+#ver13_0
+######################
 py -m nn_ns.CJK.unicode.ucd_unihan.ucd.dump_load___parsed_result__of__Blocks_txt -i /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt
 py -m nn_ns.CJK.unicode.ucd_unihan.ucd.dump_load___parsed_result__of__Blocks_txt -i /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt --dump ver13_0
 
 py -m nn_ns.CJK.unicode.ucd_unihan.ucd.dump_load___parsed_result__of__Blocks_txt --load ver13_0
+
+
+e ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__Blocks_txt__of_ver13_0.py
+
+
+######################
+#ver14_0
+######################
+py -m nn_ns.CJK.unicode.ucd_unihan.ucd.dump_load___parsed_result__of__Blocks_txt -i /sdcard/0my_files/unzip/unicode14_0/UCD/Blocks.txt
+py -m nn_ns.CJK.unicode.ucd_unihan.ucd.dump_load___parsed_result__of__Blocks_txt -i /sdcard/0my_files/unzip/unicode14_0/UCD/Blocks.txt --dump ver14_0
+
+py -m nn_ns.CJK.unicode.ucd_unihan.ucd.dump_load___parsed_result__of__Blocks_txt --load ver14_0
+
+cp -iv ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__Blocks_txt__of_ver13_0.py ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__Blocks_txt__of_ver14_0.py
+e ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__Blocks_txt__of_ver14_0.py
+    %s/ver13/ver14/g
+
+######################
+#ver13_0 vs ver14_0
+######################
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py.out.ver13_0.txt
+view ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py.out.ver14_0.txt
+[[
+diff ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py.out.ver13_0.txt ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py.out.ver14_0.txt
+  ???shrink???
+  ===
+  < ,(0x18d00, 0x18d90)
+  > ,(0x18d00, 0x18d80)
+  ===
+  ,(0x18d00, 0x18d80)
+  : 'Tangut Supplement'
+===
+40a41,42
+> ,(0x870, 0x8a0)
+> : 'Arabic Extended-B'
+366a369,370
+> ,(0x10570, 0x105c0)
+> : 'Vithkuqi'
+368a373,374
+> ,(0x10780, 0x107c0)
+> : 'Latin Extended-F'
+416a423,424
+> ,(0x10f70, 0x10fb0)
+> : 'Old Uyghur'
+455c463
+< ,(0x11700, 0x11740)
+---
+> ,(0x11700, 0x11750)
+468a477,478
+> ,(0x11ab0, 0x11ac0)
+> : 'Unified Canadian Aboriginal Syllabics Extended-A'
+490a501,502
+> ,(0x12f90, 0x13000)
+> : 'Cypro-Minoan'
+500a513,514
+> ,(0x16a70, 0x16ad0)
+> : 'Tangsa'
+517c531
+< ,(0x18d00, 0x18d90)
+---
+> ,(0x18d00, 0x18d80)
+518a533,534
+> ,(0x1aff0, 0x1b000)
+> : 'Kana Extended-B'
+530a547,548
+> ,(0x1cf00, 0x1cfd0)
+> : 'Znamenny Musical Notation'
+546a565,566
+> ,(0x1df00, 0x1e000)
+> : 'Latin Extended-G'
+550a571,572
+> ,(0x1e290, 0x1e2c0)
+> : 'Toto'
+552a575,576
+> ,(0x1e7e0, 0x1e800)
+> : 'Ethiopic Extended-B'
+===
+]]
+
+
+
+
+
 
 
 

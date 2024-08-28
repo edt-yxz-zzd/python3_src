@@ -7,8 +7,6 @@ view ../../python3_src/seed/hierarchy/symbol/PrivateSymbol.py
 seed.types.Symbol
 py -m nn_ns.app.debug_cmd   seed.types.Symbol -x
 py -m nn_ns.app.doctest_cmd seed.types.Symbol:__doc__ -ht
-py_adhoc_call   seed.types.Symbol   @f
-from seed.types.Symbol import *
 
 
 
@@ -187,10 +185,11 @@ ISymbol
 
 
 NamedWeakKey
-ReDefRepr
-DottedAttrCollector
 
 '''.split()#'''
+#move out:
+    #ReDefRepr
+    #DottedAttrCollector
 __all__
 
 from seed.tiny_.check import check_type_is
@@ -199,9 +198,8 @@ from seed.abc.eq_by_id.AddrAsHash import AddrAsHash as EqById, le_AddrAsHash # B
 from seed.helper.repr_input import repr_helper
 from seed.tiny import MapView
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name
-from seed.tiny_.check import check_callable
-from seed.data_funcs.lnkls import rglnkls2list
 from seed.pkg_tools.import_object import import4qobject
+from seed.types.DottedAttrCollector import DottedAttrCollector, ReDefRepr
 
 from weakref import WeakKeyDictionary
 
@@ -470,121 +468,27 @@ def public_symbol5cls(Type, /):
 
 
 
-class ReDefRepr:
-    def __init__(sf, f, /, *args):
-        check_callable(f)
-        sf._f = f
-        sf._xs = args
-        sf._m = None
-    def __repr__(sf, /):
-        if sf._m is None:
-            s = sf._m = sf._f(*sf._xs)
-            check_type_is(str, s)
-        return sf._m
-    @property
-    def func(sf, /):
-        return sf._f
-    @property
-    def args4func(sf, /):
-        return sf._xs
-
-def __():
-    #bug:__getattribute__==>>
-    #   ^RecursionError: maximum recursion depth exceeded
-  class WrappedCallable:
-    def __init__(sf, f, /):
-        check_callable(f)
-        sf.__f = f
-    @property
-    def func(sf, /):
-        return sf.__f
-    def __call__(sf, /, *args, **kwds):
-        return sf.__f(sf, *args, **kwds)
-
-
-  class DottedAttrCollector(WrappedCallable):
-    def __init__(sf, f, obj, lnkls8nms, /):
-        check_type_is(tuple, lnkls8nms)
-        sf.__obj = obj
-        sf.__nms = lnkls8nms
-        super().__init__(f)
-    @property
-    def obj(sf, /):
-        return sf.__obj
-    @property
-    def lnkls8names(sf, /):
-        return sf.__nms
-    def list_names(sf, /):
-        nms = rglnkls2list(sf.__nms)
-        return nms
-    def mk_qname4attr(sf, /):
-        ss = sf.list_names()
-        return '.'.join(ss)
-    def __getattribute__(sf, nm, /):
-        check_pseudo_identifier(nm)
-        return type(sf)(sf.func, sf.obj, (sf.lnkls8names, nm))
-    def __repr__(sf, /):
-        s = repr(sf.__obj)
-        ss = sf.list_names()
-        ss.insert(0, s)
-        return '.'.join(ss)
-
-    @property
-    def func(sf, /):
-        return sf.__f
-
-
-class DottedAttrCollector(tuple):
-    def __new__(cls, f, obj, lnkls8nms, /):
-        check_callable(f)
-        check_type_is(tuple, lnkls8nms)
-        sf = tuple.__new__(cls, [f, obj, lnkls8nms])
-        return sf
-
-    def __list_names__(sf, /):
-        [f, obj, lnkls8nms] = sf
-        nms = rglnkls2list(lnkls8nms)
-        return nms
-    def __mk_qname4attr__(sf, /):
-        ss = __class__.__list_names__(sf)
-        return '.'.join(ss)
-    def __getattribute__(sf, nm, /):
-        check_pseudo_identifier(nm)
-        [f, obj, lnkls8nms] = sf
-        return type(sf)(f, obj, (lnkls8nms, nm))
-    def __repr__(sf, /):
-        [f, obj, lnkls8nms] = sf
-        s = repr(obj)
-        ss = __class__.__list_names__(sf)
-        ss.insert(0, s)
-        return '.'.join(ss)
-    def __call__(sf, /, *args, **kwds):
-        [f, obj, lnkls8nms] = sf
-        return f(sf, *args, **kwds)
-
-
-
 
 
 def __repr4PP(P_nms, /):
     return repr(P_nms) + '()'
 def __call4P(P_nms, /):
-    return DottedAttrCollector(__call4PP, ReDefRepr(__repr4PP, P_nms), ())
+    return DottedAttrCollector(__call4PP, ReDefRepr(__repr4PP, P_nms), (), None)
 def __call4PP(PP_nms, /):
-    [f, obj, lnkls8nms] = PP_nms
+    [f, obj, lnkls8nms, may_repr4obj] = PP_nms
     PP = obj #PP_nms.obj
     [P_nms] = PP.args4func
     snm4mdl = type(P_nms).__mk_qname4attr__(P_nms)
     snm4qnm = type(PP_nms).__mk_qname4attr__(PP_nms)
     return getP(snm4mdl, snm4qnm)
-_P = DottedAttrCollector(__call4P, NamedWeakKey('P'), ())
+_P = DottedAttrCollector(__call4P, NamedWeakKey('P'), (), None)
     #old version: P.a.b().c.d()
     #--> new version: P.a.b()
 
 def __call4P__new_version(P_nms, /):
     snm4mdl = type(P_nms).__mk_qname4attr__(P_nms)
     return import4qobject(__module__:=snm4mdl, __qualname__:='')
-P = DottedAttrCollector(__call4P__new_version, NamedWeakKey('P'), ())
+P = DottedAttrCollector(__call4P__new_version, NamedWeakKey('P'), (), None)
     # new version: P.a.b()
 
 def getP(__module__='', __qualname__=None, /):
@@ -746,4 +650,8 @@ class __:
 if __name__ == "__main__":
     ...
 __all__
+from seed.types.Symbol import ISymbol, ISymbol__mixins
+from seed.types.Symbol import apply_key_, explain_key_, check_wkey
+from seed.types.Symbol import PublicSymbol, mk_public_symbol, public_symbol5cls, P, getP
+from seed.types.Symbol import PrivateSymbol, mk_private_symbol, private_symbol5cls
 from seed.types.Symbol import *

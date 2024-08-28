@@ -1,0 +1,941 @@
+{'ACK'
+: {0x6: 1}
+,'ACKNOWLEDGE'
+: {0x6: 1}
+,'ALERT'
+: {0x7: 1}
+,'ALM'
+: {0x61C: 1}
+,'APC'
+: {0x9F: 1}
+,'APPLICATION PROGRAM COMMAND'
+: {0x9F: 1}
+,'BACKSPACE'
+: {0x8: 1}
+,'BEL'
+: {0x7: 1}
+,'BOM'
+: {0xFEFF: 1}
+,'BPH'
+: {0x82: 1}
+,'BREAK PERMITTED HERE'
+: {0x82: 1}
+,'BS'
+: {0x8: 1}
+,'BYTE ORDER MARK'
+: {0xFEFF: 1}
+,'BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS'
+: {0x1D0C5: 1}
+,'CAN'
+: {0x18: 1}
+,'CANCEL'
+: {0x18: 1}
+,'CANCEL CHARACTER'
+: {0x94: 1}
+,'CARRIAGE RETURN'
+: {0xD: 1}
+,'CCH'
+: {0x94: 1}
+,'CGJ'
+: {0x34F: 1}
+,'CHARACTER TABULATION'
+: {0x9: 1}
+,'CHARACTER TABULATION SET'
+: {0x88: 1}
+,'CHARACTER TABULATION WITH JUSTIFICATION'
+: {0x89: 1}
+,'CONTROL SEQUENCE INTRODUCER'
+: {0x9B: 1}
+,'CR'
+: {0xD: 1}
+,'CSI'
+: {0x9B: 1}
+,'CUNEIFORM SIGN NU11 OVER NU11 BUR OVER BUR'
+: {0x122D5: 1}
+,'CUNEIFORM SIGN NU11 TENU'
+: {0x122D4: 1}
+,'DATA LINK ESCAPE'
+: {0x10: 1}
+,'DC1'
+: {0x11: 1}
+,'DC2'
+: {0x12: 1}
+,'DC3'
+: {0x13: 1}
+,'DC4'
+: {0x14: 1}
+,'DCS'
+: {0x90: 1}
+,'DEL'
+: {0x7F: 1}
+,'DELETE'
+: {0x7F: 1}
+,'DEVICE CONTROL FOUR'
+: {0x14: 1}
+,'DEVICE CONTROL ONE'
+: {0x11: 1}
+,'DEVICE CONTROL STRING'
+: {0x90: 1}
+,'DEVICE CONTROL THREE'
+: {0x13: 1}
+,'DEVICE CONTROL TWO'
+: {0x12: 1}
+,'DLE'
+: {0x10: 1}
+,'END OF GUARDED AREA'
+: {0x97: 1}
+,'END OF LINE'
+: {0xA: 1}
+,'END OF MEDIUM'
+: {0x19: 1}
+,'END OF PROTECTED AREA'
+: {0x97: 1}
+,'END OF SELECTED AREA'
+: {0x87: 1}
+,'END OF TEXT'
+: {0x3: 1}
+,'END OF TRANSMISSION'
+: {0x4: 1}
+,'END OF TRANSMISSION BLOCK'
+: {0x17: 1}
+,'ENQ'
+: {0x5: 1}
+,'ENQUIRY'
+: {0x5: 1}
+,'EOL'
+: {0xA: 1}
+,'EOM'
+: {0x19: 1}
+,'EOT'
+: {0x4: 1}
+,'EPA'
+: {0x97: 1}
+,'ESA'
+: {0x87: 1}
+,'ESC'
+: {0x1B: 1}
+,'ESCAPE'
+: {0x1B: 1}
+,'ETB'
+: {0x17: 1}
+,'ETX'
+: {0x3: 1}
+,'FF'
+: {0xC: 1}
+,'FILE SEPARATOR'
+: {0x1C: 1}
+,'FORM FEED'
+: {0xC: 1}
+,'FS'
+: {0x1C: 1}
+,'FSI'
+: {0x2068: 1}
+,'FVS1'
+: {0x180B: 1}
+,'FVS2'
+: {0x180C: 1}
+,'FVS3'
+: {0x180D: 1}
+,'FVS4'
+: {0x180F: 1}
+,'GROUP SEPARATOR'
+: {0x1D: 1}
+,'GS'
+: {0x1D: 1}
+,'HANGUL JONGSEONG SSANGYESIEUNG'
+: {0x11EE: 1}
+,'HANGUL JONGSEONG YESIEUNG-KHIEUKH'
+: {0x11EF: 1}
+,'HANGUL JONGSEONG YESIEUNG-KIYEOK'
+: {0x11EC: 1}
+,'HANGUL JONGSEONG YESIEUNG-SSANGKIYEOK'
+: {0x11ED: 1}
+,'HENTAIGANA LETTER E-1'
+: {0x1B001: 1}
+,'HIGH OCTET PRESET'
+: {0x81: 1}
+,'HOP'
+: {0x81: 1}
+,'HORIZONTAL TABULATION'
+: {0x9: 1}
+,'HORIZONTAL TABULATION SET'
+: {0x88: 1}
+,'HORIZONTAL TABULATION WITH JUSTIFICATION'
+: {0x89: 1}
+,'HT'
+: {0x9: 1}
+,'HTJ'
+: {0x89: 1}
+,'HTS'
+: {0x88: 1}
+,'IND'
+: {0x84: 1}
+,'INDEX'
+: {0x84: 1}
+,'INFORMATION SEPARATOR FOUR'
+: {0x1C: 1}
+,'INFORMATION SEPARATOR ONE'
+: {0x1F: 1}
+,'INFORMATION SEPARATOR THREE'
+: {0x1D: 1}
+,'INFORMATION SEPARATOR TWO'
+: {0x1E: 1}
+,'KANNADA LETTER LLLA'
+: {0xCDE: 1}
+,'LAO LETTER FO FAY'
+: {0xE9F: 1}
+,'LAO LETTER FO FON'
+: {0xE9D: 1}
+,'LAO LETTER LO'
+: {0xEA5: 1}
+,'LAO LETTER RO'
+: {0xEA3: 1}
+,'LATIN CAPITAL LETTER GHA'
+: {0x1A2: 1}
+,'LATIN SMALL LETTER GHA'
+: {0x1A3: 1}
+,'LEFTWARDS TRIANGLE-HEADED ARROW WITH DOUBLE VERTICAL STROKE'
+: {0x2B7A: 1}
+,'LF'
+: {0xA: 1}
+,'LINE FEED'
+: {0xA: 1}
+,'LINE TABULATION'
+: {0xB: 1}
+,'LINE TABULATION SET'
+: {0x8A: 1}
+,'LOCKING-SHIFT ONE'
+: {0xE: 1}
+,'LOCKING-SHIFT ZERO'
+: {0xF: 1}
+,'LRE'
+: {0x202A: 1}
+,'LRI'
+: {0x2066: 1}
+,'LRM'
+: {0x200E: 1}
+,'LRO'
+: {0x202D: 1}
+,'MEDEFAIDRIN CAPITAL LETTER H'
+: {0x16E56: 1}
+,'MEDEFAIDRIN CAPITAL LETTER NG'
+: {0x16E57: 1}
+,'MEDEFAIDRIN SMALL LETTER H'
+: {0x16E76: 1}
+,'MEDEFAIDRIN SMALL LETTER NG'
+: {0x16E77: 1}
+,'MESSAGE WAITING'
+: {0x95: 1}
+,'MICR DASH SYMBOL'
+: {0x2449: 1}
+,'MICR ON US SYMBOL'
+: {0x2448: 1}
+,'MMSP'
+: {0x205F: 1}
+,'MVS'
+: {0x180E: 1}
+,'MW'
+: {0x95: 1}
+,'MYANMAR LETTER KHAMTI LLA'
+: {0xAA6E: 1}
+,'NAK'
+: {0x15: 1}
+,'NBH'
+: {0x83: 1}
+,'NBSP'
+: {0xA0: 1}
+,'NEGATIVE ACKNOWLEDGE'
+: {0x15: 1}
+,'NEL'
+: {0x85: 1}
+,'NEW LINE'
+: {0xA: 1}
+,'NEXT LINE'
+: {0x85: 1}
+,'NL'
+: {0xA: 1}
+,'NNBSP'
+: {0x202F: 1}
+,'NO BREAK HERE'
+: {0x83: 1}
+,'NUL'
+: {0x0: 1}
+,'NULL'
+: {0x0: 1}
+,'OPERATING SYSTEM COMMAND'
+: {0x9D: 1}
+,'OSC'
+: {0x9D: 1}
+,'PAD'
+: {0x80: 1}
+,'PADDING CHARACTER'
+: {0x80: 1}
+,'PARTIAL LINE BACKWARD'
+: {0x8C: 1}
+,'PARTIAL LINE DOWN'
+: {0x8B: 1}
+,'PARTIAL LINE FORWARD'
+: {0x8B: 1}
+,'PARTIAL LINE UP'
+: {0x8C: 1}
+,'PDF'
+: {0x202C: 1}
+,'PDI'
+: {0x2069: 1}
+,'PLD'
+: {0x8B: 1}
+,'PLU'
+: {0x8C: 1}
+,'PM'
+: {0x9E: 1}
+,'PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRACKET'
+: {0xFE18: 1}
+,'PRIVACY MESSAGE'
+: {0x9E: 1}
+,'PRIVATE USE ONE'
+: {0x91: 1}
+,'PRIVATE USE TWO'
+: {0x92: 1}
+,'PRIVATE USE-1'
+: {0x91: 1}
+,'PRIVATE USE-2'
+: {0x92: 1}
+,'PU1'
+: {0x91: 1}
+,'PU2'
+: {0x92: 1}
+,'RECORD SEPARATOR'
+: {0x1E: 1}
+,'REVERSE INDEX'
+: {0x8D: 1}
+,'REVERSE LINE FEED'
+: {0x8D: 1}
+,'RI'
+: {0x8D: 1}
+,'RIGHTWARDS TRIANGLE-HEADED ARROW WITH DOUBLE VERTICAL STROKE'
+: {0x2B7C: 1}
+,'RLE'
+: {0x202B: 1}
+,'RLI'
+: {0x2067: 1}
+,'RLM'
+: {0x200F: 1}
+,'RLO'
+: {0x202E: 1}
+,'RS'
+: {0x1E: 1}
+,'SCI'
+: {0x9A: 1}
+,'SET TRANSMIT STATE'
+: {0x93: 1}
+,'SGC'
+: {0x99: 1}
+,'SHIFT IN'
+: {0xF: 1}
+,'SHIFT OUT'
+: {0xE: 1}
+,'SHY'
+: {0xAD: 1}
+,'SI'
+: {0xF: 1}
+,'SINGLE CHARACTER INTRODUCER'
+: {0x9A: 1}
+,'SINGLE GRAPHIC CHARACTER INTRODUCER'
+: {0x99: 1}
+,'SINGLE SHIFT THREE'
+: {0x8F: 1}
+,'SINGLE SHIFT TWO'
+: {0x8E: 1}
+,'SINGLE-SHIFT-2'
+: {0x8E: 1}
+,'SINGLE-SHIFT-3'
+: {0x8F: 1}
+,'SO'
+: {0xE: 1}
+,'SOH'
+: {0x1: 1}
+,'SOS'
+: {0x98: 1}
+,'SP'
+: {0x20: 1}
+,'SPA'
+: {0x96: 1}
+,'SS2'
+: {0x8E: 1}
+,'SS3'
+: {0x8F: 1}
+,'SSA'
+: {0x86: 1}
+,'ST'
+: {0x9C: 1}
+,'START OF GUARDED AREA'
+: {0x96: 1}
+,'START OF HEADING'
+: {0x1: 1}
+,'START OF PROTECTED AREA'
+: {0x96: 1}
+,'START OF SELECTED AREA'
+: {0x86: 1}
+,'START OF STRING'
+: {0x98: 1}
+,'START OF TEXT'
+: {0x2: 1}
+,'STRING TERMINATOR'
+: {0x9C: 1}
+,'STS'
+: {0x93: 1}
+,'STX'
+: {0x2: 1}
+,'SUB'
+: {0x1A: 1}
+,'SUBSTITUTE'
+: {0x1A: 1}
+,'SYN'
+: {0x16: 1}
+,'SYNCHRONOUS IDLE'
+: {0x16: 1}
+,'SYRIAC SUBLINEAR COLON SKEWED LEFT'
+: {0x709: 1}
+,'TAB'
+: {0x9: 1}
+,'TIBETAN MARK BKA- SHOG GI MGO RGYAN'
+: {0xFD0: 1}
+,'UNIT SEPARATOR'
+: {0x1F: 1}
+,'US'
+: {0x1F: 1}
+,'VERTICAL TABULATION'
+: {0xB: 1}
+,'VERTICAL TABULATION SET'
+: {0x8A: 1}
+,'VS1'
+: {0xFE00: 1}
+,'VS10'
+: {0xFE09: 1}
+,'VS100'
+: {0xE0153: 1}
+,'VS101'
+: {0xE0154: 1}
+,'VS102'
+: {0xE0155: 1}
+,'VS103'
+: {0xE0156: 1}
+,'VS104'
+: {0xE0157: 1}
+,'VS105'
+: {0xE0158: 1}
+,'VS106'
+: {0xE0159: 1}
+,'VS107'
+: {0xE015A: 1}
+,'VS108'
+: {0xE015B: 1}
+,'VS109'
+: {0xE015C: 1}
+,'VS11'
+: {0xFE0A: 1}
+,'VS110'
+: {0xE015D: 1}
+,'VS111'
+: {0xE015E: 1}
+,'VS112'
+: {0xE015F: 1}
+,'VS113'
+: {0xE0160: 1}
+,'VS114'
+: {0xE0161: 1}
+,'VS115'
+: {0xE0162: 1}
+,'VS116'
+: {0xE0163: 1}
+,'VS117'
+: {0xE0164: 1}
+,'VS118'
+: {0xE0165: 1}
+,'VS119'
+: {0xE0166: 1}
+,'VS12'
+: {0xFE0B: 1}
+,'VS120'
+: {0xE0167: 1}
+,'VS121'
+: {0xE0168: 1}
+,'VS122'
+: {0xE0169: 1}
+,'VS123'
+: {0xE016A: 1}
+,'VS124'
+: {0xE016B: 1}
+,'VS125'
+: {0xE016C: 1}
+,'VS126'
+: {0xE016D: 1}
+,'VS127'
+: {0xE016E: 1}
+,'VS128'
+: {0xE016F: 1}
+,'VS129'
+: {0xE0170: 1}
+,'VS13'
+: {0xFE0C: 1}
+,'VS130'
+: {0xE0171: 1}
+,'VS131'
+: {0xE0172: 1}
+,'VS132'
+: {0xE0173: 1}
+,'VS133'
+: {0xE0174: 1}
+,'VS134'
+: {0xE0175: 1}
+,'VS135'
+: {0xE0176: 1}
+,'VS136'
+: {0xE0177: 1}
+,'VS137'
+: {0xE0178: 1}
+,'VS138'
+: {0xE0179: 1}
+,'VS139'
+: {0xE017A: 1}
+,'VS14'
+: {0xFE0D: 1}
+,'VS140'
+: {0xE017B: 1}
+,'VS141'
+: {0xE017C: 1}
+,'VS142'
+: {0xE017D: 1}
+,'VS143'
+: {0xE017E: 1}
+,'VS144'
+: {0xE017F: 1}
+,'VS145'
+: {0xE0180: 1}
+,'VS146'
+: {0xE0181: 1}
+,'VS147'
+: {0xE0182: 1}
+,'VS148'
+: {0xE0183: 1}
+,'VS149'
+: {0xE0184: 1}
+,'VS15'
+: {0xFE0E: 1}
+,'VS150'
+: {0xE0185: 1}
+,'VS151'
+: {0xE0186: 1}
+,'VS152'
+: {0xE0187: 1}
+,'VS153'
+: {0xE0188: 1}
+,'VS154'
+: {0xE0189: 1}
+,'VS155'
+: {0xE018A: 1}
+,'VS156'
+: {0xE018B: 1}
+,'VS157'
+: {0xE018C: 1}
+,'VS158'
+: {0xE018D: 1}
+,'VS159'
+: {0xE018E: 1}
+,'VS16'
+: {0xFE0F: 1}
+,'VS160'
+: {0xE018F: 1}
+,'VS161'
+: {0xE0190: 1}
+,'VS162'
+: {0xE0191: 1}
+,'VS163'
+: {0xE0192: 1}
+,'VS164'
+: {0xE0193: 1}
+,'VS165'
+: {0xE0194: 1}
+,'VS166'
+: {0xE0195: 1}
+,'VS167'
+: {0xE0196: 1}
+,'VS168'
+: {0xE0197: 1}
+,'VS169'
+: {0xE0198: 1}
+,'VS17'
+: {0xE0100: 1}
+,'VS170'
+: {0xE0199: 1}
+,'VS171'
+: {0xE019A: 1}
+,'VS172'
+: {0xE019B: 1}
+,'VS173'
+: {0xE019C: 1}
+,'VS174'
+: {0xE019D: 1}
+,'VS175'
+: {0xE019E: 1}
+,'VS176'
+: {0xE019F: 1}
+,'VS177'
+: {0xE01A0: 1}
+,'VS178'
+: {0xE01A1: 1}
+,'VS179'
+: {0xE01A2: 1}
+,'VS18'
+: {0xE0101: 1}
+,'VS180'
+: {0xE01A3: 1}
+,'VS181'
+: {0xE01A4: 1}
+,'VS182'
+: {0xE01A5: 1}
+,'VS183'
+: {0xE01A6: 1}
+,'VS184'
+: {0xE01A7: 1}
+,'VS185'
+: {0xE01A8: 1}
+,'VS186'
+: {0xE01A9: 1}
+,'VS187'
+: {0xE01AA: 1}
+,'VS188'
+: {0xE01AB: 1}
+,'VS189'
+: {0xE01AC: 1}
+,'VS19'
+: {0xE0102: 1}
+,'VS190'
+: {0xE01AD: 1}
+,'VS191'
+: {0xE01AE: 1}
+,'VS192'
+: {0xE01AF: 1}
+,'VS193'
+: {0xE01B0: 1}
+,'VS194'
+: {0xE01B1: 1}
+,'VS195'
+: {0xE01B2: 1}
+,'VS196'
+: {0xE01B3: 1}
+,'VS197'
+: {0xE01B4: 1}
+,'VS198'
+: {0xE01B5: 1}
+,'VS199'
+: {0xE01B6: 1}
+,'VS2'
+: {0xFE01: 1}
+,'VS20'
+: {0xE0103: 1}
+,'VS200'
+: {0xE01B7: 1}
+,'VS201'
+: {0xE01B8: 1}
+,'VS202'
+: {0xE01B9: 1}
+,'VS203'
+: {0xE01BA: 1}
+,'VS204'
+: {0xE01BB: 1}
+,'VS205'
+: {0xE01BC: 1}
+,'VS206'
+: {0xE01BD: 1}
+,'VS207'
+: {0xE01BE: 1}
+,'VS208'
+: {0xE01BF: 1}
+,'VS209'
+: {0xE01C0: 1}
+,'VS21'
+: {0xE0104: 1}
+,'VS210'
+: {0xE01C1: 1}
+,'VS211'
+: {0xE01C2: 1}
+,'VS212'
+: {0xE01C3: 1}
+,'VS213'
+: {0xE01C4: 1}
+,'VS214'
+: {0xE01C5: 1}
+,'VS215'
+: {0xE01C6: 1}
+,'VS216'
+: {0xE01C7: 1}
+,'VS217'
+: {0xE01C8: 1}
+,'VS218'
+: {0xE01C9: 1}
+,'VS219'
+: {0xE01CA: 1}
+,'VS22'
+: {0xE0105: 1}
+,'VS220'
+: {0xE01CB: 1}
+,'VS221'
+: {0xE01CC: 1}
+,'VS222'
+: {0xE01CD: 1}
+,'VS223'
+: {0xE01CE: 1}
+,'VS224'
+: {0xE01CF: 1}
+,'VS225'
+: {0xE01D0: 1}
+,'VS226'
+: {0xE01D1: 1}
+,'VS227'
+: {0xE01D2: 1}
+,'VS228'
+: {0xE01D3: 1}
+,'VS229'
+: {0xE01D4: 1}
+,'VS23'
+: {0xE0106: 1}
+,'VS230'
+: {0xE01D5: 1}
+,'VS231'
+: {0xE01D6: 1}
+,'VS232'
+: {0xE01D7: 1}
+,'VS233'
+: {0xE01D8: 1}
+,'VS234'
+: {0xE01D9: 1}
+,'VS235'
+: {0xE01DA: 1}
+,'VS236'
+: {0xE01DB: 1}
+,'VS237'
+: {0xE01DC: 1}
+,'VS238'
+: {0xE01DD: 1}
+,'VS239'
+: {0xE01DE: 1}
+,'VS24'
+: {0xE0107: 1}
+,'VS240'
+: {0xE01DF: 1}
+,'VS241'
+: {0xE01E0: 1}
+,'VS242'
+: {0xE01E1: 1}
+,'VS243'
+: {0xE01E2: 1}
+,'VS244'
+: {0xE01E3: 1}
+,'VS245'
+: {0xE01E4: 1}
+,'VS246'
+: {0xE01E5: 1}
+,'VS247'
+: {0xE01E6: 1}
+,'VS248'
+: {0xE01E7: 1}
+,'VS249'
+: {0xE01E8: 1}
+,'VS25'
+: {0xE0108: 1}
+,'VS250'
+: {0xE01E9: 1}
+,'VS251'
+: {0xE01EA: 1}
+,'VS252'
+: {0xE01EB: 1}
+,'VS253'
+: {0xE01EC: 1}
+,'VS254'
+: {0xE01ED: 1}
+,'VS255'
+: {0xE01EE: 1}
+,'VS256'
+: {0xE01EF: 1}
+,'VS26'
+: {0xE0109: 1}
+,'VS27'
+: {0xE010A: 1}
+,'VS28'
+: {0xE010B: 1}
+,'VS29'
+: {0xE010C: 1}
+,'VS3'
+: {0xFE02: 1}
+,'VS30'
+: {0xE010D: 1}
+,'VS31'
+: {0xE010E: 1}
+,'VS32'
+: {0xE010F: 1}
+,'VS33'
+: {0xE0110: 1}
+,'VS34'
+: {0xE0111: 1}
+,'VS35'
+: {0xE0112: 1}
+,'VS36'
+: {0xE0113: 1}
+,'VS37'
+: {0xE0114: 1}
+,'VS38'
+: {0xE0115: 1}
+,'VS39'
+: {0xE0116: 1}
+,'VS4'
+: {0xFE03: 1}
+,'VS40'
+: {0xE0117: 1}
+,'VS41'
+: {0xE0118: 1}
+,'VS42'
+: {0xE0119: 1}
+,'VS43'
+: {0xE011A: 1}
+,'VS44'
+: {0xE011B: 1}
+,'VS45'
+: {0xE011C: 1}
+,'VS46'
+: {0xE011D: 1}
+,'VS47'
+: {0xE011E: 1}
+,'VS48'
+: {0xE011F: 1}
+,'VS49'
+: {0xE0120: 1}
+,'VS5'
+: {0xFE04: 1}
+,'VS50'
+: {0xE0121: 1}
+,'VS51'
+: {0xE0122: 1}
+,'VS52'
+: {0xE0123: 1}
+,'VS53'
+: {0xE0124: 1}
+,'VS54'
+: {0xE0125: 1}
+,'VS55'
+: {0xE0126: 1}
+,'VS56'
+: {0xE0127: 1}
+,'VS57'
+: {0xE0128: 1}
+,'VS58'
+: {0xE0129: 1}
+,'VS59'
+: {0xE012A: 1}
+,'VS6'
+: {0xFE05: 1}
+,'VS60'
+: {0xE012B: 1}
+,'VS61'
+: {0xE012C: 1}
+,'VS62'
+: {0xE012D: 1}
+,'VS63'
+: {0xE012E: 1}
+,'VS64'
+: {0xE012F: 1}
+,'VS65'
+: {0xE0130: 1}
+,'VS66'
+: {0xE0131: 1}
+,'VS67'
+: {0xE0132: 1}
+,'VS68'
+: {0xE0133: 1}
+,'VS69'
+: {0xE0134: 1}
+,'VS7'
+: {0xFE06: 1}
+,'VS70'
+: {0xE0135: 1}
+,'VS71'
+: {0xE0136: 1}
+,'VS72'
+: {0xE0137: 1}
+,'VS73'
+: {0xE0138: 1}
+,'VS74'
+: {0xE0139: 1}
+,'VS75'
+: {0xE013A: 1}
+,'VS76'
+: {0xE013B: 1}
+,'VS77'
+: {0xE013C: 1}
+,'VS78'
+: {0xE013D: 1}
+,'VS79'
+: {0xE013E: 1}
+,'VS8'
+: {0xFE07: 1}
+,'VS80'
+: {0xE013F: 1}
+,'VS81'
+: {0xE0140: 1}
+,'VS82'
+: {0xE0141: 1}
+,'VS83'
+: {0xE0142: 1}
+,'VS84'
+: {0xE0143: 1}
+,'VS85'
+: {0xE0144: 1}
+,'VS86'
+: {0xE0145: 1}
+,'VS87'
+: {0xE0146: 1}
+,'VS88'
+: {0xE0147: 1}
+,'VS89'
+: {0xE0148: 1}
+,'VS9'
+: {0xFE08: 1}
+,'VS90'
+: {0xE0149: 1}
+,'VS91'
+: {0xE014A: 1}
+,'VS92'
+: {0xE014B: 1}
+,'VS93'
+: {0xE014C: 1}
+,'VS94'
+: {0xE014D: 1}
+,'VS95'
+: {0xE014E: 1}
+,'VS96'
+: {0xE014F: 1}
+,'VS97'
+: {0xE0150: 1}
+,'VS98'
+: {0xE0151: 1}
+,'VS99'
+: {0xE0152: 1}
+,'VT'
+: {0xB: 1}
+,'VTS'
+: {0x8A: 1}
+,'WEIERSTRASS ELLIPTIC FUNCTION'
+: {0x2118: 1}
+,'WJ'
+: {0x2060: 1}
+,'YI SYLLABLE ITERATION MARK'
+: {0xA015: 1}
+,'ZWJ'
+: {0x200D: 1}
+,'ZWNBSP'
+: {0xFEFF: 1}
+,'ZWNJ'
+: {0x200C: 1}
+,'ZWSP'
+: {0x200B: 1}
+}

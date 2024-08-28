@@ -7,6 +7,31 @@ see:py_all@bash_script
     py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
 
 [[
+TODO:
+
+定义:资源路径，含 格式/解码协议
+  py_adhoc_call 除了『=eval-expr』『:echo-str』，新增『//=load-resource』
+    也许可以考虑 直接打开文件:
+        『//^rb=open_read-path』
+        『//^wb=open_write-path』
+e ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
+resource-load-path==protocol+path => loadable path
+  path = *.zip:::inner_patb
+  dump#raw_bytes
+    pickle.dump
+  u8
+    str#raw_text
+    repr
+    json.dump
+    base64
+    a85,b85
+
+serializing-deserializing
+
+
+]]
+
+[[
 py_adhoc_call { -lineno } xxx.yyy ,f
 <<==:
 DONE?:TODO:选项:添加:『+lineno』:『,』枚举时附加行号
@@ -84,9 +109,18 @@ xxx.yyy 模块全名
 
     g=repr|str|ascii|hex|... #builtins.*
      |not_show
+     |dump8show #dump bytes directly to stdout
+     |pickle_dump8show #dump bytes directly to stdout
      |stable_repr
      |stable_repr__expand_top_layer
      |stable_repr__expand_all_layer
+     |stable_repr__expand_all_layer__noindent
+     |pprint__pformat
+     |pprint__pformat_d3...
+     |stable_repr__F__i1...
+     |stable_repr__T__i1...
+     |stable_repr__F__i1__d3...
+     |stable_repr__T__i1__d3...
 
 新增:islice
     @233:f
@@ -362,6 +396,9 @@ adhoc_argparse__args__ver1
     #eval_single_arg_payload
 #__all__:goto
 
+from pprint import pformat as _pprint__pformat
+    #pformat(object, indent=1, width=80, depth=None, *, compact=False, sort_dicts=True, underscore_numbers=False)
+    #==>>pprint__pformat
 from importlib import import_module
 from operator import attrgetter
 from collections.abc import Mapping
@@ -374,7 +411,12 @@ from seed.pkg_tools.load_module5attr import Rjstplr, rjstplr
 from seed.lang.call_ import call_
 from seed.func_tools.detect_depth4fail import decorator4show_py_help
 from seed.helper.stable_repr import stable_repr
+    #def stable_repr(obj, *, indent:str='    ', depth:int=-1, maybe_max_depth:[None, int]=None, has_head_eol_when_indent:bool=True):
+    #==>> regex'stable_repr__[TF]__i\d+(__d\d+)?'
+    #   _match__stable_repr_regex(nm) -> kwds4stable_repr
+    # stable_repr__F__i1__d3/stable_repr__T__i1__d3
 from seed.helper.stable_repr import stable_repr__expand_all_layer
+from seed.helper.stable_repr import stable_repr__expand_all_layer__noindent
 from seed.helper.stable_repr import stable_repr__expand_top_layer
 from seed.helper.safe_eval import safe_eval, safe_exec
 from seed.tiny import mk_tuple, check_type_is, check_type_le, check_callable, ifNone, echo
@@ -436,6 +478,35 @@ arg_regex = re.compile(arg_pattern, re.DOTALL)
 import_regex = re.compile(import_pattern)
     #see:adhoc_argparse__import
 
+
+
+
+
+_stable_repr_regex = re.compile(r'stable_repr__([FT])__i(\d+)(__d(\d+))?')
+    #stable_repr => stable_repr__F__i1__d3/stable_repr__T__i1__d3
+def _match__stable_repr_regex(s, /):
+    '-> kwds4stable_repr'
+    m = _stable_repr_regex.fullmatch(s)
+    if m is None:
+        return
+    gs = m.groups()
+    assert len(gs) == 4, (len(gs), gs)
+    has_head_eol_when_indent = bool('FT'.index(gs[0]))
+    indent = ' '*int(gs[1])
+    depth = 0
+    if gs[2]:
+        maybe_max_depth = int(gs[3])
+    else:
+        maybe_max_depth = None
+    kwds4stable_repr = dict(indent=indent, depth=depth, maybe_max_depth=maybe_max_depth, has_head_eol_when_indent=has_head_eol_when_indent)
+    return kwds4stable_repr
+
+def pprint__pformat(x, /, **kwds):
+    return _pprint__pformat(x, compact=True, **kwds)
+def pprint__pformat_d(depth, /):
+    def pprint__pformat(x, /, **kwds):
+        return _pprint__pformat(x, compact=True, depth=depth, **kwds)
+    return pprint__pformat
 class AdhocArgParserError(Exception):pass
 class AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag(AdhocArgParserError):pass
 class AdhocArgParserError__show_help_then_exit_with_err(AdhocArgParserError):pass
@@ -498,6 +569,8 @@ if 0:
     _setting4using_stable_repr = 'stable_repr.'
     _setting4using_stable_repr__expand_top_layer = 'stable_repr__expand_top_layer.'
     _setting4using_stable_repr__expand_all_layer = 'stable_repr__expand_all_layer.'
+    _setting4using_stable_repr__expand_all_layer__noindent = 'stable_repr__expand_all_layer__noindent.'
+    _setting4using_pprint__pformat = 'pprint__pformat.'
 prefixes4func_name4adhoc_argparser__main__call = {_prefix4unpack_iter, _prefix4normal_call}
 
 def adhoc_argparser__main__call(nm2main, may_argv, /):
@@ -543,7 +616,8 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         return _postprocess
 
     #raise Exception(options4argparser)
-    if options4argparser[0] == '{':
+    #if options4argparser[0] == '{':
+    if options4argparser and options4argparser[0] == '{':
         j = options4argparser.index('}')
         args4postprocess = options4argparser[1:j]
         options4argparser = options4argparser[j+1:]
@@ -608,7 +682,7 @@ usage:
 py_adhoc_call    xxx.yyy  @g =1 :2 --p=3 ++ls=4 ++ls:5 -f +t
     <==> from xxx.yyy import g; print(repr(g(1,'2',p=3,ls=[4,'5'],f=False,t=True)))
 
-#『repr』-->『not_show/stable_repr/stable_repr__expand_top_layer/stable_repr__expand_all_layer』/py.__builtins__.『repr/str/hex/ascii/...』
+#『repr』-->『not_show/stable_repr/stable_repr__expand_top_layer/stable_repr__expand_all_layer/stable_repr__expand_all_layer__noindent/pprint__pformat』/py.__builtins__.『repr/str/hex/ascii/...』
 py_adhoc_call    xxx.yyy  @not_show.g
     <==> from xxx.yyy import g; g()
 py_adhoc_call    xxx.yyy  @hex.g
@@ -759,6 +833,14 @@ def adhoc_argparse__import(strs, /):
     return d
 
 def _not_show(x, /):pass
+def _dump8show(x, /):
+    #check_type_is(bytes, x)
+    import sys
+    sys.stdout.buffer.write(x)
+def _pickle_dump8show(x, /):
+    import sys
+    import pickle
+    pickle.dump(x, sys.stdout.buffer)
 def _mk__to_show(to_str, /):
     if not callable(to_str):raise logic-err
     #if not callable(to_str):raise AdhocArgParserError
@@ -813,6 +895,10 @@ def _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, /):
 def _payload4prefix_nm2to_show(nm, /):
     if nm == 'not_show':
         to_show = _not_show
+    elif nm == 'dump8show':
+        to_show = _dump8show
+    elif nm == 'pickle_dump8show':
+        to_show = _pickle_dump8show
     else:
         if nm == 'stable_repr':
             to_str = stable_repr
@@ -820,6 +906,16 @@ def _payload4prefix_nm2to_show(nm, /):
             to_str = stable_repr__expand_top_layer
         elif nm == 'stable_repr__expand_all_layer':
             to_str = stable_repr__expand_all_layer
+        elif nm == 'stable_repr__expand_all_layer__noindent':
+            to_str = stable_repr__expand_all_layer__noindent
+        elif nm == 'pprint__pformat':
+            to_str = pprint__pformat
+        elif nm.startswith('pprint__pformat_d'):
+            depth = int(nm[len('pprint__pformat_d'):])
+            to_str = pprint__pformat_d(depth)
+        elif nm.startswith('stable_repr__') and (kwds4stable_repr:=_match__stable_repr_regex(nm)):
+            #stable_repr__F__i1__d3/stable_repr__T__i1__d3
+            to_str = lambda x,/:stable_repr(x, **kwds4stable_repr)
         elif not hasattr(builtins, nm):raise AdhocArgParserError(nm)
         else:
             to_str = getattr(builtins, nm)

@@ -34,6 +34,7 @@ view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/extracted/DerivedGeneralCate
 0378..0379    ; Cn #   [2] <reserved-0378>..<reserved-0379>
 0380..0383    ; Cn #   [4] <reserved-0380>..<reserved-0383>
 
+view ../../python3_src/nn_ns/CJK/CJK_data/raw/U+FF00全角字符.txt
 #'''
 
 from nn_ns.CJK.unicode.ucd_unihan.ucd.parsed_result__of__Blocks_txt__of_ver13_0 import readonly__char_pt2code_block_name4ver13_0, readonly__code_block_name2char_pt_rngs4ver13_0

@@ -26,6 +26,9 @@ py_adhoc_call   seed.types.LazyList   @f
 
 
 news:
+    _LazyListIter.get_stamp()
+    _LazyListIter.has_changed_since_stamp_()
+news:
     _LazyListIter.fork()
         snapshot/save-state
     _LazyListIter.get_curr_lazylist()
@@ -519,7 +522,11 @@ ToConcatLazyList
 
 '''.split()#'''
     #repr_as_lt_3dot_gt
+    #_LazyListRelaxIter
+    #_LazyListIter
 __all__
+from seed.types.IForkable import IForkable, IForkable__stamp
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 
 from seed.tiny import check_type_is, null_tuple, mk_tuple, check_type_le  # null_iter
 from seed.tiny import echo as basic_method, is_iterator, print_err
@@ -608,7 +615,8 @@ def to_LazyList(iterable, /):
     #]]]'''#'''
     'to avoid "non_iterator_ok=True"'
     return LazyList(iterable, non_iterator_ok=True)
-class _LazyListIter:
+class _Stamp: pass
+class _LazyListIter(IForkable__stamp):
     r'''[[[
     #see:LazyList.iter__hardwork/__iter__
     #
@@ -621,6 +629,7 @@ class _LazyListIter:
         same:
             it donot affect lazylist_iter@sf to handle the output lazylist
     #]]]'''#'''
+    ___no_slots_ok___ = True
     def to_LazyList(sf, /):
         '.to_LazyList() vs .get_curr_lazylist(): diff@[.does_iter_pairs() is True]'
         return to_LazyList(sf)
@@ -628,17 +637,43 @@ class _LazyListIter:
     def from_iterable(cls, iterable, /):
         return to_LazyListIter(iterable)
 
-    def __init__(sf, lazylist, /, *, to_iter_pairs):
+    def __init__(sf, lazylist, /, *, to_iter_pairs, may_stamp):
         check_type_is(LazyList, lazylist)
         check_type_is(bool, to_iter_pairs)
+        stamp = may_stamp if not may_stamp is None else _Stamp()
+        check_type_is(_Stamp, stamp)
         sf._ls = lazylist
         sf._ps = to_iter_pairs
+        sf._st = stamp
     def get_curr_lazylist(sf, /):
         return sf._ls
     def does_iter_pairs(sf, /):
         return sf._ps
+    @override
+    def get_stamp(sf, /):
+        '-> stamp'
+        return sf._st
+    @override
+    def has_changed_since_stamp_(sf, stamp, /):
+        'stamp -> changed/bool'
+        return not sf._st is stamp
+    @override
     def fork(sf, /):
-        return type(sf)(sf.get_curr_lazylist(), to_iter_pairs=sf.does_iter_pairs())
+        return type(sf)(sf.get_curr_lazylist(), to_iter_pairs=sf.does_iter_pairs(), may_stamp=sf.get_stamp())
+    @override
+    def were(sf, ot, /):
+        return ((sf is ot)
+        or (type(sf) is type(ot)
+            and sf.get_stamp() is ot.get_stamp()
+            and sf.get_curr_lazylist() is ot.get_curr_lazylist()
+            and sf.does_iter_pairs() is ot.does_iter_pairs()
+            )
+        )
+    #def __eq__(sf, ot, /):
+    #    return sf.were(ot)
+    #def __ne__(sf, ot, /):
+    #    return not sf == ot
+
     def __iter__(sf, /):
         return sf
     def __next__(sf, /):
@@ -648,6 +683,7 @@ class _LazyListIter:
         (x, lazylist) = m
         #check_type_is(LazyList, lazylist)
         sf._ls = lazylist
+        sf._st = _Stamp()
         if sf._ps:
             return m
         return x
@@ -915,7 +951,7 @@ class LazyList:
     #   depend upon .may_unpack() only
     def iter__hardwork(sf, /, *, to_iter_pairs=False):
         'LazyList x -> Iter ((x, LazyList x) if to_iter_pairs else x) # [hardwork =[def]= call .may_unpack(relax=False)]'
-        return _LazyListIter(sf, to_iter_pairs=to_iter_pairs)
+        return _LazyListIter(sf, to_iter_pairs=to_iter_pairs, may_stamp=None)
     def __iter__(sf, /):
         return sf.iter__hardwork()
     __iter__ = iter__hardwork

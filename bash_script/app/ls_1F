@@ -1,0 +1,4 @@
+ls -1F "$@"
+  # -1: one file per line
+  # -F: add suffix "/" for folder
+

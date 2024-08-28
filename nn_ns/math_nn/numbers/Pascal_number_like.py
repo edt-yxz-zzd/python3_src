@@ -2,9 +2,9 @@
 
 import warnings, sys
 DeprecationWarning
-warnings.warn("deprecated, use IPascalNumberLike instead"
+warnings.warn(f"deprecated:{__name__}, use IPascalNumberLike instead"
         , DeprecationWarning)
-print("deprecated, use IPascalNumberLike instead", file=sys.stderr)
+print(f"deprecated:{__name__}, use IPascalNumberLike instead", file=sys.stderr)
 
 __all__ = '''
     PascalNumberLike

@@ -25,7 +25,8 @@ ConstantRepr
 '''.split()#'''
 __all__
 
-from seed.tiny import check_type_is
+
+from seed.tiny_.check import check_type_is
 
 class ConstantRepr:
     def __init__(sf, s, /):

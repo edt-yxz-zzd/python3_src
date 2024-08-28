@@ -1,5 +1,11 @@
 r'''
 e ../../python3_src/seed/text/mk_char_pt_ranges5predicator.py
+
+
+assert printable_ascii_char_pt_ranges == alnum_ascii_char_pt_ranges | punctuation_ascii_char_pt_ranges | NonTouchRanges(((32, 33),))
+    # [printable%95 == alnum%(10+26*2==62) | punctuation%32 | space%1]
+
+
 py -m seed.text.mk_char_pt_ranges5predicator
 py -m nn_ns.app.debug_cmd   seed.text.mk_char_pt_ranges5predicator
 
@@ -226,6 +232,7 @@ assert alpha_ascii_char_pt_ranges.len_ints() == lower_ascii_char_pt_ranges.len_i
 
 
 assert printable_ascii_char_pt_ranges == alnum_ascii_char_pt_ranges | punctuation_ascii_char_pt_ranges | NonTouchRanges(((32, 33),))
+    # [printable%95 == alnum%(10+26*2==62) | punctuation%32 | space%1]
 
 
 def char_pt_ranges2char_set(char_pt_ranges, /):
@@ -272,3 +279,6 @@ assert not is_printable_ascii_str('\t')
 assert not is_printable_ascii_str('\n')
 
 
+from seed.text.mk_char_pt_ranges5predicator import printable_ascii_char_pt_ranges, printable_ascii_sorted_chars
+from seed.text.mk_char_pt_ranges5predicator import punctuation_ascii_char_pt_ranges, punctuation_ascii_sorted_chars
+from seed.text.mk_char_pt_ranges5predicator import *

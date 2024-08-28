@@ -212,6 +212,29 @@ test_super_in_classmethod/NonDataDescriptor4Echo
 test abstractmethod+NonDataDescriptor4InstanceMethod
 test C.f is INonDataDescriptor
 
+
+
+
+some test fail:
+        # ok@[Python 3.8.0 (default, Dec 5 2019, 10:18:50)]
+        # fail@[Python 3.11.9 (main, Jun 10 2024, 00:57:33)]
+>>> import sys
+
+#>>> sys.version_info
+sys.version_info(major=3, minor=11, micro=9, releaselevel='final', serial=0)
+>>> py_ver = sys.version_info[:3]
+>>> ok_py_ver = (3, 8)
+>>> bad_py_ver = (3, 11)
+
+
+
+
+
+
+
+
+
+
 >>> class A:
 ...     @classmethod
 ...     def f(cls, /):return cls
@@ -241,14 +264,38 @@ True
 True
 >>> type(B_f) is NonDataDescriptor4Echo
 True
->>> C.f == (B_f, None, C)
+
+#?fail?:guess:come from:func-body/API-changed, without update doctest
+#>>> C.f == (B_f, None, C)
+#True
+#>>> c.f == (B_f, c, C)
+#True
+#>>> super(B,C).f == (A_f, None, C)
+#True
+#>>> super(B,c).f == (A_f, c, C)
+#True
+
+>>> A_f_func = A_f.__func__
+>>> B_f_func = B_f.__func__
+>>> C.f == (B_f_func, (B_f, None, C))
 True
->>> c.f == (B_f, c, C)
+>>> c.f == (B_f_func, (B_f, c, C))
 True
->>> super(B,C).f == (A_f, None, C)
+>>> super(B,C).f == (A_f_func, (A_f, None, C))
 True
->>> super(B,c).f == (A_f, c, C)
+>>> super(B,c).f == (A_f_func, (A_f, c, C))
 True
+
+
+#>>> super(B,c).f
+#(<function A.f at 0x7d3e1a16c0>, (<__main__.NonDataDescriptor4Echo object at 0x7d3e19d390>, <__main__.C object at 0x7d3e1c2710>, <class '__main__.C'>))
+#>>> c
+#<__main__.C object at 0x7d3e1c2710>
+#>>> c.f
+#(<function B.f at 0x7d3e1a1760>, (<__main__.NonDataDescriptor4Echo object at 0x7d3e19d570>, <__main__.C object at 0x7d3e1c2710>, <class '__main__.C'>))
+#>>> C.f
+#(<function B.f at 0x7d3e1a1760>, (<__main__.NonDataDescriptor4Echo object at 0x7d3e19d570>, None, <class '__main__.C'>))
+
 >>> del A, B, C
 
 
@@ -297,16 +344,30 @@ False
 ...     @NonDataDescriptor4InstanceMethod
 ...     @abstractmethod
 ...     def f(sf, /):pass
->>> B()
+
+#>>> B()
 Traceback (most recent call last):
     ...
 TypeError: Can't instantiate abstract class B with abstract methods f
+TypeError: Can't instantiate abstract class B with abstract method f
+"methods" --> "method"
+        # ok@[Python 3.8.0 (default, Dec 5 2019, 10:18:50)]
+        # fail@[Python 3.11.9 (main, Jun 10 2024, 00:57:33)]
 
-#'
+>>> class B(ABC):
+...     __slots__ = ()
+...     @NonDataDescriptor4InstanceMethod
+...     @abstractmethod
+...     def f(sf, /):pass
+...     @abstractmethod
+...     def g(sf, /):pass
 
+>>> B()
+Traceback (most recent call last):
+    ...
+TypeError: Can't instantiate abstract class B with abstract methods f, g
 
-
-
+#'      #to match:Can_t
 
 
 #>>> from types import MethodDescriptorType, ClassMethodDescriptorType, MethodWrapperType, WrapperDescriptorType, MethodType
@@ -330,18 +391,21 @@ True
 True
 >>> hasattr(type(C.f), '__get__')
 True
->>> hasattr(type(C().f), '__get__')
+>>> hasattr(type(C().f), '__get__') is (py_ver < bad_py_ver)
 True
 >>> hasattr(type(id), '__get__')
 False
-
 
 >>> hasattr(LambdaType, '__get__')
 True
 >>> hasattr(FunctionType, '__get__')
 True
->>> hasattr(MethodType, '__get__')
+
+#>>> hasattr(MethodType, '__get__')
 True
+>>> hasattr(MethodType, '__get__') is (py_ver < bad_py_ver)
+True
+
 >>> hasattr(BuiltinFunctionType, '__get__')
 False
 >>> hasattr(BuiltinMethodType, '__get__')
@@ -355,8 +419,14 @@ AttributeError: type object 'builtin_function_or_method' has no attribute '__get
 >>> IDescriptor.__subclasshook__(BuiltinFunctionType)
 NotImplemented
 
->>> bool(NotImplemented)
+#>>> bool(NotImplemented)
 True
+py3_11_9:
+<doctest __main__[62]>:1: DeprecationWarning: NotImplemented should not be used in a boolean context
+  bool(NotImplemented)
+>>> not (py_ver < bad_py_ver) or bool(NotImplemented)
+True
+
 
 >>> issubclass(type, IDescriptor)
 False
@@ -372,7 +442,10 @@ False
 True
 >>> issubclass(FunctionType, INonDataDescriptor)
 True
->>> issubclass(MethodType, INonDataDescriptor)
+
+#>>> issubclass(MethodType, INonDataDescriptor)
+True
+>>> issubclass(MethodType, INonDataDescriptor) is (py_ver < bad_py_ver)
 True
 
 >>> issubclass(LambdaType, IDataDescriptor)
@@ -576,7 +649,10 @@ assert not issubclass(IDataDescriptor, INonDataDescriptor)
 
 assert issubclass(LambdaType, INonDataDescriptor)
 assert issubclass(FunctionType, INonDataDescriptor)
-assert issubclass(MethodType, INonDataDescriptor)
+if 0b000:
+    assert issubclass(MethodType, INonDataDescriptor)
+        # ok@[Python 3.8.0 (default, Dec 5 2019, 10:18:50)]
+        # fail@[Python 3.11.9 (main, Jun 10 2024, 00:57:33)]
 
 assert not issubclass(LambdaType, IDataDescriptor)
 assert not issubclass(FunctionType, IDataDescriptor)

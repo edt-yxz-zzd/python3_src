@@ -1,9 +1,21 @@
 #__all__:goto
+    # using HEXReprInt to replace HexReprInt
+    #   API.output.format changed!
+    #   !!!maybe cause some doctest fail!!!
+    #   ???to change:fmap_rngs2hex_repr
+    #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
+#all abstractmethod:
+#/def \<\(_get_rngs_\|_to_NonTouchRanges_\|_len_ints_\|_valid_ranges_\|_to_TouchRangeBasedIntMapping_\|__len__\|_get_rngs_values_pair_\|_get_type_of_seq4both_rngs_and_values\)\>
 
 r'''[[[[[
 py -m seed.data_funcs.rngs
-py -m nn_ns.app.debug_cmd   seed.data_funcs.rngs
-from seed.data_funcs.rngs import make_Ranges, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet, StackStyleSimpleIntMapping, TouchRangeBasedIntMapping
+py -m nn_ns.app.debug_cmd   seed.data_funcs.rngs -x
+py -m nn_ns.app.doctest_cmd seed.data_funcs.rngs:__doc__ -ht
+
+from seed.data_funcs.rngs import make_Ranges, sorted_rngs_to_iter_nontouch_ranges, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet, StackStyleSimpleIntMapping, TouchRangeBasedIntMapping
+    TouchRangeBasedIntMapping.from_value2begin2sz/.from_rng_value_pairs/.from_clone_of_rngs_with_default
+from seed.data_funcs.rngs import IRanges
+    for:.from_hexXhexszpair_list/.from_hex_repr_pair_list/.from_len_rng2hexbegins/.from_len_rng2begin_chars/.from_char_pairs__str/.from_hex_sz_pair_list/.from_hex2sz
 from seed.data_funcs.rngs import NonTouchRanges, TouchRanges, make_NonTouchRanges, make_TouchRanges
 from seed.data_funcs.rngs import len_of__rng, len_of__rng__neg_as0
 
@@ -1203,15 +1215,15 @@ TouchRanges(((0, 1), (1, 32)))
     ranges5len_rng2hexbegins
 >>> ranges = make_Ranges([(0,1),(1,2),(3,32),(44,45)])
 >>> d = ranges2len_rng2hexbegins(ranges)
->>> d
-{1: [0x0, 0x1, 0x2c], 29: [0x3]}
+>>> d #old:{1: [0x0, 0x1, 0x2c], 29: [0x3]}
+{1: [0x0, 0x1, 0x2C], 29: [0x3]}
 >>> ranges5len_rng2hexbegins(d)
 TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
 
 >>> IRanges.from_len_rng2hexbegins(d)
 TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
->>> ranges.to_len_rng2hexbegins()
-{1: [0x0, 0x1, 0x2c], 29: [0x3]}
+>>> ranges.to_len_rng2hexbegins() #old:{1: [0x0, 0x1, 0x2c], 29: [0x3]}
+{1: [0x0, 0x1, 0x2C], 29: [0x3]}
 
     ranges2len_rng2hexbegins_str
     ranges5len_rng2hexbegins_str
@@ -1238,6 +1250,36 @@ TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
 TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
 >>> ranges.to_len_rng2begin_chars()
 {1: '\x00\x01,', 29: '\x03'}
+
+
+
+ranges2hex_sz_pair_list
+ranges5hex_sz_pair_list
+>>> ls = ranges2hex_sz_pair_list(ranges)
+>>> ls
+[(0x0, 1), (0x1, 1), (0x3, 29), (0x2C, 1)]
+>>> ranges5hex_sz_pair_list(ls)
+TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
+
+>>> IRanges.from_hex_sz_pair_list(ls)
+TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
+>>> ranges.to_hex_sz_pair_list()
+[(0x0, 1), (0x1, 1), (0x3, 29), (0x2C, 1)]
+
+
+ranges2hex2sz
+ranges5hex2sz
+>>> d = ranges2hex2sz(ranges)
+>>> d
+{0x0: 1, 0x1: 1, 0x3: 29, 0x2C: 1}
+>>> ranges5hex2sz(d)
+TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
+
+>>> IRanges.from_hex2sz(d)
+TouchRanges(((0, 1), (1, 2), (3, 32), (44, 45)))
+>>> ranges.to_hex2sz()
+{0x0: 1, 0x1: 1, 0x3: 29, 0x2C: 1}
+
 
 
 ]]
@@ -1398,7 +1440,53 @@ __all__ = """
 
     check_input4isomorphism_mapping__RangeBased
     isomorphism_mapping__RangeBased
-    """.split()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    rngs_op__iter_gaps
+    rngs_op__reversed_gaps
+    rngs_op__iter_gaps_
+    IMixin4_get_rngs_
+    IMixin4_get_rngs_AND_len_ints
+    IRanges
+    test_subset_relation_ex__xtouch_ranges
+    IRangeBasedIntMapping__view_part_API
+    IRangeBasedIntMapping
+    hexbegins2str
+    hexbegins5str
+    hexbegins2chars
+    hexbegins5chars
+    ranges2hex_sz_pair_list
+    ranges5hex_sz_pair_list
+    ranges2hex2sz
+    ranges5hex2sz
+    ranges2compact_txt_
+    ranges5compact_txt_
+    """.split()#"""
+__all__
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+#from seed.helper.repr_input import repr_helper
+#class _(ABC):
+#    __slots__ = ()
+#    raise NotImplementedError
+#    ___no_slots_ok___ = True
+#    def __repr__(sf, /):
+#        #return repr_helper(sf, *args, **kwargs)
+#        #return repr_helper_ex(sf, args, ordered_attrs, kwargs, ordered_attrs_only=False)
+#        ...
+#if __name__ == "__main__":
 
 import bisect
 from itertools import chain
@@ -1409,6 +1497,12 @@ from seed.tiny import print_err
 from seed.func_tools.fmapT.fmapT__tiny import fmap_rngs2hex_repr, fmapT__pairs, dot
 #from seed.func_tools.dot2 import dot
 from seed.tiny_.HexReprInt import HexReprInt
+from seed.tiny_.HexReprInt import HEXReprInt as HexReprInt
+    # using HEXReprInt to replace HexReprInt
+    #   API.output.format changed!
+    #   !!!maybe cause some doctest fail!!!
+    #   ???to change:fmap_rngs2hex_repr
+    #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
 from seed.tiny import fmap4dict_value
 from seed.tiny import check_type_is
 
@@ -2373,10 +2467,13 @@ def rngs_op__iter_gaps_(rngs, /, *, reverse, whole_rng=None):
     f = rngs_op__reversed_gaps if reverse else rngs_op__iter_gaps
     return f(rngs, whole_rng=whole_rng)
 
-class IMixin4_get_rngs_:
+class IMixin4_get_rngs_(ABC):
+    __slots__ = ()
     #no len_ints
+    @abstractmethod
     def _get_rngs_(sf, /):
         raise NotImplementedError
+    @abstractmethod
     def _to_NonTouchRanges_(sf, /):
         raise NotImplementedError
     def rngs__get(sf, idx_or_slice, /):
@@ -2443,7 +2540,9 @@ class IMixin4_get_rngs_:
 
 
 class IMixin4_get_rngs_AND_len_ints(IMixin4_get_rngs_):
+    __slots__ = ()
     #len_ints
+    @abstractmethod
     def _len_ints_(sf, /):
         '-> len_ints/uint'
         raise NotImplementedError
@@ -2481,13 +2580,27 @@ TODO:
     所有 虚函数 改名:格式为 _xxx_
         以保证 map(IRanges.xxx, ...)可正常工作！
     #'''
+    __slots__ = ()
     @classmethod
+    @abstractmethod
     def _valid_ranges_(cls, ranges, /):
         raise NotImplementedError
-        return valid_ranges(ranges)
+        #return valid_ranges(ranges)
     @classmethod
     def valid_ranges(cls, ranges, /):
         return cls._valid_ranges_(ranges)
+    @override
+    def _get_rngs_(sf, /):
+        return sf.ranges
+    #def __len__(sf, /):
+    #    return sf.__sz
+    #def len_ints(sf, /):
+    @override
+    def _len_ints_(sf, /):
+        '-> len_ints/uint'
+        return sf.__sz
+
+
     def is_nontouch_ranges(sf, /):
         return sf.__nontouch
     def to_nontouch_ranges(sf, /):
@@ -2496,38 +2609,58 @@ TODO:
         return tuple(sorted_rngs_to_iter_nontouch_ranges(sf.ranges))
         return sf.to_NonTouchRanges().ranges
     def to_hex_repr_pair_list(sf, /):
+        '-> [(HexReprInt, HexReprInt)]'
         return ranges2hex_repr_pair_list(sf)
     @staticmethod
     def from_hex_repr_pair_list(hexXhexszpair_list, /):
         return ranges5hex_repr_pair_list(hexXhexszpair_list)
     def to_hexXhexszpair_list(sf, /):
+        '-> [(HexReprInt|(HexReprInt, sz))]'
         return ranges2hexXhexszpair_list(sf)
     @staticmethod
     def from_hexXhexszpair_list(hexXhexszpair_list, /):
         return ranges5hexXhexszpair_list(hexXhexszpair_list)
     def to_len_rng2hexbegins(sf, /):
+        '-> {sz:[HexReprInt]}'
         return ranges2len_rng2hexbegins(sf)
     @staticmethod
     def from_len_rng2hexbegins(len_rng2hexbegins, /):
         return ranges5len_rng2hexbegins(len_rng2hexbegins)
 
     def to_len_rng2hexbegins_str(sf, /):
+        '-> {sz: ",".join(f"{begin:X}"...)}'
         return ranges2len_rng2hexbegins_str(sf)
     @staticmethod
     def from_len_rng2hexbegins_str(len_rng2hexbegins_str, /):
         return ranges5len_rng2hexbegins_str(len_rng2hexbegins_str)
 
     def to_len_rng2begin_chars(sf, /):
+        '-> {sz: "".join(map(chr,begins))}'
         return ranges2len_rng2begin_chars(sf)
     @staticmethod
     def from_len_rng2begin_chars(len_rng2begin_chars, /):
         return ranges5len_rng2begin_chars(len_rng2begin_chars)
 
     def to_char_pairs__str(sf, /):
+        '-> "{first_char}{last_char}"...'
         return ranges2char_pairs__str(sf)
     @staticmethod
     def from_char_pairs__str(char_pairs__str, /):
         return ranges5char_pairs__str(char_pairs__str)
+
+    def to_hex_sz_pair_list(sf, /):
+        '-> [(HexReprInt, sz)]'
+        return ranges2hex_sz_pair_list(sf)
+    @staticmethod
+    def from_hex_sz_pair_list(hex_sz_pair_list, /):
+        return ranges5hex_sz_pair_list(hex_sz_pair_list)
+
+    def to_hex2sz(sf, /):
+        '-> {HexReprInt:sz}'
+        return ranges2hex2sz(sf)
+    @staticmethod
+    def from_hex2sz(hex2sz, /):
+        return ranges5hex2sz(hex2sz)
 
     def __init__(sf, ranges, /):
         #ranges = tuple(ranges)
@@ -2539,12 +2672,6 @@ TODO:
     @property
     def ranges(sf, /):
         return sf.__ranges
-    def _get_rngs_(sf, /):
-        return sf.ranges
-    #def __len__(sf, /):
-    #    return sf.__sz
-    def len_ints(sf, /):
-        return sf.__sz
     def __hash_args(sf, /):
         return type(sf), sf.ranges
     def __hash__(sf, /):
@@ -2593,19 +2720,27 @@ TODO:
     def __xor__(sf, other, /):
         return sf._op(other, symmetric_difference_ex__xtouch_ranges, faster_output_iter_touch_ranges=False)
 
-
+if 0b000:
+    IRanges()
+    #_to_NonTouchRanges_, _valid_ranges_
 class TouchRanges(IRanges):
+    ___no_slots_ok___ = True
+    @override
     def _to_NonTouchRanges_(sf, /):
         return make_NonTouchRanges(sorted_rngs_to_iter_nontouch_ranges(sf.ranges))
     @classmethod
+    @override
     def _valid_ranges_(cls, ranges, /):
         return valid_touch_ranges(ranges)
 
 
 class NonTouchRanges(IRanges):
+    ___no_slots_ok___ = True
+    @override
     def _to_NonTouchRanges_(sf, /):
         return sf
     @classmethod
+    @override
     def _valid_ranges_(cls, ranges, /):
         return valid_nontouch_ranges(ranges)
 
@@ -2770,15 +2905,25 @@ def iter_nontouch_rangess_between(begin, end, /):
         rngs = tuple(rngs)
         yield rngs
 
+if 0b000:
+    IMixin4_get_rngs_AND_len_ints()
+    #_get_rngs_, _len_ints_, _to_NonTouchRanges_
 class StackStyleSimpleIntSet(IMixin4_get_rngs_AND_len_ints):
     r'''
     .rngs :: [(int, int)] #nontouch_ranges
         public-mutable
         NOTE: SHOULD call fix_after_modify_rngs after update .rngs externally
     #'''
+    ___no_slots_ok___ = True
+    @override
+    def _get_rngs_(sf, /):
+        rngs = sf.rngs
+        return rngs
+    @override
     def _len_ints_(sf, /):
         '-> len_ints/uint'
         return len(sf)
+    @override
     def _to_NonTouchRanges_(sf, /):
         rngs = sf.rngs
         return NonTouchRanges((*rngs,))
@@ -2885,9 +3030,6 @@ class StackStyleSimpleIntSet(IMixin4_get_rngs_AND_len_ints):
     def from_clone_of_rngs(cls, rngs, /):
         rngs = [*make_Ranges(rngs).to_nontouch_ranges()]
         return cls(rngs)
-    def _get_rngs_(sf, /):
-        rngs = sf.rngs
-        return rngs
 
 
 
@@ -2897,118 +3039,60 @@ class StackStyleSimpleIntSet(IMixin4_get_rngs_AND_len_ints):
 
 
 
-class IRangeBasedIntMapping(IMixin4_get_rngs_AND_len_ints):
-    r'''
-ABC IRangeBasedIntMapping:
-    * immutable TouchRangeBasedIntMapping
-    * mutable StackStyleSimpleIntMapping
+class IRangeBasedIntMapping__view_part_API(IMixin4_get_rngs_AND_len_ints):
+    'view part API of IRangeBasedIntMapping'
+    __slots__ = ()
 
-see also:
-    ABC IRanges
-
-used:
-    to repr parse result of unicode::UCD::Blocks.txt
-        view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt
-        char_pt_rng2code_block_name
-            :: TouchRangeBasedIntMapping<str>
-            :: StackStyleSimpleIntMapping<str>
-        code_block_name2char_pt_rngs
-            :: Map<str, NonTouchRanges>
-            :: Map<str, StackStyleSimpleIntSet>
-
-    #'''
+    @override
     def _len_ints_(sf, /):
         '-> len_ints/uint'
         return len(sf)
-    def _to_TouchRangeBasedIntMapping_(sf, /):
-        '-> immutable TouchRangeBasedIntMapping'
-        raise NotImplementedError
-    def to_TouchRangeBasedIntMapping(sf, /):
-        return sf._to_TouchRangeBasedIntMapping_()
-    @classmethod
-    def _get_type_of_seq4both_rngs_and_values(cls, /):
-        '-> seq_type'
-        raise NotImplementedError
-    def __len__(sf, /):
-        '-> len_ints'
-        raise NotImplementedError
+    @abstractmethod
     def _get_rngs_values_pair_(sf, /):
         '-> ([rng], [value])'
         raise NotImplementedError
-    @property
-    def rngs_values_pair(sf, /):
-        return sf._get_rngs_values_pair_()
+    @abstractmethod
+    def _to_TouchRangeBasedIntMapping_(sf, /):
+        '-> immutable TouchRangeBasedIntMapping'
+        raise NotImplementedError
+    @abstractmethod
+    def __len__(sf, /):
+        '-> len_ints'
+        raise NotImplementedError
+
+
+
+
+    @override
     def _get_rngs_(sf, /):
         rngs, values = sf.rngs_values_pair
         return rngs
-    _to_NonTouchRanges_ = TouchRanges._to_NonTouchRanges_
+    #bug:_to_NonTouchRanges_ = TouchRanges._to_NonTouchRanges_
+    @override
+    def _to_NonTouchRanges_(sf, /):
+        #bug:return make_NonTouchRanges(sorted_rngs_to_iter_nontouch_ranges(sf.ranges))
+        #   has no ".ranges"
+        rngs = sf._get_rngs_()
+        return make_NonTouchRanges(sorted_rngs_to_iter_nontouch_ranges(rngs))
 
 
+    def to_TouchRangeBasedIntMapping(sf, /):
+        return sf._to_TouchRangeBasedIntMapping_()
+
+
+    @property
+    def rngs_values_pair(sf, /):
+        return sf._get_rngs_values_pair_()
     def __eq__(sf, other, /):
         if type(other) is not type(sf):
             return NotImplemented
         return sf.rngs_values_pair == other.rngs_values_pair
-
-
-
-    @classmethod
-    def from_rng_value_pairs(cls, rng_value_pairs, /):
-        '-> sf'
-        d = StackStyleSimpleIntMapping()
-        d.push_rng_value_pairs(rng_value_pairs)
-        if cls is type(d):
-            sf = d
-            del d
-        else:
-            rngs, values = d.rngs_values_pair
-            del d
-
-            seq_type = cls._get_type_of_seq4both_rngs_and_values()
-            if not seq_type is list:
-                rngs = seq_type(rngs)
-                values = seq_type(values)
-            sf = cls((rngs, values))
-        sf
-        return sf
 
     def get_top(sf, /):
         '-> (i, v)'
         rngs, values = sf.rngs_values_pair
         if not rngs: raise KeyError('get_top from an empty mapping')
         return rngs[-1][-1] -1, values[-1]
-    def __repr__(sf, /):
-        rngs, values = sf.rngs_values_pair
-        return '{}({})'.format(type(sf).__name__, (rngs, values))
-
-
-
-    @classmethod
-    def check_rngs(cls, rngs, /):
-        'check rngs is touch_ranges-list-version'
-        list = cls._get_type_of_seq4both_rngs_and_values()
-        if not type(rngs) is list: raise TypeError
-        if not 7 <= detect_iter_ranges(rngs): raise TypeError #not touch_ranges-list-version
-    @classmethod
-    def check_values(cls, rngs, values, /):
-        'postcondition:[two rngs touch]==>>[their values diff]   ##precondition: check_rngs(rngs) ==>> [rngs is touch_ranges-list-version]'
-        list = cls._get_type_of_seq4both_rngs_and_values()
-        if not type(values) is list: raise TypeError
-        for _ in map(hash, values):pass
-        if not len(rngs) == len(values): raise TypeError
-        L = len(values)
-        for i in range(L-1):
-            [(begin0, end0), (begin1, end1)] = rngs[i:i+2]
-            if end0 == begin1:
-                #touch
-                #==>> value diff
-                v0, v1 = values[i:i+2]
-                if v0 == v1: raise TypeError('two rngs touch with same value but not merge into one rng')
-    @classmethod
-    def from_clone_of_rngs_with_default(cls, rngs, value, /):
-        list = cls._get_type_of_seq4both_rngs_and_values()
-        rngs = list(make_Ranges(rngs).to_nontouch_ranges())
-        values = list([value])*len(rngs)
-        return cls((rngs, values))
 
     def __getitem__(sf, i, /):
         return sf.getitem4int(i)
@@ -3049,20 +3133,158 @@ used:
         xreversed_rng_value_pairs = sf.iter_rng_value_pairs_(reverse=reverse)
         reverse = iter if reverse else False
         return rng_value_pairs_to_iter_int_value_pairs_(xreversed_rng_value_pairs, reverse=reverse)
+
+    #@classmethod
+    #def from_value2begin2sz(cls, value2begin2sz, /):
+    def to_value2begin2sz(sf, /):
+        '-> value2begin2sz/v2hx2sz/{v:{begin/HexReprInt:sz}}'
+        v2hx2sz = value2begin2sz = {}
+        for (i,j), v in sf.iter_rng_value_pairs_(reverse=False):
+            hx = HexReprInt(i)
+            sz = j-i
+            hx2sz = v2hx2sz.setdefault(v, {})
+            hx2sz[hx] = sz
+
+        return value2begin2sz
+
+    #@classmethod
+    #def from_rng_value_pairs(cls, rng_value_pairs, /):
+    def to_rng_value_pairs(sf, /, *, reverse=False):
+        '-> [(rng, value)]'
+        rng_value_pairs = tuple(sf.iter_rng_value_pairs_(reverse=reverse))
+        return rng_value_pairs
+    #@classmethod
+    #def from_rngs_values_pair(cls, rngs_values_pair, /):
+    def to_rngs_values_pair(sf, /):
+        '-> (rngs, values)/([rng], [value])'
+        return sf.rngs_values_pair
+
+#end-class IRangeBasedIntMapping__view_part_API(IMixin4_get_rngs_AND_len_ints):
+
+
+
+#class IRangeBasedIntMapping(IMixin4_get_rngs_AND_len_ints):
+class IRangeBasedIntMapping(IRangeBasedIntMapping__view_part_API):
+    r'''
+ABC IRangeBasedIntMapping:
+    * immutable TouchRangeBasedIntMapping
+    * mutable StackStyleSimpleIntMapping
+
+see also:
+    ABC IRanges
+
+used:
+    to repr parse result of unicode::UCD::Blocks.txt
+        view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/Blocks.txt
+        char_pt_rng2code_block_name
+            :: TouchRangeBasedIntMapping<str>
+            :: StackStyleSimpleIntMapping<str>
+        code_block_name2char_pt_rngs
+            :: Map<str, NonTouchRanges>
+            :: Map<str, StackStyleSimpleIntSet>
+
+    #'''
+    __slots__ = ()
+
+    @classmethod
+    @abstractmethod
+    def _get_type_of_seq4both_rngs_and_values(cls, /):
+        '-> seq_type'
+        raise NotImplementedError
+
+    @classmethod
+    def from_value2begin2sz(cls, value2begin2sz, /):
+        '-> sf'
+        v2i2sz = value2begin2sz
+        rng_v_pairs = sorted(((i,i+sz), v) for v, i2sz in v2i2sz.items() for i, sz in i2sz.items())
+        i2v = cls.from_rng_value_pairs(rng_v_pairs)
+        sf = i2v
+        return sf
+
+    @classmethod
+    def from_rng_value_pairs(cls, rng_value_pairs, /):
+        '-> sf'
+        d = StackStyleSimpleIntMapping()
+        d.push_rng_value_pairs(rng_value_pairs)
+        if cls is type(d):
+            sf = d
+            del d
+        else:
+            rngs, values = d.rngs_values_pair
+            del d
+            sf = cls.from_rngs_values_pair((rngs, values))
+
+        sf
+        return sf
+    @classmethod
+    def from_rngs_values_pair(cls, rngs_values_pair, /):
+        '-> sf'
+        rngs, values = rngs_values_pair
+        seq_type = cls._get_type_of_seq4both_rngs_and_values()
+        if not seq_type is list:
+            rngs = seq_type(rngs)
+            values = seq_type(values)
+        sf = cls((rngs, values))
+        return sf
+
+
+    def __repr__(sf, /):
+        rngs, values = sf.rngs_values_pair
+        return '{}({})'.format(type(sf).__name__, (rngs, values))
+
+
+
+    @classmethod
+    def check_rngs(cls, rngs, /):
+        'check rngs is touch_ranges-list-version'
+        list = cls._get_type_of_seq4both_rngs_and_values()
+        if not type(rngs) is list: raise TypeError
+        if not 7 <= detect_iter_ranges(rngs): raise TypeError #not touch_ranges-list-version
+    @classmethod
+    def check_values(cls, rngs, values, /):
+        'postcondition:[two rngs touch]==>>[their values diff]   ##precondition: check_rngs(rngs) ==>> [rngs is touch_ranges-list-version]'
+        list = cls._get_type_of_seq4both_rngs_and_values()
+        if not type(values) is list: raise TypeError
+        for _ in map(hash, values):pass
+        if not len(rngs) == len(values): raise TypeError
+        L = len(values)
+        for i in range(L-1):
+            [(begin0, end0), (begin1, end1)] = rngs[i:i+2]
+            if end0 == begin1:
+                #touch
+                #==>> value diff
+                v0, v1 = values[i:i+2]
+                if v0 == v1: raise TypeError('two rngs touch with same value but not merge into one rng')
+    @classmethod
+    def from_clone_of_rngs_with_default(cls, rngs, value, /):
+        list = cls._get_type_of_seq4both_rngs_and_values()
+        rngs = list(make_Ranges(rngs).to_nontouch_ranges())
+        values = list([value])*len(rngs)
+        return cls((rngs, values))
+if 0b000:
+    IRangeBasedIntMapping()
+        #__len__, _get_rngs_values_pair_, _get_type_of_seq4both_rngs_and_values, _to_TouchRangeBasedIntMapping_
 class TouchRangeBasedIntMapping(IRangeBasedIntMapping):
+    ___no_slots_ok___ = True
+    @override
     def _to_TouchRangeBasedIntMapping_(sf, /):
         '-> immutable TouchRangeBasedIntMapping'
         return sf
     @classmethod
+    @override
     def _get_type_of_seq4both_rngs_and_values(cls, /):
         '-> seq_type'
         return tuple
+    @override
     def __len__(sf, /):
         '-> len_ints'
         return sf._sz
+    @override
     def _get_rngs_values_pair_(sf, /):
         '-> ([rng], [value])'
         return sf._rngs_values_pair
+
+
     def __init__(sf, rngs_values_pair=None, /):
         if rngs_values_pair is None:
             rngs_values_pair = (), ()
@@ -3091,6 +3313,8 @@ class StackStyleSimpleIntMapping(IRangeBasedIntMapping):
         public-mutable
         NOTE: SHOULD call fix_after_modify_rngs after update .rngs/.values externally
     #'''
+    ___no_slots_ok___ = True
+    @override
     def _to_TouchRangeBasedIntMapping_(sf, /):
         '-> immutable TouchRangeBasedIntMapping'
         rngs, values = sf.rngs_values_pair
@@ -3098,12 +3322,15 @@ class StackStyleSimpleIntMapping(IRangeBasedIntMapping):
         values = to_tuple(values)
         return TouchRangeBasedIntMapping((rngs,values))
     @classmethod
+    @override
     def _get_type_of_seq4both_rngs_and_values(cls, /):
         '-> seq_type'
         return list
+    @override
     def __len__(sf, /):
         '-> len_ints'
         return sf._sz
+    @override
     def _get_rngs_values_pair_(sf, /):
         #保证IRangeBasedIntMapping.rngs_values_pair 能找到有效的_get_rngs_values_pair_
         '-> ([rng], [value])'
@@ -3357,6 +3584,25 @@ def ranges5iter_rngs(rngs, /):
 ranges2char_pairs__str = dot[char_pt_rngs2char_pairs__str, ranges2iter_rngs]
 ranges5char_pairs__str = dot[ranges5iter_rngs, char_pt_rngs5char_pairs__str]
 
+def ranges2hex_sz_pair_list(ranges, /):
+    'IRanges -> [(begin/HexReprInt, len_rng/int)]'
+    hex_sz_pair_list = [(begin, int(end-begin)) for begin, end in ranges2hex_repr_pair_list(ranges)]
+    return hex_sz_pair_list
+def ranges5hex_sz_pair_list(hex_sz_pair_list, /):
+    '[(begin/HexReprInt, len_rng/int)] -> IRanges'
+    rngs = [(int(begin), int(begin+sz)) for begin, sz in hex_sz_pair_list]
+    ranges = make_Ranges(rngs)
+    return ranges
+def ranges2hex2sz(ranges, /):
+    'IRanges -> {begin/HexReprInt:len_rng/int}'
+    hex_sz_pair_list = ranges2hex_sz_pair_list(ranges)
+    hex2sz = dict(hex_sz_pair_list)
+    return hex2sz
+def ranges5hex2sz(hex2sz, /):
+    '{begin/HexReprInt:len_rng/int} -> IRanges'
+    hex_sz_pair_list = sorted(hex2sz.items())
+    ranges = ranges5hex_sz_pair_list(hex_sz_pair_list)
+    return ranges
 
 
 ranges2len_rng2hexbegins_str

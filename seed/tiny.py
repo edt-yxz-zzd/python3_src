@@ -31,7 +31,7 @@ dot[[f, a...]::[b...], g](*args, **kwargs)
 
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
 from seed.tiny import fst, snd, at
-from seed.tiny import mk_tuple, mk_frozenset
+from seed.tiny import mk_tuple, mk_frozenset, mk_immutable_seq
 from seed.tiny import check_tmay, check_pair, check_uint, check_imay, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 from seed.tiny import check_type_le, check_type_is, icheck_type_le, icheck_type_is
 from seed.tiny import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
@@ -110,7 +110,21 @@ from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOve
 
 from seed.helper.str2__all__ import str2__all__
 __all__ = str2__all__(r'''
-    HexReprInt          # subtype of int, __repr__ -> hex
+    dict_add            # :: mapping -> k -> v -> is_new_key/bool
+    set_add             # :: set -> k -> v -> is_new_key/bool
+    dict_update         # :: mapping -> mapping -> are_all_new_keys/bool
+    set_update          # :: set -> mapping -> are_all_new_keys/bool
+
+    strip_text_by_marker_pair
+                        # :: str -> sep -> sep -> middle_gap
+    cut_text_by_marker_seq
+                        # :: str -> (*seps) -> [gap]
+    repr_as_3dot        # [repr(repr_as_3dot) == '...']
+    HEXReprInt          # subtype of int, __repr__ -> hex/0xF
+    HexReprInt          # ===HEXReprInt
+    LowHexReprInt       # subtype of int, __repr__ -> hex/0xf
+    HEXReprInt__without_0x
+                        # subtype of int, __repr__ -> hex/"F"
     no_op               # :: (*args, **kwargs) -> None
     next__tmay          # :: Iter a -> tmay a
     lookup__tmay        # :: Lookupable k v -> tmay v  # Lookupable := hasattr __getitem__ raise LookupError
@@ -201,6 +215,7 @@ __all__ = str2__all__(r'''
     echo_key            # echo_key[k...] -> (k...)
     mk_frozenset        # :: Iter a -> frozenset a
     mk_tuple            # :: Iter a -> tuple a
+    mk_immutable_seq    # :: Iter a -> (tuple a | str | bytes | range)
     mk_reiterable       # :: Iter a -> ReIter a
     mk_reiterables      # :: Iter<Iter a> -> ReIter<ReIter a>
     mk_reiterable__depth_
@@ -448,10 +463,16 @@ from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOve
 
 from seed.tiny_.update_attr import update_attr, iupdate_attrs, set_attrs, prepare4set_attrs, fwd_call
 
-from seed.tiny_.HexReprInt import HexReprInt
-from seed.tiny import HexReprInt
-assert repr(HexReprInt(15)) == hex(15) == '0xf'
-assert repr(HexReprInt(-15)) == hex(-15) == '-0xf'
+from seed.tiny_.HexReprInt import HEXReprInt__without_0x
+from seed.tiny_.HexReprInt import HEXReprInt, HexReprInt, LowHexReprInt
+from seed.tiny import HEXReprInt, HexReprInt, LowHexReprInt
+assert HexReprInt is HEXReprInt
+assert repr(HEXReprInt(15)) == '0xF'
+assert repr(HEXReprInt(-15)) == '-0xF'
+assert repr(LowHexReprInt(15)) == hex(15) == '0xf'
+assert repr(LowHexReprInt(-15)) == hex(-15) == '-0xf'
+assert repr(HEXReprInt__without_0x(15)) == 'F' == f'{(15):X}'
+assert repr(HEXReprInt__without_0x(-15)) == '-F' == f'{(-15):X}'
 
 assert curry1(isinstance, 1)(int)
 assert not curry1(isinstance, 1)(str)
@@ -596,6 +617,22 @@ assert next(null_iter, None) is None
 #null_sequence = empty_sequence
 #null_set = empty_set
 #null_mapping = empty_mapping
+
+from seed.tiny_.containers import mk_immutable_seq
+assert mk_immutable_seq('') is null_tuple
+assert mk_immutable_seq(b'') is null_tuple
+assert mk_immutable_seq(range(9,9)) is null_tuple
+assert mk_immutable_seq(()) is null_tuple
+
+assert mk_immutable_seq(__:='a') is __
+assert mk_immutable_seq(__:=b'a') is __
+assert mk_immutable_seq(__:=range(999)) is __
+assert mk_immutable_seq(__:=(999,)) is __
+assert mk_immutable_seq([999]) == (999,)
+
+
+
+
 
 
 from seed.tiny_.mk_reiterable import mk_reiterable, mk_reiterables, mk_reiterable__depth_
@@ -753,6 +790,22 @@ from seed.tiny_.singleton import __newobj__, __new4singleton__
 
 from seed.tiny_.iter_stop_with_ import iter_stop_with_, GetStopIterationValue
 from seed.tiny_.class_property import class_property
+
+from seed.helper.ConstantRepr import repr_as_3dot #ConstantRepr
+assert repr(repr_as_3dot) == '...'
+assert repr(...) == 'Ellipsis'
+
+
+from seed.str_tools.cut_text_by_marker_seq import cut_text_by_marker_seq, strip_text_by_marker_pair
+assert cut_text_by_marker_seq('abcdefg', *'bdf') == [*'aceg']
+assert cut_text_by_marker_seq('abcde', *'bd') == [*'ace']
+assert strip_text_by_marker_pair('abcde', *'bd') == 'c'
+
+
+from seed.tiny_.dict_op__add import dict_add, set_add, dict_update, set_update
+assert dict_add({}, 222, 333)
+assert not dict_add({222:111}, 222, 333)
+assert not dict_add({222:333}, 222, 333)
 
 
 

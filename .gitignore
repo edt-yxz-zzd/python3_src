@@ -30,5 +30,9 @@
 /**/_ignore__unzip
 /**/_ignore__build
 
+#internal tmp output
+#   view ../../python3_src/seed/recognize/xml/Visitor4ParseResult4XML.py
+#   ../../python3_src/nn_ns/CJK/unicode/ucd_unihan/xml/_ignore__tmp/ver14_0_0/
+/**/_ignore__tmp
 
 

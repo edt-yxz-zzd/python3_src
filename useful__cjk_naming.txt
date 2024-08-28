@@ -55,6 +55,11 @@ why?
 ######################
 [[
 [:常用翻译用语]:here
+unicode 统合码
+汉字区:兼容区vs归并区
+  : 'CJK Compatibility Ideographs'
+  : 'CJK Unified Ideographs'
+
 preview - 预览
 review - 回顾,复审,检阅,复核
 revise - 订正
@@ -270,6 +275,10 @@ max1:？？上限/上界
   fixpoint theory
   不动点归纳法
   fixpoint induction method
+region 区域
+range vs interval
+    范围:左闭右开区间
+    区间:闭区间
 
 [:非汉字部件环境冫标识命名规范]:here
 囜:选用作:通配符#某
@@ -11329,6 +11338,9 @@ s/.0x/\r\0/g
 [[
 ?翻译BMP?:基本面/基位面/基平面/主位面
 ?翻译unified?:归并/归一/统一
+===
+view ../lots/NOTE/unicode/cjk/汉字区.txt
+  unicode 统合码
 ===
 [:兼容区丷归并区]:here
 兼容区vs归并区

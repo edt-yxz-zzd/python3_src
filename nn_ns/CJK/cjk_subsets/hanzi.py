@@ -58,6 +58,12 @@ gbk
         *与 ISO 10646 相应的国家标准 GB 13000 中的其它 CJK 汉字
         #以上合计 20902 个汉字。
         *其它汉字、部首、符号，共计 984 个。
+    view ../lots/NOTE/unicode/cjk/汉字区.txt
+        20902 => [4E00..=9FA5] 一龥
+        初版统合码:唯二汉字区:一龥豈鶴
+            一龥:归并区
+            豈鶴:兼容区
+            view ../../python3_src/seed/text/unicode/constant.py
 
 
 汉字单字字频总表_cedict_12041
@@ -515,6 +521,24 @@ unihan_kUnihanCore2020_common_hz_str__U13_0___2573
     一百零六部平水韵韵目_上声29
     一百零六部平水韵韵目_去声30
     一百零六部平水韵韵目_入声17
+
+
+
+
+
+文本纟繁简字对列表牜繁简唯一可逆牜基位面冫一臸龥牜过滤冫汉字相关基础编码_943繁简字对_1886
+    hzTSpairs__hit_encodings_big5_cp949_gb2312_iso2022_jp__1886
+文本纟繁简字对列表牜繁简唯一可逆牜基位面冫一臸龥_1959繁简字对_3918
+    hzTSpairs__hit_region_ge4E00_le9FA5_20902__3918
+文本纟汉字列表牜繁简平凡自反牜基位面冫一臸龥牜过滤冫汉字相关基础编码_2230
+    cjk_common_region_of_encodings_big5_cp949_gb2312_iso2022_jp__trivial_TS__2230
+文本纟汉字列表牜繁简平凡自反牜基位面冫一臸龥_14428
+    cjk_region_ge4E00_le9FA5_20902__trivial_TS__14428
+
+
+
+
+
 
 """.split()#"""
     #hz_set2sorted_hz_str__by_reversed_freq
@@ -7305,6 +7329,119 @@ cjk_common_subset_1869_trivial_TS_1632 = """
 
 
 
+
+
+
+
+
+#view ../../python3_src/nn_ns/CJK/cjk_subsets/cjk_subsets__TS.py
+#view ../../python3_src/nn_ns/CJK/cjk_subsets/cjk_subsets__TS____output.py
+
+from nn_ns.CJK.cjk_subsets.cjk_subsets__TS____output import 文本纟繁简字对列表牜繁简唯一可逆牜基位面冫一臸龥牜过滤冫汉字相关基础编码_943繁简字对_1886, 文本纟繁简字对列表牜繁简唯一可逆牜基位面冫一臸龥_1959繁简字对_3918, 文本纟汉字列表牜繁简平凡自反牜基位面冫一臸龥牜过滤冫汉字相关基础编码_2230, 文本纟汉字列表牜繁简平凡自反牜基位面冫一臸龥_14428
+
+
+from nn_ns.CJK.cjk_subsets.cjk_subsets__TS____output import hzTSpairs__hit_encodings_big5_cp949_gb2312_iso2022_jp__1886, hzTSpairs__hit_region_ge4E00_le9FA5_20902__3918, cjk_common_region_of_encodings_big5_cp949_gb2312_iso2022_jp__trivial_TS__2230, cjk_region_ge4E00_le9FA5_20902__trivial_TS__14428
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+__all__
 
 
 if __name__ == "__main__":

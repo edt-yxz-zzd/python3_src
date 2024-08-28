@@ -9,3 +9,5 @@ def sign_of(x):
     else:
         raise Exception(f'sign_of({x!r})')
 
+
+from seed.math.sign_of import sign_of

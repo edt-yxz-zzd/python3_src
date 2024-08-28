@@ -1,0 +1,641 @@
+{'Adlam'
+: {0x1E900: 96}
+,'Aegean Numbers'
+: {0x10100: 64}
+,'Ahom'
+: {0x11700: 80}
+,'Alchemical Symbols'
+: {0x1F700: 128}
+,'Alphabetic Presentation Forms'
+: {0xFB00: 80}
+,'Anatolian Hieroglyphs'
+: {0x14400: 640}
+,'Ancient Greek Musical Notation'
+: {0x1D200: 80}
+,'Ancient Greek Numbers'
+: {0x10140: 80}
+,'Ancient Symbols'
+: {0x10190: 64}
+,'Arabic'
+: {0x600: 256}
+,'Arabic Extended-A'
+: {0x8A0: 96}
+,'Arabic Extended-B'
+: {0x870: 48}
+,'Arabic Mathematical Alphabetic Symbols'
+: {0x1EE00: 256}
+,'Arabic Presentation Forms-A'
+: {0xFB50: 688}
+,'Arabic Presentation Forms-B'
+: {0xFE70: 144}
+,'Arabic Supplement'
+: {0x750: 48}
+,'Armenian'
+: {0x530: 96}
+,'Arrows'
+: {0x2190: 112}
+,'Avestan'
+: {0x10B00: 64}
+,'Balinese'
+: {0x1B00: 128}
+,'Bamum'
+: {0xA6A0: 96}
+,'Bamum Supplement'
+: {0x16800: 576}
+,'Basic Latin'
+: {0x0: 128}
+,'Bassa Vah'
+: {0x16AD0: 48}
+,'Batak'
+: {0x1BC0: 64}
+,'Bengali'
+: {0x980: 128}
+,'Bhaiksuki'
+: {0x11C00: 112}
+,'Block Elements'
+: {0x2580: 32}
+,'Bopomofo'
+: {0x3100: 48}
+,'Bopomofo Extended'
+: {0x31A0: 32}
+,'Box Drawing'
+: {0x2500: 128}
+,'Brahmi'
+: {0x11000: 128}
+,'Braille Patterns'
+: {0x2800: 256}
+,'Buginese'
+: {0x1A00: 32}
+,'Buhid'
+: {0x1740: 32}
+,'Byzantine Musical Symbols'
+: {0x1D000: 256}
+,'CJK Compatibility'
+: {0x3300: 256}
+,'CJK Compatibility Forms'
+: {0xFE30: 32}
+,'CJK Compatibility Ideographs'
+: {0xF900: 512}
+,'CJK Compatibility Ideographs Supplement'
+: {0x2F800: 544}
+,'CJK Radicals Supplement'
+: {0x2E80: 128}
+,'CJK Strokes'
+: {0x31C0: 48}
+,'CJK Symbols and Punctuation'
+: {0x3000: 64}
+,'CJK Unified Ideographs'
+: {0x4E00: 20992}
+,'CJK Unified Ideographs Extension A'
+: {0x3400: 6592}
+,'CJK Unified Ideographs Extension B'
+: {0x20000: 42720}
+,'CJK Unified Ideographs Extension C'
+: {0x2A700: 4160}
+,'CJK Unified Ideographs Extension D'
+: {0x2B740: 224}
+,'CJK Unified Ideographs Extension E'
+: {0x2B820: 5776}
+,'CJK Unified Ideographs Extension F'
+: {0x2CEB0: 7488}
+,'CJK Unified Ideographs Extension G'
+: {0x30000: 4944}
+,'Carian'
+: {0x102A0: 64}
+,'Caucasian Albanian'
+: {0x10530: 64}
+,'Chakma'
+: {0x11100: 80}
+,'Cham'
+: {0xAA00: 96}
+,'Cherokee'
+: {0x13A0: 96}
+,'Cherokee Supplement'
+: {0xAB70: 80}
+,'Chess Symbols'
+: {0x1FA00: 112}
+,'Chorasmian'
+: {0x10FB0: 48}
+,'Combining Diacritical Marks'
+: {0x300: 112}
+,'Combining Diacritical Marks Extended'
+: {0x1AB0: 80}
+,'Combining Diacritical Marks Supplement'
+: {0x1DC0: 64}
+,'Combining Diacritical Marks for Symbols'
+: {0x20D0: 48}
+,'Combining Half Marks'
+: {0xFE20: 16}
+,'Common Indic Number Forms'
+: {0xA830: 16}
+,'Control Pictures'
+: {0x2400: 64}
+,'Coptic'
+: {0x2C80: 128}
+,'Coptic Epact Numbers'
+: {0x102E0: 32}
+,'Counting Rod Numerals'
+: {0x1D360: 32}
+,'Cuneiform'
+: {0x12000: 1024}
+,'Cuneiform Numbers and Punctuation'
+: {0x12400: 128}
+,'Currency Symbols'
+: {0x20A0: 48}
+,'Cypriot Syllabary'
+: {0x10800: 64}
+,'Cypro-Minoan'
+: {0x12F90: 112}
+,'Cyrillic'
+: {0x400: 256}
+,'Cyrillic Extended-A'
+: {0x2DE0: 32}
+,'Cyrillic Extended-B'
+: {0xA640: 96}
+,'Cyrillic Extended-C'
+: {0x1C80: 16}
+,'Cyrillic Supplement'
+: {0x500: 48}
+,'Deseret'
+: {0x10400: 80}
+,'Devanagari'
+: {0x900: 128}
+,'Devanagari Extended'
+: {0xA8E0: 32}
+,'Dingbats'
+: {0x2700: 192}
+,'Dives Akuru'
+: {0x11900: 96}
+,'Dogra'
+: {0x11800: 80}
+,'Domino Tiles'
+: {0x1F030: 112}
+,'Duployan'
+: {0x1BC00: 160}
+,'Early Dynastic Cuneiform'
+: {0x12480: 208}
+,'Egyptian Hieroglyph Format Controls'
+: {0x13430: 16}
+,'Egyptian Hieroglyphs'
+: {0x13000: 1072}
+,'Elbasan'
+: {0x10500: 48}
+,'Elymaic'
+: {0x10FE0: 32}
+,'Emoticons'
+: {0x1F600: 80}
+,'Enclosed Alphanumeric Supplement'
+: {0x1F100: 256}
+,'Enclosed Alphanumerics'
+: {0x2460: 160}
+,'Enclosed CJK Letters and Months'
+: {0x3200: 256}
+,'Enclosed Ideographic Supplement'
+: {0x1F200: 256}
+,'Ethiopic'
+: {0x1200: 384}
+,'Ethiopic Extended'
+: {0x2D80: 96}
+,'Ethiopic Extended-A'
+: {0xAB00: 48}
+,'Ethiopic Extended-B'
+: {0x1E7E0: 32}
+,'Ethiopic Supplement'
+: {0x1380: 32}
+,'General Punctuation'
+: {0x2000: 112}
+,'Geometric Shapes'
+: {0x25A0: 96}
+,'Geometric Shapes Extended'
+: {0x1F780: 128}
+,'Georgian'
+: {0x10A0: 96}
+,'Georgian Extended'
+: {0x1C90: 48}
+,'Georgian Supplement'
+: {0x2D00: 48}
+,'Glagolitic'
+: {0x2C00: 96}
+,'Glagolitic Supplement'
+: {0x1E000: 48}
+,'Gothic'
+: {0x10330: 32}
+,'Grantha'
+: {0x11300: 128}
+,'Greek Extended'
+: {0x1F00: 256}
+,'Greek and Coptic'
+: {0x370: 144}
+,'Gujarati'
+: {0xA80: 128}
+,'Gunjala Gondi'
+: {0x11D60: 80}
+,'Gurmukhi'
+: {0xA00: 128}
+,'Halfwidth and Fullwidth Forms'
+: {0xFF00: 240}
+,'Hangul Compatibility Jamo'
+: {0x3130: 96}
+,'Hangul Jamo'
+: {0x1100: 256}
+,'Hangul Jamo Extended-A'
+: {0xA960: 32}
+,'Hangul Jamo Extended-B'
+: {0xD7B0: 80}
+,'Hangul Syllables'
+: {0xAC00: 11184}
+,'Hanifi Rohingya'
+: {0x10D00: 64}
+,'Hanunoo'
+: {0x1720: 32}
+,'Hatran'
+: {0x108E0: 32}
+,'Hebrew'
+: {0x590: 112}
+,'High Private Use Surrogates'
+: {0xDB80: 128}
+,'High Surrogates'
+: {0xD800: 896}
+,'Hiragana'
+: {0x3040: 96}
+,'IPA Extensions'
+: {0x250: 96}
+,'Ideographic Description Characters'
+: {0x2FF0: 16}
+,'Ideographic Symbols and Punctuation'
+: {0x16FE0: 32}
+,'Imperial Aramaic'
+: {0x10840: 32}
+,'Indic Siyaq Numbers'
+: {0x1EC70: 80}
+,'Inscriptional Pahlavi'
+: {0x10B60: 32}
+,'Inscriptional Parthian'
+: {0x10B40: 32}
+,'Javanese'
+: {0xA980: 96}
+,'Kaithi'
+: {0x11080: 80}
+,'Kana Extended-A'
+: {0x1B100: 48}
+,'Kana Extended-B'
+: {0x1AFF0: 16}
+,'Kana Supplement'
+: {0x1B000: 256}
+,'Kanbun'
+: {0x3190: 16}
+,'Kangxi Radicals'
+: {0x2F00: 224}
+,'Kannada'
+: {0xC80: 128}
+,'Katakana'
+: {0x30A0: 96}
+,'Katakana Phonetic Extensions'
+: {0x31F0: 16}
+,'Kayah Li'
+: {0xA900: 48}
+,'Kharoshthi'
+: {0x10A00: 96}
+,'Khitan Small Script'
+: {0x18B00: 512}
+,'Khmer'
+: {0x1780: 128}
+,'Khmer Symbols'
+: {0x19E0: 32}
+,'Khojki'
+: {0x11200: 80}
+,'Khudawadi'
+: {0x112B0: 80}
+,'Lao'
+: {0xE80: 128}
+,'Latin Extended Additional'
+: {0x1E00: 256}
+,'Latin Extended-A'
+: {0x100: 128}
+,'Latin Extended-B'
+: {0x180: 208}
+,'Latin Extended-C'
+: {0x2C60: 32}
+,'Latin Extended-D'
+: {0xA720: 224}
+,'Latin Extended-E'
+: {0xAB30: 64}
+,'Latin Extended-F'
+: {0x10780: 64}
+,'Latin Extended-G'
+: {0x1DF00: 256}
+,'Latin-1 Supplement'
+: {0x80: 128}
+,'Lepcha'
+: {0x1C00: 80}
+,'Letterlike Symbols'
+: {0x2100: 80}
+,'Limbu'
+: {0x1900: 80}
+,'Linear A'
+: {0x10600: 384}
+,'Linear B Ideograms'
+: {0x10080: 128}
+,'Linear B Syllabary'
+: {0x10000: 128}
+,'Lisu'
+: {0xA4D0: 48}
+,'Lisu Supplement'
+: {0x11FB0: 16}
+,'Low Surrogates'
+: {0xDC00: 1024}
+,'Lycian'
+: {0x10280: 32}
+,'Lydian'
+: {0x10920: 32}
+,'Mahajani'
+: {0x11150: 48}
+,'Mahjong Tiles'
+: {0x1F000: 48}
+,'Makasar'
+: {0x11EE0: 32}
+,'Malayalam'
+: {0xD00: 128}
+,'Mandaic'
+: {0x840: 32}
+,'Manichaean'
+: {0x10AC0: 64}
+,'Marchen'
+: {0x11C70: 80}
+,'Masaram Gondi'
+: {0x11D00: 96}
+,'Mathematical Alphanumeric Symbols'
+: {0x1D400: 1024}
+,'Mathematical Operators'
+: {0x2200: 256}
+,'Mayan Numerals'
+: {0x1D2E0: 32}
+,'Medefaidrin'
+: {0x16E40: 96}
+,'Meetei Mayek'
+: {0xABC0: 64}
+,'Meetei Mayek Extensions'
+: {0xAAE0: 32}
+,'Mende Kikakui'
+: {0x1E800: 224}
+,'Meroitic Cursive'
+: {0x109A0: 96}
+,'Meroitic Hieroglyphs'
+: {0x10980: 32}
+,'Miao'
+: {0x16F00: 160}
+,'Miscellaneous Mathematical Symbols-A'
+: {0x27C0: 48}
+,'Miscellaneous Mathematical Symbols-B'
+: {0x2980: 128}
+,'Miscellaneous Symbols'
+: {0x2600: 256}
+,'Miscellaneous Symbols and Arrows'
+: {0x2B00: 256}
+,'Miscellaneous Symbols and Pictographs'
+: {0x1F300: 768}
+,'Miscellaneous Technical'
+: {0x2300: 256}
+,'Modi'
+: {0x11600: 96}
+,'Modifier Tone Letters'
+: {0xA700: 32}
+,'Mongolian'
+: {0x1800: 176}
+,'Mongolian Supplement'
+: {0x11660: 32}
+,'Mro'
+: {0x16A40: 48}
+,'Multani'
+: {0x11280: 48}
+,'Musical Symbols'
+: {0x1D100: 256}
+,'Myanmar'
+: {0x1000: 160}
+,'Myanmar Extended-A'
+: {0xAA60: 32}
+,'Myanmar Extended-B'
+: {0xA9E0: 32}
+,'NKo'
+: {0x7C0: 64}
+,'Nabataean'
+: {0x10880: 48}
+,'Nandinagari'
+: {0x119A0: 96}
+,'New Tai Lue'
+: {0x1980: 96}
+,'Newa'
+: {0x11400: 128}
+,'Number Forms'
+: {0x2150: 64}
+,'Nushu'
+: {0x1B170: 400}
+,'Nyiakeng Puachue Hmong'
+: {0x1E100: 80}
+,'Ogham'
+: {0x1680: 32}
+,'Ol Chiki'
+: {0x1C50: 48}
+,'Old Hungarian'
+: {0x10C80: 128}
+,'Old Italic'
+: {0x10300: 48}
+,'Old North Arabian'
+: {0x10A80: 32}
+,'Old Permic'
+: {0x10350: 48}
+,'Old Persian'
+: {0x103A0: 64}
+,'Old Sogdian'
+: {0x10F00: 48}
+,'Old South Arabian'
+: {0x10A60: 32}
+,'Old Turkic'
+: {0x10C00: 80}
+,'Old Uyghur'
+: {0x10F70: 64}
+,'Optical Character Recognition'
+: {0x2440: 32}
+,'Oriya'
+: {0xB00: 128}
+,'Ornamental Dingbats'
+: {0x1F650: 48}
+,'Osage'
+: {0x104B0: 80}
+,'Osmanya'
+: {0x10480: 48}
+,'Ottoman Siyaq Numbers'
+: {0x1ED00: 80}
+,'Pahawh Hmong'
+: {0x16B00: 144}
+,'Palmyrene'
+: {0x10860: 32}
+,'Pau Cin Hau'
+: {0x11AC0: 64}
+,'Phags-pa'
+: {0xA840: 64}
+,'Phaistos Disc'
+: {0x101D0: 48}
+,'Phoenician'
+: {0x10900: 32}
+,'Phonetic Extensions'
+: {0x1D00: 128}
+,'Phonetic Extensions Supplement'
+: {0x1D80: 64}
+,'Playing Cards'
+: {0x1F0A0: 96}
+,'Private Use Area'
+: {0xE000: 6400}
+,'Psalter Pahlavi'
+: {0x10B80: 48}
+,'Rejang'
+: {0xA930: 48}
+,'Rumi Numeral Symbols'
+: {0x10E60: 32}
+,'Runic'
+: {0x16A0: 96}
+,'Samaritan'
+: {0x800: 64}
+,'Saurashtra'
+: {0xA880: 96}
+,'Sharada'
+: {0x11180: 96}
+,'Shavian'
+: {0x10450: 48}
+,'Shorthand Format Controls'
+: {0x1BCA0: 16}
+,'Siddham'
+: {0x11580: 128}
+,'Sinhala'
+: {0xD80: 128}
+,'Sinhala Archaic Numbers'
+: {0x111E0: 32}
+,'Small Form Variants'
+: {0xFE50: 32}
+,'Small Kana Extension'
+: {0x1B130: 64}
+,'Sogdian'
+: {0x10F30: 64}
+,'Sora Sompeng'
+: {0x110D0: 48}
+,'Soyombo'
+: {0x11A50: 96}
+,'Spacing Modifier Letters'
+: {0x2B0: 80}
+,'Specials'
+: {0xFFF0: 16}
+,'Sundanese'
+: {0x1B80: 64}
+,'Sundanese Supplement'
+: {0x1CC0: 16}
+,'Superscripts and Subscripts'
+: {0x2070: 48}
+,'Supplemental Arrows-A'
+: {0x27F0: 16}
+,'Supplemental Arrows-B'
+: {0x2900: 128}
+,'Supplemental Arrows-C'
+: {0x1F800: 256}
+,'Supplemental Mathematical Operators'
+: {0x2A00: 256}
+,'Supplemental Punctuation'
+: {0x2E00: 128}
+,'Supplemental Symbols and Pictographs'
+: {0x1F900: 256}
+,'Supplementary Private Use Area-A'
+: {0xF0000: 65536}
+,'Supplementary Private Use Area-B'
+: {0x100000: 65536}
+,'Sutton SignWriting'
+: {0x1D800: 688}
+,'Syloti Nagri'
+: {0xA800: 48}
+,'Symbols and Pictographs Extended-A'
+: {0x1FA70: 144}
+,'Symbols for Legacy Computing'
+: {0x1FB00: 256}
+,'Syriac'
+: {0x700: 80}
+,'Syriac Supplement'
+: {0x860: 16}
+,'Tagalog'
+: {0x1700: 32}
+,'Tagbanwa'
+: {0x1760: 32}
+,'Tags'
+: {0xE0000: 128}
+,'Tai Le'
+: {0x1950: 48}
+,'Tai Tham'
+: {0x1A20: 144}
+,'Tai Viet'
+: {0xAA80: 96}
+,'Tai Xuan Jing Symbols'
+: {0x1D300: 96}
+,'Takri'
+: {0x11680: 80}
+,'Tamil'
+: {0xB80: 128}
+,'Tamil Supplement'
+: {0x11FC0: 64}
+,'Tangsa'
+: {0x16A70: 96}
+,'Tangut'
+: {0x17000: 6144}
+,'Tangut Components'
+: {0x18800: 768}
+,'Tangut Supplement'
+: {0x18D00: 128}
+,'Telugu'
+: {0xC00: 128}
+,'Thaana'
+: {0x780: 64}
+,'Thai'
+: {0xE00: 128}
+,'Tibetan'
+: {0xF00: 256}
+,'Tifinagh'
+: {0x2D30: 80}
+,'Tirhuta'
+: {0x11480: 96}
+,'Toto'
+: {0x1E290: 48}
+,'Transport and Map Symbols'
+: {0x1F680: 128}
+,'Ugaritic'
+: {0x10380: 32}
+,'Unified Canadian Aboriginal Syllabics'
+: {0x1400: 640}
+,'Unified Canadian Aboriginal Syllabics Extended'
+: {0x18B0: 80}
+,'Unified Canadian Aboriginal Syllabics Extended-A'
+: {0x11AB0: 16}
+,'Vai'
+: {0xA500: 320}
+,'Variation Selectors'
+: {0xFE00: 16}
+,'Variation Selectors Supplement'
+: {0xE0100: 240}
+,'Vedic Extensions'
+: {0x1CD0: 48}
+,'Vertical Forms'
+: {0xFE10: 16}
+,'Vithkuqi'
+: {0x10570: 80}
+,'Wancho'
+: {0x1E2C0: 64}
+,'Warang Citi'
+: {0x118A0: 96}
+,'Yezidi'
+: {0x10E80: 64}
+,'Yi Radicals'
+: {0xA490: 64}
+,'Yi Syllables'
+: {0xA000: 1168}
+,'Yijing Hexagram Symbols'
+: {0x4DC0: 64}
+,'Zanabazar Square'
+: {0x11A00: 80}
+,'Znamenny Musical Notation'
+: {0x1CF00: 208}
+}

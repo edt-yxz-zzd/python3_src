@@ -55,6 +55,7 @@ py -m nn_ns.app.doctest_cmd seed.helper.stable_repr:__doc__ -ff -v
 from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
 from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
 from seed.helper.stable_repr import stable_repr__expand_all_layer, stable_repr_print__expand_all_layer
+from seed.helper.stable_repr import stable_repr__expand_all_layer__noindent, stable_repr_print__expand_all_layer__noindent
 
 
 SortableIterReprable4builtins.register_datatype_and_name_and_SortableIterReprable
@@ -74,6 +75,7 @@ from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, reg
 >>> from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
 >>> from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
 >>> from seed.helper.stable_repr import stable_repr__expand_all_layer, stable_repr_print__expand_all_layer
+>>> from seed.helper.stable_repr import stable_repr__expand_all_layer__noindent, stable_repr_print__expand_all_layer__noindent
 
 >>> from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
 
@@ -473,6 +475,32 @@ XX(
 ]
 
 
+>>> stable_repr_print__expand_all_layer__noindent(None, [(0, 1, [2, [3, {4:{5:{6}}}]]), []])
+[
+(
+0
+,1
+,[
+2
+,[
+3
+,{
+4
+: {
+5
+: {
+6
+}
+}
+}
+]
+]
+)
+,[]
+]
+
+
+
 #]]]]]'''
 
 __all__ = r'''
@@ -481,6 +509,9 @@ __all__ = r'''
 
     stable_repr__expand_all_layer
     stable_repr_print__expand_all_layer
+
+    stable_repr__expand_all_layer__noindent
+    stable_repr_print__expand_all_layer__noindent
 
     stable_repr
     stable_repr_ex
@@ -814,6 +845,13 @@ def stable_repr__expand_all_layer(obj, /):
     return stable_repr(obj, **_kwargs4expand_all_layer)
 def stable_repr_print__expand_all_layer(may_ofile, obj, /):
     return stable_repr_print(may_ofile, obj, **_kwargs4expand_all_layer)
+##################################
+_kwargs4expand_all_layer__noindent = {**_kwargs4expand_all_layer, 'indent':''}
+def stable_repr__expand_all_layer__noindent(obj, /):
+    return stable_repr(obj, **_kwargs4expand_all_layer__noindent)
+def stable_repr_print__expand_all_layer__noindent(may_ofile, obj, /):
+    return stable_repr_print(may_ofile, obj, **_kwargs4expand_all_layer__noindent)
+##################################
 ##################################
 ##################################
 
@@ -1828,6 +1866,7 @@ __register(); del __register
 from seed.helper.stable_repr import stable_repr, stable_repr_ex, stable_repr_print, stable_repr_print_ex
 from seed.helper.stable_repr import stable_repr__expand_top_layer, stable_repr_print__expand_top_layer
 from seed.helper.stable_repr import stable_repr__expand_all_layer, stable_repr_print__expand_all_layer
+from seed.helper.stable_repr import stable_repr__expand_all_layer__noindent, stable_repr_print__expand_all_layer__noindent
 
 
 from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs

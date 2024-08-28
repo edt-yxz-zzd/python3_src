@@ -94,44 +94,49 @@ def compare_by_lt_eq(lhs, rhs):
     return +1
 
 class IComparable(ABC):
+    __slots__ = ()
     @abstractmethod
-    def ___compare___(sf, other):
+    def ___compare___(sf, ot, /):
         'obj -> ([-1..+1]|NotImplemented)'
     def __lt__(sf, ot):
-        r = compare(sf, other)
+        r = compare(sf, ot)
         return r < 0
     def __le__(sf, ot):
-        r = compare(sf, other)
+        r = compare(sf, ot)
         return r <= 0
     def __gt__(sf, ot):
-        r = compare(sf, other)
+        #return not sf <= ot
+        r = compare(sf, ot)
         return r > 0
     def __ge__(sf, ot):
-        r = compare(sf, other)
+        #return not sf < ot
+        r = compare(sf, ot)
         return r >= 0
     def __eq__(sf, ot):
-        r = compare(sf, other)
+        r = compare(sf, ot)
         return r == 0
     def __ne__(sf, ot):
-        r = compare(sf, other)
+        return not sf == ot
+        r = compare(sf, ot)
         return r != 0
 
 class ITypeComparable(IComparable):
+    __slots__ = ()
     @abstractmethod
-    def ___same_type_compare___(sf, other):
+    def ___same_type_compare___(sf, ot, /):
         '__class__ -> [-1..+1]'
-        assert type(sf) is type(other)
+        assert type(sf) is type(ot)
     @classmethod
     @abstractmethod
-    def ___type_compare___(cls, other_cls):
+    def ___type_compare___(cls, ot_cls):
         'type -> ([-1..+1]|NotImplemented)'
 
     @override
-    def ___compare___(sf, other):
+    def ___compare___(sf, ot, /):
         t0 = type(sf)
-        t1 = type(other)
+        t1 = type(ot)
         if t0 is t1:
-            return t0.___same_type_compare___(sf, other)
+            return t0.___same_type_compare___(sf, ot)
         return type_compare(t0, t1)
 
 

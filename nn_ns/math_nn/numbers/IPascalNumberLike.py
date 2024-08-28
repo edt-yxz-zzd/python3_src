@@ -1,7 +1,7 @@
 
 '''
 Pascal_number(n,k) = binomial(n,k) = choose(n,k) = C(n,k)
-Stirling_circle(n,k) = Stirling[n,k] = Stirling number of first kind
+Stirling_circle_number(n,k) = Stirling[n,k] = Stirling number of first kind
 Stirling_subset_number(n,k) = Stirling{n,k} = Stirling number of second kind
 Eulerian_1st(n,k) = Eulerian<n,k> = Eulerian numbers of first order
 Eulerian_2nd(n,k) = Eulerian<<n,k>> = Eulerian numbers of second order

@@ -1,8 +1,8 @@
-
+#__all__:goto
 r'''
 
 py -m seed.types.view.RecurView
-py -m nn_ns.app.debug_cmd   seed.types.view.RecurView
+py -m nn_ns.app.debug_cmd   seed.types.view.RecurView -x
 
 from seed.types.view.RecurView import default_cfg4RecurView
 from seed.types.view.RecurView import IConfig4RecurView, IRecurView, default_cfg4RecurView, default_slice
@@ -74,6 +74,9 @@ mappingproxy({<class '...'>})
 >>> cfg.get_view__immutable_basetypes()
 SeqView([<class 'numbers.Number'>])
 >>> cfg.get_view__basetype_RecurViewType_pairs()
+SeqView([(<class 'collections.abc.Sequence'>, <class 'seed.types.view.RecurView.RecurView4Seq'>), (<class 'collections.abc.Mapping'>, <class 'seed.types.view.RecurView.RecurView4Mapping'>), (<class 'collections.abc.Set'>, <class 'seed.types.view.RecurView.asif_RecurView4Set'>), (<class 'seed.data_funcs.rngs.IRangeBasedIntMapping'>, <class 'seed.types.view.RecurView.RecurView4IRangeBasedIntMapping'>)])
+
+old:before:IRangeBasedIntMapping
 SeqView([(<class 'collections.abc.Sequence'>, <class 'seed.types.view.RecurView.RecurView4Seq'>), (<class 'collections.abc.Mapping'>, <class 'seed.types.view.RecurView.RecurView4Mapping'>), (<class 'collections.abc.Set'>, <class 'seed.types.view.RecurView.asif_RecurView4Set'>)])
 >>> cfg.get_view__fallback_RecurViewTypes()
 SeqView([])
@@ -104,6 +107,8 @@ __all__ = '''
         slc2may_slice
         slc5may_slice
     '''.split()
+        #asif_RecurView4Seq
+__all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.types.view.View import MapView, SetView, SeqView
@@ -545,6 +550,9 @@ import datetime
 import time
 from pathlib import PurePath
 from types import MappingProxyType
+from seed.data_funcs.rngs import IRangeBasedIntMapping, TouchRangeBasedIntMapping, StackStyleSimpleIntMapping
+from seed.data_funcs.rngs import IRangeBasedIntMapping__view_part_API
+
 ___end_mark_of_excluded_global_names__2___ = ...
 def _():
     'is time.struct_time immutable? YES!!!'
@@ -600,6 +608,10 @@ def _asif_RecurView4bytearray(cfg4RecurView, bs, /):
 def _asif_RecurView4Set(cfg4RecurView, s, /):
     'mimic dict, where key are considered immutable solid data like str/datetime'
     return SetView(s)
+def _asif_RecurView4Seq(cfg4RecurView, ls, /):
+    'mimic dict, where key are considered immutable solid data like str/datetime/rng'
+    return SeqView(ls)
+
 
 class _asif_RecurView4XXX(IRecurView):
     @abstractmethod
@@ -623,10 +635,99 @@ class asif_RecurView4Set(_asif_RecurView4XXX, Set):
     ___ABC4XXX___ = Set
     def __new__(sf, may_cfg4RecurView, set_, /):
         return _asif_RecurView4Set(may_cfg4RecurView, set_)
+class asif_RecurView4Seq(_asif_RecurView4XXX, Set):
+    ___ABC4XXX___ = Set
+    def __new__(sf, may_cfg4RecurView, ls, /):
+        return _asif_RecurView4Seq(may_cfg4RecurView, ls)
 
 
 
+if 0b000:
+    assert 0, dir(TouchRangeBasedIntMapping())
+        #for:IRangeBasedIntMapping
 
+
+if 0b000:
+    IRangeBasedIntMapping__view_part_API()
+        #__len__, _get_rngs_values_pair_, _to_TouchRangeBasedIntMapping_
+class RecurView4IRangeBasedIntMapping(IRecurView, IRangeBasedIntMapping__view_part_API):
+    r'''[[[
+
+ABC IRangeBasedIntMapping:
+    * immutable TouchRangeBasedIntMapping
+    * mutable StackStyleSimpleIntMapping
+
+    #]]]'''#'''
+    ___no_slots_ok___ = True
+    @override
+    def _to_TouchRangeBasedIntMapping_(sf, /):
+        '-> immutable TouchRangeBasedIntMapping'
+        return TouchRangeBasedIntMapping.from_rngs_values_pair(sf.rngs_values_pair)
+        raise 000
+        return sf
+    @override
+    def __len__(sf, /):
+        '-> len_ints'
+        return len(sf.__d)
+    @override
+    def _get_rngs_values_pair_(sf, /):
+        '-> ([rng], [value])'
+        rngs, values = sf.__d.rngs_values_pair
+        if not type(rngs) is tuple:
+            if 0:
+                rngs = sf.__cfg.to_view(rngs)
+                    #TypeError: '<' not supported between instances of 'RecurView4Seq' and 'tuple'
+                #<<==:#idx = bisect.bisect_left(rngs, (j,j)) - 1
+                #   @seed.data_funcs.rngs:def rngs_op__get_maybe_range_contained_ex(rngs, i, /):
+                #when using seed.types.view.RecurView:rngs[k] will be RecurView4Seq
+                #now:using SeqView instead of RecurView4Seq
+                raise TypeError(type(rngs))
+            rngs = SeqView(rngs)
+        values = sf.__cfg.to_view(values)
+        return (rngs, values)
+
+
+
+    ######################
+    ######################
+    ######################
+    #below:copy from: RecurView4Mapping
+    ######################
+
+    @classmethod
+    @override
+    def try_view_(cls, cfg4RecurView, obj, /):
+        '{{cls/IRecurView}} -> cfg4RecurView/IConfig4RecurView -> obj -> tmay IRecurView<cfg4RecurView, obj>'
+        if not isinstance(obj, IRangeBasedIntMapping):
+            return ()
+        return (cls(cfg4RecurView, obj),)
+    @override
+    def get_type_of_wrapped_obj(sf, /):
+        '{{sf/IRecurView<cfg4RecurView, obj>}} -> type<obj>'
+        return type(sf.__d)
+
+
+
+    def __init__(sf, may_cfg4RecurView, mapping:IRangeBasedIntMapping, /):
+        cfg4RecurView = cfg5may_cfg4RecurView(may_cfg4RecurView)
+        sf.__cfg = cfg4RecurView
+
+        if not isinstance(mapping, IRangeBasedIntMapping): raise TypeError
+        if isinstance(mapping, __class__):
+            # since immutable, we can use the underly object directly
+            mapping = mapping.__d
+            assert not isinstance(mapping, __class__)
+        sf.__d = mapping
+    def __repr__(sf, /):
+        cfg4RecurView = sf.__cfg
+        may_cfg4RecurView = cfg2may_cfg4RecurView(cfg4RecurView)
+        return repr_helper(sf, may_cfg4RecurView, sf.__d)
+            # ?why not list(sf.__d)?
+            #   view is not to hide info!!
+
+    ######################
+    ######################
+    ######################
 
 
 
@@ -652,6 +753,7 @@ default_cfg4RecurView = Config4RecurView(
     ,datetime.timezone
     ,time.struct_time
     ,*_PathTypes
+
     }
 
     ,{list:RecurView4Seq
@@ -667,6 +769,9 @@ default_cfg4RecurView = Config4RecurView(
     ,MappingProxyType:RecurView4Mapping
         #key-value-slot is immutable
         #but the value obj itself is mutable!!!
+    ,StackStyleSimpleIntMapping:RecurView4IRangeBasedIntMapping
+    ,TouchRangeBasedIntMapping:RecurView4IRangeBasedIntMapping
+        # the value obj itself is mutable!!!
     }
 
     ,[Number]
@@ -674,11 +779,20 @@ default_cfg4RecurView = Config4RecurView(
     ,[(Sequence, RecurView4Seq)
     ,(Mapping, RecurView4Mapping)
     ,(Set, asif_RecurView4Set)
+    ,(IRangeBasedIntMapping, RecurView4IRangeBasedIntMapping)
     ]
 
     ,[]
     )
 
+if 0b001:
+    assert default_cfg4RecurView.to_view(TouchRangeBasedIntMapping()) or 1
+    #_v = default_cfg4RecurView.to_view(TouchRangeBasedIntMapping.from_rngs_values_pair(([(2,3)], [[999]])))
+        #TypeError: unhashable type: 'list'
+    _v = default_cfg4RecurView.to_view(TouchRangeBasedIntMapping.from_rngs_values_pair(([(2,3)], [(999,666)])))
+    assert type(_v[2]) is RecurView4Seq
+    assert type(_v[2][0]) is int
+    assert _v[2][0] == 999
 
 
 if __name__ == "__main__":

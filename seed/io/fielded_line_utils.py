@@ -1,3 +1,4 @@
+#__all__:goto
 r'''[[[
 see also:
     py::csv
@@ -95,6 +96,7 @@ __all__ = '''
         fielded_lines_preprocesserT
         lines_preprocesserT
 
+    unicode_char_pt_rng5field
 
         example4lines_parser4UCD_CJKRadicals_txt
         example4txt_parser4UCD_CJKRadicals_txt
@@ -233,6 +235,20 @@ def decimal_nondecimal_str2int_tail_pair(decimal_nondecimal_str, /):
     u = int(decimal_digit1s)
     return (u, tail)
 
+def unicode_char_pt_rng5field(field, /):
+    'str/regex"[0-9A-F]+([.][.][0-9A-F]+)?" -> rng/(begin,end)"'
+    if '.' in field:
+        hx4first, hx4last = field.split('..')
+    else:
+        hx4ch = field
+        hx4first, hx4last = hx4ch, hx4ch
+    begin = hex2int(hx4first)
+    end = 1+hex2int(hx4last)
+    return (begin, end)
+
+
+
+
 def mk_fT(f, /):
     def fT(*args, **kwargs):
         def _f(x, /):
@@ -294,3 +310,5 @@ def lines_preprocesserT(line_tail_comment_prefix, /, *, keep_space_lines):
 example4lines_parser4UCD_CJKRadicals_txt = fielded_lines_parserT__tuple(';', '#', [decimal_nondecimal_str2int_tail_pair, hex2char, hex2char], keep_space_lines=False, keep_bifix_spaces4field=False)
 example4txt_parser4UCD_CJKRadicals_txt = lines_handler2txt_handler(example4lines_parser4UCD_CJKRadicals_txt)
 
+from seed.io.fielded_line_utils import unicode_char_pt_rng5field
+from seed.io.fielded_line_utils import *

@@ -1,0 +1,1 @@
+py -m nn_ns.app.mk_py_template --root_dirs '.' --root_dirs '../../python3_src/' -i '<~.tpl>' --begin4template4module '' --end4template4module '' --placeholder4path4module '\bzz\b'  --placeholder4qnm4module '\bz\b' -o  "$@"

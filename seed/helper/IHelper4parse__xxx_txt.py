@@ -37,9 +37,11 @@ used by:
 .state
     = compact_result
     mutable
+        #maybe immutable
+        #hidden from user
 
 ======================
-.
+
 #'''
 
 __all__ = ['IHelper4parse__xxx_txt']
@@ -52,9 +54,103 @@ class IHelper4parse__xxx_txt(ABC):
     r'''
 main methods:
     .parse__fin
+        #parse__ifile
     .state2dataobj___create
     .state5dataobj___save
+
+
+===
+===
+===
+ifile
+    -> parsed_result
+        -> extra_derived_result
+            <-> readonly__extra_derived_result
+        <-> readonly__parsed_result
+        <-> compact_result
+            <-> state
+        :::
+        <-> dataobj
+            <-> readonly__dataobj
+
+<<==:
+[state == compact_result]
+[dataobj == (parsed_result, extra_derived_result)]
+[readonly__dataobj == (readonly__parsed_result, readonly__extra_derived_result)]
+==>>:
+
+!:ifile -> parsed_result
+!:parsed_result <-> compact_result
+!:parsed_result -> extra_derived_result
+!:parsed_result <-> readonly__parsed_result
+!:extra_derived_result <-> readonly__extra_derived_result
+==>>:
+
+parsed_result <-> dataobj
+    !! [dataobj == (parsed_result, extra_derived_result)]
+    !:parsed_result -> extra_derived_result
+
+
+compact_result <-> dataobj
+    !:parsed_result <-> compact_result
+    parsed_result <-> dataobj
+
+compact_result <-> state
+    !! [state == compact_result]
+    echo
+
+state <-> dataobj
+    compact_result <-> state
+    compact_result <-> dataobj
+
+dataobj <-> readonly__dataobj
+    !! [dataobj == (parsed_result, extra_derived_result)]
+    !! [readonly__dataobj == (readonly__parsed_result, readonly__extra_derived_result)]
+    !:parsed_result <-> readonly__parsed_result
+    !:extra_derived_result <-> readonly__extra_derived_result
+
+
+<<==:
+`parse__fin
+    ifile -> parsed_result
+
+state2dataobj___create
+state5dataobj___save
+    state <-> dataobj
+
+compact_result2state
+compact_result5state
+    compact_result <-> state
+
+compact_result2dataobj
+compact_result5dataobj
+    compact_result <-> dataobj
+
+parsed_result2dataobj
+parsed_result5dataobj
+    parsed_result <-> dataobj
+
+`parsed_result2extra
+    parsed_result -> extra_derived_result
+
+`parsed_result2compact
+`parsed_result5compact
+    parsed_result <-> compact_result
+
+`parsed_result2readonly
+`parsed_result5readonly
+    parsed_result <-> readonly__parsed_result
+
+`extra_derived_result2readonly
+`extra_derived_result5readonly
+    extra_derived_result <-> readonly__extra_derived_result
+
+dataobj2readonly
+dataobj5readonly
+    dataobj <-> readonly__dataobj
+
     #'''
+    #grep 'def [^_]' ../../python3_src/seed/helper/IHelper4parse__xxx_txt.py
 
 
     @abstractmethod

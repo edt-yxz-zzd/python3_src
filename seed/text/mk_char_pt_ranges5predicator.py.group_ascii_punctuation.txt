@@ -1,0 +1,23 @@
+e ../../python3_src/seed/text/mk_char_pt_ranges5predicator.py.group_ascii_punctuation.txt
+
+from seed.text.mk_char_pt_ranges5predicator import punctuation_ascii_char_pt_ranges, punctuation_ascii_sorted_chars
+
+assert punctuation_ascii_sorted_chars == '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+assert len(punctuation_ascii_sorted_chars) == 32
+
+print(punctuation_ascii_sorted_chars)
+!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+
+
+()[]{}
++-*/
+<=>
+
+,.:;!?
+"'`
+
+#$@%
+&|
+
+\^_~
+

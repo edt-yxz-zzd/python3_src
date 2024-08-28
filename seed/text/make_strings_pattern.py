@@ -1,7 +1,7 @@
 
 __all__ = '''
-    make_chars_pattern
     make_strings_pattern
+    make_chars_pattern
     '''.split()
 
 from re import escape
@@ -16,6 +16,7 @@ def make_chars_pattern(chars):
     pattern = ''.join(chain('[', patterns, ']'))
     return pattern
 assert make_chars_pattern(['a', '1']) == '[a1]'
+assert (__:=make_chars_pattern([*r'^a-z\w[]'])) == r'[\^a\-z\\w\[\]]', __
 
 def make_strings_pattern(strings):
     # ['ab', '12'] ==>> r"ab|12"
@@ -33,3 +34,6 @@ def make_strings_pattern(strings):
 assert make_strings_pattern(['a', 'aa']) == 'aa|a'
 
 
+from seed.text.make_strings_pattern import make_strings_pattern
+from seed.text.make_strings_pattern import make_chars_pattern
+from seed.text.make_strings_pattern import *

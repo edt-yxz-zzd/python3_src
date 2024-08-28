@@ -1,3 +1,4 @@
+#__all__:goto
 r'''[[[
 
 [[
@@ -23,6 +24,9 @@ AttributeError: 'tuple_iterator' object has no attribute '__contains__'
 
 ]]
 
+
+
+
 from seed.tiny_.check import check_may_, check_not_
 
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
@@ -32,12 +36,14 @@ from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifi
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.tiny_.check import check_str, check_char, check_bool
-from seed.tiny_.check import icheck_str, icheck_char, icheck_bool
+from seed.tiny_.check import check_str, check_char, check_bool, check_tribool
+from seed.tiny_.check import icheck_str, icheck_char, icheck_bool, icheck_tribool
 
 ]]]'''#'''
 
 __all__ = '''
+    check_non_ABC
+
     check_may_
     check_not_
 
@@ -85,11 +91,15 @@ __all__ = '''
     check_str
     check_char
     check_bool
+    check_tribool
 
     icheck_str
     icheck_char
     icheck_bool
-    '''.split()
+    icheck_tribool
+
+'''.split()#'''
+__all__
 
 def _call_(check_, obj, /):
     'check_ :: (obj->None) | ((obj->None), *args)'
@@ -276,6 +286,9 @@ def check_char(s, /):
 
 def check_bool(b, /):
     check_type_is(bool, b)
+def check_tribool(b, /):
+    if not b is ...:
+        check_type_is(bool, b)
 
 def icheck_str(s, /):
     check_str(s)
@@ -286,7 +299,39 @@ def icheck_char(s, /):
 def icheck_bool(b, /):
     check_bool(b)
     return b
+def icheck_tribool(b, /):
+    check_tribool(b)
+    return b
 
+def check_non_ABC(cls, /):
+    if (nms:=getattr(cls, '__abstractmethods__', None)):
+        raise TypeError((cls, sorted(nms)))
+def check_ABC(cls, /):
+    if not (nms:=getattr(cls, '__abstractmethods__', None)):
+        raise TypeError(cls)
+
+check_non_ABC(int)
+def __():
+    from abc import ABC, abstractmethod
+    class C(ABC):
+        @abstractmethod
+        def f():0
+    check_ABC(C)
+    check_non_ABC(int)
+
+    try:
+        check_non_ABC(C)
+    except TypeError:
+        pass
+    else:
+        raise 000
+    try:
+        check_ABC(int)
+    except TypeError:
+        pass
+    else:
+        raise 000
+__()
 
 
 
@@ -297,8 +342,8 @@ from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifi
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.tiny_.check import check_str, check_char, check_bool
-from seed.tiny_.check import icheck_str, icheck_char, icheck_bool
+from seed.tiny_.check import check_str, check_char, check_bool, check_tribool
+from seed.tiny_.check import icheck_str, icheck_char, icheck_bool, icheck_tribool
 
 
 from seed.tiny_.check import *

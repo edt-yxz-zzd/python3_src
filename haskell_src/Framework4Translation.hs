@@ -19,6 +19,8 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE UndecidableInstances #-}
 
+{-# LANGUAGE DataKinds #-}
+
 -- {-# LANGUAGE DataKinds #-}
 -- {-# LANGUAGE DefaultSignatures #-}
 {-
@@ -217,7 +219,39 @@ ver3-to-ver4:
       TRY__UVirtualMachine
         update:TRY__mkVM --> TRY__mkVM u__datD5u__dat_D_6Z
 
+ver5:虚拟机塔
+  函数/数据:只能绑定于特定『虚拟机塔』的内存里
+      文件:可以在不同虚拟机之间自由交换:可以当作_999数据
+      输入输出为文件的函数:可以当作_999函数
+      函数:可以通过(.)/cat组合合成，也可以通过装载程序/脚本文件得到。
+      虚拟机不会无缘无故出现，只能通过装载虚拟机程序得到
 
+
+对付多态类型:
+  f g --> ((\g::... -> f g) g)
+ghci:
+  :set -XDataKinds
+  data Z :: [*] -> *
+ghci> f :: Z ls -> Z xs -> Z (ls++xs)
+  <interactive>:11:27: error:
+    Not in scope: type constructor or class ‘++’
+
+
+{-# LANGUAGE DataKinds #-}
+Vms :: [*] -> * -> *
+Vms nml_tower dat
+
+transmit :: Vms nml_towerA (File fmt dat) -> Vms nml_towerB a -> Vms nml_towerB (File fmt dat)
+eval :: Vms (fmt:_nml_tower) (File fmt dat) -> Vms (fmt:_nml_tower) dat
+pure5natural :: dat -> Vms nml_tower a -> Vms nml_tower dat
+apply :: Vms nml_tower (a->b) -> Vms nml_tower a -> Vms nml_tower b
+collapse :: Vms nml_towerA (Vms nml_towerB dat) -> Vms (nml_towerB ++ nml_towerA)
+  (++) fail...
+doing here...
+
+
+
+===old:
 
 三种文件+两种程序+基本操作:
 *三种文件:

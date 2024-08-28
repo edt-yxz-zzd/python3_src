@@ -1,0 +1,6 @@
+ls -1F -sSh "$@"
+  # -1: one file per line
+  # -F: add suffix "/" for folder
+  # -s: --size: show
+  # -S: sort, largest first
+  # -h: --human-readable
