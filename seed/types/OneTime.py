@@ -11,6 +11,8 @@ class OneTimeBase:
         # self.N = len(key2anything)
         self._key2pos_value = key2anything
         self.witnesses = [] # keys
+    def clear(self):
+        self.witnesses.clear()
 
     @property
     def buffer(self):
@@ -120,6 +122,8 @@ class OneTimeSet(OneTimeBase, MutableSet):
         return pos
 
 
+    def update(self, keys):
+        for _ in map(self.add, keys):pass
 
     def add(self, key):
         self[key] = key

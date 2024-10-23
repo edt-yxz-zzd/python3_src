@@ -1,6 +1,35 @@
+r'''[[[
+e ../../python3_src/seed/iters/generator_iterator_capturer.py
+from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
 
-#e ../../python3_src/seed/iters/generator_iterator_capturer.py
-#from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
+
+gi.send(777) --> gi.code:{777==yield ...}
+
+return 999 --> raise StopIteration(999)
+yield from it --> try...except StopIteration as e: return e.value
+
+
+
+return5it = yield from it
+>>> def f():
+...     yield 555
+...     return 999
+...
+>>> def g():
+...     x = yield from f()
+...     xs.append(x)
+...
+>>> xs = []
+>>> for u in g():
+...     u
+...
+555
+>>> xs
+[999]
+
+
+
+#]]]'''#'''
 
 class GeneratorIteratorCapturer:
     def __init__(sf, generator_iterator, /):

@@ -32,6 +32,7 @@ dot[[f, a...]::[b...], g](*args, **kwargs)
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
 from seed.tiny import fst, snd, at
 from seed.tiny import mk_tuple, mk_frozenset, mk_immutable_seq
+from seed.tiny import mk_pair, mk_pair_tuple, is_pair
 from seed.tiny import check_tmay, check_pair, check_uint, check_imay, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 from seed.tiny import check_type_le, check_type_is, icheck_type_le, icheck_type_is
 from seed.tiny import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
@@ -110,10 +111,11 @@ from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOve
 
 from seed.helper.str2__all__ import str2__all__
 __all__ = str2__all__(r'''
+    oo                  # usage: +oo, -oo
     dict_add            # :: mapping -> k -> v -> is_new_key/bool
-    set_add             # :: set -> k -> v -> is_new_key/bool
-    dict_update         # :: mapping -> mapping -> are_all_new_keys/bool
-    set_update          # :: set -> mapping -> are_all_new_keys/bool
+    set_add             # :: set -> k -> is_new_key/bool
+    dict_update         # :: mapping -> view<mapping> -> are_all_new_keys/bool
+    set_update          # :: set -> view<set> -> are_all_new_keys/bool
 
     strip_text_by_marker_pair
                         # :: str -> sep -> sep -> middle_gap
@@ -129,6 +131,8 @@ __all__ = str2__all__(r'''
     next__tmay          # :: Iter a -> tmay a
     lookup__tmay        # :: Lookupable k v -> tmay v  # Lookupable := hasattr __getitem__ raise LookupError
     chains              # :: Iter (Iter a) -> Iter a
+    count_              # count_(start=0, may_stop=None, /, step=1)
+                        # diff:itertools.count(start=0, step=1)
 
     slice2triple        # :: slice -> (.start, .stop, .step)
     range2triple        # :: range -> (.start, .stop, .step)
@@ -215,6 +219,9 @@ __all__ = str2__all__(r'''
     echo_key            # echo_key[k...] -> (k...)
     mk_frozenset        # :: Iter a -> frozenset a
     mk_tuple            # :: Iter a -> tuple a
+    mk_pair_tuple       # :: Iter (Iter a) -> tuple (pair a)
+    mk_pair             # :: Iter a -> pair a
+    is_pair             # :: a -> bool
     mk_immutable_seq    # :: Iter a -> (tuple a | str | bytes | range)
     mk_reiterable       # :: Iter a -> ReIter a
     mk_reiterables      # :: Iter<Iter a> -> ReIter<ReIter a>
@@ -269,6 +276,8 @@ __all__ = str2__all__(r'''
     mk_Left             # a -> (False,a)
     mk_Right            # a -> (True,a)
 
+    unbox_               # :: x -> (Iter a){len<2} -> (a|x)
+    unbox               # :: (Iter a){len==1} -> a
     fst                 # :: (a, ...) -> a
     snd                 # :: (a, b, ...) -> b
     at                  # at[k](m) := m[k]
@@ -454,6 +463,7 @@ from seed.func_tools.not_dot import __not__, not_dot
 from seed.for_libs.next__tmay import next__tmay
 from seed.for_libs.lookup__tmay import lookup__tmay
 from seed.iters.chains import chains
+from seed.iters.count_ import count_
 
 from seed.tiny_.types5py import MapView, kwargs2Attrs, curry1
 #from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs, MethodType as curry1
@@ -599,6 +609,19 @@ from seed.tiny_.null_dev import null_context, null_context5result_
 from seed.tiny_.constants import inf, pos_inf, neg_inf
 
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
+from seed.tiny_.containers import mk_pair, mk_pair_tuple
+from seed.tiny_.containers import is_pair
+
+
+assert mk_pair(__:=(1,2)) is __
+assert not mk_pair(__:=[1,2]) is __
+assert mk_pair_tuple(__:=((1,2),(1,2))) is __
+assert not mk_pair_tuple(__:=((1,2),[1,2])) is __
+assert is_pair((1,2))
+assert not is_pair((1,2,3))
+assert not is_pair([1,2])
+assert not is_pair(1)
+
 assert mk_tuple([]) is null_tuple
 assert mk_frozenset([]) is null_frozenset
 assert null_str == ''
@@ -641,7 +664,7 @@ assert mk_reiterables([{}, null_iter, []]) == ({}, (), [])
 assert mk_reiterables(iter([{}, null_iter, []])) == ({}, (), [])
 
 
-from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp
+from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp
 from seed.debug.lazy_raise import lazy_raise
 
 #from collections.abc import Iterable, Iterator
@@ -806,6 +829,15 @@ from seed.tiny_.dict_op__add import dict_add, set_add, dict_update, set_update
 assert dict_add({}, 222, 333)
 assert not dict_add({222:111}, 222, 333)
 assert not dict_add({222:333}, 222, 333)
+
+
+from seed.tiny_.oo8inf import oo
+
+
+
+
+
+
 
 
 

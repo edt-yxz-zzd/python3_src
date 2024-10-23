@@ -1,3 +1,4 @@
+#__all__:goto
 r'''
 e ../../python3_src/seed/tiny_/bmk_pairs.py
 [[
@@ -19,6 +20,12 @@ see:
 ]]
 
 py -m seed.tiny_.bmk_pairs
+seed.tiny_.bmk_pairs
+py -m nn_ns.app.debug_cmd   seed.tiny_.bmk_pairs -x
+py -m nn_ns.app.doctest_cmd seed.tiny_.bmk_pairs:__doc__ -ht
+
+++argpack@20241007
+
 
 >>> from seed.tiny_.bmk_pairs import bmk_pairs, bmk_triples, show_ordered_pairs_as_bmk_pairs, show_ordered_triples_as_bmk_triples, bmk_OrderedDict, show_ordered_pairs_as_bmk_OrderedDict, show_ordered_dict_as_bmk_OrderedDict, cased_bmk
 
@@ -118,9 +125,90 @@ frozenset({1})
 (1,)
 
 
+>>> bmk_argpack__grouped[::]
+Traceback (most recent call last):
+    ...
+TypeError
+>>> bmk_argpack__not_grouped[::]
+Traceback (most recent call last):
+    ...
+TypeError
+>>> bmk_argpack__grouped[1:2:]
+Traceback (most recent call last):
+    ...
+TypeError
+>>> bmk_argpack__not_grouped[:2:3]
+Traceback (most recent call last):
+    ...
+TypeError
+
+
+
+
+>>> bmk_argpack__grouped[()]
+((),)
+>>> bmk_argpack__not_grouped[()]
+((),)
+>>> bmk_argpack__grouped[:111:]
+((111,),)
+>>> bmk_argpack__not_grouped[:111:]
+((111,),)
+
+>>> bmk_argpack__grouped[999::666,:111:,888::777,22::44,:33:,:55:,66::77]
+((111, 33, 55), ((999, 666), (888, 777), (22, 44), (66, 77)))
+>>> bmk_argpack__not_grouped[999::666,:111:,888::777,22::44,:33:,:55:,66::77]
+((), ((999, 666),), (111,), ((888, 777), (22, 44)), (33, 55), ((66, 77),))
+
+
+#>>> mk_argpack_()
+#>>> mk_argpack_(b=1,a=2)
+#>>> mk_argpack_(3,b=1,a=2)
+#>>> mk_argpack_(3,4,b=1,a=2)
+#>>> mk_argpack_(3,4,a=2)
+#>>> mk_argpack_(3,4)
+#>>> mk_argpack_(3)
+
+>>> mk_argpack_()
+((),)
+>>> mk_argpack_(b=1,a=2)
+((), (('a', 2), ('b', 1)))
+>>> mk_argpack_(3,b=1,a=2)
+((3,), (('a', 2), ('b', 1)))
+>>> mk_argpack_(3,4,b=1,a=2)
+((3, 4), (('a', 2), ('b', 1)))
+>>> mk_argpack_(3,4,a=2)
+((3, 4), (('a', 2),))
+>>> mk_argpack_(3,4)
+((3, 4),)
+>>> mk_argpack_(3)
+((3,),)
+
+
+>>> show_argpack_(None, ())
+Traceback (most recent call last):
+    ...
+TypeError
+>>> show_argpack_(None, ((),))
+'bmk_argpack__grouped[()]'
+>>> show_argpack_(None, bmk_argpack__grouped[()])
+'bmk_argpack__grouped[()]'
+>>> show_argpack_(None, bmk_argpack__grouped[:111:])
+'bmk_argpack__grouped[:111]'
+>>> show_argpack_(None, bmk_argpack__grouped[999::666,:111:,888::777,22::44,:33:,:55:,66::77])
+'bmk_argpack__grouped[:111, :33, :55, 999::666, 888::777, 22::44, 66::77]'
+>>> show_argpack_(None, bmk_argpack__not_grouped[()])
+'bmk_argpack__grouped[()]'
+>>> show_argpack_(None, bmk_argpack__not_grouped[:111:])
+'bmk_argpack__grouped[:111]'
+>>> show_argpack_(None, bmk_argpack__not_grouped[999::666,:111:,888::777,22::44,:33:,:55:,66::77])
+'bmk_argpack__not_grouped[999::666, :111, 888::777, 22::44, :33, :55, 66::77]'
+
+
+
+
 #'''
 
-__all__ = '''
+__all__ = r'''
     bmk_pairs
     bmk_triples
     bmk_OrderedDict
@@ -131,9 +219,63 @@ __all__ = '''
 
     show_ordered_pairs_as_bmk_OrderedDict
     show_ordered_dict_as_bmk_OrderedDict
-    '''.split()
+
+
+
+check_argpack
+mk_argpack_
+show_argpack_
+bmk_argpack__grouped
+    bmk_argpack__not_grouped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+check_argpack
+mk_argpack_
+    mk_argpackZ
+        mk_argpackEM
+            mk_argpackEO
+show_argpack_
+    show_argpack8bracket_only
+        show_argpack_item_
+            show_kwarg6argpack
+            show_arg6argpack
+cased_argpack_item2bracket_item
+    cased_argpack_item5bracket_item
+bmk_argpack__grouped
+    bmk_argpack__not_grouped
+
+
+
+
+
+
+
+'''.split()#'''
+#BracketMaker
+__all__
+___begin_mark_of_excluded_global_names__0___ = ...
 
 from collections import OrderedDict
+from itertools import chain, cycle
+from seed.tiny_.containers import mk_pair, mk_pair_tuple, mk_tuple
+#from seed.tiny_.containers import is_pair
+from seed.tiny_.check import check_type_is, check_pair# check_int_ge
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
 
 class _Common4BMk:
     def __getattribute__(sf, attr, /):
@@ -260,12 +402,188 @@ _case2mk = {
     }
 cased_bmk = _BMk4CasedKey(_case2mk.__getitem__)
 
+__all__
 from seed.tiny_.bmk_pairs import bmk_pairs, bmk_triples, show_ordered_pairs_as_bmk_pairs, show_ordered_triples_as_bmk_triples, bmk_OrderedDict, show_ordered_pairs_as_bmk_OrderedDict, show_ordered_dict_as_bmk_OrderedDict, cased_bmk
+
+
+
+######################
+######################
+######################
+######################
+######################
+######################
+######################
+######################
+######################
+######################
+######################
+######################
+
+def check_argpack(x, /, *, grouped):
+    'SHOULDBE [args{maybe-empty}, (kwarg_pairs{nonempty}, args{nonempty}, ...)?]'
+    check_type_is(tuple, x)
+    if not x:raise TypeError
+    if grouped and not len(x) <= 2:raise TypeError
+    for y in x:
+        check_type_is(tuple, y)
+    for i, y in enumerate(x):
+        if not (y or i==0):raise TypeError
+        if i&1:
+            for z in y:
+                check_pair(z)
+
+def mk_argpack_(*args, **kwargs):
+    return mk_argpackZ(args, sorted(kwargs.items()))
+def mk_argpackZ(args, kwarg_pairs, /):
+    'Z:2:pair:(args, kwarg_pairs)'
+    return mk_argpackEM([(False, args), (True, kwarg_pairs)], to_group=False)
+def mk_argpackEM(eithers, /, *, to_group):
+    'Iter (Either args kwarg_pairs) -> [args{maybe-empty}, (kwarg_pairs{nonempty}, args{nonempty}, ...)?] #E:Either,M:many'
+    def f():
+        for is_kvs, xs in eithers:
+            check_type_is(bool, is_kvs)
+            if is_kvs:
+                yield from ((is_kvs, kv) for kv in map(mk_pair, xs))
+            else:
+                yield from ((is_kvs, v) for v in xs)
+    return mk_argpackEO(f(), to_group=to_group)
+
+def mk_argpackEO(eithers, /, *, to_group):
+    'Iter (Either arg kwarg_pair) -> [args{maybe-empty}, (kwarg_pairs{nonempty}, args{nonempty}, ...)?] #E:Either,O:one-by-one'
+    check_type_is(bool, to_group)
+    if to_group:
+        kvs = []
+        vs = []
+        put_kv = kvs.append
+        put_v = vs.append
+        def mk_result():
+            if kvs:
+                return (mk_tuple(vs), mk_tuple(kvs))
+            return (mk_tuple(vs),)
+    else:
+        #ess = []
+        #prev = ...
+        #prev = True # is_kv@(-1), (not is_kv)@0, ...
+        ess = [[]]
+        prev = False # is_kv@(-1), (not is_kv)@0, ...
+        def put(same, y, /):
+            if not same:
+                ess.append([y])
+            else:
+                ess[-1].append(y)
+        def mk_result():
+            return mk_tuple(map(mk_tuple, ess))
+        def put_kv(kv, /):
+            put(prev is is_kv, kv)
+        def put_v(v, /):
+            put(prev is is_kv, v)
+                #bug:put(prev is not is_kv, v)
+    for is_kv, y in eithers:
+        if is_kv:
+            put_kv(y)
+        else:
+            put_v(y)
+        prev = is_kv
+    argpack = mk_result()
+    assert argpack
+    #assert all(rs or i==0 for i, rs in enumerate(argpack))
+    #from seed.tiny import print_err
+    #if 0b001:print_err(argpack)
+    check_argpack(argpack, grouped=to_group)
+    return argpack
+
+def show_kwarg6argpack(x, /):
+    k,v = x
+    if k is None is v:
+        return 'True'#==is_kv
+    return f'{k!r}::{v!r}'
+def show_arg6argpack(x, /):
+    if x is None:
+        return 'False'#==is_kv
+    return f':{x!r}'
+def show_argpack_item_(is_kv, x, /):
+    f = show_kwarg6argpack if is_kv else show_arg6argpack
+    return f(x)
+_fs4show_argpack = (show_arg6argpack, show_kwarg6argpack)
+def show_argpack8bracket_only(argpack, /):
+    check_argpack(argpack, grouped=False)
+    fs = cycle(_fs4show_argpack)
+    ss = ', '.join(s for f, xs in zip(fs, argpack) for s in map(f, xs))
+    if not ss:
+        ss = '()'
+    return f'[{ss}]'
+def cased_argpack_item2bracket_item(cased_argpack_item, /):
+    '(Either arg kwarg_pair) -> (bool|slice)'
+    (is_kv, x) = cased_argpack_item
+    check_type_is(bool, is_kv)
+    if is_kv:
+        check_pair(x)
+        k,v = x
+        if k is None is v:
+            return True#is_kv
+        return slice(k,None,v)
+    if x is None:
+        return False#is_kv
+    return slice(None, x, None)
+def cased_argpack_item5bracket_item(bracket_item, /):
+    '(bool|slice) -> (Either arg kwarg_pair)'
+    z = bracket_item
+    T = type(z)
+    if T is slice:
+        a = z.start
+        b = z.stop
+        c = z.step
+        is_kv = b is None
+        is_v = a is None is c
+        if is_v is is_kv:raise TypeError
+        if is_kv:
+            return (is_kv, (a,c))
+        return (is_kv, b)
+    check_type_is(bool, z)
+    is_kv = z
+    if is_kv:
+        return (is_kv, (None,None))
+    return (is_kv, None)
+
+class _BMkArgPack(_Common4BMk):
+    to_group = True
+    def __getitem__(sf, bracket_items, /):
+        if not type(bracket_items) is tuple:
+            bracket_item = bracket_items
+            bracket_items = (bracket_item,)
+        check_type_is(tuple, bracket_items)
+        it = map(cased_argpack_item5bracket_item, bracket_items)
+        argpack = mk_argpackEO(it, to_group=type(sf).to_group)
+        return argpack
+class _BMkArgPack__not_grouped(_BMkArgPack):
+    to_group = False
+
+
+bmk_argpack__grouped = _BMkArgPack()
+bmk_argpack__not_grouped = _BMkArgPack__not_grouped()
+def show_argpack_(may_header_or_grouped, argpack, /):
+    'may (str|bool) -> argpack -> str'
+    check_type_is(tuple, argpack)
+    if may_header_or_grouped is None:
+        header_or_grouped = len(argpack) <= 2
+    else:
+        header_or_grouped = may_header_or_grouped
+    if type(header_or_grouped) is bool:
+        grouped = header_or_grouped
+        header = 'bmk_argpack__grouped' if grouped else 'bmk_argpack__not_grouped'
+    else:
+        header = header_or_grouped
+    check_type_is(str, header)
+    s = show_argpack8bracket_only(argpack)
+    return header + s
+
 
 if 0:
     #del _ #otherwise doctest not set result to "_"
     #   now remove 『def _():』
     pass
+from seed.tiny_.bmk_pairs import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -277,4 +595,23 @@ if __name__ == "__main__":
 
 
 
+from seed.tiny_.bmk_pairs import bmk_pairs, bmk_triples, show_ordered_pairs_as_bmk_pairs, show_ordered_triples_as_bmk_triples, bmk_OrderedDict, show_ordered_pairs_as_bmk_OrderedDict, show_ordered_dict_as_bmk_OrderedDict, cased_bmk
+from seed.tiny_.bmk_pairs import check_argpack, mk_argpack_, show_argpack_, bmk_argpack__grouped, bmk_argpack__not_grouped
+from seed.tiny_.bmk_pairs import (check_argpack
+,mk_argpack_
+,    mk_argpackZ
+,        mk_argpackEM
+,            mk_argpackEO
+,show_argpack_
+,    show_argpack8bracket_only
+,        show_argpack_item_
+,            show_kwarg6argpack
+,            show_arg6argpack
+,cased_argpack_item2bracket_item
+,    cased_argpack_item5bracket_item
+,bmk_argpack__grouped
+,    bmk_argpack__not_grouped
+)
 
+
+from seed.tiny_.bmk_pairs import *

@@ -1,5 +1,7 @@
 
-'''
+r'''
+e ../../python3_src/seed/graph/U2Vtc_To_DigraphABC.py
+
 oriented multi-edged digraph by defalt
 oriented means neighbors are ordered
 u2vtc is a mapping if obj_graph or sequence if int_graph
@@ -13,22 +15,43 @@ dedges = [(a,b)] # a->b
 
 
 
+seed.graph.U2Vtc_To_DigraphABC
+py -m nn_ns.app.debug_cmd   seed.graph.U2Vtc_To_DigraphABC -x
+py -m nn_ns.app.doctest_cmd seed.graph.U2Vtc_To_DigraphABC:__doc__ -ht
+
+
 from seed.graph.U2Vtc_To_DigraphABC import ObjU2Vtc_To_Digraph, IntU2Vtc_To_Digraph
 from seed.graph.U2Vtc_To_DigraphABC import U2Vtc_To_DigraphABC
 '''#'''
 
 __all__ = '''
-    U2Vtc_To_DigraphABC
+U2Vtc_To_DigraphABC
     ObjU2Vtc_To_Digraph
     IntU2Vtc_To_Digraph
+
+
+
+
+
+
+
+
+
+make_int_graph_map
+make_int_graph_set
+int_graph_dedges2u2vtc
+obj_graph_dedges2u2vtc
 '''.split()#'''
 
-
+___begin_mark_of_excluded_global_names__0___ = ...
+from itertools import chain
 from collections import defaultdict
-from seed.graph.DigraphABC import DigraphABC
+from seed.graph.DigraphABC import DigraphABC, DigraphABC__mk
 from seed.types.DefaultDict import DefaultDict
 from seed.types.OneTime import OneTimeMap, OneTimeSet
 from seed.types.to_container import to_container
+from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
 
 def make_int_graph_map(N):
     buffer = [None]*N
@@ -60,8 +83,8 @@ def int_graph_dedges2u2vtc(dedges, missing_vtc):
     for u, vtc in d.items():
         u2vtc[u] = vtc
     if any(vtc is None for vtc in u2vtc):
-        raise ValueError('miss some vertices: {}'
-                         .format(list(u for u, vtc in enumerate(u2vtc) if vtc is None)))
+        _missing_vtc = list(u for u, vtc in enumerate(u2vtc) if vtc is None)
+        raise ValueError(f'miss some vertices: {_missing_vtc}')
     return u2vtc
 
 
@@ -95,28 +118,30 @@ class U2Vtc_To_DigraphABC(DigraphABC):
 ##    def make_vertex_set(self):
 ##        return set
 
+    def __repr__(self):
+        return repr_helper(self, self.u2vtc)
     def num_vertices(self):
         return len(self.u2vtc)
     def num_dedges(self):
         try:
             return self.ne
         except AttributeError:
-            self.ne = sum(map(len, u2vtc))
+            self.ne = sum(map(len, self.u2vtc))
             return self.ne
-    def iter_vertices(self):
-        return iter(self.u2vtc)
-    def iter_adjacent_dedges(self, v):
+    def vertex2iter_adjacent_dedges(self, v):
         return ((v, u) for u in self.u2vtc[v])
     def dedge2ends(self, e):
         return e
-    def iter_neighbors(self, v):
+    def vertex2iter_neighbors(self, v):
         return iter(self.u2vtc[v])
 
 
 
 
-class ObjU2Vtc_To_Digraph(U2Vtc_To_DigraphABC):
+class ObjU2Vtc_To_Digraph(U2Vtc_To_DigraphABC, DigraphABC__mk):
     __slots__ = ()
+    def iter_vertices(self):
+        return iter(self.u2vtc.keys())
     def make_vertex_mapping(self):
         return {}
     def make_vertex_set(self):
@@ -125,8 +150,10 @@ class ObjU2Vtc_To_Digraph(U2Vtc_To_DigraphABC):
     def from_vertex_pairs(cls, pairs, missing_vtc):
         u2vtc = obj_graph_dedges2u2vtc(pairs, missing_vtc)
         return cls(u2vtc)
-class IntU2Vtc_To_Digraph(U2Vtc_To_DigraphABC):
+class IntU2Vtc_To_Digraph(U2Vtc_To_DigraphABC, DigraphABC__mk):
     __slots__ = ()
+    def iter_vertices(self):
+        return iter(range(len(self.u2vtc)))
     def make_vertex_mapping(self):
         return make_int_graph_map(self.num_vertices())
     def make_vertex_set(self):

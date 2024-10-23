@@ -1,4 +1,3 @@
-#from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right, mk_immutable_seq
 #py -m seed.tiny_.containers
 __all__ = '''
     mk_immutable_seq
@@ -9,6 +8,9 @@ __all__ = '''
 
     mk_frozenset
     mk_tuple
+        mk_pair
+        mk_pair_tuple
+            is_pair
 
     null_str
     null_bytes
@@ -34,6 +36,22 @@ def mk_frozenset(iterable, /):
     return _mk_immutable(frozenset, null_frozenset, iterable)
 def mk_tuple(iterable, /):
     return _mk_immutable(tuple, null_tuple, iterable)
+def mk_pair(iterable, /):
+    if type(iterable) is tuple:
+        if len(iterable) == 2:
+            return iterable
+        raise TypeError(len(iterable))
+    (x, y) = iterable
+    return (x, y)
+def is_pair(x, /):
+    return type(x) is tuple and len(x) == 2
+def mk_pair_tuple(iterable, /):
+    'see also:view ../../python3_src/seed/helper/mk_pairs.py'
+    if type(iterable) is tuple:
+        if all(map(is_pair, iterable)):
+            return iterable
+    return mk_tuple(map(mk_pair, iterable))
+
 def _mk_immutable(ImmutableType, null, iterable, /):
     if type(iterable) is ImmutableType:
         x = iterable
@@ -107,4 +125,7 @@ assert mk_immutable_seq([999]) == (999,)
 
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
 from seed.tiny_.containers import mk_immutable_seq
+
+from seed.tiny_.containers import mk_pair, mk_pair_tuple
+from seed.tiny_.containers import is_pair
 from seed.tiny_.containers import *

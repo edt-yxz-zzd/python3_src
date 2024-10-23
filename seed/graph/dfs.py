@@ -39,7 +39,7 @@ input:
     graph g requirements:
         .iter_vertices()
         .make_vertex_mapping()
-        .iter_neighbors(v)
+        .vertex2iter_neighbors(v)
     roots:
         default = g.iter_vertices()
         if provided:
@@ -63,7 +63,7 @@ input:
             raise logic-error
         processed2is_ancestor[v] = True
         path = (v, path)
-        stack.append(g.iter_neighbors(v))
+        stack.append(g.vertex2iter_neighbors(v))
     def exit():
         nonlocal path
         stack.pop()

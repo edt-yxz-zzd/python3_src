@@ -7,6 +7,8 @@ py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_LLoo_.miscellaneous -x
 py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo_.miscellaneous:__doc__ -ht
 #]]]'''
 __all__ = r'''
+
+
 Error4IRecognizerLLoo
     ParallelError4IRecognizerLLoo
         Error__not_only_one_match
@@ -39,6 +41,8 @@ TmpSnapshot4Inputter
 BaseReply
     Signal__HeaderCompleted
     Reply4IRecognizerLLoo
+        LazyErrmsg
+            SimpleFormatter
 BaseHandler4gi4two_phases_recognize
     parse__via_IRecognizerLLoo
     mk_gi4skip_header_signal
@@ -147,6 +151,8 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 ___end_mark_of_excluded_global_names__0___ = ...
 
+######################
+from seed.recognize.recognizer_LLoo_.LazyErrmsg import LazyErrmsg, SimpleFormatter
 ######################
 from seed.recognize.recognizer_LLoo_.IScene import \
 (KindError

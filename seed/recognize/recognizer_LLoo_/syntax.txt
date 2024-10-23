@@ -19,6 +19,12 @@ choice-tagged:
   {+>| rgnr +>| rgnr +>|}
 choice-Cased:
   {*>| rgnr *>| rgnr *>|}
+TODO:
+  parallel/the_only_one-hash-lookahead-switch: LL-finite(tkey-tree)
+    {&:| :tkey:tkey->rgnr &:| :tkey:tkey:{:tkey}->rgnr &:|}
+    tkey_tree = :tkey | :tkey tkey_tree | :{sep_by<',',tkey_tree>}
+
+
 
 tuple:
   (, rgnr , -^-rgnr , -^- , rgnr , rgnr ,)

@@ -113,7 +113,7 @@ def mk_dst_vtx2num_src_vtc(g, /):
     dst_vtx2num_src_vtc = g.make_vertex_mapping__default_(0)
 
     for src_vtx in g.iter_vertices():
-        for dst_vtx in g.iter_neighbors(src_vtx):
+        for dst_vtx in g.vertex2iter_neighbors(src_vtx):
             dst_vtx2num_src_vtc[dst_vtx] += 1
     return dst_vtx2num_src_vtc
 
@@ -162,10 +162,10 @@ def iter_local_sorted_topological_ordering__vtx2sorted_idx_(vtx2sorted_idx, g, /
         src_vtx = pop()
         yield src_vtx
         num_output_vtc += 1
-        for dst_vtx in g.iter_neighbors(src_vtx):
+        for dst_vtx in g.vertex2iter_neighbors(src_vtx):
             dst_vtx2num_src_vtc[dst_vtx] -= 1
 
-        for dst_vtx in g.iter_neighbors(src_vtx):
+        for dst_vtx in g.vertex2iter_neighbors(src_vtx):
             if dst_vtx2num_src_vtc[src_vtx] == 0:
                 push(dst_vtx)
     if not num_output_vtc == g.num_vertices():
@@ -191,7 +191,7 @@ def validate_topological_ordering_(g, topological_ordering, /):
 
     for src_vtx in g.iter_vertices():
         src_topo_idx = vtx2topo_idx[src_vtx]
-        for dst_vtx in g.iter_neighbors(src_vtx):
+        for dst_vtx in g.vertex2iter_neighbors(src_vtx):
             dst_topo_idx = vtx2topo_idx[dst_vtx]
             if not src_topo_idx < dst_topo_idx:
                 raise NotTopologicalOrdering(((src_vtx, dst_vtx), (src_topo_idx, dst_topo_idx)))
@@ -213,7 +213,7 @@ def validate_local_sorted_topological_ordering__local_neighbor_pair_only_(g, loc
     for src_vtx in g.iter_vertices():
         src_topo_idx = vtx2topo_idx[src_vtx]
         nv_or_min_dst_topo_idx = nv
-        for dst_vtx in g.iter_neighbors(src_vtx):
+        for dst_vtx in g.vertex2iter_neighbors(src_vtx):
             dst_topo_idx = vtx2topo_idx[dst_vtx]
             nv_or_min_dst_topo_idx = min(nv_or_min_dst_topo_idx, dst_topo_idx)
         may_min_dst_topo_idx = None if nv_or_min_dst_topo_idx == nv else nv_or_min_dst_topo_idx

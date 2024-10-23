@@ -71,8 +71,14 @@ postprocess
 
 
 [[
-why so slow?
+why so slow? @20240828
+    *guess1@20240911:inefficiency maybe caused by f-string/strig-formatting to generate errmsg
+        TODO:++class LazyErrmsg(fmtr,*kwds4fmt)
+            ==>> !!wrong guess!! @20240911
+    *guess2@20240912:inefficiency maybe caused by iter/generator/IRecognizerLLoo.iter4two_phases_recognize()/seed.func_tools.recur5yield__halfway
+        TODO:remake:IRecognizerLLooiter4one_phases_recognize()/seed.func_tools.recur5yield{no:halfway} #ok,fail{consumed or not}
 ######################
+@20240828
 _to_show4build_ = True
 ######################
 ==>>:

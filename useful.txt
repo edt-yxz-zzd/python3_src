@@ -354,6 +354,15 @@ int:
   pint: positive_int, int_ge_1 not prime_int
   #dint: reverse-positive_int, int_le_0
   imay: imay_uint, int_ge_n1, int>=-1
+  sint==int
+  uint%M == {0..<M}
+  mint==suint==(mirrored_uint/signed_uint) <=> (bool,uint)
+    编码:
+      (+1, u) --> u
+      (-1, u) --> -1-u
+    解码:
+      u>=0 --> (+1, u)
+      n<0 --> (-1, -1-n)
 
 max1__aaa:前缀『max1__』
   upperbound/end/upperbound1
@@ -833,6 +842,7 @@ if __name__ == '__main__':
 if __name__ == '__main__':
     now:
       py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   %seed.abc.IReprHelper:IReprHelper@T    =T   +exclude_attrs5listed_in_cls_doc
+    <<==:
     now:
       py -m nn_ns.app.adhoc_argparser__main__call8module  seed.helper.print_methods  @wrapped_print_methods   %seed.abc.IReprHelper:IReprHelper    =IReprHelper
 

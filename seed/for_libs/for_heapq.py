@@ -30,7 +30,7 @@ view /sdcard/0my_files/tmp/out4py/py_src/py-heapq.py
 
 seed.for_libs.for_heapq
 py -m nn_ns.app.debug_cmd   seed.for_libs.for_heapq -x
-py -m nn_ns.app.doctest_cmd seed.for_libs.for_heapq:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.for_libs.for_heapq:__doc__ -ht
 py_adhoc_call   seed.for_libs.for_heapq   @f
 from seed.for_libs.for_heapq import *
 
@@ -252,6 +252,68 @@ def heapify(x):
 
 
 
+
+    heap_remove_at
+    heap_fix_at__after_key_smaller
+    heap_fix_at__after_key_bigger
+
+>>> heap_remove_at(ls, 8)
+8
+>>> ls
+[1, 4, 2, 5, 9, 3, 6, 7]
+>>> heap_validate_(ls)
+
+>>> heap_remove_at(ls, 2)
+2
+>>> ls
+[1, 4, 3, 5, 9, 7, 6]
+>>> heap_validate_(ls)
+
+>>> heap_remove_at(ls, 0)
+1
+>>> ls
+[3, 4, 6, 5, 9, 7]
+>>> heap_validate_(ls)
+
+>>> ls[4] = 2
+>>> ls
+[3, 4, 6, 5, 2, 7]
+>>> heap_fix_at__after_key_smaller(ls, 4)
+>>> ls
+[2, 3, 6, 5, 4, 7]
+>>> heap_validate_(ls)
+
+>>> ls[1] = 6
+>>> ls
+[2, 6, 6, 5, 4, 7]
+>>> heap_fix_at__after_key_bigger(ls, 1)
+>>> ls
+[2, 4, 6, 5, 6, 7]
+>>> heap_validate_(ls)
+
+>>> ls[0] = 4
+>>> ls
+[4, 4, 6, 5, 6, 7]
+>>> heap_fix_at__after_key_bigger(ls, 0)
+>>> ls
+[4, 4, 6, 5, 6, 7]
+>>> heap_validate_(ls)
+
+
+>>> ls = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+>>> ls[0] = 4
+>>> ls
+[4, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+>>> heap_fix_at__after_key_bigger(ls, 0)
+>>> ls
+[1, 3, 2, 4, 4, 5, 6, 7, 8, 9, 10]
+>>> heap_validate_(ls)
+
+
+
+
+
+
 #]]]'''
 __all__ = r'''
 
@@ -283,20 +345,30 @@ Heap
     heapify
     heappush
     heappop
+    heap_remove_at
+    heap_fix_at__after_key_smaller
+    heap_fix_at__after_key_bigger
     heappushpop
     heappoppush
     heapreplace
 
+
+
+no_op8set_idx4item_
 '''.split()#'''
+    #ISeq8underlying_heap
+
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from itertools import count as count_
 from itertools import islice
 from seed.tiny import at
 from seed.tiny import ifNonef, ifNone, echo
-from seed.tiny import check_type_is
+from seed.tiny_.check import check_type_is, check_int_ge
 from seed.tiny_.check import check_callable
 from seed.tiny_.std____key__le__reverse_ import std____key__le__reverse_
+___end_mark_of_excluded_global_names__0___ = ...
 
 class ValidateFail__not_heap(Exception):pass
 
@@ -324,9 +396,70 @@ def to_iparent_(ichild, /):
     iparent = (ichild-1)//2
     return iparent
 
+
+
+
+
+class ISeq8underlying_heap:
+    def __len__(sf, /):
+        '-> uint'
+    def append(sf, x, /):
+        'x -> None'
+    def pop(sf, /):
+        '-> x | ^IndexError'
+    def __getitem__(sf, idx, /):
+        'idx -> x | ^IndexError'
+    def __setitem__(sf, idx, x, /):
+        'idx -> x -> None | ^IndexError'
+
+class _Seq4set_idx4item_(ISeq8underlying_heap):
+    'see:set_idx4item_()'
+    def __init__(sf, set_idx4item_, heap, /):
+        check_callable(set_idx4item_)
+        sf.set_idx4item_ = set_idx4item_
+        sf.heap = heap
+    def __len__(sf, /):
+        '-> uint'
+        return len(sf.heap)
+    def append(sf, x, /):
+        'x -> None'
+        sf.heap.append(x)
+        sf.set_idx4item_(x, len(sf)-1)
+        return
+    def pop(sf, /):
+        '-> x | ^IndexError'
+        #sf.set_idx4item_(x, None)
+        return sf.heap.pop()
+    def __getitem__(sf, idx, /):
+        'idx -> x | ^IndexError'
+        return sf.heap[idx]
+    def __setitem__(sf, idx, x, /):
+        'idx -> x -> None | ^IndexError'
+        check_int_ge(0, idx)
+        sf.heap[idx] = x
+        sf.set_idx4item_(x, idx)
+
+
+
+
+
+
+
+
+
+
+
+def no_op8set_idx4item_(item, idx, /):pass
 class Heap:
+    r'''[[[
+    obj vs item vs val:
+        input: obj # heappush(obj)
+        store: item
+        output: val # heappop() -> val
+
+    #]]]'''#'''
     ######################
-    def __init__(sf, heap, /, *, item5obj_, item2val_, key, __le__, reverse, obj_vs_item, applied__heapify):
+    def __init__(sf, heap, /, *, item5obj_, item2val_, key, __le__, reverse, obj_vs_item, applied__heapify, set_idx4item_=None):
         r'''[[[
         heap :: [item] if obj_vs_item else [obj]
         item5obj_ :: may (obj -> item)
@@ -337,6 +470,8 @@ class Heap:
             flip __le__
         obj_vs_item :: bool
         applied__heapify :: bool
+        set_idx4item_ :: may (item -> idx -> None)
+            # e.g. [item.idx := idx]
 
 
         #]]]'''#'''
@@ -351,14 +486,25 @@ class Heap:
         item2val_ = ifNone(item2val_, echo)
         check_callable(item2val_)
 
+        set_idx4item_ = ifNone(set_idx4item_, no_op8set_idx4item_)
+        check_callable(set_idx4item_)
+
 
         [] = heap[:0]
         len(heap)
 
-        sf.args = (heap, item5obj_, item2val_, key, __le__, reverse)
-        (heap, item5obj_, item2val_, key, __le__, reverse) = sf.args
+        for jjj in range(2):
+            sf.args = (heap, item5obj_, item2val_, key, __le__, reverse, set_idx4item_)
+            (heap, item5obj_, item2val_, key, __le__, reverse, set_idx4item_) = sf.args
+            if jjj: break
 
-        sf.heapify(obj_vs_item=obj_vs_item, applied__heapify=applied__heapify)
+            sf.heapify(obj_vs_item=obj_vs_item, applied__heapify=applied__heapify)
+
+            if not set_idx4item_ is no_op8set_idx4item_:
+                heap = _Seq4set_idx4item_(set_idx4item_, heap)
+                #to update sf.args
+            else:
+                break
 
     def __len__(sf, /):
         return len(sf.heap)
@@ -383,6 +529,9 @@ class Heap:
     @property
     def reverse(sf, /):
         return sf.args[5]
+    @property
+    def set_idx4item_(sf, /):
+        return sf.args[6]
 
     ######################
     def le__idx_(sf, lhs_idx, rhs_idx, /):
@@ -394,7 +543,7 @@ class Heap:
         return not sf.le__idx_(rhs_idx, lhs_idx)
 
     def le__item_(sf, lhs_item, rhs_item, /):
-        (_heap, _item5obj_, _item2val_, key, __le__, reverse) = sf.args
+        (_heap, _item5obj_, _item2val_, key, __le__, reverse, set_idx4item_) = sf.args
 
         lhs_key = key(lhs_item)
         rhs_key = key(rhs_item)
@@ -423,10 +572,15 @@ class Heap:
                 obj = heap[i]
                 item = item5obj_(obj)
                 heap[i] = item
+
         if not applied__heapify:
             sf._heapify()
             if 0b00:print(sf.heap)
             if 0b00:sf.heap_validate_()
+        set_idx4item_ = sf.set_idx4item_
+        if not (set_idx4item_ is no_op8set_idx4item_ or (obj_vs_item and applied__heapify)):
+            for i in range(len(heap)):
+                set_idx4item_(heap[i], i)
     def _heapify(sf, /):
         'O(N)'
         ##########ver2:
@@ -441,7 +595,7 @@ class Heap:
         iparent4last = to_iparent_(ilast)
         for iparent in reversed(range(iparent4last+1)):
             # [:proof___heapify_is_O_N]:goto
-            sf._try_rshift_at__until_end(iparent)
+            sf._try_lshift_after_rshift_at__until_end(iparent)
         return
         ##########ver1:bug:
         heap = sf.heap
@@ -493,7 +647,13 @@ class Heap:
         if 0b00:sf.heap_validate_()
 
     def _try_lshift_at__until(sf, iancestor, ichild, /):
-        'O(logN)'
+        r'''[[[
+        '-> new_ichild #O(logN)'
+        !!!this is semi_public_API:shouldnot rename/remove!!!
+
+        [assume:[ichild =!= iancestor] -> [edge(iparent<ichild>,ichild) may violate heap_constraints; therefore to fix it upward but not beyond iancestor]]
+
+        #]]]'''#'''
         while not ichild == iancestor and sf._try_lshift_at(ichild):
             iparent = to_iparent_(ichild)
             #######
@@ -504,14 +664,67 @@ class Heap:
     ######################
     def heappop(sf, /, *, val_vs_item=False):
         'O(logN)'
+        return sf.heap_remove_at(0, val_vs_item=val_vs_item)
+
         heap = sf.heap
 
         last_item = heap.pop()
             # ^IndexError
-        result = sf.heappushpop(last_item, obj_vs_item=True, val_vs_item=val_vs_item)
+        #not efficient:result = sf.heappushpop(last_item, obj_vs_item=True, val_vs_item=val_vs_item)
+        #   !! [heap[0] is min hence must be popped unless not existed]
+        result = sf.heappoppush(last_item, obj_vs_item=True, val_vs_item=val_vs_item, empty_ok=True)
+            # ??what if empty??
+            # curr impl of heappoppush => empty ok
+            # now: ++empty_ok
         if 0b00:print(heap)
         if 0b00:sf.heap_validate_()
         return result
+    ######################
+    def heap_remove_at(sf, idx, /, *, val_vs_item=False):
+        'O(logN)'
+        #if idx == 0:
+        #    return sf.heappop(val_vs_item=val_vs_item)
+
+        heap = sf.heap
+
+        #idx = range(len(heap))[idx]
+            # ^IndexError
+        check_int_ge(0, idx)
+
+        result_item = heap[idx]
+            # ^IndexError
+        last_item = heap.pop()
+        if idx == len(heap):
+            assert result_item is last_item
+            # not put back last_item
+        else:
+            # put back last_item
+            heap[idx] = last_item
+            #
+            #vivi:sf._try_lshift_after_rshift_at__until_end(idx)
+            #   but fix 0 as iancestor@_try_lshift_at__until()
+            #
+            (changed, new_idx) = sf._try_rshift_at__until_end(idx)
+            new_idx = sf._try_lshift_at__until(0, new_idx)
+            assert heap[new_idx] is last_item
+        result_item
+
+        result = sf._item2val(val_vs_item, result_item)
+        return result
+    ######################
+    def heap_fix_at__after_key_smaller(sf, idx, /):
+        'O(logN)'
+        check_int_ge(0, idx)
+        new_idx = sf._try_lshift_at__until(0, idx)
+
+    ######################
+    def heap_fix_at__after_key_bigger(sf, idx, /):
+        'O(logN)'
+        check_int_ge(0, idx)
+        (changed, new_idx) = sf._try_rshift_at__until_end(idx)
+        new_idx = sf._try_lshift_at__until(0, new_idx)
+
+
 
     ######################
     def heappushpop(sf, obj, /, *, obj_vs_item=False, val_vs_item=False):
@@ -530,7 +743,7 @@ class Heap:
 
 
     ######################
-    def heappoppush(sf, obj, /, *, obj_vs_item=False, val_vs_item=False):
+    def heappoppush(sf, obj, /, *, obj_vs_item=False, val_vs_item=False, empty_ok=False):
         'O(logN)'
         heap = sf.heap
 
@@ -538,9 +751,13 @@ class Heap:
         if heap:
             result_item = heap[0]
             heap[0] = item
-            sf._try_rshift_at__until_end(0)
+            sf._try_lshift_after_rshift_at__until_end(0)
             if 0b00:print(heap)
             if 0b00:sf.heap_validate_()
+        elif not empty_ok:
+            [].pop()
+                # ^IndexError
+            raise IndexError
         else:
             result_item = item
         result_item
@@ -552,11 +769,10 @@ class Heap:
 
 
     def _try_rshift_at__until_end(sf, iparent, /):
-        '-> new_iparent/bool #O(logN)'
-        'O(logN)'
-        ##########ver2:
-        #rshift hole/inf then put back and lshift old_item
-        #
+        r'''[[[
+        '-> (changed/bool, new_iparent) #O(logN)'
+        !!!this is semi_public_API:shouldnot rename/remove!!!
+        #]]]'''#'''
         heap = sf.heap
         old_item = heap[iparent]
             # ^IndexError
@@ -568,7 +784,9 @@ class Heap:
         assert 0 <= iparent < end
         # [0 <= iparent < end]
         if end < 2:
-            return iparent
+            # [0 <= iparent < end < 2]
+            # [0 == iparent < end == 1 < 2]
+            return False, iparent
         # [end >= 2]
         ilast = end -1
         # [ilast >= 1]
@@ -586,10 +804,39 @@ class Heap:
             heap[iparent] = heap[ichild4min]
             #heap[ichild4min] = hole = inf
             iparent = ichild4min
+        if old_iparent == iparent:
+            return False, iparent
         heap[iparent] = old_item
+        return True, iparent
+    def _try_lshift_after_rshift_at__until_end(sf, iparent, /):
+        r'''[[[
+        '-> new_iparent #O(logN)'
+        !!!this is semi_public_API:shouldnot rename/remove!!!
+
+        [assume:[edge(iparent,ichild<iparent>) may violate heap_constraints; therefore to fix it downward but not beyond iparent and pass end]]
+
+        routine:
+        1. pushdown:pop subtree_root@iparent, rshift to leaf, remain a hole at leaf
+        2. popup:put back the popped subtree_root item into the hole leaf, lshift it until satisfy heap_constraints
+
+        #]]]'''#'''
+        ######################
+        ######################
+        ##########ver2:
+        #rshift hole/inf then put back and lshift old_item
+        #
+        old_iparent = iparent
+        (changed, iparent) = sf._try_rshift_at__until_end(iparent)
         iparent = sf._try_lshift_at__until(old_iparent, iparent)
         return iparent
 
+        ######################
+        ######################
+        ######################
+        ######################
+        ######################
+        ######################
+        ######################
         ##########ver1:
         heap = sf.heap
         end = len(heap)
@@ -654,6 +901,9 @@ class Heap:
     heapify
     heappush
     heappop
+    heap_remove_at
+    heap_fix_at__after_key_smaller
+    heap_fix_at__after_key_bigger
     heappushpop
     heappoppush
     heapreplace
@@ -880,6 +1130,27 @@ def heappop(ls, /, *, val_vs_item=False,      item5obj_=None, item2val_=None, ke
     val = heap.heappop(val_vs_item=val_vs_item)
     return val
 
+def heap_remove_at(ls, idx, /, *, val_vs_item=False,      item5obj_=None, item2val_=None, key=None, __le__=None, reverse=False):
+    'O(logN)'
+    heap = Heap(ls, item5obj_=item5obj_, item2val_=item2val_, key=key, __le__=__le__, reverse=reverse, obj_vs_item=True, applied__heapify=True)
+    val = heap.heap_remove_at(idx, val_vs_item=val_vs_item)
+    return val
+
+def heap_fix_at__after_key_smaller(ls, idx, /, *,      item5obj_=None, item2val_=None, key=None, __le__=None, reverse=False):
+    'O(logN)'
+    heap = Heap(ls, item5obj_=item5obj_, item2val_=item2val_, key=key, __le__=__le__, reverse=reverse, obj_vs_item=True, applied__heapify=True)
+    heap.heap_fix_at__after_key_smaller(idx)
+    return
+
+def heap_fix_at__after_key_bigger(ls, idx, /, *,      item5obj_=None, item2val_=None, key=None, __le__=None, reverse=False):
+    'O(logN)'
+    heap = Heap(ls, item5obj_=item5obj_, item2val_=item2val_, key=key, __le__=__le__, reverse=reverse, obj_vs_item=True, applied__heapify=True)
+    heap.heap_fix_at__after_key_bigger(idx)
+    return
+
+
+
+
 def heappushpop(ls, obj, /, *, obj_vs_item=False, val_vs_item=False,      item5obj_=None, item2val_=None, key=None, __le__=None, reverse=False):
     'O(logN)'
     heap = Heap(ls, item5obj_=item5obj_, item2val_=item2val_, key=key, __le__=__le__, reverse=reverse, obj_vs_item=True, applied__heapify=True)
@@ -887,11 +1158,11 @@ def heappushpop(ls, obj, /, *, obj_vs_item=False, val_vs_item=False,      item5o
     val = heap.heappushpop(obj, obj_vs_item=obj_vs_item, val_vs_item=val_vs_item)
     return val
 
-def heappoppush(ls, obj, /, *, obj_vs_item=False, val_vs_item=False,      item5obj_=None, item2val_=None, key=None, __le__=None, reverse=False):
+def heappoppush(ls, obj, /, *, obj_vs_item=False, val_vs_item=False, empty_ok=False,      item5obj_=None, item2val_=None, key=None, __le__=None, reverse=False):
     'O(logN)'
     heap = Heap(ls, item5obj_=item5obj_, item2val_=item2val_, key=key, __le__=__le__, reverse=reverse, obj_vs_item=True, applied__heapify=True)
         #NOTE:obj_vs_item!
-    val = heap.heappoppush(obj, obj_vs_item=obj_vs_item, val_vs_item=val_vs_item)
+    val = heap.heappoppush(obj, obj_vs_item=obj_vs_item, val_vs_item=val_vs_item, empty_ok=empty_ok)
     return val
 heapreplace = heappoppush
 
@@ -926,6 +1197,9 @@ heap_validate_
 heapify
 heappush
 heappop
+heap_remove_at
+heap_fix_at__after_key_smaller
+heap_fix_at__after_key_bigger
 heappushpop
 heappoppush
 heapreplace
@@ -1079,7 +1353,7 @@ from seed.for_libs.for_heapq import extract_kth_smallest_elements_, nsmallest, n
 
 from seed.for_libs.for_heapq import heap_sort_
 
-from seed.for_libs.for_heapq import heappushs_, heappops_, heappop_eqvs_, heapify, heappush, heappop, heappushpop, heappoppush, heapreplace
+from seed.for_libs.for_heapq import heappushs_, heappops_, heappop_eqvs_, heapify, heappush, heappop, heap_remove_at, heap_fix_at__after_key_smaller, heap_fix_at__after_key_bigger, heappushpop, heappoppush, heapreplace
 
 
 from seed.for_libs.for_heapq import Heap, std____key__le__reverse_

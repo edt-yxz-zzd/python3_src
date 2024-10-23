@@ -2,6 +2,7 @@
 e ../../python3_src/useful__cjk_naming.txt
 du -h ../../python3_src/useful__cjk_naming.txt
 精确术语规范
+[:毛病冫线性化导致歧义]:goto
 [:常用翻译用语]:goto
 [:非汉字部件环境冫标识命名规范]:goto
   [:必要性纟区分冫程序丷代码]:goto
@@ -54,11 +55,36 @@ why?
 ]]
 ######################
 [[
+[:毛病冫线性化导致歧义]:here
+比如:
+  类型纟状态转换表:
+    * ?类型纟状态转换表牜简并版
+    * ?类型纟状态转换表牜详析版
+  实际上是:针对同一对象的两个无序并列修饰语:
+    类型({纟状态转换表}&{牜详析版})
+      ?类型纟状态转换表牜详析版
+      ?类型牜详析版纟状态转换表
+      类型纟状态转换表灬牜详析版
+        『灬』表示『回退一』
+        类似py『from ....xxx import *』
+==>>:
+transition_table4DFA4LR :: {(st,ps_vocabulary):action}
+    类型纟状态转换表灬牜简并版
+transition_table4DFA4LR :: ({(st,<eof>):(accept|error)} | {(st,terminal):(shift|reduce|error)} | {(st,nonterminal):goto|error})
+    类型纟状态转换表灬牜详析版
+]]
+######################
+[[
 [:常用翻译用语]:here
 unicode 统合码
 汉字区:兼容区vs归并区
   : 'CJK Compatibility Ideographs'
   : 'CJK Unified Ideographs'
+
+
+sink沉/荒/墟/渊？:vs:source源
+  dst/destination目标/的/靶/芜/菂？:vs:src/source源
+  见:渊薮/渊源，归墟
 
 preview - 预览
 review - 回顾,复审,检阅,复核
@@ -115,6 +141,8 @@ show - 显示/亮/字串化
 print - 打印
 __getitem__/lookup - 索取扌/索取冫某某某巛流水号扌 :: 索引号 -> 元素
 index() - 定位扌/定位冫某某某讠流水号扌 :: 元素 -> 索引号
+index/key/addr/ptr - 址引 #索引,路引,指引,指针
+  ?ref:引用?
 unit - 位元#量纲? #单位? #感觉不太行:事业单位
 1/one/unity - 幺元
 token - 码元/字元
@@ -221,6 +249,17 @@ max1:？？上限/上界
 前瞻vs后顾/回顾
   lookahead,prospective,prospect
   lookback,review,retrospective,retrospect
+  #
+  forward compatibility 前瞻性兼容 #前版设计兼容后续版本
+  backward compatibility回顾性兼容
+  #
+  forward reference     前瞻性引用 #前方符号引用后方对象
+      曾见过
+  back reference        回顾性引用
+      曾见过
+  ?backward reference   回顾性引用
+      还未曾见过
+  #
 内外:
   内视vs外感
   内定/内顾/内向/内省/内视/内敛/保守vs外感/外听/外向/外出/外涉/涉外/外瞩/越界/奔放/激进
@@ -239,11 +278,75 @@ max1:？？上限/上界
   untrammelled
   unlimited
   unbounded
+  ===
+  内敛识别器:inextensible,closed-end
+    vs:非内敛识别器/前瞻贪婪识别器:extensible,open-ended
+    ===
+    caged,blocked,self-restraint,inextensible,closed-end
+    vs:greedy,loose,extensible,open-ended
+  ===
+  贪婪:greedy; avid; grasping; rapacious
+  自制/节制/克制
+  自了，自截，自解，自紧
+    自紧self-tightening,self-sealing
+    自紧密封self-sealing packing
+    自紧夹头self-clinching fastener
+  自制
+    【同义字】vi.
+    refrain 暂时地抑制住行动或欲望
+    abstain 因主义信仰,或深思,以意志节制有害的事物
+    forbear 藉自制心抑制感情
+  abnegate vt. 克制
+  自制动:self-retention
+  brake:制动器:使运行中的运输工具、机器等减低速度或停止运动的装置。通称闸。
+  cage:n. 笼，兽笼；牢房，监狱vt. 把…关进笼子；把…囚禁起来
+  temperate:adj. 饮食有节制的, 克己的 (气候)温和的
+  moderate:adj. 适度的，中等的；有节制的；稳健的，温和的vi. 变缓和，变弱
+  abstinent:adj. 禁欲的；有节制的；饮食有度的 n. 禁欲者
+  自停机构:self-stopping gear, stopping motions
+  自停装置:automatic stop arrangement
+  self-restraint <<不可数名词>>自制,克己, n. 自我克制
+  self-restraint agreement:自限协定,自愿限制协定
+  restraint:n. 克制；抑制；束缚
+  本分,自持
+  无节制,放纵
+  extravagant:adj. 奢侈的, 铺张的过度的, 过分的, 放肆的
+  incontinent:adj. (大小便)失禁的 不能自制的
+  immoderate:adj. 过度的,无节制的
+  indulgent:adj. 放纵的；宽容的；任性的
+  intemperate:adj. 不温和的,过度的 无节制的,放纵的,纵酒的
+  loose:adj. 不牢固的；不精确的；宽松的；散漫的vt. 释放；开船；放枪
+    3.a. <绳结等> 松的,不紧的(<--> tight)
+    3.c. <门、牙齿、机器的零件等> 松动的,不牢固的,摇动的(<--> fast)
+    7<人、言行> (在道德上) 不严谨的,放荡的,品行不端的(<--> strict)
+  严格:strict; severe; exacting; rigid; stern; stringent
+  严谨:conscientious(honest) and careful(cautious); exact
+  随便:casual; informal; random; arbitrary
+  任性:willful; capricious; wayward; headstrong; self-willed
+  open-ended:可扩充
+    closed-end:adj. 闭锁式的,资本额固定的
+  extensible:adj. 可展开的,可扩张的,可延长的
+    expandable
+  augmenting:n. 扩大；增加；加强；补充
+  diffusible:adj. 可被散播的；可被传播的；扩散性的
+  不可扩张匹配:unaugmentable matching
+  封冻:frostbound:adj. 冰冻的,不热情的
+    freezing:adj. 冰冻的；严寒的；冷冻用的
+  冻结:
+    frozen:adj. 冻结的；冷酷的v. 凝固；变得刻板；结冰（freeze的过去分词）
+    blocked:adj. 堵塞的；被封锁的 v. 阻塞（block的过去分词）
+  自闭合self-closing
+  自闭塞self-blocking
+  自持:
+    self-(sustaining|sustained|maintaining|maintained|supporting|contained)
+    自持过程
+      self-sustaining process
+      bootstrap process
 内禀/本征/固有/自生/自发性的vs外赋/外附/外敷/强加性的
   内禀/本征/固有:intrinsic(al)
     #class:类#乸/内禀接口
     internal; inherent; intrinsic; indigenous
-  外赋/外附/外在/外来:extrinsic,attached
+  外赋/外附/外在/外来:extrinsic,attached,extraneous
     #plug:插件#匞+匴/外赋接口
     external; foreign; imported; outside; exterior
   appendix附录,增补
@@ -924,6 +1027,67 @@ a_or_b: 左丨右
 巜: 返回 (新状态, 结果)
   ipush_: 巜压入元素囗/巜压入冫元素扌 :: stack -> x -> (stack, None)
   ipop_: 巜弹出元素囗/巜弹出冫元素扌 :: stack -> (stack, tmay x)
+]]
+
+[[
+渊薮/渊源，归墟
+汇(匯/彙)
+匯合，詞彙
+===
+汉语大辞典
+歸墟
+(歸墟,归墟)
+亦作“歸虛”。
+傳說為海中無底之谷，謂眾水匯聚之處。
+ 《列子‧湯問》：“渤海之東，不知幾億萬里，有大壑焉，實惟無底之谷，其下無底，名曰歸墟。”
+ 張湛注：“歸墟，或作歸塘。”
+ 明李東陽《初預郊壇分獻得南海》詩：“歸虛下有通靈地，廣利中含濟物功。”後喻事物的終結、歸宿。
+ 清龔自珍《上清真人碑書後》：“余平生不喜道書，亦不願見道士，以其勦用佛書門面語，而歸墟只在長生。”
+===
+汉语大辞典
+淵藪
+(淵藪,渊薮)
+1.淵，魚聚之處；藪，獸聚之處。泛指人和事物集聚的地方。
+ 《書‧武成》：“今商王受無道，暴殄天物，害虐烝民，為天下逋逃主，萃淵藪。”
+ 唐劉知幾《史通‧辨職》：“斯固素餐之窟宅，尸祿之淵藪也。”
+ 清何琇《樵香小記‧經典釋文》：“《經典釋文》，為古義之淵藪。”
+ 艾青《大西洋》詩：“多少年了，大西洋啊，成了大海盜的淵藪。”
+2.聚集。
+ 《南齊書‧王晏傳》：“令大息德元淵藪亡命，同惡相濟，劍客成群。”
+ 清惲敬《與姚秋農》：“中州人文淵藪，昔聖先賢流風在人，五兄課士之外，必有提唱發揮，守先待後之事。”
+ 姚華《曲海一勺‧駢史下》：“文物風俗，淵藪於此。”
+3.謂深廣。
+ 《隸釋‧漢荊州刺史度尚碑》：“智含淵藪，仁隆春煖，義高秋雲，行絜冰霜。”
+4.猶深淵。
+ 郭小川《登九山》詩：“妄圖把廣大貧下中農重新投入黑暗的淵藪。”
+5.猶根源。
+ 宋王安石《贈陳君景初》詩：“堂堂潁川士，察脈極淵藪。”
+ 明李贄《童心說》：“然則‘六經’、《語》、《孟》，乃道學之口實，假人之淵藪也。”
+===
+汉语大辞典
+淵源
+(淵源,渊源)
+1.水的源頭。比喻事物的本原。
+ 《漢書‧董仲舒傳贊》：“仲舒遭漢承秦滅學之後，《六經》離析，下帷發憤，潛心大業，令後學者有所統壹，為群儒首，然考其師友淵源所漸，猶未及乎游夏，而曰筦晏弗及，伊呂不加，過矣。”
+ 晉葛洪《抱樸子‧微旨》：“夫根荄不洞地，而求柯條干雲，淵源不泓窈，而求湯流萬里者，未之有也。”
+ 宋蘇軾《復改科賦》：“探經義之淵源，是非紛若；考辭章之聲律，去取昭然。”
+ 清俞正燮《癸巳類稿‧＜唐律疏議＞跋》：“唐律本隋，由魏而周而隋，有淵源也。”
+ 郁達夫《文學上的階級鬥爭》：“文學上的階級鬥爭，若要追求它的淵源，也與人類一樣的古。”
+2.指學業上的相師承。
+ 《宋書‧隱逸傳‧雷次宗》：“于時師友淵源，務訓弘道，外慕等夷，內懷悱發。”
+ 宋秦觀《辭史官表》：“若非承父兄之教詔，世守其言；則必積師友之淵源，材克厥職。”
+ 明李贄《藏書‧德業儒臣前論》：“雖師友淵源，莫詳次第，而僅存什一，要當知道無絕續，人具隻眼云耳。”
+ 梁啟超《中國學術思想變遷之大勢》第四章第一節：“﹝太史公﹞《自序》稱‘吾聞諸董生曰’云云，蓋史公於董子必有淵源也。”
+3.猶關係，聯繫。
+ 魯迅《墳‧從鬍鬚說到牙齒》：“歐美的文明人諱言下體以及和下體略有淵源的事物。”
+ 茅盾《多角關係》五：“謝晉壽和兄弟的淵源似乎不比尋常。”
+ 郭沫若《洪波曲》第十一章四：“他和立群，可又算得別有淵源了。”
+4.深邃，深廣。
+ 《後漢書‧班固傳》：“屢訪群儒，諭咨故老，與之乎斟酌道德之淵源，肴覈仁義之林藪，以望元符之臻焉。”
+ 李賢注：“淵源，林藪，喻深邃也。”
+ 唐呂岩《滿庭芳》詞：“大道淵源，高真隱祕。風流豈可知聞？”宋王得臣《麈史‧睿謨》：“神宗皇帝，聖學淵源，莫窺涯涘。”
+ 明王玉峰《焚香記‧餞別》：“難道終身貧賤？他學問淵源，今科擬將僊桂攀。”
+===
 ]]
 
 [[

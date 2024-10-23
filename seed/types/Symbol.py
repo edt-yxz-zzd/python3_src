@@ -1,13 +1,16 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/types/Symbol.py
-view ../../python3_src/seed/hierarchy/symbol/PrivateSymbol.py
+    view ../../python3_src/seed/hierarchy/symbol/PrivateSymbol.py
 
 
 seed.types.Symbol
 py -m nn_ns.app.debug_cmd   seed.types.Symbol -x
 py -m nn_ns.app.doctest_cmd seed.types.Symbol:__doc__ -ht
 
+
+++__reduce__()
+    view ../../python3_src/seed/for_libs/for_pickle.py
 
 
 symbol
@@ -144,7 +147,9 @@ AttributeError: module 'seed.types.Symbol' has no attribute '_aaa'
 
 old:[<'ooooooxxxxxx'>]
 
->>> print(_aaa.ccc.BBB)
+>>> print(_aaa.ccc.BBB) #doctest: +ELLIPSIS
+[<PrivateSymbol('', '', 'ooooooxxxxxx', 'seed.types.Symbol', '_aaa.ccc.BBB', (<function import4qobject at 0x...>, ('seed.types.Symbol', '_aaa.ccc.BBB')), I = <class 'int'>, t = 666, uuu = P.seed.types.Symbol()._aaa.ccc.BBB.uuu)>]
+
 [<PrivateSymbol('', '', 'ooooooxxxxxx', 'seed.types.Symbol', '_aaa.ccc.BBB', I = <class 'int'>, t = 666, uuu = P.seed.types.Symbol()._aaa.ccc.BBB.uuu)>]
 
 old:[<PrivateSymbol('', '', 'ooooooxxxxxx', I = <class 'int'>, t = 666, uuu = P.seed.types.Symbol()._aaa.ccc.BBB.uuu)>]
@@ -155,7 +160,9 @@ P.seed.types.Symbol()._aaa.bbb
 [<PublicSymbol('seed.types.Symbol', '_aaa.bbb', '', AAA = [<'seed.types.Symbol:_aaa.bbb.AAA'>])>]
 >>> _aaa.bbb.AAA
 [<'seed.types.Symbol:_aaa.bbb.AAA'>]
->>> print(_aaa.bbb.AAA)
+>>> print(_aaa.bbb.AAA) #doctest: +ELLIPSIS
+[<PrivateSymbol("[<'seed.types.Symbol:_aaa.bbb.AAA'>]", '', '', '', '', (<function import4qobject at 0x...>, ('seed.types.Symbol', '_aaa.bbb.AAA')))>]
+
 [<PrivateSymbol("[<'seed.types.Symbol:_aaa.bbb.AAA'>]", '', '', '', '')>]
 
 old:[<PrivateSymbol('', '', 'seed.types.Symbol:_aaa.bbb.AAA')>]
@@ -164,6 +171,121 @@ old:[<PrivateSymbol('', '', 'seed.types.Symbol:_aaa.bbb.AAA')>]
 >>> del _aaa
 
 
+
+
+__reduce__
+>>> import pickle
+>>> import copyreg
+>>> import copy
+
+>>> @public_symbol5cls
+... class _aaa:
+...     class ccc:
+...         @private_symbol5cls
+...         class BBB:
+...             'ooooooxxxxxx'
+...             @public_symbol5cls
+...             class uuu:
+...                 pass
+>>> _aaa
+P.seed.types.Symbol()._aaa
+>>> seed.types.Symbol._aaa
+Traceback (most recent call last):
+    ...
+AttributeError: module 'seed.types.Symbol' has no attribute '_aaa'
+>>> seed.types.Symbol._aaa = _aaa
+>>> seed.types.Symbol._aaa
+P.seed.types.Symbol()._aaa
+>>> bs = pickle.dumps(_aaa)
+
+Traceback (most recent call last):
+    ...
+_pickle.PicklingError: Can't pickle P.seed.types.Symbol()._aaa: attribute lookup seed.types.Symbol._aaa on seed.types.Symbol failed
+#>>> seed.types.Symbol.__all__.append('_aaa')
+#>>> bs = pickle.dumps(_aaa)
+
+>>> bs
+b'\x80\x04\x95R\x00\x00\x00\x00\x00\x00\x00\x8c\x1cseed.pkg_tools.import_object\x94\x8c\x0eimport4qobject\x94\x93\x94\x8c\x11seed.types.Symbol\x94\x8c\x04_aaa\x94\x86\x94R\x94.'
+
+before:using:(import4qobject, ...)
+:using:(getP, ...)
+b'\x80\x04\x95+\x00\x00\x00\x00\x00\x00\x00\x8c\x11seed.types.Symbol\x94\x8c\x04getP\x94\x93\x94h\x00\x8c\x04_aaa\x94\x86\x94R\x94.'
+
+>>> x = pickle.loads(bs)
+>>> x is _aaa
+True
+
+>>> pickle.loads(pickle.dumps(_aaa)) is _aaa
+True
+>>> copy.copy(_aaa) is _aaa
+True
+
+>>> pickle.loads(pickle.dumps(__:=_aaa.ccc.BBB.uuu)) is __
+True
+>>> copy.copy(__:=_aaa.ccc.BBB.uuu) is __
+True
+
+>>> _aaa.ccc
+P.seed.types.Symbol()._aaa.ccc
+>>> _aaa.ccc.BBB
+[<seed.types.Symbol:_aaa.ccc.BBB:'ooooooxxxxxx'>]
+>>> _aaa.ccc.BBB.uuu
+P.seed.types.Symbol()._aaa.ccc.BBB.uuu
+
+>>> pickle.loads(pickle.dumps(__:=_aaa.ccc)) is __
+True
+
+after:++may_reduce_value:=(import4qobject, ...)
+>>> pickle.loads(pickle.dumps(__:=_aaa.ccc)) is __
+True
+
+
+
+#>>> pickle.dumps(_aaa.ccc.BBB)
+before:++may_reduce_value:=(import4qobject, ...)
+after:++may_reduce_value:=qnm4sf
+Traceback (most recent call last):
+    ...
+_pickle.PicklingError: Can't pickle [<seed.types.Symbol:_aaa.ccc.BBB:'ooooooxxxxxx'>]: attribute lookup seed.types.Symbol._aaa.ccc.BBB on seed.types.Symbol failed
+
+before:++may_reduce_value
+Traceback (most recent call last):
+    ...
+_pickle.PicklingError: <class 'seed.types.Symbol.PrivateSymbol'>
+
+
+>>> pickle.loads(pickle.dumps(__:=_aaa.ccc.BBB.uuu)) is __
+True
+
+>>> copy.copy(__:=_aaa.ccc) is __
+True
+>>> copy.copy(__:=_aaa.ccc.BBB) is __
+True
+
+#
+before:++may_reduce_value:=(import4qobject, ...)
+#>>> copy.copy(_aaa.ccc.BBB)
+Traceback (most recent call last):
+    ...
+_pickle.PicklingError: <class 'seed.types.Symbol.PrivateSymbol'>
+>>> copy.copy(__:=_aaa.ccc.BBB.uuu) is __
+True
+
+
+>>> del _aaa
+>>> kkk = mk_private_symbol(smay4repr:='', emay_smay4str:='', __doc__:='kkk', smay_mdl4creator:='', smay_qnm4creator:='', may_reduce_value:=None)
+>>> kkk
+[<::'kkk'>]
+>>> print(kkk)
+[<PrivateSymbol('', '', 'kkk', '', '', None)>]
+>>> copy.copy(kkk)
+Traceback (most recent call last):
+    ...
+_pickle.PicklingError: <class 'seed.types.Symbol.PrivateSymbol'>
+>>> pickle.dumps(kkk)
+Traceback (most recent call last):
+    ...
+_pickle.PicklingError: <class 'seed.types.Symbol.PrivateSymbol'>
 
 #]]]'''
 __all__ = r'''
@@ -192,16 +314,20 @@ NamedWeakKey
     #DottedAttrCollector
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
+
 from seed.tiny_.check import check_type_is
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.abc.eq_by_id.AddrAsHash import AddrAsHash as EqById, le_AddrAsHash # BaseAddrAsHash
 from seed.helper.repr_input import repr_helper
 from seed.tiny import MapView
-from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name
+from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, check_pair, check_callable
 from seed.pkg_tools.import_object import import4qobject
 from seed.types.DottedAttrCollector import DottedAttrCollector, ReDefRepr
 
 from weakref import WeakKeyDictionary
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 class __:
     def fff():pass
@@ -420,6 +546,24 @@ class PublicSymbol(ISymbol__mixins):
         _init_a(sf, kwds)
         sf[_wkey4attrs:] = _mk_private_attrs4PublicSymbol(__module__, __qualname__, __doc__)
         ######################
+    #def __getstate__(sf, /):
+    #    return None
+    #def __setstate__(sf, /):
+    #    raise 000
+    def __reduce__(sf, /):
+        'getP(__module__, __qualname__)'
+        d = sf[_wkey4attrs:]
+        mdl = d['__module__']
+        qnm = d['__qualname__']
+        if 0:
+            #???why???
+            #_pickle.PicklingError: Can't pickle P.seed.types.Symbol()._aaa: attribute lookup seed.types.Symbol._aaa on seed.types.Symbol failed
+            if not '.' in qnm:
+                # top_lvl-symbol
+                nm = qnm
+                return f'{mdl}.{nm}'
+        return (import4qobject, (mdl, qnm))
+        return (getP, (mdl, qnm))
     @override
     def __repr__(sf, /):
         '-> str'
@@ -508,24 +652,49 @@ def getP(__module__='', __qualname__=None, /):
 
 
 
-def _mk_private_attrs4PrivateSymbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, /):
+def _mk_private_attrs4PrivateSymbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, may_reduce_value, /):
     return MapView(dict(locals()))
 
 
 class PrivateSymbol(ISymbol__mixins):
     __slots__ = ()
     private_vs_public = False
-    def __init__(sf, smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, /, **kwds):
+    def __init__(sf, smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, may_reduce_value, /, **kwds):
         check_type_is(str, smay4repr)
         if not emay_smay4str is ...:
             check_type_is(str, emay_smay4str)
         check_type_is(str, __doc__)
         check_smay_pseudo_qual_name(smay_mdl4creator)
         check_smay_pseudo_qual_name(smay_qnm4creator)
+        if not None is may_reduce_value:
+            reduce_value = may_reduce_value
+            if type(reduce_value) is str:
+                qnm4sf = reduce_value
+                check_pseudo_qual_name(qnm4sf)
+            else:
+                check_pair(reduce_value)
+                mkr6top_lvl, args4mkr = reduce_value
+                check_type_is(tuple, args4mkr)
+                check_callable(mkr6top_lvl)
+                check_pseudo_qual_name(mkr6top_lvl.__module__)
+                check_pseudo_identifier(mkr6top_lvl.__qualname__)
+                    # <<== top_lvl
         ######################
         _init_a(sf, kwds)
-        sf[_wkey4attrs:] = _mk_private_attrs4PrivateSymbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator)
+        sf[_wkey4attrs:] = _mk_private_attrs4PrivateSymbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, may_reduce_value)
         ######################
+    #def __getstate__(sf, /):
+    #    raise 000
+    #def __setstate__(sf, /):
+    #    raise 000
+    def __reduce__(sf, /):
+        d = sf[_wkey4attrs:]
+        mrv4sf = d['may_reduce_value']
+        if not mrv4sf is None:
+            reduce_value = mrv4sf
+            return reduce_value
+        import pickle
+        raise pickle.PicklingError(type(sf))
     @override
     def __repr__(sf, /):
         '-> str'
@@ -555,16 +724,23 @@ class PrivateSymbol(ISymbol__mixins):
         doc = d['__doc__']
         mdl4cr = d['smay_mdl4creator']
         qnm4cr = d['smay_qnm4creator']
+        mrv4sf = d['may_reduce_value']
         kwds = _ag(sf)
-        s = repr_helper(sf, r, s, doc, mdl4cr, qnm4cr, **kwds)
+
+        #if mrv4sf is None:
+        #    tmay_rv = ()
+        #else:
+        #    tmay_rv = (mrv4sf,)
+        #s = repr_helper(sf, r, s, doc, mdl4cr, qnm4cr, *tmay_rv, **kwds)
+        s = repr_helper(sf, r, s, doc, mdl4cr, qnm4cr, mrv4sf, **kwds)
         return f'[<{s!s}>]'
         return f'[<{doc!r}>]'
 
 
 
-def mk_private_symbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, /, **kwds):
+def mk_private_symbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, may_reduce_value, /, **kwds):
     'eg:kw:__isabstractmethod__'
-    return PrivateSymbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, **kwds)
+    return PrivateSymbol(smay4repr, emay_smay4str, __doc__, smay_mdl4creator, smay_qnm4creator, may_reduce_value, **kwds)
 def private_symbol5cls(Type, /):
     if not isinstance(Type, type): raise TypeError
     return _echo_or_private_symbol5xxx(Type)
@@ -596,14 +772,30 @@ def _echo_or_symbol5xxx(_mk_symbol, xxx, snm4mdl='', qnm4parent='', /):
         # stop@func
         kwds = {}
     return _mk_symbol(__module__:=qnm4mdl, __qualname__:=qnm, __doc__:=doc, **kwds)
-    return mk_public_symbol(__module__:=qnm4mdl, __qualname__:=qnm, __doc__:=doc, **kwds)
-    return mk_private_symbol(smay4repr:='', emay_smay4str:='', __doc__:=doc, smay_mdl4creator:=qnm4mdl, smay_qnm4creator:=qnm, **kwds)
+    #return mk_public_symbol(__module__:=qnm4mdl, __qualname__:=qnm, __doc__:=doc, **kwds)
+    #return mk_private_symbol(smay4repr:='', emay_smay4str:='', __doc__:=doc, smay_mdl4creator:=qnm4mdl, smay_qnm4creator:=qnm, **kwds)
 
 def __mk_symbol4private(__module__, __qualname__, __doc__, /, **kwds):
+    try:
+        check_pseudo_qual_name(__module__)
+        #check_pseudo_identifier(__qualname__)
+        check_pseudo_qual_name(__qualname__)
+    except (TypeError, ValueError):
+        may_reduce_value = None
+    else:
+        if 0:
+            check_pseudo_identifier(__qualname__)
+            #???why???
+            #_pickle.PicklingError: Can't pickle [<seed.types.Symbol:_aaa.ccc.BBB:'ooooooxxxxxx'>]: attribute lookup seed.types.Symbol._aaa.ccc.BBB on seed.types.Symbol failed
+            may_reduce_value = qnm4sf = f'{__module__}.{__qualname__}'
+
+        may_reduce_value = reduce_value = (import4qobject, (__module__, __qualname__))
+    may_reduce_value
+
     if not __doc__:
         r = f"[<'{__module__}:{__qualname__}'>]"
-        return mk_private_symbol(smay4repr:=r, emay_smay4str:='', __doc__:='', smay_mdl4creator:='', smay_qnm4creator:='', **kwds)
-    return mk_private_symbol(smay4repr:='', emay_smay4str:='', __doc__, smay_mdl4creator:=__module__, smay_qnm4creator:=__qualname__, **kwds)
+        return mk_private_symbol(smay4repr:=r, emay_smay4str:='', __doc__:='', smay_mdl4creator:='', smay_qnm4creator:='', may_reduce_value, **kwds)
+    return mk_private_symbol(smay4repr:='', emay_smay4str:='', __doc__, smay_mdl4creator:=__module__, smay_qnm4creator:=__qualname__, may_reduce_value, **kwds)
     #old:
     if not __doc__:
         __doc__ = f'{__module__}:{__qualname__}'

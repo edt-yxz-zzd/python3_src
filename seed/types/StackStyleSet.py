@@ -335,7 +335,7 @@ __all__
 
 from collections.abc import MutableSet, Set, Sequence
 from seed.helper.repr_input import repr_helper
-from seed.tiny import check_type_is
+from seed.tiny import check_type_is, snd
 from seed.types.view.View import SeqView#, SetView, MapView
 
 
@@ -374,12 +374,22 @@ class StackStyleSet(MutableSet):
     def __reversed__(sf, /):
         return reversed(sf._vs)
     def add(sf, v, /):
+        'val -> None'
+        sf.add_ex(v)
+    def add_ex(sf, v, /):
+        'val -> (is_new/bool, idx/uint)'
         k = sf._val2key_(v)
         d = sf._d
-        if not k in d:
+        m = d.get(k)
+        is_new = m is None
+        if is_new:
+        #if not k in d:
             #s.add(k)
             d[k] = idx = len(sf)
             sf._vs.append(v)
+        else:
+            idx = m
+        return (is_new, idx)
     def pop(sf, /):
         v = sf._vs.pop()
         k = sf._val2key_(v)
@@ -410,6 +420,20 @@ class StackStyleSet(MutableSet):
     def discard(sf, k, /):
         if not k in sf: return
         sf.remove(k)
+    def iter_items4closure_(sf, i, /):
+        while i < len(sf):
+            yield (i, sf[i])
+            i += 1
+    def iter_values4closure_(sf, i, /):
+        return map(snd, sf.iter_items4closure_(i))
+    def closure_with_item_(sf, i, f, /):
+        for i, v in sf.iter_items4closure_(i):
+            vs = f(i, v)
+            sf.update(vs)
+    def closure_with_value_(sf, i, f, /):
+        for v in sf.iter_values4closure_(i):
+            vs = f(v)
+            sf.update(vs)
 StackStyleSet()
 
 
@@ -524,6 +548,10 @@ class MultiSetStyleStack(Sequence):
     def __eq__(sf, ot, /):
         if type(ot) is not type(sf):return NotImplemented
         return (sf._vs == ot._vs)
+    iter_items4closure_ = StackStyleSet.iter_items4closure_
+    iter_values4closure_ = StackStyleSet.iter_values4closure_
+    closure_with_item_ = StackStyleSet.closure_with_item_
+    closure_with_value_ = StackStyleSet.closure_with_value_
 MultiSetStyleStack()
 
 

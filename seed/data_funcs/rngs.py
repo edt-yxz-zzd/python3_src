@@ -16,6 +16,7 @@ from seed.data_funcs.rngs import make_Ranges, sorted_rngs_to_iter_nontouch_range
     TouchRangeBasedIntMapping.from_value2begin2sz/.from_rng_value_pairs/.from_clone_of_rngs_with_default
 from seed.data_funcs.rngs import IRanges
     for:.from_hexXhexszpair_list/.from_hex_repr_pair_list/.from_len_rng2hexbegins/.from_len_rng2begin_chars/.from_char_pairs__str/.from_hex_sz_pair_list/.from_hex2sz
+    for:.from_touch_rngs/.from_sorted_rngs/.from_unsorted_rngs/.from_sorted_ints/.from_unsorted_ints/.from_sorted_chars/.from_unsorted_chars
 from seed.data_funcs.rngs import NonTouchRanges, TouchRanges, make_NonTouchRanges, make_TouchRanges
 from seed.data_funcs.rngs import len_of__rng, len_of__rng__neg_as0
 
@@ -2505,6 +2506,8 @@ class IMixin4_get_rngs_(ABC):
         rngs = sf._get_rngs_()
         return rngs_to_iter_ints_(rngs, reverse=reverse)
     iter_ints_ = iter_keys_
+    def iter_ints_(sf, /, reverse):
+        return sf.iter_keys_(reverse=reverse)
     def iter_rngs_(sf, /, reverse):
         rngs = sf._get_rngs_()
         g = reversed if reverse else iter
@@ -2608,6 +2611,40 @@ TODO:
             return sf.ranges
         return tuple(sorted_rngs_to_iter_nontouch_ranges(sf.ranges))
         return sf.to_NonTouchRanges().ranges
+    @staticmethod
+    def from_touch_rngs(iterable_touch_ranges, /):
+        return make_Ranges(iterable_touch_ranges)
+    @staticmethod
+    def from_sorted_rngs(iterable_sorted_ranges, /):
+        iterable_touch_ranges = sorted_rngs_to_iter_nontouch_ranges(iterable_sorted_ranges)
+        return IRanges.from_touch_rngs(iterable_touch_ranges)
+    @staticmethod
+    def from_unsorted_rngs(iterable_unsorted_ranges, /):
+        iterable_sorted_ranges = sorted(iterable_unsorted_ranges)
+        return IRanges.from_sorted_rngs(iterable_sorted_ranges)
+    @staticmethod
+    def from_sorted_ints(iterable_sorted_ints, /):
+        iter_nontouch_ranges = sorted_ints_to_iter_nontouch_ranges(iterable_sorted_ints)
+        return IRanges.from_touch_rngs(iter_nontouch_ranges)
+    @staticmethod
+    def from_unsorted_ints(iterable_unsorted_ints, /):
+        iterable_sorted_ints = sorted(iterable_unsorted_ints)
+        return IRanges.from_sorted_ints(iterable_sorted_ints)
+    @staticmethod
+    def from_sorted_chars(iterable_sorted_chars, /):
+        iterable_sorted_ints = map(ord, iterable_sorted_chars)
+        return IRanges.from_sorted_ints(iterable_sorted_ints)
+    def to_chars__str(sf, /):
+        '-> "{char}"...'
+        #see:to_char_pairs__str
+        #see:from_sorted_chars/from_unsorted_chars
+        return ranges2chars__str(sf)
+    @staticmethod
+    def from_unsorted_chars(iterable_unsorted_chars, /):
+        iterable_unsorted_ints = map(ord, iterable_unsorted_chars)
+        return IRanges.from_unsorted_ints(iterable_unsorted_ints)
+
+
     def to_hex_repr_pair_list(sf, /):
         '-> [(HexReprInt, HexReprInt)]'
         return ranges2hex_repr_pair_list(sf)
@@ -3583,6 +3620,10 @@ def ranges5iter_rngs(rngs, /):
     return make_Ranges(rngs)
 ranges2char_pairs__str = dot[char_pt_rngs2char_pairs__str, ranges2iter_rngs]
 ranges5char_pairs__str = dot[ranges5iter_rngs, char_pt_rngs5char_pairs__str]
+def ranges2chars__str(ranges, /):
+    'IRanges -> "{char}"...'
+    s = ''.join(map(chr, ranges.iter_ints()))
+    return s
 
 def ranges2hex_sz_pair_list(ranges, /):
     'IRanges -> [(begin/HexReprInt, len_rng/int)]'

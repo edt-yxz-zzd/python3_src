@@ -1,4 +1,13 @@
 
+r'''[[[
+from seed.types.view.SeqSliceView import SeqSliceView
+
+seed.types.view.SeqSliceView
+py -m nn_ns.app.debug_cmd   seed.types.view.SeqSliceView -x
+py -m nn_ns.app.doctest_cmd seed.types.view.SeqSliceView! -v
+py -m nn_ns.app.doctest_cmd seed.types.view.SeqSliceView! -ht
+
+#]]]'''#'''
 
 __all__ = '''
     SeqSliceView
@@ -117,9 +126,9 @@ example:
 see: SeqTransformView
 see: mk_slice
 '''
-    __slots__ = ('__rng', '__seq')
+    __slots__ = ('__rng', '__seq', '__eq', '__h')
 
-    def __init__(self, seq, range_or_slice):
+    def __init__(self, seq, range_or_slice, *, to_support_seq_eq=False):
         ':: [a] -> range -> [a]'
         if not isinstance(seq, Sequence): raise TypeError
 
@@ -149,12 +158,51 @@ see: mk_slice
 
         self.__rng = rng
         self.__seq = seq
+        self.__eq = bool(to_support_seq_eq)
+    def __hash__(self):
+        try:
+            return self.__h
+        except AttributeError:
+            pass
+
+        hash(self.__seq[:0])
+            # ^TypeError
+            #   avoid: py.list
+        if not self.__eq:
+            h = super().__hash__()
+        else:
+            L = len(self)
+            SZ = 1024
+            h = hash((id(type(self)), L, self.__eq))
+            for i in range(0, L, SZ):
+                h = hash((h, *self[i:i+SZ]))
+            h
+        h
+        self.__h = h
+        return hash(self)
+    def __eq__(self, other):
+        if not self.__eq:
+            return super().__eq__(other)
+        if self is other:
+            return True
+        if not type(self) is type(other):
+            return False #match __hash__()
+            return NotImplemented
+        if not len(self) == len(other):
+            return False #match __hash__()
+        if not (self.__eq) is (other.__eq): raise NotImplementedError
+            #return False #match __hash__()
+        for x, y in zip(self, other):
+            if not x in [y]:
+                return False
+        return True
 
     def __getitem__(self, i):
         j = self.__rng[i]
         if isinstance(j, range):
             assert type(i) is slice
-            return type(self).from_sequence_range(self.__seq, j)
+            rng = j
+            return type(self).from_sequence_range_supportseqeq(self.__seq, rng, self.__eq)
         else:
             assert type(i) is not slice
             assert type(j) is int
@@ -163,12 +211,20 @@ see: mk_slice
 
 
     def __repr__(self):
+        if self.__eq:
+            return repr_helper(self, self.__seq, self.__rng, to_support_seq_eq=True)
         return repr_helper(self, self.__seq, self.__rng)
 
     @classmethod
-    def from_sequence(cls, seq): return cls.from_sequence_range(seq, None)
+    def from_sequence(cls, seq):
+        return cls.from_sequence_range(seq, None)
     @classmethod
-    def from_sequence_range(cls, seq, range_or_slice): return cls(seq, range_or_slice)
+    def from_sequence_range(cls, seq, range_or_slice):
+        return cls(seq, range_or_slice)
+    @classmethod
+    def from_sequence_range_supportseqeq(cls, seq, range_or_slice, to_support_seq_eq):
+        return cls(seq, range_or_slice, to_support_seq_eq=to_support_seq_eq)
+
 
 
     def __len__(self):
@@ -201,15 +257,18 @@ assert not isinstance(int, Sequence)
 assert isinstance(range, Sequence) ??????? why fail????
 '''
 
-def t():
+def _t():
     ls = SeqSliceView([1,2,3,4,5,6,7], range(1,6,2))
     ls2 = SeqSliceView(ls, slice(-1, None, -1))
     assert repr(ls2) == 'SeqSliceView([1, 2, 3, 4, 5, 6, 7], range(5, -1, -2))'
 
+from seed.types.view.SeqSliceView import SeqSliceView
 if __name__ == "__main__":
-    t()
+    _t()
     import doctest
     doctest.testmod()
 
 
 
+from seed.types.view.SeqSliceView import SeqSliceView
+from seed.types.view.SeqSliceView import *

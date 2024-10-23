@@ -46,6 +46,7 @@ class Cased(tuple):
         cls._check_case_payload_(case, payload)
         return tuple.__new__(cls, [case, payload])
     ######################
+    __match_args__ = ('case', 'payload')
     @property
     def case(sf, /):
         return sf[0]
@@ -91,6 +92,12 @@ class Cased(tuple):
         if payload is sf.payload:
             return sf
         return type(sf)(sf.case, payload)
+    ######################
+    def itag__payload(sf, tag, /):
+        return sf.ireplace__payload(Cased(tag, sf.payload))
+    def untag__payload(sf, /):
+        tag, _payload = sf.payload
+        return (tag, sf.ireplace__payload(_payload))
     ######################
     ######################
     def ireplace__payload__if_(sf, b, payload, /):
