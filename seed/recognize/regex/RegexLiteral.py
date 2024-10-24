@@ -7,6 +7,8 @@ view ../../python3_src/seed/seq_tools/avoid_substrs.py
 view ../../python3_src/seed/seq_tools/escape_schemes/README.txt
     view ../../python3_src/seed/seq_tools/escape_schemes/universal_single_point_escape_scheme__enable_raw_text__disable_recur.py
 
+view ../../python3_src/seed/recognize/BaseTokenizer4MetaSymbol.py
+
 
 seed.recognize.regex.RegexLiteral
 py -m nn_ns.app.debug_cmd   seed.recognize.regex.RegexLiteral -x
@@ -15,6 +17,7 @@ py -m nn_ns.app.doctest_cmd seed.recognize.regex.RegexLiteral:__doc__ -ht    >  
 view /sdcard/0my_files/tmp/0tmp
 %s/\n\n*# Line .*//
 
+%s/seed[.]recognize[.]regex[.]RegexLiteral[.]BadFormat__/seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__
 
 [[[[[[[
 [[[
@@ -415,27 +418,27 @@ xxx #>>> tokenize__str('?!(,])')
 >>> tokenize__str('?!')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__eof: 2
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__eof: 2
 >>> tokenize__str('?!()')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '', 3)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '', 3)
 >>> tokenize__str('?!(...)')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '...', 6)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '...', 6)
 >>> tokenize__str('?!(?!(|))')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unexpected_esc: (3, 5)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unexpected_esc: (3, 5)
 >>> tokenize__str('?!([,)') #[(3, ('[,', {}), 5)]
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '[,', 5)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '[,', 5)
 >>> tokenize__str('?!(,])') #[(3, (',]', {}), 5)]
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, ',]', 5)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, ',]', 5)
 >>> tokenize__str('?!([|)')
 [(3, ('[|', {}), 5)]
 >>> tokenize__str('?!(|)')
@@ -491,39 +494,39 @@ seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, ',]'
 >>> tokenize__str('?!(;[]=)')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, ';[]=', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, ';[]=', 7)
 >>> tokenize__str('?!(;{}=)')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, ';{}=', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, ';{}=', 7)
 >>> tokenize__str('?!(&:[])')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '&:[]', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '&:[]', 7)
 >>> tokenize__str('?!(&%[])')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '&%[]', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '&%[]', 7)
 >>> tokenize__str('?!(&:{})')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '&:{}', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '&:{}', 7)
 >>> tokenize__str('?!(&%{})')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '&%{}', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '&%{}', 7)
 >>> tokenize__str('?!(&@.=)')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '&@.=', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '&@.=', 7)
 >>> tokenize__str('?!($^)')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, '$^', 5)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, '$^', 5)
 >>> tokenize__str('?!(char)')
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__unknown_meta_char_payload: (3, 'char', 7)
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__unknown_meta_char_payload: (3, 'char', 7)
 >>> tokenize__str('?!([[:],)')
 [(3, ('[[:],', {'min': 0, 'may_max': None}), 8)]
 >>> tokenize__str('?!([[666:],)')
@@ -604,18 +607,18 @@ True
 >>> [*tokenizer4RegexLiteral.tokenize__str('?![#?!-?![-,:;.+41]666?![#777?![#abc#]888#]999#]')]
 []
 >>> [*tokenizer4RegexLiteral__with_comment.tokenize__str('?![#?!-?![-,:;.+41]666?![#777?![#abc#]888#]999#]')]
-[(4, ('comment', {'comment': '  \t\r\n?!.A666?![#777?![#abc#]888#]999'}), 48)]
+[(4, ('comment', {'comment': '?![#  \t\r\n?!.A666?![#777?![#abc#]888#]999#]'}), 48)]
 
 >>> [*tokenizer4RegexLiteral.tokenize__str('?!(|)')]
 [(3, ('|', {}), 4)]
 >>> [*tokenizer4RegexLiteral.tokenize__str('?![#?!(|)#]')]
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__forbid_mata_char: 6
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__forbid_mata_char: (4, 6)
 >>> [*tokenizer4RegexLiteral__with_comment.tokenize__str('?![#?!(|)#]')]
 Traceback (most recent call last):
     ...
-seed.recognize.regex.RegexLiteral.BadFormat__forbid_mata_char: 6
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__forbid_mata_char: (4, 6)
 
 }}}}}}}
 #]]]]]]]
@@ -811,37 +814,29 @@ Fail
         ParseFail__expected_tkey
     TokenizeFail
         BadFormat
-            BadFormat__eof
-            BadFormat__char_esc_fmt
-            BadFormat__esc_esc
-            BadFormat__unknown_meta_char_payload
-            BadFormat__forbid_mata_char
-            BadFormat__forbid_esc_inside_escaped_chars
-            BadFormat__unexpected_esc
-            BadFormat__unknown_char_esc_fmt
-            BadFormat__unknown_single_char_payload
 
 
 Parser4RegexLiteral
     parser4RegexLiteral__no_builtins
     parser4RegexLiteral__with_2x2_builtins
-Tokenizer4RegexLiteral
-    tokenizer4RegexLiteral
-Tokenizer4RegexLiteral__with_comment
-    tokenizer4RegexLiteral__with_comment
+BaseTokenizer4MetaSymbol
+    Tokenizer4RegexLiteral
+        tokenizer4RegexLiteral
+BaseTokenizer4MetaSymbol__with_comment
+    Tokenizer4RegexLiteral__with_comment
+        tokenizer4RegexLiteral__with_comment
 mk_positioned_chars5text
 mk_positioned_chars5str
 
-IterUntilEndMarker
 dry_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import chain, pairwise
+from itertools import chain# pairwise
 import re
 #from string import hexdigits as _hxs
 #isxdigit = _hxs.__contains__
-from unicodedata import lookup as _nm2ch
+#from unicodedata import lookup as _nm2ch
 
 #DONE:ctx-->HistoryMapping
 from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
@@ -849,11 +844,12 @@ from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
     #d.env_pop_until(p0)
     #with d.mk_contextmanager() as p0:
 from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_pair
+from seed.tiny_.check import check_type_is, check_type_le# check_int_ge, check_pair
 
 
 
-from seed.tiny import fst, snd, ifNone, echo, MapView
+#from seed.tiny import fst, snd, ifNone, echo, MapView
+from seed.tiny import MapView
 from seed.tiny_.HashedPair import Solo
 from seed.recognize.regex.RegexRepr import hollow_regex, dead_regex, empty_set_repr, whole_set_repr
 from seed.recognize.regex.RegexRepr import SetRepr_5Unicode_property
@@ -896,32 +892,19 @@ from seed.recognize.regex.RegexRepr import \
 ,        RegexRepr_Many1
 )
 
+from seed.recognize.BaseTokenizer4MetaSymbol import BadFormat__unknown_meta_char_payload
 ___end_mark_of_excluded_global_names__0___ = ...
 
+__all__
 ######################
-class Fail(Exception):pass
-class ParseFail(Fail):pass
-class TokenizeFail(Fail):pass
-class BadFormat(TokenizeFail):pass
-
+from seed.recognize.BaseTokenizer4MetaSymbol import BaseTokenizer4MetaSymbol, BaseTokenizer4MetaSymbol__with_comment
+from seed.recognize.BaseTokenizer4MetaSymbol import mk_positioned_chars5text, mk_positioned_chars5str
+from seed.recognize.Fail import Fail, ParseFail, TokenizeFail, BadFormat
 ######################
 ParseFail
 class ParseFail__eof(ParseFail):pass
 class ParseFail__unexpected_tkey(ParseFail):pass
 class ParseFail__expected_tkey(ParseFail):pass
-
-######################
-BadFormat
-class BadFormat__eof(BadFormat):pass
-class BadFormat__char_esc_fmt(BadFormat):pass
-class BadFormat__esc_esc(BadFormat):pass
-class BadFormat__unknown_meta_char_payload(BadFormat):pass
-class BadFormat__forbid_mata_char(BadFormat):pass
-class BadFormat__forbid_esc_inside_escaped_chars(BadFormat):pass
-class BadFormat__unexpected_esc(BadFormat):pass
-class BadFormat__unknown_char_esc_fmt(BadFormat):pass
-class BadFormat__unknown_single_char_payload(BadFormat):pass
-######################
 
 
 
@@ -1343,261 +1326,26 @@ parser4RegexLiteral__no_builtins = Parser4RegexLiteral({})
 parser4RegexLiteral__with_2x2_builtins = Parser4RegexLiteral({'{empty_set_repr}':empty_set_repr, '{whole_set_repr}':whole_set_repr, '[hollow_regex]':hollow_regex, '[dead_regex]':dead_regex})
 __all__
 
-def mk_positioned_chars5text(position_info, text, /):
-    '(lineno, columno) -> Iter char -> positioned_chars'
-    check_pair(position_info)
-    (lineno, columno) = position_info
-    check_type_is(int, lineno)
-    check_type_is(int, columno)
-    it = echo_or_mk_PeekableIterator(text)
-    #_4newline
-    for ch in it:
-        if ch == '\r':
-            if not it.is_empty() and it.head == '\n':
-                next(it)
-            ch = '\n'
-        #####
-        if ch == '\n':
-            lineno += 1
-            columno = 0 #<<==newline.end_position_info
-        else:
-            columno += 1
-        yield ch, (lineno, columno)
-def mk_positioned_chars5str(position_info, s, /):
-    'idx -> Iter char -> positioned_chars'
-    check_type_is(int, position_info)
-    j = position_info
-    it = ((c,j) for j,c in enumerate(s, 1+j))
-    return it
 
-class _Raw:
-    def __init__(sf, tkn, /):
-        sf.tkn = tkn
-class Tokenizer4RegexLiteral:
+class Tokenizer4RegexLiteral(BaseTokenizer4MetaSymbol):
     r'''[[[
     LL1
     [positioned_chars :: Iter (char, position_info)]
     [token :: (position_info, (tkey/str, tdat/dict), position_info)]
     #]]]'''#'''
-    _to_output_comment_ = False
-    def tokenize__text(sf, text, position_info=(1,1), /):
-        positioned_chars = mk_positioned_chars5text(position_info, text)
-        return sf.tokenize(position_info, positioned_chars)
-    def tokenize__str(sf, s, position_info=0, /):
-        positioned_chars = mk_positioned_chars5str(position_info, s)
-        return sf.tokenize(position_info, positioned_chars)
-    def tokenize(sf, position_info, positioned_chars, /):
-        'position_info -> Iter (char, position_info) -> Iter token/(position_info, (tkey/str, tdat/dict), position_info)' ' #return-end_position_info'
-        positioned_maychars = sf.preprocess(positioned_chars)
-        return sf._tokenize(position_info, positioned_maychars, meta_char_ok=True)
-    def _tokenize(sf, position_info, positioned_maychars, /, *, meta_char_ok):
-        'position_info -> Iter (may char, position_info) -> Iter token/(position_info, (tkey/str, tdat/dict), position_info)' ' #return-end_position_info'
-        prev_p = position_info
-        it = iter(positioned_maychars)
-        to_mark_raw_char = not meta_char_ok
-        if to_mark_raw_char:
-            def mark(tkn, /):
-                return _Raw(tkn)
-        else:
-            mark = echo
-        mark
-        for m, p in it:
-            if m is None:
-                prev_p = yield from sf.on_escape_seq(p, it, meta_char_ok=meta_char_ok)
-                continue
-            ch = m
-            yield mark(sf.mk_token4char(prev_p, ch, p))
-            prev_p = p
-        return (end_position_info := prev_p)
-    def on_escape_seq(sf, position_info, positioned_maychars, /, *, meta_char_ok):
-        'position_info -> Iter (may char, position_info) -> Iter token | ^BadFormat__... | ^BadFormat__eof' ' #return-end_position_info'
-        it = iter(positioned_maychars)
-        #prev_p = position_info
-        (m, p) = sf._read1(position_info, it)
-            # ^BadFormat__eof
-        if m is None:
-            raise BadFormat__esc_esc(p)
-        ch = m
-        if ch == '(':
-            if not meta_char_ok:
-                raise BadFormat__forbid_mata_char(position_info)
-            _it = sf.iter_meta_char_tokens5payload(p, it)
-        elif ch == '[':
-            _it = sf.iter_escaped_char_tokens5long_payload(p, it)
-        else:
-            _it = sf.iter_escaped_char_tokens5single_char_payload(position_info, ch, p)
-        return _it  #return-end_position_info
-
-    def _read1(sf, prev_p, it, /):
-        for x in it:
-            return x
-        raise BadFormat__eof(prev_p)
-    def iter_meta_char_tokens5payload(sf, prev_p, it, /):
-        ''
-        ' #return-end_position_info'
-        sf._greedy_reads_ex
-        (s, _prev_p, item, it) = sf._greedy_reads_ex(#(
-                ')'.__ne__, prev_p, it)
-        (m, p) = item
-        #(
-        assert m == ')'
-        yield sf.mk_token4meta_char(prev_p, s, _prev_p)
-        prev_p = p
-        return (end_position_info := prev_p)
-    def iter_comment_tokens5long_payload(sf, prev_p, it, /):
-        ''
-        ' #return-end_position_info'
-        p0 = prev_p
-        p = prev_p
-        b = sf._to_output_comment_
-        if b:
-            ss = []
-        ch_ = ''
-        for tkn in sf._tokenize(prev_p, it, meta_char_ok=False):
-            is_raw = type(tkn) is _Raw
-            if is_raw:
-                raw = tkn
-                tkn = raw.tkn
-            tkn, is_raw
-            (prev_p, (tkey, tdat), p) = tkn
-            if not tkey in 'char comment':raise Exception(tkey)
-            if is_raw:
-                if not tkey == 'char':raise Exception(tkey)
-                ch = tdat['char']
-                if ch == '#':
-                    ch_ = '#'
-                elif ch == ']':
-                    if ch_ == '#':
-                        break
-                else:
-                    ch_ = ''
-            else:
-                ch_ = ''
-
-            if not b:
-                continue
-            if tkey == 'char':
-                ch = tdat['char']
-                ss.append(ch)
-            elif tkey == 'comment':
-                s = tdat['comment']
-                ss.append('?![#')
-                ss.append(s)
-                ss.append('#]')
-            else:
-                raise 000
-        else:
-            raise BadFormat__eof(p)
-        assert is_raw
-        assert ch == ']'
-        assert ch_ == '#'
-        if b:
-            assert ss
-            assert ss[-1] == '#'
-            ss.pop()
-            def __(ss, /):
-                if ss:
-                    yield ss[0]
-                for a, b in pairwise(ss):
-                    yield b
-                    if a == '?' and b == '!':
-                        yield '.'
-            comment = ''.join(__(ss))
-            yield sf.mk_token4comment(p0, comment, p)
-        return (end_position_info:=p)
-    def iter_escaped_char_tokens5long_payload(sf, prev_p, it, /):
-        ''
-        ' #return-end_position_info'
-        (m, p) = sf._read1(prev_p, it)
-            # ^BadFormat__eof
-        if m == '#':
-            prev_p = p
-            prev_p = yield from sf.iter_comment_tokens5long_payload(prev_p, it)
-            return (end_position_info := prev_p)
-            ######################
-            ########old:
-            try:
-                for m, p in _4suffix4comment.iter_until_end_marker(it, key=fst, eof_ok=False):
-                    # ^BadFormat__eof
-                    if m is None:
-                        raise BadFormat__forbid_esc_inside_escaped_chars(prev_p, p)
-                    prev_p = p
-            except BadFormat__eof:
-                raise BadFormat__eof(prev_p)
-
-            return (end_position_info := prev_p)
-
-        while 1:
-            prev_p, (m, p), it
-            if m is None:
-                raise BadFormat__forbid_esc_inside_escaped_chars(prev_p, p)
-            ch = m
-            if ch == ']':
-                prev_p = p
-                break
-            if ch in _4single:
-                yield from sf.iter_escaped_char_tokens5single_char_payload(prev_p, ch, p)
-                prev_p = p
-                (m, p) = item = sf._read1(prev_p, it)
-                prev_p, (m, p), it
-                continue
-            if not ch in '+@':
-                raise BadFormat__unknown_char_esc_fmt(prev_p, ch, p)
-            (s, _prev_p, item, it) = sf._greedy_reads_ex(lambda c:c=='_' or c.isalnum(), p, it)
-                #str.isidentifier
-                #str.isalnum
-                # ^BadFormat__eof...
-            if not s:
-                raise BadFormat__char_esc_fmt(prev_p, ch, p, s, _prev_p)
-            try:
-                if ch == '+':
-                    _ch = chr(int(s, 16))
-                elif ch == '@':
-                    _ch = _nm2ch(s)
-                else:
-                    raise 000
-            except Exception:
-                raise BadFormat__char_esc_fmt(prev_p, ch, p, s, _prev_p)
-            _ch
-            # ((ch, p), s) --> _ch
-            # (prev_p, (ch, p), s, _prev_p, item, it)
-            # --> (prev_p, _ch, _prev_p, item, it)
-            yield sf.mk_token4char(prev_p, _ch, _prev_p)
-            prev_p = _prev_p
-            (m, p) = item
-            ##777;    next(it)
-            prev_p, (m, p), it
-        return (end_position_info := prev_p)
-    def _greedy_reads_ex(sf, char2ok_, prev_p, it, /):
-        '-> (str, prev_p, item, it)'
-        cs = []
-        while 1:
-            (m, p) = x = sf._read1(prev_p, it)
-                # ^BadFormat__eof
-            m, p = x
-            if m is None:
-                raise BadFormat__unexpected_esc(prev_p, p)
-            ch = m
-            if not char2ok_(ch):
-                cs = ''.join(cs)
-                return (cs, prev_p, x, it)
-            cs.append(ch)
-            prev_p = p
-
-
-    def iter_escaped_char_tokens5single_char_payload(sf, prev_p, ch, p, /):
-        ''
-        ' #return-end_position_info'
-        try:
-            txt = _4single[ch]
-        except KeyError:
-            raise BadFormat__unknown_single_char_payload(p, ch)
-        for _ch in txt:
-            yield sf.mk_token4char(prev_p, _ch, p)
-            prev_p = p
-        prev_p = p
-        return (end_position_info := prev_p)
-
+    #@override
+    def _iter_customize_meta_char_tokens_(sf, begin_position_info, xchars, chars, end_position_info, /):
+        'position_info -> xchars/[(_RawChar|_TrueChar){.raw_vs_true,.char,(.span|.char_token)}] -> chars/str{len=len(xchars)} -> position_info -> Iter usrdefined-meta_char_tkn #to be overrided'
+        #see:mk_token4meta_char
+        assert xchars
+        assert len(xchars) == len(chars)
+        assert chars[0] == '('
+        assert chars[-1] == ')'
+        s = chars[1:-1]
+        begin_position_info = xchars[1].span[0]
+        #begin_position_info = xchars[0].span[1]
+        end_position_info = xchars[-2].span[1]
+        yield sf.mk_token4meta_char(begin_position_info, s, end_position_info)
     def mk_token4meta_char(sf, begin_position_info, s, end_position_info, /):
         if s in _tkeys__no_params:
             return sf.mk_token(begin_position_info, s, end_position_info)
@@ -1626,134 +1374,22 @@ class Tokenizer4RegexLiteral:
                 ))
         tdat = d
 
-        #tdat = None
-        #match s[0]:
-        #    case '$':
-        #        match s[:2]:
-        #            case '$^':
-        #               m['color']
-        #    case '[':#]
-        #    case ';':
-        #        match s[:2]:
-        #            case ';[':#]
-        #            case ';{':#}
-        #    case '&':
-        #        if s[:2] == '&@':
-        #        match s[:3]:
-        #            case '&:[':#]
-        #            case '&%[':#]
-        #            case '&:{':#}
-        #            case '&%{':#}
-        #if tdat is None:
-        #    raise 000
-
         return sf.mk_token(begin_position_info, tkey, end_position_info, **tdat)
-    def mk_token4comment(sf, begin_position_info, comment, end_position_info, /):
-        return sf.mk_token(begin_position_info, 'comment', end_position_info, comment=comment)
-    def mk_token4char(sf, begin_position_info, char, end_position_info, /):
-        return sf.mk_token(begin_position_info, 'char', end_position_info, char=char)
-    def mk_token(sf, begin_position_info, tkey, end_position_info, /, **tdat):
-        '-> token/(position_info, (tkey/str, tdat/dict), position_info)'
-        check_type_is(str, tkey)
-        return (begin_position_info, (tkey, tdat), end_position_info)
-    def preprocess(sf, positioned_chars, /):
-        'Iter (char, position_info) -> Iter (may char, position_info)'
-        positioned_chars = sf.denoise(positioned_chars)
-        positioned_maychars = sf.cut(positioned_chars)
-        return positioned_maychars
-    def cut(sf, positioned_chars, /):
-        'Iter (char, position_info) -> Iter (may char, position_info)'
-        it = iter(positioned_chars)
-        f = _4prefix.iter_until_end_marker
-        while 1:
-            may_prefix = yield from f(it, key=fst, eof_ok=True)
-            if may_prefix:
-                # '?!' --> (None, p)
-                prefix = may_prefix
-                match prefix:
-                    case [('?', _), ('!', p)]:
-                        pass
-                    case _:
-                        raise 000
-                yield None, p
-            else:
-                # None @eof
-                assert may_prefix is None
-                break
-        return
-        ######################
-    def denoise(sf, positioned_chars, /):
-        'Iter (char, position_info) -> Iter (char, position_info)'
-        for (ch, p) in positioned_chars:
-            if not ch.isspace():
-                yield (ch, p)
-
-
-_4single = (
-{'.':'?!'
-,'-':' '
-,':':'\r'
-,';':'\n'
-,',':'\t'
-})
 #end-class Tokenizer4RegexLiteral:
-class Tokenizer4RegexLiteral__with_comment(Tokenizer4RegexLiteral):
+######################
+######################
+######################
+#
+
+class Tokenizer4RegexLiteral__with_comment(Tokenizer4RegexLiteral, BaseTokenizer4MetaSymbol__with_comment):
     #@override
     _to_output_comment_ = True
 tokenizer4RegexLiteral = Tokenizer4RegexLiteral()
 tokenizer4RegexLiteral__with_comment = Tokenizer4RegexLiteral__with_comment()
 
 __all__
-class IterUntilEndMarker:
-    def __init__(sf, end_marker, /):
-        if not end_marker:raise ValueError
-        if end_marker[0] in end_marker[1:]:raise ValueError
-        sf._ls = end_marker
-    def iter_until_end_marker(sf, iterable, /, *, key=None, eof_ok=False):
-        'Iter x -> (Iter x){return-may [x]~=~end_marker}'
-        key = ifNone(key, echo)
-        ls = sf._ls
-        sz = len(ls)
-        prevs = []
-        assert sz
-        for x in iterable:
-            #assert sz
-            #assert sz + len(prevs) == len(ls)
-            k = key(x)
-            if k == ls[len(prevs)]:
-                prevs.append(x)
-                sz -= 1
-                if not sz:
-                    #assert len(prevs) == len(ls)
-                    return prevs
-                continue
-            if prevs:
-                #flush
-                yield from prevs
-                prevs.clear()
-                sz = len(ls)
-            #assert not prevs
-            yield x
-        else:
-            #eof
-            #assert sz
-            if prevs:
-                #flush
-                yield from prevs
-                prevs.clear()
-            #assert not prevs
-        #assert not prevs
-        #assert sz
-        if not eof_ok:
-            raise BadFormat__eof
-        return None
-#end-class IterUntilEndMarker:
-__all__
-
-_4newline = IterUntilEndMarker('\r\n')
-_4prefix = IterUntilEndMarker('?!')
 # [#
-_4suffix4comment = IterUntilEndMarker('#]')
+##_4suffix4comment = IterUntilEndMarker('#]')
 
 _tkeys__no_params = (
 #'[,'
