@@ -11,7 +11,7 @@ py -m nn_ns.app.doctest_cmd seed.recognize.BaseTokenizer4MetaSymbol:__doc__ -ht
 {{{{{{{
 
 >>> def tokenize__str(s, /):
-...     return [*base_tokenizer4meta_symbol.tokenize__str(s)]
+...     return list_tokenize__str(base_tokenizer4meta_symbol, s)
 
 
 #>>> tokenize__str(' \t\r\n')
@@ -160,6 +160,43 @@ seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__forbid_mata_char: (4, 6)
 >>> tokenize__str('?!(a(b(c)()(())))')
 [(2, ('meta_char', {'xchars': [_RawChar(2, '(', 3), _RawChar(3, 'a', 4), _RawChar(4, '(', 5), _RawChar(5, 'b', 6), _RawChar(6, '(', 7), _RawChar(7, 'c', 8), _RawChar(8, ')', 9), _RawChar(9, '(', 10), _RawChar(10, ')', 11), _RawChar(11, '(', 12), _RawChar(12, '(', 13), _RawChar(13, ')', 14), _RawChar(14, ')', 15), _RawChar(15, ')', 16), _RawChar(16, ')', 17)], 'chars': '(a(b(c)()(())))'}), 17)]
 
+
+######################
+######################
+######################
+#_to_output_comment_
+#_to_ignore_spaces_
+#_meta_char_ok_
+#
+>>> base_tokenizer4meta_symbol
+BaseTokenizer4MetaSymbol(_meta_char_ok_ = True, _to_ignore_spaces_ = True, _to_output_comment_ = False)
+>>> base_tokenizer4meta_symbol__with_comment
+BaseTokenizer4MetaSymbol(_meta_char_ok_ = True, _to_ignore_spaces_ = True, _to_output_comment_ = True)
+>>> base_tokenizer4meta_symbol__space_sensitive
+BaseTokenizer4MetaSymbol(_meta_char_ok_ = True, _to_ignore_spaces_ = False, _to_output_comment_ = False)
+>>> base_tokenizer4meta_symbol__no_meta_char
+BaseTokenizer4MetaSymbol(_meta_char_ok_ = False, _to_ignore_spaces_ = True, _to_output_comment_ = False)
+
+
+>>> base_tokenizer4meta_symbol.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!()')
+[(3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13), (22, ('meta_char', {'xchars': [_RawChar(22, '(', 23), _RawChar(23, ')', 24)], 'chars': '()'}), 24)]
+>>> base_tokenizer4meta_symbol__with_comment.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!()')
+[(3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13), (18, ('comment', {'comment': '?![##]'}), 20), (22, ('meta_char', {'xchars': [_RawChar(22, '(', 23), _RawChar(23, ')', 24)], 'chars': '()'}), 24)]
+>>> base_tokenizer4meta_symbol__space_sensitive.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!()')
+[(0, ('char', {'char': ' '}), 1), (3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13), (22, ('meta_char', {'xchars': [_RawChar(22, '(', 23), _RawChar(23, ')', 24)], 'chars': '()'}), 24)]
+>>> base_tokenizer4meta_symbol__no_meta_char.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!()')
+Traceback (most recent call last):
+    ...
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__forbid_meta_char: (13, 22)
+>>> base_tokenizer4meta_symbol__no_meta_char.list_tokenize__str(r' ?!.?!-?![+41]?![##]')
+[(3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13)]
+
+
+
+######################
+
+
+
 }}}}}}}
 #]]]]]]]
 #]]]]]
@@ -183,16 +220,29 @@ BadFormat
     BadFormat__unknown_char_esc_fmt
     BadFormat__unknown_single_char_payload
     BadFormat__unknown_single_char_payload4meta_char
+    BadFormat__forbid_meta_char
 
 BaseTokenizer4MetaSymbol
     base_tokenizer4meta_symbol
+    base_tokenizer4meta_symbol__with_comment
+    base_tokenizer4meta_symbol__space_sensitive
+    base_tokenizer4meta_symbol__no_meta_char
+BaseTokenizer4MetaSymbol
     mk_positioned_chars5text
     mk_positioned_chars5str
+
     _PosIter
     _RawChar
     _TrueChar
-BaseTokenizer4MetaSymbol__with_comment
-    base_tokenizer4meta_symbol__with_comment
+
+    tokenize__text
+    tokenize__str
+    tokenize
+
+    list_tokenize__text
+    list_tokenize__str
+    list_tokenize
+
 IterUntilEndMarker
 '''.split()#'''
 __all__
@@ -221,16 +271,17 @@ class BadFormat__unexpected_esc(BadFormat):pass
 class BadFormat__unknown_char_esc_fmt(BadFormat):pass
 class BadFormat__unknown_single_char_payload(BadFormat):pass
 class BadFormat__unknown_single_char_payload4meta_char(BadFormat):pass
+class BadFormat__forbid_meta_char(BadFormat):pass
 ######################
 
 
 
 def mk_positioned_chars5text(position_info, text, /):
-    '(lineno, columno) -> Iter char -> positioned_chars'
+    'position_info/(lineno, columnno) -> Iter char -> positioned_chars/(Iter (char, position_info))'
     check_pair(position_info)
-    (lineno, columno) = position_info
+    (lineno, columnno) = position_info
     check_type_is(int, lineno)
-    check_type_is(int, columno)
+    check_type_is(int, columnno)
     it = echo_or_mk_PeekableIterator(text)
     #_4newline
     for ch in it:
@@ -241,12 +292,12 @@ def mk_positioned_chars5text(position_info, text, /):
         #####
         if ch == '\n':
             lineno += 1
-            columno = 0 #<<==newline.end_position_info
+            columnno = 0 #<<==newline.end_position_info
         else:
-            columno += 1
-        yield ch, (lineno, columno)
+            columnno += 1
+        yield ch, (lineno, columnno)
 def mk_positioned_chars5str(position_info, s, /):
-    'idx -> Iter char -> positioned_chars'
+    'position_info/idx4char -> Iter char -> positioned_chars/(Iter (char, position_info))'
     check_type_is(int, position_info)
     j = position_info
     it = ((c,j) for j,c in enumerate(s, 1+j))
@@ -387,11 +438,44 @@ datatype:
 ]]
 
     #]]]'''#'''
-    _to_output_comment_ = False
+    def __repr__(sf, /):
+        return repr_helper(sf, _to_output_comment_=sf._to_output_comment_, _to_ignore_spaces_=sf._to_ignore_spaces_, _meta_char_ok_=sf._meta_char_ok_)
+    def __init__(sf, /, *, _to_output_comment_, _to_ignore_spaces_, _meta_char_ok_):
+        check_type_is(bool, _to_output_comment_)
+        check_type_is(bool, _to_ignore_spaces_)
+        check_type_is(bool, _meta_char_ok_)
+        sf._ocm = _to_output_comment_
+        sf._isp = _to_ignore_spaces_
+        sf._mco = _meta_char_ok_
+    @property
+    def _to_output_comment_(sf, /):
+        '-> bool'
+        return sf._ocm
+    @property
+    def _to_ignore_spaces_(sf, /):
+        '-> bool'
+        return sf._isp
+    @property
+    def _meta_char_ok_(sf, /):
+        '-> bool'
+        return sf._mco
+
+    def list_tokenize__text(sf, text, position_info=(1,1), /):
+        'Iter char -> [token] # token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::(lineno,columnno)/(uint,uint)]'
+        return list(sf.tokenize__text(text, position_info))
+    def list_tokenize__str(sf, s, position_info=0, /):
+        'Iter char -> [token] # token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::idx4char/uint]'
+        return list(sf.tokenize__str(s, position_info))
+    def list_tokenize(sf, position_info, positioned_chars, /):
+        'position_info -> Iter (char, position_info) -> [token] # token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn)'
+        return list(sf.tokenize(position_info, positioned_chars))
+
     def tokenize__text(sf, text, position_info=(1,1), /):
+        'Iter char -> Iter token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::(lineno,columnno)/(uint,uint)]'
         positioned_chars = mk_positioned_chars5text(position_info, text)
         return sf.tokenize(position_info, positioned_chars)
     def tokenize__str(sf, s, position_info=0, /):
+        'Iter char -> Iter token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::idx4char/uint]'
         positioned_chars = mk_positioned_chars5str(position_info, s)
         return sf.tokenize(position_info, positioned_chars)
     def tokenize(sf, position_info, positioned_chars, /):
@@ -409,7 +493,11 @@ datatype:
     ######################
     def preprocess(sf, positioned_chars, /):
         'Iter (char, position_info) -> Iter (may char, position_info)'
-        positioned_chars = sf.denoise(positioned_chars)
+        if sf._to_ignore_spaces_:
+            positioned_chars = sf.denoise(positioned_chars)
+        else:
+            positioned_chars = iter(positioned_chars)
+        positioned_chars
         positioned_maychars = sf.cut(positioned_chars)
         return positioned_maychars
     def cut(sf, positioned_chars, /):
@@ -665,12 +753,15 @@ datatype:
     def recognize_meta_char(sf, pr_positioned_may_rawXtrue_charXcomments, /):
         '_PosIter (may (raw_char|true_char|comment_tkn), position_info) -> Iter (usrdefined-meta_char_tkn|char_tkn|comment_tkn) | ^BadFormat__... | ^BadFormat__eof'
         #-> iter_metaXcharXcomments
+        b = sf._meta_char_ok_
         it = pr_positioned_may_rawXtrue_charXcomments
         p = it.position_info
         for item in it:
             p_ = p
             m, p = item
             if m is None:
+                if not b:
+                    raise BadFormat__forbid_meta_char(p_, p)
                 yield from sf.iter_meta_char_tokens5payload(it)
                     #usrdefined-meta_char_tkn
                 continue
@@ -768,11 +859,14 @@ datatype:
     ######################
     ######################
 #end-class BaseTokenizer4MetaSymbol:
-class BaseTokenizer4MetaSymbol__with_comment(BaseTokenizer4MetaSymbol):
-    #@override
-    _to_output_comment_ = True
-base_tokenizer4meta_symbol = BaseTokenizer4MetaSymbol()
-base_tokenizer4meta_symbol__with_comment = BaseTokenizer4MetaSymbol__with_comment()
+##class BaseTokenizer4MetaSymbol__with_comment(BaseTokenizer4MetaSymbol):
+##    #@override
+##    _to_output_comment_ = True
+##base_tokenizer4meta_symbol__with_comment = BaseTokenizer4MetaSymbol__with_comment()
+base_tokenizer4meta_symbol = BaseTokenizer4MetaSymbol(_to_output_comment_=False, _to_ignore_spaces_=True, _meta_char_ok_=True)
+base_tokenizer4meta_symbol__with_comment = BaseTokenizer4MetaSymbol(_to_output_comment_=True, _to_ignore_spaces_=True, _meta_char_ok_=True)
+base_tokenizer4meta_symbol__space_sensitive = BaseTokenizer4MetaSymbol(_to_output_comment_=False, _to_ignore_spaces_=False, _meta_char_ok_=True)
+base_tokenizer4meta_symbol__no_meta_char = BaseTokenizer4MetaSymbol(_to_output_comment_=False, _to_ignore_spaces_=True, _meta_char_ok_=False)
 
 class IterUntilEndMarker:
     def __init__(sf, end_marker, /):
@@ -823,8 +917,27 @@ _4prefix = IterUntilEndMarker('?!')
 __all__
 
 
+def tokenize__text(sf, text, position_info=(1,1), /):
+    'BaseTokenizer4MetaSymbol -> Iter char -> Iter token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::(lineno,columnno)/(uint,uint)]'
+    return sf.tokenize__text(text, position_info)
+def tokenize__str(sf, s, position_info=0, /):
+    'BaseTokenizer4MetaSymbol -> Iter char -> Iter token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::idx4char/uint]'
+    return sf.tokenize__str(s, position_info)
+def tokenize(sf, position_info, positioned_chars, /):
+    'BaseTokenizer4MetaSymbol -> position_info -> Iter (char, position_info) -> Iter token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn)'
+    return sf.tokenize(position_info, positioned_chars)
 
+
+def list_tokenize__text(sf, text, position_info=(1,1), /):
+    'BaseTokenizer4MetaSymbol -> Iter char -> [token] # token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::(lineno,columnno)/(uint,uint)]'
+    return sf.list_tokenize__text(text, position_info)
+def list_tokenize__str(sf, s, position_info=0, /):
+    'BaseTokenizer4MetaSymbol -> Iter char -> [token] # token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn) # [position_info::idx4char/uint]'
+    return sf.list_tokenize__str(s, position_info)
+def list_tokenize(sf, position_info, positioned_chars, /):
+    'BaseTokenizer4MetaSymbol -> position_info -> Iter (char, position_info) -> [token] # token/(position_info, (tkey/str, tdat/dict), position_info)/(usrdefined-meta_char_tkn|char_tkn|comment_tkn)'
+    return sf.list_tokenize(position_info, positioned_chars)
 
 __all__
-from seed.recognize.BaseTokenizer4MetaSymbol import BaseTokenizer4MetaSymbol, BaseTokenizer4MetaSymbol__with_comment
+from seed.recognize.BaseTokenizer4MetaSymbol import BaseTokenizer4MetaSymbol
 from seed.recognize.BaseTokenizer4MetaSymbol import *

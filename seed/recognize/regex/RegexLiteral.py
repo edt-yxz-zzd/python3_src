@@ -312,10 +312,10 @@ ranges4Pat_WS_and_py_re_sp:31
 
 >>> def tokenize__str(s, /):
 ...     it = ((c,j) for j,c in enumerate(s, 1))
-...     return [*tokenizer4RegexLiteral.tokenize(0, it)]
+...     return [*tokenizer4regex_literal.tokenize(0, it)]
 
 >>> def tokenize__str(s, /):
-...     return [*tokenizer4RegexLiteral.tokenize__str(s)]
+...     return [*tokenizer4regex_literal.tokenize__str(s)]
 
 
 #>>> tokenize__str(' \t\r\n')
@@ -604,21 +604,60 @@ True
 ######################
 # recur comment:
 #
->>> [*tokenizer4RegexLiteral.tokenize__str('?![#?!-?![-,:;.+41]666?![#777?![#abc#]888#]999#]')]
+>>> [*tokenizer4regex_literal.tokenize__str('?![#?!-?![-,:;.+41]666?![#777?![#abc#]888#]999#]')]
 []
->>> [*tokenizer4RegexLiteral__with_comment.tokenize__str('?![#?!-?![-,:;.+41]666?![#777?![#abc#]888#]999#]')]
+>>> [*tokenizer4regex_literal__with_comment.tokenize__str('?![#?!-?![-,:;.+41]666?![#777?![#abc#]888#]999#]')]
 [(4, ('comment', {'comment': '?![#  \t\r\n?!.A666?![#777?![#abc#]888#]999#]'}), 48)]
 
->>> [*tokenizer4RegexLiteral.tokenize__str('?!(|)')]
+>>> [*tokenizer4regex_literal.tokenize__str('?!(|)')]
 [(3, ('|', {}), 4)]
->>> [*tokenizer4RegexLiteral.tokenize__str('?![#?!(|)#]')]
+>>> [*tokenizer4regex_literal.tokenize__str('?![#?!(|)#]')]
 Traceback (most recent call last):
     ...
 seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__forbid_mata_char: (4, 6)
->>> [*tokenizer4RegexLiteral__with_comment.tokenize__str('?![#?!(|)#]')]
+>>> [*tokenizer4regex_literal__with_comment.tokenize__str('?![#?!(|)#]')]
 Traceback (most recent call last):
     ...
 seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__forbid_mata_char: (4, 6)
+
+
+
+######################
+######################
+######################
+tokenizer4regex_literal
+tokenizer4regex_literal__with_comment
+tokenizer4regex_literal__space_sensitive
+tokenizer4regex_literal__no_meta_char
+
+>>> tokenizer4regex_literal
+Tokenizer4RegexLiteral(_meta_char_ok_ = True, _to_ignore_spaces_ = True, _to_output_comment_ = False)
+>>> tokenizer4regex_literal__with_comment
+Tokenizer4RegexLiteral(_meta_char_ok_ = True, _to_ignore_spaces_ = True, _to_output_comment_ = True)
+>>> tokenizer4regex_literal__space_sensitive
+Tokenizer4RegexLiteral(_meta_char_ok_ = True, _to_ignore_spaces_ = False, _to_output_comment_ = False)
+>>> tokenizer4regex_literal__no_meta_char
+Tokenizer4RegexLiteral(_meta_char_ok_ = False, _to_ignore_spaces_ = True, _to_output_comment_ = False)
+
+
+>>> tokenizer4regex_literal.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!(|)')
+[(3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13), (23, ('|', {}), 24)]
+>>> tokenizer4regex_literal__with_comment.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!(|)')
+[(3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13), (18, ('comment', {'comment': '?![##]'}), 20), (23, ('|', {}), 24)]
+>>> tokenizer4regex_literal__space_sensitive.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!(|)')
+[(0, ('char', {'char': ' '}), 1), (3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13), (23, ('|', {}), 24)]
+>>> tokenizer4regex_literal__no_meta_char.list_tokenize__str(r' ?!.?!-?![+41]?![##]?!(|)')
+Traceback (most recent call last):
+    ...
+seed.recognize.BaseTokenizer4MetaSymbol.BadFormat__forbid_meta_char: (13, 22)
+>>> tokenizer4regex_literal__no_meta_char.list_tokenize__str(r' ?!.?!-?![+41]?![##]')
+[(3, ('char', {'char': '?'}), 4), (4, ('char', {'char': '!'}), 4), (6, ('char', {'char': ' '}), 7), (10, ('char', {'char': 'A'}), 13)]
+
+
+
+######################
+######################
+######################
 
 }}}}}}}
 #]]]]]]]
@@ -793,8 +832,8 @@ __all__ = r'''
 Parser4RegexLiteral
     parser4RegexLiteral__no_builtins
     parser4RegexLiteral__with_2x2_builtins
-tokenizer4RegexLiteral
-tokenizer4RegexLiteral__with_comment
+tokenizer4regex_literal
+tokenizer4regex_literal__with_comment
 
 
 
@@ -821,12 +860,22 @@ Parser4RegexLiteral
     parser4RegexLiteral__with_2x2_builtins
 BaseTokenizer4MetaSymbol
     Tokenizer4RegexLiteral
-        tokenizer4RegexLiteral
-BaseTokenizer4MetaSymbol__with_comment
-    Tokenizer4RegexLiteral__with_comment
-        tokenizer4RegexLiteral__with_comment
-mk_positioned_chars5text
-mk_positioned_chars5str
+        tokenizer4regex_literal
+        tokenizer4regex_literal__with_comment
+        tokenizer4regex_literal__space_sensitive
+        tokenizer4regex_literal__no_meta_char
+BaseTokenizer4MetaSymbol
+    mk_positioned_chars5text
+    mk_positioned_chars5str
+
+    tokenize__text
+    tokenize__str
+    tokenize
+
+    list_tokenize__text
+    list_tokenize__str
+    list_tokenize
+
 
 dry_
 '''.split()#'''
@@ -897,8 +946,10 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 __all__
 ######################
-from seed.recognize.BaseTokenizer4MetaSymbol import BaseTokenizer4MetaSymbol, BaseTokenizer4MetaSymbol__with_comment
+from seed.recognize.BaseTokenizer4MetaSymbol import BaseTokenizer4MetaSymbol
 from seed.recognize.BaseTokenizer4MetaSymbol import mk_positioned_chars5text, mk_positioned_chars5str
+from seed.recognize.BaseTokenizer4MetaSymbol import tokenize__text, tokenize__str, tokenize
+from seed.recognize.BaseTokenizer4MetaSymbol import list_tokenize__text, list_tokenize__str, list_tokenize
 from seed.recognize.Fail import Fail, ParseFail, TokenizeFail, BadFormat
 ######################
 ParseFail
@@ -927,15 +978,15 @@ class Parser4RegexLiteral:
         sf._gctx = MapView(gctx4builtins)
             # vs:ctx-usrdef
     def parse__text(sf, text, position_info=(1,1), /):
-        tokens = tokenizer4RegexLiteral.tokenize__text(text, position_info)
+        tokens = tokenizer4regex_literal.tokenize__text(text, position_info)
         return sf.parse__tokens(position_info, tokens)
     def parse__str(sf, s, position_info=0, /):
-        tokens = tokenizer4RegexLiteral.tokenize__str(s, position_info)
+        tokens = tokenizer4regex_literal.tokenize__str(s, position_info)
         return sf.parse__tokens(position_info, tokens)
 
     def parse(sf, position_info, positioned_chars, /):
         'position_info -> Iter (char, position_info) -> IRegexRepr'
-        tokens = tokenizer4RegexLiteral.tokenize(position_info, positioned_chars)
+        tokens = tokenizer4regex_literal.tokenize(position_info, positioned_chars)
         return sf.parse__tokens(position_info, tokens)
     def parse__tokens(sf, position_info, tokens, /):
         'position_info -> Iter token -> IRegexRepr'
@@ -1381,11 +1432,16 @@ class Tokenizer4RegexLiteral(BaseTokenizer4MetaSymbol):
 ######################
 #
 
-class Tokenizer4RegexLiteral__with_comment(Tokenizer4RegexLiteral, BaseTokenizer4MetaSymbol__with_comment):
-    #@override
-    _to_output_comment_ = True
-tokenizer4RegexLiteral = Tokenizer4RegexLiteral()
-tokenizer4RegexLiteral__with_comment = Tokenizer4RegexLiteral__with_comment()
+##class Tokenizer4RegexLiteral__with_comment(Tokenizer4RegexLiteral, BaseTokenizer4MetaSymbol__with_comment):
+##    #@override
+##    _to_output_comment_ = True
+#tokenizer4RegexLiteral__with_comment = Tokenizer4RegexLiteral()
+##tokenizer4RegexLiteral = Tokenizer4RegexLiteral()
+tokenizer4regex_literal = Tokenizer4RegexLiteral(_to_output_comment_=False, _to_ignore_spaces_=True, _meta_char_ok_=True)
+tokenizer4regex_literal__with_comment = Tokenizer4RegexLiteral(_to_output_comment_=True, _to_ignore_spaces_=True, _meta_char_ok_=True)
+tokenizer4regex_literal__space_sensitive = Tokenizer4RegexLiteral(_to_output_comment_=False, _to_ignore_spaces_=False, _meta_char_ok_=True)
+tokenizer4regex_literal__no_meta_char = Tokenizer4RegexLiteral(_to_output_comment_=False, _to_ignore_spaces_=True, _meta_char_ok_=False)
+
 
 __all__
 # [#
@@ -1556,5 +1612,5 @@ __all__
 
 
 __all__
-from seed.recognize.regex.RegexLiteral import Parser4RegexLiteral, parser4RegexLiteral__no_builtins, parser4RegexLiteral__with_2x2_builtins, tokenizer4RegexLiteral, tokenizer4RegexLiteral__with_comment
+from seed.recognize.regex.RegexLiteral import Parser4RegexLiteral, parser4RegexLiteral__no_builtins, parser4RegexLiteral__with_2x2_builtins, tokenizer4regex_literal, tokenizer4regex_literal__with_comment
 from seed.recognize.regex.RegexLiteral import *
