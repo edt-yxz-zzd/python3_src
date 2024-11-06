@@ -18,67 +18,67 @@ deque
 
 
 example:
-    >>> Deque()
-    Deque([])
-    >>> Deque([])
-    Deque([])
-    >>> Deque([1,2])
-    Deque([1, 2])
+>>> Deque()
+Deque([])
+>>> Deque([])
+Deque([])
+>>> Deque([1,2])
+Deque([1, 2])
 
-    >>> d = Deque()
-    >>> len(d)
-    0
-    >>> d.append_right(1)
-    >>> d
-    Deque([1])
-    >>> d.append_right(2)
-    >>> d
-    Deque([1, 2])
-    >>> d.append_left(-1)
-    >>> d
-    Deque([-1, 1, 2])
-    >>> d.append_left(-2)
-    >>> d
-    Deque([-2, -1, 1, 2])
-    >>> d.pop_right()
-    2
-    >>> d
-    Deque([-2, -1, 1])
-    >>> d.pop_left()
-    -2
-    >>> d
-    Deque([-1, 1])
-    >>> len(d)
-    2
-    >>> d.pop_left()
-    -1
-    >>> d
-    Deque([1])
-    >>> d.pop_right()
-    1
-    >>> d
-    Deque([])
+>>> d = Deque()
+>>> len(d)
+0
+>>> d.append_right(1)
+>>> d
+Deque([1])
+>>> d.append_right(2)
+>>> d
+Deque([1, 2])
+>>> d.append_left(-1)
+>>> d
+Deque([-1, 1, 2])
+>>> d.append_left(-2)
+>>> d
+Deque([-2, -1, 1, 2])
+>>> d.pop_right()
+2
+>>> d
+Deque([-2, -1, 1])
+>>> d.pop_left()
+-2
+>>> d
+Deque([-1, 1])
+>>> len(d)
+2
+>>> d.pop_left()
+-1
+>>> d
+Deque([1])
+>>> d.pop_right()
+1
+>>> d
+Deque([])
 
 
-    >>> d = Deque([1,2,3,4])
-    >>> len(d)
-    4
-    >>> d[1]
-    2
-    >>> d[-1]
-    4
-    >>> d[-4]
-    1
-    >>> d[4] #doctest: +IGNORE_EXCEPTION_DETAIL
-    Traceback (most recent call last):
-        ...
-    IndexError
+>>> d = Deque([1,2,3,4])
+>>> len(d)
+4
+>>> d[1]
+2
+>>> d[-1]
+4
+>>> d[-4]
+1
+>>> d[4] #doctest: +IGNORE_EXCEPTION_DETAIL
+Traceback (most recent call last):
+    ...
+IndexError
 
 '''
 
 __all__ = '''
-    Deque
-    '''.split()
+Deque
+'''.split()
 
 from seed.helper.repr_input import repr_helper
 import operator # .index
@@ -99,6 +99,9 @@ methods:
     pop_left
     pop_right
 
+    clear
+    xxx no:__iter__
+
 '''
     def __init__(self, iterable=None):
         # __begin == 0 or 0 < __begin < len(__ls)
@@ -108,6 +111,10 @@ methods:
 
         if iterable is not None:
             self.extend_right(iterable)
+    def clear(self):
+        self.__ls.clear()
+        self.__begin = 0
+        self.__size = 0
     def __len__(self):
         return self.__size
     def extend_left(self, iterable):
@@ -266,6 +273,8 @@ methods:
         self.__post_pop()
         return x
 
+from seed.types.Deque import Deque
+from seed.types.Deque import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

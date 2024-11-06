@@ -16,6 +16,16 @@ news:
 ]]
 
 
+[[
+copy from:epilog
+===:
+NOTE:
+    lineno counted inside the given text instead of whole pysrc file, eg:
+        『py -m seed.for_libs.for_doctest xxx.yyy.zzz:__doc__ -ht』
+
+
+]]
+
 
 seed.for_libs.for_doctest
 py -m nn_ns.app.debug_cmd   seed.for_libs.for_doctest -x
@@ -47,6 +57,7 @@ py -m seed.for_libs.for_doctest __main__! -v
 py -m seed.for_libs.for_doctest __main__:__doc__ -v
 py -m seed.for_libs.for_doctest __main__:_Test -v
 
+py -m seed.for_libs.for_doctest xxx.yyy.zzz:__doc__ -ht
 
 [[抄袭帮助文档:考虑增加--option,--fail-fast
 py -m doctest -h
@@ -408,12 +419,20 @@ doctest_optionflag_names = _collect_doctest_optionflag_names()
 #py -m doctest -h
     #{DONT_ACCEPT_TRUE_FOR_1,DONT_ACCEPT_BLANKLINE,NORMALIZE_WHITESPACE,ELLIPSIS,SKIP,IGNORE_EXCEPTION_DETAIL,REPORT_UDIFF,REPORT_CDIFF,REPORT_NDIFF,REPORT_ONLY_FIRST_FAILURE,FAIL_FAST}
 
+epilog=r'''
+NOTE:
+    lineno counted inside the given text instead of whole pysrc file, eg:
+        『py -m seed.for_libs.for_doctest xxx.yyy.zzz:__doc__ -ht』
+
+'''#'''
+
 def main(args=None, /):
     import argparse
 
     parser = argparse.ArgumentParser(
         description='doctest on single obj'
-        , epilog=''
+        , epilog=epilog
+
         , formatter_class=argparse.RawDescriptionHelpFormatter
         )
     parser.add_argument('module_qname_and_obj_qnames', type=str, nargs='+'

@@ -442,8 +442,12 @@ __all__
 
 
 import inspect
-from inspect import getargspec as _getargspec__py2
-    #Deprecated since version 3.0:inspect.getargspec(func) -> ArgSpec(args, varargs, keywords, defaults)
+try:
+    from inspect import getargspec as _getargspec__py2
+        #Deprecated since version 3.0:inspect.getargspec(func) -> ArgSpec(args, varargs, keywords, defaults)
+except ImportError:
+    #fail@py3_11_9
+    _getargspec__py2 = None
 from inspect import signature as _get_signature_of__py3 #py2/py3 api diff, py3/py4 may be diff too.
     #inspect.signature(callable, *, follow_wrapped=True) -> Signature
     #.__wrapped__=f
@@ -776,8 +780,8 @@ def triples5api_(may_f, /, *tmay_Nothing___or___args4mk_default_or_raise):
 
 
 
-
-def get_signature_of__py2_(f, /):
+if not _getargspec__py2 is None:
+  def get_signature_of__py2_(f, /):
     '-> (_infos4idx_nm_both/[(nm,tmay_default)], may_nm4varargs, may_nm4varkwargs) #only used for mk_pairs()/pairs5api_()'
     '-> ([nm], [(nm,default)], may_nm4varargs, may_nm4varkwargs)'
     'follow_wrapped=False'
@@ -792,6 +796,43 @@ def get_signature_of__py2_(f, /):
     ps1 = [(nm, (v,)) for nm, v in zip(nms4args[i:], defaults)]
     _infos4idx_nm_both = (*ps0, *ps1)
     return (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwargs)
+else:
+    #using:get_signature_of__py3_
+  def get_signature_of__py2_(f, /):
+    '-> (_infos4idx_nm_both/[(nm,tmay_default)], may_nm4varargs, may_nm4varkwargs) #only used for mk_pairs()/pairs5api_()'
+    (infoss4input, tmay_return_annotation) = get_signature_of__py3_(f, follow_wrapped=False)
+    (infos4idx_only, infos4idx_nm_both, tmay_info4varargs, infos4nm_only, tmay_info4varkwds) = infoss4input
+    #5+1-3==3
+    if 1:
+        if infos4nm_only:raise TypeError('KEYWORD_ONLY occur')
+        if infos4idx_only:raise TypeError('POSITIONAL_ONLY occur')
+        if tmay_return_annotation:raise TypeError('return_annotation occur')
+    # info4parameter = (name, tmay_annotation, tmay_default)
+    #.parameter_infoss :: (infos4idx_only/[info4parameter], '/', infos4idx_nm_both/[info4parameter], '*', tmay_info4varargs/(tmay info4parameter), infos4nm_only/[info4parameter], '**', tmay_info4varkwds/(tmay info4parameter))
+    #5+1-3==3
+    (infos4idx_nm_both, tmay_info4varargs, tmay_info4varkwds)
+    if any(tmay_annotation for (name, tmay_annotation, tmay_default) in infos4idx_nm_both):raise TypeError('param_annotation occur')
+    _infos4idx_nm_both = tuple((name, tmay_default) for (name, tmay_annotation, tmay_default) in infos4idx_nm_both)
+    #may_nm4varargs
+    for (name, tmay_annotation, tmay_default) in tmay_info4varargs:
+        if tmay_annotation:raise TypeError('vararg_annotation occur')
+        if tmay_default:raise TypeError('vararg_default occur')
+        may_nm4varargs = name
+        break
+    else:
+        may_nm4varargs = None
+    may_nm4varargs
+    #may_nm4varkwargs
+    for (name, tmay_annotation, tmay_default) in tmay_info4varkwargs:
+        if tmay_annotation:raise TypeError('varkwarg_annotation occur')
+        if tmay_default:raise TypeError('varkwarg_default occur')
+        may_nm4varkwargs = name
+        break
+    else:
+        may_nm4varkwargs = None
+    may_nm4varkwargs
+    return (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwargs)
+
 
 
 def _mk_tmay_from_nmay4Signature__py3(nmay_x, /, *, Nothing = _Signature__py3.empty):

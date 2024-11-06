@@ -1,4 +1,5 @@
 #HHHHH
+#__all__:goto
 r'''
 
 seed.types.Tester
@@ -10,6 +11,23 @@ py -m nn_ns.app.doctest_cmd seed.types.Tester!
 
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.Tester @f
 
+++Tester__named
+
+[[
+view ../../python3_src/seed/types/CachedProperty.py
+___always_tri_test___ --> CachedProperty #cached_property
+    ++CachedProperty.__call__
+
+grep -F seed.types.Tester -r ../../python3_src/seed/ -r ../../python3_src/nn_ns/
+grep -F ___always_tri_test___ -r ../../python3_src/seed/ -r ../../python3_src/nn_ns/ | grep -F .py:
+
+
+    ++@CachedProperty
+    @abstractmethod
+    def ___always_tri_test___(sf, /):
+        '-> bool'
+
+]]
 
 
 
@@ -105,15 +123,73 @@ IAlwaysTriTester
                     Tester__cls_getattr_call
                 ITesterArg__with_callable
                     Tester__test_func
+                        tester__bool
+                            truth_tester
+                        tester__not_bool
+                            falsity_tester
                 ITesterArg__with_subscriptable
                     Tester__test_mapping
             ITesterArgs
                 ITesterArgs__with_strs
                     Tester__obj_hasattrs
                     Tester__cls_hasattrs
-    '''.split()
+
+
+IXQuerySet  ITester
+    XQuerySet__complementary
+    XQuerySet5predicator
+    XQuerySet5container
+    mk_XQuerySet__always
+    XQuerySet__named
+    CharQuerySet__using_py_str_method
+    StrQuerySet__using_py_regex_fullmatch
+    StrQuerySet__using_py_regex_match_prefix
+    StrQuerySet__using_py_regex_search
+
+
+XQuerySet__named
+    empty_xqset
+    whole_xqset
+    truth_test_xqset
+    falsity_test_xqset
+CharQuerySet__using_py_str_method
+    char_qset__py_regex__w
+    char_qset__py_regex__W
+    char_qset__py_regex__s
+    char_qset__py_regex__S
+    char_qset__py_regex__d
+    char_qset__py_regex__D
+StrQuerySet__using_py_regex_fullmatch
+    char_qset__isalnum
+    char_qset__not_isalnum
+    char_qset__isalpha
+    char_qset__not_isalpha
+    char_qset__isascii
+    char_qset__not_isascii
+    char_qset__isdecimal
+    char_qset__not_isdecimal
+    char_qset__isdigit
+    char_qset__not_isdigit
+    char_qset__isidentifier
+    char_qset__not_isidentifier
+    char_qset__islower
+    char_qset__not_islower
+    char_qset__isnumeric
+    char_qset__not_isnumeric
+    char_qset__isprintable
+    char_qset__not_isprintable
+    char_qset__isspace
+    char_qset__not_isspace
+    char_qset__istitle
+    char_qset__not_istitle
+    char_qset__isupper
+    char_qset__not_isupper
+
+'''.split()#'''
 
 #HHHHH
+___begin_mark_of_excluded_global_names__0___ = ...
+
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
 from seed.abc.IGetArgsKwargs import IGetArgsKwargs
 from seed.abc.abc import ABC, abstractmethod, override
@@ -121,6 +197,13 @@ from seed.abc.ISingleton import ISingleton
 
 from seed.types.TriBoolOps import TriBoolOps, LazyTriBoolOps
 from seed.util_class.Lazy__call import Lazy#Lazy__call
+from seed.types.CachedProperty import CachedProperty
+from seed.tiny_.check import check_type_is, check_type_le, check_char, check_non_ABC, check_callable, check_pseudo_qual_name
+import re
+from seed.helper.repr_input import repr_helper
+from seed.tiny_._Base4repr import _Base4repr #sf._args4repr = (...)
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 #HHHHH
@@ -148,6 +231,7 @@ def is_good(sf, x, /):
 class IAlwaysTriTester(IReprImmutableHelper):
     __slots__ = ()
     #def ___get_args_kwargs___(sf):
+    @CachedProperty
     @abstractmethod
     def ___always_tri_test___(sf, /):
         r'''-> (...|bool)
@@ -157,6 +241,8 @@ class IAlwaysTriTester(IReprImmutableHelper):
         False -> always False
         #'''
         return ...
+assert '___always_tri_test___' in IAlwaysTriTester.__abstractmethods__, 'bug@CachedProperty'
+
 class ITester(IAlwaysTriTester):
     __slots__ = ()
     #def ___get_args_kwargs___(sf):
@@ -175,8 +261,8 @@ class ITester(IAlwaysTriTester):
         return TesterXOR(sf, ot)
     def __or__(sf, ot, /):
         return TesterOR(sf, ot)
-    def __invert__(sf, ot, /):
-        return TesterNOT(sf)
+    def __invert__(sf, /):
+        return TesterNOT(sf)#to be overrided@TesterNOT
 
 
 
@@ -192,6 +278,7 @@ class ITesterNotAlways(ITester):
     __slots__ = ()
     #def ___get_args_kwargs___(sf):
     #def __is_good__(sf, x):
+    #@CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         return ...
@@ -210,12 +297,14 @@ class ITesterNoArgs(ITester, ISingleton):
         return r
 class Tester_True(ITesterNoArgs):
     __slots__ = ()
+    #@CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         '-> bool'
         return True
 class Tester_False(ITesterNoArgs):
     __slots__ = ()
+    #@CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         '-> bool'
@@ -339,6 +428,7 @@ class ITesterArgs__with_strs(ITesterArgs):
 
 
 class TesterAND(ITesterBinaryOp):
+    @CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         op = LazyTriBoolOps.lazyL_AND
@@ -348,6 +438,7 @@ class TesterAND(ITesterBinaryOp):
         '-> bool'
         return is_good(sf.lhs, x) and is_good(sf.rhs, x)
 class TesterXOR(ITesterBinaryOp):
+    @CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         op = LazyTriBoolOps.lazyL_XOR
@@ -357,6 +448,7 @@ class TesterXOR(ITesterBinaryOp):
         '-> bool'
         return is_good(sf.lhs, x) ^ is_good(sf.rhs, x)
 class TesterNOT_XOR(ITesterBinaryOp):
+    @CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         op = LazyTriBoolOps.lazyL_NOT_XOR
@@ -366,6 +458,7 @@ class TesterNOT_XOR(ITesterBinaryOp):
         '-> bool'
         return is_good(sf.lhs, x) is is_good(sf.rhs, x)
 class TesterOR(ITesterBinaryOp):
+    @CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         op = LazyTriBoolOps.lazyL_OR
@@ -379,6 +472,7 @@ class TesterOR(ITesterBinaryOp):
 
 
 class TesterNOT(ITesterUnaryOp):
+    @CachedProperty
     @override
     def ___always_tri_test___(sf, /):
         op = TriBoolOps.NOT
@@ -387,6 +481,10 @@ class TesterNOT(ITesterUnaryOp):
     def __is_good__(sf, x, /):
         '-> bool'
         return not is_good(sf.rhs, x)
+    @override
+    def __invert__(sf, /):
+        #return TesterNOT(sf)
+        return sf.rhs
 
 
 
@@ -625,9 +723,220 @@ case op of:
     tester = Tester_(obj)
     return tester
 
+
+
+
+
+
+
+
+
+
+
+######################
+######################
+tester__bool = Tester__test_func(bool)
+tester__not_bool = ~tester__bool
+assert ~tester__not_bool is tester__bool
+
+truth_tester = tester__bool
+falsity_tester = tester__not_bool
+
+
+
+######################
+######################
+#move from:view ../../python3_src/seed/types/IToken.py
+IXQuerySet = ITester
+XQuerySet__complementary = TesterNOT
+XQuerySet5predicator = Tester__test_func
+XQuerySet5container = Tester__in_obj
+def mk_XQuerySet__always(b, /):
+    check_type_is(bool, b)
+    return the_Tester_True if b else the_Tester_False
+
+#XQuerySet__named
+class XQuerySet__named(ITesterArgs, IXQuerySet):
+    ___no_slots_ok___ = True
+    def __init__(sf, qnm, xqset, /):
+        check_type_le(IXQuerySet, xqset)
+        check_pseudo_qual_name(qnm)
+        super().__init__(qnm, xqset)
+        sf._qnm = qnm
+        sf._xqs = xqset
+    def __str__(sf, /):
+        return repr_helper(sf, sf._qnm, sf._xqs)
+    def __repr__(sf, /):
+        return sf._qnm
+    @CachedProperty
+    @override
+    def ___always_tri_test___(sf, /):
+        return always_tri_test(sf._xqs)
+    @override
+    def __is_good__(sf, x, /):
+        '-> bool'
+        return is_good(sf._xqs, x)
+
+
+
+
+empty_xqset = XQuerySet__named('empty_xqset', the_Tester_False)
+whole_xqset = XQuerySet__named('whole_xqset', the_Tester_True)
+
+truth_test_xqset = XQuerySet__named('truth_test_xqset', tester__bool)
+falsity_test_xqset = XQuerySet__named('falsity_test_xqset', tester__not_bool)
+
+#######
+r'''[[[
+
+regex__w
+regex__s
+regex__d
+
+regex__W
+regex__S
+regex__D
+
+
+
+isalnum
+isalpha
+isascii
+isdecimal
+isdigit
+isidentifier
+islower
+isnumeric
+isprintable
+isspace
+istitle
+isupper
+
+not_isalnum
+not_isalpha
+not_isascii
+not_isdecimal
+not_isdigit
+not_isidentifier
+not_islower
+not_isnumeric
+not_isprintable
+not_isspace
+not_istitle
+not_isupper
+
+#]]]'''#'''
+_nms6str = set('isalnum isalpha isascii isdecimal isdigit isidentifier islower isnumeric isprintable isspace istitle isupper'.split())
+
+class CharQuerySet__using_py_str_method(ITesterArgs, IXQuerySet):
+    def __init__(sf, py_str_attr, /):
+        #check_pseudo_qual_name(py_str_attr)
+        if not py_str_attr in _nms6str:raise ValueError(py_str_attr)#TypeError(py_str_attr)
+        predicator = getattr(str, py_str_attr)
+        super().__init__(py_str_attr)
+        sf._nm = py_str_attr
+        sf._pf = predicator
+
+    def __repr__(sf, /):
+        return repr_helper(sf, sf._nm)
+    @override
+    def __is_good__(sf, x, /):
+        '-> bool'
+        return sf._pf(x)
+check_non_ABC(CharQuerySet__using_py_str_method)
+
+class _IStrQuerySet__using_py_regex_xxx(ITesterArgs, IXQuerySet):
+    def __init__(sf, py_regex_pattern, /):
+        sf._rex = re.compile(py_regex_pattern)
+        super().__init__(py_regex_pattern)
+#, _Base4repr sf._args4repr = (py_regex_pattern,)
+    #def _check_args_(sf, args, /): [py_str_attr] = args
+class StrQuerySet__using_py_regex_fullmatch(_IStrQuerySet__using_py_regex_xxx):
+    @override
+    def __is_good__(sf, x, /):
+        '-> bool'
+        return bool(sf._rex.fullmatch(x))
+class StrQuerySet__using_py_regex_match_prefix(_IStrQuerySet__using_py_regex_xxx):
+    @override
+    def __is_good__(sf, x, /):
+        '-> bool'
+        return bool(sf._rex.match(x))
+class StrQuerySet__using_py_regex_search(_IStrQuerySet__using_py_regex_xxx):
+    @override
+    def __is_good__(sf, x, /):
+        '-> bool'
+        return bool(sf._rex.search(x))
+check_non_ABC(StrQuerySet__using_py_regex_fullmatch)
+check_non_ABC(StrQuerySet__using_py_regex_match_prefix)
+check_non_ABC(StrQuerySet__using_py_regex_search)
+
+#######
+def _mk4str_method(nm, /):
+    gnm = f'char_qset__{nm}'
+    gcnm = f'char_qset__not_{nm}'
+
+    _xqset = CharQuerySet__using_py_str_method(nm)
+
+    xqset = XQuerySet__named(gnm, _xqset)
+    complementary_xqset = XQuerySet__named(gcnm, ~_xqset)
+
+    return (xqset, complementary_xqset)
+def _mk4py_char_regex(char, /):
+    check_char(char)
+    assert char.isalpha()
+    assert char.islower()
+    nm = char
+    cnm = char.upper()
+    assert not cnm == nm
+    gnm = f'char_qset__py_regex__{nm}'
+    gcnm = f'char_qset__py_regex__{cnm}'
+    _xqset = StrQuerySet__using_py_regex_fullmatch(rf'\{nm}')
+    _cxqset = StrQuerySet__using_py_regex_fullmatch(rf'\{cnm}')
+
+    xqset = XQuerySet__named(gnm, _xqset)
+    complementary_xqset = XQuerySet__named(gcnm, _cxqset)
+    return (xqset, complementary_xqset)
+
+
+#######
+### (char_qset__py_regex__s, char_qset__py_regex__S) = _mk4py_char_regex('s')
+#:.,.+4s/^\(\w\)\(\w\)$/(char_qset__py_regex__\1, char_qset__py_regex__\2) = _mk4py_char_regex('\1')
+(char_qset__py_regex__w, char_qset__py_regex__W) = _mk4py_char_regex('w')
+(char_qset__py_regex__s, char_qset__py_regex__S) = _mk4py_char_regex('s')
+(char_qset__py_regex__d, char_qset__py_regex__D) = _mk4py_char_regex('d')
+
+#######
+### (char_qset__isalnum, char_qset__not_isalnum) = _mk4str_method('isalnum')
+#:.,.+14s/^\w\+$/(char_qset__\0, char_qset__not_\0) = _mk4str_method('\0')
+(char_qset__isalnum, char_qset__not_isalnum) = _mk4str_method('isalnum')
+(char_qset__isalpha, char_qset__not_isalpha) = _mk4str_method('isalpha')
+(char_qset__isascii, char_qset__not_isascii) = _mk4str_method('isascii')
+(char_qset__isdecimal, char_qset__not_isdecimal) = _mk4str_method('isdecimal')
+(char_qset__isdigit, char_qset__not_isdigit) = _mk4str_method('isdigit')
+(char_qset__isidentifier, char_qset__not_isidentifier) = _mk4str_method('isidentifier')
+(char_qset__islower, char_qset__not_islower) = _mk4str_method('islower')
+(char_qset__isnumeric, char_qset__not_isnumeric) = _mk4str_method('isnumeric')
+(char_qset__isprintable, char_qset__not_isprintable) = _mk4str_method('isprintable')
+(char_qset__isspace, char_qset__not_isspace) = _mk4str_method('isspace')
+(char_qset__istitle, char_qset__not_istitle) = _mk4str_method('istitle')
+(char_qset__isupper, char_qset__not_isupper) = _mk4str_method('isupper')
+#######
+
+
+
+
+
+
+
+######################
+######################
+######################
+__all__
+
 from seed.types.Tester import mk_tester_, view_registered_ops4mk_tester_
 
-from seed.types.Tester import is_good, ITester, IAlwaysTriTester
+from seed.types.Tester import is_good, always_tri_test
+from seed.types.Tester import is_good, always_tri_test, ITester, IAlwaysTriTester
 from seed.types.Tester import the_Tester_True, the_Tester_False, Tester_True, Tester_False, TesterNOT, TesterAND, TesterXOR, TesterNOT_XOR, TesterOR
 from seed.types.Tester import ITesterMayAlways, ITesterNotAlways, ITesterNoArgs, ITesterUnaryOp, ITesterBinaryOp, ITesterArg, ITesterArgs, ITesterArg__with_cls, ITesterArgs__with_strs, ITesterArg__with_str, ITesterArg__with_callable, ITesterArg__with_subscriptable
 from seed.types.Tester import Tester__is_obj, Tester__eq_obj, Tester__in_obj, Tester__cls_is, Tester__cls_le, Tester__cls_lt, Tester__obj_hasattrs, Tester__cls_hasattrs, Tester__obj_getattr_test, Tester__obj_getattr_call, Tester__cls_getattr_call, Tester__test_func, Tester__test_mapping

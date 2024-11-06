@@ -286,13 +286,15 @@ if __name__ == '__main__':
 
 bar = '='*22
 def main__print_infos_of_modules(qnames, /, *, exclude_exported:bool):
-    print_unbound_names_of_modules(qnames)
+    111;print_unbound_names_of_modules(qnames)
     print(bar); print(bar); print(bar)
-    print_global_names_of_modules(qnames, exclude_exported=exclude_exported)
+    222;print_global_names_of_modules(qnames, exclude_exported=exclude_exported)
     print(bar); print(bar); print(bar)
-    print_toplevel_def_heads_of_modules(qnames)
+    333;print_toplevel_def_heads_of_modules(qnames)
     print(bar); print(bar); print(bar)
-    print_unbound_names_of_modules(qnames)
+    222;print_global_names_of_modules(qnames, exclude_exported=exclude_exported)
+    print(bar); print(bar); print(bar)
+    111;print_unbound_names_of_modules(qnames)
 if __name__ == '__main__':
     main__print_infos_of_modules(qnames)
 

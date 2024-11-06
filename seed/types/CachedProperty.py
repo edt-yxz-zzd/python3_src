@@ -1,6 +1,12 @@
 
 
-'''
+r'''
+e ../../python3_src/seed/types/CachedProperty.py
+
+py -m seed.types.CachedProperty
+
+
+
 >>> instance2calc_value = lambda self: hash(self.xxx)
 >>> class B:
 ...     @CachedProperty
@@ -20,45 +26,65 @@ True
 True
 >>> hash(b) == b.hash_value
 True
+>>> hash(b) == type(b).hash_value(b) #used asif func
+True
+>>> type(b).__hash__(b) == type(b).hash_value(b) #used asif func
+True
 
-'''
+>>> type(b).hash_value(b) #doctest: +SKIP
+
+>>> from abc import abstractmethod
+>>> @CachedProperty
+... @abstractmethod
+... def f(self):pass
+>>> @CachedProperty
+... def g(self):pass
+>>> f.__isabstractmethod__
+True
+>>> g.__isabstractmethod__
+False
+
+
+'''#'''
 
 __all__ = '''
     CachedProperty
-    '''.split()
+    '''.split()#'''
 
-#from seed.helper.repr_input import repr_helper
-'''
-class Partial_Instance2CachedValue:
-    def __init__(self, *, maybe_instance2cached_dict, maybe_attribute_name):
-        # attribute_name maybe None
-        if maybe_instance2cached_dict is None:
-            instance2cached_dict = vars
-        else:
-            instance2cached_dict = maybe_instance2cached_dict
-        self.instance2cached_dict = instance2cached_dict
-        self.maybe_attribute_name = maybe_attribute_name
-    def make_instance2cached_value(self, *, property_name):
-        maybe_attribute_name = self.maybe_attribute_name
-        if maybe_attribute_name is None:
-            attribute_name = property_name
-        else:
-            # allow property_name != attribute_name
-            attribute_name = maybe_attribute_name
-        return Instance2CachedValue(
-                instance2cached_dict=self.instance2cached_dict
-                ,attribute_name=attribute_name
-                )
+from seed.helper.repr_input import repr_helper
+from functools import update_wrapper
 
+r'''
+.class Partial_Instance2CachedValue:
+.    def __init__(self, *, maybe_instance2cached_dict, maybe_attribute_name):
+.        # attribute_name maybe None
+.        if maybe_instance2cached_dict is None:
+.            instance2cached_dict = vars
+.        else:
+.            instance2cached_dict = maybe_instance2cached_dict
+.        self.instance2cached_dict = instance2cached_dict
+.        self.maybe_attribute_name = maybe_attribute_name
+.    def make_instance2cached_value(self, *, property_name):
+.        maybe_attribute_name = self.maybe_attribute_name
+.        if maybe_attribute_name is None:
+.            attribute_name = property_name
+.        else:
+.            # allow property_name != attribute_name
+.            attribute_name = maybe_attribute_name
+.        return Instance2CachedValue(
+.                instance2cached_dict=self.instance2cached_dict
+.                ,attribute_name=attribute_name
+.                )
+.
+.
+.class Instance2CachedValue:
+.    def __init__(self, *, instance2cached_dict, attribute_name):
+.        self.instance2cached_dict = instance2cached_dict
+.        self.attribute_name = attribute_name
+.    def __call__(self, instance):
+.        return self.instance2cached_dict(instance)[self.attribute_name]
 
-class Instance2CachedValue:
-    def __init__(self, *, instance2cached_dict, attribute_name):
-        self.instance2cached_dict = instance2cached_dict
-        self.attribute_name = attribute_name
-    def __call__(self, instance):
-        return self.instance2cached_dict(instance)[self.attribute_name]
-
-'''
+'''#'''
 
 
 
@@ -75,7 +101,7 @@ class Instance2CachedValue:
 
 
 class CachedProperty:
-    '''allow property_name != attribute_name
+    r'''allow property_name != attribute_name
 
 getattr(type(instance), property_name) is the property
 getattr(instance, property_name) is the value
@@ -92,14 +118,15 @@ getattr(instance, attribute_name) is the value or fail
 
 
 now update "attribute_name" to "instance2cached_dict"+"attribute_name"
-'''
-    """
-    __slots__ = '''
+'''#'''
+    r"""
+    __slots__ = r'''
         instance2calc_value
         instance2cached_dict
         attribute_name
-        '''.split()
-    """
+        __isabstractmethod__
+        '''.split()#'''
+    """#"""
 
     @classmethod
     def at(cls, *
@@ -128,6 +155,18 @@ now update "attribute_name" to "instance2cached_dict"+"attribute_name"
         d['instance2calc_value'] = instance2calc_value
         d['instance2cached_dict'] = instance2cached_dict
         d['attribute_name'] = attribute_name
+        if 1:
+            d['__isabstractmethod__'] = getattr(instance2calc_value, '__isabstractmethod__', False)
+        else:
+            #fail<<==:
+                #update_wrapper(wrapper, wrapped, assigned=('__module__', '__name__', '__qualname__', '__doc__', '__annotations__'), updated=('__dict__',))
+            update_wrapper(__self, instance2calc_value)
+            assert hasattr(__self, '__isabstractmethod__') is hasattr(instance2calc_value, '__isabstractmethod__')
+    def __repr__(self):
+        return repr_helper(self, self.instance2calc_value, instance2cached_dict=self.instance2cached_dict, attribute_name=self.attribute_name)
+    def __call__(self, instance):
+        '# [=> type(instance).xxx(instance)]'
+        return _get(self, instance)
 
     @property
     def instance2calc_value(self):
@@ -157,17 +196,7 @@ now update "attribute_name" to "instance2cached_dict"+"attribute_name"
         """
 
     def __get__(self, instance, owner):
-        if instance is None:
-            return self
-
-        d = self.instance2cached_dict(instance)
-        attribute_name = self.attribute_name
-        try:
-            return d[attribute_name]
-        except KeyError:
-            d[attribute_name] = self.instance2calc_value(instance)
-        return d[attribute_name]
-
+        return _get(self, instance)
 
     # MUST define "__set__" to make self a data_descriptor
     #   otherwise, instance override self
@@ -188,12 +217,12 @@ now update "attribute_name" to "instance2cached_dict"+"attribute_name"
 
 
 
-    """
+    r"""
     def __repr__(self):
         return repr_helper(self, self.attribute_name)
-    """
+    """#"""
 
-    '''
+    r'''
     def ireplace(self, *, instance2calc_value=None, instance2cached_dict=None, attribute_name):
         d = dict(instance2calc_value=self.instance2calc_value, instance2cached_dict=self.instance2cached_dict, attribute_name=self.attribute_name)
         if instance2calc_value is not None:
@@ -203,10 +232,23 @@ now update "attribute_name" to "instance2cached_dict"+"attribute_name"
         if attribute_name is not None:
             d['attribute_name'] = attribute_name
         return __class__(**d)
-    '''
+    '''#'''
+
+def _get(self, instance):
+    if instance is None:
+        return self
+
+    d = self.instance2cached_dict(instance)
+    attribute_name = self.attribute_name
+    try:
+        return d[attribute_name]
+    except KeyError:
+        d[attribute_name] = self.instance2calc_value(instance)
+    return d[attribute_name]
 
 
 
+from seed.types.CachedProperty import CachedProperty
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
