@@ -1,6 +1,4 @@
 #__all__:goto
-#TODO:before parse:apply:may_tkey2tdat2tdat:{tkey:tdat_transform}
-#TODO:gpost register...
 r'''[[[
 e ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/example__arithmetic_expression.py
 view ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/doctest4IRecognizerLLoo.py
@@ -17,7 +15,8 @@ atom_expr =:
     | '(' arith_expr ')'
 pow_expr = atom_expr ( '**' sign* pow_expr)?
 mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
-add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
+#bug:add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
+add_expr = sign* mul_expr ( ('+' | '-') sign* mul_expr)*
 arith_expr = add_expr
 sign = ('+' | '-')
 
@@ -39,7 +38,7 @@ tkey:
 #not_using:tkey2tdat2tdat4tknz__7arith
 #not_using:name2may_gpostprocess6ok4parse__7arith
 >>> parse7arith__pseudo_fname_('xyzabc_file', iter('( 999 + 666 )'), {}, {}) #doctest: +ELLIPSIS
-Reply(Either(True, ((), ((Cased('group', ((), ((Cased('number', ('9', '9', '9')), ()), ()), (('+', (), ((), ((Cased('number', ('6', '6', '6')), ()), ()), ())),))), ()), ()), ())), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__noisy(5, PositionInfo4Gap__text_file('xyzabc_file', None, 13, LinenoColumn(1, 14), 13), None)))
+Reply(Either(True, ((), ((Cased('group', ((), ((Cased('number', ('9', '9', '9')), ()), ()), (('+', (), ((Cased('number', ('6', '6', '6')), ()), ())),))), ()), ()), ())), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__noisy(5, PositionInfo4Gap__text_file('xyzabc_file', None, 13, LinenoColumn(1, 14), 13), None)))
 
 
 #not_using:tkey2tdat2tdat4tknz__7arith
@@ -73,7 +72,7 @@ Reply(Either(True, ((), ((Cased('group', ((), ((Cased('number', ('9', '9', '9'))
 #using:tkey2tdat2tdat4tknz__7arith
 #not_using:name2may_gpostprocess6ok4parse__7arith
 >>> parse7arith__pseudo_fname_('xyzabc_file', iter('( 999 + 666 )'), None, {}) #doctest: +ELLIPSIS
-Reply(Either(True, ((), ((Cased('group', ((), ((Cased('number', 999), ()), ()), (('+', (), ((), ((Cased('number', 666), ()), ()), ())),))), ()), ()), ())), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__noisy(5, PositionInfo4Gap__text_file('xyzabc_file', None, 13, LinenoColumn(1, 14), 13), None)))
+Reply(Either(True, ((), ((Cased('group', ((), ((Cased('number', 999), ()), ()), (('+', (), ((Cased('number', 666), ()), ())),))), ()), ()), ())), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__noisy(5, PositionInfo4Gap__text_file('xyzabc_file', None, 13, LinenoColumn(1, 14), 13), None)))
 
 
 >>> istream7arith = tokenize7arith__pseudo_fname_('xyzabc_file', iter('( 999 + 666 )'))
@@ -121,13 +120,26 @@ Reply(Either(True, 27), ExtPositionInfo(MonotonicIndex(<object object at 0x...>,
 
 
 
+>>> eval7arith('7/9')
+Fraction(7, 9)
+>>> eval7arith('(7/9 +11/9)')
+2
+>>> eval7arith('-1-3+4') #found:grammar-error@add_expr
+0
 
 
+py_adhoc_call   seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression   @eval7arith :77%9
+    5
+py_adhoc_call   seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression   @eval7arith :7/9
+    Fraction(7, 9)
+py_adhoc_call   seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression   @eval7arith :'(7/9 +11/9)'
+    2
+py_adhoc_call   seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression   @eval7arith :'-1-3+4'
+    0
 
-py_adhoc_call   seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression   @f
-from seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression import *
 #]]]'''
 __all__ = r'''
+eval7arith
 parse7arith__pseudo_fname_
     parse7arith__istream_
     tokenize7arith__pseudo_fname_
@@ -181,8 +193,8 @@ def _spost__atom_expr(oresult, /):
     return oresult.payload
 def _spost__pow_expr(oresult, /):
     #pow_expr = atom_expr ( '**' sign* pow_expr)?
-    a, tmay_x_signs_b = oresult
-    match tmay_x_signs_b:
+    a, tmay_op_signs_b = oresult
+    match tmay_op_signs_b:
         case [('**', signs, b)]:
             b = _signed(signs, b)
             s = a**b
@@ -194,8 +206,8 @@ def _spost__pow_expr(oresult, /):
 
 def _spost__mul_expr(oresult, /):
     #mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
-    a, tmay_x_signs_b = oresult
-    match tmay_x_signs_b:
+    a, tmay_op_signs_b = oresult
+    match tmay_op_signs_b:
         case [(op, signs, b)]:
             b = _signed(signs, b)
             match op:
@@ -217,24 +229,20 @@ def _spost__mul_expr(oresult, /):
 
 
 def _spost__add_expr(oresult, /):
-    #add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
-    signs, a, tmay_x_signs_b = oresult
+    # !! bug:add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
+    # => add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.many_(mkrs.serial_([op8add, ref__signs, ref__mul_expr]))])
+    signs, a, ls4op_signs_b = oresult
     a = _signed(signs, a)
-    match tmay_x_signs_b:
-        case [(op, signs, b)]:
-            b = _signed(signs, b)
-            match op:
-                case '+':
-                    s = a+b
-                case '-':
-                    s = a-b
-                case _:
-                    raise 000
-        case []:
-            s = a
-        case _:
-            raise 000
-    return s
+    for (op, signs, b) in ls4op_signs_b:
+        b = _signed(signs, b)
+        match op:
+            case '+':
+                a += b
+            case '-':
+                a -= b
+            case _:
+                raise 000
+    return a
 
 
 def prepare4parse4arith_():
@@ -285,7 +293,12 @@ def prepare4parse4arith_():
     atom_expr = mkrs.priority_parallel_([mkrs.tag_(number, 'number'), mkrs.tag_(mkrs.between_(sym6, sym9, ref__arith_expr), 'group')])
     pow_expr = mkrs.serial_([ref__atom_expr, mkrs.optional__strict_(mkrs.serial_([op8pow, ref__signs, ref__pow_expr]))])
     mul_expr = mkrs.serial_([ref__pow_expr, mkrs.optional__strict_(mkrs.serial_([op8mul, ref__signs, ref__mul_expr]))])
-    add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.optional__strict_(mkrs.serial_([op8add, ref__signs, ref__add_expr]))])
+    #bug-1:add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.optional__strict_(mkrs.serial_([op8add, ref__signs, ref__add_expr]))])
+    #   should remove snd ref__signs
+    #bug-2:grammar-error:add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.optional__strict_(mkrs.serial_([op8add, ref__add_expr]))])
+    #   !! bug:add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
+    #   => add_expr = sign* mul_expr ( ('+' | '-') sign* mul_expr)*
+    add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.many_(mkrs.serial_([op8add, ref__signs, ref__mul_expr]))])
     arith_expr = ref__add_expr
     ######################
     #:.,.+9s/^\( *\)ref__\(\w*\) = grp4rgnr_ref.\2$/\1nmd__\2 = ref__\2.mk_named_rgnr_(\2)
@@ -399,5 +412,18 @@ def parse7arith__istream_(istream7arith, may_name2may_gpostprocess6ok4parse=None
     reply = recognize_(nmd__arith_expr, env4parse, gctx:={}, istream7arith)
     return reply
 
+def eval7arith(src, /):
+    reply = parse7arith__pseudo_fname_('<eval7arith>', iter(src))
+    if not reply.ok:raise SyntaxError(reply.ext_info8end, reply.errmsg)
+        #ext_info8begin???
+    oresult = reply.oresult
+    assert type(oresult) in (int, Fraction, float, complex)
+    if type(oresult) in (int, Fraction):
+        (N, D) = oresult.as_integer_ratio()
+        if D == 1:
+            oresult = N
+    return oresult
+
 __all__
+from seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression import eval7arith, parse7arith__pseudo_fname_
 from seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression import *

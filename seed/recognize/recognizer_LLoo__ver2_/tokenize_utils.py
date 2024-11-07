@@ -103,7 +103,7 @@ def _iter_LHLs(may_tkey2tdat2tdat, may_tkeys8noise4tknz, rgnr4tknz, chr_istream,
         reply = recognize_(rgnr4tknz, env, gctx:={}, chr_istream)
         ext_info8end = reply.ext_info8end
         assert ext_info8end == chr_istream.tell_ext_info()
-        if not reply.ok:raise Exception(ext_info8begin, ext_info8end, reply.errmsg)
+        if not reply.ok:raise SyntaxError(ext_info8begin, ext_info8end, reply.errmsg)
         if ext_info8begin == ext_info8end:raise Exception('nullable token')
         oresult = reply.oresult
         check_type_is(Cased, oresult)
