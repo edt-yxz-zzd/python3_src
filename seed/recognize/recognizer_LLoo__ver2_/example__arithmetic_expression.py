@@ -14,7 +14,8 @@ atom_expr =:
     | 'number'
     | '(' arith_expr ')'
 pow_expr = atom_expr ( '**' sign* pow_expr)?
-mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
+#bug:mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
+mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* pow_expr)*
 #bug:add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
 add_expr = sign* mul_expr ( ('+' | '-') sign* mul_expr)*
 arith_expr = add_expr
@@ -126,6 +127,8 @@ Fraction(7, 9)
 2
 >>> eval7arith('-1-3+4') #found:grammar-error@add_expr
 0
+>>> eval7arith('1/3*3') #found:grammar-error@mul_expr
+1
 
 
 py_adhoc_call   seed.recognize.recognizer_LLoo__ver2_.example__arithmetic_expression   @eval7arith :77%9
@@ -205,27 +208,23 @@ def _spost__pow_expr(oresult, /):
     return s
 
 def _spost__mul_expr(oresult, /):
-    #mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
-    a, tmay_op_signs_b = oresult
-    match tmay_op_signs_b:
-        case [(op, signs, b)]:
-            b = _signed(signs, b)
-            match op:
-                case '*':
-                    s = a*b
-                case '/':
-                    s = Fraction(a)/b
-                case '//':
-                    s = a//b
-                case '%':
-                    s = a%b
-                case _:
-                    raise 000
-        case []:
-            s = a
-        case _:
-            raise 000
-    return s
+    # !! bug:mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
+    # => mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* pow_expr)*
+    a, ls4op_signs_b = oresult
+    for (op, signs, b) in ls4op_signs_b:
+        b = _signed(signs, b)
+        match op:
+            case '*':
+                a = a*b
+            case '/':
+                a = Fraction(a)/b
+            case '//':
+                a = a//b
+            case '%':
+                a = a%b
+            case _:
+                raise 000
+    return a
 
 
 def _spost__add_expr(oresult, /):
@@ -292,7 +291,10 @@ def prepare4parse4arith_():
     ######################
     atom_expr = mkrs.priority_parallel_([mkrs.tag_(number, 'number'), mkrs.tag_(mkrs.between_(sym6, sym9, ref__arith_expr), 'group')])
     pow_expr = mkrs.serial_([ref__atom_expr, mkrs.optional__strict_(mkrs.serial_([op8pow, ref__signs, ref__pow_expr]))])
-    mul_expr = mkrs.serial_([ref__pow_expr, mkrs.optional__strict_(mkrs.serial_([op8mul, ref__signs, ref__mul_expr]))])
+    #bug-3:grammar-error:mul_expr = mkrs.serial_([ref__pow_expr, mkrs.optional__strict_(mkrs.serial_([op8mul, ref__signs, ref__mul_expr]))])
+    #   !! bug:mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
+    #   => mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* pow_expr)*
+    mul_expr = mkrs.serial_([ref__pow_expr, mkrs.many_(mkrs.serial_([op8mul, ref__signs, ref__pow_expr]))])
     #bug-1:add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.optional__strict_(mkrs.serial_([op8add, ref__signs, ref__add_expr]))])
     #   should remove snd ref__signs
     #bug-2:grammar-error:add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.optional__strict_(mkrs.serial_([op8add, ref__add_expr]))])
