@@ -9,10 +9,10 @@ e ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/doctest4IRecognizerLLo
 
 seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo
 py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo -x
-py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__ -ht
 
-py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__ -ht -ff
-py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__ -ht    >  /sdcard/0my_files/tmp/0tmp      2>&1
+py -m nn_ns.app.doctest_cmd    seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo:__doc__     seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__    -ht -ff
+
+py -m nn_ns.app.doctest_cmd    seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo:__doc__     seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__    -ht    >  /sdcard/0my_files/tmp/0tmp      2>&1
 view /sdcard/0my_files/tmp/0tmp
 
 
@@ -30,78 +30,26 @@ def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False):
     'IRecognizerLLoo -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> Reply'#@wrapper
 
 begin_doctest:here
->>> from seed.types.IToken import mk_token_rawstream__5xs__idx_
->>> from seed.types.stream.IRecoverableInputStream import PlainRecoverableInputStream5token_seq, RecoverableInputStream9LazyList
->>> from seed.types.IToken import char_qset__isdecimal
->>> from seed.types.Tester import Tester__eq_obj
+######################
+see:IRecognizerLLoo:__doc__
+    which should be tested first
+    which now be removed from this __doc__ to avoid maintain two copies
+######################
 
-
+######################
 >>> tkey_vs_tdat_vs_tkd=0; tkn_qset5xqset_=TokenKeyQuerySet5xqset # [tkey :: char]
 >>> def _mk_istream5src(src, /):
 ...     (gap0, iter_tokens) = mk_token_rawstream__5xs__idx_(0, src, tkey_vs_tdat_vs_tkd=tkey_vs_tdat_vs_tkd)
 ...     #istream = PlainRecoverableInputStream5token_seq(0, gap0, 0, [*iter_tokens])
 ...     istream = RecoverableInputStream9LazyList(0, gap0, iter_tokens)
 ...     return istream
->>> mkrs = Makers4IRecognizerLLoo
->>> rgnr8digit = mkrs.spost__tkn2tkey_(mkrs.token_(tkn_qset5xqset_(char_qset__isdecimal)))
->>> digits1 = mkrs.many_(rgnr8digit, 1)
->>> spaces1 = mkrs.many_(mkrs.spost__tkn2tkey_(mkrs.token_(tkn_qset5xqset_(Tester__eq_obj(' ')))), 1)
->>> digits1
-RecognizerLLoo__many(RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(TokenKeyQuerySet5xqset(char_qset__isdecimal))), 1)
->>> spaces1
-RecognizerLLoo__many(RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(TokenKeyQuerySet5xqset(Tester__eq_obj(' ')))), 1)
->>> sym6 = mkrs.spost__tkn2tkey_(mkrs.token_(tkn_qset5xqset_(Tester__eq_obj('(')))) #')('
->>> sym9 = mkrs.spost__tkn2tkey_(mkrs.token_(tkn_qset5xqset_(Tester__eq_obj(')')))) #
->>> sym_plus = mkrs.spost__tkn2tkey_(mkrs.token_(tkn_qset5xqset_(Tester__eq_obj('+')))) #
-
->>> nm4add_expr = Symbol4IRecognizerLLoo('add_expr')
->>> ref__add_expr = mkrs.ref_(nm4add_expr)
-
->>> group_expr = mkrs.between_(sym6, sym9, ref__add_expr)
->>> atom_expr = mkrs.priority_parallel_([digits1, group_expr])
->>> add_expr = mkrs.named_(nm4add_expr, mkrs.sep_by_(sym_plus, atom_expr, 1))
->>> repr(add_expr) == (
-... "RecognizerLLoo__named(nm4rgnr_.add_expr"
-...   ", RecognizerLLoo__sep_by("
-...     "RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(TokenKeyQuerySet5xqset(Tester__eq_obj('+'))))"
-...     ", RecognizerLLoo__priority_parallel("
-...       "(RecognizerLLoo__many(RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(TokenKeyQuerySet5xqset(char_qset__isdecimal))), 1)"
-...       ", RecognizerLLoo__between("
-...         "RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(TokenKeyQuerySet5xqset(Tester__eq_obj('('))))"
-...         ", RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(TokenKeyQuerySet5xqset(Tester__eq_obj(')'))))"
-...         ", RecognizerLLoo__ref(nm4rgnr_.add_expr)"
-...         ")"
-...       ")"
-...     "), 1))"
-... )
-True
-
-
->>> (name2rgnr, nms4ref, nms6ref) = collect_namess5rgnrs_([add_expr])
->>> name2rgnr == {nm4add_expr:add_expr}
-True
->>> env = Environment(param2setting:={}, name2rgnr:={nm4add_expr:add_expr}, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={})
+>>> env = Environment(param2setting:={}, name2rgnr:={}, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={})
 >>> gctx = {}
+>>> mkrs = Makers4IRecognizerLLoo
 
->>> istream = _mk_istream5src('555')
->>> recognize_(add_expr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(True, (('5', '5', '5'),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 
->>> istream = _mk_istream5src('5+9')
->>> recognize_(add_expr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(True, (('5',), ('9',))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+######################
 
->>> istream = _mk_istream5src('(9)')
->>> recognize_(add_expr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(True, ((('9',),),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-
->>> istream = _mk_istream5src('(505+(3+40))')
->>> recognize_(add_expr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(True, ((('5', '0', '5'), (('3',), ('4', '0'))),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 12), PositionInfo4Gap__idx(12)))
-
->>> istream = _mk_istream5src('505+xxxx')
->>> recognize_(add_expr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(4), PositionInfo4Gap__idx(5)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__idx(5)))
 
 
 
@@ -182,12 +130,11 @@ spost__tkn2tkey_
 spost__unbox_
 
 TODO
+tkey_prefix_tree_
 :non_tested-yet:
+    gsep_end_by_:see:many_,...
     try_except_else_:++strict_vs_forgivable:non_tested
     try_except_else__spost_:++strict_vs_forgivable:non_tested
-    named_
-    ref_
-    gsep_end_by_
 #######
 
 
@@ -213,16 +160,16 @@ Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
-#+ignore cancel spost__tkn2tkey_, hence got tkn/BaseToken:
+#+ignore cancel spost__tkn2tkey_, hence got tkn/Token__keyed:
 >>> istream = _mk_istream5src('69')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -244,7 +191,7 @@ True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -257,14 +204,14 @@ True
 #######
 >>> main_rgnr = mkrs.followed_by_(rgnr8digit)
 >>> istream = _mk_istream5src('69')
->>> recognize_(main_rgnr, env, gctx, istream) # [ignore=>BaseToken] #doctest: +ELLIPSIS
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+>>> recognize_(main_rgnr, env, gctx, istream) # [ignore=>Token__keyed] #doctest: +ELLIPSIS
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -277,14 +224,14 @@ True
 #######
 >>> main_rgnr = mkrs.not_followed_by_(rgnr8digit)
 >>> istream = _mk_istream5src('69')
->>> recognize_(main_rgnr, env, gctx, istream) # [ignore=>BaseToken] #doctest: +ELLIPSIS
-Reply(Either(False, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+>>> recognize_(main_rgnr, env, gctx, istream) # [ignore=>Token__keyed] #doctest: +ELLIPSIS
+Reply(Either(False, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(True, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(True, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -305,13 +252,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -338,13 +285,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -372,13 +319,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -406,13 +353,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -439,13 +386,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -472,13 +419,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -507,13 +454,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -543,13 +490,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -580,13 +527,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(True, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0))), ((unlocker_into__snapshot_none, no_seekback), (protected_forgivable_fail, unprotected_forgivable_ok)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(True, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0))), ((unlocker_into__snapshot_none, no_seekback), (protected_forgivable_fail, unprotected_forgivable_ok)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -615,13 +562,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(True, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0))), ((unlocker_into__snapshot_none, no_seekback), (protected_forgivable_fail, unprotected_forgivable_ok)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(True, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0))), ((unlocker_into__snapshot_none, no_seekback), (protected_forgivable_fail, unprotected_forgivable_ok)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -654,13 +601,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -691,13 +638,13 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1))), ((unlocker_into__snapshot_none, no_seekback), (unprotected_severe_fail, unprotected_severe_fail)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -731,7 +678,7 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -767,7 +714,7 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -807,7 +754,7 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -815,7 +762,7 @@ True
 #   rgnr8_pair.unprotected=>fail
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -846,7 +793,7 @@ True
 
 >>> istream = _mk_istream5src('6x9')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -854,7 +801,7 @@ True
 #   rgnr8_pair.unprotected=>fail
 >>> istream = _mk_istream5src('x69')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -923,7 +870,7 @@ True
 
 >>> istream = _mk_istream5src('x')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -943,7 +890,7 @@ True
 
 >>> istream = _mk_istream5src('x')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -965,7 +912,7 @@ True
 
 >>> istream = _mk_istream5src('x')
 >>> recognize_(main_rgnr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1147,7 +1094,7 @@ True
 >>> main_rgnr = mkrs.spostprocess_(rgnr8digit, spost6err, spost6ok)
 >>> istream = _mk_istream5src('7')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1177,7 +1124,7 @@ True
 
 >>> istream = _mk_istream5src('7+')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=False) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1211,7 +1158,7 @@ True
 
 >>> istream = _mk_istream5src('7+')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1249,7 +1196,7 @@ True
 
 >>> istream = _mk_istream5src('7+')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=False) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1283,7 +1230,7 @@ True
 
 >>> istream = _mk_istream5src('7+')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1327,7 +1274,7 @@ True
 
 >>> istream = _mk_istream5src('7+')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=False) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1361,7 +1308,7 @@ True
 
 >>> istream = _mk_istream5src('7+')
 >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 >>> istream.tell_ext_info() == _.ext_info8end
 True
 
@@ -1387,12 +1334,12 @@ True
 
 #######
 #######
-#++NOTE:ignore,_force_postprocess_when_ignore_:non_tested
+#++NOTE:ignore,_force_postprocess_when_ignore_
     gprepostprocess_
     spostprocess_
     try_except_else_
     try_except_else__spost_
-#begin-test:ignore,_force_postprocess_when_ignore_:non_tested
+#begin-test:ignore,_force_postprocess_when_ignore_
 
 [[[
 #_force_postprocess_when_ignore_:=True
@@ -1542,7 +1489,7 @@ True
     >>> main_rgnr = mkrs.spostprocess_(rgnr8digit, spost6err, spost6ok, _force_postprocess_when_ignore_:=True)
     >>> istream = _mk_istream5src('7')
     >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #__changed #doctest: +ELLIPSIS
-    Reply(Either(True, Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+    Reply(Either(True, Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
     >>> istream.tell_ext_info() == _.ext_info8end
     True
 
@@ -1572,7 +1519,7 @@ True
 
     >>> istream = _mk_istream5src('7+')
     >>> recognize_(main_rgnr, env, gctx, istream, ignore=False) #doctest: +ELLIPSIS
-    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
     >>> istream.tell_ext_info() == _.ext_info8end
     True
 
@@ -1606,7 +1553,7 @@ True
 
     >>> istream = _mk_istream5src('7+')
     >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
     >>> istream.tell_ext_info() == _.ext_info8end
     True
 
@@ -1644,7 +1591,7 @@ True
 
     >>> istream = _mk_istream5src('7+')
     >>> recognize_(main_rgnr, env, gctx, istream, ignore=False) #doctest: +ELLIPSIS
-    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
     >>> istream.tell_ext_info() == _.ext_info8end
     True
 
@@ -1678,7 +1625,7 @@ True
 
     >>> istream = _mk_istream5src('7+')
     >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
     >>> istream.tell_ext_info() == _.ext_info8end
     True
 
@@ -1722,7 +1669,7 @@ True
 
     >>> istream = _mk_istream5src('7+')
     >>> recognize_(main_rgnr, env, gctx, istream, ignore=False) #doctest: +ELLIPSIS
-    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
     >>> istream.tell_ext_info() == _.ext_info8end
     True
 
@@ -1756,7 +1703,7 @@ True
 
     >>> istream = _mk_istream5src('7+')
     >>> recognize_(main_rgnr, env, gctx, istream, ignore=True) #doctest: +ELLIPSIS
-    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+    Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
     >>> istream.tell_ext_info() == _.ext_info8end
     True
 
@@ -1786,7 +1733,7 @@ True
 
 
 
-#end-test:ignore,_force_postprocess_when_ignore_:non_tested
+#end-test:ignore,_force_postprocess_when_ignore_
 
 
 #######
@@ -1826,9 +1773,9 @@ True
 #######
 >>> main_rgnr = mkrs.rgnr__any_token
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 >>> _3test_(main_rgnr, '') #doctest: +ELLIPSIS
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
@@ -1851,7 +1798,7 @@ Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 >>> _3test_(main_rgnr, '') #doctest: +ELLIPSIS
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
@@ -1897,12 +1844,12 @@ True
 '7'
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 ''
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
@@ -1915,9 +1862,9 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 >>> main_rgnr = mkrs.token_seq_([tkn_qset5xqset_(char_qset__isdecimal), tkn_qset5xqset_(Tester__eq_obj('+'))])
 >>> _333test_(main_rgnr, '7+', '7', '+', '') #doctest: +ELLIPSIS
 '7+'
-Reply(Either(True, (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(True, (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(True, (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(True, (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(True, (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(True, (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '7'
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
@@ -1938,14 +1885,14 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 >>> main_rgnr = mkrs.token_seq_([tkn_qset5xqset_(char_qset__isdecimal)])
 >>> _333test_(main_rgnr, '7', '+', '') #doctest: +ELLIPSIS
 '7'
-Reply(Either(True, (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None)),)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '+'
-Reply(Either(False, ((TokenKeyQuerySet5xqset(char_qset__isdecimal),), (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None)),))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, ((TokenKeyQuerySet5xqset(char_qset__isdecimal),), (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None)),))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, ((TokenKeyQuerySet5xqset(char_qset__isdecimal),), (BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None)),))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, ((TokenKeyQuerySet5xqset(char_qset__isdecimal),), (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None)),))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, ((TokenKeyQuerySet5xqset(char_qset__isdecimal),), (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None)),))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, ((TokenKeyQuerySet5xqset(char_qset__isdecimal),), (Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None)),))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 ''
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
@@ -1974,17 +1921,17 @@ Reply(Either(True, ()), ExtPositionInfo(MonotonicIndex(<object object at 0x...>,
 '7'
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '+'
 Reply(Either(True, '+'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, '+'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('+', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 ''
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
@@ -2003,7 +1950,7 @@ Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 #dead
 >>> main_rgnr = mkrs.priority_parallel_([])
@@ -2022,9 +1969,9 @@ Reply(Either(True, ('7', '+')), ExtPositionInfo(MonotonicIndex(<object object at
 Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '7'
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
@@ -2032,9 +1979,9 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 ''
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
@@ -2045,50 +1992,50 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 >>> main_rgnr = mkrs.serial_([rgnr8digit, sym_plus, False])
 >>> _333test_(main_rgnr, '7x', 'x') #doctest: +ELLIPSIS
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 >>> main_rgnr = mkrs.serial_([rgnr8digit, False, sym_plus])
 >>> _333test_(main_rgnr, '7x', 'x') #doctest: +ELLIPSIS
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 >>> main_rgnr = mkrs.serial_([True, rgnr8digit, sym_plus])
 >>> _333test_(main_rgnr, '7x', 'x') #doctest: +ELLIPSIS
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 >>> main_rgnr = mkrs.serial_([False, rgnr8digit, sym_plus])
 >>> _333test_(main_rgnr, '7x', 'x') #doctest: +ELLIPSIS
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 
 
@@ -2114,9 +2061,9 @@ Reply(Either(False, 222), ExtPositionInfo(MonotonicIndex(<object object at 0x...
 Reply(Either(False, 222), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '7'
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
@@ -2176,17 +2123,17 @@ Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...
 '7+'
 Reply(Either(True, '+'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 Reply(Either(True, '+'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '7'
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
@@ -2214,7 +2161,7 @@ Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...
 '(+)'
 Reply(Either(True, '+'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 Reply(Either(True, '+'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('+', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 %%%%%%%%%%
 '(+'
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
@@ -2232,19 +2179,19 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '(x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '(+x))))'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj(')')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj(')')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj(')')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj(')')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj(')')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj(')')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 
 
 
@@ -2344,19 +2291,19 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '+x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '++x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 %%%%%%%%%%
 '+++x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
 
 
 #######
@@ -2377,16 +2324,16 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 ----------
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '+x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 ----------
 '++x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 ----------
 '+++x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
 ----------
 '++++x'
 Reply(Either(True, ('+', '+', '+', '+')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
@@ -2498,19 +2445,19 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 %%%%%%%%%%
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '+x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 %%%%%%%%%%
 '++x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 
 
 
@@ -2532,16 +2479,16 @@ Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x.
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 ----------
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '+x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 ----------
 '++x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(2), PositionInfo4Gap__idx(3)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
 ----------
 '+++x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
 ----------
 '++++x'
 Reply(Either(True, ('+', '+', '+', '+')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
@@ -2562,28 +2509,28 @@ end_by_(rgnr8end, rgnr8body, _min=0, may_max=None, ignore4end=True, unpack4end=F
 >>> main_rgnr = mkrs.end_by_(sym_dot, rgnr8digit, 2, 3)
 >>> _333test_(main_rgnr, 'x', '7x') #doctest: +ELLIPSIS
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 
 #######
 >>> _111test_(main_rgnr, 'x', '7x', '', '7.', '77.', '777.', '7777.') #doctest: +ELLIPSIS
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 ----------
 ''
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 ----------
 '7.'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 ----------
 '77.'
 Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
@@ -2592,7 +2539,7 @@ Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at
 Reply(Either(True, ('7', '7', '7')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
 ----------
 '7777.'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('.')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('7', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('.')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(3), PositionInfo4Gap__idx(4)), Cased('7', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
 
 
 
@@ -2604,14 +2551,14 @@ sep_end_by_(rgnr8sep, rgnr8end, rgnr8body, _min=0, may_max=None, ignore4sep=True
 >>> main_rgnr = mkrs.sep_end_by_(sym_plus, sym_dot, rgnr8digit, 1, 3)
 >>> _333test_(main_rgnr, 'x', '7x') #doctest: +ELLIPSIS
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 #######
 >>> main_rgnr = mkrs.sep_end_by_(sym_plus, sym_dot, rgnr8digit, 0)
@@ -2636,10 +2583,10 @@ Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 ----------
 '.'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '7.'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 ----------
 '7+7.'
 Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
@@ -2653,16 +2600,16 @@ Reply(Either(True, ('7', '7', '7')), ExtPositionInfo(MonotonicIndex(<object obje
 >>> main_rgnr = mkrs.sep_end_by_(sym_plus, sym_dot, rgnr8digit, 1, 3)
 >>> _111test_(main_rgnr, 'x', '7x', '', '.', '7.', '7+7.', '7+7+7.', '7+7+7+7.') #doctest: +ELLIPSIS
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 ''
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 ----------
 '.'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('.', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '7.'
 Reply(Either(True, ('7',)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
@@ -2674,7 +2621,7 @@ Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at
 Reply(Either(True, ('7', '7', '7')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 6), PositionInfo4Gap__idx(6)))
 ----------
 '7+7+7+7.'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('.')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(5), PositionInfo4Gap__idx(6)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 6), PositionInfo4Gap__idx(6)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('.')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(5), PositionInfo4Gap__idx(6)), Cased('+', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 6), PositionInfo4Gap__idx(6)))
 
 
 
@@ -2686,9 +2633,9 @@ sep_by_(rgnr8sep, rgnr8body, _min=0, may_max=None, ignore4sep=True, unpack4sep=F
 >>> main_rgnr = mkrs.sep_by_(sym_plus, rgnr8digit, 1, 3)
 >>> _333test_(main_rgnr, 'x', '7x') #doctest: +ELLIPSIS
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 %%%%%%%%%%
 '7x'
 Reply(Either(True, ('7',)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
@@ -2718,10 +2665,10 @@ Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at
 Reply(Either(False, 'eof'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
 ----------
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '7x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('+')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(1), PositionInfo4Gap__idx(2)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
 ----------
 '7+7x'
 Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
@@ -2734,7 +2681,7 @@ Reply(Either(True, ('7', '7', '7')), ExtPositionInfo(MonotonicIndex(<object obje
 >>> main_rgnr = mkrs.sep_by_(sym_plus, rgnr8digit, 1, 3)
 >>> _111test_(main_rgnr, 'x', '7x', '', '7', '7+7', '7+7+7', '7+7+7+7') #doctest: +ELLIPSIS
 'x'
-Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(char_qset__isdecimal), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 ----------
 '7x'
 Reply(Either(True, ('7',)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
@@ -2811,35 +2758,35 @@ Reply(Either(True, ('7', '7')), ExtPositionInfo(MonotonicIndex(<object object at
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
 Reply(Either(True, Cased('7', None)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, Cased('7', None)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 #######
 >>> main_rgnr = mkrs.spost__tkn2tkey_(tkn_rgnr8digit)
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 #######
 >>> main_rgnr = mkrs.spost__tkn2tdat_(tkn_rgnr8digit)
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
 Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 #######
 >>> main_rgnr = mkrs.spost__tkd2tkey_(tkd_rgnr8digit)
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 #######
 >>> main_rgnr = mkrs.spost__tkd2tdat_(tkd_rgnr8digit)
 >>> _3test_(main_rgnr, '7') #doctest: +ELLIPSIS
 Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
-Reply(Either(True, BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('7', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
 
 #######
 >>> main_rgnr = mkrs.spost__unbox_(mkrs.serial_([rgnr8digit]))
@@ -2887,6 +2834,98 @@ Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...
 
 
 
+#######
+>>> (grp4nm4rgnr, grp4rgnr_ref) = mk_group_pair4rgnr_ref()
+>>> ref__xxx_rgnr = grp4rgnr_ref.xxx_rgnr
+>>> ref__xxx_rgnr is grp4rgnr_ref.xxx_rgnr # cached
+True
+>>> nm4xxx_rgnr = grp4nm4rgnr.xxx_rgnr
+>>> nm4xxx_rgnr is ref__xxx_rgnr.name6ref # inter-connected
+True
+>>> repr(nm4xxx_rgnr) == repr(Symbol4IRecognizerLLoo('xxx_rgnr'))
+True
+>>> repr(ref__xxx_rgnr) == repr(mkrs.ref_(nm4xxx_rgnr))
+True
+
+>>> nmd_xxx_rgnr = ref__xxx_rgnr.mk_named_rgnr_(_unamed__xxx_rgnr:=mkrs.rgnr__any_token)
+>>> repr(nmd_xxx_rgnr) == repr(mkrs.named_(nm4xxx_rgnr, _unamed__xxx_rgnr))
+True
+
+>>> del ref__xxx_rgnr, nmd_xxx_rgnr,_unamed__xxx_rgnr # not to affect below collect_namess5locals_()
+
+
+
+
+
+#######
+#begin-ref_,named_
+#######
+
+###
+>>> (grp4nm4rgnr, grp4rgnr_ref) = mk_group_pair4rgnr_ref()
+>>> ref__rgnr8digit = grp4rgnr_ref.rgnr8digit # mkrs.ref_()
+>>> nmd__rgnr8digit = ref__rgnr8digit.mk_named_rgnr_(rgnr8digit) # mkrs.named_()
+>>> ref__rgnr8digit
+RecognizerLLoo__ref(nm4rgnr_.rgnr8digit)
+>>> nmd__rgnr8digit
+RecognizerLLoo__named(nm4rgnr_.rgnr8digit, RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(TokenKeyQuerySet5xqset(char_qset__isdecimal))))
+
+###
+>>> (name2rgnr, nms4ref, nms6ref) = collect_namess5locals_(locals(), _no_check__vs__ge__vs__eq_=2)
+>>> nms4ref
+frozenset({nm4rgnr_.rgnr8digit})
+>>> nms6ref
+frozenset({nm4rgnr_.rgnr8digit})
+>>> name2rgnr == {grp4nm4rgnr.rgnr8digit:nmd__rgnr8digit}
+True
+
+###
+#restore_env:goto
+>>> saved_env = env
+>>> env = Environment(param2setting:={}, name2rgnr, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={})
+
+###
+>>> main_rgnr = ref__rgnr8digit
+>>> _1test_(main_rgnr, '7') #doctest: +ELLIPSIS
+Reply(Either(True, '7'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+###
+#restore_env:here
+>>> env = saved_env
+>>> del ref__rgnr8digit, nmd__rgnr8digit, main_rgnr # not to affect below collect_namess5locals_()
+
+#######
+#end-ref_,named_
+#######
+
+
+
+#######
+>>> main_rgnr = mkrs.tkey_prefix_tree_(tuple((w,w) for w in 'xyz 34 345w ++'.split()))
+>>> _3test_(main_rgnr, 'xyz') #doctest: +ELLIPSIS
+Reply(Either(True, 'xyz'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(True, 'xyz'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+Reply(Either(True, 'xyz'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 3), PositionInfo4Gap__idx(3)))
+>>> _1test_(main_rgnr, '345w') #doctest: +ELLIPSIS
+Reply(Either(True, '345w'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 4), PositionInfo4Gap__idx(4)))
+>>> _1test_(main_rgnr, '++w') #doctest: +ELLIPSIS
+Reply(Either(True, '++'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+>>> _3test_(main_rgnr, 'xyw') #doctest: +ELLIPSIS
+Reply(Either(False, 'no_prefix_matched'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, 'no_prefix_matched'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+Reply(Either(False, 'no_prefix_matched'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+>>> _1test_(main_rgnr, '345') #doctest: +ELLIPSIS
+Reply(Either(True, '34'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+>>> _1test_(main_rgnr, '34w') #doctest: +ELLIPSIS
+Reply(Either(True, '34'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+>>> _1test_(main_rgnr, '3w') #doctest: +ELLIPSIS
+Reply(Either(False, 'no_prefix_matched'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+>>> _1test_(main_rgnr, '+w') #doctest: +ELLIPSIS
+Reply(Either(False, 'no_prefix_matched'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+
+
+
 
 
 
@@ -2895,11 +2934,10 @@ Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...
 #######
 #>>> mkrs.???()
 TODO:see above: here list some:
+tkey_prefix_tree_
 :non_tested-yet:
     try_except_else_:++strict_vs_forgivable:non_tested
     try_except_else__spost_:++strict_vs_forgivable:non_tested
-    named_
-    ref_
     gsep_end_by_
 
 
@@ -2927,7 +2965,7 @@ view /sdcard/0my_files/tmp/0tmp
 
 end_doctest:here
 ]]
-
+<<<placeholder4example_snippet-from-seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo.__doc__>>>
 
 
 #]]]'''
@@ -2947,8 +2985,10 @@ from seed.types.Either import mk_Left, mk_Right
 
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import \
 (Environment
-,Symbol4IRecognizerLLoo
-,collect_namess5rgnrs_
+,mk_group_pair4rgnr_ref
+,   Symbol4IRecognizerLLoo
+,collect_namess5locals_
+,   collect_namess5rgnrs_
 #
 ,Makers4IRecognizerLLoo
 ,light_wrap_rgnr_
@@ -2967,9 +3007,44 @@ from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import \
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
+def _extract_example_snippet():
+    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import __doc__ as _doc
+    from seed.str_tools.cut_text_by_marker_seq import strip_text_by_marker_pair
+    example_snippet = strip_text_by_marker_pair(_doc, '\nbegin_doctest:here\n', '\nend_doctest:here\n')
+    return example_snippet
+
+_plc_hldr = '<<<placeholder4example_snippet-from-seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo.__doc__>>>'
+__doc__ = __doc__.replace(_plc_hldr, fr'''
 
 
 
+
+
+
+
+
+######################
+######################
+######################
+[[
+######################
+# extracted from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo.__doc__
+######################
+
+{_extract_example_snippet()!s}
+]]
+######################
+######################
+######################
+
+
+
+
+
+
+
+'''#'''
+)
 
 
 

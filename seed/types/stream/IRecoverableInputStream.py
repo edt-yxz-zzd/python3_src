@@ -38,6 +38,11 @@ IBaseInputStream
         IPlainRecoverableInputStream
             PlainRecoverableInputStream5token_seq
         RecoverableInputStream9LazyList
+            mk_istream5rawstream_
+            mk_chr_istream5args8chars_
+            mk_chr_istream5path_
+            mk_chr_istream5file_
+            mk_chr_istream5chars_
 ISnapshot
     ISnapshot4RecoverableInputStream__clean
         ISnapshot4RecoverableInputStream__clean__init
@@ -57,7 +62,16 @@ from weakref import ref as wref_# WeakKeyDictionary as WkeyD, WeakValueDictionar
 
 
 
-from seed.types.IToken import IBaseToken, IToken, BaseToken
+from seed.types.IToken import mk_chr_rawstream5args8chars_
+    # -> chr_rawstream
+from seed.types.IToken import (
+mk_chr_rawstream5args8chars_
+,   mk_chr_rawstream5path_
+,   mk_chr_rawstream5file_
+,   mk_chr_rawstream5chars_
+,       mk_chr_rawstream5text_
+)
+from seed.types.IToken import IBaseToken, IToken, Token__keyed
 from seed.types.IToken import IBasePositionInfo, IPositionInfo4Gap, IPositionInfo4Span
 ###########
 ##if 0:
@@ -83,12 +97,13 @@ class NotSameStreamError(Error):pass
 class NotSameStreamNameError(NotSameStreamError):pass
 
 class ExtPositionInfo(tuple):
-    '[ext_info/ExtPositionInfo ~=~ (monotonic_idx, gap_info)]'
+    '[ext_info/ExtPositionInfo ~=~ (monotonic_idx, gap_info)/(IMonotonicIndex, IPositionInfo4Gap)]'
     __slots__ = ()
     def __repr__(sf, /):
         return repr_helper(sf, *sf)
     def __new__(cls, /, monotonic_idx, gap_info):
-        #check_type_is(int, monotonic_idx)
+        check_type_le(IMonotonicIndex, monotonic_idx)
+        check_type_le(IPositionInfo4Gap, gap_info)
         return tuple.__new__(cls, [monotonic_idx, gap_info])
     @property
     def monotonic_idx(sf, /):
@@ -862,6 +877,21 @@ check_non_ABC(PlainRecoverableInputStream5token_seq)
 _RIStream5token_seq = PlainRecoverableInputStream5token_seq
 #end-class PlainRecoverableInputStream5token_seq(IPlainRecoverableInputStream):
 
+def mk_istream5rawstream_(rawstream, max_num_tokens6backward=0, /):
+    'rawstream -> istream/IRecoverableInputStream # [#rawstream:see:seed.types.IToken#]'
+    return RecoverableInputStream9LazyList.from_rawstream(rawstream, max_num_tokens6backward)
+def mk_chr_istream5args8chars_(args8chars, max_num_tokens6backward=0, /):
+    'args8chars -> chr_istream/IRecoverableInputStream # [#args8chars:see:seed.types.IToken:mk_chr_rawstream5args8chars_#]'
+    return RecoverableInputStream9LazyList.from_args8chars(args8chars, max_num_tokens6backward)
+def mk_chr_istream5path_(ipath, /, *, encoding, may_pseudo_fname=None, max_num_tokens6backward=0):
+    'ipath -> chr_istream/IRecoverableInputStream'
+    return RecoverableInputStream9LazyList.from_path(ipath, encoding=encoding, may_pseudo_fname=may_pseudo_fname, max_num_tokens6backward=max_num_tokens6backward)
+def mk_chr_istream5file_(chr_tgbegin, ifile, /, *, to_close:bool, max_num_tokens6backward=0):
+    'PositionInfo4Gap__text_file -> input_text_file -> chr_istream/IRecoverableInputStream'
+    return RecoverableInputStream9LazyList.from_file(chr_tgbegin, ifile, to_close=to_close, max_num_tokens6backward=max_num_tokens6backward)
+def mk_chr_istream5chars_(chr_tgbegin, chars, /, *, max_num_tokens6backward=0):
+    'PositionInfo4Gap__text_file -> Iter char -> chr_istream/IRecoverableInputStream'
+    return RecoverableInputStream9LazyList.from_chars(chr_tgbegin, chars, max_num_tokens6backward=max_num_tokens6backward)
 
 class RecoverableInputStream9LazyList(IRecoverableInputStream):
     '[RecoverableInputStream9LazyList ~=~ (max_num_tokens6backward,?view4tokens6backward?,ExtPositionInfo/(MonotonicIndex,IPositionInfo4Gap),LazyList<(IToken{.token_end_position_info},MonotonicIndex)>)]'
@@ -887,6 +917,33 @@ class RecoverableInputStream9LazyList(IRecoverableInputStream):
         def _get_end_gap_position_info5token_(token, /):
             'token -> token_end_position_info'
             return token.token_end_position_info
+    @classmethod
+    def from_rawstream(cls, rawstream, max_num_tokens6backward=0, /):
+        'rawstream -> istream/IRecoverableInputStream # [#rawstream:see:seed.types.IToken#]'
+        (tgbegin, tkns) = rawstream
+        istream = cls(max_num_tokens6backward, tgbegin, iter(tkns))
+        return istream
+    @classmethod
+    def from_args8chars(cls, args8chars, max_num_tokens6backward=0, /):
+        'args8chars -> chr_istream/IRecoverableInputStream # [#args8chars:see:seed.types.IToken:mk_chr_rawstream5args8chars_#]'
+        chr_rawstream = mk_chr_rawstream5args8chars_(args8chars)
+        return cls.from_rawstream(chr_rawstream, max_num_tokens6backward)
+    @classmethod
+    def from_path(cls, ipath, /, *, encoding, may_pseudo_fname=None, max_num_tokens6backward=0):
+        'ipath -> chr_istream/IRecoverableInputStream'
+        chr_rawstream = mk_chr_rawstream5path_(ipath, encoding=encoding, may_pseudo_fname=may_pseudo_fname)
+        return cls.from_rawstream(chr_rawstream, max_num_tokens6backward)
+    @classmethod
+    def from_file(cls, chr_tgbegin, ifile, /, *, to_close:bool, max_num_tokens6backward=0):
+        'PositionInfo4Gap__text_file -> input_text_file -> chr_istream/IRecoverableInputStream'
+        chr_rawstream = mk_chr_rawstream5file_(chr_tgbegin, ifile, to_close=to_close)
+        return cls.from_rawstream(chr_rawstream, max_num_tokens6backward)
+    @classmethod
+    def from_chars(cls, chr_tgbegin, chars, /, *, max_num_tokens6backward=0):
+        'PositionInfo4Gap__text_file -> Iter char -> chr_istream/IRecoverableInputStream'
+        chr_rawstream = mk_chr_rawstream5chars_(chr_tgbegin, chars)
+        return cls.from_rawstream(chr_rawstream, max_num_tokens6backward)
+
     def __init__(sf, max_num_tokens6backward, prev_token_end_gap_position_info, nonlazylist_iter_tokens8istream, /):
         'uint -> IPositionInfo4Gap -> Iter token -> None'
         check_int_ge(0, max_num_tokens6backward)
@@ -1208,5 +1265,6 @@ from seed.types.stream.IRecoverableInputStream import InputStreamError__eof, Rel
 #utilities:
 from seed.types.stream.IRecoverableInputStream import dummy_unlocker, DetectionUnlocker
 from seed.types.stream.IRecoverableInputStream import PlainRecoverableInputStream5token_seq, RecoverableInputStream9LazyList
+from seed.types.stream.IRecoverableInputStream import mk_istream5rawstream_, mk_chr_istream5args8chars_, mk_chr_istream5path_, mk_chr_istream5file_, mk_chr_istream5chars_
 
 from seed.types.stream.IRecoverableInputStream import *

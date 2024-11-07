@@ -65,7 +65,8 @@ seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo
 py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo -x
 py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo:__doc__ -ht
 
-py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__ -ht -ff
+
+py -m nn_ns.app.doctest_cmd    seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo:__doc__     seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__    -ht -ff
 
 
 static-->persistent
@@ -149,9 +150,12 @@ tkey
 tkey_seq
 tkey_qset
 tkey_qset_seq
+TODO:
 tkey_prefix_tree
     ++tag_rgnr_++switch_case
     view ../../python3_src/seed/seq_tools/mk_prefix_tree.py
+    from seed.seq_tools.mk_prefix_tree import mk_prefix_tree, update4prefix_tree
+    from seed.seq_tools.mk_prefix_tree import lookup4prefix_tree__chars_, lookup_longest_prefix4prefix_tree__chars_, iter_lookup_prefix4prefix_tree__chars_
 ??tkey_dqset_prefix_tree
     dqset: __ne__ required disjoint
     ===
@@ -159,7 +163,6 @@ tkey_prefix_tree
     dqset-disjointable_query_set
         dqset is ?rng_based_set?
         prefix_tree use ?sorted-mapping?
-TODO:
 switch_cased(io_sym, priority_parallel([tag_rgnr_(...)...])|tkey_prefix_tree, tag2rgnr)
 if_tmay(io_sym, optional__xxx_(rgnr8condition), rgnr8then, rgnr8else)
 TODO:
@@ -403,7 +406,7 @@ how many combinations?
 [[
 ######################
 view ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/doctest4IRecognizerLLoo.py
-py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__ -ht
+py -m nn_ns.app.doctest_cmd    seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo:__doc__     seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__    -ht -ff
 ######################
 ######################
 example-snippet:
@@ -422,6 +425,49 @@ def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False):
     'IRecognizerLLoo -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> Reply'#@wrapper
 
 begin_doctest:here
+
+######################
+######################
+#[target:] => (nm4xxx_rgnr, ref__xxx_rgnr)
+>>> mkrs = Makers4IRecognizerLLoo
+>>> nm4xxx_rgnr = Symbol4IRecognizerLLoo('xxx_rgnr')
+>>> ref__xxx_rgnr = mkrs.ref_(nm4xxx_rgnr)
+
+>>> not Symbol4IRecognizerLLoo('xxx_rgnr') is Symbol4IRecognizerLLoo('xxx_rgnr') # not cached
+True
+>>> not Symbol4IRecognizerLLoo('xxx_rgnr') == Symbol4IRecognizerLLoo('xxx_rgnr') # not eq
+True
+>>> Symbol4IRecognizerLLoo('xxx_rgnr')
+nm4rgnr_.xxx_rgnr
+>>> nm_grp_ = Symbol4IRecognizerLLoo.mk_group()
+>>> nm4xxx_rgnr = nm_grp_.xxx_rgnr
+>>> nm4xxx_rgnr is nm_grp_.xxx_rgnr #cached
+True
+>>> nm4xxx_rgnr is nm_grp_.xxx_rgnr #eq
+True
+>>> nm4xxx_rgnr
+nm4rgnr_.xxx_rgnr
+
+>>> (grp4nm4rgnr, grp4rgnr_ref) = mk_group_pair4rgnr_ref()
+>>> ref__xxx_rgnr = grp4rgnr_ref.xxx_rgnr
+>>> ref__xxx_rgnr is grp4rgnr_ref.xxx_rgnr # cached
+True
+>>> repr(ref__xxx_rgnr) == repr(mkrs.ref_(nm4xxx_rgnr))
+True
+>>> nm4xxx_rgnr = grp4nm4rgnr.xxx_rgnr
+>>> nm4xxx_rgnr is ref__xxx_rgnr.name6ref # inter-connected
+True
+>>> repr(nm4xxx_rgnr) == repr(Symbol4IRecognizerLLoo('xxx_rgnr'))
+True
+
+>>> xxx_rgnr = ref__xxx_rgnr.mk_named_rgnr_(_unamed__xxx_rgnr:=mkrs.rgnr__any_token)
+>>> repr(xxx_rgnr) == repr(mkrs.named_(nm4xxx_rgnr, _unamed__xxx_rgnr))
+True
+
+>>> del ref__xxx_rgnr, xxx_rgnr # not to affect below collect_namess5locals_()
+
+######################
+######################
 >>> from seed.types.IToken import mk_token_rawstream__5xs__idx_
 >>> from seed.types.stream.IRecoverableInputStream import PlainRecoverableInputStream5token_seq, RecoverableInputStream9LazyList
 >>> from seed.types.IToken import char_qset__isdecimal
@@ -446,12 +492,19 @@ RecognizerLLoo__many(RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(Token
 >>> sym9 = mkrs.spost__tkn2tkey_(mkrs.token_(tkn_qset5xqset_(Tester__eq_obj(')')))) #
 >>> sym_plus = mkrs.spost__tkn2tkey_(mkrs.token_(tkn_qset5xqset_(Tester__eq_obj('+')))) #
 
+
 >>> nm4add_expr = Symbol4IRecognizerLLoo('add_expr')
 >>> ref__add_expr = mkrs.ref_(nm4add_expr)
+>>> (grp4nm4rgnr, grp4rgnr_ref) = mk_group_pair4rgnr_ref()
+>>> ref__add_expr = grp4rgnr_ref.add_expr
+>>> nm4add_expr = grp4nm4rgnr.add_expr
 
 >>> group_expr = mkrs.between_(sym6, sym9, ref__add_expr)
 >>> atom_expr = mkrs.priority_parallel_([digits1, group_expr])
->>> add_expr = mkrs.named_(nm4add_expr, mkrs.sep_by_(sym_plus, atom_expr, 1))
+>>> #=> add_expr = mkrs.named_(nm4add_expr, mkrs.sep_by_(sym_plus, atom_expr, 1))
+>>> add_expr = ref__add_expr.mk_named_rgnr_(_unamed__add_expr:=mkrs.sep_by_(sym_plus, atom_expr, 1))
+>>> repr(add_expr) == repr(mkrs.named_(nm4add_expr, _unamed__add_expr))
+True
 >>> repr(add_expr) == (
 ... "RecognizerLLoo__named(nm4rgnr_.add_expr"
 ...   ", RecognizerLLoo__sep_by("
@@ -469,7 +522,19 @@ RecognizerLLoo__many(RecognizerLLoo__spost__tkn2tkey(RecognizerLLoo__token(Token
 True
 
 
->>> (name2rgnr, nms4ref, nms6ref) = collect_namess5rgnrs_([add_expr])
+>>> #=> name2rgnr = {nm4add_expr:add_expr}
+>>> (name2rgnr, nms4ref, nms6ref) = collect_namess5rgnrs_([add_expr], _no_check__vs__ge__vs__eq_=1)
+>>> nms4ref
+frozenset({nm4rgnr_.add_expr})
+>>> nms6ref # not into
+frozenset()
+>>> name2rgnr == {nm4add_expr:add_expr}
+True
+>>> (name2rgnr, nms4ref, nms6ref) = collect_namess5locals_(locals(), _no_check__vs__ge__vs__eq_=2)
+>>> nms4ref
+frozenset({nm4rgnr_.add_expr})
+>>> nms6ref
+frozenset({nm4rgnr_.add_expr})
 >>> name2rgnr == {nm4add_expr:add_expr}
 True
 >>> env = Environment(param2setting:={}, name2rgnr, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={})
@@ -493,7 +558,7 @@ Reply(Either(True, ((('5', '0', '5'), (('3',), ('4', '0'))),)), ExtPositionInfo(
 
 >>> istream = _mk_istream5src('505+xxxx')
 >>> recognize_(add_expr, env, gctx, istream) #doctest: +ELLIPSIS
-Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(4), PositionInfo4Gap__idx(5)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__idx(5)))
+Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(4), PositionInfo4Gap__idx(5)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__idx(5)))
 
 
 
@@ -555,10 +620,13 @@ IRecognizerLLoo
         Symbol4GlobalVarable
         Symbol4LocalVarable
     Symbol4IRecognizerLLoo
-        collect_namess5rgnrs_
+        collect_namess5locals_
+            collect_namess5rgnrs_
 
 IRecognizerLLoo
-    collect_namess5rgnrs_
+    collect_namess5locals_
+        collect_namess5rgnrs_
+            check_names4ref_names6ref_
     check_may_weakable_name
 
     IRecognizerLLoo__default_mixins
@@ -568,6 +636,8 @@ IRecognizerLLoo
         check_may_emay_weakable_name
         check_weakable_name
             Symbol4IRecognizerLLoo
+        Group4rgnr_ref
+            mk_group_pair4rgnr_ref
     IRecognizerLLoo__serial
         RecognizerLLoo__dependent_pair
     IRecognizerLLoo__priority_parallel
@@ -629,7 +699,10 @@ IRecognizerLLoo
         IRecognizerLLoo__any_token
         IRecognizerLLoo__token
         IRecognizerLLoo__token_seq
+        IRecognizerLLoo__tkey_prefix_tree
 
+    IRecognizerLLoo__tkey_prefix_tree__init
+        RecognizerLLoo__tkey_prefix_tree
     IRecognizerLLoo__no_child6env__init
         IRecognizerLLoo__token_seq__init
             RecognizerLLoo__token
@@ -660,10 +733,21 @@ IBaseInputStream
     PlainRecoverableInputStream5token_seq
     RecoverableInputStream9LazyList
 
-WeakableSymbol5name
-    Symbol4IRecognizerLLoo
-    Symbol4GlobalVarable
-    Symbol4LocalVarable
+mk_subclas4IWeakableSymbol5name_
+    IWeakableSymbol5name
+        WeakableSymbol5name
+        Symbol4IRecognizerLLoo
+        Symbol4GlobalVarable
+        Symbol4LocalVarable
+    INamedObjGroup__type8mkr
+        NameGroup4WeakableSymbol
+        NameGroup4IRecognizerLLoo
+        NameGroup4GlobalVarable
+        NameGroup4LocalVarable
+INamedObjGroup
+    INamedObjGroup__type8mkr
+    Group4rgnr_ref
+        mk_group_pair4rgnr_ref
 IEnvironment
     getset_external_cache4func
     getset_external_cache4method
@@ -778,6 +862,10 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 from types import FunctionType as Func, MethodType as Meth
 
 
+#prefix_tree
+#   tkey_prefix_tree
+from seed.seq_tools.mk_prefix_tree import mk_prefix_tree, update4prefix_tree
+from seed.seq_tools.mk_prefix_tree import lookup4prefix_tree__chars_, lookup_longest_prefix4prefix_tree__chars_, iter_lookup_prefix4prefix_tree__chars_
 
 
 from seed.types.Tester import is_good, always_tri_test
@@ -820,7 +908,7 @@ from seed.iters.count_ import count_
 
 from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, empty_FrozenDict
 from seed.tiny import ifNone, echo, mk_tuple, mk_frozenset, null_tuple, null_frozenset, null_mapping_view, fst, MapView, print_err, snd
-from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le, check_callable
+from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le, check_callable, check_pair
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.helper.repr_input import repr_helper
 from seed.tiny_._Base4repr import _Base4repr
@@ -1258,7 +1346,7 @@ class IRecognizerLLoo(ABC):
         # '-> (nm2rgnr, nms4ref, nms6ref, nms4pre, nms4post)/({nm:rgnr}, {nm}, {nm}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref]'
         if bypass_cache:
             #at first, findout all names needed to be registered
-            #   or:using:collect_namess5rgnrs_
+            #   or:using:collect_namess5rgnrs_,collect_namess5locals_
             return _4nmss(sf, env)
         return env.getset_external_cache4rgnr_func(sf, _4nmss, 1)
     def view_id2rgnr8all_descendants6env_(sf, env, /):
@@ -1314,10 +1402,21 @@ def _4back_cache(rgnr, env, /):
     return max(n, m)
 def _4nmss(rgnr, env, /):
     return collect_namess5rgnrs_(rgnr.iter_persistent_descendants6env_(env))
-def collect_namess5rgnrs_(rgnrs, /):
-    '-> (nm2rgnr, nms4ref, nms6ref)/({nm:rgnr}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref]'
+def collect_namess5locals_(locals, /, *, _no_check__vs__ge__vs__eq_:'{0|1|2}'=0):
+    '{k:rgnr} -> (nm2rgnr, nms4ref, nms6ref)/({nm:rgnr}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref] # used to prepare env # NOTE:[without env since before env creation] => [donot access children, required input all defined rgnrs within scope]'
+    if 0:
+        rgnrs = filter(lambda x:isinstance(x, IRecognizerLLoo), locals.values())
+        #view ../lots/NOTE/Python/python-bug/stdlib-abc-__instancecheck__-bug.txt
+        #@20241107
+        #Python 3.11.9 (main, Jun 10 2024, 00:57:33)
+        #it seems likely that py.abc use 『x.__class__』 instead of 『type(x)』
+    rgnrs = filter(lambda x:issubclass(type(x), IRecognizerLLoo), locals.values())
+    return collect_namess5rgnrs_(rgnrs, _no_check__vs__ge__vs__eq_=_no_check__vs__ge__vs__eq_)
+def collect_namess5rgnrs_(rgnrs, /, *, _no_check__vs__ge__vs__eq_:'{0|1|2}'=0):
+    'Iter rgnr -> (nm2rgnr, nms4ref, nms6ref)/({nm:rgnr}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref] # used to prepare env # NOTE:[without env since before env creation] => [donot access children, required input all defined rgnrs within scope]'
     #'-> (nm2rgnr, nms4ref, nms6ref, nms4pre, nms4post)/({nm:rgnr}, {nm}, {nm}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref]'
     #(nms4ref, nms6ref, nms4pre, nms4post) = set(), set(), set(), set()
+    check_int_ge_lt(0, 3, _no_check__vs__ge__vs__eq_)
     (nms4ref, nms6ref) = set(), set()
     nm2rgnr = {}
     for rgnr in rgnrs:
@@ -1337,11 +1436,29 @@ def collect_namess5rgnrs_(rgnrs, /):
     assert nm2rgnr.keys() == nms4ref
 
     #(nms4ref, nms6ref, nms4pre, nms4post) = map(mk_frozenset, (nms4ref, nms6ref, nms4pre, nms4post))
+    ######################
     (nms4ref, nms6ref) = map(mk_frozenset, (nms4ref, nms6ref))
     nm2rgnr = MapView(nm2rgnr)
+    ######################
+    check_names4ref_names6ref_(_no_check__vs__ge__vs__eq_, nms4ref, nms6ref)
     return (nm2rgnr, nms4ref, nms6ref)
     #return (nm2rgnr, nms4ref, nms6ref, nms4pre, nms4post)
-
+def check_names4ref_names6ref_(_no_check__vs__ge__vs__eq_, nms4ref, nms6ref, /):
+    check_int_ge_lt(0, 3, _no_check__vs__ge__vs__eq_)
+    ######################
+    match _no_check__vs__ge__vs__eq_:
+        case 0:
+            #_no_check_
+            pass
+        case 1:
+            #_ge_check_
+            if not nms4ref >= nms6ref: raise Exception(nms6ref-nms4ref)
+        case 2:
+            #_eq_check_
+            if not nms4ref == nms6ref: raise Exception(nms4ref-nms6ref, nms6ref-nms4ref)
+        case _:
+            raise 000
+    ######################
 class IRecognizerLLoo__default_mixins(IRecognizerLLoo):
     __slots__ = ()
     #@override
@@ -1391,18 +1508,127 @@ def check_may_emay_weakable_name(may_emay_nm, /):
 def check_weakable_name(nm, /):
     wref_(nm)
         #check weakable
-class WeakableSymbol5name:
+class INamedObjGroup(ABC):
+    ___no_slots_ok___ = True
+    @abstractmethod
+    def _mk_obj5name_(sf, nm, /):
+        'nm -> named_obj'
+    def __repr__(sf, /):
+        d = object.__getattribute__(sf, '_d')
+        return repr_helper(sf, d)
+    def __init__(sf, /, *args, **kwds):
+        d = dict(*args, **kwds)
+        object.__setattr__(sf, '_d', d)
+    def __setattr__(sf, nm, v, /):
+        raise AttributeError(nm)
+    def __detattr__(sf, nm, /):
+        raise AttributeError(nm)
+    def __getattribute__(sf, nm, /):
+        'nm -> cached-named_obj'
+        try:
+            return sf[nm]
+        except KeyError:
+            raise AttributeError(nm)
+    def __getitem__(sf, nm, /):
+        'nm -> cached-named_obj'
+        d = object.__getattribute__(sf, '_d')
+        if nm not in d:
+            x = type(sf)._mk_obj5name_(sf, nm)
+            d[nm] = x
+        return d[nm]
+class INamedObjGroup__type8mkr(INamedObjGroup):
+    @classmethod
+    @abstractmethod
+    def _named_obj_type_(cls, nm, /):
+        'nm -> named_obj'
+    @override
+    def _mk_obj5name_(sf, nm, /):
+        'nm -> named_obj'
+        return type(sf)._named_obj_type_(nm)
+class Group4rgnr_ref(INamedObjGroup):
+    'grp4rgnr_ref'
+    @override
+    def _mk_obj5name_(sf, nm, /):
+        'nm -> named_obj/RecognizerLLoo__ref<Symbol4IRecognizerLLoo<nm>>'
+        grp4nm4rgnr = object.__getattribute__(sf, '_grp')
+        nm6ref = nm4rgnr = grp4nm4rgnr[nm]
+        return RecognizerLLoo__ref(nm6ref)
+    def __repr__(sf, /):
+        grp4nm4rgnr = object.__getattribute__(sf, '_grp')
+        d = object.__getattribute__(sf, '_d')
+        return repr_helper(sf, grp4nm4rgnr, d)
+    def __init__(sf, grp4nm4rgnr, /, *args, **kwds):
+        check_type_is(NameGroup4IRecognizerLLoo, grp4nm4rgnr)
+        INamedObjGroup.__init__(sf, *args, **kwds)
+        object.__setattr__(sf, '_grp', grp4nm4rgnr)
+def mk_group_pair4rgnr_ref():
+    '-> (grp4nm4rgnr, grp4rgnr_ref)/(NameGroup4IRecognizerLLoo, Group4rgnr_ref)'
+    grp4nm4rgnr = Symbol4IRecognizerLLoo.mk_group()
+    grp4rgnr_ref = Group4rgnr_ref(grp4nm4rgnr)
+    return (grp4nm4rgnr, grp4rgnr_ref)
+class IWeakableSymbol5name(ABC):
     'weakable#check_weakable_name()'
-    _prefix_ = ''
+    ___no_slots_ok___ = True
+    @abstractmethod
+    def _prefix_():
+        '-> str #class property'
+    @abstractmethod
+    def _group_type_():
+        '-> subclass of INamedObjGroup__type8mkr #class property'
+
     def __init__(sf, nm, /):
         sf._nm = nm
     def __repr__(sf, /):
-        return sf._prefix_ + sf._nm
-check_weakable_name(WeakableSymbol5name('nm'))
-class Symbol4IRecognizerLLoo(WeakableSymbol5name):
-    'can be used with RecognizerLLoo__named,RecognizerLLoo__ref'
-    _prefix_ = 'nm4rgnr_.'
-check_weakable_name(Symbol4IRecognizerLLoo('nm'))
+        return type(sf)._prefix_ + sf._nm
+    @classmethod
+    def mk_group(cls, /):
+        T = cls._group_type_
+        assert issubclass(T, INamedObjGroup__type8mkr)
+        assert T._named_obj_type_ is cls
+        return T()
+_bases4SymT = (IWeakableSymbol5name,)
+_bases4GroupT = (INamedObjGroup__type8mkr,)
+def mk_subclas4IWeakableSymbol5name_(__doc__, _prefix_, nm4SymT, nm4GroupT, /):
+    '-> (SymT, GroupT) # [SymT <: IWeakableSymbol5name][SymT._group_type_ is GroupT] # [GroupT <: INamedObjGroup__type8mkr][GroupT._named_obj_type_ is SymT]'
+    ######################
+    from abc import update_abstractmethods
+    SymT = type(nm4SymT, _bases4SymT, dict(__doc__=__doc__, _prefix_=_prefix_))
+    GroupT = type(nm4GroupT, _bases4GroupT, dict(_named_obj_type_=SymT))
+    #@override
+    SymT._group_type_ = GroupT
+    update_abstractmethods(SymT)
+    ######################
+
+    ######################
+    assert SymT.__doc__ == __doc__
+    assert SymT._prefix_ == _prefix_
+    ######################
+    assert SymT._group_type_ is GroupT
+    assert GroupT._named_obj_type_ is SymT
+    ######################
+    assert SymT.__qualname__ == nm4SymT
+    assert GroupT.__qualname__ == nm4GroupT
+    ######################
+    assert issubclass(SymT, IWeakableSymbol5name)
+    assert issubclass(GroupT, INamedObjGroup__type8mkr)
+    ######################
+    check_non_ABC(SymT)
+    check_non_ABC(GroupT)
+    ######################
+    check_weakable_name(SymT('nm'))
+    ######################
+    grp = SymT.mk_group()
+    check_type_is(GroupT, grp)
+    sym = grp.aaa000
+    check_type_is(SymT, sym)
+    check_weakable_name(sym)
+    assert sym is grp.aaa000 # cached
+    ######################
+    return (SymT, GroupT)
+    ######################
+(WeakableSymbol5name, NameGroup4WeakableSymbol) = mk_subclas4IWeakableSymbol5name_('weakable#check_weakable_name()', 'wnm_.', 'WeakableSymbol5name', 'NameGroup4WeakableSymbol')
+(Symbol4IRecognizerLLoo, NameGroup4IRecognizerLLoo) = mk_subclas4IWeakableSymbol5name_('can be used with RecognizerLLoo__named,RecognizerLLoo__ref', 'nm4rgnr_.', 'Symbol4IRecognizerLLoo', 'NameGroup4IRecognizerLLoo')
+    #grp4nm4rgnr
 class RecognizerLLoo__named(IRecognizerLLoo__default_mixins, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, nm4ref, rgnr, /):
@@ -1454,6 +1680,9 @@ class RecognizerLLoo__ref(IRecognizerLLoo__default_mixins, _Base4repr):
     def name6ref(sf, /):
         '-> (Hashable&&Weakable) # used in IEnvironment.name2rgnr_()'
         return sf._nm6ref
+    def mk_named_rgnr_(sf, rgnr, /):
+        assert rgnr is not sf
+        return RecognizerLLoo__named(sf.name6ref, rgnr)
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
         rgnr = env.name2rgnr_(sf._nm6ref)
@@ -1511,14 +1740,11 @@ class WeakKeyHalfMap(IHalfMap):
         d = sf._d
         return sym in d
 
-class Symbol4GlobalVarable(WeakableSymbol5name):
-    'global-symbol #can be used with XContext,ContextView'
-    _local_vs_global_ = True
-    _prefix_ = 'nm4gvar_.'
-class Symbol4LocalVarable(WeakableSymbol5name):
-    'local-symbol #can be used with XContext,ContextView'
-    _local_vs_global_ = False
-    _prefix_ = 'nm4lvar_.'
+(Symbol4GlobalVarable, NameGroup4GlobalVarable) = mk_subclas4IWeakableSymbol5name_('global-symbol #can be used with XContext,ContextView', 'nm4gvar_.', 'Symbol4GlobalVarable', 'NameGroup4GlobalVarable')
+777;    Symbol4GlobalVarable._local_vs_global_ = True
+(Symbol4LocalVarable, NameGroup4LocalVarable) = mk_subclas4IWeakableSymbol5name_('local-symbol #can be used with XContext,ContextView', 'nm4lvar_.', 'Symbol4LocalVarable', 'NameGroup4LocalVarable')
+777;    Symbol4LocalVarable._local_vs_global_ = False
+
 class XContext(IHalfMap):
     'xctx#writeonly'
     ___no_slots_ok___ = True
@@ -1717,7 +1943,7 @@ def getset_external_cache4func(get_vs_set_vs_set_ex, f, /, *weakable_args, __dep
         return (is_new, r)
     raise 000-case
 #end-class IEnvironment(ABC):
-class Environment(IEnvironment):
+class Environment(IEnvironment, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, /):
         #may_external_cache = None
@@ -1730,6 +1956,7 @@ class Environment(IEnvironment):
         sf._nm2mpost6err = name2may_gpostprocess6err
         sf._nm2mpost6ok = name2may_gpostprocess6ok
         sf._w2c = external_cache
+        sf._reset4repr((param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok))
     @override
     def param2setting_(sf, nm, /):
         'k -> v|^LookupError'
@@ -1837,18 +2064,18 @@ def _recognize(_0main_rgnr, _0env, _0gctx, _0istream, _0ignore, /):
     ######################
     return (st, main_rcall)
     ######################
-def apply_may_gpreprocess_(mpre_, rgnr, _0env, xctx_view, ignore, istream, /):
+def apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream, /):
     st = None
-    if not mpre_ is None:
-        pre_ = mpre_
+    if not mgpre_ is None:
+        gpre_ = mgpre_
         # [gpreprocess :: (rgnr->env->xctx_view->ignore->ext_info8begin->(st, may ignore))]
-        (st, mignore) = pre_(rgnr, _0env, xctx_view, ignore, istream.tell_ext_info())
+        (st, mignore) = gpre_(rgnr, _0env, xctx_view, ignore, istream.tell_ext_info())
         if not mignore is None:
             ignore = mignore
             check_type_is(bool, ignore)
     ignore
     return (st, ignore)
-    #(st, ignore) = apply_may_gpreprocess_(mpre_, rgnr, _0env, xctx_view, ignore, istream)
+    #(st, ignore) = apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream)
 def apply_may_gpostprocess_(mgpost6err_, mgpost6ok_, reply, rgnr, _0env, xctx_view, ignore, st, /):
     if reply.ok:
         if not mgpost6ok_ is None:
@@ -1900,11 +2127,10 @@ class _State4recognize:
         may_osymbolXseq = rgnr._may_osymbolXseq_
         #mnmpre = rgnr._may_name4gpreprocess_
         #mnmgpost = rgnr._may_name4gpostprocess_
-        if not ignore:
-            mnmpre = mnmgpost = rgnr._may_name4ref_
-            mpre_ = None if mnmpre is None else _0env.name2may_gpreprocess_(mnmpre)
-            mgpost6err_ = None if mnmgpost is None else _0env.name2may_gpostprocess6err_(mnmgpost)
-            mgpost6ok_ = None if mnmgpost is None else _0env.name2may_gpostprocess6ok_(mnmgpost)
+        mnmpre = mnmgpost = rgnr._may_name4ref_ if not ignore else None
+        mgpre_ = None if mnmpre is None else _0env.name2may_gpreprocess_(mnmpre)
+        mgpost6err_ = None if mnmgpost is None else _0env.name2may_gpostprocess6err_(mnmgpost)
+        mgpost6ok_ = None if mnmgpost is None else _0env.name2may_gpostprocess6ok_(mnmgpost)
 
         _0xctx.del_items(dsymbols)
             ######################
@@ -1914,13 +2140,12 @@ class _State4recognize:
         b_scope = rgnr._is_ctx_scope_
         p = _0ctx.env_tell() if b_scope else None
 
-        if not ignore:
-            (st, ignore) = apply_may_gpreprocess_(mpre_, rgnr, _0env, xctx_view, ignore, istream)
         #######
-        if ignore:
+        if not mgpre_ is None:
+            (st, ignore) = apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream)
+        else:
             st = None
-            mgpost6err_ = None
-            mgpost6ok_ = None
+        #######
         ex_args = [xctx_view[isymbol] for isymbol in rgnr._isymbol_seq8extra_params_]
         gi = rgnr._mk_gi4recognize_(_0env, xctx_view, unlocker, ignore, istream, *ex_args)
                 # _tail_call() or forbod:tail_recur_Call
@@ -2042,7 +2267,7 @@ def trial_and_error_(rgnr, /):
 #.    #mnmpre = rgnr._may_name4gpreprocess_
 #.    #mnmgpost = rgnr._may_name4gpostprocess_
 #.    mnmpre = mnmgpost = rgnr._may_name4ref_
-#.    mpre_ = None if mnmpre is None else _0env.name2may_gpreprocess_(mnmpre)
+#.    mgpre_ = None if mnmpre is None else _0env.name2may_gpreprocess_(mnmpre)
 #.    mgpost6ok_ = None if mnmgpost is None else _0env.name2may_gpostprocess6ok_(mnmgpost)
 #.    mgpost6err_ = None if mnmgpost is None else _0env.name2may_gpostprocess6err_(mnmgpost)
 #.
@@ -2054,10 +2279,10 @@ def trial_and_error_(rgnr, /):
 #.    b_scope = rgnr._is_ctx_scope_
 #.    p = _0ctx.env_tell() if b_scope else None
 #.
-#.    if not mpre_ is None:
-#.        pre_ = mpre_
+#.    if not mgpre_ is None:
+#.        gpre_ = mgpre_
 #.        # [gpreprocess :: (rgnr->env->xctx_view->ignore->ext_info8end->may ignore)]
-#.        xxx mignore = pre_(rgnr, _0env, xctx_view, ignore, istream.tell_ext_info())
+#.        xxx mignore = gpre_(rgnr, _0env, xctx_view, ignore, istream.tell_ext_info())
 #.        if not mignore is None:
 #.            ignore = mignore
 #.            check_type_is(bool, ignore)
@@ -2291,7 +2516,7 @@ class IRecognizerLLoo__serial(IRecognizerLLoo):
         #serial has no snapshot
         #   priority_parallel has a snapshot(or using trial_and_error_)
         it = sf._iter_runtime_serial_children_(env, xctx_view, ignore, var_changed, var_ok, var_reply)
-        000;    del ignore
+        777;    del ignore
         for (ignore4outer, rgnr, unlock_case, ignore4inner, unpack, fail_vs_stop_vs_continue) in it:
             if not released:
               match unlock_case:
@@ -3925,6 +4150,7 @@ class IRecognizerLLoo__constant_loader(IRecognizerLLoo__no_child6env):
 
 
 class IRecognizerLLoo__eof(IRecognizerLLoo__no_child6env):
+    'eof'
     __slots__ = ()
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
@@ -3937,6 +4163,7 @@ class IRecognizerLLoo__eof(IRecognizerLLoo__no_child6env):
         return reply
         777;    yield
 class IRecognizerLLoo__not_eof(IRecognizerLLoo__no_child6env):
+    'not_eof'
     __slots__ = ()
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
@@ -3949,6 +4176,7 @@ class IRecognizerLLoo__not_eof(IRecognizerLLoo__no_child6env):
         return reply
         777;    yield
 class IRecognizerLLoo__any_token(IRecognizerLLoo__no_child6env):
+    'any_token'
     __slots__ = ()
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
@@ -3959,6 +4187,7 @@ class IRecognizerLLoo__any_token(IRecognizerLLoo__no_child6env):
         return reply
         777;    yield
 class IRecognizerLLoo__token(IRecognizerLLoo__no_child6env):
+    'token'
     __slots__ = ()
     @property
     @abstractmethod
@@ -4003,9 +4232,8 @@ def _mk_reply4tkn_seq(unlocker, istream, tkn_seq, may_errmsg, /):
     reply = Reply(eresult, ext_info8end)
     return reply
 
-
-
 class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6env):
+    'token_seq'
     __slots__ = ()
     @property
     @abstractmethod
@@ -4025,6 +4253,110 @@ class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6env):
         reply = _mk_reply4tkn_seq(unlocker, istream, tkn_seq, may_errmsg)
         return reply
         777;    yield
+#class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6env):
+
+
+
+class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6env):
+    'tkey_prefix_tree #see:seed.seq_tools.mk_prefix_tree'
+    __slots__ = ()
+    @property
+    @abstractmethod
+    def _many0_vs_solo_vs_many1_(sf, /):
+        '-> uint%3/{0/many0|1/solo|2/many1}'
+    @property
+    @abstractmethod
+    def _tkey_prefix_tree_(sf, /):
+        '-> tkey_prefix_tree/prefix_tree<tkey> #see:seed.seq_tools.mk_prefix_tree'
+    #.@property
+    #.@abstractmethod
+    #.def _keyed_words_(sf, /):
+    #.    '-> keyed_words/[(key4word, word/[tkey])] # [._keyed_words_ ~=~ ._tkey_prefix_tree_] #see:seed.seq_tools.mk_prefix_tree'
+    #.@abstractmethod
+    #.def _idx4word5key4word_(sf, key4word, /):
+    #.    'key4word -> idx4word # [sf._keyed_words_[idx4word] === (key4word, word)]'
+    def _mk_tkey_prefix_tree_(sf, keyed_words, /):
+        'keyed_words/[(key4word, word/[tkey])] -> tkey_prefix_tree #[use ._keyed_words_ to generate ._tkey_prefix_tree_]'
+        #keyed_words = sf._keyed_words_
+        # def mk_prefix_tree(dict_mkr, keyed, words_or_keyed_words, /, *, to_support_seq_eq):
+        tkey_prefix_tree = mk_prefix_tree(dict, True, keyed_words, to_support_seq_eq=False)
+        return tkey_prefix_tree
+    @override
+    def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
+        tkey_prefix_tree = sf._tkey_prefix_tree_
+        tkns = istream.peek_iter()
+        tkeys = map(tkn2tkey_, tkns)
+        (imay_len_word, keys4word) = lookup_longest_prefix4prefix_tree__chars_(tkey_prefix_tree, tkeys, with_imay_len_word=True)
+        assert bool(keys4word) is (imay_len_word >= 0)
+        case = sf._many0_vs_solo_vs_many1_
+        check_int_ge_lt(0, 3, case)
+        if imay_len_word == -1:
+            assert not keys4word
+            if 0:
+                #.words = null_tuple
+                #.rs = words
+                pass
+            rs = keys4word
+            if case == 0:
+                #many0
+                oresult = rs
+                eresult = mk_Right(oresult)
+            else:
+                #solo,many1
+                errmsg = 'no_prefix_matched'
+                eresult = mk_Left(errmsg)
+            eresult
+        else:
+            assert keys4word
+            len_word = imay_len_word
+            istream.read_le(len_word)
+            unlocker.unlocker_release()
+            if 0:
+                #.j5k_ = sf._idx4word5key4word_
+                #.js4word = map(j5k_, keys4word)
+                #.j2kw = sf._keyed_words_
+                #.words = mk_tuple(map(snd, (j2kw[j] for j in js4word)))
+                #.rs = words
+                pass
+            rs = keys4word
+            if case == 1:
+                #solo
+                [oresult] = rs
+            else:
+                #many0,many1
+                oresult = rs
+            eresult = mk_Right(oresult)
+        eresult
+        ext_info8end = istream.tell_ext_info()
+        reply = Reply(eresult, ext_info8end)
+        return reply
+        777;    yield
+#class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6env):
+class IRecognizerLLoo__tkey_prefix_tree__init(IRecognizerLLoo__tkey_prefix_tree, _Base4repr):
+    ___no_slots_ok___ = True
+    def __init__(sf, keyed_tkey_seq_pairs, /, _many0_vs_solo_vs_many1_:'{0|1|2}'=1):
+        'keyed_tkey_seq_pairs/keyed_words/[(key4word, word/[tkey])] -> (0|1|2) -> None'
+        check_int_ge_lt(0, 3, _many0_vs_solo_vs_many1_)
+        check_type_is(tuple, keyed_tkey_seq_pairs)
+        for x in keyed_tkey_seq_pairs:
+            check_pair(x)
+        tkey_prefix_tree = sf._mk_tkey_prefix_tree_(keyed_tkey_seq_pairs)
+        args = (keyed_tkey_seq_pairs, _many0_vs_solo_vs_many1_)
+        sf._reset4repr(args if not _many0_vs_solo_vs_many1_ == 1 else args[:-1])
+        sf._tpt = tkey_prefix_tree
+        sf._rc = _many0_vs_solo_vs_many1_
+    @property
+    @override
+    def _many0_vs_solo_vs_many1_(sf, /):
+        '-> uint%3/{0/many0|1/solo|2/many1}'
+        return sf._rc
+    @property
+    @override
+    def _tkey_prefix_tree_(sf, /):
+        '-> tkey_prefix_tree/prefix_tree<tkey> #see:seed.seq_tools.mk_prefix_tree'
+        return sf._tpt
+#end-class IRecognizerLLoo__tkey_prefix_tree__init(IRecognizerLLoo__tkey_prefix_tree, _Base4repr):
+class RecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__tkey_prefix_tree__init, IRecognizerLLoo__default_mixins):pass
 
 
 
@@ -4300,6 +4632,7 @@ class Makers4IRecognizerLLoo:
     spost__unbox_ = RecognizerLLoo__spost__unbox
     spostprocess_ = RecognizerLLoo__spostprocess
     tag_ = RecognizerLLoo__tag
+    tkey_prefix_tree_ = RecognizerLLoo__tkey_prefix_tree
     token_ = RecognizerLLoo__token
     token_seq_ = RecognizerLLoo__token_seq
     unbox_tuple_ = RecognizerLLoo__unbox_tuple

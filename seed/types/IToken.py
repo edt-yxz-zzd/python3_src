@@ -8,6 +8,8 @@ py -m nn_ns.app.doctest_cmd seed.types.IToken:__doc__ -ht
 
 [ITokenQuerySet is not subclass of IXQuerySet]
 [rawstream := (prev_token_end_gap_position_info, tokens)]
+[chr_rawstream := (chr_tgbegin, chr_tkns) :: (PositionInfo4Gap__text_file, Iter Token__char)]
+    prev_token_end_gap_position_info --> tgbegin
 
 DONE:++noise
     denoise_rawstream_#filter
@@ -30,7 +32,8 @@ DONE:++noise
 
 
 
-[rawstream := (prev_token_end_gap_position_info, tokens)]
+######################
+######################
 >>> def list_rawstream_(rawstream, /):
 ...     (prev_token_end_gap_position_info, tokens) = rawstream
 ...     assert tokens is iter(tokens)
@@ -38,9 +41,9 @@ DONE:++noise
 ...     return (prev_token_end_gap_position_info, tokens)
 
 >>> list_rawstream_(mk_token_rawstream__5xs__idx_(990, 'ab', 777, tkey_vs_tdat_vs_tkd=0))
-(PositionInfo4Gap__idx(990), [BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased('a', 777)), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased('b', 777))])
+(PositionInfo4Gap__idx(990), [Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased('a', 777)), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased('b', 777))])
 >>> list_rawstream_(mk_token_rawstream__5xs__idx_(990, 'ab', 777, tkey_vs_tdat_vs_tkd=1))
-(PositionInfo4Gap__idx(990), [BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased(777, 'a')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased(777, 'b'))])
+(PositionInfo4Gap__idx(990), [Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased(777, 'a')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased(777, 'b'))])
 >>> list_rawstream_(mk_token_rawstream__5xs__idx_(990, '', 777, tkey_vs_tdat_vs_tkd=2))
 Traceback (most recent call last):
     ...
@@ -53,18 +56,94 @@ TypeError: 777
 
 #>>> from seed.tiny import echo
 >>> list_rawstream_(mk_token_rawstream__5xs__idx_(990, 'ab', str.upper, tkey_vs_tdat_vs_tkd=0))
-(PositionInfo4Gap__idx(990), [BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased('a', 'A')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased('b', 'B'))])
+(PositionInfo4Gap__idx(990), [Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased('a', 'A')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased('b', 'B'))])
 >>> list_rawstream_(mk_token_rawstream__5xs__idx_(990, 'ab', str.upper, tkey_vs_tdat_vs_tkd=1))
-(PositionInfo4Gap__idx(990), [BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased('A', 'a')), BaseToken(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased('B', 'b'))])
+(PositionInfo4Gap__idx(990), [Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased('A', 'a')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased('B', 'b'))])
+
+
+
+
+
+
+
+
+
+
+
+######################
+######################
+######################
+>>> import seed.types.IToken
+>>> from itertools import islice
+>>> chr_rawstream = mk_chr_rawstream5path_(seed.types.IToken.__file__, encoding='u8')
+>>> (chr_tgbegin, chr_tkns) = chr_rawstream
+>>> chr_tgbegin == PositionInfo4Gap__text_file(seed.types.IToken.__file__, None, 0, LinenoColumn(1, 1), 0)
+True
+
+#using:may_pseudo_fname
+>>> chr_rawstream = mk_chr_rawstream5path_(seed.types.IToken.__file__, encoding='u8', may_pseudo_fname='seed.types.IToken.__file__')
+>>> (chr_tgbegin, chr_tkns) = chr_rawstream
+>>> chr_tgbegin
+PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 0, LinenoColumn(1, 1), 0)
+
+>>> chr_tkns__16 = [*islice(chr_tkns, 16)]
+>>> chr_tkns__16[0]
+Token__char(PositionInfo4Span__text_file(PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 0, LinenoColumn(1, 1), 0), PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 1, LinenoColumn(1, 2), 1)), Cased('#', None))
+>>> chr_tkns__16[0].token_idx
+0
+>>> chr_tkns__16[0].token_key
+'#'
+>>> chr_tkns__16[0].token_keyed_data
+Cased('#', None)
+>>> chr_tkns__16[0].token_data is None
+True
+>>> for chr_tkn in chr_tkns__16[12:15]:
+...     print(chr_tkn)
+Token__char(PositionInfo4Span__text_file(PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 12, LinenoColumn(1, 13), 12), PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 13, LinenoColumn(1, 14), 13)), Cased('o', None))
+Token__char(PositionInfo4Span__text_file(PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 13, LinenoColumn(1, 14), 13), PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 14, LinenoColumn(2, 1), 14)), Cased('\n', None))
+Token__char(PositionInfo4Span__text_file(PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 14, LinenoColumn(2, 1), 14), PositionInfo4Gap__text_file('seed.types.IToken.__file__', None, 15, LinenoColumn(2, 2), 15)), Cased('r', None))
+
+
+#######
+>>> (p0, it) = mk_chr_rawstream5args8chars_((seed.types.IToken.__file__, 'u8', 'seed.types.IToken.__file__'))
+>>> p0 == chr_tgbegin
+True
+>>> [*islice(it, 16)] == chr_tkns__16
+True
+
+#######
+>>> (p0, it) = mk_chr_rawstream5args8chars_((chr_tgbegin, "#__all__:goto\nr'xxxxxx"))
+>>> p0 == chr_tgbegin
+True
+>>> [*islice(it, 16)] == chr_tkns__16
+True
+
+#######
+>>> from io import StringIO
+>>> (p0, it) = mk_chr_rawstream5args8chars_((chr_tgbegin, True, StringIO("#__all__:goto\nr'xxxxxx")))
+>>> p0 == chr_tgbegin
+True
+>>> [*islice(it, 16)] == chr_tkns__16
+True
+
+
+
+
+
 
 #]]]'''
 __all__ = r'''
 mk_token_rawstream__5xs__idx_
+mk_chr_rawstream5args8chars_
+    mk_chr_rawstream5path_
+        mk_gap_position_info_at_ifile_begin
+    mk_chr_rawstream5file_
+    mk_chr_rawstream5chars_     mk_chr_rawstream5text_
 
 
 IBaseToken
     IToken
-        BaseToken
+        _BaseToken
             Token__char
             Token__keyed
 
@@ -94,7 +173,20 @@ IBasePositionInfo
 
 
 
+check_may_str
 
+mk_chr_rawstream5args8chars_
+    mk_args8chars5path_
+    mk_args8chars5file_
+    mk_args8chars5chars_
+
+mk_chr_rawstream5args8chars_
+    mk_chr_rawstream5path_
+        mk_gap_position_info_at_ifile_begin
+        mk_chr_rawstream5file_
+            iter_chars5file_
+            mk_chr_rawstream5chars_     mk_chr_rawstream5text_
+                iter_char_tokens5chars_
 
 
 
@@ -282,6 +374,7 @@ from seed.tiny_._Base4repr import _Base4repr #sf._args4repr = (...)
 from seed.math.sign_of import sign_of
 
 from seed.types.Either import Cased# Either
+from seed.tiny import echo
 
 
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -353,6 +446,15 @@ class IBaseToken(ABC):
         '-> tkd/Cased<tkey,tdat>'
         return Cased(sf.token_key, sf.token_data)
 
+    @abstractmethod
+    def __hash__(sf, /):
+        '-> int'
+    @abstractmethod
+    def __eq__(sf, ot, /):
+        '-> bool'
+    def __ne__(sf, ot):
+        return not sf == ot
+
 class IToken(IBaseToken):
     #class IToken__with_tspan(IBaseToken):
     'tpstn/tspan/tposition_info/token_span_position_info/IPositionInfo4Span #[idx4token == token_begin_position_info.idx4gap == token_end_position_info.idx4gap-1]'
@@ -374,7 +476,8 @@ class IToken(IBaseToken):
         '-> tgend/end_position_info4token/IPositionInfo4Gap'
         return sf.token_span_position_info.end_gap_position_info
 
-class BaseToken(IToken, _Base4repr):
+class _BaseToken(IToken, _Base4repr):
+    '[_BaseToken is for subclassing purpose] # [for datatype, use Token__keyed instead of _BaseToken]'
     ___no_slots_ok___ = True
     _basetype4tspan_ = IPositionInfo4Span
     @classmethod
@@ -425,12 +528,40 @@ class BaseToken(IToken, _Base4repr):
     #    '-> tdat/token_data'
     #    return sf._tdat
 
+    @override
+    def __hash__(sf, /):
+        '-> int'
+        return hash((id(type(sf)), sf.token_span_position_info, sf.token_keyed_data))
+    @override
+    def __eq__(sf, ot, /):
+        '-> bool'
+        if sf is ot:
+            return True
+        if not type(sf) is type(ot):
+            return NotImplemented
+        return (sf.token_idx == ot.token_idx
+                    #test idx first
+        and sf.token_span_position_info == ot.token_span_position_info
+        and sf.token_keyed_data == ot.token_keyed_data
+        )
+    def __ne__(sf, ot):
+        return not sf == ot
+
 
 class LinenoColumn(IBasePositionInfo, _Base4repr):
+    r'''[[[
+    [newline === '\n']
+    [lineno >= 1]
+    [column >= 1]
+    cancel:
+        #.[column >= ([lineno == 1)]
+        #.    [[lineno>1][column==0]] <==> newline
+    #]]]'''#'''
     ___no_slots_ok___ = True
     def __init__(sf, jrow, jcolumn, /):
         check_int_ge(1, jrow)
         check_int_ge(1, jcolumn)
+        #.check_int_ge(int(jrow == 1), jcolumn)
         sf._jr = jrow
         sf._jc = jcolumn
         sf._args4repr = (jrow, jcolumn)
@@ -443,8 +574,10 @@ class LinenoColumn(IBasePositionInfo, _Base4repr):
     def ifeed_char(sf, char, /):
         '-> LinenoColumn'
         if char == '\n':
+            #newline gone
             jrow = 1+sf.lineno
             jcolumn = 1
+            #cancel:jcolumn = 0 # 1 --> 0
         else:
             jrow = sf.lineno
             jcolumn = 1+sf.column
@@ -645,6 +778,15 @@ class PositionInfo4Gap__noisy(IPositionInfo4Gap, _Base4repr):
     def low_lvl_tgend(sf, /):
         '-> IPositionInfo4Gap'
         return sf._tge
+    def flatten(sf, /):
+        '-> PositionInfo4Gap__noisy | ^TypeError'
+        check_type_is(__class__, sf.low_lvl_tgbegin)
+        check_type_is(__class__, sf.low_lvl_tgend)
+        low_sf = __class__(sf.idx4gap, sf.low_lvl_tgbegin.low_lvl_tgbegin, sf.low_lvl_tgend.low_lvl_tgend)
+        if low_sf == sf.low_lvl_tgbegin:
+            low_sf = sf.low_lvl_tgbegin
+        return low_sf
+
     @property
     @override
     def idx4gap(sf, /):
@@ -719,10 +861,10 @@ class PositionInfo4Span(IPositionInfo4Span, _Base4repr):
         return compare(sf.begin_gap_position_info, ot.end_gap_position_info)
 
 class PositionInfo4Span__text_file(PositionInfo4Span):
-    def __init__(sf, tgbegin, tgend, /):
-        check_type_is(PositionInfo4Gap__text_file, tgbegin)
-        check_type_is(PositionInfo4Gap__text_file, tgend)
-        super().__init__(tgbegin, tgend)
+    def __init__(sf, chr_tgbegin, chr_tgend, /):
+        check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
+        check_type_is(PositionInfo4Gap__text_file, chr_tgend)
+        super().__init__(chr_tgbegin, chr_tgend)
 
 
 
@@ -730,12 +872,15 @@ def __():
     gap0 = PositionInfo4Gap__text_file('', 0, 0, LinenoColumn(1,1), 0)
     gap1 = PositionInfo4Gap__text_file('', 0, 0, LinenoColumn(1,1), 1)
     span0 = PositionInfo4Span__text_file(gap0, gap1)
+    match gap0:
+        case PositionInfo4Span__text_file(x):
+            assert x is gap0
 __()
 
 
 
 
-class Token__char(BaseToken):
+class Token__char(_BaseToken):
     'char'
     _basetype4tspan_ = PositionInfo4Span__text_file
     @classmethod
@@ -744,7 +889,7 @@ class Token__char(BaseToken):
         #ord(tkey)
         check_char(tkey)
 
-class Token__keyed(BaseToken):
+class Token__keyed(_BaseToken):
     'keyed/Cased'
 
 
@@ -770,33 +915,145 @@ class Token__keyed(BaseToken):
 ######################
 ######################
 ######################
+def check_may_str(x, /):
+    if not None is x:
+        check_type_is(str, x)
+def mk_args8chars5path_(ipath, /, *, encoding, may_pseudo_fname=None):
+    'input_text_file_path -> args8chars'
+    if type(ipath) is PositionInfo4Gap__text_file:raise TypeError
+    if type(encoding) is bool:raise TypeError
+    check_may_str(encoding)
+    check_may_str(may_pseudo_fname)
+    return (ipath, encoding, may_pseudo_fname)
+def mk_args8chars5file_(chr_tgbegin, ifile, /, *, to_close:bool):
+    'PositionInfo4Gap__text_file -> input_text_file -> args8chars'
+    check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
+    check_type_is(bool, to_close)
+    ifile.read
+    return (chr_tgbegin, to_close, ifile)
+def mk_args8chars5chars_(chr_tgbegin, chars, /):
+    'PositionInfo4Gap__text_file -> Iter char -> args8chars'
+    check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
+    chars = iter(chars)
+    return (chr_tgbegin, chars)
+def mk_chr_rawstream5args8chars_(args8chars, /):
+    r'''[[[
+    :: args8chars -> chr_rawstream
+
+    [args8chars :: ((chr_tgbegin, chars)|(chr_tgbegin, to_close, ifile)|(ipath, encoding, may_pseudo_fname))]
+    [chr_rawstream :: (chr_tgbegin, chr_tkns)]
+
+    [chr_tgbegin :: PositionInfo4Gap__text_file]
+    [to_close :: bool]
+    [chars :: Iter char]
+    [chr_tkns :: Iter chr_tkn/Token__char]
+
+    #]]]'''#'''
+    check_type_is(tuple, args8chars)
+    match args8chars:
+        case (chr_tgbegin, chars):
+            return mk_chr_rawstream5chars_(chr_tgbegin, chars)
+        case (chr_tgbegin, bool(to_close), ifile):
+            return mk_chr_rawstream5file_(chr_tgbegin, ifile, to_close=to_close)
+        case (ipath, encoding, may_pseudo_fname):
+            return mk_chr_rawstream5path_(ipath, encoding=encoding, may_pseudo_fname=may_pseudo_fname)
+        case _:
+            raise TypeError(len(args8chars))
+    raise 000
+def mk_chr_rawstream5path_(ipath, /, *, encoding, may_pseudo_fname=None):
+    'input_text_file_path -> chr_rawstream/(chr_tgbegin/PositionInfo4Gap__text_file, Iter chr_tkn/Token__char)'
+    pseudo_fname = ipath if may_pseudo_fname is None else may_pseudo_fname
+    chr_tgbegin = mk_gap_position_info_at_ifile_begin(pseudo_fname)
+    check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
+
+    ifile = open(ipath, 'rt', encoding=encoding)
+    return mk_chr_rawstream5file_(chr_tgbegin, ifile, to_close=True)
+def mk_chr_rawstream5file_(chr_tgbegin, ifile, /, *, to_close:bool):
+    'PositionInfo4Gap__text_file -> input_text_file -> chr_rawstream/(chr_tgbegin/PositionInfo4Gap__text_file, Iter chr_tkn/Token__char)'
+    check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
+    check_type_is(bool, to_close)
+    chars = iter_chars5file_(ifile, to_close=to_close)
+    return mk_chr_rawstream5text_(chr_tgbegin, chars)
+def iter_chars5file_(ifile, /, *, to_close):
+    'input_text_file -> Iter char'
+    check_type_is(bool, to_close)
+    it = _iter_chars5file(ifile)
+    if to_close:
+        with ifile:
+            yield from it
+    else:
+        yield from it
+    return
+def _iter_chars5file(ifile, /):
+    # [to_close is False]
+    while (ch := ifile.read(1)):
+        yield ch
+def mk_chr_rawstream5chars_(chr_tgbegin, chars, /):
+    'PositionInfo4Gap__text_file -> Iter char -> chr_rawstream/(chr_tgbegin/PositionInfo4Gap__text_file, Iter chr_tkn/Token__char)'
+    check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
+    chr_tkns = iter_char_tokens5chars_(chr_tgbegin, chars)
+    chr_rawstream = (chr_tgbegin, chr_tkns)
+    return chr_rawstream
+mk_chr_rawstream5text_ = mk_chr_rawstream5chars_
+def iter_char_tokens5chars_(chr_tgbegin, chars, /):
+    'chr_tgbegin/prev_token_end_gap_position_info -> Iter char -> Iter Token__char'
+    check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
+    chars = iter(chars)
+
+    (fname, may_idx6bytes, idx6chars, lineno_column, _idx4gap) = chr_tgbegin.args
+    assert idx6chars == _idx4gap
+    may_idx6bytes = None
+    for ch in chars:
+        idx6chars += 1 # === idx4gap
+        lineno_column = lineno_column.ifeed_char(ch)
+        #:PositionInfo4Gap__text_file(fname, may_idx6bytes, idx6chars, lineno_column, idx4gap)
+        chr_tgend = PositionInfo4Gap__text_file(fname, may_idx6bytes, idx6chars, lineno_column, idx6chars)
+        tspan = PositionInfo4Span__text_file(chr_tgbegin, chr_tgend)
+        chr_tkn = Token__char(tspan, ch, None)
+        yield chr_tkn
+        ###############
+        chr_tgbegin = chr_tgend
+        ###############
+
+
+
+def mk_gap_position_info_at_ifile_begin(fname, /):
+    '-> chr_tgbegin/PositionInfo4Gap__text_file'
+    may_idx6bytes = None
+    idx6chars = 0
+    lineno_column = LinenoColumn(1,1)
+    idx4gap = 0
+    gap_position_info = PositionInfo4Gap__text_file(fname, may_idx6bytes, idx6chars, lineno_column, idx4gap)
+    return gap_position_info
+
 ######################
 ######################
 ######################
 ######################
 ######################
-def denoise_rawstream_(high_lvl_offset, denoiser, low_lvl_rawstream, /):
+def denoise_rawstream_(high_lvl_offset, denoiser, low_lvl_rawstream, /, *, to_flatten:bool):
     'uint -> denoiser/(low_lvl_rawstream -> low_high_low_triples/(Iter (tgbegin/low_lvl-IPositionInfo4Gap, high_lvl-tkd/Cased, tgend/low_lvl-IPositionInfo4Gap))) -> low_lvl_rawstream/(low_lvl-IPositionInfo4Gap, Iter low_lvl-IToken) -> high_lvl_rawstream/(high_lvl-IPositionInfo4Gap, Iter high_lvl-IToken)'
+    check_type_is(bool, to_flatten)
     check_callable(denoiser)
-    (low_lvl_prev_token_end_gap_position_info, low_lvl_tokens) = low_lvl_rawstream
+    (low_lvl_tgbegin, low_lvl_tokens) = low_lvl_rawstream
     low_high_low_triples = denoiser(low_lvl_rawstream)
-    high_lvl_rawstream = mk_high_lvl_rawstream5low_high_low_triples_(high_lvl_offset, low_lvl_prev_token_end_gap_position_info, low_high_low_triples)
+    high_lvl_rawstream = mk_high_lvl_rawstream5low_high_low_triples_(high_lvl_offset, low_lvl_tgbegin, low_high_low_triples, to_flatten=to_flatten)
     return high_lvl_rawstream
-def mk_high_lvl_rawstream5low_high_low_triples_(high_lvl_offset, low_lvl_prev_token_end_gap_position_info, low_high_low_triples, /):
+def mk_high_lvl_rawstream5low_high_low_triples_(high_lvl_offset, low_lvl_tgbegin, low_high_low_triples, /, *, to_flatten:bool):
     'uint -> low_lvl-IPositionInfo4Gap -> low_high_low_triples/(Iter (tgbegin/low_lvl-IPositionInfo4Gap, high_lvl-tkd/Cased, tgend/low_lvl-IPositionInfo4Gap)) -> high_lvl_rawstream/(high_lvl-IPositionInfo4Gap, Iter high_lvl-IToken)'
+    check_type_is(bool, to_flatten)
     check_int_ge(0, high_lvl_offset)
-    check_type_le(IPositionInfo4Gap, low_lvl_prev_token_end_gap_position_info)
+    check_type_le(IPositionInfo4Gap, low_lvl_tgbegin)
     low_high_low_triples = iter(low_high_low_triples)
 
-    prev_low_lvl_tgend4tokens = low_lvl_prev_token_end_gap_position_info
-    low_lvl_tgbegin4noises = prev_low_lvl_tgend4tokens
-    high_lvl_rawstream = _4mk_high_lvl_rawstream5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples)
+    low_lvl_tgbegin4noises = low_lvl_tgbegin
+    high_lvl_rawstream = _4mk_high_lvl_rawstream5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples, to_flatten=to_flatten)
         #high_lvl_rawstream = (high_lvl_prev_token_end_gap_position_info, high_lvl_tokens)
     return high_lvl_rawstream
-def _4mk_high_lvl_rawstream5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples, /):
+def _4mk_high_lvl_rawstream5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples, /, *, to_flatten):
     '-> high_lvl_rawstream'
     assert low_high_low_triples is iter(low_high_low_triples)
-    alternative_gap_tkd = _high_lvl_GTG5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples)
+    alternative_gap_tkd = _high_lvl_GTG5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples, to_flatten=to_flatten)
     ######################
     #below are all high_lvl
     ######################
@@ -837,23 +1094,25 @@ def alternative_gap_tkn5alternative_gap_tkd_(alternative_gap_tkd, /):
         tgend = next(it)
         tspan = PositionInfo4Span(tgbegin, tgend)
         #Token__keyed
-        tkn = BaseToken(tspan, tkd)
+        tkn = Token__keyed(tspan, tkd)
         yield tkn
         yield tgend
         ######################
         tgbegin = tgend
     return
 
-def _high_lvl_GTG5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples, /):
+def _high_lvl_GTG5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_triples, /, *, to_flatten):
     '-> Iter (high_lvl_gap|high_lvl_tkd){alternative} # [gap, tkd, gap, tkd, gap, ..., gap]{len>=1}{odd len}'
     assert low_high_low_triples is iter(low_high_low_triples)
+    check_type_is(bool, to_flatten)
+    xflatten = PositionInfo4Gap__noisy.flatten if to_flatten else echo
 
     low_lvl_tgbegin4noises
     for (low_lvl_tgbegin4tokens, high_lvl_tkd, low_lvl_tgend4tokens) in low_high_low_triples:
         #low_lvl_tgbegin4noises
         low_lvl_tgend4noises = low_lvl_tgbegin4tokens
-        high_lvl_token_end_gap_position_info = PositionInfo4Gap__noisy(idx4gap:=high_lvl_offset, low_lvl_tgbegin4noises, low_lvl_tgend4noises)
-        yield high_lvl_token_end_gap_position_info
+        high_lvl_tgbegin = xflatten(PositionInfo4Gap__noisy(idx4gap:=high_lvl_offset, low_lvl_tgbegin4noises, low_lvl_tgend4noises))
+        yield high_lvl_tgbegin
         yield high_lvl_tkd
         ######################
         high_lvl_offset += 1
@@ -863,8 +1122,8 @@ def _high_lvl_GTG5LHL(high_lvl_offset, low_lvl_tgbegin4noises, low_high_low_trip
     else:
         #low_lvl_tgbegin4noises
         low_lvl_tgend4noises = low_lvl_tgbegin4noises
-        high_lvl_token_end_gap_position_info = PositionInfo4Gap__noisy(idx4gap:=high_lvl_offset, low_lvl_tgbegin4noises, None)
-        yield high_lvl_token_end_gap_position_info
+        high_lvl_tgbegin = xflatten(PositionInfo4Gap__noisy(idx4gap:=high_lvl_offset, low_lvl_tgbegin4noises, None))
+        yield high_lvl_tgbegin
         #no:tkd
             #high_lvl_offset += 1
             #low_lvl_tgbegin4noises = low_lvl_tgend4tokens
@@ -883,7 +1142,7 @@ def mk_token_rawstream__5tspan_tkd_pairs_(prev_token_end_gap_position_info, tspa
     return rawstream
 def _mk_tail4rawstream__tspan_tkd_pair(tspan_tkd_pairs, /):
     for (tspan, tkd) in tspan_tkd_pairs:
-        yield BaseToken(tspan, tkd)
+        yield Token__keyed(tspan, tkd)
 
 
 def attach_tgend_(mk_end_gap_position_info_, prev_token_end_gap_position_info, xs, /):
@@ -1499,18 +1758,37 @@ r'''[[[
 ######################
 ######################
 ######################
-
+__all__
+def _check_all_non_ABC():
+    for nm in __all__:
+        if nm[0].isupper() and not nm[0] == 'I':
+            check_non_ABC(globals()[nm])
+_check_all_non_ABC()
 
 ######################
 ######################
 ######################
 __all__
-from seed.types.IToken import IBaseToken, IToken, BaseToken, Token__char, Token__keyed
+from seed.types.IToken import IBaseToken, IToken, _BaseToken, Token__char, Token__keyed
 from seed.types.IToken import IBasePositionInfo, IPositionInfo4Gap, IPositionInfo4Span
 from seed.types.IToken import LinenoColumn, PositionInfo4Gap__idx, PositionInfo4Gap__file, PositionInfo4Gap__text_file, PositionInfo4Gap__higher_level, PositionInfo4Gap__noisy, PositionInfo4Span, PositionInfo4Span__text_file
 from seed.types.IToken import Token__char, PositionInfo4Span__text_file, PositionInfo4Gap__text_file, LinenoColumn
 
 from seed.types.IToken import mk_token_rawstream__5xs__idx_
+from seed.types.IToken import (
+mk_chr_rawstream5args8chars_
+,   mk_chr_rawstream5path_
+,       mk_gap_position_info_at_ifile_begin
+,   mk_chr_rawstream5file_
+,   mk_chr_rawstream5chars_
+,       mk_chr_rawstream5text_
+,   mk_args8chars5path_
+,   mk_args8chars5file_
+,   mk_args8chars5chars_
+#       args8chars = mk_args8chars5chars_(chr_tgbegin, chars)
+#       args8chars = mk_args8chars5file_(chr_tgbegin, ifile, to_close=to_close)
+#       args8chars = mk_args8chars5path_(ipath, encoding=encoding, may_pseudo_fname=may_pseudo_fname)
+)
 
 
 
