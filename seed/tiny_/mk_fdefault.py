@@ -6,7 +6,8 @@ seed.tiny_.mk_fdefault
     used in:
         seed.mapping_tools.fdefault
 py -m seed.tiny_.mk_fdefault
-py -m nn_ns.app.debug_cmd   seed.tiny_.mk_fdefault
+py -m nn_ns.app.debug_cmd   seed.tiny_.mk_fdefault  -x
+py -m nn_ns.app.doctest_cmd seed.tiny_.mk_fdefault:__doc__ -ht
 
 xdefault # imay, xdefault, ...
     see: mk_default
@@ -17,6 +18,9 @@ zdefault # ... # handle all cases
 
 
 
+from seed.tiny_.mk_fdefault import check4mk_default_, check4mk_default__len_
+    #def check4mk_default_(imay_xdefault_rank, xdefault, /, *args4xdefault):
+    #def check4mk_default__len_(imay_xdefault_rank, xdefault, len_args4xdefault, /):
 from seed.tiny_.mk_fdefault import mk_default__easy, mk_default, mk_default_or_raise
     #def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
     #def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
@@ -184,6 +188,8 @@ mk_default
 >>> mk_default(0, 999)
 Traceback (most recent call last):
     ...
+TypeError: <class 'int'>
+
 TypeError: 'int' object is not callable
 >>> mk_default(-2, 999)
 Traceback (most recent call last):
@@ -679,8 +685,13 @@ uniform_read_calc_update
 >>> class ok(Exception):pass
 >>> class bad(Exception):pass
 
+#>>> ok.__qualname__ = 'ok'
+#>>> bad.__qualname__ = 'bad'
+>>> ok.__module__ = '__main__'
+>>> bad.__module__ = '__main__'
+
 >>> mk_default5zdefault is mk_default__easy
->>> mk_default__easy(111)
+True
 >>> mk_default__easy(111)
 111
 >>> mk_default__easy(-1, 111)
@@ -754,6 +765,8 @@ bad: 111
 __all__ = '''
     mk_fdefault
     mk_default
+        check4mk_default_
+        check4mk_default__len_
         eliminate_tmay__mix
         eliminate_tmay_or_raise__simple
     BasePermissionMappingOps
@@ -823,11 +836,19 @@ __all__ = '''
     '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
+
 from types import MappingProxyType
 from seed.tiny_.check import check_type_is, check_imay, check_callable, check_pair, check_is_None
 from seed.tiny_.verify import is_reiterable
 from seed.tiny_.slice2triple import slice2triple
 from seed.tiny_.Weakable import WeakableDict
+
+from seed.for_libs.for_inspect__isolated import check_num_args_ok_# is_num_args_ok_
+#def check_num_args_ok_(num_args, f, /, *, imay_num_ok=False, follow_wrapped=True, ok_if_no_signature=False):
+#    '-> None | ^TypeError | ^ValueError'
+___end_mark_of_excluded_global_names__0___ = ...
+__all__
 
 class Mk_fdefaultP:
     r'''
@@ -1022,15 +1043,29 @@ if 0:
         del _33333333333333333333333333333333
 mk_default_or_raise = mk_default_or_raise__ver1
 mk_default_or_raise = mk_default_or_raise__ver2
+def check4mk_default_(imay_xdefault_rank, xdefault, /, *args4xdefault):
+    check4mk_default__len_(imay_xdefault_rank, xdefault, len(args4xdefault))
+def check4mk_default__len_(imay_xdefault_rank, xdefault, len_args4xdefault, /):
+    #check_imay(imay_xdefault_rank)
+    check_type_is(int, imay_xdefault_rank)
+    if not -1 <= imay_xdefault_rank <= len_args4xdefault: raise TypeError#ValueError
+    if imay_xdefault_rank == -1:
+        default = xdefault
+    else:
+        args2default = xdefault
+        check_callable(args2default)
+        #bug:check_num_args_ok_(len_args4xdefault, args2default)
+        num_args = L = xdefault_rank = imay_xdefault_rank
+        check_num_args_ok_(num_args, args2default)
+    return
+
 def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
     r'''
     args4xdefault = [..., z, y, x]
     imay_xdefault_rank :: [-1..len(args4xdefault)]
     xdefault = [default, fdefault, x2default, y_x2default, z_y_x2defaulta, ...].__getitem__(1+imay_xdefault_rank)
     #'''
-    #check_imay(imay_xdefault_rank)
-    check_type_is(int, imay_xdefault_rank)
-    if not -1 <= imay_xdefault_rank <= len(args4xdefault): raise TypeError#ValueError
+    check4mk_default_(imay_xdefault_rank, xdefault, *args4xdefault)
     if imay_xdefault_rank == -1:
         default = xdefault
     else:

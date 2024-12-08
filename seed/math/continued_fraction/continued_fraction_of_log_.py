@@ -4,6 +4,7 @@ e ../../python3_src/seed/math/continued_fraction/continued_fraction_of_log_.py
     view ../../python3_src/nn_ns/math_nn/continued_fraction/continued_fraction.py
     view ../../python3_src/seed/math/continued_fraction/continued_fraction_fold.py
     view ../../python3_src/seed/math/continued_fraction/continued_fraction_of_log_.py
+    view ../../python3_src/seed/math/continued_fraction/iter_continued_fraction_of_log__truncated_.py
 
 
 

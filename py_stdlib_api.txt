@@ -34,6 +34,16 @@ super(__class__, ...obj/cls)
   super(__class__, cls).__init_subclass__(*args, **kwargs)
     #as-if classmethod
 
+[[
+view others/app/termux/web_server.txt
+# [:using____httpd_conf__py_doc_html]:here
+httpd -f /sdcard/0my_files/git_repos/txt_phone/lots/NOTE/html/httpd-confs/httpd.conf-sdcard_0my_files-unzip-py_doc-python_3_12_4_docs_html
+lynx http://127.0.0.1:3124/index.html
+  py3.12.4
+lynx http://127.0.0.1:3081/index.html
+  py3.8.1
+httpd -k stop -f /sdcard/0my_files/git_repos/txt_phone/lots/NOTE/html/httpd-confs/httpd.conf-sdcard_0my_files-unzip-py_doc-python_3_12_4_docs_html
+]]
 [[[
 help(format)
 help('FORMATTING')

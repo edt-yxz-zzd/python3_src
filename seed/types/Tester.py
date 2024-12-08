@@ -152,14 +152,24 @@ XQuerySet__named
     whole_xqset
     truth_test_xqset
     falsity_test_xqset
-CharQuerySet__using_py_str_method
+
+StrQuerySet__using_py_regex_fullmatch
     char_qset__py_regex__w
     char_qset__py_regex__W
     char_qset__py_regex__s
     char_qset__py_regex__S
     char_qset__py_regex__d
     char_qset__py_regex__D
-StrQuerySet__using_py_regex_fullmatch
+    char_qset__py_regex__hexdigit
+    char_qset__py_regex__hexdigit_underscore
+    char_qset__py_regex__digit
+    char_qset__py_regex__digit_underscore
+    char_qset__py_regex__bit
+    char_qset__py_regex__bit_underscore
+    char_qset__py_regex__octal_digit
+    char_qset__py_regex__octal_digit_underscore
+
+CharQuerySet__using_py_str_method
     char_qset__isalnum
     char_qset__not_isalnum
     char_qset__isalpha
@@ -881,7 +891,7 @@ def _mk4str_method(nm, /):
     complementary_xqset = XQuerySet__named(gcnm, ~_xqset)
 
     return (xqset, complementary_xqset)
-def _mk4py_char_regex(char, /):
+def _mk_both4py_char_regex(char, /):
     check_char(char)
     assert char.isalpha()
     assert char.islower()
@@ -890,20 +900,44 @@ def _mk4py_char_regex(char, /):
     assert not cnm == nm
     gnm = f'char_qset__py_regex__{nm}'
     gcnm = f'char_qset__py_regex__{cnm}'
-    _xqset = StrQuerySet__using_py_regex_fullmatch(rf'\{nm}')
-    _cxqset = StrQuerySet__using_py_regex_fullmatch(rf'\{cnm}')
 
-    xqset = XQuerySet__named(gnm, _xqset)
-    complementary_xqset = XQuerySet__named(gcnm, _cxqset)
+    xqset = _mk4nmd_py_char_regex(gnm, rf'\{nm}')
+    complementary_xqset = _mk4nmd_py_char_regex(gcnm, rf'\{cnm}')
     return (xqset, complementary_xqset)
 
 
+def _mk4nmd_py_char_regex(_nm, ptn, /):
+    xqset = _mk4nmd_py_xxx_regex(f'char_qset__py_regex__{_nm}', ptn)
+    return xqset
+def _mk4nmd_py_str_regex(_nm, ptn, /):
+    xqset = _mk4nmd_py_xxx_regex(f'str_qset__py_regex__{_nm}', ptn)
+    return xqset
+def _mk4nmd_py_xxx_regex(nm, ptn, /):
+    xqset = XQuerySet__named(nm, StrQuerySet__using_py_regex_fullmatch(ptn))
+    return xqset
 #######
-### (char_qset__py_regex__s, char_qset__py_regex__S) = _mk4py_char_regex('s')
-#:.,.+4s/^\(\w\)\(\w\)$/(char_qset__py_regex__\1, char_qset__py_regex__\2) = _mk4py_char_regex('\1')
-(char_qset__py_regex__w, char_qset__py_regex__W) = _mk4py_char_regex('w')
-(char_qset__py_regex__s, char_qset__py_regex__S) = _mk4py_char_regex('s')
-(char_qset__py_regex__d, char_qset__py_regex__D) = _mk4py_char_regex('d')
+### (char_qset__py_regex__s, char_qset__py_regex__S) = _mk_both4py_char_regex('s')
+#:.,.+4s/^\(\w\)\(\w\)$/(char_qset__py_regex__\1, char_qset__py_regex__\2) = _mk_both4py_char_regex('\1')
+(char_qset__py_regex__w, char_qset__py_regex__W) = _mk_both4py_char_regex('w')
+(char_qset__py_regex__s, char_qset__py_regex__S) = _mk_both4py_char_regex('s')
+(char_qset__py_regex__d, char_qset__py_regex__D) = _mk_both4py_char_regex('d')
+
+char_qset__py_regex__hexdigit = _mk4nmd_py_char_regex('hexdigit', r'[0-9a-fA-F]')
+char_qset__py_regex__hexdigit_underscore = _mk4nmd_py_char_regex('hexdigit_underscore', r'[0-9a-fA-F_]')
+
+char_qset__py_regex__digit = _mk4nmd_py_char_regex('digit', r'[0-9]')
+char_qset__py_regex__digit_underscore = _mk4nmd_py_char_regex('digit_underscore', r'[0-9_]')
+
+# bit = binary digit
+# octal
+# decimal
+# hexadecimal
+char_qset__py_regex__bit = _mk4nmd_py_char_regex('digit', r'[01]')
+char_qset__py_regex__bit_underscore = _mk4nmd_py_char_regex('digit_underscore', r'[01_]')
+
+char_qset__py_regex__octal_digit = _mk4nmd_py_char_regex('digit', r'[0-7]')
+char_qset__py_regex__octal_digit_underscore = _mk4nmd_py_char_regex('digit_underscore', r'[0-7_]')
+
 
 #######
 ### (char_qset__isalnum, char_qset__not_isalnum) = _mk4str_method('isalnum')

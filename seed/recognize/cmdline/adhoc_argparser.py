@@ -32,6 +32,8 @@ serializing-deserializing
 ]]
 
 [[
+py_adhoc_call xxx.yyy ,f | lineno
+<--
 py_adhoc_call { -lineno } xxx.yyy ,f
 <<==:
 DONE?:TODO:选项:添加:『+lineno』:『,』枚举时附加行号
@@ -142,6 +144,9 @@ xxx.yyy 模块全名
         <==> py_adhoc_call { --lineno=0 } xxx.yyy ,f
     py_adhoc_call { +lineno } xxx.yyy ,f
         <==> py_adhoc_call { --lineno=1 } xxx.yyy ,f
+    -->:
+    py_adhoc_call   script.对数纟差分倍增   @list.100:枚举冫插入位置纟小数部分纟对数纟差分倍增扌 +使用冫负对数
+    [0, 1, 2, 0, 2, 4, 0, 3, 6, 0, 4, 8, 12, 3, 8, 13, 2, 8, 14, 1, 8, 15, 0, 8, 16, 24, 6, 15, 24, 4, 14, 24, 2, 13, 24, 0, 12, 24, 36, 9, 22, 35, 6, 20, 34, 3, 18, 33, 48, 15, 31, 47, 11, 28, 45, 7, 25, 43, 3, 22, 41, 60, 18, 38, 58, 13, 34, 55, 8, 30, 52, 3, 26, 49, 72, 20, 44, 69, 15, 40, 65, 9, 35, 61, 3, 30, 57, 84, 23, 51, 79, 16, 45, 74, 9, 39, 69, 2, 33, 64]
 
 新增:
     %!<py_script>
@@ -868,7 +873,15 @@ def _parse_payload4prefix(prefix, payload4prefix, /):
         elif prefix == '@':
             def islice_(r, /):
                 ls = r
-                return ls[:num4islice]
+                try:
+                    return ls[:num4islice]
+                except TypeError:
+                    #TypeError: 'generator' object is not subscriptable
+                    #   see:above:『py_adhoc_call   script.对数纟差分倍增   @list.100:枚举冫插入位置纟小数部分纟对数纟差分倍增扌 +使用冫负对数』
+                    it = r
+                    assert iter(it) is it
+                    #return list(islice(it, num4islice))
+                    return islice(it, num4islice)
         else:
             raise AdhocArgParserError(prefix)
         islice_

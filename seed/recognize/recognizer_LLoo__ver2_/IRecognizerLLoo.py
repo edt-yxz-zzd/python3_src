@@ -4,6 +4,7 @@ r'''[[[
 ######################
 ######################
 #TODO:goto
+#doctest_cmd:goto
 # [:def__IRecognizerLLoo]:goto
 # [:def__IEnvironment]:goto
 #begin_doctest:goto
@@ -14,7 +15,8 @@ r'''[[[
 #
 #ignore affect spostprocess,gpostprocess
 #   ++_force_postprocess_when_ignore_
-#       @IRecognizerLLoo__gprepostprocess
+#       @IRecognizerLLoo__gprepostprocess6cenv <: IConfig4gprepostprocess
+#           @IRecognizerLLoo__gprepostprocess
 #       @IRecognizerLLoo__spostprocess
 #       @RecognizerLLoo__try_except_else
 #       @RecognizerLLoo__try_except_else__spost
@@ -22,6 +24,7 @@ r'''[[[
 #       @RecognizerLLoo__light_wrap
 #       @IRecognizerLLoo__tag
 #       @IRecognizerLLoo__constant_loader
+#       @IRecognizerLLoo__tkey_prefix_tree
 #
 #[forkable is bad idea][there should be only one input_stream and many snapshot]
 #   <<== old discarded istream will still remain in parent func stack frame therefore never be destroyed and release memory...
@@ -31,6 +34,9 @@ r'''[[[
 #now cancel auto release:unlocker_release() <<== [@fail:not reply.ok: (unlocker>>snapshot) should not unlocker_release()!]
 #
 #
+#cancel:TODO: rename max_num_tokens6backward:--> max_num_tokens4look_behind
+#   lookahead vs lookbehind
+#   look_ahead vs look_behind
 #TODO: serial-final-flattener:Rope+tuple(leaf-node)
 #   view ../../python3_src/seed/types/Rope.py
 #TODO:pseudo_func_body_stmt_flow,_is_ctx_scope_=True
@@ -62,7 +68,8 @@ view ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/doctest4IRecognizer
 
 
 seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo
-py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo -x
+py -m seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo
+py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo -x -off_defs
 py -m nn_ns.app.doctest_cmd seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo:__doc__ -ht
 
 
@@ -81,9 +88,14 @@ DONE:
         nm4pre --> nm_seq4pre
         nm4post --> nm_seq4post
 TODO:
+DONE:IEnvironment --> (ICoreEnvironment|IShellEnvironment)
 IEnvironment
     .external_cache
-        #to save rgnr persistent info(full_view_info<env,rgnr.descendants>)
+ICoreEnvironment
+    .core_cache
+    .getset_external_cache4rgnr_method
+    .getset_external_cache4rgnr_func
+        #to save rgnr persistent info(full_view_info<cenv,rgnr.descendants>)
         eg:[children,_isymbol2essential_,_may_osymbolXseq_]==>>ok-isymbol-dependency==>>which children ignore
 ignore:
     ignore oresult, only is_ok
@@ -91,12 +103,12 @@ ignore:
     see:_isymbol2essential_
 rgnr.children<env> finite persistent/stable(not-tmp-created-rgnr)
     ref
-    rgnr._iter_persistent_children6env_(env)
+    rgnr._iter_persistent_children6cenv_(cenv)
 istream.view_tokens6backward#back_cache
     istream.max_num_tokens6backward
     rgnr.required_num_tokens6backward
 
-DONE:ref ~ env.name2rgnr_
+DONE:ref ~ cenv.name2rgnr_
 DONE:named ~ env.name2may_gpostprocess6ok_
 DONE:flip:invert_ok_err
 DONE:empty_loader
@@ -225,13 +237,13 @@ AddUnlocker
 ]]
 
 [[
-#DONE:trial,optional...-->extend Call to contain external_cache to avoid save:(rgnr,try_rgnr_(rgnr)) via buitin support
+#DONE:[cancel by light_wrap_rgnr_]:trial,optional...-->extend Call to contain core_cache to avoid save:(rgnr,try_rgnr_(rgnr)) via buitin support
 #   RecognizeCall --> (Call|mk_Call_)
 #   => :『light_wrap_rgnr_()』
 #       try_rgnr_-->trial_and_error_
 #DONE:recur5yield__ver3 strict type+send()as GI + class ABC 4 subclassing... allow GI to avoid save:(rgnr,try_rgnr_(rgnr)) via call mk_gi directly...
 #   e ../../python3_src/seed/func_tools/recur5yield__strict.py
-#   => :『@_decorator44rngr$recognize_()』
+#   => :『@_decorator4rngr$recognize_()』
 #DONE:list high freq exconfigpack and register them...
 #   => 『get_info_ex4high_freq_sconfigpack_()』
 #DONE:only『not_followed_by_()』: flip only for (forgivable_fail) ==>> ???only for try # i.e. flip(try_rgnr_(rgnr)) try_rgnr_() is not enough!!! how to avoid severe_fail??? ==>> severe_try
@@ -420,7 +432,7 @@ PlainRecoverableInputStream5token_seq :: uint -> may IPositionInfo4Gap -> uint -
 def mk_token_rawstream__5xs__idx_(offset, xs, ex_arg=None, /, *, tkey_vs_tdat_vs_tkd:'(0|1|2)'):
     'uint -> Iter (tkey|tdat|tkd) -> (((tkey -> tdat)|tdat/non_callable)|((tdat -> tkey)|tkey/non_callable)|None) -> (tkey_vs_tdat_vs_tkd/(0|1|2)) -> rawstream/(IPositionInfo4Gap, Iter IToken)'
 
-def Environment.__init__(sf, param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, /):
+def mk_Environment(param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, name2force_postprocess_when_ignore, /):
 def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False):
     'IRecognizerLLoo -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> Reply'#@wrapper
 
@@ -429,6 +441,7 @@ begin_doctest:here
 ######################
 ######################
 #[target:] => (nm4xxx_rgnr, ref__xxx_rgnr)
+>>> recognize_ = recognize__asif_main_rgnr_
 >>> mkrs = Makers4IRecognizerLLoo
 >>> nm4xxx_rgnr = Symbol4IRecognizerLLoo('xxx_rgnr')
 >>> ref__xxx_rgnr = mkrs.ref_(nm4xxx_rgnr)
@@ -537,7 +550,7 @@ frozenset({nm4rgnr_.add_expr})
 frozenset({nm4rgnr_.add_expr})
 >>> name2rgnr == {nm4add_expr:add_expr}
 True
->>> env = Environment(param2setting:={}, name2rgnr, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={})
+>>> env = mk_Environment(param2setting:={}, name2rgnr, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={}, name2force_postprocess_when_ignore:={})
 >>> gctx = {}
 
 >>> istream = _mk_istream5src('555')
@@ -609,9 +622,13 @@ light_wrap_rgnr_
 
 
 
+IConfig4gprepostprocess
+    IRecognizerLLoo__gprepostprocess6cenv
+    Config4gprepostprocess
 
 IRecognizerLLoo
     recognize_
+        recognize__asif_main_rgnr_
     RecognizeCall   Call mk_Call_
     Reply           RecognizeReply
         ExtPositionInfo
@@ -619,6 +636,10 @@ IRecognizerLLoo
     ContextView
         Symbol4GlobalVarable
         Symbol4LocalVarable
+        Symbol4UnrestrictedGlobalVarable
+        Symbol4UnrestrictedLocalVarable
+        Symbol4ConstantReadableGlobalVarable
+        Symbol4ConstantReadableLocalVarable
     Symbol4IRecognizerLLoo
         collect_namess5locals_
             collect_namess5rgnrs_
@@ -629,6 +650,11 @@ IRecognizerLLoo
             check_names4ref_names6ref_
     check_may_weakable_name
 
+    IRecognizerLLoo__main
+        IRecognizerLLoo__main__gprepostprocess
+        BaseRecognizerLLoo__main__default_mixins
+        IRecognizerLLoo__main__split_teardown
+            BaseRecognizerLLoo__main__split_teardown__default_mixins
     IRecognizerLLoo__default_mixins
     RecognizerLLoo__named
     RecognizerLLoo__ref
@@ -648,41 +674,59 @@ IRecognizerLLoo
                 RecognizerLLoo__end_by
                 RecognizerLLoo__sep_by
                 RecognizerLLoo__sep_end_by
-    IRecognizerLLoo__two_children6env
+    IRecognizerLLoo__two_children6cenv
         IRecognizerLLoo__repetition
-    IRecognizerLLoo__solo_child6env
+    IRecognizerLLoo__solo_child6cenv
         IRecognizerLLoo__alias
-        IRecognizerLLoo__gprepostprocess
+        IRecognizerLLoo__lazy_solo_child
+            IRecognizerLLoo__lazy_alias
+        IRecognizerLLoo__gprepostprocess6cenv
+            IRecognizerLLoo__gprepostprocess
             apply_may_gpreprocess_
             apply_may_gpostprocess_
         IRecognizerLLoo__spostprocess
             apply_may_spostprocess_
+            IRecognizerLLoo__spost__fmap4tuple__static
         IRecognizerLLoo__tag
-    IRecognizerLLoo__solo_child6env__init
+    IRecognizerLLoo__solo_child6cenv__init
         RecognizerLLoo__not_ignore
         RecognizerLLoo__ignore
         RecognizerLLoo__none8oresult_if_ignore
+        IRecognizerLLoo__lazy_solo_child__init
+            default_mk_rgnr5cenv_args_ex
+            IRecognizerLLoo__lazy_alias__init
+                BaseRecognizerLLoo__lazy_alias__default_mixins
+                    RecognizerLLoo__lazy_alias
+                        lazy_alias_rgnr__human_
+                        mkr5or_nm_
         IRecognizerLLoo__alias__init
             BaseRecognizerLLoo__alias__default_mixins
+                BaseRecognizerLLoo__main__default_mixins
+                    RecognizerLLoo__main
+                BaseRecognizerLLoo__main__split_teardown__default_mixins
+                    RecognizerLLoo__main__split_teardown
                 RecognizerLLoo__unbox_tuple
                     RecognizerLLoo__between
                 IRecognizerLLoo__dependent_pair__spost
                     RecognizerLLoo__switch_cased
                     RecognizerLLoo__switch_branches
-        IRecognizerLLoo__forgivable_fail_ok__solo_child6env__init
+        IRecognizerLLoo__forgivable_fail_ok__solo_child6cenv__init
         IRecognizerLLoo__gprepostprocess__init
             RecognizerLLoo__gprepostprocess
-        IRecognizerLLoo__spostprocess__init
+        IRecognizerLLoo__spostprocess__init4mini
+            IRecognizerLLoo__spost__fmap4tuple__dynamic
+        IRecognizerLLoo__spostprocess__init4dynamic
             RecognizerLLoo__spostprocess
-            IRecognizerLLoo__spostprocess__init__default_mixins
-                IRecognizerLLoo__spostprocess__init__default_mixins__static
-                    IRecognizerLLoo__spost__fmap4tuple
+            IRecognizerLLoo__spostprocess__init4mini__default_mixins
+                RecognizerLLoo__subscript
+                IRecognizerLLoo__spostprocess__init4mini__default_mixins__static
+                    IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static
         IRecognizerLLoo__tag__init
             RecognizerLLoo__tag
                 tag_rgnr_
         RecognizerLLoo__light_wrap
             light_wrap_rgnr_
-    IRecognizerLLoo__two_children6env__init
+    IRecognizerLLoo__two_children6cenv__init
         IRecognizerLLoo__repetition__init
             RecognizerLLoo__repetition
     IRecognizerLLoo__init__rgnrs
@@ -693,7 +737,7 @@ IRecognizerLLoo
         explain_unpack_case
     IRecognizerLLoo__constant_loader
         RecognizerLLoo__constant_loader
-    IRecognizerLLoo__no_child6env
+    IRecognizerLLoo__no_child6cenv
         IRecognizerLLoo__eof
         IRecognizerLLoo__not_eof
         IRecognizerLLoo__any_token
@@ -703,7 +747,7 @@ IRecognizerLLoo
 
     IRecognizerLLoo__tkey_prefix_tree__init
         RecognizerLLoo__tkey_prefix_tree
-    IRecognizerLLoo__no_child6env__init
+    IRecognizerLLoo__no_child6cenv__init
         IRecognizerLLoo__token_seq__init
             RecognizerLLoo__token
         IRecognizerLLoo__token__init
@@ -733,25 +777,58 @@ IBaseInputStream
     PlainRecoverableInputStream5token_seq
     RecoverableInputStream9LazyList
 
-mk_subclas4IWeakableSymbol5name_
+mk_subclass_ex4IWeakableSymbol5name__7XContext_ContextView_
+    lazy_False
+    lazy_True
+    Cases4accessible
+        Case4readable
+            unreadable
+            restricted_readable
+            always_readable
+        Case4writable
+            unwritable
+            restricted_writable
+            always_writable
+        Case4removable
+            unremovable
+            restricted_removable
+            always_removable
+
+mk_subclass_ex4IWeakableSymbol5name_
     IWeakableSymbol5name
         WeakableSymbol5name
         Symbol4IRecognizerLLoo
+
         Symbol4GlobalVarable
         Symbol4LocalVarable
+        Symbol4UnrestrictedGlobalVarable
+        Symbol4UnrestrictedLocalVarable
+        Symbol4ConstantReadableGlobalVarable
+        Symbol4ConstantReadableLocalVarable
     INamedObjGroup__type8mkr
         NameGroup4WeakableSymbol
         NameGroup4IRecognizerLLoo
         NameGroup4GlobalVarable
         NameGroup4LocalVarable
+        NameGroup4UnrestrictedGlobalVarable
+        NameGroup4UnrestrictedLocalVarable
+        NameGroup4ConstantReadableGlobalVarable
+        NameGroup4ConstantReadableLocalVarable
+
 INamedObjGroup
     INamedObjGroup__type8mkr
     Group4rgnr_ref
         mk_group_pair4rgnr_ref
-IEnvironment
+ICoreEnvironment
     getset_external_cache4func
     getset_external_cache4method
+    CoreEnvironment
+IShellEnvironment   IEnvironment
     Environment
+        mk_Environment
+        mk_name2may_gpostprocess6ok_
+            mk_gpostprocess6ok__5xpost_
+
         mk_gpreprocess__5constant_
         mk_gpostprocess6err__5spost_
         mk_gpostprocess6ok__5spost_
@@ -760,6 +837,9 @@ IEnvironment
         mk_gpostprocess6ok__5spost_after_tag_st_
 IHalfMap
     WeakKeyHalfMap
+        WeakKeyHalfMap8AnonymousWeakableSymbol
+AnonymousWeakableSymbol
+    WeakKeyHalfMap8AnonymousWeakableSymbol
 
 IRecognizerLLoo__serial
     DummyList
@@ -775,7 +855,7 @@ Error
 
 
 IHasAttr__forgivable_fail_be_ok
-    IRecognizerLLoo__forgivable_fail_ok__solo_child6env__init
+    IRecognizerLLoo__forgivable_fail_ok__solo_child6cenv__init
 
 IHasAttr__force_postprocess_when_ignore
     IRecognizerLLoo__gprepostprocess
@@ -799,19 +879,22 @@ mk_ignorable_unpack_case_
 
 
 
-IRecognizerLLoo__spostprocess__init__default_mixins__static
+IRecognizerLLoo__spostprocess__init4mini__default_mixins__static
     RecognizerLLoo__spost__unbox
     RecognizerLLoo__spost__tkn2tkd
     RecognizerLLoo__spost__tkn2tkey
     RecognizerLLoo__spost__tkn2tdat
     RecognizerLLoo__spost__tkd2tkey
     RecognizerLLoo__spost__tkd2tdat
-    IRecognizerLLoo__spost__fmap4tuple
+    IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static
         RecognizerLLoo__spost__fmap4tuple__tkn2tkd
         RecognizerLLoo__spost__fmap4tuple__tkn2tkey
         RecognizerLLoo__spost__fmap4tuple__tkn2tdat
         RecognizerLLoo__spost__fmap4tuple__tkd2tkey
         RecognizerLLoo__spost__fmap4tuple__tkd2tdat
+IRecognizerLLoo__spost__fmap4tuple__static
+    RecognizerLLoo__spost__fmap4tuple
+
 mk_casedT_
 pair2Cased_
 unbox
@@ -830,17 +913,21 @@ Makers4IRecognizerLLoo
     rgnr__any_tkey
     rgnr__any_tdat
 
+
+
+
+
 '''.split()#'''
 __all__
 r'''[[[
 (lookahead__vs__try__vs__optional__vs__lift)
 below deprecated by light_wrap_rgnr_():
-.    IRecognizerLLoo__solo_child6env
+.    IRecognizerLLoo__solo_child6cenv
 .        IRecognizerLLoo__lookahead
 .        IRecognizerLLoo__try
 .        IRecognizerLLoo__optional
 .        IRecognizerLLoo__lift
-.    IRecognizerLLoo__solo_child6env__init
+.    IRecognizerLLoo__solo_child6cenv__init
 .        IRecognizerLLoo__lift__init
 .            RecognizerLLoo__lift
 .        IRecognizerLLoo__optional__init
@@ -859,7 +946,10 @@ below deprecated by light_wrap_rgnr_():
 #xxx:Snapshot4IForkableInputStream
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from enum import Enum, auto
 from types import FunctionType as Func, MethodType as Meth
+from seed.helper.getset_external_cache4func import getset_external_cache4func, getset_external_cache4method
+from seed.for_libs.for_inspect import check_num_args_ok_, is_num_args_ok_
 
 
 #prefix_tree
@@ -907,7 +997,7 @@ from weakref import ref as wref_, WeakKeyDictionary as WkeyD, WeakValueDictionar
 from seed.iters.count_ import count_
 
 from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, empty_FrozenDict
-from seed.tiny import ifNone, echo, mk_tuple, mk_frozenset, null_tuple, null_frozenset, null_mapping_view, fst, MapView, print_err, snd
+from seed.tiny import ifNone, echo, mk_tuple, mk_frozenset, null_tuple, null_frozenset, null_mapping_view, fst, MapView, mk_MapView, curry1, print_err, snd, with_expect_error
 from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le, check_callable, check_pair
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.helper.repr_input import repr_helper
@@ -1044,6 +1134,16 @@ class IRecognizerLLoo(ABC):
         nm4post := nm4ref
     # [:lookahead__vs__try__vs__optional__vs__lift]:goto
     # [:protected_fail__vs__forgivable_fail__vs__severe_fail]:goto
+    #######
+    ++main_rgnr/rgnr._may_setup_
+        [_may_setup_ :: may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr)]
+        [sym8id4curr_rgnz :: WeakKeyHalfMap8AnonymousWeakableSymbol <: (WeakKeyHalfMap & AnonymousWeakableSymbol)]
+        ++xctx_view.sym8id4curr_rgnz
+            mk a fresh sym8id4curr_rgnz for each call recognize_()
+        ==>>:
+        ++main_rgnr/rgnr._may_teardown_
+        ++RecognizerLLoo__main()
+        ++recognize__asif_main_rgnr_()
     ######################
     env:
         #immutable
@@ -1052,6 +1152,7 @@ class IRecognizerLLoo(ABC):
         .name2may_gpreprocess_
         .name2may_gpostprocess6err_
         .name2may_gpostprocess6ok_
+        .name2force_postprocess_when_ignore_
     gctx:
         #mutable
         :: Mapping
@@ -1060,6 +1161,7 @@ class IRecognizerLLoo(ABC):
         :: DynamicStackedMapping
             serial:enter/exit
     xctx_view :: ContextView<gctx,ctx>
+        ++xctx_view.sym8id4curr_rgnz
     unlocker:
         #to free prev protect resource asif succ
         .known_released :: bool
@@ -1076,6 +1178,35 @@ class IRecognizerLLoo(ABC):
     symbol:
         ._local_vs_global_ :: bool
             used in (gctx | ctx)
+        ._case4readable_ :: (0|1|2)
+            unreadable
+            restricted_readable
+                ok iff sym in _isymbols_
+            always_readable
+        ._case4removable_ :: (0|1|2)
+            unremovable
+            restricted_removable
+                ok iff sym in _dsymbols_
+            always_removable
+        ._case4writable_ :: (0|1|2)
+            unwritable
+            restricted_writable
+                ok iff _may_osymbolXseq_ and sym in _may_osymbolXseq_
+            always_writable
+        xxx ._case4overwritable_ :: (0|1|2)
+        xxx: ._unrestricted_ :: bool
+            does read/write unrestricted
+        xxx:._always_readable_ :: bool
+            does read unrestricted
+            for builtins config@setup_once
+                see:_may_setup_,sym8id4curr_rgnz
+
+        Symbol4GlobalVarable
+        Symbol4LocalVarable
+        Symbol4UnrestrictedGlobalVarable
+        Symbol4UnrestrictedLocalVarable
+        Symbol4ConstantReadableGlobalVarable
+        Symbol4ConstantReadableLocalVarable
     eresult:
         :: Either errmsg oresult
     reply:
@@ -1170,9 +1301,9 @@ class IRecognizerLLoo(ABC):
     typing:
     @IEnvironment:
         #donot affect reply.ok ==>>:
-        [gpreprocess :: (rgnr->env->xctx_view->ignore->ext_info8begin->(st, may ignore))]
-        [gpostprocess6err :: (rgnr->env->xctx_view->ignore->st->ext_info8end->errmsg->errmsg)]
-        [gpostprocess6ok :: (rgnr->env->xctx_view->ignore->st->ext_info8end->oresult->oresult)]
+        [gpreprocess :: (rgnr->env->xctx_view->ignore->ext_info8begin->(st4ppp, may ignore))]
+        [gpostprocess6err :: (rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->errmsg->errmsg)]
+        [gpostprocess6ok :: (rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->oresult->oresult)]
     ######################
     @RecognizeCall/mk_gi4IRecognizerLLoo__5solo_rgnr_transform_cases_:
         [spostprocess6err :: (errmsg->errmsg)]
@@ -1188,7 +1319,7 @@ class IRecognizerLLoo(ABC):
     @property
     @abstractmethod
     def _may_name4ref_(sf, /):
-        '-> may (Hashable&&Weakable) # used in IEnvironment.name2rgnr_()'
+        '-> may (Hashable&&Weakable) # used in ICoreEnvironment.name2rgnr_()'
     ##@property
     ##@abstractmethod
     ##def _may_name4gprepostprocess_(sf, /):
@@ -1230,31 +1361,34 @@ class IRecognizerLLoo(ABC):
     @property
     @abstractmethod
     def _required_num_tokens6backward_(sf, /):
-        '-> required_num_tokens6backward/uint#see:required_num_tokens6backward6env_()'
+        '-> required_num_tokens6backward/uint#see:required_num_tokens6backward6cenv_()'
         #IRecognizerLLoo.required_num_tokens6backward
         #IInputStream.max_num_tokens6backward
     @abstractmethod
-    def _validate_solo6env_(sf, env, /):
+    def _validate_solo6cenv_(sf, cenv, /):
         '-> None|^ValidateError(rgnr, ...)'
     @abstractmethod
-    def _cache_full_view_info6env_(sf, env, /):
-        '-> None #sf.iter_persistent_descendants6env_(env) # [saved into env.external_cache]'
-        '-> None # [saved into env.external_cache]'
+    def _cache_full_view_info6cenv_(sf, cenv, /):
+        '-> None #sf.iter_persistent_descendants6cenv_(cenv) # [saved into cenv.core_cache]'
+        '-> None # [saved into cenv.core_cache]'
     @abstractmethod
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /, *ex_args:'from sf._isymbol_seq8extra_params_'):
         '-> GenIter{yield-RecognizeCall(IRecognizerLLoo, unlocker, ignore, istream);receive-child_rgnr.Reply;return-self.Reply(eresult, ext_info8end)} #[should not call IRecognizerLLoo._mk_gi4recognize_() directly since rgnr._is_ctx_scope_ (should call via 『yield Call(...)』)] #[postcondition:[[reply.ok==True]=>[unlocker.known_released==True]]]'
         #xxx:._tail_recur_Call_ok_ or forbod:tail_recur_Call
         #recognize_()::_tail_call() or forbod:tail_recur_Call
     @abstractmethod
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
     ######################
     #@abstractmethod
     def _get_the_base_rgnr_(sf, /):
-        '-> IRecognizerLLoo # resolve RecognizerLLoo__light_wrap._get_the_cached_child6env_() as many as possible times # [must be persistent obj, twice yield same obj]'
+        '-> IRecognizerLLoo # resolve RecognizerLLoo__light_wrap._get_the_cached_child6cenv_() as many as possible times # [must be persistent obj, twice yield same obj]'
         #RecognizerLLoo__light_wrap =>:
-            #xxx:def _get_the_base_rgnr6env_(sf, env, /):
-                #'-> IRecognizerLLoo # resolve RecognizerLLoo__light_wrap._get_the_cached_child6env_() as many as possible times # [must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+            # => hard to impl '_get_the_base_rgnr6cenv_'
+            # => _get_the_base_rgnr6cenv_ --> _get_the_base_rgnr_
+            #
+            #xxx:def _get_the_base_rgnr6cenv_(sf, cenv, /):
+                #'-> IRecognizerLLoo # resolve RecognizerLLoo__light_wrap._get_the_cached_child6cenv_() as many as possible times # [must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
         return sf
     @property
     def _isymbols_(sf, /):
@@ -1294,21 +1428,21 @@ class IRecognizerLLoo(ABC):
         assert len(params) == 6+len(sf._isymbol_seq8extra_params_)
         #######################
 
-    def cache_full_view_info6env_(sf, env, /):
-        '-> first_time/bool # [saved into env.external_cache]'
-        sf.validate_descendants6env_(env)
+    def cache_full_view_info6cenv_(sf, cenv, /):
+        '-> first_time/bool # [saved into cenv.core_cache]'
+        sf.validate_descendants6cenv_(cenv)
             #should before cache "first_time"
-        (is_new, _) = env.getset_external_cache4rgnr_func(sf, _4mixins, 2)
+        (is_new, _) = cenv.getset_external_cache4rgnr_func(sf, _4mixins, 2)
         first_time = is_new
         if first_time:
-            sf._cache_full_view_info6env_(env)
-            for child in sf._iter_persistent_children6env_(env):
-                child.cache_full_view_info6env_(env)
+            sf._cache_full_view_info6cenv_(cenv)
+            for child in sf._iter_persistent_children6cenv_(cenv):
+                child.cache_full_view_info6cenv_(cenv)
                     #not:bug:since "first_time" guard
-            sf.required_num_tokens6backward6env_(env)
+            sf.required_num_tokens6backward6cenv_(cenv)
         return first_time
-    def iter_persistent_descendants6env_(sf, env, /):
-        '-> descendants/(Iter IRecognizerLLoo) # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def iter_persistent_descendants6cenv_(sf, cenv, /):
+        '-> descendants/(Iter IRecognizerLLoo) # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
         #.if 0b0000:
         #.    from inspect import currentframe, getouterframes, stack
         #.    #print_err(getouterframes(currentframe()))
@@ -1316,8 +1450,8 @@ class IRecognizerLLoo(ABC):
         #.    print_err([x.function for x in stk[:20]])
         #.    print_err(len(stk))
         #.    del stk
-        #.    print_err('iter_persistent_descendants6env_')
-        #.    input('iter_persistent_descendants6env_')
+        #.    print_err('iter_persistent_descendants6cenv_')
+        #.    input('iter_persistent_descendants6cenv_')
         id2rgnr = {}
         ls = []
         def put(rgnr, /):
@@ -1333,45 +1467,45 @@ class IRecognizerLLoo(ABC):
             yield rgnr
             #if 0b0001:print_err(rgnr)
             #if 0b0001:print_err(id(rgnr))
-            it = rgnr._iter_persistent_children6env_(env)
+            it = rgnr._iter_persistent_children6cenv_(cenv)
             for _ in map(put, it):pass
         ls = [*map(wref_, id2rgnr.values())]
         del id2rgnr
         if any(w() is None for w in ls):raise Exception('not persistent descendant rgnr')
-    def required_num_tokens6backward6env_(sf, env, /):
+    def required_num_tokens6backward6cenv_(sf, cenv, /):
         '-> uint#see:_required_num_tokens6backward_()'
-        return env.getset_external_cache4rgnr_func(sf, _4back_cache, 1)
-    def collect_namess6env_(sf, env, /, *, bypass_cache=False):
+        return cenv.getset_external_cache4rgnr_func(sf, _4back_cache, 1)
+    def collect_namess6cenv_(sf, cenv, /, *, bypass_cache=False):
         '-> (nm2rgnr, nms4ref, nms6ref)/({nm:rgnr}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref]'
         # '-> (nm2rgnr, nms4ref, nms6ref, nms4pre, nms4post)/({nm:rgnr}, {nm}, {nm}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref]'
         if bypass_cache:
             #at first, findout all names needed to be registered
             #   or:using:collect_namess5rgnrs_,collect_namess5locals_
-            return _4nmss(sf, env)
-        return env.getset_external_cache4rgnr_func(sf, _4nmss, 1)
-    def view_id2rgnr8all_descendants6env_(sf, env, /):
+            return _4nmss(sf, cenv)
+        return cenv.getset_external_cache4rgnr_func(sf, _4nmss, 1)
+    def view_id2rgnr8all_descendants6cenv_(sf, cenv, /):
         '-> id2rgnr/view-WeakValueDictionary{id:rgnr}'
-        return env.getset_external_cache4rgnr_func(sf, _4id2rgnr, 1)
-    def validate_solo6env_(sf, env, /):
-        '-> None|^ValidateError(rgnr, ...) # [saved into env.external_cache]'
-        m = env.getset_external_cache4rgnr_func(sf, _4check_solo, 1)
+        return cenv.getset_external_cache4rgnr_func(sf, _4id2rgnr, 1)
+    def validate_solo6cenv_(sf, cenv, /):
+        '-> None|^ValidateError(rgnr, ...) # [saved into cenv.core_cache]'
+        m = cenv.getset_external_cache4rgnr_func(sf, _4check_solo, 1)
         if not m is None:
             raise m
-    def validate_descendants6env_(sf, env, /):
-        '-> None|^ValidateError(rgnr, ...) # [saved into env.external_cache]'
-        m = env.getset_external_cache4rgnr_func(sf, _4check_all, 1)
+    def validate_descendants6cenv_(sf, cenv, /):
+        '-> None|^ValidateError(rgnr, ...) # [saved into cenv.core_cache]'
+        m = cenv.getset_external_cache4rgnr_func(sf, _4check_all, 1)
         if not m is None:
             raise m
 #end-class IRecognizerLLoo:
-def _4check_solo(rgnr, env, /):
+def _4check_solo(rgnr, cenv, /):
     '-> (None|^ValidateError(rgnr, ...))'
     rgnr._validate_solo_()
-    rgnr._validate_solo6env_(env)
+    rgnr._validate_solo6cenv_(cenv)
     return
     '-> (None|ValidateError(rgnr, ...)) #not raise ValidateError'
     try:
         rgnr._validate_solo_()
-        rgnr._validate_solo6env_(env)
+        rgnr._validate_solo6cenv_(cenv)
     except ValidateError as e:
         if not e.args or e.args[0] is not rgnr:
             e = ValidateError(rgnr, e)
@@ -1380,28 +1514,28 @@ def _4check_solo(rgnr, env, /):
         #TypeError,ValueError,KeyError...
         e = ValidateError(rgnr, e)
         return e
-def _4check_all(rgnr, env, /):
+def _4check_all(rgnr, cenv, /):
     '-> (None|^ValidateError(rgnr, ...))'
-    for rgnr in rgnr.iter_persistent_descendants6env_(env):
-        rgnr.validate_solo6env_(env)
+    for rgnr in rgnr.iter_persistent_descendants6cenv_(cenv):
+        rgnr.validate_solo6cenv_(cenv)
     return
     '-> (None|ValidateError(rgnr, ...)) #not raise ValidateError'
     try:
-        for rgnr in rgnr.iter_persistent_descendants6env_(env):
-            rgnr.validate_solo6env_(env)
+        for rgnr in rgnr.iter_persistent_descendants6cenv_(cenv):
+            rgnr.validate_solo6cenv_(cenv)
     except ValidateError as e:
         return e
-def _4id2rgnr(rgnr, env, /):
-    return MapView(WvalD((id(descendant), descendant) for descendant in rgnr.iter_persistent_descendants6env_(env)))
-def _4back_cache(rgnr, env, /):
-    return max(descendant._required_num_tokens6backward_ for descendant in rgnr.iter_persistent_descendants6env_(env))
+def _4id2rgnr(rgnr, cenv, /):
+    return MapView(WvalD((id(descendant), descendant) for descendant in rgnr.iter_persistent_descendants6cenv_(cenv)))
+def _4back_cache(rgnr, cenv, /):
+    return max(descendant._required_num_tokens6backward_ for descendant in rgnr.iter_persistent_descendants6cenv_(cenv))
     #bug:
     n = rgnr._required_num_tokens6backward_
-    m = max((child.required_num_tokens6backward6env_(env) for child in rgnr._iter_persistent_children6env_(env)), default=0)
+    m = max((child.required_num_tokens6backward6cenv_(cenv) for child in rgnr._iter_persistent_children6cenv_(cenv)), default=0)
         #bug:since not cached yet
     return max(n, m)
-def _4nmss(rgnr, env, /):
-    return collect_namess5rgnrs_(rgnr.iter_persistent_descendants6env_(env))
+def _4nmss(rgnr, cenv, /):
+    return collect_namess5rgnrs_(rgnr.iter_persistent_descendants6cenv_(cenv))
 def collect_namess5locals_(locals, /, *, _no_check__vs__ge__vs__eq_:'{0|1|2}'=0):
     '{k:rgnr} -> (nm2rgnr, nms4ref, nms6ref)/({nm:rgnr}, {nm}, {nm}) #[nm2rgnr.keys() == nms4ref] # used to prepare env # NOTE:[without env since before env creation] => [donot access children, required input all defined rgnrs within scope]'
     if 0:
@@ -1480,15 +1614,15 @@ class IRecognizerLLoo__default_mixins(IRecognizerLLoo):
     #@override
     _may_name4ref_ = None
     @override
-    def _validate_solo6env_(sf, env, /):
+    def _validate_solo6cenv_(sf, cenv, /):
         '-> None|^ValidateError(rgnr, ...)'
         return None
     @override
-    def _cache_full_view_info6env_(sf, env, /):
-        '-> None #sf.iter_persistent_descendants6env_(env) # [saved into env.external_cache]'
+    def _cache_full_view_info6cenv_(sf, cenv, /):
+        '-> None #sf.iter_persistent_descendants6cenv_(cenv) # [saved into cenv.core_cache]'
         return None
 def _4mixins(rgnr, env, /):
-    'persistent_func{IRecognizerLLoo__default_mixins.cache_full_view_info6env_}'
+    'persistent_func{IRecognizerLLoo__default_mixins.cache_full_view_info6cenv_}'
     return ...
 
 def explain_may_emay_weakable_name(nm, may_emay_nm, /):
@@ -1509,10 +1643,37 @@ def check_weakable_name(nm, /):
     wref_(nm)
         #check weakable
 class INamedObjGroup(ABC):
+    r'''[[[
+    usage:
+    grp.nm4rgnr_xxx
+    grp['nm4rgnr_xxx']
+    grp[:].as_FrozenDict()
+    grp[:].as_immutable_namespace()
+    grp[:].frozen_()
+    grp[:].view8mapping_()
+
+    #]]]'''#'''
     ___no_slots_ok___ = True
     @abstractmethod
     def _mk_obj5name_(sf, nm, /):
         'nm -> named_obj'
+    def view8mapping_(sf, /):
+        d = object.__getattribute__(sf, '_d')
+        return mk_MapView(d)
+    def frozen_(sf, /):
+        d = object.__getattribute__(sf, '_d')
+        if not type(d) is MapView:
+            object.__setattr__(sf, '_d', mk_MapView(d))
+            #bug:sf.frozen_()
+            sf[:].frozen_()
+    def as_FrozenDict(sf, /):
+        '-> FrozenDict'
+        d = object.__getattribute__(sf, '_d')
+        return mk_FrozenDict(d)
+    def as_immutable_namespace(sf, /):
+        from seed.types.Namespace import NamespaceForbidModify
+        d = object.__getattribute__(sf, '_d')
+        return NamespaceForbidModify(d)
     def __repr__(sf, /):
         d = object.__getattribute__(sf, '_d')
         return repr_helper(sf, d)
@@ -1531,11 +1692,41 @@ class INamedObjGroup(ABC):
             raise AttributeError(nm)
     def __getitem__(sf, nm, /):
         'nm -> cached-named_obj'
+        if type(nm) is slice:
+            if not nm == _full_slice:raise TypeError
+            return _MethodCallerWrapper4INamedObjGroup(sf)
         d = object.__getattribute__(sf, '_d')
         if nm not in d:
+            if type(d) is MapView:
+                raise KeyError(nm)
+                raise AttributeError(nm)
+            assert type(d) is dict
             x = type(sf)._mk_obj5name_(sf, nm)
             d[nm] = x
         return d[nm]
+_full_slice = slice(None)
+class _MethodCallerWrapper4INamedObjGroup:
+    def __repr__(sf, /):
+        grp = object.__getattribute__(sf, '_grp')
+        return repr_helper(sf, grp)
+    def __init__(sf, grp, /):
+        if 0:
+            #py-stdlib.bug:check_type_le(INamedObjGroup, grp)
+            #   isinstance(grp, INamedObjGroup) --> ^TypeError
+            assert isinstance(grp, INamedObjGroup)
+                # ^TypeError: issubclass() arg 1 must be a class
+        assert issubclass(type(grp), INamedObjGroup)
+        object.__setattr__(sf, '_grp', grp)
+    def __setattr__(sf, nm, v, /):
+        raise AttributeError(nm)
+    def __detattr__(sf, nm, /):
+        raise AttributeError(nm)
+    def __getattribute__(sf, nm, /):
+        'nm -> curry1(type(grp).nm, grp)'
+        grp = object.__getattribute__(sf, '_grp')
+        Grp = type(grp)
+        f = getattr(Grp, nm)
+        return curry1(f, grp)
 class INamedObjGroup__type8mkr(INamedObjGroup):
     @classmethod
     @abstractmethod
@@ -1546,7 +1737,29 @@ class INamedObjGroup__type8mkr(INamedObjGroup):
         'nm -> named_obj'
         return type(sf)._named_obj_type_(nm)
 class Group4rgnr_ref(INamedObjGroup):
+    r'''[[[
     'grp4rgnr_ref'
+    usage:
+    grp.nm4rgnr_xxx
+    grp['nm4rgnr_xxx']
+    grp[:].as_FrozenDict()
+    grp[:].as_immutable_namespace()
+    grp[:].frozen_()
+    grp[:].view8mapping_()
+
+    grp4nm4rgnr = grp4rgnr_ref[:].get_grp4nm4rgnr_()
+    nm2sym4rgnr = grp4rgnr_ref[:].view_grp4nm4rgnr_as_mapping_()
+
+    #]]]'''#'''
+    def get_grp4nm4rgnr_(sf, /):
+        '-> grp4nm4rgnr/NameGroup4IRecognizerLLoo'
+        grp4nm4rgnr = object.__getattribute__(sf, '_grp')
+        return grp4nm4rgnr
+    def view_grp4nm4rgnr_as_mapping_(sf, /):
+        '-> nm2sym4rgnr/{str:sym4rgnr}'
+        grp4nm4rgnr = sf[:].get_grp4nm4rgnr_()
+        nm2sym4rgnr = grp4nm4rgnr[:].view8mapping_()
+        return nm2sym4rgnr
     @override
     def _mk_obj5name_(sf, nm, /):
         'nm -> named_obj/RecognizerLLoo__ref<Symbol4IRecognizerLLoo<nm>>'
@@ -1566,6 +1779,7 @@ def mk_group_pair4rgnr_ref():
     grp4nm4rgnr = Symbol4IRecognizerLLoo.mk_group()
     grp4rgnr_ref = Group4rgnr_ref(grp4nm4rgnr)
     return (grp4nm4rgnr, grp4rgnr_ref)
+
 class IWeakableSymbol5name(ABC):
     'weakable#check_weakable_name()'
     ___no_slots_ok___ = True
@@ -1588,12 +1802,14 @@ class IWeakableSymbol5name(ABC):
         return T()
 _bases4SymT = (IWeakableSymbol5name,)
 _bases4GroupT = (INamedObjGroup__type8mkr,)
-def mk_subclas4IWeakableSymbol5name_(__doc__, _prefix_, nm4SymT, nm4GroupT, /):
+assert type('xxx', (), dict(__module__='mmm')).__module__ == 'mmm'
+assert type('xxx', (), {}).__module__ == __name__ != 'mmm'
+def mk_subclass_ex4IWeakableSymbol5name_(__module__, __doc__, _prefix_, nm4SymT, nm4GroupT, /):
     '-> (SymT, GroupT) # [SymT <: IWeakableSymbol5name][SymT._group_type_ is GroupT] # [GroupT <: INamedObjGroup__type8mkr][GroupT._named_obj_type_ is SymT]'
     ######################
     from abc import update_abstractmethods
-    SymT = type(nm4SymT, _bases4SymT, dict(__doc__=__doc__, _prefix_=_prefix_))
-    GroupT = type(nm4GroupT, _bases4GroupT, dict(_named_obj_type_=SymT))
+    SymT = type(nm4SymT, _bases4SymT, dict(__module__=__module__, __doc__=__doc__, _prefix_=_prefix_))
+    GroupT = type(nm4GroupT, _bases4GroupT, dict(__module__=__module__, _named_obj_type_=SymT))
     #@override
     SymT._group_type_ = GroupT
     update_abstractmethods(SymT)
@@ -1605,6 +1821,9 @@ def mk_subclas4IWeakableSymbol5name_(__doc__, _prefix_, nm4SymT, nm4GroupT, /):
     ######################
     assert SymT._group_type_ is GroupT
     assert GroupT._named_obj_type_ is SymT
+    ######################
+    assert SymT.__module__ == __module__
+    assert GroupT.__module__ == __module__
     ######################
     assert SymT.__qualname__ == nm4SymT
     assert GroupT.__qualname__ == nm4GroupT
@@ -1626,8 +1845,8 @@ def mk_subclas4IWeakableSymbol5name_(__doc__, _prefix_, nm4SymT, nm4GroupT, /):
     ######################
     return (SymT, GroupT)
     ######################
-(WeakableSymbol5name, NameGroup4WeakableSymbol) = mk_subclas4IWeakableSymbol5name_('weakable#check_weakable_name()', 'wnm_.', 'WeakableSymbol5name', 'NameGroup4WeakableSymbol')
-(Symbol4IRecognizerLLoo, NameGroup4IRecognizerLLoo) = mk_subclas4IWeakableSymbol5name_('can be used with RecognizerLLoo__named,RecognizerLLoo__ref', 'nm4rgnr_.', 'Symbol4IRecognizerLLoo', 'NameGroup4IRecognizerLLoo')
+(WeakableSymbol5name, NameGroup4WeakableSymbol) = mk_subclass_ex4IWeakableSymbol5name_(__name__, 'weakable#check_weakable_name()', 'wnm_.', 'WeakableSymbol5name', 'NameGroup4WeakableSymbol')
+(Symbol4IRecognizerLLoo, NameGroup4IRecognizerLLoo) = mk_subclass_ex4IWeakableSymbol5name_(__name__, 'can be used with RecognizerLLoo__named,RecognizerLLoo__ref', 'nm4rgnr_.', 'Symbol4IRecognizerLLoo', 'NameGroup4IRecognizerLLoo')
     #grp4nm4rgnr
 class RecognizerLLoo__named(IRecognizerLLoo__default_mixins, _Base4repr):
     ___no_slots_ok___ = True
@@ -1639,9 +1858,13 @@ class RecognizerLLoo__named(IRecognizerLLoo__default_mixins, _Base4repr):
         #sf._args4repr = (nm4ref, rgnr)
         sf._reset4repr((nm4ref, rgnr))
     @property
+    def name4ref(sf, /):
+        '-> (Hashable&&Weakable) # used in ICoreEnvironment.name2rgnr_()'
+        return sf._nm4ref
+    @property
     @override
     def _may_name4ref_(sf, /):
-        '-> may (Hashable&&Weakable) # used in IEnvironment.name2rgnr_()'
+        '-> may (Hashable&&Weakable) # used in ICoreEnvironment.name2rgnr_()'
         return sf._nm4ref
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
@@ -1651,8 +1874,8 @@ class RecognizerLLoo__named(IRecognizerLLoo__default_mixins, _Base4repr):
         reply = yield mk_Call_(rgnr, unlocker, ignore, istream)
         return reply
     @override
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
         rgnr = sf._r
         yield rgnr
 check_non_ABC(RecognizerLLoo__named)
@@ -1678,22 +1901,23 @@ class RecognizerLLoo__ref(IRecognizerLLoo__default_mixins, _Base4repr):
         #see:RecognizerLLoo__named
     @property
     def name6ref(sf, /):
-        '-> (Hashable&&Weakable) # used in IEnvironment.name2rgnr_()'
+        '-> (Hashable&&Weakable) # used in ICoreEnvironment.name2rgnr_()'
         return sf._nm6ref
     def mk_named_rgnr_(sf, rgnr, /):
         assert rgnr is not sf
         return RecognizerLLoo__named(sf.name6ref, rgnr)
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-        rgnr = env.name2rgnr_(sf._nm6ref)
+        cenv = env.core_env
+        rgnr = cenv.name2rgnr_(sf._nm6ref)
         #bug:return rgnr._mk_gi4recognize_(env, xctx_view, unlocker, ignore, istream)
         #   since rgnr._is_ctx_scope_
         reply = yield mk_Call_(rgnr, unlocker, ignore, istream)
         return reply
     @override
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
-        rgnr = env.name2rgnr_(sf._nm6ref)
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
+        rgnr = cenv.name2rgnr_(sf._nm6ref)
         yield rgnr
 check_non_ABC(RecognizerLLoo__ref)
 
@@ -1718,7 +1942,7 @@ class IHalfMap(ABC):
         raise TypeError
 
 class WeakKeyHalfMap(IHalfMap):
-    'IHalfMap<WeakKeyDictionary> #see:IEnvironment.external_cache'
+    'IHalfMap<WeakKeyDictionary> #see:ICoreEnvironment.core_cache/IEnvironment.external_cache' ' #can use AnonymousWeakableSymbol as key'
     ___no_slots_ok___ = True
     def __init__(sf, d=None, /):
         if d is None:
@@ -1739,14 +1963,232 @@ class WeakKeyHalfMap(IHalfMap):
     def __contains__(sf, sym, /):
         d = sf._d
         return sym in d
+class AnonymousWeakableSymbol:
+    'to be used as weakable-key@WeakKeyDictionary/WeakKeyHalfMap/...'
+    def __init__(sf, note, /):
+        sf._note = note
+        super().__init__()
+    def __repr__(sf, /):
+        nm = type(sf).__name__
+        s = sf._note
+        ptr = id(sf)
+        return f'[<{nm}:{s!r}@0x{ptr:x}>]'
+            #<object object at 0x7a374ec570>
+class WeakKeyHalfMap8AnonymousWeakableSymbol(AnonymousWeakableSymbol, WeakKeyHalfMap):
+    'can use AnonymousWeakableSymbol as key'
+    pass
+def __():
+    #assert 0, AnonymousWeakableSymbol('aaa')
+        # [<AnonymousWeakableSymbol:'aaa'@0x7d2339f750>]
+    sym = AnonymousWeakableSymbol('aaa')
+    s = repr(sym)
+    assert s.startswith("[<AnonymousWeakableSymbol:'aaa'@0x")
+    assert s.endswith(">]")
+    ######################
+    d = WeakKeyHalfMap8AnonymousWeakableSymbol('aaa')
+    s = repr(d)
+    assert s.startswith("[<WeakKeyHalfMap8AnonymousWeakableSymbol:'aaa'@0x")
+    assert s.endswith(">]")
+    d[sym] = 999
+    assert d[sym] == 999
+__()
 
-(Symbol4GlobalVarable, NameGroup4GlobalVarable) = mk_subclas4IWeakableSymbol5name_('global-symbol #can be used with XContext,ContextView', 'nm4gvar_.', 'Symbol4GlobalVarable', 'NameGroup4GlobalVarable')
-777;    Symbol4GlobalVarable._local_vs_global_ = True
-(Symbol4LocalVarable, NameGroup4LocalVarable) = mk_subclas4IWeakableSymbol5name_('local-symbol #can be used with XContext,ContextView', 'nm4lvar_.', 'Symbol4LocalVarable', 'NameGroup4LocalVarable')
-777;    Symbol4LocalVarable._local_vs_global_ = False
+######################
+######################
+######################
+#######
+lazy_False = lambda:False
+lazy_True = lambda:True
+
+def _is_ok2(value, lazy_ok4restricted, /):
+    '(0|1|2)/(bad/restricted/ok) -> (()->bool) -> bool'
+    #if 0b0000:print_err(value)
+    match value:
+        case 0:
+            #bad
+            #unreadable
+            #unwritable
+            #unremovable
+            return False
+        case 2:
+            #ok
+            #always_readable
+            #always_writable
+            #always_removable
+            return True
+        case 1:
+            #restricted
+            #restricted_readable
+            #restricted_writable
+            #restricted_removable
+            return lazy_ok4restricted()
+        case _:
+            raise 000
+#######
+class Case4readable(Enum):
+    '_case4readable_#__getitem__'
+    unreadable = 0
+    restricted_readable = 1
+    always_readable = 2
+    def readable_(sf, lazy_ok4restricted, /):
+        return _is_ok2(sf.value, lazy_ok4restricted)
+assert Case4readable.unreadable
+assert Case4readable.unreadable.value == 0
+assert not hasattr(Case4readable.readable_, 'value')
+
+#######
+class Case4writable(Enum):
+    '_case4writable_#__setitem__'
+    unwritable = 0
+    restricted_writable = 1
+    always_writable = 2
+    def writable_(sf, lazy_ok4restricted, /):
+        return _is_ok2(sf.value, lazy_ok4restricted)
+
+#######
+class Case4removable(Enum):
+    '_case4removable_#__delitem__'
+    unremovable = 0
+    restricted_removable = 1
+    always_removable = 2
+    def removable_(sf, lazy_ok4restricted, /):
+        return _is_ok2(sf.value, lazy_ok4restricted)
+
+#######
+_Ts4accessible = (Case4readable, Case4writable, Case4removable)
+def __():
+    from seed.types.Namespace import NamespaceForbidModify
+    nm2case = {}
+    for T in _Ts4accessible:
+        nm2case.update(T.__members__)
+    Cases4accessible = NamespaceForbidModify(nm2case)
+    return Cases4accessible
+Cases4accessible = __()
+assert Cases4accessible.unreadable is Case4readable.unreadable
+assert Cases4accessible.unreadable
+assert Cases4accessible.unreadable.value == 0
+
+#######
+unreadable = Case4readable.unreadable
+restricted_readable = Case4readable.restricted_readable
+always_readable = Case4readable.always_readable
+
+#######
+unwritable = Case4writable.unwritable
+restricted_writable = Case4writable.restricted_writable
+always_writable = Case4writable.always_writable
+
+#######
+unremovable = Case4removable.unremovable
+restricted_removable = Case4removable.restricted_removable
+always_removable = Case4removable.always_removable
+
+#######
+######################
+######################
+######################
+
+
+
+def mk_subclass_ex4IWeakableSymbol5name__7XContext_ContextView_(__module__, __doc__, _prefix_, nm4SymT, nm4GroupT, /, *
+    , _local_vs_global_=False
+    #
+    , _case4readable_=Case4readable.restricted_readable
+    , _case4writable_=Case4writable.restricted_writable
+    , _case4removable_=Case4removable.restricted_removable
+    ):
+    '-> (SymT, GroupT)'
+    #see:_mk4XContext_ContextView
+    #see:mk_subclass_ex4IWeakableSymbol5name_
+    ######################
+    check_type_is(bool, _local_vs_global_)
+    check_type_is(Case4readable, _case4readable_)
+    check_type_is(Case4writable, _case4writable_)
+    check_type_is(Case4removable, _case4removable_)
+    ######################
+    (SymT, GroupT) = mk_subclass_ex4IWeakableSymbol5name_(__module__, __doc__, _prefix_, nm4SymT, nm4GroupT)
+    ######################
+    SymT._local_vs_global_ = _local_vs_global_
+    ######################
+    SymT._case4readable_ = _case4readable_
+    SymT._case4writable_ = _case4writable_
+    SymT._case4removable_ = _case4removable_
+    ######################
+    return (SymT, GroupT)
+    ######################
+def _mk4XContext_ContextView(__module__, __doc__, _prefix_, nm4SymT, nm4GroupT, /, *
+    , _local_vs_global_=False
+    #
+    , _unrestricted_=False
+    , _constant_readable_=False
+    #., _always_readable_=False
+    #
+    ):
+    '-> (SymT, GroupT)'
+    #see:mk_subclass_ex4IWeakableSymbol5name__7XContext_ContextView_
+    ######################
+    check_type_is(bool, _local_vs_global_)
+    check_type_is(bool, _unrestricted_)
+    check_type_is(bool, _constant_readable_)
+    #.check_type_is(bool, _always_readable_)
+    ######################
+    if _constant_readable_ and _unrestricted_:raise ValueError
+    ######################
+    77; _case4readable_=Case4readable.restricted_readable
+    77; _case4writable_=Case4writable.restricted_writable
+    77; _case4removable_=Case4removable.restricted_removable
+    ######################
+    #._always_readable_ = _constant_readable_ or _always_readable_ or _unrestricted_
+    ######################
+    if _unrestricted_:
+        _case4readable_ = always_readable
+        _case4writable_ = always_writable
+        _case4removable_ = always_removable
+    elif _constant_readable_:
+        _case4readable_ = always_readable
+        _case4writable_ = unwritable
+        _case4removable_ = unremovable
+    #.elif _always_readable_:
+    #.    _case4readable_ = always_readable
+    ######################
+    check_type_is(Case4readable, _case4readable_)
+    check_type_is(Case4writable, _case4writable_)
+    check_type_is(Case4removable, _case4removable_)
+    ######################
+    (SymT, GroupT) = mk_subclass_ex4IWeakableSymbol5name__7XContext_ContextView_(__module__, __doc__, _prefix_, nm4SymT, nm4GroupT
+    , _local_vs_global_=_local_vs_global_
+    #
+    , _case4readable_=_case4readable_
+    , _case4writable_=_case4writable_
+    , _case4removable_=_case4removable_
+    )
+    ######################
+    #.SymT._unrestricted_ = _unrestricted_
+    #.SymT._always_readable_ = _always_readable_
+    ######################
+    return (SymT, GroupT)
+    ######################
+#######
+(Symbol4GlobalVarable, NameGroup4GlobalVarable) = _mk4XContext_ContextView(__name__, 'restricted-global-symbol #can be used with XContext,ContextView', 'nm4gvar_.', 'Symbol4GlobalVarable', 'NameGroup4GlobalVarable', _local_vs_global_=True)
+(Symbol4LocalVarable, NameGroup4LocalVarable) = _mk4XContext_ContextView(__name__, 'restricted-local-symbol #can be used with XContext,ContextView', 'nm4lvar_.', 'Symbol4LocalVarable', 'NameGroup4LocalVarable')
+
+#######
+#_unrestricted_:=True
+(Symbol4UnrestrictedGlobalVarable, NameGroup4UnrestrictedGlobalVarable) = _mk4XContext_ContextView(__name__, 'unrestricted-global-symbol #can be used with XContext,ContextView', 'nm4ugvar_.', 'Symbol4UnrestrictedGlobalVarable', 'NameGroup4UnrestrictedGlobalVarable', _local_vs_global_=True, _unrestricted_=True)
+(Symbol4UnrestrictedLocalVarable, NameGroup4UnrestrictedLocalVarable) = _mk4XContext_ContextView(__name__, 'unrestricted-local-symbol #can be used with XContext,ContextView', 'nm4ulvar_.', 'Symbol4UnrestrictedLocalVarable', 'NameGroup4UnrestrictedLocalVarable', _unrestricted_=True)
+
+#######
+#_always_readable_:=True
+#-->:
+#_constant_readable_:=True
+(Symbol4ConstantReadableGlobalVarable, NameGroup4ConstantReadableGlobalVarable) = _mk4XContext_ContextView(__name__, 'constant-always_readable-global-symbol #can be used with XContext,ContextView', 'nm4cgvar_.', 'Symbol4ConstantReadableGlobalVarable', 'NameGroup4ConstantReadableGlobalVarable', _local_vs_global_=True, _constant_readable_=True)
+(Symbol4ConstantReadableLocalVarable, NameGroup4ConstantReadableLocalVarable) = _mk4XContext_ContextView(__name__, 'constant-always_readable-local-symbol #can be used with XContext,ContextView', 'nm4clvar_.', 'Symbol4ConstantReadableLocalVarable', 'NameGroup4ConstantReadableLocalVarable', _constant_readable_=True)
+
+
+#######
 
 class XContext(IHalfMap):
-    'xctx#writeonly'
+    'xctx#writeonly#@restricted-context'
     ___no_slots_ok___ = True
     def __init__(sf, gctx, ctx, /):
         sf._xs = (gctx, ctx)
@@ -1755,11 +2197,17 @@ class XContext(IHalfMap):
     def __len__(sf, /):
         raise TypeError
     def __delitem__(sf, sym, /):
+        '@restricted-remove, ie:[restricted_removable=>ok]'
+        if sym._case4removable_ == unremovable: raise KeyError(sym)
+
         (gctx, ctx) = sf._xs
         xctx = gctx if sym._local_vs_global_ else ctx
         del xctx[sym]
 
     def __setitem__(sf, sym, v, /):
+        '@restricted-write, ie:[restricted_writable=>ok]'
+        if sym._case4writable_ == unwritable: raise KeyError(sym)
+
         (gctx, ctx) = sf._xs
         xctx = gctx if sym._local_vs_global_ else ctx
         xctx[sym] = v
@@ -1778,12 +2226,46 @@ class XContext(IHalfMap):
         if not len(osymbol_seq) == len(oresult):raise TypeError
         for sym, v in zip(osymbol_seq, oresult):
             sf[sym] = v
+
+_sym4sym8id4curr_rgnz = Symbol4ConstantReadableLocalVarable('_sym4sym8id4curr_rgnz')
+    # [sym8id4curr_rgnz is ctx[_sym4sym8id4curr_rgnz]]
+    # [sym8id4curr_rgnz is xctx_view[_sym4sym8id4curr_rgnz]]
 class ContextView(IHalfMap):
-    'xctx_view = (gctx_view+++ctx_view)#readonly'
+    r'''[[[
+    xctx_view = (gctx_view+++ctx_view)
+        #readonly --> now:partially writable via sym{_unrestricted_:=True}
+
+
+    #######
+    ++xctx_view.sym8id4curr_rgnz
+        mk a fresh sym8id4curr_rgnz for each call recognize_()
+    #######
+
+    #######
+    key:see:mk_subclass_ex4IWeakableSymbol5name__7XContext_ContextView_
+        Symbol4GlobalVarable
+        Symbol4LocalVarable
+        Symbol4UnrestrictedGlobalVarable
+        Symbol4UnrestrictedLocalVarable
+        Symbol4ConstantReadableGlobalVarable
+        Symbol4ConstantReadableLocalVarable
+    #######
+
+    #]]]'''#'''
     ___no_slots_ok___ = True
+    @property
+    def sym8id4curr_rgnz(sf, /):
+        '-> weakable-symbol/[WeakKeyHalfMap8AnonymousWeakableSymbol <: (AnonymousWeakableSymbol&WeakKeyHalfMap)] # [used to distinguish each call recognize_()] #use to cache data directly'
+        #return sf._sym4run
+        return sf[_sym4sym8id4curr_rgnz]
+    assert issubclass(WeakKeyHalfMap8AnonymousWeakableSymbol, WeakKeyHalfMap)
+    assert issubclass(WeakKeyHalfMap8AnonymousWeakableSymbol, AnonymousWeakableSymbol)
+    #def __init__(sf, isymbols, gctx, ctx, sym8id4curr_rgnz, /):
     def __init__(sf, isymbols, gctx, ctx, /):
+        #check_type_is(WeakKeyHalfMap8AnonymousWeakableSymbol, sym8id4curr_rgnz)
         sf._xs = (isymbols, gctx, ctx)
             #sf._xs = (SetView(isymbols), MapView(gctx), MapView(ctx))
+        #sf._sym4run = sym8id4curr_rgnz
         if 0:
             sf._isz = None
             sf._ks = None
@@ -1796,167 +2278,208 @@ class ContextView(IHalfMap):
     #    ks = mk_frozenset(ks)
     #    sf._ks = ks
     #    return sf.keys()
+    def _f(sf, sym, /, *, case:'(0/get|1/set|2/del)'):
+        'sym -> xctx | ^KeyError'
+        (isymbols, gctx, ctx) = sf._xs
+        #.ok = (sym._unrestricted_ or (not write and (sym._always_readable_ or sym in isymbols)))
+        ok = _is_ok5(case, sym, lambda:sym in isymbols, lazy_False, lazy_False)
+        if not ok:
+            raise KeyError(sym)
+        xctx = gctx if sym._local_vs_global_ else ctx
+        return xctx
     def __contains__(sf, sym, /):
-        (isymbols, gctx, ctx) = sf._xs
-        return sym in isymbols and sym in (xctx := gctx if sym._local_vs_global_ else ctx)
+        xctx = sf._f(sym, case=0)
+        return sym in xctx
     def __getitem__(sf, sym, /):
-        (isymbols, gctx, ctx) = sf._xs
-        if sym in isymbols:
-            xctx = gctx if sym._local_vs_global_ else ctx
-            return xctx[sym]
-        raise KeyError(sym)
+        xctx = sf._f(sym, case=0)
+        return xctx[sym]
+    def __setitem__(sf, sym, val, /):
+        xctx = sf._f(sym, case=1)
+        xctx[sym] = val
+    def __delitem__(sf, sym, /):
+        xctx = sf._f(sym, case=2)
+        del xctx[sym]
+def _is_ok5(case, sym, lazy_ok4get, lazy_ok4set, lazy_ok4del, /):
+    'case/(0/get|1/set|2/del) -> sym/[#_mk4XContext_ContextView#] -> (()->bool) -> (()->bool) -> (()->bool) -> bool'
+    match case:
+        case 0:
+            #get
+            ok = sym._case4readable_.readable_(lazy_ok4get)
+        case 1:
+            #set
+            ok = sym._case4writable_.writable_(lazy_ok4set)
+        case 2:
+            #del
+            ok = sym._case4removable_.removable_(lazy_ok4del)
+        case _:
+            raise 000
+    ok
+    return ok
+assert _is_ok5(0, _sym4sym8id4curr_rgnz, lazy_False, lazy_False, lazy_False)
+#end-class ContextView(IHalfMap):
 
 #[:def__IEnvironment]:here
-class IEnvironment(ABC):
-    'env'
+#class IEnvironment(ABC):
+#   --> (ICoreEnvironment|IShellEnvironment)
+class ICoreEnvironment(ABC):
+    r'''[[[
+    cenv/core_env
+
+    IEnvironment --> (ICoreEnvironment|IShellEnvironment)
+        <<==:
+        [grammar4IRecognizerLLoo.py::(nm4spost|nm4spost6elem|cenv_var) => RecognizerLLoo__lazy_alias]
+
+    cenv/core_env vs env/senv/shell_env/attached_env
+        * senv:
+            attached_parts of rgnr
+        * cenv:
+            builtin_parts of rgnr
+            for IRecognizerLLoo.cache_full_view_info6cenv_(cenv)/...xxx6cenv_(cenv)
+            ...:
+                .cache_full_view_info6cenv_
+                .iter_persistent_descendants6cenv_
+                .required_num_tokens6backward6cenv_
+                .view_id2rgnr8all_descendants6cenv_
+                .collect_namess6cenv_
+                .validate_solo6cenv_
+                .validate_descendants6cenv_
+            ...:
+                ._validate_solo6cenv_
+                ._cache_full_view_info6cenv_
+                ._iter_persistent_children6cenv_
+                    ._get_the_two_cached_children6cenv_
+                    ._get_the_cached_child6cenv_
+                        ._mk_the_uncached_child6cenv_
+                            eg:RecognizerLLoo__lazy_alias
+                ._get_config4gprepostprocess6cenv_
+                ._get_gsep_end_by_args6cenv_
+                    ._get_repetition_args6cenv_
+
+
+    #]]]'''#'''
+    r'''[[[
+DONE:IEnvironment --> (ICoreEnvironment|IShellEnvironment)
+
+def \(\<\(cache_full_view_info6cenv_\|iter_persistent_descendants6cenv_\|required_num_tokens6backward6cenv_\|view_id2rgnr8all_descendants6cenv_\|collect_namess6cenv_\|validate_solo6cenv_\|validate_descendants6cenv_\|_validate_solo6cenv_\|_cache_full_view_info6cenv_\|_iter_persistent_children6cenv_\|_get_the_two_cached_children6cenv_\|_get_the_cached_child6cenv_\|_mk_the_uncached_child6cenv_\|_get_config4gprepostprocess6cenv_\|_get_gsep_end_by_args6cenv_\|_get_repetition_args6cenv_\)\>\)\@!\w*6c\?env
+    #xxx:def _get_the_base_rgnr6cenv_(sf, cenv, /):
+
+%s/\(\<\(cache_full_view_info\|iter_persistent_descendants\|required_num_tokens6backward\|view_id2rgnr8all_descendants\|collect_namess\|validate_solo\|validate_descendants\|_validate_solo\|_cache_full_view_info\|_iter_persistent_children\|_get_the_two_cached_children\|_get_the_cached_child\|_mk_the_uncached_child\|_get_config4gprepostprocess\|_get_gsep_end_by_args\|_get_repetition_args\)6env_\>\)/\26cenv_/g
+
+
+
+%s/\(6cenv_([^)]*\)\<env\>/\1cenv/g
+%s/\(6cenv_([^)]*\)\<_0env\>\(\.core_env\)\@!/\1_0env.core_env/g
+\(6cenv_([^)]*\)\(\<\(c\|_0\|_0env\.core_\)\)\@<!env\>
+\(([^)]*\), \(\<env\>\)
+
+
+\(solo_child\|two_children\|no_child\|gprepostprocess\)\@<!6env
+
+%s/\(solo_child\|two_children\|no_child\|gprepostprocess\)\@<=6env/6cenv/g
+
+%s/mk_rgnr5env_args_ex/mk_rgnr5cenv_args_ex/g
+%s/c\@<!env2result/c\0/g
+    getset_external_cache4rgnr_func
+    getset_external_cache4rgnr_method
+
+%s/saved into env\.external_cache/saved into cenv.core_cache/g
+
+
+e ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/grammar4IRecognizerLLoo.py
+%s/c\@<!env_var/cenv_var/g
+
+    #]]]'''#'''
     __slots__ = ()
+
     @abstractmethod
     def param2setting_(sf, nm, /):
         'k -> v|^LookupError'
+        'see:grammar4IRecognizerLLoo.py::INameResolver'
+        #data_name_resolver
     @abstractmethod
     def name2rgnr_(sf, nm, /):
         'k -> IRecognizerLLoo|^LookupError #using:IRecognizerLLoo._may_name4ref_'
+
+
+    @property
     @abstractmethod
-    def name2may_gpreprocess_(sf, nm, /):
-        'k -> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8begin->(st, may ignore)) #using:IRecognizerLLoo._may_name4ref_ #donot affect reply.ok'
-        # 'k -> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8end->may ignore) #using:IRecognizerLLoo._may_name4gpreprocess_ #donot affect reply.ok'
+    def core_cache(sf, /):
+        '-> mutable weak_key_mapping without len/keys()/...#WeakKeyHalfMap/IHalfMap<WeakKeyDictionary> #to save rgnr persistent info(full_view_info<cenv,rgnr.descendants>) #see:IRecognizerLLoo.cache_full_view_info6cenv_'
+    def getset_external_cache4rgnr_func(sf, rgnr, rgnr_cenv2result, get_vs_set_vs_set_ex, /):
+        'IRecognizerLLoo -> (IRecognizerLLoo -> ICoreEnvironment -> r)/persistent-FunctionType -> (0|1|2) -> ((r|^KeyError)|r|(is_new,r))'
+        #check_type_le(IRecognizerLLoo, rgnr)
+        return getset_external_cache4func(get_vs_set_vs_set_ex, rgnr_cenv2result, rgnr, sf)
+    def getset_external_cache4rgnr_method(sf, cenv2result, get_vs_set_vs_set_ex, /):
+        '(ICoreEnvironment -> r)/MethodType{IRecognizerLLoo, persistent-FunctionType} -> (0|1|2) -> ((r|^KeyError)|r|(is_new,r))'
+        check_type_is(Meth, cenv2result)
+        rgnr = cenv2result.__self__
+        rgnr_cenv2result = cenv2result.__func__
+        return sf.getset_external_cache4rgnr_func(rgnr, rgnr_cenv2result, get_vs_set_vs_set_ex)
+
+getset_external_cache4func
+getset_external_cache4method
+#end-class ICoreEnvironment(ABC):
+#class IEnvironment(ABC):
+class IShellEnvironment(ABC):
+    r'''[[[
+    env/senv/shell_env
+
+    two name resolver(two diff kinds of names):
+        * data_name_resolver:
+            [nm := symbol<data/func/param>]
+                # 'see:grammar4IRecognizerLLoo.py::INameResolver'
+            .core_env.param2setting_
+        * rgnr_name_resolver:
+            [nm := symbol<rgnr> == IRecognizerLLoo._may_name4ref_ == RecognizerLLoo__named.name4ref/nm4ref]
+            *for:ref_/RecognizerLLoo__ref:
+                # ._may_name4ref_ ==>> (RecognizerLLoo__ref.name6ref/nm6ref)
+                .name2rgnr_
+            *for:gprepostprocess_/RecognizerLLoo__gprepostprocess
+                #mkrs.gprepostprocess_(rgnr, may gpreprocess, may gpostprocess6err, may gpostprocess6ok, _force_postprocess_when_ignore_)
+                # ._may_name4ref_~gprepostprocess_@recognize_():
+                .name2may_gpreprocess_
+                .name2may_gpostprocess6err_
+                .name2may_gpostprocess6ok_
+                .name2force_postprocess_when_ignore_
+
+    #]]]'''#'''
+    __slots__ = ()
+    @property
     @abstractmethod
-    def name2may_gpostprocess6err_(sf, nm, /):
-        'k -> may gpostprocess6err/(rgnr->env->xctx_view->ignore->st->ext_info8end->errmsg->errmsg) #using:IRecognizerLLoo._may_name4ref_ #donot affect reply.ok'
-        # 'k -> may gpostprocess6err/(rgnr->env->xctx_view->ignore->ext_info8end->errmsg->errmsg) #using:IRecognizerLLoo._may_name4gpostprocess_ #donot affect reply.ok'
-    @abstractmethod
-    def name2may_gpostprocess6ok_(sf, nm, /):
-        'k -> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->st->ext_info8end->oresult->oresult) #using:IRecognizerLLoo._may_name4ref_ #donot affect reply.ok'
-        # 'k -> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->ext_info8end->oresult->oresult) #using:IRecognizerLLoo._may_name4gpostprocess_ #donot affect reply.ok'
+    def core_env(sf, /):
+        '-> ICoreEnvironment'
     @property
     @abstractmethod
     def external_cache(sf, /):
-        '-> mutable weak_key_mapping without len/keys()/...#WeakKeyHalfMap/IHalfMap<WeakKeyDictionary> #to save rgnr persistent info(full_view_info<env,rgnr.descendants>) #see:IRecognizerLLoo.cache_full_view_info6env_'
-    def getset_external_cache4rgnr_func(sf, rgnr, rgnr_env2result, get_vs_set_vs_set_ex, /):
-        'IRecognizerLLoo -> (IRecognizerLLoo -> IEnvironment -> r)/persistent-FunctionType -> (0|1|2) -> ((r|^KeyError)|r|(is_new,r))'
-        #check_type_le(IRecognizerLLoo, rgnr)
-        return getset_external_cache4func(get_vs_set_vs_set_ex, rgnr_env2result, rgnr, sf)
-    def getset_external_cache4rgnr_method(sf, env2result, get_vs_set_vs_set_ex, /):
-        '(IEnvironment -> r)/MethodType{IRecognizerLLoo, persistent-FunctionType} -> (0|1|2) -> ((r|^KeyError)|r|(is_new,r))'
-        check_type_is(Meth, env2result)
-        rgnr = env2result.__self__
-        rgnr_env2result = env2result.__func__
-        return sf.getset_external_cache4rgnr_func(rgnr, rgnr_env2result, get_vs_set_vs_set_ex)
-def getset_external_cache4method(get_vs_set_vs_set_ex, mf, /, *weakable_args):
-    'precondition:[mf/MethodType == (f/FunctionType + weakable_selfs)] => ' \
-        '(0|1|2) -> mf/MethodType/((*weakable_args)->r) -> (*weakable_args) -> ((r|^KeyError)|r|(is_new,r))'
-    check_int_ge_lt(0, 3, case:=get_vs_set_vs_set_ex)
-    args = []
-    while type(mf) is Meth:
-        sf = mf.__self__
-        wref_(sf)
-            #check weakable
-        args.append(sf)
-        mf = mf.__func__
-    f = mf
-    check_type_is(Func, f)
-    args.reverse()
-    return getset_external_cache4func(case, f, *args, *weakable_args)
+        '-> mutable weak_key_mapping without len/keys()/...#WeakKeyHalfMap/IHalfMap<WeakKeyDictionary> #to save external func result of attached_parts of rgnr'
 
-def getset_external_cache4func(get_vs_set_vs_set_ex, f, /, *weakable_args, __depth=0):
-    '(0|1|2) -> f/FunctionType/((*weakable_args)->r) -> (*weakable_args) -> ((r|^KeyError)|r|(is_new,r))'
-    if not 0 <= __depth < 2:raise Exception(getset_external_cache4func, get_vs_set_vs_set_ex, f, *weakable_args)
-    check_int_ge_lt(0, 3, case:=get_vs_set_vs_set_ex)
-    check_type_is(Func, f)
-    #xxx:if not weakable_args:raise TypeError
-    d = vars(f)
-    k = getset_external_cache4func
-    if not k in d:
-        check_type_is(Func, f)
-        d[k] = WkeyD()
-    wd0 = wd = d[k]
-    check_type_is(WkeyD, wd)
-    it = map(wref_, weakable_args)
-    #bug:it = iter([*it])
-    #   fail:wref_(wref_(...))
-    [*it]
-        #check weakable
-    it = iter(weakable_args)
-    if case == 0:
-        for w in it:
-            wd = wd[w]
-                # ^KeyError
-        else:
-            r = wd
-            return r
-    try:
-        for w in it:
-            wd = wd[w]
-                # ^KeyError
-    except KeyError:
-        pass
-    else:
-        r = wd
-        if case == 1:
-            return r
-        if case == 2:
-            return (is_new:=False, r)
-        raise 000-case
-    wd, w, it
-        # !! KeyError => [w existed]
-    # [w may be last]
-    # [wd is not r]
-    for _w in it:
-        # [w is not last]
-        if 0:
-            #why? bug:『wd = wd[w] = WkeyD()』
-            wd = wd[w] = WkeyD()
-        else:
-            tmp = WkeyD()
-            wd[w] = tmp
-            wd = tmp
-            del tmp
-        #if 0b0001:print_err({**wd0})
-        # [wd is not r]
-        w = _w
-        # [w may be last]
-        # [wd is not r]
-    # [w is last]
-    # [wd is not r]
-    wd, w
-    try:
-        r = wd[w]
-    except KeyError:
-        is_new = True
-    else:
-        is_new = False
-        if case == 1:
-            return r
-        if case == 2:
-            return (is_new, r)
-        raise 000-case
-    r = wd[w] = f(*weakable_args)
-    #if 0b0001:print_err({**wd0})
-    rx = getset_external_cache4func(case, f, *weakable_args, __depth=__depth+1)
-    if case == 1:
-        assert rx is r
-        return rx
-    if case == 2:
-        (_is_new, _r) = rx
-        assert not _is_new
-        assert _r is r
-        return (is_new, r)
-    raise 000-case
+    @abstractmethod
+    def name2may_gpreprocess_(sf, nm, /):
+        'k -> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8begin->(st4ppp, may ignore)) #using:IRecognizerLLoo._may_name4ref_ #donot affect reply.ok'
+        # 'k -> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8end->may ignore) #using:IRecognizerLLoo._may_name4gpreprocess_ #donot affect reply.ok'
+    @abstractmethod
+    def name2may_gpostprocess6err_(sf, nm, /):
+        'k -> may gpostprocess6err/(rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->errmsg->errmsg) #using:IRecognizerLLoo._may_name4ref_ #donot affect reply.ok'
+        # 'k -> may gpostprocess6err/(rgnr->env->xctx_view->ignore->ext_info8end->errmsg->errmsg) #using:IRecognizerLLoo._may_name4gpostprocess_ #donot affect reply.ok'
+    @abstractmethod
+    def name2may_gpostprocess6ok_(sf, nm, /):
+        'k -> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->oresult->oresult) #using:IRecognizerLLoo._may_name4ref_ #donot affect reply.ok'
+        # 'k -> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->ext_info8end->oresult->oresult) #using:IRecognizerLLoo._may_name4gpostprocess_ #donot affect reply.ok'
+    @abstractmethod
+    def name2force_postprocess_when_ignore_(sf, nm, /):
+        'k -> _force_postprocess_when_ignore_/bool #using:IRecognizerLLoo._may_name4ref_ #donot affect reply.ok'
+IEnvironment = IShellEnvironment
 #end-class IEnvironment(ABC):
-class Environment(IEnvironment, _Base4repr):
+class CoreEnvironment(ICoreEnvironment, _Base4repr):
     ___no_slots_ok___ = True
-    def __init__(sf, param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, /):
-        #may_external_cache = None
-        #external_cache = ifNone(may_external_cache, WeakKeyHalfMap())
-        external_cache = WeakKeyHalfMap()
+    def __init__(sf, param2setting, name2rgnr, /):
+        core_cache = WeakKeyHalfMap()
 
+        sf._w2cc = core_cache
         sf._p2v = param2setting
         sf._nm2r = name2rgnr
-        sf._nm2mpre = name2may_gpreprocess
-        sf._nm2mpost6err = name2may_gpostprocess6err
-        sf._nm2mpost6ok = name2may_gpostprocess6ok
-        sf._w2c = external_cache
-        sf._reset4repr((param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok))
+
+        sf._reset4repr((param2setting, name2rgnr))
     @override
     def param2setting_(sf, nm, /):
         'k -> v|^LookupError'
@@ -1965,6 +2488,45 @@ class Environment(IEnvironment, _Base4repr):
     def name2rgnr_(sf, nm, /):
         'k -> IRecognizerLLoo|^LookupError #using:IRecognizerLLoo._may_name4ref_'
         return sf._nm2r[nm]
+    @property
+    @override
+    def core_cache(sf, /):
+        return sf._w2cc
+
+def mk_Environment(param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, name2force_postprocess_when_ignore, /):
+    'as replacement of old API{Environment.__init__}'
+    cenv = CoreEnvironment(param2setting, name2rgnr)
+    env = Environment(cenv, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, name2force_postprocess_when_ignore)
+    return env
+class Environment(IEnvironment, _Base4repr):
+    ___no_slots_ok___ = True
+    #old:def __init__(sf, param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, name2force_postprocess_when_ignore, /):
+    def __init__(sf, cenv, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, name2force_postprocess_when_ignore, /):
+        check_type_le(ICoreEnvironment, cenv)
+
+        external_cache = WeakKeyHalfMap()
+
+        sf._w2sc = external_cache
+        sf._cenv = cenv
+        sf._nm2mpre = name2may_gpreprocess
+        sf._nm2mpost6err = name2may_gpostprocess6err
+        sf._nm2mpost6ok = name2may_gpostprocess6ok
+        sf._nm2b_force_post = name2force_postprocess_when_ignore
+
+        sf._reset4repr((cenv, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok))
+
+    @property
+    @override
+    def core_env(sf, /):
+        '-> ICoreEnvironment'
+        return sf._cenv
+
+    @property
+    @override
+    def external_cache(sf, /):
+        return sf._w2sc
+
+
     @override
     def name2may_gpreprocess_(sf, nm, /):
         return sf._nm2mpre.get(nm)
@@ -1974,18 +2536,17 @@ class Environment(IEnvironment, _Base4repr):
     @override
     def name2may_gpostprocess6ok_(sf, nm, /):
         return sf._nm2mpost6ok.get(nm)
-    @property
     @override
-    def external_cache(sf, /):
-        return sf._w2c
+    def name2force_postprocess_when_ignore_(sf, nm, /):
+        return sf._nm2b_force_post.get(nm, False)
 #end-class Environment(IEnvironment):
 
 r'''[[[
 intent:
-    mkrs.gprepostprocess_(rgnr, may gpreprocess, may gpostprocess6err, may gpostprocess6ok)
+    mkrs.gprepostprocess_(rgnr, may gpreprocess, may gpostprocess6err, may gpostprocess6ok, _force_postprocess_when_ignore_)
 
 usage:
-    gpreprocess = mk_gpreprocess__5constant_(st, may_ignore)
+    gpreprocess = mk_gpreprocess__5constant_(st4ppp, may_ignore)
     gpostprocess6err = mk_gpostprocess6err__5spost_(spostprocess6err)
     gpostprocess6ok = mk_gpostprocess6ok__5spost_(spostprocess6ok)
 
@@ -1996,108 +2557,337 @@ usage:
 
 
 #]]]'''#'''
-def mk_gpreprocess__5constant_(st, may_ignore, /):
+def mk_gpreprocess__5constant_(st4ppp, may_ignore, /):
     def gpreprocess(rgnr, env, xctx_view, ignore, ext_info8begin, /):
-        '-> (st, may ignore)'
-        return (st, may_ignore)
+        '-> (st4ppp, may ignore)'
+        return (st4ppp, may_ignore)
     return gpreprocess
 
 def mk_gpostprocess6err__5spost_(spostprocess6err, /):
-    def gpostprocess6err(rgnr, env, xctx_view, ignore, st, ext_info8end, errmsg, /):
+    def gpostprocess6err(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, errmsg, /):
         '-> errmsg'
         return spostprocess6err(errmsg)
     return gpostprocess6err
 
 def mk_gpostprocess6ok__5spost_(spostprocess6ok, /):
-    def gpostprocess6ok(rgnr, env, xctx_view, ignore, st, ext_info8end, oresult, /):
+    def gpostprocess6ok(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, oresult, /):
         '-> oresult'
         return spostprocess6ok(oresult)
+    return gpostprocess6ok
+def mk_gpostprocess6ok__5xpost_(xpostprocess6ok, /):
+    'xpostprocess6ok -> gpostprocess6ok # [xpostprocess6ok :: ((oresult)|(env, oresult)|(env, xctx_view, oresult)|(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, oresult)) -> oresult][num_args{xpostprocess6ok} <- {1,2,3,7}]'
+    if is_num_args_ok_(1, xpostprocess6ok):
+        def gpostprocess6ok(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, oresult, /):
+            '-> oresult'
+            return xpostprocess6ok(oresult)
+    elif is_num_args_ok_(2, xpostprocess6ok):
+        def gpostprocess6ok(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, oresult, /):
+            '-> oresult'
+            return xpostprocess6ok(env, oresult)
+    elif is_num_args_ok_(3, xpostprocess6ok):
+        def gpostprocess6ok(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, oresult, /):
+            '-> oresult'
+            return xpostprocess6ok(env, xctx_view, oresult)
+    elif is_num_args_ok_(7, xpostprocess6ok):
+        gpostprocess6ok = xpostprocess6ok
+    else:
+        raise TypeError('reject num_args:{1,2,3,7}:[xpostprocess6ok :: ((oresult)|(env, oresult)|(env, xctx_view, oresult)|(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, oresult)) -> oresult]:', xpostprocess6ok)
     return gpostprocess6ok
 
 
 def mk_gpreprocess__5lazy_st_(lazy_st, may_ignore, /):
     def gpreprocess(rgnr, env, xctx_view, ignore, ext_info8begin, /):
-        '-> (st, may ignore)'
-        return (st:=lazy_st(), may_ignore)
+        '-> (st4ppp, may ignore)'
+        return (st4ppp:=lazy_st(), may_ignore)
     return gpreprocess
 
 def mk_gpostprocess6err__5spost_after_tag_st_(spostprocess6err_after_tag_st, /):
-    def gpostprocess6err(rgnr, env, xctx_view, ignore, st, ext_info8end, errmsg, /):
+    def gpostprocess6err(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, errmsg, /):
         '-> errmsg'
-        return spostprocess6err_after_tag_st((st, errmsg))
+        return spostprocess6err_after_tag_st((st4ppp, errmsg))
     return gpostprocess6err
 
 def mk_gpostprocess6ok__5spost_after_tag_st_(spostprocess6ok_after_tag_st, /):
-    def gpostprocess6ok(rgnr, env, xctx_view, ignore, st, ext_info8end, oresult, /):
+    def gpostprocess6ok(rgnr, env, xctx_view, ignore, st4ppp, ext_info8end, oresult, /):
         '-> oresult'
-        return spostprocess6ok_after_tag_st((st, oresult))
+        return spostprocess6ok_after_tag_st((st4ppp, oresult))
     return gpostprocess6ok
 
+def mk_name2may_gpostprocess6ok_(fmtr_or_fmt4nm4method, grp4nm4rgnr, xpostprocess_group, /):
+    '(fmtr/(str->str)|fmt/str) -> NameGroup4IRecognizerLLoo -> namespace<xpostprocess_> -> name2may_gpostprocess6ok'
+    ######################
+    g5x_ = mk_gpostprocess6ok__5xpost_
+    ######################
+
+    check_type_is(NameGroup4IRecognizerLLoo, grp4nm4rgnr)
+    nm2sym4rgnr = grp4nm4rgnr[:].view8mapping_()
+    if type(fmtr_or_fmt4nm4method) is str:
+        fmt = fmtr_or_fmt4nm4method
+        fmtr = fmt.format
+    else:
+        fmtr = fmtr_or_fmt4nm4method
+    fmtr
+    check_callable(fmtr)
+    f = fmtr
+    f
+        #rnm2fnm_
+    #xxx:g = curry1(getattr, xpostprocess_group)
+        #fnm2may_xpost_
+    #gf = dot[g,f]
+        #rnm2may_xpost_
+    sz = 0
+    def iter_ggf_(nm4rgnr, /):
+        nonlocal sz
+        check_type_is(str, nm4rgnr)
+        if not None is (xpost_:=getattr(xpostprocess_group, f(nm4rgnr), None)):
+            gpost_ = g5x_(xpost_)
+            yield gpost_
+            sz += 1
+        return
+        if 0b0000:
+            #from seed.tiny import print_err
+            print_err(nm4rgnr)
+    name2may_gpostprocess6ok = MapView({sym4rgnr:gpost_ for nm4rgnr, sym4rgnr in nm2sym4rgnr.items() for gpost_ in iter_ggf_(nm4rgnr)})
+    assert len(name2may_gpostprocess6ok) == sz
+    return name2may_gpostprocess6ok
+#end-def mk_name2may_gpostprocess6ok_(fmt4nm4method, grp4nm4rgnr, xpostprocess_group, /):
 
 
 
+class IRecognizerLLoo__main(IRecognizerLLoo):
+    r'''[[[
+    #######
+    ++main_rgnr/rgnr._may_setup_
+        [_may_setup_ :: may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr)]
+        [sym8id4curr_rgnz :: WeakKeyHalfMap8AnonymousWeakableSymbol <: (WeakKeyHalfMap & AnonymousWeakableSymbol)]
+    #######
+    ++main_rgnr/rgnr._may_teardown_
+        [_may_teardown_ :: may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->either__exc_info__or__reply->tmay result4rgnz)]
+            # [either__exc_info__or__reply :: (Either exc_info/(exc_type, exc_value, traceback) Reply)]
+    #######
+    #]]]'''#'''
+    __slots__ = ()
+    @property
+    @abstractmethod
+    def _may_setup_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: -> may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr)'
+        return None
+    @property
+    @abstractmethod
+    def _may_teardown_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, either__exc_info__or__reply, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: -> may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->either__exc_info__or__reply->tmay result4rgnz) # [either__exc_info__or__reply :: (Either exc_info/(exc_type, exc_value, traceback) Reply)]'
+        if either__exc_info__or__reply.is_left:
+            (exc_type, exc_value, traceback) = exc_info = either__exc_info__or__reply.left
+            tmay_result4rgnz = null_tuple
+        else:
+            reply = either__exc_info__or__reply.right
+            check_type_is(Reply, reply)
+            result4rgnz = reply
+            tmay_result4rgnz = (result4rgnz,)
+        return tmay_result4rgnz
+class IRecognizerLLoo__main__split_teardown(IRecognizerLLoo__main):
+    r'''[[[
+    always re-raise exception if any
+    #]]]'''#'''
+    __slots__ = ()
+    @abstractmethod
+    def _may_teardown6rpostprocess_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, reply, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: => env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->reply->result4rgnz'
+    @abstractmethod
+    def _may_teardown6finalize_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: => env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->None'
+
+    @override
+    def _may_teardown_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, either__exc_info__or__reply, /):
+        if either__exc_info__or__reply.is_left:
+            #(exc_type, exc_value, traceback) = exc_info = either__exc_info__or__reply.left
+            tmay_result4rgnz = null_tuple
+        else:
+            reply = either__exc_info__or__reply.right
+            check_type_is(Reply, reply)
+            result4rgnz = f(env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, reply) if not None is (f:=sf._may_teardown6rpostprocess_) else reply
+            tmay_result4rgnz = (result4rgnz,)
+        tmay_result4rgnz
+        ######################
+        if not None is (f:=sf._may_teardown6finalize_): f(env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr)
+        ######################
+        return tmay_result4rgnz
 
 
-_decorator44rngr = Decorator4recur5yield(Executor4recur5yield__dispatch_by_dict(None, False, True, {RecognizeCall:'gi5rcall_'}))
+_decorator4rngr = Decorator4recur5yield(Executor4recur5yield__dispatch_by_dict(None, False, True, {RecognizeCall:'gi5rcall_'}))
     # [_allow__gi2gi_:=True] ==>> # donot use 『yield from』
     #
     #def Executor4recur5yield__dispatch_by_dict.__init__(sf, may_emplace_stack_ops, using_tail_recur_gi_protocol, _allow__gi2gi_, may_type2attr_or_child_gi_protocol, /):
     #
-@_decorator44rngr
-def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False):
-    'IRecognizerLLoo -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> Reply'#@wrapper
-    'IRecognizerLLoo -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> (st, Call)'#@wrapped
-    (st, main_rcall) = _recognize(main_rgnr, env, gctx, istream, ignore)
-    return (st, main_rcall)
-def _recognize(_0main_rgnr, _0env, _0gctx, _0istream, _0ignore, /):
-    '-> (st, main_rcall)'
+def _get_if(miss_ok, x, nm, default, /):
+    return getattr(x, nm, *(default,)[:miss_ok])
+def recognize__asif_main_rgnr_(asif_main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=True):
+    'IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> (Reply if main_rgnr._may_teardown_ is None else result4rgnz)'#@wrapper
+    return recognize_(asif_main_rgnr, env, gctx, istream, ignore=ignore, to_allow_non_main_rgnr=to_allow_non_main_rgnr)
+#@_decorator4rngr
+def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=False): #, _may_setup_=None
+    r'''[[[
+    'IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> (Reply if main_rgnr._may_teardown_ is None else result4rgnz)'#@wrapper
+    #######
+    ++xctx_view.sym8id4curr_rgnz
+        mk a fresh sym8id4curr_rgnz for each call recognize_()
+    #######
+    ++main_rgnr/rgnr._may_setup_
+        [_may_setup_ :: may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr)]
+        [sym8id4curr_rgnz :: WeakKeyHalfMap8AnonymousWeakableSymbol <: (WeakKeyHalfMap & AnonymousWeakableSymbol)]
+    #######
+    ++recognize__asif_main_rgnr_()
+    #######
+    #]]]'''#'''
     ######################
-    _0ctx = DynamicStackedMapping({})
-    _0xctx = XContext(_0gctx, _0ctx)
-    _0id2rgnr = _0main_rgnr.view_id2rgnr8all_descendants6env_(_0env)
+    check_type_is(bool, to_allow_non_main_rgnr)
+    if not to_allow_non_main_rgnr:
+        check_type_le(IRecognizerLLoo__main, main_rgnr)
     ######################
-    st = _State4recognize(_0env, _0gctx, _0ctx, _0xctx, _0id2rgnr)
+    #_may_teardown_ = main_rgnr._may_teardown_
+    _may_teardown_ = _get_if(to_allow_non_main_rgnr, main_rgnr, '_may_teardown_', None)
+    ok = False
+    var_inner_st_ex = ObjVar()
+        #ObjVar<(inner_st,st4main_rgnr)>:for main_rgnr._may_teardown_
+    try:
+        (st4rgnz, main_rcall) = _recognize(main_rgnr, env, gctx, istream, ignore, to_allow_non_main_rgnr, var_inner_st_ex)
+            # set var_inner_st_ex.x after _may_setup_()
+        reply = _2recognize(st4rgnz, main_rcall)
+        ok = True
+        return reply
+    finally:
+        # [[bool(var_inner_st_ex)] <==> [_may_setup_() completed]]
+        if var_inner_st_ex and not None is (teardown_ := _may_teardown_):
+            # [_may_setup_() completed]
+            (inner_st, st4main_rgnr) = var_inner_st_ex.x
+            if not ok:
+                import sys
+                exc_info = sys.exc_info()
+                either__exc_info__or__reply = mk_Left(exc_info)
+            else:
+                either__exc_info__or__reply = mk_Right(reply)
+            either__exc_info__or__reply
+            (_0env, _0gctx, d8ctx, _0sym8id4curr_rgnz, _0ignore) = inner_st
+            tmay_result4rgnz = teardown_(_0env, _0gctx, d8ctx, _0sym8id4curr_rgnz, _0ignore, st4main_rgnr, either__exc_info__or__reply)
+            if tmay_result4rgnz:
+                #alter result
+                [result4rgnz] = tmay_result4rgnz
+                return result4rgnz
+            else:
+                #untouch result
+                [] = tmay_result4rgnz
+                #to-continue:re-raise|return reply
+            #to-continue:re-raise|return reply
+        else:
+            #to-continue:re-raise|return reply
+            pass
+        #re-raise|return reply
+        #   stop_here
+    raise 000
+    return reply
+    #.(st4rgnz, main_rcall) = _recognize(main_rgnr, env, gctx, istream, ignore)
+    #.return (st4rgnz, main_rcall)
+@_decorator4rngr
+def _2recognize(st4rgnz, main_rcall, /):
+    '-> Reply'#@wrapper
+    return st4rgnz, main_rcall
+
+#@_decorator4rngr
+def _recognize(_0main_rgnr, _0env, _0gctx, _0istream, _0ignore, to_allow_non_main_rgnr, var_inner_st_ex, /):
+    'IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> ignore/bool -> var_inner_st_ex/ObjVar<(inner_st,st4main_rgnr)>/[#main_rgnr._may_teardown_#] -> (st4rgnz, Call)'#@wrapped
+    '-> (st4rgnz, main_rcall)'
     ######################
-    _0main_rgnr.cache_full_view_info6env_(_0env)
-    if not _0main_rgnr.required_num_tokens6backward6env_(_0env) <= _0istream.max_num_tokens6backward:raise Exception('istream.max_num_tokens6backward too small:', _0main_rgnr.required_num_tokens6backward6env_(_0env), _0istream.max_num_tokens6backward)
+    check_type_is(bool, to_allow_non_main_rgnr)
+    if not to_allow_non_main_rgnr:
+        check_type_le(IRecognizerLLoo__main, _0main_rgnr)
+    ######################
+    #_may_setup_ = _0main_rgnr._may_setup_
+    _may_setup_ = _get_if(to_allow_non_main_rgnr, _0main_rgnr, '_may_setup_', None)
+    ######################
+    _0main_rgnr.cache_full_view_info6cenv_(_0env.core_env)
+    if not _0main_rgnr.required_num_tokens6backward6cenv_(_0env.core_env) <= _0istream.max_num_tokens6backward:raise Exception('istream.max_num_tokens6backward too small:', _0main_rgnr.required_num_tokens6backward6cenv_(_0env.core_env), _0istream.max_num_tokens6backward)
     main_rcall = mk_Call_(_0main_rgnr, dummy_unlocker, _0ignore, _0istream)
     ######################
-    return (st, main_rcall)
+    _0sym8id4curr_rgnz = WeakKeyHalfMap8AnonymousWeakableSymbol('sym8id4curr_rgnz')
+    ######################
+    d8ctx = {} #used in:_0ctx
+    ######################
+    inner_st = (_0env, _0gctx, d8ctx, _0sym8id4curr_rgnz, _0ignore)
+        #inner_st:for main_rgnr._may_teardown_
+    assert not var_inner_st_ex
+    if not None is (setup_:=_may_setup_):
+        #st4main_rgnr = setup_(_0env, _0gctx, d8ctx, _0sym8id4curr_rgnz, _0ignore)
+        st4main_rgnr = setup_(*inner_st)
+    else:
+        st4main_rgnr = None
+            #not-bug! asif call default setup_()
+            # !! [[bool(var_inner_st_ex)] <==> [_may_setup_() completed]]
+    st4main_rgnr
+    var_inner_st_ex.x = (inner_st, st4main_rgnr)
+        #follow setup_() to catch any exc below
+    assert var_inner_st_ex
+    ######################
+    #after:setup_()#_may_setup_
+    d8ctx
+    if 1:
+        if not _0sym8id4curr_rgnz is d8ctx.setdefault(_sym4sym8id4curr_rgnz, _0sym8id4curr_rgnz):raise 000
+    else:
+        d8ctx[_sym4sym8id4curr_rgnz] = _0sym8id4curr_rgnz
+    _0ctx = DynamicStackedMapping(d8ctx)
+        #after:setup_()#_may_setup_
+    assert _0ctx[_sym4sym8id4curr_rgnz] is _0sym8id4curr_rgnz
+    ######################
+    _0ctx
+    _0xctx = XContext(_0gctx, _0ctx)
+    _0id2rgnr = _0main_rgnr.view_id2rgnr8all_descendants6cenv_(_0env.core_env)
+    ######################
+    #.st4rgnz = _State4recognize(_0env, _0gctx, _0ctx, _0xctx, _0sym8id4curr_rgnz, _0id2rgnr)
+    st4rgnz = _State4recognize(_0env, _0gctx, _0ctx, _0xctx, _0id2rgnr)
+    ######################
+    if __debug__:
+        xctx_view = ContextView(null_frozenset, _0gctx, _0ctx)
+        assert xctx_view.sym8id4curr_rgnz is _0sym8id4curr_rgnz
+    ######################
+    return (st4rgnz, main_rcall)
     ######################
 def apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream, /):
-    st = None
+    st4ppp = None
+        #st4ppp<pre-post>
     if not mgpre_ is None:
         gpre_ = mgpre_
-        # [gpreprocess :: (rgnr->env->xctx_view->ignore->ext_info8begin->(st, may ignore))]
-        (st, mignore) = gpre_(rgnr, _0env, xctx_view, ignore, istream.tell_ext_info())
+        # [gpreprocess :: (rgnr->env->xctx_view->ignore->ext_info8begin->(st4ppp, may ignore))]
+        (st4ppp, mignore) = gpre_(rgnr, _0env, xctx_view, ignore, istream.tell_ext_info())
         if not mignore is None:
             ignore = mignore
             check_type_is(bool, ignore)
     ignore
-    return (st, ignore)
-    #(st, ignore) = apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream)
-def apply_may_gpostprocess_(mgpost6err_, mgpost6ok_, reply, rgnr, _0env, xctx_view, ignore, st, /):
+    return (st4ppp, ignore)
+    #(st4ppp, ignore) = apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream)
+def apply_may_gpostprocess_(mgpost6err_, mgpost6ok_, reply, rgnr, _0env, xctx_view, ignore, st4ppp, /):
     if reply.ok:
         if not mgpost6ok_ is None:
             post6ok_ = mgpost6ok_
-            # [gpostprocess6ok :: (rgnr->env->xctx_view->ignore->st->ext_info8end->oresult->oresult)]
-            oresult = post6ok_(rgnr, _0env, xctx_view, ignore, st, reply.ext_info8end, reply.oresult)
+            # [gpostprocess6ok :: (rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->oresult->oresult)]
+            oresult = post6ok_(rgnr, _0env, xctx_view, ignore, st4ppp, reply.ext_info8end, reply.oresult)
             if not oresult is reply.oresult:
                 reply = reply.ireplace(eresult=mk_Right(oresult))
     else:
         if not mgpost6err_ is None:
             post6err_ = mgpost6err_
-            # [gpostprocess6err :: (rgnr->env->xctx_view->ignore->st->ext_info8end->errmsg->errmsg)]
-            errmsg = post6err_(rgnr, _0env, xctx_view, ignore, st, reply.ext_info8end, reply.errmsg)
+            # [gpostprocess6err :: (rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->errmsg->errmsg)]
+            errmsg = post6err_(rgnr, _0env, xctx_view, ignore, st4ppp, reply.ext_info8end, reply.errmsg)
             if not errmsg is reply.errmsg:
                 reply = reply.ireplace(eresult=mk_Left(errmsg))
     check_type_is(Reply, reply)
     return reply
-    #reply = apply_may_gpostprocess_(mgpost6err_, mgpost6ok_, reply, rgnr, _0env, xctx_view, ignore, st)
+    #reply = apply_may_gpostprocess_(mgpost6err_, mgpost6ok_, reply, rgnr, _0env, xctx_view, ignore, st4ppp)
 class _State4recognize:
+    'st4rgnz'
+    #def __init__(sf, _0env, _0gctx, _0ctx, _0xctx, _0sym8id4curr_rgnz, _0id2rgnr, /):
     def __init__(sf, _0env, _0gctx, _0ctx, _0xctx, _0id2rgnr, /):
-        sf._args = (_0env, _0gctx, _0ctx, _0xctx, _0id2rgnr)
-        (sf._0env, sf._0gctx, sf._0ctx, sf._0xctx, sf._0id2rgnr) = (_0env, _0gctx, _0ctx, _0xctx, _0id2rgnr)
+        #(sf._0env, sf._0gctx, sf._0ctx, sf._0xctx, sf._0sym8id4curr_rgnz, sf._0id2rgnr) = args = (_0env, _0gctx, _0ctx, _0xctx, _0sym8id4curr_rgnz, _0id2rgnr)
+        (sf._0env, sf._0gctx, sf._0ctx, sf._0xctx, sf._0id2rgnr) = args = (_0env, _0gctx, _0ctx, _0xctx, _0id2rgnr)
+        sf._args = args
     def gi5rcall_(sf, rcall, /):
         'Call -> GI'
         #############
@@ -2109,7 +2899,7 @@ class _State4recognize:
         check_type_is(bool, ignore)
         if unlocker.known_released:
             unlocker = dummy_unlocker
-        if not id(rgnr._get_the_base_rgnr_()) in _0id2rgnr:raise Exception('not persistent rgnr from IRecognizerLLoo.iter_persistent_descendants6env_', rgnr)
+        if not id(rgnr._get_the_base_rgnr_()) in _0id2rgnr:raise Exception('not persistent rgnr from IRecognizerLLoo.iter_persistent_descendants6cenv_', rgnr)
         if exargs4lwrap:
             rgnr = light_wrap_rgnr_(rgnr, *exargs4lwrap)
         gi = sf._call(rgnr, unlocker, ignore, istream)
@@ -2120,6 +2910,7 @@ class _State4recognize:
         _0gctx = sf._0gctx
         _0ctx = sf._0ctx
         _0xctx = sf._0xctx
+        #._0sym8id4curr_rgnz = sf._0sym8id4curr_rgnz
         _0env = sf._0env
         #############
         dsymbols = rgnr._dsymbols_
@@ -2131,20 +2922,23 @@ class _State4recognize:
         mgpre_ = None if mnmpre is None else _0env.name2may_gpreprocess_(mnmpre)
         mgpost6err_ = None if mnmgpost is None else _0env.name2may_gpostprocess6err_(mnmgpost)
         mgpost6ok_ = None if mnmgpost is None else _0env.name2may_gpostprocess6ok_(mnmgpost)
+        b_force = False if mnmgpost is None else _0env.name2force_postprocess_when_ignore_(mnmgpost)
 
         _0xctx.del_items(dsymbols)
             ######################
             # [delete before enter ctx scope]
             ######################
+        #.xctx_view = ContextView(isymbols, _0gctx, _0ctx, _0sym8id4curr_rgnz)
         xctx_view = ContextView(isymbols, _0gctx, _0ctx)
+            #isymbols<rgnr>
         b_scope = rgnr._is_ctx_scope_
         p = _0ctx.env_tell() if b_scope else None
 
         #######
-        if not mgpre_ is None:
-            (st, ignore) = apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream)
+        if not mgpre_ is None and (not ignore or b_force):
+            (st4ppp, ignore) = apply_may_gpreprocess_(mgpre_, rgnr, _0env, xctx_view, ignore, istream)
         else:
-            st = None
+            st4ppp = None
         #######
         ex_args = [xctx_view[isymbol] for isymbol in rgnr._isymbol_seq8extra_params_]
         gi = rgnr._mk_gi4recognize_(_0env, xctx_view, unlocker, ignore, istream, *ex_args)
@@ -2161,8 +2955,8 @@ class _State4recognize:
             #forbod:tail_recur_Call
             #   <<== not rgnr._tail_recur_Call_ok_
             return gi
-        return sf._tail_call(gi, b_scope, p, may_osymbolXseq, mgpost6err_, mgpost6ok_, rgnr, xctx_view, st, ignore, unlocker)
-    def _tail_call(sf, gi, b_scope, p, may_osymbolXseq, mgpost6err_, mgpost6ok_, rgnr, xctx_view, st, ignore, unlocker, /):
+        return sf._tail_call(gi, b_scope, p, may_osymbolXseq, mgpost6err_, mgpost6ok_, b_force, rgnr, xctx_view, st4ppp, ignore, unlocker)
+    def _tail_call(sf, gi, b_scope, p, may_osymbolXseq, mgpost6err_, mgpost6ok_, b_force, rgnr, xctx_view, st4ppp, ignore, unlocker, /):
         '-> gi<return-Reply>'
         #############
         _0ctx = sf._0ctx
@@ -2188,7 +2982,8 @@ class _State4recognize:
             ######################
             # [assignment before gpostprocess6ok] <<== [gpostprocess6ok is external-registered, may change len(oresult)]
             ######################
-        reply = apply_may_gpostprocess_(mgpost6err_, mgpost6ok_, reply, rgnr, _0env, xctx_view, ignore, st)
+        if (not ignore or b_force):
+            reply = apply_may_gpostprocess_(mgpost6err_, mgpost6ok_, reply, rgnr, _0env, xctx_view, ignore, st4ppp)
         return reply
 
         ######################
@@ -2257,7 +3052,7 @@ def trial_and_error_(rgnr, /):
 #.    ######################
 #.    _0ctx = DynamicStackedMapping({})
 #.    _0xctx = XContext(_0gctx, _0ctx)
-#.    _0id2rgnr = _0main_rgnr.view_id2rgnr8all_descendants6env_(_0env)
+#.    _0id2rgnr = _0main_rgnr.view_id2rgnr8all_descendants6cenv_(_0env.core_env)
 #.    ######################
 #.  def _call(rgnr, unlocker, ignore, istream, /):
 #.    '-> gi<return-Reply>'
@@ -2346,7 +3141,7 @@ def trial_and_error_(rgnr, /):
 #.    check_type_is(bool, ignore)
 #.    if unlocker.known_released:
 #.        unlocker = dummy_unlocker
-#.    if not id(rgnr) in _0id2rgnr:raise Exception('not persistent rgnr from IRecognizerLLoo.iter_persistent_descendants6env_', rgnr)
+#.    if not id(rgnr) in _0id2rgnr:raise Exception('not persistent rgnr from IRecognizerLLoo.iter_persistent_descendants6cenv_', rgnr)
 #.    gi = _call(rgnr, unlocker, ignore, istream)
 #.    gi_ls.append(gi)
 #.    gi_ls.append(mk_Right(None))
@@ -2373,8 +3168,8 @@ def trial_and_error_(rgnr, /):
 #.    ######################
 #.  def _main():
 #.    '-> Reply'
-#.    _0main_rgnr.cache_full_view_info6env_(_0env)
-#.    if not _0main_rgnr.required_num_tokens6backward6env_(_0env) <= _0istream.max_num_tokens6backward:raise Exception('istream.max_num_tokens6backward too small:', _0main_rgnr.required_num_tokens6backward6env_(_0env), _0istream.max_num_tokens6backward)
+#.    _0main_rgnr.cache_full_view_info6cenv_(_0env.core_env)
+#.    if not _0main_rgnr.required_num_tokens6backward6cenv_(_0env.core_env) <= _0istream.max_num_tokens6backward:raise Exception('istream.max_num_tokens6backward too small:', _0main_rgnr.required_num_tokens6backward6cenv_(_0env.core_env), _0istream.max_num_tokens6backward)
 #.    main_rcall = mk_Call_(_0main_rgnr, dummy_unlocker, _0ignore, _0istream)
 #.    x = mk_Left(main_rcall)
 #.    gi_ls = [x]
@@ -2617,11 +3412,11 @@ class IRecognizerLLoo__priority_parallel(IRecognizerLLoo):
     __slots__ = ()
     @abstractmethod
     def _iter_priority_parallel_children_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
     @override
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
-        return sf._iter_priority_parallel_children_(env)
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
+        return sf._iter_priority_parallel_children_(cenv)
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
         it = sf._iter_priority_parallel_children_(env)
@@ -2659,27 +3454,27 @@ class IRecognizerLLoo__priority_parallel(IRecognizerLLoo):
         return reply
 
 
-class IRecognizerLLoo__solo_child6env(IRecognizerLLoo):
-    'solo_child6env-rgnr'
+class IRecognizerLLoo__solo_child6cenv(IRecognizerLLoo):
+    'solo_child6cenv-rgnr'
     __slots__ = ()
     @abstractmethod
-    def _get_the_cached_child6env_(sf, env, /):
-        '-> IRecognizerLLoo # [must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def _get_the_cached_child6cenv_(sf, cenv, /):
+        '-> IRecognizerLLoo # [must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
     @override
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
-        yield sf._get_the_cached_child6env_(env)
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
+        yield sf._get_the_cached_child6cenv_(cenv)
 
-class IRecognizerLLoo__two_children6env(IRecognizerLLoo):
-    'two_children6env-rgnr'
+class IRecognizerLLoo__two_children6cenv(IRecognizerLLoo):
+    'two_children6cenv-rgnr'
     __slots__ = ()
     @abstractmethod
-    def _get_the_two_cached_children6env_(sf, env, /):
-        '-> (IRecognizerLLoo, IRecognizerLLoo) # [must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def _get_the_two_cached_children6cenv_(sf, cenv, /):
+        '-> (IRecognizerLLoo, IRecognizerLLoo) # [must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
     @override
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
-        return iter(sf._get_the_two_cached_children6env_(env))
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
+        return iter(sf._get_the_two_cached_children6cenv_(cenv))
 
 class IHasAttr__forgivable_fail_be_ok(ABC):
     __slots__ = ()
@@ -2697,23 +3492,25 @@ r"""[[[
 .#
 .#==>>:
 .#
-.##class IRecognizerLLoo__flip(IRecognizerLLoo__solo_child6env):
+.##class IRecognizerLLoo__flip(IRecognizerLLoo__solo_child6cenv):
 .##    'flip-rgnr'
 .##    __slots__ = ()
 .##    @override
 .##    def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-.##        rgnr = sf._get_the_cached_child6env_(env)
+.##        cenv = env.core_env
+.##        rgnr = sf._get_the_cached_child6cenv_(cenv)
 .##        reply = yield mk_Call_(rgnr, dummy_unlocker, ignore, istream)
 .##        reply = reply.ireplace(eresult=~reply.eresult)
 .##        return reply
 .
 .
-.class IRecognizerLLoo__lookahead(IRecognizerLLoo__solo_child6env):
+.class IRecognizerLLoo__lookahead(IRecognizerLLoo__solo_child6cenv):
 .    'lookahead-rgnr'
 .    __slots__ = ()
 .    @override
 .    def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-.        rgnr = sf._get_the_cached_child6env_(env)
+.        cenv = env.core_env
+.        rgnr = sf._get_the_cached_child6cenv_(cenv)
 .        snapshot = istream.save2snapshot()
 .        reply = yield mk_Call_(rgnr, dummy_unlocker, ignore, istream)
 .        snapshot.restore_and_release(istream)
@@ -2726,12 +3523,13 @@ r"""[[[
 .            unlocker.unlocker_release()
 .        return reply
 .
-.class IRecognizerLLoo__try(IRecognizerLLoo__solo_child6env):
+.class IRecognizerLLoo__try(IRecognizerLLoo__solo_child6cenv):
 .    'try-rgnr#see:try_rgnr_@IRecognizerLLoo__repetition&&fail_vs_stop_vs_continue@IRecognizerLLoo__serial'
 .    __slots__ = ()
 .    @override
 .    def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-.        rgnr = sf._get_the_cached_child6env_(env)
+.        cenv = env.core_env
+.        rgnr = sf._get_the_cached_child6cenv_(cenv)
 .        snapshot = istream.save2snapshot()
 .        reply = yield mk_Call_(rgnr, unlocker >> snapshot, ignore, istream)
 .        if not reply.ok:
@@ -2753,7 +3551,7 @@ r"""[[[
 .            # 1. * fail but monotonic_idx8begin keep unchanged
 .            # 2. * ok
 .
-.class IRecognizerLLoo__optional(IRecognizerLLoo__solo_child6env, IHasAttr__forgivable_fail_be_ok):
+.class IRecognizerLLoo__optional(IRecognizerLLoo__solo_child6cenv, IHasAttr__forgivable_fail_be_ok):
 .    'optional-rgnr'
 .    __slots__ = ()
 .    @override
@@ -2772,7 +3570,7 @@ r"""[[[
 .        ######################
 .        #before hasattr ._forgivable_fail_be_ok_:
 .        ######################
-.        ##rgnr = sf._get_the_cached_child6env_(env)
+.        ##rgnr = sf._get_the_cached_child6cenv_(cenv)
 .        ##snapshot = istream.save2snapshot()
 .        ##reply = yield mk_Call_(rgnr, unlocker >> snapshot, ignore, istream)
 .        ##if not reply.ok:
@@ -2796,7 +3594,7 @@ r"""[[[
 .        ##return reply
 .        ##    # 3. * ok with null_tuple and monotonic_idx8begin keep unchanged
 .        ##    # 4. * ok with (oresult,)
-.class IRecognizerLLoo__lift(IRecognizerLLoo__solo_child6env, IHasAttr__forgivable_fail_be_ok):
+.class IRecognizerLLoo__lift(IRecognizerLLoo__solo_child6cenv, IHasAttr__forgivable_fail_be_ok):
 .    r'''[[[
 .    'lift-rgnr#[main purpose:to lift eresult.ok] #but optional_rgnr plays similar role...'
 .    [oresult<lift(rgnr)> :: (case4fail/(0|1|2), unchanged<monotonic_idx8begin>, original_reply<rgnr>)]
@@ -2815,7 +3613,8 @@ r"""[[[
 .        ######################
 .        #this func is used directly by IRecognizerLLoo__optional
 .        ######################
-.        rgnr = sf._get_the_cached_child6env_(env)
+.        cenv = env.core_env
+.        rgnr = sf._get_the_cached_child6cenv_(cenv)
 .        snapshot = istream.save2snapshot()
 .        monotonic_idx8begin = istream.tell_monotonic_idx()
 .        reply = yield mk_Call_(rgnr, unlocker >> snapshot, ignore, istream)
@@ -2862,24 +3661,24 @@ r"""[[[
 
 
 
-#bug:class IRecognizerLLoo__repetition(IRecognizerLLoo__serial, IRecognizerLLoo__solo_child6env):
+#bug:class IRecognizerLLoo__repetition(IRecognizerLLoo__serial, IRecognizerLLoo__solo_child6cenv):
 #   not solo but two:(rgnr,try_rgnr_(rgnr))
 #   now:[builtin_support:light_wrap_rgnr_()]&&trial_and_error_()
-#       TODO
-class IRecognizerLLoo__repetition(IRecognizerLLoo__serial, IRecognizerLLoo__two_children6env):
+class IRecognizerLLoo__repetition(IRecognizerLLoo__serial, IRecognizerLLoo__two_children6cenv):
     'repetition-rgnr/many'
     __slots__ = ()
     #@override
     _not_ignore_toplvl_ = False
     @abstractmethod
-    def _get_repetition_args6env_(sf, env, /):
+    def _get_repetition_args6cenv_(sf, cenv, /):
         '-> repetition_args/(min, may_max, unlock_idx, begin_vs_middle, ignore, unpack)/(uint, may uint, unit, bool, bool, bool)'
     @override
     def _iter_runtime_serial_children_(sf, env, xctx_view, ignore:bool, var_changed, var_ok, var_reply, /):
         '-> Iter (ignore4outer/bool, IRecognizerLLoo, unlock_case/(may begin_vs_middle/bool), ignore4inner/bool, unpack/bool, fail_vs_stop_vs_continue/{0,1,2})'
-        #bug:rgnr = sf._get_the_cached_child6env_(env)
-        rgnr, rgnr8trial = sf._get_the_two_cached_children6env_(env)
-        (_min, may_max, unlock_idx, begin_vs_middle, _ignore, unpack) = sf._get_repetition_args6env_(env)
+        cenv = env.core_env
+        #bug:rgnr = sf._get_the_cached_child6cenv_(cenv)
+        rgnr, rgnr8trial = sf._get_the_two_cached_children6cenv_(cenv)
+        (_min, may_max, unlock_idx, begin_vs_middle, _ignore, unpack) = sf._get_repetition_args6cenv_(cenv)
         #if not step > 0:raise Exception
         if not 0 <= unlock_idx <= _min:raise Exception
         if None is not may_max < _min:raise Exception
@@ -2966,12 +3765,12 @@ class IRecognizerLLoo__gsep_end_by(IRecognizerLLoo__serial):
     #@override
     _not_ignore_toplvl_ = False
     @abstractmethod
-    def _get_gsep_end_by_args6env_(sf, env, /):
+    def _get_gsep_end_by_args6cenv_(sf, cenv, /):
         '-> gsep_end_by_args/(args4body, may_args4sep_body, may_args4end, args4cntl)/((rgnr8body, rgnr8trial_body, ignore4body, unpack4body), may (rgnr8sep_body, rgnr8trial_sep_body, ignore4sep_body, unpack4sep_body), may (rgnr8end, rgnr8trial_end, ignore4end, unpack4end), (min, may_max, unlock_idx, begin_vs_middle))/((rgnr, rgnr, bool, bool), may (rgnr, rgnr, bool, bool), may (rgnr, rgnr, bool, bool), (uint, may uint, unit, bool))'
     @override
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
-        gsep_end_by_args = sf._get_gsep_end_by_args6env_(env)
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
+        gsep_end_by_args = sf._get_gsep_end_by_args6cenv_(cenv)
         (args4body, may_args4sep_body, may_args4end, args4cntl) = gsep_end_by_args
         (rgnr8body, rgnr8trial_body, ignore4body, unpack4body) = args4body
         yield rgnr8body
@@ -2991,7 +3790,8 @@ class IRecognizerLLoo__gsep_end_by(IRecognizerLLoo__serial):
     @override
     def _iter_runtime_serial_children_(sf, env, xctx_view, ignore:bool, var_changed, var_ok, var_reply, /):
         '-> Iter (ignore4outer/bool, IRecognizerLLoo, unlock_case/(may begin_vs_middle/bool), ignore4inner/bool, unpack/bool, fail_vs_stop_vs_continue/{0,1,2})'
-        gsep_end_by_args = sf._get_gsep_end_by_args6env_(env)
+        cenv = env.core_env
+        gsep_end_by_args = sf._get_gsep_end_by_args6cenv_(cenv)
         (args4body, may_args4sep_body, may_args4end, args4cntl) = gsep_end_by_args
         (_min, may_max, unlock_idx, begin_vs_middle) = args4cntl
 
@@ -3165,7 +3965,7 @@ class IRecognizerLLoo__gsep_end_by__init(IRecognizerLLoo__gsep_end_by, _Base4rep
         #sf._args4repr = (iu_rgnr8body, may_iu_rgnr8sep_body, may_iu_rgnr8end, _min, may_max, unlock_idx, begin_vs_middle)
         sf._reset4repr((iu_rgnr8body, may_iu_rgnr8sep_body, may_iu_rgnr8end, _min, may_max, unlock_idx, begin_vs_middle))
     @override
-    def _get_gsep_end_by_args6env_(sf, env, /):
+    def _get_gsep_end_by_args6cenv_(sf, cenv, /):
         return sf._gargs
 class RecognizerLLoo__gsep_end_by(IRecognizerLLoo__gsep_end_by__init, IRecognizerLLoo__default_mixins):pass
 check_non_ABC(RecognizerLLoo__gsep_end_by)
@@ -3290,7 +4090,7 @@ check_non_ABC(RecognizerLLoo__sep_by)
 
 
 
-class IRecognizerLLoo__solo_child6env__init(IRecognizerLLoo__solo_child6env, _Base4repr):
+class IRecognizerLLoo__solo_child6cenv__init(IRecognizerLLoo__solo_child6cenv, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, rgnr, /):
         check_type_le(IRecognizerLLoo, rgnr)
@@ -3298,11 +4098,11 @@ class IRecognizerLLoo__solo_child6env__init(IRecognizerLLoo__solo_child6env, _Ba
         #sf._args4repr = (rgnr,)
         sf._reset4repr((rgnr,))
     @override
-    def _get_the_cached_child6env_(sf, env, /):
-        '-> IRecognizerLLoo # [must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def _get_the_cached_child6cenv_(sf, cenv, /):
+        '-> IRecognizerLLoo # [must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
         return sf._r
 
-class IRecognizerLLoo__two_children6env__init(IRecognizerLLoo__two_children6env, _Base4repr):
+class IRecognizerLLoo__two_children6cenv__init(IRecognizerLLoo__two_children6cenv, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, rgnr0, rgnr1, /):
         check_type_le(IRecognizerLLoo, rgnr0)
@@ -3311,8 +4111,8 @@ class IRecognizerLLoo__two_children6env__init(IRecognizerLLoo__two_children6env,
         #sf._args4repr = (rgnr0, rgnr1)
         sf._reset4repr((rgnr0, rgnr1))
     @override
-    def _get_the_two_cached_children6env_(sf, env, /):
-        '-> (IRecognizerLLoo, IRecognizerLLoo) # [must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def _get_the_two_cached_children6cenv_(sf, cenv, /):
+        '-> (IRecognizerLLoo, IRecognizerLLoo) # [must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
         return sf._rs
 
 
@@ -3321,14 +4121,29 @@ class IRecognizerLLoo__two_children6env__init(IRecognizerLLoo__two_children6env,
 
 
 
-class IRecognizerLLoo__alias(IRecognizerLLoo__solo_child6env):
+class IRecognizerLLoo__alias(IRecognizerLLoo__solo_child6cenv):
     'alias a complex rgnr_expr'
     __slots__ = ()
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-        rgnr = sf._get_the_cached_child6env_(env)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
         reply = yield mk_Call_(rgnr, unlocker, ignore, istream)
         return reply
+class IRecognizerLLoo__lazy_solo_child(IRecognizerLLoo__solo_child6cenv):
+    __slots__ = ()
+    #_get_the_cached_child6cenv_
+    #ICoreEnvironment.getset_external_cache4rgnr_method
+    @abstractmethod
+    def _mk_the_uncached_child6cenv_(sf, cenv, /):
+        '-> uncached-IRecognizerLLoo'
+    @override
+    def _get_the_cached_child6cenv_(sf, cenv, /):
+        '-> IRecognizerLLoo # [must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
+        return cenv.getset_external_cache4rgnr_method(sf._mk_the_uncached_child6cenv_, 1)#get_vs_set_vs_set_ex
+class IRecognizerLLoo__lazy_alias(IRecognizerLLoo__lazy_solo_child, IRecognizerLLoo__alias):
+    'see:grammar4IRecognizerLLoo.py::INameResolver'
+    __slots__ = ()
 
 class IHasAttr__force_postprocess_when_ignore(ABC):
     __slots__ = ()
@@ -3337,8 +4152,17 @@ class IHasAttr__force_postprocess_when_ignore(ABC):
     def _force_postprocess_when_ignore_(sf, /):
         '-> bool'
 
-class IRecognizerLLoo__gprepostprocess(IRecognizerLLoo__solo_child6env, IHasAttr__force_postprocess_when_ignore):
-    #IRecognizerLLoo__wrap-->IRecognizerLLoo__gprepostprocess
+
+
+class IConfig4gprepostprocess(IHasAttr__force_postprocess_when_ignore):
+    'required by grammar4IRecognizerLLoo.py::(nm4spost|nm4spost6elem|cenv_var)'
+    # case ('=$', nm4spost):
+    # case ('~$', nm4spost):
+    # case ('=*$', nm4spost6elem):
+    # case ('~*$', nm4spost6elem):
+    # case ('$+', value):
+    # case ('.@', value):
+    #       cenv_var
     __slots__ = ()
     #_force_postprocess_when_ignore_ = False
     #@property
@@ -3348,29 +4172,46 @@ class IRecognizerLLoo__gprepostprocess(IRecognizerLLoo__solo_child6env, IHasAttr
     @property
     @abstractmethod
     def _may_gpreprocess_(sf, /):
-        '-> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8begin->(st, may ignore)) #donot affect reply.ok'
+        '-> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8begin->(st4ppp, may ignore)) #donot affect reply.ok'
     @property
     @abstractmethod
     def _may_gpostprocess6err_(sf, /):
-        '-> may gpostprocess6err/(rgnr->env->xctx_view->ignore->st->ext_info8end->errmsg->errmsg) #donot affect reply.ok'
+        '-> may gpostprocess6err/(rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->errmsg->errmsg) #donot affect reply.ok'
     @property
     @abstractmethod
     def _may_gpostprocess6ok_(sf, /):
-        '-> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->st->ext_info8end->oresult->oresult) #donot affect reply.ok'
+        '-> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->oresult->oresult) #donot affect reply.ok'
 
+class IRecognizerLLoo__gprepostprocess6cenv(IRecognizerLLoo__solo_child6cenv):
+    'see:grammar4IRecognizerLLoo.py::INameResolver'
+    __slots__ = ()
+    @abstractmethod
+    def _get_config4gprepostprocess6cenv_(sf, cenv, /):
+        'env -> IConfig4gprepostprocess'
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-        rgnr = sf._get_the_cached_child6env_(env)
-        if not ignore or sf._force_postprocess_when_ignore_:
-            (st, ignore) = apply_may_gpreprocess_(sf._may_gpreprocess_, rgnr, env, xctx_view, ignore, istream)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
+        cfg = sf._get_config4gprepostprocess6cenv_(cenv)
+        if not ignore or cfg._force_postprocess_when_ignore_:
+            (st4ppp, ignore) = apply_may_gpreprocess_(cfg._may_gpreprocess_, rgnr, env, xctx_view, ignore, istream)
 
         reply = yield mk_Call_(rgnr, unlocker, ignore, istream)
 
-        if not ignore or sf._force_postprocess_when_ignore_:
-            reply = apply_may_gpostprocess_(sf._may_gpostprocess6err_, sf._may_gpostprocess6ok_, reply, rgnr, env, xctx_view, ignore, st)
+        if not ignore or cfg._force_postprocess_when_ignore_:
+            reply = apply_may_gpostprocess_(cfg._may_gpostprocess6err_, cfg._may_gpostprocess6ok_, reply, rgnr, env, xctx_view, ignore, st4ppp)
         return reply
+class IRecognizerLLoo__gprepostprocess(IRecognizerLLoo__gprepostprocess6cenv, IConfig4gprepostprocess):
+    #class IRecognizerLLoo__gprepostprocess(IRecognizerLLoo__solo_child6cenv, IHasAttr__force_postprocess_when_ignore):
+    #IRecognizerLLoo__wrap-->IRecognizerLLoo__gprepostprocess
+    #extract out IConfig4gprepostprocess+IRecognizerLLoo__gprepostprocess6cenv
+    __slots__ = ()
+    @override
+    def _get_config4gprepostprocess6cenv_(sf, cenv, /):
+        'env -> IConfig4gprepostprocess'
+        return sf
 
-class IRecognizerLLoo__spostprocess(IRecognizerLLoo__solo_child6env, IHasAttr__force_postprocess_when_ignore):
+class IRecognizerLLoo__spostprocess(IRecognizerLLoo__solo_child6cenv, IHasAttr__force_postprocess_when_ignore):
     __slots__ = ()
     #_force_postprocess_when_ignore_ = False
     #@property
@@ -3388,7 +4229,8 @@ class IRecognizerLLoo__spostprocess(IRecognizerLLoo__solo_child6env, IHasAttr__f
 
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-        rgnr = sf._get_the_cached_child6env_(env)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
         reply = yield mk_Call_(rgnr, unlocker, ignore, istream)
 
         if (not ignore or sf._force_postprocess_when_ignore_):
@@ -3399,7 +4241,7 @@ def apply_may_spostprocess_(reply, mspost6err_, mspost6ok_, /):
     reply = reply.ireplace(eresult=reply.eresult.fmap4either(mspost6err_, mspost6ok_))
     return reply
 
-class IRecognizerLLoo__tag(IRecognizerLLoo__solo_child6env):
+class IRecognizerLLoo__tag(IRecognizerLLoo__solo_child6cenv):
     'used as child_rgnr/branch of priority_parallel #no matter whether ignore'
     __slots__ = ()
     @property
@@ -3408,7 +4250,8 @@ class IRecognizerLLoo__tag(IRecognizerLLoo__solo_child6env):
         '-> tag'
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-        rgnr = sf._get_the_cached_child6env_(env)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
         reply = yield mk_Call_(rgnr, unlocker, ignore, istream)
         if reply.ok:
             reply = reply.ireplace(eresult=mk_Right(Cased(sf._tag_, reply.oresult)))
@@ -3419,31 +4262,111 @@ class IRecognizerLLoo__tag(IRecognizerLLoo__solo_child6env):
 
 
 
-class IRecognizerLLoo__alias__init(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__alias):pass
+
+class IRecognizerLLoo__lazy_solo_child__init(IRecognizerLLoo__lazy_solo_child, _Base4repr):
+    '[mk_rgnr5cenv_args_ex :: cenv -> (*args_ex) -> rgnr]'
+    ___no_slots_ok___ = True
+    def __init__(sf, may_mk_rgnr5cenv_args_ex=None, args_ex=null_tuple, /):
+        mk_rgnr5cenv_args_ex = ifNone(may_mk_rgnr5cenv_args_ex, default_mk_rgnr5cenv_args_ex)
+        check_callable(mk_rgnr5cenv_args_ex)
+        check_type_is(tuple, args_ex)
+        if mk_rgnr5cenv_args_ex is default_mk_rgnr5cenv_args_ex:
+            if not args_ex:raise TypeError
+            if not all(type(x) is Either for x in args_ex):raise TypeError
+            xf = args_ex[0]
+            if xf.is_right:
+                check_callable(f:=xf.right)
+
+        args4repr = (may_mk_rgnr5cenv_args_ex, args_ex)
+        args4repr = pop_defaults_(args4repr, [None, null_tuple])
+        sf._reset4repr(args4repr)
+        sf._mkr = mk_rgnr5cenv_args_ex
+        sf._ex = args_ex
+    @override
+    def _mk_the_uncached_child6cenv_(sf, cenv, /):
+        '-> uncached-IRecognizerLLoo'
+        rgnr = sf._mkr(cenv, *sf._ex)
+            #rgnr = mk_rgnr5cenv_args_ex(cenv, *args_ex)
+        check_type_le(IRecognizerLLoo, rgnr)
+        return rgnr
+def default_mk_rgnr5cenv_args_ex(cenv, /, *args_ex):
+    'ICoreEnvironment -> (*[Either sym<cenv.param2setting_> value]{nonempty;fst is mkr}) -> rgnr'
+    if not args_ex:raise TypeError
+    if not all(type(x) is Either for x in args_ex):raise TypeError
+    it = (x.fold4either(cenv.param2setting_, None) for x in args_ex)
+    f = next(it)
+    rgnr = f(*it)
+    check_type_le(IRecognizerLLoo, rgnr)
+    return rgnr
+
+
+
+
+class IRecognizerLLoo__alias__init(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__alias):pass
 class BaseRecognizerLLoo__alias__default_mixins(IRecognizerLLoo__alias__init, IRecognizerLLoo__default_mixins):pass
 check_non_ABC(BaseRecognizerLLoo__alias__default_mixins)
+
+
+class IRecognizerLLoo__lazy_alias__init(IRecognizerLLoo__lazy_solo_child__init, IRecognizerLLoo__lazy_alias):pass
+class BaseRecognizerLLoo__lazy_alias__default_mixins(IRecognizerLLoo__lazy_alias__init, IRecognizerLLoo__default_mixins):pass
+check_non_ABC(BaseRecognizerLLoo__lazy_alias__default_mixins)
+
+class RecognizerLLoo__lazy_alias(BaseRecognizerLLoo__lazy_alias__default_mixins):
+    def __init__(sf, mkr_or_nm4mkr, xargs4mkr, /):
+        xargs4mkr = mk_tuple(xargs4mkr)
+        if not all(type(x) is Either for x in xargs4mkr):raise TypeError
+        mkr = mkr5or_nm_(mkr_or_nm4mkr)
+        args_ex = (mk_Right(mkr), *xargs4mkr)
+        super().__init__(may_mk_rgnr5cenv_args_ex:=None, args_ex)
+        args4repr = (mkr_or_nm4mkr, xargs4mkr)
+        sf._reset4repr(args4repr)
+check_non_ABC(RecognizerLLoo__lazy_alias)
+def mkr5or_nm_(mkr_or_nm4mkr, /):
+    '(mkr|nm<Makers4IRecognizerLLoo[nm]>) -> mkr'
+    if type(mkr_or_nm4mkr) is str:
+        nm4mkr = mkr_or_nm4mkr
+        mkr = getattr(mkrs:=Makers4IRecognizerLLoo, nm4mkr)
+    else:
+        mkr = mkr_or_nm4mkr
+    mkr
+    check_callable(mkr)
+    return mkr
+def lazy_alias_rgnr__human_(mkr_or_nm4mkr, /, *ls4xvalue_or_value):
+    '(mkr|nm<Makers4IRecognizerLLoo[nm]>) -> (*[(xvalue/Either|value/(not Either))]) -> IRecognizerLLoo #[required: value is not Either otherwise should be wrapped as xvalue/mk_Right(value)]'
+    ls = ls4xvalue_or_value
+    if any(type(y) is Either and y.is_left for y in ls):
+        xs = (y if type(y) is Either else mk_Right(y) for y in ls)
+        #rgnr = mkrs.lazy_alias_(mkr_or_nm4mkr, xs)
+        rgnr = RecognizerLLoo__lazy_alias(mkr_or_nm4mkr, xs)
+    else:
+        vs = (y.right if type(y) is Either else y for y in ls)
+        mkr = mkr5or_nm_(mkr_or_nm4mkr)
+        rgnr = mkr(*vs)
+    rgnr
+    return rgnr
+#end-def lazy_alias_rgnr__human_(mkr_or_nm4mkr, /, *ls4xvalue_or_value):
+
 
 def check_may_callable(x, /):
     if not x is None:
         check_callable(x)
-class IRecognizerLLoo__gprepostprocess__init(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__gprepostprocess):
-    #___no_slots_ok___ = True
-    def __init__(sf, rgnr, _may_gpreprocess_, _may_gpostprocess6err_, _may_gpostprocess6ok_, _force_postprocess_when_ignore_=False, /):
-        check_type_le(IRecognizerLLoo, rgnr)
+class Config4gprepostprocess(IConfig4gprepostprocess):
+    ___no_slots_ok___ = True
+    def __init__(sf, _may_gpreprocess_, _may_gpostprocess6err_, _may_gpostprocess6ok_, /, _force_postprocess_when_ignore_=False):
         check_may_callable(_may_gpreprocess_)
         check_may_callable(_may_gpostprocess6err_)
         check_may_callable(_may_gpostprocess6ok_)
         check_type_is(bool, _force_postprocess_when_ignore_)
 
-        super().__init__(rgnr)
         sf._mpre = _may_gpreprocess_
         sf._mgpost6err = _may_gpostprocess6err_
         sf._mgpost6ok = _may_gpostprocess6ok_
         sf._b_force = _force_postprocess_when_ignore_
 
-        args = (rgnr, _may_gpreprocess_, _may_gpostprocess6err_, _may_gpostprocess6ok_, _force_postprocess_when_ignore_)
-        #sf._args4repr = args if _force_postprocess_when_ignore_ else args[:-1]
+        #######
+        args = (_may_gpreprocess_, _may_gpostprocess6err_, _may_gpostprocess6ok_, _force_postprocess_when_ignore_)
         sf._reset4repr(args if _force_postprocess_when_ignore_ else args[:-1])
+        #######
     @property
     @override
     def _force_postprocess_when_ignore_(sf, /):
@@ -3453,25 +4376,37 @@ class IRecognizerLLoo__gprepostprocess__init(IRecognizerLLoo__solo_child6env__in
     @property
     @override
     def _may_gpreprocess_(sf, /):
-        '-> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8begin->(st, may ignore)) #donot affect reply.ok'
+        '-> may gpreprocess/(rgnr->env->xctx_view->ignore->ext_info8begin->(st4ppp, may ignore)) #donot affect reply.ok'
         return sf._mpre
     @property
     @override
     def _may_gpostprocess6err_(sf, /):
-        '-> may gpostprocess6err/(rgnr->env->xctx_view->ignore->st->ext_info8end->errmsg->errmsg) #donot affect reply.ok'
+        '-> may gpostprocess6err/(rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->errmsg->errmsg) #donot affect reply.ok'
         return sf._mgpost6err
     @property
     @override
     def _may_gpostprocess6ok_(sf, /):
-        '-> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->st->ext_info8end->oresult->oresult) #donot affect reply.ok'
+        '-> may gpostprocess6ok/(rgnr->env->xctx_view->ignore->st4ppp->ext_info8end->oresult->oresult) #donot affect reply.ok'
         return sf._mgpost6ok
+class IRecognizerLLoo__gprepostprocess__init(Config4gprepostprocess, IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__gprepostprocess):
+    #split out Config4gprepostprocess
+    #___no_slots_ok___ = True
+    def __init__(sf, rgnr, _may_gpreprocess_, _may_gpostprocess6err_, _may_gpostprocess6ok_, /, _force_postprocess_when_ignore_=False):
+        check_type_le(IRecognizerLLoo, rgnr)
+        #super().__init__(rgnr)
+        IRecognizerLLoo__solo_child6cenv__init.__init__(sf, rgnr)
+        Config4gprepostprocess.__init__(sf, _may_gpreprocess_, _may_gpostprocess6err_, _may_gpostprocess6ok_, _force_postprocess_when_ignore_)
+        #######
+        args = (rgnr, _may_gpreprocess_, _may_gpostprocess6err_, _may_gpostprocess6ok_, _force_postprocess_when_ignore_)
+        sf._reset4repr(args if _force_postprocess_when_ignore_ else args[:-1])
+        #######
 
 class RecognizerLLoo__gprepostprocess(IRecognizerLLoo__gprepostprocess__init, IRecognizerLLoo__default_mixins):pass
 check_non_ABC(RecognizerLLoo__gprepostprocess)
 
 
-class IRecognizerLLoo__spostprocess__init(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__spostprocess):
-    def __init__(sf, rgnr, _may_spostprocess6err_, _may_spostprocess6ok_, _force_postprocess_when_ignore_=False, /):
+class IRecognizerLLoo__spostprocess__init4dynamic(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__spostprocess):
+    def __init__(sf, rgnr, _may_spostprocess6err_, _may_spostprocess6ok_, /, _force_postprocess_when_ignore_=False):
         check_type_le(IRecognizerLLoo, rgnr)
         check_may_callable(_may_spostprocess6err_)
         check_may_callable(_may_spostprocess6ok_)
@@ -3501,10 +4436,10 @@ class IRecognizerLLoo__spostprocess__init(IRecognizerLLoo__solo_child6env__init,
     def _may_spostprocess6ok_(sf, /):
         '-> may spostprocess6ok/(oresult->oresult) #donot affect reply.ok'
         return sf._mspost6ok
-class RecognizerLLoo__spostprocess(IRecognizerLLoo__spostprocess__init, IRecognizerLLoo__default_mixins):pass
+class RecognizerLLoo__spostprocess(IRecognizerLLoo__spostprocess__init4dynamic, IRecognizerLLoo__default_mixins):pass
 check_non_ABC(RecognizerLLoo__spostprocess)
 
-class IRecognizerLLoo__tag__init(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__tag):
+class IRecognizerLLoo__tag__init(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__tag):
     def __init__(sf, rgnr, tag, /):
         #check_type_le(IRecognizerLLoo, rgnr)
         super().__init__(rgnr)
@@ -3528,8 +4463,8 @@ def tag_rgnr_(tag, rgnr, /):
 
 
 _wd = get_weak_symbolize_register4sexconfigpack_(forbid_xxx_protected_ok)
-class RecognizerLLoo__light_wrap(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__default_mixins):
-    'builtin_support:light_wrap_rgnr_() #[postprocess no matter whether ignore] #[to avoid: _iter_persistent_children6env_ --> [rgnr, try_rgnr_(rgnr)...]@RecognizerLLoo__repetition]'
+class RecognizerLLoo__light_wrap(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__default_mixins):
+    'builtin_support:light_wrap_rgnr_() #[postprocess no matter whether ignore] #[to avoid: _iter_persistent_children6cenv_ --> [rgnr, try_rgnr_(rgnr)...]@RecognizerLLoo__repetition]'
     def __init__(sf, rgnr, symbol8sexconfigpack, may_info4mk_gi, /):
         sf._pk = sexconfigpack = _wd.lookup(symbol8sexconfigpack)
         sf._sym = symbol8sexconfigpack
@@ -3538,14 +4473,15 @@ class RecognizerLLoo__light_wrap(IRecognizerLLoo__solo_child6env__init, IRecogni
         #sf._args4repr = (rgnr, symbol8sexconfigpack, may_info4mk_gi)
         sf._reset4repr((rgnr, symbol8sexconfigpack, may_info4mk_gi))
         sf._br = rgnr._get_the_base_rgnr_()
-            # => hard to impl '_get_the_base_rgnr6env_'
-            # => _get_the_base_rgnr6env_ --> _get_the_base_rgnr_
+            # => hard to impl '_get_the_base_rgnr6cenv_'
+            # => _get_the_base_rgnr6cenv_ --> _get_the_base_rgnr_
     @override
     def _get_the_base_rgnr_(sf, /):
         return sf._br
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
-        rgnr = sf._get_the_cached_child6env_(env)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
         sexconfigpack = sf._pk
         #symbol8sexconfigpack = sf._sym
         may_info4mk_gi = sf._m
@@ -3578,7 +4514,7 @@ check_non_ABC(RecognizerLLoo__light_wrap)
 
 
 
-class IRecognizerLLoo__repetition__init(IRecognizerLLoo__two_children6env__init, IRecognizerLLoo__repetition):
+class IRecognizerLLoo__repetition__init(IRecognizerLLoo__two_children6cenv__init, IRecognizerLLoo__repetition):
     @override
     def __init__(sf, rgnr, _min, may_max, unlock_idx, begin_vs_middle:bool, ignore:bool, unpack:bool, /):
         check_type_is(bool, unpack)
@@ -3594,12 +4530,12 @@ class IRecognizerLLoo__repetition__init(IRecognizerLLoo__two_children6env__init,
         #sf._args4repr = (rgnr, _min, may_max, unlock_idx, begin_vs_middle, ignore, unpack)
         sf._reset4repr((rgnr, _min, may_max, unlock_idx, begin_vs_middle, ignore, unpack))
     @override
-    def _get_repetition_args6env_(sf, env, /):
+    def _get_repetition_args6cenv_(sf, cenv, /):
         '-> repetition_args/(min, may_max, unlock_idx, begin_vs_middle, ignore, unpack)/(uint, may uint, unit, bool, bool, bool)'
         return sf._rp_args
 
 
-class IRecognizerLLoo__forgivable_fail_ok__solo_child6env__init(IRecognizerLLoo__solo_child6env__init, IHasAttr__forgivable_fail_be_ok):
+class IRecognizerLLoo__forgivable_fail_ok__solo_child6cenv__init(IRecognizerLLoo__solo_child6cenv__init, IHasAttr__forgivable_fail_be_ok):
     @override
     def __init__(sf, rgnr, _forgivable_fail_be_ok_:bool, /):
         check_type_is(bool, _forgivable_fail_be_ok_)
@@ -3618,18 +4554,18 @@ def try_rgnr_(rgnr, /):
 .    if not type(rgnr) is RecognizerLLoo__try:
 .        rgnr = RecognizerLLoo__try(rgnr)
 .    return rgnr
-.class IRecognizerLLoo__lift__init(IRecognizerLLoo__forgivable_fail_ok__solo_child6env__init, IRecognizerLLoo__lift):pass
-.class IRecognizerLLoo__optional__init(IRecognizerLLoo__forgivable_fail_ok__solo_child6env__init, IRecognizerLLoo__optional):pass
+.class IRecognizerLLoo__lift__init(IRecognizerLLoo__forgivable_fail_ok__solo_child6cenv__init, IRecognizerLLoo__lift):pass
+.class IRecognizerLLoo__optional__init(IRecognizerLLoo__forgivable_fail_ok__solo_child6cenv__init, IRecognizerLLoo__optional):pass
 .
 .class RecognizerLLoo__lift(IRecognizerLLoo__lift__init, IRecognizerLLoo__default_mixins):pass
 .check_non_ABC(RecognizerLLoo__lift)
 .class RecognizerLLoo__optional(IRecognizerLLoo__optional__init, IRecognizerLLoo__default_mixins):pass
 .check_non_ABC(RecognizerLLoo__optional)
-.class RecognizerLLoo__try(IRecognizerLLoo__try, IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__default_mixins):pass
+.class RecognizerLLoo__try(IRecognizerLLoo__try, IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__default_mixins):pass
 .check_non_ABC(RecognizerLLoo__try)
-.class RecognizerLLoo__lookahead(IRecognizerLLoo__lookahead, IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__default_mixins):pass
+.class RecognizerLLoo__lookahead(IRecognizerLLoo__lookahead, IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__default_mixins):pass
 .check_non_ABC(RecognizerLLoo__lookahead)
-.##class RecognizerLLoo__flip(IRecognizerLLoo__flip, IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__default_mixins):pass
+.##class RecognizerLLoo__flip(IRecognizerLLoo__flip, IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__default_mixins):pass
 .##check_non_ABC(RecognizerLLoo__flip)
 #]]]"""#"""
 
@@ -3656,7 +4592,7 @@ class IRecognizerLLoo__init__rgnrs(IRecognizerLLoo, _Base4repr):
 class RecognizerLLoo__priority_parallel(IRecognizerLLoo__init__rgnrs, IRecognizerLLoo__priority_parallel, IRecognizerLLoo__default_mixins):
     @override
     def _iter_priority_parallel_children_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
         return iter(sf._rgnrs_)
 check_non_ABC(RecognizerLLoo__priority_parallel)
 
@@ -3668,7 +4604,9 @@ def mk_casedT_(tag, /):
 def unbox(xs, /):
     [x] = xs
     return x
-class IRecognizerLLoo__spostprocess__init__default_mixins(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__spostprocess, IRecognizerLLoo__default_mixins):
+class IRecognizerLLoo__spostprocess__init4mini(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__spostprocess):
+    # vs:IRecognizerLLoo__spostprocess__init4dynamic
+    #
     # ++sf._force_postprocess_when_ignore_ <<== RecognizerLLoo__unbox_tuple using RecognizerLLoo__spost__unbox
     #@override
     #_force_postprocess_when_ignore_ = False
@@ -3686,7 +4624,16 @@ class IRecognizerLLoo__spostprocess__init__default_mixins(IRecognizerLLoo__solo_
     def _force_postprocess_when_ignore_(sf, /):
         '-> bool'
         return sf._b_force
-class IRecognizerLLoo__spostprocess__init__default_mixins__static(IRecognizerLLoo__spostprocess__init__default_mixins):
+assert issubclass(IRecognizerLLoo__spostprocess__init4dynamic, IRecognizerLLoo__solo_child6cenv__init)
+assert issubclass(IRecognizerLLoo__spostprocess__init4dynamic, IRecognizerLLoo__spostprocess)
+#class IRecognizerLLoo__spostprocess__init4mini__default_mixins(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__spostprocess, IRecognizerLLoo__default_mixins):
+    #bug:class IRecognizerLLoo__spostprocess__init4mini__default_mixins(IRecognizerLLoo__spostprocess__init4dynamic, IRecognizerLLoo__default_mixins):
+    #   !! init4mini is not init4dynamic
+class IRecognizerLLoo__spostprocess__init4mini__default_mixins(IRecognizerLLoo__spostprocess__init4mini, IRecognizerLLoo__default_mixins):
+    #bug:class IRecognizerLLoo__spostprocess__init4mini__default_mixins(IRecognizerLLoo__spostprocess__init4dynamic, IRecognizerLLoo__default_mixins):
+    #   !! init4mini is not init4dynamic
+    pass
+class IRecognizerLLoo__spostprocess__init4mini__default_mixins__static(IRecognizerLLoo__spostprocess__init4mini__default_mixins):
     @classmethod
     @abstractmethod
     def _spostprocess6ok_(cls, oresult, /):
@@ -3695,13 +4642,127 @@ class IRecognizerLLoo__spostprocess__init__default_mixins__static(IRecognizerLLo
     @override
     def _may_spostprocess6ok_(sf, /):
         return type(sf)._spostprocess6ok_
+class RecognizerLLoo__subscript(IRecognizerLLoo__spostprocess__init4mini__default_mixins):
+    'subscript/getitem'
+    def __init__(sf, rgnr, key, /, _force_postprocess_when_ignore_=False):
+        super().__init__(rgnr, _force_postprocess_when_ignore_=_force_postprocess_when_ignore_)
+        sf._k = key
+        args = (rgnr, key, _force_postprocess_when_ignore_)
+        sf._reset4repr(args if _force_postprocess_when_ignore_ else args[:-1])
+    @override
+    def _may_spostprocess6ok_(sf, oresult, /):
+        return oresult[sf._k]
+check_non_ABC(RecognizerLLoo__subscript)
+
+
+class IRecognizerLLoo__main__gprepostprocess(IRecognizerLLoo__gprepostprocess, IRecognizerLLoo__main):
+    __slots__ = ()
+
+class BaseRecognizerLLoo__main__default_mixins(IRecognizerLLoo__main, BaseRecognizerLLoo__alias__default_mixins):
+    #@override
+    _may_setup_ = None
+    #@override
+    _may_teardown_ = None
+
+class RecognizerLLoo__main(BaseRecognizerLLoo__main__default_mixins):
+    def __init__(sf, rgnr, /, _may_setup_=None, _may_teardown_=None):
+        check_may_callable(_may_setup_)
+        check_may_callable(_may_teardown_)
+        super().__init__(rgnr)
+        ls = pop_defaults_([rgnr, _may_setup_, _may_teardown_], [None, None])
+        sf._reset4repr((*ls,))
+        sf._mf4s = _may_setup_
+        sf._mf4t = _may_teardown_
+    @property
+    @override
+    #def _may_setup_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, /):
+    def _may_setup_(sf, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: -> may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr)'
+        return sf._mf4s
+    @property
+    @override
+    #def _may_teardown_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, either__exc_info__or__reply, /):
+    def _may_teardown_(sf, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: -> may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->either__exc_info__or__reply->tmay result4rgnz) # [either__exc_info__or__reply :: (Either exc_info/(exc_type, exc_value, traceback) Reply)]'
+        return sf._mf4t
+check_non_ABC(RecognizerLLoo__main)
+
+
+
+
+class BaseRecognizerLLoo__main__split_teardown__default_mixins(IRecognizerLLoo__main__split_teardown, BaseRecognizerLLoo__alias__default_mixins):
+    #@override
+    _may_setup_ = None
+    #@override
+    _may_teardown6rpostprocess_ = None
+    #@override
+    _may_teardown6finalize_ = None
+
+    if 0:
+        @override
+        def _may_teardown6rpostprocess_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, reply, /):
+            return (result4rgnz:=reply)
+        @override
+        def _may_teardown6finalize_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, /):
+            return None
+
+
+class RecognizerLLoo__main__split_teardown(BaseRecognizerLLoo__main__split_teardown__default_mixins):
+    def __init__(sf, rgnr, /, _may_setup_=None, _may_teardown6rpostprocess_=None, _may_teardown6finalize_=None):
+        check_may_callable(_may_setup_)
+        check_may_callable(_may_teardown6rpostprocess_)
+        check_may_callable(_may_teardown6finalize_)
+        super().__init__(rgnr)
+        ls = pop_defaults_([rgnr, _may_setup_, _may_teardown6rpostprocess_, _may_teardown6finalize_], [None, None, None])
+        sf._reset4repr((*ls,))
+        sf._mf4s = _may_setup_
+        sf._mf4t6r = _may_teardown6rpostprocess_
+        sf._mf4t6f = _may_teardown6finalize_
+
+        #.sf._f4t6r = ifNone(_may_teardown6rpostprocess_, type(sf).default__teardown6rpostprocess_)
+        #.sf._f4t6f = ifNone(_may_teardown6finalize_, type(sf).default__teardown6finalize_)
+    @property
+    @override
+    #def _may_setup_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, /):
+    def _may_setup_(sf, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: -> may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr)'
+        return sf._mf4s
+
+    @property
+    @override
+    def _may_teardown6rpostprocess_(sf, /):
+    #def _may_teardown6rpostprocess_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, reply, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: => env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->reply->result4rgnz'
+        return sf._mf4t6r
+    @property
+    @override
+    def _may_teardown6finalize_(sf, /):
+    #def _may_teardown6finalize_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, /):
+        '[only called iff [sf as main_rgnr][entering recognize_()]]: => env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->None'
+        return sf._mf4t6f
+
+    if 0:
+        @staticmethod
+        def default__teardown6rpostprocess_(env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, reply, /):
+            return (result4rgnz:=reply)
+        @staticmethod
+        def default__teardown6finalize_(env, gctx, ctx, sym8id4curr_rgnz, ignore, st4main_rgnr, /):
+            return None
+
+
+check_non_ABC(RecognizerLLoo__main__split_teardown)
+
+
+
+
+
 #class RecognizerLLoo__spost__unbox(BaseRecognizerLLoo__alias__default_mixins):
 #    'unbox:used in unbox_tuple'
 #    def __init__(sf, rgnr, /):
 #        super().__init__(RecognizerLLoo__spostprocess(rgnr, None, unbox))
 #        #sf._args4repr = (rgnr,)
 #        sf._reset4repr((rgnr,))
-class RecognizerLLoo__spost__unbox(IRecognizerLLoo__spostprocess__init__default_mixins__static):
+class RecognizerLLoo__spost__unbox(IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
     'unbox:used in unbox_tuple'
     #@override
     _spostprocess6ok_ = unbox
@@ -3859,8 +4920,8 @@ class RecognizerLLoo__serial(IRecognizerLLoo__serial, IRecognizerLLoo__default_m
         '-> bool #true-tuple, not ignore the top-level tuple # required by RecognizerLLoo__unbox_tuple'
         return sf._keep_tpl
     @override
-    def _iter_persistent_children6env_(sf, env, /):
-        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into env.external_cache]'
+    def _iter_persistent_children6cenv_(sf, cenv, /):
+        '-> Iter IRecognizerLLoo # [must be finite][must be persistent obj, twice yield same obj][may saved into cenv.core_cache]'
         return map(fst, sf._ts)
     @override
     def _iter_runtime_serial_children_(sf, env, xctx_view, ignore:bool, var_changed, var_ok, var_reply, /):
@@ -3929,7 +4990,7 @@ class RecognizerLLoo__dependent_pair(IRecognizerLLoo__serial, IRecognizerLLoo__d
         sf._reset4repr(args if not may_rgnr8default_payload is None else args[:-1])
         sf._r_d_r = args
     @override
-    def _iter_persistent_children6env_(sf, env, /):
+    def _iter_persistent_children6cenv_(sf, cenv, /):
         (rgnr8case, case2rgnr8payload, may_rgnr8default_payload) = sf._r_d_r
         yield rgnr8case
         yield from case2rgnr8payload.values()
@@ -4028,7 +5089,7 @@ class RecognizerLLoo__try_except_else(IRecognizerLLoo__default_mixins, IHasAttr_
         exargs4lwrap = (nm4info_ex4mk_gi,)
         sf._ex4lw = exargs4lwrap
     @override
-    def _iter_persistent_children6env_(sf, env, /):
+    def _iter_persistent_children6cenv_(sf, cenv, /):
         return iter(sf._r3_b[:3])
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
@@ -4090,7 +5151,7 @@ class RecognizerLLoo__try_except_else__spost(RecognizerLLoo__try_except_else):
         '(oresult<rgnr8trial>, oresult<rgnr8else>) -> oresult<rgnr8self>.right'
         return sf._mspost6ok6trial_else
 
-    def __init__(sf, rgnr8trial, rgnr8except, rgnr8else, strict_vs_forgivable=False, may_spostprocess6ok6except=None, may_spostprocess6ok6trial_else=None, _force_postprocess_when_ignore_=False, /):
+    def __init__(sf, rgnr8trial, rgnr8except, rgnr8else, strict_vs_forgivable=False, may_spostprocess6ok6except=None, may_spostprocess6ok6trial_else=None, /, _force_postprocess_when_ignore_=False):
         check_may_callable(may_spostprocess6ok6except)
         check_may_callable(may_spostprocess6ok6trial_else)
         check_type_is(bool, _force_postprocess_when_ignore_)
@@ -4098,7 +5159,7 @@ class RecognizerLLoo__try_except_else__spost(RecognizerLLoo__try_except_else):
         super().__init__(rgnr8trial, rgnr8except, rgnr8else, strict_vs_forgivable)
 
         args = (rgnr8trial, rgnr8except, rgnr8else, strict_vs_forgivable, may_spostprocess6ok6except, may_spostprocess6ok6trial_else, _force_postprocess_when_ignore_)
-        ls = pop_defaults_([*args], [False, None, None, False])
+        ls = pop_defaults_(args, [False, None, None, False])
         #sf._args4repr = args if len(ls) == len(args) else args[:len(ls)]
         sf._reset4repr(args if len(ls) == len(args) else args[:len(ls)])
         #sf._r3_b_m2_b = args
@@ -4109,13 +5170,13 @@ check_non_ABC(RecognizerLLoo__try_except_else__spost)
 
 
 
-class IRecognizerLLoo__no_child6env(IRecognizerLLoo):
+class IRecognizerLLoo__no_child6cenv(IRecognizerLLoo):
     __slots__ = ()
     @override
-    def _iter_persistent_children6env_(sf, env, /):
+    def _iter_persistent_children6cenv_(sf, cenv, /):
         return
         777;    yield
-class IRecognizerLLoo__constant_loader(IRecognizerLLoo__no_child6env):
+class IRecognizerLLoo__constant_loader(IRecognizerLLoo__no_child6cenv):
     'constant_loader #no matter whether ignore'
     __slots__ = ()
     @property
@@ -4149,7 +5210,7 @@ class IRecognizerLLoo__constant_loader(IRecognizerLLoo__no_child6env):
 
 
 
-class IRecognizerLLoo__eof(IRecognizerLLoo__no_child6env):
+class IRecognizerLLoo__eof(IRecognizerLLoo__no_child6cenv):
     'eof'
     __slots__ = ()
     @override
@@ -4162,7 +5223,7 @@ class IRecognizerLLoo__eof(IRecognizerLLoo__no_child6env):
             unlocker.unlocker_release()
         return reply
         777;    yield
-class IRecognizerLLoo__not_eof(IRecognizerLLoo__no_child6env):
+class IRecognizerLLoo__not_eof(IRecognizerLLoo__no_child6cenv):
     'not_eof'
     __slots__ = ()
     @override
@@ -4175,7 +5236,7 @@ class IRecognizerLLoo__not_eof(IRecognizerLLoo__no_child6env):
             unlocker.unlocker_release()
         return reply
         777;    yield
-class IRecognizerLLoo__any_token(IRecognizerLLoo__no_child6env):
+class IRecognizerLLoo__any_token(IRecognizerLLoo__no_child6cenv):
     'any_token'
     __slots__ = ()
     @override
@@ -4186,7 +5247,7 @@ class IRecognizerLLoo__any_token(IRecognizerLLoo__no_child6env):
         reply = _mk_reply4tkn(unlocker, istream, tmay_tkn, may_errmsg)
         return reply
         777;    yield
-class IRecognizerLLoo__token(IRecognizerLLoo__no_child6env):
+class IRecognizerLLoo__token(IRecognizerLLoo__no_child6cenv):
     'token'
     __slots__ = ()
     @property
@@ -4232,7 +5293,7 @@ def _mk_reply4tkn_seq(unlocker, istream, tkn_seq, may_errmsg, /):
     reply = Reply(eresult, ext_info8end)
     return reply
 
-class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6env):
+class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6cenv):
     'token_seq'
     __slots__ = ()
     @property
@@ -4253,12 +5314,12 @@ class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6env):
         reply = _mk_reply4tkn_seq(unlocker, istream, tkn_seq, may_errmsg)
         return reply
         777;    yield
-#class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6env):
+#class IRecognizerLLoo__token_seq(IRecognizerLLoo__no_child6cenv):
 
 
 
-class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6env):
-    'tkey_prefix_tree #see:seed.seq_tools.mk_prefix_tree'
+class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6cenv):
+    'tkey_prefix_tree #no matter whether ignore #see:seed.seq_tools.mk_prefix_tree'
     __slots__ = ()
     @property
     @abstractmethod
@@ -4283,6 +5344,8 @@ class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6env):
         return tkey_prefix_tree
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
+        ignore = False
+            #no matter whether ignore
         tkey_prefix_tree = sf._tkey_prefix_tree_
         tkns = istream.peek_iter()
         tkeys = map(tkn2tkey_, tkns)
@@ -4331,7 +5394,7 @@ class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6env):
         reply = Reply(eresult, ext_info8end)
         return reply
         777;    yield
-#class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6env):
+#class IRecognizerLLoo__tkey_prefix_tree(IRecognizerLLoo__no_child6cenv):
 class IRecognizerLLoo__tkey_prefix_tree__init(IRecognizerLLoo__tkey_prefix_tree, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, keyed_tkey_seq_pairs, /, _many0_vs_solo_vs_many1_:'{0|1|2}'=1):
@@ -4376,74 +5439,115 @@ def tkd2tdat_(tkd, /):
     'tkd -> tdat # Cased -> payload'
     return tkd.payload
 
-class RecognizerLLoo__spost__tkn2tkd(IRecognizerLLoo__spostprocess__init__default_mixins__static):
+class RecognizerLLoo__spost__tkn2tkd(IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
     #@override
     _spostprocess6ok_ = tkn2tkd_
-class RecognizerLLoo__spost__tkn2tkey(IRecognizerLLoo__spostprocess__init__default_mixins__static):
+class RecognizerLLoo__spost__tkn2tkey(IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
     #@override
     _spostprocess6ok_ = tkn2tkey_
-class RecognizerLLoo__spost__tkn2tdat(IRecognizerLLoo__spostprocess__init__default_mixins__static):
+class RecognizerLLoo__spost__tkn2tdat(IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
     #@override
     _spostprocess6ok_ = tkn2tdat_
-class RecognizerLLoo__spost__tkd2tkey(IRecognizerLLoo__spostprocess__init__default_mixins__static):
+class RecognizerLLoo__spost__tkd2tkey(IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
     #@override
     _spostprocess6ok_ = tkd2tkey_
-class RecognizerLLoo__spost__tkd2tdat(IRecognizerLLoo__spostprocess__init__default_mixins__static):
+class RecognizerLLoo__spost__tkd2tdat(IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
     #@override
     _spostprocess6ok_ = tkd2tdat_
 
 
-class IRecognizerLLoo__spost__fmap4tuple(IRecognizerLLoo__spostprocess__init__default_mixins__static):
+class IRecognizerLLoo__spost__fmap4tuple__dynamic(IRecognizerLLoo__spostprocess):
+    'fmap4tuple/fmap<tuple> #[oresult :: tuple]'
+    __slots__ = ()
+    @abstractmethod
+    def _dyn_transform4fmap_(sf, oresult_element, /):
+        'oresult_element -> oresult_element #donot affect reply.ok'
+        'dynamic:_dyn_transform4oresult_element_-->_dyn_transform4fmap_'
+    @override
+    def _may_spostprocess6ok_(sf, oresult, /):
+        'oresult -> oresult/tuple #donot affect reply.ok'
+        f = sf._dyn_transform4fmap_
+        oresult = mk_tuple(map(f, oresult))
+        return oresult
+class RecognizerLLoo__spost__fmap4tuple(IRecognizerLLoo__spost__fmap4tuple__dynamic, IRecognizerLLoo__spostprocess__init4mini__default_mixins):
+    def __init__(sf, rgnr, _dyn_transform4fmap_, /, _force_postprocess_when_ignore_=False):
+        check_callable(_dyn_transform4fmap_)
+        super().__init__(rgnr, _force_postprocess_when_ignore_=_force_postprocess_when_ignore_)
+        sf._f = _dyn_transform4fmap_
+        args = (rgnr, _dyn_transform4fmap_, _force_postprocess_when_ignore_)
+        sf._reset4repr(args if _force_postprocess_when_ignore_ else args[:-1])
+    @property
+    @override
+    def _dyn_transform4fmap_(sf, /):
+        '-> (oresult_element -> oresult_element) #donot affect reply.ok'
+        return sf._f
+check_non_ABC(RecognizerLLoo__spost__fmap4tuple)
+
+class IRecognizerLLoo__spost__fmap4tuple__static(IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
+    'fmap4tuple/fmap<tuple> #[oresult :: tuple]'
+    __slots__ = ()
     @classmethod
     @abstractmethod
-    def _transform4oresult_element_(cls, oresult_element, /):
+    def _stc_transform4fmap_(cls, oresult_element, /):
         'oresult_element -> oresult_element #donot affect reply.ok'
+        'static:_stc_transform4oresult_element_-->_stc_transform4fmap_'
     @classmethod
     @override
     def _spostprocess6ok_(cls, oresult, /):
         'oresult -> oresult #donot affect reply.ok'
-        f = cls._transform4oresult_element_
+        f = cls._stc_transform4fmap_
         oresult = mk_tuple(map(f, oresult))
         return oresult
 
+class IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static(IRecognizerLLoo__spost__fmap4tuple__static, IRecognizerLLoo__spostprocess__init4mini__default_mixins__static):
+    'staic:classmethod'
+    @classmethod
+    @abstractmethod
+    @override
+    #'--> staic:classmethod'
+    def _stc_transform4fmap_(cls, oresult_element, /):
+        'oresult_element -> oresult_element #donot affect reply.ok'
 
-class RecognizerLLoo__spost__fmap4tuple__tkn2tkd(IRecognizerLLoo__spost__fmap4tuple):
+
+class RecognizerLLoo__spost__fmap4tuple__tkn2tkd(IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static):
     #@override
-    _transform4oresult_element_ = tkn2tkd_
-class RecognizerLLoo__spost__fmap4tuple__tkn2tkey(IRecognizerLLoo__spost__fmap4tuple):
+    _stc_transform4fmap_ = tkn2tkd_
+class RecognizerLLoo__spost__fmap4tuple__tkn2tkey(IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static):
     #@override
-    _transform4oresult_element_ = tkn2tkey_
-class RecognizerLLoo__spost__fmap4tuple__tkn2tdat(IRecognizerLLoo__spost__fmap4tuple):
+    _stc_transform4fmap_ = tkn2tkey_
+class RecognizerLLoo__spost__fmap4tuple__tkn2tdat(IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static):
     #@override
-    _transform4oresult_element_ = tkn2tdat_
-class RecognizerLLoo__spost__fmap4tuple__tkd2tkey(IRecognizerLLoo__spost__fmap4tuple):
+    _stc_transform4fmap_ = tkn2tdat_
+class RecognizerLLoo__spost__fmap4tuple__tkd2tkey(IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static):
     #@override
-    _transform4oresult_element_ = tkd2tkey_
-class RecognizerLLoo__spost__fmap4tuple__tkd2tdat(IRecognizerLLoo__spost__fmap4tuple):
+    _stc_transform4fmap_ = tkd2tkey_
+class RecognizerLLoo__spost__fmap4tuple__tkd2tdat(IRecognizerLLoo__spost__fmap4tuple__init4mini__default_mixins__static):
     #@override
-    _transform4oresult_element_ = tkd2tdat_
+    _stc_transform4fmap_ = tkd2tdat_
 
 
 
 
 
 
-class RecognizerLLoo__not_ignore(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__default_mixins):
+class RecognizerLLoo__not_ignore(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__default_mixins):
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
         ######################
         #new-ver:donot reset oresult as None
-        rgnr = sf._get_the_cached_child6env_(env)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
         reply = yield mk_Call_(rgnr, unlocker, ignore:=False, istream)
         return reply
 check_non_ABC(RecognizerLLoo__not_ignore)
 
-class RecognizerLLoo__ignore(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__default_mixins):
+class RecognizerLLoo__ignore(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__default_mixins):
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
         ######################
         #new-ver:donot reset oresult as None
-        rgnr = sf._get_the_cached_child6env_(env)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
         reply = yield mk_Call_(rgnr, unlocker, ignore:=True, istream)
         return reply
         ######################
@@ -4455,11 +5559,12 @@ class RecognizerLLoo__ignore(IRecognizerLLoo__solo_child6env__init, IRecognizerL
         #return reply
 check_non_ABC(RecognizerLLoo__ignore)
 _Right_None = mk_Right(None)
-class RecognizerLLoo__none8oresult_if_ignore(IRecognizerLLoo__solo_child6env__init, IRecognizerLLoo__default_mixins):
+class RecognizerLLoo__none8oresult_if_ignore(IRecognizerLLoo__solo_child6cenv__init, IRecognizerLLoo__default_mixins):
     @override
     def _mk_gi4recognize_(sf, env, xctx_view, unlocker, ignore:bool, istream, /):
         'cancel:directly used by RecognizerLLoo__ignore'
-        rgnr = sf._get_the_cached_child6env_(env)
+        cenv = env.core_env
+        rgnr = sf._get_the_cached_child6cenv_(cenv)
         reply = yield mk_Call_(rgnr, unlocker, ignore, istream)
         if ignore and reply.ok:
             if not reply.oresult is None:
@@ -4487,13 +5592,13 @@ check_non_ABC(RecognizerLLoo__constant_loader)
 
 
 
-class IRecognizerLLoo__no_child6env__init(IRecognizerLLoo__no_child6env, _Base4repr):
+class IRecognizerLLoo__no_child6cenv__init(IRecognizerLLoo__no_child6cenv, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, /):
         #sf._args4repr = null_tuple
         sf._reset4repr(null_tuple)
-class IRecognizerLLoo__token_seq__init(IRecognizerLLoo__token_seq, IRecognizerLLoo__no_child6env, _Base4repr):
-    #class IRecognizerLLoo__no_child6env__init_tkn_qset_seq(IRecognizerLLoo__no_child6env, _Base4repr):
+class IRecognizerLLoo__token_seq__init(IRecognizerLLoo__token_seq, IRecognizerLLoo__no_child6cenv, _Base4repr):
+    #class IRecognizerLLoo__no_child6cenv__init_tkn_qset_seq(IRecognizerLLoo__no_child6cenv, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, tkn_qset_seq, /):
         tkn_qset_seq = mk_tuple(tkn_qset_seq)
@@ -4507,8 +5612,8 @@ class IRecognizerLLoo__token_seq__init(IRecognizerLLoo__token_seq, IRecognizerLL
     def _token_qset_seq_(sf, /):
         '-> tkn_qset_seq/[ITokenQuerySet]'
         return sf._qss
-class IRecognizerLLoo__token__init(IRecognizerLLoo__token, IRecognizerLLoo__no_child6env, _Base4repr):
-    #class IRecognizerLLoo__no_child6env__init_tkn_qset(IRecognizerLLoo__no_child6env, _Base4repr):
+class IRecognizerLLoo__token__init(IRecognizerLLoo__token, IRecognizerLLoo__no_child6cenv, _Base4repr):
+    #class IRecognizerLLoo__no_child6cenv__init_tkn_qset(IRecognizerLLoo__no_child6cenv, _Base4repr):
     ___no_slots_ok___ = True
     def __init__(sf, tkn_qset, /):
         check_type_le(ITokenQuerySet, tkn_qset)
@@ -4522,12 +5627,12 @@ class IRecognizerLLoo__token__init(IRecognizerLLoo__token, IRecognizerLLoo__no_c
         return sf._qs
 
 
-class RecognizerLLoo__eof(IRecognizerLLoo__no_child6env__init, IRecognizerLLoo__eof, IRecognizerLLoo__default_mixins):pass
-class RecognizerLLoo__not_eof(IRecognizerLLoo__no_child6env__init, IRecognizerLLoo__not_eof, IRecognizerLLoo__default_mixins):pass
-class RecognizerLLoo__any_token(IRecognizerLLoo__no_child6env__init, IRecognizerLLoo__any_token, IRecognizerLLoo__default_mixins):pass
+class RecognizerLLoo__eof(IRecognizerLLoo__no_child6cenv__init, IRecognizerLLoo__eof, IRecognizerLLoo__default_mixins):pass
+class RecognizerLLoo__not_eof(IRecognizerLLoo__no_child6cenv__init, IRecognizerLLoo__not_eof, IRecognizerLLoo__default_mixins):pass
+class RecognizerLLoo__any_token(IRecognizerLLoo__no_child6cenv__init, IRecognizerLLoo__any_token, IRecognizerLLoo__default_mixins):pass
 
-#class RecognizerLLoo__token(IRecognizerLLoo__no_child6env__init_tkn_qset, IRecognizerLLoo__token, IRecognizerLLoo__default_mixins):pass
-#class RecognizerLLoo__token_seq(IRecognizerLLoo__no_child6env__init_tkn_qset_seq, IRecognizerLLoo__token_seq, IRecognizerLLoo__default_mixins):pass
+#class RecognizerLLoo__token(IRecognizerLLoo__no_child6cenv__init_tkn_qset, IRecognizerLLoo__token, IRecognizerLLoo__default_mixins):pass
+#class RecognizerLLoo__token_seq(IRecognizerLLoo__no_child6cenv__init_tkn_qset_seq, IRecognizerLLoo__token_seq, IRecognizerLLoo__default_mixins):pass
 class RecognizerLLoo__token(IRecognizerLLoo__token__init, IRecognizerLLoo__default_mixins):pass
 class RecognizerLLoo__token_seq(IRecognizerLLoo__token_seq__init, IRecognizerLLoo__default_mixins):pass
 
@@ -4558,6 +5663,7 @@ if 1:
     #######
     _0light_wrap_rgnr = light_wrap_rgnr_
     _0tag_rgnr = tag_rgnr_
+    _0lazy_alias_rgnr__human = lazy_alias_rgnr__human_
     #######
     #_echo_ = ???
     _0empty8header = empty8header_
@@ -4585,6 +5691,7 @@ class Makers4IRecognizerLLoo:
     #######
     light_wrap_rgnr_ = _0light_wrap_rgnr
     tag_rgnr_ = _0tag_rgnr
+    lazy_alias_rgnr__human_ = _0lazy_alias_rgnr__human
     #######
     #_echo_ = ???
     empty8header_ = _0empty8header
@@ -4619,6 +5726,7 @@ class Makers4IRecognizerLLoo:
     sep_by_ = RecognizerLLoo__sep_by
     sep_end_by_ = RecognizerLLoo__sep_end_by
     serial_ = RecognizerLLoo__serial
+    spost__fmap4tuple_ = RecognizerLLoo__spost__fmap4tuple
     spost__fmap4tuple__tkd2tdat_ = RecognizerLLoo__spost__fmap4tuple__tkd2tdat
     spost__fmap4tuple__tkd2tkey_ = RecognizerLLoo__spost__fmap4tuple__tkd2tkey
     spost__fmap4tuple__tkn2tdat_ = RecognizerLLoo__spost__fmap4tuple__tkn2tdat
@@ -4631,6 +5739,7 @@ class Makers4IRecognizerLLoo:
     spost__tkn2tkey_ = RecognizerLLoo__spost__tkn2tkey
     spost__unbox_ = RecognizerLLoo__spost__unbox
     spostprocess_ = RecognizerLLoo__spostprocess
+    subscript_ = RecognizerLLoo__subscript
     tag_ = RecognizerLLoo__tag
     tkey_prefix_tree_ = RecognizerLLoo__tkey_prefix_tree
     token_ = RecognizerLLoo__token
@@ -4643,6 +5752,10 @@ class Makers4IRecognizerLLoo:
     try_except_else_ = RecognizerLLoo__try_except_else
     try_except_else__spost_ = RecognizerLLoo__try_except_else__spost
     #######
+    main_ = RecognizerLLoo__main
+    main__split_teardown_ = RecognizerLLoo__main__split_teardown
+    lazy_alias_ = RecognizerLLoo__lazy_alias
+    #######
     _nms = {*locals()} -_nms
     pass
 def __():
@@ -4652,6 +5765,30 @@ def __():
     nm2x = {nm:x for nm, x in vars(M).items() if nm in nms}
     return NamespaceForbidModify(nm2x)
 Makers4IRecognizerLLoo = __()
+if 0b0000:print_err(repr(Makers4IRecognizerLLoo))
+if 0b0001:repr(Makers4IRecognizerLLoo)
+    #ok
+if 0b0001:{**Makers4IRecognizerLLoo}
+    #ok:???__iter__+__getitem__???
+with with_expect_error(AttributeError):
+    if 0b0001:Makers4IRecognizerLLoo.items
+    #fail
+    #AttributeError: items
+with with_expect_error((AttributeError, ValueError)):
+    if 0b0001:dict(Makers4IRecognizerLLoo)
+    #fail
+    #ValueError: dictionary update sequence element #0 has length 15; 2 is required
+if 0b0001:Makers4IRecognizerLLoo.tag_
+    #ok
+with with_expect_error(AttributeError):
+    if 0b0001:del Makers4IRecognizerLLoo.tag_
+    #fail
+with with_expect_error(AttributeError):
+    if 0b0001:Makers4IRecognizerLLoo.tag_ = 999
+    #fail
+with with_expect_error(AttributeError):
+    if 0b0001:Makers4IRecognizerLLoo.xxxx = 999
+    #fail
 #end-class Makers4IRecognizerLLoo:
 ######################
 def _check_repr_overrided():
@@ -4674,7 +5811,7 @@ def _check_repr_overrided():
             assert T.__repr__ is not IRecognizerLLoo.__repr__, T
             assert T.__repr__ is _Base4repr.__repr__, T
         ######################
-        if not T.__name__[0] in '_I' and not T is BaseRecognizerLLoo__alias__default_mixins:
+        if not T.__name__[0] in '_I' and not T in (BaseRecognizerLLoo__alias__default_mixins, BaseRecognizerLLoo__main__default_mixins, BaseRecognizerLLoo__main__split_teardown__default_mixins, BaseRecognizerLLoo__lazy_alias__default_mixins):
             prefix = 'RecognizerLLoo__'
             assert T.__name__.startswith(prefix), (prefix, T)
             suffix = T.__name__[len(prefix):]
@@ -4703,8 +5840,9 @@ _check_repr_overrided()
 
 
 __all__
-from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import recognize_, IRecognizerLLoo
+from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import recognize_, recognize__asif_main_rgnr_, IRecognizerLLoo
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import IRecognizerLLoo, Call, mk_Call_, RecognizeCall, Reply, RecognizeReply, dummy_unlocker
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import IUnlocker, ISnapshot, IInputStream
     # IBoxedInputStream
+from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import Makers4IRecognizerLLoo
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import *

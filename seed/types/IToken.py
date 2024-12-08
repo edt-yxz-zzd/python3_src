@@ -136,7 +136,7 @@ __all__ = r'''
 mk_token_rawstream__5xs__idx_
 mk_chr_rawstream5args8chars_
     mk_chr_rawstream5path_
-        mk_gap_position_info_at_ifile_begin
+        mk_chr_tgbegin5fname_
     mk_chr_rawstream5file_
     mk_chr_rawstream5chars_     mk_chr_rawstream5text_
 
@@ -182,7 +182,7 @@ mk_chr_rawstream5args8chars_
 
 mk_chr_rawstream5args8chars_
     mk_chr_rawstream5path_
-        mk_gap_position_info_at_ifile_begin
+        mk_chr_tgbegin5fname_   mk_gap_position_info_at_ifile_begin
         mk_chr_rawstream5file_
             iter_chars5file_
             mk_chr_rawstream5chars_     mk_chr_rawstream5text_
@@ -284,14 +284,22 @@ XQuerySet__named
     whole_xqset
     truth_test_xqset
     falsity_test_xqset
-CharQuerySet__using_py_str_method
+StrQuerySet__using_py_regex_fullmatch
     char_qset__py_regex__w
     char_qset__py_regex__W
     char_qset__py_regex__s
     char_qset__py_regex__S
     char_qset__py_regex__d
     char_qset__py_regex__D
-StrQuerySet__using_py_regex_fullmatch
+    char_qset__py_regex__hexdigit
+    char_qset__py_regex__hexdigit_underscore
+    char_qset__py_regex__digit
+    char_qset__py_regex__digit_underscore
+    char_qset__py_regex__bit
+    char_qset__py_regex__bit_underscore
+    char_qset__py_regex__octal_digit
+    char_qset__py_regex__octal_digit_underscore
+CharQuerySet__using_py_str_method
     char_qset__isalnum
     char_qset__not_isalnum
     char_qset__isalpha
@@ -963,7 +971,7 @@ def mk_chr_rawstream5args8chars_(args8chars, /):
 def mk_chr_rawstream5path_(ipath, /, *, encoding, may_pseudo_fname=None):
     'input_text_file_path -> chr_rawstream/(chr_tgbegin/PositionInfo4Gap__text_file, Iter chr_tkn/Token__char)'
     pseudo_fname = ipath if may_pseudo_fname is None else may_pseudo_fname
-    chr_tgbegin = mk_gap_position_info_at_ifile_begin(pseudo_fname)
+    chr_tgbegin = mk_chr_tgbegin5fname_(pseudo_fname)
     check_type_is(PositionInfo4Gap__text_file, chr_tgbegin)
 
     ifile = open(ipath, 'rt', encoding=encoding)
@@ -1017,14 +1025,15 @@ def iter_char_tokens5chars_(chr_tgbegin, chars, /):
 
 
 
-def mk_gap_position_info_at_ifile_begin(fname, /):
-    '-> chr_tgbegin/PositionInfo4Gap__text_file'
+def mk_chr_tgbegin5fname_(fname, /):
+    'fname -> chr_tgbegin/PositionInfo4Gap__text_file'
     may_idx6bytes = None
     idx6chars = 0
     lineno_column = LinenoColumn(1,1)
     idx4gap = 0
-    gap_position_info = PositionInfo4Gap__text_file(fname, may_idx6bytes, idx6chars, lineno_column, idx4gap)
-    return gap_position_info
+    chr_tgbegin = PositionInfo4Gap__text_file(fname, may_idx6bytes, idx6chars, lineno_column, idx4gap)
+    return chr_tgbegin
+mk_gap_position_info_at_ifile_begin = mk_chr_tgbegin5fname_
 
 ######################
 ######################
@@ -1287,14 +1296,22 @@ from seed.types.Tester import (ITester
 ,   whole_xqset
 ,   truth_test_xqset
 ,   falsity_test_xqset
-,CharQuerySet__using_py_str_method
+,StrQuerySet__using_py_regex_fullmatch
 ,   char_qset__py_regex__w
 ,   char_qset__py_regex__W
 ,   char_qset__py_regex__s
 ,   char_qset__py_regex__S
 ,   char_qset__py_regex__d
 ,   char_qset__py_regex__D
-,StrQuerySet__using_py_regex_fullmatch
+,   char_qset__py_regex__hexdigit
+,   char_qset__py_regex__hexdigit_underscore
+,   char_qset__py_regex__digit
+,   char_qset__py_regex__digit_underscore
+,   char_qset__py_regex__bit
+,   char_qset__py_regex__bit_underscore
+,   char_qset__py_regex__octal_digit
+,   char_qset__py_regex__octal_digit_underscore
+,CharQuerySet__using_py_str_method
 ,   char_qset__isalnum
 ,   char_qset__not_isalnum
 ,   char_qset__isalpha
@@ -1778,7 +1795,7 @@ from seed.types.IToken import mk_token_rawstream__5xs__idx_
 from seed.types.IToken import (
 mk_chr_rawstream5args8chars_
 ,   mk_chr_rawstream5path_
-,       mk_gap_position_info_at_ifile_begin
+,       mk_chr_tgbegin5fname_
 ,   mk_chr_rawstream5file_
 ,   mk_chr_rawstream5chars_
 ,       mk_chr_rawstream5text_

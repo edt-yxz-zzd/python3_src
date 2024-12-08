@@ -21,8 +21,8 @@ see:
 
 seed.for_libs.for_inspect
 py -m nn_ns.app.debug_cmd   seed.for_libs.for_inspect -x
-py -m nn_ns.app.adhoc_argparser__main__call8module   seed.for_libs.for_inspect   @f
-py -m nn_ns.app.doctest_cmd seed.for_libs.for_inspect:__doc__ -v
+py -m nn_ns.app.doctest_cmd seed.for_libs.for_inspect:__doc__ -ht
+py_adhoc_call   seed.for_libs.for_inspect   @f
 
 from seed.for_libs.for_inspect import get_signature_of__py3_
 
@@ -146,9 +146,15 @@ ValueError: no signature found for builtin <built-in method add of set object at
 Traceback (most recent call last):
     ...
 TypeError: unsupported callable
+
 >>> f = int.from_bytes
->>> get_signature_of__py3_(f)
+
+#old:>>> get_signature_of__py3_(f)
 (((), (('bytes', (), ()), ('byteorder', (), ())), (), (('signed', (), (False,)),), ()), ())
+>>> get_signature_of__py3_(f)
+(((), (('bytes', (), ()), ('byteorder', (), ('big',))), (), (('signed', (), (False,)),), ()), ())
+
+
 >>> get_signature_of__py2_(f)
 Traceback (most recent call last):
     ...
@@ -268,7 +274,7 @@ TypeError: varargs occur
 ... def ps(a='aaa', b='bbb', **_):pass
 Traceback (most recent call last):
     ...
-TypeError: varkwargs occur
+TypeError: varkwds occur
 >>> @pairs5api_
 ... def ps(a='aaa', b='bbb', *, _):pass
 Traceback (most recent call last):
@@ -292,7 +298,17 @@ TypeError: miss default value
 ...     def f(sf, /, a='aaa'):pass
 ...     @classmethod
 ...     def g(cls, /, a='aaa'):pass
+>>> get_signature_of__py2_(TEST.g)
+((('a', ('aaa',)),), None, None)
+>>> get_signature_of__py2_(TEST.f)
+((('sf', ()), ('a', ('aaa',))), None, None)
+>>> get_signature_of__py2_(TEST().g)
+((('a', ('aaa',)),), None, None)
+>>> get_signature_of__py2_(TEST().f)
+((('a', ('aaa',)),), None, None)
 >>> pairs5api_(TEST.g)
+[('a', 'aaa')]
+
 Traceback (most recent call last):
     ...
 TypeError: miss default value
@@ -301,6 +317,8 @@ Traceback (most recent call last):
     ...
 TypeError: miss default value
 >>> pairs5api_(TEST().f)
+[('a', 'aaa')]
+
 Traceback (most recent call last):
     ...
 TypeError: miss default value
@@ -441,6 +459,7 @@ __all__ = r'''
 __all__
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import inspect
 try:
     from inspect import getargspec as _getargspec__py2
@@ -448,16 +467,14 @@ try:
 except ImportError:
     #fail@py3_11_9
     _getargspec__py2 = None
-from inspect import signature as _get_signature_of__py3 #py2/py3 api diff, py3/py4 may be diff too.
-    #inspect.signature(callable, *, follow_wrapped=True) -> Signature
-    #.__wrapped__=f
-    #_test4follow_wrapped():goto
+#from inspect import signature as _get_signature_of__py3 #py2/py3 api diff, py3/py4 may be diff too.
+from seed.for_libs.for_inspect__isolated import _get_signature_of__py3
+
 from inspect import Parameter as _Parameter__py3, Signature as _Signature__py3 # py3/py4 may has diff Parameter, Signature
 from seed.helper.get4may import nmay2tmay__Nothing
     #nmay2tmay__Nothing(Nothing, nmay)
-from seed.debug.expectError import expectError
 from seed.tiny import check_type_is
-from seed.tiny_.mk_fdefault import eliminate_tmay, eliminate_tmay__cased, eliminate_tmay__mix, eliminate_tmay_or_raise, eliminate_tmay_or_raise__simple
+from seed.tiny_.mk_fdefault import eliminate_tmay__mix# eliminate_tmay, eliminate_tmay__cased, eliminate_tmay_or_raise, eliminate_tmay_or_raise__simple
 from seed.tiny_.mk_fdefault import mk_default__easy#, mk_default, mk_default_or_raise
     #def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
     #def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
@@ -466,126 +483,18 @@ from seed.tiny_.mk_fdefault import mk_default__easy#, mk_default, mk_default_or_
     #   mirrored = (mirror_imay_xedefault_rank < -1) ^ bool(mirror)
     #
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
-
-def is_num_args_ok_(num_args, f, /, *, imay_num_ok=False, follow_wrapped=True, ok_if_no_signature=False):
-    '-> bool | ^TypeError | ^ValueError'
-    return _check_num_args_ok_(_ask=True, **locals())
-def check_num_args_ok_(num_args, f, /, *, imay_num_ok=False, follow_wrapped=True, ok_if_no_signature=False):
-    '-> None | ^TypeError | ^ValueError'
-    return _check_num_args_ok_(_ask=False, **locals())
-def _check_num_args_ok_(*, num_args, f, imay_num_ok, _ask, follow_wrapped, ok_if_no_signature):
-    '-> None | bool | ^TypeError | ^ValueError'
-    if num_args < 0:
-        if imay_num_ok and num_args == -1:
-            #non_callable
-            x = f
-            if _ask:
-                return not callable(x)
-                    # -> bool
-            if callable(x):raise TypeError(type(x))
-                    # ^TypeError
-            return
-                    # -> None
-        raise TypeError(num_args)
-                    # ^TypeError
-
-    ######################
-    assert num_args >= 0
-    if _ask and not callable(f):
-        # !! get_: ^TypeError
-        return False
-                    # -> bool
-    def get_():
-        return _get_signature_of__py3(f, follow_wrapped=follow_wrapped)
-            #ValueError: no signature found for builtin type <class 'bool'>
-            #TypeError: 0 is not a callable object
-    if ok_if_no_signature:
-        try:
-            sig = get_()
-        except ValueError:
-            #ok@no signature
-            if _ask:
-                return callable(f)
-                    # -> bool
-            if not callable(f):raise TypeError(type(f))
-                    # ^TypeError
-            return
-                    # -> None
-        sig
-    else:
-        sig = get_()
-                    # ^ValueError
-    sig
-    bind_ = lambda:sig.bind(*range(num_args))
-    if _ask:
-        return not expectError(TypeError, bind_)
-                    # -> bool
-    bind_()
-                    # ^TypeError
-    return
-                    # -> None
-
-assert is_num_args_ok_(-1, 0, imay_num_ok=True)
-assert not is_num_args_ok_(-1, lambda:0, imay_num_ok=True)
-assert is_num_args_ok_(0, lambda:0)
-assert not is_num_args_ok_(1, lambda:0)
-assert is_num_args_ok_(1, lambda x:0)
-assert expectError(ValueError, lambda:is_num_args_ok_(1, bool))
-assert is_num_args_ok_(1, bool, ok_if_no_signature=True)
-assert not is_num_args_ok_(1, 0)
-assert expectError(ValueError, lambda:check_num_args_ok_(1, bool))
-assert expectError(TypeError, lambda:check_num_args_ok_(1, lambda:0))
-assert not expectError(TypeError, lambda:check_num_args_ok_(1, lambda x:0))
-assert expectError(TypeError, lambda:check_num_args_ok_(1, 0))
-assert expectError(TypeError, lambda:check_num_args_ok_(-1, 0))
-assert not expectError(TypeError, lambda:check_num_args_ok_(-1, 0, imay_num_ok=True))
-
-def _test4follow_wrapped():
-    #inspect.signature(callable, *, follow_wrapped=True) -> Signature
-    #.__wrapped__=f
-    class F:
-        def __call__(sf, /):
-            pass
-    fff = F()
-    ######################
-    assert is_num_args_ok_(0, fff)
-    assert not is_num_args_ok_(1, fff)
-    assert not is_num_args_ok_(2, fff)
-    ######################
-    def g(a, b):
-        pass
-    fff = F()
-    fff.__wrapped__ = g #ok
-    ######################
-    assert not is_num_args_ok_(0, fff) #ok
-    assert not is_num_args_ok_(1, fff)
-    assert is_num_args_ok_(2, fff) #ok
-    ######################
-    assert is_num_args_ok_(0, fff, follow_wrapped=False)
-    assert not is_num_args_ok_(1, fff, follow_wrapped=False)
-    assert not is_num_args_ok_(2, fff, follow_wrapped=False)
-    ######################
-    ######################
-    from functools import update_wrapper
-    f = F()
-    h = update_wrapper(f, g)
-    assert h is f, h
-    assert f.__wrapped__ is g
-    assert not is_num_args_ok_(0, f)
-    assert is_num_args_ok_(2, f)
-    assert is_num_args_ok_(0, f, follow_wrapped=False)
-    assert not is_num_args_ok_(2, f, follow_wrapped=False)
-    #print(dir(f))
-_test4follow_wrapped()
+from seed.for_libs.for_inspect__isolated import check_num_args_ok_, is_num_args_ok_
 
 #def pairs5api__xdefault_(imay_xdefault_rank, xdefault, /, *args4xdefault):
 def _mk_nm2default(*tmay_Nothing___or___args4mk_default_or_raise):
     L = len(tmay_Nothing___or___args4mk_default_or_raise)
     if L == 0:
         tmay_Nothing___or___args4mk_default_or_raise = (-3- 1, TypeError, 'miss default value')
+            #@py3_11_9:ValueError: no signature found for builtin type <class 'TypeError'>
     else:pass
     #####
     if L >= 2:
@@ -607,8 +516,8 @@ def _mk_nm2default(*tmay_Nothing___or___args4mk_default_or_raise):
 def pairs5api__zdefault_(*tmay_Nothing___or___args4mk_default_or_raise):
     nm2default = _mk_nm2default(*tmay_Nothing___or___args4mk_default_or_raise)
     def pairs5api(f, /):
-        (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwargs) = get_signature_of__py2_(f)
-        if not may_nm4varkwargs is None:raise TypeError('varkwargs occur')
+        (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwds) = get_signature_of__py2_(f)
+        if not may_nm4varkwds is None:raise TypeError('varkwds occur')
         if not may_nm4varargs is None:raise TypeError('varargs occur')
         pairs = [(nm, eliminate_tmay__mix(tm, 1, nm2default, nm)) for nm, tm in _infos4idx_nm_both]
         return pairs
@@ -654,7 +563,7 @@ def triples5api__zdefault_(*tmay_Nothing___or___args4mk_default_or_raise, follow
     def triples5api(f, /):
         (infoss4input, tmay_return_annotation) = get_signature_of__py3_(f, follow_wrapped=follow_wrapped)
         (infos4idx_only, infos4idx_nm_both, tmay_info4varargs, infos4nm_only, tmay_info4varkwds) = infoss4input
-        if tmay_info4varkwds:raise TypeError('varkwargs occur')
+        if tmay_info4varkwds:raise TypeError('varkwds occur')
         if tmay_info4varargs:raise TypeError('varargs occur')
         if infos4nm_only:raise TypeError('KEYWORD_ONLY occur')
         if infos4idx_only:raise TypeError('POSITIONAL_ONLY occur')
@@ -782,11 +691,11 @@ def triples5api_(may_f, /, *tmay_Nothing___or___args4mk_default_or_raise):
 
 if not _getargspec__py2 is None:
   def get_signature_of__py2_(f, /):
-    '-> (_infos4idx_nm_both/[(nm,tmay_default)], may_nm4varargs, may_nm4varkwargs) #only used for mk_pairs()/pairs5api_()'
-    '-> ([nm], [(nm,default)], may_nm4varargs, may_nm4varkwargs)'
+    '-> (_infos4idx_nm_both/[(nm,tmay_default)], may_nm4varargs, may_nm4varkwds) #only used for mk_pairs()/pairs5api_()'
+    '-> ([nm], [(nm,default)], may_nm4varargs, may_nm4varkwds)'
     'follow_wrapped=False'
     #ignores __wrapped__ attributes and includes the already bound first parameter in the signature output for bound methods.
-    (nms4args, may_nm4varargs, may_nm4varkwargs, may_defaults) = _getargspec__py2(f)
+    (nms4args, may_nm4varargs, may_nm4varkwds, may_defaults) = _getargspec__py2(f)
     if may_defaults is None:
         defaults = ()
     else:
@@ -795,18 +704,27 @@ if not _getargspec__py2 is None:
     ps0 = [(nm, ()) for nm in nms4args[:i]]
     ps1 = [(nm, (v,)) for nm, v in zip(nms4args[i:], defaults)]
     _infos4idx_nm_both = (*ps0, *ps1)
-    return (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwargs)
+    return (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwds)
 else:
     #using:get_signature_of__py3_
   def get_signature_of__py2_(f, /):
-    '-> (_infos4idx_nm_both/[(nm,tmay_default)], may_nm4varargs, may_nm4varkwargs) #only used for mk_pairs()/pairs5api_()'
-    (infoss4input, tmay_return_annotation) = get_signature_of__py3_(f, follow_wrapped=False)
+    '-> (_infos4idx_nm_both/[(nm,tmay_default)], may_nm4varargs, may_nm4varkwds) #only used for mk_pairs()/pairs5api_()'
+    try:
+        (infoss4input, tmay_return_annotation) = get_signature_of__py3_(f, follow_wrapped=False)
+    except ValueError:
+        # ValueError: no signature found for builtin <method 'add' of 'set' objects>
+        raise TypeError('unsupported callable')
     (infos4idx_only, infos4idx_nm_both, tmay_info4varargs, infos4nm_only, tmay_info4varkwds) = infoss4input
+    def lazy_exc():
+        return ValueError('Function has keyword-only parameters or annotations, use inspect.signature() API which can support them')
     #5+1-3==3
     if 1:
-        if infos4nm_only:raise TypeError('KEYWORD_ONLY occur')
-        if infos4idx_only:raise TypeError('POSITIONAL_ONLY occur')
-        if tmay_return_annotation:raise TypeError('return_annotation occur')
+        if infos4nm_only:raise lazy_exc() #TypeError('KEYWORD_ONLY occur')
+        if tmay_return_annotation:raise lazy_exc() #TypeError('return_annotation occur')
+        #if infos4idx_only:raise TypeError('POSITIONAL_ONLY occur')
+        if infos4idx_only:
+            infos4idx_nm_both = infos4idx_only + infos4idx_nm_both
+            infos4idx_only = ()
     # info4parameter = (name, tmay_annotation, tmay_default)
     #.parameter_infoss :: (infos4idx_only/[info4parameter], '/', infos4idx_nm_both/[info4parameter], '*', tmay_info4varargs/(tmay info4parameter), infos4nm_only/[info4parameter], '**', tmay_info4varkwds/(tmay info4parameter))
     #5+1-3==3
@@ -822,16 +740,16 @@ else:
     else:
         may_nm4varargs = None
     may_nm4varargs
-    #may_nm4varkwargs
-    for (name, tmay_annotation, tmay_default) in tmay_info4varkwargs:
+    #may_nm4varkwds
+    for (name, tmay_annotation, tmay_default) in tmay_info4varkwds:
         if tmay_annotation:raise TypeError('varkwarg_annotation occur')
         if tmay_default:raise TypeError('varkwarg_default occur')
-        may_nm4varkwargs = name
+        may_nm4varkwds = name
         break
     else:
-        may_nm4varkwargs = None
-    may_nm4varkwargs
-    return (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwargs)
+        may_nm4varkwds = None
+    may_nm4varkwds
+    return (_infos4idx_nm_both, may_nm4varargs, may_nm4varkwds)
 
 
 

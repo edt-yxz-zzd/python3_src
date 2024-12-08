@@ -1,0 +1,12 @@
+# next_pseudoprime
+#
+# from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_
+# from seed.math.prime_gens import next_pseudoprime__ge_, prev_may_pseudoprime__lt_
+#
+# from seed.math.prime_gens import is_prime__le_pow2_81_
+# from seed.math.prime_gens import next_may_prime__le_pow2_81__ge_, prev_may_prime__lt_
+#
+# strong probable-prime (SPRP)
+#
+#
+py_adhoc_call   seed.math.prime_gens   @next_pseudoprime__ge_  "$@"

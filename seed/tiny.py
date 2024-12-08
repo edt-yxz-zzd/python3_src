@@ -4,7 +4,7 @@ py -m seed.tiny
 
 /from \(seed[.]\)\@!
     py std lib move to seed.tiny_....
-    eg: from seed.tiny_.types5py import MapView, kwargs2Attrs, curry1
+    eg: from seed.tiny_.types5py import mk_MapView, MapView, kwargs2Attrs, curry1
 
 from seed.func_tools.dot2 import dot
 view ../../python3_src/seed/func_tools/dot2.py
@@ -250,6 +250,7 @@ __all__ = str2__all__(r'''
                         # :: (()->may either) -> may Base<exc> -> (()->(value|raise exc)) -> (either->()) -> either
 
     expectError         # :: Error -> (()->...) -> bool
+    with_expect_error   # :: Error -> Error_if_no_exc -> contextmanager
     assert_eq           # :: lhs -> rhs -> (_fmt=...) -> **vars -> ()
     assert_eq_f         # :: ans -> f -> *args -> (_fmt=...) -> **vars -> ()
     mk_assert_eq_f      # :: (_fmt=...) -> **vars -> (ans -> f -> *args -> **kwargs -> ())
@@ -316,7 +317,8 @@ __all__ = str2__all__(r'''
                         # does_run_as_main(__name__)
                         # does_run_as_main.alter_main_name :: String
 
-    MapView             # mapping -> MappingProxyType
+    MapView             # === MappingProxyType
+    mk_MapView          # mapping -> MappingProxyType # avoid (MapView . MapView)
     curry1              # ((sf, /, *args, **kwargs) -> r) -> sf -> ((*args, **kwargs) -> r)
     kwargs2Attrs        # (**kwargs) -> SimpleNamespace
 
@@ -456,16 +458,39 @@ from seed.helper.ifNone import ifNone, ifNonef
 from seed.helper.Echo import echo, theEcho
 from seed.helper.with_if import with_if
 from seed.debug.expectError import expectError
+from seed.debug.with_expect_error import with_expect_error
 from seed.debug.print_err import print_err, print_ferr
 from seed.debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f
 from seed.debug.lazy_raise import lazy_raise
+
+
+with with_expect_error(KeyError):
+    raise KeyError
+try:
+    with with_expect_error(KeyError):
+        raise SyntaxError
+except SyntaxError:
+    pass
+else:
+    raise 000
+try:
+    with with_expect_error(KeyError, IndexError):
+        pass
+except IndexError:
+    pass
+else:
+    raise 000
+
+
+
+
 from seed.func_tools.not_dot import __not__, not_dot
 from seed.for_libs.next__tmay import next__tmay
 from seed.for_libs.lookup__tmay import lookup__tmay
 from seed.iters.chains import chains
 from seed.iters.count_ import count_
 
-from seed.tiny_.types5py import MapView, kwargs2Attrs, curry1
+from seed.tiny_.types5py import mk_MapView, MapView, kwargs2Attrs, curry1
 #from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs, MethodType as curry1
   #SimpleNamespace(**kw)
 from seed.types.Namespace import Namespace, NamespaceSetOnce

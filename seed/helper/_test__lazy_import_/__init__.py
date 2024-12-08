@@ -1,0 +1,5 @@
+from seed.helper.lazy_import import symbol4finder6parent, finder6parent__4lazy_attr_mdl__via_PathFinder
+globals()[symbol4finder6parent] = finder6parent__4lazy_attr_mdl__via_PathFinder
+finder6parent__4lazy_attr_mdl__via_PathFinder.register__add_more_lazy_children_(__name__, ['_lazy_child__aaa'])
+
+

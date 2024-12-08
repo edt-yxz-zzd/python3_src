@@ -155,7 +155,7 @@ prepare4parse4arith_
     grp4nm4rgnr4parse__7arith
     name2may_gpostprocess6ok4parse__7arith
     name2rgnr4parse__7arith
-    nmd__arith_expr
+    main_rgnr4parse__7arith
     max_num_tokens6backward4parse__7arith
     env4parse__7arith
 
@@ -166,7 +166,7 @@ prepare4parse4arith_
 prepare4tokenize4arith_
     tkey2tdat2tdat4tknz__7arith
     tkeys8noise4tknz__7arith
-    rgnr4tknz__7arith
+    main_rgnr4tknz__7arith
     max_num_tokens6backward4tknz__7arith
     may_env4tknz__7arith
 
@@ -176,7 +176,7 @@ prepare4tokenize4arith_
 '''.split()#'''
 #prepare4parse4arith_
 #    name2rgnr4parse__7arith
-#    nmd__arith_expr
+#    main_rgnr4parse__7arith
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from fractions import Fraction
@@ -191,68 +191,68 @@ def _signed(signs, b, /):
     if e&1:
         b = -b
     return b
-def _spost__atom_expr(oresult, /):
-    #atom_expr = mkrs.priority_parallel_([mkrs.tag_(number, 'number'), mkrs.tag_(mkrs.between_(sym6, sym9, ref__arith_expr), 'group')])
-    return oresult.payload
-def _spost__pow_expr(oresult, /):
-    #pow_expr = atom_expr ( '**' sign* pow_expr)?
-    a, tmay_op_signs_b = oresult
-    match tmay_op_signs_b:
-        case [('**', signs, b)]:
+class _spostprocess_group7arith:
+    def _spost__atom_expr(oresult, /):
+        #atom_expr = mkrs.priority_parallel_([mkrs.tag_(number, 'number'), mkrs.tag_(mkrs.between_(sym6, sym9, ref__arith_expr), 'group')])
+        return oresult.payload
+    def _spost__pow_expr(oresult, /):
+        #pow_expr = atom_expr ( '**' sign* pow_expr)?
+        a, tmay_op_signs_b = oresult
+        match tmay_op_signs_b:
+            case [('**', signs, b)]:
+                b = _signed(signs, b)
+                s = a**b
+            case []:
+                s = a
+            case _:
+                raise 000
+        return s
+
+    def _spost__mul_expr(oresult, /):
+        # !! bug:mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
+        # => mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* pow_expr)*
+        a, ls4op_signs_b = oresult
+        for (op, signs, b) in ls4op_signs_b:
             b = _signed(signs, b)
-            s = a**b
-        case []:
-            s = a
-        case _:
-            raise 000
-    return s
-
-def _spost__mul_expr(oresult, /):
-    # !! bug:mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* mul_expr)?
-    # => mul_expr = pow_expr ( ('*' | '/' | '//' | '%') sign* pow_expr)*
-    a, ls4op_signs_b = oresult
-    for (op, signs, b) in ls4op_signs_b:
-        b = _signed(signs, b)
-        match op:
-            case '*':
-                a = a*b
-            case '/':
-                a = Fraction(a)/b
-            case '//':
-                a = a//b
-            case '%':
-                a = a%b
-            case _:
-                raise 000
-    return a
+            match op:
+                case '*':
+                    a = a*b
+                case '/':
+                    a = Fraction(a)/b
+                case '//':
+                    a = a//b
+                case '%':
+                    a = a%b
+                case _:
+                    raise 000
+        return a
 
 
-def _spost__add_expr(oresult, /):
-    # !! bug:add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
-    # => add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.many_(mkrs.serial_([op8add, ref__signs, ref__mul_expr]))])
-    signs, a, ls4op_signs_b = oresult
-    a = _signed(signs, a)
-    for (op, signs, b) in ls4op_signs_b:
-        b = _signed(signs, b)
-        match op:
-            case '+':
-                a += b
-            case '-':
-                a -= b
-            case _:
-                raise 000
-    return a
-
-
+    def _spost__add_expr(oresult, /):
+        # !! bug:add_expr = sign* mul_expr ( ('+' | '-') add_expr)?
+        # => add_expr = mkrs.serial_([ref__signs, ref__mul_expr, mkrs.many_(mkrs.serial_([op8add, ref__signs, ref__mul_expr]))])
+        signs, a, ls4op_signs_b = oresult
+        a = _signed(signs, a)
+        for (op, signs, b) in ls4op_signs_b:
+            b = _signed(signs, b)
+            match op:
+                case '+':
+                    a += b
+                case '-':
+                    a -= b
+                case _:
+                    raise 000
+        return a
+#end-class _spostprocess_group7arith:
 def prepare4parse4arith_():
-    '-> (grp4nm4rgnr4parse__7arith, name2may_gpostprocess6ok4parse__7arith, name2rgnr4parse__7arith, nmd__arith_expr, max_num_tokens6backward4parse__7arith, env4parse__7arith)'
+    '-> (grp4nm4rgnr4parse__7arith, name2may_gpostprocess6ok4parse__7arith, name2rgnr4parse__7arith, main_rgnr4parse__7arith, max_num_tokens6backward4parse__7arith, env4parse__7arith)'
     ######################
-    from seed.tiny import fmap4dict_value, MapView
     ######################
-    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import collect_namess5locals_, mk_group_pair4rgnr_ref, Makers4IRecognizerLLoo
+    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import mk_name2may_gpostprocess6ok_
+    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import collect_namess5rgnrs_, collect_namess5locals_, mk_group_pair4rgnr_ref, Makers4IRecognizerLLoo
     from seed.types.IToken import TokenKeyQuerySet5xqset
     from seed.types.Tester import Tester__eq_obj
-    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import Environment, mk_gpostprocess6ok__5spost_
+    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import mk_Environment
     ######################
     tkn_qset5xqset_ = TokenKeyQuerySet5xqset
     mkrs = Makers4IRecognizerLLoo
@@ -280,7 +280,9 @@ def prepare4parse4arith_():
 
     ######################
     (grp4nm4rgnr, grp4rgnr_ref) = mk_group_pair4rgnr_ref()
+    assert grp4nm4rgnr is grp4rgnr_ref[:].get_grp4nm4rgnr_()
     ######################
+    #ls4rgnr_ref
     ref__atom_expr = grp4rgnr_ref.atom_expr
     ref__pow_expr = grp4rgnr_ref.pow_expr
     ref__mul_expr = grp4rgnr_ref.mul_expr
@@ -289,6 +291,10 @@ def prepare4parse4arith_():
     ref__sign = grp4rgnr_ref.sign
     ref__signs = grp4rgnr_ref.signs
     ######################
+    grp4nm4rgnr[:].frozen_()
+    nm2sym4rgnr = grp4rgnr_ref[:].view_grp4nm4rgnr_as_mapping_()
+    ######################
+    #ls4rgnr4rule
     atom_expr = mkrs.priority_parallel_([mkrs.tag_(number, 'number'), mkrs.tag_(mkrs.between_(sym6, sym9, ref__arith_expr), 'group')])
     pow_expr = mkrs.serial_([ref__atom_expr, mkrs.optional__strict_(mkrs.serial_([op8pow, ref__signs, ref__pow_expr]))])
     #bug-3:grammar-error:mul_expr = mkrs.serial_([ref__pow_expr, mkrs.optional__strict_(mkrs.serial_([op8mul, ref__signs, ref__mul_expr]))])
@@ -304,38 +310,54 @@ def prepare4parse4arith_():
     arith_expr = ref__add_expr
     ######################
     #:.,.+9s/^\( *\)ref__\(\w*\) = grp4rgnr_ref.\2$/\1nmd__\2 = ref__\2.mk_named_rgnr_(\2)
-    nmd__atom_expr = ref__atom_expr.mk_named_rgnr_(atom_expr)
-    nmd__pow_expr = ref__pow_expr.mk_named_rgnr_(pow_expr)
-    nmd__mul_expr = ref__mul_expr.mk_named_rgnr_(mul_expr)
-    nmd__add_expr = ref__add_expr.mk_named_rgnr_(add_expr)
-    nmd__arith_expr = ref__arith_expr.mk_named_rgnr_(arith_expr)
-    nmd__sign = ref__sign.mk_named_rgnr_(sign)
-    nmd__signs = ref__signs.mk_named_rgnr_(signs)
+    #.nmd__atom_expr = ref__atom_expr.mk_named_rgnr_(atom_expr)
+    #.nmd__pow_expr = ref__pow_expr.mk_named_rgnr_(pow_expr)
+    #.nmd__mul_expr = ref__mul_expr.mk_named_rgnr_(mul_expr)
+    #.nmd__add_expr = ref__add_expr.mk_named_rgnr_(add_expr)
+    #.nmd__arith_expr = ref__arith_expr.mk_named_rgnr_(arith_expr)
+    #.nmd__sign = ref__sign.mk_named_rgnr_(sign)
+    #.nmd__signs = ref__signs.mk_named_rgnr_(signs)
+    #.######################
+    #.(name2rgnr, nms4ref, nms6ref) = collect_namess5locals_(locals(), _no_check__vs__ge__vs__eq_=2)
     ######################
-    (name2rgnr, nms4ref, nms6ref) = collect_namess5locals_(locals(), _no_check__vs__ge__vs__eq_=2)
+    nms4rgnr4rule = sorted(nm2sym4rgnr)
+    #_d = {*locals()} # generate locals diff...
+    ls4rgnr4rule = [*map(locals().__getitem__, nms4rgnr4rule)]
+    ls4rgnr_ref = [getattr(grp4rgnr_ref, nm) for nm in nms4rgnr4rule]
+    ls4rgnr_nmd = [rgnr_ref.mk_named_rgnr_(rgnr4rule) for rgnr4rule, rgnr_ref in zip(ls4rgnr4rule, ls4rgnr_ref)]
+    all_rgnrs = (*ls4rgnr_ref, *ls4rgnr4rule, *ls4rgnr_nmd)
+    (name2rgnr, nms4ref, nms6ref) = collect_namess5rgnrs_(all_rgnrs, _no_check__vs__ge__vs__eq_=2)
+    nmd__arith_expr = name2rgnr[grp4nm4rgnr.arith_expr]
+    main_rgnr4parse__7arith = mkrs.main_(nmd__arith_expr)
+    #   main_rgnr #should be rgnr_nmd instead rgnr4rule which without spostprocess_
     ######################
-    name2may_gpostprocess6ok = MapView(fmap4dict_value(mk_gpostprocess6ok__5spost_, {**{}
-    ,nmd__atom_expr._may_name4ref_:_spost__atom_expr
-        #fixed-bug:miss postprocess<atom_expr>
-    ,nmd__pow_expr._may_name4ref_:_spost__pow_expr
-    ,nmd__mul_expr._may_name4ref_:_spost__mul_expr
-    ,nmd__add_expr._may_name4ref_:_spost__add_expr
-        #fixed-bug:miss 『._may_name4ref_』
-    }))
+    name2may_gpostprocess6ok = mk_name2may_gpostprocess6ok_(r'_spost__{}', grp4nm4rgnr, _spostprocess_group7arith)
+    assert 4 == len(name2may_gpostprocess6ok), (name2may_gpostprocess6ok.keys(), len(name2may_gpostprocess6ok))
+    #from seed.tiny import fmap4dict_value, MapView
+    #from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import mk_gpostprocess6ok__5spost_
+    #.name2may_gpostprocess6ok = MapView(fmap4dict_value(mk_gpostprocess6ok__5spost_, {**{}
+    #.,nmd__atom_expr.name4ref:_spost__atom_expr
+    #.    #fixed-bug:miss postprocess<atom_expr>
+    #.,nmd__pow_expr.name4ref:_spost__pow_expr
+    #.,nmd__mul_expr.name4ref:_spost__mul_expr
+    #.,nmd__add_expr.name4ref:_spost__add_expr
+    #.    #fixed-bug:miss 『.name4ref』
+    #.}))
     ######################
     name2rgnr4parse__7arith = name2rgnr
     max_num_tokens6backward4parse__7arith = 0
     name2may_gpostprocess6ok4parse__7arith = name2may_gpostprocess6ok
     grp4nm4rgnr4parse__7arith = grp4nm4rgnr
+    777;    grp4nm4rgnr[:].frozen_()
     ######################
-    env4parse__7arith = Environment(param2setting:={}, name2rgnr:=name2rgnr4parse__7arith, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:=name2may_gpostprocess6ok4parse__7arith)
+    env4parse__7arith = mk_Environment(param2setting:={}, name2rgnr:=name2rgnr4parse__7arith, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:=name2may_gpostprocess6ok4parse__7arith, name2force_postprocess_when_ignore:={})
     ######################
-    return (grp4nm4rgnr4parse__7arith, name2may_gpostprocess6ok4parse__7arith, name2rgnr4parse__7arith, nmd__arith_expr, max_num_tokens6backward4parse__7arith, env4parse__7arith)
+    return (grp4nm4rgnr4parse__7arith, name2may_gpostprocess6ok4parse__7arith, name2rgnr4parse__7arith, main_rgnr4parse__7arith, max_num_tokens6backward4parse__7arith, env4parse__7arith)
     ######################
 #end-def prepare4parse4arith_():
 
 def prepare4tokenize4arith_():
-    '-> (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith)'
+    '-> (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, main_rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith)'
     'tkeys = ** // % * / + - ( ) number'
     from seed.tiny import MapView
     from seed.recognize.recognizer_LLoo__ver2_.tokenize_utils import mk_rgnr4words_
@@ -361,57 +383,60 @@ def prepare4tokenize4arith_():
     max_num_tokens6backward4tknz__7arith = 0
     may_env4tknz__7arith = None
     tkey2tdat2tdat4tknz__7arith = MapView({'number':lambda cs:int(''.join(cs))})
-    return (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith)
+    main_rgnr4tknz__7arith = mkrs.main_(rgnr4tknz__7arith)
+    return (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, main_rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith)
 #end-def prepare4tokenize4arith_():
 if 1:
-  #def __():
-    (grp4nm4rgnr4parse__7arith, name2may_gpostprocess6ok4parse__7arith, name2rgnr4parse__7arith, nmd__arith_expr, max_num_tokens6backward4parse__7arith, env4parse__7arith) = prepare4parse4arith_()
-    (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith) = prepare4tokenize4arith_()
+    (grp4nm4rgnr4parse__7arith, name2may_gpostprocess6ok4parse__7arith, name2rgnr4parse__7arith, main_rgnr4parse__7arith, max_num_tokens6backward4parse__7arith, env4parse__7arith) = prepare4parse4arith_()
+    (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, main_rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith) = prepare4tokenize4arith_()
+    ######################
+    try:
+        grp4nm4rgnr4parse__7arith.xxx
+    except AttributeError:
+        pass
+    else:
+        raise 000
+    ######################
 
-if 1:
-  def __():
-    from seed.recognize.recognizer_LLoo__ver2_.tokenize_utils import tokenize__core_, tokenize__args8chars_
-    from seed.recognize.recognizer_LLoo__ver2_.tokenize_utils import tokenize__chars_, tokenize__file_, tokenize__path_
-    from seed.types.IToken import mk_gap_position_info_at_ifile_begin
 def tokenize7arith__pseudo_fname_(pseudo_fname, src, may_tkey2tdat2tdat=None, /):
     'str -> Iter char -> istream7arith'
     from seed.recognize.recognizer_LLoo__ver2_.tokenize_utils import tokenize__chars_
-    from seed.types.IToken import mk_gap_position_info_at_ifile_begin
+    from seed.types.IToken import mk_chr_tgbegin5fname_
     #def tokenize__chars_(may_tkey2tdat2tdat, may_tkeys8noise4tknz, rgnr4tknz, chr_tgbegin, chars, /, *, to_flatten:bool, max_num_tokens6backward4low_lvl=0, max_num_tokens6backward4high_lvl=0, may_env4tknz=None):
-    chr_tgbegin6pseudo_fname = mk_gap_position_info_at_ifile_begin(pseudo_fname)
+    chr_tgbegin6pseudo_fname = mk_chr_tgbegin5fname_(pseudo_fname)
 
     tkey2tdat2tdat4tknz__7arith
     tkeys8noise4tknz__7arith
-    rgnr4tknz__7arith
+    main_rgnr4tknz__7arith
     max_num_tokens6backward4tknz__7arith
     max_num_tokens6backward4parse__7arith
     may_env4tknz__7arith
 
     if may_tkey2tdat2tdat is None:
         may_tkey2tdat2tdat = tkey2tdat2tdat4tknz__7arith
-    return tokenize__chars_(may_tkey2tdat2tdat, tkeys8noise4tknz__7arith, rgnr4tknz__7arith, chr_tgbegin6pseudo_fname, src, to_flatten=False, max_num_tokens6backward4low_lvl=max_num_tokens6backward4tknz__7arith, max_num_tokens6backward4high_lvl=max_num_tokens6backward4parse__7arith, may_env4tknz=may_env4tknz__7arith)
+    return tokenize__chars_(may_tkey2tdat2tdat, tkeys8noise4tknz__7arith, main_rgnr4tknz__7arith, chr_tgbegin6pseudo_fname, src, to_flatten=False, max_num_tokens6backward4low_lvl=max_num_tokens6backward4tknz__7arith, max_num_tokens6backward4high_lvl=max_num_tokens6backward4parse__7arith, may_env4tknz=may_env4tknz__7arith)
 def parse7arith__pseudo_fname_(pseudo_fname, src, may_tkey2tdat2tdat=None, may_name2may_gpostprocess6ok4parse=None, /):
     'str -> Iter char -> Reply'
     istream7arith = tokenize7arith__pseudo_fname_(pseudo_fname, src, may_tkey2tdat2tdat)
     return parse7arith__istream_(istream7arith, may_name2may_gpostprocess6ok4parse)
 def parse7arith__istream_(istream7arith, may_name2may_gpostprocess6ok4parse=None, /):
     'istream7arith -> Reply'
-    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import recognize_, Environment
+    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import recognize_, mk_Environment
     #used to create new may_name2may_gpostprocess6ok4parse:grp4nm4rgnr4parse__7arith
     #used@env4parse__7arith:name2may_gpostprocess6ok4parse__7arith
     #used@env4parse__7arith:name2rgnr4parse__7arith
-    nmd__arith_expr
+    main_rgnr4parse__7arith
     #used@istream7arith:max_num_tokens6backward4parse__7arith
     env4parse__7arith
 
     ######################
-    env4parse = env4parse__7arith if may_name2may_gpostprocess6ok4parse is None or may_name2may_gpostprocess6ok4parse == name2may_gpostprocess6ok4parse__7arith else Environment(param2setting:={}, name2rgnr:=name2rgnr4parse__7arith, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:=may_name2may_gpostprocess6ok4parse)
+    env4parse = env4parse__7arith if may_name2may_gpostprocess6ok4parse is None or may_name2may_gpostprocess6ok4parse == name2may_gpostprocess6ok4parse__7arith else mk_Environment(param2setting:={}, name2rgnr:=name2rgnr4parse__7arith, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:=may_name2may_gpostprocess6ok4parse, name2force_postprocess_when_ignore:={})
     ######################
     if 0b0000:
         from seed.tiny import print_err
         print_err(env4parse._nm2mpost6ok)
     ######################
-    reply = recognize_(nmd__arith_expr, env4parse, gctx:={}, istream7arith)
+    reply = recognize_(main_rgnr4parse__7arith, env4parse, gctx:={}, istream7arith)
     return reply
 
 def eval7arith(src, /):

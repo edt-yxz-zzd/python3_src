@@ -543,6 +543,33 @@ underscored_hex_ge1__pattern
 underscored_hex_ge0__pattern
 underscored_hex_int__pattern
 
+bindigit__pattern
+bindigit_nonzero__pattern
+bin_ge1__pattern
+bin_ge0__pattern
+bin_int__pattern
+
+underscored_bindigit__pattern
+underscored_bin_body__pattern
+underscored_bin_ge1__pattern
+underscored_bin_ge0__pattern
+underscored_bin_int__pattern
+
+octdigit__pattern
+octdigit_nonzero__pattern
+oct_ge1__pattern
+oct_ge0__pattern
+oct_int__pattern
+
+underscored_octdigit__pattern
+underscored_oct_body__pattern
+underscored_oct_ge1__pattern
+underscored_oct_ge0__pattern
+underscored_oct_int__pattern
+
+py_int__pattern
+py_uint__pattern
+
 
 space__pattern
 spaces0__pattern
@@ -592,6 +619,33 @@ underscored_hex_body__regex
 underscored_hex_ge1__regex
 underscored_hex_ge0__regex
 underscored_hex_int__regex
+
+bindigit__regex
+bindigit_nonzero__regex
+bin_ge1__regex
+bin_ge0__regex
+bin_int__regex
+
+underscored_bindigit__regex
+underscored_bin_body__regex
+underscored_bin_ge1__regex
+underscored_bin_ge0__regex
+underscored_bin_int__regex
+
+octdigit__regex
+octdigit_nonzero__regex
+oct_ge1__regex
+oct_ge0__regex
+oct_int__regex
+
+underscored_octdigit__regex
+underscored_oct_body__regex
+underscored_oct_ge1__regex
+underscored_oct_ge0__regex
+underscored_oct_int__regex
+
+py_int__regex
+py_uint__regex
 
 
 space__regex
@@ -662,6 +716,54 @@ underscored_hex_int__pattern = fr'(?:[+-]?{underscored_hex_ge0__pattern})'
 
 
 
+#binary
+bindigit__pattern = r'[01]'
+bindigit_nonzero__pattern = r'1'
+bin_ge1__pattern = fr'(?:0[bB]0*{bindigit_nonzero__pattern}{bindigit__pattern}*)'
+#bin_ge0__pattern = fr'(?:0|0[bB]{bindigit__pattern}+)'
+bin_ge0__pattern = fr'(?:0[bB]{bindigit__pattern}+)'
+bin_int__pattern = fr'(?:[+-]?{bin_ge0__pattern})'
+
+
+#py binary int literal donot allow '__', '_$', '^0_b', '0b$'
+underscored_bindigit__pattern = r'[_01]'
+#underscored_bin_body__pattern = fr'(?:{underscored_bindigit__pattern}*)'
+underscored_bin_body__pattern = fr'(?:{bindigit__pattern}+(?:_{bindigit__pattern}+)*)'
+underscored_bin_ge1__pattern = fr'(?:0[bB](?:0+_?)*{bindigit_nonzero__pattern}(?:_?{underscored_bin_body__pattern})?)'
+underscored_bin_ge0__pattern = fr'(?:0[bB]{underscored_bin_body__pattern})'
+underscored_bin_int__pattern = fr'(?:[+-]?{underscored_bin_ge0__pattern})'
+
+
+
+
+
+
+
+
+#octonary
+octdigit__pattern = r'[0-7]'
+octdigit_nonzero__pattern = r'[1-7]'
+oct_ge1__pattern = fr'(?:0[oO]0*{octdigit_nonzero__pattern}{octdigit__pattern}*)'
+#oct_ge0__pattern = fr'(?:0|0[oO]{octdigit__pattern}+)'
+oct_ge0__pattern = fr'(?:0[oO]{octdigit__pattern}+)'
+oct_int__pattern = fr'(?:[+-]?{oct_ge0__pattern})'
+
+
+#py octonary int literal donot allow '__', '_$', '^0_o', '0o$'
+underscored_octdigit__pattern = r'[_0-7]'
+#underscored_oct_body__pattern = fr'(?:{underscored_octdigit__pattern}*)'
+underscored_oct_body__pattern = fr'(?:{octdigit__pattern}+(?:_{octdigit__pattern}+)*)'
+underscored_oct_ge1__pattern = fr'(?:0[oO](?:0+_?)*{octdigit_nonzero__pattern}(?:_?{underscored_oct_body__pattern})?)'
+underscored_oct_ge0__pattern = fr'(?:0[oO]{underscored_oct_body__pattern})'
+underscored_oct_int__pattern = fr'(?:[+-]?{underscored_oct_ge0__pattern})'
+
+
+
+
+
+py_int__pattern = fr'(?:{underscored_hex_int__pattern}|{underscored_bin_int__pattern}|{underscored_oct_int__pattern}|{underscored_decimal_int__pattern})'
+    # dec should be last to avoid match leading 0
+py_uint__pattern = fr'(?:\s*(?=[+0-9])(?!-){py_int__pattern})'
 
 
 ######################
@@ -709,7 +811,32 @@ underscored_hex_body__regex = re.compile(underscored_hex_body__pattern)
 underscored_hex_ge1__regex = re.compile(underscored_hex_ge1__pattern)
 underscored_hex_ge0__regex = re.compile(underscored_hex_ge0__pattern)
 underscored_hex_int__regex = re.compile(underscored_hex_int__pattern)
+bindigit__regex = re.compile(bindigit__pattern)
+bindigit_nonzero__regex = re.compile(bindigit_nonzero__pattern)
+bin_ge1__regex = re.compile(bin_ge1__pattern)
+bin_ge0__regex = re.compile(bin_ge0__pattern)
+bin_int__regex = re.compile(bin_int__pattern)
+underscored_bindigit__regex = re.compile(underscored_bindigit__pattern)
+underscored_bin_body__regex = re.compile(underscored_bin_body__pattern)
+underscored_bin_ge1__regex = re.compile(underscored_bin_ge1__pattern)
+underscored_bin_ge0__regex = re.compile(underscored_bin_ge0__pattern)
+underscored_bin_int__regex = re.compile(underscored_bin_int__pattern)
+octdigit__regex = re.compile(octdigit__pattern)
+octdigit_nonzero__regex = re.compile(octdigit_nonzero__pattern)
+oct_ge1__regex = re.compile(oct_ge1__pattern)
+oct_ge0__regex = re.compile(oct_ge0__pattern)
+oct_int__regex = re.compile(oct_int__pattern)
+underscored_octdigit__regex = re.compile(underscored_octdigit__pattern)
+underscored_oct_body__regex = re.compile(underscored_oct_body__pattern)
+underscored_oct_ge1__regex = re.compile(underscored_oct_ge1__pattern)
+underscored_oct_ge0__regex = re.compile(underscored_oct_ge0__pattern)
+underscored_oct_int__regex = re.compile(underscored_oct_int__pattern)
 
+
+
+py_int__regex = re.compile(py_int__pattern)
+py_uint__regex = re.compile(py_uint__pattern)
+assert py_int__regex.fullmatch('-3_4')
 
 
 space__pattern = r'(?:\s)'
@@ -757,6 +884,8 @@ py_str__regex = re.compile(py_str__pattern)
 
 
 del re
+from seed.text.useful_regex_patterns import py_uint__pattern, py_uint__regex
+from seed.text.useful_regex_patterns import py_int__pattern, py_int__regex
 from seed.text.useful_regex_patterns import py_str__pattern, py_str__regex
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern, nm__regex, qnm__regex
 from seed.text.useful_regex_patterns import *

@@ -355,7 +355,7 @@ class _fs:
     def overwrite(self, name, value, /):
         if name not in self: raise KeyError(name)
         return _set(self, name, value)
-    def forbid_setitem(self, name, /):
+    def forbid_setitem(self, name, value, /):
         raise KeyError(name)
 
     delitem = _del

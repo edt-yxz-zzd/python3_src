@@ -6,6 +6,7 @@ see:
 
 !mv ../../python3_src/seed/math/iter_sorted_products_of_pairwise_coprime_uints.py ../../python3_src/seed/math/iter_sorted_products_of_uints.py
 from seed.math.iter_sorted_products_of_uints import iter_sorted_products_of_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs
+from seed.math.iter_sorted_products_of_uints import iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_, iter_approximate_num_pints_lt__generated_by_, approximate_num_pints_lt__generated_by_, iter_unsorted_primes_lt__prime_eq_one_plus_product_generated_by_strict_sorted_pairwise_coprime_uints_
 
 
 py -m nn_ns.app.debug_cmd   seed.math.iter_sorted_products_of_uints -x
@@ -692,6 +693,7 @@ __all__ = r'''
 
     iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_
     iter_approximate_num_pints_lt__generated_by_
+        approximate_num_pints_lt__generated_by_
     iter_unsorted_primes_lt__prime_eq_one_plus_product_generated_by_strict_sorted_pairwise_coprime_uints_
     '''.split()#'''
     #iter_sorted_products_of_pairwise_coprime_uints
@@ -1005,8 +1007,12 @@ def iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_(max1, sor
     return main()
 #assert (r := [*iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_(100, [2,3,5])) == [], r
 #assert (r := [*iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_(100, [5,3,2], coprime_factors_is_unsorted_but_finite=True)) == [], r
-def iter_approximate_num_pints_lt__generated_by_(coprime_bases, N, /):
+def approximate_num_pints_lt__generated_by_(coprime_bases, N, /):
     '-> total_estimate/float'
+    for x in iter_approximate_num_pints_lt__generated_by_(coprime_bases, N): pass
+    return x
+def iter_approximate_num_pints_lt__generated_by_(coprime_bases, N, /):
+    '-> Iter total_estimate/float'
     #len(coprime_bases)
     #may inf long:if not len({*coprime_bases}) == len(coprime_bases):raise ValueError(coprime_bases)
     coprime_bases = iter(coprime_bases) #release memory if using LazyList
@@ -1050,7 +1056,7 @@ def iter_unsorted_primes_lt__prime_eq_one_plus_product_generated_by_strict_sorte
     from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
     max1 = is_prime__using_A014233_.upperbound
     if not may_max1 is None:
-        if may_max1 > may_max1: raise ValueError(may_max1)
+        if may_max1 > max1: raise ValueError(may_max1)
         max1 = may_max1
     return filter(is_prime__using_A014233_, map(1 .__add__, iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_(max1, coprime_bases, coprime_factors_is_unsorted_but_finite=coprime_factors_is_unsorted_but_finite)))
 
@@ -1064,4 +1070,7 @@ if __name__ == "__main__":
 
 
 
+from seed.math.iter_sorted_products_of_uints import iter_sorted_products_of_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs
+from seed.math.iter_sorted_products_of_uints import iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_, iter_approximate_num_pints_lt__generated_by_, approximate_num_pints_lt__generated_by_, iter_unsorted_primes_lt__prime_eq_one_plus_product_generated_by_strict_sorted_pairwise_coprime_uints_
 
+from seed.math.iter_sorted_products_of_uints import *

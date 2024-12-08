@@ -248,7 +248,7 @@ max1:？？上限/上界
   出口egress/exit
 前瞻vs后顾/回顾
   lookahead,prospective,prospect
-  lookback,review,retrospective,retrospect
+  lookbehind,lookback,review,retrospective,retrospect
   #
   forward compatibility 前瞻性兼容 #前版设计兼容后续版本
   backward compatibility回顾性兼容

@@ -7,6 +7,31 @@ py -m nn_ns.app.debug_cmd   seed.types.FrozenOrderedSet -x
 py -m nn_ns.app.doctest_cmd seed.types.FrozenOrderedSet:__doc__ -ht
 
 
+
+[[
+see:
+    from seed.data_funcs.rngs import StackStyleSimpleIntSet, StackStyleSimpleIntMapping
+        [key :: int]
+        bisearch in sorted rngs
+    view ../../python3_src/seed/types/OrderedSet.py
+        [Ord key]
+        based on immutable-red-black-tree
+    view ../../python3_src/seed/types/StackStyleSet.py
+        [key :: Hashable]
+        based on py.dict,py.list
+        from seed.types.StackStyleSet import StackStyleSet
+
+    view ../../python3_src/seed/types/FrozenOrderedSet.py
+        [key :: Hashable]
+        based on py.OrderedDict,py.list
+        bijection
+        from seed.types.FrozenOrderedSet import FrozenOrderedSet, FrozenOrderedDict
+        from collections import OrderedDict
+        #frozenset-unordered
+
+]]
+
+
 >>> s = FrozenOrderedSet(range(300, 305))
 >>> s
 FrozenOrderedSet((300, 301, 302, 303, 304))

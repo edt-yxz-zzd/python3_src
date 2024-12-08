@@ -297,6 +297,7 @@ conventions:
         # !! [:name4proposition]:goto
 naming:
 中文标识:
+  view ../../python3_src/useful__cjk_naming.txt
   囗 ~ 空格 或 '_'
   魊 ~ may/maybe #Haskell.Maybr
     魊囗 ~ may_
@@ -379,6 +380,17 @@ max1__aaa:前缀『max1__』
 ex_aaa,aaa_ex:前缀『ex_』后缀『_ex』
   extend,extra,extension
   ver:version
+ns4zzz:前缀『ns4』
+  ns - namespace
+  zzz = getattr(grp4zzz, nm)
+    vs: nm2zzz
+grp4zzz:前缀『grp4』
+  grp - group <: namespace
+    maybe has special method
+      grp[:].xxx()
+  zzz = getattr(grp4zzz, nm)
+    vs: nm2zzz
+    <: ns2zzz
 xaaa:前缀『x』
   * mix:aaa_or_bbb
       sz_or_sz_reader --> xsz

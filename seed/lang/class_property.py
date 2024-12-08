@@ -1,6 +1,58 @@
-
+#__all__:goto
 # see: types.DynamicClassAttribute
-'''
+r'''
+e ../../python3_src/seed/lang/class_property.py
+
+py -m seed.lang.class_property
+from seed.lang.class_property import class_property, static_property
+
+py -m seed.types.attr.class_property
+from seed.types.attr.class_property import class_property, static_property
+
+[[
+help(types.DynamicClassAttribute)
+py_help types:DynamicClassAttribute
+===
+class DynamicClassAttribute(builtins.object)
+ |  DynamicClassAttribute(fget=None, fset=None, fdel=None, doc=None)
+ |
+ |  Route attribute access on a class to __getattr__.
+ |
+ |  This is a descriptor, used to define attributes that act differently when
+ |  accessed through an instance and through a class.  Instance access remains
+ |  normal, but access to an attribute through a class will be routed to the
+ |  class's __getattr__ method; this is done by raising AttributeError.
+ |
+ |  This allows one to have properties active on an instance, and have virtual
+ |  attributes on the class with the same name.  (Enum used this between Python
+ |  versions 3.4 - 3.9 .)
+ |
+ |  Subclass from this to use a different method of accessing virtual attributes
+ |  and still be treated properly by the inspect module. (Enum uses this since
+ |  Python 3.10 .)
+ |
+ |  Methods defined here:
+ |
+ |  __delete__(self, instance)
+ |
+ |  __get__(self, instance, ownerclass=None)
+ |
+ |  __init__(self, fget=None, fset=None, fdel=None, doc=None)
+ |      Initialize self.  See help(type(self)) for accurate signature.
+ |
+ |  __set__(self, instance, value)
+ |
+ |  deleter(self, fdel)
+ |
+ |  getter(self, fget)
+ |
+ |  setter(self, fset)
+===
+]]
+
+
+[[
+usage:
     from seed.types.ABC import ABC, not_implemented
 
     class C(ABC):
@@ -37,13 +89,15 @@
         def RED(cls):
             return 'RED'
     assert D.RED == 'RED'
+]]
 
-'''
 
-__all__ = '''
+'''#'''
+
+__all__ = r'''
     class_property
     static_property
-'''.split()
+'''.split()#'''
 
 
 from functools import wraps
@@ -83,13 +137,13 @@ t2()
 
 __isabstractmethod__ = '__isabstractmethod__'
 class class_property:
-    '''
+    r'''
 class C:
     RED = 'RED'
     @class_property
     def RED(cls):
         return 'RED'
-'''
+'''#'''
     def __init__(self, func):
         self.func = func
         wraps(func)(self)
@@ -103,13 +157,13 @@ class C:
     #def __call__(self): raise NotImplementedError
 
 class static_property:
-    '''
+    r'''
 class C:
     RED = 'RED'
     @static_property
     def RED():
         return 'RED'
-'''
+'''#'''
     def __init__(self, func):
         self.func = func
         wraps(func)(self)
@@ -226,4 +280,5 @@ _test2()
 
 
 
-
+from seed.lang.class_property import class_property, static_property
+from seed.lang.class_property import *

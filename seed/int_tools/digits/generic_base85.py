@@ -32,7 +32,76 @@ a85 padding:
     bad:unclear why this work
 ]]
 
+[[
+回顾@20241124:
+编码后长度 弹性伸缩(标准base64填充『=』是不必要的) 但 避开 1%BLOCK_SIZE
+   [base16:len%2=!=1]
+   [base41:len%3=!=1]
+   [base64:len%4=!=1]
+   [base85:len%5=!=1]
 
+   [16**2 == 256**1]
+   [41**3 / 256**2 ~= 1.0516510009765625]
+   [64**4 == 256**3]
+   [85**5 / 256**4 ~= 1.0330819350201637]
+   16,41,64,85 之后 是 102 但:
+       *ascii_graph 只有 94
+       *ascii_printable(==ascii_graph+ascii_whitespace) 只有 100
+        #见下面:_what_are_theremain_graph_chars_of_x85_alphabet()
+
+
+>>> for n in range(2,48):
+...     print((n, (256**(n-1))**(1/n)))
+(2, 16.0)
+(3, 40.317473596635935)
+(4, 64.0)
+(5, 84.44850628946526)
+(6, 101.59366732596474)
+(7, 115.93262902578002)
+(8, 128.0)
+(9, 138.24764657821515)
+(10, 147.03338943962052)
+(11, 154.63544888376927)
+(12, 161.2698943865437)
+(13, 167.10549730685568)
+(14, 172.27522465694153)
+(15, 176.88484863587533)
+(16, 181.01933598375618)
+(17, 184.7475938598344)
+(18, 188.1260150112766)
+(19, 191.20114709177412)
+(20, 194.011720513331)
+(21, 196.59020326931048)
+(22, 198.9640040666777)
+(23, 201.1564116748873)
+(24, 203.18733465192946)
+(25, 205.07388866294326)
+(26, 206.83086643573068)
+(27, 208.4711165885495)
+(28, 210.00585113795526)
+(29, 211.444896765351)
+(30, 212.79690141255367)
+(31, 214.06950515272632)
+(32, 215.2694823049509)
+(33, 216.40286025809334)
+(34, 217.47501931973153)
+(35, 218.4907770197249)
+(36, 219.45445961038658)
+(37, 220.36996296821027)
+(38, 221.24080468009097)
+(39, 222.07016876337238)
+(40, 222.86094420380783)
+(41, 223.61575828350354)
+(42, 224.33700550052697)
+(43, 225.02687274426776)
+(44, 225.68736127898146)
+(45, 226.32030599692595)
+(46, 226.92739232796717)
+(47, 227.51017113124936)
+
+]]
+
+[[
 >>> import base64
 >>> base64.a85encode(b'1111')
 b'0ekC;'
@@ -88,6 +157,9 @@ b'\x00'
 b'!!'
 >>> impl__base64__a85decode(b'!!')
 b'\x00'
+
+]]
+
 
 main4iter_find_best_parameters4IWordBasedRadixDigitsCodec
 iter_find_best_parameters4IWordBasedRadixDigitsCodec
@@ -2532,9 +2604,28 @@ impl__base64__xx85codec__mod = WordBasedRadixDigitsCodec__oradix_lt_iradix(256, 
 
 b85_alphabet = (b"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 b"abcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~")
-_bs__0_85 = bytes(range(85))
 a85_alphabet = bytes(range(ord(' ')+1, ord('v')))
 assert len(a85_alphabet) == 85
+def _what_are_theremain_graph_chars_of_x85_alphabet():
+    ''
+    import string as S
+    assert S.printable == ''.join([S.digits, S.ascii_lowercase, S.ascii_uppercase, S.punctuation, S.whitespace])
+    assert 100 == len(S.printable)
+    assert [10, 26, 26, 32, 6] == [*map(len, [S.digits, S.ascii_lowercase, S.ascii_uppercase, S.punctuation, S.whitespace])]
+
+    ascii_graph = ''.join([S.digits, S.ascii_lowercase, S.ascii_uppercase, S.punctuation])
+    assert len(ascii_graph) == 94 == 100-6 == 10+26+26+32
+    us4ascii_graph = set(map(ord, ascii_graph))
+    #b85_alphabet = (b"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" b"abcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~")
+    #a85_alphabet = bytes(range(ord(' ')+1, ord('v')))
+    remain_graph_chars_ = lambda x85_alphabet:''.join(map(chr, sorted(us4ascii_graph -set(x85_alphabet))))
+    assert remain_graph_chars_(b85_alphabet) == '"\',./:[\\]' == r""" " ' , . / : [ \ ] """[1::2] == '\x22\x27\x2c\x2e\x2f\x3a\x5b\x5c\x5d'
+    assert remain_graph_chars_(a85_alphabet) == 'vwxyz{|}~'
+    assert len(remain_graph_chars_(b85_alphabet)) == 9 == 100-6-85
+    assert len(remain_graph_chars_(a85_alphabet)) == 9 == 100-6-85
+_what_are_theremain_graph_chars_of_x85_alphabet()
+
+_bs__0_85 = bytes(range(85))
 _table__a85encode = bytes.maketrans(_bs__0_85, a85_alphabet)
 _table__a85decode = bytes.maketrans(a85_alphabet, _bs__0_85)
 

@@ -1040,6 +1040,7 @@ __all__ = r'''
 '''.split()#'''
     #timegm__float
     #Result4Timer
+__all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 
@@ -1482,13 +1483,15 @@ uint2radix_repr:duration: 0.007977075 *(unit: 0:00:01)
         @property
         def default_cleanup_on_exit(sf, /):
             return __class__._cleanup_on_exit
-    def __call__(sf, /, *args, _to_show_=True, _fmt_='{prefix}:duration: {duration} *(unit: {unit})', prefix='...', _show_hint_on_enter_=False, **kwds):
+    def __call__(sf, /, *args, _to_show_=True, _fmt_='{prefix}:duration: {duration} *(unit: {unit})', prefix='...', _show_hint_on_enter_=False, _low_duration_threshold4show_=0, **kwds):
         'sf/Timer__print_err -> (*args) -> **{_to_show_,_fmt_,_show_hint_on_enter_,prefix,**kwds} -> withable_obj<Result4Timer>'
         if not _to_show_:
             may_callback_on_exit_ = None
         else:
             def callback_on_exit_(duration_without_unit, unit, /):
                 #if not _to_show_: return
+                if duration_without_unit < _low_duration_threshold4show_:
+                    return
                 s = _fmt_.format(*args, prefix=prefix, duration=duration_without_unit, unit=unit, **kwds)
                 print_err = sf._pr
                 #if not _to_show_: return

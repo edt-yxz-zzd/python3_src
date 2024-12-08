@@ -285,16 +285,28 @@ if __name__ == '__main__':
     ___end_mark_pattern_of_excluded_global_names__9999___ = ...
 
 bar = '='*22
-def main__print_infos_of_modules(qnames, /, *, exclude_exported:bool):
+def main__print_infos_of_modules(qnames, /, *, exclude_exported:bool, to_show_toplevel_def_heads:bool):
+    ######################
+    def print_bars():
+        print(bar); print(bar); print(bar)
+    ######################
     111;print_unbound_names_of_modules(qnames)
-    print(bar); print(bar); print(bar)
+    ######################
+    print_bars()
     222;print_global_names_of_modules(qnames, exclude_exported=exclude_exported)
-    print(bar); print(bar); print(bar)
-    333;print_toplevel_def_heads_of_modules(qnames)
-    print(bar); print(bar); print(bar)
-    222;print_global_names_of_modules(qnames, exclude_exported=exclude_exported)
-    print(bar); print(bar); print(bar)
+    ######################
+    if to_show_toplevel_def_heads:
+        ######################
+        print_bars()
+        333;print_toplevel_def_heads_of_modules(qnames)
+        ######################
+        print_bars()
+        222;print_global_names_of_modules(qnames, exclude_exported=exclude_exported)
+        ######################
+    ######################
+    print_bars()
     111;print_unbound_names_of_modules(qnames)
+    ######################
 if __name__ == '__main__':
     main__print_infos_of_modules(qnames)
 

@@ -1,5 +1,11 @@
-
+#__all__:goto
 r"""
+e  ../../python3_src/seed/types/LazyValueDict.py
+view../../python3_src/seed/helper/lazy_import.py
+
+py -m seed.types.LazyValueDict
+from seed.types.LazyValueDict import LazyValueDict, Value2Lazy, mk_LazyValueDict
+
 >>> f = Value2Lazy
 
 >>> d = LazyValueDict()
@@ -142,12 +148,9 @@ class LazyValueDict(MutableMapping):
     def __len__(self):
         return len(self.__d)
 
+from seed.types.LazyValueDict import LazyValueDict, Value2Lazy, mk_LazyValueDict
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    #doctest: +ELLIPSIS
-    #doctest: +NORMALIZE_WHITESPACE
-    #doctest: +IGNORE_EXCEPTION_DETAIL
-    #Traceback (most recent call last):
 
-
+from seed.types.LazyValueDict import *

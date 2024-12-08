@@ -7,7 +7,7 @@ r'''[[[
 ######################
 e ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/doctest4IRecognizerLLoo.py
 
-seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo
+py -m seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo
 py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo -x
 
 py -m nn_ns.app.doctest_cmd    seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo:__doc__     seed.recognize.recognizer_LLoo__ver2_.doctest4IRecognizerLLoo:__doc__    -ht -ff
@@ -25,7 +25,7 @@ PlainRecoverableInputStream5token_seq :: uint -> may IPositionInfo4Gap -> uint -
 def mk_token_rawstream__5xs__idx_(offset, xs, ex_arg=None, /, *, tkey_vs_tdat_vs_tkd:'(0|1|2)'):
     'uint -> Iter (tkey|tdat|tkd) -> (((tkey -> tdat)|tdat/non_callable)|((tdat -> tkey)|tkey/non_callable)|None) -> (tkey_vs_tdat_vs_tkd/(0|1|2)) -> rawstream/(IPositionInfo4Gap, Iter IToken)'
 
-def Environment.__init__(sf, param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, /):
+def mk_Environment(param2setting, name2rgnr, name2may_gpreprocess, name2may_gpostprocess6err, name2may_gpostprocess6ok, name2force_postprocess_when_ignore, /):
 def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False):
     'IRecognizerLLoo -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> Reply'#@wrapper
 
@@ -37,13 +37,19 @@ see:IRecognizerLLoo:__doc__
 ######################
 
 ######################
+>>> _0recognize = recognize_
+>>> recognize_ = recognize__asif_main_rgnr_
+
+######################
+
+######################
 >>> tkey_vs_tdat_vs_tkd=0; tkn_qset5xqset_=TokenKeyQuerySet5xqset # [tkey :: char]
 >>> def _mk_istream5src(src, /):
 ...     (gap0, iter_tokens) = mk_token_rawstream__5xs__idx_(0, src, tkey_vs_tdat_vs_tkd=tkey_vs_tdat_vs_tkd)
 ...     #istream = PlainRecoverableInputStream5token_seq(0, gap0, 0, [*iter_tokens])
 ...     istream = RecoverableInputStream9LazyList(0, gap0, iter_tokens)
 ...     return istream
->>> env = Environment(param2setting:={}, name2rgnr:={}, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={})
+>>> env = mk_Environment(param2setting:={}, name2rgnr:={}, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={}, name2force_postprocess_when_ignore:={})
 >>> gctx = {}
 >>> mkrs = Makers4IRecognizerLLoo
 
@@ -102,6 +108,7 @@ token_seq_
 named_
 ref_
 
+tkey_prefix_tree_
 priority_parallel_
 serial_
 dependent_pair_
@@ -129,8 +136,12 @@ spost__tkn2tkd_
 spost__tkn2tkey_
 spost__unbox_
 
+main_
+main__split_teardown_
+lazy_alias_
+lazy_alias_rgnr__human_
+
 TODO
-tkey_prefix_tree_
 :non_tested-yet:
     gsep_end_by_:see:many_,...
     try_except_else_:++strict_vs_forgivable:non_tested
@@ -1743,10 +1754,10 @@ True
 True
 >>> repr(mkrs.not_eof_()) == repr(mkrs.rgnr__not_eof)
 True
->>> def _1test_(main_rgnr, src, /, *, ignore=False):
+>>> def _1test_(main_rgnr, src, /, *, ignore=False, not_Reply=False):
 ...     istream = _mk_istream5src(src)
 ...     reply = recognize_(main_rgnr, env, gctx, istream, ignore=ignore)
-...     assert istream.tell_ext_info() == reply.ext_info8end
+...     if not not_Reply:assert istream.tell_ext_info() == reply.ext_info8end
 ...     return reply
 >>> def _3test_(main_rgnr, src, /):
 ...     #NOTE:ignore,protect_header_
@@ -2882,7 +2893,7 @@ True
 ###
 #restore_env:goto
 >>> saved_env = env
->>> env = Environment(param2setting:={}, name2rgnr, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={})
+>>> env = mk_Environment(param2setting:={}, name2rgnr, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={}, name2force_postprocess_when_ignore:={})
 
 ###
 >>> main_rgnr = ref__rgnr8digit
@@ -2928,24 +2939,274 @@ Reply(Either(False, 'no_prefix_matched'), ExtPositionInfo(MonotonicIndex(<object
 
 
 
+#######
+>>> main_rgnr = mkrs.subscript_(rgnr8digit, slice(None))
+>>> _3test_(main_rgnr, '5') #doctest: +ELLIPSIS
+Reply(Either(True, '5'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, '5'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('5', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+>>> main_rgnr = mkrs.subscript_(rgnr8digit, slice(0,0))
+>>> _1test_(main_rgnr, '5') #doctest: +ELLIPSIS
+Reply(Either(True, ''), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+>>> main_rgnr = mkrs.subscript_(rgnr8digit, 0)
+>>> _1test_(main_rgnr, '5') #doctest: +ELLIPSIS
+Reply(Either(True, '5'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+
+
+
+#######
+>>> main_rgnr = mkrs.spost__fmap4tuple_(rgnr8pair, lambda c:c+'ww')
+>>> _3test_(main_rgnr, '69') #doctest: +ELLIPSIS
+Reply(Either(True, ('6ww', '9ww')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(True, ('6ww', '9ww')), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+Reply(Either(True, None), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 2), PositionInfo4Gap__idx(2)))
+
+
+
+
+
+
+
+#######
+>>> def mk_lazy_raise_with_nlast_args_(n, E, v, /):
+...     def lazy_raise(*args):
+...         raise E(v, *args[max(0,len(args)-n):])
+...     return lazy_raise
+>>> def mk_lazy_tmay_value_with_nlast_args_(n, v, /):
+...     def lazy_tmay_value(*args):
+...         return ((v, *args[max(0,len(args)-n):]),)
+...     return lazy_tmay_value
+>>> def mk_lazy_value_(v, /):
+...     def lazy_value(*args):
+...         return v
+...     return lazy_value
+>>> def mk_lazy_value_with_nlast_args_(n, v, /):
+...     def lazy_value(*args):
+...         return (v, *args[max(0,len(args)-n):])
+...     return lazy_value
+>>> recognize_ = _0recognize #begin-test:main_()/main__split_teardown_()
+
+#######
+>>> main_rgnr = mkrs.main_(rgnr8digit, mk_lazy_tmay_value_with_nlast_args_(0x02, 999))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+>>> main_rgnr = mkrs.main_(rgnr8digit, mk_lazy_tmay_value_with_nlast_args_(0x02, 999), mk_lazy_value_(()))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+>>> main_rgnr = mkrs.main_(rgnr8digit, mk_lazy_value_(999), mk_lazy_tmay_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+(666, 999, Either(True, Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))))
+
+>>> main_rgnr = mkrs.main_(rgnr8digit, None, mk_lazy_tmay_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+(666, None, Either(True, Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))))
+
+>>> main_rgnr = mkrs.main_(rgnr8digit, mk_lazy_raise_with_nlast_args_(0x02, Exception, 999), mk_lazy_tmay_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (999, [<WeakKeyHalfMap8AnonymousWeakableSymbol:'sym8id4curr_rgnz'@0x...>], False)
+
+
+######
+# main_:++rgnr internal exc whether catch by _may_teardown_
+>>> rgnr8raise = mkrs.spostprocess_(rgnr8digit, None, mk_lazy_raise_with_nlast_args_(0x01, Exception, 777))
+
+######
+>>> main_rgnr = mkrs.main_(rgnr8raise, mk_lazy_tmay_value_with_nlast_args_(0x02, 999), mk_lazy_value_(()))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (777, '6')
+
+######
+>>> main_rgnr = mkrs.main_(rgnr8raise, mk_lazy_tmay_value_with_nlast_args_(0x02, 999), None)
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (777, '6')
+
+######
+>>> main_rgnr = mkrs.main_(rgnr8raise, mk_lazy_tmay_value_with_nlast_args_(0x02, 999), mk_lazy_raise_with_nlast_args_(0x02, Exception, 666))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (666, ((999, [<WeakKeyHalfMap8AnonymousWeakableSymbol:'sym8id4curr_rgnz'@0x...>], False),), Either(False, (<class 'Exception'>, Exception(777, '6'), <traceback object at 0x...>)))
+
+######
+>>> main_rgnr = mkrs.main_(rgnr8raise, mk_lazy_tmay_value_with_nlast_args_(0x02, 999), mk_lazy_tmay_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+(666, ((999, [<WeakKeyHalfMap8AnonymousWeakableSymbol:'sym8id4curr_rgnz'@0x...>], False),), Either(False, (<class 'Exception'>, Exception(777, '6'), <traceback object at 0x...>)))
+
+
+
+
+#######
+#######
+#######
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8digit, mk_lazy_value_with_nlast_args_(0x02, 999))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8digit, mk_lazy_value_with_nlast_args_(0x02, 999), None, mk_lazy_value_(None))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8digit, mk_lazy_value_(999), mk_lazy_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+(666, 999, Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1))))
+
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8digit, None, mk_lazy_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+(666, None, Reply(Either(True, '6'), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1))))
+
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8digit, mk_lazy_raise_with_nlast_args_(0x02, Exception, 999), mk_lazy_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (999, [<WeakKeyHalfMap8AnonymousWeakableSymbol:'sym8id4curr_rgnz'@0x...>], False)
+
+
+######
+# main__split_teardown_:++rgnr internal exc whether catch by _may_teardown_
+>>> rgnr8raise = mkrs.spostprocess_(rgnr8digit, None, mk_lazy_raise_with_nlast_args_(0x01, Exception, 777))
+
+######
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8raise, mk_lazy_value_with_nlast_args_(0x02, 999), None, mk_lazy_value_(None))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (777, '6')
+
+######
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8raise, mk_lazy_value_with_nlast_args_(0x02, 999), None)
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (777, '6')
+
+######
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8raise, mk_lazy_value_with_nlast_args_(0x02, 999), None, mk_lazy_raise_with_nlast_args_(0x02, Exception, 666))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (666, False, (999, [<WeakKeyHalfMap8AnonymousWeakableSymbol:'sym8id4curr_rgnz'@0x...>], False))
+
+######
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8raise, mk_lazy_value_with_nlast_args_(0x02, 999), mk_lazy_raise_with_nlast_args_(0x02, Exception, 666))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (777, '6')
+
+######
+>>> main_rgnr = mkrs.main__split_teardown_(rgnr8raise, mk_lazy_value_with_nlast_args_(0x02, 999), mk_lazy_value_with_nlast_args_(0x02, 666))
+>>> _1test_(main_rgnr, '6', not_Reply=True) #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+Exception: (777, '6')
+
+
+
+
+>>> recognize_ = recognize__asif_main_rgnr_ #end-test:main__split_teardown_()/main__split_teardown_()
+
+
+
+
+
+
+
+
+#######
+lazy_alias_
+#######
+>>> main_rgnr = mkrs.lazy_alias_('any_token_', [])
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_(mkrs.any_token_, [])
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(0), PositionInfo4Gap__idx(1)), Cased('6', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 1), PositionInfo4Gap__idx(1)))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_(mkrs.constant_loader_, [mk_Right(mk_Right(999))])
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, 999), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+#######
+>>> saved__env = env
+>>> env = mk_Environment(param2setting:={666:mk_Right(999)}, name2rgnr:={}, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:={}, name2force_postprocess_when_ignore:={})
+>>> main_rgnr = mkrs.lazy_alias_(mkrs.constant_loader_, [mk_Left(666)])
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, 999), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+
+#>>> env = saved__env
+#######
+lazy_alias_rgnr__human_
+>>> def constant_loader__Right_(oresult, /):
+...     return mkrs.constant_loader_(mk_Right(oresult))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_rgnr__human_(mkrs.constant_loader_, mk_Left(666))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, 999), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_rgnr__human_('constant_loader_', mk_Left(666))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, 999), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_rgnr__human_('constant_loader_', mk_Right(mk_Right(999)))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, 999), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_rgnr__human_(constant_loader__Right_, mk_Right(999))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, 999), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_rgnr__human_(constant_loader__Right_, 999)
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, 999), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+#######
+>>> main_rgnr = mkrs.lazy_alias_rgnr__human_(constant_loader__Right_, mk_Left(666))
+>>> _1test_(main_rgnr, '6') #doctest: +ELLIPSIS
+Reply(Either(True, Either(True, 999)), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 0), PositionInfo4Gap__idx(0)))
+
+
+>>> env = saved__env
+
+
+
+
 
 #######
 #######
 #######
 #>>> mkrs.???()
 TODO:see above: here list some:
-tkey_prefix_tree_
 :non_tested-yet:
     try_except_else_:++strict_vs_forgivable:non_tested
     try_except_else__spost_:++strict_vs_forgivable:non_tested
-    gsep_end_by_
+    mkrs.gsep_end_by_(...) #_validate()
 
 
 #NOTE:ignore,protect_header_
 #NOTE:_force_postprocess_when_ignore_
 #NOTE:strict_vs_forgivable
 
-:%s/ 0x\w\+/ 0x.../g
+:%s/\([@ ]0x\)\w\+/\1.../g
 :%s/+ELLIPSIS  *[R]eply/+ELLIPSIS\rReply/g
 :%s/  *# Line /\r# Line /g
 :%s/  *$//g
@@ -2984,7 +3245,7 @@ from seed.types.Tester import Tester__eq_obj
 from seed.types.Either import mk_Left, mk_Right
 
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import \
-(Environment
+(mk_Environment
 ,mk_group_pair4rgnr_ref
 ,   Symbol4IRecognizerLLoo
 ,collect_namess5locals_
@@ -2998,6 +3259,7 @@ from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import \
 ,mk_gpostprocess6err__5spost_after_tag_st_
 #
 ,recognize_
+,   recognize__asif_main_rgnr_
 ,forbid_xxx_protected_ok
 ,get_info_ex4high_freq_sconfigpack_
 )
@@ -3046,7 +3308,16 @@ __doc__ = __doc__.replace(_plc_hldr, fr'''
 '''#'''
 )
 
-
+def _validate():
+    from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import Makers4IRecognizerLLoo
+    all_method_names = tuple(sorted(Makers4IRecognizerLLoo))
+    miss_nms = [nm for nm in all_method_names if not (f'mkrs.{nm}(' if nm[-1] == '_' else f'>>> main_rgnr = mkrs.{nm}\n') in __doc__] #)
+    if miss_nms:
+        from seed.tiny import print_err
+        print_err('\n'.join(miss_nms))
+        raise Exception(miss_nms)
+    return
+_validate()
 
 
 __all__

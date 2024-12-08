@@ -1,6 +1,14 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/types/StackStyleSet.py
+
+
+seed.types.StackStyleSet
+py -m nn_ns.app.debug_cmd   seed.types.StackStyleSet
+py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.StackStyleSet   @f
+py -m nn_ns.app.doctest_cmd seed.types.StackStyleSet:__doc__ -v
+
+[[
 see:
     from seed.data_funcs.rngs import StackStyleSimpleIntSet, StackStyleSimpleIntMapping
         [key :: int]
@@ -11,13 +19,17 @@ see:
     view ../../python3_src/seed/types/StackStyleSet.py
         [key :: Hashable]
         based on py.dict,py.list
+        from seed.types.StackStyleSet import StackStyleSet
 
-seed.types.StackStyleSet
-py -m nn_ns.app.debug_cmd   seed.types.StackStyleSet
-py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.StackStyleSet   @f
-py -m nn_ns.app.doctest_cmd seed.types.StackStyleSet:__doc__ -v
+    view ../../python3_src/seed/types/FrozenOrderedSet.py
+        [key :: Hashable]
+        based on py.OrderedDict,py.list
+        bijection
+        from seed.types.FrozenOrderedSet import FrozenOrderedSet, FrozenOrderedDict
+        from collections import OrderedDict
+        #frozenset-unordered
 
-from seed.types.StackStyleSet import StackStyleSet, MultiSetStyleStack
+]]
 
 py_help seed.types.StackStyleSet@StackStyleSet
 py_help seed.types.StackStyleSet@MultiSetStyleStack
@@ -558,4 +570,4 @@ MultiSetStyleStack()
 
 
 from seed.types.StackStyleSet import StackStyleSet, MultiSetStyleStack
-
+from seed.types.StackStyleSet import *

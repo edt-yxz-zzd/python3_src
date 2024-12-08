@@ -3,11 +3,11 @@ r'''[[[
 e zz
 
 z
-py -m nn_ns.app.debug_cmd   z -x
-py -m nn_ns.app.doctest_cmd z:__doc__ -ht
+py -m nn_ns.app.debug_cmd   z -x # -off_defs
+py -m nn_ns.app.doctest_cmd z:__doc__ -ht # -ff -df
 py_adhoc_call   z   @f
 from z import *
-#]]]'''
+]]]'''#'''
 __all__ = r'''
 '''.split()#'''
 __all__

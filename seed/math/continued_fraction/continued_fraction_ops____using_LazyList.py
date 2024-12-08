@@ -8,6 +8,8 @@ see:
     view ../../python3_src/seed/math/binary_float/binary_float_ops____using_LazyList.py
     view ../../python3_src/seed/math/continued_fraction/iter_continued_fraction_of_log__truncated_.py
         from seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_ import cf_log_, cf_ln_
+view ../../python3_src/seed/math/floor_ceil__tiny.py
+    from seed.math.floor_ceil__tiny import fractional_fixed_point_part_of_, fractional_fixed_point_part_of_neg_
 
 
 
@@ -1284,6 +1286,11 @@ doctest____end:here
 
 #]]]'''
 __all__ = r'''
+ContinuedFraction
+
+
+
+
 ContinuedFractionState__1var
 ContinuedFractionState__2vars
     cf_add
@@ -1334,10 +1341,13 @@ ContinuedFraction
     #chain__strict_
     #cf_unpack_or_raise
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.types.LazySeq import LazySeq
 from seed.types.LazyList import decorator4protocol4ToConcatLazyList_, ToConcatLazyList
 from seed.types.LazyList import LazyList, LazyListError
 
+from seed.math.continued_fraction.prepare_continued_fraction_from_string import prepare_continued_fraction_from_string_
+from seed.math.floor_ceil__tiny import fractional_fixed_point_part_of_, fractional_fixed_point_part_of_neg_
 from fractions import Fraction
 #from itertools import chain, islice, count as _count_
     # chain__strict_
@@ -1358,6 +1368,9 @@ from seed.math.continued_fraction.continued_fraction_fold import iter_continued_
 
 from seed.helper.repr_input import repr_helper
 from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
+___end_mark_of_excluded_global_names__0___ = ...
+
+__all__
 
 NaN = object()
 class ContinuedFractionState__2vars:
@@ -1919,7 +1932,17 @@ class ContinuedFraction(LazySeq):
     @property
     def _cf_digits(sf, /):
         return sf.the_lazylist
-    def __new__(cls, cf_digits__or__int__or__Fraction, /):
+
+    ######################
+    #ContinuedFraction
+    ######################
+    def __new__(cls, str_or_cf_digits__or__int__or__Fraction, /):
+        if type(str_or_cf_digits__or__int__or__Fraction) is str:
+            s = str_or_cf_digits__or__int__or__Fraction
+            cf_digits__or__int__or__Fraction = prepare_continued_fraction_from_string_(s)
+        else:
+            cf_digits__or__int__or__Fraction = str_or_cf_digits__or__int__or__Fraction
+        cf_digits__or__int__or__Fraction
         if is_iterable(cf_digits__or__int__or__Fraction):
             cf_digits = cf_digits__or__int__or__Fraction
         elif type(cf_digits__or__int__or__Fraction) is int:
@@ -1935,6 +1958,7 @@ class ContinuedFraction(LazySeq):
             sf = cf_digits
         else:
             sf = super(__class__, cls).__new__(cls, cf_digits)
+        sf
         return sf
     if 0:
         #@override
@@ -1992,9 +2016,12 @@ class ContinuedFraction(LazySeq):
     def is_int(sf, /):
         return cf_is_int_(sf._cf_digits)
     def __floor__(sf, /):
+        #see:fractional_fixed_point_part_of_
         return cf_floor_(sf._cf_digits)
     def __ceil__(sf, /):
+        #see:fractional_fixed_point_part_of_neg_
         return cf_ceil_(sf._cf_digits)
+
     def _cmp_(sf, ot, /):
         ot = __class__(ot)
         return cf_cmp_(sf._cf_digits, ot._cf_digits)
@@ -2114,6 +2141,39 @@ class ContinuedFraction(LazySeq):
         pows = PowSeq(sf, None, cf_1)
         return pows.get_pow_(e)
 
+    ######################
+    ######################
+    ######################
+    ######################
+    def fractional_fixed_point_part_of_(sf, /):
+        return fractional_fixed_point_part_of_(sf)
+    def fractional_fixed_point_part_of_neg_(sf, /):
+        return fractional_fixed_point_part_of_neg_(sf)
+    ######################
+    ######################
+    def __radd__(sf, ot, /):
+        ot = __class__(ot)
+        return ot + sf
+    def __rmul__(sf, ot, /):
+        ot = __class__(ot)
+        return ot * sf
+    def __rsub__(sf, ot, /):
+        ot = __class__(ot)
+        return ot - sf
+    def __rtruediv__(sf, ot, /):
+        ot = __class__(ot)
+        return ot / sf
+    def __rdivmod__(sf, ot, /):
+        ot = __class__(ot)
+        return divmod(ot, sf)
+    def __rmod__(sf, ot, /):
+        ot = __class__(ot)
+        return ot % sf
+    def __rfloordiv__(sf, ot, /):
+        ot = __class__(ot)
+        return ot // sf
+    #xxx:def __rpow__(sf, e, /):
+    ######################
 #end-class ContinuedFraction:
 
 cf_0 = ContinuedFraction(0)
