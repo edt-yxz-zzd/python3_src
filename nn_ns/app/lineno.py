@@ -1,6 +1,7 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/nn_ns/app/lineno.py
+e ../../python3_src/bash_script/app/lineno
 
 [[
 seperated from:『py_adhoc_call { +lineno }』
@@ -13,6 +14,33 @@ usage:
 cat /sdcard/0my_files/tmp/0tmp | py -m nn_ns.app.lineno
 cat /sdcard/0my_files/tmp/0tmp | lineno
 lineno < /sdcard/0my_files/tmp/0tmp
+
+===
+发现cat,grep,awk/gawk也有类似功能:
+===
+echo -e -n 'abc\n123\n...\n' | cat -n
+     1  abc
+     2  123
+     3  ...
+echo -e -n 'abc\n123\n...\n' | lineno
+1:abc
+2:123
+3:...
+
+===
+echo $'aaa\n777\n...' | gawk 'BEGIN { OFS = ":" } { print FNR, $0 }'
+1:aaa
+2:777
+3:...
+
+===
+echo $'aaa\n777\n...' | grep '' -n
+1:aaa
+2:777
+3:...
+
+===
+
 ]]
 
 
@@ -42,6 +70,8 @@ def main(args=None, /):
         , epilog=''
         , formatter_class=argparse.RawDescriptionHelpFormatter
         )
+    parser.add_argument('-fmt', '--format4lineno', type=str, default=(default_format4lineno:='{0}:')
+            , help=f'format<lineno>: [default:={default_format4lineno!r}]')
     parser.add_argument('-s', '--lineno_offset', type=int, default=1
                         , help='lineno for first line: [default:=1]')
     parser.add_argument('-i', '--input', type=str, default=None
@@ -74,10 +104,12 @@ def main(args=None, /):
     may_ofname = args.output
     #with may_open_stdout(may_ofname, omode, encoding=oencoding) as fout:
     lineno_offset = args.lineno_offset
+    format4lineno = args.format4lineno
     with open4r(may_ifname, xencoding=iencoding) as fin:
         with open4w(may_ofname, force=force, xencoding=oencoding) as fout:
           for lineno, line in enumerate(fin, lineno_offset):
-              print(lineno, ':', line, sep='', end='')
+              #print(lineno, ':', line, sep='', end='')
+              print(format4lineno.format(lineno), line, sep='', end='')
 
 if __name__ == "__main__":
     main()

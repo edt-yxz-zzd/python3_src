@@ -1,6 +1,5 @@
 #__all__:goto
 r'''[[[
-
 e ../../python3_src/seed/math/prime_gens.py
     view ../../python3_src/seed/math/is_prime__le_pow2_64.py
         # replaced since 2**64 < A014233[-1]
@@ -12,6 +11,15 @@ e ../../python3_src/seed/math/factor_pint_into_strong_pseudoprimes_by_quadratic_
 !mv ../../python3_src/seed/math/lazy_prime_seq_by_Eratosthenes_sieve.py ../../python3_src/seed/math/prime_gens.py
 .+1,$s/\<lazy_prime_seq_by_Eratosthenes_sieve\>/prime_gens/g
 ]]
+[[
+rename:
+    to match:
+        next_may_prime__le_pow2_81__ge_
+        raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
+.+1,$s/\<prev_may_prime__lt_\>/prev_may_prime__le_pow2_81__lt_/g
+.+1,$s/\<raw_iter_all_strict_sorted_primes__using_primality_test__lt_\>/raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_/g
+]]
+
 
 seed.math.prime_gens
 py -m seed.math.prime_gens
@@ -34,7 +42,7 @@ from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_fa
 
 from seed.math.prime_gens import prime_gen__Eratosthenes_sieve, prime_gen__Miller_Rabin_primality_test
 
-from seed.math.prime_gens import prime_gen, prime_filter__using_primality_test_, raw_iter_all_strict_sorted_primes__using_primality_test__lt_
+from seed.math.prime_gens import prime_gen, prime_filter__using_primality_test_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
 
 from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
 
@@ -1023,7 +1031,7 @@ offsetted_sieve = [-1, -1, 1, None, None, 2, 3]
 
 
 
->>> [*raw_iter_all_strict_sorted_primes__using_primality_test__lt_(200)]
+>>> [*raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(200)]
 [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199]
 >>> len(_)
 46
@@ -1196,11 +1204,11 @@ TypeError: -1
 
     is_prime__le_pow2_81_
     raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
+    raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
     next_pseudoprime__ge_
     prev_may_pseudoprime__lt_
     next_may_prime__le_pow2_81__ge_
-    prev_may_prime__lt_
-
+    prev_may_prime__le_pow2_81__lt_
 >>> is_prime__le_pow2_81_(7)
 True
 >>> is_prime__le_pow2_81_(9)
@@ -1238,15 +1246,15 @@ TypeError: unsupported operand type(s) for -: 'NoneType' and 'int'
 True
 >>> next_may_prime__le_pow2_81__ge_(2**81) -2**81
 17
->>> 2**82 -prev_may_prime__lt_(2**82)
+>>> 2**82 -prev_may_prime__le_pow2_81__lt_(2**82)
 Traceback (most recent call last):
     ...
 seed.math.prime_gens.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound < end == 4835703278458516698824704]
->>> 2**81 -prev_may_prime__lt_(2**81)
+>>> 2**81 -prev_may_prime__le_pow2_81__lt_(2**81)
 51
->>> prev_may_prime__lt_(2) is None
+>>> prev_may_prime__le_pow2_81__lt_(2) is None
 True
->>> prev_may_prime__lt_(1) is None
+>>> prev_may_prime__le_pow2_81__lt_(1) is None
 True
 
 
@@ -1330,8 +1338,8 @@ prime_gen__Miller_Rabin_primality_test
 is_strong_pseudoprime__basis_
     is_prime__le_pow2_81_
         prime_filter__using_primality_test_
-            raw_iter_all_strict_sorted_primes__using_primality_test__lt_
-                prev_may_prime__lt_
+            raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+                prev_may_prime__le_pow2_81__lt_
                     reversed_iter_primes__le_pow2_81__lt_
             raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
                 next_may_prime__le_pow2_81__ge_
@@ -1397,8 +1405,8 @@ is_strong_pseudoprime__basis_
     is_prime__using_A014233_        is_prime__le_pow2_81_
         default4is_prime_and_may_upperbound
             prime_filter__using_primality_test_
-                raw_iter_all_strict_sorted_primes__using_primality_test__lt_
-                    prev_may_prime__lt_
+                raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+                    prev_may_prime__le_pow2_81__lt_
                 raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
                     next_may_prime__le_pow2_81__ge_
 
@@ -1523,7 +1531,7 @@ class Error(Exception):
 
 #def _iter_all_strict_sorted_primes():
 def raw_iter_all_strict_sorted_primes__lt_(end, /, *, to_cache_only_busy_primes_plus_next, may_primes):
-    'using Eratosthenes_sieve: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__lt_'
+    'using Eratosthenes_sieve: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_'
     '-> (Iter prime){[[last prime < end][next prime >= end]]}'
     it = raw_iter_all_strict_sorted_primes_(to_cache_only_busy_primes_plus_next=to_cache_only_busy_primes_plus_next, may_primes=may_primes)
     return _iter__lt_(end, it)
@@ -1534,7 +1542,7 @@ def _iter__lt_(end, xs, /):
             break
         yield p
 def raw_list_all_strict_sorted_primes__lt_(end, /, *, to_cache_only_busy_primes_plus_next, may_primes):
-    'using Eratosthenes_sieve: -> [prime]{[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__lt_'
+    'using Eratosthenes_sieve: -> [prime]{[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_'
     return [*raw_iter_all_strict_sorted_primes__lt_(end, to_cache_only_busy_primes_plus_next=to_cache_only_busy_primes_plus_next, may_primes=may_primes)]
 
 
@@ -2043,7 +2051,7 @@ primality_test_of_Miller_Rabin
     #]]]'''#'''
     #see:is_strong_pseudoprime__basis_
     #see:is_prime__tribool_
-    #see:raw_iter_all_strict_sorted_primes__using_primality_test__lt_
+    #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
     r = _prepare4is_prime__tribool_(prime_basis4A014233, n, skip_check=skip_check)
 
     if not r is ...:
@@ -2953,7 +2961,7 @@ if 0b000:
 
 
 
-#def raw_iter_all_strict_sorted_primes__using_primality_test__lt_(end, /, *, is_prime_and_may_upperbound=(is_prime__le_pow2_64, 2**64)):
+#def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end, /, *, is_prime_and_may_upperbound=(is_prime__le_pow2_64, 2**64)):
     # replaced since 2**64 < A014233[-1]
 assert A014233[-1] > 2**81
 is_prime__le_pow2_81_ = is_prime__using_A014233_
@@ -2970,7 +2978,7 @@ def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_(beg
         ints = _count(begin)
     return prime_filter__using_primality_test_(ints, is_prime_and_may_upperbound=is_prime_and_may_upperbound)
 def prev_may_pseudoprime__lt_(end, /):
-    'using Miller_Rabin_primality_test: end -> (may pseudoprime){[[pseudoprime < end][next pseudoprime >= end]]} #see:prev_may_prime__lt_'
+    'using Miller_Rabin_primality_test: end -> (may pseudoprime){[[pseudoprime < end][next pseudoprime >= end]]} #see:prev_may_prime__le_pow2_81__lt_'
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     case = Case4is_prime__tribool_.II_prime_basis_gtN
     for n in reversed(range(2, end)):
@@ -3008,10 +3016,10 @@ def _next__may_head_(it, /):
     for head in it:
         return head
     return None
-def prev_may_prime__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
+def prev_may_prime__le_pow2_81__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
     'using Miller_Rabin_primality_test: end -> (may prime){[[prime < end][next prime >= end]]} #see:prev_may_pseudoprime__lt_'
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    it = raw_iter_all_strict_sorted_primes__using_primality_test__lt_(end, is_prime_and_may_upperbound=is_prime_and_may_upperbound, reverse=True)
+    it = raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end, is_prime_and_may_upperbound=is_prime_and_may_upperbound, reverse=True)
     return _next__may_head_(it)
 def _iter_xs_ge_(next_may_x__ge_, begin, /):
     while 1:
@@ -3039,7 +3047,7 @@ def iter_primes__le_pow2_81__ge_(begin, /):
     return _iter_xs_ge_(next_may_prime__le_pow2_81__ge_, begin)
 def reversed_iter_primes__le_pow2_81__lt_(end, /):
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    return _reversed_iter_xs_lt_(prev_may_prime__lt_, end)
+    return _reversed_iter_xs_lt_(prev_may_prime__le_pow2_81__lt_, end)
 
 def pairwise_diff_(xs, /):
     xs = iter(xs)
@@ -3052,7 +3060,7 @@ def iter_pairwise_diff_primes__le_pow2_81__ge_(begin, /):
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     return pairwise_diff_(iter_primes__le_pow2_81__ge_(begin))
 
-def raw_iter_all_strict_sorted_primes__using_primality_test__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound, reverse=False):
+def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound, reverse=False):
     'using Miller_Rabin_primality_test: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__lt_<Eratosthenes_sieve>'
     check_type_is(int, end)
 
@@ -3195,8 +3203,10 @@ from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_fa
 
 from seed.math.prime_gens import prime_gen__Eratosthenes_sieve, prime_gen__Miller_Rabin_primality_test
 
-from seed.math.prime_gens import prime_gen, prime_filter__using_primality_test_, raw_iter_all_strict_sorted_primes__using_primality_test__lt_
+from seed.math.prime_gens import prime_gen, prime_filter__using_primality_test_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
 
 from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
+
+from seed.math.prime_gens import is_prime__le_pow2_81_, next_pseudoprime__ge_, prev_may_pseudoprime__lt_, next_may_prime__le_pow2_81__ge_, prev_may_prime__le_pow2_81__lt_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
 
 from seed.math.prime_gens import *

@@ -3260,6 +3260,8 @@ from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import \
 #
 ,recognize_
 ,   recognize__asif_main_rgnr_
+,main_recognize_
+,   main_recognize__default_
 ,forbid_xxx_protected_ok
 ,get_info_ex4high_freq_sconfigpack_
 )

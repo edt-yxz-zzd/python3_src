@@ -103,6 +103,9 @@ False
 >>> it.seek(st)
 >>> ls == [*it]
 True
+>>> it2 = RadixNumerationIterator.mk5params_(10, 0, 210, imay_radix4beyond=8, _may_digits4begin_=None, _may_digits4end_=None)
+>>> ls == [*it2]
+True
 
 
 py_adhoc_call   seed.math.combination__stated__radix_repr_uint   @f
@@ -231,14 +234,62 @@ class Mutable_st4radix_numeration(_IBase4TellSeekState, IStated__immutable_core_
 
     def __init__(sf, radix, begin, may_end, /, *, imay_radix4beyond=-1, _may_digits4begin_=None, _may_digits4end_=None):
         #def __init__(sf, radix, begin, may_end, /, *, imay_radix4beyond, _may_digits4begin_, _may_digits4end_):
+        sf._rwst = type(sf)._prepare4init_(radix, begin, may_end, raise_vs_None=False, imay_radix4beyond=imay_radix4beyond, _may_digits4begin_=_may_digits4begin_, _may_digits4end_=_may_digits4end_)
+            # ^TypeError
+        return
+        ######################
+        sf._rwst = [immutable_core_xstate, mutable_core_xstate, immutable_redundant_xstate, mutable_redundant_xstate]
+        return
+        sf._rwst
+        (immutable_core_xstate, mutable_core_xstate, immutable_redundant_xstate, mutable_redundant_xstate) = sf.rwst
+        ((radix, may_end, imay_radix4beyond), begin, may_digits4end, digits4begin) = sf.rwst
+        ######################
+    @classmethod
+    def mk_may_(cls, radix, begin, may_end, /, *, imay_radix4beyond=-1, _may_digits4begin_=None, _may_digits4end_=None):
+        '-> may sf'
+        may_rwst = cls._prepare4init_(radix, begin, may_end, raise_vs_None=True, imay_radix4beyond=imay_radix4beyond, _may_digits4begin_=_may_digits4begin_, _may_digits4end_=_may_digits4end_)
+        if may_rwst is None:
+            may_sf = None
+        else:
+            rwst = may_rwst
+            ((radix, may_end, imay_radix4beyond), begin, may_digits4end, digits4begin) = rwst
+            sf = cls(radix, begin, may_end, imay_radix4beyond=imay_radix4beyond, _may_digits4begin_=_may_digits4begin_, _may_digits4end_=_may_digits4end_)
+            may_sf = sf
+        return may_sf
+    @classmethod
+    def _prepare4init_(cls, radix, begin, may_end, /, *, raise_vs_None, imay_radix4beyond=-1, _may_digits4begin_=None, _may_digits4end_=None):
+        '-> may rwst if raise_vs_None else (rwst|^TypeError)'
+        check_type_is(bool, raise_vs_None)
+        b_err = False
+        if not raise_vs_None:
+            # ->rwst|^TypeError
+            def on_err():
+                raise TypeError
+        else:
+            # ->may_rwst
+            def on_err():
+                nonlocal b_err
+                b_err = True
+        on_err
+
+        ######################
         check_int_ge(2, radix)
         check_int_ge(0, begin)
-        check_may_([check_int_ge, begin+1], may_end)
+        #check_may_([check_int_ge, begin+1], may_end)
             #check_int_ge(begin+1, end)
+        if not may_end is None:
+            end = may_end
+            #check_int_ge(begin, end)
+            check_int_ge(0, end)
+            if not begin < end: on_err()
 
+
+        ######################
         check_int_ge(-1, imay_radix4beyond)
-        if not imay_radix4beyond < radix:raise TypeError
+        #if not imay_radix4beyond < radix:raise TypeError
+        if not imay_radix4beyond < radix: on_err()
 
+        ######################
         check_may_([check_type_is, list], _may_digits4begin_)
         check_may_([check_type_is, list], _may_digits4end_)
         if may_end is None is not _may_digits4end_:raise TypeError
@@ -255,16 +306,35 @@ class Mutable_st4radix_numeration(_IBase4TellSeekState, IStated__immutable_core_
             digits4begin = _may_digits4begin_
         digits4begin
 
+        ######################
         check_may_([check_type_is, list], may_digits4end)
         check_type_is(list, digits4begin)
         assert not (digits4begin and digits4begin[0] == 0)
         if not may_digits4end is None:
             digits4end = may_digits4end
             assert not (digits4end and digits4end[0] == 0)
-            assert len(digits4begin) <= len(digits4end)
-            assert not (len(digits4begin) == len(digits4end) and digits4begin >= digits4end)
-                #check_int_ge(begin+1, end)
-        assert (imay_radix4beyond == -1 or any(j >= imay_radix4beyond for j in digits4begin))
+            #check_int_ge(begin+1, end)
+            #assert not len(digits4begin) > len(digits4end), TypeError
+            #assert not (len(digits4begin) == len(digits4end) and digits4begin >= digits4end), TypeError
+            if len(digits4begin) > len(digits4end): on_err()
+            elif (len(digits4begin) == len(digits4end) and digits4begin >= digits4end): on_err()
+        ######################
+        #assert (imay_radix4beyond == -1 or any(j >= imay_radix4beyond for j in digits4begin))
+        #if not (imay_radix4beyond == -1 or any(j >= imay_radix4beyond for j in digits4begin)): on_err()
+        if 0 <= imay_radix4beyond < radix:
+            radix4beyond = imay_radix4beyond
+            if not any(j >= radix4beyond for j in digits4begin):
+                if not digits4begin:
+                    delta4begin = 1 if radix4beyond == 0 else radix4beyond
+                    digits4begin.append(delta4begin)
+                else:
+                    delta4begin = radix4beyond - digits4begin[-1]
+                    digits4begin[-1] = radix4beyond
+                assert 0 < delta4begin < radix
+                begin += delta4begin
+                if may_end is not None and end <= begin: on_err()
+        ######################
+        b_err
         ######################
         radix, begin, may_end, imay_radix4beyond, digits4begin, may_digits4end
         ######################
@@ -273,11 +343,11 @@ class Mutable_st4radix_numeration(_IBase4TellSeekState, IStated__immutable_core_
         immutable_redundant_xstate = may_digits4end
         mutable_redundant_xstate = digits4begin
         ######################
-        sf._rwst = [immutable_core_xstate, mutable_core_xstate, immutable_redundant_xstate, mutable_redundant_xstate]
-        return
-        sf._rwst
-        (immutable_core_xstate, mutable_core_xstate, immutable_redundant_xstate, mutable_redundant_xstate) = sf.rwst
-        ((radix, may_end, imay_radix4beyond), begin, may_digits4end, digits4begin) = sf.rwst
+        rwst = [immutable_core_xstate, mutable_core_xstate, immutable_redundant_xstate, mutable_redundant_xstate]
+        ######################
+        may_rwst = None if b_err else rwst
+        return may_rwst
+        ######################
     @property
     def rwst(sf, /):
         return tuple(sf._rwst)
@@ -363,33 +433,6 @@ class Mutable_st4radix_numeration(_IBase4TellSeekState, IStated__immutable_core_
         (begin, digits4begin) = (0, []) if immutable_core_xstate == -1 else (imay_radix4beyond, [imay_radix4beyond])
         return cls(radix, begin, may_end, imay_radix4beyond=imay_radix4beyond, _may_digits4begin_=digits4begin, _may_digits4end_=may_digits4end)
 check_non_ABC(Mutable_st4radix_numeration)
-#.class Mutable_st4radix_numeration(IBase4TellSeekState, _Base4repr):
-#.    ___no_slots_ok___ = True
-#.
-#.    @override
-#.    def __getstate__(sf, /):
-#.        return (sf.radix, tuple(sf.digits))
-#.    @override
-#.    def __setstate__(sf, st, /):
-#.        (radix, [*digits]) = st
-#.        sf.__init__(radix, digits)
-#.    def __init__(sf, radix, digits4begin, may_digits4end, /):
-#.        #def __init__(sf, radix, digits4begin, may_digits4end, /, *, imay_radix4beyond=-1, _may_digits4begin_=None, _may_digits4end_=None):
-#.        check_int_ge(0, radix)
-#.        check_type_is(list, digits)
-#.        assert not (digits and digits[0] == 0)
-#.        sf._args4mst = (radix, digits)
-#.        sf._reset4repr(sf._args4mst)
-#.    @property
-#.    def radix(sf, /):
-#.        return sf._args4mst[0]
-#.    @property
-#.    def digits(sf, /):
-#.        return sf._args4mst[1]
-#.    @property
-#.    def sz4comb(sf, /):
-#.        return len(sf.digits)
-
 
 
 
@@ -413,8 +456,7 @@ class _IBaseBoundedIterator(IBaseStatedIterator):
         elif None is not may_end <= begin:
             may_mutable_st = None
         else:
-            mutable_st = Mutable_st4radix_numeration(radix, begin, may_end, imay_radix4beyond=imay_radix4beyond, _may_digits4begin_=_may_digits4begin_, _may_digits4end_=_may_digits4end_)
-            may_mutable_st = mutable_st
+            may_mutable_st = Mutable_st4radix_numeration.mk_may_(radix, begin, may_end, imay_radix4beyond=imay_radix4beyond, _may_digits4begin_=_may_digits4begin_, _may_digits4end_=_may_digits4end_)
         may_mutable_st
         return may_mutable_st
 

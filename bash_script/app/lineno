@@ -1,1 +1,4 @@
 py -m nn_ns.app.lineno "$@"
+#or:
+#gawk 'BEGIN { OFS = ":" } { print FNR, $0 }' "$@"
+#grep '' -n "$@"

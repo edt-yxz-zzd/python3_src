@@ -574,6 +574,17 @@ Reply(Either(True, ((('5', '0', '5'), (('3',), ('4', '0'))),)), ExtPositionInfo(
 Reply(Either(False, (TokenKeyQuerySet5xqset(Tester__eq_obj('(')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(4), PositionInfo4Gap__idx(5)), Cased('x', None)))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__idx(5)))
 
 
+TODO:test:main_recognize_
+>>> istream = _mk_istream5src('5+9')
+>>> main_recognize_(add_expr, env, gctx, istream, to_allow_non_main_rgnr=True)
+(('5',), ('9',))
+
+>>> istream = _mk_istream5src('505+xxxx')
+>>> main_recognize_(add_expr, env, gctx, istream, to_allow_non_main_rgnr=True) #doctest: +ELLIPSIS
+Traceback (most recent call last):
+    ...
+seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo.RecognizeFail: ((TokenKeyQuerySet5xqset(Tester__eq_obj('(')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(4), PositionInfo4Gap__idx(5)), Cased('x', None))), ExtPositionInfo(MonotonicIndex(<object object at 0x...>, 5), PositionInfo4Gap__idx(5)))
+
 
 
 unitest per mkr@Makers4IRecognizerLLoo:
@@ -629,6 +640,8 @@ IConfig4gprepostprocess
 IRecognizerLLoo
     recognize_
         recognize__asif_main_rgnr_
+    main_recognize_
+        main_recognize__default_
     RecognizeCall   Call mk_Call_
     Reply           RecognizeReply
         ExtPositionInfo
@@ -848,10 +861,11 @@ IRecognizerLLoo__serial
     ObjVar
     Output__oresult
 
+InputStreamError__eof
+ReleasedError
 Error
     ValidateError
-    InputStreamError__eof
-    ReleasedError
+    RecognizeFail
 
 
 IHasAttr__forgivable_fail_be_ok
@@ -998,6 +1012,7 @@ from seed.iters.count_ import count_
 
 from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, empty_FrozenDict
 from seed.tiny import ifNone, echo, mk_tuple, mk_frozenset, null_tuple, null_frozenset, null_mapping_view, fst, MapView, mk_MapView, curry1, print_err, snd, with_expect_error
+from functools import partial
 from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le, check_callable, check_pair
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.helper.repr_input import repr_helper
@@ -1051,6 +1066,7 @@ forbid_xxx_protected_ok = True
 
 class Error(Exception):pass
 class ValidateError(Error):pass
+class RecognizeFail(Error):pass
 
 class RecognizeCall(tuple):
     '[exargs4lwrap :: [nm4info_ex4mk_gi]]'
@@ -1102,6 +1118,11 @@ class Reply(tuple):
         '-> bool'
         return sf.eresult.right
 
+    def as_RecognizeFail(sf, /):
+        '[not ok] => RecognizeFail'
+        errmsg = sf.errmsg
+        ext_info8end = sf.ext_info8end
+        return RecognizeFail(errmsg, ext_info8end)
     def as_dict(sf, /):
         return dict(eresult=sf.eresult, ext_info8end=sf.ext_info8end)
     def ireplace(sf, /, **kwds):
@@ -1144,6 +1165,15 @@ class IRecognizerLLoo(ABC):
         ++main_rgnr/rgnr._may_teardown_
         ++RecognizerLLoo__main()
         ++recognize__asif_main_rgnr_()
+    #######
+    ++main_rgnr/rgnr._may_main_recognize_()
+    ++global:main_recognize_()
+        ..:main_recognize_()
+            using rgnr._may_main_recognize_
+        vs:global:recognize_()
+            using main_rgnr.(_mk_gi4recognize_&_may_setup_&_may_teardown_)
+        vs:global:recognize__asif_main_rgnr_()
+            using rgnr.(_mk_gi4recognize_&?_may_setup_?&?_may_teardown_?)
     ######################
     env:
         #immutable
@@ -1316,6 +1346,12 @@ class IRecognizerLLoo(ABC):
 #begin-class IRecognizerLLoo(ABC):
     #[:def__IRecognizerLLoo]:here
     __slots__ = ()
+    @property
+    @abstractmethod
+    def _may_main_recognize_(sf, env, gctx, istream, /, *, ignore=False):
+        '[only called iff [sf as main_rgnr][used by main_recognize_()]]: -> may (env->gctx->istream->ignore->(result4rgnz@(tmay_result4rgnz@_may_teardown_|reply.oresult))|^RecognizeFail|^Exception)'
+        'recognize_,recognize__asif_main_rgnr_ :: IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> ((Reply if main_rgnr._may_teardown_ is None or [teardown_ return null_tuple] else result4rgnz) if not to_output_Either else (Either Reply result4rgnz))'
+        return None
     @property
     @abstractmethod
     def _may_name4ref_(sf, /):
@@ -1595,6 +1631,8 @@ def check_names4ref_names6ref_(_no_check__vs__ge__vs__eq_, nms4ref, nms6ref, /):
     ######################
 class IRecognizerLLoo__default_mixins(IRecognizerLLoo):
     __slots__ = ()
+    #@override
+    _may_main_recognize_ = None
     #@override
     _tail_recur_Call_ok_ = False
     #@override
@@ -2653,6 +2691,36 @@ def mk_name2may_gpostprocess6ok_(fmtr_or_fmt4nm4method, grp4nm4rgnr, xpostproces
 #end-def mk_name2may_gpostprocess6ok_(fmt4nm4method, grp4nm4rgnr, xpostprocess_group, /):
 
 
+def main_recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=False):
+    '[only called iff [main_rgnr._may_main_recognize_ is None][used by main_recognize_()]]: (IRecognizerLLoo__main->env->gctx->istream->ignore->(result4rgnz@(tmay_result4rgnz@_may_teardown_|reply.oresult))|^RecognizeFail|^Exception)'
+    check_type_is(bool, ignore)
+    check_type_is(bool, to_allow_non_main_rgnr)
+    if not to_allow_non_main_rgnr:
+        check_type_le(IRecognizerLLoo__main, main_rgnr)
+    else:
+        check_type_le(IRecognizerLLoo, rgnr:=main_rgnr)
+    _may_main_recognize_ = main_rgnr._may_main_recognize_
+    _1_main_recognize_ = ifNone(_may_main_recognize_, partial(main_recognize__default_, main_rgnr, to_allow_non_main_rgnr=to_allow_non_main_rgnr))
+    #result4rgnz = _main_recognize_(main_rgnr, env, gctx, istream, ignore=ignore)
+    result4rgnz = _1_main_recognize_(env, gctx, istream, ignore=ignore)
+        # ^RecognizeFail
+        # ^Exception
+    return result4rgnz
+def main_recognize__default_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=False):
+    '[only called iff [main_rgnr._may_main_recognize_ is None][used by main_recognize_()]]: (IRecognizerLLoo__main->env->gctx->istream->ignore->(result4rgnz@(tmay_result4rgnz@_may_teardown_|reply.oresult))|^RecognizeFail|^Exception)'
+    either_reply_or_result4rgnz = recognize__asif_main_rgnr_(main_rgnr, env, gctx, istream, ignore=ignore, to_allow_non_main_rgnr=to_allow_non_main_rgnr, to_output_Either=True)
+        # ^RecognizeFail
+        # ^Exception
+    if either_reply_or_result4rgnz.is_left:
+        reply = either_reply_or_result4rgnz.left
+        if not reply.ok:
+            raise reply.as_RecognizeFail()
+                # ^RecognizeFail
+        result4rgnz = reply.oresult
+    else:
+        result4rgnz = either_reply_or_result4rgnz.right
+    result4rgnz
+    return result4rgnz
 
 class IRecognizerLLoo__main(IRecognizerLLoo):
     r'''[[[
@@ -2665,8 +2733,24 @@ class IRecognizerLLoo__main(IRecognizerLLoo):
         [_may_teardown_ :: may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->either__exc_info__or__reply->tmay result4rgnz)]
             # [either__exc_info__or__reply :: (Either exc_info/(exc_type, exc_value, traceback) Reply)]
     #######
+    ++main_rgnr/rgnr._may_main_recognize_()
+    ++global:main_recognize_()
+        ..:main_recognize_()
+            using rgnr._may_main_recognize_
+        vs:global:recognize_()
+            using main_rgnr.(_mk_gi4recognize_&_may_setup_&_may_teardown_)
+        vs:global:recognize__asif_main_rgnr_()
+            using rgnr.(_mk_gi4recognize_&?_may_setup_?&?_may_teardown_?)
+    #######
     #]]]'''#'''
     __slots__ = ()
+    @override
+    def _may_main_recognize_(sf, env, gctx, istream, /, *, ignore=False):
+        '[only called iff [sf as main_rgnr][used by main_recognize_()]]: -> may (env->gctx->istream->ignore->(result4rgnz@(tmay_result4rgnz@_may_teardown_|reply.oresult))|^RecognizeFail|^Exception)'
+        result4rgnz = main_recognize__default_(sf, env, gctx, istream, ignore=ignore, to_allow_non_main_rgnr=False)
+            # ^RecognizeFail
+            # ^Exception
+        return result4rgnz
     @property
     @abstractmethod
     def _may_setup_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, /):
@@ -2721,13 +2805,13 @@ _decorator4rngr = Decorator4recur5yield(Executor4recur5yield__dispatch_by_dict(N
     #
 def _get_if(miss_ok, x, nm, default, /):
     return getattr(x, nm, *(default,)[:miss_ok])
-def recognize__asif_main_rgnr_(asif_main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=True):
-    'IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> (Reply if main_rgnr._may_teardown_ is None else result4rgnz)'#@wrapper
-    return recognize_(asif_main_rgnr, env, gctx, istream, ignore=ignore, to_allow_non_main_rgnr=to_allow_non_main_rgnr)
+def recognize__asif_main_rgnr_(asif_main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=True, to_output_Either=False):
+    'IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> ((Reply if main_rgnr._may_teardown_ is None or [teardown_ return null_tuple] else result4rgnz) if not to_output_Either else (Either Reply result4rgnz))'#@wrapper
+    return recognize_(asif_main_rgnr, env, gctx, istream, ignore=ignore, to_allow_non_main_rgnr=to_allow_non_main_rgnr, to_output_Either=to_output_Either)
 #@_decorator4rngr
-def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=False): #, _may_setup_=None
+def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_main_rgnr=False, to_output_Either=False): #, _may_setup_=None
     r'''[[[
-    'IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> (Reply if main_rgnr._may_teardown_ is None else result4rgnz)'#@wrapper
+    'IRecognizerLLoo__main -> env/IEnvironment -> gctx/mapping -> istream/IInputStream -> ((Reply if main_rgnr._may_teardown_ is None or [teardown_ return null_tuple] else result4rgnz) if not to_output_Either else (Either Reply result4rgnz))'#@wrapper
     #######
     ++xctx_view.sym8id4curr_rgnz
         mk a fresh sym8id4curr_rgnz for each call recognize_()
@@ -2741,8 +2825,23 @@ def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_m
     #]]]'''#'''
     ######################
     check_type_is(bool, to_allow_non_main_rgnr)
+    check_type_is(bool, to_output_Either)
+    ######################
     if not to_allow_non_main_rgnr:
         check_type_le(IRecognizerLLoo__main, main_rgnr)
+    ######################
+    if to_output_Either:
+        def xmk_either_(reply_vs_result4rgnz, reply_or_result4rgnz, /):
+            '-> (either_reply_or_result4rgnz|reply_or_result4rgnz)'
+            '-> either_reply_or_result4rgnz'
+            return Either(reply_vs_result4rgnz, reply_or_result4rgnz)
+    else:
+        def xmk_either_(reply_vs_result4rgnz, reply_or_result4rgnz, /):
+            '-> (either_reply_or_result4rgnz|reply_or_result4rgnz)'
+            '-> reply_or_result4rgnz'
+            return reply_or_result4rgnz
+    xmk_either_
+        # '-> (either_reply_or_result4rgnz|reply_or_result4rgnz)'
     ######################
     #_may_teardown_ = main_rgnr._may_teardown_
     _may_teardown_ = _get_if(to_allow_non_main_rgnr, main_rgnr, '_may_teardown_', None)
@@ -2754,6 +2853,7 @@ def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_m
             # set var_inner_st_ex.x after _may_setup_()
         reply = _2recognize(st4rgnz, main_rcall)
         ok = True
+        return xmk_either_(False, reply)
         return reply
     finally:
         # [[bool(var_inner_st_ex)] <==> [_may_setup_() completed]]
@@ -2772,6 +2872,7 @@ def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_m
             if tmay_result4rgnz:
                 #alter result
                 [result4rgnz] = tmay_result4rgnz
+                return xmk_either_(True, result4rgnz)
                 return result4rgnz
             else:
                 #untouch result
@@ -2783,8 +2884,15 @@ def recognize_(main_rgnr, env, gctx, istream, /, *, ignore=False, to_allow_non_m
             pass
         #re-raise|return reply
         #   stop_here
+    ######################
     raise 000
+    ######################
+    return xmk_either_(False, reply)
+    return xmk_either_(True, result4rgnz)
+    ######################
     return reply
+    return result4rgnz
+    ######################
     #.(st4rgnz, main_rcall) = _recognize(main_rgnr, env, gctx, istream, ignore)
     #.return (st4rgnz, main_rcall)
 @_decorator4rngr
@@ -4663,16 +4771,19 @@ class BaseRecognizerLLoo__main__default_mixins(IRecognizerLLoo__main, BaseRecogn
     _may_setup_ = None
     #@override
     _may_teardown_ = None
+check_non_ABC(BaseRecognizerLLoo__alias__default_mixins)
 
 class RecognizerLLoo__main(BaseRecognizerLLoo__main__default_mixins):
-    def __init__(sf, rgnr, /, _may_setup_=None, _may_teardown_=None):
+    def __init__(sf, rgnr, /, _may_setup_=None, _may_teardown_=None, _may_main_recognize_=None):
         check_may_callable(_may_setup_)
         check_may_callable(_may_teardown_)
+        check_may_callable(_may_main_recognize_)
         super().__init__(rgnr)
-        ls = pop_defaults_([rgnr, _may_setup_, _may_teardown_], [None, None])
+        ls = pop_defaults_([rgnr, _may_setup_, _may_teardown_, _may_main_recognize_], [None, None, None])
         sf._reset4repr((*ls,))
         sf._mf4s = _may_setup_
         sf._mf4t = _may_teardown_
+        sf._mf4m = _may_main_recognize_
     @property
     @override
     #def _may_setup_(sf, env, gctx, ctx, sym8id4curr_rgnz, ignore, /):
@@ -4685,6 +4796,15 @@ class RecognizerLLoo__main(BaseRecognizerLLoo__main__default_mixins):
     def _may_teardown_(sf, /):
         '[only called iff [sf as main_rgnr][entering recognize_()]]: -> may (env->gctx->ctx->sym8id4curr_rgnz->ignore->st4main_rgnr->either__exc_info__or__reply->tmay result4rgnz) # [either__exc_info__or__reply :: (Either exc_info/(exc_type, exc_value, traceback) Reply)]'
         return sf._mf4t
+    @property
+    @override
+    #def _may_main_recognize_(sf, env, gctx, istream, /, *, ignore=False):
+    def _may_main_recognize_(sf, env, gctx, istream, /, *, ignore=False):
+        '[only called iff [sf as main_rgnr][used by main_recognize_()]]: -> may (env->gctx->istream->ignore->(result4rgnz@(tmay_result4rgnz@_may_teardown_|reply.oresult))|^RecognizeFail|^Exception)'
+        if None is (f := sf._mf4m):
+            return super()._may_main_recognize_
+        return f
+        return sf._mf4m
 check_non_ABC(RecognizerLLoo__main)
 
 
