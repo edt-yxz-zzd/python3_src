@@ -1,5 +1,5 @@
 
-'''
+r'''
 
 II :: [a] -> (start=1) -> a
 
@@ -23,6 +23,7 @@ seed.iters.product
 __all__ = r'''
 II
     II_mod
+        factorial_mod_
         II__ft_e_pairs_
             II__ft2e_
                 II__p2e_
@@ -31,6 +32,12 @@ II
 #from seed.iters.product import py_product as II
 from seed.iters.binary_op import foldl
 from operator import __mul__, __mod__, __pow__
+#from math import factorial
+
+def factorial_mod_(modulus, n, /):
+    'modulus -> n -> (n! %modulus)'
+    if not n >= 0:raise ValueError(n)
+    return II_mod(modulus, range(1, n+1))
 
 def II(iterable, *, one=1, mul=None):
     if mul is None:
@@ -61,4 +68,4 @@ II__p2e_ = II__ft2e_
 
 
 
-from seed.math.II import II, II_mod, II__p2e_, II__ft2e_, II__ft_e_pairs_
+from seed.math.II import II, II_mod, II__p2e_, II__ft2e_, II__ft_e_pairs_, factorial_mod_

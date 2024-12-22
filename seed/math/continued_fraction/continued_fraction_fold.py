@@ -4,6 +4,7 @@ e ../../python3_src/seed/math/continued_fraction/continued_fraction_fold.py
     view ../../python3_src/nn_ns/math_nn/continued_fraction/continued_fraction.py
     view ../../python3_src/seed/math/continued_fraction/continued_fraction_fold.py
     view ../../python3_src/seed/math/continued_fraction/continued_fraction_of_log_.py
+    view others/数学/continued-fraction/充要条件冫错开囜位纟分子分母序列纟渐近分数纟连分数.txt
 
 seed.math.continued_fraction.continued_fraction_fold
 py -m nn_ns.app.debug_cmd   seed.math.continued_fraction.continued_fraction_fold -x
@@ -265,6 +266,9 @@ complete-case out of:
 ]]
 
 [[[
+view ../../python3_src/seed/math/gcd.py
+    gcd_via_halve_
+===
 比辗转相除还快，怎么做到的？
     view ../../python3_src/seed/math/ops/algebra/algebra.txt
         前面两个(Binary GCD, Lehmer’s algorithm)并没能少于O(N**2)
@@ -856,6 +860,49 @@ select from above:
 >>> _test____inv_mod_(7)
 >>> _test____mk_coprime_certification_(7)
 >>> _test____mk_gcd_certification_(20)
+
+
+
+
+
+
+
+[[
+充要条件冫错开一位纟分子分母序列纟渐近分数纟连分数:
+py_adhoc_call   seed.math.continued_fraction.continued_fraction_fold   ,iter_approximate_fraction_NDs5continued_fraction_  ='[2]*7'
+(2, 1)
+(5, 2)
+(12, 5)
+(29, 12)
+(70, 29)
+(169, 70)
+(408, 169)
+py_adhoc_call   seed.math.continued_fraction.continued_fraction_fold   ,iter_approximate_fraction_NDs5continued_fraction_  ='[3]*7'
+(3, 1)
+(10, 3)
+(33, 10)
+(109, 33)
+(360, 109)
+(1189, 360)
+(3927, 1189)
+==>>:
+充要条件冫错开一位纟分子分母序列纟渐近分数纟连分数:
+    # 错开一位:分母超前一位
+    [[分母纟渐近分数纟连分数{cf}[j] == 分子纟渐近分数纟连分数{cf}[j+1]] <-> [[cf0==0][cf == [0; *[cf1]*+oo]]]]
+    # 错开一位:分子超前一位
+    [[分子纟渐近分数纟连分数{cf}[j] == 分母纟渐近分数纟连分数{cf}[j+1]] <-> [[cf0>=1][cf == [cf0]*+oo]]]
+    # continued_fraction_fold_state0 = ContinuedFractionFoldState(0,1,1,0)
+    #   (prevN, prevD, currN, currD)
+    # (0/1, 1/0, cf0/1, (1+cf0*cf1)/(0+1*cf1), ...)
+    # [cf0==0]:(0/1, 1/0, 0/1, 1/cf1, ...)
+==>>:
+充要条件冫错开囜位纟分子分母序列纟渐近分数纟连分数:
+    ???
+
+view others/数学/continued-fraction/充要条件冫错开囜位纟分子分母序列纟渐近分数纟连分数.txt
+]]
+
+
 
 
 #]]]'''

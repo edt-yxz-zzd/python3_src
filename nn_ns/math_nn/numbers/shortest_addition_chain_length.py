@@ -1,3 +1,4 @@
+#__all__:goto
 r'''[[[
 e ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length.py
 see:
@@ -7,6 +8,8 @@ see:
     view script/min_add_ver3.py
     view others/数学/最小加法链.txt
     view script/data__avoid_vim_search/最短加链囗数据列表[1..=10_0000][A003313][oeis.org].txt
+    view script/搜索冫最短加链长度.py
+        20241220
 [[
 https://oeis.org/A003313
     D. W. Wilson and Antoine Mathys, Table of n, a(n) for n = 1..100000 (10001 terms from D. W. Wilson)
@@ -36,7 +39,7 @@ __all__ = '''
     pint2shortest_addition_chain_length__first_100000_terms
     pint2shortest_addition_chain_length
 
-    '''.split()
+    '''.split()#'''
 
 # copy from: view script/data__avoid_vim_search/最短加链囗数据列表[1..=10_0000][A003313][oeis.org].txt
 # :%s/^\(\d\+\) \(\d\+\)$/,\2#\1/g
@@ -100050,3 +100053,6 @@ pint2shortest_addition_chain_length = pint2shortest_addition_chain_length__first
 
 
 
+from nn_ns.math_nn.numbers.shortest_addition_chain_length import pint2shortest_addition_chain_length__first_100000_terms
+from nn_ns.math_nn.numbers.shortest_addition_chain_length import pint2shortest_addition_chain_length
+from nn_ns.math_nn.numbers.shortest_addition_chain_length import *

@@ -123,7 +123,11 @@ def heapify(x):
 ===
 ]]
 
-
+######################
+######################
+iter_merge_sorted_iterables_
+    merge
+######################
 >>> list(merge([1,3,5,7], [0,2,4,8], [5,10,15,20], [], [25]))
 [0, 1, 2, 3, 4, 5, 5, 7, 8, 10, 15, 20, 25]
 >>> list(merge(['dog', 'horse'], ['cat', 'fish', 'kangaroo'], key=len))
@@ -314,7 +318,40 @@ def heapify(x):
 
 
 
-#]]]'''
+
+
+######################
+######################
+######################
+iter_merge_sorted_iterable_exs_
+    merge_ex
+######################
+>>> def _mk_iter4merge_ex(j, /):
+...     if j == 0: return
+...     yield ((j, j), iter([_mk_iter4merge_ex(j-1)]))
+...     for k in reversed(range(1, j)):
+...         yield ((j, k), None)
+
+>>> list(merge_ex(_mk_iter4merge_ex(4), _mk_iter4merge_ex(2), __le__=tuple.__ge__))
+[(4, 4), (4, 3), (4, 2), (4, 1), (3, 3), (3, 2), (3, 1), (2, 2), (2, 2), (2, 1), (2, 1), (1, 1), (1, 1)]
+
+>>> list(merge_ex(_mk_iter4merge_ex(4), _mk_iter4merge_ex(2), __le__=int.__ge__, key4le=lambda pair:int.__add__(*pair)))
+[(4, 4), (4, 3), (4, 2), (3, 3), (4, 1), (3, 2), (2, 2), (3, 1), (2, 2), (2, 1), (2, 1), (1, 1), (1, 1)]
+
+>>> list(merge_ex(_mk_iter4merge_ex(4), _mk_iter4merge_ex(2), __le__=int.__ge__, key4le=lambda pair:int.__add__(*pair), unique=True))
+[(4, 4), (4, 3), (4, 2), (4, 1), (2, 2), (2, 1), (1, 1)]
+
+#bad example:not sorted:>>> list(merge_ex(_mk_iter4merge_ex(4), _mk_iter4merge_ex(2), __le__=int.__ge__, key4le=lambda pair:int.__add__(*pair), reverse=True))
+[(2, 2), (1, 1), (2, 1), (4, 4), (3, 3), (2, 2), (1, 1), (2, 1), (3, 2), (3, 1), (4, 3), (4, 2), (4, 1)]
+
+#bad example:not sorted:>>> list(merge_ex(_mk_iter4merge_ex(4), _mk_iter4merge_ex(2), __le__=int.__ge__, key4le=lambda pair:int.__add__(*pair), reverse=True, unique=True))
+[(2, 2), (1, 1)]
+
+
+
+
+
+#]]]'''#'''
 __all__ = r'''
 
 to_iparent_
@@ -324,6 +361,8 @@ to_iparent_
 
 iter_merge_sorted_iterables_
     merge
+iter_merge_sorted_iterable_exs_
+    merge_ex
 
 extract_kth_smallest_elements_
     nsmallest
@@ -353,7 +392,6 @@ Heap
     heapreplace
 
 
-
 no_op8set_idx4item_
 '''.split()#'''
     #ISeq8underlying_heap
@@ -361,8 +399,9 @@ no_op8set_idx4item_
 __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import count as count_
+from itertools import count as count_, repeat
 from itertools import islice
+#from seed.tiny import print_err
 from seed.tiny import at
 from seed.tiny import ifNonef, ifNone, echo
 from seed.tiny_.check import check_type_is, check_int_ge
@@ -958,6 +997,132 @@ def _mk___le___(__le__, /):
 
 
 ######################
+def iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable:[False,callable], key4le:[None,callable], __le__:[None,callable], reverse:bool, unique:bool, obj2value_:[None,callable]):
+    r'''
+    :: (*sorted_iterable_exs) -> Iter v
+    [[key4stable := False] -> [unstable sort]]
+    [key4le for total_order&unique]
+
+    see-below:
+        merge_ex()
+        iter_merge_sorted_iterables_()
+    used-by:
+        view script/搜索冫最短加链长度.py
+
+    [sorted_iterable_exs :: [sorted<fst> Iter (x, may sorted_iterable_exs{all <= x})]]
+
+    [item :: (key4le(x), (key4stable(x), j/serial_number4iter); x, tail_iter, may branch_iters)]
+        # !! _mk___le___
+    [tail_iter :: sorted_iterable_ex]
+    [branch_iters :: Iter sorted_iterable_ex]
+
+    [obj2value_ :: x -> v]
+    '''#'''
+    check_type_is(bool, unique)
+
+    (key4le, __le__, reverse) = std____key__le__reverse_(key4le, __le__, reverse)
+    if key4stable is False:
+        key4stable = lambda _, /:0
+            # const_(0)
+    check_callable(key4stable)
+
+    if obj2value_ is None:
+        obj2value_ = echo
+    check_callable(obj2value_)
+
+    if unique:
+        tmay_prev_k4le = []
+        def is_dup_(k4le, /):
+            if tmay_prev_k4le:
+                [prev_k4le] = tmay_prev_k4le
+                b_dup = __le__(k4le, prev_k4le)
+                if not b_dup:
+                    tmay_prev_k4le[0] = k4le
+            else:
+                b_dup = False
+                tmay_prev_k4le.append(k4le)
+            b_dup
+            return b_dup
+    else:
+        def is_dup_(k4le, /):
+            return False
+    is_dup_
+
+    sorted_iterable_exs = (*map(iter, sorted_iterable_exs),)
+    _0j = 0
+        #serial_number4iter = 0
+
+    def tmay_item5sorted_iterable_ex_(imay_j, sorted_iterable_ex, /):
+        'imay serial_number4iter -> sorted_iterable_ex -> tmay item'
+        nonlocal _0j
+        it = iter(sorted_iterable_ex)
+        for head in it:
+            break
+        else:
+            return ()
+        if imay_j == -1:
+            j = _0j
+            _0j += 1
+        else:
+            j = imay_j
+        j
+        item = item5no_head_tail_(j, head, it)
+        return (item,)
+    def item5no_head_tail_(j, head, tail_iter, /):
+        'j/serial_number4iter -> (x, may branch_iters) -> tail_iter -> item'
+        (obj, may_branch_iters) = head
+        if not may_branch_iters is None:
+            may_branch_iters = iter(may_branch_iters)
+        return (key4le(obj), (key4stable(obj), j)
+                    #total key #distinguish
+                    # !! _mk___le___
+                ,obj, tail_iter, may_branch_iters
+                    #payload
+                )
+
+    ___le___ = _mk___le___(__le__)
+
+    ls = [item for tmay_item in map(tmay_item5sorted_iterable_ex_, repeat(-1), sorted_iterable_exs) for item in tmay_item]
+
+    heap = Heap(ls, item5obj_=None, item2val_=None, key=None, __le__=___le___, reverse=reverse, obj_vs_item=True, applied__heapify=False)
+
+    while ls:
+        #if 0b0001:print_err(ls[0])
+        (k4le, (k4stable, j), obj, tail_iter, may_branch_iters) = ls[0]
+        ############
+        if not is_dup_(k4le):
+            yield obj2value_(obj)
+        ############
+        ps = [(j, tail_iter)]
+        if not may_branch_iters is None:
+            branch_iters = may_branch_iters
+            ps.extend((-1, branch_iter) for branch_iter in branch_iters)
+        ps
+        ps = iter(ps)
+        ############
+        b_pop = True
+        for imay_j, it in ps:
+
+            tm = tmay_item5sorted_iterable_ex_(imay_j, it)
+            if not tm: continue
+            [item] = tm
+            if b_pop:
+                b_pop = False
+                heap.heappoppush(item)
+            else:
+                heap.heappush(item)
+            heap
+        b_pop
+        ############
+        if b_pop:
+            b_pop = False
+            heap.heappop()
+        b_pop
+        ############
+    #end-while ls:
+
+
+######################
 def iter_merge_sorted_iterables_(*sorted_iterables, key, __le__, reverse):
     r'''[[[
     O(N*log2(len(sorted_iterables)))
@@ -981,6 +1146,7 @@ def iter_merge_sorted_iterables_(*sorted_iterables, key, __le__, reverse):
     def item5si_obj_objs_(signed_idx, obj, iter_sorted_objs, /):
         return (key(obj), signed_idx
                     #total key #distinguish
+                    # !! _mk___le___
                 ,obj, iter_sorted_objs
                     #payload
                 )
@@ -1099,6 +1265,10 @@ def heap_sort_(iterable, /, *, key=None, __le__=None, reverse=False):
 
 
 
+######################
+def merge_ex(*sorted_iterable_exs, key4stable:[False,callable]=False, key4le=None, __le__=None, reverse=False, unique=False, obj2value_:[None,callable]=None):
+    '# [sorted_iterable_exs :: [sorted<fst> Iter (x, may sorted_iterable_exs{all <= x})]] # [[key4stable := False] -> [unstable sort]]'
+    return iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable=key4stable, key4le=key4le, __le__=__le__, reverse=reverse, unique=unique, obj2value_=obj2value_)
 ######################
 def merge(*sorted_iterables, key=None, __le__=None, reverse=False):
     'O(N*log2(len(sorted_iterables)))'
@@ -1348,6 +1518,7 @@ if __name__ == "__main__":
 
 
 from seed.for_libs.for_heapq import iter_merge_sorted_iterables_, merge
+from seed.for_libs.for_heapq import iter_merge_sorted_iterable_exs_, merge_ex
 
 from seed.for_libs.for_heapq import extract_kth_smallest_elements_, nsmallest, nlargest
 

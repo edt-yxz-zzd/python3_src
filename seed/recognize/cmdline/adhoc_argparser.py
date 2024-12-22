@@ -6,6 +6,9 @@ see:py_all@bash_script
     py_adhoc_call ''  ,str.list '%difflib:__all__@all' =all
     py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
 
+py -m nn_ns.app.debug_cmd   seed.recognize.cmdline.adhoc_argparser -x
+py -m nn_ns.app.doctest_cmd   seed.recognize.cmdline.adhoc_argparser:__doc__
+
 [[
 TODO:
 
@@ -129,6 +132,11 @@ xxx.yyy 模块全名
     @g.233:f
     ,233:f
     ,g.233:f
+    ==>>:
+    @list.233:f
+        py_adhoc_call   script.搜索冫进制数基数乊同一表达型解读为素数   @list.100:枚举冫进制数基数乊同一表达型解读为素数扌 :17401
+        py_adhoc_call   script.对数纟差分倍增   @list.100:枚举冫插入位置纟小数部分纟对数纟差分倍增扌 +使用冫负对数
+
 
 ?新增『+lineno』:
     or函数名之前的选项:
@@ -144,9 +152,10 @@ xxx.yyy 模块全名
         <==> py_adhoc_call { --lineno=0 } xxx.yyy ,f
     py_adhoc_call { +lineno } xxx.yyy ,f
         <==> py_adhoc_call { --lineno=1 } xxx.yyy ,f
-    -->:
-    py_adhoc_call   script.对数纟差分倍增   @list.100:枚举冫插入位置纟小数部分纟对数纟差分倍增扌 +使用冫负对数
-    [0, 1, 2, 0, 2, 4, 0, 3, 6, 0, 4, 8, 12, 3, 8, 13, 2, 8, 14, 1, 8, 15, 0, 8, 16, 24, 6, 15, 24, 4, 14, 24, 2, 13, 24, 0, 12, 24, 36, 9, 22, 35, 6, 20, 34, 3, 18, 33, 48, 15, 31, 47, 11, 28, 45, 7, 25, 43, 3, 22, 41, 60, 18, 38, 58, 13, 34, 55, 8, 30, 52, 3, 26, 49, 72, 20, 44, 69, 15, 40, 65, 9, 35, 61, 3, 30, 57, 84, 23, 51, 79, 16, 45, 74, 9, 39, 69, 2, 33, 64]
+新增『-end4print』:
+    『-end4print』 <==> 『--end4print='""'』
+    『+end4print』 <==> 『--end4print='None'』 <==> 『--end4print='"\n"'』
+    py_adhoc_call  { -end4print }  seed.for_libs.for_tarfile   @str.read_solo_tarfile_  :script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma  --xencoding4data:ascii
 
 新增:
     %!<py_script>
@@ -401,6 +410,7 @@ adhoc_argparse__args__ver1
     #eval_single_arg_payload
 #__all__:goto
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from pprint import pformat as _pprint__pformat
     #pformat(object, indent=1, width=80, depth=None, *, compact=False, sort_dicts=True, underscore_numbers=False)
     #==>>pprint__pformat
@@ -428,6 +438,7 @@ from seed.tiny import mk_tuple, check_type_is, check_type_le, check_callable, if
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
     #nm__pattern = r'(?:(?!\d)\w+)'
     #qnm__pattern = fr'(?:{nm__pattern}(?:[.]{nm__pattern})*)'
+___end_mark_of_excluded_global_names__0___ = ...
 
 #qnm_as__pattern = r'(?:(?P<qnm>\w[\w.]*(?<![.]))(?P<qnm_as>@\w*)?)'
 #   named pattern duplicated below
@@ -603,10 +614,21 @@ def adhoc_argparser__main__call8module(may_argv, /):
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
-    def _mk_postprocess(*, lineno=None):
+    def _mk_postprocess_ex(*, lineno=None, end4print=None):
+        ######################
+        if end4print is None:
+            may_end4print = None
+        else:
+            if type(end4print) is bool:
+                end4print = '' if not end4print else '\n'
+            check_type_is(str, end4print)
+            may_end4print = end4print
+        may_end4print
+        ######################
         if type(lineno) is bool:
             #lineno = None if not lineno else 0
             lineno = int(lineno)
+        #xxx:may be None:check_type_is(int, lineno)
         ######################
         if lineno is None:
             def _postprocess(*, lineno):
@@ -618,6 +640,7 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 lineno += offset
                 print(lineno, end=':')
                 pass
+        return (_postprocess, may_end4print)
         return _postprocess
 
     #raise Exception(options4argparser)
@@ -630,9 +653,9 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         args4postprocess = []
         options4argparser
     (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
-    _mk_postprocess
-    _postprocess = decorator4show_py_help(_mk_postprocess)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
-    return (_postprocess, options4argparser)
+    _mk_postprocess_ex
+    (_postprocess, may_end4print) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    return (_postprocess, may_end4print, options4argparser)
 
 def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv, /):
     try:
@@ -643,11 +666,11 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     except AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag:
         show_help();exit(0);
 
-    (_postprocess, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
+    (_postprocess, may_end4print, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
-    setting4prefix = _parse_payload4prefix(prefix, payload4prefix)
+    setting4prefix = _parse_payload4prefix(prefix, payload4prefix, may_end4print=may_end4print)
     to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
 
@@ -846,15 +869,15 @@ def _pickle_dump8show(x, /):
     import sys
     import pickle
     pickle.dump(x, sys.stdout.buffer)
-def _mk__to_show(to_str, /):
+def _mk__to_show(to_str, /, *, may_end4print):
     if not callable(to_str):raise logic-err
     #if not callable(to_str):raise AdhocArgParserError
     def to_show(x, /):
-        print(to_str(x))
+        print(to_str(x), end=may_end4print)
     return to_show
 
 _payload4prefix__regex = re.compile(r'(?P<nm>(?:\w+[.])?)(?P<num4islice>(?:\d+[:])?)')
-def _parse_payload4prefix(prefix, payload4prefix, /):
+def _parse_payload4prefix(prefix, payload4prefix, /, *, may_end4print):
     'prefix -> payload4prefix -> setting4prefix'
     check_type_is(str, payload4prefix)
     m = _payload4prefix__regex.fullmatch(payload4prefix)
@@ -891,21 +914,21 @@ def _parse_payload4prefix(prefix, payload4prefix, /):
     #if payload4prefix: raise NotImplementedError
     #if payload4prefix.endswith(':'): ...
     #smay_nm_dot = payload4prefix
-    to_show = _payload4prefix_smay_nm_dot2to_show(smay_nm_dot)
+    to_show = _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, may_end4print=may_end4print)
     setting4prefix = to_show, islice_
     return setting4prefix
 
-def _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, /):
+def _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, /, *, may_end4print):
     if not smay_nm_dot:
         to_str = repr
-        to_show = _mk__to_show(to_str)
+        to_show = _mk__to_show(to_str, may_end4print=may_end4print)
         to_str = None
     elif not smay_nm_dot.endswith('.'):raise AdhocArgParserError(smay_nm_dot)
     else:
         nm = smay_nm_dot[:-1]
-        to_show = _payload4prefix_nm2to_show(nm)
+        to_show = _payload4prefix_nm2to_show(nm, may_end4print=may_end4print)
     return to_show
-def _payload4prefix_nm2to_show(nm, /):
+def _payload4prefix_nm2to_show(nm, /, *, may_end4print):
     if nm == 'not_show':
         to_show = _not_show
     elif nm == 'dump8show':
@@ -932,7 +955,7 @@ def _payload4prefix_nm2to_show(nm, /):
         elif not hasattr(builtins, nm):raise AdhocArgParserError(nm)
         else:
             to_str = getattr(builtins, nm)
-        to_show = _mk__to_show(to_str)
+        to_show = _mk__to_show(to_str, may_end4print=may_end4print)
         to_str = None
     return to_show
 
