@@ -13,6 +13,14 @@ view script/搜索冫某进制表达数乊多种进制解读皆为素数.py
     py_adhoc_call   script.搜索冫某进 制表达数乊多种进制解读皆为素数   @_八位十六进制数囗后 续五种素进制解读皆为素数囗断点重启冫拆分成两百五十六个串行子任务
 ++kw:to_postpone_KeyboardInterrupt_until_subtask_switchover
 (Ctrl+C)KeyboardInterrupt 延迟触发直到子任务切换
+
+used in:
+    view script/搜索冫某进制表达数乊多种进制解读皆为素数.py
+    view script/搜索冫最短加链长度.py
+see also:
+    view ../../python3_src/seed/for_libs/for_time.py
+        PeriodicToilLeisureTime
+        timer__print_err__thread_wide
 ]]
 
 [[[
@@ -115,6 +123,8 @@ def check_xhandler_or_whether_turnoff(xhandler_or_whether_turnoff, /):
         check_xhandler(xhandler)
 class PostponeKeyboardInterrupt(AbstractContextManager):
     'see: kw:to_postpone_KeyboardInterrupt_until_subtask_switchover'
+    # used in:view script/搜索冫某进制表达数乊多种进制解读皆为素数.py
+    # used in:view script/搜索冫最短加链长度.py
     __slots__ = ()
     def __init__(sf, xhandler_or_whether_turnoff=False, /, may_prompt_string=None):
         if not (may_prompt_string is None or type(may_prompt_string) is str):raise TypeError(type(may_prompt_string))

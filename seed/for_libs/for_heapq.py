@@ -997,7 +997,9 @@ def _mk___le___(__le__, /):
 
 
 ######################
-def iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable:[False,callable], key4le:[None,callable], __le__:[None,callable], reverse:bool, unique:bool, obj2value_:[None,callable]):
+def _default_selector4unique(lhs, rhs, /):
+    return (final:=True, lhs)
+def iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable:[False,callable], key4le:[None,callable], __le__:[None,callable], reverse:bool, unique:[bool,callable], obj2value_:[None,callable]):
     r'''
     :: (*sorted_iterable_exs) -> Iter v
     [[key4stable := False] -> [unstable sort]]
@@ -1010,6 +1012,7 @@ def iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable:[False,call
         view script/搜索冫最短加链长度.py
 
     [sorted_iterable_exs :: [sorted<fst> Iter (x, may sorted_iterable_exs{all <= x})]]
+        TODO:new-version:[sorted_iterable_exs :: [sorted<fst> Iter ((x, may branch_iters)|(branch_iters, Ellipsis/...))]]
 
     [item :: (key4le(x), (key4stable(x), j/serial_number4iter); x, tail_iter, may branch_iters)]
         # !! _mk___le___
@@ -1017,8 +1020,21 @@ def iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable:[False,call
     [branch_iters :: Iter sorted_iterable_ex]
 
     [obj2value_ :: x -> v]
+    [unique = (unique|selector4unique) :: (bool|(lhs-x,rhs-x) -> (final/bool, x))]
+        ??? may use key4stable instead
+
     '''#'''
+    if callable(unique):
+        selector4unique = unique
+        unique = True
+    else:
+        selector4unique = _default_selector4unique
+    selector4unique
+    unique
     check_type_is(bool, unique)
+    b_defa_sel = selector4unique is _default_selector4unique
+    if not unique:
+        del selector4unique
 
     (key4le, __le__, reverse) = std____key__le__reverse_(key4le, __le__, reverse)
     if key4stable is False:
@@ -1086,12 +1102,33 @@ def iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable:[False,call
 
     heap = Heap(ls, item5obj_=None, item2val_=None, key=None, __le__=___le___, reverse=reverse, obj_vs_item=True, applied__heapify=False)
 
+    if not b_defa_sel:
+        tmay_prev_obj = []
+        #final = False
     while ls:
         #if 0b0001:print_err(ls[0])
         (k4le, (k4stable, j), obj, tail_iter, may_branch_iters) = ls[0]
         ############
-        if not is_dup_(k4le):
-            yield obj2value_(obj)
+        if b_defa_sel:
+            if not is_dup_(k4le):
+                yield obj2value_(obj)
+        else:
+            if not is_dup_(k4le):
+                # new obj => flush old obj
+                if tmay_prev_obj:
+                    prev_obj = tmay_prev_obj.pop()
+                    [] = tmay_prev_obj
+                    if not final:
+                        yield obj2value_(prev_obj)
+                tmay_prev_obj.append(obj)
+                final = False
+            elif not final:
+                # dup obj
+                [prev_obj] = tmay_prev_obj
+                (final, tmay_prev_obj[0]) = selector4unique(prev_obj, obj)
+                check_type_is(bool, final)
+                if final:
+                    yield obj2value_(prev_obj)
         ############
         ps = [(j, tail_iter)]
         if not may_branch_iters is None:
@@ -1120,6 +1157,14 @@ def iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable:[False,call
         b_pop
         ############
     #end-while ls:
+    if not b_defa_sel:
+        # end-loop => flush old obj
+        if tmay_prev_obj:
+            prev_obj = tmay_prev_obj.pop()
+            [] = tmay_prev_obj
+            if not final:
+                yield obj2value_(prev_obj)
+    return
 
 
 ######################
@@ -1266,7 +1311,7 @@ def heap_sort_(iterable, /, *, key=None, __le__=None, reverse=False):
 
 
 ######################
-def merge_ex(*sorted_iterable_exs, key4stable:[False,callable]=False, key4le=None, __le__=None, reverse=False, unique=False, obj2value_:[None,callable]=None):
+def merge_ex(*sorted_iterable_exs, key4stable:[False,callable]=False, key4le=None, __le__=None, reverse=False, unique:[bool,callable]=False, obj2value_:[None,callable]=None):
     '# [sorted_iterable_exs :: [sorted<fst> Iter (x, may sorted_iterable_exs{all <= x})]] # [[key4stable := False] -> [unstable sort]]'
     return iter_merge_sorted_iterable_exs_(*sorted_iterable_exs, key4stable=key4stable, key4le=key4le, __le__=__le__, reverse=reverse, unique=unique, obj2value_=obj2value_)
 ######################

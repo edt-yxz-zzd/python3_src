@@ -544,7 +544,150 @@ https://cs.uwaterloo.ca/journals/JIS/VOL5/Jackson/matthews3.html
 
 
 
+[[[
+@20250107:search e4p s.t. p**e4p near 10**e4b enough #threshold4relative_error
+===
+main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_
+vs:
+    view ../../python3_src/seed/int_tools/digits/generic_base85.py
+        # for n in range(2,48):print((n, (256**(n-1))**(1/n)))
 
+===
+
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   ,10:main4iter_continued_fraction_of_irrational_log_Fraction_ --cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=1  =2  =3
+Fraction(1, 1)
+Fraction(2, 1)
+Fraction(3, 2)
+Fraction(8, 5)
+Fraction(19, 12)
+Fraction(65, 41)
+Fraction(84, 53)
+Fraction(485, 306)
+Fraction(1054, 665)
+Fraction(24727, 15601)
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   @list.10:main4iter_continued_fraction_of_irrational_log_Fraction_ --cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=0  =10  =3
+[0, 2, 10, 2, 2, 1, 13, 1, 7, 18]
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   ,10:main4iter_continued_fraction_of_irrational_log_Fraction_ --cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=2  =10  =3
+(0, 1)
+(1, 2)
+(10, 21)
+(21, 44)
+(52, 109)
+(73, 153)
+(1001, 2098)
+(1074, 2251)
+(8519, 17855)
+(154416, 323641)
+
+echo $[3**21]
+10460353203
+echo $[3**44]
+7093466277004997233#bug:truncated:modulo 2**64
+echo $[3**109]
+6548406049418485331#bug:truncated:modulo 2**64
+>>> 3**21
+10460353203
+>>> 3**44
+984770902183611232881
+>>> 3**109
+10144175740568179028790664417176723510595582355545683
+>>> 3**44%2**64
+7093466277004997233
+>>> 3**109%2**64
+6548406049418485331
+
+
+[4813 in cf_log_(10;7)[:10]]
+    [is_prime(4813)]
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   ,main4batch4iter_continued_fraction_of_irrational_log_Fraction_ --cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=0 --size=10  =10  ='[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]'
+(10, 2, [0, 3, 3, 9, 2, 2, 4, 6, 2, 1])
+(10, 3, [0, 2, 10, 2, 2, 1, 13, 1, 7, 18])
+(10, 5, [0, 1, 2, 3, 9, 2, 2, 4, 6, 2])
+(10, 7, [0, 1, 5, 2, 5, 6, 1, 4813, 1, 1])
+(10, 11, [1, 24, 6, 3, 2, 1, 1, 3, 1, 1])
+(10, 13, [1, 8, 1, 3, 2, 7, 1, 6, 16, 1])
+(10, 17, [1, 4, 2, 1, 17, 1, 3, 1, 1, 3])
+(10, 19, [1, 3, 1, 1, 2, 2, 1, 3, 2, 2])
+(10, 23, [1, 2, 1, 3, 4, 17, 2, 1, 2, 66])
+(10, 29, [1, 2, 6, 6, 1, 2, 1, 2, 2, 2])
+(10, 31, [1, 2, 28, 2, 3, 1, 2, 1, 1, 1])
+(10, 37, [1, 1, 1, 3, 6, 25, 1, 3, 1, 2])
+(10, 41, [1, 1, 1, 1, 1, 2, 1, 1, 8, 7])
+(10, 43, [1, 1, 1, 1, 2, 1, 2, 7, 1, 5])
+(10, 47, [1, 1, 2, 20, 8, 42, 11, 5, 1, 1])
+(10, 53, [1, 1, 2, 1, 1, 1, 2, 8, 4, 6])
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   ,main4batch4iter_continued_fraction_of_irrational_log_Fraction_ --cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=2 --size=10  =10  ='[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]'
+(10, 2, [(0, 1), (1, 3), (3, 10), (28, 93), (59, 196), (146, 485), (643, 2136), (4004, 13301), (8651, 28738), (12655, 42039)])
+(10, 3, [(0, 1), (1, 2), (10, 21), (21, 44), (52, 109), (73, 153), (1001, 2098), (1074, 2251), (8519, 17855), (154416, 323641)])
+(10, 5, [(0, 1), (1, 1), (2, 3), (7, 10), (65, 93), (137, 196), (339, 485), (1493, 2136), (9297, 13301), (20087, 28738)])
+(10, 7, [(0, 1), (1, 1), (5, 6), (11, 13), (60, 71), (371, 439), (431, 510), (2074774, 2455069), (2075205, 2455579), (4149979, 4910648)])
+(10, 11, [(1, 1), (25, 24), (151, 145), (478, 459), (1107, 1063), (1585, 1522), (2692, 2585), (9661, 9277), (12353, 11862), (22014, 21139)])
+(10, 13, [(1, 1), (9, 8), (10, 9), (39, 35), (88, 79), (655, 588), (743, 667), (5113, 4590), (82551, 74107), (87664, 78697)])
+(10, 17, [(1, 1), (5, 4), (11, 9), (16, 13), (283, 230), (299, 243), (1180, 959), (1479, 1202), (2659, 2161), (9456, 7685)])
+(10, 19, [(1, 1), (4, 3), (5, 4), (9, 7), (23, 18), (55, 43), (78, 61), (289, 226), (656, 513), (1601, 1252)])
+(10, 23, [(1, 1), (3, 2), (4, 3), (15, 11), (64, 47), (1103, 810), (2270, 1667), (3373, 2477), (9016, 6621), (598429, 439463)])
+(10, 29, [(1, 1), (3, 2), (19, 13), (117, 80), (136, 93), (389, 266), (525, 359), (1439, 984), (3403, 2327), (8245, 5638)])
+(10, 31, [(1, 1), (3, 2), (85, 57), (173, 116), (604, 405), (777, 521), (2158, 1447), (2935, 1968), (5093, 3415), (8028, 5383)])
+(10, 37, [(1, 1), (2, 1), (3, 2), (11, 7), (69, 44), (1736, 1107), (1805, 1151), (7151, 4560), (8956, 5711), (25063, 15982)])
+(10, 41, [(1, 1), (2, 1), (3, 2), (5, 3), (8, 5), (21, 13), (29, 18), (50, 31), (429, 266), (3053, 1893)])
+(10, 43, [(1, 1), (2, 1), (3, 2), (5, 3), (13, 8), (18, 11), (49, 30), (361, 221), (410, 251), (2411, 1476)])
+(10, 47, [(1, 1), (2, 1), (5, 3), (102, 61), (821, 491), (34584, 20683), (381245, 228004), (1940809, 1160703), (2322054, 1388707), (4262863, 2549410)])
+(10, 53, [(1, 1), (2, 1), (5, 3), (7, 4), (12, 7), (19, 11), (50, 29), (419, 243), (1726, 1001), (10775, 6249)])
+
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   ,main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_ =10  =10  ='[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]'
+    #(params, idx6cf, approx_ND4logb_y)
+((10, 10, 2), 2, (3, 10))
+((10, 10, 3), 1, (1, 2))
+((10, 10, 5), 3, (7, 10))
+((10, 10, 7), 3, (11, 13))
+((10, 10, 11), 0, (1, 1))
+((10, 10, 13), 2, (10, 9))
+((10, 10, 17), 3, (16, 13))
+((10, 10, 19), 4, (23, 18))
+((10, 10, 23), 3, (15, 11))
+((10, 10, 29), 2, (19, 13))
+((10, 10, 31), 1, (3, 2))
+((10, 10, 37), 3, (11, 7))
+((10, 10, 41), 5, (21, 13))
+((10, 10, 43), 5, (18, 11))
+((10, 10, 47), 2, (5, 3))
+((10, 10, 53), 5, (19, 11))
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   @list.main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_ =10  =10  ='[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]' --with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only=2 #idx_only
+    #cf_log_(b;y)[:1+idx6cf]
+[2, 1, 3, 3, 0, 2, 3, 4, 3, 2, 1, 3, 5, 5, 2, 5]
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   @list.main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_ =10  =10  ='[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]' --with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only=5 #D_only
+    #y**D#p**D
+    #view others/数学/有递增趋势的非递增序列.txt
+[10, 2, 10, 13, 1, 9, 13, 18, 11, 13, 2, 7, 13, 11, 3, 11]
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   @list.main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_ =10  =10  ='[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]' --with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only=4 #N_only
+    #b**N#10**N
+[3, 1, 7, 11, 1, 10, 16, 23, 15, 19, 3, 11, 21, 18, 5, 19]
+
+1/threshold4relative_error:10-->100
+py_adhoc_call   seed.math.continued_fraction.iter_continued_fraction_of_log__truncated_   @list.main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_ =100  =10  ='[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53]' --with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only=3 #ND_only
+    #b**N#10**N
+    #y**D#p**D
+[(28, 93), (73, 153), (65, 93), (60, 71), (151, 145), (88, 79), (16, 13), (78, 61), (64, 47), (136, 93), (173, 116), (69, 44), (50, 31), (49, 30), (102, 61), (50, 29)]
+
+>>> 2**93
+9903520314283042199192993792
+>>> 10**28
+10000000000000000000000000000
+>>> 3**153
+9989689095948428268966921126195809393034773710522520293009978943147202723
+>>> 5**93
+100974195868289511092701256356196637398170423693954944610595703125
+>>> 17**13
+9904578032905937
+>>> 10**16
+10000000000000000
+>>> 41**31
+99151561540870339022484588445237129558214701225241
+>>> 43**30
+10093776109231555797740541116805209814919811290249
+
+===
+]]]
 
 
 
@@ -830,8 +973,17 @@ cf_log_
     cf_ln_
     cf_log2_
 
+
+main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_
+    main4until4iter_continued_fraction_of_irrational_log_Fraction_
+main4batch4iter_continued_fraction_of_irrational_log_Fraction_
+    main4iter_continued_fraction_of_irrational_log_Fraction_
+    mk_ND5or_rational_
+
 '''.split()#'''
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
+
 from seed.math.floor_ceil import perfect_div, perfect_kth_root_, NotPerfectError__kth_root
 from seed.math.floor_ceil import floor_div, ceil_div
 from seed.math.floor_ceil import floor_log2, ceil_log2
@@ -848,6 +1000,7 @@ from seed.tiny import is_iterator
 from itertools import islice
 from numbers import Rational
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 def __():
     # API:here
@@ -1026,7 +1179,7 @@ def __():
         'see:cf_log_'
 
     ######################
-
+#end-API
 
 def __():
     i = 100000
@@ -1836,6 +1989,7 @@ def iter_continued_fraction_of_irrational_log_cf_(cf_digits4base, cf_digits4y, /
 
 def convert_to_ContinuedFraction_(rational_or_pair_or_list_or_iterator, /):
     'cf_like/(Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction) -> cf/ContinuedFraction'
+    #see:mk_ND5or_rational_
     x = rational_or_pair_or_list_or_iterator
     cls = type(x)
     if cls is LazyList or cls is ContinuedFraction:
@@ -1906,6 +2060,147 @@ def cf_log2_(y, /, **kwds):
 ContinuedFraction
 
 
+######################
+#main{iter_continued_fraction_of_irrational_log_Fraction_}
+######################
+def mk_ND5or_rational_(rational_or_ND, /):
+    '((N,D)|Rational) -> (N,D)'
+    #see:convert_to_ContinuedFraction_
+    from fractions import Fraction
+    cls = type(rational_or_ND)
+    if cls is tuple:
+        ND = rational_or_ND
+        N, D = ND
+    elif cls is int or isinstance(rational_or_ND, Rational):
+        rational = rational_or_ND
+        ND = rational.as_integer_ratio()
+    else:
+        raise TypeError(cls)
+    ND = Fraction(*ND).as_integer_ratio()
+        #std...
+    #mk_tuple
+    return ND
+def _prepare4main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_(with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only, /):
+    from seed.tiny_.check import check_uint_lt
+    check_uint_lt(6, with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only)
+    match with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only:
+        case 0:
+            # with_params
+            def f(params, idx6cf, approx_ND4logb_y, /):
+                return (params, idx6cf, approx_ND4logb_y)
+        case 1:
+            # without_params
+            def f(params, idx6cf, approx_ND4logb_y, /):
+                return (idx6cf, approx_ND4logb_y)
+        case 2:
+            # idx_only
+            def f(params, idx6cf, approx_ND4logb_y, /):
+                return idx6cf
+        case 3:
+            # ND_only
+            def f(params, idx6cf, approx_ND4logb_y, /):
+                return approx_ND4logb_y
+        case 4:
+            # N_only
+            def f(params, idx6cf, approx_ND4logb_y, /):
+                (N, D) = approx_ND4logb_y
+                return N
+        case 5:
+            # D_only
+            def f(params, idx6cf, approx_ND4logb_y, /):
+                (N, D) = approx_ND4logb_y
+                return D
+        case _:
+            raise 000
+    f
+    return f
+def main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_(ND4inv_threshold4relative_error, ND4base, NDs4ys, /, *, with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only=0):
+    f = _prepare4main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_(with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only)
+    for ND4y in NDs4ys:
+        params = (ND4inv_threshold4relative_error, ND4base, ND4y)
+        (idx6cf, approx_ND4logb_y) = main4until4iter_continued_fraction_of_irrational_log_Fraction_(*params)
+        yield f(params, idx6cf, approx_ND4logb_y)
+
+def main4until4iter_continued_fraction_of_irrational_log_Fraction_(ND4inv_threshold4relative_error, ND4base, ND4y, /):
+    r'''[[[
+    -> (idx6cf, approx_ND4logb_y)
+    until:ND4inv_threshold4relative_error
+    #for N, D in it__NDs4logb_y:
+        # [log_(b; y) ~= N/D]
+        # [y ~= b**(N/D)]
+        # [y**D ~= b**N]
+        # [y**D/b**N ~= 1]
+        # [abs(y**D-b**N)/b**N ~= 0]
+        # [until:abs(y**D-b**N)/b**N <= threshold4relative_error == err == N4err/D4err]
+        # [until:abs(yD-bN) <= err*bN]
+        # [until:-err*bN <= (yD-bN) <= +err*bN]
+        # [until:(1-err)*bN <= yD <= (1+err)*bN]
+        # [until:(1-N4err/D4err)*bN <= yD <= (1+N4err/D4err)*bN]
+        # until:[(D4err-N4err)*b**N <= D4err*y**D <= (D4err+N4err)*b**N]
+    #]]]'''#'''
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from fractions import Fraction
+
+    it__NDs4logb_y = main4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, ND4y, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=2)
+    base = Fraction(*mk_ND5or_rational_(ND4base))
+    y = Fraction(*mk_ND5or_rational_(ND4y))
+    ND4threshold4relative_error = mk_ND5or_rational_(ND4inv_threshold4relative_error)[::-1]
+    #threshold4relative_error = Fraction(*ND4threshold4relative_error)
+    #assert threshold4relative_error > 0
+    (N4err, D4err) = ND4threshold4relative_error
+    #check_int_ge(0, N4err)
+    check_int_ge(1, N4err) # MUST
+    #check_int_ge(1, D4err)
+    check_int_ge(N4err, D4err)
+
+    DsubN4err = D4err -N4err
+    DaddN4err = D4err +N4err
+    for j, (N, D) in enumerate(it__NDs4logb_y):
+        bN = base**N
+        yD = y**D
+        if DsubN4err*bN <= D4err*yD <= DaddN4err*bN:
+            break
+        del bN, yD
+    else:
+        raise 000
+    j
+    N, D
+    bN, yD
+    return (idx6cf:=j, approx_ND4logb_y:=(N, D))
+def main4batch4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, NDs4ys, /, *, size, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=0):
+    from seed.tiny_.check import check_type_is, check_int_ge
+    check_int_ge(0, size)
+    kwds = dict(cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs, may_size=size, to_list=True)
+    for ND4y in NDs4ys:
+        ls = main4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, ND4y, **kwds)
+        yield (ND4base, ND4y, ls)
+def main4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, ND4y, /, *, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=0, may_size=None, to_list=False):
+    #def iter_continued_fraction_of_irrational_log_Fraction_(N4base, D4base, N4y, D4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, to_detect_rational_result=False, to_detect_rational_result_when_troubleshooting=True, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
+    from seed.tiny_.check import check_uint_lt
+    check_uint_lt(3, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs)
+    if 0 == cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs:
+        from seed.tiny import echo
+    elif 1 <= cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs <= 2:
+        from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fractions5continued_fraction_, iter_approximate_fraction_NDs5continued_fraction_
+
+
+    ND4base = mk_ND5or_rational_(ND4base)
+    ND4y = mk_ND5or_rational_(ND4y)
+    cf_digits = iter_continued_fraction_of_irrational_log_Fraction_(*ND4base, *ND4y)
+    match cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs:
+        case 0:
+            f = echo
+        case 1:
+            f = iter_approximate_fractions5continued_fraction_
+        case 2:
+            f = iter_approximate_fraction_NDs5continued_fraction_
+    f
+    it = f(cf_digits)
+    if not may_size is None:
+        sz = may_size
+        it = islice(it, sz)
+    if may_size is None and to_list:raise TypeError
+    return it if may_size is None or not to_list else [*it]
 
 
 

@@ -1,13 +1,23 @@
 r'''
-see: py::contextlib.AbstractContextManager/@contextlib.contextmanager'
+e ../../python3_src/seed/abc/IContextManager.py
+see:
+    py::contextlib.AbstractContextManager/@contextlib.contextmanager'
+    view ../../python3_src/seed/for_libs/for_contextlib.py
 
 intend: show API here only, donot use this module
+
+py -m seed.abc.IContextManager 
+
 #'''
 
-raise see-contextlib.AbstractContextManager
+__all__ = r'''
+IContextManager
+'''.split()#'''
 
+#raise see-contextlib.AbstractContextManager
+from contextlib import AbstractContextManager
 from seed.abc.abc import abstractmethod, ABC
-class IContextManager(ABC):
+class IContextManager(AbstractContextManager, ABC):
     'see: py::contextlib.AbstractContextManager/@contextlib.contextmanager'
     __slots__ = ()
 
@@ -29,3 +39,6 @@ class IContextManager(ABC):
         return None#reraise
 
 
+from contextlib import AbstractContextManager
+from seed.abc.IContextManager import IContextManager
+from seed.for_libs.for_contextlib import IContextManager, IContextManager__movable

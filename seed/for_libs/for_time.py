@@ -961,80 +961,85 @@ datetime.datetime(2023, 8, 24, 4, 15, 31, 808944, tzinfo=datetime.timezone.utc)
 
 #]]]'''
 __all__ = r'''
-    time_struct8platform_epoch___tz4utc
-    time_struct8platform_epoch___tz4local
-
-    time_struct5timestamp_
-    time_struct2timestamp_
-
-    TimeFormatDirective
-        time_fmt5py_str_fmt_
-        time_fmt5snippets_
-    default_time_fmt
-        time_fmt5may_
-
-    time_struct2formatted_str_
-    time_struct5formatted_str_
-
-    timestamp2formatted_str__via_time_struct__
-    timestamp5formatted_str__via_time_struct__
-
-    get_now__timestamp
-    get_now__time_struct_
-
-    get_consumed_duration__system_wide__monotonic
-    get_consumed_duration__system_wide__highest_resolution
-    get_consumed_duration__process_wide
-    get_consumed_duration__thread_wide
-
-    Timer
-        timer__thread_wide
-        timer__process_wide
-        timer__system_wide__highest_resolution
-        timer__system_wide__monotonic
-        Timer__print_err
-            timer__print_err__thread_wide
-            timer__print_err__process_wide
-            timer__print_err__system_wide__highest_resolution
-            timer__print_err__system_wide__monotonic
-
-
-    aware_datetime8platform_epoch
-    tz4utc
-    tz4local
-        utcoffset4local
-            total_seconds4utcoffset4local
-
-    tz5or__local_vs_utc_
-        check_tzinfo
+PeriodicToilLeisureTime
+    default_mkr4seconds4leisure
 
 
 
+time_struct8platform_epoch___tz4utc
+time_struct8platform_epoch___tz4local
+
+time_struct5timestamp_
+time_struct2timestamp_
+
+TimeFormatDirective
+    time_fmt5py_str_fmt_
+    time_fmt5snippets_
+default_time_fmt
+    time_fmt5may_
+
+time_struct2formatted_str_
+time_struct5formatted_str_
+
+timestamp2formatted_str__via_time_struct__
+timestamp5formatted_str__via_time_struct__
+
+get_now__timestamp
+get_now__time_struct_
+
+get_consumed_duration__system_wide__monotonic
+get_consumed_duration__system_wide__highest_resolution
+get_consumed_duration__process_wide
+get_consumed_duration__thread_wide
+
+Timer
+    timer__thread_wide
+    timer__process_wide
+    timer__system_wide__highest_resolution
+    timer__system_wide__monotonic
+    Timer__print_err
+        timer__print_err__thread_wide
+        timer__print_err__process_wide
+        timer__print_err__system_wide__highest_resolution
+        timer__print_err__system_wide__monotonic
 
 
-    Error
-        Error__miss_tzinfo__strptime_mismatch_strftime
-        Error__mismatch_tzinfo
+aware_datetime8platform_epoch
+tz4utc
+tz4local
+    utcoffset4local
+        total_seconds4utcoffset4local
 
-    is_datetime_aware
-    is_datetime_naive
-    check_aware_datetime
-    get_now__aware_datetime_
-    Case4datetime_isoformat_timespec
-    is_the_time_zone_offset_directive_in_time_fmt
+tz5or__local_vs_utc_
+    check_tzinfo
 
 
-    aware_datetime5timestamp_
-    aware_datetime2timestamp_
 
-    datetime2formatted_str_
-    datetime5formatted_str_
 
-    aware_datetime5formatted_str_
-    aware_datetime2formatted_str_
 
-    timestamp2formatted_str__via_datetime__
-    timestamp5formatted_str__via_datetime__
+Error
+    Error__miss_tzinfo__strptime_mismatch_strftime
+    Error__mismatch_tzinfo
+
+is_datetime_aware
+is_datetime_naive
+check_aware_datetime
+get_now__aware_datetime_
+Case4datetime_isoformat_timespec
+is_the_time_zone_offset_directive_in_time_fmt
+
+
+aware_datetime5timestamp_
+aware_datetime2timestamp_
+
+datetime2formatted_str_
+datetime5formatted_str_
+
+aware_datetime5formatted_str_
+aware_datetime2formatted_str_
+
+timestamp2formatted_str__via_datetime__
+timestamp5formatted_str__via_datetime__
 
 
 '''.split()#'''
@@ -1045,6 +1050,8 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 
 #import time
+from time import sleep
+
 from time import strftime, strptime
 from time import struct_time
 from time import gmtime
@@ -1932,6 +1939,59 @@ def timestamp5formatted_str__via_datetime__(may_time_fmt, local_vs_utc__or__tz, 
 
 
 
+
+
+#rest,relax,leisure
+#work,labor,toil
+#class PeriodicWorkRest
+def default_mkr4seconds4leisure(seconds4toil, seconds4leisure, actual_seconds4toil, /):
+    'seconds4toil/float -> seconds4leisure/float -> actual_seconds4toil/float -> actual_seconds4leisure/float'
+    actual_seconds4leisure = seconds4leisure
+    return actual_seconds4leisure
+class PeriodicToilLeisureTime:
+    'sleep if work too long enough'
+    # used in:view script/搜索冫最短加链长度.py
+    # see also:view ../../python3_src/seed/for_libs/for_signal.py
+    #       PostponeKeyboardInterrupt
+    def __init__(sf, seconds4toil:float, seconds4leisure:float, may_mkr4seconds4leisure=None, /, *, may_prompt_string6resting=None):
+        '[may_mkr4seconds4leisure :: may (seconds4toil/float -> seconds4leisure/float -> actual_seconds4toil/float -> actual_seconds4leisure/float)]'
+        mkr4seconds4leisure = ifNone(may_mkr4seconds4leisure, default_mkr4seconds4leisure)
+        check_callable(mkr4seconds4leisure)
+        if mkr4seconds4leisure is default_mkr4seconds4leisure:
+            may_mkr4seconds4leisure = None
+
+        if not (prompt_string6resting := may_prompt_string6resting) is None:
+            check_type_is(str, prompt_string6resting)
+
+        #check_type_is(float, seconds4toil)
+        #check_type_is(float, seconds4leisure)
+        sf.seconds4toil = float(seconds4toil)
+        sf.seconds4leisure = float(seconds4leisure)
+        sf.mkr4seconds4leisure = mkr4seconds4leisure
+        sf.may_mkr4seconds4leisure = may_mkr4seconds4leisure
+        sf.may_prompt_string6resting = may_prompt_string6resting
+        sf._g = get_consumed_duration__thread_wide
+        sf.reset()
+    def reset(sf, /):
+        sf._t0 = sf._g()
+    def resting_(sf, actual_seconds4toil, /):
+        if not (prompt_string6resting := sf.may_prompt_string6resting) is None:
+            print_err(prompt_string6resting, end='')
+        actual_seconds4leisure = sf.mkr4seconds4leisure(sf.seconds4toil, sf.seconds4leisure, actual_seconds4toil)
+        sleep(actual_seconds4leisure)
+        #sleep(sf.seconds4leisure)
+        sf.reset()
+    def __call__(sf, /):
+        'sleep if work too long enough'
+        t1 = sf._g()
+        t0 = sf._t0
+        dt = t1 -t0
+        if not dt < sf.seconds4toil:
+            sf.resting_(dt)
+        return
+    def sleep_if_work_too_long_enough_(sf, /):
+        sf()
+
 ######################
 ######################
 ######################
@@ -2033,6 +2093,7 @@ time_struct8platform_epoch___tz4utc
 ,is_the_time_zone_offset_directive_in_time_fmt
 )
 
+from seed.for_libs.for_time import PeriodicToilLeisureTime
 
 
 

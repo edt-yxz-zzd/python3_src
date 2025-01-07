@@ -4,6 +4,20 @@ e ../../python3_src/seed/math/primes__inductive_generated__almost_smooth.py
 view others/数学/有递增趋势的非递增序列.txt
     ++序列纟链长纟扩展幺链素数
         枚举冫链长纟扩展幺链素数扌
+view ../../python3_src/seed/math/iter_sorted_products_of_uints.py
+
+py -m seed.math.primes__inductive_generated__almost_smooth
+py -m nn_ns.app.debug_cmd   seed.math.primes__inductive_generated__almost_smooth -x
+py -m nn_ns.app.doctest_cmd seed.math.primes__inductive_generated__almost_smooth:__doc__ -ht
+
+
+[[
+DONE:允许幂方分解(因为计算量不大):
+    ++allow_pefect_power
+    欤扩展幺链素数扌()-->欤再扩展幺链素数扌()
+        rigid4n-->root4rigid4n**er4rgd4n
+    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+]]
 
 
 [[
@@ -26,6 +40,8 @@ e ../../python3_src/seed/math/primes__inductive_generated__almost_smooth.py
     [欤幺链素数扌(n) =[def]= [[n >= 3][is_prime(n)][(ez4n,h4n) :=> [ez4n,h4n :: uint][2**(ez4n+1)*(h4n*2+1)+1==n]][odd4n := (h4n*2+1)][[odd4n==1]or欤幺链素数扌(odd4n)]]]
 [n :: int][ps :: {odd_prime}]:
     [欤扩展幺链素数扌(ps;n) =[def]= [[n >= 3][is_prime(n)][(ez4n,h4n) :=> [ez4n,hr4n :: uint][p2ep4n :: {uint:uint}][p2ep4n.keys()==set(ps)][ex := II__p2e_(p2ep4n)][ex*2**(ez4n+1)*(hr4n*2+1)+1==n]][rigid4n := (hr4n*2+1)][[rigid4n==1]or欤扩展幺链素数扌(rigid4n)]]]
+    #++allow_pefect_power
+    [欤再扩展幺链素数扌(ps;n) =[def]= [[n >= 3][is_prime(n)][(ez4n,h4n) :=> [ez4n,hr4n :: uint][p2ep4n :: {uint:uint}][p2ep4n.keys()==set(ps)][ex := II__p2e_(p2ep4n)][ex*2**(ez4n+1)*(hr4n*2+1)+1==n]][rigid4n := (hr4n*2+1)][[rigid4n==1]or[[(root4rigid4n,er4rgd4n) := factor_pint_as_pefect_power_(rigid4n)][欤再扩展幺链素数扌(root4rigid4n)]]]]]
 ]]
 
 
@@ -35,10 +51,6 @@ e ../../python3_src/seed/math/primes__inductive_generated__almost_smooth.py
 
 
 
-
-py -m seed.math.primes__inductive_generated__almost_smooth
-py -m nn_ns.app.debug_cmd   seed.math.primes__inductive_generated__almost_smooth -x
-py -m nn_ns.app.doctest_cmd seed.math.primes__inductive_generated__almost_smooth:__doc__ -ht
 
 
 
@@ -2443,8 +2455,111 @@ py_adhoc_call { +lineno }  seed.math.primes__inductive_generated__almost_smooth 
 
 
 
+>>> def print_iterable_with_lineno_(max_sz, xs, /, *, offset=0):
+...     for i, x in enumerate(islice(xs, max_sz), offset):
+...         print(f'{i}:{x!r}')
+>>> print_iterable_with_lineno_(100, 枚举冫扩展幺链素数牜归纳生成扌([]), offset=1) #doctest: +ELLIPSIS +SKIP
+1:(3, 1)
+2:(5, 1)
+3:(7, 2)
+4:(11, 2)
+...
+94:(120833, 5)
+95:(120899, 7)
+96:(120929, 7)
+97:(140417, 4)
+98:(163841, 2)
+99:(182279, 6)
+100:(182297, 6)
+>>> print_iterable_with_lineno_(50, 枚举冫扩展幺链素数牜归纳生成扌([]), offset=1) #doctest: +ELLIPSIS
+1:(3, 1)
+2:(5, 1)
+...
+46:(2879, 8)
+47:(3089, 3)
+48:(3329, 3)
+49:(3593, 4)
+50:(3617, 4)
+
+>>> print_iterable_with_lineno_(50, 枚举冫扩展幺链素数牜归纳生成扌([3]), offset=1) #doctest: +ELLIPSIS
+1:(3, 1)
+...
+46:(269, 4)
+47:(271, 2)
+48:(277, 4)
+49:(283, 5)
+50:(293, 2)
 
 
+
+>>> print_iterable_with_lineno_(50, 枚举冫扩展幺链素数牜归纳生成扌([3], _max1_=283), offset=1) #doctest: +ELLIPSIS
+1:(3, 1)
+...
+46:(269, 4)
+47:(271, 2)
+48:(277, 4)
+
+>>> print_iterable_with_lineno_(50, 枚举冫扩展幺链素数牜归纳生成扌([], allow_pefect_power=True), offset=1) #doctest: +ELLIPSIS
+1:(3, 1)
+2:(5, 1)
+3:(7, 2)
+4:(11, 2)
+5:(13, 2)
+6:(17, 1)
+7:(19, 2)
+8:(23, 3)
+9:(29, 3)
+...
+44:(577, 2)
+45:(587, 4)
+46:(593, 3)
+47:(641, 2)
+48:(653, 3)
+49:(677, 3)
+50:(719, 6)
+
+>>> print_iterable_with_lineno_(50, 枚举冫再扩展幺链素数牜归纳生成扌([]), offset=1) #doctest: +ELLIPSIS
+1:(3, 1)
+...
+48:(653, 3)
+49:(677, 3)
+50:(719, 6)
+
+>>> print_iterable_with_lineno_(50, 枚举冫再扩展幺链素数牜归纳生成扌([3]), offset=1) #doctest: +ELLIPSIS
+1:(3, 1)
+2:(5, 1)
+3:(7, 1)
+4:(11, 2)
+5:(13, 1)
+6:(17, 1)
+7:(19, 1)
+8:(23, 3)
+9:(29, 2)
+...
+44:(227, 3)
+45:(229, 2)
+46:(233, 3)
+47:(241, 2)
+48:(251, 2)
+49:(257, 1)
+50:(269, 4)
+
+
+e ../../python3_src/seed/math/factor_pint_as_pefect_power_.py
+    Exception: (517, (11, 47, 1, 3), (47, 1, 3))
+        #bug-fixed:@20250104..20250105
+>>> _统计冫枚举冫扩展幺链素数牜归纳生成扌([3, 5], _max1_=2**16)
+args = (65536, (3, 5), False)
+数量纟幺链素数 = 84
+数量纟扩展幺链素数 = 2455
+数量纟再扩展幺链素数 = 2651
+数量纟素数 = 6541
+
+>>> _测试冫枚举冫扩展幺链素数牜归纳生成扌([3, 5], _max1_=2**16)
+>>> _测试冫枚举冫扩展幺链素数牜归纳生成扌([3], _max1_=2**16)
+
+Exception: (639, ({3: 2}, 71, {2: 1}), {2: 1})
+>>> _测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=2**16)
 
 #]]]'''
 __all__ = r'''
@@ -2457,6 +2572,11 @@ __all__ = r'''
 
 
 
+欤再扩展幺链素数扌
+    求冫链长纟再扩展幺链素数扌
+    枚举冫再扩展幺链素数牜加二枚举扌
+    枚举冫再扩展幺链素数牜归纳生成扌
+    枚举冫链长纟再扩展幺链素数扌
 欤扩展幺链素数扌
     求冫链长纟扩展幺链素数扌
     枚举冫扩展幺链素数牜加二枚举扌
@@ -2467,6 +2587,7 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from ast import literal_eval
 
 from seed.iters.is_sorted import is_strict_sorted
@@ -2478,6 +2599,8 @@ from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_t
 
 from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
 
+
+from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
 
 #枚举冫扩展幺链素数牜归纳生成扌<<==:
 #from collections import deque
@@ -2495,7 +2618,7 @@ def __():
     ...
 
 
-
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -2662,8 +2785,10 @@ def 枚举冫扩展幺链素数牜小于六十四比特扌(ps, /, *, _max1_=_pow
 ######################
 ######################
 ######################
-def 欤扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
-    return bool(求冫链长纟扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_))
+def 欤再扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
+    return 欤扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=True)
+def 欤扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False, allow_pefect_power=False):
+    return bool(求冫链长纟扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power))
 def _ps2qs_(ps, /, *, _ps_is_qs_):
     if _ps_is_qs_:
         qs = ps
@@ -2677,8 +2802,13 @@ def _ps2qs_(ps, /, *, _ps_is_qs_):
             qs = tuple(sorted({2, *ps}))
         qs
     return qs
-def 求冫链长纟扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
+def 求冫链长纟扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False, allow_pefect_power=False):
     '-> 链长/uint'
+    check_type_is(bool, allow_pefect_power)
+    if allow_pefect_power:
+        return 求冫链长纟再扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_)
+
+    check_type_is(bool, _ps_is_qs_)
     check_type_is(int, n)
     qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
     if not (3 <= n):
@@ -2688,6 +2818,7 @@ def 求冫链长纟扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
         if not _is_SPRP_(n):
             return 0#False
         (q2e4Nmm, unfactored_part4Nmm) = semi_factor_pint_via_trial_division(qs, n-1)
+
         stack.append((n, q2e4Nmm, unfactored_part4Nmm))
 
         rigid4n = unfactored_part4Nmm
@@ -2715,6 +2846,47 @@ def 求冫链长纟扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
         # [is_prime(next_round.p_or_1)]
     assert L
     return L#True
+def 求冫链长纟再扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
+    '-> 链长/uint'
+    check_type_is(bool, _ps_is_qs_)
+    check_type_is(int, n)
+    qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
+    if not (3 <= n):
+        return 0#False
+    stack = []
+    while 1:
+        if not _is_SPRP_(n):
+            return 0#False
+        (q2e4Nmm, unfactored_part4Nmm) = semi_factor_pint_via_trial_division(qs, n-1)
+
+        rigid4n = unfactored_part4Nmm
+        assert rigid4n&1
+        (root4rigid4n, er4rgd4n) = factor_pint_as_pefect_power_(rigid4n) if not rigid4n == 1 else (1, 1)
+        stack.append((n, q2e4Nmm, root4rigid4n, er4rgd4n))
+        if root4rigid4n == 1:
+            break
+        n = root4rigid4n
+    L = len(stack)
+    assert stack[-1][-2:] == (1, 1)
+        # [(first_round.p_or_1/root4rigid4n, er4rgd4n) == (1, 1)]
+    while stack:
+        (n, q2e4Nmm, p_or_1, er4rgd4n) = stack.pop()
+        # [[p_or_1 == 1]or[is_prime(p_or_1)]]
+        if not p_or_1 == 1:
+            # [is_prime(p_or_1)]
+            p = p_or_1
+            # [is_prime(p)]
+            assert not p in q2e4Nmm
+            q2e4Nmm[p] = er4rgd4n
+        # [is_complete_factorization_of_(n-1, q2e4Nmm)]
+        if not is_prime__via_complete_factorization_Nmm_(q2e4Nmm, n):
+            return 0#False
+        # [is_prime(n)]
+        # !! [next_round.p_or_1 == curr_round.n]
+        # [is_prime(next_round.p_or_1)]
+    assert L
+    return L#True
+
 
 _f4SPRP = None
 def _is_SPRP_(n, /):
@@ -2727,15 +2899,18 @@ def _is_SPRP_(n, /):
         raise 000
     return bool(f(n))
 
-def 枚举冫扩展幺链素数牜加二枚举扌(ps, /, *, _ps_is_qs_=False):
+def 枚举冫再扩展幺链素数牜加二枚举扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
+    return 枚举冫扩展幺链素数牜加二枚举扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=True)
+def 枚举冫扩展幺链素数牜加二枚举扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
     '-> Iter (扩展幺链素数,链长) # [加二枚举==>>[扩展幺链素数:递增]] #加二枚举:太耗时 #归纳生成法能起到修剪无用分支的作用'
     qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
-    for n in count_(3, 2):
+    ns = count_(3, 2) if _max1_ is None else range(3, _max1_, 2)
+    for n in ns:
         #if not _is_SPRP_(n):continue
-        L = 求冫链长纟扩展幺链素数扌(qs, n, _ps_is_qs_=True)
+        L = 求冫链长纟扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_pefect_power=allow_pefect_power)
         if L:
             yield (n, L)
-    raise 000
+    if _max1_ is None:raise 000
 
 
 
@@ -2745,101 +2920,292 @@ def 枚举冫扩展幺链素数牜加二枚举扌(ps, /, *, _ps_is_qs_=False):
 ######################
 ######################
 ######################
-def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
+def 枚举冫再扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
+    return 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=True)
+def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
     '-> Iter (扩展幺链素数,链长) # [归纳生成==>>[扩展幺链素数:递增]] #加二枚举:太耗时 #归纳生成法能起到修剪无用分支的作用'
+    check_type_is(bool, allow_pefect_power)
+    check_type_is(bool, _ps_is_qs_)
+
     qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
     q_set = frozenset(qs)
-    # [rigid4n == (1|out exclude qs)]
+    assert 2 in qs
+    max_q = max(qs)
+    # [root4rigid4n == (1|out exclude qs)]
+    # [rigid4n == root4rigid4n**er4rgd4n]
+    #   [[not allow_pefect_power] -> [er4rgd4n===1]]
     # [scale <- products_of(qs)]
     # [n := 1+2*scale*rigid4n]
-    # [n := 1+2*scale*(1|out-{*qs})]
+    # [n := 1+2*scale*(1|out-{*qs})**er4rgd4n]
     #
     # [nhr == (N,height4n,rigid4n) == (n,h4n,r4n)]
+    # [nhrt == (N,height4n,rigid4n,root4rigid4n) == (n,h4n,r4n,rt)]
+    # [rerh == (root4rigid4n,er4rgd4n,*rh) == (rt,e,r,h)]
     # [rh == (rigid4n,height4rigid4n) == (r,h4r)]
     # [oh == (out,height4out) == (o,h4o) == (扩展幺链素数,链长)]
 
-    heap = []
-        # :: [(nhr, Iter nhr)]
-        # [nhr == (N,height4n,rigid4n)]
+
     scales = LazyList(iter_sorted_products_of_strict_sorted_pairwise_coprime_uints(qs, finite_seq_vs_infinite_seq=False, turnoff__verify_factors_are_pairwise_coprime=False))
         # :: [product_of_qs]
+        # == [1, ...]
+        # ==>> [head_nhrt.N == 1+2*1*head_nhrt.rigid4n]
+
+    from seed.for_libs.for_heapq import iter_merge_sorted_iterable_exs_, merge_ex
+    #def merge_ex(*sorted_iterable_exs, key4stable:[False,callable]=False, key4le=None, __le__=None, reverse=False, unique:[bool,callable]=False, obj2value_:[None,callable]=None):
+    #   '# [sorted_iterable_exs :: [sorted<fst> Iter (x, may sorted_iterable_exs{all <= x})]] # [[key4stable := False] -> [unstable sort]]'
+
+    def _mk_next_rerh_(rerh, /):
+        (rt, e, r, h) = rerh
+        return (rt, e+1, r*rt, h)
+    def _mk_sorted_iterable_ex5rerh(rerh, /):
+        '-> Iter ((nhrt,b_out), may_next_branches)'
+        #rh = rerh[-2:]
+        it__nhrts = _iter_nhrts5rerh_(rerh)
+        head = next(it__nhrts)
+        if not is_nhrt_ok_(head):
+            return
+
+        may_next_branches = None if rerh[-2] == 1 or not allow_pefect_power else (_mk_sorted_iterable_ex5rerh(_mk_next_rerh_(rerh)),)
+        nhrt = head
+        while is_nhrt_ok_(nhrt):
+            (n,h,r,rt) = nhrt
+            b_out = is_prime_nrt_(n, rt)
+            if b_out and (max_q < n or n not in q_set):
+                may_next_branches = (may_next_branches if may_next_branches else ()) + (_mk_sorted_iterable_ex5rerh_nhrt(rerh, nhrt),)
+            yield (nhrt, b_out), may_next_branches
+            nhrt = next(it__nhrts)
+            may_next_branches = None
+    def _mk_sorted_iterable_ex5rerh_nhrt(rerh, nhrt, /):
+        # precondition:[nhrt is output]
+
+        #xxx:(rt, e, r, h) = rerh
+        (n,h,r,rt) = nhrt
+        # !! [nhrt is output]
+        # [n is prime]
+        # [n is new-root4rigid4n]
+        # [er4rgd4n:=1][rigid4n==root4rigid4n**e==n]
+        #rh = (n,h)
+        rerh = (n,1,n,h)
+        return _mk_sorted_iterable_ex5rerh(rerh)
 
 
-    def _iter_nhrs5rh_(rh, /):
-        '-> Iter nhr'
-        (rigid4n, h) = rh
+    def _iter_nhrts5rerh_(rerh, /):
+        '-> Iter nhrt'
+        #(rigid4n, h) = rh
+        (rt, e, rigid4n, h) = rerh
         #h : h4r --> h4n
         h += 1
         for sc in scales:
             # [n := 1+2*scale*rigid4n]
             n = 1+2*sc*rigid4n
-            yield (n, h, rigid4n)
-    #is_head_ok_
-    if 0:
-        def is_head_ok_(head, /):
-            #(n, h4n, r4n) = head #nhr
-            return (_max1_ is None or head[0] < _max1_)
-    elif _max1_ is None:
-        def is_head_ok_(head, /):
+            yield (n, h, rigid4n,rt)
+    #is_head_ok_-->is_nhrt_ok_
+    if _max1_ is None:
+        def is_nhrt_ok_(nhrt, /):
             return True
     else:
-        def is_head_ok_(head, /):
-            #(n, h4n, r4n) = head #nhr
-            return (head[0] < _max1_)
-    #end-is_head_ok_
-    def _put_rh_(rh, /):
-        it__nhrs = _iter_nhrs5rh_(rh)
-        head = next(it__nhrs)
-        if not is_head_ok_(head):
-            return
-        heap_item = (head, it__nhrs)
-        heappush(heap, heap_item)
-    def _extract_one_nhr_():
-        (nhr, tail) = heap[0]
-        head = next(tail)
-
-        if not is_head_ok_(head):
-            heappop(heap)
-        else:
-            heapreplace(heap, (head, tail))
-        return nhr
-    def is_prime_nr_(n, rigid4n, /):
-        if not rigid4n == 1:
-            ps4Nmm = (*qs, rigid4n)
+        def is_nhrt_ok_(nhrt, /):
+            #(n, h4n, r4n, rt) = nhrt #nhrt
+            return (nhrt[0] < _max1_)
+    is_nhrt_ok_
+    #end-is_nhrt_ok_
+    #bug:[now:rigid4n may be prime power]:def is_prime_nr_(n, rigid4n, /):
+    def is_prime_nrt_(n, root4rigid4n, /):
+        if not root4rigid4n == 1:
+            ps4Nmm = (*qs, root4rigid4n)
         else:
             ps4Nmm = qs
         return is_prime__via_complete_factorization_Nmm_(ps4Nmm, n)
 
-    rh0 = (1, 0)
-    _put_rh_(rh0)
-    def _iter_ohs_():
-        '-> Iter (扩展幺链素数,链长) #严格递增'
-        #while 1:
-        #   now:++_max1_
-        while heap:
-            nhr = _extract_one_nhr_()
-            (n, h4n, r4n) = nhr
-            if not is_prime_nr_(n, r4n):
-                continue
-            oh = (o, h4o) = (n, h4n)
-            yield oh
-            if not o in q_set:
-                rh = oh
-                _put_rh_(rh)
-        if _max1_ is None:
-            raise 000
-        return
-    return _iter_ohs_()
+    def main():
+        rerh0 = (1, 1, 1, 0)
+        for nhrt, b_out in merge_ex(_mk_sorted_iterable_ex5rerh(rerh0)):
+            if not b_out: continue
+            (n, h4n, r4n, rt) = nhrt
+            #yield nhrt
+            yield (n, h4n)
+    return main()
 
-def 枚举冫链长纟扩展幺链素数扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
+
+#origial version:NotImplementedError(allow_pefect_power)
+#.def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
+#.    '-> Iter (扩展幺链素数,链长) # [归纳生成==>>[扩展幺链素数:递增]] #加二枚举:太耗时 #归纳生成法能起到修剪无用分支的作用'
+#.    check_type_is(bool, allow_pefect_power)
+#.    check_type_is(bool, _ps_is_qs_)
+#.
+#.    qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
+#.    q_set = frozenset(qs)
+#.    assert 2 in qs
+#.    max_q = max(qs)
+#.    # [rigid4n == (1|out exclude qs)]
+#.    # [scale <- products_of(qs)]
+#.    # [n := 1+2*scale*rigid4n]
+#.    # [n := 1+2*scale*(1|out-{*qs})]
+#.    #
+#.    # [nhr == (N,height4n,rigid4n) == (n,h4n,r4n)]
+#.    # [rh == (rigid4n,height4rigid4n) == (r,h4r)]
+#.    # [oh == (out,height4out) == (o,h4o) == (扩展幺链素数,链长)]
+#.
+#.    heap = []
+#.        # :: [(nhr, Iter nhr)]
+#.        # [nhr == (N,height4n,rigid4n)]
+#.        # if allow_pefect_power:[nhr == ((N,height4n,rigid4n/(1|prime))|head4nontrivial_power/(N==rigid4n==root4rigid4n**er4rgd4n,height4n,rigid4n,root4rigid4n/prime,er4rgd4n{>=2}))]
+#.
+#.    scales = LazyList(iter_sorted_products_of_strict_sorted_pairwise_coprime_uints(qs, finite_seq_vs_infinite_seq=False, turnoff__verify_factors_are_pairwise_coprime=False))
+#.        # :: [product_of_qs]
+#.        # == [1, ...]
+#.
+#.
+#.    def _iter_nhrs5rh_(rh, /):
+#.        '-> Iter nhr'
+#.        (rigid4n, h) = rh
+#.        #h : h4r --> h4n
+#.        h += 1
+#.        for sc in scales:
+#.            # [n := 1+2*scale*rigid4n]
+#.            n = 1+2*sc*rigid4n
+#.            yield (n, h, rigid4n)
+#.    #is_head_ok_
+#.    if 0:
+#.        def is_head_ok_(head, /):
+#.            #(n, h4n, r4n) = head #nhr
+#.            return (_max1_ is None or head[0] < _max1_)
+#.    elif _max1_ is None:
+#.        def is_head_ok_(head, /):
+#.            return True
+#.    else:
+#.        def is_head_ok_(head, /):
+#.            #(n, h4n, r4n) = head #nhr
+#.            return (head[0] < _max1_)
+#.    #end-is_head_ok_
+#.    # ++allow_pefect_power
+#.    def _put_rh__pows_(rh, /):
+#.        if rh[0] == 1:
+#.            return _put_rh_(rh)
+#.        raise 000-NotImplementedError
+#.    if allow_pefect_power:raise 000-NotImplementedError
+#.    def _put_rh_(rh, /):
+#.        it__nhrs = _iter_nhrs5rh_(rh)
+#.        head = next(it__nhrs)
+#.        if not is_head_ok_(head):
+#.            return
+#.        heap_item = (head, it__nhrs)
+#.        heappush(heap, heap_item)
+#.    def _extract_one_nhr_():
+#.        (nhr, tail) = heap[0]
+#.        head = next(tail)
+#.
+#.        if not is_head_ok_(head):
+#.            heappop(heap)
+#.        else:
+#.            heapreplace(heap, (head, tail))
+#.        return nhr
+#.    def is_prime_nr_(n, rigid4n, /):
+#.        if not rigid4n == 1:
+#.            ps4Nmm = (*qs, rigid4n)
+#.        else:
+#.            ps4Nmm = qs
+#.        return is_prime__via_complete_factorization_Nmm_(ps4Nmm, n)
+#.
+#.    rh0 = (1, 0)
+#.    _put_rh_(rh0)
+#.    def _iter_ohs_():
+#.        '-> Iter (扩展幺链素数,链长) #严格递增'
+#.        #while 1:
+#.        #   now:++_max1_
+#.        while heap:
+#.            nhr = _extract_one_nhr_()
+#.            (n, h4n, r4n) = nhr
+#.            if not is_prime_nr_(n, r4n):
+#.                continue
+#.            oh = (o, h4o) = (n, h4n)
+#.            yield oh
+#.            if o > max_q or not o in q_set:
+#.                rh = oh
+#.                _put_rh_(rh)
+#.                    #allow_pefect_power:_put_rh__pows_:TODO
+#.        if _max1_ is None:
+#.            raise 000
+#.        return
+#.    return _iter_ohs_()
+#.
+def 枚举冫链长纟再扩展幺链素数扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
+    return 枚举冫链长纟扩展幺链素数扌(ps, _max1_=_max1_, _ps_is_qs_=_max1_, allow_pefect_power=True)
+def 枚举冫链长纟扩展幺链素数扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
     '-> 序列纟链长纟扩展幺链素数/Iter 链长 #归纳生成'
     #view others/数学/有递增趋势的非递增序列.txt
-    return map(snd, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_))
+    return map(snd, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power))
 
 
-def iter_odd_primes__inductive_generated__almost_smooth_based_(ps, /, *, _max1_=None, _ps_is_qs_=False):
+def iter_odd_primes__inductive_generated__almost_smooth_based_(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
     '-> Iter odd_prime'
-    return map(fst, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_))
+    return map(fst, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power))
+
+
+
+def _统计冫枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_, _ps_is_qs_=False):
+    check_int_ge(0, _max1_)
+    assert _max1_ <= 2**64
+    777; is_prime = is_prime__le_pow2_64
+    777; 欤幺链素数牜小于六十四比特扌
+    ps = mk_tuple(ps)
+    args = (_max1_, ps, _ps_is_qs_)
+
+    qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
+    #ps, _ps_is_qs_ = qs, True
+    ns = count_(3, 2) if _max1_ is None else range(3, _max1_, 2)
+    数量纟幺链素数 = 0
+    数量纟扩展幺链素数 = 0
+    数量纟再扩展幺链素数 = 0
+    数量纟素数 = 0
+    for n in ns:
+        欤素数 = is_prime(n)
+
+        欤幺链素数 = 欤幺链素数牜小于六十四比特扌(n)
+        _欤幺链素数 = 欤扩展幺链素数扌((2,), n, _ps_is_qs_=True, allow_pefect_power=False)
+        欤扩展幺链素数 = 欤扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_pefect_power=False)
+        欤再扩展幺链素数 = 欤扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_pefect_power=True)
+        assert 欤幺链素数 == _欤幺链素数 <= 欤扩展幺链素数 <= 欤再扩展幺链素数 <= 欤素数, (args, n, [欤幺链素数, _欤幺链素数, 欤扩展幺链素数, 欤再扩展幺链素数, 欤素数])
+        数量纟幺链素数 += 欤幺链素数
+        数量纟扩展幺链素数 += 欤扩展幺链素数
+        数量纟再扩展幺链素数 += 欤再扩展幺链素数
+        数量纟素数 += 欤素数
+    print(f'args = {args}')
+    print(f'数量纟幺链素数 = {数量纟幺链素数}')
+    print(f'数量纟扩展幺链素数 = {数量纟扩展幺链素数}')
+    print(f'数量纟再扩展幺链素数 = {数量纟再扩展幺链素数}')
+    print(f'数量纟素数 = {数量纟素数}')
+
+
+
+def _测试冫枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_, _ps_is_qs_=False):
+    check_int_ge(0, _max1_)
+    ps = mk_tuple(ps)
+    args = (_max1_, ps, _ps_is_qs_)
+
+    lss5ind = lsF, lsT = [[*枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power)] for allow_pefect_power in [False, True]]
+    assert not lsF == lsT, (_max1_, ps, _ps_is_qs_)
+
+    lss5add = lsF, lsT = [[*枚举冫扩展幺链素数牜加二枚举扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power)] for allow_pefect_power in [False, True]]
+    assert not lsF == lsT, (_max1_, ps, _ps_is_qs_)
+
+    assert lss5add == lss5ind, ([*map(list.__eq__, lss5ind, lss5add)], (_max1_, ps, _ps_is_qs_))
+
+def __():
+    for e in range(16):
+        try:
+            _测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=2**e)
+        except AssertionError:
+            pass
+        else:
+            #print(e)
+            assert e == 5, e
+            break
+    else:
+        raise 000
+#__()
+_测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=32)
+#_测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=2**16)
 
 __all__
 from seed.math.primes__inductive_generated__almost_smooth import 枚举冫幺链素数牜小于六十四比特扌

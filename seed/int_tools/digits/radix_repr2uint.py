@@ -1,8 +1,12 @@
+#__all__:goto
 #r"""[[[
 
 r'''
 py -m seed.int_tools.digits.radix_repr2uint
 from seed.int_tools.digits.radix_repr2uint import radix_repr2uint, IRadixRepr2Uint, RadixRepr2Uint
+used in:
+    view ../../python3_src/seed/int_tools/digits/uint25bijective_numeration.py
+        => require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)
 
 !mkdir ../../python3_src/seed/int_tools/digits
 e ../../python3_src/seed/int_tools/digits/radix_repr2uint.py
@@ -21,11 +25,14 @@ __all__ = '''
                 radix_repr2uint__little_endian
                 radix_repr2uint__big_endian
 
-    '''.split()
+    '''.split()#'''
+___begin_mark_of_excluded_global_names__0___ = ...
+
 from seed.abc.abc import ABC, abstractmethod, override, ABC__no_slots
 from seed.helper.check.checkers import check_int, check_type_is
 from seed.int_tools.digits._common import _Int
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 class IRadixRepr2Uint(ABC):
     r'''
@@ -49,20 +56,25 @@ class IRadixRepr2Uint(ABC):
     def mul(sf, lhs, rhs, /):
         ...
     def radix_repr2uint(sf, digits, /,*, is_big_endian:bool, _merge_ver:'0|1|2'):
+        '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
+
         f = sf.radix_repr2uint__big_endian if is_big_endian else sf.radix_repr2uint__little_endian
         return f(digits, _merge_ver=_merge_ver)
     def radix_repr2uint__big_endian(sf, digits, /,*, _merge_ver:'0|1|2'):
+        '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
         if _merge_ver==0:
             return sf.radix_repr2uint__big_endian__plain(digits)
         else:
             return sf.radix_repr2uint__big_endian__merge(digits, _merge_ver=_merge_ver)
     def radix_repr2uint__little_endian(sf, digits, /,*, _merge_ver:'0|1|2'):
+        '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
         if _merge_ver==0:
             return sf.radix_repr2uint__little_endian__plain(digits)
         else:
             return sf.radix_repr2uint__little_endian__merge(digits, _merge_ver=_merge_ver)
 
     def radix_repr2uint__little_endian__merge(sf, digits, /,*, _merge_ver:'1|2'):
+        '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
         iter_digits = iter(digits); del digits
         zero = sf.get_zero()
         for digit_LSB in iter_digits:
@@ -119,6 +131,7 @@ class IRadixRepr2Uint(ABC):
             u
         return u
     def radix_repr2uint__big_endian__merge(sf, digits, /,*, _merge_ver:'1|2'):
+        '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
         iter_digits = iter(digits); del digits
         zero = sf.get_zero()
         for digit_MSB in iter_digits:
@@ -181,6 +194,7 @@ class IRadixRepr2Uint(ABC):
 
 
     def radix_repr2uint__little_endian__plain(sf, digits, /):
+        '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
         u = sf.get_zero()
         weight = sf.get_one()
         base = sf.get_radix()
@@ -192,6 +206,7 @@ class IRadixRepr2Uint(ABC):
             weight = mul(weight, base)
         return u
     def radix_repr2uint__big_endian__plain(sf, digits, /):
+        '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
         u = sf.get_zero()
         base = sf.get_radix()
         mul = sf.mul
@@ -243,10 +258,13 @@ class _RadixRepr2Uint(IRadixRepr2Uint, ABC__no_slots):
     def mul(sf, lhs, rhs, /):
         return _Int(lhs.i*rhs.i)
 def radix_repr2uint__little_endian(radix, digits, /,*, _merge_ver:'0|1|2'=0):
+    '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
     return RadixRepr2Uint(radix).radix_repr2uint__little_endian(digits, _merge_ver=_merge_ver)
 def radix_repr2uint__big_endian(radix, digits, /,*, _merge_ver:'0|1|2'=0):
+    '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
     return RadixRepr2Uint(radix).radix_repr2uint__big_endian(digits, _merge_ver=_merge_ver)
 def radix_repr2uint(radix_or_an_IRadixRepr2Uint, digits, /,*, is_big_endian:bool, _merge_ver:'0|1|2'=0, input_is_an_IRadixRepr2Uint_not_radix=False):
+    '# require [radix_repr2uint should not check [digit <- [0..<radix]]] to allow overflow/underflow (asif usage@bijective_numeration)'
     if input_is_an_IRadixRepr2Uint_not_radix:
         an_IRadixRepr2Uint = radix_or_an_IRadixRepr2Uint
     else:

@@ -1,0 +1,5 @@
+
+e ../../python3_src/seed/abc/see-seed.io.IBaseIO.txt
+
+view ../../python3_src/seed/io/IBaseIO.py
+

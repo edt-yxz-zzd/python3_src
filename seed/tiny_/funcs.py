@@ -34,6 +34,8 @@ __all__ = '''
     fprint
     py_cmp
     int2cmp
+
+    set_doc_
     '''.split()
 
 
@@ -101,6 +103,13 @@ def int2cmp(i, /):
         return 0
     return -1 if i < 0 else +1
 
+def set_doc_(doc, /, *, force=False):
+    assert type(doc) is str
+    def _set_doc_(f, /):
+        if not (force or getattr(f, '__doc__', None) is None): raise ValueError(f'{f} has __doc__')
+        f.__doc__ = doc
+        return f
+    return _set_doc_
 
-from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp
+from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp, set_doc_
 from seed.tiny_.funcs import *

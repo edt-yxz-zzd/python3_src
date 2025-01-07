@@ -15,8 +15,12 @@ O(floor_kth_root_) ~:
     ~ [0 <= lbN < k]:O(1)
     ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
     ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
-    ~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
+    ~ [k*lbK < lbN < k*lbK**(3/2)][lbN/lblbN**(3/2) < k < lbN/lblbN]:O(k**2 *lbK**3)
     ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+    ######################
+    [lbN == k*lbK] => [k==lbN/lblbN]
+    [lbN == k*lbK**(3/2)] => [k==lbN/lblbN**(3/2)]
+    [k*lbK < lbN < k*lbK**(3/2)] => [lbN/lblbN**(3/2) < k < lbN/lblbN]
     ######################
 
 
@@ -38,6 +42,24 @@ O(floor_kth_root_) ~:
 
 e ../../python3_src/seed/math/floor_ceil.py
 view others/数学/divmod加速.txt
+view ../../python3_src/seed/math/floor_ceil_log__via_div_log2.py
+view ../../python3_src/seed/math/log__bijective_numeration.py
+view ../../python3_src/seed/math/floor_ceil__tiny.py
+
+
+[[
+ls ../../python3_src/seed/math/*{floor,log}*
+view ../../python3_src/seed/math/floor_ceil.py
+view ../../python3_src/seed/math/floor_ceil__tiny.py
+view ../../python3_src/seed/math/discrete_logarithm.py
+view ../../python3_src/seed/math/floor_log__Fraction_.py
+view ../../python3_src/seed/math/floor_log__ops_.py
+view ../../python3_src/seed/math/floor_ceil_log__via_div_log2.py
+view ../../python3_src/seed/math/log.py
+view ../../python3_src/seed/math/log__bijective_numeration.py
+]]
+
+
 
 py -m nn_ns.app.debug_cmd   seed.math.floor_ceil -x
 
@@ -54,10 +76,11 @@ py_adhoc_call   seed.math.floor_ceil @floor_log2 =57*59*60*61*71*72*73
 
 
 from seed.math.floor_ceil import floor_div, ceil_div
-from seed.math.floor_ceil import floor_log2, ceil_log2
+from seed.math.floor_ceil import floor_div_, ceil_div_
+from seed.math.floor_ceil import floor_log2, ceil_log2, floor_ceil_log2
 from seed.math.floor_ceil import floor_log2_kth_root_, ceil_log2_kth_root_
 from seed.math.floor_ceil import floor_log2_sqrt, ceil_log2_sqrt
-from seed.math.floor_ceil import floor_log_, ceil_log_
+from seed.math.floor_ceil import floor_log_, ceil_log_, floor_ceil_log_
 
 # now: math.isqrt
 from seed.math.floor_ceil import floor_sqrt, ceil_sqrt
@@ -68,18 +91,24 @@ from seed.math.floor_ceil import floor_kth_root_, ceil_kth_root_
 __all__ = r'''
     floor_log2
     ceil_log2
+        floor_ceil_log2
+    floor_log_
+    ceil_log_
+        floor_ceil_log_
+
+
     floor_log2_kth_root_
     ceil_log2_kth_root_
     floor_log2_sqrt
     ceil_log2_sqrt
-    floor_log_
-    ceil_log_
 
     floor_sqrt
     ceil_sqrt
 
     floor_div
     ceil_div
+        floor_div_
+        ceil_div_
 
     offsetted_divmod
 
@@ -212,6 +241,13 @@ def floor_ceil_div(n, d, /):
     return fq, cq
 
 
+def ceil_div_(d, n, /):
+    '[ceil_div_(d;n) == ceil(n/d) == ceil_div(n,d)]'
+    return ceil_div(n, d)
+def floor_div_(d, n, /):
+    '[floor_div_(d;n) == n//d == floor_div(n,d)]'
+    return floor_div(n, d)
+
 def floor_div(n, d, /):
     r'''floor_div n d = n//d where d != 0
 
@@ -337,6 +373,22 @@ example:
         return e
     raise logic-err
 
+def floor_ceil_log_(base, pint, /, *, with_floor_pow:bool):
+    #check_type_is(bool, with_floor_pow)
+    if base == 2:
+        #return floor_ceil_log2(pint, with_floor_pow=with_floor_pow)
+        e0 = floor_log2(pint)
+        fl_pw = (1<<e0)
+    else:
+        e0 = floor_log_(base, pint)
+        fl_pw = base**e0
+    # e0, fl_pw
+    e1 = e0 + (not pint == fl_pw)
+    if with_floor_pow:
+        return (e0, e1, fl_pw)
+    return (e0, e1, )
+def floor_ceil_log2(pint, /, *, with_floor_pow:bool):
+    return floor_ceil_log_(2, pint, with_floor_pow=with_floor_pow)
 
 def floor_log2(pint, /):
     r'''floor_log2(p) = floor(log2(p)) where p > 0
@@ -798,8 +850,12 @@ def floor_kth_root_(k, n, /):
     ~ [0 <= lbN < k]:O(1)
     ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
     ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
-    ~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
+    ~ [k*lbK < lbN < k*lbK**(3/2)][lbN/lblbN**(3/2) < k < lbN/lblbN]:O(k**2 *lbK**3)
     ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+    ######################
+    [lbN == k*lbK] => [k==lbN/lblbN]
+    [lbN == k*lbK**(3/2)] => [k==lbN/lblbN**(3/2)]
+    [k*lbK < lbN < k*lbK**(3/2)] => [lbN/lblbN**(3/2) < k < lbN/lblbN]
     ######################
 
     [k>=1][n>=0]
@@ -1322,8 +1378,12 @@ def _floor_kth_root__impl_(k, n, /):
     ~ [0 <= lbN < k]:O(1)
     ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
     ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
-    ~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
+    ~ [k*lbK < lbN < k*lbK**(3/2)][lbN/lblbN**(3/2) < k < lbN/lblbN]:O(k**2 *lbK**3)
     ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+    ######################
+    [lbN == k*lbK] => [k==lbN/lblbN]
+    [lbN == k*lbK**(3/2)] => [k==lbN/lblbN**(3/2)]
+    [k*lbK < lbN < k*lbK**(3/2)] => [lbN/lblbN**(3/2) < k < lbN/lblbN]
     ######################
 
 

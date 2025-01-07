@@ -2,11 +2,12 @@
 r'''[[[
 e ../../python3_src/seed/math/discrete_logarithm.py
 view others/数学/整数分解/sqrts_mod_.txt
+view ../../python3_src/seed/math/find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_.py
 
 
 seed.math.discrete_logarithm
 py -m nn_ns.app.debug_cmd   seed.math.discrete_logarithm -x
-py -m nn_ns.app.doctest_cmd seed.math.discrete_logarithm:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.math.discrete_logarithm:__doc__ -ht # -ff -v
 py_adhoc_call   seed.math.discrete_logarithm   @f
 
 
@@ -113,8 +114,17 @@ IDefaultLookupable
             Lookupable__pows
             Lookupable__Tpows
             Lookupable__Ppows_2pows
+
 '''.split()#'''
+#find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_
+#    find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_
+#        iter_sorted_primitive_roots_mod_prime__using_factorization_of_pmm_
+#
+#_find_arbitrary_one_primitive_root_mod_prime_
+#    _find_the_min_primitive_root_mod_prime_
+#        _iter_sorted_primitive_roots_mod_prime_
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
 
 #from math import isqrt as floor_sqrt_
 from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
@@ -127,70 +137,31 @@ from seed.math.inv_mod_ import inv_mod_
 from seed.math.Chinese_Remainder_Theorem import CRT, ECRT, mk_CRT, apply_CRT, apply_CRT__pairs, check_CRT_ans, CRT_Answer_Error
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
 
+#move to: view ../../python3_src/seed/math/find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_.py
+if 1:from seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_ import _find_arbitrary_one_primitive_root_mod_prime_, _find_the_min_primitive_root_mod_prime_, _iter_sorted_primitive_roots_mod_prime_
+#from seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_ import find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_, find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_, iter_sorted_primitive_roots_mod_prime__using_factorization_of_pmm_
+___end_mark_of_excluded_global_names__0___ = ...
 
-def _find_arbitrary_one_primitive_root_mod_prime_(p, factorization_of_pmm, /):
-    for g in _iter_sorted_primitive_roots_mod_prime_(p, factorization_of_pmm):
-        break
-    else:
-        raise 000
-    return g
-def _iter_sorted_primitive_roots_mod_prime_(p, factorization_of_pmm, /):
-    if p == 2:
-        yield 1
-        return
-    # [p >= 3]
-    # [p-1 >= 2]
-    pmm = p-1
-    # [pmm >= 2]
-    e0 = pmm//II(factorization_of_pmm.keys())
-    II_q = II(q for q in factorization_of_pmm)
-    phi_p = e0 * II_q
-    assert phi_p == pmm
-    II_qmm = II(q-1 for q in factorization_of_pmm)
-    phi_pmm = e0 * II_qmm
-    #gs = []
-    num_gs = 0
-    ps = sorted(factorization_of_pmm.items())
-    assert ps
-        # !! [p-1 >= 2]
-    #bug: p=2,3: for g in range(2, pmm//2 +1):
-    for g in range(2, p):
-        #base0 = pow(g, e0, p)
-        base0 = g
-        for q, e in ps:
-            for _ in range(e-1):
-                base0 = pow(base0, q, p)
-                if base0 == 1:
-                    break
-            if base0 == 1:
-                break
-        else:
-            assert not base0 == 1
-        if base0 == 1:
-            continue
+def _API():
+    #API:
+    def find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_(factorization_of_pmm, may_p=None, /):
+        'factorization{p-1} -> may p -> arbitrary primitive_root%p'
+    def find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_(factorization_of_pmm, may_p=None, /):
+        'factorization{p-1} -> may p -> min primitive_root%p'
+    def iter_sorted_primitive_roots_mod_prime__using_factorization_of_pmm_(factorization_of_pmm, may_p=None, /):
+        'factorization{p-1} -> may p -> sorted-Iter primitive_root%p'
 
-        for i in range(len(ps)):
-            #base1 = pow(g, pmm//q, p)
-            base1 = base0
-            for q, _ in ps[i+1:]:
-                base1 = pow(base1, q, p)
-                if base1 == 1:
-                    break
-            if base1 == 1:
-                break
-            q, _ = ps[i]
-            base0 = pow(base0, q, p)
-        else:
-            assert base0 == 1, ((p, factorization_of_pmm), phi_p, ps, base0, pow(g, phi_p, p))
-        if base1 == 1:
-            #bug:assert not base0 == 1
-            continue
-        assert base0 == 1
-        yield g
-        #gs.append(g)
-        num_gs += 1
-    #assert len(gs) == phi_pmm
-    assert num_gs == phi_pmm
+
+    def _find_arbitrary_one_primitive_root_mod_prime_(p, factorization_of_pmm, /):
+        'p -> factorization{p-1} -> arbitrary primitive_root%p'
+    def _find_the_min_primitive_root_mod_prime_(p, factorization_of_pmm, /):
+        'p -> factorization{p-1} -> min primitive_root%p'
+    def _iter_sorted_primitive_roots_mod_prime_(p, factorization_of_pmm, /):
+        'p -> factorization{p-1} -> sorted-Iter primitive_root%p'
+_API
+
+
+
 
 def _detect_easy_case4discrete_logarithm__coprime_(modulus, base, order_of_base, y, /):
     '-> (x|...)'
@@ -930,30 +901,14 @@ def _discrete_logarithm__coprime__order_of_base_is_odd_prime_power_(modulus, bas
 #end-def _discrete_logarithm__coprime__order_of_base_is_odd_prime_power_(modulus, base, order_of_base, p, ep, y, /):
 
 
-def __():
-    from seed.tiny import ifNonef, ifNone, echo
-    from seed.tiny import check_type_is, fst, snd, at
-    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-    from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
-    from seed.helper.repr_input import repr_helper
-
-def __():
-    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-    from seed.helper.repr_input import repr_helper
-    class _(ABC):
-        __slots__ = ()
-        raise NotImplementedError
-        ___no_slots_ok___ = True
-        def __repr__(sf, /):
-            #return repr_helper(sf, *_args_, **kwargs)
-            #return repr_helper_ex(sf, _args_, ordered_attrs, kwargs, ordered_attrs_only=False)
-            ...
-if __name__ == "__main__":
-    pass
 __all__
 
 
 from seed.math.discrete_logarithm import discrete_logarithm__coprime_
     #def discrete_logarithm__coprime_(modulus, base, order_of_base, factorization_of_order_of_base, y, /)
+if 1:from seed.math.discrete_logarithm import _find_arbitrary_one_primitive_root_mod_prime_, _find_the_min_primitive_root_mod_prime_, _iter_sorted_primitive_roots_mod_prime_
+    #from seed.math.discrete_logarithm import find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_, find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_, iter_sorted_primitive_roots_mod_prime__using_factorization_of_pmm_
+#from seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_ import _find_arbitrary_one_primitive_root_mod_prime_, _find_the_min_primitive_root_mod_prime_, _iter_sorted_primitive_roots_mod_prime_
+#from seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_ import find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_, find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_, iter_sorted_primitive_roots_mod_prime__using_factorization_of_pmm_
+
 from seed.math.discrete_logarithm import *

@@ -77,9 +77,42 @@ calling:c()
 777
 
 
+######################
+>>> #from seed.helper.lazy_import import BaseCachedPropertyGroup, ImmediateProperty, ImportProperty, FunctionalBatchProperty
+>>> class B(BaseCachedPropertyGroup):
+...     def bxx(sf, /):
+...         from seed.helper.lazy_import import BaseCachedPropertyGroup
+...         return BaseCachedPropertyGroup
+...     vxx = ImmediateProperty(999)
+...     ixx = ImportProperty('seed.helper.lazy_import', 'ImportProperty')
+...     @FunctionalBatchProperty
+...     def fxx(sf, /):
+...         from seed.helper.lazy_import import FunctionalBatchProperty
+...         return FunctionalBatchProperty, {'exx':666}
+>>> x = B()
+>>> x.bxx
+<class 'seed.helper.lazy_import.BaseCachedPropertyGroup'>
+>>> x.vxx
+999
+>>> x.ixx
+<class 'seed.helper.lazy_import.ImportProperty'>
+>>> x.fxx
+<class 'seed.helper.lazy_import.FunctionalBatchProperty'>
+>>> x.exx
+666
+
+
+
+######################
 py_adhoc_call   seed.helper.lazy_import   @f
 #]]]'''
 __all__ = r'''
+BaseCachedPropertyGroup
+_IProperty4BaseCachedPropertyGroup
+    ImmediateProperty
+    ImportProperty
+    FunctionalBatchProperty
+
 CachedProperty
 BatchCachedProperty
     mk_batch_cached_properties_
@@ -122,6 +155,7 @@ Finder4lazy_attr_mdl
 #deprecated:Finder4lazy_attr_mdl
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.repr_input import repr_helper
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
     #__slots__ = ()
     #___no_slots_ok___ = True
@@ -137,6 +171,11 @@ from importlib.machinery import FileFinder
 from seed.for_libs.for_importlib__finder6parent import symbol4finder6parent, IFinder6parent
 from seed.for_libs.for_importlib__finder6parent import MetaPathFinder__parent_defined
 from importlib.machinery import PathFinder
+
+
+
+from seed.pkg_tools.import_object import import_object, import4qobject
+#def import4qobject(may_qname4module, may_qname4obj, /):
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -494,6 +533,80 @@ finder6parent__4lazy_attr_mdl__via_PathFinder = Finder6parent__4lazy_attr_mdl__v
 
 
 
+######################
+#@20241229
+_spec_nms = ('__dict__', '__class__')
+class BaseCachedPropertyGroup:
+    #__slots__ = ('__dict__', '__weakref__')
+    def __getattribute__(sf, nm, /):
+        if nm in _spec_nms:
+            return super().__getattribute__(nm)
+        d = object.__getattribute__(sf, '__dict__')
+        #d = vars(sf)
+            # RecursionError: maximum recursion depth exceeded
+        try:
+            return d[nm]
+        except KeyError:
+            pass
+        cls = type(sf)
+        f = getattr(cls, nm)
+        d[nm] = f(sf)
+        return getattr(sf, nm)
+BaseCachedPropertyGroup
+
+class _IProperty4BaseCachedPropertyGroup(ABC):
+    __slots__ = ()
+    @abstractmethod
+    def __repr__(sf, /):
+        return super().__repr__()
+    @abstractmethod
+    def __call__(sf, instance, /):
+        '-> property_value'
+    def __get__(sf, may_instance, owner, /):
+        if may_instance is None:
+            return sf
+        instance = may_instance
+        return sf(instance)
+
+class ImmediateProperty(_IProperty4BaseCachedPropertyGroup):
+    ___no_slots_ok___ = True
+    def __init__(sf, v, /):
+        sf._v = v
+    @override
+    def __repr__(sf, /):
+        return repr_helper(sf, sf._v)
+    @override
+    def __call__(sf, instance, /):
+        return sf._v
+
+class ImportProperty(_IProperty4BaseCachedPropertyGroup):
+    ___no_slots_ok___ = True
+    def __init__(sf, qnm4mdl, qnm4obj, /):
+        sf._qnm4mdl = qnm4mdl
+        sf._qnm4obj = qnm4obj
+    @override
+    def __repr__(sf, /):
+        return repr_helper(sf, sf._qnm4mdl, sf._qnm4obj)
+    @override
+    def __call__(sf, instance, /):
+        return import4qobject(sf._qnm4mdl, sf._qnm4obj)
+
+class FunctionalBatchProperty(_IProperty4BaseCachedPropertyGroup):
+    ___no_slots_ok___ = True
+    def __init__(sf, f, /):
+        '[f :: instance -> (property_value, dict4batch_property)]'
+        sf._f = f
+    @override
+    def __repr__(sf, /):
+        return repr_helper(sf, sf._f)
+    @override
+    def __call__(sf, instance, /):
+        (v, d) = sf._f(instance)
+        vars(instance).update(d)
+        return v
+
+
+######################
 
 
 
@@ -514,5 +627,7 @@ from seed.helper.lazy_import import name4on_missing4lazy_attr_mdl
 from seed.helper.lazy_import import symbol4finder6parent, finder6parent__4lazy_attr_mdl__via_PathFinder
     #globals()[symbol4finder6parent] = finder6parent__4lazy_attr_mdl__via_PathFinder
     #finder6parent__4lazy_attr_mdl__via_PathFinder.register__add_more_lazy_children_(__name__, ['lazy_child__aaa'])
+
+from seed.helper.lazy_import import BaseCachedPropertyGroup, ImmediateProperty, ImportProperty, FunctionalBatchProperty
 
 from seed.helper.lazy_import import *

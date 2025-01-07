@@ -313,6 +313,8 @@ __all__ = str2__all__(r'''
     py_cmp              # :: Ord a => a -> a -> -> (-1|0|+1)
     int2cmp             # :: int -> (-1|0|+1)
 
+    set_doc_            # :: doc -> (f->f) # @set_doc_(__doc__)\n def f(...)
+
     does_run_as_main    # :: String -> Bool
                         # does_run_as_main(__name__)
                         # does_run_as_main.alter_main_name :: String
@@ -689,7 +691,7 @@ assert mk_reiterables([{}, null_iter, []]) == ({}, (), [])
 assert mk_reiterables(iter([{}, null_iter, []])) == ({}, (), [])
 
 
-from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp
+from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp, set_doc_
 from seed.debug.lazy_raise import lazy_raise
 
 #from collections.abc import Iterable, Iterator

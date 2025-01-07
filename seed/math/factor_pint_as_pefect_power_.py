@@ -1,7 +1,107 @@
 #__all__:goto
+#_doc4factor_pint_as_pefect_power__CRT_ver_:goto
+#bug-fixed:@20250104..20250105
 r'''[[[
 e ../../python3_src/seed/math/factor_pint_as_pefect_power_.py
 view others/数学/整数分解/整数幂方分解.txt
+view script/辅助冫幂方判定.py
+view ../../python3_src/seed/math/_data4factor_pint_as_pefect_power_.py
+
+
+
+
+
+py -m seed.math.factor_pint_as_pefect_power_    >  /sdcard/0my_files/tmp/0tmp      2>&1
+    to show _cache
+py -m nn_ns.app.debug_cmd   seed.math.factor_pint_as_pefect_power_ -x
+py -m nn_ns.app.doctest_cmd seed.math.factor_pint_as_pefect_power_:__doc__ -ht # -ff -v
+
+[[
+floor_kth_root_-ver2@20250105:
+[TIME(factor_pint_as_pefect_power_(n)) ~<= O(lbN**3*lblblbN) if not _to_eliminate_the_dominant_branch else O(lbN**3)]
+<<==:
+#DONE:eliminate the_dominant_branch&the_secondary_branch via _factor_pint_as_pefect_power__try_small_prime_factors
+===
+let [max4exp < lbN/lblbN] to eliminate the_dominant_branch&the_secondary_branch
+let [max4exp < lbN/lblbN**(3/2)] to eliminate the_dominant_branch&the_secondary_branch
+!! [max4exp := ceil_div(ceil_log2(n), exp4zpow) -1]
+[max4exp ~= lbN/exp4zpow]
+[max4exp <= lbN/lblbN]
+    <==> [lbN/exp4zpow ~<= lbN/lblbN]
+    <==> [exp4zpow ~>= lblbN]
+    #config4primes4le_256
+    # [exp4zpow == 8] => [n <= 2**2**8 == 2**256]
+[max4exp <= lbN/lblbN**(3/2)]
+    <==> [lbN/exp4zpow ~<= lbN/lblbN**(3/2)]
+    <==> [exp4zpow ~>= lblbN**(3/2)]
+    #config4primes4le_256
+    # [exp4zpow == 8] => [n <= 2**2**8**(2/3) == 2**16]
+
+[TIME(_factor_pint_as_pefect_power__try_small_prime_factors{config4primes4le_{2**exp4zpow}})
+~= TIME(div(n,2**exp4zpow))*len(primes_le(2**exp4zpow))
+~= O((lbN*exp4zpow) * (2**exp4zpow/exp4zpow))
+~= O(lbN * 2**exp4zpow)
+* [exp4zpow ~>= lblbN]:
+    ~>= O(lbN * 2**lblbN)
+        ~= O(lbN**2)
+* [exp4zpow ~>= lblbN**(3/2)]:
+    ~>= O(lbN * 2**lblbN**(3/2))
+        ~= O(lbN * (2**lblbN)**lblbN**(1/2))
+        ~= O(lbN * lbN**lblbN**(1/2))
+        ~= O(lbN**lblbN**(1/2))
+            too big!!
+            should not eliminate the_secondary_branch
+]
+++kw:_to_eliminate_the_dominant_branch
+[eliminate the_dominant_branch]:
+    [max4exp <= lbN/lblbN]
+    !! [max4exp ~= lbN/exp4zpow]
+    [exp4zpow ~>= lblbN]
+    [exp4zpow := lblbN]:
+        # [{exp4zpow:minN} == {e:2**2**e} == {1:4, 2:16, 3:256, 4:65536, 5:4294967296, 6:18446744073709551616, 7:340282366920938463463374607431768211456, 8:115792089237316195423570985008687907853269984665640564039457584007913129639936, ..., 14:ValueError: Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit, ...}]
+        [TIME(_factor_pint_as_pefect_power__try_small_prime_factors{config4primes4le_{2**exp4zpow}}) ~>= O(lbN**2)]
+        [TIME(factor_pint_as_pefect_power_(n)) ~<= O(lbN**3)]
+===
+]]
+[[
+floor_kth_root_-ver2@20250105:
+[TIME(factor_pint_as_pefect_power_(n)) ~<= O(lbN**3*lblblbN)]
+<<==:
+TIME(factor_pint_as_pefect_power_(n))
+    <= O(sum[TIME(floor_kth_root_(k;n)) | [k :<- primes_le(lbN)]])
+    <= O(sum[TIME(floor_kth_root_(k;n)) | [k :<- [1,3,5..=lbN]]])
+    <= O(sum[TIME(floor_kth_root_(k;n)) | [k :<- [1 ... lbN/lblbN**(3/2) ... lbN/lblbN ... lbN]]])
+    <= O(sum[TIME(floor_kth_root_(k;n)) | [k :<- [1 ... lbN/lblbN**(3/2)]]])
+      +O(sum[TIME(floor_kth_root_(k;n)) | [k :<- [lbN/lblbN**(3/2) ... lbN/lblbN]]])
+      +O(sum[TIME(floor_kth_root_(k;n)) | [k :<- [lbN/lblbN ... lbN]]])
+    <= O(sum[ lbN**2 | [k :<- [1 ... lbN/lblbN**(3/2)]]])
+      +O(sum[ k**2 *lbK**3 | [k :<- [lbN/lblbN**(3/2) ... lbN/lblbN]]])
+      +O(sum[ lbN**3 /k | [k :<- [lbN/lblbN ... lbN]]])
+    <= O(lbN**3/lblbN**(3/2))
+      +O(lbN**3) # the_secondary_branch
+      +O(lbN**3*lblblbN) # the_dominant_branch
+    <= O(lbN**3*lblblbN)
+<<==:
+def floor_kth_root_(k, n, /):
+    ######################
+    let [mmm:=min{k*log2(k), log2(n)}]
+    let [lbN:=log2(n)][lblbN:=log2(log2(n))]
+    let [lbK:=log2(k)]
+    ######################
+    ~ O(mmm**3 /k + (lbN -mmm)**2)
+    ######################
+    ~ [0 <= lbN < k]:O(1)
+    ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
+    ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
+    ~ [k*lbK < lbN < k*lbK**(3/2)][lbN/lblbN**(3/2) < k < lbN/lblbN]:O(k**2 *lbK**3)
+    ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+    ######################
+    [lbN == k*lbK] => [k==lbN/lblbN]
+    [lbN == k*lbK**(3/2)] => [k==lbN/lblbN**(3/2)]
+    [k*lbK < lbN < k*lbK**(3/2)] => [lbN/lblbN**(3/2) < k < lbN/lblbN]
+    ######################
+
+]]
 
 [[
 CRT-ver-factor_pint_as_pefect_power_:
@@ -25,14 +125,6 @@ CRT-ver-detect_pefect_kth_root_:
     CRT-ver worse than floor_kth_root_-ver which gives: O(lbN**2 *lblbN)
 
 ]]
-
-
-
-
-seed.math.factor_pint_as_pefect_power_
-py -m nn_ns.app.debug_cmd   seed.math.factor_pint_as_pefect_power_ -x
-py -m nn_ns.app.doctest_cmd seed.math.factor_pint_as_pefect_power_:__doc__ -ff -v
-
 py_adhoc_call   seed.math.factor_pint_as_pefect_power_   @factor_pint_as_pefect_power_  ='257**99'
 py_adhoc_call   seed.math.factor_pint_as_pefect_power_   @factor_pint_as_pefect_power_  ='(2**19-1)**99' +verbose
 
@@ -117,51 +209,512 @@ ValueError: 1
 (10403, 1)
 
 
+
+[[
+@20250104
+DONE:set_doc_
+from seed.tiny_.funcs import set_doc_
+]]
+
+[[
+@20250104
+DONE:类似:平方剩余判定
+    静态制表<p>: (n%p)是否是k次幂剩余
+view script/辅助冫幂方判定.py
+view ../../python3_src/seed/math/_data4factor_pint_as_pefect_power_.py
+===
+[211 == 1+2*3*5*7]
+[2311 == 1+2*3*5*7*11]
+[200560490131 == 1+II_primes_le(31)]
+===
+e script/辅助冫幂方判定.py
+    枚举冫顺次奇素数辻相应最小素数牜小于二的八十一次幂牜减一被顺次奇素数整除扌
+#>>> [*islice(map(at[2], 枚举冫顺次奇素数辻相应最小素数牜小于二的八十一次幂牜减一被顺次奇素数整除扌()), 100)]
+[1, 1, 2, 1, 2, 3, 5, 1, 1, 5, 2, 1, 2, 3, 1, 6, 3, 2, 4, 2, 2, 1, 1, 2, 3, 3, 3, 5, 1, 2, 1, 3, 2, 4, 3, 5, 2, 7, 1, 1, 3, 1, 2, 9, 2, 5, 6, 12, 6, 1, 1, 3, 1, 3, 3, 4, 3, 2, 1, 3, 1, 2, 3, 3, 13, 3, 5, 3, 5, 7, 1, 3, 2, 6, 6, 12, 3, 4, 2, 1, 5, 1, 2, 5, 1, 4, 15, 3, 6, 3, 4, 2, 1, 2, 3, 1, 16, 5, 9, 5]
+
+[
+def _考察冫阈值间素因子纟阈值以下规模纟素模乘法群扌(min4factor, max4factor, max4modulus, /):
+    'min4factor -> max4factor -> max4modulus -> Iter (p, [modulus]){[p <- [min4factor..=max4factor]][is_prime(modulus)][modulus%p==1]}'
+===
+py_adhoc_call   script.辅助冫幂方判定   ,_考察冫阈值间素因子纟阈值以下规模纟素模乘法群扌  =2  =7  =100
+(2, [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97])
+(3, [7, 13, 19, 31, 37, 43, 61, 67, 73, 79, 97])
+(5, [11, 31, 41, 61, 71])
+(7, [29, 43, 71])
+===
+py_adhoc_call   script.辅助冫幂方判定   ,_考察冫阈值间素因子纟阈值以下规模纟素模乘法群扌  =11  =47  =500
+===
+(11, [23, 67, 89, 199, 331, 353, 397, 419, 463])
+(13, [53, 79, 131, 157, 313, 443])
+(17, [103, 137, 239, 307, 409, 443])
+(19, [191, 229, 419, 457])
+(23, [47, 139, 277, 461])
+(29, [59, 233, 349])
+(31, [311, 373])
+(37, [149, 223])
+(41, [83])
+(43, [173, 431])
+(47, [283])
+===
+]
+xxx[没必要重复<<==%(M0*M1)即可降低运算量]==>>: 最多挑选3个模，尽量重复...
+忽略2
+次序:7,5,3; => [29,31,43,61,71]
+!! [modulus <= 500][2*11*13 == 286] => 超过10的素因子相应模 不太可能 重复
+    只有:419,443
+(2, ...[31, 43, 61])
+(3, [31, 43, 61])
+(5, [31, 61, 71])
+(7, [29, 43, 71])
+(11, [23, 67, 89, 419])
+(13, [53, 79, 131, 443])
+(17, [103, 137, 239, 443])
+(19, [191, 229, 419])
+(23, [47, 139, 277])
+(29, [59, 233, 349])
+(31, [311, 373])
+(37, [149, 223])
+(41, [83])
+(43, [173, 431])
+(47, [283])
+++(53, [107])
+
+==>>: 挑选几个最小模
+(2, [3, 5, 7, 11, 13, 17, 19, 23, 29])
+(3, [7, 13, 19])
+(5, [11, 31, 41])
+(7, [29, 43, 71])
+(11, [23, 67, 89])
+(13, [53, 79, 131])
+(17, [103, 137])
+(19, [191])
+(23, [47, 139])
+(29, [59])
+(31, [311])
+(37, [149])
+(41, [83])
+(43, [173])
+(47, [283])
+++(53, [107])
+
+===
+发现没必要保存整个表O(N)即O(prime_modulus)
+    [N==1+d*p4Nmm]
+    只有(1+d)即(1+((N-1)/p4Nmm))个 模幂方数
+    当d足够小时，可直接保存 所有 模幂方数
+from seed.math._data4factor_pint_as_pefect_power_ import p4Nmm_scales_pairs, p4Nmm_Ns_pairs, p4Nmm2Ns, p4Nmm2II_Ns, p4Nmm2N2modpows
+]]
+
+@20250104
+found_bugs_20250104
+Exception: (268, ({2: 2}, 67, {2: 1}), {2: 1})
+Exception: (517, (11, 47, 1, 3), (47, 1, 3))
+Exception: (639, ({3: 2}, 71, {2: 1}), {2: 1})
+>>> factor_pint_as_pefect_power_(268)
+(268, 1)
+>>> factor_pint_as_pefect_power_(517)
+(517, 1)
+>>> factor_pint_as_pefect_power_(639)
+(639, 1)
+
+>>> from math import floor, ceil
+>>> def _factor_pint_as_pefect_power_(n, /, *, float_type:'float|Decimal'):
+...     for e in reversed(range(1, 1+n.bit_length())):
+...         r = n**(1/float_type(e))
+...         r1 = ceil(r)
+...         r0 = floor(r)
+...         n1 = r1**e
+...         n0 = r0**e
+...         if n0 < n < n1:continue
+...         if n1 == n:return (r1, e)
+...         if n0 == n:return (r0, e)
+...         raise Exception((n, e), (r1, r0), (n1, n0))
+...             #Exception: ((284144440414418491, 1), (284144440414418496, 284144440414418496), (284144440414418496, 284144440414418496))
+...                 #==>> ++kw:float_type to use Decimal
+
+>>> def _test_factor_pint_as_pefect_power_eq(n, /, *, float_type:'float|Decimal'):
+...     r_e = factor_pint_as_pefect_power_(n)
+...     _r_e = _factor_pint_as_pefect_power_(n, float_type=float_type)
+...     assert r_e == _r_e, (n, r_e, _r_e)
+>>> def _test_factor_pint_as_pefect_power_lt(m, /, *, float_type:'float|Decimal'):
+...     for n in range(2, m):
+...         _test_factor_pint_as_pefect_power_eq(n, float_type=float_type)
+>>> _test_factor_pint_as_pefect_power_lt(1+2**16, float_type=float)
+
+>>> from math import *
+>>> log10((2*3*17*23)**6)
+20.221968046677063
+>>> log10((2*3*17*23)**12)
+40.443936093354125
+>>> (2*3*17*23)**12
+27793042616829652326068869392049880764416
+>>> ((2*3*17*23)**12).bit_length()
+135
+>>> from itertools import product
+>>> def _test_factor_pint_as_pefect_power__comb(max4e4p=10, *, float_type:'float|Decimal'):
+...     bases = [2, 3, 17, 23]
+...     max1_e = 5
+...     #for e2 in range(0, 11):
+...     # for e3 in range(0, 11):
+...     #  for e17 in range(0, 11):
+...     #   for e23 in range(0, 11):
+...     #    n = 2**e2 * 3**e3 * 17**e17 * 23**e23
+...     for es in product(range(0, 1+max4e4p), repeat=len(bases)):
+...         n = II(map(int.__pow__, bases, es))
+...         if n == 1:continue
+...         _test_factor_pint_as_pefect_power_eq(n, float_type=float_type)
+>>> from decimal import localcontext, Decimal
+>>> with localcontext(prec=50) as ctx:ctx
+Context(prec=50, rounding=ROUND_HALF_EVEN, Emin=-999999, Emax=999999, capitals=1, clamp=0, flags=[], traps=[InvalidOperation, DivisionByZero, Overflow])
+>>> with localcontext(prec=50):_test_factor_pint_as_pefect_power__comb(10, float_type=Decimal)     #doctest: +SKIP
+>>> with localcontext(prec=30):_test_factor_pint_as_pefect_power__comb(4, float_type=Decimal)
+
+
 #]]]'''
 __all__ = r'''
-    factor_pint_as_pefect_power_
+factor_pint_as_pefect_power_
+
+
+
+
+get_or_mk_config4primes4le_zpow_
+    config4primes4le_2
+    config4primes4le_4
+    config4primes4le_8
+    config4primes4le_16
+    config4primes4le_32
+    config4primes4le_64
+    config4primes4le_128
+    config4primes4le_256
+
 '''.split()#'''
 __all__
 
-from itertools import count as count_
-from seed.tiny import check_type_is
-from seed.math.floor_ceil import floor_log2, ceil_log2
-from seed.math.floor_ceil import floor_log2_kth_root_, ceil_log2_kth_root_
-from seed.math.floor_ceil import floor_sqrt, ceil_sqrt
+___begin_mark_of_excluded_global_names__0___ = ...
+class _G:
+    from seed.math._data4factor_pint_as_pefect_power_ import p4Nmm_scales_pairs, p4Nmm_Ns_pairs, p4Nmm2Ns, p4Nmm2II_Ns, p4Nmm2N2modpows
 
-from seed.math.sqrts_mod_ import is_square_residual_mod_prime_power_, is_square_residual_mod_prime_
-from seed.math.sqrts_mod_ import iter_sqrts_mod_prime_power_, iter_sqrts_mod_prime_power__coprime__5one_sqrt_
-from seed.math.inv_mod_ex import inv_mod_power__coprime_
-from seed.math.inv_mod_ex import ginv_mod_
-    #(inv_x_g, k4M, k4x, gcd_of_Mx, M_g, x_g) = ginv_mod_(M, x)
-
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers, factor_pint_out_power_of_base_
-from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_division_ex_, default4upperbound4probably_prime, check_result5factor_pint_
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+from functools import cache
+from itertools import takewhile
+#from seed.tiny_.funcs import set_doc_
+from seed.tiny_.check import check_int_ge# check_type_is
+from seed.math.floor_ceil import floor_kth_root_, ceil_div, ceil_log2
+#
+from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_# factor_pint_out_2_powers
+from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_division_ex_# default4upperbound4probably_prime, check_result5factor_pint_
 from seed.math.II import II, II__p2e_#, II_mod
+from seed.math.gcd import gcd
 from seed.math.prime_gens import prime_gen
-from seed.math.gcd import gcd, gcd_many#, are_coprime
-from seed.math.Chinese_Remainder_Theorem import apply_raw_CRT__inc, mk_coeff_pairs4apply_raw_CRT__inc
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+__all__
+#.def _try_best_to_detect_non_pefect_power_(e, n, /):
+#.    'e/uint -> n/uint -> sure_non_pefect_power{True=>[not [?[rt::uint]. rt**e==n]];False=>unsure}/bool'
+#.    check_int_ge(0, e)
+#.    check_int_ge(0, n)
+#.    if e == 0:
+#.        return not n == 1
+#.    if e == 1:
+#.        return False
+#.    # [e >= 2]
+#.    if n <= 1:
+#.        return False
+#.    # [n >= 2]
+#.    ... ...
+def _try_best_to_detect_non_pefect_power_(e, n, /):
+    'e/prime/uint{>=2} -> n/uint{>=2} -> sure_non_pefect_power{True=>[not [?[rt::uint]. rt**e==n]];False=>unsure}/bool'
+    # [e >= 2]
+    # [n >= 2]
+    assert e >= 2
+    assert n >= 2
+    # [p4Nmm := e]
+    if (II_Ns := _G.p4Nmm2II_Ns.get(e)):
+        rem = n %II_Ns
+        Ns = _G.p4Nmm2Ns[e]
+        N2modpows = _G.p4Nmm2N2modpows[e]
+        for N in Ns:
+            modpows = N2modpows[N]
+            if not rem%N in modpows:
+                return True#non_pefect_power
+    #######
+    return False#unsure
+if 1:
+    from seed.math._data4factor_pint_as_pefect_power_ import cache4factor_pint_as_pefect_power_ as _cache
+#xxx:@set_doc_(_doc4factor_pint_as_pefect_power__CRT_ver_, force=True)
+def factor_pint_as_pefect_power_(n, /, *, verbose=False, _to_eliminate_the_dominant_branch=True):
+    'n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp} #floor_kth_root_-ver2@20250105:[TIME(factor_pint_as_pefect_power_(n)) ~<= O(lbN**3*lblblbN) if not _to_eliminate_the_dominant_branch else O(lbN**3)]'
+    check_int_ge(1, n)
+    if not n >= 2:raise ValueError(n)
+    # [n >= 2]
+    if not n >= 4:
+        return (n, 1)
+    # [n >= 4]
+    ######################
+    if n < len(_cache):
+        return _cache[n]
+    ######################
+    if _to_eliminate_the_dominant_branch:
+        # [exp4zpow ~>= lblbN]
+        lbN = ceil_log2(n)
+        lblbN = ceil_log2(lbN)
+        exp4zpow = lblbN
+        # !! [n >= 4]
+        # [lbN >= 2]
+        # [lblbN >= 1]
+        assert exp4zpow >= 1
+        # [{exp4zpow:minN} == {e:2**2**e} == {1:4, 2:16, 3:256, 4:65536, 5:4294967296, 6:18446744073709551616, 7:340282366920938463463374607431768211456, 8:115792089237316195423570985008687907853269984665640564039457584007913129639936, ..., 14:ValueError: Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit, ...}]
+    else:
+        exp4zpow = 4
+        #config4primes4le_zpow = config4primes4le_16
+            #config4primes4le_zpow = config4primes4le_256
+    exp4zpow
+    exp4zpow = max(4, exp4zpow)
+    config4primes4le_zpow = get_or_mk_config4primes4le_zpow_(exp4zpow)
+    ######################
+    (exp4zpow, zpow, primes4le_zpow, product4primes4le_zpow) = config4primes4le_zpow
+    ######################
+    # !! [exp4zpow >= 1]
+    # [2 in primes4le_zpow]
+    assert exp4zpow >= 1
+    assert primes4le_zpow and primes4le_zpow[0] == 2
+    ######################
+    #assert zpow == 256 #for 257==256+1
+    #assert product4primes4le_zpow == 64266330917908644872330635228106713310880186591609208114244758680898150367880703152525200743234420230
+        # !! product4primes4le_zpow is too big
+    ######################
+    if not _to_eliminate_the_dominant_branch:
+        assert exp4zpow == 4
+        assert zpow == 16 #for 17==16+1
+        assert product4primes4le_zpow == 30030
+        #assert config4primes4le_16 == (4, 16, (2, 3, 5, 7, 11, 13), 30030), config4primes4le_16
+    ######################
+    #if gcd(n, product4primes4le_zpow):
+    (b_stop, payload) = _factor_pint_as_pefect_power__try_small_prime_factors(primes4le_zpow, n, verbose=verbose)
+        #DONE:eliminate the_dominant_branch&the_secondary_branch via _factor_pint_as_pefect_power__try_small_prime_factors
+        #   let [max4exp < lbN/lblbN] to eliminate the_dominant_branch&the_secondary_branch
+        #   let [max4exp < lbN/lblbN**(3/2)] to eliminate the_dominant_branch&the_secondary_branch
+    if b_stop:
+        (base, exp) = payload
+        assert (base, exp) == (n, 1)
+        return (base, exp)
+    (gcd4es4ps, p_e_pairs, _n) = payload
+    # [[_n==1]or[min_prime_factor{_n} > zpow]]
+    if gcd4es4ps == 0:
+        assert not p_e_pairs
+        #assert _n is n, (n, _n)
+        assert _n == n, (n, _n)
+        # [_n == n]
+        # !! [n >= 4]
+        # !! [[_n==1]or[min_prime_factor{_n} > zpow]]
+        # [min_prime_factor{n} > zpow]
+        # !! [n <= 2**ceil_log2(n)]
+        # [n <= 2**ceil_log2(n) == zpow**(ceil_log2(n)/exp4zpow) <= zpow**ceil_div(ceil_log2(n), exp4zpow)]
+        # [n <= zpow**ceil_div(ceil_log2(n), exp4zpow)]
+        # !! [min_prime_factor{n} > zpow]
+        # [log_(min_prime_factor{n}; n) < log_(zpow; n) <= ceil_div(ceil_log2(n), exp4zpow)]
+        # [floor_log_(min_prime_factor{n}; n) <= ceil_div(ceil_log2(n), exp4zpow) -1]
+        max4exp = ceil_div(ceil_log2(n), exp4zpow) -1
+        assert max4exp >= 1
+        result = _factor_pint_as_pefect_power__basic(max4exp, n, verbose=verbose)
+    else:
+        assert gcd4es4ps >= 2
+        assert p_e_pairs
+        assert 1 <= _n < n
+        # !! [exp4zpow >= 1]
+        # [2 in primes4le_zpow]
+        # [odd _n]
+        assert _n&1
+        if _n == 1:
+            _result = (1, gcd4es4ps)
+        else:
+            # [_n >= 2]
+            p2max_e4exp = p2e4gcd4es = _factor_small_pint_(gcd4es4ps)
+            assert p2max_e4exp
+            _max4exp = ceil_div(ceil_log2(_n), exp4zpow) -1
+            _result = _factor_pint_as_pefect_power__extend(p2max_e4exp, _max4exp, _n, verbose=verbose)
+        _result
+        (_base, exp) = _result
+        base = _base*II(p**(e//exp) for p,e in p_e_pairs)
+        result = (base, exp)
+    result
+    #if validate:
+    if __debug__:
+        (base, exp) = result
+        assert n == base**exp
+    return result
+
+def _factor_pint_as_pefect_power__basic(max4exp, n, /, *, verbose):
+    'max4exp{>=1} -> n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}'
+    assert max4exp >= 1
+    assert n >= 2
+    ps4exp = takewhile(max4exp.__ge__, iter(prime_gen))
+    #ps4exp = (p4exp for p4exp in ps4exp if not _try_best_to_detect_non_pefect_power_(p4exp, n))
+        # !! [_n decreasing]
+    p2max_e4exp_ = lambda _, /:max4exp
+    return _factor_pint_as_pefect_power__common(ps4exp, p2max_e4exp_, max4exp, n, verbose=verbose)
+
+
+def _factor_pint_as_pefect_power__extend(p2max_e4exp, max4exp, n, /, *, verbose):
+    'p2max_e4exp/{p4exp:max_e4p4exp} -> max4exp{>=1} -> n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}{II__p2e_(p2max_e4exp)%exp==0}'
+    assert p2max_e4exp
+    assert max4exp >= 1
+    assert n >= 2
+    ps4exp = sorted(p2max_e4exp)
+    # !! [_n decreasing]
+        #.ps4exp = [p4exp for p4exp in ps4exp if not _try_best_to_detect_non_pefect_power_(p4exp, n)]
+        #.if not ps4exp:
+        #.    #non_pefect_power
+        #.    return (n, 1)
+    p2max_e4exp_ = p2max_e4exp.__getitem__
+    return _factor_pint_as_pefect_power__common(ps4exp, p2max_e4exp_, max4exp, n, verbose=verbose)
+
+def _factor_pint_as_pefect_power__common(ps4exp, p2max_e4exp_, max4exp, n, /, *, verbose):
+    'ps4exp/sorted-Iter (candidate_prime_factor4exp/prime/pint) -> p2max_e4exp_/(p4exp->max_e4p4exp) -> max4exp{>=1} -> n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}{II__p2e_(p2max_e4exp)%exp==0}'
+    ps4exp = iter(ps4exp)
+    assert callable(p2max_e4exp_)
+    assert max4exp >= 1
+    assert n >= 2
+
+    p2e4exp = {}
+    _n = n
+    _max4exp = max4exp
+    for p4exp in ps4exp:
+        if not p4exp <= _max4exp:
+            # !! _max4exp updated/decreasing
+            break
+        if _try_best_to_detect_non_pefect_power_(p4exp, _n):
+            #non_pefect_power@p4exp
+            continue
+        #max_e4p4exp = p2max_e4exp[p4exp]
+        max_e4p4exp = p2max_e4exp_(p4exp)
+        for e4p in range(1, 1+max_e4p4exp):
+            rt = floor_kth_root_(p4exp, _n)
+            if not rt**p4exp == _n:
+                e4p -= 1
+                break
+            _n = rt
+            _max4exp //= p4exp
+                # _max4exp updated/decreasing
+        e4p, _n
+        if e4p:
+            p2e4exp[p4exp] = e4p
+        _n
+    p2e4exp, _n
+    exp = II__p2e_(p2e4exp)
+    base = _n
+    return (base, exp)
+
+_2357 = (2,3,5,7)
+#_small_primes = _2357
+def _mk_config4primes4le_zpow_(exp4zpow, /):
+    check_int_ge(1, exp4zpow)
+    zpow = 1 << exp4zpow
+    primes4le_zpow = small_continuous_primes = tuple(takewhile(zpow.__ge__, iter(prime_gen)))
+    product4primes4le_zpow = II(primes4le_zpow)
+    config4primes4le_zpow = (exp4zpow, zpow, primes4le_zpow, product4primes4le_zpow)
+    return config4primes4le_zpow
+#config4primes4le_2 = _mk_config4primes4le_zpow_(1)
+#config4primes4le_4 = _mk_config4primes4le_zpow_(2)
+#config4primes4le_8 = _mk_config4primes4le_zpow_(3)
+#config4primes4le_16 = _mk_config4primes4le_zpow_(4)
+#config4primes4le_32 = _mk_config4primes4le_zpow_(5)
+#config4primes4le_64 = _mk_config4primes4le_zpow_(6)
+#config4primes4le_128 = _mk_config4primes4le_zpow_(7)
+#config4primes4le_256 = _mk_config4primes4le_zpow_(8)
+_ls4config4primes4le_zpow = [_mk_config4primes4le_zpow_(exp4zpow) for exp4zpow in range(1, 9)]
+[config4primes4le_2, config4primes4le_4, config4primes4le_8, config4primes4le_16, config4primes4le_32, config4primes4le_64, config4primes4le_128, config4primes4le_256] = _ls4config4primes4le_zpow
+#print(_ls4config4primes4le_zpow)
+assert _ls4config4primes4le_zpow == (
+[(1, 2, (2,), 2)
+,(2, 4, (2, 3), 6)
+,(3, 8, (2, 3, 5, 7), 210)
+,(4, 16, (2, 3, 5, 7, 11, 13), 30030)
+,(5, 32, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31), 200560490130)
+,(6, 64, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61), 117288381359406970983270)
+,(7, 128, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127), 4014476939333036189094441199026045136645885247730)
+,(8, 256, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251), 64266330917908644872330635228106713310880186591609208114244758680898150367880703152525200743234420230)
+]), _ls4config4primes4le_zpow
+
+assert config4primes4le_16 == (4, 16, (2, 3, 5, 7, 11, 13), 30030), config4primes4le_16
+
+#++kw:_to_eliminate_the_dominant_branch
+@cache
+def get_or_mk_config4primes4le_zpow_(exp4zpow, /):
+    check_int_ge(1, exp4zpow)
+    if (i:=exp4zpow-1) < len(_ls4config4primes4le_zpow):
+        return _ls4config4primes4le_zpow[i]
+    return _mk_config4primes4le_zpow_(exp4zpow)
+
+def _factor_pint_as_pefect_power__try_small_prime_factors(ps, n, /, *, verbose):
+    'n/int{>=2} -> (b_stop/bool, payload)/((False, ...)|(True, (base/int{>=2}, exp/int{>=1}){n==base**exp}))'
+    _n = n
+    gcd4es4ps = 0
+    p_e_pairs = []
+    for p in ps:
+        e4p, _n = factor_pint_out_power_of_base_(p, _n)
+        if e4p:
+            p_e_pairs.append((p, e4p))
+            gcd4es4ps = gcd(gcd4es4ps, e4p)
+            if gcd4es4ps == 1:
+                return (True, (n, 1))
+    assert not gcd4es4ps == 1
+    assert (not gcd4es4ps == 0) is bool(p_e_pairs)
+    return (False, (gcd4es4ps, p_e_pairs, _n))
+
+
+
+
+
+
+
+def _factor_small_pint_(n, /):
+    (p2e4n, unfactored_part, may_next_prime_factor) = factor_pint_by_trial_division_ex_(n, may_upperbound4prime_factor=n+1)
+    if not unfactored_part == 1:raise 000
+    return p2e4n
+
+def _fill_cache(max_n, /):
+    _cache.extend(map(factor_pint_as_pefect_power_, range(len(_cache), 1+max_n)))
+if __name__ == "__main__":
+    if '_cache' not in globals() or len(_cache) < 3:
+        _cache = [None, None]
+            #_fill_cache():goto
+            #fill only once, cache no more
+        _fill_cache(1 << 12)
+        if 0b0001:[*map(print, _cache)]
+del _fill_cache
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _perfect_kth_root__p2e_(p2e, k, /):
+    d = {}
+    for p, e in p2e.items():
+        q, r = divmod(e, k)
+        if r: raise 000
+        d[p] = q
+    return d
+
+
+
+
+__all__
 def __():
-    # API:
-    def apply_raw_CRT__inc(us, vs, coeff_pairs, rs, /, *, partial_ok=False):
-        r'''[[[
-        'moduli/[pint] -> accumulated_partial_moduli/[pint] -> coeff_pairs/[(uint%moduli[i], uint%accumulated_partial_moduli[i])] -> remainders/[uint%moduli[i]] -> whole_remainder/uint%whole_modulus'
-
-        'us/[pint] -> vs/[pint]{.len==1+len(us);.[i]==II(us[:i])} -> coeff_pairs/[(uint%us[i], uint%vs[i])]{.[i]==(vs[i]*inv_mod_(us[i];vs[i]), us[i]*inv_mod_(vs[i];us[i])))} -> remainders/[uint%us[i]]{len==len(us)} -> whole_remainder/uint%vs[-1]'
-        #]]]'''#'''
-    def mk_coeff_pair4apply_raw_CRT__inc(u, v, /):
-        'u -> v -> (coeff4u, coeff4v){coeff4x == inv_mod_(x;y)*y %(x*y)} |^CRT_Error__moduli_not_coprime if [gcd(u,v) =!= 1]'
-    def mk_coeff_pairs4apply_raw_CRT__inc(us, vs, /):
-        'us/[pint] -> vs/{.len=1+len(us)}{vs[i]==II(us[:i])} -> coeff_pairs/[(coeff4u, coeff4v)]{coeff4x == inv_mod_(x;y)*y %(x*y)} |^CRT_Error__moduli_not_coprime if [gcd(u[i],v[i]) =!= 1]'
-    def mk_accumulated_partial_moduli4apply_raw_CRT__inc(us, /):
-        'us/[pint] -> vs/{.len=1+len(us)}{vs[i]==II(us[:i])}'
-    def prepare4apply_raw_CRT__inc(us, /):
-        'us/[pint] -> (vs/{.len=1+len(us)}{vs[i]==II(us[:i])}, coeff_pairs/[(coeff4u, coeff4v)]{coeff4x == inv_mod_(x;y)*y %(x*y)}) |^CRT_Error__moduli_not_coprime if [gcd(u[i],v[i]) =!= 1]'
-
-
-
-def __():
+    #cancel:TODO:
     def detect_pefect_quotient_(n, d, /):
         'n/uint -> d/pint -> may q/uint # [[result is None] =!= [n%d==0]][q == n///d]'
         r'''[[[
@@ -179,47 +732,97 @@ def __():
         #]]]'''#'''
 
 
-def factor_pint_as_pefect_power_(n, /, *, verbose=False):
-    r'''[[[
-    'n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}'
+_doc4factor_pint_as_pefect_power__CRT_ver_ = \
+r'''[[[
+'n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}'
 
-    O(lbN**3/lblbN)
-        lbN**3 come from:
-            apply_raw_CRT__inc::num_ps4rt<k>**3
+O(lbN**3/lblbN)
+    lbN**3 come from:
+        apply_raw_CRT__inc::num_ps4rt<k>**3
 
-    CRT-ver little better than floor_kth_root_-ver which gives:O(lbN**3)
-        CRT-ver:
-            [total k == O(lbN/lb_max_p/lblbN) == O(lbN/lblbN**2)]
-                #since trial_division enlarge min prime factor(k-th root) of n
+CRT-ver little better than floor_kth_root_-ver which gives:O(lbN**3)
+    CRT-ver:
+        [total k == O(lbN/lb_max_p/lblbN) == O(lbN/lblbN**2)]
+            #since trial_division enlarge min prime factor(k-th root) of n
 
-        floor_kth_root_-ver:
-            [total k == O(lbN/lblbN)]
-                # since k is prime
-            per k:O(lbN**2 *lblbN)
-            total:O(lbN**3)
+    floor_kth_root_-ver:
+        [total k == O(lbN/lblbN)]
+            # since k is prime
+        per k:O(lbN**2 *lblbN)
+        total:O(lbN**3)
 
 ######################
 ######################vs:
 O(bisearch-ver:floor_kth_root_) ~ O(log2(n)**3/k)
 O(floor_sqrt) ~ O(log2(n)**2)
 O(floor_kth_root_) ~:
-    ######################
-    let [mmm:=min{k*log2(k), log2(n)}]
-    let [lbN:=log2(n)][lblbN:=log2(log2(n))]
-    let [lbK:=log2(k)]
-    ######################
-    ~ O(mmm**3 /k + (lbN -mmm)**2)
-    ######################
-    ~ [0 <= lbN < k]:O(1)
-    ~ [k <= lbN < k*lbK]:O(lbN**3 /k)
-    ~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
-    ~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
-    ~ [lbN > k*lbK**(3/2)]:O(lbN**2)
-    ######################
+######################
+let [mmm:=min{k*log2(k), log2(n)}]
+let [lbN:=log2(n)][lblbN:=log2(log2(n))]
+let [lbK:=log2(k)]
+######################
+~ O(mmm**3 /k + (lbN -mmm)**2)
+######################
+~ [0 <= lbN < k]:O(1)
+~ [k <= lbN < k*lbK]:O(lbN**3 /k)
+~ worst[lbN == k*lbK][k==lbN/lblbN]:O(lbN**2 *lblbN)
+~ [k*lbK < lbN < k*lbK**(3/2)]:O(k**2 *lbK**3)
+~ [lbN > k*lbK**(3/2)]:O(lbN**2)
+######################
 
 
 
-    #]]]'''#'''
+#]]]'''#'''
+
+__all__
+def __():
+  if 1:
+    from itertools import count as count_
+    from seed.tiny_.funcs import set_doc_
+    from seed.tiny_.check import check_type_is# check_int_ge
+    from seed.math.II import II__p2e_#II, II_mod
+    from seed.math.floor_ceil import floor_log2, ceil_log2
+    from seed.math.floor_ceil import floor_log2_kth_root_# ceil_log2_kth_root_
+    from seed.math.floor_ceil import floor_sqrt# ceil_sqrt
+    from seed.math.gcd import gcd_many #, gcd#, are_coprime
+    #
+    from seed.math.inv_mod_ex import ginv_mod_
+    #    #(inv_x_g, k4M, k4x, gcd_of_Mx, M_g, x_g) = ginv_mod_(M, x)
+
+    from seed.math.prime_gens import prime_gen
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_# factor_pint_out_2_powers
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+    from seed.math.Chinese_Remainder_Theorem import apply_raw_CRT__inc, mk_coeff_pairs4apply_raw_CRT__inc
+    #
+  def __():
+    # API:
+    from seed.math.Chinese_Remainder_Theorem import apply_raw_CRT__inc, mk_coeff_pairs4apply_raw_CRT__inc
+    def apply_raw_CRT__inc(us, vs, coeff_pairs, rs, /, *, partial_ok=False):
+        r'''[[[
+        'moduli/[pint] -> accumulated_partial_moduli/[pint] -> coeff_pairs/[(uint%moduli[i], uint%accumulated_partial_moduli[i])] -> remainders/[uint%moduli[i]] -> whole_remainder/uint%whole_modulus'
+
+        'us/[pint] -> vs/[pint]{.len==1+len(us);.[i]==II(us[:i])} -> coeff_pairs/[(uint%us[i], uint%vs[i])]{.[i]==(vs[i]*inv_mod_(us[i];vs[i]), us[i]*inv_mod_(vs[i];us[i])))} -> remainders/[uint%us[i]]{len==len(us)} -> whole_remainder/uint%vs[-1]'
+        #]]]'''#'''
+    def mk_coeff_pair4apply_raw_CRT__inc(u, v, /):
+        'u -> v -> (coeff4u, coeff4v){coeff4x == inv_mod_(x;y)*y %(x*y)} |^CRT_Error__moduli_not_coprime if [gcd(u,v) =!= 1]'
+    def mk_coeff_pairs4apply_raw_CRT__inc(us, vs, /):
+        'us/[pint] -> vs/{.len=1+len(us)}{vs[i]==II(us[:i])} -> coeff_pairs/[(coeff4u, coeff4v)]{coeff4x == inv_mod_(x;y)*y %(x*y)} |^CRT_Error__moduli_not_coprime if [gcd(u[i],v[i]) =!= 1]'
+    def mk_accumulated_partial_moduli4apply_raw_CRT__inc(us, /):
+        'us/[pint] -> vs/{.len=1+len(us)}{vs[i]==II(us[:i])}'
+    def prepare4apply_raw_CRT__inc(us, /):
+        'us/[pint] -> (vs/{.len=1+len(us)}{vs[i]==II(us[:i])}, coeff_pairs/[(coeff4u, coeff4v)]{coeff4x == inv_mod_(x;y)*y %(x*y)}) |^CRT_Error__moduli_not_coprime if [gcd(u[i],v[i]) =!= 1]'
+
+
+  if 0:
+    #deprecated-version@20250104
+    #found_bugs_20250104
+    Exception: (268, ({2: 2}, 67, {2: 1}), {2: 1})
+    Exception: (517, (11, 47, 1, 3), (47, 1, 3))
+    Exception: (639, ({3: 2}, 71, {2: 1}), {2: 1})
+  @set_doc_(_doc4factor_pint_as_pefect_power__CRT_ver_, force=True)
+  def factor_pint_as_pefect_power__buggy_(n, /, *, verbose=False):
+  #def factor_pint_as_pefect_power_(n, /, *, verbose=False):
+    'n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}'
     #cache:_get_ginv_mod_<{p-1:{_k:(gcd, may_inv_k)}}>
     #cache:_get_mod_<{p:(n,r4n)}>
     u2v2res4ginv = {}
@@ -542,6 +1145,8 @@ O(floor_kth_root_) ~:
             assert e4n >= 1
             assert may_e4n == _may_e4n
             if not e4n % _k == 0:
+                raise Exception(n, (p, _may_n, _may_e4n, _r4n), (may_n, may_e4n, r4n))
+                    #Exception: (517, (11, 47, 1, 3), (47, 1, 3))
                 raise 000
         if ok:
             for (p, _may_n, _may_e4n, _r4n) in extras:
@@ -576,6 +1181,7 @@ O(floor_kth_root_) ~:
             # [_n >= 2]
             p2e4n_ = {}
             may_p2e4gcd4e5n = None
+            p2e4n_, _n, may_p2e4gcd4e5n
         else:
             # [_n >= 4]
             _2357 = (2,3,5,7)
@@ -592,12 +1198,15 @@ O(floor_kth_root_) ~:
                     if may_n is not None:
                         _n = may_n
                         p2e4n_[p] = may_e4n
+            p2e4n_, _n
             # [_n >= 1]
             may_p2e4gcd4e5n = None
             if p2e4n_:
                 may_p2e4gcd4e5n = p2e4gcd4e5n = _update_p2e4gcd4e5n_(may_p2e4gcd4e5n, p2e4n_)
                 iter_sorted_keys_of_p2e4gcd4e5n = iter(sorted(p2e4gcd4e5n))
+            p2e4n_, _n, may_p2e4gcd4e5n
             #if _n == 1
+        p2e4n_, _n, may_p2e4gcd4e5n
         # [_n >= 1]
         k_ = 1
         # [n0 == (II__p2e_(p2e4n_)*_n)**k_]
@@ -609,7 +1218,11 @@ O(floor_kth_root_) ~:
                 p2e4gcd4e5n
                 if not p2e4gcd4e5n:
                     break
-                _k = next(iter_sorted_keys_of_p2e4gcd4e5n)
+                #_k = next(iter_sorted_keys_of_p2e4gcd4e5n)
+                _k = next(iter_sorted_keys_of_p2e4gcd4e5n, None)
+                    # ?StopIteration
+                if _k is None:raise Exception(n, (p2e4n_, _n, may_p2e4gcd4e5n), p2e4gcd4e5n)
+                    #Exception: (639, ({3: 2}, 71, {2: 1}), {2: 1})
                 #may_max_e4k = p2e4gcd4e5n[_k]
             _k
 
@@ -792,18 +1405,6 @@ O(floor_kth_root_) ~:
         return (rt, k)
     return mainmain()
 
-def _factor_small_pint_(n, /):
-    (p2e4n, unfactored_part, may_next_prime_factor) = factor_pint_by_trial_division_ex_(n, may_upperbound4prime_factor=n+1)
-    if not unfactored_part == 1:raise 000
-    return p2e4n
-
-def _perfect_kth_root__p2e_(p2e, k, /):
-    d = {}
-    for p, e in p2e.items():
-        q, r = divmod(e, k)
-        if r: raise 000
-        d[p] = q
-    return d
 
 
 
@@ -812,7 +1413,7 @@ def _perfect_kth_root__p2e_(p2e, k, /):
 
 
 
-
+__all__
 def __():
     #too slow, discard
     #begin-detect_pefect_kth_root_
@@ -873,6 +1474,17 @@ def __():
     531441
 
     #]]]'''#'''
+    from seed.tiny_.check import check_type_is# check_int_ge
+    from seed.math.sqrts_mod_ import is_square_residual_mod_prime_# is_square_residual_mod_prime_power_
+    from seed.math.sqrts_mod_ import iter_sqrts_mod_prime_power_# iter_sqrts_mod_prime_power__coprime__5one_sqrt_
+    from seed.math.floor_ceil import floor_log2_kth_root_, ceil_log2_kth_root_
+    from seed.math.floor_ceil import floor_log2# ceil_log2
+    from seed.math.inv_mod_ex import inv_mod_power__coprime_
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_, factor_pint_out_2_powers
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+    from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_division_ex_# default4upperbound4probably_prime, check_result5factor_pint_
+    from seed.math.II import II
+    from seed.math.gcd import gcd
     def detect_pefect_kth_root_(k, n, /, *, verbose):
         r'''[[[
         'k/int{>=1} -> n/int{>=2} -> may base/int{>=2}{n==base**k}'
@@ -1170,6 +1782,7 @@ def __():
         return rt
     #end-detect_pefect_kth_root_
 
+__all__
 def __():
     # floor_kth_root_-ver
     from seed.for_libs.for_time import (
