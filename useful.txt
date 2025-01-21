@@ -1,9 +1,11 @@
 template4module:goto
 固定于剪贴板的源文件模板:goto
+  py_tpl ../../python3_src/seed/int_tools/digits/codecs4int.py
+  :r !date +\%Y\%m\%d
+  :r !echo "%"
 def__main:adhoc_argparser__main__call:main:goto
 vim_cmd___update_def_api_to_use_slash:goto
 repr_helper,stable_repr__expand_top_layer,recur5yield__list__echo__echo,factor_uint__via_min_factor_list,safe_eval,MakeDict
-
 debug:
   __main__ 模块!! import 所有自己的东西!! 避免两套数据
 

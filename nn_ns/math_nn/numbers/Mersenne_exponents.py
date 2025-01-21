@@ -1,4 +1,4 @@
-
+#__all__:goto
 
 r'''[[[[[
 命名有误，应当是:exponents4Mersenne_prime
@@ -7,6 +7,10 @@ r'''[[[[[
 e ../../python3_src/nn_ns/math_nn/numbers/exponents4Mersenne_prime.py
 
 e ../../python3_src/nn_ns/math_nn/numbers/Mersenne_exponents.py
+py -m nn_ns.math_nn.numbers.Mersenne_exponents
+py -m nn_ns.app.debug_cmd   nn_ns.math_nn.numbers.Mersenne_exponents -x # -off_defs
+py -m nn_ns.app.doctest_cmd nn_ns.math_nn.numbers.Mersenne_exponents:__doc__ -ht # -ff -df
+
 from nn_ns.math_nn.numbers.Mersenne_exponents import Mersenne_exponents, Mersenne_exponents__stable, Mersenne_exponents__unstable
 from nn_ns.math_nn.numbers.Mersenne_exponents import known_Mersenne_exponent_set, is_known_Mersenne_exponent, is_Mersenne_exponent__Lucas_Lehmer_test
 from nn_ns.math_nn.numbers.Mersenne_exponents import is_known_not_Mersenne_exponent
@@ -27,6 +31,7 @@ A000396
     Perfect numbers n: n is equal to the sum of the proper divisors of n.
     (Formerly M4186 N1744)
     6, 28, 496, 8128, 33550336, 8589869056, 137438691328, 2305843008139952128, 2658455991569831744654692615953842176, 191561942608236107294793378084303638130997321548169216
+
 
 
 
@@ -97,10 +102,105 @@ These sites may provide additional details on the list of known Mersenne Prime N
   http://www.isthe.com/chongo/tech/math/prime/mersenne.html
   http://en.wikipedia.org/wiki/Mersenne_prime#List_of_known_Mersenne_primes
 ]]
+
+>>> sorted(common__known_Mersenne_exponent_set__known_Mersenne_prime_set)
+[3, 7, 31, 127]
+
+[[
+copy from:
+    view others/数学/不可约多项式/找冫超长本原不可约多项式.txt
+===
+view /storage/emulated/0/0my_files/book/math/fxtbook[Matters Computational][Algorithms for Programmers].pdf
+
+[f(x) :: binary_polynomial]:
+  [Q(f;x) =[def]= sum [c*x**(2**k-1) | [c*x**k :<- all_terms_of(f(x))]]]
+[[p(x) :: irreducible_binary_polynomial] -> [q(x) :<- all_irreducible_factors_of(Q(p;x))] -> [deg(q(x)) == order_mod(p(x);x)]]
+!! [[p(x) :: primitive_irreducible_binary_polynomial] -> [(2**deg(p(x))-1) == order_mod(p(x);x)]]
+!! [[p(x) :: binary_polynomial] -> [deg(Q(p;x)) == (2**deg(p(x))-1)]]
+[[p(x) :: primitive_irreducible_binary_polynomial] -> [is_irreducible_binary_polynomial_(Q(p;x))]]
+
+[[p(x) :: irreducible_binary_polynomial] -> [[is_primitive_irreducible_binary_polynomial_(p(x))] <-> [(2**deg(p(x))-1) == order_mod(p(x);x)]]]
+[[q(x) :: irreducible_binary_polynomial] -> [is_prime_(2**deg(q(x))-1)] -> [is_primitive_irreducible_binary_polynomial_(q(x))]]
+
+!! [[is_Mersenne_exponent_(d)] <-> [is_Mersenne_prime_(2**d-1)] <-> [is_prime_(2**d-1)]]
+[[p(x) :: primitive_irreducible_binary_polynomial] -> [is_Mersenne_exponent_(deg(p(x)))] -> [is_primitive_irreducible_binary_polynomial_(Q(p;x))]]
+  也就是 要找出一个 次数为梅森素数的本原不可约多项式，可以先 找出一个 次数为梅森指数的本原不可约多项式
+  比如:
+    要:找出一个 次数为梅森素数(2**127-1)的本原不可约多项式
+    转化为:找出一个 次数为梅森指数127的本原不可约多项式
+        等价于:找出一个 次数为梅森素数(2**7-1)的本原不可约多项式
+    转化为:找出一个 次数为梅森指数7的本原不可约多项式
+        等价于:找出一个 次数为梅森素数(2**3-1)的本原不可约多项式
+    转化为:找出一个 次数为梅森指数3的本原不可约多项式
+    (x**3+x**1+x**0)
+    --> (x**(2**3-1)+x**(2**1-1)+x**(2**0-1))
+    == (x**7+x**1+x**0)
+    --> (x**(2**7-1)+x**(2**1-1)+x**(2**0-1))
+    == (x**127+x**1+x**0)
+    --> (x**(2**127-1)+x**(2**1-1)+x**(2**0-1))
+    == (x**170141183460469231731687303715884105727+x**1+x**0)
+]]
+
+>>> for e in Mersenne_exponents__unstable: print(e, e.bit_length(), sep=':')
+2:2
+3:2
+5:3
+7:3
+13:4
+17:5
+19:5
+31:5
+61:6
+89:7
+107:7
+127:7
+521:10
+607:10
+1279:11
+2203:12
+2281:12
+3217:12
+4253:13
+4423:13
+9689:14
+9941:14
+11213:14
+19937:15
+21701:15
+23209:15
+44497:16
+86243:17
+110503:17
+132049:18
+216091:18
+756839:20
+859433:20
+1257787:21
+1398269:21
+2976221:22
+3021377:22
+6972593:23
+13466917:24
+20996011:25
+24036583:25
+25964951:25
+30402457:25
+32582657:25
+37156667:26
+42643801:26
+43112609:26
+57885161:26
+74207281:27
+77232917:27
+82589933:27
+
 #]]]]]'''
 
 __all__ = '''
-    Mersenne_exponents
+is_known_Mersenne_prime_
+    common__known_Mersenne_exponent_set__known_Mersenne_prime_set
+
+Mersenne_exponents
     Mersenne_exponents__stable
     Mersenne_exponents__unstable
 
@@ -161,7 +261,17 @@ def is_known_Mersenne_prime(m, /):
 def is_Mersenne_prime__Lucas_Lehmer_test(m, /):
     return _is_Mersenne_prime(is_Mersenne_exponent__Lucas_Lehmer_test, m)
 
-def int2imay_pseudo_Mersenne_exponent(i, /):
+def is_known_Mersenne_prime_(u, /):
+    # @20250119
+    return u > 0 and (u&(u+1)) == 0 and u.bit_length() in known_Mersenne_exponent_set
+    return int2imay_pseudo_Mersenne_exponent(u) in known_Mersenne_exponent_set
+common__known_Mersenne_exponent_set__known_Mersenne_prime_set = set(filter(is_known_Mersenne_prime_, known_Mersenne_exponent_set))
+#if __name__ == "__main__": print(sorted(common__known_Mersenne_exponent_set__known_Mersenne_prime_set))
+assert [3, 7, 31, 127] == (__:=sorted(common__known_Mersenne_exponent_set__known_Mersenne_prime_set)), __
+
+def int2imay_pseudo_Mersenne_exponent(u, /):
+    return u.bit_length() if u > 0 and (u&(u+1)) == 0 else -1
+def __old_int2imay_pseudo_Mersenne_exponent(i, /):
     if i < 1: return -1
     assert i >= 1
     k1 = i.bit_length()

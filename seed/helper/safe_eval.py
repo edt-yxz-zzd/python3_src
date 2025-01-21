@@ -1,5 +1,9 @@
 
 r'''
+===
+@20250118: ++kw:using_extended_globals
+
+===
 why not _builtins['eval'] = safe_eval??
     safe_eval needs __globals__ to access builtins.eval
     if pass safe_eval as eval to the call, builtins.eval is passed too.
@@ -15,6 +19,8 @@ safe_eval vs data_eval(===ast.literal_eval):
 
 py -m seed.helper.safe_eval
 from seed.helper.safe_eval import safe_eval, safe_exec, data_eval
+from seed.helper.safe_eval import safe_eval_ex, safe_exec_ex
+from seed.helper.safe_eval import safe_eval_ex as safe_eval, safe_exec_ex as safe_exec
 
 use-scene:
     # see: seed.io.savefile.SaveFile
@@ -104,7 +110,11 @@ SyntaxError: invalid syntax
 >>> safe_exec('import sys') #doctest: +ELLIPSIS
 Traceback (most recent call last):
     ...
-SystemError: ...: bad argument to internal function
+_ImportError__forbid_import_stmt: forbid calling __import__('sys', globals={'__builtins__': [{...}]}, fromlist=None, level=0)
+
+old-result-above:
+    SystemError: ...: bad argument to internal function
+
 >>> safe_exec('a=1')
 {'a': 1}
 >>> safe_exec("a=[1, {2: 3}, {4}, (), '', b'']")
@@ -246,7 +256,7 @@ True
 #'''
 
 
-__all__ = ('literal_eval', 'safe_eval', 'data_eval', 'safe_exec')
+__all__ = ('literal_eval', 'data_eval', 'safe_eval', 'safe_exec', 'safe_eval_ex', 'safe_exec_ex')
 
 #from .. import get_keys_and_gettor_of_module_or_dict
 from ast import literal_eval
@@ -257,6 +267,32 @@ from collections import ChainMap as _ChainMap
 from collections import UserDict as _UserDict
 import builtins
 # NOTE: <built-in function __import__>
+
+def _vars5module(qnm4mdl, nms4check, /):
+    import importlib
+    mdl = importlib.import_module(qnm4mdl)
+    assert mdl.__name__ == qnm4mdl
+    nm2v = {nm:v for nm in dir(mdl) if not nm[:1] == '_' for v in [getattr(mdl, nm)] if v.__module__ == qnm4mdl}
+    assert sorted(nm2v) == sorted(nms4check), set(nm2v) ^ set(nms4check)
+    return nm2v#vars(mdl)
+
+def _vars5math():
+    qnm4mdl = 'math'
+    nms4check = ['acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'cbrt', 'ceil', 'comb', 'copysign', 'cos', 'cosh', 'degrees', 'dist', 'e', 'erf', 'erfc', 'exp', 'exp2', 'expm1', 'fabs', 'factorial', 'floor', 'fmod', 'frexp', 'fsum', 'gamma', 'gcd', 'hypot', 'inf', 'isclose', 'isfinite', 'isinf', 'isnan', 'isqrt', 'lcm', 'ldexp', 'lgamma', 'log', 'log10', 'log1p', 'log2', 'modf', 'nan', 'nextafter', 'perm', 'pi', 'pow', 'prod', 'radians', 'remainder', 'sin', 'sinh', 'sqrt', 'tan', 'tanh', 'tau', 'trunc', 'ulp']
+    return _vars5module(qnm4mdl, nms4check)
+def _vars5cmath():
+    qnm4mdl = 'cmath'
+    nms4check = ['acos', 'acosh', 'asin', 'asinh', 'atan', 'atanh', 'cos', 'cosh', 'e', 'exp', 'inf', 'infj', 'isclose', 'isfinite', 'isinf', 'isnan', 'log', 'log10', 'nan', 'nanj', 'phase', 'pi', 'polar', 'rect', 'sin', 'sinh', 'sqrt', 'tan', 'tanh', 'tau']
+    return _vars5module(qnm4mdl, nms4check)
+def _vars5itertools():
+    qnm4mdl = 'itertools'
+    nms4check = ['accumulate', 'chain', 'combinations', 'combinations_with_replacement', 'compress', 'count', 'cycle', 'dropwhile', 'filterfalse', 'groupby', 'islice', 'pairwise', 'permutations', 'product', 'repeat', 'starmap', 'takewhile', 'tee', 'zip_longest']
+    return _vars5module(qnm4mdl, nms4check)
+    #.import itertools
+    #.nm2v = {nm:v for nm in dir(itertools) if not nm[:1] == '_' for v in [getattr(itertools, nm)] if v.__module__ == 'itertools'}
+    #.assert (__:=sorted(nm2v)) == nms4check, __
+    #.return nm2v#vars(itertools)
+
 from ._safe_eval__details import allows as _allows, forbids as _forbids
 class _pseudo_py_dict(_UserDict, dict):
     # <<== TypeError: exec() globals must be a dict, not ChainMap
@@ -268,6 +304,14 @@ class _pseudo_py_dict(_UserDict, dict):
         sf.data = d
             # donot 『_UserDict.__init__(sf, d)』, since .data={**d}
         assert sf.data is d
+    def __missing__(sf, k, /, *, _null={}):
+        #@20250118:++__missing__
+        d = sf.data
+        assert not k in d
+        _d = d.get('__builtins__', _null)#if not k in d else d
+        return _d[k]
+        print('__missing__', k)
+        return sf.data[k]
 
 
 literal_eval = literal_eval
@@ -275,7 +319,21 @@ data_eval = literal_eval
 _global_eval = eval
 _global_exec = exec
 
-
+def _test4_pseudo_py_dict():
+    d = dict(x=999)
+    assert 999 == _global_eval('x', d)
+    _d = _pseudo_py_dict(_ChainMap({}, d))
+    assert 999 == _global_eval('x', dict(_d))
+    assert 999 == _global_eval('x', _d)
+    g = dict(__builtins__=d)
+    assert 999 == _global_eval('x', g)
+    _g = _pseudo_py_dict(_ChainMap({}, g))
+    assert 999 == _global_eval('x', dict(_g))
+    assert 999 == _global_eval('x', _g)
+        # NameError: name 'x' is not defined
+        # why only this line fail???
+        # => @20250118:++__missing__
+_test4_pseudo_py_dict(); del _test4_pseudo_py_dict
 
 
 forbid___bs__ = \
@@ -362,11 +420,30 @@ __import__(...)
 #'''
 
 _builtins = {name : getattr(builtins, name) for name in _allows}
-_builtins = dict(__import__=_4__import__, **_builtins)
+#_builtins = dict(__import__=_4__import__, **_builtins)
+_builtins.update(__import__=_4__import__)
+#_builtins.update(**_vars5itertools())
+
+_builtins_ex = {**_vars5itertools(), **_builtins}
+    # @20250118: ++_vars5itertools()
+    # @20250118: ++_builtins_ex
+    # @20250118: ++_globals_ex
+    # @20250118: ++kw:using_extended_globals
+    # @20250118: ++safe_eval_ex(), safe_exec_ex()
+    # for 『py_adhoc_call   aaa.bbb   ,stable_repr.f ='range(1,10)' ='count(4)'』
+
 _builtins = _MappingProxyType(_builtins)
-_builtins = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins))
+#_builtins = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins))
+_builtins_ex = _MappingProxyType(_builtins_ex)
+#_builtins_ex = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins_ex))
+
 _globals = {'__builtins__' : _builtins}
 _globals = _MappingProxyType(_globals)
+_globals_ex = {'__builtins__' : _builtins_ex}
+_globals_ex = _MappingProxyType(_globals_ex)
+assert 'count' in _globals_ex['__builtins__']
+#assert hasattr(_globals_ex['__builtins__'], 'count')
+
 _global_print = print
 _global_eval
 _global_exec
@@ -376,7 +453,10 @@ _UserDict
 del builtins, _allows
 del _4__import__
 del DictKeyAsObjAttrAndAsMapping
+del _builtins_ex, _vars5itertools
+del _vars5module, _vars5math, _vars5cmath
 _globals
+_globals_ex
 _ImportError__forbid_import_stmt
 _allowed_modules
 _saved__import__
@@ -395,7 +475,9 @@ __builtins__ = _builtins; del _builtins
 
 assert ...
 __builtins__, _global_eval, _global_eval
-def _std4args(locals, nonlocals, /, *, readonly):
+def _std4args(locals, nonlocals, /, *, readonly, using_extended_globals):
+    # ??? globals is used to be bound to func ???
+    # ??? locals is used to lookup vats (?hence should _ChainMap globals?) ???
     if locals is None:
         locals = {}
     #type(locals).__getitem__
@@ -416,7 +498,45 @@ def _std4args(locals, nonlocals, /, *, readonly):
     else:
         locals_nonlocals = _ChainMap(locals, nonlocals)
 
-    gd = _ChainMap(nonlocals, _globals)
+    xglobals = _globals if not using_extended_globals else _globals_ex
+    assert len(xglobals) == 1
+        # only "__builtins__"
+    ######################
+    ######################
+    if 1:
+        #@20250118
+        locals_nonlocals_globals = _ChainMap(locals_nonlocals, xglobals)
+        locals_nonlocals = _pseudo_py_dict(locals_nonlocals_globals)
+            # ok
+    else:
+        #@20250118
+        locals_nonlocals = _pseudo_py_dict(locals_nonlocals)
+            # fail
+        # ??? globals is used to be bound to func ???
+        # ??? locals is used to lookup vats (?hence should _ChainMap globals?) ???
+    ######################
+    ######################
+    #.if 1:
+    #.    #@20250118
+    #.    locals_nonlocals_globals = _ChainMap(locals_nonlocals, xglobals)
+    #.    nonlocals_globals = _pseudo_py_dict(locals_nonlocals_globals)
+    #.    locals_nonlocals = nonlocals_globals
+    #.        #ok
+    #.    locals_nonlocals = locals_nonlocals_globals
+    #.        #fail
+    #.    return (locals, nonlocals, locals_nonlocals, nonlocals_globals)
+    #.if 1:
+    #.    #@20250118
+    #.    locals_nonlocals = _ChainMap(locals_nonlocals, xglobals)
+    #.    nonlocals_globals = {**xglobals}
+    #.    assert len(nonlocals_globals) == 1
+    #.    #return (locals, nonlocals, locals_nonlocals, nonlocals_globals)
+    #.    gd = _ChainMap(xglobals, nonlocals) # @20250118:override "__builtins__"
+    #.    #gd = _ChainMap(nonlocals, xglobals)
+    #.    nonlocals_globals = _pseudo_py_dict(gd)
+    #.    return (locals, nonlocals, locals_nonlocals, nonlocals_globals)
+
+    gd = _ChainMap(nonlocals, xglobals)
         # <<== proof from `kw:global`
         #
         #
@@ -428,22 +548,60 @@ def _std4args(locals, nonlocals, /, *, readonly):
     assert nonlocals_globals.data is gd
 
     return (locals, nonlocals, locals_nonlocals, nonlocals_globals)
+def _test4_std4args(locals, nonlocals):
+    (_locals, _nonlocals, locals_nonlocals, nonlocals_globals) = _std4args(locals, nonlocals, readonly=True, using_extended_globals=True)
+    #_global_print(nonlocals_globals)
+    #_global_print(type(nonlocals_globals))
+    #_global_print(nonlocals_globals.data)
+    #import itertools
+    itertools = _saved__import__('itertools')
+    assert nonlocals_globals.data['__builtins__']['count'] is itertools.count
+
+    assert 'count' in nonlocals_globals['__builtins__']
+    #assert hasattr(nonlocals_globals['__builtins__'], 'count')
+
+    assert nonlocals_globals['__builtins__']['count'] is itertools.count
+    #assert nonlocals_globals['__builtins__'].count is itertools.count
+
+    assert _global_eval('count', dict(__builtins__=_globals_ex['__builtins__'])) is itertools.count
+    assert _global_eval('count', dict(_globals_ex)) is itertools.count
+
+    assert _global_eval('count', dict(nonlocals_globals)) is itertools.count
+    assert _global_eval('count', nonlocals_globals) is itertools.count
+    assert _global_eval('round', nonlocals_globals, locals_nonlocals) is round
+    assert _global_eval('round', nonlocals_globals, {}) is round
+    assert _global_eval('count', nonlocals_globals, _ChainMap(locals_nonlocals, nonlocals_globals)) is itertools.count
+    assert _global_eval('count', nonlocals_globals, None) is itertools.count
+        # ok
+    if 0:
+        #fail
+        assert _global_eval('count', nonlocals_globals, {}) is itertools.count
+        assert _global_eval('count', nonlocals_globals, {**_globals_ex}) is itertools.count
+    if 0:
+        #fail
+        assert _global_eval('count', nonlocals_globals, locals_nonlocals) is itertools.count
+            # why only this line fail???
+
+_test4_std4args({}, {})
+_test4_std4args(None, None)
+del _test4_std4args
 
 #def safe_eval(expression, locals=None):
 #def safe_eval(expression, locals=None, /):
 #def safe_eval(expression, /,*, locals=None, nonlocals=None):
 #def safe_eval(expression, /, locals=None):
 #def safe_eval(expression, /, locals=None, *, nonlocals=None):
-def safe_eval(expression, /,*, locals=None, nonlocals=None):
+def safe_eval(expression, /,*, locals=None, nonlocals=None, using_extended_globals=False):
+    return safe_eval_ex(expression, locals=locals, nonlocals=nonlocals, using_extended_globals=using_extended_globals)
+def safe_eval_ex(expression, /,*, locals=None, nonlocals=None, using_extended_globals=True):
     # assume expression cannot setitem in locals
     # but expression can getitem in locals and update it
     #
-    (_locals, _nonlocals, locals_nonlocals, nonlocals_globals) = _std4args(locals, nonlocals, readonly=True)
+    (_locals, _nonlocals, locals_nonlocals, nonlocals_globals) = _std4args(locals, nonlocals, readonly=True, using_extended_globals=using_extended_globals)
         #although nonlocals is useless, here to match API-of-safe_eval with safe_exec
 
 
-    if 0b0:
-        return _global_eval(expression, dict(_globals), locals_nonlocals)
+    #if 0b0: return _global_eval(expression, dict(xglobals), locals_nonlocals)
 
     result = _global_eval(expression, nonlocals_globals, locals_nonlocals)
         # TypeError: globals must be a real dict; try eval(expr, {}, mapping)
@@ -465,8 +623,12 @@ eval(source, globals=None, locals=None, /)
 ##safe_eval.__globals__
 ##_builtins['eval'] = safe_eval
 
+assert safe_eval_ex('count', locals={}, nonlocals={})
+assert safe_eval_ex('count')
 
-def safe_exec(script, /,*, locals=None, nonlocals=None):
+def safe_exec(script, /,*, locals=None, nonlocals=None, using_extended_globals=False):
+    return safe_exec_ex(script, locals=locals, nonlocals=nonlocals, using_extended_globals=using_extended_globals)
+def safe_exec_ex(script, /,*, locals=None, nonlocals=None, using_extended_globals=True):
     # assume script cannot setitem in nonlocals
     # but script can getitem in nonlocals and update it
     #
@@ -474,12 +636,10 @@ def safe_exec(script, /,*, locals=None, nonlocals=None):
 
     #bug:result = locals
     #   locals may be None
-    (_locals, _nonlocals, locals_nonlocals, nonlocals_globals) = _std4args(locals, nonlocals, readonly=False)
+    (_locals, _nonlocals, locals_nonlocals, nonlocals_globals) = _std4args(locals, nonlocals, readonly=False, using_extended_globals=using_extended_globals)
     result = _locals
 
-    if 0b0:
-        _global_exec(script, dict(_globals), locals_nonlocals)
-        return result
+    #if 0b0: _global_exec(script, dict(xglobals), locals_nonlocals) return result
 
     _global_exec(script, nonlocals_globals, locals_nonlocals)
         #TypeError: exec() globals must be a dict, not ChainMap
@@ -501,7 +661,7 @@ exec(source, globals=None, locals=None, /)
 
 
 if 1:
-    __nms4globals4this_module = {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', '__all__', 'literal_eval', 'data_eval', '_global_eval', '_global_exec', '_globals', 'safe_eval', 'safe_exec', '_ImportError__forbid_import_stmt', '_allowed_modules', '_saved__import__', '_MappingProxyType', '_ChainMap', '_global_print', '_pseudo_py_dict', '_UserDict', '_std4args', '__nms4globals4this_module'}
+    __nms4globals4this_module = {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', '__all__', 'literal_eval', 'data_eval', '_global_eval', '_global_exec', '_globals', '_globals_ex', 'safe_eval', 'safe_eval_ex', 'safe_exec', 'safe_exec_ex', '_ImportError__forbid_import_stmt', '_allowed_modules', '_saved__import__', '_MappingProxyType', '_ChainMap', '_global_print', '_pseudo_py_dict', '_UserDict', '_std4args', '__nms4globals4this_module'}
     assert set(globals()) ^ __nms4globals4this_module <= {'__annotations__'}, set(globals()) ^ __nms4globals4this_module
 
 
@@ -531,7 +691,8 @@ def _test_safe_exec():
 
     try:
         _global_exec('import sys', {}, {})
-    except SystemError:
+    except _ImportError__forbid_import_stmt:
+    #except SystemError:
         #forbidden __import__
         pass
     else:
@@ -540,7 +701,8 @@ def _test_safe_exec():
     try:
         #safe_exec(script)
         safe_exec('import sys')
-    except SystemError:
+    except _ImportError__forbid_import_stmt:
+    #except SystemError:
         # SystemError: /home/builder/.termux-build/python/src/Objects/dictobject.c:1434: bad argument to internal function
         #forbidden __import__
         pass
@@ -570,3 +732,7 @@ if __name__ == "__main__":
 
 
 
+from seed.helper.safe_eval import safe_eval, safe_exec, data_eval
+from seed.helper.safe_eval import safe_eval_ex, safe_exec_ex
+if 0:from seed.helper.safe_eval import safe_eval_ex as safe_eval, safe_exec_ex as safe_exec
+from seed.helper.safe_eval import *

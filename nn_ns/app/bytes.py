@@ -17,6 +17,9 @@ r'''
 1024^6 => EiB - exbibyte
 1024^7 => ZiB - zebibyte
 1024^8 => YiB - yobibyte
+
+see:man fallocate
+
 '''
 epilog_str = __doc__
 from decimal import Decimal, getcontext

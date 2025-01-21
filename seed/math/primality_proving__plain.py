@@ -14,6 +14,9 @@ view ../../python3_src/nn_ns/math_nn/numbers/b002233-least_positive_prime_primit
     最小素本原根
     最小『素』本原根
 
+view script/search_prime_modulus4NTT4len_is_zpow.py
+    ##vs:本模块.iter_until_odd_prime_exs__zpow_dominance_Pmm__P_per_bit_length_
+    py_adhoc_call   script.search_prime_modulus4NTT4len_is_zpow   ,100:iter_ex_prime_moduli4NTT4len_is_zpow_  +only_zpow_dominance   --min0_log2_zpow=44  --may_max1_log2_zpow=None   --min0_prime_modulus='int(2**61.99)' --max1_prime_modulus='2**62'
 
 
 seed.math.primality_proving__plain

@@ -104,6 +104,12 @@ from seed.types.Namespace import namespace2items, namespace2keys, namespace2valu
 from seed.types.Namespace import MutabilityFlag4Namespace, mutability_flag2namespace_type
 from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOverwriteImplicitly, NamespaceForbidNewKey, NamespaceForbidSetitem, NamespaceForbidDelitem, NamespaceForbidAlterKeySet, NamespaceForbidModify
 
+from seed.tiny_.print_iterable_with_lineno_ import print_iterable_with_lineno_, print_iterable_, print_iterable_with_linenoT, print_iterableT
+def print_iterable_with_lineno_(max_sz, xs, /, *, offset=0, to_str=repr):
+def print_iterable_(max_sz, xs, /, *, to_str=repr, may_min_lineno=None):
+def print_iterable_with_linenoT(max_sz, /, *, offset=0, to_str=repr):
+def print_iterableT(max_sz, /, *, to_str=repr, may_min_lineno=None):
+
 
 
 #]]]'''

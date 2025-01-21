@@ -62,6 +62,8 @@ view ../../python3_src/seed/math/log__bijective_numeration.py
 
 
 py -m nn_ns.app.debug_cmd   seed.math.floor_ceil -x
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_log2 -ht
+py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:ceil_log2 -ht
 
 py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_kth_root_ -v
 py -m nn_ns.app.doctest_cmd seed.math.floor_ceil:floor_sqrt -v
@@ -323,6 +325,7 @@ example:
     >>> ceil_div(-6, -5)
     2
 '''
+    return -((-n)//d)
     if d > 0:
         n -= 1
     else:
@@ -421,7 +424,11 @@ example:
 '''
     assert pint > 0
     return pint.bit_length()-1
-
+assert (0).bit_length() == 0
+assert (1).bit_length() == 1
+assert (2).bit_length() == 2
+assert (3).bit_length() == 2
+assert (4).bit_length() == 3
 
 def offsetted_divmod(original, n, d, /):
     r'''original -> n -> d -> (pq, pr)
