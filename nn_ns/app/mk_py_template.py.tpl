@@ -16,20 +16,20 @@ __all__ = r'''
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import islice
-from seed.tiny_.check import check_type_is, check_int_ge
-
-from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.helper.repr_input import repr_helper
+#.from itertools import islice
+#.from seed.tiny_.check import check_type_is, check_int_ge
+#.
+#.from seed.abc.abc__ver1 import abstractmethod, override, ABC
+#.from seed.helper.repr_input import repr_helper
 ___end_mark_of_excluded_global_names__0___ = ...
 
-class __(ABC):
-    __slots__ = ()
-    ___no_slots_ok___ = True
-    def __repr__(sf, /):
-        return repr_helper(sf, *args, **kwargs)
-if __name__ == "__main__":
-    raise NotImplementedError
+#.class __(ABC):
+#.    __slots__ = ()
+#.    ___no_slots_ok___ = True
+#.    def __repr__(sf, /):
+#.        return repr_helper(sf, *args, **kwargs)
+#.if __name__ == "__main__":
+#.    raise NotImplementedError
 
 
 __all__
