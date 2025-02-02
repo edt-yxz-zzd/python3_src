@@ -19,6 +19,10 @@ view ../../python3_src/seed/helper/safe_eval.py
     ++kw:may_prompt_string6resting
     ++kw:may_args4PeriodicToilLeisureTime
 
+@20250202:++to_show_StopIteration_value
+
+
+
 [[
 TODO:
 
@@ -652,7 +656,9 @@ def adhoc_argparser__main__call8module(may_argv, /):
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
-    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False):
+    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False, to_show_StopIteration_value=False):
+        ######################
+        check_type_is(bool, to_show_StopIteration_value)
         ######################
         check_type_is(bool, to_show_timedelta)
         try_resting_ = mkr4try_resting_(may_prompt_string6resting=may_prompt_string6resting, may_args4PeriodicToilLeisureTime=may_args4PeriodicToilLeisureTime)
@@ -697,7 +703,7 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 print(lineno, end=':')
                 pass
         #@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
-        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta)
+        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value)
         #@20250118: ++kw:flush4print
         return (_postprocess, may_end4print, flush4print)
         return (_postprocess, may_end4print)
@@ -714,8 +720,8 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         options4argparser
     (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
     _mk_postprocess_ex
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
-    return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, options4argparser)
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, options4argparser)
 
 def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv, /):
     try:
@@ -726,12 +732,12 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     except AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag:
         show_help();exit(0);
 
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
     setting4prefix = _parse_payload4prefix(prefix, payload4prefix, may_end4print=may_end4print, flush4print=flush4print)
-    777;postpone, try_resting_, to_show_timedelta
+    777;postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value
     to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
 
@@ -748,14 +754,22 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
         r = iter(r)
 
 
-        Nothing = object()
+        #.Nothing = object()
+        b_stop = False
         lineno = -1
-        while 1:
+        while not b_stop:
             lineno += 1
             try_resting_()
             with postpone, timer(prefix=f'{lineno}', _to_show_=to_show_timedelta, _show_hint_on_enter_=True):
-                x = next(r, Nothing)
-                if x is Nothing:break
+                #.x = next(r, Nothing)
+                #.if x is Nothing:break
+                try:
+                    x = next(r)
+                except StopIteration as e:
+                    ev = e.value
+                    if not to_show_StopIteration_value: break
+                    x = ev
+                    b_stop = True
                 _postprocess(lineno=lineno)
                 to_show(x)
             #end-with postpone:

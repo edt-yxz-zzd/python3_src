@@ -443,7 +443,16 @@ py_adhoc_call   seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cub
 ((2, 1), (16384, 118934))
 
 
-
+py_adhoc_call  { +to_show_StopIteration_value } seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cube_root   ,iter_try_factor1_pint__via_Lehman_method__layered__easy_   ='(2**17-1)*(2**31-1)'
+((None, 2.50211826831969), (255, 1038))
+((2.50211826831969, 2.169180468784931), (262, 1035))
+((2.169180468784931, 1.9016954462071483), (525, 2072))
+((1.9016954462071483, 1.6830786952006025), (1033, 4111))
+((1.6830786952006025, 1.50111812611176), (2067, 8228))
+((1.50111812611176, 1.3470813450750774), (4134, 16459))
+((1.3470813450750774, 1.2150745478056086), (8269, 32924))
+((1.2150745478056086, 1.1006823948238753), (298, 17138))
+(2147483647, 1.1006823948238753, 16843, 83005, [((None, 2.50211826831969), (255, 1038)), ((2.50211826831969, 2.169180468784931), (262, 1035)), ((2.169180468784931, 1.9016954462071483), (525, 2072)), ((1.9016954462071483, 1.6830786952006025), (1033, 4111)), ((1.6830786952006025, 1.50111812611176), (2067, 8228)), ((1.50111812611176, 1.3470813450750774), (4134, 16459)), ((1.3470813450750774, 1.2150745478056086), (8269, 32924)), ((1.2150745478056086, 1.1006823948238753), (298, 17138))])
 
 
 
@@ -454,18 +463,20 @@ __all__ = r'''
 try_factor1_pint__via_Lehman_method__original_
 try_factor1_pint__via_Lehman_method__layered_
     iter_try_factor1_pint__via_Lehman_method__layered_
+    iter_try_factor1_pint__via_Lehman_method__layered__easy_
 
 
 icbrt
 calc_max_k__float_
 calc_max_k__int_
+calc_t5max_k_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_factor_pint
 from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
 from seed.math.floor_ceil import floor_kth_root_, ceil_kth_root_
-from math import isqrt, gcd, floor
+from math import isqrt, gcd, floor, log
 from decimal import Decimal, Context, localcontext
 
 from seed.tiny_.check import check_type_is, check_int_ge
@@ -590,6 +601,30 @@ def _diff_t(c, t, /):
     x = (1+2*t)
     dt = (-x**2/(x + c)/2)
     return dt
+
+def calc_t5max_k_(n, max_k, /):
+    'n/pint{>=27} -> max_k/pint{>=3} -> t{n,max_k:=min(max_k,n**/3)}/float{>=1}'
+    check_int_ge(3, max_k)
+    check_int_ge(27, n)
+        # !! [min_n >= min_k**3 == 3**3]
+    # [max_k >= 3]
+    # [n >= 27]
+
+
+    # [z == 1/(1+2*t)]
+    # [max_k(B) == 1+n**z]
+    # [z == log(n;max_k-1)]
+    # [(1+2*t) == log(max_k-1;n)]
+    # [t == (log(max_k-1;n)-1)/2]
+    r = log(n, max_k-1) # ==log(max_k-1;n)
+    t = (r-1)/2
+    if t < 1:
+        # [[t < 1] -> [max_k > n**/3]]
+        #assert max_k**3 > n
+        assert max_k > icbrt(n)
+        t = 1.0
+    check_type_is(float, t)
+    return t
 
 
 def calc_max_k__float_(n, t, /):
@@ -782,6 +817,39 @@ def try_factor1_pint__via_Lehman_method__layered_(n, old_t, new_ts, /, *, min_di
     for _ in g:pass
     [r] = g.get_tmay_result()
     return r
+def iter_try_factor1_pint__via_Lehman_method__layered__easy_(n, may_old_t=None, /, *, min_divisor4trial_division=2, amplifier=2.0, default_max_k=256):
+    '-> (Iter ((may_old_t,new_t), (_num_scales, _num_steps))){generator-return (imay_proper_factor, last_t, num_scales, num_steps, sts)}'
+    calc_max_k_ = calc_max_k__float_
+    def __(n, may_old_t, /):
+        if may_old_t is None:
+            old_t = -1.0
+            new_max_k = default_max_k
+        else:
+            old_t = may_old_t
+            check_type_is(float, old_t)
+            assert old_t > 1
+            old_max_k = calc_max_k_(n, old_t)
+            new_max_k = floor(amplifier*old_max_k)
+        old_t
+        new_max_k
+        new_t = calc_t5max_k_(n, new_max_k)
+        return (old_t, new_t)
+    def iter_new_ts(n, new_t, /):
+        while 1:
+            yield new_t
+            if new_t <= 1.0:
+                break
+            new_max_k = calc_max_k_(n, new_t)
+            new_max_k = floor(amplifier*new_max_k)
+            new_t = calc_t5max_k_(n, new_max_k)
+    def main(n, /):
+        (old_t, new_t) = __(n, may_old_t)
+        new_ts = iter_new_ts(n, new_t)
+        it = iter_try_factor1_pint__via_Lehman_method__layered_(n, old_t, new_ts, min_divisor4trial_division=min_divisor4trial_division)
+        return it
+        #return (yield from it)
+    return main(n)
+
 def iter_try_factor1_pint__via_Lehman_method__layered_(n, old_t, new_ts, /, *, min_divisor4trial_division=2):
     '-> (Iter ((may_old_t,new_t), (_num_scales, _num_steps))){generator-return (imay_proper_factor, last_t, num_scales, num_steps, sts)}'
     #check_type_is(bool, to_output_statistics)
