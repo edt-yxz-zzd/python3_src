@@ -110,6 +110,7 @@ check_xhandler
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.repr_input import repr_helper
 from seed.debug.print_err import print_err
 from contextlib import AbstractContextManager
 import signal
@@ -127,6 +128,7 @@ class PostponeKeyboardInterrupt(AbstractContextManager):
     # used in:view script/搜索冫最短加链长度.py
     __slots__ = ()
     def __init__(sf, xhandler_or_whether_turnoff=False, /, may_prompt_string=None):
+        args = (xhandler_or_whether_turnoff, may_prompt_string)
         if not (may_prompt_string is None or type(may_prompt_string) is str):raise TypeError(type(may_prompt_string))
         check_xhandler_or_whether_turnoff(xhandler_or_whether_turnoff)
         if xhandler_or_whether_turnoff is False:
@@ -136,6 +138,23 @@ class PostponeKeyboardInterrupt(AbstractContextManager):
         sf._tmay_prev = ()
         sf._b_interrupt = False
         sf._m_prompt = may_prompt_string
+        sf._args = args
+    def __repr__(sf, /):
+        return repr_helper(sf, *sf._args)
+    def exit_then_enter(sf, /):
+        #@20250130:循环体每一轮结束时检查是否触发
+        #   view ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
+        '-> None|^KeyboardInterrupt[#or:call handler#]'
+        #
+        #def check_KeyboardInterrupt__via_exit_then_enter(sf, /):
+        #def check_KeyboardInterrupt__via_exit_then_enter(sf, exc_type, exc_value, traceback, /):
+        #type(sf).__exit__(sf, exc_type, exc_value, traceback)
+        try:
+            type(sf).__exit__(sf, exc_type:=None, exc_value:=None, traceback:=None)
+                #^KeyboardInterrupt
+        finally:
+            type(sf).__enter__(sf)
+
     def handler(sf, signum, frame, /):
         assert signum == signal.SIGINT
         #signame = signal.Signals(signum).name

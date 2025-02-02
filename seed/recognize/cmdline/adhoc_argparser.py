@@ -12,6 +12,12 @@ py -m nn_ns.app.doctest_cmd   seed.recognize.cmdline.adhoc_argparser:__doc__
 view ../../python3_src/seed/helper/safe_eval.py
     @20250118: ++kw:using_extended_globals
 @20250118: ++kw:flush4print
+@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
+
+@20250201
+    ++kw:to_show_timedelta
+    ++kw:may_prompt_string6resting
+    ++kw:may_args4PeriodicToilLeisureTime
 
 [[
 TODO:
@@ -156,6 +162,15 @@ xxx.yyy 模块全名
         <==> py_adhoc_call { --lineno=0 } xxx.yyy ,f
     py_adhoc_call { +lineno } xxx.yyy ,f
         <==> py_adhoc_call { --lineno=1 } xxx.yyy ,f
+新增:
+    ++kw:to_show_timedelta
+    ++kw:may_prompt_string6resting
+    ++kw:may_args4PeriodicToilLeisureTime
+    py_adhoc_call { +to_postpone_KeyboardInterrupt_until_yield +to_show_timedelta --may_args4PeriodicToilLeisureTime='(60,60)' --may_prompt_string6resting:$'\n\n    resting...\n\n' }  script.搜索冫伪素数牜临近幂方   ,main  =2  =1 =3000+1   =2 =4  --may_prime_basis='[2,3,5,7]' --path:script/搜索冫伪素数牜临近幂方.py..header.2.1-_.sz4.2_3_5_7-SPRP.out.txt
+新增『-to_postpone_KeyboardInterrupt_until_yield』『--prompt_string4postpone_KeyboardInterrupt_until_yield=...』:
+    『ctrl+c』
+    py_adhoc_call  { +to_postpone_KeyboardInterrupt_until_yield }  script.搜索冫伪素数牜临近幂方   ,迭代搜索冫偏移量纟伪素数牜临近幂方扌  '=[2,3]'  '=range(100,110+1)' =10
+        ^C KeyboardInterrupt
 新增『-flush4print』:
     py_adhoc_call { -flush4print }  script.辅助冫有限域本原根判定   ,stable_repr.factor_ppowmms__via_GNU_factor_ =2 ='range(1,10)' +to_stderr
     py_adhoc_call { +flush4print }  script.辅助冫有限域本原根判定   ,stable_repr.factor_ppowmms__via_GNU_factor_ =2 ='range(1,10)' +to_stderr
@@ -429,6 +444,20 @@ import re
 import builtins
 from itertools import islice
 
+from seed.for_libs.for_signal import PostponeKeyboardInterrupt
+    # ++kw:to_postpone_KeyboardInterrupt_until_yield => flush4print
+
+# ++kw:to_show_timedelta
+# ++kw:may_prompt_string6resting
+# ++kw:may_args4PeriodicToilLeisureTime
+from seed.for_libs.for_time import timer__print_err__thread_wide as timer
+#   with postpone, timer(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
+from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
+#def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+#    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
+
+
+
 from seed.pkg_tools.load_module5attr import Rjstplr, rjstplr
 from seed.lang.call_ import call_
 from seed.func_tools.detect_depth4fail import decorator4show_py_help
@@ -623,8 +652,25 @@ def adhoc_argparser__main__call8module(may_argv, /):
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
-    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False):
+    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False):
+        ######################
+        check_type_is(bool, to_show_timedelta)
+        try_resting_ = mkr4try_resting_(may_prompt_string6resting=may_prompt_string6resting, may_args4PeriodicToilLeisureTime=may_args4PeriodicToilLeisureTime)
+        try_resting_, to_show_timedelta
+        ######################
         check_type_is(bool, flush4print)
+        check_type_is(bool, to_postpone_KeyboardInterrupt_until_yield)
+        if None is prompt_string4postpone_KeyboardInterrupt_until_yield:
+            prompt_string4postpone_KeyboardInterrupt_until_yield = '\n\n... postpone_KeyboardInterrupt_until_yield ...\n\n'
+        else:
+            to_postpone_KeyboardInterrupt_until_yield = True
+        check_type_is(str, prompt_string4postpone_KeyboardInterrupt_until_yield)
+        # ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
+        if to_postpone_KeyboardInterrupt_until_yield:
+            flush4print = True
+        # ++kw:to_postpone_KeyboardInterrupt_until_yield => flush4print
+        ######################
+        postpone = PostponeKeyboardInterrupt(whether_turnoff:=not to_postpone_KeyboardInterrupt_until_yield, may_prompt_string=prompt_string4postpone_KeyboardInterrupt_until_yield)
         ######################
         if end4print is None:
             may_end4print = None
@@ -650,6 +696,8 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 lineno += offset
                 print(lineno, end=':')
                 pass
+        #@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
+        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta)
         #@20250118: ++kw:flush4print
         return (_postprocess, may_end4print, flush4print)
         return (_postprocess, may_end4print)
@@ -666,8 +714,8 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         options4argparser
     (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
     _mk_postprocess_ex
-    (_postprocess, may_end4print, flush4print) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
-    return (_postprocess, may_end4print, flush4print, options4argparser)
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, options4argparser)
 
 def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv, /):
     try:
@@ -678,11 +726,12 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     except AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag:
         show_help();exit(0);
 
-    (_postprocess, may_end4print, flush4print, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
     setting4prefix = _parse_payload4prefix(prefix, payload4prefix, may_end4print=may_end4print, flush4print=flush4print)
+    777;postpone, try_resting_, to_show_timedelta
     to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
 
@@ -693,11 +742,41 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     r = islice_(r)
     if prefix == _prefix4normal_call:
         if r is not None:
-            to_show(r)
+            #with postpone:
+                to_show(r)
     elif prefix == _prefix4unpack_iter:
-        for lineno, x in enumerate(r):
-            _postprocess(lineno=lineno)
-            to_show(x)
+        r = iter(r)
+
+
+        Nothing = object()
+        lineno = -1
+        while 1:
+            lineno += 1
+            try_resting_()
+            with postpone, timer(prefix=f'{lineno}', _to_show_=to_show_timedelta, _show_hint_on_enter_=True):
+                x = next(r, Nothing)
+                if x is Nothing:break
+                _postprocess(lineno=lineno)
+                to_show(x)
+            #end-with postpone:
+                # ^KeyboardInterrupt@__exit__ if any && not whether_turnoff
+        #######
+        #.with postpone:
+        #.    for lineno, x in enumerate(r):
+        #.        ...
+        #.        postpone.exit_then_enter()
+        #######
+        #.r = iter(r)
+        #.it = enumerate(r)
+        #.while 1:
+        #.    with postpone:
+        #.        for lineno, x in it:
+        #.            _postprocess(lineno=lineno)
+        #.            to_show(x)
+        #.            break
+        #.    #end-with postpone:
+        #.        # ^KeyboardInterrupt@__exit__ if any && not whether_turnoff
+        #######
     else:
         raise Exception(f'logic-err:unknown prefix: {prefix!r}')
 

@@ -1,7 +1,12 @@
 #__all__:goto
 r'''[[[
-e ../../python3_src/seed/math/RhoDetector.py
 rho_detector
+e ../../python3_src/seed/math/RhoDetector.py
+vs:
+    view ../../python3_src/seed/math/RhoDetector.py
+        OO
+    view ../../python3_src/seed/algo/rho_method.py
+        functional
 
 seed.math.RhoDetector
 py -m nn_ns.app.debug_cmd   seed.math.RhoDetector -x

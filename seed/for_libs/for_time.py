@@ -963,7 +963,7 @@ datetime.datetime(2023, 8, 24, 4, 15, 31, 808944, tzinfo=datetime.timezone.utc)
 __all__ = r'''
 PeriodicToilLeisureTime
     default_mkr4seconds4leisure
-
+    mkr4try_resting_
 
 
 time_struct8platform_epoch___tz4utc
@@ -1993,6 +1993,32 @@ class PeriodicToilLeisureTime:
         sf()
 
 ######################
+
+def try_resting__no_resting_():
+    'no_rest#default:try_resting_#default_try_resting_'
+    pass
+def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
+    if not may_args4PeriodicToilLeisureTime is None:
+        args4PeriodicToilLeisureTime = may_args4PeriodicToilLeisureTime
+        check_type_is(tuple, args4PeriodicToilLeisureTime)
+        if not 2 <= len(args4PeriodicToilLeisureTime) <= 3:raise TypeError("[args4PeriodicToilLeisureTime :: (seconds4toil:float, seconds4leisure:float, may_mkr4seconds4leisure=None)][may_mkr4seconds4leisure :: may (seconds4toil/float -> seconds4leisure/float -> actual_seconds4toil/float -> actual_seconds4leisure/float)]")
+        match args4PeriodicToilLeisureTime:
+            case (seconds4toil, seconds4leisure):
+                may_mkr4seconds4leisure = None
+            case (seconds4toil, seconds4leisure, may_mkr4seconds4leisure):
+                pass
+            case _:
+                raise 000
+        try_resting_ = PeriodicToilLeisureTime(seconds4toil, seconds4leisure, may_mkr4seconds4leisure, may_prompt_string6resting=may_prompt_string6resting) # .sleep_if_work_too_long_enough_
+    else:
+        #def try_resting_():pass
+        try_resting_ = try_resting__no_resting_
+    try_resting_
+    return try_resting_
+#end-def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)])
+
+######################
 ######################
 ######################
 
@@ -2093,7 +2119,14 @@ time_struct8platform_epoch___tz4utc
 ,is_the_time_zone_offset_directive_in_time_fmt
 )
 
-from seed.for_libs.for_time import PeriodicToilLeisureTime
+
+
+from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
+#def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+#    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
+#try_resting_ = mkr4try_resting_(may_prompt_string6resting=may_prompt_string6resting, may_args4PeriodicToilLeisureTime=may_args4PeriodicToilLeisureTime):
+#from seed.for_libs.for_time import timer__print_err__thread_wide as timer
+#   with postpone, timer(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
 
 
 

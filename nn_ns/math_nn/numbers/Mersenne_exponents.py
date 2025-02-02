@@ -11,6 +11,9 @@ py -m nn_ns.math_nn.numbers.Mersenne_exponents
 py -m nn_ns.app.debug_cmd   nn_ns.math_nn.numbers.Mersenne_exponents -x # -off_defs
 py -m nn_ns.app.doctest_cmd nn_ns.math_nn.numbers.Mersenne_exponents:__doc__ -ht # -ff -df
 
+from nn_ns.math_nn.numbers.Mersenne_exponents import is_Mersenne_number_
+from nn_ns.math_nn.numbers.Mersenne_exponents import is_Mersenne_prime_
+
 from nn_ns.math_nn.numbers.Mersenne_exponents import Mersenne_exponents, Mersenne_exponents__stable, Mersenne_exponents__unstable
 from nn_ns.math_nn.numbers.Mersenne_exponents import known_Mersenne_exponent_set, is_known_Mersenne_exponent, is_Mersenne_exponent__Lucas_Lehmer_test
 from nn_ns.math_nn.numbers.Mersenne_exponents import is_known_not_Mersenne_exponent
@@ -194,11 +197,19 @@ view /storage/emulated/0/0my_files/book/math/fxtbook[Matters Computational][Algo
 77232917:27
 82589933:27
 
+
+
+>>> (_1__is_Mersenne_number_ is not _2__is_Mersenne_number_ is is_Mersenne_number_)
+True
+>>> all(_1__is_Mersenne_number_(i) is _2__is_Mersenne_number_(i) for i in range(-3, 300))
+True
+
 #]]]]]'''
 
 __all__ = '''
 is_known_Mersenne_prime_
     common__known_Mersenne_exponent_set__known_Mersenne_prime_set
+is_Mersenne_number_
 
 Mersenne_exponents
     Mersenne_exponents__stable
@@ -261,7 +272,16 @@ def is_known_Mersenne_prime(m, /):
 def is_Mersenne_prime__Lucas_Lehmer_test(m, /):
     return _is_Mersenne_prime(is_Mersenne_exponent__Lucas_Lehmer_test, m)
 
+def is_Mersenne_number_(u, /):
+    # @20250130
+    return u > 0 and u.bit_length() == u.bit_count()
+_2__is_Mersenne_number_ = is_Mersenne_number_
+def _1__is_Mersenne_number_(u, /):
+    # @20250119
+    return u > 0 and (u&(u+1)) == 0
 def is_known_Mersenne_prime_(u, /):
+    # @20250130
+    return u > 0 and (L:=u.bit_length()) == u.bit_count() and L in known_Mersenne_exponent_set
     # @20250119
     return u > 0 and (u&(u+1)) == 0 and u.bit_length() in known_Mersenne_exponent_set
     return int2imay_pseudo_Mersenne_exponent(u) in known_Mersenne_exponent_set

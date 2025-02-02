@@ -22,6 +22,7 @@ GroupContextManager used in:
 py_adhoc_call   seed.for_libs.for_contextlib   @f
 ]]]'''#'''
 __all__ = r'''
+exit_then_enter
 null_context
 MovableContextManager
 GroupContextManager
@@ -94,7 +95,17 @@ st_exit_ = curry1(_call, '__st_exit__')
 
 
 
-
+def exit_then_enter(sf, /):
+    '-> None|^Exception... #used inside with_body'
+    #copy from:view ../../python3_src/seed/for_libs/for_signal.py
+        #@20250130:循环体每一轮结束时检查是否触发
+        #   view ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
+    #
+    try:
+        type(sf).__exit__(sf, exc_type:=None, exc_value:=None, traceback:=None)
+            #^Exception
+    finally:
+        type(sf).__enter__(sf)
 
 def check_withable(withable, /):
     check_type_le(AbstractContextManager, withable)
@@ -596,4 +607,5 @@ from seed.for_libs.for_contextlib import IContextManager, IContextManager__movab
 from seed.for_libs.for_contextlib import IStatedContextManagerMaker
 
 
+from seed.for_libs.for_contextlib import exit_then_enter
 from seed.for_libs.for_contextlib import *
