@@ -549,7 +549,7 @@ def _f4factor(n, a, x, /):
     # patch001__seed_definition
     return (x**2+a)%n
 def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seeds=None, max_num_tries_per_seed=None, to_output_statistics=False):
-    'n/int{>=1} -> may (n -> (*params) -> uint%n -> uint%n) -> (kw:seeds/may (Iter params_x0/(*params, x0))) -> (success_part, fail_part)/(sprp2exp, non_sprp2exp)/({sprp:exp}, {non_sprp:exp}) if not to_output_statistics else (sprp2exp, non_sprp2exp, total_steps) # [SPRP == strong probable-prime]'
+    'n/int{>=1} -> may (n -> (*params) -> uint%n -> uint%n) -> (kw:seeds/may (Iter params_x0/(*params, x0))) -> (success_part, failure_part)/(sprp2exp, non_sprp2exp)/({sprp:exp}, {non_sprp:exp}) if not to_output_statistics else (sprp2exp, non_sprp2exp, total_steps) # [SPRP == strong probable-prime]'
 
     check_type_is(bool, to_output_statistics)
     check_int_ge(1, n)
@@ -560,25 +560,24 @@ def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seed
 
     (factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division) = _lazy_imports()
 
-    ls4sprp = []
+    ls4sprp4succ = []
         # [sprp-factor]{pairwise-coprime}
-    ls4non_sprp = []
+    ls4non_sprp4todo = []
         # [(non-sprp)-(non-pefect_power)-factor]{pairwise-coprime}
-    ls4fail = []
-    sprp2exp = {}
-    factor2exp = {}
+        # a todo_list
+    ls4non_sprp4fail = []
     def put(factor):
         # [factor >= 2]
         if _is_SPRP_(factor):
-            ls4sprp.append(factor)
+            ls4sprp4succ.append(factor)
             return
         (factor, exp) = factor_pint_as_pefect_power_(factor)
             # :[why_required__factor_pint_as_pefect_power_]:goto
             # try_factor1_pint__via_rho_method_ fail at: 4,8,16, 25...
         if exp > 1 and _is_SPRP_(factor):
-            ls4sprp.append(factor)
+            ls4sprp4succ.append(factor)
             return
-        ls4non_sprp.append(factor)
+        ls4non_sprp4todo.append(factor)
         return
     #end-put
     kwds = dict(to_detect_SPRP=False, seeds=seeds, max_num_seeds=max_num_seeds, max_num_tries_per_seed=max_num_tries_per_seed, to_output_statistics=True)
@@ -586,20 +585,23 @@ def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seed
     # [n >= 2]
     put(n)
     total_steps = 0
-    while ls4non_sprp:
-        u = ls4non_sprp.pop()
+    while ls4non_sprp4todo:
+        u = ls4non_sprp4todo.pop()
         # [u >= 2]
         (imay_proper_factor, jseed, _total_steps) = try_factor1_pint__via_rho_method_(u, f_, **kwds)
         total_steps += _total_steps
         if imay_proper_factor == -1:
-            ls4fail.append(u)
+            ls4non_sprp4fail.append(u)
             continue
         factor = imay_proper_factor
         factors = merge_coprimess_into_smaller_coprimes([[factor], [u//factor]])
         for _ in map(put, factors):pass
+    assert not ls4non_sprp4todo
+    777; ls4non_sprp4fail
+    777; ls4sprp4succ
     unfactored_part = n
-    (sprp2exp, unfactored_part) = semi_factor_pint_via_trial_division(ls4sprp, unfactored_part)
-    (non_sprp2exp, unfactored_part) = semi_factor_pint_via_trial_division(ls4non_sprp, unfactored_part)
+    (sprp2exp, unfactored_part) = semi_factor_pint_via_trial_division(ls4sprp4succ, unfactored_part)
+    (non_sprp2exp, unfactored_part) = semi_factor_pint_via_trial_division(ls4non_sprp4fail, unfactored_part)
     if not unfactored_part==1:raise Exception(n, sprp2exp, non_sprp2exp, unfactored_part, total_steps)
     if to_output_statistics:
         return (sprp2exp, non_sprp2exp, total_steps)
@@ -664,7 +666,7 @@ def try_factor1_pint__via_rho_method_(n, f_=None, /, *, to_detect_SPRP=False, se
         assert _gcd == n or _gcd == 0
         #bad seed or hit max_j
     else:
-        #fail
+        #failure
         imay_proper_factor = -1
     imay_proper_factor
     total_steps = num_js
