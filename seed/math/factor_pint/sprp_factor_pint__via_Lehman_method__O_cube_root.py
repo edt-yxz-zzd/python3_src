@@ -454,7 +454,16 @@ py_adhoc_call  { +to_show_StopIteration_value } seed.math.factor_pint.sprp_facto
 ((1.2150745478056086, 1.1006823948238753), (298, 17138))
 (2147483647, 1.1006823948238753, 16843, 83005, [((None, 2.50211826831969), (255, 1038)), ((2.50211826831969, 2.169180468784931), (262, 1035)), ((2.169180468784931, 1.9016954462071483), (525, 2072)), ((1.9016954462071483, 1.6830786952006025), (1033, 4111)), ((1.6830786952006025, 1.50111812611176), (2067, 8228)), ((1.50111812611176, 1.3470813450750774), (4134, 16459)), ((1.3470813450750774, 1.2150745478056086), (8269, 32924)), ((1.2150745478056086, 1.1006823948238753), (298, 17138))])
 
-
+py_adhoc_call  { +to_show_StopIteration_value } seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cube_root   ,8:iter_try_factor1_pint__via_Lehman_method__layered__easy_   ='(2**17-1)*(2**89-1)'
+((None, 6.129678674471884), (255, 1038))
+((6.129678674471884, 5.394440941570505), (261, 1031))
+((5.394440941570505, 4.805249543776437), (524, 2068))
+((4.805249543776437, 4.322208704200404), (1032, 4107))
+((4.322208704200404, 3.9199194506619826), (2064, 8216))
+((3.9199194506619826, 3.5796388498277993), (4128, 16435))
+((3.5796388498277993, 3.2880318246604863), (8257, 32876))
+((3.2880318246604863, 3.035341615946276), (16514, 65763))
+None
 
 
 from seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cube_root import *
@@ -798,7 +807,7 @@ def try_factor1_pint__via_Lehman_method__layered_(n, old_t, new_ts, /, *, min_di
     r'''[[[
     :: n/int{>64} -> old_t/T -> new_ts/(Iter T) -> (imay_proper_factor/int, last_t/T, num_scales, num_steps, sts/[info_per_round])
     [T <- {int,float}]
-    O(sum{n**/(1+2*t) | t<-new_ts} -[old_t>1]n**/(1+2*old_t))
+    O([last_t>=1]n**/(1+2*last_t) -[old_t>1]n**/(1+2*old_t))
 
     :: n/int{>64}
     -> old_t/T{[not 0<=old_t<=1]}
@@ -806,12 +815,12 @@ def try_factor1_pint__via_Lehman_method__layered_(n, old_t, new_ts, /, *, min_di
     -> (imay_proper_factor, last_t/T, num_scales, num_steps, sts/[((may_old_t,new_t), (_num_scales,_num_steps))])
 
     [[imay_proper_factor == -1][last_t==1] -> [[n==1]or[is_prime(n)]]]
-    [num_steps ~<= sum [5*n**/(1+2*t) | [t :<- new_ts]] -[old_t>1]5*n**/(1+2*old_t)]
+    [num_steps ~<= [last_t>=1]5*n**/(1+2*last_t) -[old_t>1]5*n**/(1+2*old_t)]
 
     #]]]'''#'''
+    #bug:O(sum{n**/(1+2*t) | t<-new_ts} -[old_t>1]n**/(1+2*old_t))
     #, to_output_statistics=False
     #, to_output_last_t=False
-    'O(sum{n**/(1+2*t) | t<-new_ts} -[old_t>1]n**/(1+2*old_t)) => [T <- {int,float}] => n/int{>64} -> old_t/T{[not 0<=old_t<=1]} -> new_ts/(Iter T{new_t<old_t or old_t<0}){decreasing} -> (imay_proper_factor, last_t/T, num_scales, num_steps, sts/[((may_old_t,new_t), (_num_scales,_num_steps))]) # [[imay_proper_factor == -1][last_t==1] -> [[n==1]or[is_prime(n)]]] # [num_steps ~<= sum [5*n**/(1+2*t) | [t :<- new_ts]] -[old_t>1]5*n**/(1+2*old_t)]'
     g = iter_try_factor1_pint__via_Lehman_method__layered_(n, old_t, new_ts, min_divisor4trial_division=min_divisor4trial_division)
     g = GeneratorIteratorCapturer(g)
     for _ in g:pass
@@ -819,6 +828,8 @@ def try_factor1_pint__via_Lehman_method__layered_(n, old_t, new_ts, /, *, min_di
     return r
 def iter_try_factor1_pint__via_Lehman_method__layered__easy_(n, may_old_t=None, /, *, min_divisor4trial_division=2, amplifier=2.0, default_max_k=256):
     '-> (Iter ((may_old_t,new_t), (_num_scales, _num_steps))){generator-return (imay_proper_factor, last_t, num_scales, num_steps, sts)}'
+    check_type_is(float, amplifier)
+    if not amplifier > 1.0:raise ValueError
     calc_max_k_ = calc_max_k__float_
     def __(n, may_old_t, /):
         if may_old_t is None:
@@ -839,9 +850,12 @@ def iter_try_factor1_pint__via_Lehman_method__layered__easy_(n, may_old_t=None, 
             yield new_t
             if new_t <= 1.0:
                 break
-            new_max_k = calc_max_k_(n, new_t)
-            new_max_k = floor(amplifier*new_max_k)
+            old_t = new_t
+            old_max_k = calc_max_k_(n, old_t)
+            new_max_k = floor(amplifier*old_max_k)
+            if not new_max_k > old_max_k:raise ValueError(amplifier, old_max_k, new_max_k)
             new_t = calc_t5max_k_(n, new_max_k)
+            if not new_t < old_t:raise ValueError(amplifier, old_t, new_t, old_max_k, new_max_k)
     def main(n, /):
         (old_t, new_t) = __(n, may_old_t)
         new_ts = iter_new_ts(n, new_t)
