@@ -43,6 +43,7 @@ from seed.tiny_.check import icheck_str, icheck_char, icheck_bool, icheck_triboo
 
 __all__ = '''
     check_non_ABC
+    check_ABC
 
     check_may_
     check_not_
@@ -306,9 +307,13 @@ def icheck_tribool(b, /):
 def check_non_ABC(cls, /):
     if (nms:=getattr(cls, '__abstractmethods__', None)):
         raise TypeError((cls, sorted(nms)))
-def check_ABC(cls, /):
-    if not (nms:=getattr(cls, '__abstractmethods__', None)):
+def check_ABC(cls, nms=None, /):
+    if not (_nms:=getattr(cls, '__abstractmethods__', None)):
         raise TypeError(cls)
+    if not nms is None:
+        diff = set(nms)^set(_nms)
+        if diff:
+            raise TypeError(cls, diff)
 
 check_non_ABC(int)
 def __():

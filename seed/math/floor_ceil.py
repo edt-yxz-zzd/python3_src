@@ -1,4 +1,5 @@
 #__all__:goto
+#from seed.math.factor_pint_as_pefect_power_ import is_kth_power_, is_square_, is_cube_
 r'''[[[
 # now:see: math.isqrt() vs floor_sqrt
 #bug: O(bisearch-ver:floor_kth_root_) ~ O(log2(k)*log2(n)**2)

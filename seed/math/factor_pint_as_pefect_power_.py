@@ -15,6 +15,7 @@ py -m seed.math.factor_pint_as_pefect_power_    >  /sdcard/0my_files/tmp/0tmp   
     to show _cache
 py -m nn_ns.app.debug_cmd   seed.math.factor_pint_as_pefect_power_ -x
 py -m nn_ns.app.doctest_cmd seed.math.factor_pint_as_pefect_power_:__doc__ -ht # -ff -v
+py -m nn_ns.app.doctest_cmd seed.math.factor_pint_as_pefect_power_:_4doctest -ht # -ff -v
 
 [[
 floor_kth_root_-ver2@20250105:
@@ -370,10 +371,46 @@ Context(prec=50, rounding=ROUND_HALF_EVEN, Emin=-999999, Emax=999999, capitals=1
 >>> with localcontext(prec=30):_test_factor_pint_as_pefect_power__comb(4, float_type=Decimal)
 
 
+
+
+is_kth_power_
+    is_square_
+    is_cube_
+>>> is_square_(8)
+False
+>>> is_square_(9)
+True
+>>> is_cube_(8)
+True
+>>> is_cube_(9)
+False
+
+>>> for k in range(-3, 3+1):
+...     [(k,n) for n in range(-27, 27+1) if is_kth_power_(k,n)]
+[(-3, -1), (-3, 1)]
+[(-2, 1)]
+[(-1, -1), (-1, 1)]
+[(0, 1)]
+[(1, -27), (1, -26), (1, -25), (1, -24), (1, -23), (1, -22), (1, -21), (1, -20), (1, -19), (1, -18), (1, -17), (1, -16), (1, -15), (1, -14), (1, -13), (1, -12), (1, -11), (1, -10), (1, -9), (1, -8), (1, -7), (1, -6), (1, -5), (1, -4), (1, -3), (1, -2), (1, -1), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14), (1, 15), (1, 16), (1, 17), (1, 18), (1, 19), (1, 20), (1, 21), (1, 22), (1, 23), (1, 24), (1, 25), (1, 26), (1, 27)]
+[(2, 0), (2, 1), (2, 4), (2, 9), (2, 16), (2, 25)]
+[(3, -27), (3, -8), (3, -1), (3, 0), (3, 1), (3, 8), (3, 27)]
+
+>>> for k in range(2, 17):     #doctest: +SKIP
+...     for n in range(2, 2**16):
+...         assert is_kth_power_(k, n) == _is_kth_power_(k, n), (k, n)
+
 #]]]'''
+_4doctest = r'''[[[
+
+
+
+
+#]]]'''#'''
 __all__ = r'''
 factor_pint_as_pefect_power_
-
+is_kth_power_
+    is_square_
+    is_cube_
 
 
 
@@ -397,7 +434,7 @@ class _G:
 from functools import cache
 from itertools import takewhile
 #from seed.tiny_.funcs import set_doc_
-from seed.tiny_.check import check_int_ge# check_type_is
+from seed.tiny_.check import check_int_ge, check_type_is
 from seed.math.floor_ceil import floor_kth_root_, ceil_div, ceil_log2
 #
 from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_# factor_pint_out_2_powers
@@ -405,12 +442,147 @@ from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_divisi
 from seed.math.II import II, II__p2e_#, II_mod
 from seed.math.gcd import gcd
 from seed.math.prime_gens import prime_gen
+from seed.math.factor_pint.factor_pint__naive_brute_force import factor_pint__naive_brute_force_, iter_factor_pint__naive_brute_force_
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
 
 __all__
+def _prepare4is_kth_power_(max_k, max_n, /):
+    _k2kpows = [None, None]
+    for k in range(2, 1+max_k):
+        s = set()
+        for i in range(2, 1+max_n):
+            n = i**k #kpow
+            if n > max_n:break
+            s.add(n)
+        _k2kpows.append(s)
+    return _k2kpows
+_k2kpows = _prepare4is_kth_power_(10, 2**10)
+assert len(_k2kpows) == 11
+assert _k2kpows[-1] is _k2kpows[10]
+assert _k2kpows[-1] == {1024}, _k2kpows[-1]
+_3_5_7_11_13 = (3,5,7,11,13)
+_II_3_5_7_11_13 = II(_3_5_7_11_13)
+def is_kth_power_(k, n, /):
+    'k/int -> n/int -> bool/(floor_kth_root_(k;n)**k==n)'
+    #def is_perfect_kth_power_(k, n, /):
+    check_type_is(int, k)
+    check_type_is(int, n)
+    #_try_best_to_detect_non_pefect_power_
+    if n < 0:
+        # [n < 0]
+        if k&1 == 0:
+            return False
+        # [odd k]
+        n = -n
+        # [n > 0]
+    # [n >= 0]
+    if n < 2:
+        if n == 1:
+            return True
+        if n == 0:
+            # 0**0 ok
+            # 0**0==1 not 0
+            return k >= 1
+        raise 000
+    # [n >= 2]
+    if k < 2:
+        return k == 1
+    # [k >= 2]
+    # [n >= 2]
+    if n&1 == 0:
+        # [n%2 == 0]
+        # [n >= 2]
+        ez, n = factor_pint_out_power_of_base_(2, n)
+        # [n >= 1]
+        # [n%2 == 1]
+        if not ez%k == 0:
+            return False
+        if n == 1:
+            return True
+        # [n >= 2]
+        # [n%2 == 1]
+        # [n >= 3]
+    # [n%2 == 1]
+    # [n >= 3]
+
+    if n <= 1024:
+        # [2 <= n <= 1024]
+        if k > 10:
+            return False
+        return n in _k2kpows[k]
+    # [n > 1024]
+    # [n%2 == 1]
+    L = n.bit_length()
+    # [1024 < 2**L <= n < 2**L]
+    # [L >= 11]
+    # [k >= 2]
+    if k >= L:
+        return False
+    # [2 <= k < L]
+
+    # !! [2**3 < 3**2]
+    # [2 < 3**(2/3)]
+    # [n < 2**L < 3**(2*L/3)]
+    # !! [L >= 11]
+    # [2*L/3 < L-1]
+    if 3*k >= 2*L:
+        # [k >= 2*L/3]
+        # [3**k >= 3**(2*L/3) > n]
+        # [n%2 == 1]
+        return False
+        return k == L-1 and n == (1<<k)
+    # [2 <= k < 2*L/3]
+    # [1024 < 2**L <= n < 2**L]
+    # [n%2 == 1]
+    # !! [2**4 < 17]
+    # [n < 2**L < 17**(L/4)]
+    if 4*k >= L:
+        # [k >= L/4]
+        # [17**k >= 17**(L/4) > n]
+        # [n%2 == 1]
+        ds = []
+        _n = n%_II_3_5_7_11_13
+        for p in _3_5_7_11_13:
+            if _n%p == 0:
+                if ds and p > 5:
+                    return False
+                ds.append(p)
+        if not ds:
+            return False
+        assert len(ds) == 1 or ds == [3,5]
+        # [9==3**2 is not useless since k const]
+        if 3 in ds:
+            if len(ds) == 2:
+                ds.append(15)
+            ds.append(9)
+        return any(d**k == n for d in ds)
+    # [2 <= k < L/4]
+    # [1024 < 2**L <= n < 2**L]
+    # [n%2 == 1]
+    #see:_try_best_to_detect_non_pefect_power_
+    if _try_best_to_detect_non_pefect_power_(k, n):
+        # NOTE:[k may be not prime]
+        #   intended to abuse
+        return False
+    if L > 257 and k >= 4:
+        for (p,ep) in iter_factor_pint__naive_brute_force_(k):
+            if _try_best_to_detect_non_pefect_power_(p, n):
+                return False
+    return n == floor_kth_root_(k, n)**k
+def _is_kth_power_(k, n, /):
+    return n == floor_kth_root_(k, n)**k
+
+def is_square_(n, /):
+    #def is_perfect_square_(n, /):
+    'n/int -> bool/(isqrt(n)**2==n)'
+    return is_kth_power_(2, n)
+def is_cube_(n, /):
+    #def is_perfect_cube_(n, /):
+    'n/int -> bool/(floor(cbrt(n))**3==n)'
+    return is_kth_power_(3, n)
 #.def _try_best_to_detect_non_pefect_power_(e, n, /):
 #.    'e/uint -> n/uint -> sure_non_pefect_power{True=>[not [?[rt::uint]. rt**e==n]];False=>unsure}/bool'
 #.    check_int_ge(0, e)
@@ -439,6 +611,9 @@ def _try_best_to_detect_non_pefect_power_(e, n, /):
             modpows = N2modpows[N]
             if not rem%N in modpows:
                 return True#non_pefect_power
+    else:
+        # [e is prime which larger cached ones] or abuse:[e is not prime]{it is intended not to raise at this case}
+        pass
     #######
     return False#unsure
 if 1:
@@ -1875,4 +2050,5 @@ __all__
 
 
 from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+from seed.math.factor_pint_as_pefect_power_ import is_kth_power_, is_square_, is_cube_
 from seed.math.factor_pint_as_pefect_power_ import *

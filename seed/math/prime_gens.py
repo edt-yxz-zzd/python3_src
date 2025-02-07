@@ -1,5 +1,17 @@
 #__all__:goto
 r'''[[[
+[[
+命名有误丶尚未订正
+警告:见view others/数学/primality_test/proof_primality_via_GFsqN_test.txt
+  看来我确实搞错了:应该是[pseudoprime =!= PRP][pseudoprime <: odd_composite <: composite][odd_prime <: SPRP <: PRP][SPRP == strong_probable_prime =!= strong_pseudoprime]
+      #而非一直以为的『odd_prime <: SPRP == strong_pseudoprime』
+[n <- [2..]][n%2==1]:
+    [is_strong_probable_prime__base_(b;n) =[def]= [gcd(b,n)== 1][(ez,odd) :=> [2**ez*(2*hf+1) == n-1]][[b**(1+2*hf)%n==1]or[?[e :<- [0..<ez]] -> [b**(2**e*(1+2*hf)%n == n-1]]]]
+    [is_strong_pseudoprime__base_(b;n) =[def]= [not is_prime(n)][is_strong_probable_prime__base_(b;n)]]
+
+]]
+
+
 e ../../python3_src/seed/math/prime_gens.py
     view ../../python3_src/seed/math/is_prime__le_pow2_64.py
         # replaced since 2**64 < A014233[-1]
@@ -1413,6 +1425,26 @@ mk_tribool_delegate5PRP_test_
 >>> bool(...)
 True
 
+
+
+    iter_primes__ge_lt_
+        iter_primes__between_
+>>> iter_primes__between_ is iter_primes__ge_lt_
+True
+
+>>> is_prime__using_A014233_.upperbound - 2**81
+899192425450629036549771
+>>> bin(is_prime__using_A014233_.upperbound - 2**81)
+'0b10111110011010010101000110101101110001011011001000100100000100001010011010001011'
+
+>>> [*islice(iter_primes__ge_lt_(is_prime__using_A014233_.upperbound -500, None), 99)]
+[3317044064679887385961657, 3317044064679887385961753, 3317044064679887385961763, 3317044064679887385961783, 3317044064679887385961801, 3317044064679887385961813]
+>>> [*islice(iter_primes__ge_lt_(is_prime__using_A014233_.upperbound -500, 3317044064679887385961753), 99)]
+[3317044064679887385961657]
+>>> [*islice(iter_primes__ge_lt_(is_prime__using_A014233_.upperbound -500, 3317044064679887385961753+1), 99)]
+[3317044064679887385961657, 3317044064679887385961753]
+
+
 #]]]'''
 _doc4tmp_test = r'''
 >>> 
@@ -1434,6 +1466,7 @@ is_strong_pseudoprime__basis_
                 next_may_prime__le_pow2_81__ge_
                     iter_primes__le_pow2_81__ge_
                         iter_pairwise_diff_primes__le_pow2_81__ge_
+            iter_primes__ge_lt_         iter_primes__between_
         is_prime__tribool_
             Case4is_prime__tribool_
             detect_strong_pseudoprime__not_waste_too_much_time_
@@ -3448,6 +3481,21 @@ def _reversed_iter_xs_lt_(prev_may_x__lt_, end, /, **kwds):
         yield x
         #bug:end = x-1
         end = x
+def iter_primes__ge_lt_(begin, may_end, /, *, reverse=False):
+    #iter_primes__le_pow2_81__ge_
+    #reversed_iter_primes__le_pow2_81__lt_
+    #is_prime__le_pow2_81_
+    delegate, max_end = default4is_prime_and_may_upperbound
+    assert delegate is is_prime__le_pow2_81_
+    if may_end is None:
+        may_end = max_end
+    else:
+        end = may_end
+        check_type_is(int, end)
+        may_end = min(max_end, end)
+    return iter_pseudoprimes__ge_lt_(begin, may_end, reverse=reverse, case=is_prime__le_pow2_81_)
+iter_primes__between_ = iter_primes__ge_lt_
+
 def iter_pseudoprimes__ge_lt_(begin, may_end, /, *, reverse=False, **kwds):
     # @20250130: ++kw:case@next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_&prev_may_pseudoprime__lt_
     check_type_is(bool, reverse)

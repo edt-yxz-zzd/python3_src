@@ -178,6 +178,27 @@ py_adhoc_call  { -end4print }  seed.for_libs.for_tarfile   @str.read_solo_tarfil
 
 py_adhoc_call  { -end4print }  seed.for_libs.for_tarfile   ,str.iter_read_solo_tarfile_  :script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma  --xencoding4data:ascii
 
+[[
+源起:
+view script/搜索冫最短加链长度.py
+===
+create:lzma:
+tar --create --verbose --file=script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma  --lzma script/搜索冫最短加链长度.py..statistics.out.txt
+tar -cvf script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma  --lzma script/搜索冫最短加链长度.py..statistics.out.txt
+
+===
+show:lzma:
+tar --extract --verbose --file=script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma --to-stdout | more
+tar -xvf script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma -O | more
+    -C, --directory=DIR
+tar -xf script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma -O | diff - script/搜索冫最短加链长度.py..statistics.out.txt -s
+    Files - and script/搜索冫最短加链长度.py..statistics.out.txt are identical
+py_adhoc_call  { -end4print }  seed.for_libs.for_tarfile   ,str.iter_read_solo_tarfile_  :script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma  --xencoding4data:ascii  | diff - script/搜索冫最短加链长度.py..statistics.out.txt -s
+
+
+]]
+
+
 ]]]'''#'''
 __all__ = r'''
 double_open_solo_tarfile_

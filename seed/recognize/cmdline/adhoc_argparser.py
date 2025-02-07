@@ -166,6 +166,8 @@ xxx.yyy 模块全名
         <==> py_adhoc_call { --lineno=0 } xxx.yyy ,f
     py_adhoc_call { +lineno } xxx.yyy ,f
         <==> py_adhoc_call { --lineno=1 } xxx.yyy ,f
+新增::++to_show_StopIteration_value
+    py_adhoc_call  { +to_show_StopIteration_value } seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cube_root   ,iter_try_factor1_pint__via_Lehman_method__layered__easy_   ='(2**17-1)*(2**31-1)'
 新增:
     ++kw:to_show_timedelta
     ++kw:may_prompt_string6resting

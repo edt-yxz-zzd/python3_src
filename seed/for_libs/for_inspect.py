@@ -455,11 +455,14 @@ __all__ = r'''
         triples5api__Nothing_
         triples5api__None
 
+    namess5api
+
 '''.split()#'''
 __all__
 
 
 ___begin_mark_of_excluded_global_names__0___ = ...
+from itertools import compress
 import inspect
 try:
     from inspect import getargspec as _getargspec__py2
@@ -599,7 +602,21 @@ def triples5api_(may_f, /, *tmay_Nothing___or___args4mk_default_or_raise):
 
 
 
+def namess5api(f, /, POSITIONAL_ONLY_ok:bool, POSITIONAL_OR_KEYWORD_ok:bool, VAR_POSITIONAL_ok:bool, KEYWORD_ONLY_ok:bool, VAR_KEYWORD_ok:bool, *, follow_wrapped=True):
+    'func -> selectors/(*bool*5) -> [[nm]]'
+    (infoss4input, tmay_return_annotation) = get_signature_of__py3_(f, follow_wrapped=follow_wrapped)
+    (infos4idx_only, infos4idx_nm_both, tmay_info4varargs, infos4nm_only, tmay_info4varkwds) = infoss4input
+    if tmay_info4varkwds and not VAR_KEYWORD_ok:raise TypeError('VAR_KEYWORD: occur')
+    if tmay_info4varargs and not VAR_POSITIONAL_ok:raise TypeError('VAR_POSITIONAL occur')
+    if infos4nm_only and not KEYWORD_ONLY_ok:raise TypeError('KEYWORD_ONLY occur')
+    if infos4idx_only and not POSITIONAL_ONLY_ok:raise TypeError('POSITIONAL_ONLY occur')
+    if infos4idx_nm_both and not POSITIONAL_OR_KEYWORD_ok:raise TypeError('POSITIONAL_OR_KEYWORD occur')
+    if tmay_return_annotation:raise TypeError('return_annotation occur')
 
+    selectors = (POSITIONAL_ONLY_ok, POSITIONAL_OR_KEYWORD_ok, VAR_POSITIONAL_ok, KEYWORD_ONLY_ok, VAR_KEYWORD_ok)
+    nmss = (tuple(nm for nm, tmay_annotation, tmay_default in infos) for infos in infoss4input)
+    nms = tuple(compress(nmss, selectors))
+    return nms
 
 
 
@@ -805,6 +822,8 @@ def get_signature_of__py3_(f, /, follow_wrapped=True):
 
 
 
+assert namess5api(namess5api, 1,1,1,1,1) == (('f',), ('POSITIONAL_ONLY_ok', 'POSITIONAL_OR_KEYWORD_ok', 'VAR_POSITIONAL_ok', 'KEYWORD_ONLY_ok', 'VAR_KEYWORD_ok'), (), ('follow_wrapped',), ())
+assert namess5api(namess5api, 1,1,0,1,0) == (('f',), ('POSITIONAL_ONLY_ok', 'POSITIONAL_OR_KEYWORD_ok', 'VAR_POSITIONAL_ok', 'KEYWORD_ONLY_ok', 'VAR_KEYWORD_ok'), ('follow_wrapped',))
 
 from seed.for_libs.for_inspect import check_num_args_ok_, is_num_args_ok_
 from seed.for_libs.for_inspect import get_signature_of__py3_
@@ -812,4 +831,5 @@ from seed.for_libs.for_inspect import pairs5api_, pairs5api__zdefault_
 from seed.for_libs.for_inspect import pairs5api__raise, pairs5api__Nothing_, pairs5api__None
 from seed.for_libs.for_inspect import triples5api_, triples5api__zdefault_
 from seed.for_libs.for_inspect import triples5api__raise, triples5api__Nothing_, triples5api__None
+from seed.for_libs.for_inspect import namess5api
 from seed.for_libs.for_inspect import *
