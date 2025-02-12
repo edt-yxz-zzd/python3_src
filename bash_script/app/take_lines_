@@ -1,0 +1,13 @@
+a1="$1"
+#a2="$2"
+#help shift
+if ! shift 1 ; then { echo "miss:arg:num_lines" >&2 ; exit 1 ; } ; fi
+  #输入不足2个
+
+#echo $"{ print \$0 ; if (NR == $a1) exit 0; }"  "$@"
+gawk $"{ print \$0 ; if (NR == $a1) exit 0; }"  "$@"
+#usage:『echo $'aaa\nbbb' | take_lines_ 1』
+
+#cat "$2"  | gawk $"{ print $0 ; if (NR == $1) exit 0; }"
+#echo $'aaa\nbbb' | gawk $'{ print NR ; if (NR == 1) exit 0; }'
+# => 1
