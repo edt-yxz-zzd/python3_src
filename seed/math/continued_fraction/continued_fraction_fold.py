@@ -8,7 +8,8 @@ e ../../python3_src/seed/math/continued_fraction/continued_fraction_fold.py
 
 seed.math.continued_fraction.continued_fraction_fold
 py -m nn_ns.app.debug_cmd   seed.math.continued_fraction.continued_fraction_fold -x
-py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_fold:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_fold:__doc__ -ht # -ff -v
+py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_fold:approximate_fraction_boundaries5continued_fraction__by_limit_denominator_.__doc__ -ht
 py_adhoc_call   seed.math.continued_fraction.continued_fraction_fold   @_test____mk_gcd_certification_ =100
 
 [cf([]) === +oo]
@@ -413,6 +414,23 @@ Fundamental theorem of arithmetic – Integers have unique prime factorizations
 
 
 
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(20, [1]*8)
+(Fraction(21, 13), Fraction(13, 8))
+
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(22, [1]*8)
+(Fraction(21, 13), Fraction(34, 21))
+
+used in:『(n*ln(n) + n*lnln(n) + n*C0) < PRIMES_S1[n] < (n*ln(n) + n*lnln(n) + n*C1)』
+>>> from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import raw_iter_cf_digits4e_the_natural_logarithm_base_
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(10000, raw_iter_cf_digits4e_the_natural_logarithm_base_())
+(Fraction(25946, 9545), Fraction(23225, 8544))
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(100000, raw_iter_cf_digits4e_the_natural_logarithm_base_())
+(Fraction(25946, 9545), Fraction(49171, 18089))
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(1000000, raw_iter_cf_digits4e_the_natural_logarithm_base_())
+(Fraction(1084483, 398959), Fraction(566827, 208524))
+
+
+
 
 
 >>> approximate_fraction5continued_fraction__by_limit_denominator_(100, [1]*20)
@@ -557,23 +575,23 @@ view ../../python3_src/seed/math/inv_mod_.py
 >>> ginv_mod_respectively_(15, -10)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: -10
 >>> ginv_mod_respectively_(15, 0)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: 0
 >>> ginv_mod_respectively_(0, 1)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: 0
 >>> ginv_mod_(-1, 1)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: -1
 >>> ginv_mod_(0, 1)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: 0
 >>> ginv_mod_(1, -1)
 (0, 0, -1, 1, 1, -1)
 >>> ginv_mod_(1, 0)
@@ -928,6 +946,7 @@ iter_approximate_fraction_NDs5continued_fraction_
         iter_approximate_fractions5continued_fraction__by_limit_denominator_
         approximate_fraction5continued_fraction__by_limit_denominator_
             ApproximateFractionFail__limit_denominator_too_small_to_find_approximation_ge
+        approximate_fraction_boundaries5continued_fraction__by_limit_denominator_
 
 
 
@@ -962,7 +981,7 @@ continued_fraction_digits_ex5ND_
 '''.split()#'''
 __all__
 
-from itertools import islice
+from itertools import islice, pairwise
 from fractions import Fraction
 from seed.helper.repr_input import repr_helper
 from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
@@ -2476,7 +2495,79 @@ Fraction(22, 7)
     return _unsafe_ND2Fraction_(N, D)
     return Fraction(N, D)
     return N, D
+#end-def approximate_fraction5continued_fraction__by_limit_denominator_(max1_denominator, cf_digits, /, *, le_vs_any_vs_ge=0):
 
+
+def approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(max1_denominator, cf_digits, /):
+    r'''[[[
+-> boundaries/(lower_bound, upper_bound)/(Fraction,Fraction)|^ContinuedFractionError__inf__no_cf0
+
+[max1_denominator>=2][not +oo]:
+      [has cf0]
+      [at least one approximation: (cf0,1)]
+
+
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(20, [1]*8)
+(Fraction(21, 13), Fraction(13, 8))
+
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(22, [1]*8)
+(Fraction(21, 13), Fraction(34, 21))
+
+used in:『(n*ln(n) + n*lnln(n) + n*C0) < PRIMES_S1[n] < (n*ln(n) + n*lnln(n) + n*C1)』
+>>> from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import raw_iter_cf_digits4e_the_natural_logarithm_base_
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(10000, raw_iter_cf_digits4e_the_natural_logarithm_base_())
+(Fraction(25946, 9545), Fraction(23225, 8544))
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(100000, raw_iter_cf_digits4e_the_natural_logarithm_base_())
+(Fraction(25946, 9545), Fraction(49171, 18089))
+>>> approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(1000000, raw_iter_cf_digits4e_the_natural_logarithm_base_())
+(Fraction(1084483, 398959), Fraction(566827, 208524))
+
+
+
+    #]]]'''#'''
+    check_int_ge(2, max1_denominator)
+
+    NDs = iter_approximate_fraction_NDs5continued_fraction__by_limit_denominator_(max1_denominator, cf_digits, le_vs_any_vs_ge=0)
+        # ^ContinuedFractionError__inf__no_cf0
+
+    #j = None
+    #for j, (ND0, ND1) in enumerate(pairwise(NDs)): pass
+        # bug@[cf_digits==[cf0;]]
+        #   => no pair
+        #   => [j is None]
+
+    it = enumerate(NDs)
+    a = b = None
+    for a in it: break
+    for b in it: break
+    for c in it:
+        a, b = b, c
+
+    if a is None: raise logic-err # must leading by (cf0, 1)
+    if b is None: raise Exception('cf is int or max1_denominator is too small')
+
+    j0, ND0 = a
+    j1, ND1 = b
+    assert j0+1 == j1
+
+    N0, D0 = ND0
+    N1, D1 = ND1
+    if not 0 < D0 < D1 < max1_denominator: raise logic-err
+
+    fr0 = _unsafe_ND2Fraction_(N0, D0)
+    fr1 = _unsafe_ND2Fraction_(N1, D1)
+    if j0&1:
+        # [odd j0]
+        # [even j1]
+        low, up = fr1, fr0
+    else:
+        # [even j0]
+        # [odd j1]
+        low, up = fr0, fr1
+    boundaries = low, up
+    assert low < up
+    return boundaries
+#end-def approximate_fraction_boundaries5continued_fraction__by_limit_denominator_(max1_denominator, cf_digits, /):
 
 
 
@@ -2503,7 +2594,7 @@ from seed.math.continued_fraction.continued_fraction_fold import backward_iter_c
 
 from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionFoldState, continued_fraction_fold_state0
 
-from seed.math.continued_fraction.continued_fraction_fold import approximate_fraction5continued_fraction__by_limit_denominator_
+from seed.math.continued_fraction.continued_fraction_fold import approximate_fraction5continued_fraction__by_limit_denominator_, approximate_fraction_boundaries5continued_fraction__by_limit_denominator_
 from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, iter_approximate_fractions5continued_fraction_
 
 
@@ -2511,7 +2602,7 @@ from seed.math.continued_fraction.continued_fraction_fold import iter_continued_
 from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionError__inf__no_cf0
 from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction_, iter_approximate_fractions5continued_fraction_
 from seed.math.continued_fraction.continued_fraction_fold import calc_ND5finite_continued_fraction_, calc_Fraction5finite_continued_fraction_
-from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction__by_limit_denominator_, iter_approximate_fractions5continued_fraction__by_limit_denominator_, approximate_fraction5continued_fraction__by_limit_denominator_
+from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction__by_limit_denominator_, iter_approximate_fractions5continued_fraction__by_limit_denominator_, approximate_fraction5continued_fraction__by_limit_denominator_, approximate_fraction_boundaries5continued_fraction__by_limit_denominator_
 
 
 from seed.math.continued_fraction.continued_fraction_fold import mk_gcd_certification_, validate__gcd_certification_, mk_coprime_certification_, validate__coprime_certification_, inv_mod_, validate__inv_mod_, ginv_mod_respectively_, validate__ginv_mod_respectively_, ginv_mod_, validate__ginv_mod_

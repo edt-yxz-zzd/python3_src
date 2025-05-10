@@ -166,10 +166,21 @@ True
 >>> _zs == zs
 True
 
+>>> rshift = int.__rshift__
+>>> _xs = perform_inv_Walsh_transform_(rshift, add, sub, ys)
+>>> _xs == xs
+True
+
+>>> uint_xmul__via_Walsh_transform_(999, 666)
+15029895168
+>>> uint_xmul__via_Walsh_transform_(55553, 57777)
+62269583197791584256
 
 py_adhoc_call   seed.algo.FFT.Walsh_transform   @f
 ]]]'''#'''
 __all__ = r'''
+perform_inv_Walsh_transform_
+    uint_xmul__via_Walsh_transform_
 perform_Walsh_transform_
 mk_matrix4Walsh_transform__fancy_
 mk_matrix4Walsh_transform__naive_
@@ -184,6 +195,9 @@ matrix_slice_
 matrix_product_
 matrix_right_Kronecker_product_     matrix_tensor_product_
 
+
+matrix_dyadic_product_
+vector_dyadic_product_
 
 '''.split()#'''
 __all__
@@ -225,6 +239,7 @@ def matrix_slice_(T, A, jrows, jcolumns, /):
         return A[jrows[i]][jcolumns[j]]
     return mk_matrix_(T, rB, cB, ij2v)
 def matrix_product_(T, add, mul, A, B, /):
+    #vs:matrix_dyadic_product_
     (rA, cA) = matrix_shape_(A)
     (rB, cB) = matrix_shape_(B)
     if not cA == rB:raise TypeError('matrix_product_', (rA, cA), (rB, cB))
@@ -312,9 +327,123 @@ def perform_Walsh_transform_(add, sub, xs, /):
         # [sz4blk*num_blks == L]
     return xs
 
+#@20250223
+def matrix_dyadic_product_(T, mul, A, B, /):
+    #vs:matrix_product_
+    #vs:vector_dyadic_product_
+    sA = (rA, cA) = matrix_shape_(A)
+    sB = (rB, cB) = matrix_shape_(B)
+    if not sA == sB:raise TypeError('matrix_dyadic_product_', (rA, cA), (rB, cB))
+    def ij2v(i, j, /):
+        return mul(A[i][j], B[i][j])
+    return mk_matrix_(T, rA, cA, ij2v)
+#@20250223
+def vector_dyadic_product_(T, mul, A, B, /):
+    #vs:matrix_dyadic_product_
+    szA = len(A)
+    szB = len(B)
+    if not szA == szB:raise TypeError('vector_dyadic_product_', szA, szB)
+    return T(map(mul, A, B))
+#@20250223
+def perform_inv_Walsh_transform_(rshift, add, sub, xs, /):
+    'O(L*log2(L))'
+    # [IW[2**ez] == W[2**ez]/2**ez]
+    L = len(xs)
+    ez = L.bit_length() - 1
+    if ez < 0 or not L == 1<<ez:raise ValueError(L)
+    _zs = perform_Walsh_transform_(add, sub, xs)
+    zs = [rshift(z, ez) for z in _zs]
+    return zs
+
+#@20250223
+#e ../../python3_src/seed/algo/rho_method.py
+def uint_xmul__via_Walsh_transform_(x, y, /):
+    check_int_ge(0, x)
+    check_int_ge(0, y)
+    flb1_ = int.bit_length
+    bsz = flb1_(x) + flb1_(y)
+    ez = flb1_(bsz)
+    bbsz = 1<<ez
+    assert bbsz >= bsz
+    xs = _list_bits5uint(bbsz, x)
+    ys = _list_bits5uint(bbsz, y)
+    if 0b0000:
+        assert _bits2uint(xs) == x
+        assert _bits2uint(ys) == y
+        assert _wbits2uint(xs) == x
+        assert _wbits2uint(ys) == y
+    _rshift = int.__rshift__
+    add = int.__add__
+    sub = int.__sub__
+    def perfect_rshift(x, ez, /):
+        y = x >> ez
+        if not x == (y<<ez):raise ValueError(x, ez)
+        return y
+    def xor_not(x, y, /):
+        return x ^ ~y
+        # x ^ ~y ^ y == x ^ 111... == ~x
+        # ~(~x ^ ~y) ^ y == x ^ 111... == ~x
+    _xs = perform_Walsh_transform_(add, sub, xs)
+    _ys = perform_Walsh_transform_(add, sub, ys)
+    mul = int.__mul__
+    xor = int.__xor__
+    #mul = xor
+    _zs = vector_dyadic_product_(list, mul, _xs, _ys)
+    if 0b0000:
+        from seed.tiny import print_err
+        print_err(xs, ys)
+        print_err(_xs, _ys)
+        print_err(_zs)
+    if 0b0000:
+        assert xs == perform_inv_Walsh_transform_(perfect_rshift, add, sub, _xs)
+        assert ys == perform_inv_Walsh_transform_(perfect_rshift, add, sub, _ys)
+    zs = perform_inv_Walsh_transform_(perfect_rshift, add, sub, _zs)
+    assert len(zs) == bbsz
+    z = _wbits2uint(zs)
+    return z
+    return zs
+    z = _bits2uint(zs)
+        #IndexError: string index out of range
+    return z
+def _wbits2uint(ws, /):
+    it = iter(ws)
+    for w in it:
+        if w:break
+    else:
+        return 0
+    u = w
+    for w in it:
+        u <<= 1
+        u += w
+    return u
+def _bits2uint(bs, /):
+    s = ''.join(map('01'.__getitem__, bs))
+    return int(s, 2)
+def _list_bits5uint(sz, x, /):
+    xs = _iter_bits5uint(sz, x)
+    xs = list(xs)
+    assert min(xs, default=0) >= 0
+    assert max(xs, default=0) <= 1
+    return xs
+def _iter_bits5uint(sz, x, /):
+    bs = f'{x:0>{sz}b}'
+    assert len(bs) == sz
+    return map(ord('0').__rsub__, map(ord, bs))
+    ######################
+    #old:
+    bs = bin(x).remove_prefix('0b')
+    if sz >= 0:
+        pad = sz -len(bs)
+        if not pad >= 0:raise ValueError(sz, x)
+        bs = '0'*pad + bs
+        assert len(bs) == sz
+    return map(ord('0').__rsub__, map(ord, bs))
+
 
 __all__
 
+from seed.algo.FFT.Walsh_transform import uint_xmul__via_Walsh_transform_
+from seed.algo.FFT.Walsh_transform import perform_inv_Walsh_transform_
 from seed.algo.FFT.Walsh_transform import perform_Walsh_transform_, mk_matrix4Walsh_transform__fancy_
 from seed.algo.FFT.Walsh_transform import mk_matrix4Walsh_transform__naive_, perform_Walsh_transform__naive_
 

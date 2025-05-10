@@ -1,0 +1,9 @@
+#g_add
+	export cmd='git add --dry-run --all'
+	echo ======= $cmd
+	echo $cmd | bash
+#git add --dry-run -A
+#git add --dry-run --all
+#git add -n -A
+#git add -nA
+

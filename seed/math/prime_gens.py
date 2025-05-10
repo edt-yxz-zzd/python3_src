@@ -1,6 +1,22 @@
 #__all__:goto
 r'''[[[
 [[
+psp vs prp
+[pseudoprime <: composite_number]
+<<==:
+@20250225
+  /sdcard/0my_files/book/math/factorint/snd/The new book of prime number records(3ed)(1996)(Ribenboim).djvu
+  [pg20/567]
+PSP(a) - pseudoprime in base a
+EPSP(a) - Euler pseudoprime in base a
+SPSP(a) - strong pseudoprime in base a
+LPSP(P,Q) - Lucas pseudoprime with parameters (P,Q)
+ELPSP(P,Q) - Euler-Lucas pseudoprime with parameters (P, Q)
+SLPSP(P,Q) - strong Lucas pseudoprime with parameters (P, Q)
+SPSP
+]]
+
+[[
 命名有误丶尚未订正
 警告:见view others/数学/primality_test/proof_primality_via_GFsqN_test.txt
   看来我确实搞错了:应该是[pseudoprime =!= PRP][pseudoprime <: odd_composite <: composite][odd_prime <: SPRP <: PRP][SPRP == strong_probable_prime =!= strong_pseudoprime]
@@ -24,6 +40,7 @@ e ../../python3_src/seed/math/factor_pint_into_strong_pseudoprimes_by_quadratic_
 .+1,$s/\<lazy_prime_seq_by_Eratosthenes_sieve\>/prime_gens/g
 ]]
 [[
+#@20250419之前:
 rename:
     to match:
         next_may_prime__le_pow2_81__ge_
@@ -31,6 +48,15 @@ rename:
 .+1,$s/\<prev_may_prime__lt_\>/prev_may_prime__le_pow2_81__lt_/g
 .+1,$s/\<raw_iter_all_strict_sorted_primes__using_primality_test__lt_\>/raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_/g
 ]]
+[[
+后续:_helper4renaming_pseudoprime_()
+
+@20250419
+:.+1,1475s/pseudoprime/probable_prime/g
+    #替换48次/46行
+
+]]
+#重命名后:
 
 
 seed.math.prime_gens
@@ -44,7 +70,9 @@ py -m nn_ns.app.doctest_cmd seed.math.prime_gens:_doc4tmp_test -ht
 
 
 
-from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_
+from seed.math.prime_gens import hold_all_weakrefs4caches_
+    __ws = hold_all_weakrefs4caches_()
+from seed.math.prime_gens import detect_strong_probable_prime__not_waste_too_much_time_
 
 from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_
 
@@ -56,14 +84,15 @@ from seed.math.prime_gens import prime_gen__Eratosthenes_sieve, prime_gen__Mille
 
 from seed.math.prime_gens import prime_gen, prime_filter__using_primality_test_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
 
-from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
+from seed.math.prime_gens import is_strong_probable_prime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
 
 
 
 
 
 
->>> list_islice_(9, reversed_iter_pseudoprimes__lt_(7))
+
+>>> list_islice_(9, reversed_iter_probable_primes__lt_(7))
 [5, 3, 2]
 
 
@@ -75,7 +104,7 @@ py_adhoc_call   seed.math.prime_gens   @_find_mismatch4diff_cases4is_prime__trib
     # choke here:
     # _find_mismatch4diff_cases4is_prime__tribool_:
     #   r1 = is_prime__tribool_(mn, case=C.ERH)
-    # _is_strong_pseudoprime_:
+    # _is_strong_probable_prime_:
     #   d = pow(base, odd, n)
     #
     # 2*521**2
@@ -1113,6 +1142,14 @@ False
 True
 
 
+######################
+#@20250419
+#新增这两行测试移至此处，以避免影响以上测试:
+>>> __ws = hold_all_weakrefs4caches_()
+>>> __ws.index(prime_gen.get_or_mk_lazy_prime_seq_())
+4
+
+######################
 
 
 >>> len(A014233)
@@ -1219,8 +1256,8 @@ TypeError: -1
     is_prime__le_pow2_81_
     raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
     raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
-    next_pseudoprime__ge_
-    prev_may_pseudoprime__lt_
+    next_probable_prime__ge_
+    prev_may_probable_prime__lt_
     next_may_prime__le_pow2_81__ge_
     prev_may_prime__le_pow2_81__lt_
 >>> is_prime__le_pow2_81_(7)
@@ -1235,10 +1272,10 @@ False
 Traceback (most recent call last):
     ...
 seed.math.prime_gens.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 3317044064679887385962123]
->>> pp = next_pseudoprime__ge_(2**82) -2**82
+>>> pp = next_probable_prime__ge_(2**82) -2**82
 >>> pp
 9
->>> mm =  2**82 -prev_may_pseudoprime__lt_(2**82)
+>>> mm =  2**82 -prev_may_probable_prime__lt_(2**82)
 >>> mm
 57
 >>> is_prime__le_pow2_81_(2**82+pp)
@@ -1276,30 +1313,30 @@ True
 
 
 
->>> [*map(detect_strong_pseudoprime__not_waste_too_much_time_, range(-1, 20))]
+>>> [*map(detect_strong_probable_prime__not_waste_too_much_time_, range(-1, 20))]
 [0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1]
 >>> [*map(calc_len_prime_basis4II_prime_basis_gtN_, [is_prime__le_pow2_81_.upperbound, 2**607-1, 2**1279-1])]
 [19, 87, 158]
->>> detect_strong_pseudoprime__not_waste_too_much_time_(is_prime__le_pow2_81_.upperbound)
+>>> detect_strong_probable_prime__not_waste_too_much_time_(is_prime__le_pow2_81_.upperbound)
 -1
->>> detect_strong_pseudoprime__not_waste_too_much_time_(2**607-1)
+>>> detect_strong_probable_prime__not_waste_too_much_time_(2**607-1)
 -1
->>> detect_strong_pseudoprime__not_waste_too_much_time_(2**1279-1)
+>>> detect_strong_probable_prime__not_waste_too_much_time_(2**1279-1)
 -1
 
 
 
 
-    iter_pseudoprimes__ge_
-    reversed_iter_pseudoprimes__lt_
+    iter_probable_primes__ge_
+    reversed_iter_probable_primes__lt_
     iter_primes__le_pow2_81__ge_
     reversed_iter_primes__le_pow2_81__lt_
 
->>> list_islice_(9, iter_pseudoprimes__ge_(-4))
+>>> list_islice_(9, iter_probable_primes__ge_(-4))
 [2, 3, 5, 7, 11, 13, 17, 19, 23]
->>> list_islice_(9, iter_pseudoprimes__ge_(0))
+>>> list_islice_(9, iter_probable_primes__ge_(0))
 [2, 3, 5, 7, 11, 13, 17, 19, 23]
->>> list_islice_(9, iter_pseudoprimes__ge_(7))
+>>> list_islice_(9, iter_probable_primes__ge_(7))
 [7, 11, 13, 17, 19, 23, 29, 31, 37]
 
 >>> list_islice_(9, iter_primes__le_pow2_81__ge_(-4))
@@ -1309,11 +1346,11 @@ True
 >>> list_islice_(9, iter_primes__le_pow2_81__ge_(7))
 [7, 11, 13, 17, 19, 23, 29, 31, 37]
 
->>> list_islice_(9, reversed_iter_pseudoprimes__lt_(-4))
+>>> list_islice_(9, reversed_iter_probable_primes__lt_(-4))
 []
->>> list_islice_(9, reversed_iter_pseudoprimes__lt_(0))
+>>> list_islice_(9, reversed_iter_probable_primes__lt_(0))
 []
->>> list_islice_(9, reversed_iter_pseudoprimes__lt_(7))
+>>> list_islice_(9, reversed_iter_probable_primes__lt_(7))
 [5, 3, 2]
 
 >>> list_islice_(9, reversed_iter_primes__le_pow2_81__lt_(-4))
@@ -1323,56 +1360,56 @@ True
 >>> list_islice_(9, reversed_iter_primes__le_pow2_81__lt_(7))
 [5, 3, 2]
 
-#>>> for a, b in zip(iter_pseudoprimes__ge_(0), iter_primes__le_pow2_81__ge_(0)):
+#>>> for a, b in zip(iter_probable_primes__ge_(0), iter_primes__le_pow2_81__ge_(0)):
 #...     if not a == b:break
 #>>> (a, b)
-[:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
+[:next_probable_prime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
 >>> A014233[12] == (3317044064679887385961981)
 True
->>> next_pseudoprime__ge_(3317044064679887385961981)
+>>> next_probable_prime__ge_(3317044064679887385961981)
 3317044064679887385962123
->>> next_pseudoprime__ge_(3317044064679887385961980)
+>>> next_probable_prime__ge_(3317044064679887385961980)
 3317044064679887385962123
->>> next_pseudoprime__ge_(3317044064679887385961981) -3317044064679887385961981
+>>> next_probable_prime__ge_(3317044064679887385961981) -3317044064679887385961981
 142
 
-    iter_pairwise_diff_pseudoprimes__ge_
+    iter_pairwise_diff_probable_primes__ge_
     iter_pairwise_diff_primes__le_pow2_81__ge_
->>> list_islice_(9, iter_pairwise_diff_pseudoprimes__ge_(0))
+>>> list_islice_(9, iter_pairwise_diff_probable_primes__ge_(0))
 [1, 2, 2, 4, 2, 4, 2, 4, 6]
 >>> list_islice_(9, iter_pairwise_diff_primes__le_pow2_81__ge_(0))
 [1, 2, 2, 4, 2, 4, 2, 4, 6]
 
 
 
-    iter_pseudoprimes__inside_
-    iter_pseudoprimes__ge_lt_   iter_pseudoprimes__between_
->>> iter_pseudoprimes__between_ is iter_pseudoprimes__ge_lt_
+    iter_probable_primes__inside_
+    iter_probable_primes__ge_lt_   iter_probable_primes__between_
+>>> iter_probable_primes__between_ is iter_probable_primes__ge_lt_
 True
->>> [*iter_pseudoprimes__inside_(range(-5, 11))]
+>>> [*iter_probable_primes__inside_(range(-5, 11))]
 [2, 3, 5, 7]
->>> [*iter_pseudoprimes__between_(-5, 11)]
+>>> [*iter_probable_primes__between_(-5, 11)]
 [2, 3, 5, 7]
->>> [*iter_pseudoprimes__between_(-5, 11, reverse=True)]
+>>> [*iter_probable_primes__between_(-5, 11, reverse=True)]
 [7, 5, 3, 2]
->>> [*iter_pseudoprimes__between_(-5, 11, case=[], reverse=True)] # see:is_prime__tribool_() since < 2**81
+>>> [*iter_probable_primes__between_(-5, 11, case=[], reverse=True)] # see:is_prime__tribool_() since < 2**81
 [7, 5, 3, 2]
->>> [*iter_pseudoprimes__between_(-5, 11, case=[], reverse=True, skip_A014233=True)] # see:is_prime__tribool_() since skip_A014233 # 由于打补丁，之前相当于skip_check=True
+>>> [*iter_probable_primes__between_(-5, 11, case=[], reverse=True, skip_A014233=True)] # see:is_prime__tribool_() since skip_A014233 # 由于打补丁，之前相当于skip_check=True
 [7, 5, 3, 2]
->>> [*iter_pseudoprimes__between_(-5, 11, case=[], reverse=True, skip_A014233=True, skip_check=True)] # see:is_prime__tribool_() since skip_A014233
+>>> [*iter_probable_primes__between_(-5, 11, case=[], reverse=True, skip_A014233=True, skip_check=True)] # see:is_prime__tribool_() since skip_A014233
 [9, 7, 5, 3, 2]
 
->>> [*map((2**100).__rsub__, islice(iter_pseudoprimes__between_(2**100, 2**100+8000, case=[], reverse=True, skip_A014233=True), 9))] # see:is_prime__tribool_() since skip_A014233 # 由于打补丁，之前相当于skip_check=True
+>>> [*map((2**100).__rsub__, islice(iter_probable_primes__between_(2**100, 2**100+8000, case=[], reverse=True, skip_A014233=True), 9))] # see:is_prime__tribool_() since skip_A014233 # 由于打补丁，之前相当于skip_check=True
 [7995, 7987, 7983, 7981, 7977, 7965, 7947, 7945, 7911]
->>> [*map((2**100).__rsub__, islice(iter_pseudoprimes__between_(2**100, 2**100+8000, case=[], reverse=True, skip_A014233=True, skip_check=True), 9))] # see:is_prime__tribool_() since skip_A014233
+>>> [*map((2**100).__rsub__, islice(iter_probable_primes__between_(2**100, 2**100+8000, case=[], reverse=True, skip_A014233=True, skip_check=True), 9))] # see:is_prime__tribool_() since skip_A014233
 [7999, 7997, 7995, 7993, 7991, 7989, 7987, 7985, 7983]
->>> [*map((2**100).__rsub__, islice(iter_pseudoprimes__between_(2**100, 2**100+8000, case=[], reverse=True), 9))]
+>>> [*map((2**100).__rsub__, islice(iter_probable_primes__between_(2**100, 2**100+8000, case=[], reverse=True), 9))]
 [7737, 7717, 7713, 7701, 7623, 7557, 7531, 7491, 7477]
->>> [*map((2**100).__rsub__, islice(iter_pseudoprimes__between_(2**100, 2**100+8000, case=None, reverse=True), 9))]
+>>> [*map((2**100).__rsub__, islice(iter_probable_primes__between_(2**100, 2**100+8000, case=None, reverse=True), 9))]
 [7737, 7717, 7713, 7701, 7623, 7557, 7531, 7491, 7477]
 
 
-is_strong_pseudoprime__basis__with_trial_division_
+is_strong_probable_prime__basis__with_trial_division_
     continuous_trial_division_
         iter_continuous_prime_bases_
 
@@ -1392,9 +1429,9 @@ xfilter4continuous_bases:=None
 >>> [(n, continuous_trial_division_(None, n)) for n in range(-2, 20)]
 [(-2, 1), (-1, 1), (0, 1), (1, 1), (2, -1), (3, -1), (4, 2), (5, -1), (6, 2), (7, -1), (8, 2), (9, 3), (10, 2), (11, -1), (12, 2), (13, -1), (14, 2), (15, 3), (16, 2), (17, -1), (18, 2), (19, -1)]
 
->>> [(n, is_strong_pseudoprime__basis__with_trial_division_(None, [], n)) for n in range(-2, 20)]
+>>> [(n, is_strong_probable_prime__basis__with_trial_division_(None, [], n)) for n in range(-2, 20)]
 [(-2, False), (-1, False), (0, False), (1, False), (2, True), (3, True), (4, False), (5, True), (6, False), (7, True), (8, False), (9, False), (10, False), (11, True), (12, False), (13, True), (14, False), (15, False), (16, False), (17, True), (18, False), (19, True)]
->>> [(n, r) for n in range(-2, 2**16) for r in [is_strong_pseudoprime__basis__with_trial_division_(None, [2], n)] if not r is is_prime__le_pow2_81_(n)]
+>>> [(n, r) for n in range(-2, 2**16) for r in [is_strong_probable_prime__basis__with_trial_division_(None, [2], n)] if not r is is_prime__le_pow2_81_(n)]
 [(2047, True), (3277, True), (4033, True), (4681, True), (8321, True), (42799, True), (49141, True), (65281, True)]
 
 xfilter4continuous_bases:=False
@@ -1403,7 +1440,7 @@ xfilter4continuous_bases:=False
 [(-2, []), (-1, []), (0, []), (1, []), (2, []), (3, []), (4, []), (5, []), (6, []), (7, []), (8, []), (9, []), (10, []), (11, []), (12, []), (13, []), (14, []), (15, []), (16, []), (17, []), (18, []), (19, [])]
 >>> [(n, continuous_trial_division_(False, n)) for n in range(-2, 20)]
 [(-2, 1), (-1, 1), (0, 1), (1, 1), (2, -1), (3, -1), (4, 2), (5, -1), (6, 2), (7, -1), (8, 2), (9, 0), (10, 2), (11, 0), (12, 2), (13, 0), (14, 2), (15, 0), (16, 2), (17, 0), (18, 2), (19, 0)]
->>> [(n, r) for n in range(-2, 2**12) for r in [is_strong_pseudoprime__basis__with_trial_division_(False, [2], n)] if not r is is_prime__le_pow2_81_(n)]
+>>> [(n, r) for n in range(-2, 2**12) for r in [is_strong_probable_prime__basis__with_trial_division_(False, [2], n)] if not r is is_prime__le_pow2_81_(n)]
 [(2047, True), (3277, True), (4033, True)]
 
 
@@ -1418,8 +1455,8 @@ xfilter4continuous_bases:=0|1|2|...
 
 
 mk_tribool_delegate5PRP_test_
-    [delegate := mk_tribool_delegate5PRP_test_(is_strong_pseudoprime__basis__with_trial_division_, xfilter4continuous_bases4div, bases4SPRP)]
->>> delegate = mk_tribool_delegate5PRP_test_(is_strong_pseudoprime__basis__with_trial_division_, xfilter4continuous_bases4div:=None, bases4SPRP:=[2,3,5,7])
+    [delegate := mk_tribool_delegate5PRP_test_(is_strong_probable_prime__basis__with_trial_division_, xfilter4continuous_bases4div, bases4SPRP)]
+>>> delegate = mk_tribool_delegate5PRP_test_(is_strong_probable_prime__basis__with_trial_division_, xfilter4continuous_bases4div:=None, bases4SPRP:=[2,3,5,7])
 >>> [(n, is_prime__tribool_(n, case=delegate)) for n in range(-2, 20)]
 [(-2, False), (-1, False), (0, False), (1, False), (2, Ellipsis), (3, Ellipsis), (4, False), (5, Ellipsis), (6, False), (7, Ellipsis), (8, False), (9, False), (10, False), (11, Ellipsis), (12, False), (13, Ellipsis), (14, False), (15, False), (16, False), (17, Ellipsis), (18, False), (19, Ellipsis)]
 >>> bool(...)
@@ -1450,13 +1487,150 @@ _doc4tmp_test = r'''
 >>> 
 
 '''#'''
+#重命名前:
+#.__all__ = r'''
+#.hold_all_weakrefs4caches_
+#.
+#.prime_gen
+#.prime_gen__Miller_Rabin_primality_test
+#.
+#.is_strong_pseudoprime__basis_
+#.    is_strong_pseudoprime__basis__with_trial_division_
+#.    is_prime__le_pow2_81_
+#.        prime_filter__using_primality_test_
+#.            raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+#.                prev_may_prime__le_pow2_81__lt_
+#.                    reversed_iter_primes__le_pow2_81__lt_
+#.            raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
+#.                next_may_prime__le_pow2_81__ge_
+#.                    iter_primes__le_pow2_81__ge_
+#.                        iter_pairwise_diff_primes__le_pow2_81__ge_
+#.            iter_primes__ge_lt_         iter_primes__between_
+#.        is_prime__tribool_
+#.            Case4is_prime__tribool_
+#.            detect_strong_pseudoprime__not_waste_too_much_time_
+#.            next_pseudoprime__ge_
+#.            prev_may_pseudoprime__lt_
+#.                reversed_iter_pseudoprimes__lt_
+#.                iter_pseudoprimes__ge_
+#.                    iter_pairwise_diff_pseudoprimes__ge_
+#.            iter_pseudoprimes__inside_
+#.            iter_pseudoprimes__ge_lt_   iter_pseudoprimes__between_
+#.
+#.
+#.
+#.min_prime_factor_gen
+#.    tabulate_may_min_prime_factor4uint_lt_
+#.    tabulate_may_factorization4uint_lt_
+#.
+#.all_prime_factors_gen
+#.    tabulate_may_all_prime_factors4uint_lt_
+#.
+#.
+#.
+#.
+#.
+#.
+#.
+#.
+#.
+#.
+#.
+#.
+#.raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_
+#.    raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_
+#.    raw_iter_all_strict_sorted_primes_
+#.        raw_iter_all_strict_sorted_primes__lt_
+#.            raw_list_all_strict_sorted_primes__lt_
+#.
+#.
+#.    GlobalControl4PrimeGenerator__Eratosthenes_sieve
+#.        prime_gen__Eratosthenes_sieve
+#.            prime_gen
+#.    GlobalControl4PrimeGenerator__Miller_Rabin_primality_test
+#.        prime_gen__Miller_Rabin_primality_test
+#.
+#.Error
+#.    Bool5TriboolFail__probably_prime
+#.    OverflowError__Miller_Rabin_primality_test__A014233
+#.    IsPrimeError
+#.
+#.
+#.A014233         n2upperbound4Miller_Rabin_primality_test_using_first_n_plus1_primes_as_basis
+#.    prime_basis4A014233
+#.        prime_basis_set4A014233
+#.
+#.
+#.is_strong_pseudoprime__basis_
+#.    is_strong_pseudoprime_
+#.        iter_until_found_min_prime_witness4odd_composite_
+#.            find_min_prime_witness4odd_composite_
+#.
+#.    is_prime__using_A014233_        is_prime__le_pow2_81_
+#.        default4is_prime_and_may_upperbound
+#.            prime_filter__using_primality_test_
+#.                raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+#.                    prev_may_prime__le_pow2_81__lt_
+#.                raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
+#.                    next_may_prime__le_pow2_81__ge_
+#.
+#.        is_prime__tribool_
+#.            mk_tribool_delegate5PRP_test_
+#.                is_strong_pseudoprime__basis__with_trial_division_
+#.            Case4is_prime__tribool_
+#.            detect_strong_pseudoprime__not_waste_too_much_time_
+#.            iter_prime_basis4II_prime_basis_gtN_
+#.                calc_len_prime_basis4II_prime_basis_gtN_
+#.            next_pseudoprime__ge_
+#.            prev_may_pseudoprime__lt_
+#.
+#.
+#.
+#.GlobalControl4MinPrimeFactorGenerator__Eratosthenes_sieve
+#.    min_prime_factor_gen__Eratosthenes_sieve
+#.        min_prime_factor_gen
+#.        tabulate_may_min_prime_factor4uint_lt_
+#.        tabulate_may_factorization4uint_lt_
+#.
+#.GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve
+#.    all_prime_factors_gen__Eratosthenes_sieve
+#.        all_prime_factors_gen
+#.        tabulate_may_all_prime_factors4uint_lt_
+#.
+#.
+#.
+#.mk_tribool_delegate5PRP_test_
+#.is_strong_pseudoprime__basis__with_trial_division_
+#.    continuous_trial_division_
+#.        iter_continuous_prime_bases_
+#.    callable5xfilter4continuous_bases
+#.    mk_initial_state4filter4continuous_bases_
+#.        filter4continuous_bases4II_prime_basis_gtN
+#.        filter4continuous_bases4empty
+#.        mk_filter4continuous_bases4fixed_size
+#.
+#.
+#.
+#.pairwise_diff_
+#.'''.split()#'''
+
+r'''[[[
+后续:_helper4renaming_pseudoprime_()
+
+@20250419
+:.+1,.+130s/pseudoprime/probable_prime/g
+    #替换18次/17行
+
+#]]]'''#'''
+#重命名后:
 __all__ = r'''
+hold_all_weakrefs4caches_
 
 prime_gen
 prime_gen__Miller_Rabin_primality_test
 
-is_strong_pseudoprime__basis_
-    is_strong_pseudoprime__basis__with_trial_division_
+is_strong_probable_prime__basis_
+    is_strong_probable_prime__basis__with_trial_division_
     is_prime__le_pow2_81_
         prime_filter__using_primality_test_
             raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
@@ -1469,14 +1643,14 @@ is_strong_pseudoprime__basis_
             iter_primes__ge_lt_         iter_primes__between_
         is_prime__tribool_
             Case4is_prime__tribool_
-            detect_strong_pseudoprime__not_waste_too_much_time_
-            next_pseudoprime__ge_
-            prev_may_pseudoprime__lt_
-                reversed_iter_pseudoprimes__lt_
-                iter_pseudoprimes__ge_
-                    iter_pairwise_diff_pseudoprimes__ge_
-            iter_pseudoprimes__inside_
-            iter_pseudoprimes__ge_lt_   iter_pseudoprimes__between_
+            detect_strong_probable_prime__not_waste_too_much_time_
+            next_probable_prime__ge_
+            prev_may_probable_prime__lt_
+                reversed_iter_probable_primes__lt_
+                iter_probable_primes__ge_
+                    iter_pairwise_diff_probable_primes__ge_
+            iter_probable_primes__inside_
+            iter_probable_primes__ge_lt_   iter_probable_primes__between_
 
 
 
@@ -1522,8 +1696,8 @@ A014233         n2upperbound4Miller_Rabin_primality_test_using_first_n_plus1_pri
         prime_basis_set4A014233
 
 
-is_strong_pseudoprime__basis_
-    is_strong_pseudoprime_
+is_strong_probable_prime__basis_
+    is_strong_probable_prime_
         iter_until_found_min_prime_witness4odd_composite_
             find_min_prime_witness4odd_composite_
 
@@ -1537,13 +1711,13 @@ is_strong_pseudoprime__basis_
 
         is_prime__tribool_
             mk_tribool_delegate5PRP_test_
-                is_strong_pseudoprime__basis__with_trial_division_
+                is_strong_probable_prime__basis__with_trial_division_
             Case4is_prime__tribool_
-            detect_strong_pseudoprime__not_waste_too_much_time_
+            detect_strong_probable_prime__not_waste_too_much_time_
             iter_prime_basis4II_prime_basis_gtN_
                 calc_len_prime_basis4II_prime_basis_gtN_
-            next_pseudoprime__ge_
-            prev_may_pseudoprime__lt_
+            next_probable_prime__ge_
+            prev_may_probable_prime__lt_
 
 
 
@@ -1561,7 +1735,7 @@ GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve
 
 
 mk_tribool_delegate5PRP_test_
-is_strong_pseudoprime__basis__with_trial_division_
+is_strong_probable_prime__basis__with_trial_division_
     continuous_trial_division_
         iter_continuous_prime_bases_
     callable5xfilter4continuous_bases
@@ -1573,6 +1747,27 @@ is_strong_pseudoprime__basis__with_trial_division_
 
 
 pairwise_diff_
+
+
+
+
+
+
+
+
+is_strong_pseudoprime_
+is_strong_pseudoprime__basis__with_trial_division_
+is_strong_pseudoprime__basis_
+detect_strong_pseudoprime__not_waste_too_much_time_
+prev_may_pseudoprime__lt_
+next_pseudoprime__ge_
+iter_pseudoprimes__ge_lt_
+iter_pseudoprimes__inside_
+iter_pseudoprimes__between_
+iter_pseudoprimes__ge_
+reversed_iter_pseudoprimes__lt_
+iter_pairwise_diff_pseudoprimes__ge_
+
 '''.split()#'''
 __all__
 
@@ -1599,6 +1794,8 @@ with timer(prefix='py:std...', _to_show_=_to_show_):
 with timer(prefix='seed:basic...', _to_show_=_to_show_):
     from seed.iters.apply_may_args4islice_ import apply_may_args4islice_
     from seed.iters.apply_may_args4islice_ import list_islice_, show_islice_, stable_show_islice_, stable_list_islice_
+
+    from seed.tiny import mk_tuple, mk_reiterable
     from seed.tiny import ifNonef, snd, print_err, ifNone #, echo
     from seed.tiny_.check import check_type_is, check_int_ge
     from seed.tiny_.dict_op__add import set_add# dict_add, dict_update, set_update
@@ -2253,9 +2450,10 @@ if 1:
     is_prime__using_A014233_.upperbound = A014233[-1]+2
         #only for first raise in _find_upperbound4is_prime__using_A014233_
 
-def is_strong_pseudoprime_(base, n, /, *, to_find_sqrt_neg1=False):
+def is_strong_probable_prime_(base, n, /, *, to_find_sqrt_neg1=False):
     'base/int{>=2,%n=!=0} -> n{>=3,odd} -> [n is base-SPRP]'
     return _kw__is_strong_pseudoprime__basis_([base], n, to_find_sqrt_neg1=to_find_sqrt_neg1)
+44444; is_strong_pseudoprime_ = is_strong_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 def _bool__5bool_or_with_sqrts_(bool_or_with_sqrts, /):
     b, sqrts = _pair5bool_or_with_sqrts_(bool_or_with_sqrts)
     return b
@@ -2385,7 +2583,7 @@ def filter4continuous_bases4II_prime_basis_gtN(k, st_k, prime_k, /):
     st_k1 = (n, ii)
     return (st_k1,)
 #filter4continuous_bases4II_prime_basis_gtN.n2st0 = lambda n, /: (n, 1)
-def is_strong_pseudoprime__basis__with_trial_division_(xfilter4continuous_bases4div, bases4SPRP, n, /):
+def is_strong_probable_prime__basis__with_trial_division_(xfilter4continuous_bases4div, bases4SPRP, n, /):
     # @20250130
     'may filter4continuous_bases4div/((k/uint -> st[k] -> prime_gen[k] -> tmay st[k+1])|((-1) -> None -> n/int -> st0)) -> bases4SPRP/(Iter int) -> n/int -> whether_SPRP/bool # [SPRP == strong probable-prime]'
     r = continuous_trial_division_(xfilter4continuous_bases4div, n)
@@ -2408,12 +2606,14 @@ def is_strong_pseudoprime__basis__with_trial_division_(xfilter4continuous_bases4
         return False
     bases = factor_or_bases
     return is_strong_pseudoprime__basis_(bases, n)
+44444; is_strong_pseudoprime__basis__with_trial_division_ = is_strong_probable_prime__basis__with_trial_division_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 
-def is_strong_pseudoprime__basis_(basis, n, /, *, to_find_sqrt_neg1=False):
+def is_strong_probable_prime__basis_(basis, n, /, *, to_find_sqrt_neg1=False):
     'basis/[base/int{>=2,%n=!=0}] -> n{>=3,odd} -> [n is basis-SPRP] /(bool if not to_find_sqrt_neg1 or not found sqrt_neg1 else (bool, [sqrt_neg1]/[int%n <= n//2]{len=1/(False|True),2/False}))'
     #see:is_prime__using_A014233_
     return _kw__is_strong_pseudoprime__basis_(basis, n, to_find_sqrt_neg1=to_find_sqrt_neg1)
-def _kw__is_strong_pseudoprime__basis_(basis, n, /, *, to_find_sqrt_neg1):
+44444; is_strong_pseudoprime__basis_ = is_strong_probable_prime__basis_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+def _kw__is_strong_probable_prime__basis_(basis, n, /, *, to_find_sqrt_neg1):
     check_type_is(int, n)
     if not (n >= 3 and (n&1) == 1): raise ValueError(n)
     # [n is odd][n >= 3]
@@ -2475,7 +2675,8 @@ def _kw__is_strong_pseudoprime__basis_(basis, n, /, *, to_find_sqrt_neg1):
                 assert r is False
             return (r, sqrts)
         return r
-def _is_strong_pseudoprime_(base, n, n_neg1, e_neg1, odd, to_find_sqrt_neg1, /):
+44444; _kw__is_strong_pseudoprime__basis_ = _kw__is_strong_probable_prime__basis_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+def _is_strong_probable_prime_(base, n, n_neg1, e_neg1, odd, to_find_sqrt_neg1, /):
     '-> (bool if not to_find_sqrt_neg1 or not found sqrt_neg1 else (True, sqrt_neg1/(int%n))|(False, nonplain_sqrt_1/(int%n)))'
     ######################
     # [n is odd][n >= 3]
@@ -2501,6 +2702,7 @@ def _is_strong_pseudoprime_(base, n, n_neg1, e_neg1, odd, to_find_sqrt_neg1, /):
             return False
         d = d2
     return False
+44444; _is_strong_pseudoprime_ = _is_strong_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 
 if __name__ == "__main__":
     with timer(prefix='apply is_prime__using_A014233_ on A014233', _to_show_=_to_show_):
@@ -2599,14 +2801,20 @@ class Case4is_prime__tribool_(Enum):
         # def____II_prime_basis_gtN:here
         # impl____II_prime_basis_gtN:goto
         # II_prime_basis_gtN___vs___A014233:goto
-def detect_strong_pseudoprime__not_waste_too_much_time_(n, /):
+def detect_strong_probable_prime__not_waste_too_much_time_(n, /, *, may_bases4SPRP=None):
     'n/int -> (0|1|-1) # [0=>not prime][1=>prime][-1=>strong_pseudoprime] #[case:=Case4is_prime__tribool_.II_prime_basis_gtN]'
     #r = is_prime__tribool_(n, case=Case4is_prime__tribool_.II_prime_basis_gtN)
-    r = is_prime__tribool_(n, case=None)
-        #=> case=Case4is_prime__tribool_.II_prime_basis_gtN
+    if not may_bases4SPRP is None:
+        bases4SPRP = mk_reiterable(may_bases4SPRP)
+        case = bases4SPRP
+    else:
+        case = None
+            #=> case=Case4is_prime__tribool_.II_prime_basis_gtN
+    r = is_prime__tribool_(n, case=case)
     if r is ...:
         return -1
     return int(r)
+44444; detect_strong_pseudoprime__not_waste_too_much_time_ = detect_strong_probable_prime__not_waste_too_much_time_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 def mk_tribool_delegate5PRP_test_(is_PRP_, /, *args, **kwds):
     'probable_primality_test/(*args -> int -> **kwds -> whether_PRP/bool) -> *args -> **kwds -> tribool_primality_test/(int -> tribool_whether_prime/tribool)  # [PRP == probable-prime] # [used by (kw:delegate@is_prime__tribool_)]'
     def tribool_primality_test(n, /):
@@ -3413,7 +3621,7 @@ def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end
     return filter(is_prime_, range(2, end))
 
 
-def prev_may_pseudoprime__lt_(end, /, **kwds):
+def prev_may_probable_prime__lt_(end, /, **kwds):
     # @20250130: ++kw:case@prev_may_pseudoprime__lt_
     'using Miller_Rabin_primality_test: end -> (may pseudoprime){[[pseudoprime < end][next pseudoprime >= end]]} #see:prev_may_prime__le_pow2_81__lt_'
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
@@ -3429,8 +3637,9 @@ def prev_may_pseudoprime__lt_(end, /, **kwds):
         if 2 < end:
             return 2
     return None
+44444; prev_may_pseudoprime__lt_ = prev_may_probable_prime__lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 
-def next_pseudoprime__ge_(begin, /, **kwds):
+def next_probable_prime__ge_(begin, /, **kwds):
     # @20250130: ++kw:case@next_pseudoprime__ge_
     'using Miller_Rabin_primality_test: begin -> (pseudoprime){[[prev pseudoprime < begin][pseudoprime >= begin]]} #see:next_may_prime__le_pow2_81__ge_' \
     r'''
@@ -3452,6 +3661,7 @@ def next_pseudoprime__ge_(begin, /, **kwds):
             break
     pseudoprime = n
     return pseudoprime
+44444; next_pseudoprime__ge_ = next_probable_prime__ge_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 def next_may_prime__le_pow2_81__ge_(begin, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
     'using Miller_Rabin_primality_test: begin -> (may prime){[[prev prime < begin][prime >= begin]]} #see:next_pseudoprime__ge_'
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
@@ -3496,7 +3706,7 @@ def iter_primes__ge_lt_(begin, may_end, /, *, reverse=False):
     return iter_pseudoprimes__ge_lt_(begin, may_end, reverse=reverse, case=is_prime__le_pow2_81_)
 iter_primes__between_ = iter_primes__ge_lt_
 
-def iter_pseudoprimes__ge_lt_(begin, may_end, /, *, reverse=False, **kwds):
+def iter_probable_primes__ge_lt_(begin, may_end, /, *, reverse=False, **kwds):
     # @20250130: ++kw:case@next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_&prev_may_pseudoprime__lt_
     check_type_is(bool, reverse)
     check_type_is(int, begin)
@@ -3523,7 +3733,8 @@ def iter_pseudoprimes__ge_lt_(begin, may_end, /, *, reverse=False, **kwds):
         primess = reversed(primess)
     primess
     return chain(*primess)
-def _iter_pseudoprimes__inside_(uints, /, **kwds):
+44444; iter_pseudoprimes__ge_lt_ = iter_probable_primes__ge_lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+def _iter_probable_primes__inside_(uints, /, **kwds):
     kwds.setdefault('case', None)
     for n in uints:
         r = is_prime__tribool_(n, **kwds)
@@ -3531,20 +3742,25 @@ def _iter_pseudoprimes__inside_(uints, /, **kwds):
             pseudoprime = n
             yield pseudoprime
     return
-def iter_pseudoprimes__inside_(ints, /, **kwds):
+44444; _iter_pseudoprimes__inside_ = _iter_probable_primes__inside_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+def iter_probable_primes__inside_(ints, /, **kwds):
     it = filter(2 .__le__, ints)
     return _iter_pseudoprimes__inside_(it, **kwds)
+44444; iter_pseudoprimes__inside_ = iter_probable_primes__inside_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 iter_pseudoprimes__inside_
 iter_pseudoprimes__ge_lt_
-iter_pseudoprimes__between_ = iter_pseudoprimes__ge_lt_
-def iter_pseudoprimes__ge_(begin, /, **kwds):
+iter_probable_primes__between_ = iter_probable_primes__ge_lt_
+44444; iter_pseudoprimes__between_ = iter_pseudoprimes__ge_lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+def iter_probable_primes__ge_(begin, /, **kwds):
     # @20250130: ++kw:case@next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_&prev_may_pseudoprime__lt_
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     return _iter_xs_ge_(next_pseudoprime__ge_, begin, **kwds)
-def reversed_iter_pseudoprimes__lt_(end, /, **kwds):
+44444; iter_pseudoprimes__ge_ = iter_probable_primes__ge_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+def reversed_iter_probable_primes__lt_(end, /, **kwds):
     # @20250130: ++kw:case@next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_&prev_may_pseudoprime__lt_
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     return _reversed_iter_xs_lt_(prev_may_pseudoprime__lt_, end, **kwds)
+44444; reversed_iter_pseudoprimes__lt_ = reversed_iter_probable_primes__lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 def iter_primes__le_pow2_81__ge_(begin, /):
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     return _iter_xs_ge_(next_may_prime__le_pow2_81__ge_, begin)
@@ -3559,9 +3775,10 @@ def pairwise_diff_(xs, /):
     xs = iter(xs)
     for a, b in pairwise(xs):
         yield b-a
-def iter_pairwise_diff_pseudoprimes__ge_(begin, /):
+def iter_pairwise_diff_probable_primes__ge_(begin, /):
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     return pairwise_diff_(iter_pseudoprimes__ge_(begin))
+44444; iter_pairwise_diff_pseudoprimes__ge_ = iter_pairwise_diff_probable_primes__ge_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
 def iter_pairwise_diff_primes__le_pow2_81__ge_(begin, /):
     # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
     return pairwise_diff_(iter_primes__le_pow2_81__ge_(begin))
@@ -3676,16 +3893,197 @@ def tabulate_may_all_prime_factors4uint_lt_(sz, /):
 #class
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################
+#@20250419
+def _filter4globals_(is_ok_, /):
+    nms = []
+    xs = []
+    for nm, x in sorted(globals().items()):
+        if not is_ok_(nm, x):
+            continue
+        nms.append(nm)
+        xs.append(x)
+    nms = tuple(nms)
+    xs = tuple(xs)
+    return (nms, xs)
+_IBaseGlobalControl4LazySeq.get_or_mk_lazy_seq_
+def _prepare4hold_all_weakrefs4caches_():
+    'all:instance:_IBaseGlobalControl4LazySeq'
+    def is_ok_(nm, x, /):
+        return isinstance(x, _IBaseGlobalControl4LazySeq)
+    (nms, xs) = _filter4globals_(is_ok_)
+    for x in xs:
+        x.get_or_mk_lazy_seq_()
+    return (nms, xs)
+_data4hold_all_weakrefs4caches_ = _prepare4hold_all_weakrefs4caches_()
+assert (__:='\n'.join(_data4hold_all_weakrefs4caches_[0])) == (r'''
+all_prime_factors_gen
+all_prime_factors_gen__Eratosthenes_sieve
+min_prime_factor_gen
+min_prime_factor_gen__Eratosthenes_sieve
+prime_gen
+prime_gen__Eratosthenes_sieve
+prime_gen__Miller_Rabin_primality_test
+'''.strip()), __
+('all_prime_factors_gen', 'all_prime_factors_gen__Eratosthenes_sieve', 'min_prime_factor_gen', 'min_prime_factor_gen__Eratosthenes_sieve', 'prime_gen', 'prime_gen__Eratosthenes_sieve', 'prime_gen__Miller_Rabin_primality_test')
+assert (__:=len(_data4hold_all_weakrefs4caches_[0])) == 7, __
+#@20250419
+def hold_all_weakrefs4caches_():
+    '-> tuple<weakref<lazy_seq>> # to replace 『lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()』' \
+    ' # all:instance:_IBaseGlobalControl4LazySeq.get_or_mk_lazy_seq_'
+    (nms, xs) = _data4hold_all_weakrefs4caches_
+    ws = tuple(x.get_or_mk_lazy_seq_() for x in xs)
+    return ws
+hold_all_weakrefs4caches_()
+
+def _helper4renaming_probable_prime_():
+    r'''[[[
+    'helper:rename:pseudoprime --> probable_prime'
+
+@20250419
+:%s/^def \(\w*\)pseudoprime\(\w*\)\((.*):\)$/def \1probable_prime\2\3\r44444; \1pseudoprime\2 = \1probable_prime\2  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+    只替换了15个 #预期:16个
+        缺失:iter_pseudoprimes__between_
+
+@20250419
+:%s/^\(\w*\)pseudoprime\(\w*\) = \(\w*\)pseudoprime\(\w*\)$/\1probable_prime\2 = \3probable_prime\4\r44444; \0  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+
+    #]]]'''#'''
+    def is_ok_(nm, x, /):
+        return 'pseudo' in nm
+    (nms, xs) = _filter4globals_(is_ok_)
+    def is_ok_(nm, x, /):
+        return 'pseudoprime' in nm
+    (_nms, _xs) = _filter4globals_(is_ok_)
+    assert _nms == nms, set(nms)^set(_nms)
+    return (nms, xs)
+44444; _helper4renaming_pseudoprime_ = _helper4renaming_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+_data4renaming_pseudoprime_ = _helper4renaming_pseudoprime_()
+assert (__:='\n'.join(_data4renaming_pseudoprime_[0])) == (r'''
+_helper4renaming_pseudoprime_
+_is_strong_pseudoprime_
+_iter_pseudoprimes__inside_
+_kw__is_strong_pseudoprime__basis_
+detect_strong_pseudoprime__not_waste_too_much_time_
+is_strong_pseudoprime_
+is_strong_pseudoprime__basis_
+is_strong_pseudoprime__basis__with_trial_division_
+iter_pairwise_diff_pseudoprimes__ge_
+iter_pseudoprimes__between_
+iter_pseudoprimes__ge_
+iter_pseudoprimes__ge_lt_
+iter_pseudoprimes__inside_
+next_pseudoprime__ge_
+prev_may_pseudoprime__lt_
+reversed_iter_pseudoprimes__lt_
+'''.strip()), __
+('_helper4renaming_pseudoprime_', '_is_strong_pseudoprime_', '_iter_pseudoprimes__inside_', '_kw__is_strong_pseudoprime__basis_', 'detect_strong_pseudoprime__not_waste_too_much_time_', 'is_strong_pseudoprime_', 'is_strong_pseudoprime__basis_', 'is_strong_pseudoprime__basis__with_trial_division_', 'iter_pairwise_diff_pseudoprimes__ge_', 'iter_pseudoprimes__between_', 'iter_pseudoprimes__ge_', 'iter_pseudoprimes__ge_lt_', 'iter_pseudoprimes__inside_', 'next_pseudoprime__ge_', 'prev_may_pseudoprime__lt_', 'reversed_iter_pseudoprimes__lt_')
+assert (__:=len(_data4renaming_pseudoprime_[0])) == 16, __
+######################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     pass
 
 
 
 
+#重命名前:
+#.__all__
+#.
+#.
+#.from seed.math.prime_gens import hold_all_weakrefs4caches_
+#.from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_
+#.
+#.from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_
+#.
+#.from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_factor4uint_lt_, tabulate_may_factorization4uint_lt_
+#.
+#.
+#.
+#.from seed.math.prime_gens import prime_gen__Eratosthenes_sieve, prime_gen__Miller_Rabin_primality_test
+#.
+#.from seed.math.prime_gens import prime_gen, prime_filter__using_primality_test_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+#.
+#.from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
+#.
+#.from seed.math.prime_gens import is_prime__le_pow2_81_, next_pseudoprime__ge_, prev_may_pseudoprime__lt_, next_may_prime__le_pow2_81__ge_, prev_may_prime__le_pow2_81__lt_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+#.
+#.from seed.math.prime_gens import iter_pseudoprimes__ge_, reversed_iter_pseudoprimes__lt_, iter_primes__le_pow2_81__ge_, reversed_iter_primes__le_pow2_81__lt_
+#.from seed.math.prime_gens import iter_pairwise_diff_pseudoprimes__ge_, iter_pairwise_diff_primes__le_pow2_81__ge_
+#.
+#.#######
+#.from seed.math.prime_gens import iter_pseudoprimes__inside_, iter_pseudoprimes__ge_lt_# iter_pseudoprimes__between_
+#.from seed.math.prime_gens import prev_may_pseudoprime__lt_, next_pseudoprime__ge_, reversed_iter_pseudoprimes__lt_, iter_pseudoprimes__ge_
+#.from seed.math.prime_gens import prev_may_prime__le_pow2_81__lt_, next_may_prime__le_pow2_81__ge_, reversed_iter_primes__le_pow2_81__lt_, iter_primes__le_pow2_81__ge_
+#.#######
+#.
+#.from seed.math.prime_gens import is_strong_pseudoprime__basis__with_trial_division_, continuous_trial_division_, iter_continuous_prime_bases_, callable5xfilter4continuous_bases, mk_initial_state4filter4continuous_bases_, filter4continuous_bases4II_prime_basis_gtN, filter4continuous_bases4empty, mk_filter4continuous_bases4fixed_size
+#.    # @20250130
+#.from seed.math.prime_gens import mk_tribool_delegate5PRP_test_, is_strong_pseudoprime__basis__with_trial_division_
+#.    # @20250131
+#.
+#.
+
+
+r'''[[[
+后续:_helper4renaming_pseudoprime_()
+
+@20250419
+:.+1,$s/pseudoprime/probable_prime/g
+    #替换16次/9行
+#]]]'''#'''
+
+#重命名后:
 __all__
 
-
-from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_
+from seed.math.prime_gens import hold_all_weakrefs4caches_
+from seed.math.prime_gens import detect_strong_probable_prime__not_waste_too_much_time_
 
 from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_
 
@@ -3697,23 +4095,24 @@ from seed.math.prime_gens import prime_gen__Eratosthenes_sieve, prime_gen__Mille
 
 from seed.math.prime_gens import prime_gen, prime_filter__using_primality_test_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
 
-from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
+from seed.math.prime_gens import is_strong_probable_prime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
 
-from seed.math.prime_gens import is_prime__le_pow2_81_, next_pseudoprime__ge_, prev_may_pseudoprime__lt_, next_may_prime__le_pow2_81__ge_, prev_may_prime__le_pow2_81__lt_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+from seed.math.prime_gens import is_prime__le_pow2_81_, next_probable_prime__ge_, prev_may_probable_prime__lt_, next_may_prime__le_pow2_81__ge_, prev_may_prime__le_pow2_81__lt_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
 
-from seed.math.prime_gens import iter_pseudoprimes__ge_, reversed_iter_pseudoprimes__lt_, iter_primes__le_pow2_81__ge_, reversed_iter_primes__le_pow2_81__lt_
-from seed.math.prime_gens import iter_pairwise_diff_pseudoprimes__ge_, iter_pairwise_diff_primes__le_pow2_81__ge_
+from seed.math.prime_gens import iter_probable_primes__ge_, reversed_iter_probable_primes__lt_, iter_primes__le_pow2_81__ge_, reversed_iter_primes__le_pow2_81__lt_
+from seed.math.prime_gens import iter_pairwise_diff_probable_primes__ge_, iter_pairwise_diff_primes__le_pow2_81__ge_
 
 #######
-from seed.math.prime_gens import iter_pseudoprimes__inside_, iter_pseudoprimes__ge_lt_# iter_pseudoprimes__between_
-from seed.math.prime_gens import prev_may_pseudoprime__lt_, next_pseudoprime__ge_, reversed_iter_pseudoprimes__lt_, iter_pseudoprimes__ge_
+from seed.math.prime_gens import iter_probable_primes__inside_, iter_probable_primes__ge_lt_# iter_probable_primes__between_
+from seed.math.prime_gens import prev_may_probable_prime__lt_, next_probable_prime__ge_, reversed_iter_probable_primes__lt_, iter_probable_primes__ge_
 from seed.math.prime_gens import prev_may_prime__le_pow2_81__lt_, next_may_prime__le_pow2_81__ge_, reversed_iter_primes__le_pow2_81__lt_, iter_primes__le_pow2_81__ge_
 #######
 
-from seed.math.prime_gens import is_strong_pseudoprime__basis__with_trial_division_, continuous_trial_division_, iter_continuous_prime_bases_, callable5xfilter4continuous_bases, mk_initial_state4filter4continuous_bases_, filter4continuous_bases4II_prime_basis_gtN, filter4continuous_bases4empty, mk_filter4continuous_bases4fixed_size
+from seed.math.prime_gens import is_strong_probable_prime__basis__with_trial_division_, continuous_trial_division_, iter_continuous_prime_bases_, callable5xfilter4continuous_bases, mk_initial_state4filter4continuous_bases_, filter4continuous_bases4II_prime_basis_gtN, filter4continuous_bases4empty, mk_filter4continuous_bases4fixed_size
     # @20250130
-from seed.math.prime_gens import mk_tribool_delegate5PRP_test_, is_strong_pseudoprime__basis__with_trial_division_
+from seed.math.prime_gens import mk_tribool_delegate5PRP_test_, is_strong_probable_prime__basis__with_trial_division_
     # @20250131
+
 
 
 from seed.math.prime_gens import *

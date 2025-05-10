@@ -1,16 +1,16 @@
 #__all__:goto
 r'''[[[
-e zz
+e ../../python3_src/seed/recognize/rgnr/test/test4SimpleRecognizer.py
 
-z
-py -m nn_ns.app.debug_cmd   z -x # -off_defs
-py -m nn_ns.app.doctest_cmd z:__doc__ -ht # -ff -df
+seed.recognize.rgnr.test.test4SimpleRecognizer
+py -m nn_ns.app.debug_cmd   seed.recognize.rgnr.test.test4SimpleRecognizer -x # -off_defs
+py -m nn_ns.app.doctest_cmd seed.recognize.rgnr.test.test4SimpleRecognizer:__doc__ -ht # -ff -df
 
 [[
 ]]
 
-py_adhoc_call   z   @f
-from z import *
+py_adhoc_call   seed.recognize.rgnr.test.test4SimpleRecognizer   @f
+from seed.recognize.rgnr.test.test4SimpleRecognizer import *
 ]]]'''#'''
 __all__ = r'''
 '''.split()#'''
@@ -36,4 +36,4 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 __all__
-from z import *
+from seed.recognize.rgnr.test.test4SimpleRecognizer import *

@@ -21,6 +21,12 @@ view ../../python3_src/seed/helper/safe_eval.py
 
 @20250202:++to_show_StopIteration_value
 
+@20250301
+    ++kw:to_show_total_timedelta
+
+@20250404
+    ++kw:smay_kwd4supply_func4resting
+        supply/provide
 
 
 [[
@@ -166,6 +172,11 @@ xxx.yyy 模块全名
         <==> py_adhoc_call { --lineno=0 } xxx.yyy ,f
     py_adhoc_call { +lineno } xxx.yyy ,f
         <==> py_adhoc_call { --lineno=1 } xxx.yyy ,f
+新增:++smay_kwd4supply_func4resting
+    py_adhoc_call { +flush4print +to_show_timedelta  --may_args4PeriodicToilLeisureTime='(60,60)' --may_prompt_string6resting:$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  script.辅助冫有限域本原根判定牜泛化梅森指数   ,枚举冫拟泛化梅森指数纟素基灬牜输出指定数量每基扌  --case4trial_division:bit_length --bases4SPRP=[2,3,5,7]  +verbose --num_exps_per_radix=1  --radix2begin4exp='{269:3167+1}'  >> /sdcard/0my_files/tmp/0tmp
+    if try_resting_ is None:
+        def try_resting_():pass
+
 新增::++to_show_StopIteration_value
     py_adhoc_call  { +to_show_StopIteration_value } seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cube_root   ,iter_try_factor1_pint__via_Lehman_method__layered__easy_   ='(2**17-1)*(2**31-1)'
 新增:
@@ -453,6 +464,8 @@ from itertools import islice
 from seed.for_libs.for_signal import PostponeKeyboardInterrupt
     # ++kw:to_postpone_KeyboardInterrupt_until_yield => flush4print
 
+# ++kw:to_show_total_timedelta
+
 # ++kw:to_show_timedelta
 # ++kw:may_prompt_string6resting
 # ++kw:may_args4PeriodicToilLeisureTime
@@ -658,7 +671,12 @@ def adhoc_argparser__main__call8module(may_argv, /):
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
-    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False, to_show_StopIteration_value=False):
+    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting=''):
+        ######################
+        check_type_is(str, smay_kwd4supply_func4resting)
+        if smay_kwd4supply_func4resting:dict(**{smay_kwd4supply_func4resting:1})
+        ######################
+        check_type_is(bool, to_show_total_timedelta)
         ######################
         check_type_is(bool, to_show_StopIteration_value)
         ######################
@@ -704,8 +722,10 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 lineno += offset
                 print(lineno, end=':')
                 pass
+        #@20250404:++kw:smay_kwd4supply_func4resting
+        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting)
         #@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
-        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value)
+        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta)
         #@20250118: ++kw:flush4print
         return (_postprocess, may_end4print, flush4print)
         return (_postprocess, may_end4print)
@@ -722,10 +742,11 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         options4argparser
     (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
     _mk_postprocess_ex
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
-    return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, options4argparser)
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, options4argparser)
 
 def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv, /):
+  if 1:
     try:
         ((options4argparser, (prefix, payload4prefix, func_name), args4call), (positional_args, flag2bool, keyword2arg, keyword2args)) = adhoc_argparse__call(prefixes4func_name4adhoc_argparser__main__call, may_argv)
     except AdhocArgParserError__show_help_then_exit_with_err as e:
@@ -734,19 +755,22 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     except AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag:
         show_help();exit(0);
 
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
     setting4prefix = _parse_payload4prefix(prefix, payload4prefix, may_end4print=may_end4print, flush4print=flush4print)
-    777;postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value
+    777;postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta
     to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
+    kwds4extra = {smay_kwd4supply_func4resting:try_resting_} if smay_kwd4supply_func4resting else {}
 
     main_func = options4argparser_func_name_to_main_func(options4argparser, func_name)
     if not callable(main_func): raise AdhocArgParserError(func_name)
+  #end-if 1:
+  with timer(prefix=f'total:', _to_show_=to_show_total_timedelta, _show_hint_on_enter_=False):
 
-    r = decorator4show_py_help(main_func)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    r = decorator4show_py_help(main_func)(*positional_args, **flag2bool, **keyword2arg, **keyword2args, **kwds4extra)
     r = islice_(r)
     if prefix == _prefix4normal_call:
         if r is not None:
@@ -798,6 +822,7 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
 
     return None
         #return r #meaningless since run out iterator when print
+  #end-with timer(prefix=f'total:', _to_show_=to_show_total_timedelta, _show_hint_on_enter_=False):
 
 def show_help():
     print(r'''

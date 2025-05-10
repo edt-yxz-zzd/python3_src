@@ -4,6 +4,8 @@ section:
   finger_tree_ops
 
 
+日期
+:r !date +@\%Y\%m\%d
 
 
 

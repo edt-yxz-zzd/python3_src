@@ -20,8 +20,12 @@ py -m nn_ns.app.doctest_cmd seed.str_tools.cut_text_by_marker_seq:__doc__ -ht
 >>> _e_mr = ':mmm:end'
 >>> _ans = ['\nabc\n', '\n666999\n', '\nxyz\n', ]
 
->>> assert cut_text_by_marker_seq(_txt0, _b_mr, _e_mr) == _ans
->>> assert strip_text_by_marker_pair(_txt0, _b_mr, _e_mr) == _ans[1]
+>>> cut_text_by_marker_seq(_txt0, _b_mr, _e_mr) == _ans
+True
+>>> strip_text_by_marker_pair(_txt0, _b_mr, _e_mr) == _ans[1]
+True
+>>> [*iter_eval_lines_by_marker_pair(_txt0, _b_mr, _e_mr)]
+[666999]
 
 
 
@@ -30,11 +34,37 @@ py -m nn_ns.app.doctest_cmd seed.str_tools.cut_text_by_marker_seq:__doc__ -ht
 __all__ = r'''
 cut_text_by_marker_seq
     strip_text_by_marker_pair
+        iter_eval_lines_by_marker_pair
 '''.split()#'''
 __all__
 
+def iter_eval_lines_by_marker_pair(txt, begin_marker, end_marker, /, *, eval_='literal_eval'):
+    if type(eval_) is str:
+        if eval_ == 'literal_eval':
+            from ast import literal_eval as eval_
+        elif eval_ == 'eval':
+            eval_ = eval
+        else:
+            raise Exception(f'unknown eval_:{eval_!r}')
+        eval_
+    eval_
+    assert callable(eval_)
+    _txt_ = strip_text_by_marker_pair(txt, begin_marker, end_marker)
+    lines = _txt_.split('\n')
+    for line in lines:
+        if not line or line[0] in '# >.':
+            # skip indents
+            # skip comment
+            # skip doctest:>>> ...
+            continue
+        yield eval_(line)
+
+
 def strip_text_by_marker_pair(txt, begin_marker, end_marker, /):
-    _, s, _ = cut_text_by_marker_seq(txt, begin_marker, end_marker)
+    if begin_marker is None is end_marker:
+        s = txt
+    else:
+        _, s, _ = cut_text_by_marker_seq(txt, begin_marker, end_marker)
     return s
 def cut_text_by_marker_seq(txt, /, *markers):
     ss = []
@@ -51,5 +81,5 @@ assert cut_text_by_marker_seq('abcde', *'bd') == [*'ace']
 assert strip_text_by_marker_pair('abcde', *'bd') == 'c'
 
 __all__
-from seed.str_tools.cut_text_by_marker_seq import cut_text_by_marker_seq, strip_text_by_marker_pair
+from seed.str_tools.cut_text_by_marker_seq import cut_text_by_marker_seq, strip_text_by_marker_pair, iter_eval_lines_by_marker_pair
 from seed.str_tools.cut_text_by_marker_seq import *

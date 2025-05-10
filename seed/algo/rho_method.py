@@ -10,15 +10,21 @@ re-export:
     view ../../python3_src/seed/math/sprp_factor_pint__via_rho_method_.py
     from seed.math.sprp_factor_pint__via_rho_method_ import try_factor1_pint__via_rho_method_, sprp_factor_pint__via_rho_method_
 
-seed.algo.rho_method
+
+py -m seed.algo.rho_method
 py -m nn_ns.app.debug_cmd   seed.algo.rho_method -x # -off_defs
 py -m nn_ns.app.doctest_cmd seed.algo.rho_method:__doc__ -ht # -ff -df
+py -m nn_ns.app.doctest_cmd seed.algo.rho_method:_some4doctest -ht # -ff -df
 
 [[
 rho_method:
     ver1: f(2*k) ~ f(k)
     ver2: f(k) ~ f(2**floor_log2(k))
     ver2_1: f(k) ~ f(-1+2**floor_log2(k))
+
+    trial:(x+1/x)
+    trial:(x<*>x+k)
+        xmul:view ../../python3_src/seed/algo/FFT/Walsh_transform.py
 ]]
 
 
@@ -276,6 +282,193 @@ below output before: patch001__seed_definition
 
 
 
+######################
+_f4factor_V
+>>> pow(3, -1, 15)
+Traceback (most recent call last):
+    ...
+ValueError: base is not invertible for the given modulus
+
+def try_factor1_pint__via_rho_method_(n, f_=None, /, *, to_detect_SPRP=False, seeds=None, max_num_seeds=None, max_num_tries_per_seed=None, to_output_statistics=False)
+>>> fV = lambda n, /, *, _verbose=True, **kwds:try_factor1_pint__via_rho_method_(n, _f4factor_V, to_output_statistics=True, _verbose=_verbose, **kwds)
+>>> fV(2**37-1)  #doctest: +ELLIPSIS
+w=608
+max_num_seeds=2432
+max_num_tries_per_seed=2432
+seeds=<itertools.islice object at 0x...>
+1:(608, 137438953470)
+(223, 1, 53)
+>>> fV(2**41-1)  #doctest: +ELLIPSIS
+w=1217
+max_num_seeds=4868
+max_num_tries_per_seed=4868
+seeds=<itertools.islice object at 0x...>
+1:(1217, 2199023255550)
+(13367, 1, 446)
+>>> fV(2**37-1, seeds=[(0, 1)])  #doctest: +ELLIPSIS
+w=608
+max_num_seeds=2432
+max_num_tries_per_seed=2432
+seeds=<itertools.islice object at 0x...>
+1:(0, 1)
+(223, 1, 15)
+>>> fV(2**41-1, seeds=[(0, 1)])  #doctest: +ELLIPSIS
+w=1217
+max_num_seeds=4868
+max_num_tries_per_seed=4868
+seeds=<itertools.islice object at 0x...>
+1:(0, 1)
+(13367, 1, 136)
+>>> fV(2**59-1, seeds=[(0, 1)], _verbose=False)
+(179951, 1, 1846)
+>>> fV(2**67-1, seeds=[(0, 1)], _verbose=False)
+(193707721, 1, 65024)
+
+>>> fV(2**101-1, seeds=[(0, 1)], _verbose=False) #doctest: +SKIP
+    #too slow
+
+>>> fV(2**59-1, _verbose=False)
+(179951, 1, 164)
+>>> fV(2**67-1, _verbose=False)
+(193707721, 1, 5418)
+>>> fV(2**101-1, _verbose=False) #doctest: +SKIP
+    #too slow
+
+
+
+
+
+
+
+
+######################
+#fail:
+_f4factor_W
+>>> fW = lambda n, /, *, _verbose=True, **kwds:try_factor1_pint__via_rho_method_(n, _f4factor_W, to_output_statistics=True, _verbose=_verbose, **kwds)
+>>> fW(2**37-1, _verbose=True)  #doctest: +ELLIPSIS
+w=608
+max_num_seeds=2432
+max_num_tries_per_seed=2432
+seeds=<itertools.islice object at 0x...>
+1:(608, 137438953470)
+(223, 1, 46)
+>>> fW(2**41-1, _verbose=True)  #doctest: +ELLIPSIS +SKIP
+w=1217
+max_num_seeds=4868
+max_num_tries_per_seed=4868
+seeds=<itertools.islice object at 0x...>
+1:(1217, 2199023255550)
+(13367, 1, 1976)
+>>> fW(2**37-1, seeds=[(0, 1)], _verbose=False)
+(-1, 1, 5)
+>>> fW(2**41-1, seeds=[(0, 1)], _verbose=False)
+(-1, 1, 5)
+>>> fW(2**37-1, seeds=[(0, 37)], _verbose=False)
+(223, 1, 125)
+>>> fW(2**41-1, seeds=[(0, 41)], _verbose=False) #doctest: +SKIP
+(-1, 1, 4869)
+
+
+
+
+######################
+#fail:
+_f4factor_NmodX
+>>> fMOD = lambda n, /, *, _verbose=True, **kwds:try_factor1_pint__via_rho_method_(n, _f4factor_NmodX, to_output_statistics=True, _verbose=_verbose, **kwds)
+>>> fMOD(2**37-1, _verbose=True)  #doctest: +ELLIPSIS
+w=608
+max_num_seeds=2432
+max_num_tries_per_seed=2432
+seeds=<itertools.islice object at 0x...>
+1:(608, 137438953470)
+2:(609, 137438953470)
+3:(610, 137438953470)
+4:(611, 137438953470)
+...
+49:(656, 137438953470)
+50:(657, 137438953470)
+51:(658, 137438953470)
+(223, 51, 806)
+
+>>> fMOD(2**41-1, _verbose=True)  #doctest: +ELLIPSIS +SKIP
+w=1217
+max_num_seeds=4868
+max_num_tries_per_seed=4868
+seeds=<itertools.islice object at 0x...>
+...
+4868:(6084, 2199023255550)
+(-1, 4868, 165433)
+
+
+
+
+
+
+######################
+#fail:
+_f4factor_NmodX_plus_squareX
+>>> fMODaddSQ = lambda n, /, *, _verbose=True, **kwds:try_factor1_pint__via_rho_method_(n, _f4factor_NmodX_plus_squareX, to_output_statistics=True, _verbose=_verbose, **kwds)
+>>> fMODaddSQ(2**37-1, _verbose=True)  #doctest: +ELLIPSIS
+w=608
+max_num_seeds=2432
+max_num_tries_per_seed=2432
+seeds=<itertools.islice object at 0x...>
+1:(608, 137438953470)
+(223, 1, 216)
+>>> fMODaddSQ(2**41-1, _verbose=True)  #doctest: +ELLIPSIS
+w=1217
+max_num_seeds=4868
+max_num_tries_per_seed=4868
+seeds=<itertools.islice object at 0x...>
+1:(1217, 2199023255550)
+(13367, 1, 305)
+
+>>> fMODaddSQ(2**59-1, _verbose=True)  #doctest: +ELLIPSIS +SKIP
+w=27554
+max_num_seeds=110216
+max_num_tries_per_seed=110216
+seeds=<itertools.islice object at 0x...>
+1:(27554, 576460752303423486)
+(179951, 1, 72779)
+
+#slow:KeyboardInterrupt:>>> fMODaddSQ(2**67-1, _verbose=True)  #doctest: +ELLIPSIS
+#slow:KeyboardInterrupt:>>> fMODaddSQ(2**101-1, _verbose=True)  #doctest: +ELLIPSIS
+
+
+
+######################
+#fail:
+_f4factor_NmodX_plus_X
+>>> fMODaddX = lambda n, /, *, _verbose=True, **kwds:try_factor1_pint__via_rho_method_(n, _f4factor_NmodX_plus_X, to_output_statistics=True, _verbose=_verbose, **kwds)
+>>> fMODaddX(2**37-1, _verbose=True)  #doctest: +ELLIPSIS
+w=608
+max_num_seeds=2432
+max_num_tries_per_seed=2432
+seeds=<itertools.islice object at 0x...>
+1:(608, 137438953470)
+(223, 1, 33)
+>>> fMODaddX(2**41-1, _verbose=True)  #doctest: +ELLIPSIS +SKIP
+...
+(13367, 363, 42016)
+
+>>> fMODaddX(2**59-1, _verbose=True)  #doctest: +ELLIPSIS +SKIP
+w=27554
+max_num_seeds=110216
+max_num_tries_per_seed=110216
+seeds=<itertools.islice object at 0x...>
+...
+(179951, 140, 28360)
+
+
+
+######################
+#fail:
+_f4factor_NmodX_xor_X
+>>> fMODaXOR = lambda n, /, *, _verbose=False, **kwds:try_factor1_pint__via_rho_method_(n, _f4factor_NmodX_xor_X, to_output_statistics=True, _verbose=_verbose, **kwds)
+>>> fMODaXOR(2**37-1)  #doctest: +ELLIPSIS
+(223, 9, 556)
+>>> fMODaXOR(2**41-1)  #doctest: +ELLIPSIS +SKIP
+(13367, 1422, 141438)
 
 
 
@@ -285,6 +478,14 @@ below output before: patch001__seed_definition
 
 
 
+
+
+
+
+
+
+
+######################
 view ../../python3_src/nn_ns/math_nn/factor_Mersenne_number_into_prime2exp.py.cached.txt
 >37
 : {223: 1, 616318177: 1}
@@ -362,6 +563,33 @@ py_adhoc_call   seed.algo.rho_method   @sprp_factor_pint__via_rho_method_ +to_ou
 
 
 ]]]'''#'''
+
+_template4some4doctest = r'''[[[
+######################
+#fail:
+_f4factor_XXX
+>>> fXXX = lambda n, /, *, _verbose=False, **kwds:try_factor1_pint__via_rho_method_(n, _f4factor_XXX, to_output_statistics=True, _verbose=_verbose, **kwds)
+>>> fXXX(2**37-1)  #doctest: +ELLIPSIS
+>>> fXXX(2**41-1)  #doctest: +ELLIPSIS +SKIP
+
+>>> fXXX(2**59-1)  #doctest: +ELLIPSIS +SKIP
+
+#]]]'''#'''
+_some4doctest = r'''[[[
+######################
+
+
+
+
+
+
+
+
+
+
+
+#]]]'''#'''
+
 __all__ = r'''
 rho_method_
 try_factor1_pint__via_rho_method_
@@ -548,6 +776,79 @@ def _f4factor(n, a, x, /):
     '''#'''
     # patch001__seed_definition
     return (x**2+a)%n
+
+#@20250223
+def _f4factor_V(n, a, x, /):
+    r'''
+    :: n -> a -> x -> (x+1/x+a)%n
+        [x0 <- [0..=n-1]]
+        [a <- [1..=n-3]]
+        [seed := (a, x0)]
+    '''#'''
+    try:
+        ix = pow(x, -1, n)
+        #pow(3, -1, 15)
+        #ValueError: base is not invertible for the given modulus
+    except ValueError:
+        return x
+    return (x+ix+a)%n
+#@20250223
+def _f4factor_W(n, a, x, /):
+    r'''
+    :: n -> a -> x -> (x<*>x+a)%n
+        xmul-Walsh_transform
+        [x0 <- [0..=n-1]]
+        [a <- [1..=n-3]]
+        [seed := (a, x0)]
+    '''#'''
+    return (_xmul(x,x)+a)%n
+#@20250223
+def _xmul(x, y):
+    'xmul-Walsh_transform'
+    global _xmul
+    from seed.algo.FFT.Walsh_transform import uint_xmul__via_Walsh_transform_ as _xmul
+    return _xmul(x, y)
+
+#@20250323
+def _f4factor_NmodX(n, a, x, /):
+    r'''
+    :: n -> a -> x -> (n%x+a)%n if x else 0
+        [x0 <- [0..=n-1]]
+        [a <- [1..=n-3]]
+        [seed := (a, x0)]
+    '''#'''
+    return (n%x+a)%n if x else 0
+#@20250323
+def _f4factor_NmodX_plus_squareX(n, a, x, /):
+    r'''
+    :: n -> a -> x -> ((n%x if x else 0)+a+x**2)%n
+        [x0 <- [0..=n-1]]
+        [a <- [1..=n-3]]
+        [seed := (a, x0)]
+    '''#'''
+    return ((n%x if x else 0)+a+x**2)%n
+#@20250323
+def _f4factor_NmodX_plus_X(n, a, x, /):
+    r'''
+    :: n -> a -> x -> ((n%x if x else 0)+a+x)%n
+        [x0 <- [0..=n-1]]
+        [a <- [1..=n-3]]
+        [seed := (a, x0)]
+    '''#'''
+    return ((n%x if x else 0)+a+x)%n
+#@20250323
+def _f4factor_NmodX_xor_X(n, a, x, /):
+    r'''
+    :: n -> a -> x -> (((n%x if x else 0)+a)^x)%n
+        [x0 <- [0..=n-1]]
+        [a <- [1..=n-3]]
+        [seed := (a, x0)]
+    '''#'''
+    return (((n%x if x else 0)+a)^x)%n
+
+
+
+
 def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seeds=None, max_num_tries_per_seed=None, to_output_statistics=False):
     'n/int{>=1} -> may (n -> (*params) -> uint%n -> uint%n) -> (kw:seeds/may (Iter params_x0/(*params, x0))) -> (success_part, failure_part)/(sprp2exp, non_sprp2exp)/({sprp:exp}, {non_sprp:exp}) if not to_output_statistics else (sprp2exp, non_sprp2exp, total_steps) # [SPRP == strong probable-prime]'
 
@@ -606,10 +907,11 @@ def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seed
     if to_output_statistics:
         return (sprp2exp, non_sprp2exp, total_steps)
     return (sprp2exp, non_sprp2exp)
-def try_factor1_pint__via_rho_method_(n, f_=None, /, *, to_detect_SPRP=False, seeds=None, max_num_seeds=None, max_num_tries_per_seed=None, to_output_statistics=False):
+def try_factor1_pint__via_rho_method_(n, f_=None, /, *, to_detect_SPRP=False, seeds=None, max_num_seeds=None, max_num_tries_per_seed=None, to_output_statistics=False, _verbose=False):
     'n/int{>=1}/[not is_prime(n)] -> may (n -> (*params) -> uint%n -> uint%n) -> (kw:seeds/may (Iter params_x0/(*params, x0))) -> imay proper_factor if not to_output_statistics else (imay_proper_factor, jseed, total_steps) # [SPRP == strong probable-prime]'
     check_type_is(bool, to_detect_SPRP)
     check_type_is(bool, to_output_statistics)
+    check_type_is(bool, _verbose)
     check_int_ge(1, n)
     if to_detect_SPRP:
         if not _is_SPRP_(n):raise ValueError('is composite integer')
@@ -635,6 +937,11 @@ def try_factor1_pint__via_rho_method_(n, f_=None, /, *, to_detect_SPRP=False, se
 
     f_ = ifNone(f_, _f4factor)
     #f = curry1(f_, n)
+    if _verbose:
+        print(f'w={w}')
+        print(f'max_num_seeds={max_num_seeds}')
+        print(f'max_num_tries_per_seed={max_num_tries_per_seed}')
+        print(f'seeds={seeds}')
 
     max_j = max_num_tries_per_seed
     test_ = lambda x,y:gcd(x-y,n)
@@ -650,6 +957,7 @@ def try_factor1_pint__via_rho_method_(n, f_=None, /, *, to_detect_SPRP=False, se
 
     jseed = 0
     for jseed, seed in enumerate(seeds, 1):
+        if _verbose: print(jseed, seed, sep=':')
         params_x0 = seed
         (*params, x0) = params_x0
         def f(j, xj, /, *, f_=f_, n=n, params=params):
@@ -674,6 +982,9 @@ def try_factor1_pint__via_rho_method_(n, f_=None, /, *, to_detect_SPRP=False, se
         return (imay_proper_factor, jseed, total_steps)
 
     return imay_proper_factor
+
+
+
 
 
 

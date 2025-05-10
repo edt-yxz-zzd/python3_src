@@ -1,6 +1,9 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/uint_partition.py
+view script/拆分冫幂方纟奇数.py
+    泛化:3**3==27==1+6+12+8#魔方
+
 十五爻元密钥纟三爻元置换:goto
 十二爻元密钥纟三爻元置换:goto
 
@@ -65,6 +68,58 @@ view others/数学/编程/密码学/我的设计冫加密框架.txt
 17:297
 18:385
 19:490
+>>> tmp_cache2 = []
+>>> uint2num_uint_partitions__len_le_(max4num_parts:=16, u:=20, cache2=tmp_cache2)
+620
+>>> print_iterable_with_lineno_(99999, tmp_cache2, offset=0)
+0:[[1]]
+1:[[0], [1]]
+2:[[0], [1], [1, 2]]
+3:[[0], [1], [], [1, 2, 3]]
+4:[[0], [1], [], [], [1, 3, 4, 5]]
+5:[[0], [1], [], [], [], [1, 3, 5, 6, 7]]
+6:[[0], [1], [], [], [], [], [1, 4, 7, 9, 10, 11]]
+7:[[0], [1], [], [], [], [], [], [1, 4, 8, 11, 13, 14, 15]]
+8:[[0], [1], [], [], [], [], [], [], [1, 5, 10, 15, 18, 20, 21, 22]]
+9:[[0], [1], [], [], [], [], [], [], [], [1, 5, 12, 18, 23, 26, 28, 29, 30]]
+10:[[0], [1], [], [], [], [], [], [], [], [], [1, 6, 14, 23, 30, 35, 38, 40, 41, 42]]
+11:[[0], [1], [], [], [], [], [], [], [], [], [], [1, 6, 16, 27, 37, 44, 49, 52, 54]]
+12:[[0], [1], [], [], [], [], [], [], [], [], [], [], [1, 7, 19, 34, 47, 58, 65, 70]]
+13:[[0], [1], [], [], [], [], [], [], [], [], [], [], [], [1, 7, 21, 39, 57, 71, 82]]
+14:[[0], [1], [], [], [], [], [], [], [], [], [], [], [], [7], [1, 8, 24, 47, 70, 90]]
+15:[[0], [1], [], [], [], [], [], [], [], [], [], [], [], [], [7], [1, 8, 27, 54, 84]]
+16:[[0], [1], [], [], [], [], [], [], [], [], [], [], [], [], [7], [8, 29, 63]]
+17:[[0], [1], [], [], [], [], [], [], [], [], [], [], [], [], [], [7, 31]]
+18:[[0], [1], [], [], [], [], [], [], [], [], [], [], [], [], [], [7]]
+19:[[0], [1]]
+20:[[0], [1], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [7, 38, 101, 185, 275, 357, 427, 481, 523, 553, 575, 590, 601, 608, 613, 616, 618, 619, 620]]
+>>> print_iterable_with_lineno_(99999, [[uint2num_uint_partitions__len_le_(max4num_parts, u, cache2=tmp_cache2) for max4num_parts in range(u+1)] for u in range(20)], offset=0)
+0:[1]
+1:[0, 1]
+2:[0, 1, 2]
+3:[0, 1, 2, 3]
+4:[0, 1, 3, 4, 5]
+5:[0, 1, 3, 5, 6, 7]
+6:[0, 1, 4, 7, 9, 10, 11]
+7:[0, 1, 4, 8, 11, 13, 14, 15]
+8:[0, 1, 5, 10, 15, 18, 20, 21, 22]
+9:[0, 1, 5, 12, 18, 23, 26, 28, 29, 30]
+10:[0, 1, 6, 14, 23, 30, 35, 38, 40, 41, 42]
+11:[0, 1, 6, 16, 27, 37, 44, 49, 52, 54, 55, 56]
+12:[0, 1, 7, 19, 34, 47, 58, 65, 70, 73, 75, 76, 77]
+13:[0, 1, 7, 21, 39, 57, 71, 82, 89, 94, 97, 99, 100, 101]
+14:[0, 1, 8, 24, 47, 70, 90, 105, 116, 123, 128, 131, 133, 134, 135]
+15:[0, 1, 8, 27, 54, 84, 110, 131, 146, 157, 164, 169, 172, 174, 175, 176]
+16:[0, 1, 9, 30, 64, 101, 136, 164, 186, 201, 212, 219, 224, 227, 229, 230, 231]
+17:[0, 1, 9, 33, 72, 119, 163, 201, 230, 252, 267, 278, 285, 290, 293, 295, 296, 297]
+18:[0, 1, 10, 37, 84, 141, 199, 248, 288, 318, 340, 355, 366, 373, 378, 381, 383, 384, 385]
+19:[0, 1, 10, 40, 94, 164, 235, 300, 352, 393, 423, 445, 460, 471, 478, 483, 486, 488, 489, 490]
+>>> (_50:=[uint2num_uint_partitions__len_le_(..., u, cache2=tmp_cache2) for u in range(50)]) == [uint2num_uint_partitions_(u, cache=...) for u in range(50)]
+True
+>>> _50
+[1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, 56, 77, 101, 135, 176, 231, 297, 385, 490, 627, 792, 1002, 1255, 1575, 1958, 2436, 3010, 3718, 4565, 5604, 6842, 8349, 10143, 12310, 14883, 17977, 21637, 26015, 31185, 37338, 44583, 53174, 63261, 75175, 89134, 105558, 124754, 147273, 173525]
+
+
 >>> from math import *
 >>> log2(comb(231, 5))
 32.28899078630452
@@ -726,7 +781,9 @@ partition_uint_factorial_
     uint2iter_uint_partitions_
     num_permutations5uint_partition_
     uint2num_uint_partitions_
-num_set_partitions5uint_partition_
+    uint2num_uint_partitions__len_le_
+num_set_partitions5uint_partition_      num_unordered_choices5uint_partition_
+    num_ordered_choices5uint_partition_
 
 
 
@@ -734,31 +791,299 @@ num_set_partitions5uint_partition_
 
 
 
-uint2num_uint_partitions_
 uint2iter_uint_partitions_
+    uint2num_uint_partitions_
+    uint2num_uint_partitions__len_le_
 
 iter_parts5uint_partition_
     iter_parts5zipped_uint_partition_
 iter_counted_parts5uint_partition_
     iter_counted_parts5expanded_uint_partition_
 num_set_partitions5uint_partition_
+    num_unordered_choices5uint_partition_
+    num_ordered_choices5uint_partition_
 num_permutations5uint_partition_
 partition_uint_factorial_
 
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from enum import Enum, auto
 from math import factorial, comb, perm
 from itertools import repeat, groupby, compress# permutation# islice
 from seed.tiny_.check import check_type_is, check_int_ge
+from seed.debug.print_err import print_err
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
+_global_cache2 = []
+def uint2num_uint_partitions__len_le_(emay_max4num_parts, u, /, *, cache2, max4part=None):
+    '[O(u**2)] => emay_max4num_parts/uint -> u/uint -> (kw:max4part/uint) -> (kw:cache2/(None=>local|...=>global|[[[uint]]])) -> num_uint_partitions{all parts <= max4part}/uint{==cache2[u][max4num_parts][offsetted_max4part]} # [cache2==u2max4num_parts2offsetted_max4part2num_uint_partitions :: [[[uint]]] / list{list{list{uint}}}]'
+    check_int_ge(0, u)
+    # [u>=0]
+
+    max4part = u if max4part is None else max4part
+    check_int_ge(0, max4part)
+    max4part = min(u, max4part)
+    # [0 <= max4part <= u]
+
+    max4num_parts = u if emay_max4num_parts is ... else emay_max4num_parts
+    check_int_ge(0, max4num_parts)
+    max4num_parts = min(u, max4num_parts)
+    # [0 <= max4num_parts <= u]
+    # xxx:[(max4num_parts-1)*1+1*max4part <= u] =>: [(max4num_parts+max4part <= u+1]
+    #   !! [max4part =[def]= upperbound4part] not [max4part =[def]= max(parts4u, default=0)]
+
+    if not u <= max4num_parts*max4part:
+        return 0
+    # [u <= max4num_parts*max4part]
+    _3 = [u, max4num_parts, max4num_parts]
+    assert all(_3) is any(_3)
+
+    if cache2 is None:
+        cache2 = []
+    elif cache2 is ...:
+        cache2 = _global_cache2
+    check_type_is(list, cache2)
+    if not cache2:
+        cache2.append([[1]])
+    #assert cache2
+    #assert cache2[0]
+    #assert cache2[0][0]
+    assert cache2[0][0][0] == 1
+    # (_recur4uint2num_uint_partitions__len_le_, _loop4uint2num_uint_partitions__len_le_)
+    return _loop4uint2num_uint_partitions__len_le_(cache2, u, max4num_parts, max4part)
+class _Case4uint2num_uint_partitions__len_le_(Enum):
+    RETURN = auto()
+    RECUR4A = auto()
+    RECUR4B = auto()
+
+def __():
+    def calc_offsetted_max4part_ex_(u, max4num_parts, max4part, /):
+        # [0 <= max4num_parts <= u]
+        # [0 <= max4part <= u]
+        # [u <= max4num_parts*max4part]or[max4num_parts==0==max4part]
+        if max4num_parts:
+            # [max4num_parts >= 1]
+            # !! [u <= max4num_parts*max4part]
+            # [u/max4num_parts <= max4part]
+            # [max4part >= ceil(u/max4num_parts) == 1+(u-1)//max4num_parts == min4max4part]
+            min4max4part = 1+ (u-1)//max4num_parts
+        else:
+            min4max4part = 0
+            assert max4part == 0
+        min4max4part
+        offsetted_max4part = max4part-min4max4part
+        assert offsetted_max4part >= 0, ((u, max4num_parts, max4part), (min4max4part, offsetted_max4part))
+        return (min4max4part, offsetted_max4part)
+    C = _Case4uint2num_uint_partitions__len_le_
+    def set_(cache2, u, max4num_parts, min4max4part, offsetted_max4part, num_uint_partitions, /):
+        check_int_ge(0, num_uint_partitions)
+        assert max4num_parts >= 2
+        if len(cache2) < u+1:
+            if not cache2:
+                cache2.append([[1]])
+            for v in range(len(cache2), u+1):
+                cache2.append([[0], [1]])
+        m2o2n = cache2[u]
+        if len(m2o2n) < 2:
+            m2o2n += [[0], [1]][len(m2o2n):]
+            assert len(m2o2n) == 2
+        assert len(m2o2n) >= 2
+        if len(m2o2n) <= max4num_parts:
+            for _max4num_parts in range(len(m2o2n), max4num_parts+1):
+                #o = (u%_max4num_parts==0)
+                    # [u==_max4num_parts*_min4max4part]
+                #m2o2n.append([] if not o else [1])
+                m2o2n.append([])
+        #.assert len(m2o2n) >= max4num_parts, (u, max4num_parts, offsetted_max4part, num_uint_partitions, len(m2o2n))
+        #.if len(m2o2n) == max4num_parts:
+        #.    o = int(u == max4num_parts*min4max4part)
+        #.    assert offsetted_max4part == o, (u, max4num_parts, offsetted_max4part, num_uint_partitions)
+        #.    m2o2n.append([] if o==0 else [1])
+        assert len(m2o2n) > max4num_parts
+        o2n = m2o2n[max4num_parts]
+        if len(o2n) < offsetted_max4part:
+            assert len(o2n)+1 == offsetted_max4part == 1, (u, max4num_parts, offsetted_max4part, num_uint_partitions, len(o2n))
+            assert (u == max4num_parts*min4max4part), (u, max4num_parts, offsetted_max4part, num_uint_partitions)
+            o2n.append(1)
+        assert len(o2n) == offsetted_max4part, (u, max4num_parts, offsetted_max4part, num_uint_partitions, len(o2n))
+        o2n.append(num_uint_partitions)
+        assert cache2[u][max4num_parts][offsetted_max4part] == num_uint_partitions
+    def imay_get_(x, /, *ks):
+        #def imay_get_(cache2, u, max4num_parts, offsetted_max4part, /):
+        #lookup
+        for k in ks:
+            if not k < len(x):
+                return -1
+            x = x[k]
+        x
+        assert x >= 0
+        return x
+    def prepare(cache2, u, max4num_parts, max4part, /):
+        # [u >= 0]
+        # [max4num_parts >= 0]
+        # [max4part >= 0]
+        assert u >= 0
+        assert max4num_parts >= 0
+        assert max4part >= 0
+        max4num_parts = min(u, max4num_parts)
+        max4part = min(u, max4part)
+        # [0 <= max4num_parts <= u]
+        # [0 <= max4part <= u]
+
+        diff = max4num_parts*max4part -u
+        ######################
+        if diff >= 0:
+            # [diff >= 0]
+            # [u <= max4num_parts*max4part]
+            pass
+        else:
+            max4num_parts = 0
+            max4part = 0
+            # [max4num_parts==0==max4part]
+        (min4max4part, offsetted_max4part) = calc_offsetted_max4part_ex_(u, max4num_parts, max4part)
+            # required:[u <= max4num_parts*max4part]or[max4num_parts==0==max4part]
+        ######################
+        if diff < 0:
+            # [u > max4num_parts*max4part]
+            imay_num_uint_partitions = 0
+        elif diff == 0:
+            # [u == max4num_parts*max4part]
+            imay_num_uint_partitions = 1
+        else:
+            # [diff > 0]
+            # [0 <= u < max4num_parts*max4part]
+            # =>:
+            # [max4num_parts*max4part > 0]
+            # [max4num_parts > 0]
+            # [max4part > 0]
+
+            #imay_num_uint_partitions = -1
+            imay_num_uint_partitions = imay_get_(cache2, u, max4num_parts, offsetted_max4part)
+        imay_num_uint_partitions # imay num_uint_partitions
+        check_int_ge(-1, imay_num_uint_partitions)
+        # [imay_num_uint_partitions >= 0] ==>> [diff <= 0]or[diff > 0][lookup cache2 success]
+        # [imay_num_uint_partitions == -1] ==>> [diff > 0][lookup cache2 failure]
+        # [diff > 0] ==>>:
+            # [0 <= u < max4num_parts*max4part]
+            # [0 < max4num_parts <= u]
+            # [0 < max4part <= u]
+        return (u, max4num_parts, max4part, min4max4part, offsetted_max4part, diff, imay_num_uint_partitions)
+    def recur(cache2, u, max4num_parts, max4part, /):
+        (u, max4num_parts, max4part, min4max4part, offsetted_max4part, diff, imay_num_uint_partitions) = prepare(cache2, u, max4num_parts, max4part)
+        if not imay_num_uint_partitions == -1:
+            num_uint_partitions = imay_num_uint_partitions
+            return num_uint_partitions
+        # [imay_num_uint_partitions == -1]
+        # [diff > 0][lookup cache2 failure]
+        # [0 <= u < max4num_parts*max4part]
+        # [0 < max4num_parts <= u]
+        # [0 < max4part <= u]
+        a = recur(cache2, u-max4part, max4num_parts-1, max4part)
+            # case:[max_part==max4part]
+        b = recur(cache2, u, max4num_parts, max4part-1)
+            # case:[max_part<max4part]
+        num_uint_partitions = a+b
+        set_(cache2, u, max4num_parts, min4max4part, offsetted_max4part, num_uint_partitions)
+        return num_uint_partitions
+    #end-def recur(cache2, u, max4num_parts, max4part, /):
+
+    b_debug = 0b0000#False#True#0b0001
+    def put_RECUR(stk, cache2, u, max4num_parts, max4part, /):
+        if b_debug:saved = (u, max4num_parts, max4part)
+        result5prepare = (u, max4num_parts, max4part, min4max4part, offsetted_max4part, diff, imay_num_uint_partitions) = prepare(cache2, u, max4num_parts, max4part)
+        if b_debug:print_err('put_RECUR', saved, (u, max4num_parts, max4part), (min4max4part, offsetted_max4part))
+        if not imay_num_uint_partitions == -1:
+            num_uint_partitions = imay_num_uint_partitions
+            case = C.RETURN
+            payload = num_uint_partitions
+        else:
+            # [imay_num_uint_partitions == -1]
+            # [diff > 0][lookup cache2 failure]
+            # [0 <= u < max4num_parts*max4part]
+            # [0 < max4num_parts <= u]
+            # [0 < max4part <= u]
+            case = C.RECUR4A
+            payload = result5prepare
+        stk.append((case, payload))
+
+    def loop(cache2, u, max4num_parts, max4part, /):
+        stk = []
+            #stack :: [(case, payload)]
+            # [(case, payload) == (RETURN, num_uint_partitions)|(RECUR4A,result5prepare)|(RECUR4B,(result5prepare,a))]
+        put_RECUR(stk, cache2, u, max4num_parts, max4part)
+        while 1:
+            (case, payload) = stk[-1]
+            #############
+            match case:
+                case C.RECUR4A:
+                    result5prepare = payload
+                    (u, max4num_parts, max4part, min4max4part, offsetted_max4part, diff, imay_num_uint_partitions) = result5prepare
+                    put_RECUR(stk, cache2, u-max4part, max4num_parts-1, max4part)
+                        #a = recur(cache2, u-max4part, max4num_parts-1, max4part)
+                        # case:[max_part==max4part]
+                    continue
+                case C.RECUR4B:
+                    (result5prepare, a) = payload
+                    (u, max4num_parts, max4part, min4max4part, offsetted_max4part, diff, imay_num_uint_partitions) = result5prepare
+                    put_RECUR(stk, cache2, u, max4num_parts, max4part-1)
+                        #b = recur(cache2, u, max4num_parts, max4part-1)
+                        # case:[max_part<max4part]
+                    continue
+                case C.RETURN:
+                    num_uint_partitions = payload
+                case _:
+                    raise 000
+            #############
+            #case:RETURN
+            assert case == C.RETURN
+            num_uint_partitions
+            #############
+            stk.pop()
+            if not stk:
+                break
+                return num_uint_partitions
+            #############
+            (case, payload) = stk[-1]
+            match case:
+                case C.RECUR4A:
+                    a = num_uint_partitions
+                    payload = (payload, a)
+                    case = C.RECUR4B
+                case C.RECUR4B:
+                    b = num_uint_partitions
+                    ((u, max4num_parts, max4part, min4max4part, offsetted_max4part, diff, imay_num_uint_partitions), a) = payload
+                    num_uint_partitions = a+b
+                    payload = num_uint_partitions
+                    case = C.RETURN
+                    if 1:
+                        set_(cache2, u, max4num_parts, min4max4part, offsetted_max4part, num_uint_partitions)
+                    else:
+                        try:
+                            set_(cache2, u, max4num_parts, min4max4part, offsetted_max4part, num_uint_partitions)
+                        except AssertionError as e:
+                            raise AssertionError(e, stk)
+                case _:
+                    raise 000
+            #############
+            stk[-1] = (case, payload)
+            #############
+        #end-while 1:
+        return num_uint_partitions
+    #end-def loop(cache2, u, max4num_parts, max4part, /):
+    return (recur, loop)
+#end-def __():
+(_recur4uint2num_uint_partitions__len_le_, _loop4uint2num_uint_partitions__len_le_) = __()
+
+
 _global_cache = []
 def uint2num_uint_partitions_(u, /, *, cache, max4part=None):
-    '[O(u**2)] => u/uint -> (kw:max4part/uint) -> (kw:cache/(None=>local|...=>global|[[uint]])) -> num_uint_partitions{all parts <= max4part}/uint{==cache[u][max4part]}'
+    '[O(u**2)] => u/uint -> (kw:max4part/uint) -> (kw:cache/(None=>local|...=>global|[[uint]])) -> num_uint_partitions{all parts <= max4part}/uint{==cache[u][max4part]} # [cache==u2max4part2num_uint_partitions :: [[uint]] / list{list{uint}}]'
+    #if not max4num_parts is None: return uint2num_uint_partitions__len_le_(u, cache2=???cache)
     check_int_ge(0, u)
+
     max4part = u if max4part is None else max4part
     check_int_ge(0, max4part)
     max4part = min(u, max4part)
@@ -775,9 +1100,9 @@ def uint2num_uint_partitions_(u, /, *, cache, max4part=None):
     assert cache[0][0] == 1
 
     for v in range(len(cache), u+1):
-        _4u2n(cache, v)
+        _4u2m2n(cache, v)
     return cache[u][max4part]
-def _4u2n(cache, u, /):
+def _4u2m2n(cache, u, /):
     '[u > 0][len(cache) == u]'
     assert len(cache) == u > 0
     ls = [0, 1]
@@ -796,12 +1121,40 @@ def _4u2n(cache, u, /):
     #ls[u]
     #cache[u][u]
 
-def uint2iter_uint_partitions_(u, /, *, to_expand=True):
+def uint2iter_uint_partitions_(u, /, *, to_expand=True, max4part=None, max4num_parts=None):
     'u/uint -> (kw:to_expand/bool) -> Iter ([part] if to_expand else [(part, count)]) # in decreasing order'
+    ##############
+    # @20250508:++kw:max4part
+    # @20250508:++kw:max4num_parts
+    ##############
     check_type_is(bool, to_expand)
     check_int_ge(0, u)
+    ##############
+    if None is max4part:
+        max4part = u
+    check_int_ge(0, max4part)
+    #max4part = min(u, max4part)
+    # [0 <= max4part]
+    # but:[u <?> max4part]
+    ##############
+    if None is max4num_parts:
+        max4num_parts = u
+    check_int_ge(0, max4num_parts)
+    max4num_parts = min(u, max4num_parts)
+    # [0 <= max4num_parts <= u]
+    ##############
+    #.if 0:
+    #.    if max4num_parts == 0:
+    #.        if u > 0: return null_iter
+    #.        if u == 0:return iter([()])
+    #.    if max4num_parts == 1:
+    #.        if u > 0: return iter([(u,)])
+    #.        if u == 0:return iter([()])
+    ##############
+
     ls = []
         # :: [part] if to_expand else [(part, count)]
+    ##############
     if to_expand:
         put = ls.append
         pop = ls.pop
@@ -818,23 +1171,61 @@ def uint2iter_uint_partitions_(u, /, *, to_expand=True):
             sz -= 1
             if sz:
                 ls.append((max4part, sz))
+    ##############
     put
     pop
-    def f(u, max4part, /):
+    ##############
+    def recur_iter_partss4u_(u, max4part, /):
+        # precondition:[len(ls) <= max4num_parts][u >= 0][max4part >= 0]
+        #   but:[u <?> max4part]
+        ##############
+        # [u >= 0]
+        # [max4part >= 0]
+        # [len(ls) <= max4num_parts]
+        ##############
         if u == 0:
             yield tuple(ls)
+            # [len(ls) <= max4num_parts]
             return
+        # [u > 0]
+        if not len(ls) < max4num_parts:
+            # [len(ls) == max4num_parts]
+            # [u > 0]
+            return
+        # [len(ls) < max4num_parts]
+        # [u > 0]
+        # [max4part >= 0]
+        # [u <?> max4part]
         max4part = min(max4part, u)
-        #assert 0 <= max4part <= u
+        # [0 <= max4part <= u]
         for max4part in reversed(range(1, max4part+1)):
+            # [1 <= new-max4part <= old-max4part <= u]
+            #######
             #bug:sz, v = divmod(u, max4part)
             #if sz:ls += [max4part]*sz
                 #UnboundLocalError: cannot access local variable 'ls' where it is not associated with a value
+            #######
             v = u-max4part
+            # !! [1 <= new-max4part <= u]
+            # [0 <= v < u]
+            # [v >= 0]
+            # but:[v <?> max4part]
+            # !! [len(ls) < max4num_parts]
             put(max4part)
-            yield from f(v, max4part)
+            # [len(ls) <= max4num_parts]
+            yield from recur_iter_partss4u_(v, max4part)
+            # [len(ls) <= max4num_parts]
             pop()
-    return f(u, u)
+            # [len(ls) < max4num_parts]
+        # [len(ls) < max4num_parts]
+    #end-def recur_iter_partss4u_(u, max4part, /):
+    # [len(ls) == 0 <= max4num_parts]
+    # [len(ls) <= max4num_parts]
+    # [u >= 0]
+    # [max4part >= 0]
+    # but:[u <?> max4part]
+    return recur_iter_partss4u_(u, max4part)
+    return recur_iter_partss4u_(u, u)
 
 def iter_parts5uint_partition_(uint_partition, /, *, zipped_vs_expanded=False):
     '([part] if zipped_vs_expanded else [(part, count)]) -> Iter part'
@@ -858,6 +1249,7 @@ def iter_counted_parts5expanded_uint_partition_(expanded_uint_partition, /):
         yield (part, count)
 def num_permutations5uint_partition_(uint_partition, /, *, zipped_vs_expanded=True):
     '([part] if zipped_vs_expanded else [(part, count)]) -> num_permutations/uint'
+    # [整数拆分 == 置换环节表达 的 置换环节 的 长度]
     expanded_uint_partition = iter_counted_parts5uint_partition_(uint_partition, zipped_vs_expanded=zipped_vs_expanded)
 
     r = 1
@@ -865,14 +1257,14 @@ def num_permutations5uint_partition_(uint_partition, /, *, zipped_vs_expanded=Tr
     for part, count in expanded_uint_partition:
         for _ in range(count):
             u += part
-            #r *= comb(u, part)
+            #no:r *= comb(u, part)#see:num_set_partitions5uint_partition_()
             #选出一个 置换环节
-            r *= perm(u, part)
-            r //= part
+            r *= (perm(u, part) // part)#有序但周期性循环
         r //= factorial(count)
     return r
 def num_set_partitions5uint_partition_(uint_partition, /, *, zipped_vs_expanded=True):
     '([part] if zipped_vs_expanded else [(part, count)]) -> num_set_partitions/uint'
+    # [整数拆分 == 集合拆分 的 子集 的 规模]
     #parts = iter_parts5uint_partition_(uint_partition, zipped_vs_expanded=zipped_vs_expanded)
     expanded_uint_partition = iter_counted_parts5uint_partition_(uint_partition, zipped_vs_expanded=zipped_vs_expanded)
 
@@ -882,9 +1274,28 @@ def num_set_partitions5uint_partition_(uint_partition, /, *, zipped_vs_expanded=
         for _ in range(count):
             u += part
             #选出一个 子集
-            r *= comb(u, part)
+            r *= comb(u, part)#无序<==>递增
         r //= factorial(count)
     return r
+num_unordered_choices5uint_partition_ = num_set_partitions5uint_partition_
+    #vs:num_ordered_choices5uint_partition_
+def num_ordered_choices5uint_partition_(uint_partition, /, *, zipped_vs_expanded=True):
+    '([part] if zipped_vs_expanded else [(part, count)]) -> num_ordered_choices/uint'
+    # [整数拆分 == 集合拆分 的 预着色-子集 的 规模#即 各部分依次序预先着色，等规模子集 并不等价]
+    #parts = iter_parts5uint_partition_(uint_partition, zipped_vs_expanded=zipped_vs_expanded)
+    expanded_uint_partition = iter_counted_parts5uint_partition_(uint_partition, zipped_vs_expanded=zipped_vs_expanded)
+
+    r = 1
+    u = 0
+    for part, count in expanded_uint_partition:
+        for _ in range(count):
+            u += part
+            #选出一个 子集
+            r *= comb(u, part)#无序<==>递增
+        #no:r //= factorial(count)
+            # !! "ordered"
+    return r
+
 def partition_uint_factorial_(u, /, *, to_expand=True):
     'uint -> (num_permutations/uint, uint_partition/([part] if to_expand else [(part, count)]))'
     it = uint2iter_uint_partitions_(u, to_expand=to_expand)

@@ -38,7 +38,8 @@ def ln_(x, /):
 def lb_(x, /):
     'x -> log<2>(x)'
     return log2(x)
-
+#lg_ = lb_
+#   log2 or log10
 
 __all__
 from seed.math.log import log_, ln_, lb_

@@ -162,6 +162,9 @@ neighboring - 毗邻 #？比邻？
   adjacent邻接？邻近？
 force vt. 强制，强迫，勉强，强行; n. 力，暴力，影响力，兵力/军队，效力/效果/强度
 brute force 蛮力，强力 #暴力,无理性单凭体力，畜力
+  fancy:花俏
+  native:自然的/本地的
+  naive:天真的
 implement - v. 实现,具现化,实例化
 implementation - n. 具现
 instance - 实例
@@ -382,6 +385,10 @@ region 区域
 range vs interval
     范围:左闭右开区间
     区间:闭区间
+view ../lots/NOTE/abbr/software.txt
+  logic:（逻辑|理则）-->理薮
+  bit:爻元
+  bool:真值
 
 [:非汉字部件环境冫标识命名规范]:here
 囜:选用作:通配符#某

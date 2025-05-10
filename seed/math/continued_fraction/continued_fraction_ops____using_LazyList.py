@@ -1349,13 +1349,14 @@ from seed.types.LazyList import LazyList, LazyListError
 from seed.math.continued_fraction.prepare_continued_fraction_from_string import prepare_continued_fraction_from_string_
 from seed.math.floor_ceil__tiny import fractional_fixed_point_part_of_, fractional_fixed_point_part_of_neg_
 from fractions import Fraction
+from math import floor
 #from itertools import chain, islice, count as _count_
     # chain__strict_
 #import itertools # count
 
 
 from seed.tiny import check_type_is
-from seed.tiny_.check import check_uint, check_int_ge
+from seed.tiny_.check import check_uint, check_int_ge, check_uint_lt
 from seed.tiny import echo, null_iter, is_iterable, is_iterator
 from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
 from seed.math.PowSeq import PowSeq
@@ -1932,6 +1933,88 @@ class ContinuedFraction(LazySeq):
     @property
     def _cf_digits(sf, /):
         return sf.the_lazylist
+
+    ######################
+    #@20250301
+    #   vivi:(Fraction.limit_denominator)
+    def to_Fraction__via_limit_denominator_(sf, max_denominator, /, *, case=0):
+        r'''[[[
+        * [case==0]:
+            [result := approximate_fraction with max denominator <= max_denominator]
+        * [case==1]:
+            [result := lower_approximate_fraction with max denominator <= max_denominator]
+        * [case==2]:
+            [result := upper_approximate_fraction with max denominator <= max_denominator]
+        * [case==3]:
+            [result := both (lower_approximate_fraction,upper_approximate_fraction) with max denominator <= max_denominator]
+
+>>> from fractions import Fraction
+>>> Fraction('3.141592653589793').limit_denominator(10)
+Fraction(22, 7)
+>>> Fraction('3.141592653589793').limit_denominator(7)Fraction(22, 7)
+>>> Fraction('3.141592653589793').limit_denominator(6)Fraction(19, 6)
+
+        #]]]'''#'''
+        check_uint_lt(4, case)
+        max_denominator = floor(max_denominator)
+        check_int_ge(1, max_denominator)
+
+        frs = sf.iter_approximate_fractions_()
+        del sf
+        fr0 = fr1 = Nothing = []
+        finite = False
+        for j, fr in enumerate(frs):
+            if fr.denominator > max_denominator:break
+            fr0, fr1 = fr1, fr
+        else:
+            finite = True
+        finite
+        j1 = j if finite else j-1
+        j0 = j if finite else j1 -1
+        if j1 == -1:
+            assert not finite
+            raise Exception('max_denominator too small:', max_denominator)
+        if fr1 is Nothing:
+            raise logic-err
+            raise ContinuedFractionError__inf__no_cf0
+        # [fr1 is not Nothing]
+        # [fr0 may be Nothing]
+        assert (fr1 is fr) is finite
+        if j0 == -1:
+            assert not finite
+            assert j1 == 0
+            lower_approximate_fraction = fr1
+            upper_approximate_fraction = Nothing
+        if finite:
+            fr0 = fr1
+            j0 = j1
+
+        if j1&1:
+            #[odd j1]
+            lower_approximate_fraction = fr0
+                #maybe Nothing
+            upper_approximate_fraction = fr1
+        else:
+            #[even j1]
+            lower_approximate_fraction = fr1
+            upper_approximate_fraction = fr0
+                #maybe Nothing
+        # [fr1 is not Nothing]
+        # [fr0 may be Nothing]
+        # [lower_approximate_fraction may be Nothing]
+        # [upper_approximate_fraction may be Nothing]
+        match case:
+            case 0:
+                result = fr1
+            case 1:
+                result = lower_approximate_fraction
+            case 2:
+                result = upper_approximate_fraction
+            case 3:
+                result = (lower_approximate_fraction, upper_approximate_fraction)
+                if fr0 is Nothing:raise Exception('max_denominator too small:', max_denominator)
+        if result is Nothing:raise Exception('max_denominator too small:', max_denominator)
+        return result
 
     ######################
     #ContinuedFraction

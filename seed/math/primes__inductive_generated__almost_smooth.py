@@ -1,4 +1,5 @@
 #__all__:goto
+#收集数据:goto
 r'''[[[
 e ../../python3_src/seed/math/primes__inductive_generated__almost_smooth.py
 view others/数学/有递增趋势的非递增序列.txt
@@ -82,7 +83,19 @@ from seed.math.primes__inductive_generated__almost_smooth import iter_odd_primes
 
 
 
+[[
+收集数据:here
+扩展幺链素数:受限最高:
+* [2]
+    23584787:[2]@lt_zpow32#第301#高11
+    12965872123292708897:[2]@lt_zpow64#第978#高14
 
+* [2,3]
+    34549:[2,3]@lt_zpow16#第980#高9
+    1432349099:[2,3]@lt_zpow32#第97033#高15
+
+]]
+<<==:
 
 
 

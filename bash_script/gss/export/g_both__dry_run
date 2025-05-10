@@ -1,0 +1,23 @@
+#g_add
+#@20250511
+######################
+#view ../../python3_src/自己的相关数据/delta4on_working4py_src/README-cmds.txt
+#view ../../python3_src/bash_script/gss/export/gdry_run
+#view ../../python3_src/bash_script/gss/export/g_both__dry_run
+######################
+#_nm=txt_phone; cd $my_git_txt; _tm=$(date +\%Y\%m\%d_\%H\%M\%S); _tmp_opath=../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-$_nm-$_tm.txt; echo $_tmp_opath ; echo $_tmp_opath >> $_tmp_opath ; gdry_run >> $_tmp_opath ;
+#_nm=py_src; cd $my_git_py; _tm=$(date +\%Y\%m\%d_\%H\%M\%S); _tmp_opath=../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-$_nm-$_tm.txt; echo $_tmp_opath ; echo $_tmp_opath >> $_tmp_opath ; gdry_run >> $_tmp_opath ;
+
+######################
+	#export cmd='git add --dry-run --all'
+######################
+	export cmd='_nm=txt_phone; cd $my_git_txt; _tm=$(date +\%Y\%m\%d_\%H\%M\%S); _tmp_opath=../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-$_nm-$_tm.txt; echo $_tmp_opath ; echo $_tmp_opath >> $_tmp_opath ; gdry_run >> $_tmp_opath ;'
+	echo ======= $cmd
+	echo $cmd | bash
+
+######################
+	export cmd='_nm=py_src; cd $my_git_py; _tm=$(date +\%Y\%m\%d_\%H\%M\%S); _tmp_opath=../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-$_nm-$_tm.txt; echo $_tmp_opath ; echo $_tmp_opath >> $_tmp_opath ; gdry_run >> $_tmp_opath ;'
+	echo ======= $cmd
+	echo $cmd | bash
+
+######################

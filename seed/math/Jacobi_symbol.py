@@ -3,6 +3,11 @@ e ../../python3_src/seed/math/Jacobi_symbol.py
 py -m seed.math.Jacobi_symbol
 from seed.math.Jacobi_symbol import Jacobi_symbol
 
+注意:
+    [[Jacobi_symbol(M;x)==-1] -> [is_square_nonresidual_mod_(M;x)]]
+    但是:[Jacobi_symbol(M;x)==+1]无用，可能是也可能不是平方剩余
+    [MAYBE:[Jacobi_symbol(M;x)==+1][is_square_nonresidual_mod_(M;x)]]
+
 view others/数学/二次互反律.txt
 [[[[[
 二次互反律

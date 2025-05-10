@@ -148,6 +148,7 @@ class IExecutor4recur5yield(ABC):
     main_result = result5recur<main_generator_iterator>
 
     main_prepare_func(*args4main, **kwds4main) -> (st, main-exprlist5yield)
+        child_gi_protocol := _st_and_type2child_gi_protocol_(st, type(exprlist5yield))
     main_generator_iterator := child_gi_protocol(main-exprlist5yield)
     main_generator_iterator :: GI
     GI == GeneratorIterator<iter-exprlist5yield, return-result5return>
