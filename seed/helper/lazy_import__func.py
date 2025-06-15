@@ -233,6 +233,11 @@ def lazy_import4func_(qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst='', smay_nm4fu
     _inject_(sf, smay_qnm4mdl8dst, smay_nm4func8dst, may_func8dst:=None)
     return sf
 def lazy_import4funcs_(qnm4mdl8src, xqnms4func8src, smay_qnm4mdl8dst='', /):
+    r'''[[[
+    [xqnms4func8src :: (Iter xqnm4func8src) | xqnms4func8src__str]
+    [xqnms4func8src__str <- regex"{xqnm4func8src}(,{xqnm4func8src})*"]
+    [xqnm4func8src <- regex"{qnm4func8src}(:{nm4func8dst})?"]
+    #]]]'''#'''
     if type(xqnms4func8src) is str:
         xqnms4func8src = xqnms4func8src.split(',')
     xs = []

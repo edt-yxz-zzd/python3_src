@@ -77,7 +77,8 @@ from types import FunctionType
 import ast
 from itertools import islice
 from seed.tiny_.check import check_type_is, check_int_ge
-from seed.tiny_.types5py import curry1
+#from seed.tiny_.types5py import curry1
+from seed.helper.lazy_import__func7worker4funcss import worker4lazy_import4funcss_, check_kwds4worker
 from seed.helper.lazy_import__func import lazy_import4funcs_
 #def lazy_import4funcs_(qnm4mdl8src, xqnms4func8src, smay_qnm4mdl8dst='', /):
 lazy_import4funcs_('seed.debug.print_err', 'print_err', __name__)
@@ -200,41 +201,42 @@ def helper4decorator4lazy_import__funcs_(f, smay_qnm4mdl8dst, /):
 
     (path, j0, j4end, txt, ast_tree, node4f, mdl__nm_pairs__pairs) = _test(f)
     return (qnm4mdl8dst, mdl__nm_pairs__pairs)
-def _check_kwds4worker(*, to_show_nmss4func8dst=False, to_return_nmss4func8dst=False):
-    check_type_is(bool, to_show_nmss4func8dst)
-    check_type_is(bool, to_return_nmss4func8dst)
-def check_kwds4worker(kwds4worker, /):
-    _check_kwds4worker(**kwds4worker)
 
-def worker4decorator4lazy_import__funcs_(f, smay_qnm4mdl8dst, /, *, to_show_nmss4func8dst=False, to_return_nmss4func8dst=False):
+def worker4decorator4lazy_import__funcs_(f, smay_qnm4mdl8dst, /, **kwds4worker):
     #, **kwds4worker
-    check_type_is(bool, to_show_nmss4func8dst)
-    check_type_is(bool, to_return_nmss4func8dst)
+    #   === , *, to_show_nmss4func8dst=False, to_return_nmss4func8dst=False
     (qnm4mdl8dst, mdl__nm_pairs__pairs) = helper4decorator4lazy_import__funcs_(f, smay_qnm4mdl8dst)
-    nmss4func8dst = []
-    rss = []
-    for (qnm4mdl8src, nm_pairs) in mdl__nm_pairs__pairs:
-        xqnms4func8src = ','.join((f'{nm}:{smay_nm}' if smay_nm else nm) for nm, smay_nm in nm_pairs)
-        nms4func8dst = [(smay_nm if smay_nm else nm) for nm, smay_nm in nm_pairs]
-        rs = lazy_import4funcs_(qnm4mdl8src, xqnms4func8src, smay_qnm4mdl8dst:=qnm4mdl8dst)
-        rss.append(rs)
-        nmss4func8dst.append(nms4func8dst)
-    rss
-    nmss4func8dst
-    nmss4func8dst__str = _str8list_(map(_str8list_, nmss4func8dst))
-    if to_show_nmss4func8dst:
-        print_err(nmss4func8dst__str)
-    if to_return_nmss4func8dst:
-        return (rss, nmss4func8dst, nmss4func8dst__str)
-    return rss
-def _str8list_(ss, /):
-    r'[str] -> str # fmt=regex"\[({s}(, {s})*)?\]"'
-    s = ', '.join(ss)
-    return f'[{s!s}]'
+    return worker4lazy_import4funcss_(mdl__nm_pairs__pairs, smay_qnm4mdl8dst:=qnm4mdl8dst, **kwds4worker)
+
+#.def worker4decorator4lazy_import__funcs_(f, smay_qnm4mdl8dst, /, *, to_show_nmss4func8dst=False, to_return_nmss4func8dst=False):
+#.    #, **kwds4worker
+#.    check_type_is(bool, to_show_nmss4func8dst)
+#.    check_type_is(bool, to_return_nmss4func8dst)
+#.    (qnm4mdl8dst, mdl__nm_pairs__pairs) = helper4decorator4lazy_import__funcs_(f, smay_qnm4mdl8dst)
+#.    nmss4func8dst = []
+#.    rss = []
+#.    for (qnm4mdl8src, nm_pairs) in mdl__nm_pairs__pairs:
+#.        xqnms4func8src = ','.join((f'{nm}:{smay_nm}' if smay_nm else nm) for nm, smay_nm in nm_pairs)
+#.        nms4func8dst = [(smay_nm if smay_nm else nm) for nm, smay_nm in nm_pairs]
+#.        rs = lazy_import4funcs_(qnm4mdl8src, xqnms4func8src, smay_qnm4mdl8dst:=qnm4mdl8dst)
+#.        rss.append(rs)
+#.        nmss4func8dst.append(nms4func8dst)
+#.    rss
+#.    nmss4func8dst
+#.    nmss4func8dst__str = _str8list_(map(_str8list_, nmss4func8dst))
+#.    if to_show_nmss4func8dst:
+#.        print_err(nmss4func8dst__str)
+#.    if to_return_nmss4func8dst:
+#.        return (rss, nmss4func8dst, nmss4func8dst__str)
+#.    return rss
+#.def _str8list_(ss, /):
+#.    r'[str] -> str # fmt=regex"\[({s}(, {s})*)?\]"'
+#.    s = ', '.join(ss)
+#.    return f'[{s!s}]'
 class _Decorator4lazy_import__funcs:
     def __init__(sf, smay_qnm4mdl8dst='', /, **kwds4worker):
         check_type_is(str, smay_qnm4mdl8dst)
-        _check_kwds4worker(**kwds4worker)
+        check_kwds4worker(kwds4worker)
         sf._sm = smay_qnm4mdl8dst
         sf._kw = kwds4worker
     def __repr__(sf, /):
