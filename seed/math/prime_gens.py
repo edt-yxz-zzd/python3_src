@@ -71,7 +71,7 @@ py -m nn_ns.app.doctest_cmd seed.math.prime_gens:_doc4tmp_test -ht
 
 
 from seed.math.prime_gens import hold_all_weakrefs4caches_
-    __ws = hold_all_weakrefs4caches_()
+000;    __ws = hold_all_weakrefs4caches_()
 from seed.math.prime_gens import detect_strong_probable_prime__not_waste_too_much_time_
 
 from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_
@@ -4083,6 +4083,7 @@ r'''[[[
 __all__
 
 from seed.math.prime_gens import hold_all_weakrefs4caches_
+#000;    __ws = hold_all_weakrefs4caches_()
 from seed.math.prime_gens import detect_strong_probable_prime__not_waste_too_much_time_
 
 from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_

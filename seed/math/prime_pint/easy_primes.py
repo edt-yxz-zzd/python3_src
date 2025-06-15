@@ -13,8 +13,27 @@ py -m nn_ns.app.doctest_cmd seed.math.prime_pint.easy_primes:__doc__ -ht # -ff -
 
 [[
 类似于:欤再扩展幺链素数扌
-但是，自定义分解方案
+不同之处在于，自定义分解方案
 ]]
+[[
+@20250526
+十分稀少
+<<==:
+view others/数学/术语/smooth_number.txt
+主要定理:
+  #平方根-smooth:占比超过30%
+  [lim{num_smooth_numbers6_le_(x;sqrt(x)) / x | x-->+oo} == rho_(2) == 1-ln_(2) ~= 0.3068528194400547]
+    # [@[u::real{>=1}{<=2}] -> [lim{num_smooth_numbers6_le_(x;x**/u) / x | x-->+oo} == 1-ln_(u)]]
+  #对数平方-smooth:数量超过平方根
+  [@[x::real{>=5}] -> [num_smooth_numbers6_le_(x;ln_(x)**2) >= x**(1/2)]]
+    # [@[n:<-[1..]] -> @[x::real{>=(8-[n<=24]-[n<=5]-[n<=2])}] -> [num_smooth_numbers6_le_(x;ln_(x)**(1+1/n)) >= x**/(1+n)]]
+  #常量-smooth:正比例于对数幂方
+  [@[y::real{>=2}] -> ?[c[num_primes_le(y)]::real{>0}] -> [lim{num_smooth_numbers6_le_(x;y)/ln_(x)**num_primes_le(y) | x-->+oo} == c[num_primes_le(y)]]]
+
+
+
+]]
+
 
 ############
 py_adhoc_call   seed.math.prime_pint.easy_primes   @list.10:iter_easy_primes__trial_division__fixed_known_primes_ ='[2,3]'  ='0'

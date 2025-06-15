@@ -139,11 +139,28 @@ pop - 弹出
 dump - 卸载
 show - 显示/亮/字串化
 print - 打印
+hook - ???#钩
+flag - 旌#特征位标记
+  view others/杂/词语解释/靚-靘-靖-旌-靜.txt
+handle - 耒#句柄，把手
+  view others/杂/词语解释/耒耜.txt
+稽/勘
+  稽核#audit
+  勘:collate; investigate/survey/explore
+  稽:check/examine/investigate/inspect; stay/delay/procrastinate
+
+    view others/杂/词语解释/指-爽-爽指.txt
+    view others/数学/术语/私译logic.txt
+甄别/区别/鉴别/辨别:examine,distinguish;discriminate
+  discriminator:甄别器
+赅:完备:complete; full; comprehensive
+
 __getitem__/lookup - 索取扌/索取冫某某某巛流水号扌 :: 索引号 -> 元素
 index() - 定位扌/定位冫某某某讠流水号扌 :: 元素 -> 索引号
 index/key/addr/ptr - 址引 #索引,路引,指引,指针
   ?ref:引用?
 unit - 位元#量纲? #单位? #感觉不太行:事业单位
+  component/unit/primitive/building-block:构件
 1/one/unity - 幺元
 token - 码元/字元
 tuple - 元组
@@ -221,6 +238,31 @@ max1:？？上限/上界
   原版original edition
   subtitled
   stamp/mark/tag
+
+将『假设』的不同词性拆成:
+  assume:vt. 假定
+  assumption:n.假说
+all/each/every:尽/凡/周/遍/全
+  墨经=>尽/周
+any/some/exists:某/或
+  墨经=>或
+中国哲学简史:墨经:
+  实-所谓
+  名-所以谓
+    达名-名『物』，达也，有实，必待之名也
+    类名-命之『马』，类也，若实也者，必以是名也。
+    私名-命之『臧』，私也，是名也，止于是实也
+#荀子:共名，别名
+
+variable:变项#变数/变量
+constant:恒项#恒量/常量
+transition:转变
+revolution:变革#变迁？#变转#革命
+migration:迁移#迁徙#变迁？
+variation:异变#变种，变异
+variant:变体
+
+
 前后:
 前缀vs后缀
   prefix vs suffix
@@ -385,10 +427,19 @@ region 区域
 range vs interval
     范围:左闭右开区间
     区间:闭区间
+bug:颣/病蛊/毛病/疵病/病蒂/病窳yu3
+  debug:祛病/调试/诊病/纠错
+  view others/杂/词语解释/颣-纇.txt
+    (駁瑕指纇,驳瑕指颣)
 view ../lots/NOTE/abbr/software.txt
-  logic:（逻辑|理则）-->理薮
+  formal: (形式的|礼节性的) --> [私译]形彻的
+  logic:（逻辑|理则|论理）--> [私译]理薮--> [私译]理矩--> [私译]理格
   bit:爻元
   bool:真值
+沓:numerous; many; repeated
+  复
+摞:pile up; stack up
+  叠
 
 [:非汉字部件环境冫标识命名规范]:here
 囜:选用作:通配符#某
@@ -11632,9 +11683,86 @@ copy from:
 ]]
 ######################
 [[
+@20250525
+bug:病蛊/毛病/疵病/病蒂/病窳yu3
+debug:祛病/调试/诊病/纠错
+<<==:
+find /sdcard/0my_files/tmp/out4py/ -name '*词汇*'
+script/汉语大辞典-词汇繁简对照-补空.txt.7z
+view /sdcard/0my_files/tmp/out4py/script.欧路词典囗.试读囗囗假设简介字节数地址固定囗.汉语大辞典.out.词典-词汇繁简对照-补空.txt
+grep 病 /sdcard/0my_files/tmp/out4py/script.欧路词典囗.试读囗囗假设简介字节数地址固定囗.汉语大辞典.out.词典-词汇繁简对照-补空.txt > /sdcard/0my_files/tmp/0tmp
+bug:病蛊/毛病/疵病/病蒂/病窳yu3
+  <<==疵病=瑕病=毛病=弊病~弊端，纰漏/瑕疵/差错/故障/缺陷，病蠱:病蛊，病徵:病征(非:病症)，病候，病狀:病状=病像=病象，病因=病原~病源=病根=病蒂~病灶，病害，病質:病质，病窳yu3
+debug:除错，纠错，调试，祛病，诊病#排障，排错，诊断？探病？
+障
+窳
+grep 障 /sdcard/0my_files/tmp/out4py/script.欧路词典囗.试读囗囗假设简介字节数地址固定囗.汉语大辞典.out.词典-词汇繁简对照-补空.txt > /sdcard/0my_files/tmp/0tmp
+grep 窳 /sdcard/0my_files/tmp/out4py/script.欧路词典囗.试读囗囗假设简介字节数地址固定囗.汉语大辞典.out.词典-词汇繁简对照-补空.txt > /sdcard/0my_files/tmp/0tmp
+
 ]]
 ######################
 [[
+@20250526
+达名vs类名vs私名
+===
+find /sdcard/20220614_copy5sd__0my_files/book_txt/小说天堂txt/重命名/ -name '*墨*'
+view /sdcard/20220614_copy5sd__0my_files/book_txt/小说天堂txt/重命名/小说天堂txt-2/《墨子》.txt
+  ocr错字多
+view /sdcard/20220614_copy5sd__0my_files/book_txt/小说天堂txt/重命名/小说天堂txt-2/《墨子白话今译》.txt
+===
+经上第四十
+  名，达、类、私。
+经说上第四十二:
+  名『物』，达也，有实必待之名也。
+    #bug?:有实必待文多也:『文多』-->『之名』
+  命之『马』，类也，若实也者必以是名也。
+  命之『臧』，私也，是名也止于是实也。
+    #臧-某个人名
+
+===
+ocr错误？:
+经说上第四十二:
+  知，传受之，闻也。方不障，说也。身观焉，亲也。
+    #亲:来源于体验的知识#实验实践
+    #闻:来源于传授的知识#历史传说
+    #说:来源于论证的知识#演绎推理
+        #小取第四十五:『以说出故』
+  所以谓，名也。所谓，实也。名实耦，合也。志行，为也。
+    #名:关于名称的知识
+    #实:关于实体的知识
+    #合:名实映射表的知识
+    #为:怎么做的知识#算法，菜谱
+  闻，或告之，传也。身观焉，亲也。
+  见，时者，体也。二者，尽也。
+
+
+===
+汉语大辞典
+達名
+(達名,达名)
+1.成名。
+ 《墨子‧親士》：“三子之能達名成功於天下也，皆於其國抑而大醜也。”
+2.猶言大概念。事物大類的名稱。
+ 章炳麟《原儒》：“冒之達名，道、墨、名、法、陰陽、小說、詩賦、經方、本草、蓍龜、形法，此皆術士，何遽不言儒。局之類名，蹴踘弋道近射，曆譜近數，調律近樂，猶虎門之儒所事也。今獨以傳經為儒，以私名則異，以達名、類名則偏，要之題號由古今異。”
+
+===
+汉语大辞典
+類名
+(類名,类名)
+《墨經》中的邏輯術語。指反映同類對象的概念，相當於普遍概念。如“馬”即類名。
+ 《墨子‧經說上》：“命之馬，類也；若實也者，必以是名也。”
+ 孫詒讓間詁：“張云：‘馬而名之馬，是類也。凡馬之實，皆得名之馬。’案：張說是也。”
+
+===
+汉语大辞典
+私名
+1.猶私客，私人。
+ 《列子‧黃帝》：“范氏有子曰子華，善養私名，舉國服之。”
+ 張湛注：“遊俠之徒也。”
+ 宋葉適《法度總論三‧吏胥》：“更迭為之，無根固窟穴之患，無保引私名之弊，而封建之勢因以去矣。”
+2.古邏輯學名詞。指反映單一事物的概念。相當於專有名詞。語本《墨子‧經上》：“名：達、類、私。”
+ 章炳麟《原儒》：“故有理情性，陳王道，而不麗保氏，身不跨馬，射不穿札，即與駁者，則以呰窳詬之，以多藝匡之－－是以類名宰私名也。”
+
 ]]
 ######################
 [[

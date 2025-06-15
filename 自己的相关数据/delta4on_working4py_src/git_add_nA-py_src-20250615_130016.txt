@@ -1,0 +1,18 @@
+../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20250615_130016.txt
+======= git add --dry-run --all
+add 'seed/math/prime_gens.py'
+add 'seed/math/prime_pint/easy_primes.py'
+add 'seed/recognize/cmdline/adhoc_argparser.py'
+add 'useful__cjk_naming.txt'
+add '自己的相关数据/delta4on_working4py_src/README-cmds.txt'
+add 'nn_ns/math_nn/numbers/b000003-class_number_of_the_quadratic_order_of_discriminant_(-4n)__fst_20000.txt'
+add 'nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_th_neg_squarefree))__fst_10000.txt'
+add 'seed/helper/lazy_import__func.py'
+add 'seed/helper/lazy_import__func7ast.py'
+add 'seed/int_tools/bijections4int.py'
+add 'seed/int_tools/digits/codecs4int.py'
+add 'seed/io/cache_file/README.txt'
+add 'seed/recognize/rgnr/abc/IRecognizer.py'
+add 'seed/recognize/rgnr/abc/utilities4IRecognizer.py'
+add '自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20250615_130016.txt'
+add '自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20250615_130012.txt'

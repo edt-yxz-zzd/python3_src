@@ -2,6 +2,8 @@
 r'''[[[
 e ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
 
+ad hoc fashion
+
 see:py_all@bash_script
     py_adhoc_call ''  ,str.list '%difflib:__all__@all' =all
     py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
