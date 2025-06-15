@@ -91,3 +91,15 @@ xxx:add 'seed/recognize/rgnr/abc/utilities4IRecognizer.py'
 
 
 ]]]
+[[
+@20250615
+g_both__dry_run
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20250615_130016.txt
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20250615_130012.txt
+===
+允许:add 'seed/int_tools/digits/codecs4int.py'
+临时性排除:py,txt:其余同上
+===
+
+]]
+
