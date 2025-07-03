@@ -1,0 +1,11 @@
+../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20250703_124232.txt
+======= git add --dry-run --all
+add 'seed/data_funcs/rngs.py'
+add 'seed/tiny.py'
+add 'seed/io/cache_file/README.txt'
+add 'seed/iters/pairwise_.py'
+add 'seed/recognize/rgnr/abc/IRecognizer.py'
+add 'seed/recognize/rgnr/abc/utilities4IRecognizer.py'
+add 'seed/text/compack_repr_char_set.py'
+add '自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20250703_124232.txt'
+add '自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20250703_124228.txt'

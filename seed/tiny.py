@@ -139,6 +139,11 @@ __all__ = str2__all__(r'''
     chains              # :: Iter (Iter a) -> Iter a
     count_              # count_(start=0, may_stop=None, /, step=1)
                         # diff:itertools.count(start=0, step=1)
+    pairwise_           # :: x -> *(Iter x)* -> Iter (x,x)
+    pairwise__head_     # :: x -> Iter x -> Iter (x,x)
+    pairwise__tail_     # :: x -> Iter x -> Iter (x,x)
+    pairwise_chain_     # :: *(Iter x)* -> Iter (x,x)
+    pairwise_chains_    # :: Iter (Iter x) -> Iter (x,x)
 
     slice2triple        # :: slice -> (.start, .stop, .step)
     range2triple        # :: range -> (.start, .stop, .step)
@@ -497,6 +502,7 @@ from seed.for_libs.next__tmay import next__tmay
 from seed.for_libs.lookup__tmay import lookup__tmay
 from seed.iters.chains import chains
 from seed.iters.count_ import count_
+from seed.iters.pairwise_ import pairwise_, pairwise__head_, pairwise__tail_, pairwise_chain_, pairwise_chains_
 
 from seed.tiny_.types5py import mk_MapView, MapView, kwargs2Attrs, curry1
 #from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs, MethodType as curry1

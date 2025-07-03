@@ -15,7 +15,7 @@ py -m nn_ns.app.doctest_cmd seed.data_funcs.rngs:__doc__ -ht
 from seed.data_funcs.rngs import make_Ranges, sorted_rngs_to_iter_nontouch_ranges, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet, StackStyleSimpleIntMapping, TouchRangeBasedIntMapping
     TouchRangeBasedIntMapping.from_value2begin2sz/.from_rng_value_pairs/.from_clone_of_rngs_with_default
 from seed.data_funcs.rngs import IRanges
-    for:.from_hexXhexszpair_list/.from_hex_repr_pair_list/.from_len_rng2hexbegins/.from_len_rng2begin_chars/.from_char_pairs__str/.from_hex_sz_pair_list/.from_hex2sz
+    for:.from_hexXhexszpair_list/.from_hex_repr_pair_list/.from_len_rng2hexbegins/.from_len_rng2begin_chars/.from_char_pairs__str/.from_wave_rngtxt/.from_hex_sz_pair_list/.from_hex2sz
     for:.from_touch_rngs/.from_sorted_rngs/.from_unsorted_rngs/.from_sorted_ints/.from_unsorted_ints/.from_sorted_chars/.from_unsorted_chars
 from seed.data_funcs.rngs import NonTouchRanges, TouchRanges, make_NonTouchRanges, make_TouchRanges
 from seed.data_funcs.rngs import len_of__rng, len_of__rng__neg_as0
@@ -51,6 +51,8 @@ IRangeBasedIntMapping
     ranges5iter_rngs
     ranges2char_pairs__str
     ranges5char_pairs__str
+    ranges2wave_rngtxt
+    ranges5wave_rngtxt
 
     check_input4isomorphism_mapping__RangeBased
     isomorphism_mapping__RangeBased
@@ -1355,6 +1357,70 @@ True
 
 
 ]]
+[[
+@20250629:++:
+    ranges2wave_rngtxt
+    ranges5wave_rngtxt
+
+>>> ranges5wave_rngtxt('90A')
+NonTouchRanges(((48, 58), (65, 66)))
+>>> ranges = IRanges.from_wave_rngtxt('90A')
+>>> ranges
+NonTouchRanges(((48, 58), (65, 66)))
+>>> ranges.to_wave_rngtxt()
+'90A'
+
+
+>>> ranges5wave_rngtxt('90FA')
+NonTouchRanges(((48, 58), (65, 71)))
+>>> ranges = IRanges.from_wave_rngtxt('90FA')
+>>> ranges
+NonTouchRanges(((48, 58), (65, 71)))
+>>> ranges.to_wave_rngtxt()
+'90FA'
+
+
+>>> ranges5wave_rngtxt('9FA')
+NonTouchRanges(((57, 58), (65, 71)))
+>>> ranges = IRanges.from_wave_rngtxt('9FA')
+>>> ranges
+NonTouchRanges(((57, 58), (65, 71)))
+>>> ranges.to_wave_rngtxt()
+'9FA'
+
+
+>>> ranges5wave_rngtxt('9A')
+NonTouchRanges(((57, 58), (65, 66)))
+>>> ranges = IRanges.from_wave_rngtxt('9A')
+>>> ranges
+NonTouchRanges(((57, 58), (65, 66)))
+>>> ranges.to_wave_rngtxt()
+'9A'
+
+
+>>> ranges5wave_rngtxt('9')
+NonTouchRanges(((57, 58),))
+>>> ranges = IRanges.from_wave_rngtxt('9')
+>>> ranges
+NonTouchRanges(((57, 58),))
+>>> ranges.to_wave_rngtxt()
+'9'
+
+
+>>> ranges5wave_rngtxt('')
+NonTouchRanges(())
+>>> ranges = IRanges.from_wave_rngtxt('')
+>>> ranges
+NonTouchRanges(())
+>>> ranges.to_wave_rngtxt()
+''
+
+
+
+
+
+]]
+
 
 
 ]]]
@@ -1410,6 +1476,8 @@ __all__ = """
     StackStyleSimpleIntMapping
     TouchRangeBasedIntMapping
 
+    ranges2chars__str
+        ranges2sorted_chars__str
     ranges2hex_repr_pair_list
     ranges5hex_repr_pair_list
 
@@ -1438,6 +1506,8 @@ __all__ = """
     ranges5iter_rngs
     ranges2char_pairs__str
     ranges5char_pairs__str
+    ranges2wave_rngtxt
+    ranges5wave_rngtxt
 
     check_input4isomorphism_mapping__RangeBased
     isomorphism_mapping__RangeBased
@@ -1477,6 +1547,8 @@ __all__ = """
     ranges5compact_txt_
     """.split()#"""
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func import lazy_import4funcs_
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 #from seed.helper.repr_input import repr_helper
 #class _(ABC):
@@ -1506,6 +1578,7 @@ from seed.tiny_.HexReprInt import HEXReprInt as HexReprInt
     #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
 from seed.tiny import fmap4dict_value
 from seed.tiny import check_type_is
+___end_mark_of_excluded_global_names__0___ = ...
 
 def all_map(pred, iterable, /):
     return all(map(pred, iterable))
@@ -2639,6 +2712,7 @@ TODO:
         #see:to_char_pairs__str
         #see:from_sorted_chars/from_unsorted_chars
         return ranges2chars__str(sf)
+    to_sorted_chars__str = to_chars__str
     @staticmethod
     def from_unsorted_chars(iterable_unsorted_chars, /):
         iterable_unsorted_ints = map(ord, iterable_unsorted_chars)
@@ -2679,11 +2753,19 @@ TODO:
         return ranges5len_rng2begin_chars(len_rng2begin_chars)
 
     def to_char_pairs__str(sf, /):
+        '-> sorted-regex"({first_char}{last_char})*"'
         '-> "{first_char}{last_char}"...'
         return ranges2char_pairs__str(sf)
     @staticmethod
     def from_char_pairs__str(char_pairs__str, /):
         return ranges5char_pairs__str(char_pairs__str)
+
+    def to_wave_rngtxt(sf, /):
+        '-> sorted-regex"({solo_char}|{last_char}{first_char})*" # [global-asc&&local-desc => "wave"]'
+        return ranges2wave_rngtxt(sf)
+    @staticmethod
+    def from_wave_rngtxt(wave_rngtxt, /):
+        return ranges5wave_rngtxt(wave_rngtxt)
 
     def to_hex_sz_pair_list(sf, /):
         '-> [(HexReprInt, sz)]'
@@ -3624,6 +3706,10 @@ def ranges2chars__str(ranges, /):
     'IRanges -> "{char}"...'
     s = ''.join(map(chr, ranges.iter_ints()))
     return s
+ranges2sorted_chars__str = ranges2chars__str
+
+lazy_import4funcs_('seed.text.compack_repr_char_set', 'wave_rngtxt2IRanges_:ranges5wave_rngtxt,wave_rngtxt5IRanges_:ranges2wave_rngtxt', __name__)
+if 0:from seed.text.compack_repr_char_set import wave_rngtxt2IRanges_ as ranges5wave_rngtxt, wave_rngtxt5IRanges_ as ranges2wave_rngtxt
 
 def ranges2hex_sz_pair_list(ranges, /):
     'IRanges -> [(begin/HexReprInt, len_rng/int)]'
