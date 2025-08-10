@@ -151,6 +151,7 @@ IRadixedDigit
     #flip_rxdigit_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from functools import cached_property
 #.from collections import namedtuple
 from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_
 from functools import lru_cache
@@ -215,6 +216,12 @@ class IRadixInfo(ABC):
     def count_num_leading0s_ex_(sf, digit, /):
         '[.is_zpow_radix] => digit/uint%2**num_bits4digit -> (num_leading0s, imay_num_bits4payload)/(uint%(1+num_bits4digit), imay uint%num_bits4digit) # [num_bits4digit==num_leading0s+1[#(maybe nonexist) the "1" bit#]+imay_num_bits4payload]'
         return count_num_leading0s_ex_(sf.num_bits4digit, digit)
+    ######################
+    ######################
+    @property
+    def is_null(sf, /):
+        '-> bool{[radix == 1]}'
+        return sf.radix == 1
     ######################
 #end-class IRadixInfo(ABC):
 class IZpowRadixInfo(IRadixInfo):
@@ -472,6 +479,12 @@ class IRadixedDigit(ABC):
     def count_num_leading0s_ex(sf, /):
         '[.is_zpow_radix] => -> (num_leading0s, imay_num_bits4payload)/(uint%(1+num_bits4digit), imay uint%num_bits4digit) # [num_bits4digit==num_leading0s+1[#(maybe nonexist) the "1" bit#]+imay_num_bits4payload]'
         return sf.radix_info.count_num_leading0s_ex_(sf.digit)
+    ######################
+    @cached_property
+    def is_null(sf, /):
+        '-> bool{[radix == 1]}'
+        return sf.radix_info.is_null
+        return sf.radix_info.radix == 1
     ######################
 
 _BaseRadixedDigit = mk_namedtuple_(__name__, 'BaseRadixedDigit', 'radix_info digit')

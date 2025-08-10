@@ -4,7 +4,7 @@ r'''[[[
 e ../../python3_src/seed/int_tools/StepDecoder.py
 view ../../python3_src/seed/int_tools/digits/codecs4int.py
 view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt
-    TODO:step_decoder4int_with_inf__alnum__5over8
+    DONE:step_decoder4int_with_inf__alnum__5over8
 view others/数学/编程/设计/自定义编码之要点.txt
     TODO:统一:透明数据化硬编码{区间前缀树,况态化解码结果}
         TODO:阶跃式分阶层、强幂级进分阶层
@@ -44,10 +44,10 @@ rename:
 DONE:dependent_pair
 TODO:dependent_serial#连锁依赖串联
 TODO:带多层长度的负载冃自然数#宏头胞 代表 层数; (统一单位:爻元|躯胞，但 线性变换:step{j8layer}*u+offset{j8layer} 或者 非线性变换:f(j8layer,u))
-TODO:dynamic_bits-->dynamic_digits
+DONE:dynamic_bits-->dynamic_digits
     len_dydigits
     (len_dydigits4head, len_dydigits4body)
-TODO:fixed_size_bits-->fixed_size_digits
+DONE:fixed_size_bits-->fixed_size_digits
     (u8head, weight4head, u8digits)
     u8head add1 ???
 TODO:dynamic_bits_with_dependent_size_bits-->dynamic_digits_with_dependent_size_digits
@@ -423,6 +423,95 @@ True
 
 
 
+decode4int_with_inf__alnum__5over8_
+>>> _58_dec = lambda s:decode4int_with_inf__alnum__5over8_(s, fullmatch=True)
+>>> _58_dec('YU')
+(+oo)
+>>> _58_dec('W1')
+(-oo)
+>>> _58_dec('X')
+0
+>>> _58_dec('Y1')
+1
+>>> _58_dec('WG')
+-15
+>>> _58_dec('YF')
+15
+>>> _58_dec('WEF')
+-16
+>>> _58_dec('YHG')
+16
+
+>>> _58_dec('W80000000') == -(2**35-1)
+True
+>>> _58_dec('YNVVVVVVV') == +(2**35-1)
+True
+>>> _58_dec('W6NUVVVVVVV') == -(2**35)
+True
+>>> _58_dec('YP810000000') == +(2**35)
+True
+
+
+
+>>> _58_dec(''.join(['W4', '0'*(2**2-1), '0'*(2**15-1)])) == -(2**163835-1)
+True
+>>> _58_dec(''.join(['YR', 'V'*(2**2-1), 'V'*(2**15-1)])) == +(2**163835-1)
+True
+>>> _58_dec(''.join(['W3', 'R',     'U','V'*(2**2-1),     'U','V'*(2**15-1)])) == -(2**163835)
+True
+>>> _58_dec(''.join(['YS', '4',     '1','0'*(2**2-1),     '1','0'*(2**15-1)])) == +(2**163835)
+True
+
+#非标准数据:
+>>> _58_dec('YT0')
+0
+>>> _58_dec('YTA0')
+0
+>>> _58_dec('YTAL0')
+0
+>>> _58_dec('YTALA0')
+0
+>>> _58_dec('YTALAL0')
+0
+
+>>> _58_dec('YT0')
+0
+>>> _58_dec('YT10')
+0
+>>> _58_dec('YT8')
+0
+>>> _58_dec('YT90')
+0
+>>> _58_dec('YTA0')
+0
+>>> _58_dec('YTAG')
+0
+>>> _58_dec('YTAH0')
+0
+>>> _58_dec('YTAK0')
+0
+>>> _58_dec('YTAL0')
+0
+
+
+>>> _58_dec('YTAL0')
+0
+>>> _58_dec('YTAL10')
+0
+>>> _58_dec('YTAL8')
+0
+>>> _58_dec('YTAL90')
+0
+>>> _58_dec('YTALA0')
+0
+>>> _58_dec('YTALAG')
+0
+>>> _58_dec('YTALAH0')
+0
+>>> _58_dec('YTALAK0')
+0
+>>> _58_dec('YTALAL0')
+0
 
 
 
@@ -431,9 +520,13 @@ py_adhoc_call   seed.int_tools.StepDecoder   @f
 from seed.int_tools.StepDecoder import *
 ]]]'''#'''
 __all__ = r'''
-mk_step_decoder4int_with_inf__alnum__5over8_
 encode4int_with_inf__alnum__5over8_
     iter_encode4int_with_inf__alnum__5over8_
+decode4int_with_inf__alnum__5over8_
+    mk_step_decoder4int_with_inf__alnum__5over8_
+    IDecoder__input_seq
+        Exception__nonnull_remain
+        Exception__not_fullmatch
 
 max_digit5num_bits_ex_
 max_digit5num_bits_
@@ -508,6 +601,7 @@ IUIntCompressor
 rxdigit8one
 rxdigit8two
 IStepDecoder__fixed_size_layers__functional
+    Exception__min_layer_idx4end_by_cell_boundary
     IStepDecoder__fixed_size_layers__body4infinite_uint_interval
         StepDecoder__fixed_size_layers__body4infinite_uint_interval
     IStepDecoder__plugin4finite_uint_interval__fixed_size_layers
@@ -617,6 +711,14 @@ calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continue
 
 uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
 #from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
+
+mk_seq_rng = lazy_import4func_('seed.seq_tools.mk_seq_rng', 'mk_seq_rng', __name__)
+#from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+
+
+lazy_import4func_('seed.int_tools.DigitReader', 'DigitReader5iter', __name__, 'mk_DigitReader5iter')
+if 0:from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
+mk_DigitReader5iter
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -1238,11 +1340,13 @@ class IStepDecoder__flatten(IStepDecoder__wrapper, IStepDecoder__without_subcall
         call_entry = _CallE(step_decoder, st)
         while 1:
             (stk, call_entry7loop) = sf._pushs_until_loop_st(stk, call_entry)
-            if not 0 == call_entry7loop.num_required_digits:
+            st7loop = call_entry7loop.state
+            if not 0 == st7loop.num_required_digits:
                 call_entry7loop7nonfinal = call_entry7loop
+                st7loop7nonfinal = st7loop
                 payload = (stk, call_entry7loop7nonfinal)
                 #not st4sf.is_final_st
-                st4sf = _LoopST(Cased(False,payload),  call_entry7loop7nonfinal.rxdigit8remain, call_entry7loop7nonfinal.num_required_digits)
+                st4sf = _LoopST(Cased(False,payload),  st7loop7nonfinal.rxdigit8remain, st7loop7nonfinal.num_required_digits)
                 break
             call_entry7loop7final = call_entry7loop
             #st7final.is_final_st
@@ -1333,8 +1437,8 @@ class IStepDecoder__flip_digits(IStepDecoder__wrapper, IStepDecoder__without_sub
     def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
         loop_st = loop_st7nonfinal.payload
         _required_digits = tuple(sf.radix_info4digit.flip_digits_(required_digits))
-        loop_st = sf.flatten_wrapped_step_decoder.feed_digits_(_required_digits)
-        return _mk_loop_st__flipped_rxdigit8remain_(loop_st)
+        _loop_st = sf.flatten_wrapped_step_decoder.feed_digits_(loop_st, _required_digits)
+        return _mk_loop_st__flipped_rxdigit8remain_(_loop_st)
     #@override
     feed_oresult_remain_ = _Dead.feed_oresult_remain_
     ######################
@@ -1770,7 +1874,7 @@ class IStepDecoder__skip_macro_header(IStepDecoder__fixed_radix4macro_header, IS
     radix_info4macro_header = rxdigit8no_bits.radix_info
     @override
     def start_(sf, rxdigit8macro_header, /):
-        assert rxdigit8macro_header.radix_info.radix == 1
+        assert rxdigit8macro_header.is_null
         return _LoopST(Cased(False,None),   rxdigit8macro_header,   1)
     @override
     def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
@@ -1864,7 +1968,7 @@ class IStepDecoder__parallel__partition_space4macro_header(IStepDecoder__fixed_r
 #end-class IStepDecoder__parallel__partition_space4macro_header(IStepDecoder__fixed_radix4macro_header):
 
 r'''[[[
-TODO:IStepDecoder__dynamic_bibits{body_bibit:="10"}
+DONE:IStepDecoder__dynamic_bibits{body_bibit:="10"}
     bibit:two bit
     xxx:regex"(10)*(0|11)"
     regex"(01)*(00|1)"
@@ -2324,7 +2428,7 @@ class IStepDecoder__fixed_size_layers__functional(IStepDecoder):
         #   !! 有限区插件才需要,无限区插件无需
         #######
         #move to:IStepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
-            #.if rxdigit8macro_header.radix_info.radix == 1:
+            #.if rxdigit8macro_header.is_null:
             #.    rxdigit8macro_header = rxdigit8one
         #######
         dr4fst_part = sf.step_decoder4fixed_size_xbcells4zeroth_layer
@@ -2339,13 +2443,13 @@ class IStepDecoder__fixed_size_layers__functional(IStepDecoder):
         #######
         if layer_idx >= sf.min_layer_idx4end_by_cell_boundary:
             # check no remain bits
-            if not rxdigit8remain.radix_info.radix == 1:raise Exception__min_layer_idx4end_by_cell_boundary(layer_idx, sf.min_layer_idx4end_by_cell_boundary, rxdigit8remain, sf) #raise 000
+            if not rxdigit8remain.is_null:raise Exception__min_layer_idx4end_by_cell_boundary(layer_idx, sf.min_layer_idx4end_by_cell_boundary, rxdigit8remain, sf) #raise 000
                 #StepDecoder__fixed_size_layers__body4infinite_uint_interval(ZpowRadixInfo(5), 2)
                 #   (1, 0, RadixedDigit(ZpowRadixInfo(1), 0), sf)
         #######
         u = oresult7subcall
         v = sf._uncompress_at_(layer_idx, u)
-            #if layer_idx == 0 and sf.radix_info4macro_header.radix==1: assert u == 0 and v == 1
+            #if layer_idx == 0 and sf.radix_info4macro_header.is_null: assert u == 0 and v == 1
 
         #cancel shortcut:case = 1+layer_idx if not v == 0 else sf.num_layers
         #   !! offset may lead to nonzero value
@@ -2402,7 +2506,7 @@ class IStepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
     @override
     def start_(sf, rxdigit8macro_header, /):
         #######
-        if rxdigit8macro_header.radix_info.radix == 1:
+        if rxdigit8macro_header.is_null:
             rxdigit8macro_header = rxdigit8one
         #######
         if sf.radix4digit == 2 and rxdigit8macro_header.radix_info.radix < 3:
@@ -3737,7 +3841,105 @@ def _58_iter_encode(xu, /):
 #end-def _58_iter_encode(xu, /):
 #end-def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
 
+class _SeqIter:
+    @property
+    @override
+    def begin(sf, /):
+        '#mutable'
+        return sf._i
+    def __init__(sf, seq, /, begin=None, end=None, *, key):
+        (begin, end) = mk_seq_rng(seq, begin, end)
+        sf._xs = seq
+        sf._i = begin
+        sf._j = end
+        sf._f = key
+    def __iter__(sf, /):
+        return sf
+    def __next__(sf, /):
+        i = sf._i
+        if i == sf._j:
+            raise StopIteration
+        x = sf._xs[i]
+        y = sf._f(x)
+        sf._i = i+1
+        return y
 
+class IDecoder__input_seq(ABC):
+    __slots__ = ()
+    @property
+    @abstractmethod
+    def step_decoder(sf, /):
+        '-> IStepDecoder__fixed_radix4macro_header{oresult}'
+    @abstractmethod
+    def elem2head_digit_(sf, x, /):
+        'x -> digit8macro_header'
+    @abstractmethod
+    def elem2body_digit_(sf, x, /):
+        'x -> digit8body_cell'
+    def decode(sf, seq, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
+        '[x] -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
+        assert not (fullmatch and nonnull_remain_ok)
+        (begin, end) = mk_seq_rng(seq, begin, end)
+        if not begin < end:
+            raise ValueError(seq, begin, end)
+        digit8H = sf.elem2head_digit_(seq[begin])
+        777;_begin = 1+begin
+        digit8H
+        dr = sf.step_decoder
+        radix_info4H = dr.radix_info4macro_header
+        if not 0 <= digit8H < radix_info4H.radix:raise ValueError(digit8H, radix_info4H.radix)
+        rxdigit8H = RadixedDigit(radix_info4H, digit8H)
+        digit_iter = _SeqIter(seq, _begin, end, key=sf.elem2body_digit_)
+        digit_reader = mk_DigitReader5iter(dr.radix_info4digit, digit_iter)
+        ###
+        input4step_decoder = Input4StepDecoder(rxdigit8H, digit_reader)
+        (oresult, rxdigit8remain) = step_decode__input_(dr, input4step_decoder)
+        new_begin = digit_iter.begin
+        if nonnull_remain_ok:
+            return (oresult, rxdigit8remain, new_begin)
+        #not nonnull_remain_ok
+        if not rxdigit8remain.is_null:raise Exception__nonnull_remain(rxdigit8remain)
+        if not fullmatch:
+            return (oresult, new_begin)
+        if not new_begin == end:raise Exception__not_fullmatch(new_begin, end)
+        #fullmatch
+        return oresult
+class Exception__nonnull_remain(Exception):pass
+class Exception__not_fullmatch(Exception):pass
+#end-class IDecoder__input_seq(ABC):
+Exception__nonnull_remain
+Exception__not_fullmatch
+
+def _mk_alnum2digit_(alphabet4alnum, /):
+     alnum2digit = {c:j for j,c in enumerate(alphabet4alnum)}
+     for c in alphabet4alnum:
+         alnum2digit[c.lower()] = alnum2digit[c]
+     return alnum2digit
+_58_2digit6head = _mk_alnum2digit_(_58_tbl6head)
+_58_2digit6body = _mk_alnum2digit_(_58_tbl6body)
+class _58_Decoder__input_seq(IDecoder__input_seq):
+    ___no_slots_ok___ = True
+    def __init__(sf, /):
+        pass
+    @cached_property
+    @override
+    def step_decoder(sf, /):
+        return mk_step_decoder4int_with_inf__alnum__5over8_()
+    @cached_property
+    #@override
+    def elem2head_digit_(sf, /):
+        return _58_2digit6head.__getitem__
+    @cached_property
+    #@override
+    def elem2body_digit_(sf, /):
+        return _58_2digit6body.__getitem__
+#end-class _58_Decoder__input_seq(IDecoder__input_seq):
+_58_decode = _58_Decoder__input_seq().decode
+def decode4int_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
+    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
+    return _58_decode(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_remain_ok=nonnull_remain_ok)
+encode4int_with_inf__alnum__5over8_
+decode4int_with_inf__alnum__5over8_
 
 
 

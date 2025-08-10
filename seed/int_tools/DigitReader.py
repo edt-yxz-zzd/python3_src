@@ -228,9 +228,9 @@ mk_namedtuple_
 _BaseDigitReader5iter = mk_namedtuple_(__name__, 'BaseDigitReader5iter', 'radix_info4digit digit_iter')
 class DigitReader5iter(_BaseDigitReader5iter, IDigitReader5iter):
     ___no_slots_ok___ = True
-    def __new__(cls, /, digit_iter):
+    def __new__(cls, /, radix_info4digit, digit_iter):
         digit_iter = iter(digit_iter)
-        return super(__class__, cls).__new__(cls, digit_iter)
+        return super(__class__, cls).__new__(cls, radix_info4digit, digit_iter)
 #end-class DigitReader5iter(_BaseDigitReader5iter, IDigitReader5iter):
 
 _BaseDigitReader5seq = mk_namedtuple_(__name__, 'BaseDigitReader5seq', 'radix_info4digit digit_subseq')
