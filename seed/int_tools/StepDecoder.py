@@ -484,13 +484,19 @@ True
 0
 >>> _58_dec('YTA0')
 0
+>>> _58_dec('YTA10')
+0
 >>> _58_dec('YTAG')
 0
 >>> _58_dec('YTAH0')
 0
 >>> _58_dec('YTAK0')
 0
+>>> _58_dec('YTAK10')
+0
 >>> _58_dec('YTAL0')
+0
+>>> _58_dec('YTAL10')
 0
 
 
@@ -504,13 +510,19 @@ True
 0
 >>> _58_dec('YTALA0')
 0
+>>> _58_dec('YTALA10')
+0
 >>> _58_dec('YTALAG')
 0
 >>> _58_dec('YTALAH0')
 0
 >>> _58_dec('YTALAK0')
 0
+>>> _58_dec('YTALAK10')
+0
 >>> _58_dec('YTALAL0')
+0
+>>> _58_dec('YTALAL10')
 0
 
 
@@ -524,12 +536,10 @@ encode4int_with_inf__alnum__5over8_
     iter_encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
     mk_step_decoder4int_with_inf__alnum__5over8_
-    IDecoder__input_seq
-        Exception__nonnull_remain
-        Exception__not_fullmatch
+IDecoder__input_seq
+    Exception__nonnull_remain
+    Exception__not_fullmatch
 
-max_digit5num_bits_ex_
-max_digit5num_bits_
 
 CallEntry4StepDecoder
 Kind4State4StepDecoder
@@ -650,6 +660,18 @@ IStepDecoder__int_with_inf
 IStepDecoder__rational_with_inf
     StepDecoder__rational_with_inf
 
+
+
+
+
+
+
+
+
+
+
+max_digit5num_bits_ex_
+max_digit5num_bits_
 '''.split()#'''
     #IStepDecoder__fixed_size_layers
 __all__
@@ -4060,4 +4082,42 @@ __()
 
 
 __all__
+from seed.int_tools.StepDecoder import encode4int_with_inf__alnum__5over8_, iter_encode4int_with_inf__alnum__5over8_, decode4int_with_inf__alnum__5over8_, mk_step_decoder4int_with_inf__alnum__5over8_
+
+
+from seed.int_tools.StepDecoder import Exception__nonnull_remain, Exception__not_fullmatch, Exception__min_layer_idx4end_by_cell_boundary, ReservedAreaException, InfiniteException__nonzero_rxdigit8remain
+
+from seed.int_tools.StepDecoder import IDecoder__input_seq, IStepDecoder, step_decode__input_, step_decode__head_, step_decode__state_
+
+from seed.int_tools.StepDecoder import IBaseState4StepDecoder, ILoopState4StepDecoder, ICallState4StepDecoder
+
+from seed.int_tools.StepDecoder import IInput4StepDecoder, IPartialOutput4StepDecoder, IFullOutput4StepDecoder
+
+from seed.int_tools.StepDecoder import IUIntLinearTransform
+
+from seed.int_tools.StepDecoder import CallEntry4StepDecoder, Kind4State4StepDecoder, LoopState4StepDecoder__plain, CallState4StepDecoder__plain, mk_nontail_call_st4step_decoder_, TailCallState4StepDecoder__plain, mk_tail_call_st4step_decoder_, XCallState4StepDecoder__plain
+
+
+from seed.int_tools.StepDecoder import Input4StepDecoder, PartialOutput4StepDecoder, FullOutput4StepDecoder
+
+
+from seed.int_tools.StepDecoder import UIntLinearTransform, uint_linear_transform8echo
+
+from seed.int_tools.StepDecoder import StepDecoder__dynamic_bits, StepDecoder__fixed_size_xbcells, StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval, StepDecoder__dynamic_bibits, StepDecoder__flatten, StepDecoder__flip_digits, StepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits, StepDecoder__constant_oresult
+
+
+from seed.int_tools.StepDecoder import StepDecoder__fixed_size_layers__body4infinite_uint_interval, StepDecoder__plugin4finite_uint_interval__extend_macro_header, StepDecoder__plugin4finite_uint_interval__parallel__partition_space4macro_header, StepDecoder__plugin4finite_uint_interval__fixed_size_layers, StepDecoder__plugin4infinite_uint_interval__extend_macro_header, StepDecoder__plugin4infinite_uint_interval__parallel__partition_space4macro_header, StepDecoder__plugin4infinite_uint_interval__truncated_dynamic_bits_with_may_dynamic_bibits_with_dependent_size_layers
+
+
+
+from seed.int_tools.StepDecoder import StepDecoder__uint_with_inf, StepDecoder__int_with_inf, mk_step_decoder4int_with_inf__alnum__5over8_, StepDecoder__rational_with_inf
+
+
+
+
+
+
+
+
+
 from seed.int_tools.StepDecoder import *
