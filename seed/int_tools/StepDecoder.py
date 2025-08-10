@@ -7,6 +7,7 @@ view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8�
     DONE:step_decoder4int_with_inf__alnum__5over8
 view others/数学/编程/设计/自定义编码之要点.txt
     TODO:统一:透明数据化硬编码{区间前缀树,况态化解码结果}
+        IStepDecoder__hardwired__prefix_tree
         TODO:阶跃式分阶层、强幂级进分阶层
 
 seed.int_tools.StepDecoder
@@ -474,6 +475,7 @@ True
 >>> _58_dec('YTALAL0')
 0
 
+
 >>> _58_dec('YT0')
 0
 >>> _58_dec('YT10')
@@ -525,6 +527,30 @@ True
 >>> _58_dec('YTALAL10')
 0
 
+
+>>> _58_dec('YTALAL111111111111111')
+1
+>>> _58_dec('YS111')
+1
+>>> _58_dec('YT11111')
+1
+>>> _58_dec('YT201111')
+1
+>>> _58_dec('YT3001111')
+1
+
+>>> _58_dec('YT911111')
+1
+>>> _58_dec('YTA1111111')
+1
+>>> _58_dec('YTAH1111111')
+1
+>>> _58_dec('YTAK11111111')
+1
+>>> _58_dec('YTAL1111111111')
+1
+>>> _58_dec('YTAL91111111111')
+1
 
 
 
@@ -664,6 +690,19 @@ IStepDecoder__rational_with_inf
 
 
 
+IStepDecoder__hardwired__prefix_tree
+    StepDecoder__hardwired__prefix_tree
+    fill_prefix_tree_
+        PrefixTree4step_decoder
+        Target4prefix_tree4step_decoder
+
+
+
+
+
+
+
+
 
 
 
@@ -682,7 +721,7 @@ from itertools import islice
 from itertools import accumulate
 #accumulate(iterable, func=None, *, initial=None)
 from bisect import bisect_right
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_non_ABC, check_pair
+from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_non_ABC, check_pair, check_callable
 
 from seed.tiny_.oo8inf import oo
 
@@ -715,8 +754,8 @@ from seed.int_tools.DigitReader import IDigitReader# IDigitReader5iter, IDigitRe
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
 from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
 repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err', __name__)
-if 0:from seed.tiny import mk_tuple,print_err
+lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_', __name__)
+if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_
 lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,concat_digits2bytes_,concat_digits2iter_bytess_', __name__)
 if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
 
@@ -1875,7 +1914,7 @@ class IStepDecoder__fixed_radix4macro_header(IStepDecoder):
     @property
     @abstractmethod
     def radix_info4macro_header(sf, /):
-        '-> IRadixedDigit # [radix_info4macro_header == start_()::rxdigit8macro_header.radix_info]'
+        '-> IRadixInfo # [radix_info4macro_header == start_()::rxdigit8macro_header.radix_info]'
     @property
     def radix4macro_header(sf, /):
         '-> uint{>=1} # [radix4macro_header == start_()::rxdigit8macro_header.radix_info.radix]'
@@ -3753,6 +3792,8 @@ def _58_iter_to_str(it, /):
     yield _58_tbl6head[bs[0]]
     yield _58_to_str4body(bs[1:])
     yield from map(_58_to_str4body, it)
+_58_bss = (None, b'\x00', None, b'\x08', None, b'\x00', None, b'\x10', None, b'\x14')
+assert len(_58_bss) == 10
 def _58_iter_encode(xu, /):
     '(uint|+oo) -> Iter (digits/bytes)'
     if xu is +oo:
@@ -3821,8 +3862,9 @@ def _58_iter_encode(xu, /):
             if _r >= 5:
                 yield b'\x0A' # 10
             #_58_bss = (None, b'\x00', None, b'\x08', None, b'\x00', None, b'\x10', None, b'\x14', None, b'\x15\x00')
-            _58_bss = (None, b'\x00', None, b'\x08', None, b'\x00', None, b'\x10', None, b'\x14')
-            assert len(_58_bss) == 10
+            if 0:
+                _58_bss = (None, b'\x00', None, b'\x08', None, b'\x00', None, b'\x10', None, b'\x14')
+                assert len(_58_bss) == 10
             [last_prefix] = _58_bss[_r]
         else:
             # [2 <= L <= 4]
@@ -3965,14 +4007,249 @@ decode4int_with_inf__alnum__5over8_
 
 
 
+import builtins as _B
+def _prepare_prefix_tree4val(v, /):
+    # [target4prefix_tree =[def]= ]
+    match v:
+        #.case ... | None:
+            #『case ...:』SyntaxError: invalid syntax
+        case _B.Ellipsis | None:
+            #None/undefined_interval
+            #.../reserved_interval
+            r = v
+        case (0, d):
+            #(0,prefix_tree4step_decoder/extend_macro_header)
+            r = PrefixTree4step_decoder(d)
+        case ((1|2|3) as case, payload):
+            #(1,oresult)
+            #(2,peculiar_args4step_decoder)
+            #(3,step_decoder)
+            r = Target4prefix_tree4step_decoder(Cased(case, payload))
+        case _:
+            raise 000
+    r
+    return r
+
+def _prepare_prefix_tree(d, /):
+    f = _prepare_prefix_tree4val
+    d = mk_MapView_({k:f(v) for k, v in d.items()})
+    ps = sorted(d.items(), key=fst)
+    us = tuple(map(fst, ps))
+    ts = tuple(map(snd, ps))
+    return (d, us, ts)
+class PrefixTree4step_decoder:
+    'prefix_tree4step_decoder'
+    def __init__(sf, d, /):
+        sf._d, sf._us, sf._ts = _prepare_prefix_tree(d)
+        sf._filled = False
+            #turn-on by fill_prefix_tree_()
+    @property
+    def filled(sf, /):
+        '-> bool{turn-on by fill_prefix_tree_()}'
+        return sf._filled
+    @property
+    def mapping_view(sf, /):
+        '-> {max1:target4prefix_tree}'
+        return sf._d
+    @property
+    def sorted_max1_seq_view(sf, /):
+        '-> [max1]'
+        return sf._us
+    @property
+    def ordered_target_seq_view(sf, /):
+        '-> [target4prefix_tree]{correspondent with sorted_max1_seq_view}'
+        return sf._ts
+    def __len__(sf, /):
+        return len(sf._d)
+class Target4prefix_tree4step_decoder:
+    'target4prefix_tree'
+    def __init__(sf, cased_target, may_step_decoder, /):
+        check_type_is(Cased, cased_target)
+        sf._ct = cased_target
+        sf._ms = may_step_decoder
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.cased_target, sf._ms)
+    @property
+    def cased_target(sf, /):
+        return sf._ct
+    @property
+    def step_decoder(sf, /):
+        m = sf._ms
+        if m is None:raise AttributeError('step_decoder')
+        return m
+    @step_decoder.setter
+    def step_decoder(sf, step_decoder, /):
+        if not sf._ms is None:raise AttributeError('step_decoder')
+        sf._ms = step_decoder
 
 
+class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_header):
+    r'''[[[
+    [prefix_tree4step_decoder, =[def]= nonempty{max1:target4prefix_tree}]
+        #PrefixTree4step_decoder
+    [radix4macro_header =[def]= max(prefix_tree4step_decoder)]
+    [num_intervals4macro_header =[def]= len(prefix_tree4step_decoder)]
+    [target4prefix_tree =[def]= (None/undefined_interval|.../reserved_interval|(0,prefix_tree4step_decoder/extend_macro_header)|(1,oresult)|(2,peculiar_args4step_decoder)|(3,step_decoder))]
+        #Target4prefix_tree4step_decoder
+    [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> peculiar_args4step_decoder -> step_decoder]
+    [common_args4step_decoder :: (radix4digit, ...usrdefined...)]
+    [begin_size_pair_prefix4step_decoder :: [(begin/min{interval}, size/radix/len{interval})]] =>:
+        [fixed_min_prefix4step_decoder :: [uint]]
+        [fixed_max_prefix4step_decoder :: [uint]]
+        [fixed_radix_prefix4step_decoder :: [uint{>=1}]]
+        # [fixed_prefix4step_decoder]
+        # [radix4macro_header4step_decoder]
+    #]]]'''#'''
+    #级:grade level class stage step degree cascade
+    __slots__ = ()
+    ######################
+    @property
+    @abstractmethod
+    def mkr4step_decoder(sf, /):
+        '-> (common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> peculiar_args4step_decoder -> step_decoder)'
+    @property
+    @abstractmethod
+    def common_args4step_decoder(sf, /):
+        '-> common_args4step_decoder{radix4digit == common_args4step_decoder[0]}'
+    @property
+    @abstractmethod
+    def prefix_tree4step_decoder(sf, /):
+        '-> prefix_tree4step_decoder/PrefixTree4step_decoder{Target4prefix_tree4step_decoder}'
+    ######################
+    def fill_prefix_tree_(sf, /):
+        prefix_tree4step_decoder = sf.prefix_tree4step_decoder
+        common_args4step_decoder = sf.common_args4step_decoder
+        mkr4step_decoder = sf.mkr4step_decoder
+        fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4step_decoder, sf.radix_info4digit)
+    ######################
+    ######################
+    @cached_property
+    @override
+    def radix_info4digit(sf, /):
+        radix4digit = sf.common_args4step_decoder[0]
+        radix_info4digit = RadixInfo(radix4digit)
+        return radix_info4digit
+    @cached_property
+    @override
+    def radix_info4macro_header(sf, /):
+        #radix4macro_header = max(sf.prefix_tree4step_decoder.mapping_view)
+        radix4macro_header = sf.prefix_tree4step_decoder.sorted_max1_seq_view[-1]
+        return RadixInfo(radix4macro_header)
+    ######################
+    @override
+    def start_(sf, rxdigit8macro_header, /):
+        tree = sf.prefix_tree4step_decoder
+        if not tree.filled:
+            sf.fill_prefix_tree_()
+        return sf._work(rxdigit8no_bits, rxdigit8macro_header, tree)
+    def _work(sf, rxdigit8acc, rxdigit8H, tree, /):
+        # [tree.filled]
+        digit8H = rxdigit8H.digit
+        us = tree.sorted_max1_seq_view
+        j = bisect_right(us, digit8H)
+        # !! [0 <= digit8H < radix4macro_header == us[-1]]
+        # [0 <= j < len(us)]
+        offset = 0 if j==0 else us[j-1]
+        assert offset <= digit8H < us[j]
+        _radix4H = us[j] -offset
+        _digit8H = digit8H -offset
+        _radix_info4H = RadixInfo(_radix4H)
+        _rxdigit8H = RadixedDigit(_radix_info4H, _digit8H)
+        _rxdigit8acc = rxdigit8acc.merge_rxdigit_(_rxdigit8H)
+        x = tree.ordered_target_seq_view[j]
+        if x is ... or x is None:
+            raise ReservedAreaException(x)
+        if type(x) is Target4prefix_tree4step_decoder:
+            tgt = x
+            return _TCallST.mk_tail_call_st5three_args_(None,   tgt.step_decoder,_rxdigit8acc, state_vs_rxdigit=True)
+        assert type(x) is PrefixTree4step_decoder
+        inner_tree = x
+        return _LoopST(Cased(False, inner_tree),  _rxdigit8acc,  1)
+    @override
+    def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
+        st = loop_st7nonfinal
+        assert st.case is False
+        [digit] = required_digits
+        rx8low = RadixedDigit(sf.radix_info4digit, digit)
+        rx8acc = st.rxdigit8remain
+        tree = st.payload
+        return sf._work(rx8acc, rx8low, tree)
+    #@override
+    feed_oresult_remain_ = _Dead.feed_oresult_remain_
+    ######################
+def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4step_decoder, radix_info4digit=None, /):
+    if radix_info4digit is None:
+        radix4digit = common_args4step_decoder[0]
+        radix_info4digit = RadixInfo(radix4digit)
+    radix_info4digit
+    fixed_min_prefix = []
+    fixed_radix_prefix = []
+    T = Target4prefix_tree4step_decoder
+    P = PrefixTree4step_decoder
+    def recur_(prefix_tree4step_decoder, /):
+        check_type_is(P, prefix_tree4step_decoder)
+        if prefix_tree4step_decoder._filled:return
+        begin = 0
+        for end, x in zip(prefix_tree4step_decoder.sorted_max1_seq_view, prefix_tree4step_decoder.ordered_target_seq_view):
+            radix = end-begin
+            check_int_ge(1, radix)
+            fixed_min_prefix.append(begin)
+            fixed_radix_prefix.append(radix)
+            777; begin = end
+            if x is ... or x is None:
+                pass
+            elif type(x) is T:
+              if not hasattr(x, 'step_decoder'):
+                tgt = x
+                match tgt.cased_target:
+                    case (1,oresult):
+                        step_decoder = StepDecoder__constant_oresult(radix_info4digit, oresult)
+                    case (2,peculiar_args4step_decoder):
+                        step_decoder = mkr4step_decoder(common_args4step_decoder, tuple(fixed_min_prefix), tuple(fixed_radix_prefix), peculiar_args4step_decoder)
+                    case (3,step_decoder):
+                        step_decoder
+                        pass
+                    case _:
+                        raise 000
+                tgt.step_decoder = step_decoder
+            else:
+                recur_(x)
+            fixed_min_prefix.pop()
+            fixed_radix_prefix.pop()
+        #for end, x in zip(prefix_tree4step_decoder.sorted_max1_seq_view, prefix_tree4step_decoder.ordered_target_seq_view):
+        prefix_tree4step_decoder._filled = True
+    recur_(prefix_tree4step_decoder)
+    return
 
+#end-class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_header):
 
-
-
-
-
+class StepDecoder__hardwired__prefix_tree(IStepDecoder__hardwired__prefix_tree):
+    ___no_slots_ok___ = True
+    def __init__(sf, mkr4step_decoder, common_args4step_decoder, prefix_tree4step_decoder, /):
+        check_callable(mkr4step_decoder)
+        check_type_is(tuple, common_args4step_decoder)
+        #check_radix_info4digit
+        check_int_ge(2, radix4digit:=common_args4step_decoder[0])
+        check_type_is(PrefixTree4step_decoder, prefix_tree4step_decoder)
+        sf._mk = mkr4step_decoder
+        sf._cs = common_args4step_decoder
+        sf._tr = prefix_tree4step_decoder
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.mkr4step_decoder, sf.common_args4step_decoder, sf.prefix_tree4step_decoder)
+    @property
+    @override
+    def mkr4step_decoder(sf, /):
+        return sf._mk
+    @property
+    @override
+    def common_args4step_decoder(sf, /):
+        return sf._cs
+    @property
+    @override
+    def prefix_tree4step_decoder(sf, /):
+        return sf._tr
+check_non_ABC(StepDecoder__hardwired__prefix_tree)
+['common_args4step_decoder', 'mkr4step_decoder', 'prefix_tree4step_decoder']
 
 
 
@@ -4116,6 +4393,10 @@ from seed.int_tools.StepDecoder import StepDecoder__uint_with_inf, StepDecoder__
 
 
 
+
+from seed.int_tools.StepDecoder import IStepDecoder__hardwired__prefix_tree
+
+from seed.int_tools.StepDecoder import StepDecoder__hardwired__prefix_tree, fill_prefix_tree_, PrefixTree4step_decoder, Target4prefix_tree4step_decoder
 
 
 

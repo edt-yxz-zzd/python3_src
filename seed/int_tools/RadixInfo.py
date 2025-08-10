@@ -452,6 +452,13 @@ class IRadixedDigit(ABC):
     def digit(sf, /):
         '-> uint%radix'
     ######################
+    def merge_rxdigit_(sf, ot, /):
+        high, low = sf, ot
+        rH = high.radix_info.radix
+        rL = low.radix_info.radix
+        radix = rH * rL
+        digit = high.digit * rL + low.digit
+        return RadixedDigit(RadixInfo(radix), digit)
     def flip_rxdigit_(sf, /):
         '-> IRadixedDigit'
         #xxx:'[.is_zpow_radix] => IRadixedDigit -> IRadixedDigit'
