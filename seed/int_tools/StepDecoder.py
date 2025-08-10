@@ -381,11 +381,59 @@ seed.int_tools.StepDecoder.ReservedAreaException: (0, RadixedDigit(ZpowRadixInfo
 
 
 
+
+
+encode4int_with_inf__alnum__5over8_
+>>> _58_enc = lambda xi:encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=True)
+>>> _58_enc(+oo)
+'YU'
+>>> _58_enc(-oo)
+'W1'
+>>> _58_enc(0)
+'X'
+>>> _58_enc(+1)
+'Y1'
+>>> _58_enc(-15)
+'WG'
+>>> _58_enc(+15)
+'YF'
+>>> _58_enc(-16)
+'WEF'
+>>> _58_enc(+16)
+'YHG'
+
+>>> _58_enc(-(2**35-1))
+'W80000000'
+>>> _58_enc(+(2**35-1)) == ''.join(['YN', 'V'*(2**3-1)])
+True
+>>> _58_enc(-(2**35))
+'W6NUVVVVVVV'
+>>> _58_enc(+(2**35)) == ''.join(['YP', '8',     '1','0'*(2**3-1)])
+True
+
+>>> _58_enc(-(2**163835-1)) == ''.join(['W4', '0'*(2**2-1), '0'*(2**15-1)])
+True
+>>> _58_enc(+(2**163835-1)) == ''.join(['YR', 'V'*(2**2-1), 'V'*(2**15-1)])
+True
+>>> _58_enc(-(2**163835)) == ''.join(['W3', 'R',     'U','V'*(2**2-1),     'U','V'*(2**15-1)])
+True
+>>> _58_enc(+(2**163835)) == ''.join(['YS', '4',     '1','0'*(2**2-1),     '1','0'*(2**15-1)])
+True
+
+
+
+
+
+
+
+
 py_adhoc_call   seed.int_tools.StepDecoder   @f
 from seed.int_tools.StepDecoder import *
 ]]]'''#'''
 __all__ = r'''
 mk_step_decoder4int_with_inf__alnum__5over8_
+encode4int_with_inf__alnum__5over8_
+    iter_encode4int_with_inf__alnum__5over8_
 
 max_digit5num_bits_ex_
 max_digit5num_bits_
@@ -567,6 +615,8 @@ rglnkls2reversed_iterable = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls2
 calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction_fold', 'calc_Fraction5finite_continued_fraction_', __name__)
 #from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
 
+uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
+#from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -3516,7 +3566,176 @@ def mk_step_decoder4int_with_inf__alnum__5over8_():
 
 
 
+def encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
+    '(int|-oo|+oo) -> (digits/bytes if digits_vs_str else str/alnum)'
+    it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str)
+    s = '' if digits_vs_str else b''
+    r = s.join(it)
+    return r
+def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
+    '(int|-oo|+oo) -> Iter (digits/bytes if digits_vs_str else str/alnum)'
+    if xi < 0:
+        xu = -xi
+        it = _58_iter_flip(_58_iter_encode(xu))
+    else:
+        xu = xi
+        it = _58_iter_encode(xu)
+    it
+    if digits_vs_str:
+        it = _58_iter_to_str(it)
+    return it
+def _58_flip4body(bs, /):
+    '(digits/bytes) -> (digits/bytes)'
+    # [31==32-1]
+    return bytes(map((31).__sub__, bs))
+def _58_iter_flip(it, /):
+    'Iter (digits/bytes) -> Iter (digits/bytes)'
+    it = iter(it)
+    for bs in it:
+        if bs:
+            break
+    else:
+        raise 000
+    bs
+    # [2==3-1]
+    yield bytes([2-bs[0]])
+    yield _58_flip4body(bs[1:])
+    yield from map(_58_flip4body, it)
+def _mk_58_tbls():
+    from string import digits, ascii_uppercase, ascii_lowercase
+    _alphabet4alnum = digits+ascii_uppercase
+    alphabet4alnum6body = _alphabet4alnum[:32]
+    alphabet4alnum6head = _alphabet4alnum[32:35]
+    return (alphabet4alnum6head, alphabet4alnum6body)
+(_58_tbl6head, _58_tbl6body) = _mk_58_tbls()
+_58_tbl4tr = bytes.maketrans(_58_tbl6body.encode('ascii'), bytes(range(len(_58_tbl6body))))
+def _uZdigits_mod32(u, /):
+    return uintZbase32_(u).encode('ascii').translate(_58_tbl4tr)
 
+def _58_to_str4body(bs, /):
+    '(digits/bytes) -> (str/alnum)'
+    return ''.join(map(_58_tbl6body.__getitem__, bs))
+def _58_iter_to_str(it, /):
+    'Iter (digits/bytes) -> Iter (str/alnum)'
+    it = iter(it)
+    for bs in it:
+        if bs:
+            break
+    else:
+        raise 000
+    bs
+    yield _58_tbl6head[bs[0]]
+    yield _58_to_str4body(bs[1:])
+    yield from map(_58_to_str4body, it)
+def _58_iter_encode(xu, /):
+    '(uint|+oo) -> Iter (digits/bytes)'
+    if xu is +oo:
+        yield b'\x02\x1E'
+    elif xu == 0:
+        yield b'\x01'
+    elif xu < 16:
+        yield b'\x02'
+        yield bytes([xu])
+    else:
+        # [xu >= 16]
+        yield b'\x02'
+        us = []
+        u = xu
+        # [u >= 16]
+        # [u > 1]
+        while u > 1:
+            # [u > 1]
+            us.append(u)
+            # [u >= 2]
+            nbit = u.bit_length()
+            # [nbit >= 2]
+            ncell = (nbit+4)//5
+            # [ncell >= 1]
+            u = ncell
+            # [u >= 1]
+        assert u == 1
+        # [ncell == u == 1]
+        assert 2 <= nbit <= 5
+        assert us
+        assert 2 <= us[-1] <= 31
+        us.append(1)
+        L = len(us)
+        assert L >= 2
+        ls = [16, 8, 4, 2]
+            # :: [max1{head_cell}]
+        if len(ls) > L:
+            ls = ls[:L]
+        else:
+            #ks = (8, 2, 16, 4, 2)
+            ks = b'\x08\x02\x10\x04\x02'
+            (q,r) = divmod(L-len(ls), len(ks))
+            if q:
+                ls.extend(ks*q)
+            if r:
+                ls.extend(ks[:r])
+        assert len(ls) == L
+        for j, (u, max1) in enumerate(zip(us, ls)):
+            if u < max1:break
+        else:
+            raise 000
+        j
+        L = j+1
+        del us[L:]
+        del ls[L:]
+        assert L >= 2
+        if L > 4:
+            # [L >= 5]
+            yield b'\x1D' #29
+            nbit4prefix = 5+2*(L-4)
+            (q, _r) = divmod(nbit4prefix-5-1, 10)
+            if q:
+                yield b'\x0A\x15'*q # 10,21
+            #_58_bss = (b'\x00', b'\x08', b'\x0A\x00', b'\x0A\x10', b'\x0A\x14', b'\x0A\x15\x00')
+            #_58_bss = (None, b'\x00', None, b'\x08', None, b'\x0A\x00', None, b'\x0A\x10', None, b'\x0A\x14', None, b'\x0A\x15\x00')
+            if _r >= 5:
+                yield b'\x0A' # 10
+            #_58_bss = (None, b'\x00', None, b'\x08', None, b'\x00', None, b'\x10', None, b'\x14', None, b'\x15\x00')
+            _58_bss = (None, b'\x00', None, b'\x08', None, b'\x00', None, b'\x10', None, b'\x14')
+            assert len(_58_bss) == 10
+            [last_prefix] = _58_bss[_r]
+        else:
+            # [2 <= L <= 4]
+            assert 2 <= L <= 4
+            match L:
+                case 2:
+                    last_prefix = 16 # 32-16
+                case 3:
+                    last_prefix = 24 # 32-8
+                case 4:
+                    yield b'\x1C' # 28 # 32-4
+                    last_prefix = 0 # next byte
+                case _:
+                    raise 000
+            last_prefix
+        last_prefix
+        assert last_prefix == 0 or last_prefix >= ls[-1] > us[-1]
+        assert last_prefix > 0 or 1 == us[-1]
+        u = us.pop()
+        if last_prefix == 0:
+            if not u == 1:raise 000
+            assert us
+            pass#skip
+        else:
+            d = last_prefix | u
+            yield bytes([d])
+        u
+        while us:
+            sz = u
+            u = us.pop()
+            bs = _uZdigits_mod32(u)
+            osz = sz -len(bs)
+            if osz:
+                assert osz > 0
+                yield '\x00'*osz
+            yield bs
+    return
+#end-def _58_iter_encode(xu, /):
+#end-def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
 
 
 
