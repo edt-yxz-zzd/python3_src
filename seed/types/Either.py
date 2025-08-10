@@ -12,7 +12,9 @@ KindedName
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.tiny_.check import check_type_is, check_type_le
 from seed.tiny_.catched_call__either import catched_call__either# cached_catched_call__either, get_or_cached_catched_call__either
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper')
+#.from seed.helper.repr_input import repr_helper
 from seed.tiny_.containers import null_tuple
 from collections.abc import Hashable as IHashable
 ___end_mark_of_excluded_global_names__0___ = ...

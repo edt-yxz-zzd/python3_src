@@ -14,19 +14,28 @@ from seed.helper.lazy_import__func7ast import mk_decorator4lazy_import__funcs_, 
 usage:
 from seed.helper.lazy_import__func import lazy_import4func_
 lazy_import4func_('seed.tiny', 'echo', __name__)
-    ##if toplevel then eqv:
+    ##if toplevel then almost eqv:
 echo = lazy_import4func_('seed.tiny', 'echo')
+    ##not overwrite global.echo
+best:
+echo = lazy_import4func_('seed.tiny', 'echo', __name__)
 
 lazy_import4func_('seed.tiny', 'ifNone', __name__, '_ifNone_')
-    ##if toplevel then eqv:
+    ##if toplevel then almost eqv:
 _ifNone_ = lazy_import4func_('seed.tiny', 'ifNone')
+    ##not overwrite global._ifNone_
+best:
+_ifNone_ = lazy_import4func_('seed.tiny', 'ifNone', __name__, '_ifNone_')
 
 ===
 usage:
 from seed.helper.lazy_import__func import lazy_import4funcs_
 lazy_import4funcs_('seed.tiny', 'fst,snd:_snd_', __name__)
-    ##if toplevel then eqv:
+    ##if toplevel then almost eqv:
 [fst,_snd_] = lazy_import4funcs_('seed.tiny', 'fst,snd')
+    ##not overwrite global.fst/_snd_
+best:
+[fst,_snd_] = lazy_import4funcs_('seed.tiny', 'fst,snd:_snd_', __name__)
 
 ===
 usage:

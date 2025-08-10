@@ -11,7 +11,9 @@ _Base4repr
     #_Base4repr_ex
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.helper.repr_input import repr_helper
+#.from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class _Base4repr:

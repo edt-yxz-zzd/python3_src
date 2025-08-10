@@ -324,14 +324,18 @@ variant:变体
   unlimited
   unbounded
   ===
-  内敛识别器:inextensible,closed-end
+  内敛:?ascetic?(禁欲苦行的)
+  <<==:
+  #(双端内敛:双刹:前刹+后刹)
+  内敛识别器:inextensible,closed-end,abstinent,ascetic
     vs:非内敛识别器/前瞻贪婪识别器:extensible,open-ended
     ===
     caged,blocked,self-restraint,inextensible,closed-end
     vs:greedy,loose,extensible,open-ended
   ===
   贪婪:greedy; avid; grasping; rapacious
-  自制/节制/克制
+  自制/节制/克制/自限
+  禁欲/节食
   自了，自截，自解，自紧
     自紧self-tightening,self-sealing
     自紧密封self-sealing packing
@@ -341,18 +345,42 @@ variant:变体
     refrain 暂时地抑制住行动或欲望
     abstain 因主义信仰,或深思,以意志节制有害的事物
     forbear 藉自制心抑制感情
+  自制
+    #home-made自己制造
+    #will power:自制力:控制自己的能力
+    1.self-control; self-restraint; (self-)abnegation; forbearance
+    2.to forbear
+  克制:restrain; restraint; control; hold in; refrain from; subdue; keep (oneself) from; forbear from
+  节制:
+    1.control; check; be moderate in; restrict; hold down
+    2.temperance; abstinence; continence; moderation; restraint
+  禁欲:
+    禁欲主义:asceticism; stoicism
+    禁欲主义者:an ascetic; a stoic
+    ascetic:adj. 苦行的；禁欲主义的 n. 禁欲者；苦行者
+    stoic: n. 斯多葛学派哲学家；禁欲主义者 adj. 斯多葛派的；禁欲主义的
+  自限:self-limited,self-restraint
+  temperate:adj. 饮食有节制的, 克己的 (气候)温和的
+  abstinent:adj. 禁欲的；有节制的；饮食有度的 n. 禁欲者
+  continent:n.大陆 adj.  ((文语)) 1 有自制心的,克己的;2 节制性欲的,禁欲的;3 能抑制排泄的
+  moderate:adj. 适度的，中等的；有节制的；稳健的，温和的vi. 变缓和，变弱
+  restrain:vt. 抑制，控制；制止；约束
+  temperance:temperate 的名词: n. 节制(尤指饮食)；节欲戒酒
+  abstinence:abstain,abstinent 的名词:n. 节制；禁食；戒酒
+  continence:continent 的名词: n. 节欲（尤指禁欲）；自制，克制
+  moderation:moderate 的名词: n. 自我节制;自我控制缓和,减轻
+  restraint:restrain 的名词:n. 克制；抑制；束缚
+  self-restraint <<不可数名词>>自制,克己, n. 自我克制
+  self-restraint agreement:自限协定,自愿限制协定
+  subdue: vt. 征服；抑制；减轻
   abnegate vt. 克制
+  abnegation:abnegate 的名词: n. 自我克制；放弃 抛弃，(对子女等的)拒绝承认，否认
+  forbearance:forbear 的名词: n. 节制；克制；容忍；〈法律〉债务偿还期的延展
   自制动:self-retention
   brake:制动器:使运行中的运输工具、机器等减低速度或停止运动的装置。通称闸。
   cage:n. 笼，兽笼；牢房，监狱vt. 把…关进笼子；把…囚禁起来
-  temperate:adj. 饮食有节制的, 克己的 (气候)温和的
-  moderate:adj. 适度的，中等的；有节制的；稳健的，温和的vi. 变缓和，变弱
-  abstinent:adj. 禁欲的；有节制的；饮食有度的 n. 禁欲者
   自停机构:self-stopping gear, stopping motions
   自停装置:automatic stop arrangement
-  self-restraint <<不可数名词>>自制,克己, n. 自我克制
-  self-restraint agreement:自限协定,自愿限制协定
-  restraint:n. 克制；抑制；束缚
   本分,自持
   无节制,放纵
   extravagant:adj. 奢侈的, 铺张的过度的, 过分的, 放肆的
@@ -636,6 +664,10 @@ Case(Enum) ?况型/况框? case 况例/况态
   using/via:选用指定方法:『爫』抓丁#详细候选:见下面
   at/on:在指定情形下:『乊』乎/诸/之于
   细化/version:后缀标签-指定细节/指定小分类/细化约束条件/版本:『牜』
+    高区分度形容词:
+        +『牜/乊』:场景位次(版本/时地/路引)
+        +『牜』:外延特征(色/形/格式/功用)
+        +『爫』:内涵关窍(算法/实现细节/改动处)
     文件内容牜文件格式:vs:文件内容匕文件格式
       倾向于改『匕』为『牜』
     [:文件内容牜文件格式]:goto

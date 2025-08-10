@@ -292,6 +292,8 @@ methods ordered:
     read_relax_le
 
 methods classified:
+    tmp_peek_iter
+        '[unsafe][should ensure no other concurrent read/peek operation]'
     # may raise StopIteration
     __next__
     head
@@ -356,6 +358,25 @@ no __bool__
         if self.__dq:
             return self.__dq.popleft()
         return next(self.__it)
+    def tmp_peek_iter(self):
+        '[unsafe][should ensure no other concurrent read/peek operation]'
+        from seed.lang.nonbool import nonbool
+        dq = self.__dq
+        ######################
+        #del self.__dq
+            # but:assign self.__it after self.__dq, would del self.__it firstly too?
+        #self.__dq = NotImplemented
+            # but:bool(NotImplemented) may be ok
+        self.__dq = nonbool
+        ######################
+        try:
+            yield from dq
+            for x in self.__it:
+                dq.append(x)
+                yield x
+        finally:
+            self.__dq = dq
+        return
     def read_le(self, n):
         'consume; if len(result) < n, then self be empty after this call'
         if not n >= 0: raise ValueError

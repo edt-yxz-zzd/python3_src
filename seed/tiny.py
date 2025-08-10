@@ -29,6 +29,14 @@ dot[[f, a...]::[b...], g](*args, **kwargs)
     =[def]= f(a..., g(*args, **kwargs), b...)
 ]]
 
+[[
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
+lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,ifNone:ifNone_', __name__)
+if 0:from seed.tiny import mk_tuple,print_err,ifNone as ifNone_ #xxx:null_tuple #xxx:echo,fst,snd
+]]
+
+
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
 from seed.tiny import fst, snd, at
 from seed.tiny import mk_tuple, mk_frozenset, mk_immutable_seq

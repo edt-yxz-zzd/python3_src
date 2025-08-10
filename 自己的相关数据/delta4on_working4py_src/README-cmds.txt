@@ -102,4 +102,33 @@ view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-
 ===
 
 ]]
+[[
+@20250703
+g_both__dry_run
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20250703_124228.txt
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20250703_124232.txt
+===
+将允许:add 'seed/recognize/rgnr/abc/IRecognizer.py'
+临时性排除:py,txt:其余同上
+===
+???出错:
+  g6_ '我的思考牜大脑机制-灵感泉涌-随机记忘 <= 笔记:《系统方法谈》,《大脑如何思维》'
+    导致后台运行并可能有其他毛病...
+
+]]
+[[
+@20250810
+g_both__dry_run
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20250810_102618.txt
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20250810_102622.txt
+===
+临时性排除:py,txt:同上
+xxx:add 'seed/io/cache_file/README.txt'
+xxx:add 'seed/recognize/rgnr/abc/utilities4IRecognizer.py'
+xxx:add 'txt/script/对称多项式讠基表达.py'
+xxx:add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.compact.decompositions_lt_2pow32.out.txt.tar.lzma'
+xxx:add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.len_ge2__grouped_decompositions_lt_2pow32.out.txt.tar.lzma'
+===
+
+]]
 

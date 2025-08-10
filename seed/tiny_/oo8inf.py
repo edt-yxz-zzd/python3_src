@@ -1639,9 +1639,12 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 import weakref
 from numbers import Number, Integral
 from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
-from seed.helper.repr_input import repr_helper
 
 from seed.tiny_.containers import mk_tuple, null_tuple, null_iter
+
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
+if 0:from seed.helper.repr_input import repr_helper
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class BaseError4OO8inf(Exception):pass

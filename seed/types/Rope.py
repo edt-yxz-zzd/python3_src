@@ -43,6 +43,10 @@ Rope((1,), (2, 3), (4, 5, 6, 7), Rope((8,), (9,)))
 [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 
+>>> Rope((), (1,2), (3,))
+Rope((1, 2), (3,))
+>>> mk_Rope([(), (1,2), (3,)])
+Rope((1, 2), (3,))
 
 
 
@@ -50,11 +54,13 @@ Rope((1,), (2, 3), (4, 5, 6, 7), Rope((8,), (9,)))
 __all__ = r'''
 Rope
     null_rope
+    mk_Rope
 '''.split()#'''
 __all__
 
 #from seed.tiny_.check import check_type_is, check_int_ge
 from seed.helper.repr_input import repr_helper
+from seed.tiny_.containers import mk_tuple, null_tuple
 
 class Rope:
     r'''[[[
@@ -71,6 +77,10 @@ class Rope:
     def __repr__(sf, /):
         return repr_helper(sf, *sf._args)
     def __new__(cls, /, *ls_of__tpl_or_rope):
+        return cls.from_iterable(ls_of__tpl_or_rope)
+    @classmethod
+    def from_iterable(cls, iter__tpl_or_rope, /):
+        ls_of__tpl_or_rope = mk_tuple(iter__tpl_or_rope)
         if cls is __class__ and not any(ls_of__tpl_or_rope):
             try:
                 return null_rope
@@ -112,7 +122,7 @@ class Rope:
                 ls.append(rope)
                     #rope_of_odeg_ge2
 
-        args = tuple(ls) if changed else args
+        args = mk_tuple(ls) if changed else args
         if len(args) == 1 and type(args[0]) is cls:
             [sf] = args
             assert sf
@@ -139,9 +149,9 @@ class Rope:
 
 Rope._node_types4Rope_ = (Rope, tuple)
 null_rope = Rope()
-
+mk_Rope = Rope.from_iterable
 
 
 __all__
-from seed.types.Rope import Rope, null_rope
+from seed.types.Rope import Rope, null_rope, mk_Rope
 from seed.types.Rope import *

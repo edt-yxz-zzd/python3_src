@@ -2341,6 +2341,16 @@ cf_pi__prefix2001 = (
 assert len(cf_pi__prefix2001) == 2001
 cf_pi__prefix2001 = cf_circumference_diameter_ratio_pi__prefix2001 = ContinuedFraction(cf_pi__prefix2001)
 
+float.as_integer_ratio
+Fraction(0.1)
+ContinuedFraction(0.1)
+def cf5float_(x, /):
+    return ContinuedFraction(x)
+    return ContinuedFraction(Fraction(x))
+    return ContinuedFraction(Fraction(*x.as_integer_ratio()))
+cf5float_ = ContinuedFraction
+cf5float_(0.1)
+
 if __name__ == "__main__":
     pass
 __all__
