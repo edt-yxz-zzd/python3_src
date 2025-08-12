@@ -1,13 +1,19 @@
 #__all__:goto
 #TODO:goto
+#TODO:test:incremental_decode4int_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_remain_ok?
+#TODO:test:incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_remain_ok?
+#TODO:test: encode4rational_with_inf__alnum__5over8_, decode4rational_with_inf__alnum__5over8_
+#64,65:[0-9A-Za-z._-]
 r'''[[[
 e ../../python3_src/seed/int_tools/StepDecoder.py
+    vs:codecs.IncrementalDecoder
 view ../../python3_src/seed/int_tools/digits/codecs4int.py
 view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt
     DONE:step_decoder4int_with_inf__alnum__5over8
 view others/数学/编程/设计/自定义编码之要点.txt
     TODO:统一:透明数据化硬编码{区间前缀树,况态化解码结果}
         IStepDecoder__hardwired__prefix_tree
+            #TODO:分层表{base;radix} #...似乎无必要,因为 整除分阶层 更像是会被参数化的特征
         TODO:阶跃式分阶层、强幂级进分阶层
 
 seed.int_tools.StepDecoder
@@ -111,7 +117,7 @@ TODO:dynamic_bits_with_dependent_size_bits-->dynamic_digits_with_dependent_size_
 
 
 
->>> dr4alnum = mk_step_decoder4int_with_inf__alnum__5over8_()
+>>> dr4alnum = gmk_step_decoder4int_with_inf__alnum__5over8_()
 >>> from seed.int_tools.DigitReader import SubSeq, DigitReader5seq
 >>> from string import digits, ascii_uppercase, ascii_lowercase
 >>> _alphabet4alnum = digits+ascii_uppercase
@@ -558,11 +564,39 @@ py_adhoc_call   seed.int_tools.StepDecoder   @f
 from seed.int_tools.StepDecoder import *
 ]]]'''#'''
 __all__ = r'''
+incremental_decode__continued_
+    incremental_decode__init5head_
+    incremental_decode__init5state_
+        prepare_step_decoder4incremental_decode_
+    incremental_decode__headed_digits_
+    incremental_decode__ops4iter_headed_digits_
+        mk_incremental_decode5ops4iter_headed_digits_
+            Mkr4incremental_decode5ops4iter_headed_digits
+    incremental_decode4int_with_inf__alnum__5over8_
+
+    StepDecoder__flatten
+    IOps4IterDigitsWithHeadCell
+        Ops4IterDigitsWithHeadCell__functional
+IWrappedResult7incremental_decode
+    WrappedResult7incremental_decode
+IWrappedState7incremental_decode
+    WrappedState7incremental_decode
+IExtendedOutResult7incremental_decode
+    ExtendedOutResult7incremental_decode
+
+incremental_decode4int_with_inf__alnum__5over8_
 encode4int_with_inf__alnum__5over8_
     iter_encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
-    mk_step_decoder4int_with_inf__alnum__5over8_
-IDecoder__input_seq
+    gmk_step_decoder4int_with_inf__alnum__5over8_
+
+incremental_decode4rational_with_inf__alnum__5over8_
+encode4rational_with_inf__alnum__5over8_
+    iter_encode4rational_with_inf__alnum__5over8_
+decode4rational_with_inf__alnum__5over8_
+    gmk_step_decoder4rational_with_inf__alnum__5over8_
+
+IDecoder__token_seq
     Exception__nonnull_remain
     Exception__not_fullmatch
 
@@ -597,17 +631,18 @@ IStepDecoder
 
 IStepDecoder
     IStepDecoder__init_radix_info4digit
-    IStepDecoder__without_subcall
-        IStepDecoder__flatten
-        IStepDecoder__dynamic_bits
-            StepDecoder__dynamic_bits
-        IStepDecoder__fixed_size_bits
-        IStepDecoder__fixed_size_xbcells
-            StepDecoder__fixed_size_xbcells
-            IStepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
-                StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
-        IStepDecoder__dynamic_bibits
-            StepDecoder__dynamic_bibits
+    IStepDecoder__recursive_without_nontail_call_and_postprocess
+        IStepDecoder__without_subcall
+            IStepDecoder__flatten
+            IStepDecoder__dynamic_bits
+                StepDecoder__dynamic_bits
+            IStepDecoder__fixed_size_bits
+            IStepDecoder__fixed_size_xbcells
+                StepDecoder__fixed_size_xbcells
+                IStepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
+                    StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
+            IStepDecoder__dynamic_bibits
+                StepDecoder__dynamic_bibits
     IStepDecoder__wrapper
         IStepDecoder__postprocess_wrapper
         IStepDecoder__flatten
@@ -682,7 +717,7 @@ IStepDecoder__uint_with_inf
     StepDecoder__uint_with_inf
 IStepDecoder__int_with_inf
     StepDecoder__int_with_inf
-        mk_step_decoder4int_with_inf__alnum__5over8_
+        gmk_step_decoder4int_with_inf__alnum__5over8_
 IStepDecoder__rational_with_inf
     StepDecoder__rational_with_inf
 
@@ -708,7 +743,6 @@ IStepDecoder__hardwired__prefix_tree
 
 
 
-
 max_digit5num_bits_ex_
 max_digit5num_bits_
 '''.split()#'''
@@ -721,7 +755,7 @@ from itertools import islice
 from itertools import accumulate
 #accumulate(iterable, func=None, *, initial=None)
 from bisect import bisect_right
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_non_ABC, check_pair, check_callable
+from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_non_ABC, check_pair, check_callable, check_iterator
 
 from seed.tiny_.oo8inf import oo
 
@@ -742,7 +776,7 @@ from seed.types.Either import Cased, Either
 from seed.types.Either import mk_Left, mk_Right
 
 from seed.int_tools.RadixInfo import IZpowRadixInfo, ZpowRadixInfo# mk_ZpowRadixInfo_
-from seed.int_tools.RadixInfo import IRadixInfo# RadixInfo, mk_RadixInfo_
+from seed.int_tools.RadixInfo import IRadixInfo, mk_radix_info5or_radix_# RadixInfo, mk_RadixInfo_
 from seed.int_tools.RadixInfo import IRadixedDigit, RadixedDigit, rxdigit8no_bits
 
 from seed.helper.ConstantRepr import ConstantRepr
@@ -754,8 +788,8 @@ from seed.int_tools.DigitReader import IDigitReader# IDigitReader5iter, IDigitRe
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
 from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
 repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_', __name__)
-if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_
+lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_,echo', __name__)
+if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_,echo
 lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,concat_digits2bytes_,concat_digits2iter_bytess_', __name__)
 if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
 
@@ -767,11 +801,20 @@ uint5radix_repr_ = lazy_import4func_('seed.int_tools.digits.uint25radix_repr', '
 
 rglnkls2reversed_iterable = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls2reversed_iterable', __name__)
 #from seed.data_funcs.lnkls import rglnkls2reversed_iterable
+
 calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction_fold', 'calc_Fraction5finite_continued_fraction_', __name__)
 #from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
 
+iter_continued_fraction_digits5ND_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction5ND', 'iter_continued_fraction_digits5ND_', __name__)
+#from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+
 uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
 #from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
+from numbers import Rational
+#Rational.as_integer_ratio
+#   AttributeError: type object 'Rational' has no attribute 'as_integer_ratio'
+Rational.numerator
+Rational.denominator
 
 mk_seq_rng = lazy_import4func_('seed.seq_tools.mk_seq_rng', 'mk_seq_rng', __name__)
 #from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
@@ -781,7 +824,14 @@ lazy_import4func_('seed.int_tools.DigitReader', 'DigitReader5iter', __name__, 'm
 if 0:from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
 mk_DigitReader5iter
 
+mk_Rope = lazy_import4func_('seed.types.Rope', 'mk_Rope', __name__)
+lazy_import4func_('seed.types.Rope', 'Rope', __name__, '_Rope')
+if 0:from seed.types.Rope import mk_Rope, Rope as _Rope
+_Rope
+#[iter_subseq__opaque_,iter_subseq__transparent_] = lazy_import4funcs_('seed.iters.iter_subseq', 'iter_subseq__opaque_,iter_subseq__transparent_', __name__)
+
 ___end_mark_of_excluded_global_names__0___ = ...
+__all__
 
 #.class __(ABC):
 #.    __slots__ = ()
@@ -1165,6 +1215,28 @@ class IStepDecoder(ABC):
     # 后刹=>LL1,剩余 不足 1躯胞
     __slots__ = ()
     ######################
+    forbidden_nontail_call_st = False
+    forbidden_tail_call_st = False
+    forbidden_call_st = False
+    recursive_forbidden_nontail_call_st_and_postprocess = False
+    if 0:
+        @cached_property
+        def forbidden_call_st(sf, /):
+            '-> bool # see:IStepDecoder__without_subcall'
+            return sf.forbidden_tail_call_st and sf.forbidden_nontail_call_st
+        @cached_property
+        def recursive_forbidden_nontail_call_st_and_postprocess(sf, /):
+            '-> bool # see:IStepDecoder__recursive_without_nontail_call_and_postprocess'
+            return sf.forbidden_call_st
+    ######################
+    #.#forbidden_loop_st = False
+    #.forbidden_final_loop_st = False
+    #.forbidden_nonfinal_loop_st = False
+    #.@cached_property
+    #.def forbidden_loop_st(sf, /):
+    #.    '-> bool'
+    #.    return sf.forbidden_final_loop_st and sf.forbidden_nonfinal_loop_st
+    ######################
     @property
     @abstractmethod
     def radix_info4digit(sf, /):
@@ -1302,9 +1374,65 @@ class _Dead:
 _Dead.feed_digits_
 _Dead.feed_oresult_remain_
 
-class IStepDecoder__without_subcall(IStepDecoder):
-    '[st==loop_st::ILoopState4StepDecoder]'
+class IStepDecoder__recursive_without_nontail_call_and_postprocess(IStepDecoder):
+    '[st==(loop_st/ILoopState4StepDecoder|tail_call_st/ICallState4StepDecoder{[.is_tail_call_st==True][.tmay_may_postprocess==(None,)][.payload==None][.step_decoder4call.recursive_forbidden_nontail_call_st_and_postprocess==True]})] # NOTE:no nontail_call_st only'
     __slots__ = ()
+    ######################
+    #@override
+    forbidden_nontail_call_st = True
+    #@override
+    recursive_forbidden_nontail_call_st_and_postprocess = True
+    ######################
+    @abstractmethod
+    @override#update:__doc__
+    def start_(sf, rxdigit8macro_header, /):
+        'rxdigit8macro_header/IRadixedDigit -> (loop_st/ILoopState4StepDecoder|tail_call_st/ICallState4StepDecoder{is_tail_call_st==False}) # allow [num_bits4macro_header > num_bits4digit]'
+    @abstractmethod
+    @override#update:__doc__
+    def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
+        'loop_st7nonfinal/ILoopState4StepDecoder -> required_digits/[uint%2**num_bits4digit]{len==loop_st7nonfinal.num_required_digits} -> (loop_st/ILoopState4StepDecoder|tail_call_st/ICallState4StepDecoder{is_tail_call_st==False})'
+    ######################
+    #@override
+    feed_oresult_remain_ = _Dead.feed_oresult_remain_
+    ######################
+    @override
+    def step_decode__state_(sf, loop_st, digit_reader, /, *, to_full_output=False):
+        'loop_st/ILoopState4StepDecoder -> digit_reader/IDigitReader{digit_reader.radix4digit==sf.radix4digit} -> (IPartialOutput4StepDecoder if not to_full_output else IFullOutput4StepDecoder)'
+        assert loop_st.is_loop_st
+        #need no stack!!!
+        dr = sf
+        while (num_required_digits := loop_st.num_required_digits):
+            # [not loop_st.is_final_st]
+            required_digits = digit_reader.read_le(num_required_digits)
+            if not len(required_digits) == num_required_digits:raise EOFError([], dr, loop_st, required_digits)
+                #EOFError(stack, step_decoder, st, required_digits)
+            st = dr.feed_digits_(loop_st, required_digits)
+            while st.is_call_st:
+                if not st.is_tail_call_st:raise Exception(sf, dr, st)
+                tail_call_st = st
+                (dr, st) = tail_call_st.call_entry
+                if not dr.recursive_forbidden_nontail_call_st_and_postprocess:raise Exception(sf, dr, st)
+            loop_st = st
+        else:
+            # [loop_st.is_final_st]
+            oresult = loop_st.payload
+            rxdigit8remain = loop_st.rxdigit8remain
+            return mk_xoutput4step_decoder_(oresult, rxdigit8remain, digit_reader, to_full_output=to_full_output)
+        raise 000
+    ######################
+
+class IStepDecoder__without_subcall(IStepDecoder__recursive_without_nontail_call_and_postprocess):
+    '[st==loop_st::ILoopState4StepDecoder] # NOTE:no tail_call_st too!'
+    __slots__ = ()
+    ######################
+    #@override
+    forbidden_call_st = True
+    #@override
+    forbidden_nontail_call_st = True
+    #@override
+    forbidden_tail_call_st = True
+    #@override
+    recursive_forbidden_nontail_call_st_and_postprocess = True
     ######################
     @abstractmethod
     @override#update:__doc__
@@ -1327,6 +1455,7 @@ class IStepDecoder__without_subcall(IStepDecoder):
             if not len(required_digits) == num_required_digits:raise EOFError([], sf, loop_st, required_digits)
                 #EOFError(stack, step_decoder, st, required_digits)
             loop_st = sf.feed_digits_(loop_st, required_digits)
+            if not loop_st.is_loop_st:raise Exception(sf, loop_st)
         else:
             # [loop_st.is_final_st]
             oresult = loop_st.payload
@@ -1370,7 +1499,7 @@ class IStepDecoder__postprocess_wrapper(IStepDecoder__wrapper):
 
 class IStepDecoder__flatten(IStepDecoder__wrapper, IStepDecoder__without_subcall):
     r'''[[[
-    '# reproduce framework{std_step_decode__state_}'
+    '# reproduce framework{std_step_decode__state_}' for incremental_decode__continued_
 
     [st =[def]= loop_st =[def]= LoopState4StepDecoder__plain((Either (stk,call_entry) oresult), ...)]
     [stk =[def]= (None|(stk, (Either postprocess call_entry)))]
@@ -1382,10 +1511,7 @@ class IStepDecoder__flatten(IStepDecoder__wrapper, IStepDecoder__without_subcall
     def start_(sf, rxdigit8macro_header, /):
         step_decoder = sf.the_wrapped_step_decoder
         st = step_decoder.start_(rxdigit8macro_header)
-        stk = None
-            # [stk == (None|(stk, (Either postprocess call_entry)))]
-            # stack
-        st4sf = sf._mk_st4sf_(stk, step_decoder, st)
+        st4sf = sf.mk_start_state7flatten_(st)
         return st4sf
     ######################
     @override
@@ -1394,6 +1520,14 @@ class IStepDecoder__flatten(IStepDecoder__wrapper, IStepDecoder__without_subcall
         (stk, call_entry7loop7nonfinal) = st4sf.payload
         (step_decoder, st) = call_entry7loop7nonfinal
         st = step_decoder.feed_digits_(st, required_digits)
+        st4sf = sf._mk_st4sf_(stk, step_decoder, st)
+        return st4sf
+    ######################
+    def mk_start_state7flatten_(sf, st, /):
+        step_decoder = sf.the_wrapped_step_decoder
+        stk = None
+            # [stk == (None|(stk, (Either postprocess call_entry)))]
+            # stack
         st4sf = sf._mk_st4sf_(stk, step_decoder, st)
         return st4sf
     ######################
@@ -1480,6 +1614,415 @@ class StepDecoder__flatten(IStepDecoder__flatten):
         '-> IStepDecoder'
         return sf._dr
 check_non_ABC(StepDecoder__flatten)
+######################
+#incremental_decode__continued_:related:begin
+######################
+#######
+class IWrappedResult7incremental_decode(ABC):
+    'wresult7inc # for .to_be_continued'
+    __slots__ = ()
+    ######################
+    # [wresult7inc :: ((Either wst7inc ext_oresult), num_digits7read, iter_digits8remain)]
+    ######################
+    @property
+    @abstractmethod
+    def either__wst7inc__ext_oresult(sf, /):
+        '-> (Either wst7inc ext_oresult)'
+    @property
+    @abstractmethod
+    def num_digits7read(sf, /):
+        '-> uint{only for curr call}{besides iter_digits8remain}'
+    @property
+    @abstractmethod
+    def iter_digits8remain(sf, /):
+        '-> (Iterator digit)'
+    ######################
+    @cached_property
+    def to_be_continued(sf, /):
+        '-> bool{has no oresult yet}'
+        x = sf.either__wst7inc__ext_oresult
+        return x.is_left and not x.left.to_be_continued
+    ######################
+class IWrappedState7incremental_decode(ABC):
+    'wst7inc # for .to_be_continued'
+    __slots__ = ()
+    ######################
+    # [wst7inc :: (call_entry7flatten, total_num_digits7feed, digit_rope8remain6EOF)]
+    # [digit :: uint%wst7inc[0].step_decoder.radix4digit]
+    ######################
+    @property
+    @abstractmethod
+    def call_entry7flatten(sf, /):
+        '-> CallEntry4StepDecoder{IStepDecoder{.forbidden_call_st==True}}' \
+        '   #see:[StepDecoder__flatten <: IStepDecoder__flatten <: IStepDecoder__without_subcall <: IStepDecoder{.forbidden_call_st==True}]'
+    @property
+    @abstractmethod
+    def total_num_digits7feed(sf, /):
+        '-> uint{>=1}{accumulated}{included rxdigit8macro_header}{besides digit_rope8remain6EOF,iter_digits8remain}'
+    @property
+    @abstractmethod
+    def digit_rope8remain6EOF(sf, /):
+        '-> Rope{digit}' \
+        '  # [[len(digit_rope8remain6EOF) > 0] -> [iter_digits8remain is empty]]' \
+        '  # [[len(digit_rope8remain6EOF) < wst7inc[0].state.num_required_digits]or[len(digit_rope8remain6EOF) == 0 == wst7inc[0].state.num_required_digits]]' \
+        '  # => [[len(digit_rope8remain6EOF) > 0] -> [not wst7inc[0].state.is_final_st]]'
+    ######################
+    @cached_property
+    def to_be_continued(sf, /):
+        '-> bool{has no oresult yet}'
+        return not sf.call_entry7flatten.state.is_final_st
+    ######################
+class IExtendedOutResult7incremental_decode(ABC):
+    'ext_oresult'
+    __slots__ = ()
+    ######################
+    # [ext_oresult :: (oresult, rxdigit8remain, total_num_digits7feed)]
+    ######################
+    @property
+    @abstractmethod
+    def oresult(sf, /):
+        '-> object{:=final_st.payload}'
+    @property
+    @abstractmethod
+    def rxdigit8remain(sf, /):
+        '-> IRadixedDigit'
+    @property
+    @abstractmethod
+    def total_num_digits7feed(sf, /):
+        '-> uint{>=1}{accumulated}{included rxdigit8macro_header}{besides digit_rope8remain6EOF,iter_digits8remain}'
+    ######################
+
+
+
+mk_named_pseudo_tuple_
+_BaseWrappedResult7incremental_decode = mk_named_pseudo_tuple_(__name__, 'BaseWrappedResult7incremental_decode', 'either__wst7inc__ext_oresult num_digits7read iter_digits8remain')
+class WrappedResult7incremental_decode(_BaseWrappedResult7incremental_decode, IWrappedResult7incremental_decode):
+    ___no_slots_ok___ = True
+    def _check6make_(sf, /):
+        check_type_is(Either, sf.either__wst7inc__ext_oresult)
+        check_int_ge(0, sf.num_digits7read)
+        check_iterator(sf.iter_digits8remain)
+        #if not iter(it:=sf.iter_digits8remain) is it:raise TypeError(type(it))
+check_non_ABC(WrappedResult7incremental_decode)
+
+_BaseWrappedState7incremental_decode = mk_named_pseudo_tuple_(__name__, 'BaseWrappedState7incremental_decode', 'call_entry7flatten total_num_digits7feed digit_rope8remain6EOF')
+class WrappedState7incremental_decode(_BaseWrappedState7incremental_decode, IWrappedState7incremental_decode):
+    ___no_slots_ok___ = True
+    def _check6make_(sf, /):
+        check_type_is(CallEntry4StepDecoder, sf.call_entry7flatten)
+        check_int_ge(1, sf.total_num_digits7feed)
+        _Rope(); check_type_is(_Rope, sf.digit_rope8remain6EOF)
+check_non_ABC(WrappedState7incremental_decode)
+
+_BaseExtendedOutResult7incremental_decode = mk_named_pseudo_tuple_(__name__, 'BaseExtendedOutResult7incremental_decode', 'oresult rxdigit8remain total_num_digits7feed')
+class ExtendedOutResult7incremental_decode(_BaseExtendedOutResult7incremental_decode, IExtendedOutResult7incremental_decode):
+    ___no_slots_ok___ = True
+    def _check6make_(sf, /):
+        check_type_le(IRadixedDigit, sf.rxdigit8remain)
+        check_int_ge(1, sf.total_num_digits7feed)
+check_non_ABC(ExtendedOutResult7incremental_decode)
+_WRes7inc = WrappedResult7incremental_decode
+_WST7inc = WrappedState7incremental_decode
+_ExOutRes7inc = ExtendedOutResult7incremental_decode
+
+def incremental_decode__init5head_(step_decoder, rxdigit8macro_header, /, wst7inc_vs_wresult7inc:bool):
+    'IStepDecoder -> IRadixedDigit -> (wst7inc if not wst7inc_vs_wresult7inc else wresult7inc) #see:incremental_decode__init5state_,incremental_decode__continued_'
+    st = step_decoder.start_(rxdigit8macro_header)
+    return incremental_decode__init5state_(step_decoder, st, total_num_digits7feed:=1, wst7inc_vs_wresult7inc=wst7inc_vs_wresult7inc)
+#######
+def prepare_step_decoder4incremental_decode_(step_decoder, /):
+    'IStepDecoder -> IStepDecoder{.forbidden_call_st==True} #see:incremental_decode__init5state_,mk_incremental_decode5ops4iter_headed_digits_'
+    #.if not isinstance(step_decoder, IStepDecoder__flatten):
+        #why not:IStepDecoder__without_subcall
+    #if not step_decoder.recursive_forbidden_nontail_call_st_and_postprocess:
+    if not step_decoder.forbidden_call_st:
+        #why not:IStepDecoder__recursive_without_nontail_call_and_postprocess
+        #   !! complex code
+        step_decoder = StepDecoder__flatten(step_decoder)
+        st = step_decoder.mk_start_state7flatten_(st)
+        # [step_decoder :: IStepDecoder__flatten]
+    # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
+    return step_decoder
+#######
+def incremental_decode__init5state_(step_decoder, st, total_num_digits7feed, /, wst7inc_vs_wresult7inc:bool):
+    'IStepDecoder -> IBaseState4StepDecoder -> total_num_digits7feed/uint{>=1} -> (wst7inc if not wst7inc_vs_wresult7inc else wresult7inc) #see:incremental_decode__continued_'
+    check_int_ge(1, total_num_digits7feed)
+    step_decoder = prepare_step_decoder4incremental_decode_(step_decoder)
+    # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
+    if not st.is_loop_st:raise Exception(step_decoder, st)
+    loop_st = st
+    call_entry7flatten = CallEntry4StepDecoder(step_decoder, loop_st)
+    wst7inc = _WST7inc(call_entry7flatten, total_num_digits7feed, digit_rope8remain6EOF:=mk_Rope(''))
+    if not wst7inc_vs_wresult7inc:
+        return wst7inc
+    wresult7inc = incremental_decode__continued_(wst7inc, digits8partial_body:='')
+    return wresult7inc
+#######
+def incremental_decode__continued_(wst7inc, digits8partial_body, /):
+    r'''[[[
+    wst7inc -> digits8partial_body -> wresult7inc
+        #reproduce framework{IStepDecoder__without_subcall.step_decode__state_}
+
+    [wst7inc :: IWrappedState7incremental_decode(call_entry7flatten, total_num_digits7feed, digit_rope8remain6EOF)]
+    [wresult7inc :: IWrappedResult7incremental_decode((Either wst7inc ext_oresult), num_digits7read, iter_digits8remain)]
+    [ext_oresult :: IExtendedOutResult7incremental_decode(oresult, rxdigit8remain, total_num_digits7feed)]
+
+    [call_entry7flatten :: CallEntry4StepDecoder{IStepDecoder{.forbidden_call_st==True}}]
+        #see:[StepDecoder__flatten <: IStepDecoder__flatten <: IStepDecoder__without_subcall <: IStepDecoder{.forbidden_call_st==True}]
+
+    [total_num_digits7feed :: uint{>=1}{accumulated}{included rxdigit8macro_header}{besides digit_rope8remain6EOF,iter_digits8remain}]
+    [num_digits7read :: uint{only for curr call}{besides iter_digits8remain}]
+
+    [digits8partial_body :: (Iterable digit)]
+    [iter_digits8remain :: (Iterator digit)]
+    [digit_rope8remain6EOF :: Rope{digit}]
+        [[len(digit_rope8remain6EOF) > 0] -> [iter_digits8remain is empty]]
+        [[len(digit_rope8remain6EOF) < wst7inc[0].state.num_required_digits]or[len(digit_rope8remain6EOF) == 0 == wst7inc[0].state.num_required_digits]]
+            => [[len(digit_rope8remain6EOF) > 0] -> [not wst7inc[0].state.is_final_st]]
+    [digit :: uint%wst7inc[0].step_decoder.radix4digit]
+
+
+    see:incremental_decode__init5state_,incremental_decode__init5head_
+    see:Ops4IterDigitsWithHeadCell__functional
+    see:StepDecoder__flatten
+    see:IStepDecoder__without_subcall.step_decode__state_
+    vs:codecs.IncrementalDecoder
+
+    #]]]'''#'''
+    it = iter(digits8partial_body)
+    (call_entry7flatten, total_num_digits7feed, digit_rope8remain6prev_EOF) = wst7inc
+    loop_st = call_entry7flatten.state
+    if not loop_st.is_loop_st:raise Exception(call_entry7flatten)
+
+    def _4final(loop_st7final, /):
+        ext_oresult = _ExOutRes7inc(loop_st7final.oresult, loop_st7final.rxdigit8remain, total_num_digits7feed)
+        wresult7inc = _WRes7inc(mk_Right(ext_oresult), num_digits7read, iter_digits8remain:=it)
+        return wresult7inc
+
+    num_digits7read = 0
+    if loop_st.is_final_st:
+        loop_st7final = loop_st
+        if digit_rope8remain6prev_EOF:raise 000
+        return _4final(loop_st7final)
+    loop_st7nonfinal = loop_st
+
+    def read(n, /):
+        nonlocal num_digits7read
+        ds = mk_tuple(islice(it, 0, n))
+        num_digits7read += len(ds)
+        return ds
+
+    n = loop_st7nonfinal.num_required_digits -len(digit_rope8remain6prev_EOF)
+    if not 0 < n:raise 000
+    ds = read(n)
+    if digit_rope8remain6prev_EOF:
+        digit_rope = mk_Rope([digit_rope8remain6prev_EOF, ds])
+        digits = digit_rope
+    else:
+        # [not digit_rope8remain6prev_EOF]
+        digits = ds
+    777; del digit_rope8remain6prev_EOF
+    #loop_st7nonfinal, digits
+    # [digits :: (tuple|Rope)]
+    # [len(digits) <= loop_st7nonfinal.num_required_digits > 0]
+
+
+    step_decoder = call_entry7flatten.step_decoder
+    feed_digits_ = step_decoder.feed_digits_
+    def feed(loop_st7nonfinal, digits, /):
+        nonlocal total_num_digits7feed
+        # [digits :: (tuple|Rope)]
+        ds = mk_tuple(digits)
+        # [ds :: tuple{digit}]
+        st = feed_digits_(loop_st7nonfinal, ds)
+        total_num_digits7feed += len(ds)
+        return st
+
+    #loop_st7nonfinal, digits
+    # [digits :: (tuple|Rope)]
+    # [len(digits) <= loop_st7nonfinal.num_required_digits > 0]
+    while len(digits)  == loop_st7nonfinal.num_required_digits:
+        #loop_st7nonfinal, digits
+        # [len(digits) == loop_st7nonfinal.num_required_digits > 0]
+        # [digits :: (tuple|Rope)]
+        st = feed(loop_st7nonfinal, digits)
+        if not st.is_loop_st:raise Exception(step_decoder, loop_st7nonfinal, st)
+        loop_st = st
+        if loop_st.is_final_st:
+            loop_st7final = loop_st
+            return _4final(loop_st7final)
+        loop_st7nonfinal = loop_st
+        digits = read(loop_st7nonfinal.num_required_digits)
+        #loop_st7nonfinal, digits
+        # [digits :: (tuple|Rope)]
+        # [len(digits) <= loop_st7nonfinal.num_required_digits > 0]
+    else:
+        #loop_st7nonfinal, digits
+        # [digits :: (tuple|Rope)]
+        # [len(digits) < loop_st7nonfinal.num_required_digits > 0]
+        call_entry7flatten = CallEntry4StepDecoder(step_decoder, loop_st7nonfinal)
+        wst7inc = _WST7inc(call_entry7flatten, total_num_digits7feed, digit_rope8remain6EOF:=mk_Rope([digits]))
+        wresult7inc = _WRes7inc(mk_Left(wst7inc), num_digits7read, iter_digits8remain:=it)
+        return wresult7inc
+    raise 000
+#end-def incremental_decode__continued_(wst7inc, digits8partial_body, /):
+#######
+def incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header, /):
+    'IStepDecoder -> iterable([rxdigit8macro_header/IRadixedDigit;digit8body_cell/uint,...]) -> wresult7inc # see:IOps4IterDigitsWithHeadCell,incremental_decode__continued_'
+    it = digits_with_rxdigit8macro_header = iter(digits_with_rxdigit8macro_header)
+    for rxdigit8macro_header in it:
+        break
+    else:
+        raise 000
+    wst7inc = incremental_decode__init5head_(step_decoder, rxdigit8macro_header, wst7inc_vs_wresult7inc=False)
+    wresult7inc = incremental_decode__continued_(wst7inc, digits8partial_body:=it)
+    return wresult7inc
+#end-def incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header, /):
+#######
+def incremental_decode__ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, may_wst7inc, tokens, /):
+    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> may wst7inc -> Iter token -> wresult7inc # see:Ops4IterDigitsWithHeadCell__functional,incremental_decode__continued_,iter_subseq__opaque_,iter_subseq__transparent_'
+    if may_wst7inc is None:
+        digits_with_rxdigit8macro_header = ops4iter_headed_digits.iter_(tokens)
+        wresult7inc = incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header)
+    else:
+        wst7inc = may_wst7inc
+        digits8partial_body = ops4iter_headed_digits.iter4body_only_(tokens)
+        wresult7inc = incremental_decode__continued_(wst7inc, digits8partial_body)
+    return wresult7inc
+#######
+def mk_incremental_decode5ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, /):
+    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> incremental_decode__tokens_/(may wst7inc -> Iter token -> wresult7inc) # see:Ops4IterDigitsWithHeadCell__functional,incremental_decode__continued_,iter_subseq__opaque_,iter_subseq__transparent_'
+    incremental_decode__tokens_ = Mkr4incremental_decode5ops4iter_headed_digits(step_decoder, ops4iter_headed_digits)
+    return incremental_decode__tokens_
+    #######old_ver:
+    step_decoder = prepare_step_decoder4incremental_decode_(step_decoder)
+    # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
+    def incremental_decode__tokens_(may_wst7inc, tokens, /):
+        'may wst7inc -> Iter token -> wresult7inc'
+        return incremental_decode__ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, may_wst7inc, tokens)
+    return incremental_decode__tokens_
+#######
+class Mkr4incremental_decode5ops4iter_headed_digits:
+    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> incremental_decode__tokens_/(may wst7inc -> Iter token -> wresult7inc) # see:mk_incremental_decode5ops4iter_headed_digits_'
+    def __init__(sf, step_decoder, ops4iter_headed_digits, /):
+        check_type_le(IStepDecoder, step_decoder)
+        check_type_le(IOps4IterDigitsWithHeadCell, ops4iter_headed_digits)
+        step_decoder = prepare_step_decoder4incremental_decode_(step_decoder)
+        # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
+        sf._dr = step_decoder
+        sf._ops = ops4iter_headed_digits
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.step_decoder, sf.ops4iter_headed_digits)
+    @property
+    def step_decoder(sf, /):
+        return sf._dr
+    @property
+    def ops4iter_headed_digits(sf, /):
+        return sf._ops
+    def __call__(sf, may_wst7inc, tokens, /):
+        'may wst7inc -> Iter token -> wresult7inc'
+        return incremental_decode__ops4iter_headed_digits_(sf.step_decoder, sf.ops4iter_headed_digits, may_wst7inc, tokens)
+#end-class Mkr4incremental_decode5ops4iter_headed_digits:
+
+
+#######
+class IOps4IterDigitsWithHeadCell(ABC):
+    'ops4iter_headed_digits'
+    #see:IDecoder__token_seq
+    #see:iter_subseq__transparent_
+    __slots__ = ()
+    ######################
+    @property
+    @abstractmethod
+    def radix_info4macro_header(sf, /):
+        '-> IRadixInfo'
+    ######################
+    #.@abstractmethod
+    #.def token2head_digit_(sf, token, /):
+    #.    'token -> digit8macro_header'
+    #.@abstractmethod
+    #.def token2body_digit_(sf, token, /):
+    #.    'token -> digit8body_cell'
+    ######################
+    @property
+    @abstractmethod
+    def may_token2head_digit_(sf, token, /):
+        '-> may (token -> digit8macro_header)'
+    @property
+    @abstractmethod
+    def may_token2body_digit_(sf, token, /):
+        '-> may (token -> digit8body_cell)'
+    ######################
+    @cached_property
+    def token2head_digit_(sf, token, /):
+        '-> (token -> digit8macro_header)'
+        return f if not None is (f:=sf.may_token2head_digit_) else echo(0) or echo
+    @cached_property
+    def token2body_digit_(sf, token, /):
+        '-> (token -> digit8body_cell)'
+        return f if not None is (f:=sf.may_token2body_digit_) else echo(0) or echo
+    ######################
+    def iter4body_only_(sf, tokens, /):
+        'Iter token -> Iter digit8body_cell/uint'
+        it = tokens = iter(tokens)
+        if not None is (f:=sf.may_token2body_digit_):
+            it = map(f, it)
+        return it
+    def iter_(sf, tokens, /):
+        'Iter token -> iter([rxdigit8macro_header/IRadixedDigit;digit8body_cell/uint,...])'
+        it = tokens = iter(tokens)
+        for token in it:
+            break
+        else:
+            raise 000
+        digit8H = sf.token2head_digit_(token)
+        radix_info4H = sf.radix_info4macro_header
+        rxdigit8H = RadixedDigit(radix_info4H, digit8H)
+        yield rxdigit8H
+        yield from sf.iter4body_only_(it)
+        return
+    ######################
+#end-class IOps4IterDigitsWithHeadCell(ABC):
+class Ops4IterDigitsWithHeadCell__functional(IOps4IterDigitsWithHeadCell):
+    'ops4iter_headed_digits # functional'
+    ___no_slots_ok___ = True
+    def __init__(sf, radix_or_radix_info4macro_header, may_token2head_digit_, may_token2body_digit_, /):
+        if not None is (token2head_digit_:=may_token2head_digit_):
+            check_callable(token2head_digit_)
+        if not None is (token2body_digit_:=may_token2body_digit_):
+            check_callable(token2body_digit_)
+        sf._riH = mk_radix_info5or_radix_(radix_or_radix_info4macro_header)
+        sf._mH = may_token2head_digit_
+        sf._mB = may_token2body_digit_
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.radix_info4macro_header, sf.may_token2head_digit_, sf.may_token2body_digit_)
+    @property
+    @override
+    def radix_info4macro_header(sf, /):
+        '-> IRadixInfo'
+        return sf._riH
+    @property
+    @override
+    def may_token2head_digit_(sf, /):
+        '-> may (token -> digit8macro_header)'
+        return sf._mH
+    @property
+    @override
+    def may_token2body_digit_(sf, /):
+        '-> may (token -> digit8body_cell)'
+        return sf._mB
+#end-class Ops4IterDigitsWithHeadCell__functional(IOps4IterDigitsWithHeadCell):
+check_non_ABC(Ops4IterDigitsWithHeadCell__functional)
+#######
+######################
+#incremental_decode__continued_:related:end
+######################
+
+
+
+
+
+
 
 class IStepDecoder__flip_digits(IStepDecoder__wrapper, IStepDecoder__without_subcall):
     __slots__ = ()
@@ -3686,17 +4229,20 @@ check_non_ABC(StepDecoder__rational_with_inf)
 
 
 
-
 if 0:
-    _dr58 = None
-def mk_step_decoder4int_with_inf__alnum__5over8_():
-    '-> IStepDecoder__int_with_inf{radix4macro_header:=3,radix4digit:=32}  # ' \
-    'view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt'
-    global _dr58
+    _58_dr4int = None
+    _58_dr4rational = None
+def _58_gmk_dr4int_dr4rational():
+    '-> (step_decoder4int_with_inf__alnum__5over8, step_decoder4rational_with_inf__alnum__5over8)'
+    global _58_dr4int, _58_dr4rational
     try:
-        return _dr58
+        return (_58_dr4int, _58_dr4rational)
     except NameError:
         pass
+    (_58_dr4int, _58_dr4rational) = _58_mk_dr4int_dr4rational()
+    return _58_gmk_dr4int_dr4rational()
+def _58_mk_dr4int_dr4rational():
+    '-> (step_decoder4int_with_inf__alnum__5over8, step_decoder4rational_with_inf__alnum__5over8)'
     radix_info4macro_header = RadixInfo(3)
     radix_info4digit = ZpowRadixInfo(5)
     rH32 = radix_info4digit
@@ -3724,13 +4270,78 @@ def mk_step_decoder4int_with_inf__alnum__5over8_():
     ######################
     dr4uint = StepDecoder__uint_with_inf(radix_info4digit, included_inf:=True, arg4inf)
     dr4int = StepDecoder__int_with_inf(radix_info4macro_header, step_decoder4uint_withxxx_inf:=dr4uint)
-    _dr58 = dr4int
-    return mk_step_decoder4int_with_inf__alnum__5over8_()
-    return (step_decoder4int_with_inf__alnum__5over8:=dr4int)
+    dr4rational = StepDecoder__rational_with_inf(dr4int, dr4uint)
+    ######################
+    _58_dr4int = dr4int
+    _58_dr4rational = dr4rational
+    return (step_decoder4int_with_inf__alnum__5over8:=dr4int, step_decoder4rational_with_inf__alnum__5over8:=dr4rational)
+
+def gmk_step_decoder4int_with_inf__alnum__5over8_():
+    '-> IStepDecoder__int_with_inf{radix4macro_header:=3,radix4digit:=32}  # ' \
+    'view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt'
+    try:
+        return _58_dr4int
+    except NameError:
+        pass
+    _58_gmk_dr4int_dr4rational()
+    return gmk_step_decoder4int_with_inf__alnum__5over8_()
+def gmk_step_decoder4rational_with_inf__alnum__5over8_():
+    '-> IStepDecoder__rational_with_inf{radix4macro_header:=3,radix4digit:=32}  # ' \
+    'view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt'
+    try:
+        return _58_dr4rational
+    except NameError:
+        pass
+    _58_gmk_dr4int_dr4rational()
+    return gmk_step_decoder4rational_with_inf__alnum__5over8_()
 
 
 
 
+def encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool):
+    '(Rational|-oo|+oo) -> (digits/bytes if digits_vs_str else str/alnum)'
+    it = iter_encode4rational_with_inf__alnum__5over8_(xrational, digits_vs_str=digits_vs_str)
+    s = '' if digits_vs_str else b''
+    r = s.join(it)
+    return r
+def iter_encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool):
+    '(Rational|-oo|+oo) -> Iter (digits/bytes if digits_vs_str else str/alnum)'
+    if abs(xrational) is +oo:
+        xi = xrational
+        it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str)
+        return it
+    rational = xrational
+    # [rational :: Rational]
+    it = _impl_iter_encode4rational_with_inf__alnum__5over8_(rational)
+    if digits_vs_str:
+        it = _58_iter_to_str(it)
+    return it
+def _impl_iter_encode4rational_with_inf__alnum__5over8_(rational, /):
+    'Rational -> Iter (digits/bytes)'
+    digits_vs_str = False
+    #(N, D) = rational.as_integer_ratio()
+    (N, D) = (rational.numerator, rational.denominator)
+    cf_digits = iter_continued_fraction_digits5ND_(N, D)
+    [i, *us] = cf_digits
+    to_flip = False
+    yield from iter_encode4int_with_inf__alnum__5over8_(i, digits_vs_str=digits_vs_str)
+    777;to_flip = not to_flip
+    xus = [u-1 for u in us]
+    777; del i, us
+    if xus:
+        xus[-1] -= 1
+    assert all(u >= 0 for u in xus)
+    xus.append(+oo)
+    for xu in xus:
+        # [xu :: (uint|+oo)]
+        it = _58_iter_encode4uint(xu, head_bytes=b'')
+        if to_flip:
+            it = _58_flip4body(it)
+                #not:_58_iter_flip
+                # !! inner body...
+        yield from it
+        777;to_flip = not to_flip
+    return
 def encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
     '(int|-oo|+oo) -> (digits/bytes if digits_vs_str else str/alnum)'
     it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str)
@@ -3740,11 +4351,23 @@ def encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
 def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
     '(int|-oo|+oo) -> Iter (digits/bytes if digits_vs_str else str/alnum)'
     if xi < 0:
+        # [xi < 0]
         xu = -xi
-        it = _58_iter_flip(_58_iter_encode(xu))
+        # [xu > 0]
+        #head_byte{xi} = b'\x00'
+        #head_byte{xu} = b'\x02'
+        head_byte = b'\x02'
+        it = _58_iter_flip(_58_iter_encode4uint(xu, head_bytes=head_byte))
+    elif xi == 0:
+        # [xi == 0]
+        head_byte = b'\x01'
+        it = iter([head_byte])
     else:
+        # [xi > 0]
         xu = xi
-        it = _58_iter_encode(xu)
+        # [xu > 0]
+        head_byte = b'\x02'
+        it = _58_iter_encode4uint(xu, head_bytes=head_byte)
     it
     if digits_vs_str:
         it = _58_iter_to_str(it)
@@ -3794,18 +4417,30 @@ def _58_iter_to_str(it, /):
     yield from map(_58_to_str4body, it)
 _58_bss = (None, b'\x00', None, b'\x08', None, b'\x00', None, b'\x10', None, b'\x14')
 assert len(_58_bss) == 10
-def _58_iter_encode(xu, /):
+def _58_iter_encode4uint(xu, /, *, head_bytes):
     '(uint|+oo) -> Iter (digits/bytes)'
+    if head_bytes:
+        yield head_bytes
+    #######
+    #old:uint6int, but now uint6rational
+    #.if xu is +oo:
+    #.    yield b'\x02\x1E'
+    #.elif xu == 0:
+    #.    yield b'\x01'
+    #.elif xu < 16:
+    #.    yield b'\x02'
+    #.    yield bytes([xu])
+    #.else:
+    #.    # [xu >= 16]
+    #.    yield b'\x02'
+    #.    ...
+    #######
     if xu is +oo:
-        yield b'\x02\x1E'
-    elif xu == 0:
-        yield b'\x01'
+        yield b'\x1E'
     elif xu < 16:
-        yield b'\x02'
         yield bytes([xu])
     else:
         # [xu >= 16]
-        yield b'\x02'
         us = []
         u = xu
         # [u >= 16]
@@ -3902,14 +4537,15 @@ def _58_iter_encode(xu, /):
                 yield '\x00'*osz
             yield bs
     return
-#end-def _58_iter_encode(xu, /):
+#end-def _58_iter_encode4uint(xu, /):
 #end-def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
 
 class _SeqIter:
+    #see:iter_subseq__transparent_
     @property
     @override
     def begin(sf, /):
-        '#mutable'
+        '#variable'
         return sf._i
     def __init__(sf, seq, /, begin=None, end=None, *, key):
         (begin, end) = mk_seq_rng(seq, begin, end)
@@ -3928,32 +4564,33 @@ class _SeqIter:
         sf._i = i+1
         return y
 
-class IDecoder__input_seq(ABC):
+class IDecoder__token_seq(ABC):
+    #see:IOps4IterDigitsWithHeadCell
     __slots__ = ()
     @property
     @abstractmethod
     def step_decoder(sf, /):
         '-> IStepDecoder__fixed_radix4macro_header{oresult}'
     @abstractmethod
-    def elem2head_digit_(sf, x, /):
-        'x -> digit8macro_header'
+    def token2head_digit_(sf, token, /):
+        'token -> digit8macro_header'
     @abstractmethod
-    def elem2body_digit_(sf, x, /):
-        'x -> digit8body_cell'
-    def decode(sf, seq, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
-        '[x] -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
+    def token2body_digit_(sf, token, /):
+        'token -> digit8body_cell'
+    def decode(sf, token_seq, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
+        '[token] -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
         assert not (fullmatch and nonnull_remain_ok)
-        (begin, end) = mk_seq_rng(seq, begin, end)
+        (begin, end) = mk_seq_rng(token_seq, begin, end)
         if not begin < end:
-            raise ValueError(seq, begin, end)
-        digit8H = sf.elem2head_digit_(seq[begin])
+            raise ValueError(token_seq, begin, end)
+        digit8H = sf.token2head_digit_(token_seq[begin])
         777;_begin = 1+begin
         digit8H
         dr = sf.step_decoder
         radix_info4H = dr.radix_info4macro_header
         if not 0 <= digit8H < radix_info4H.radix:raise ValueError(digit8H, radix_info4H.radix)
         rxdigit8H = RadixedDigit(radix_info4H, digit8H)
-        digit_iter = _SeqIter(seq, _begin, end, key=sf.elem2body_digit_)
+        digit_iter = _SeqIter(token_seq, _begin, end, key=sf.token2body_digit_)
         digit_reader = mk_DigitReader5iter(dr.radix_info4digit, digit_iter)
         ###
         input4step_decoder = Input4StepDecoder(rxdigit8H, digit_reader)
@@ -3970,7 +4607,7 @@ class IDecoder__input_seq(ABC):
         return oresult
 class Exception__nonnull_remain(Exception):pass
 class Exception__not_fullmatch(Exception):pass
-#end-class IDecoder__input_seq(ABC):
+#end-class IDecoder__token_seq(ABC):
 Exception__nonnull_remain
 Exception__not_fullmatch
 
@@ -3981,35 +4618,134 @@ def _mk_alnum2digit_(alphabet4alnum, /):
      return alnum2digit
 _58_2digit6head = _mk_alnum2digit_(_58_tbl6head)
 _58_2digit6body = _mk_alnum2digit_(_58_tbl6body)
-class _58_Decoder__input_seq(IDecoder__input_seq):
+class _58_IDecoder__token_seq(IDecoder__token_seq):
+    ___no_slots_ok___ = True
+    def __init__(sf, /):
+        pass
+    @cached_property
+    #@override
+    def token2head_digit_(sf, /):
+        return _58_2digit6head.__getitem__
+    @cached_property
+    #@override
+    def token2body_digit_(sf, /):
+        return _58_2digit6body.__getitem__
+######################
+class _58_4int_Decoder__token_seq(_58_IDecoder__token_seq):
+    @cached_property
+    @override
+    def step_decoder(sf, /):
+        return gmk_step_decoder4int_with_inf__alnum__5over8_()
+_58_decode4int = _58_4int_Decoder__token_seq().decode
+def decode4int_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
+    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
+    return _58_decode4int(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_remain_ok=nonnull_remain_ok)
+encode4int_with_inf__alnum__5over8_
+decode4int_with_inf__alnum__5over8_
+######################
+
+######################
+class _58_4rational_Decoder__token_seq(_58_IDecoder__token_seq):
+    @cached_property
+    @override
+    def step_decoder(sf, /):
+        return gmk_step_decoder4rational_with_inf__alnum__5over8_()
+_58_decode4rational = _58_4rational_Decoder__token_seq().decode
+def decode4rational_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
+    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
+    return _58_decode4rational(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_remain_ok=nonnull_remain_ok)
+encode4rational_with_inf__alnum__5over8_
+decode4rational_with_inf__alnum__5over8_
+######################
+
+_58_4int_Decoder__token_seq
+Ops4IterDigitsWithHeadCell__functional
+class _58_Ops4IterDigitsWithHeadCell(IOps4IterDigitsWithHeadCell):
+    'for both:int,rational'
     ___no_slots_ok___ = True
     def __init__(sf, /):
         pass
     @cached_property
     @override
-    def step_decoder(sf, /):
-        return mk_step_decoder4int_with_inf__alnum__5over8_()
+    def radix_info4macro_header(sf, /):
+        return RadixInfo(3)
+        return gmk_step_decoder4int_with_inf__alnum__5over8_().radix_info4macro_header
+        return gmk_step_decoder4rational_with_inf__alnum__5over8_().radix_info4macro_header
     @cached_property
     #@override
-    def elem2head_digit_(sf, /):
+    def may_token2head_digit_(sf, /):
         return _58_2digit6head.__getitem__
     @cached_property
     #@override
-    def elem2body_digit_(sf, /):
+    def may_token2body_digit_(sf, /):
         return _58_2digit6body.__getitem__
-#end-class _58_Decoder__input_seq(IDecoder__input_seq):
-_58_decode = _58_Decoder__input_seq().decode
-def decode4int_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
-    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
-    return _58_decode(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_remain_ok=nonnull_remain_ok)
+#end-class _58_Ops4IterDigitsWithHeadCell(IOps4IterDigitsWithHeadCell):
+
+######################
+if 0: _58_inc_decode4int = ...
+def _gmk_58_inc_decode4int():
+    global _58_inc_decode4int
+    try:
+        return _58_inc_decode4int
+    except NameError:
+        pass
+    _58_inc_decode4int = mk_incremental_decode5ops4iter_headed_digits_(gmk_step_decoder4int_with_inf__alnum__5over8_(), _58_Ops4IterDigitsWithHeadCell())
+    return _gmk_58_inc_decode4int()
+
+
 encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
+def incremental_decode4int_with_inf__alnum__5over8_(may_wst7inc, s, /):
+    'may wst7inc -> str/alnum -> wresult7inc'
+    _58_inc_decode4int = _gmk_58_inc_decode4int()
+    wresult7inc = _58_inc_decode4int(may_wst7inc, s)
+    return wresult7inc
+encode4int_with_inf__alnum__5over8_
+decode4int_with_inf__alnum__5over8_
+incremental_decode4int_with_inf__alnum__5over8_
+    #TODO:test
+######################
+
+
+
+
+######################
+if 0: _58_inc_decode4rational = ...
+def _gmk_58_inc_decode4rational():
+    global _58_inc_decode4rational
+    try:
+        return _58_inc_decode4rational
+    except NameError:
+        pass
+    _58_inc_decode4rational = mk_incremental_decode5ops4iter_headed_digits_(gmk_step_decoder4rational_with_inf__alnum__5over8_(), _58_Ops4IterDigitsWithHeadCell())
+    return _gmk_58_inc_decode4rational()
+
+
+encode4rational_with_inf__alnum__5over8_
+decode4rational_with_inf__alnum__5over8_
+def incremental_decode4rational_with_inf__alnum__5over8_(may_wst7inc, s, /):
+    'may wst7inc -> str/alnum -> wresult7inc'
+    _58_inc_decode4rational = _gmk_58_inc_decode4rational()
+    wresult7inc = _58_inc_decode4rational(may_wst7inc, s)
+    return wresult7inc
+encode4rational_with_inf__alnum__5over8_
+decode4rational_with_inf__alnum__5over8_
+incremental_decode4rational_with_inf__alnum__5over8_
+    #TODO:test
+######################
+
+
+
+
+
+
+
+
 
 
 
 import builtins as _B
 def _prepare_prefix_tree4val(v, /):
-    # [target4prefix_tree =[def]= ]
     match v:
         #.case ... | None:
             #『case ...:』SyntaxError: invalid syntax
@@ -4017,9 +4753,9 @@ def _prepare_prefix_tree4val(v, /):
             #None/undefined_interval
             #.../reserved_interval
             r = v
-        case (0, d):
-            #(0,prefix_tree4step_decoder/extend_macro_header)
-            r = PrefixTree4step_decoder(d)
+        case (0, x):
+            #(0,arg8prefix_tree4step_decoder/extend_macro_header)
+            r = PrefixTree4step_decoder.mk_prefix_tree4step_decoder_(x)
         case ((1|2|3) as case, payload):
             #(1,oresult)
             #(2,peculiar_args4step_decoder)
@@ -4030,17 +4766,31 @@ def _prepare_prefix_tree4val(v, /):
     r
     return r
 
-def _prepare_prefix_tree(d, /):
+def _prepare_prefix_tree(dict_or_pairs, /):
+    if hasattr(dict_or_pairs, 'items'):
+        d = dict_or_pairs
+        pairs = d.items()
+    else:
+        pairs = dict_or_pairs
+    pairs
+    ps = sorted(pairs, key=fst)
     f = _prepare_prefix_tree4val
-    d = mk_MapView_({k:f(v) for k, v in d.items()})
-    ps = sorted(d.items(), key=fst)
+    d = mk_MapView_({k:f(v) for k, v in ps})
     us = tuple(map(fst, ps))
     ts = tuple(map(snd, ps))
     return (d, us, ts)
 class PrefixTree4step_decoder:
     'prefix_tree4step_decoder'
-    def __init__(sf, d, /):
-        sf._d, sf._us, sf._ts = _prepare_prefix_tree(d)
+    @classmethod
+    def mk_prefix_tree4step_decoder_(cls, arg8prefix_tree4step_decoder, /):
+        x = arg8prefix_tree4step_decoder
+        if isinstance(x, __class__):
+            sf = x
+        else:
+            dict_or_pairs = x
+            sf = cls(dict_or_pairs)
+    def __init__(sf, dict_or_pairs, /):
+        sf._d, sf._us, sf._ts = _prepare_prefix_tree(dict_or_pairs)
         sf._filled = False
             #turn-on by fill_prefix_tree_()
     @property
@@ -4061,8 +4811,18 @@ class PrefixTree4step_decoder:
         return sf._ts
     def __len__(sf, /):
         return len(sf._d)
+    ######################
+    def fill_prefix_tree_(sf, dr, /):
+        'IStepDecoder__hardwired__prefix_tree -> None{sf.filled}'
+        if sf.filled:return
+        prefix_tree4step_decoder = dr.prefix_tree4step_decoder
+        common_args4step_decoder = dr.common_args4step_decoder
+        mkr4step_decoder = dr.mkr4step_decoder
+        fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4step_decoder, dr.radix_info4digit)
+        assert sf.filled
+    ######################
 class Target4prefix_tree4step_decoder:
-    'target4prefix_tree'
+    'tgt/target4prefix_tree'
     def __init__(sf, cased_target, may_step_decoder, /):
         check_type_is(Cased, cased_target)
         sf._ct = cased_target
@@ -4085,18 +4845,19 @@ class Target4prefix_tree4step_decoder:
 
 class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_header):
     r'''[[[
-    [prefix_tree4step_decoder, =[def]= nonempty{max1:target4prefix_tree}]
-        #PrefixTree4step_decoder
+    [arg8prefix_tree4step_decoder =[def]= nonempty({max1:arg8target4prefix_tree}|[(max1:arg8target4prefix_tree)]|prefix_tree4step_decoder)]
+    [prefix_tree4step_decoder :: PrefixTree4step_decoder]
     [radix4macro_header =[def]= max(prefix_tree4step_decoder)]
     [num_intervals4macro_header =[def]= len(prefix_tree4step_decoder)]
-    [target4prefix_tree =[def]= (None/undefined_interval|.../reserved_interval|(0,prefix_tree4step_decoder/extend_macro_header)|(1,oresult)|(2,peculiar_args4step_decoder)|(3,step_decoder))]
-        #Target4prefix_tree4step_decoder
-    [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> peculiar_args4step_decoder -> step_decoder]
+    [arg8target4prefix_tree =[def]= (None/undefined_interval|.../reserved_interval|(0,arg8prefix_tree4step_decoder/extend_macro_header)|(1,oresult)|(2,peculiar_args4step_decoder)|(3,step_decoder))]
+    [target4prefix_tree :: (None/undefined_interval|.../reserved_interval|Target4prefix_tree4step_decoder)]
+    [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> whole_head_radix4step_decoder -> peculiar_args4step_decoder -> step_decoder]
     [common_args4step_decoder :: (radix4digit, ...usrdefined...)]
     [begin_size_pair_prefix4step_decoder :: [(begin/min{interval}, size/radix/len{interval})]] =>:
         [fixed_min_prefix4step_decoder :: [uint]]
         [fixed_max_prefix4step_decoder :: [uint]]
         [fixed_radix_prefix4step_decoder :: [uint{>=1}]]
+            => [whole_head_radix4step_decoder :: [uint{>=1}]]
         # [fixed_prefix4step_decoder]
         # [radix4macro_header4step_decoder]
     #]]]'''#'''
@@ -4106,7 +4867,7 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
     @property
     @abstractmethod
     def mkr4step_decoder(sf, /):
-        '-> (common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> peculiar_args4step_decoder -> step_decoder)'
+        '-> (common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> whole_head_radix4step_decoder -> peculiar_args4step_decoder -> step_decoder)'
     @property
     @abstractmethod
     def common_args4step_decoder(sf, /):
@@ -4115,13 +4876,6 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
     @abstractmethod
     def prefix_tree4step_decoder(sf, /):
         '-> prefix_tree4step_decoder/PrefixTree4step_decoder{Target4prefix_tree4step_decoder}'
-    ######################
-    def fill_prefix_tree_(sf, /):
-        prefix_tree4step_decoder = sf.prefix_tree4step_decoder
-        common_args4step_decoder = sf.common_args4step_decoder
-        mkr4step_decoder = sf.mkr4step_decoder
-        fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4step_decoder, sf.radix_info4digit)
-    ######################
     ######################
     @cached_property
     @override
@@ -4140,10 +4894,11 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
     def start_(sf, rxdigit8macro_header, /):
         tree = sf.prefix_tree4step_decoder
         if not tree.filled:
-            sf.fill_prefix_tree_()
+            tree.fill_prefix_tree_(sf)
         return sf._work(rxdigit8no_bits, rxdigit8macro_header, tree)
     def _work(sf, rxdigit8acc, rxdigit8H, tree, /):
         # [tree.filled]
+        assert tree.filled
         digit8H = rxdigit8H.digit
         us = tree.sorted_max1_seq_view
         j = bisect_right(us, digit8H)
@@ -4178,12 +4933,14 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
     feed_oresult_remain_ = _Dead.feed_oresult_remain_
     ######################
 def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4step_decoder, radix_info4digit=None, /):
+    if prefix_tree4step_decoder.filled:return
     if radix_info4digit is None:
         radix4digit = common_args4step_decoder[0]
         radix_info4digit = RadixInfo(radix4digit)
     radix_info4digit
     fixed_min_prefix = []
     fixed_radix_prefix = []
+    whole_head_radixes = [1]
     T = Target4prefix_tree4step_decoder
     P = PrefixTree4step_decoder
     def recur_(prefix_tree4step_decoder, /):
@@ -4195,6 +4952,7 @@ def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4st
             check_int_ge(1, radix)
             fixed_min_prefix.append(begin)
             fixed_radix_prefix.append(radix)
+            whole_head_radixes.append(whole_head_radix4step_decoder:=radix*whole_head_radixes[-1])
             777; begin = end
             if x is ... or x is None:
                 pass
@@ -4205,7 +4963,7 @@ def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4st
                     case (1,oresult):
                         step_decoder = StepDecoder__constant_oresult(radix_info4digit, oresult)
                     case (2,peculiar_args4step_decoder):
-                        step_decoder = mkr4step_decoder(common_args4step_decoder, tuple(fixed_min_prefix), tuple(fixed_radix_prefix), peculiar_args4step_decoder)
+                        step_decoder = mkr4step_decoder(common_args4step_decoder, tuple(fixed_min_prefix), tuple(fixed_radix_prefix), whole_head_radix4step_decoder, peculiar_args4step_decoder)
                     case (3,step_decoder):
                         step_decoder
                         pass
@@ -4216,6 +4974,7 @@ def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4st
                 recur_(x)
             fixed_min_prefix.pop()
             fixed_radix_prefix.pop()
+            whole_head_radixes.pop()
         #for end, x in zip(prefix_tree4step_decoder.sorted_max1_seq_view, prefix_tree4step_decoder.ordered_target_seq_view):
         prefix_tree4step_decoder._filled = True
     recur_(prefix_tree4step_decoder)
@@ -4225,11 +4984,12 @@ def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4st
 
 class StepDecoder__hardwired__prefix_tree(IStepDecoder__hardwired__prefix_tree):
     ___no_slots_ok___ = True
-    def __init__(sf, mkr4step_decoder, common_args4step_decoder, prefix_tree4step_decoder, /):
+    def __init__(sf, mkr4step_decoder, common_args4step_decoder, arg8prefix_tree4step_decoder, /):
         check_callable(mkr4step_decoder)
         check_type_is(tuple, common_args4step_decoder)
         #check_radix_info4digit
         check_int_ge(2, radix4digit:=common_args4step_decoder[0])
+        prefix_tree4step_decoder = PrefixTree4step_decoder.mk_prefix_tree4step_decoder_(arg8prefix_tree4step_decoder)
         check_type_is(PrefixTree4step_decoder, prefix_tree4step_decoder)
         sf._mk = mkr4step_decoder
         sf._cs = common_args4step_decoder
@@ -4359,18 +5119,20 @@ __()
 
 
 __all__
-from seed.int_tools.StepDecoder import encode4int_with_inf__alnum__5over8_, iter_encode4int_with_inf__alnum__5over8_, decode4int_with_inf__alnum__5over8_, mk_step_decoder4int_with_inf__alnum__5over8_
+from seed.int_tools.StepDecoder import encode4int_with_inf__alnum__5over8_, iter_encode4int_with_inf__alnum__5over8_, decode4int_with_inf__alnum__5over8_, gmk_step_decoder4int_with_inf__alnum__5over8_
+from seed.int_tools.StepDecoder import incremental_decode4int_with_inf__alnum__5over8_
 
 
 from seed.int_tools.StepDecoder import Exception__nonnull_remain, Exception__not_fullmatch, Exception__min_layer_idx4end_by_cell_boundary, ReservedAreaException, InfiniteException__nonzero_rxdigit8remain
 
-from seed.int_tools.StepDecoder import IDecoder__input_seq, IStepDecoder, step_decode__input_, step_decode__head_, step_decode__state_
+from seed.int_tools.StepDecoder import IDecoder__token_seq, IStepDecoder, step_decode__input_, step_decode__head_, step_decode__state_
 
 from seed.int_tools.StepDecoder import IBaseState4StepDecoder, ILoopState4StepDecoder, ICallState4StepDecoder
 
 from seed.int_tools.StepDecoder import IInput4StepDecoder, IPartialOutput4StepDecoder, IFullOutput4StepDecoder
 
 from seed.int_tools.StepDecoder import IUIntLinearTransform
+from seed.int_tools.StepDecoder import IOps4IterDigitsWithHeadCell
 
 from seed.int_tools.StepDecoder import CallEntry4StepDecoder, Kind4State4StepDecoder, LoopState4StepDecoder__plain, CallState4StepDecoder__plain, mk_nontail_call_st4step_decoder_, TailCallState4StepDecoder__plain, mk_tail_call_st4step_decoder_, XCallState4StepDecoder__plain
 
@@ -4379,6 +5141,7 @@ from seed.int_tools.StepDecoder import Input4StepDecoder, PartialOutput4StepDeco
 
 
 from seed.int_tools.StepDecoder import UIntLinearTransform, uint_linear_transform8echo
+from seed.int_tools.StepDecoder import Ops4IterDigitsWithHeadCell__functional
 
 from seed.int_tools.StepDecoder import StepDecoder__dynamic_bits, StepDecoder__fixed_size_xbcells, StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval, StepDecoder__dynamic_bibits, StepDecoder__flatten, StepDecoder__flip_digits, StepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits, StepDecoder__constant_oresult
 
@@ -4387,7 +5150,7 @@ from seed.int_tools.StepDecoder import StepDecoder__fixed_size_layers__body4infi
 
 
 
-from seed.int_tools.StepDecoder import StepDecoder__uint_with_inf, StepDecoder__int_with_inf, mk_step_decoder4int_with_inf__alnum__5over8_, StepDecoder__rational_with_inf
+from seed.int_tools.StepDecoder import StepDecoder__uint_with_inf, StepDecoder__int_with_inf, gmk_step_decoder4int_with_inf__alnum__5over8_, StepDecoder__rational_with_inf
 
 
 
@@ -4399,6 +5162,10 @@ from seed.int_tools.StepDecoder import IStepDecoder__hardwired__prefix_tree
 from seed.int_tools.StepDecoder import StepDecoder__hardwired__prefix_tree, fill_prefix_tree_, PrefixTree4step_decoder, Target4prefix_tree4step_decoder
 
 
+
+from seed.int_tools.StepDecoder import incremental_decode__continued_, incremental_decode__init5head_, incremental_decode__init5state_, prepare_step_decoder4incremental_decode_
+from seed.int_tools.StepDecoder import incremental_decode__headed_digits_, Ops4IterDigitsWithHeadCell__functional, incremental_decode__ops4iter_headed_digits_, mk_incremental_decode5ops4iter_headed_digits_, incremental_decode4int_with_inf__alnum__5over8_
+if 0:from seed.int_tools.StepDecoder import Mkr4incremental_decode5ops4iter_headed_digits
 
 
 from seed.int_tools.StepDecoder import *

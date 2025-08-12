@@ -1,3 +1,11 @@
 #g6_
-	echo ======= git commit --all -m "$@"
-	git commit --all -m "$@"
+	#old:echo ======= git commit --all -m "$@"
+	#old:git commit --all -m "$@"
+  #
+  #
+#@20250812
+#man git-commit
+#   -a, --all
+#       Tell the command to automatically stage files that have been modified and deleted, but new files you have not told Git about are not affected.
+echo ======= git commit -m "$@"
+git commit -m "$@"

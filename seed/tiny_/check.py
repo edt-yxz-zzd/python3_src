@@ -86,6 +86,7 @@ __all__ = '''
     icheck_pseudo_qual_name
 
     check_callable
+    check_iterator
     check_is_obj
     check_is_None
 
@@ -269,8 +270,11 @@ check_pseudo_qual_name('x.def')
 
 def check_callable(obj, /):
     if not callable(obj): raise TypeError(type(obj))
-
 check_callable(check_callable)
+
+def check_iterator(obj, /):
+    if not iter(obj) is obj: raise TypeError(type(obj))
+check_iterator(iter(''))
 
 def check_is_obj(expected, obj, /):
     if not obj is expected: raise TypeError(type(obj))

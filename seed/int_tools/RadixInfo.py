@@ -140,6 +140,7 @@ __all__ = r'''
 IRadixInfo
     RadixInfo
         mk_RadixInfo_
+        mk_radix_info5or_radix_
     IZpowRadixInfo
         ZpowRadixInfo
             mk_ZpowRadixInfo_
@@ -151,11 +152,20 @@ IRadixedDigit
     #flip_rxdigit_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from functools import lru_cache
 from functools import cached_property
 #.from collections import namedtuple
-from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_
-from functools import lru_cache
-from seed.tiny_.check import check_type_is, check_int_ge
+#from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
+#def mk_namedtuple_(__module__, nm, nms_or_str, /, *args, **kwds):
+#def mk_namedtuple__check6make_(__module__, nm, nms_or_str, /, *args, **kwds):
+#    def _check6make_(sf, /):
+from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
+#def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
+#    def _check6make_(sf, /):
+
+
+
+from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_lt
 #.
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
 from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
@@ -222,6 +232,14 @@ class IRadixInfo(ABC):
     def is_null(sf, /):
         '-> bool{[radix == 1]}'
         return sf.radix == 1
+
+    def is_good_digit_(sf, i, /):
+        'int -> bool'
+        return type(i) is int and 0 <= i < sf.radix
+    def check_digit_(sf, i, /):
+        'int -> None|^Exception'
+        check_int_ge_lt(0, sf.radix, i)
+
     ######################
 #end-class IRadixInfo(ABC):
 class IZpowRadixInfo(IRadixInfo):
@@ -239,6 +257,24 @@ class IZpowRadixInfo(IRadixInfo):
     @override
     def radix(sf, /):
         '-> uint{>=1}{==2**num_bits4digit}'
+    ######################
+    @property
+    @override
+    def is_null(sf, /):
+        '-> bool{[radix == 1]}'
+        return sf.num_bits4digit == 0
+
+    @override
+    def is_good_digit_(sf, i, /):
+        'int -> bool'
+        return type(i) is int and 0 <= i and i.bit_length() <= sf.num_bits4digit
+    @override
+    def check_digit_(sf, i, /):
+        'int -> None|^Exception'
+        check_int_ge(0, i)
+        if not i.bit_length() <= sf.num_bits4digit:raise ValueError
+
+
 #end-class IZpowRadixInfo(ABC):
 
 
@@ -439,6 +475,14 @@ def mk_RadixInfo_(radix, max_digit=None):
 def _mk_RadixInfo_(radix):
     return RadixInfo(radix, _new=True)
 
+def mk_radix_info5or_radix_(radix_or_radix_info, /):
+    '(uint{>=1}|IRadixInfo) -> IRadixInfo'
+    if type(radix_or_radix_info) is int:
+        radix = radix_or_radix_info
+        radix_info = mk_RadixInfo_(radix)
+    else:
+        radix_info = radix_or_radix_info
+    return radix_info
 
 class IRadixedDigit(ABC):
     'rdgt/rxdigit # digit with radix_info'
@@ -494,34 +538,30 @@ class IRadixedDigit(ABC):
         return sf.radix_info.radix == 1
     ######################
 
-_BaseRadixedDigit = mk_namedtuple_(__name__, 'BaseRadixedDigit', 'radix_info digit')
+
+_BaseRadixedDigit = mk_named_pseudo_tuple_(__name__, 'BaseRadixedDigit', 'radix_info digit')
+    #mk_namedtuple_ --> mk_named_pseudo_tuple_
+    #   !! is_null/cached_property
 class RadixedDigit(_BaseRadixedDigit, IRadixedDigit):
     ___no_slots_ok___ = True
+    def _check6make_(sf, /):
+        sf.radix_info.check_digit_(sf.digit)
+    ######################
+    #override:__repr__@(mk_namedtuple_|mk_named_pseudo_tuple_)
+    ######################
     #.def __repr__(sf, /):
     #.    #RadixedDigit(radix_info=RadixInfo(16), digit=7)
     #.    #-->RadixedDigit(RadixInfo(16), 7)
     #.    return repr_helper(sf, sf.radix_info, sf.digit)
     ######################
-    #.def __new__(cls, /, radix_info, digit):
-    #.    #check_type_le(IRadixInfo, radix_info)
-    #.    #check_int_ge_lt(0, radix_info.radix, digit)
-    #.    sf = super(__class__, cls).__new__(cls, radix_info, digit)
-    #.    return sf
-    ######################
-    #.def __init__(sf, /, radix_info, digit):
-    #.    sf._ri = radix_info
-    #.    sf._d = digit
-    #.@property
-    #.def radix_info(sf, /):
-    #.@property
-    #.def digit(sf, /):
-    #.def __eq__(sf, /):
-    #.def __hash__(sf, /):
-
 rxdigit8no_bits = RadixedDigit(ZpowRadixInfo(0), 0)
+
+
+
+
 
 __all__
 from seed.int_tools.RadixInfo import IZpowRadixInfo, ZpowRadixInfo, mk_ZpowRadixInfo_
-from seed.int_tools.RadixInfo import IRadixInfo, RadixInfo, mk_RadixInfo_
+from seed.int_tools.RadixInfo import IRadixInfo, RadixInfo, mk_RadixInfo_, mk_radix_info5or_radix_
 from seed.int_tools.RadixInfo import IRadixedDigit, RadixedDigit, rxdigit8no_bits
 from seed.int_tools.RadixInfo import *
