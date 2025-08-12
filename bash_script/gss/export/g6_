@@ -1,5 +1,7 @@
 #g6_
 	export cmd='git commit --all -m "$@"'
 	export cmd='git commit --all -m'
+  #@20250812:since 『--all』 skip git-add, auto search all modified files
+	export cmd='git commit -m'
 	echo ======= $cmd \""$@"\"
 	echo $cmd \""$@"\" | bash | g_out
