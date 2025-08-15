@@ -2,8 +2,7 @@
 #TODO:goto
 #TODO:NotImplementedError
 #TODO:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header
-#TODO:test:incremental_decode4int_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
-#TODO:test:incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
+#TODO:incremental_decode4int_with_inf__alnum__5over8_/incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
 #64,65,67:[0-9A-Za-z._@+-]
 r'''[[[
 e ../../python3_src/seed/int_tools/StepDecoder.py
@@ -454,6 +453,20 @@ True
 
 ######################
 decode4int_with_inf__alnum__5over8_
+>>> decode4int_with_inf__alnum__5over8_('X!', nonnull_rxdigit8remain_ok=True)
+(0, RadixedDigit(ZpowRadixInfo(0), 0), 1)
+>>> decode4int_with_inf__alnum__5over8_('X!')
+(0, 1)
+>>> decode4int_with_inf__alnum__5over8_('X!', fullmatch=False)
+(0, 1)
+>>> decode4int_with_inf__alnum__5over8_('X!', fullmatch=True)
+Traceback (most recent call last):
+    ...
+seed.int_tools.StepDecoder.Exception__not_fullmatch: (1, 2)
+>>> decode4int_with_inf__alnum__5over8_('X', fullmatch=True)
+0
+
+#######
 >>> _58_dec = lambda s:decode4int_with_inf__alnum__5over8_(s, fullmatch=True)
 
 #######
@@ -597,7 +610,7 @@ True
 #######
 
 
-'''; __doc__ = r'''
+'#'; __doc__ = r'#'
 >>>
 
 ######################
@@ -1146,44 +1159,6 @@ py_adhoc_call   seed.int_tools.StepDecoder   @f
 from seed.int_tools.StepDecoder import *
 ]]]'''#'''
 __all__ = r'''
-incremental_decode__continued_
-    incremental_decode__init5head_
-    incremental_decode__init5state_
-        prepare_step_decoder4incremental_decode_
-    incremental_decode__headed_digits_
-    incremental_decode__ops4iter_headed_digits_
-        mk_incremental_decode5ops4iter_headed_digits_
-            Mkr4incremental_decode5ops4iter_headed_digits
-    incremental_decode4int_with_inf__alnum__5over8_
-
-    StepDecoder__flatten
-    IOps4IterDigitsWithHeadCell
-        Ops4IterDigitsWithHeadCell__functional
-IWrappedResult7incremental_decode
-    WrappedResult7incremental_decode
-IWrappedState7incremental_decode
-    WrappedState7incremental_decode
-IExtendedOutResult7incremental_decode
-    ExtendedOutResult7incremental_decode
-
-incremental_decode4int_with_inf__alnum__5over8_
-decode4int_with_inf__alnum__5over8_
-    gmk_step_decoder4int_with_inf__alnum__5over8_
-encode4int_with_inf__alnum__5over8_
-    iter_encode4int_with_inf__alnum__5over8_
-        sign_of_
-
-incremental_decode4rational_with_inf__alnum__5over8_
-decode4rational_with_inf__alnum__5over8_
-    gmk_step_decoder4rational_with_inf__alnum__5over8_
-encode4rational_with_inf__alnum__5over8_
-    iter_encode4rational_with_inf__alnum__5over8_
-CodecSchemeCase4StepDecoder4Rational
-
-IDecoder__token_seq
-    Exception__nonnull_remain
-    Exception__not_fullmatch
-
 
 CallEntry4StepDecoder
 Kind4State4StepDecoder
@@ -1305,6 +1280,77 @@ IStepDecoder__int_with_inf
         gmk_step_decoder4int_with_inf__alnum__5over8_
 IStepDecoder__rational_with_inf
     StepDecoder__rational_with_inf
+        gmk_step_decoder4rational_with_inf__alnum__5over8_
+            gmk_std_step_decoder4rational_with_inf__alnum__5over8_
+                std_rational_codec_scheme_case
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+incremental_decode__continued_
+    incremental_decode__init5head_
+    incremental_decode__init5state_
+        prepare_step_decoder4incremental_decode_
+    incremental_decode__headed_digits_
+    incremental_decode__ops4iter_headed_digits_
+        mk_incremental_decode5ops4iter_headed_digits_
+            Mkr4incremental_decode5ops4iter_headed_digits
+    incremental_decode4int_with_inf__alnum__5over8_
+        ops4iter_headed_digits__alnum__5over8
+
+    StepDecoder__flatten
+    IOps4IterDigitsWithHeadCell
+        Ops4IterDigitsWithHeadCell__functional
+        ops4iter_headed_digits__alnum__5over8
+
+IWrappedResult7incremental_decode
+    WrappedResult7incremental_decode
+IWrappedState7incremental_decode
+    WrappedState7incremental_decode
+IExtendedOutResult7incremental_decode
+    ExtendedOutResult7incremental_decode
+
+incremental_decode4int_with_inf__alnum__5over8_
+decode4int_with_inf__alnum__5over8_
+    gmk_step_decoder4int_with_inf__alnum__5over8_
+encode4int_with_inf__alnum__5over8_
+    iter_encode4int_with_inf__alnum__5over8_
+        sign_of_
+
+incremental_decode4rational_with_inf__alnum__5over8_
+decode4rational_with_inf__alnum__5over8_
+    gmk_step_decoder4rational_with_inf__alnum__5over8_
+encode4rational_with_inf__alnum__5over8_
+    iter_encode4rational_with_inf__alnum__5over8_
+CodecSchemeCase4StepDecoder4Rational
+
+IDecoder__token_seq
+    Exception__nonnull_remain
+    Exception__not_fullmatch
+
+
+
+
+
+
+
 
 
 
@@ -1323,6 +1369,15 @@ IStepDecoder__hardwired__prefix_tree
     fill_prefix_tree_
         PrefixTree4step_decoder
         Target4prefix_tree4step_decoder
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1370,6 +1425,7 @@ from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple
 from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
 #def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
 #    def _check6make_(sf, /):
+from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import collect_tuple_subclasses_with_cached_property
 
 
 from seed.types.Either import Cased, Either
@@ -5252,6 +5308,12 @@ def gmk_step_decoder4int_with_inf__alnum__5over8_():
         pass
     _58_gmk_dr4int_case2dr4rational()
     return gmk_step_decoder4int_with_inf__alnum__5over8_()
+_58_std_case = _Case4scheme.cf_symmetry_scheme__via_trunc_using_signed_zero
+std_rational_codec_scheme_case = _58_std_case
+def gmk_std_step_decoder4rational_with_inf__alnum__5over8_():
+    'IStepDecoder__rational_with_inf{radix4macro_header:=3,radix4digit:=32}{cf_symmetry_scheme__via_trunc_using_signed_zero}  # ' \
+    'view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt'
+    return gmk_step_decoder4rational_with_inf__alnum__5over8_(_58_std_case)
 def gmk_step_decoder4rational_with_inf__alnum__5over8_(codec_scheme_case, /):
     'CodecSchemeCase4StepDecoder4Rational -> IStepDecoder__rational_with_inf{radix4macro_header:=3,radix4digit:=32}  # ' \
     'view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt'
@@ -5769,6 +5831,7 @@ class _58_Ops4IterDigitsWithHeadCell(IOps4IterDigitsWithHeadCell):
         return _58_2digit6body.__getitem__
 #end-class _58_Ops4IterDigitsWithHeadCell(IOps4IterDigitsWithHeadCell):
 _58_ops4iter_headed_digits = _58_Ops4IterDigitsWithHeadCell()
+ops4iter_headed_digits__alnum__5over8 = _58_ops4iter_headed_digits
 
 ######################
 if 0:
@@ -5871,6 +5934,33 @@ def _prepare_prefix_tree4val(v, /):
     r
     return r
 
+#.def _prepare_prefix_tree4cycle(arg8one_way_inf_cycle_prefix_tree4step_decoder, /):
+#.    L = len(arg8one_way_inf_cycle_prefix_tree4step_decoder)
+#.    outs = []
+#.    for j, [*ls4emay_pair] in enumerate(arg8one_way_inf_cycle_prefix_tree4step_decoder):
+#.        k = ls4emay_pair.index(...)
+#.        max1 = 1 + (0 if k == 0 else ls4emay_pair[k-1][0])
+#.        ...
+#.        ...arg8one_way_inf_cycle_prefix_tree4step_decoder --> merged into peculiar_args4step_decoder
+#.    TODO
+#.def _prepare_prefix_tree(dict_or_pairs_or_cycle, /):
+#.    if hasattr(dict_or_pairs_or_cycle, 'items'):
+#.        d = dict_or_pairs_or_cycle
+#.        pairs = d.items()
+#.    else:
+#.        pairs_or_cycle = dict_or_pairs_or_cycle
+#.        pairs_or_cycle = mk_tuple(pairs_or_cycle)
+#.        assert pairs_or_cycle
+#.        x0 = pairs_or_cycle[0]
+#.        b_pairs = len(x0) == 2 and type(x0[0]) is int
+#.        if b_pairs:
+#.            pairs = pairs_or_cycle
+#.        else:
+#.            arg8one_way_inf_cycle_prefix_tree4step_decoder = pairs_or_cycle
+#.            return _prepare_prefix_tree4cycle(arg8one_way_inf_cycle_prefix_tree4step_decoder)
+#.        pairs
+#.    pairs
+#.    ...
 def _prepare_prefix_tree(dict_or_pairs, /):
     if hasattr(dict_or_pairs, 'items'):
         d = dict_or_pairs
@@ -5950,10 +6040,15 @@ class Target4prefix_tree4step_decoder:
 
 class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_header):
     r'''[[[
-    [arg8prefix_tree4step_decoder =[def]= nonempty({max1:arg8target4prefix_tree}|[(max1:arg8target4prefix_tree)]|prefix_tree4step_decoder)]
+    [arg8prefix_tree4step_decoder =[def]= (nonempty{max1:arg8target4prefix_tree}|nonempty-sorted[(max1,arg8target4prefix_tree)]|prefix_tree4step_decoder)]
+        # 『|arg8one_way_inf_cycle_prefix_tree4step_decoder』
+        #   now:arg8one_way_inf_cycle_prefix_tree4step_decoder --> merged into peculiar_args4step_decoder
+    [arg8one_way_inf_cycle_prefix_tree4step_decoder =[def]= [(nonempty-sorted[emay (max1,arg8target4prefix_tree)]){.count(...)==1}]]
+        #{『...』repr [curr_max1:=1+prev_max1][curr_target:=next_elem{arg8one_way_inf_cycle_prefix_tree4step_decoder}{wrap around the end of the cycle}]}
     [prefix_tree4step_decoder :: PrefixTree4step_decoder]
     [radix4macro_header =[def]= max(prefix_tree4step_decoder)]
     [num_intervals4macro_header =[def]= len(prefix_tree4step_decoder)]
+    #arg{target4prefix_tree}
     [arg8target4prefix_tree =[def]= (None/undefined_interval|.../reserved_interval|(0,arg8prefix_tree4step_decoder/extend_macro_header)|(1,oresult)|(2,peculiar_args4step_decoder)|(3,step_decoder))]
     [target4prefix_tree :: (None/undefined_interval|.../reserved_interval|Target4prefix_tree4step_decoder)]
     [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> whole_head_radix4step_decoder -> peculiar_args4step_decoder -> step_decoder]
@@ -6216,10 +6311,11 @@ def __():
                 if isinstance(f, cached_property):
                     print_err(f'{nm}.{attr}::tuple.cached_property')
                     #raise 000
-__()
+if 0:__()#see:collect_tuple_subclasses_with_cached_property()
     #before:mk_namedtuple_-->mk_named_pseudo_tuple_
         #StepDecoder__plugin4finite_uint_interval__fixed_size_layers.layer_idx2uint_linear_transform::tuple.cached_property
         #StepDecoder__plugin4infinite_uint_interval__truncated_dynamic_bits_with_may_dynamic_bibits_with_dependent_size_layers.radix_info4digit::tuple.cached_property
+assert not (__:=collect_tuple_subclasses_with_cached_property(globals(), to_print_err=True)), __
 
 
 
@@ -6255,9 +6351,9 @@ from seed.int_tools.StepDecoder import StepDecoder__fixed_size_layers__body4infi
 
 
 
-from seed.int_tools.StepDecoder import StepDecoder__uint_with_inf, StepDecoder__int_with_inf, gmk_step_decoder4int_with_inf__alnum__5over8_, StepDecoder__rational_with_inf
+from seed.int_tools.StepDecoder import StepDecoder__uint_with_inf, StepDecoder__int_with_inf, StepDecoder__rational_with_inf
 
-
+from seed.int_tools.StepDecoder import gmk_step_decoder4int_with_inf__alnum__5over8_, gmk_std_step_decoder4rational_with_inf__alnum__5over8_, gmk_step_decoder4rational_with_inf__alnum__5over8_, ops4iter_headed_digits__alnum__5over8, std_rational_codec_scheme_case
 
 
 
@@ -6271,6 +6367,29 @@ from seed.int_tools.StepDecoder import StepDecoder__hardwired__prefix_tree, fill
 from seed.int_tools.StepDecoder import incremental_decode__continued_, incremental_decode__init5head_, incremental_decode__init5state_, prepare_step_decoder4incremental_decode_
 from seed.int_tools.StepDecoder import incremental_decode__headed_digits_, Ops4IterDigitsWithHeadCell__functional, incremental_decode__ops4iter_headed_digits_, mk_incremental_decode5ops4iter_headed_digits_, incremental_decode4int_with_inf__alnum__5over8_
 if 0:from seed.int_tools.StepDecoder import Mkr4incremental_decode5ops4iter_headed_digits
+
+
+from seed.int_tools.StepDecoder import \
+(incremental_decode4int_with_inf__alnum__5over8_
+,decode4int_with_inf__alnum__5over8_
+,    gmk_step_decoder4int_with_inf__alnum__5over8_
+,encode4int_with_inf__alnum__5over8_
+,    iter_encode4int_with_inf__alnum__5over8_
+)
+from seed.int_tools.StepDecoder import \
+(incremental_decode4rational_with_inf__alnum__5over8_
+,decode4rational_with_inf__alnum__5over8_
+,    gmk_step_decoder4rational_with_inf__alnum__5over8_
+,encode4rational_with_inf__alnum__5over8_
+,    iter_encode4rational_with_inf__alnum__5over8_
+)
+from seed.int_tools.StepDecoder import CodecSchemeCase4StepDecoder4Rational, std_rational_codec_scheme_case
+
+
+from seed.int_tools.StepDecoder import IWrappedResult7incremental_decode, IWrappedState7incremental_decode, IExtendedOutResult7incremental_decode
+
+from seed.int_tools.StepDecoder import WrappedResult7incremental_decode, WrappedState7incremental_decode, ExtendedOutResult7incremental_decode
+
 
 
 from seed.int_tools.StepDecoder import *

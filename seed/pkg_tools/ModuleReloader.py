@@ -99,7 +99,7 @@ mk_doctestXmodule_reloader_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from importlib import importlib
+from importlib import import_module
 from importlib import reload as inplace_reload# inplace reload <<== spec.loader.exec_module(module)
 from seed.tiny_.check import check_all_, check_pseudo_qual_name #check_type_is, check_int_ge
 #.from itertools import islice
@@ -162,7 +162,7 @@ class ModuleReloader:
             #bug:inplace_reload(qnm4mdl)
                 #TypeError: reload() argument must be a module
             if to_import_if_not_existed and not qnm4mdl in modules:
-                importlib(qnm4mdl)
+                import_module(qnm4mdl)
             else:
                 inplace_reload(modules[qnm4mdl])
 

@@ -19,6 +19,7 @@ view /sdcard/0my_files/tmp/out4py/py_src/collections/__init__.py
 ]]]'''#'''
 __all__ = r'''
 mk_named_pseudo_tuple_
+collect_tuple_subclasses_with_cached_property
 '''.split()#'''
     #_IBase4named_pseudo_tuple
 __all__
@@ -28,7 +29,7 @@ from keyword import iskeyword
 from operator import itemgetter
 from collections.abc import Sequence
 from abc import abstractmethod
-#from functools import cached_property
+from functools import cached_property
 #from collections import namedtuple
 #namedtuple(typename, field_names, *, rename=False, defaults=None, module=None)
 
@@ -40,19 +41,32 @@ from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
 repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
 lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err', __name__)
 if 0:from seed.tiny import mk_tuple,print_err
-#.from seed.helper.repr_input import repr_helper
-#.from seed.tiny_._Base4repr import _Base4repr
-        #sf._reset4repr(may_args4repr, may_kwds4repr)
-        #sf._init4repr(*args4repr, **kwds4repr)
 ___end_mark_of_excluded_global_names__0___ = ...
 
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
+
+def collect_tuple_subclasses_with_cached_property(_globals, /, *, to_print_err=False):
+    outs = []
+    Nothing = object()
+    ps = [(k,v) for k,v in _globals.items() if isinstance(k, str)]
+    ps.sort()
+    for nm, x in ps:
+        if not (isinstance(x, type) and issubclass(x, tuple)):
+            continue
+        #print_err(f'{nm}<:tuple')
+        #bug:for attr, f in vars(x).items():
+        for attr in sorted(dir(x)):
+            f = getattr(x, attr, Nothing)
+            if f is Nothing:continue
+            #print_err(f'{nm}.{attr}:={f}')
+            if isinstance(f, cached_property):
+                outs.append((nm, attr))
+                if to_print_err:
+                    print_err(f'{nm}.{attr}::tuple.cached_property')
+                #raise 000
+    return outs
+collect_tuple_subclasses_with_cached_property(globals(), to_print_err=True)
+
+
 
 class _IBase4named_pseudo_tuple(Sequence):
     #__slots__ = '__dict__ __weakref__'.split()
@@ -344,5 +358,7 @@ __all__
 from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
 #def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
 #    def _check6make_(sf, /):
+from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import collect_tuple_subclasses_with_cached_property
+assert not (__:=collect_tuple_subclasses_with_cached_property(globals(), to_print_err=True)), __
 
 from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import *
