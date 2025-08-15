@@ -123,6 +123,36 @@ assert mk_immutable_seq(__:=range(999)) is __
 assert mk_immutable_seq(__:=(999,)) is __
 assert mk_immutable_seq([999]) == (999,)
 
+
+
+
+def mk_tuple__split_first_if_str(xs, /, chars8blank=''):
+    '(str|Iter x) -> (chars8blank="") -> tuple{str|x}'
+    if type(xs) is str:
+        s = xs
+        if not chars8blank:
+            pass
+        elif len(chars8blank) == 1:
+            ch = chars8blank
+            s = s.replace(ch, ' ')
+        else:
+            tbl = dict.fromkeys(map(ord, chars8blank), ' ')
+            s = s.translate(tbl)
+        s
+        xs = s.split()
+    xs = mk_tuple(xs)
+    return xs
+assert mk_tuple__split_first_if_str(b'0 1') == (48, 32, 49)
+assert mk_tuple__split_first_if_str('0 1') == ('0', '1')
+assert mk_tuple__split_first_if_str('0 1,2') == ('0', '1,2')
+assert mk_tuple__split_first_if_str('0 1,2', ',') == ('0', '1', '2')
+assert mk_tuple__split_first_if_str('0 1,2;3', ',') == ('0', '1', '2;3')
+assert mk_tuple__split_first_if_str('0 1,2;3', ',;') == ('0', '1', '2', '3')
+
+
+
+from seed.tiny_.containers import mk_tuple__split_first_if_str
+
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
 from seed.tiny_.containers import mk_immutable_seq
 

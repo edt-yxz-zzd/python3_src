@@ -27,13 +27,14 @@ AttributeError: 'tuple_iterator' object has no attribute '__contains__'
 
 
 
-from seed.tiny_.check import check_may_, check_not_
+from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
+
 
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     from seed.tiny_.check import check_getitemable, icheck_getitemable
 from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
-from seed.tiny_.check import check_callable, check_is_obj, check_is_None
+from seed.tiny_.check import check_callable, check_iterator, check_is_obj, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
 from seed.tiny_.check import check_str, check_char, check_bool, check_tribool
@@ -45,6 +46,8 @@ __all__ = '''
     check_non_ABC
     check_ABC
 
+    check_all_
+    check_tmay_
     check_may_
     check_not_
 
@@ -111,6 +114,14 @@ def _call_(check_, obj, /):
         check_, *args = check_
         check_(*args, obj)
 
+def check_all_(check_, objs, /):
+    for obj in objs:
+        _call_(check_, obj)
+def check_tmay_(check_, tpl, /):
+    check_tmay(tpl)
+    match tpl:
+        case [obj]:
+            _call_(check_, obj)
 def check_may_(check_, obj, /):
     if not obj is None:
         _call_(check_, obj)

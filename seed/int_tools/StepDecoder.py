@@ -1,9 +1,10 @@
 #__all__:goto
 #TODO:goto
-#TODO:test:incremental_decode4int_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_remain_ok?
-#TODO:test:incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_remain_ok?
-#TODO:test: encode4rational_with_inf__alnum__5over8_, decode4rational_with_inf__alnum__5over8_
-#64,65:[0-9A-Za-z._-]
+#TODO:NotImplementedError
+#TODO:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header
+#TODO:test:incremental_decode4int_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
+#TODO:test:incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
+#64,65,67:[0-9A-Za-z._@+-]
 r'''[[[
 e ../../python3_src/seed/int_tools/StepDecoder.py
     vs:codecs.IncrementalDecoder
@@ -19,6 +20,12 @@ view others/数学/编程/设计/自定义编码之要点.txt
 seed.int_tools.StepDecoder
 py -m nn_ns.app.debug_cmd   seed.int_tools.StepDecoder -x # -off_defs
 py -m nn_ns.app.doctest_cmd seed.int_tools.StepDecoder:__doc__ -ht # -ff -df
+#######
+from seed.pkg_tools.ModuleReloader import mk_doctestXmodule_reloader_
+doctestXmodule_reloader = mk_doctestXmodule_reloader_('', 'seed.int_tools.StepDecoder:__doc__', '-ht')
+doctestXmodule_reloader(reload_first=False)
+doctestXmodule_reloader()
+#######
 
 [[
 源起:
@@ -117,6 +124,7 @@ TODO:dynamic_bits_with_dependent_size_bits-->dynamic_digits_with_dependent_size_
 
 
 
+######################
 >>> dr4alnum = gmk_step_decoder4int_with_inf__alnum__5over8_()
 >>> from seed.int_tools.DigitReader import SubSeq, DigitReader5seq
 >>> from string import digits, ascii_uppercase, ascii_lowercase
@@ -157,7 +165,9 @@ def step_decode__head_(step_decoder, rxdigit8macro_header, digit_reader, /):
 ...     return step_decode__input_(dr4alnum, input4step_decoder, to_full_output=to_full_output)
 
 
+######################
 PartialOutput4StepDecoder(oresult, rxdigit8remain)
+#######
 #>>> step_decode4alnum_('X', to_full_output=False)
 >>> step_decode4alnum_('X')
 PartialOutput4StepDecoder(0, RadixedDigit(ZpowRadixInfo(0), 0))
@@ -221,6 +231,7 @@ seed.int_tools.StepDecoder.ReservedAreaException: (0, RadixedDigit(ZpowRadixInfo
 
 
 
+#######
 [G-N]:2凡层
 >>> step_decode4alnum_('YG')
 PartialOutput4StepDecoder(0, RadixedDigit(ZpowRadixInfo(0), 0))
@@ -264,6 +275,7 @@ PartialOutput4StepDecoder(1023, RadixedDigit(ZpowRadixInfo(0), 0))
 
 
 
+#######
 [O-R]:3凡层
 >>> step_decode4alnum_('YO')
 PartialOutput4StepDecoder(0, RadixedDigit(ZpowRadixInfo(0), 0))
@@ -325,6 +337,7 @@ PartialOutput4StepDecoder(1023, RadixedDigit(ZpowRadixInfo(0), 0))
 
 
 
+#######
 [S]:4凡层
 >>> step_decode4alnum_('YS11') #doctest: +ELLIPSIS
 Traceback (most recent call last):
@@ -344,6 +357,7 @@ PartialOutput4StepDecoder(31, RadixedDigit(ZpowRadixInfo(0), 0))
 PartialOutput4StepDecoder(32767, RadixedDigit(ZpowRadixInfo(0), 0))
 
 
+#######
 [T]:深入
 >>> step_decode4alnum_('YT') #doctest: +ELLIPSIS
 Traceback (most recent call last):
@@ -377,6 +391,7 @@ PartialOutput4StepDecoder(0, RadixedDigit(ZpowRadixInfo(0), 0))
 PartialOutput4StepDecoder(0, RadixedDigit(ZpowRadixInfo(0), 0))
 
 
+#######
 [U]:正无穷
 [V]:保留区
 >>> step_decode4alnum_('YU')
@@ -387,11 +402,15 @@ Traceback (most recent call last):
 seed.int_tools.StepDecoder.ReservedAreaException: (0, RadixedDigit(ZpowRadixInfo(0), 0))
 
 
+#######
 
 
 
+######################
 encode4int_with_inf__alnum__5over8_
->>> _58_enc = lambda xi:encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=True)
+>>> _58_enc = lambda xi:encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=True, sign4zero=0)
+
+#######
 >>> _58_enc(+oo)
 'YU'
 >>> _58_enc(-oo)
@@ -409,6 +428,7 @@ encode4int_with_inf__alnum__5over8_
 >>> _58_enc(+16)
 'YHG'
 
+#######
 >>> _58_enc(-(2**35-1))
 'W80000000'
 >>> _58_enc(+(2**35-1)) == ''.join(['YN', 'V'*(2**3-1)])
@@ -418,6 +438,7 @@ True
 >>> _58_enc(+(2**35)) == ''.join(['YP', '8',     '1','0'*(2**3-1)])
 True
 
+#######
 >>> _58_enc(-(2**163835-1)) == ''.join(['W4', '0'*(2**2-1), '0'*(2**15-1)])
 True
 >>> _58_enc(+(2**163835-1)) == ''.join(['YR', 'V'*(2**2-1), 'V'*(2**15-1)])
@@ -427,11 +448,15 @@ True
 >>> _58_enc(+(2**163835)) == ''.join(['YS', '4',     '1','0'*(2**2-1),     '1','0'*(2**15-1)])
 True
 
+#######
 
 
 
+######################
 decode4int_with_inf__alnum__5over8_
 >>> _58_dec = lambda s:decode4int_with_inf__alnum__5over8_(s, fullmatch=True)
+
+#######
 >>> _58_dec('YU')
 (+oo)
 >>> _58_dec('W1')
@@ -449,6 +474,7 @@ decode4int_with_inf__alnum__5over8_
 >>> _58_dec('YHG')
 16
 
+#######
 >>> _58_dec('W80000000') == -(2**35-1)
 True
 >>> _58_dec('YNVVVVVVV') == +(2**35-1)
@@ -460,6 +486,7 @@ True
 
 
 
+#######
 >>> _58_dec(''.join(['W4', '0'*(2**2-1), '0'*(2**15-1)])) == -(2**163835-1)
 True
 >>> _58_dec(''.join(['YR', 'V'*(2**2-1), 'V'*(2**15-1)])) == +(2**163835-1)
@@ -469,7 +496,13 @@ True
 >>> _58_dec(''.join(['YS', '4',     '1','0'*(2**2-1),     '1','0'*(2**15-1)])) == +(2**163835)
 True
 
+#######
+
+
+
+######################
 #非标准数据:
+#######
 >>> _58_dec('YT0')
 0
 >>> _58_dec('YTA0')
@@ -482,6 +515,7 @@ True
 0
 
 
+#######
 >>> _58_dec('YT0')
 0
 >>> _58_dec('YT10')
@@ -508,6 +542,7 @@ True
 0
 
 
+#######
 >>> _58_dec('YTAL0')
 0
 >>> _58_dec('YTAL10')
@@ -534,6 +569,7 @@ True
 0
 
 
+#######
 >>> _58_dec('YTALAL111111111111111')
 1
 >>> _58_dec('YS111')
@@ -558,8 +594,554 @@ True
 >>> _58_dec('YTAL91111111111')
 1
 
+#######
 
 
+'''; __doc__ = r'''
+>>>
+
+######################
+#.>>> cases = [*_58_case2dr4rational]
+#.>>> type(cases[0]) is _Case4scheme
+#.False
+#.>>> type(cases[0]).__module__
+#.'seed.int_tools.StepDecoder'
+#.>>> _Case4scheme.__module__
+#.'seed.int_tools.StepDecoder'
+#.>>> type(cases[0])
+#.<enum 'CodecSchemeCase4StepDecoder4Rational'>
+#.>>> _Case4scheme
+#.<enum 'CodecSchemeCase4StepDecoder4Rational'>
+==>>doctestXmodule_reloader() cause bug:『class _Case4scheme(Enum)』redefined, but『global _58_case2dr4rational』lazy init only once => KeyError
+==>> ++『
+if '_58_dr4int' in globals():
+    del _58_dr4int, _58_case2dr4rational
+』
+
+######################
+<<==:
+######################
+encode4rational_with_inf__alnum__5over8_
+decode4rational_with_inf__alnum__5over8_
+def encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool, codec_scheme_case):
+def decode4rational_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, codec_scheme_case, fullmatch=False, nonnull_rxdigit8remain_ok=False):
+######################
+#>>> from seed.int_tools.StepDecoder import _Case4scheme # since not imported via last line 『from ... import *』, would cause KeyError
+>>> from seed.math.continued_fraction.prepare_continued_fraction_from_string import prepare_continued_fraction_from_string_
+>>> def _prepare_rationals(s, /):
+...     'str -> [(int|Fraction)]'
+...     it = map(prepare_continued_fraction_from_string_, s.split())
+...     xs = [(calc_Fraction5finite_continued_fraction_(x) if type(x) is list else x) for x in it]
+...     # [xs :: [(int|Fraction)]]
+...     return xs
+>>> def _test1_dr4rational(pairs8out, xrational, /, codec_scheme_case):
+...     s = encode4rational_with_inf__alnum__5over8_(xrational, digits_vs_str=True, codec_scheme_case=codec_scheme_case)
+...     x = decode4rational_with_inf__alnum__5over8_(s, fullmatch=True, codec_scheme_case=codec_scheme_case)
+...     t = (xrational, s)
+...     assert x == xrational, (t, x)
+...     print(t)
+...     pairs8out.append(t)
+>>> def _tests_dr4rational(pairs8out, txt, /, codec_scheme_case):
+...     _test1_dr4rational(pairs8out, +oo, codec_scheme_case)
+...     _test1_dr4rational(pairs8out, -oo, codec_scheme_case)
+...     xs = _prepare_rationals(txt)
+...     # [xs :: [(int|Fraction)]]
+...     #print(xs);return
+...     for x in xs:
+...         _test1_dr4rational(pairs8out, x, codec_scheme_case)
+...         if not x == 0:
+...             _test1_dr4rational(pairs8out, -x, codec_scheme_case)
+...     return
+>>> def kept_lex_ordering(pairs, /):
+...     pairs.sort(key=fst)
+...     _pairs = sorted(pairs, key=snd)
+...     ok = (pairs == _pairs)
+...     if not ok:
+...         js = sorted(range(len(pairs)), key=lambda j:pairs[j][1])
+...         for j, k in zip(js, range(len(pairs))):
+...             if not j==k:print((j, pairs[j]))
+...     return ok
+
+>>> class ITestCodec(ABC):
+...     ___no_slots_ok___ = True
+...     @abstractmethod
+...     def _enc_(sf, x, /):
+...         'x -> str'
+...     @abstractmethod
+...     def _dec_(sf, s, /):
+...         'str -> x'
+...     @abstractmethod
+...     def prepare_(sf, s, /):
+...         'str -> Iter x # (+/-oo),(+/-x)'
+...     def _check_kwds_(sf, /, **kwds):
+...         pass
+...     def __init__(sf, /, **kwds):
+...         sf.pairs8out = []
+...         sf.kwds = kwds
+...         sf._check_kwds_(**kwds)
+...     def test1_(sf, x, /):
+...         s = sf._enc_(x)#(digits_vs_str=True, **sf.kwds)
+...         y = sf._dec_(s)#(fullmatch=True, **sf.kwds)
+...         t = (x, s)
+...         assert y == x, (t, y)
+...         #print(t)
+...         sf.pairs8out.append(t)
+...     def tests_(sf, txt, /):
+...         xs = sf.prepare_(txt)
+...         #print(xs);return
+...         for x in xs:
+...             sf.test1_(x)
+...         return
+...     def show_pairs8out_(sf, /):
+...         print('#', len(sf.pairs8out))
+...         for t in sf.pairs8out:
+...             print(t)
+...     @property
+...     def kept_lex_ordering(sf, /):
+...         '-> bool'
+...         return kept_lex_ordering([*sf.pairs8out])
+>>> class TestCodec4Rational(ITestCodec):
+...     @override
+...     def _enc_(sf, x, /):
+...         'x -> str'
+...         return encode4rational_with_inf__alnum__5over8_(x, digits_vs_str=True, **sf.kwds)
+...     @override
+...     def _dec_(sf, s, /):
+...         'str -> x'
+...         return decode4rational_with_inf__alnum__5over8_(s, fullmatch=True, **sf.kwds)
+...     @override
+...     def _check_kwds_(sf, /, *, codec_scheme_case):
+...         pass
+...     @override
+...     def prepare_(sf, s, /):
+...         yield +oo
+...         yield -oo
+...         it = map(prepare_continued_fraction_from_string_, s.split())
+...         xs = ((calc_Fraction5finite_continued_fraction_(x) if type(x) is list else x) for x in it)
+...         # [xs :: Iter (int|Fraction)]
+...         for x in xs:
+...             yield x
+...             if not x == 0:
+...                 yield -x
+>>> class TestCodec4Int(ITestCodec):
+...     @override
+...     def _enc_(sf, x, /):
+...         'x -> str'
+...         sign4zero = 0 if x else sf.sign4zero
+...         return encode4int_with_inf__alnum__5over8_(x, digits_vs_str=True, sign4zero=sign4zero, **sf.kwds)
+...     @override
+...     def _dec_(sf, s, /):
+...         'str -> x'
+...         return decode4int_with_inf__alnum__5over8_(s, fullmatch=True, **sf.kwds)
+...     @override
+...     def _check_kwds_(sf, /, *, sign4zero):
+...         sf.sign4zero = sign4zero
+...         del sf.kwds['sign4zero']
+...         pass
+...     @override
+...     def prepare_(sf, s, /):
+...         yield +oo
+...         yield -oo
+...         xs = map(int, map(eval, s.split()))
+...         # [xs :: Iter int]
+...         for x in xs:
+...             yield x
+...             if not x == 0:
+...                 yield -x
+
+
+
+
+>>> txt8int = r"""
+...     0 1 2  15 16 17
+...     34359738367
+...     34359738368
+...     """#""" #(2**35-1) (2**163835-1)
+
+>>> txt8rationals = r"""
+...     0 1 2  15 16 17
+...     34359738367
+...     34359738368
+...     [1;2]
+...     [1;1,2]
+...     [1;1,1,2]
+...     [1;1,1,1,2]
+...     [15;1,1,1,1,2]
+...     [15;1,1,1,1,1,2]
+...     [15;1,2]
+...     [15;2]
+...     [15;1,2]
+...     [16;2]
+...     [17;1,1,2]
+...     [17;1,2]
+...     [17;2]
+...     """#""" #(2**35-1) (2**163835-1)
+
+
+>>> sign4zeroZpairs8out = {}
+
+>>> sign4zero = 0 # => X
+>>> tester = TestCodec4Int(sign4zero=sign4zero)
+>>> tester.tests_(txt8int)
+>>> sign4zeroZpairs8out[sign4zero] = mk_tuple(tester.pairs8out)
+>>> tester.kept_lex_ordering
+True
+>>> tester.show_pairs8out_()
+# 17
+((+oo), 'YU')
+((-oo), 'W1')
+(0, 'X')
+(1, 'Y1')
+(-1, 'WU')
+(2, 'Y2')
+(-2, 'WT')
+(15, 'YF')
+(-15, 'WG')
+(16, 'YHG')
+(-16, 'WEF')
+(17, 'YHH')
+(-17, 'WEE')
+(34359738367, 'YNVVVVVVV')
+(-34359738367, 'W80000000')
+(34359738368, 'YP810000000')
+(-34359738368, 'W6NUVVVVVVV')
+
+>>> sign4zero = +1 # => Y0
+>>> tester = TestCodec4Int(sign4zero=sign4zero)
+>>> tester.tests_(txt8int)
+>>> sign4zeroZpairs8out[sign4zero] = mk_tuple(tester.pairs8out)
+>>> tester.kept_lex_ordering
+True
+>>> tester.show_pairs8out_()
+# 17
+((+oo), 'YU')
+((-oo), 'W1')
+(0, 'Y0')
+(1, 'Y1')
+(-1, 'WU')
+(2, 'Y2')
+(-2, 'WT')
+(15, 'YF')
+(-15, 'WG')
+(16, 'YHG')
+(-16, 'WEF')
+(17, 'YHH')
+(-17, 'WEE')
+(34359738367, 'YNVVVVVVV')
+(-34359738367, 'W80000000')
+(34359738368, 'YP810000000')
+(-34359738368, 'W6NUVVVVVVV')
+
+>>> sign4zero = -1 # => WV
+>>> tester = TestCodec4Int(sign4zero=sign4zero)
+>>> tester.tests_(txt8int)
+>>> sign4zeroZpairs8out[sign4zero] = mk_tuple(tester.pairs8out)
+>>> tester.kept_lex_ordering
+True
+>>> tester.show_pairs8out_()
+# 17
+((+oo), 'YU')
+((-oo), 'W1')
+(0, 'WV')
+(1, 'Y1')
+(-1, 'WU')
+(2, 'Y2')
+(-2, 'WT')
+(15, 'YF')
+(-15, 'WG')
+(16, 'YHG')
+(-16, 'WEF')
+(17, 'YHH')
+(-17, 'WEE')
+(34359738367, 'YNVVVVVVV')
+(-34359738367, 'W80000000')
+(34359738368, 'YP810000000')
+(-34359738368, 'W6NUVVVVVVV')
+
+
+
+
+>>> case2pairs8out = {}
+
+#.>>> pairs = []
+#.>>> _tests_dr4rational(pairs, txt8rationals, codec_scheme_case=_Case4scheme.cf_asymmetry_scheme__via_floor)
+#.>>> len(pairs)
+#.43
+#.>>> kept_lex_ordering(pairs)
+#.True
+>>> codec_scheme_case = _Case4scheme.cf_asymmetry_scheme__via_floor
+>>> tester = TestCodec4Rational(codec_scheme_case=codec_scheme_case)
+>>> tester.tests_(txt8rationals)
+>>> case2pairs8out[codec_scheme_case] = mk_tuple(tester.pairs8out)
+>>> tester.kept_lex_ordering
+True
+>>> tester.show_pairs8out_()
+# 43
+((+oo), 'YU')
+((-oo), 'W1')
+(0, 'X1')
+(1, 'Y11')
+(-1, 'WU1')
+(2, 'Y21')
+(-2, 'WT1')
+(15, 'YF1')
+(-15, 'WG1')
+(16, 'YHG1')
+(-16, 'WEF1')
+(17, 'YHH1')
+(-17, 'WEE1')
+(34359738367, 'YNVVVVVVV1')
+(-34359738367, 'W800000001')
+(34359738368, 'YP8100000001')
+(-34359738368, 'W6NUVVVVVVV1')
+(Fraction(3, 2), 'Y1UU')
+(Fraction(-3, 2), 'WTUU')
+(Fraction(5, 3), 'Y1V11')
+(Fraction(-5, 3), 'WTTU')
+(Fraction(8, 5), 'Y1V0UU')
+(Fraction(-8, 5), 'WTU11')
+(Fraction(13, 8), 'Y1V0V11')
+(Fraction(-13, 8), 'WTU0UU')
+(Fraction(203, 13), 'YFV0V0UU')
+(Fraction(-203, 13), 'WEFU0V11')
+(Fraction(328, 21), 'YFV0V0V11')
+(Fraction(-328, 21), 'WEFU0V0UU')
+(Fraction(47, 3), 'YFV11')
+(Fraction(-47, 3), 'WEFTU')
+(Fraction(31, 2), 'YFUU')
+(Fraction(-31, 2), 'WEFUU')
+(Fraction(47, 3), 'YFV11')
+(Fraction(-47, 3), 'WEFTU')
+(Fraction(33, 2), 'YHGUU')
+(Fraction(-33, 2), 'WEEUU')
+(Fraction(88, 5), 'YHHV0UU')
+(Fraction(-88, 5), 'WEDU11')
+(Fraction(53, 3), 'YHHV11')
+(Fraction(-53, 3), 'WEDTU')
+(Fraction(35, 2), 'YHHUU')
+(Fraction(-35, 2), 'WEDUU')
+
+部分分母统一偏移一:之前:
+!! 『cf[-1] -= 2』
+=> bug:违反词典序:
+    [5/3==cf[1;1,2] > cf[1;1,1,2]==8/5]
+    [[1,0,0] < cf[1;0,0,0]]
+(4, (Fraction(-88, 5), 'WEDU01'))
+(3, (Fraction(-53, 3), 'WEDUU'))
+(12, (Fraction(-203, 13), 'WEFU0V01'))
+(11, (Fraction(-328, 21), 'WEFU0V0VU'))
+(9, (Fraction(-47, 3), 'WEFUU'))
+(10, (Fraction(-47, 3), 'WEFUU'))
+(18, (Fraction(-8, 5), 'WTU01'))
+(16, (Fraction(-5, 3), 'WTUU'))
+(26, (Fraction(5, 3), 'Y1V01'))
+(25, (Fraction(13, 8), 'Y1V0V01'))
+(24, (Fraction(8, 5), 'Y1V0VU'))
+(23, (Fraction(3, 2), 'Y1VU'))
+(32, (Fraction(47, 3), 'YFV01'))
+(33, (Fraction(47, 3), 'YFV01'))
+(30, (Fraction(203, 13), 'YFV0V0VU'))
+(29, (Fraction(31, 2), 'YFVU'))
+(39, (Fraction(53, 3), 'YHHV01'))
+(37, (Fraction(35, 2), 'YHHVU'))
+
+
+
+
+#.>>> pairs = []
+#.>>> _tests_dr4rational(pairs, txt8rationals, codec_scheme_case=_Case4scheme.cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc)
+#.>>> len(pairs)
+#.43
+#.>>> kept_lex_ordering(pairs)
+#.True
+>>> codec_scheme_case = _Case4scheme.cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc
+>>> tester = TestCodec4Rational(codec_scheme_case=codec_scheme_case)
+>>> tester.tests_(txt8rationals)
+>>> case2pairs8out[codec_scheme_case] = mk_tuple(tester.pairs8out)
+>>> tester.kept_lex_ordering
+True
+>>> tester.show_pairs8out_()
+# 43
+((+oo), 'YU')
+((-oo), 'W1')
+(0, 'X')
+(1, 'Y21')
+(-1, 'WTU')
+(2, 'Y31')
+(-2, 'WSU')
+(15, 'YHG1')
+(-15, 'WEFU')
+(16, 'YHH1')
+(-16, 'WEEU')
+(17, 'YHI1')
+(-17, 'WEDU')
+(34359738367, 'YP8100000001')
+(-34359738367, 'W6NUVVVVVVVU')
+(34359738368, 'YP8100000011')
+(-34359738368, 'W6NUVVVVVVUU')
+(Fraction(3, 2), 'Y2UU')
+(Fraction(-3, 2), 'WT11')
+(Fraction(5, 3), 'Y2V11')
+(Fraction(-5, 3), 'WT0UU')
+(Fraction(8, 5), 'Y2V0UU')
+(Fraction(-8, 5), 'WT0V11')
+(Fraction(13, 8), 'Y2V0V11')
+(Fraction(-13, 8), 'WT0V0UU')
+(Fraction(203, 13), 'YHGV0V0UU')
+(Fraction(-203, 13), 'WEF0V0V11')
+(Fraction(328, 21), 'YHGV0V0V11')
+(Fraction(-328, 21), 'WEF0V0V0UU')
+(Fraction(47, 3), 'YHGV11')
+(Fraction(-47, 3), 'WEF0UU')
+(Fraction(31, 2), 'YHGUU')
+(Fraction(-31, 2), 'WEF11')
+(Fraction(47, 3), 'YHGV11')
+(Fraction(-47, 3), 'WEF0UU')
+(Fraction(33, 2), 'YHHUU')
+(Fraction(-33, 2), 'WEE11')
+(Fraction(88, 5), 'YHIV0UU')
+(Fraction(-88, 5), 'WED0V11')
+(Fraction(53, 3), 'YHIV11')
+(Fraction(-53, 3), 'WED0UU')
+(Fraction(35, 2), 'YHIUU')
+(Fraction(-35, 2), 'WED11')
+
+
+
+
+#.>>> pairs = []
+#.>>> _tests_dr4rational(pairs, txt8rationals, codec_scheme_case=_Case4scheme.cf_symmetry_scheme__via_trunc_using_signed_zero)
+#.>>> len(pairs)
+#.43
+#.>>> kept_lex_ordering(pairs)
+#.True
+>>> codec_scheme_case = _Case4scheme.cf_symmetry_scheme__via_trunc_using_signed_zero
+>>> tester = TestCodec4Rational(codec_scheme_case=codec_scheme_case)
+>>> tester.tests_(txt8rationals)
+>>> case2pairs8out[codec_scheme_case] = mk_tuple(tester.pairs8out)
+>>> tester.kept_lex_ordering
+True
+>>> tester.show_pairs8out_()
+# 43
+((+oo), 'YU')
+((-oo), 'W1')
+(0, 'X')
+(1, 'Y11')
+(-1, 'WUU')
+(2, 'Y21')
+(-2, 'WTU')
+(15, 'YF1')
+(-15, 'WGU')
+(16, 'YHG1')
+(-16, 'WEFU')
+(17, 'YHH1')
+(-17, 'WEEU')
+(34359738367, 'YNVVVVVVV1')
+(-34359738367, 'W80000000U')
+(34359738368, 'YP8100000001')
+(-34359738368, 'W6NUVVVVVVVU')
+(Fraction(3, 2), 'Y1UU')
+(Fraction(-3, 2), 'WU11')
+(Fraction(5, 3), 'Y1V11')
+(Fraction(-5, 3), 'WU0UU')
+(Fraction(8, 5), 'Y1V0UU')
+(Fraction(-8, 5), 'WU0V11')
+(Fraction(13, 8), 'Y1V0V11')
+(Fraction(-13, 8), 'WU0V0UU')
+(Fraction(203, 13), 'YFV0V0UU')
+(Fraction(-203, 13), 'WG0V0V11')
+(Fraction(328, 21), 'YFV0V0V11')
+(Fraction(-328, 21), 'WG0V0V0UU')
+(Fraction(47, 3), 'YFV11')
+(Fraction(-47, 3), 'WG0UU')
+(Fraction(31, 2), 'YFUU')
+(Fraction(-31, 2), 'WG11')
+(Fraction(47, 3), 'YFV11')
+(Fraction(-47, 3), 'WG0UU')
+(Fraction(33, 2), 'YHGUU')
+(Fraction(-33, 2), 'WEF11')
+(Fraction(88, 5), 'YHHV0UU')
+(Fraction(-88, 5), 'WEE0V11')
+(Fraction(53, 3), 'YHHV11')
+(Fraction(-53, 3), 'WEE0UU')
+(Fraction(35, 2), 'YHHUU')
+(Fraction(-35, 2), 'WEE11')
+
+######################
+#TODO:test:incremental_decode4int_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
+#TODO:test:incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
+sign4zeroZpairs8out
+case2pairs8out
+>>> class ITestIncDecode(ABC):
+...     ___no_slots_ok___ = True
+...     @abstractmethod
+...     def _inc_dec_(sf, may_wst7inc, tokens, /):
+...         'may wst7inc -> Iter token -> may wresult7inc'
+...     def _check_kwds_(sf, /, **kwds):
+...         pass
+...     def __init__(sf, /, **kwds):
+...         #sf.pairs8ans = mk_tuple(pairs8ans)
+...         sf.kwds = kwds
+...         sf._check_kwds_(**kwds)
+...     def test1_(sf, x, s, /):
+...         may_wst7inc = None
+...         szs = (sz for j in range(1,1+len(s)) for sz in [0, j])
+...         end = 0
+...         for sz in szs:
+...             begin, end = end, end+sz
+...             may_wresult7inc = sf._inc_dec_(may_wst7inc, iter(s[begin:end]))
+...             if may_wresult7inc is None:
+...                 assert may_wst7inc is None
+...                 continue
+...             wresult7inc = may_wresult7inc
+...             if not wresult7inc.to_be_continued:break
+...             may_wst7inc = wresult7inc.wst7inc
+...             assert not None is may_wst7inc
+...         else:
+...             raise Exception(x, s)
+...         (oresult, rxdigit8remain, total_num_digits7feed) = wresult7inc.ext_oresult
+...         y = oresult
+...         t = (x, s)
+...         assert y == x, (t, y)
+...         assert rxdigit8remain.is_null, (t, y)
+...         assert total_num_digits7feed == len(s), (t, y)
+...         assert [] == [*wresult7inc.iter_digits8remain], (t, y)
+...     def tests_(sf, pairs8ans, /):
+...         for x, s in pairs8ans:
+...             sf.test1_(x, s)
+...         return
+>>> class TestIncDecode4Int(ITestIncDecode):
+...     @override
+...     def _inc_dec_(sf, may_wst7inc, tokens, /):
+...         'may wst7inc -> Iter token -> may wresult7inc'
+...         return incremental_decode4int_with_inf__alnum__5over8_(may_wst7inc, tokens, **sf.kwds, empty_ok=True)
+>>> class TestIncDecode4Rational(ITestIncDecode):
+...     @override
+...     def _inc_dec_(sf, may_wst7inc, tokens, /):
+...         'may wst7inc -> Iter token -> may wresult7inc'
+...         return incremental_decode4rational_with_inf__alnum__5over8_(may_wst7inc, tokens, **sf.kwds, empty_ok=True)
+...     @override
+...     def _check_kwds_(sf, /, *, codec_scheme_case):
+...         pass
+
+
+>>> for sign4zero in sign4zeroZpairs8out:
+...     tester = TestIncDecode4Int()#(sign4zero=sign4zero)
+...     tester.tests_(sign4zeroZpairs8out[sign4zero])
+
+>>> for codec_scheme_case in case2pairs8out:
+...     tester = TestIncDecode4Rational(codec_scheme_case=codec_scheme_case)
+...     tester.tests_(case2pairs8out[codec_scheme_case])
+
+
+
+
+
+
+
+
+
+######################
 py_adhoc_call   seed.int_tools.StepDecoder   @f
 from seed.int_tools.StepDecoder import *
 ]]]'''#'''
@@ -585,16 +1167,18 @@ IExtendedOutResult7incremental_decode
     ExtendedOutResult7incremental_decode
 
 incremental_decode4int_with_inf__alnum__5over8_
-encode4int_with_inf__alnum__5over8_
-    iter_encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
     gmk_step_decoder4int_with_inf__alnum__5over8_
+encode4int_with_inf__alnum__5over8_
+    iter_encode4int_with_inf__alnum__5over8_
+        sign_of_
 
 incremental_decode4rational_with_inf__alnum__5over8_
-encode4rational_with_inf__alnum__5over8_
-    iter_encode4rational_with_inf__alnum__5over8_
 decode4rational_with_inf__alnum__5over8_
     gmk_step_decoder4rational_with_inf__alnum__5over8_
+encode4rational_with_inf__alnum__5over8_
+    iter_encode4rational_with_inf__alnum__5over8_
+CodecSchemeCase4StepDecoder4Rational
 
 IDecoder__token_seq
     Exception__nonnull_remain
@@ -655,6 +1239,7 @@ IStepDecoder
             StepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits
     IStepDecoder__fixed_radix4macro_header
         IStepDecoder__skip_macro_header
+            StepDecoder__skip_macro_header
         IStepDecoder__extend_macro_header
         IStepDecoder__parallel__partition_space4macro_header
     IStepDecoder__constant_oresult
@@ -725,6 +1310,14 @@ IStepDecoder__rational_with_inf
 
 
 
+
+
+
+
+
+
+
+
 IStepDecoder__hardwired__prefix_tree
     StepDecoder__hardwired__prefix_tree
     fill_prefix_tree_
@@ -749,9 +1342,16 @@ max_digit5num_bits_
     #IStepDecoder__fixed_size_layers
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.for_libs.for_importlib__reload import clear_later_variables_if_reload_
+clear_later_variables_if_reload_(globals(), '')
+from numbers import Rational
+#Rational.as_integer_ratio
+#   AttributeError: type object 'Rational' has no attribute 'as_integer_ratio'
+Rational.numerator
+Rational.denominator
 from operator import __neg__
 from functools import cached_property
-from itertools import islice
+from itertools import islice, chain
 from itertools import accumulate
 #accumulate(iterable, func=None, *, initial=None)
 from bisect import bisect_right
@@ -786,49 +1386,46 @@ from seed.int_tools.DigitReader import IDigitReader# IDigitReader5iter, IDigitRe
 #from seed.int_tools.count_num_leading1s import count_num_leading1s_, count_num_leading1s_ex_
 
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_,echo', __name__)
-if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_,echo
-lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,concat_digits2bytes_,concat_digits2iter_bytess_', __name__)
-if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
+#if not 'lazy_import4func_' in globals():
+if 1:
+    from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+    repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
+    lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_,echo', __name__)
+    if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_,echo
+    lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,concat_digits2bytes_,concat_digits2iter_bytess_', __name__)
+    if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
 
-ceil_div = lazy_import4func_('seed.math.floor_ceil', 'ceil_div', __name__)
-#from seed.math.floor_ceil import ceil_div
+    ceil_div = lazy_import4func_('seed.math.floor_ceil', 'ceil_div', __name__)
+    #from seed.math.floor_ceil import ceil_div
 
-uint5radix_repr_ = lazy_import4func_('seed.int_tools.digits.uint25radix_repr', 'uint5radix_repr_', __name__)
-#from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
+    uint5radix_repr_ = lazy_import4func_('seed.int_tools.digits.uint25radix_repr', 'uint5radix_repr_', __name__)
+    #from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
 
-rglnkls2reversed_iterable = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls2reversed_iterable', __name__)
-#from seed.data_funcs.lnkls import rglnkls2reversed_iterable
+    rglnkls2reversed_iterable = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls2reversed_iterable', __name__)
+    #from seed.data_funcs.lnkls import rglnkls2reversed_iterable
 
-calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction_fold', 'calc_Fraction5finite_continued_fraction_', __name__)
-#from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
+    calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction_fold', 'calc_Fraction5finite_continued_fraction_', __name__)
+    #from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
 
-iter_continued_fraction_digits5ND_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction5ND', 'iter_continued_fraction_digits5ND_', __name__)
-#from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+    iter_continued_fraction_digits5ND_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction5ND', 'iter_continued_fraction_digits5ND_', __name__)
+    #from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
 
-uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
-#from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
-from numbers import Rational
-#Rational.as_integer_ratio
-#   AttributeError: type object 'Rational' has no attribute 'as_integer_ratio'
-Rational.numerator
-Rational.denominator
+    uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
+    #from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
 
-mk_seq_rng = lazy_import4func_('seed.seq_tools.mk_seq_rng', 'mk_seq_rng', __name__)
-#from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+    mk_seq_rng = lazy_import4func_('seed.seq_tools.mk_seq_rng', 'mk_seq_rng', __name__)
+    #from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
 
 
-lazy_import4func_('seed.int_tools.DigitReader', 'DigitReader5iter', __name__, 'mk_DigitReader5iter')
-if 0:from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
-mk_DigitReader5iter
+    lazy_import4func_('seed.int_tools.DigitReader', 'DigitReader5iter', __name__, 'mk_DigitReader5iter')
+    if 0:from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
+    mk_DigitReader5iter
 
-mk_Rope = lazy_import4func_('seed.types.Rope', 'mk_Rope', __name__)
-lazy_import4func_('seed.types.Rope', 'Rope', __name__, '_Rope')
-if 0:from seed.types.Rope import mk_Rope, Rope as _Rope
-_Rope
-#[iter_subseq__opaque_,iter_subseq__transparent_] = lazy_import4funcs_('seed.iters.iter_subseq', 'iter_subseq__opaque_,iter_subseq__transparent_', __name__)
+    mk_Rope = lazy_import4func_('seed.types.Rope', 'mk_Rope', __name__)
+    lazy_import4func_('seed.types.Rope', 'Rope', __name__, '_Rope')
+    if 0:from seed.types.Rope import mk_Rope, Rope as _Rope
+    _Rope
+    #[iter_subseq__opaque_,iter_subseq__transparent_] = lazy_import4funcs_('seed.iters.iter_subseq', 'iter_subseq__opaque_,iter_subseq__transparent_', __name__)
 
 ___end_mark_of_excluded_global_names__0___ = ...
 __all__
@@ -1082,13 +1679,14 @@ class CallState4StepDecoder__plain(_BaseCallState4StepDecoder__plain, ICallState
     #@override
     is_tail_call_st = False
     @classmethod
-    def mk_call_st5four_args_(cls, case, payload, step_decoder4call, state4call__or__rxdigit8macro_header, /, *, state_vs_rxdigit=False):
+    def mk_call_st5four_args_(cls, case, payload, step_decoder4call, state4call__or__rxdigit8macro_header, /, *, state_vs_rxdigit=False, extra_kwds4start={}):
         '-> call_st # [[cls is CallState4StepDecoder__plain] => [return nontail_call_st]] #subclass may be tail_call_st'
         if not state_vs_rxdigit:
             state4call = state4call__or__rxdigit8macro_header
+            if extra_kwds4start:raise TypeError
         else:
             rxdigit8macro_header = state4call__or__rxdigit8macro_header
-            state4call = step_decoder4call.start_(rxdigit8macro_header)
+            state4call = step_decoder4call.start_(rxdigit8macro_header, **extra_kwds4start)
         state4call
 
         cased_data = Cased(case, payload)
@@ -1237,6 +1835,10 @@ class IStepDecoder(ABC):
     #.    '-> bool'
     #.    return sf.forbidden_final_loop_st and sf.forbidden_nonfinal_loop_st
     ######################
+    @property
+    @abstractmethod
+    def emay_radix_info4macro_header(sf, /):
+        '-> emay IRadixInfo{radix>=2}'
     @property
     @abstractmethod
     def radix_info4digit(sf, /):
@@ -1473,6 +2075,10 @@ class IStepDecoder__wrapper(IStepDecoder):
     ######################
     @cached_property
     @override
+    def emay_radix_info4macro_header(sf, /):
+        return sf.the_wrapped_step_decoder.emay_radix_info4macro_header
+    @cached_property
+    @override
     def radix_info4digit(sf, /):
         '-> IRadixInfo{radix>=2}'
         return sf.the_wrapped_step_decoder.radix_info4digit
@@ -1619,7 +2225,7 @@ check_non_ABC(StepDecoder__flatten)
 ######################
 #######
 class IWrappedResult7incremental_decode(ABC):
-    'wresult7inc # for .to_be_continued'
+    'wresult7inc # for .to_be_continued .imay_num_required_digits'
     __slots__ = ()
     ######################
     # [wresult7inc :: ((Either wst7inc ext_oresult), num_digits7read, iter_digits8remain)]
@@ -1638,13 +2244,29 @@ class IWrappedResult7incremental_decode(ABC):
         '-> (Iterator digit)'
     ######################
     @cached_property
-    def to_be_continued(sf, /):
-        '-> bool{has no oresult yet}'
+    def imay_num_required_digits(sf, /):
+        '-> int{>=-1} # [-1=>ext_oresult;0=>is_final_st]'
         x = sf.either__wst7inc__ext_oresult
-        return x.is_left and not x.left.to_be_continued
+        return x.left.num_required_digits if x.is_left else -1
+    @cached_property
+    def to_be_continued(sf, /):
+        '-> bool{has no ext_oresult yet}'
+        x = sf.either__wst7inc__ext_oresult
+        return x.is_left
+    ######################
+    @property
+    def wst7inc(sf, /):
+        '-> IWrappedState7incremental_decode|^AttributeError'
+        x = sf.either__wst7inc__ext_oresult
+        return x.left
+    @property
+    def ext_oresult(sf, /):
+        '-> ExtendedOutResult7incremental_decode|^AttributeError'
+        x = sf.either__wst7inc__ext_oresult
+        return x.right
     ######################
 class IWrappedState7incremental_decode(ABC):
-    'wst7inc # for .to_be_continued'
+    'wst7inc # for .num_required_digits'
     __slots__ = ()
     ######################
     # [wst7inc :: (call_entry7flatten, total_num_digits7feed, digit_rope8remain6EOF)]
@@ -1668,9 +2290,9 @@ class IWrappedState7incremental_decode(ABC):
         '  # => [[len(digit_rope8remain6EOF) > 0] -> [not wst7inc[0].state.is_final_st]]'
     ######################
     @cached_property
-    def to_be_continued(sf, /):
-        '-> bool{has no oresult yet}'
-        return not sf.call_entry7flatten.state.is_final_st
+    def num_required_digits(sf, /):
+        '-> uint'
+        return not sf.call_entry7flatten.state.num_required_digits
     ######################
 class IExtendedOutResult7incremental_decode(ABC):
     'ext_oresult'
@@ -1730,8 +2352,8 @@ def incremental_decode__init5head_(step_decoder, rxdigit8macro_header, /, wst7in
     st = step_decoder.start_(rxdigit8macro_header)
     return incremental_decode__init5state_(step_decoder, st, total_num_digits7feed:=1, wst7inc_vs_wresult7inc=wst7inc_vs_wresult7inc)
 #######
-def prepare_step_decoder4incremental_decode_(step_decoder, /):
-    'IStepDecoder -> IStepDecoder{.forbidden_call_st==True} #see:incremental_decode__init5state_,mk_incremental_decode5ops4iter_headed_digits_'
+def prepare_step_decoder4incremental_decode_(step_decoder, may_st, /):
+    'IStepDecoder -> may st/IBaseState4StepDecoder -> (IStepDecoder{.forbidden_call_st==True}, may st) #see:incremental_decode__init5state_,mk_incremental_decode5ops4iter_headed_digits_'
     #.if not isinstance(step_decoder, IStepDecoder__flatten):
         #why not:IStepDecoder__without_subcall
     #if not step_decoder.recursive_forbidden_nontail_call_st_and_postprocess:
@@ -1739,15 +2361,19 @@ def prepare_step_decoder4incremental_decode_(step_decoder, /):
         #why not:IStepDecoder__recursive_without_nontail_call_and_postprocess
         #   !! complex code
         step_decoder = StepDecoder__flatten(step_decoder)
-        st = step_decoder.mk_start_state7flatten_(st)
+        if not may_st is None:
+            st = may_st
+            st = step_decoder.mk_start_state7flatten_(st)
+            may_st = st
+        may_st
         # [step_decoder :: IStepDecoder__flatten]
     # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
-    return step_decoder
+    return (step_decoder, may_st)
 #######
 def incremental_decode__init5state_(step_decoder, st, total_num_digits7feed, /, wst7inc_vs_wresult7inc:bool):
     'IStepDecoder -> IBaseState4StepDecoder -> total_num_digits7feed/uint{>=1} -> (wst7inc if not wst7inc_vs_wresult7inc else wresult7inc) #see:incremental_decode__continued_'
     check_int_ge(1, total_num_digits7feed)
-    step_decoder = prepare_step_decoder4incremental_decode_(step_decoder)
+    step_decoder, st = prepare_step_decoder4incremental_decode_(step_decoder, st)
     # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
     if not st.is_loop_st:raise Exception(step_decoder, st)
     loop_st = st
@@ -1795,7 +2421,8 @@ def incremental_decode__continued_(wst7inc, digits8partial_body, /):
     if not loop_st.is_loop_st:raise Exception(call_entry7flatten)
 
     def _4final(loop_st7final, /):
-        ext_oresult = _ExOutRes7inc(loop_st7final.oresult, loop_st7final.rxdigit8remain, total_num_digits7feed)
+        [oresult] = loop_st7final.tmay_oresult
+        ext_oresult = _ExOutRes7inc(oresult, loop_st7final.rxdigit8remain, total_num_digits7feed)
         wresult7inc = _WRes7inc(mk_Right(ext_oresult), num_digits7read, iter_digits8remain:=it)
         return wresult7inc
 
@@ -1867,47 +2494,52 @@ def incremental_decode__continued_(wst7inc, digits8partial_body, /):
     raise 000
 #end-def incremental_decode__continued_(wst7inc, digits8partial_body, /):
 #######
-def incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header, /):
-    'IStepDecoder -> iterable([rxdigit8macro_header/IRadixedDigit;digit8body_cell/uint,...]) -> wresult7inc # see:IOps4IterDigitsWithHeadCell,incremental_decode__continued_'
+def incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header, /, *, empty_ok=False):
+    'IStepDecoder -> iterable([rxdigit8macro_header/IRadixedDigit;digit8body_cell/uint,...]) -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]} # see:IOps4IterDigitsWithHeadCell,incremental_decode__continued_'
     it = digits_with_rxdigit8macro_header = iter(digits_with_rxdigit8macro_header)
     for rxdigit8macro_header in it:
         break
     else:
+        if empty_ok:
+            may_wresult7inc = None
+            return may_wresult7inc
         raise 000
     wst7inc = incremental_decode__init5head_(step_decoder, rxdigit8macro_header, wst7inc_vs_wresult7inc=False)
     wresult7inc = incremental_decode__continued_(wst7inc, digits8partial_body:=it)
-    return wresult7inc
+    may_wresult7inc = wresult7inc
+    return may_wresult7inc
 #end-def incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header, /):
 #######
-def incremental_decode__ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, may_wst7inc, tokens, /):
-    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> may wst7inc -> Iter token -> wresult7inc # see:Ops4IterDigitsWithHeadCell__functional,incremental_decode__continued_,iter_subseq__opaque_,iter_subseq__transparent_'
+def incremental_decode__ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, may_wst7inc, tokens, /, *, empty_ok=False):
+    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> may wst7inc -> Iter token -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]} # see:Ops4IterDigitsWithHeadCell__functional,incremental_decode__continued_,iter_subseq__opaque_,iter_subseq__transparent_'
     if may_wst7inc is None:
-        digits_with_rxdigit8macro_header = ops4iter_headed_digits.iter_(tokens)
-        wresult7inc = incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header)
+        digits_with_rxdigit8macro_header = ops4iter_headed_digits.iter_(tokens, empty_ok=True)
+        may_wresult7inc = incremental_decode__headed_digits_(step_decoder, digits_with_rxdigit8macro_header, empty_ok=empty_ok)
     else:
         wst7inc = may_wst7inc
         digits8partial_body = ops4iter_headed_digits.iter4body_only_(tokens)
         wresult7inc = incremental_decode__continued_(wst7inc, digits8partial_body)
-    return wresult7inc
+        may_wresult7inc = wresult7inc
+    return may_wresult7inc
 #######
 def mk_incremental_decode5ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, /):
-    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> incremental_decode__tokens_/(may wst7inc -> Iter token -> wresult7inc) # see:Ops4IterDigitsWithHeadCell__functional,incremental_decode__continued_,iter_subseq__opaque_,iter_subseq__transparent_'
+    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> incremental_decode__tokens_/(may wst7inc -> Iter token -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]}) # see:Ops4IterDigitsWithHeadCell__functional,incremental_decode__continued_,iter_subseq__opaque_,iter_subseq__transparent_'
     incremental_decode__tokens_ = Mkr4incremental_decode5ops4iter_headed_digits(step_decoder, ops4iter_headed_digits)
     return incremental_decode__tokens_
     #######old_ver:
-    step_decoder = prepare_step_decoder4incremental_decode_(step_decoder)
+    step_decoder, _ = prepare_step_decoder4incremental_decode_(step_decoder, None)
     # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
-    def incremental_decode__tokens_(may_wst7inc, tokens, /):
-        'may wst7inc -> Iter token -> wresult7inc'
-        return incremental_decode__ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, may_wst7inc, tokens)
+    def incremental_decode__tokens_(may_wst7inc, tokens, /, *, empty_ok=False):
+        'may wst7inc -> Iter token -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]}'
+        return incremental_decode__ops4iter_headed_digits_(step_decoder, ops4iter_headed_digits, may_wst7inc, tokens, empty_ok=empty_ok)
     return incremental_decode__tokens_
 #######
 class Mkr4incremental_decode5ops4iter_headed_digits:
-    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> incremental_decode__tokens_/(may wst7inc -> Iter token -> wresult7inc) # see:mk_incremental_decode5ops4iter_headed_digits_'
+    'IStepDecoder -> IOps4IterDigitsWithHeadCell{token} -> incremental_decode__tokens_/(may wst7inc -> Iter token -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]}) # see:mk_incremental_decode5ops4iter_headed_digits_'
     def __init__(sf, step_decoder, ops4iter_headed_digits, /):
         check_type_le(IStepDecoder, step_decoder)
         check_type_le(IOps4IterDigitsWithHeadCell, ops4iter_headed_digits)
-        step_decoder = prepare_step_decoder4incremental_decode_(step_decoder)
+        step_decoder, _ = prepare_step_decoder4incremental_decode_(step_decoder, None)
         # [step_decoder :: IStepDecoder{.forbidden_call_st==True}]
         sf._dr = step_decoder
         sf._ops = ops4iter_headed_digits
@@ -1919,9 +2551,9 @@ class Mkr4incremental_decode5ops4iter_headed_digits:
     @property
     def ops4iter_headed_digits(sf, /):
         return sf._ops
-    def __call__(sf, may_wst7inc, tokens, /):
-        'may wst7inc -> Iter token -> wresult7inc'
-        return incremental_decode__ops4iter_headed_digits_(sf.step_decoder, sf.ops4iter_headed_digits, may_wst7inc, tokens)
+    def __call__(sf, may_wst7inc, tokens, /, *, empty_ok=False):
+        'may wst7inc -> Iter token -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]}'
+        return incremental_decode__ops4iter_headed_digits_(sf.step_decoder, sf.ops4iter_headed_digits, may_wst7inc, tokens, empty_ok=empty_ok)
 #end-class Mkr4incremental_decode5ops4iter_headed_digits:
 
 
@@ -1954,11 +2586,11 @@ class IOps4IterDigitsWithHeadCell(ABC):
         '-> may (token -> digit8body_cell)'
     ######################
     @cached_property
-    def token2head_digit_(sf, token, /):
+    def token2head_digit_(sf, /):
         '-> (token -> digit8macro_header)'
         return f if not None is (f:=sf.may_token2head_digit_) else echo(0) or echo
     @cached_property
-    def token2body_digit_(sf, token, /):
+    def token2body_digit_(sf, /):
         '-> (token -> digit8body_cell)'
         return f if not None is (f:=sf.may_token2body_digit_) else echo(0) or echo
     ######################
@@ -1968,12 +2600,13 @@ class IOps4IterDigitsWithHeadCell(ABC):
         if not None is (f:=sf.may_token2body_digit_):
             it = map(f, it)
         return it
-    def iter_(sf, tokens, /):
+    def iter_(sf, tokens, /, *, empty_ok=False):
         'Iter token -> iter([rxdigit8macro_header/IRadixedDigit;digit8body_cell/uint,...])'
         it = tokens = iter(tokens)
         for token in it:
             break
         else:
+            if empty_ok:return
             raise 000
         digit8H = sf.token2head_digit_(token)
         radix_info4H = sf.radix_info4macro_header
@@ -2463,6 +3096,11 @@ class IStepDecoder__fixed_radix4macro_header(IStepDecoder):
         '-> uint{>=1} # [radix4macro_header == start_()::rxdigit8macro_header.radix_info.radix]'
         return sf.radix_info4macro_header.radix
     ######################
+    @cached_property
+    @override
+    def emay_radix_info4macro_header(sf, /):
+        return sf.radix_info4macro_header
+    ######################
     @abstractmethod
     @override#update:__doc__
     def start_(sf, rxdigit8macro_header, /):
@@ -2543,7 +3181,7 @@ class IStepDecoder__parallel__partition_space4macro_header(IStepDecoder__fixed_r
         return sf.child_step_decoder_seq[0].radix_info4digit
     @override
     def start_(sf, rxdigit8macro_header, /):
-        assert rxdigit8macro_header.radix_info.radix == sf.radix4macro_header
+        assert rxdigit8macro_header.radix_info.radix == sf.radix4macro_header, (rxdigit8macro_header, sf.radix4macro_header)
         digit = rxdigit8macro_header.digit
         check_int_ge(0, digit)
         accumulated_radix_seq = sf.accumulated_radix_seq
@@ -2693,9 +3331,23 @@ class IStepDecoder__init_radix_info4digit(IStepDecoder):
         return sf._ri
     ######################
 #end-class IStepDecoder__init_radix_info4digit(IStepDecoder):
+class StepDecoder__skip_macro_header(IStepDecoder__skip_macro_header):
+    ___no_slots_ok___ = True
+    def __init__(sf, step_decoder, /):
+        sf._dr = step_decoder
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.the_wrapped_step_decoder)
+    ######################
+    @property
+    @override
+    def the_wrapped_step_decoder(sf, /):
+        return sf._dr
+check_non_ABC(StepDecoder__skip_macro_header)
 
 class StepDecoder__dynamic_bibits(IStepDecoder__init_radix_info4digit, IStepDecoder__dynamic_bibits):
     ___no_slots_ok___ = True
+    #@override
+    emay_radix_info4macro_header = ...
 check_non_ABC(StepDecoder__dynamic_bibits)
 ['radix_info4digit']
 
@@ -2709,6 +3361,8 @@ class StepDecoder__dynamic_bits(IStepDecoder__dynamic_bits):
     def __repr__(sf, /):
         return repr_helper(sf, sf.radix_info4digit, sf.imay_max_num_bits4read)
     ######################
+    #@override
+    emay_radix_info4macro_header = ...
     @property
     @override
     def radix_info4digit(sf, /):
@@ -2748,6 +3402,8 @@ class StepDecoder__constant_oresult(IStepDecoder__constant_oresult):
     def __repr__(sf, /):
         return repr_helper(sf, sf.radix_info4digit, sf.oresult)
     ######################
+    #@override
+    emay_radix_info4macro_header = ...
     @property
     @override
     def radix_info4digit(sf, /):
@@ -2818,6 +3474,8 @@ class StepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits(IStepDecoder__
     def __repr__(sf, /):
         return repr_helper(sf, sf.radix_info4digit, sf.imay_max_num_bits4read)
     ######################
+    #@override
+    emay_radix_info4macro_header = ...
     @property
     @override
     def radix_info4digit(sf, /):
@@ -3022,6 +3680,10 @@ class IStepDecoder__fixed_size_layers__functional(IStepDecoder):
     ######################
     @cached_property
     @override
+    def emay_radix_info4macro_header(sf, /):
+        return sf.step_decoder4fixed_size_xbcells4zeroth_layer.emay_radix_info4macro_header
+    @cached_property
+    @override
     def radix_info4digit(sf, /):
         return sf.step_decoder4fixed_size_xbcells4zeroth_layer.radix_info4digit
     ######################
@@ -3128,6 +3790,8 @@ class StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval(
     def __repr__(sf, /):
         return repr_helper(sf, sf.radix_info4digit, sf.offset4macro_header)
     ######################
+    #@override
+    emay_radix_info4macro_header = ...
     @property
     @override
     def radix_info4digit(sf, /):
@@ -3142,6 +3806,8 @@ check_non_ABC(StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_i
 _BaseStepDecoder__fixed_size_xbcells = mk_namedtuple__check6make_(__name__, 'BaseStepDecoder__fixed_size_xbcells', 'radix_info4digit offset4macro_header macro_header_extra num_xbcells4read is_xbcell_bit')
 class StepDecoder__fixed_size_xbcells(_BaseStepDecoder__fixed_size_xbcells, IStepDecoder__fixed_size_xbcells):
     ___no_slots_ok___ = True
+    #@override
+    emay_radix_info4macro_header = ...
     def _check6make_(sf, /):
         check_radix_info4digit(sf.radix_info4digit)
         check_int_ge(0, sf.offset4macro_header)
@@ -3149,7 +3815,7 @@ class StepDecoder__fixed_size_xbcells(_BaseStepDecoder__fixed_size_xbcells, ISte
         check_int_ge(0, sf.num_xbcells4read)
         check_type_is(bool, sf.is_xbcell_bit)
 check_non_ABC(StepDecoder__fixed_size_xbcells)
-
+['emay_radix_info4macro_header']
 
 uint_linear_transform8echo = UIntLinearTransform(1, 0)
 StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
@@ -3179,7 +3845,9 @@ class IStepDecoder__fixed_size_layers__body4infinite_uint_interval(IStepDecoder_
 #end-class IStepDecoder__fixed_size_layers__body4infinite_uint_interval(IStepDecoder__fixed_size_layers__functional):
 assert not hasattr(IStepDecoder__fixed_size_layers__body4infinite_uint_interval, 'radix_info4macro_header')
 
-_BaseStepDecoder__fixed_size_layers__body4infinite_uint_interval = mk_namedtuple__check6make_(__name__, 'BaseStepDecoder__fixed_size_layers__body4infinite_uint_interval', 'radix_info4digit num_layers')
+_BaseStepDecoder__fixed_size_layers__body4infinite_uint_interval = mk_named_pseudo_tuple_(__name__, 'BaseStepDecoder__fixed_size_layers__body4infinite_uint_interval', 'radix_info4digit num_layers')
+    # !! [IStepDecoder__fixed_size_layers__functional.emay_radix_info4macro_header::cached_property]
+    # => [mk_namedtuple__check6make_--> mk_named_pseudo_tuple_]
 class StepDecoder__fixed_size_layers__body4infinite_uint_interval(_BaseStepDecoder__fixed_size_layers__body4infinite_uint_interval, IStepDecoder__fixed_size_layers__body4infinite_uint_interval):
     ___no_slots_ok___ = True
     def _check6make_(sf, /):
@@ -3328,6 +3996,13 @@ class IStepDecoder__plugin4infinite_uint_interval__truncated_dynamic_bits_with_m
         'num_layers/uint{>=1} -> IStepDecoder__fixed_size_layers__body4infinite_uint_interval{num_layers}'
         assert num_layers >= 1
         return StepDecoder__fixed_size_layers__body4infinite_uint_interval(sf.radix_info4digit, num_layers)
+    ######################
+    # !! [__class__ <: IStepDecoder__fixed_radix4macro_header]
+    # !! [step_decoder4truncated_dynamic_bits_with_may_dynamic_bibits.emay_radix_info4macro_header may be ...]
+    #.@cached_property
+    #.@override
+    #.def emay_radix_info4macro_header(sf, /):
+    #.    return sf.step_decoder4truncated_dynamic_bits_with_may_dynamic_bibits.emay_radix_info4macro_header
     ######################
     @cached_property
     @override
@@ -3775,6 +4450,7 @@ class IStepDecoder__uint_with_inf(IStepDecoder__fixed_radix4macro_header, IStepD
         '-> IStepDecoder__plugin4infinite_uint_interval{[min_with_unit4uint_interval:=(0,0)][included_inf:=True]}'
     ######################
 
+
 class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
     __slots__ = ()
     ######################
@@ -3792,6 +4468,45 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
     @override
     def radix_info4digit(sf, /):
         return sf.step_decoder4uint_withxxx_inf.radix_info4digit
+    ######################
+    @cached_property
+    def support_three_zeros(sf, /):
+        '-> bool{unsigned_zero,negative_zero,positive_zero}'
+        return sf.std_zero_unsigned and not sf.to_shift_out_zero
+
+    @cached_property
+    def is_symmetry_scheme(sf, /):
+        '-> bool{is_symmetry_scheme}{==std_zero_unsigned}'
+        return sf.std_zero_unsigned
+    @cached_property
+    def std_zero_unsigned(sf, /):
+        '-> bool{is std_zero unsigned}{std_zero.sign==0}'
+        radix_info4H = sf.radix_info4macro_header
+        if radix_info4H.is_null:
+            radix_info4H = sf.radix_info4digit
+        radix4H = radix_info4H.radix
+        rH_odd = bool(radix4H & 1)
+        return rH_odd
+    @property
+    #@cached_property
+    #@abstractmethod
+    def support_kw_with_sign(sf, /):
+        '-> bool{.start_(...,*,with_sign:bool)} # [with_sign=>[oresult :: (sign,int)]] # [sign <- [-1,0,+1]] # usage:rational_number_codec.cf_symmetry_scheme need to recognize nonstd_zero'
+        return True
+    ######################
+    def support_codec_scheme_case4rational_(sf, codec_scheme_case, /):
+        'CodecSchemeCase4StepDecoder4Rational -> bool'
+        match codec_scheme_case:
+            case _Case4scheme.cf_asymmetry_scheme__via_floor:
+                return True
+            case _Case4scheme.cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc:
+                return sf.std_zero_unsigned and sf.is_symmetry_scheme
+            case _Case4scheme.cf_symmetry_scheme__via_trunc_using_signed_zero:
+                return sf.std_zero_unsigned and sf.is_symmetry_scheme and sf.support_three_zeros and sf.support_kw_with_sign
+            case _unknown_codec_scheme_case:
+                raise Exception(_unknown_codec_scheme_case)
+    #end-def support_codec_scheme_case4rational_(sf, codec_scheme_case, /):
+    ######################
     ######################
     @cached_property
     def to_shift_out_zero(sf, /):
@@ -3827,11 +4542,16 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
     #    1,even{>=2},odd{>=3}
     ######################
     @override
-    def start_(sf, rxdigit8macro_header, /):
+    def start_(sf, rxdigit8macro_header, /, *, with_sign=False):
+        check_type_is(bool, with_sign)
+        if with_sign:
+            if not sf.support_kw_with_sign:raise TypeError('not support{kw:with_sign}')
+            #raise NotImplementedError('@(kw:with_sign:=True)')
         radix4H = sf.radix_info4macro_header.radix
         if not rxdigit8macro_header.radix_info.radix == radix4H:raise 000
-        return sf._work(rxdigit8macro_header)
-    def _work(sf, rxdigit8H, /):
+        return sf._work(rxdigit8macro_header, with_sign)
+    def _work(sf, rxdigit8H, /, with_sign):
+        check_type_is(bool, with_sign)
         radix_info4H = rxdigit8H.radix_info
         radix4H = radix_info4H.radix
         digit8H = rxdigit8H.digit
@@ -3851,7 +4571,8 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
         # [-half <= diff == digit8H -half < rH_odd+half]
         if diff < 0:
             flipped_sf = StepDecoder__flip_digits(sf)
-            return _TCallST.mk_tail_call_st5three_args_(__neg__,   flipped_sf,rxdigit8H, state_vs_rxdigit=True)
+            post_ = __neg__ if not with_sign else sf._4neg7with_sign
+            return _TCallST.mk_tail_call_st5three_args_(post_,   flipped_sf,rxdigit8H, state_vs_rxdigit=True)
         # [diff >= 0]
         # [0 <= diff < rH_odd+half]
         # [-rH_odd <= diff-rH_odd < half]
@@ -3862,7 +4583,9 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
         #to_flip_digits = diff < 0
         if isolated_0 and diff == 0:
             #final_st
-            oresult = u = 0
+            sign = 0o0000
+            u = 0
+            oresult = u if not with_sign else (sign, u)
             return _LoopST(Cased(0x0000,oresult),  rxdigit8no_bits,  0)
         # [not [[diff == 0][isolated_0]]]
         # [not [[diff == 0][rH_odd][radix4H >= 3]]]
@@ -3872,7 +4595,7 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
             if not 2*dr.radix_info4macro_header.radix == dr.radix_info4digit.radix:raise ValueError((radix_info4H, dr.radix_info4macro_header, dr.radix_info4digit))
                 # rH_one => 深入:再对半分『头苞』,只剩一半
             assert dr.radix_info4digit.num_bits4digit == 1+dr.radix_info4macro_header.num_bits4digit
-            return _LoopST(Cased(0x0001, None),  rxdigit8no_bits,  1)
+            return _LoopST(Cased(0x0001, with_sign),  rxdigit8no_bits,  1)
         # [radix4H >= 2]
         # [half >= 1]
         # [0 <= diff < rH_odd+half]
@@ -3882,21 +4605,80 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
         _radix_info4H = dr.radix_info4macro_header#RadixInfo(_radix4H)
         if not _radix4H == _radix_info4H.radix:raise ValueError((_radix4H, _radix_info4H))
         _rxdigit8H = RadixedDigit(_radix_info4H, _digit8H)
-        may_post_ = sf._may_to_shift_out_zero
+        may_post_ = sf._may_to_shift_out_zero if not with_sign else sf._4pos7with_sign
         return _TCallST.mk_tail_call_st5three_args_(may_post_,   dr,_rxdigit8H, state_vs_rxdigit=True)
+    def _4pos7with_sign(sf, u:'oresult7without_sign', /):
+        may_post_ = sf._may_to_shift_out_zero
+        if not may_post_ is None:
+            post_ = may_post_
+            u = post_(u)
+        u
+        sign = +0o0001
+        return (oresult7with_sign:=(sign,u))
+    def _4neg7with_sign(sf, u:'oresult7without_sign', /):
+        sign = -0o0001
+        #bug:return (oresult7with_sign:=(sign,u))
+        return (oresult7with_sign:=(sign,-u))
     @override
     def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
         st = loop_st7nonfinal
         assert st.case == 0x0001
+        with_sign = st.payload
+        check_type_is(bool, with_sign)
         [digit8H] = required_digits
         radix_info4H = sf.radix_info4digit
         rxdigit8H = RadixedDigit(radix_info4H, digit8H)
-        return sf._work(rxdigit8H)
+        return sf._work(rxdigit8H, with_sign)
     #@override
     feed_oresult_remain_ = _Dead.feed_oresult_remain_
     ######################
 #end-class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
+#if not '_Case4scheme' in globals():
+if 1:
+    r'''[[[
+    #.>>> cases = [*_58_case2dr4rational]
+    #.>>> type(cases[0]) is _Case4scheme
+    #.False
+    #.>>> type(cases[0]).__module__
+    #.'seed.int_tools.StepDecoder'
+    #.>>> _Case4scheme.__module__
+    #.'seed.int_tools.StepDecoder'
+    #.>>> type(cases[0])
+    #.<enum 'CodecSchemeCase4StepDecoder4Rational'>
+    #.>>> _Case4scheme
+    #.<enum 'CodecSchemeCase4StepDecoder4Rational'>
+    ==>>doctestXmodule_reloader() cause bug:『class _Case4scheme(Enum)』redefined, but『global _58_case2dr4rational』lazy init only once => KeyError
+    ==>> ++『if not '_Case4scheme' in globals():』
+    #]]]'''#'''
+class CodecSchemeCase4StepDecoder4Rational(Enum):
+    'codec_scheme_case'
+    cf_asymmetry_scheme__via_floor = auto()
+        #math.floor(rational)
+    cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc = auto()
+        #math.trunc(1+abs(nonzero_rational))
+    cf_symmetry_scheme__via_trunc_using_signed_zero = auto()
+        #(sign_of(rational), math.trunc(rational))
+_Case4scheme = CodecSchemeCase4StepDecoder4Rational
 class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
+    r'''[[[
+
+[cf{symmetry_scheme.unsigned_zero} not end by (+oo|-oo), otherwise asymmetry]
+
+===
+@20250813
+发现 严重错误:『连分数末尾部分分母偏移二而其余部分分母偏移一』
+    !! {违反词典序}{没有前置长度的流水样式=>同位次的数的偏移量必须相同}
+    比如: [3/2==cf[1;2,+oo] < cf[1;1,2,+oo]==5/3]
+        尾偏移一=>[[1,-1,+oo] < [1,-0,+1,+oo]]
+        尾偏移二=>[[1,-0,+oo] > [1,-0,+0,+oo]]
+订正:部分分母统一偏移一
+===
+@20250813
+发现 其实有两种不同但都很自然的编码方案{负有理数}:1.直接根据负数的连分数形式编码;2.先转化为 正有理数，编码后取反
+    这里实现的是 第1种『直接根据负数的连分数形式编码』
+===
+
+    #]]]'''#'''
     __slots__ = ()
     ######################
     IStepDecoder__int_with_inf#head_int
@@ -3904,6 +4686,11 @@ class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
     ######################
     IStepDecoder__flip_digits
     ######################
+    #TODO:rational_number_codec.cf_symmetry_scheme:see:support_kw_with_sign,support_three_zeros,codec_scheme_case
+    @property
+    @abstractmethod
+    def codec_scheme_case(sf, /):
+        '-> CodecSchemeCase4StepDecoder4Rational/(cf_asymmetry_scheme__via_floor|cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc|cf_symmetry_scheme__via_trunc_using_signed_zero)'
     @property
     @abstractmethod
     def step_decoder4int_with_inf(sf, /):
@@ -3932,12 +4719,41 @@ class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
     def radix_info4digit(sf, /):
         return sf.step_decoder4int_with_inf.radix_info4digit
     ######################
+    @cached_property
+    def _b_asymmetry(sf, /):
+        '-> bool'
+        _b_asymmetry = sf.codec_scheme_case is _Case4scheme.cf_asymmetry_scheme__via_floor
+        return _b_asymmetry
+    @cached_property
+    def _b_lift_one(sf, /):
+        '-> bool'
+        _b_lift_one = sf.codec_scheme_case is _Case4scheme.cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc
+        return _b_lift_one
+    @cached_property
+    def _b_signed_zero(sf, /):
+        '-> bool'
+        _b_signed_zero = sf.codec_scheme_case is _Case4scheme.cf_symmetry_scheme__via_trunc_using_signed_zero
+        return _b_signed_zero
+    ######################
+    @cached_property
+    def _support_codec_scheme_case(sf, /):
+        '-> bool'
+        dr4int = sf.step_decoder4int_with_inf
+        return dr4int.support_codec_scheme_case4rational_(sf.codec_scheme_case)
+    @cached_property
+    def _extra_kwds4start7dr4int(sf, /):
+        '-> extra_kwds4start{dr4int}/Mapping'
+        return dict(with_sign=True) if sf._b_signed_zero else {}
     ######################
     @override
     def start_(sf, rxdigit8macro_header, /):
+        if not sf._support_codec_scheme_case:
+            raise Exception(sf.codec_scheme_case)
+        #.if not sf.codec_scheme_case is _Case4scheme.cf_asymmetry_scheme__via_floor:
+        #.    raise NotImplementedError(sf.codec_scheme_case)
         dr4int = sf.step_decoder4int_with_inf
         lnkls = ()
-        return _CallST.mk_call_st5four_args_(0,lnkls,   dr4int,rxdigit8macro_header, state_vs_rxdigit=True)
+        return _CallST.mk_call_st5four_args_(0,lnkls,   dr4int,rxdigit8macro_header, state_vs_rxdigit=True, extra_kwds4start=sf._extra_kwds4start7dr4int)
     #@override
     feed_digits_ = _Dead.feed_digits_
     @override
@@ -3945,55 +4761,189 @@ class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
         st = call_st7nontail
         case = st.case
         lnkls = st.payload
-        x = oresult7subcall
+        #######
+        if type(oresult7subcall) is tuple:
+            # [dr4int.start_():kw:with_sign:=True]
+            # [sf.codec_scheme_case==cf_symmetry_scheme__via_trunc_using_signed_zero]
+            (sign, x) = sx = oresult7subcall
+            may_sign = sign
+        else:
+            x = oresult7subcall
+            may_sign = None
+            sx = (may_sign, x)
+        may_sign, x, sx, oresult7subcall
+        #######
+        # [sx == (may_sign, x)]
+        # [x :: (int|-oo|+oo)]
+        # [oresult7subcall == x if not cf_symmetry_scheme__via_trunc_using_signed_zero else sx]
+        #######
         if abs(x) is +oo:
-            if not lnkls:
-                assert case == 0
-                oresult = x
-            else:
-                assert case
-                assert x is +oo
-                ls = [*rglnkls2reversed_iterable(lnkls)]
-                ls.reverse()
-                L = len(ls)
-                assert L
-                if L >= 2:
-                    for j in range(1, L-1):
-                        ls[j] += 1
-                    ls[-1] += 2
-                oresult = calc_Fraction5finite_continued_fraction_(ls)
-            oresult
-            return _LoopST(Cased(2, oresult),  rxdigit8remain7subcall,  0)
+            # [x <- {-oo,+oo}]
+            # => stop
+            return sf._4stop(case, lnkls, x, rxdigit8remain7subcall)
+        #######
+        # [sx == (may_sign, x)]
         # [x :: int]
+        # [oresult7subcall == x if not cf_symmetry_scheme__via_trunc_using_signed_zero else sx]
+        #######
+        # [case==0][x :: int]
+        # [case<-{-1,+1}][x :: uint]
         assert x >= 0 or case == 0
-        lnkls = (lnkls, x)
+        #######
+        #.lnkls = (lnkls, oresult7subcall)
+        lnkls = (lnkls, sx if case==0 else x) #see:sf._4stop()
         match case:
             case 0:
                 # int
                 #i = oresult7subcall
                 ###
-                dr = dr4nint = sf.step_decoder4nint_with_inf
-                #_case = -1
+                _may_case = sf._may_next_case5case_eq0(may_sign, x)
+                if _may_case is None:
+                    return sf._4stop7unsigned_zero(rxdigit8remain7subcall)
+                _case = _may_case
+                assert abs(_case) == 1
+                #old:cf_asymmetry_scheme__via_floor:
+                    #.dr = dr4nint = sf.step_decoder4nint_with_inf
+                    #._case = -1
             case -1:
                 # nint #but [oresult::(uint|+oo)]
                 #u = n = oresult7subcall
                 ###
-                dr = dr4uint = sf.step_decoder4uint_with_inf
-                #_case = +1
+                #dr = dr4uint = sf.step_decoder4uint_with_inf
+                _case = +1
             #case +1:
                 #^SyntaxError: invalid syntax
             case 1:
                 # uint
                 #u = oresult7subcall
                 ###
-                dr = dr4nint = sf.step_decoder4nint_with_inf
-                #_case = -1
+                #dr = dr4nint = sf.step_decoder4nint_with_inf
+                _case = -1
             case _:
                 raise 000
-        lnkls
+        #.lnkls, dr
+        #._case = +1 if case==-1 else -1
+        #######
+        lnkls, _case
+        #######
+        assert abs(_case) == 1
+        match _case:
+            case -1:
+                dr = dr4nint = sf.step_decoder4nint_with_inf
+            case 1:
+                dr = dr4uint = sf.step_decoder4uint_with_inf
+            case _:
+                raise 000
         dr
-        _case = +1 if case==-1 else -1
+        #######
+        lnkls, _case, dr
+        #######
+        if rxdigit8remain7subcall.is_null and not dr.emay_radix_info4macro_header.is_null:
+            #TODO:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header
+            dr = StepDecoder__skip_macro_header(dr)
+        #######
         return _CallST.mk_call_st5four_args_(_case,lnkls,   dr,rxdigit8remain7subcall, state_vs_rxdigit=True)
+    ######################
+    def _may_next_case5case_eq0(sf, may_sign, x, /):
+        '-> may _case{-1|+1}{None=>unsigned_zero}'
+        if x > 0 or sf._b_asymmetry:
+            _may_case = -1
+        elif x < 0:
+            #symmetry_scheme
+            _may_case = +1
+        elif not x == 0:
+            raise Exception(x)
+        elif sf._b_signed_zero:
+            # [x==0] => signed_zero
+            assert not may_sign is None
+            sign = may_sign
+            assert abs(sign) <= 1
+            #.if sign == 0:
+            #.    # unsigned_zero
+            #.    return sf._4stop7unsigned_zero(rxdigit8remain7subcall)
+            _may_case = -sign if not sign==0 else None
+        elif sf._b_lift_one:
+            # [x==0] => unsigned_zero
+            #return sf._4stop7unsigned_zero(rxdigit8remain7subcall)
+            _may_case = None
+        else:
+            raise Exception(sf.codec_scheme_case)
+        _may_case
+        return _may_case
+    #end-def _may_next_case5case_eq0(may_sign, x, /):
+    ######################
+    def _4stop7unsigned_zero(sf, rxdigit8remain7subcall, /):
+        '[cf{symmetry_scheme.unsigned_zero} not end by (+oo|-oo), otherwise asymmetry]'
+        oresult = 0
+        return _LoopST(Cased(2, oresult),  rxdigit8remain7subcall,  0)
+    ######################
+    def _4stop(sf, case, lnkls, x, rxdigit8remain7subcall, /):
+        # [x <- {-oo,+oo}]
+        b_symmetry = not sf._b_asymmetry# not sf.codec_scheme_case is _Case4scheme.cf_asymmetry_scheme__via_floor
+        if not lnkls:
+            assert case == 0
+            oresult = x
+            # [oresult <- {-oo,+oo}]
+        else:
+            assert case
+            assert x is +oo
+            ls = [*rglnkls2reversed_iterable(lnkls)]
+            ls.reverse()
+            L = len(ls)
+            assert L
+            check_type_is(tuple, ls[0])
+            (may_sign, _x) = _sx = ls[0]
+            _b_signed_zero = sf._b_signed_zero#b_symmetry and sf.codec_scheme_case is _Case4scheme.cf_symmetry_scheme__via_trunc_using_signed_zero:
+            if not may_sign is None:
+                # [dr4int.start_():kw:with_sign:=True]
+                assert _b_signed_zero
+                sign = may_sign
+                    #<=cf_symmetry_scheme__via_trunc_using_signed_zero
+                b_neg = sign < 0
+            else:
+                assert not _b_signed_zero
+                b_neg = _x < 0
+                    #neednot 0
+            b_neg
+            ls[0] = _x
+            check_type_is(int, ls[0])
+            #bug:b_flip = b_symmetry and ls[0] < 0
+            #   !! [ls[0]==0]@negative_zero@Rational{>-1}{<0}
+            b_flip = b_symmetry and b_neg
+            if b_flip:
+                # [when ls[0] be 0, rational still can be positive]
+                ls[0] = -ls[0]
+                    #<=cf_symmetry_scheme{both}
+            ls
+            if L >= 2:
+                #######
+                #bug:
+                #.for j in range(1, L-1):
+                #.    ls[j] += 1
+                #.ls[-1] += 2
+                #######
+                #fix bug by:部分分母统一偏移一
+                for j in range(1, L):
+                    ls[j] += 1
+                ls
+            ls
+            rational = calc_Fraction5finite_continued_fraction_(ls)
+            _b_lift_one = sf._b_lift_one#b_symmetry and sf.codec_scheme_case is _Case4scheme.cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc
+            if _b_lift_one:
+                if rational < 1:
+                    # !! [cf{symmetry_scheme.unsigned_zero} not end by (+oo|-oo), otherwise asymmetry]
+                    # !! [not flip yet=>inside positive_rational phase]
+                    raise Exception(sf.codec_scheme_case, rational)
+                rational -= 1
+                    #<=cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc
+            rational
+            if b_flip:
+                rational = -rational
+            rational
+            oresult = rational
+        oresult
+        return _LoopST(Cased(2, oresult),  rxdigit8remain7subcall,  0)
+    #end-def _4stop(sf, case, lnkls, x, rxdigit8remain7subcall, /):
     ######################
 #end-class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
 
@@ -4207,14 +5157,20 @@ class StepDecoder__rational_with_inf(IStepDecoder__rational_with_inf):
 #######
     #]]]'''#'''
     ___no_slots_ok___ = True
-    def __init__(sf, step_decoder4int_with_inf, step_decoder4uint_with_inf, /):
+    def __init__(sf, codec_scheme_case, step_decoder4int_with_inf, step_decoder4uint_with_inf, /):
+        check_type_le(_Case4scheme, codec_scheme_case)
         check_type_le(IStepDecoder__int_with_inf, step_decoder4int_with_inf)
         check_type_le(IStepDecoder__uint_with_inf, step_decoder4uint_with_inf)
         assert step_decoder4int_with_inf.radix_info4digit == step_decoder4uint_with_inf.radix_info4digit
+        sf._sch = codec_scheme_case
         sf._dr4int = step_decoder4int_with_inf
         sf._dr4uint = step_decoder4uint_with_inf
     def __repr__(sf, /):
-        return repr_helper(sf, sf.step_decoder4int_with_inf, sf.step_decoder4uint_with_inf)
+        return repr_helper(sf, sf.codec_scheme_case, sf.step_decoder4int_with_inf, sf.step_decoder4uint_with_inf)
+    @property
+    @override
+    def codec_scheme_case(sf, /):
+        return sf._sch
     @property
     @override
     def step_decoder4int_with_inf(sf, /):
@@ -4230,19 +5186,23 @@ check_non_ABC(StepDecoder__rational_with_inf)
 
 
 if 0:
-    _58_dr4int = None
-    _58_dr4rational = None
-def _58_gmk_dr4int_dr4rational():
+    _58_dr4int = ...
+    #_58_dr4rational = ...
+    _58_case2dr4rational = ...
+if 0:
+    if '_58_dr4int' in globals():
+        del _58_dr4int, _58_case2dr4rational
+def _58_gmk_dr4int_case2dr4rational():
     '-> (step_decoder4int_with_inf__alnum__5over8, step_decoder4rational_with_inf__alnum__5over8)'
-    global _58_dr4int, _58_dr4rational
+    global _58_dr4int, _58_case2dr4rational
     try:
-        return (_58_dr4int, _58_dr4rational)
+        return (_58_dr4int, _58_case2dr4rational)
     except NameError:
         pass
-    (_58_dr4int, _58_dr4rational) = _58_mk_dr4int_dr4rational()
-    return _58_gmk_dr4int_dr4rational()
-def _58_mk_dr4int_dr4rational():
-    '-> (step_decoder4int_with_inf__alnum__5over8, step_decoder4rational_with_inf__alnum__5over8)'
+    (_58_dr4int, _58_case2dr4rational) = _58_mk_dr4int_case2dr4rational()
+    return _58_gmk_dr4int_case2dr4rational()
+def _58_mk_dr4int_case2dr4rational():
+    '-> (step_decoder4int_with_inf__alnum__5over8, codec_scheme_case2step_decoder4rational_with_inf__alnum__5over8/{codec_scheme_case:step_decoder4rational_with_inf__alnum__5over8})'
     radix_info4macro_header = RadixInfo(3)
     radix_info4digit = ZpowRadixInfo(5)
     rH32 = radix_info4digit
@@ -4269,12 +5229,19 @@ def _58_mk_dr4int_dr4rational():
     arg4inf
     ######################
     dr4uint = StepDecoder__uint_with_inf(radix_info4digit, included_inf:=True, arg4inf)
+    _dr4uint = StepDecoder__uint_with_inf(radix_info4digit, included_inf:=True, _arg4inf)
+    ######################
     dr4int = StepDecoder__int_with_inf(radix_info4macro_header, step_decoder4uint_withxxx_inf:=dr4uint)
-    dr4rational = StepDecoder__rational_with_inf(dr4int, dr4uint)
+    case2dr4rational = {
+        codec_scheme_case
+        :(dr4rational:=StepDecoder__rational_with_inf(codec_scheme_case, dr4int, _dr4uint))
+        for codec_scheme_case in _Case4scheme
+        }
     ######################
     _58_dr4int = dr4int
-    _58_dr4rational = dr4rational
-    return (step_decoder4int_with_inf__alnum__5over8:=dr4int, step_decoder4rational_with_inf__alnum__5over8:=dr4rational)
+    _58_case2dr4rational = case2dr4rational
+    return (step_decoder4int_with_inf__alnum__5over8:=dr4int, codec_scheme_case2step_decoder4rational_with_inf__alnum__5over8:=case2dr4rational)
+#end-def _58_mk_dr4int_case2dr4rational():
 
 def gmk_step_decoder4int_with_inf__alnum__5over8_():
     '-> IStepDecoder__int_with_inf{radix4macro_header:=3,radix4digit:=32}  # ' \
@@ -4283,97 +5250,210 @@ def gmk_step_decoder4int_with_inf__alnum__5over8_():
         return _58_dr4int
     except NameError:
         pass
-    _58_gmk_dr4int_dr4rational()
+    _58_gmk_dr4int_case2dr4rational()
     return gmk_step_decoder4int_with_inf__alnum__5over8_()
-def gmk_step_decoder4rational_with_inf__alnum__5over8_():
-    '-> IStepDecoder__rational_with_inf{radix4macro_header:=3,radix4digit:=32}  # ' \
+def gmk_step_decoder4rational_with_inf__alnum__5over8_(codec_scheme_case, /):
+    'CodecSchemeCase4StepDecoder4Rational -> IStepDecoder__rational_with_inf{radix4macro_header:=3,radix4digit:=32}  # ' \
     'view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt'
     try:
-        return _58_dr4rational
+        return _58_case2dr4rational[codec_scheme_case]
+    #except KeyError:
     except NameError:
         pass
-    _58_gmk_dr4int_dr4rational()
-    return gmk_step_decoder4rational_with_inf__alnum__5over8_()
+    _58_gmk_dr4int_case2dr4rational()
+    return gmk_step_decoder4rational_with_inf__alnum__5over8_(codec_scheme_case)
 
 
 
 
-def encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool):
+def encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool, codec_scheme_case):
     '(Rational|-oo|+oo) -> (digits/bytes if digits_vs_str else str/alnum)'
-    it = iter_encode4rational_with_inf__alnum__5over8_(xrational, digits_vs_str=digits_vs_str)
+    it = iter_encode4rational_with_inf__alnum__5over8_(xrational, digits_vs_str=digits_vs_str, codec_scheme_case=codec_scheme_case)
     s = '' if digits_vs_str else b''
     r = s.join(it)
     return r
-def iter_encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool):
+def iter_encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool, codec_scheme_case):
     '(Rational|-oo|+oo) -> Iter (digits/bytes if digits_vs_str else str/alnum)'
+    #.if not codec_scheme_case is _Case4scheme.cf_asymmetry_scheme__via_floor:
+    #.    raise NotImplementedError(codec_scheme_case)
     if abs(xrational) is +oo:
         xi = xrational
-        it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str)
+        it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str, sign4zero=0)#or:sign4zero=+1
         return it
     rational = xrational
     # [rational :: Rational]
-    it = _impl_iter_encode4rational_with_inf__alnum__5over8_(rational)
+    b_symmetry = not codec_scheme_case is _Case4scheme.cf_asymmetry_scheme__via_floor
+    _b_lift_one = codec_scheme_case is _Case4scheme.cf_symmetry_scheme__via_nonzero_abs_plus_one_then_trunc
+    if b_symmetry:
+        if rational == 0:
+            # !! [cf{symmetry_scheme.unsigned_zero} not end by (+oo|-oo), otherwise asymmetry]
+            xi = 0
+            it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str, sign4zero=0)#unsigned_zero
+            return it
+        # [rational =!= 0]
+        b_neg = rational < 0
+        if b_neg:
+            rational = -rational
+        # [rational > 0]
+        if _b_lift_one:
+            rational += 1
+            # [rational > 1]
+        # [[_b_lift_one] -> [rational > 1]]
+        # [rational > 0]
+    # [[_b_lift_one] -> [rational > 1]]
+    # [[b_symmetry] -> [rational > 0]]
+    it = _impl_iter_encode4rational_with_inf__alnum__5over8_(b_symmetry, _b_lift_one, rational)
+    if b_symmetry and b_neg:
+        it = _58_iter_flip(it)
     if digits_vs_str:
         it = _58_iter_to_str(it)
     return it
-def _impl_iter_encode4rational_with_inf__alnum__5over8_(rational, /):
-    'Rational -> Iter (digits/bytes)'
+def _next(it, /):
+    for head in it:
+        return head
+    raise 000
+def _impl_iter_encode4rational_with_inf__alnum__5over8_(b_symmetry, _b_lift_one, rational, /):
+    '[[[b_symmetry]->[rational>0]][[_b_lift_one] -> [rational > 1]]] => b_symmetry/bool -> Rational -> Iter (digits/bytes)'
     digits_vs_str = False
+    if b_symmetry and rational <= 0:raise 000
+    if _b_lift_one and rational <= 1:raise 000
+
     #(N, D) = rational.as_integer_ratio()
     (N, D) = (rational.numerator, rational.denominator)
-    cf_digits = iter_continued_fraction_digits5ND_(N, D)
-    [i, *us] = cf_digits
+    iter_cf_digits = iter_continued_fraction_digits5ND_(N, D)
+    assert iter(iter_cf_digits) is iter_cf_digits
+    #######ver:iter
+        #TODO:iter instead of list one time...
+    i = _next(iter_cf_digits)
+    777; us = iter_cf_digits
     to_flip = False
-    yield from iter_encode4int_with_inf__alnum__5over8_(i, digits_vs_str=digits_vs_str)
+    yield from iter_encode4int_with_inf__alnum__5over8_(i, digits_vs_str=digits_vs_str, sign4zero=int(b_symmetry and not _b_lift_one))
+        #<=b_symmetry-_b_lift_one
     777;to_flip = not to_flip
-    xus = [u-1 for u in us]
+    #fix bug by:部分分母统一偏移一
+    xus = (u-1 for u in us)
     777; del i, us
-    if xus:
-        xus[-1] -= 1
-    assert all(u >= 0 for u in xus)
-    xus.append(+oo)
-    for xu in xus:
+    #######
+    #bug:
+    #.if xus:
+    #.    xus[-1] -= 1
+    #######
+    #.if xus:
+    #.    assert xus[-1] >= 1
+    #.assert all(u >= 0 for u in xus)
+    #.xus.append(+oo)
+    prev_u = 1
+    inf = +oo
+    for xu in chain(xus, [inf]):
         # [xu :: (uint|+oo)]
+        #######
+        #check: {>=0} and last {>=1}
+        if xu is inf:
+            assert prev_u >= 1
+        else:
+            u = xu
+            assert u >= 0
+            prev_u = u
+        #######
         it = _58_iter_encode4uint(xu, head_bytes=b'')
         if to_flip:
-            it = _58_flip4body(it)
+            #bug:it = _58_flip4body(it)
+            it = map(_58_flip4body, it)
                 #not:_58_iter_flip
                 # !! inner body...
         yield from it
         777;to_flip = not to_flip
     return
-def encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
+
+    #######ver:list
+    #.[i, *us] = iter_cf_digits
+    #.#if 0b0001:print_err(i, us)
+
+    #.to_flip = False
+    #.yield from iter_encode4int_with_inf__alnum__5over8_(i, digits_vs_str=digits_vs_str, sign4zero=int(b_symmetry and not _b_lift_one))
+    #.    #<=b_symmetry-_b_lift_one
+    #.777;to_flip = not to_flip
+    #.#fix bug by:部分分母统一偏移一
+    #.xus = [u-1 for u in us]
+    #.777; del i, us
+    #.#######
+    #.#bug:
+    #.#.if xus:
+    #.#.    xus[-1] -= 1
+    #.#######
+    #.if xus:
+    #.    assert xus[-1] >= 1
+    #.assert all(u >= 0 for u in xus)
+    #.xus.append(+oo)
+    #.for xu in xus:
+    #.    # [xu :: (uint|+oo)]
+    #.    it = _58_iter_encode4uint(xu, head_bytes=b'')
+    #.    if to_flip:
+    #.        #bug:it = _58_flip4body(it)
+    #.        it = map(_58_flip4body, it)
+    #.            #not:_58_iter_flip
+    #.            # !! inner body...
+    #.    yield from it
+    #.    777;to_flip = not to_flip
+    #.return
+def encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool, sign4zero):
     '(int|-oo|+oo) -> (digits/bytes if digits_vs_str else str/alnum)'
-    it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str)
+    it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str, sign4zero=sign4zero)
     s = '' if digits_vs_str else b''
     r = s.join(it)
     return r
-def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
-    '(int|-oo|+oo) -> Iter (digits/bytes if digits_vs_str else str/alnum)'
+def sign_of_(xi, /, *, sign4zero:'{-1,0,+1}'):
+    '(Rational|int|-oo|+oo) -> sign{<- {-1,0,+1}}'
+    assert abs(sign4zero) <= 1
     if xi < 0:
         # [xi < 0]
-        xu = -xi
-        # [xu > 0]
-        #head_byte{xi} = b'\x00'
-        #head_byte{xu} = b'\x02'
-        head_byte = b'\x02'
-        it = _58_iter_flip(_58_iter_encode4uint(xu, head_bytes=head_byte))
+        sign = -1
+        if sign4zero > 0:raise TypeError
+            # [sign4zero==0]ok
     elif xi == 0:
         # [xi == 0]
-        head_byte = b'\x01'
-        it = iter([head_byte])
+        if sign4zero:
+            sign = sign4zero
+        else:
+            sign = 0
+        sign
     else:
         # [xi > 0]
-        xu = xi
-        # [xu > 0]
-        head_byte = b'\x02'
-        it = _58_iter_encode4uint(xu, head_bytes=head_byte)
+        sign = +1
+        if sign4zero < 0:raise TypeError
+            # [sign4zero==0]ok
+    sign
+    return sign
+def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool, sign4zero:'{-1,0,+1}'):
+    '(int|-oo|+oo) -> Iter (digits/bytes if digits_vs_str else str/alnum)'
+    sign = sign_of_(xi, sign4zero=sign4zero)
+    777;del sign4zero
+    match sign:
+        case -1:
+            # [xi < 0]or[xi is negative_zero]
+            xu = -xi
+            # [xu >= 0]
+            head_byte = b'\x02'
+                #head_byte{xi} = b'\x00'
+                #head_byte{xu} = b'\x02'
+            it = _58_iter_flip(_58_iter_encode4uint(xu, head_bytes=head_byte))
+        case 0:
+            # [xi == 0] #unsigned_zero
+            head_byte = b'\x01'
+            it = iter([head_byte])
+        case 1:
+            # [xi > 0]or[xi is positive_zero]
+            xu = xi
+            # [xu >= 0]
+            head_byte = b'\x02'
+            it = _58_iter_encode4uint(xu, head_bytes=head_byte)
     it
     if digits_vs_str:
         it = _58_iter_to_str(it)
     return it
 def _58_flip4body(bs, /):
     '(digits/bytes) -> (digits/bytes)'
+    check_type_is(bytes, bs)
     # [31==32-1]
     return bytes(map((31).__sub__, bs))
 def _58_iter_flip(it, /):
@@ -4538,7 +5618,7 @@ def _58_iter_encode4uint(xu, /, *, head_bytes):
             yield bs
     return
 #end-def _58_iter_encode4uint(xu, /):
-#end-def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool):
+#end-def iter_encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool, sign4zero):
 
 class _SeqIter:
     #see:iter_subseq__transparent_
@@ -4577,9 +5657,9 @@ class IDecoder__token_seq(ABC):
     @abstractmethod
     def token2body_digit_(sf, token, /):
         'token -> digit8body_cell'
-    def decode(sf, token_seq, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
-        '[token] -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
-        assert not (fullmatch and nonnull_remain_ok)
+    def decode(sf, token_seq, /, begin=None, end=None, *, fullmatch=False, nonnull_rxdigit8remain_ok=False):
+        '[token] -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_rxdigit8remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_rxdigit8remain_ok)]'
+        assert not (fullmatch and nonnull_rxdigit8remain_ok)
         (begin, end) = mk_seq_rng(token_seq, begin, end)
         if not begin < end:
             raise ValueError(token_seq, begin, end)
@@ -4596,9 +5676,9 @@ class IDecoder__token_seq(ABC):
         input4step_decoder = Input4StepDecoder(rxdigit8H, digit_reader)
         (oresult, rxdigit8remain) = step_decode__input_(dr, input4step_decoder)
         new_begin = digit_iter.begin
-        if nonnull_remain_ok:
+        if nonnull_rxdigit8remain_ok:
             return (oresult, rxdigit8remain, new_begin)
-        #not nonnull_remain_ok
+        #not nonnull_rxdigit8remain_ok
         if not rxdigit8remain.is_null:raise Exception__nonnull_remain(rxdigit8remain)
         if not fullmatch:
             return (oresult, new_begin)
@@ -4621,6 +5701,7 @@ _58_2digit6body = _mk_alnum2digit_(_58_tbl6body)
 class _58_IDecoder__token_seq(IDecoder__token_seq):
     ___no_slots_ok___ = True
     def __init__(sf, /):
+        super().__init__()
         pass
     @cached_property
     #@override
@@ -4637,23 +5718,30 @@ class _58_4int_Decoder__token_seq(_58_IDecoder__token_seq):
     def step_decoder(sf, /):
         return gmk_step_decoder4int_with_inf__alnum__5over8_()
 _58_decode4int = _58_4int_Decoder__token_seq().decode
-def decode4int_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
-    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
-    return _58_decode4int(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_remain_ok=nonnull_remain_ok)
+def decode4int_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_rxdigit8remain_ok=False):
+    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_rxdigit8remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_rxdigit8remain_ok)]'
+    return _58_decode4int(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_rxdigit8remain_ok=nonnull_rxdigit8remain_ok)
 encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
 ######################
 
 ######################
 class _58_4rational_Decoder__token_seq(_58_IDecoder__token_seq):
+    def __init__(sf, codec_scheme_case, /):
+        sf.codec_scheme_case = codec_scheme_case
+        super().__init__()
     @cached_property
     @override
     def step_decoder(sf, /):
-        return gmk_step_decoder4rational_with_inf__alnum__5over8_()
-_58_decode4rational = _58_4rational_Decoder__token_seq().decode
-def decode4rational_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_remain_ok=False):
-    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_remain_ok)]'
-    return _58_decode4rational(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_remain_ok=nonnull_remain_ok)
+        return gmk_step_decoder4rational_with_inf__alnum__5over8_(sf.codec_scheme_case)
+#_58_decode4rational = _58_4rational_Decoder__token_seq().decode
+_58_case2decode4rational = {codec_scheme_case:_58_4rational_Decoder__token_seq(codec_scheme_case).decode for codec_scheme_case in _Case4scheme}
+def decode4rational_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, codec_scheme_case, fullmatch=False, nonnull_rxdigit8remain_ok=False):
+    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_rxdigit8remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_rxdigit8remain_ok)]'
+    #.if not codec_scheme_case is _Case4scheme.cf_asymmetry_scheme__via_floor:
+    #.    raise NotImplementedError(codec_scheme_case)
+    _58_decode4rational = _58_case2decode4rational[codec_scheme_case]
+    return _58_decode4rational(_58_alnum_str, begin, end, fullmatch=fullmatch, nonnull_rxdigit8remain_ok=nonnull_rxdigit8remain_ok)
 encode4rational_with_inf__alnum__5over8_
 decode4rational_with_inf__alnum__5over8_
 ######################
@@ -4668,9 +5756,9 @@ class _58_Ops4IterDigitsWithHeadCell(IOps4IterDigitsWithHeadCell):
     @cached_property
     @override
     def radix_info4macro_header(sf, /):
+        #return gmk_step_decoder4int_with_inf__alnum__5over8_().radix_info4macro_header
+        #return gmk_step_decoder4rational_with_inf__alnum__5over8_(codec_scheme_case).radix_info4macro_header
         return RadixInfo(3)
-        return gmk_step_decoder4int_with_inf__alnum__5over8_().radix_info4macro_header
-        return gmk_step_decoder4rational_with_inf__alnum__5over8_().radix_info4macro_header
     @cached_property
     #@override
     def may_token2head_digit_(sf, /):
@@ -4680,26 +5768,31 @@ class _58_Ops4IterDigitsWithHeadCell(IOps4IterDigitsWithHeadCell):
     def may_token2body_digit_(sf, /):
         return _58_2digit6body.__getitem__
 #end-class _58_Ops4IterDigitsWithHeadCell(IOps4IterDigitsWithHeadCell):
+_58_ops4iter_headed_digits = _58_Ops4IterDigitsWithHeadCell()
 
 ######################
-if 0: _58_inc_decode4int = ...
-def _gmk_58_inc_decode4int():
+if 0:
+    _58_inc_decode4int = ...
+if 0:
+    if '_58_inc_decode4int' in globals():
+        del _58_inc_decode4int
+def _58_gmk_inc_decode4int():
     global _58_inc_decode4int
     try:
         return _58_inc_decode4int
     except NameError:
         pass
-    _58_inc_decode4int = mk_incremental_decode5ops4iter_headed_digits_(gmk_step_decoder4int_with_inf__alnum__5over8_(), _58_Ops4IterDigitsWithHeadCell())
-    return _gmk_58_inc_decode4int()
+    _58_inc_decode4int = mk_incremental_decode5ops4iter_headed_digits_(gmk_step_decoder4int_with_inf__alnum__5over8_(), _58_ops4iter_headed_digits)
+    return _58_gmk_inc_decode4int()
 
 
 encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
-def incremental_decode4int_with_inf__alnum__5over8_(may_wst7inc, s, /):
-    'may wst7inc -> str/alnum -> wresult7inc'
-    _58_inc_decode4int = _gmk_58_inc_decode4int()
-    wresult7inc = _58_inc_decode4int(may_wst7inc, s)
-    return wresult7inc
+def incremental_decode4int_with_inf__alnum__5over8_(may_wst7inc, s, /, *, empty_ok=False):
+    'may wst7inc -> str/alnum -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]}'
+    _58_inc_decode4int = _58_gmk_inc_decode4int()
+    may_wresult7inc = _58_inc_decode4int(may_wst7inc, s, empty_ok=empty_ok)
+    return may_wresult7inc
 encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
 incremental_decode4int_with_inf__alnum__5over8_
@@ -4710,24 +5803,36 @@ incremental_decode4int_with_inf__alnum__5over8_
 
 
 ######################
-if 0: _58_inc_decode4rational = ...
-def _gmk_58_inc_decode4rational():
-    global _58_inc_decode4rational
+if 0:
+    #_58_inc_decode4rational = ...
+    _58_case2inc_decode4rational = ...
+if 0:
+    if '_58_case2inc_decode4rational' in globals():
+        del _58_case2inc_decode4rational
+def _58_gmk_inc_decode4rational(codec_scheme_case, /):
     try:
-        return _58_inc_decode4rational
+        return _58_case2inc_decode4rational[codec_scheme_case]
     except NameError:
         pass
-    _58_inc_decode4rational = mk_incremental_decode5ops4iter_headed_digits_(gmk_step_decoder4rational_with_inf__alnum__5over8_(), _58_Ops4IterDigitsWithHeadCell())
-    return _gmk_58_inc_decode4rational()
+    _58_mk_case2inc_decode4rational()
+    return _58_gmk_inc_decode4rational(codec_scheme_case)
+def _58_mk_case2inc_decode4rational():
+    global _58_case2inc_decode4rational
+    _58_case2inc_decode4rational = {
+        codec_scheme_case
+        :(_58_inc_decode4rational:=mk_incremental_decode5ops4iter_headed_digits_(gmk_step_decoder4rational_with_inf__alnum__5over8_(codec_scheme_case), _58_ops4iter_headed_digits))
+        for codec_scheme_case in _Case4scheme
+        }
+    return _58_case2inc_decode4rational
 
 
 encode4rational_with_inf__alnum__5over8_
 decode4rational_with_inf__alnum__5over8_
-def incremental_decode4rational_with_inf__alnum__5over8_(may_wst7inc, s, /):
-    'may wst7inc -> str/alnum -> wresult7inc'
-    _58_inc_decode4rational = _gmk_58_inc_decode4rational()
-    wresult7inc = _58_inc_decode4rational(may_wst7inc, s)
-    return wresult7inc
+def incremental_decode4rational_with_inf__alnum__5over8_(may_wst7inc, s, /, *, codec_scheme_case, empty_ok=False):
+    'may wst7inc -> str/alnum -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]} # [kw:codec_scheme_case/CodecSchemeCase4StepDecoder4Rational]'
+    _58_inc_decode4rational = _58_gmk_inc_decode4rational(codec_scheme_case)
+    may_wresult7inc = _58_inc_decode4rational(may_wst7inc, s, empty_ok=empty_ok)
+    return may_wresult7inc
 encode4rational_with_inf__alnum__5over8_
 decode4rational_with_inf__alnum__5over8_
 incremental_decode4rational_with_inf__alnum__5over8_

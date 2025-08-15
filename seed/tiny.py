@@ -39,12 +39,13 @@ if 0:from seed.tiny import mk_tuple,print_err,ifNone as ifNone_ #xxx:null_tuple 
 
 from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
 from seed.tiny import fst, snd, at
-from seed.tiny import mk_tuple, mk_frozenset, mk_immutable_seq
+from seed.tiny import mk_tuple, mk_frozenset, mk_immutable_seq, mk_tuple__split_first_if_str
 from seed.tiny import mk_pair, mk_pair_tuple, is_pair
+from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
 from seed.tiny import check_tmay, check_pair, check_uint, check_imay, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
 from seed.tiny import check_type_le, check_type_is, icheck_type_le, icheck_type_is
 from seed.tiny import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
-from seed.tiny import check_callable, check_is_obj, check_is_None
+from seed.tiny import check_callable, check_iterator, check_is_obj, check_is_None
 from seed.tiny_.check import check_str, check_char
 from seed.tiny import get_abstractmethod_names, check_manifest4abstractmethods
 
@@ -197,6 +198,12 @@ __all__ = str2__all__(r'''
     icheck_type_le      # :: cls -> a -> a|raise TypeError
     icheck_type_is      # :: cls -> a -> a|raise TypeError
 
+    check_all_          # :: checker -> a -> None|raise TypeError
+    check_tmay_         # :: checker -> a -> None|raise TypeError
+    check_may_          # :: checker -> a -> None|raise TypeError
+    check_not_          # :: checker -> a -> None|raise TypeError
+                        # where: [checker == ((a -> None|raise TypeError) | [arged_checker, *args4arged_checker])]
+                        # where: [args4arged_checker == ((*args4arged_checker) -> a -> None|raise TypeError)]
     check_tmay          # :: a -> None|raise TypeError
     check_pair          # :: a -> None|raise TypeError
     check_either        # :: a -> None|raise TypeError
@@ -223,6 +230,7 @@ __all__ = str2__all__(r'''
                         # :: a -> a|raise TypeError
 
     check_callable      # :: a -> None|raise TypeError
+    check_iterator      # :: a -> None|raise TypeError
     check_is_obj        # :: a -> a -> None|raise TypeError
     check_is_None       # :: a -> None|raise TypeError
     check_str           # :: a -> None|raise TypeError
@@ -237,7 +245,9 @@ __all__ = str2__all__(r'''
 
     echo_key            # echo_key[k...] -> (k...)
     mk_frozenset        # :: Iter a -> frozenset a
-    mk_tuple            # :: Iter a -> tuple a
+    mk_tuple__split_first_if_str
+                        # :: Iter a -> -> tuple a
+    mk_tuple            # :: Iter a -> (chars8blank="") -> tuple a
     mk_pair_tuple       # :: Iter (Iter a) -> tuple (pair a)
     mk_pair             # :: Iter a -> pair a
     is_pair             # :: a -> bool
@@ -578,15 +588,25 @@ assert icheck_getitemable is icheck_subscriptable
 assert expectError(TypeError, lambda:check_subscriptable(set()))
 assert check_subscriptable('') is None
 
+from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
 from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
 from seed.tiny_.check import check_type_in, icheck_type_in
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
-from seed.tiny_.check import check_callable, check_is_obj, check_is_None
+from seed.tiny_.check import check_callable, check_iterator, check_is_obj, check_is_None
 from seed.tiny_.check import check_str, check_char
 from seed.tiny_.check import check_bool, icheck_bool
 
 
+check_all_(check_uint, range(3))
+check_tmay_(check_uint, (3,))
+check_tmay_(check_uint, ())
+check_may_(check_uint, 3)
+check_may_(check_uint, None)
+check_not_(check_uint, None)
+check_not_(check_uint, ...)
+check_not_(check_uint, -1)
 
+check_iterator(iter(''))
 check_uint(1)
 check_tmay(())
 check_tmay((0,))
@@ -655,6 +675,8 @@ from seed.tiny_.null_dev import null_context, null_context5result_
 
 from seed.tiny_.constants import inf, pos_inf, neg_inf
 
+from seed.tiny_.containers import mk_tuple__split_first_if_str
+
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
 from seed.tiny_.containers import mk_pair, mk_pair_tuple
 from seed.tiny_.containers import is_pair
@@ -699,6 +721,14 @@ assert mk_immutable_seq(__:=b'a') is __
 assert mk_immutable_seq(__:=range(999)) is __
 assert mk_immutable_seq(__:=(999,)) is __
 assert mk_immutable_seq([999]) == (999,)
+
+
+assert mk_tuple__split_first_if_str(b'0 1') == (48, 32, 49)
+assert mk_tuple__split_first_if_str('0 1') == ('0', '1')
+assert mk_tuple__split_first_if_str('0 1,2') == ('0', '1,2')
+assert mk_tuple__split_first_if_str('0 1,2', ',') == ('0', '1', '2')
+assert mk_tuple__split_first_if_str('0 1,2;3', ',') == ('0', '1', '2;3')
+assert mk_tuple__split_first_if_str('0 1,2;3', ',;') == ('0', '1', '2', '3')
 
 
 
