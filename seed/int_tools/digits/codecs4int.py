@@ -1,4 +1,5 @@
 #__all__:goto
+#_history:goto
 doing...
 TODO:goto
 r'''[[[
@@ -6,6 +7,9 @@ e ../../python3_src/seed/int_tools/digits/codecs4int.py
 view others/数学/编程/设计/自定义字符编码.txt
 view others/数学/编程/设计/自定义字符编码-兼容utf8.txt
 view others/数学/编程/设计/自定义编码之要点.txt
+view ../../python3_src/seed/int_tools/DigitReader.py
+view ../../python3_src/seed/int_tools/RadixInfo.py
+view ../../python3_src/seed/int_tools/StepDecoder.py
 
 seed.int_tools.digits.codecs4int
 py -m nn_ns.app.debug_cmd   seed.int_tools.digits.codecs4int -x # -off_defs
@@ -13,6 +17,28 @@ py -m nn_ns.app.doctest_cmd seed.int_tools.digits.codecs4int:__doc__ -ht # -ff -
 
 
 
+[[
+view others/数学/编程/设计/自定义字符编码.txt
+本模块所有编码器满足以下约束:
+    支持词典序#lexicographic order
+    分级前置长度#逐步推进分级前置长度型编码方案
+    ++{受控范围内胞串内部向外识别两端边界,双端内敛,字节串搜索,字节串词典序}
+
+]]
+
+
+
+
+py_adhoc_call   seed.int_tools.digits.codecs4int   @f
+from seed.int_tools.digits.codecs4int import *
+]]]'''#'''
+
+#_history =
+r'''[[[[[[[
+这里是过往历史，归结为:
+    view others/数学/编程/设计/自定义编码之要点.txt
+    view others/数学/编程/设计/自定义字符编码-兼容utf8.txt
+===
 [[
 view others/数学/编程/设计/自定义字符编码.txt
 本模块所有编码器满足以下约束:
@@ -732,1021 +758,118 @@ view others/数学/编程/设计/自定义字符编码-兼容utf8.txt
     最优:{候选方案辛,候选方案壬{偏好},候选方案癸} <<==:
 ... ...
 ]]
+]]]]]]]
+'''#'''
 
 
-
-
-
-
-py_adhoc_call   seed.int_tools.digits.codecs4int   @f
-from seed.int_tools.digits.codecs4int import *
-]]]'''#'''
 __all__ = r'''
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.for_libs.for_importlib__reload import clear_later_variables_if_reload_
+clear_later_variables_if_reload_(globals(), '')
+
+from functools import cached_property
 from itertools import islice
 from seed.tiny_.check import check_type_is, check_int_ge
 
+
+######################
+from seed.int_tools.StepDecoder import step_decode__input_, step_decode__head_, step_decode__state_
+from seed.int_tools.StepDecoder import incremental_decode__continued_, incremental_decode__init5head_, incremental_decode__init5state_
+if 777:
+    #__alnum__5over8
+    from seed.int_tools.StepDecoder import gmk_step_decoder4int_with_inf__alnum__5over8_ as _58_gmk4int, gmk_std_step_decoder4rational_with_inf__alnum__5over8_ as _58_gmk4rational
+    step_decoder4int_with_inf__alnum__5over8 = _58_gmk4int()
+    std_step_decoder4rational_with_inf__alnum__5over8 = _58_gmk4rational()
+
+
+from seed.int_tools.StepDecoder import incremental_decode__ops4iter_headed_digits_
+if 777:
+    #__alnum__5over8
+    from seed.int_tools.StepDecoder import ops4iter_headed_digits__alnum__5over8
+
+
+#__alnum__5over8
+from seed.int_tools.StepDecoder import \
+(incremental_std_decode4rational_with_inf__alnum__5over8_
+,std_decode4rational_with_inf__alnum__5over8_
+,std_encode4rational_with_inf__alnum__5over8_
+,    iter_std_encode4rational_with_inf__alnum__5over8_
+)
+######################
+
+
+
+
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
+#from seed.helper.repr_input import repr_helper
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
-#.class IPlugin(ABC):
-#.    __slots__ = ()
-#.    @property
-#.    @abstractmethod
-#.    def used_num_words6immediate(sf, /):
-#.        '-> uint{>0}'
-#.    @property
-#.    @abstractmethod
-#.    def offset4stored_uint(sf, /):
-#.        '-> uint'
-#.    @abstractmethod
-#.    def uint2cells_ex_(sf, u, num_bits4u, /):
-#.        'offsetted_stored_uint/u/uint -> num_bits4u/uint -> (icase/uint%used_num_words6immediate, num_cells/uint, Iter cell) # [num_bits4u == u.bit_length()]'
-#.    @abstractmethod
-#.    def uint5cells_ex_(sf, icase, cells, /):
-#.        'icase/uint%used_num_words6immediate -> Iter cell -> (num_cells/uint, offsetted_stored_uint/u/uint)'
-#.class IPlugin4FiniteInterval(IPlugin):
-#.    __slots__ = ()
-#.    @property
-#.    @abstractmethod
-#.    def either_max_unoffsetted_stored_uint_or_its_num_bits(sf, /):
-#.        '-> (bool, uint)/((False, max_unoffsetted_stored_uint{may be non-2-power})|(True, max_num_bits4unoffsetted_stored_uint{max_unoffsetted_stored_uint==2**max_num_bits4unoffsetted_stored_uint-1}))'
-#.    assert (0).bit_length() == 0
-#.    def is_uint_in_range_(sf, u, num_bits4u, /):
-#.        'offsetted_stored_uint/u/uint -> num_bits4u/uint -> bool # [num_bits4u == u.bit_length()]'
-#.        # # [num_bits4u == 0 if u==0 else u.bit_length()]
-#.        assert u >= 0
-#.        (is_num_bits, x) = sf.either_max_unoffsetted_stored_uint_or_its_num_bits
-#.        offset = sf.offset4stored_uint
-#.        v = u -offset
-#.            # u == offsetted_stored_uint
-#.            # v == unoffsetted_stored_uint
-#.
-#.        if v < 0:
-#.            return False
-#.        if not is_num_bits:
-#.            max_unoffsetted_stored_uint = x
-#.            return v <= max_unoffsetted_stored_uint
-#.        max_num_bits4unoffsetted_stored_uint = x
-#.
-#.        if offset == 0:
-#.            num_bits4v = num_bits4u
-#.        else:
-#.            num_bits4v = v.bit_length()
-#.        num_bits4v
-#.        return num_bits4v <= max_num_bits4unoffsetted_stored_uint
-#.
-#.
-#.class IPlugin4InfiniteInterval(IPlugin):
-#.    __slots__ = ()
-#.    @property
-#.    @abstractmethod
-#.    def min_num_layers(sf, /):
-#.        '-> uint'
-#.    @property
-#.    @abstractmethod
-#.    def whether_supported_infinite_reserved_space(sf, /):
-#.        '-> bool'
-#.
-#.class ICodec4SInt__zpow_based__lexicographic_order_reserved(ABC):
-#.    'si'
-#.class ICodec4UInt__zpow_based__lexicographic_order_reserved(ABC):
-#.    'ui'
-#.    __slots__ = ()
-#.    @property
-#.    @abstractmethod
-#.    def num_words6macro_header(sf, /):
-#.        '-> uint'
-#.    @property
-#.    @abstractmethod
-#.    def num_bits4cell6body(sf, /):
-#.        '-> uint'
-#.    @property
-#.    @abstractmethod
-#.    def seq4plugin4finite_interval(sf, /):
-#.        '-> [IPlugin4FiniteInterval]'
-#.    @property
-#.    @abstractmethod
-#.    def plugin4infinite_interval(sf, /):
-#.        '-> IPlugin4InfiniteInterval'
-#.
-#.    def encode4uint_ex_(sf, u, /):
-#.        'offsetted_stored_uint/u/uint -> (num_cells/uint, (Iter cell){nonempty})'
-#.        check_int_ge(0, u)
-#.        num_bits4u == u.bit_length()
-#.        offset4icase = 0
-#.        for plgn in sf.seq4plugin4finite_interval:
-#.            if plgn.is_uint_in_range_(u, num_bits4u):
-#.                break
-#.            offset4icase += plgn.used_num_words6immediate
-#.        else:
-#.            plgn = sf.plugin4infinite_interval
-#.        offset4icase, plgn
-#.        (icase, _num_cells, _cells) = plgn.uint2cells_ex_(u, num_bits4u)
-#.        head = offset4icase + icase
-#.        return (1+_num_cells, chain([head], _cells))
-#.    def dencode4uint_ex_(sf, cells, /):
-#.        '(Iter cell){nonempty} -> (num_cells/uint, offsetted_stored_uint/u/uint)'
-#.        cells = iter(cells)
-#.        for head in cells:
-#.            _cells = cells; del cells
-#.            break
-#.        else:
-#.            raise ValueError('null iter')
-#.        head, _cells
-#.        check_int_ge(0, head)
-#.
-#.        offset4icase = 0
-#.        for plgn in sf.seq4plugin4finite_interval:
-#.            _offset4icase = offset4icase + plgn.used_num_words6immediate
-#.            if head < _offset4icase:
-#.                break
-#.        else:
-#.            plgn = sf.plugin4infinite_interval
-#.            _offset4icase = offset4icase + plgn.used_num_words6immediate
-#.            if not head < _offset4icase:
-#.                raise ValueError('head cell too big')
-#.        offset4icase, plgn
-#.        icase = head -offset4icase
-#.        (_num_cells, offsetted_stored_uint) = plgn.uint5cells_ex_(icase, _cells)
-#.        return (1+_num_cells, offsetted_stored_uint)
-#.
-#.#num_words4cell6head
-#.#num_words4cell6body
-#.num_words6macro_header#num_words6macro_cell8logical_header
-#.num_bits4cell6body
-#.#finite_plugin:
-#.(used_num_words6immediate, offset4stored_uint, nbits_vs_uint, (max_num_bits4unoffsetted_stored_uint|max_unoffsetted_stored_uint))
-#.  #非 0层-立即数 => (num_storage_bits6immediate爻+)首层{min_..=max_}num_body_cells4fst_layer体符
-#.  #######
-#.  * (num_layers6append, multiplicity, num_storage_bits6immediate, num_body_cells4fst_layer, offset4stored_uint)
-#.      [used_num_words6immediate := multiplicity*2**num_storage_bits6immediate]
-#.      [max_unoffsetted_stored_uint := multiplicity*(iterate (\len -> 2**len-1) (2**(num_storage_bits6immediate+num_bits4cell6body*num_body_cells4fst_layer)-1) !! num_layers6append)]
-#.  #######
-#.  * (num_layers6append, num_storage_bits6immediate, min_num_body_cells4fst_layer, max_num_body_cells4fst_layer, offset4stored_uint)
-#.      [used_num_words6immediate := (max_num_body_cells4fst_layer+1-min_num_body_cells4fst_layer)*2**num_storage_bits6immediate]
-#.      [max_num_bits4unoffsetted_stored_uint := if num_layers6append == 0 then num_storage_bits6immediate else iterate (\num_bits4len -> 2**num_bits4len-1) (num_storage_bits6immediate+num_bits4cell6body*max_num_body_cells4fst_layer) !! (num_layers6append-1)]
-#.  #######
-#.###super_dybl_layers
-#.#infinite_plugin:
-#.(min_num_layers, whether_supported_infinite_reserved_space)
-#.
-#.
-#.
-#.
-#.
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
-#.
-
-from seed.iters.chains import chains
-class IDigitReader(ABC):
-    'digit_reader'
-    '词典序 => read_eq() instead of read_le()'
-    __slots__ = ()
-    @property
-    @abstractmethod
-    def eof(sf, /):
-        '-> bool'
-    @abstractmethod
-    def tell(sf, /):
-        '-> position/uint'
-    @abstractmethod
-    def read1(sf, /, *, peek=False):
-        '-> uint|^EOFError'
-    @abstractmethod
-    def read_eq(sf, sz, /, *, peek=False):
-        'uint -> tuple<uint>{len==sz}|^EOFError'
-    @abstractmethod
-    def read_while(sf, pred, /, *, peek=False):
-        '(uint->bool) -> tuple<uint>'
-    @abstractmethod
-    def drop_eq(sf, sz, /):
-        'uint -> None|^EOFError'
-
-    def peek1(sf, /):
-        '-> uint|^EOFError'
-        return sf.read1(peek=True)
-    def peek_eq(sf, sz, /):
-        'uint -> tuple<uint>{len==sz}|^EOFError'
-        return sf.read_eq(sz, peek=True)
-    def peek_while(sf, pred, /):
-        '(uint->bool) -> tuple<uint>'
-        return sf.read_while(pred, peek=True)
-#end-class IDigitReader(ABC):
-
-from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
-class DigitReader5seq(IDigitReader):
+class ITable4Codecs(ABC):
     ___no_slots_ok___ = True
-    def __init__(sf, digit_seq, begin=None, end=None, /):
-        (begin, end) = mk_seq_rng(digit_seq, begin, end)
-        #sf._args = (digit_seq, begin, end)
-        #(digit_seq, begin, end) = sf._args
-        #sf._2 = (digit_seq, end)
-        sf._0 = digit_seq
-        sf._1 = begin
-        sf._2 = end
-        #sf._sz = end -begin
-    @property
-    @override
-    def eof(sf, /):
-        '-> bool'
-        #return sf._sz == 0
-        return sf._1 == sf._2
-    @override
-    def tell(sf, /):
-        '-> position/uint'
-        return sf._1
-    @override
-    def read1(sf, /, *, peek=False):
-        '-> uint|^EOFError'
-        if sf.eof:raise EOFError
-        ls = sf._0
-        i = sf._1
-        u = ls[i]
-        if not peek:sf._1 = i+1
-        return u
-    @override
-    def read_eq(sf, sz, /, *, peek=False):
-        'uint -> tuple<uint>{len==sz}|^EOFError'
-        check_int_ge(0, sz)
-        if not sz:return ()
-        ls = sf._0
-        i = sf._1
-        k = sf._2
-
-        j = i+sz
-        if not j <= k:raise EOFError
-        us = ls[i:j]
-        if not peek:sf._1 = j
-        return us
-    @override
-    def read_while(sf, pred, /, *, peek=False):
-        '(uint->bool) -> tuple<uint>'
-        ls = sf._0
-        i = sf._1
-        k = sf._2
-        for j in range(i, k):
-            u = ls[j]
-            if not pred(u):
-                break
-        else:
-            j = k
-        us = ls[i:j]
-        if not peek:sf._1 = j
-        return us
-    @override
-    def drop_eq(sf, sz, /):
-        'uint -> None|^EOFError'
-        check_int_ge(0, sz)
-        if not sz:return
-        ls = sf._0
-        i = sf._1
-        k = sf._2
-        j = i+sz
-        if not j <= k:raise EOFError
-        sf._1 = j
-        return
-
-
-
-from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
-class DigitReader5iter(IDigitReader):
-    ___no_slots_ok___ = True
-    def __init__(sf, digits, offset, /):
-        check_int_ge(0, offset)
-        sf._it = echo_or_mk_PeekableIterator(digits)
-        sf._i = offset
-    @property
-    @override
-    def eof(sf, /):
-        '-> bool'
-        return sf._it.is_empty()
-    @override
-    def tell(sf, /):
-        '-> position/uint'
-        return sf._i
-    @override
-    def read1(sf, /, *, peek=False):
-        '-> uint|^EOFError'
-        [u] = sf.read_eq(1, peek=peek)
-        return u
-    @override
-    def read_eq(sf, sz, /, *, peek=False):
-        'uint -> tuple<uint>{len==sz}|^EOFError'
-        check_int_ge(0, sz)
-        if not sz:return ()
-        peek = bool(peek)
-        it = sf._it
-        if not it.len_ge(sz):raise EOFError
-        if peek:
-            us = it.peek_le(sz)
-        else:
-            us = it.read_le(sz)
-            sf._i += sz
-        us
-        assert len(us) == sz
-        return us
-    @override
-    def read_while(sf, pred, /, *, peek=False):
-        '(uint->bool) -> tuple<uint>'
-        it = sf._it
-        us = tuple(takewhile(pred, it.tmp_peek_iter()))
-        sz = len(us)
-        if (not peek) and sz:
-            it.drop_le(sz)
-            sf._i += sz
-        return us
-    @override
-    def drop_eq(sf, sz, /):
-        'uint -> None|^EOFError'
-        check_int_ge(0, sz)
-        if not sz:return
-        it = sf._it
-        if not it.len_ge(sz):raise EOFError
-        it.drop_le(sz)
-        sf._i += sz
-        return
-
-class IUIntOffset(IUIntCompressor):
-    __slots__ = ()
-    #@override
-    lossy = False
-class UIntEcho(IUIntOffset):
-    __slots__ = ()
-    #@override
-    offset = 0
-from bisect import bisect_left
-class IUIntCompressor__bisect_left(IUIntCompressor):
-    __slots__ = ()
-    @property
-    @abstractmethod
-    def seq4max_uint4interval(sf, /):
-        '-> [uint]'
-from seed.math.floor_ceil import ceil_div
-class IUIntCompressor__ceil_div(IUIntCompressor):
-    __slots__ = ()
-    @property
-    @abstractmethod
-    def offset(sf, /):
-        '-> uint'
-    @property
-    @abstractmethod
-    def divisor(sf, /):
-        '-> uint{>=1}'
-
-
-
-#.from seed.int_tools.RadixInfo import IZpowRadixInfo# ZpowRadixInfo, mk_ZpowRadixInfo_
-#.from seed.int_tools.RadixInfo import IRadixInfo# RadixInfo, mk_RadixInfo_
-#.class IState4StepDecoder4UInt(ABC):
-#.    __slots__ = ()
-#.    ######################
-#.    @abstractmethod
-#.    def ireplace_(sf, case, payload, /):
-#.        '-> IState4StepDecoder4UInt'
-#.    ######################
-#.    @property
-#.    @abstractmethod
-#.    def case(sf, /):
-#.        '-> Hashable'
-#.    @property
-#.    @abstractmethod
-#.    def payload(sf, /):
-#.        '-> ??? # [[is_final] => [payload is result uint]]'
-#.    @property
-#.    @abstractmethod
-#.    def radix_info4remain8head(sf, /):
-#.        '-> IRadixInfo # (.is_zpow_radix|IZpowRadixInfo) => [.radix===2**num_remain_bits8head] # allow [num_remain_bits8head > num_bits4digit]'
-#.    @property
-#.    @abstractmethod
-#.    def remain_digit8head(sf, /):
-#.        '-> uint%radix # (.is_zpow_radix|IZpowRadixInfo) => uint%2**num_remain_bits8head'
-#.    @property
-#.    @abstractmethod
-#.    def num_required_digits(sf, /):
-#.        '-> uint{>=0} # [is_final==(0==num_required_digits)]'
-#.    ######################
-#.    @property
-#.    def num_remain_bits8head(sf, /):
-#.        '-> (uint{>=0} if (.is_zpow_radix|IZpowRadixInfo) else ^AttributeError) # allow [num_remain_bits8head > num_bits4digit]'
-#.        return sf.radix_info4remain8head.num_bits4digit
-#.    @property
-#.    def max_remain_digit8head(sf, /):
-#.        '-> uint{==radix-1}'
-#.        return sf.radix_info4remain8head.max_digit
-#.    @property
-#.    def tmay_result_uint(sf, /):
-#.        '-> tmay uint # [is_final==bool(tmay_result_uint)]'
-#.        return (sf.payload,) if sf.is_final else ()
-#.    @property
-#.    def is_final(sf, /):
-#.        '-> bool'
-#.        return not sf.num_required_digits
-#.    ######################
-#.
-#.def max_digit5num_bits_ex_(num_bits, imay_max_digit, /):
-#.    'num_bits/uint{>=0} -> imay max_digit -> max_digit/uint{>=0}{==2**num_bits-1}'
-#.    return max_digit5num_bits_(num_bits) if imay_max_digit==-1 else imay_max_digit
-#.def max_digit5num_bits_(num_bits, /):
-#.    'num_bits/uint{>=0} -> max_digit/uint{>=0}{==2**num_bits-1}'
-#.    return (1<<num_bits)-1
-#.class State4StepDecoder4UInt__plain(IState4StepDecoder4UInt):
-#.    ___no_slots_ok___ = True
-#.    def __init__(sf, case, payload, radix_info4remain8head, remain_digit8head, num_required_digits, /):
-#.        sf._t = (case, payload, radix_info4remain8head, remain_digit8head, num_required_digits)
-#.    @override
-#.    def ireplace_(sf, case, payload, /):
-#.        '-> IState4StepDecoder4UInt'
-#.        return __class__(case, payload, *sf._t[2:])
-#.    @property
-#.    @override
-#.    def case(sf, /):
-#.        return sf._t[0]
-#.    @property
-#.    @override
-#.    def payload(sf, /):
-#.        return sf._t[1]
-#.    @property
-#.    @override
-#.    def radix_info4remain8head(sf, /):
-#.        return sf._t[2]
-#.    @property
-#.    @override
-#.    def remain_digit8head(sf, /):
-#.        return sf._t[3]
-#.    @property
-#.    @override
-#.    def num_required_digits(sf, /):
-#.        return sf._t[4]
-#.#end-class State4StepDecoder4UInt__plain(IState4StepDecoder4UInt):
-#.
-#.
-#.class IStepDecoder4UInt(ABC):
-#.    # 后刹=>LL1,剩余 不足 1躯胞
-#.    __slots__ = ()
-#.    ######################
-#.    @property
-#.    @abstractmethod
-#.    def num_bits4digit(sf, /):
-#.        '-> uint{>=1}'
-#.    @property
-#.    @abstractmethod
-#.    def max_digit(sf, /):
-#.        '-> uint{>=1}'
-#.    ######################
-#.    @abstractmethod
-#.    def start_(sf, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header, /):
-#.        'num_bits4macro_header/uint{>=0} -> imay_max_digit8macro_header/imay uint{==2**num_bits4macro_header-1} -> digit8macro_header/uint%2**num_bits4macro_header -> st/IState4StepDecoder4UInt # allow [num_bits4macro_header > num_bits4digit]'
-#.    @abstractmethod
-#.    def feed_(sf, st, required_digits, /):
-#.        'st/IState4StepDecoder4UInt -> required_digits/[uint%2**num_bits4digit]{len==st.num_required_digits} -> st/IState4StepDecoder4UInt'
-#.    ######################
-#.
-#.
-#.from seed.int_tools.count_num_leading1s import count_num_leading1s_, count_num_leading1s_ex_
-#.class IStepDecoder4UInt__dynamic_bits(IStepDecoder4UInt):
-#.    r'''[[[
-#.    '[dynamic_bits =[def]= regex"1*0"]'
-#.    [st == State4StepDecoder4UInt__plain(b_final,num_leading1s{acc}, ...)]
-#.    #]]]'''#'''
-#.    __slots__ = ()
-#.    @override
-#.    def start_(sf, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header, /):
-#.        return sf._work(0, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header)
-#.    @override
-#.    def feed_(sf, st, required_digits, /):
-#.        assert not st.case
-#.        [digit] = required_digits
-#.        return sf._work(st.payload, sf.num_bits4digit, sf.max_digit, digit)
-#.
-#.    def _work(sf, acc_num_leading1s, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header, /):
-#.        max_digit8macro_header = max_digit5num_bits_ex_(num_bits4macro_header, imay_max_digit8macro_header)
-#.        (num_leading1s, imay_num_bits4remain) = count_num_leading1s_ex_(num_bits4macro_header, max_digit8macro_header, digit8macro_header)
-#.        acc_num_leading1s += num_leading1s
-#.        if -1 == imay_num_bits4remain:
-#.            return State4StepDecoder4UInt__plain(False,acc_num_leading1s,   ZpowRadixInfo(0),0,   1)
-#.        num_bits4remain = imay_num_bits4remain
-#.        max_digit4remain = max_digit5num_bits_(num_bits4remain)
-#.        digit4remain = max_digit4remain & digit8macro_header
-#.        zpow_radix_info4remain = ZpowRadixInfo(num_bits4remain,max_digit=max_digit4remain)
-#.        return State4StepDecoder4UInt__plain(True,acc_num_leading1s,   zpow_radix_info4remain,digit4remain,   0)
-#.#end-class IStepDecoder4UInt__dynamic_bits(IStepDecoder4UInt):
-#.
-#.
-#.from seed.int_tools.RadixInfo import ZpowRadixInfo
-#.from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
-#.#.from seed.types.BitList import BitList
-#.#.def bitlist5digit_(zpow8radix, digit, /):
-#.#.    payload_uint = zpow8radix | digit
-#.#.    return BitList(payload_uint)
-#.
-#.from itertools import islice
-#.from seed.math.floor_ceil import ceil_div
-#.class IStepDecoder4UInt__fixed_size_bits(IStepDecoder4UInt):
-#.    r'''[[[
-#.    '[fixed_size_bits =[def]= regex"[01]{N}"]'
-#.    [st == State4StepDecoder4UInt__plain(b_final,(uint|(sz/uint,uint){acc:bit_list}), ...)]
-#.    #]]]'''#'''
-#.    __slots__ = ()
-#.    @property
-#.    @abstractmethod
-#.    def num_bits4read(sf, /):
-#.        '-> uint{>=1} # since always consume at least 1bit instead of lookahead1'
-#.
-#.    @override
-#.    def start_(sf, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header, /):
-#.        return sf._work(sf.num_bits4read, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header)
-#.    @override
-#.    def feed_(sf, st, required_digits, /):
-#.        assert not st.case
-#.        assert st.num_required_digits == len(required_digits)
-#.        (num_bits4macro_header,digit8macro_header) = st.payload
-#.        num_bits4digit = sf.num_bits4digit
-#.        num_bits4remain = num_bits4macro_header +num_bits4digit*len(required_digits) -sf.num_bits4read
-#.        assert 0 <= num_bits4remain < num_bits4digit
-#.        if num_bits4remain:
-#.            digit = required_digits[-1]
-#.            max_digit4remain = max_digit5num_bits_(num_bits4remain)
-#.            digit4remain = max_digit4remain & digit
-#.            last_digit = digit >> num_bits4remain
-#.            num_bits4last_digit = num_bits4digit -num_bits4remain
-#.            num_mid_digits = len(required_digits)-1
-#.        else:
-#.            num_mid_digits = len(required_digits)
-#.            last_digit = 0
-#.            num_bits4last_digit = 0
-#.            max_digit4remain = 0
-#.            digit4remain = 0
-#.        #.radix4digit = 1<<num_bits4digit
-#.        #.bs = bitlist5digit_(1<<num_bits4macro_header, digit8macro_header)
-#.        #.for digit in islice(required_digits, 0, num_mid_digits)
-#.        #.    bs += bitlist5digit_(radix4digit, digit)
-#.        #.bs += bitlist5digit_(1<<num_bits4last_digit, last_digit)
-#.
-#.        #.result = int(bs.to_01str(), 2)
-#.        zri4macro_header = ZpowRadixInfo(num_bits4macro_header)
-#.        zri4digit = ZpowRadixInfo(num_bits4digit)
-#.        zri4last_digit = ZpowRadixInfo(num_bits4last_digit)
-#.        def __(zri4digit):
-#.            yield (zri4macro_header, digit8macro_header)
-#.            for digit in islice(required_digits, 0, num_mid_digits)
-#.                yield (zri4digit, digit)
-#.            yield (zri4last_digit, digit8last_digit)
-#.        result = concat_digits2uint_((-sf.num_bits4read)%8, __(zri4digit))
-#.        zpow_radix_info4remain = ZpowRadixInfo(num_bits4remain,max_digit=max_digit4remain)
-#.        return State4StepDecoder4UInt__plain(True,result,   zpow_radix_info4remain, ,digit4remain,   0)
-#.
-#.    def _work(sf, num_bits4read, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header, /):
-#.        num_bits4miss = num_bits4read -num_bits4macro_header
-#.        if num_bits4miss > 0:
-#.            num_required_digits = ceil_div(num_bits4miss, sf.num_bits4digit)
-#.            return State4StepDecoder4UInt__plain(False,(num_bits4macro_header,digit8macro_header),   ZpowRadixInfo(0),0,   num_required_digits)
-#.        num_bits4remain = -num_bits4miss
-#.        max_digit4remain = max_digit5num_bits_(num_bits4remain)
-#.        digit4remain = max_digit4remain & digit8macro_header
-#.        result = digit8macro_header >> num_bits4remain
-#.        zpow_radix_info4remain = ZpowRadixInfo(num_bits4remain,max_digit=max_digit4remain)
-#.        return State4StepDecoder4UInt__plain(True,result,   zpow_radix_info4remain,digit4remain,   0)
-#.#end-class IStepDecoder4UInt__fixed_size_bits(IStepDecoder4UInt):
-#.class IStepDecoder4UInt__dynamic_bits_with_dependent_size_bits(IStepDecoder4UInt):
-#.    r'''[[[
-#.    '[dynamic_bits_with_dependent_size_bits =[def]= regex"1*0[01]{len:=???}"]'
-#.    [st == State4StepDecoder4UInt__plain(b_final,(uint|st4dybits|st4szbits), ...)]
-#.    #]]]'''#'''
-#.    __slots__ = ()
-#.    @property
-#.    @abstractmethod
-#.    def step_decoder4uint4dynamic_bits(sf, /):
-#.        '-> IStepDecoder4UInt__dynamic_bits'
-#.    @abstractmethod
-#.    def mk_step_decoder4uint4fixed_size_bits_(sf, num_bits4read, /):
-#.        'uint{>=1} -> IStepDecoder4UInt__fixed_size_bits'
-#.    @abstractmethod
-#.    def mk_result_uint_(sf, uint8dybits, uint8szbits, /):
-#.        'uint8dybits/uint{>=0} -> uint8szbits/uint{>=0} -> uint{>=0} # [uint8dybits==len_dynamic_bits{#the 0bit not in count#}][uint8szbits == (0|num_bits4read)]'
-#.
-#.    @override
-#.    def start_(sf, num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header, /):
-#.        st4dybits = sf.step_decoder4uint4dynamic_bits.start_(num_bits4macro_header, imay_max_digit8macro_header, digit8macro_header)
-#.        zpow_radix_info4remain = ZpowRadixInfo(num_bits4macro_header,max_digit=imay_max_digit8macro_header)
-#.        TODO:start_,改成 使用 RadixInfo
-#.from seed.int_tools.RadixInfo import IZpowRadixInfo, ZpowRadixInfo, mk_ZpowRadixInfo_
-#.from seed.int_tools.RadixInfo import IRadixInfo, RadixInfo, mk_RadixInfo_
-#.        return State4StepDecoder4UInt__plain(0,st4dybits,   zpow_radix_info4remain,digit4remain,   0)
-#.    @override
-#.    def feed_(sf, st, required_digits, /):
-#.        assert not st.case
-#.        assert st.num_required_digits == len(required_digits)
-#.        (num_bits4macro_header,digit8macro_header) = st.payload
-#.
-#.
-#.#end-class IStepDecoder4UInt__dynamic_bits_with_dependent_size_bits(IStepDecoder4UInt):
-
-
-from functools import cached_property
-class IPlugin4UIntInterval(ABC):
-    r'''[[[
-    'plugin4interval{uint}'
-
-    [macro_head_digit===digit{macro_header} :: uint%radix4macro_header]
-    [offsetted_macro_head_digit==macro_head_digit+offset4macro_head_digit]
-    [digit_reader{body_digit} :: IDigitReader]
-    [body_digit===digit{body_cell} :: uint%radix4body_cell]
-    #]]]'''#'''
-    __slots__ = ()
-    ######################
-    @property
-    @abstractmethod
-    def offset4macro_head_digit(sf, /):
-        '-> uint{>=0}'
-    @abstractmethod
-    def peek_test_digits_(sf, offsetted_macro_head_digit, digit_reader, /):
-        'offsetted_macro_head_digit -> IDigitReader -> may byproduct7reader # [None=>not_ok]'
-        #.def peek_test_digits_(sf, offsetted_macro_head_digit, num_digits4dropping7macro_header, digit_reader, /):
-        #.    'offsetted_macro_head_digit -> num_digits4dropping7macro_header/uint -> IDigitReader -> may byproduct7reader # [None=>not_ok] #[should digit_reader.drop_eq(num_digits4dropping7macro_header) before read/peek]'
-        #.def peek_test_digits_(sf, digit_reader, /):
-        #.    'IDigitReader -> may byproduct7reader # [None=>not_ok]'
-    @abstractmethod
-    def decode_digits_ex_(sf, digit_reader, byproduct7reader, /):
-        'IDigitReader -> byproduct7reader -> uint|^EOFError|^DecodeError'
-    ######################
-    def decode_digits_(sf, offsetted_macro_head_digit, digit_reader, /):
-        'offsetted_macro_head_digit -> IDigitReader -> uint|^EOFError|^DecodeError'
-        #.def decode_digits_(sf, digit_reader, /):
-        #.    'IDigitReader -> uint|^EOFError|^DecodeError'
-        may_byproduct7reader = sf.peek_test_digits_(offsetted_macro_head_digit, digit_reader)
-        if may_byproduct7reader is None: raise EOFError
-        byproduct7reader = may_byproduct7reader
-        u = sf.decode_digits_ex_(digit_reader, byproduct7reader)
-                # |^EOFError|^DecodeError
-        return u
-    ######################
-    @abstractmethod
-    def test_uint_(sf, u, /):
-        'uint -> may byproduct7uint # [None=>not_ok]'
-    @abstractmethod
-    def iter_encode_uint_ex_(sf, u, byproduct7uint, /):
-        'uint -> byproduct7uint -> digitss/(Iter (Iter Digit{j}))'
-    ######################
-    def iter_encode_uint_(sf, u, /):
-        'uint -> digitss/(Iter (Iter Digit{j}))|^OverflowError'
-        check_int_ge(0, u)
-        may_byproduct7uint = sf.test_uint_(u)
-        if may_byproduct7uint is None: raise OverflowError
-        byproduct7uint = may_byproduct7uint
-        digitss = sf.iter_encode_uint_ex_(u, byproduct7uint)
-        return digitss
-    ######################
-    # #但:[极大可能:[IPlugin4InfiniteInterval.宏头胞 =!= IPlugin4FiniteInterval.宏头胞]] => [宏头胞 不一致; 未必是二幂]
-    # !! IPlugin4InfiniteInterval=>要求:[躯胞 为 二幂]
-    # !! [躯部::[躯胞]][]躯部 一致 => 要求:[躯胞 一致]
-    # => [躯胞 一致 为 二幂]
-    @property
-    @abstractmethod
-    def num_bits4body_cell(sf, /):
-        '-> uint{>=1}'
-        #爻元数纟躯胞
-    ######################
     @cached_property
-    def radix4body_cell(sf, /):
+    #@abstractmethod
+    def size4head_cell(sf, /):
+        '-> uint{>=1}'
+        return len(sf.head_digit2std_token)
+    @cached_property
+    #@abstractmethod
+    def size4body_cell(sf, /):
         '-> uint{>=2}'
-        return 1<<sf.num_bits4body_cell
+        return len(sf.body_digit2std_token)
     @cached_property
-    def max_digit4body_cell(sf, /):
-        '-> uint{>=1}'
-        return sf.radix4body_cell-1
-    ######################
+    #@abstractmethod
+    def size4alphabet(sf, /):
+        '-> uint{>=3} # [size4alphabet == size4head_cell+size4body_cell]'
+        return sf.size4head_cell+sf.size4body_cell
     @property
     @abstractmethod
-    def radix4macro_header(sf, /):
-        '-> uint{>=1}'
-        # not {>=1}: e.g. "+[0-9]+"/[radix4macro_header == 1]
-    @cached_property
-    def max_digit4macro_header(sf, /):
-        '-> uint{>=0}'
-        return sf.radix4macro_header-1
-    ######################
+    def head_digit2std_token(sf, /):
+        '-> [token]{len=size4head_cell}'
     @property
     @abstractmethod
-    def num_layers(sf, /):
-        '-> uint{>=1}'
-    @abstractmethod
-    def layer_idx2uint_compressor(sf, layer_idx, /):
-        'layer_idx/uint%num_layers -> uint_compressor/IUIntCompressor'
-    ######################
-    ######################
-class IPlugin4InfiniteInterval(IPlugin4UIntInterval):
-    r'''[[[
-    'plugin4infinite_interval{uint}'
-
-    ######################
-    [:doc4IPlugin4InfiniteInterval]:goto
-    ######################
-    主打方案:编码方案{变步变殿后动态爻元}
-        [:约束牜紧凑乊首层]:goto
-    #]]]'''#'''
-        #xxx:*编码方案{大步固殿后动态爻元}
-    __slots__ = ()
-    ######################
-    #第零层:动态层/layer0/(dynamic_part++follower_part)
+    def body_digit2std_token(sf, /):
+        '-> [token]{len=size4body_cell}'
     @property
     @abstractmethod
-    def num_layers(sf, /):
-        '-> uint{>=2}'
-        #原版:'-> uint{>=1}'
-    ######################
-    #取消:step/step_(w)
-    #   !! 应该归入:ucmprsr0/IUIntCompressor{@0}
-    #.# !! 使用 变步变殿后动态爻元 #xxx:大步固殿后动态爻元
-    #.@property
-    #.@abstractmethod
-    #.def step(sf, /):
-    #.    '-> uint{>=1}'
-    #.    #步长
-
-    #升级:num_bits4follower4dynamic_part-->num_bits4follower5len_dynamic_bits_
-    #   !! 使用 变步变殿后动态爻元 而非 大步固殿后动态爻元
-    #.@property
-    #.@abstractmethod
-    #.def num_bits4follower4dynamic_part(sf, /):
-    #.    '-> uint{>=0}'
-    #.    #num_following_bits4dynamic_bits
-    #.    #num_following_bits4dynamic_part
-    #.    #爻元数纟殿后爻元
-    @abstractmethod
-    def num_bits4follower5len_dynamic_bits_(sf, len_dynamic_bits, /):
-        'len_dynamic_bits/uint{>=0} -> num_bits4follower4dynamic_part/uint{>=0}' \
-        '   # [:约束牜紧凑乊首层]:goto'
-        #num_following_bits4dynamic_bits
-        #num_following_bits4dynamic_part
-        #num_bits4follower4dynamic_part
-        #爻元数纟殿后爻元{数目纟动态爻元}
-    @abstractmethod
-    def classify_compressed_uint6layer0(sf, s_uint0, /):
-        'uint{>=0} -> len_dynamic_bits/uint{>=0}'
-        #『s_uint0』:
-        #   『s』repr small/compressed
-        #   『0』repr layer0
-        #######
-        #大步固殿后动态爻元=>return (s_uint0 // 2**num_bits4follower4dynamic_part)
-        #变步变殿后动态爻元=>return max{len_dynamic_bits | [len_dynamic_bits:<-[0..<]][offset4follower4dynamic_part{len_dynamic_bits} <= s_uint0]}
-        #   !! 采用 分段累积法
-        #######
-    @abstractmethod
-    def offset4follower5len_dynamic_bits_(sf, len_dynamic_bits, /):
-        'len_dynamic_bits/uint{>=0} -> offset4follower4dynamic_part/uint{>=0}'
-        #######
-        #大步固殿后动态爻元=>return len_dynamic_bits*2**num_bits4follower4dynamic_part
-        #变步变殿后动态爻元=>return sum{2**num_bits4follower4dynamic_part{_len_dynamic_bits} | [_len_dynamic_bits:<-[0..<len_dynamic_bits]]}
-        #   !! 采用 分段累积法
-        #######
-
-    ######################
-    # !! 使用 动态爻元 而非 动态苞元
-    # => 要求:[宏头胞&躯胞 可完美拆分为 爻元串]
-    # =>要求:[宏头胞&躯胞 为 二幂]
+    def nonstd_token2head_digit(sf, /):
+        '-> {token:uint%size4head_cell}{len>=size4head_cell}'
     @property
     @abstractmethod
-    def num_bits4macro_header(sf, /):
-        '-> uint{>=0}'
-        # not {>=1}: e.g. "+[0-9]+"/[radix4macro_header == 1]
-        #爻元数纟宏头胞
-    ######################
-    @cached_property
-    @override
-    def radix4macro_header(sf, /):
-        '-> uint{>=1}'
-        return 1<<sf.num_bits4macro_header
-    ######################
-    ######################
-from seed.int_tools.count_num_leading1s import count_num_leading1s_, count_num_leading1s_ex_
-from seed.int_tools.count_num_leading1s import count_num_leading0s_, count_num_leading0s_ex_
-    #(num_leading0s, imay_num_bits4payload) = count_num_leading0s_ex_(num_bits4digit, digit)
-from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
->>> [*uint2radix_repr_(10, 963, is_big_endian=False)]
->>> uint5radix_repr_(10, [], is_big_endian=False)
-class IPlugin4InfiniteInterval__dynamic_bits(IPlugin4InfiniteInterval):
-    'impl:编码方案{变步变殿后动态爻元}#dynamic_bits'
-    TODO:
-    ######################
-    @override
-    def peek_test_digits_(sf, offsetted_macro_head_digit, digit_reader, /):
-        'offsetted_macro_head_digit -> IDigitReader -> may byproduct7reader # [None=>not_ok]'
-        offset4h = sf.offset4macro_head_digit
-        if not offsetted_macro_head_digit >= offset4h:
-            return None
-        macro_head_digit = offsetted_macro_head_digit -offset4h
-        if not macro_head_digit < sf.radix4macro_header:
-            return None
-        byproduct7reader = macro_head_digit
-        return byproduct7reader
-    @override
-    def decode_digits_ex_(sf, digit_reader, byproduct7reader, /):
-        'IDigitReader -> byproduct7reader -> uint|^EOFError|^DecodeError'
-        macro_head_digit = byproduct7reader
-        if not macro_head_digit == sf.max_digit4macro_header:
-            max_digits = ()
-        else:
-            max_digits = (macro_head_digit, *digit_reader.read_while(sf.max_digit4body_cell.__eq__))
-        max_digits
-        num_max_digits = len(max_digits)
-        b_head = num_max_digits==0
-        max_digit = sf.max_digit4macro_header if b_head else sf.max_digit4body_cell
-        num_bits4digit = sf.num_bits4macro_header if b_head else sf.num_bits4body_cell
-        digit = macro_head_digit if b_head else digit_reader.peek1()
-        (num_leading1s, imay_num_bits4payload) = count_num_leading1s_ex_(num_bits4digit, max_digit, digit)
-        assert imay_num_bits4payload >= 0
-        num_bits4payload = imay_num_bits4payload
-        #len_dynamic_bits = (0 if b_head else (sf.num_bits4macro_header + (0 if num_max_digits==1 else (num_max_digits-1)*sf.num_bits4body_cell))) + (num_leading1s+1)
-            # 『1』in『(num_leading1s+1)』repr the terminal 『0』/terminator
-        len_dynamic_bits = (0 if b_head else (sf.num_bits4macro_header + (0 if num_max_digits==1 else (num_max_digits-1)*sf.num_bits4body_cell))) + (num_leading1s+0x000)
-            # 『0x000』in『(num_leading1s+1)』repr excluding the terminal 『0』/terminator
-        assert sf.num_layers >= 2
-        ucmprsr0 = sf.layer_idx2uint_compressor(0)
-            # 『0』repr layer0
-        uint0 = ucmprsr0.uncompress(len_dynamic_bits)
-        _num_digits1 = sf.step*uint0
-            # leading『_』repr 『exclued:num_bits4payload』
-            # 『1』repr layer1
-        num_leading_bits1 = num_bits4payload
-        mask = ((1<<num_leading_bits1)-1)
-        leading_digit1 = mask&digit
-        tail_digits1 = digit_reader.read_eq(_num_digits1)
-        digits1 = chain([leading_digit1], tail_digits1)
-        s_uint1 = uint5radix_repr_(sf.radix4body_cell, digits1, is_big_endian=True)
-            # 『s』repr small/compressed
-        ucmprsr1 = sf.layer_idx2uint_compressor(1)
-            # 『1』repr layer1
-        uint1 = ucmprsr1.uncompress(s_uint1)
-        uintX = uint1
-        for layer_idx in range(2, sf.num_layers):
-            #######
-            777;uint4prev_layer = uintX
-            777;uintX = None
-            #######
-            # layerX
-            num_digitsX = uint4prev_layer
-                # 『X』repr layerX
-            digitsX = digit_reader.read_eq(num_digitsX)
-            s_uintX = uint5radix_repr_(sf.radix4body_cell, digitsX, is_big_endian=True)
-            ucmprsrX = sf.layer_idx2uint_compressor(layer_idx)
-            uintX = ucmprsrX.uncompress(s_uintX)
-        u = uintX
-        return u
+    def nonstd_token2body_digit(sf, /):
+        '-> {token:uint%size4body_cell}{len>=size4body_cell}'
 
-    ######################
-    ######################
-    @override
-    @abstractmethod
-    def test_uint_(sf, u, /):
-        'uint -> may byproduct7uint # [None=>not_ok]'
-        ucmprsr7last = sf.layer_idx2uint_compressor(sf.num_layers-1)
-        if not u >= ucmprsr7last.offset:
-            return None
-        return True
-    @override
-    @abstractmethod
-    def iter_encode_uint_ex_(sf, u, byproduct7uint, /):
-        'uint -> byproduct7uint -> digitss/(Iter (Iter Digit{j}))'
-        assert byproduct7uint is True
-        assert sf.num_layers >= 2
-        digitss = []
-        ls4num_leading0s = []
-        _uintX = u
-        for j, layer_idx in enumerate(range(1, sf.num_layers)[::-1]):
-            #layerX
-            _uintX
-            ucmprsrX = sf.layer_idx2uint_compressor(layer_idx)
-            s_uintX = ucmprsrX.compress(_uintX)
-                # 『s』repr small/compressed
-            uintX = ucmprsrX.uncompress(s_uintX)
-            num_leading0s = uintX-_uintX
-            if not num_leading0s == 0:
-                if not num_leading0s > 0:raise 000
-                if not j > 0:raise 000
-            digitsX = uint2radix_repr_(sf.radix4body_cell, s_uintX, is_big_endian=True)
-            digitss.append(digitsX)
-            if j > 0:ls4num_leading0s.append(num_leading0s)
-            #######next round:
-            uintX = len(digitsX)
-        assert len(digitss) == 1+len(ls4num_leading0s)
-        digitss, ls4num_leading0s
-            #reversed
-            #[..., digits1]
-            #[..., num_leading0s{digits2}]
-        assert len(digitss) == len(ls4num_leading0s)
-        digits1 = digitss.pop()
-        digitss, ls4num_leading0s
-            #reversed
-            #[..., digits2]
-            #[..., num_leading0s{digits2}]
-        layer_idx, uintX
-        assert layer_idx == 0
-        uint0 = uintX
-        digits1
-        TODO...殿后爻元
-
-    ######################
-    ######################
-class IPlugin4FiniteInterval(IPlugin4UIntInterval):
-    'plugin4finite_interval{uint}'
-    __slots__ = ()
-    # !! [宏头胞 不一致; 未必是二幂]
-    # => 无:num_bits4macro_header
-
-class Table4Codecs4uint:
-    ___no_slots_ok___ = True
-    def 
-size4alphabet
-size4body_cell
-size4head_cell
-[size4alphabet == size4head_cell+size4body_cell]
-!! size4macro_header{plugin4interval}
-xxx:size4macro_header
-xxx:[size4macro_header >= size4head_cell]
-([(prefix_digits, plugin4finite_interval)], (prefix_digits, plugin4infinite_interval))
-
-class ICodecs4uint(ABC):
-    '[codecs4uint :: uint <-> [Digit{j}/uint%radix{j}]]'
+class DecodeError(Exception):pass
+class ICodecs(ABC):
+    '[codecs{v} :: v <-> [Digit{j}/uint%radix{j}]]'
     __slots__ = ()
     @abstractmethod
-    def _encode_uint_(sf, u, /):
-        'uint -> Iter (Iter digit{j})'
+    def _encode_(sf, u, /):
+        'Value -> Iter (Iter digit{j})'
     @abstractmethod
-    def _decode_uint_(sf, digit_reader, /):
-        'IDigitReader -> uint|^EOFError|^DecodeError'
-    def encode_uint_(sf, u, T=tuple, /):
-        'uint -> [digit{j}]'
-        return T(chains(sf._encode_uint_(u)))
-    def decode_uint__reader_(sf, digit_reader, /):
-        'IDigitReader -> uint|^EOFError|^DecodeError'
-        return sf._decode_uint_(digit_reader)
-    def decode_uint__seq_(sf, digit_seq, /):
-        '[digit{j}] -> uint|^EOFError|^DecodeError'
-    def decode_uint__iter_(sf, digits, /):
-        'Iter digit{j} -> uint|^EOFError|^DecodeError'
+    def _decode_(sf, digit_reader, /):
+        'IDigitReader -> Value|^EOFError|^DecodeError'
+    def encode__iter_(sf, u, /):
+        'Value -> Iter digit{j}'
+        return chains(sf._encode_(u))
+    def decode__reader_(sf, digit_reader, /):
+        'IDigitReader -> Value|^EOFError|^DecodeError'
+        return sf._decode_(digit_reader)
+    def decode__seq_(sf, digit_seq, /):
+        '[digit{j}] -> Value|^EOFError|^DecodeError'
+        TODO
+    def decode__iter_(sf, digits, /):
+        'Iter digit{j} -> Value|^EOFError|^DecodeError'
+        TODO
 
 class ICodecs4int(ABC):
     '[codecs4int :: int <-> [Digit{j}/uint%radix{j}]]'
     __slots__ = ()
     def __(sf, /):
         ...:
-
-
-
-from seed.int_tools.StepDecoder import IStepDecoder
-    ######################
-    @property
-    @abstractmethod
-    def radix_info4digit(sf, /):
-        '-> IRadixInfo{radix>=2}'
-    ######################
-    ######################
-    @abstractmethod
-    def start_(sf, rxdigit8macro_header, /):
-        'rxdigit8macro_header/IRadixedDigit -> st/IBaseState4StepDecoder # allow [num_bits4macro_header > num_bits4digit]'
-    @abstractmethod
-    def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
-        'loop_st7nonfinal/ILoopState4StepDecoder{not is_final_st} -> required_digits/[uint%2**num_bits4digit]{len==loop_st7nonfinal.num_required_digits} -> st/IBaseState4StepDecoder'
-    @abstractmethod
-    def feed_oresult_remain_(sf, call_st7nontail, oresult7subcall, rxdigit8remain7subcall, /):
-        'call_st7nontail/ICallState4StepDecoder{not is_tail_call_st} -> oresult7subcall{return from subcall} -> rxdigit8remain7subcall{return from subcall} -> st/IBaseState4StepDecoder'
-    ######################
-from seed.int_tools.StepDecoder import IStepDecoder__dynamic_bits, IStepDecoder__fixed_size_bits, IStepDecoder__fixed_size_xbcells
-from seed.int_tools.StepDecoder import CallEntry4StepDecoder, Kind4State4StepDecoder, LoopState4StepDecoder__plain, CallState4StepDecoder__plain
-    def mk_call_st5four_args_(cls, case, payload, step_decoder4call, state4call, /):
-_CallST = CallState4StepDecoder__plain
-
-from seed.int_tools.DigitReader import ISubSeq, IDigitReader, IDigitReader5iter, IDigitReader5seq, IDigitReader5bytes, IDigitReader5binary_file, IDigitReader5text_file
-from seed.int_tools.DigitReader import DigitReader5seq, DigitReader5iter, DigitReader5bytes, DigitReader5binary_file, DigitReader5text_file
-from seed.int_tools.DigitReader import SubSeq, DigitReader5seq
-
-
-from enum import Enum, auto
-from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_
-from seed.types.Either import Cased, Either
-from seed.types.Either import mk_Left, mk_Right
-
-from seed.int_tools.RadixInfo import IZpowRadixInfo, ZpowRadixInfo# mk_ZpowRadixInfo_
-from seed.int_tools.RadixInfo import IRadixInfo# RadixInfo, mk_RadixInfo_
-from seed.int_tools.RadixInfo import IRadixedDigit, RadixedDigit
-
-from seed.helper.ConstantRepr import ConstantRepr
-from seed.int_tools.DigitReader import IDigitReader
-
-
-
-
-
 __all__
 from seed.int_tools.digits.codecs4int import *

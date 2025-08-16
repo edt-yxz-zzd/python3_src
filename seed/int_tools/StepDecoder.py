@@ -1340,6 +1340,14 @@ decode4rational_with_inf__alnum__5over8_
 encode4rational_with_inf__alnum__5over8_
     iter_encode4rational_with_inf__alnum__5over8_
 CodecSchemeCase4StepDecoder4Rational
+    std_rational_codec_scheme_case
+
+incremental_std_decode4rational_with_inf__alnum__5over8_
+std_decode4rational_with_inf__alnum__5over8_
+    gmk_std_step_decoder4rational_with_inf__alnum__5over8_
+std_encode4rational_with_inf__alnum__5over8_
+    iter_std_encode4rational_with_inf__alnum__5over8_
+
 
 IDecoder__token_seq
     Exception__nonnull_remain
@@ -1756,9 +1764,9 @@ class TailCallState4StepDecoder__plain(CallState4StepDecoder__plain):
     is_tail_call_st = True
     default_case4tail_call = None
     @classmethod
-    def mk_tail_call_st5three_args_(cls, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, /, *, state_vs_rxdigit=False):
+    def mk_tail_call_st5three_args_(cls, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, /, *, state_vs_rxdigit=False, **kwds:'extra_kwds4start'):
         '-> tail_call_st'
-        return cls.mk_call_st5four_args_(cls.default_case4tail_call, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, state_vs_rxdigit=state_vs_rxdigit)
+        return cls.mk_call_st5four_args_(cls.default_case4tail_call, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, state_vs_rxdigit=state_vs_rxdigit, **kwds)
 #end-class TailCallState4StepDecoder__plain(CallState4StepDecoder__plain):
 _TCallST = TailCallState4StepDecoder__plain
 
@@ -1779,9 +1787,9 @@ class XCallState4StepDecoder__plain(CallState4StepDecoder__plain):
         '-> bool'
         return sf.case is sf.case4tail_call
     @classmethod
-    def mk_tail_call_st5three_args_(cls, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, /, *, state_vs_rxdigit=False):
+    def mk_tail_call_st5three_args_(cls, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, /, *, state_vs_rxdigit=False, **kwds:'extra_kwds4start'):
         '-> tail_call_st'
-        return cls.mk_call_st5four_args_(cls.case4tail_call, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, state_vs_rxdigit=state_vs_rxdigit)
+        return cls.mk_call_st5four_args_(cls.case4tail_call, may_postprocess, step_decoder4call, state4call__or__rxdigit8macro_header, state_vs_rxdigit=state_vs_rxdigit, **kwds)
 #end-class XCallState4StepDecoder__plain(CallState4StepDecoder__plain):
 _XCallST = XCallState4StepDecoder__plain
 
@@ -5903,6 +5911,19 @@ incremental_decode4rational_with_inf__alnum__5over8_
 ######################
 
 
+std_rational_codec_scheme_case
+def std_decode4rational_with_inf__alnum__5over8_(_58_alnum_str, /, begin=None, end=None, *, fullmatch=False, nonnull_rxdigit8remain_ok=False):
+    'str/alnum -> ((((oresult|^Exception__not_fullmatch) if fullmatch else (oresult, new_begin))|^Exception__nonnull_remain) if not nonnull_rxdigit8remain_ok else (oresult, rxdigit8remain/IRadixedDigit, new_begin)) # [not (fullmatch and nonnull_rxdigit8remain_ok)]'
+    return decode4rational_with_inf__alnum__5over8_(_58_alnum_str, begin, end, codec_scheme_case=std_rational_codec_scheme_case, fullmatch=fullmatch, nonnull_rxdigit8remain_ok=nonnull_rxdigit8remain_ok)
+def std_encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool):
+    '(Rational|-oo|+oo) -> (digits/bytes if digits_vs_str else str/alnum)'
+    return encode4rational_with_inf__alnum__5over8_(xrational, digits_vs_str=digits_vs_str, codec_scheme_case=std_rational_codec_scheme_case)
+def iter_std_encode4rational_with_inf__alnum__5over8_(xrational, /, *, digits_vs_str:bool):
+    '(Rational|-oo|+oo) -> Iter (digits/bytes if digits_vs_str else str/alnum)'
+    return iter_encode4rational_with_inf__alnum__5over8_(xrational, digits_vs_str=digits_vs_str, codec_scheme_case=std_rational_codec_scheme_case)
+def incremental_std_decode4rational_with_inf__alnum__5over8_(may_wst7inc, s, /, *, empty_ok=False):
+    'may wst7inc -> str/alnum -> (may wresult7inc){None=>[[empty_ok:=True][tokens empty]]} # [kw:codec_scheme_case/CodecSchemeCase4StepDecoder4Rational]'
+    return incremental_decode4rational_with_inf__alnum__5over8_(may_wst7inc, s, codec_scheme_case=std_rational_codec_scheme_case, empty_ok=empty_ok)
 
 
 
@@ -5912,6 +5933,24 @@ incremental_decode4rational_with_inf__alnum__5over8_
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################
 import builtins as _B
 def _prepare_prefix_tree4val(v, /):
     match v:
@@ -5924,11 +5963,12 @@ def _prepare_prefix_tree4val(v, /):
         case (0, x):
             #(0,arg8prefix_tree4step_decoder/extend_macro_header)
             r = PrefixTree4step_decoder.mk_prefix_tree4step_decoder_(x)
-        case ((1|2|3) as case, payload):
+        case ((-1|1|2|3) as case, payload):
+            #(-1,arg4period)
             #(1,oresult)
             #(2,peculiar_args4step_decoder)
             #(3,step_decoder)
-            r = Target4prefix_tree4step_decoder(Cased(case, payload))
+            r = Target4prefix_tree4step_decoder(Cased(case, payload), None)
         case _:
             raise 000
     r
@@ -6020,8 +6060,18 @@ class Target4prefix_tree4step_decoder:
     'tgt/target4prefix_tree'
     def __init__(sf, cased_target, may_step_decoder, /):
         check_type_is(Cased, cased_target)
+        if cased_target.case == -1:
+            arg4period = cased_target.payload
+            (name4period,period4jump_back) = arg4period
+            check_int_ge(1, period4jump_back)
+            may_name4period = name4period
+        else:
+            may_name4period = None
+        may_name4period
+        if (not may_step_decoder is None) and (not may_name4period is None):raise TypeError
         sf._ct = cased_target
         sf._ms = may_step_decoder
+        sf._mnm = may_name4period
     def __repr__(sf, /):
         return repr_helper(sf, sf.cased_target, sf._ms)
     @property
@@ -6029,13 +6079,26 @@ class Target4prefix_tree4step_decoder:
         return sf._ct
     @property
     def step_decoder(sf, /):
+        '-> step_decoder|^AttributeError'
         m = sf._ms
         if m is None:raise AttributeError('step_decoder')
         return m
     @step_decoder.setter
     def step_decoder(sf, step_decoder, /):
-        if not sf._ms is None:raise AttributeError('step_decoder')
+        if not sf._ms is None:raise AttributeError('existed:".step_decoder"')
+        if not sf._mnm is None:raise AttributeError('conflict:".step_decoder", ".name4period"')
         sf._ms = step_decoder
+    @property
+    def may_name4period(sf, /):
+        '-> may name4period'
+        return sf._mnm
+    @cached_property
+    def either_name4period_or_step_decoder(sf, /):
+        '-> (Either name4period step_decoder)|^AttributeError'
+        if not (name4period:=sf.may_name4period) is None:
+            return mk_Left(name4period)
+        return mk_Right(sf.step_decoder)
+#end-class Target4prefix_tree4step_decoder:
 
 
 class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_header):
@@ -6049,9 +6112,17 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
     [radix4macro_header =[def]= max(prefix_tree4step_decoder)]
     [num_intervals4macro_header =[def]= len(prefix_tree4step_decoder)]
     #arg{target4prefix_tree}
-    [arg8target4prefix_tree =[def]= (None/undefined_interval|.../reserved_interval|(0,arg8prefix_tree4step_decoder/extend_macro_header)|(1,oresult)|(2,peculiar_args4step_decoder)|(3,step_decoder))]
+    [arg8target4prefix_tree =[def]= (None/undefined_interval|.../reserved_interval|(0,arg8prefix_tree4step_decoder/extend_macro_header)|(1,oresult)|(2,peculiar_args4step_decoder)|(3,step_decoder)|(-1,arg4period))]
+    [arg4period =[def]= (name4period,period4jump_back)]
+    [name4period :: Hashable{not None}]
+    [period4jump_back :: uint{>=1}]
+        # relpace:arg8one_way_inf_cycle_prefix_tree4step_decoder
+        #fixed bug by Target4prefix_tree4step_decoder.may_name4period,step_decoder.support_kw_lnkls7PrefixTree,step_decoder.start_():kw:lnkls7PrefixTree
+            #<<==:
+            #bug:static-fill() cause inf-recur
+            #bug:runtime-decode() required extra param:num_periods
     [target4prefix_tree :: (None/undefined_interval|.../reserved_interval|Target4prefix_tree4step_decoder)]
-    [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> whole_head_radix4step_decoder -> peculiar_args4step_decoder -> step_decoder]
+    [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> whole_head_radix4step_decoder -> peculiar_args4step_decoder -> step_decoder{[[.support_kw_lnkls7PrefixTree::bool][support_kw_lnkls7PrefixTree=>.start_()::kw:lnkls7PrefixTree/(lnkls{(prefix_tree4step_decoder, idx4tgt, may_arg4period)})]]}]
     [common_args4step_decoder :: (radix4digit, ...usrdefined...)]
     [begin_size_pair_prefix4step_decoder :: [(begin/min{interval}, size/radix/len{interval})]] =>:
         [fixed_min_prefix4step_decoder :: [uint]]
@@ -6095,8 +6166,9 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
         tree = sf.prefix_tree4step_decoder
         if not tree.filled:
             tree.fill_prefix_tree_(sf)
-        return sf._work(rxdigit8no_bits, rxdigit8macro_header, tree)
-    def _work(sf, rxdigit8acc, rxdigit8H, tree, /):
+        lnkls = ()
+        return sf._work(lnkls, rxdigit8no_bits, rxdigit8macro_header, tree)
+    def _work(sf, lnkls, rxdigit8acc, rxdigit8H, tree, /):
         # [tree.filled]
         assert tree.filled
         digit8H = rxdigit8H.digit
@@ -6116,10 +6188,40 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
             raise ReservedAreaException(x)
         if type(x) is Target4prefix_tree4step_decoder:
             tgt = x
-            return _TCallST.mk_tail_call_st5three_args_(None,   tgt.step_decoder,_rxdigit8acc, state_vs_rxdigit=True)
+            #.nmXdr = tgt.either_name4period_or_step_decoder
+            #.if nmXdr.is_left:
+            #.    name4period = nmXdr.left
+            if not tgt.may_name4period is None:
+                # jump back
+                arg4period = tgt.cased_target.payload
+                item = (tree, j, may_arg4period:=arg4period)
+                _lnkls = (lnkls, item)
+                (name4period,period4jump_back) = arg4period
+                check_int_ge(1, period4jump_back)
+                n = period4jump_back-1
+                for (_tree, _j, may_arg4period) in rglnkls2reversed_iterable(_lnkls):
+                    #jump_back...
+                    if n == 0:
+                        old_tree = _tree
+                        break
+                    n -= 1
+                else:
+                    raise 000
+                old_tree
+                #.raise NotImplementedError('PrefixTree4step_decoder*Target4prefix_tree4step_decoder:', arg4period)
+                return _LoopST(Cased(False, (_lnkls, old_tree)),  _rxdigit8acc,  1)
+            # [tgt.may_name4period is None]
+            # go advance
+            item = (tree, j, may_arg4period:=None)
+            _lnkls = (lnkls, item)
+            dr = tgt.step_decoder
+            ex_kwds = dict(lnkls7PrefixTree=_lnkls) if getattr(dr, 'support_kw_lnkls7PrefixTree', False) else {}
+            return _TCallST.mk_tail_call_st5three_args_(None,   dr,_rxdigit8acc, state_vs_rxdigit=True, extra_kwds4start=ex_kwds)
         assert type(x) is PrefixTree4step_decoder
         inner_tree = x
-        return _LoopST(Cased(False, inner_tree),  _rxdigit8acc,  1)
+        item = (tree, j, may_arg4period:=None)
+        _lnkls = (lnkls, item)
+        return _LoopST(Cased(False, (_lnkls, inner_tree)),  _rxdigit8acc,  1)
     @override
     def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
         st = loop_st7nonfinal
@@ -6127,8 +6229,8 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
         [digit] = required_digits
         rx8low = RadixedDigit(sf.radix_info4digit, digit)
         rx8acc = st.rxdigit8remain
-        tree = st.payload
-        return sf._work(rx8acc, rx8low, tree)
+        (lnkls, tree) = st.payload
+        return sf._work(lnkls, rx8acc, rx8low, tree)
     #@override
     feed_oresult_remain_ = _Dead.feed_oresult_remain_
     ######################
@@ -6141,11 +6243,13 @@ def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4st
     fixed_min_prefix = []
     fixed_radix_prefix = []
     whole_head_radixes = [1]
+    trees = []
     T = Target4prefix_tree4step_decoder
     P = PrefixTree4step_decoder
     def recur_(prefix_tree4step_decoder, /):
         check_type_is(P, prefix_tree4step_decoder)
         if prefix_tree4step_decoder._filled:return
+        trees.append(prefix_tree4step_decoder)
         begin = 0
         for end, x in zip(prefix_tree4step_decoder.sorted_max1_seq_view, prefix_tree4step_decoder.ordered_target_seq_view):
             radix = end-begin
@@ -6167,16 +6271,37 @@ def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4st
                     case (3,step_decoder):
                         step_decoder
                         pass
+                    case (-1,arg4period):
+                        (name4period,period4jump_back) = arg4period
+                        check_int_ge(1, period4jump_back)
+                        j = len(trees)-period4jump_back
+                        check_int_ge(0, j)
+                        inner_tree = trees[j]
+                        # [[period4jump_back==1] -> [inner_tree is prefix_tree4step_decoder is trees[-1]]]
+                        assert tgt.may_name4period is name4period is not None
+                        777;#not fill step_decoder, leave None
+                        777_777;#see:kw:lnkls7PrefixTree&attr:support_kw_lnkls7PrefixTree
+                        pass
+                        #.if 0:
+                        #.    recur_(inner_tree)
+                        #.    #bug:static-fill() cause inf-recur
+                        #.    #bug:runtime-decode() required extra param:num_periods
+                        #.else:
+                        #.    raise NotImplementedError('Target4prefix_tree4step_decoder.cased_target:period4jump_back', arg4period)
                     case _:
                         raise 000
                 tgt.step_decoder = step_decoder
+            elif type(x) is P:
+                inner_tree = x
+                recur_(inner_tree)
             else:
-                recur_(x)
+                raise TypeError(x)
             fixed_min_prefix.pop()
             fixed_radix_prefix.pop()
             whole_head_radixes.pop()
         #for end, x in zip(prefix_tree4step_decoder.sorted_max1_seq_view, prefix_tree4step_decoder.ordered_target_seq_view):
         prefix_tree4step_decoder._filled = True
+        trees.pop()#->prefix_tree4step_decoder
     recur_(prefix_tree4step_decoder)
     return
 
@@ -6383,6 +6508,13 @@ from seed.int_tools.StepDecoder import \
 ,encode4rational_with_inf__alnum__5over8_
 ,    iter_encode4rational_with_inf__alnum__5over8_
 )
+from seed.int_tools.StepDecoder import \
+(incremental_std_decode4rational_with_inf__alnum__5over8_
+,std_decode4rational_with_inf__alnum__5over8_
+,    gmk_std_step_decoder4rational_with_inf__alnum__5over8_
+,std_encode4rational_with_inf__alnum__5over8_
+,    iter_std_encode4rational_with_inf__alnum__5over8_
+)
 from seed.int_tools.StepDecoder import CodecSchemeCase4StepDecoder4Rational, std_rational_codec_scheme_case
 
 
@@ -6390,6 +6522,51 @@ from seed.int_tools.StepDecoder import IWrappedResult7incremental_decode, IWrapp
 
 from seed.int_tools.StepDecoder import WrappedResult7incremental_decode, WrappedState7incremental_decode, ExtendedOutResult7incremental_decode
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################
+from seed.int_tools.StepDecoder import step_decode__input_, step_decode__head_, step_decode__state_
+from seed.int_tools.StepDecoder import incremental_decode__continued_, incremental_decode__init5head_, incremental_decode__init5state_
+if 777:
+    #__alnum__5over8
+    from seed.int_tools.StepDecoder import gmk_step_decoder4int_with_inf__alnum__5over8_ as _58_gmk4int, gmk_std_step_decoder4rational_with_inf__alnum__5over8_ as _58_gmk4rational
+    if 0:
+        step_decoder4int_with_inf__alnum__5over8 = _58_gmk4int()
+        std_step_decoder4rational_with_inf__alnum__5over8 = _58_gmk4rational()
+
+
+from seed.int_tools.StepDecoder import incremental_decode__ops4iter_headed_digits_
+if 777:
+    #__alnum__5over8
+    from seed.int_tools.StepDecoder import ops4iter_headed_digits__alnum__5over8
+
+
+#__alnum__5over8
+from seed.int_tools.StepDecoder import \
+(incremental_std_decode4rational_with_inf__alnum__5over8_
+,std_decode4rational_with_inf__alnum__5over8_
+,std_encode4rational_with_inf__alnum__5over8_
+,    iter_std_encode4rational_with_inf__alnum__5over8_
+)
+######################
 
 
 from seed.int_tools.StepDecoder import *

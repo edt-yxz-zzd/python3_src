@@ -45,7 +45,7 @@ def iter_global_names4export_ex(names, /, *, excluded_names, ___begin_mark_patte
     exclude = False
     for nm in names:
         if exclude:
-            if end_exclude_regex.fullmatch(nm):
+            if isinstance(nm, str) and end_exclude_regex.fullmatch(nm):
                 exclude = not exclude
         else:
             if begin_exclude_regex.fullmatch(nm):
