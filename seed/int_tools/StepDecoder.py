@@ -1,9 +1,12 @@
 #__all__:goto
 #TODO:goto
-#TODO:NotImplementedError
-#TODO:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header
-#TODO:incremental_decode4int_with_inf__alnum__5over8_/incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
-#64,65,67:[0-9A-Za-z._@+-]
+#NotImplementedError:goto
+#TODO:_58_iter_encode4uint-->参数化、泛化... 特殊值、立即数区间、多凡层区间、超凡层区间(前缀循环节)
+#TODO:_58_iter_encode4uint-->++kw:sep4layer
+#TODO:_58_iter_encode4uint-->++kw:not_zpow_radix
+#?DONE?:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header:see:fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_()
+#?TODO?:incremental_decode4int_with_inf__alnum__5over8_/incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
+#64,65,67:[0-9A-Za-z._@+-]:std_rational_codec_scheme_case{cf_symmetry_scheme__via_trunc_using_signed_zero} => ((3+2*k)+2**e) => (3+64) for (int|ratiinal),64 for inner uint
 r'''[[[
 e ../../python3_src/seed/int_tools/StepDecoder.py
     vs:codecs.IncrementalDecoder
@@ -11,10 +14,10 @@ view ../../python3_src/seed/int_tools/digits/codecs4int.py
 view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt
     DONE:step_decoder4int_with_inf__alnum__5over8
 view others/数学/编程/设计/自定义编码之要点.txt
-    TODO:统一:透明数据化硬编码{区间前缀树,况态化解码结果}
+    ?TODO:统一:透明数据化硬编码{区间前缀树,况态化解码结果}
         IStepDecoder__hardwired__prefix_tree
-            #TODO:分层表{base;radix} #...似乎无必要,因为 整除分阶层 更像是会被参数化的特征
-        TODO:阶跃式分阶层、强幂级进分阶层
+            #?TODO:分层表{base;radix} #...似乎无必要,因为 整除分阶层 更像是会被参数化的特征
+        ?TODO:阶跃式分阶层、强幂级进分阶层
 
 seed.int_tools.StepDecoder
 py -m nn_ns.app.debug_cmd   seed.int_tools.StepDecoder -x # -off_defs
@@ -55,15 +58,16 @@ rename:
 #[词典序&&变长]=>(动态爻元|动态苞元)
 #[变殿后<:语境相关有序对]
 DONE:dependent_pair
-TODO:dependent_serial#连锁依赖串联
-TODO:带多层长度的负载冃自然数#宏头胞 代表 层数; (统一单位:爻元|躯胞，但 线性变换:step{j8layer}*u+offset{j8layer} 或者 非线性变换:f(j8layer,u))
+?TODO:dependent_serial#连锁依赖串联
+    fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_()
+?TODO:带多层长度的负载冃自然数#宏头胞 代表 层数; (统一单位:爻元|躯胞，但 线性变换:step{j8layer}*u+offset{j8layer} 或者 非线性变换:f(j8layer,u))
 DONE:dynamic_bits-->dynamic_digits
     len_dydigits
     (len_dydigits4head, len_dydigits4body)
 DONE:fixed_size_bits-->fixed_size_digits
     (u8head, weight4head, u8digits)
     u8head add1 ???
-TODO:dynamic_bits_with_dependent_size_bits-->dynamic_digits_with_dependent_size_digits
+?TODO:dynamic_bits_with_dependent_size_bits-->dynamic_digits_with_dependent_size_digits
     (len_dydigits, u8szdigits)
         u8head add1 ???
 
@@ -1081,8 +1085,8 @@ True
 (Fraction(-35, 2), 'WEE11')
 
 ######################
-#TODO:test:incremental_decode4int_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
-#TODO:test:incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
+#test:incremental_decode4int_with_inf__alnum__5over8_
+#test:incremental_decode4rational_with_inf__alnum__5over8_
 sign4zeroZpairs8out
 case2pairs8out
 >>> class ITestIncDecode(ABC):
@@ -1159,6 +1163,9 @@ py_adhoc_call   seed.int_tools.StepDecoder   @f
 from seed.int_tools.StepDecoder import *
 ]]]'''#'''
 __all__ = r'''
+fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_
+    IStepDecoder__dependent_pair
+    IStepDecoder__rational_with_inf
 
 CallEntry4StepDecoder
 Kind4State4StepDecoder
@@ -1451,45 +1458,44 @@ from seed.int_tools.DigitReader import IDigitReader# IDigitReader5iter, IDigitRe
 
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
 #if not 'lazy_import4func_' in globals():
-if 1:
-    from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-    repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-    lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_,echo', __name__)
-    if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_,echo
-    lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,concat_digits2bytes_,concat_digits2iter_bytess_', __name__)
-    if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
+lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_,echo', __name__)
+if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_,echo
+lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,concat_digits2bytes_,concat_digits2iter_bytess_', __name__)
+if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
 
-    ceil_div = lazy_import4func_('seed.math.floor_ceil', 'ceil_div', __name__)
-    #from seed.math.floor_ceil import ceil_div
+ceil_div = lazy_import4func_('seed.math.floor_ceil', 'ceil_div', __name__)
+#from seed.math.floor_ceil import ceil_div
 
-    uint5radix_repr_ = lazy_import4func_('seed.int_tools.digits.uint25radix_repr', 'uint5radix_repr_', __name__)
-    #from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
+uint5radix_repr_ = lazy_import4func_('seed.int_tools.digits.uint25radix_repr', 'uint5radix_repr_', __name__)
+#from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
 
-    rglnkls2reversed_iterable = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls2reversed_iterable', __name__)
-    #from seed.data_funcs.lnkls import rglnkls2reversed_iterable
+rglnkls2reversed_iterable = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls2reversed_iterable', __name__)
+#from seed.data_funcs.lnkls import rglnkls2reversed_iterable
 
-    calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction_fold', 'calc_Fraction5finite_continued_fraction_', __name__)
-    #from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
+calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction_fold', 'calc_Fraction5finite_continued_fraction_', __name__)
+#from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
 
-    iter_continued_fraction_digits5ND_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction5ND', 'iter_continued_fraction_digits5ND_', __name__)
-    #from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+iter_continued_fraction_digits5ND_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction5ND', 'iter_continued_fraction_digits5ND_', __name__)
+#from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
 
-    uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
-    #from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
+uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
+#from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
 
-    mk_seq_rng = lazy_import4func_('seed.seq_tools.mk_seq_rng', 'mk_seq_rng', __name__)
-    #from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+mk_seq_rng = lazy_import4func_('seed.seq_tools.mk_seq_rng', 'mk_seq_rng', __name__)
+#from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
 
 
-    lazy_import4func_('seed.int_tools.DigitReader', 'DigitReader5iter', __name__, 'mk_DigitReader5iter')
-    if 0:from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
-    mk_DigitReader5iter
+lazy_import4func_('seed.int_tools.DigitReader', 'DigitReader5iter', __name__, 'mk_DigitReader5iter')
+if 0:from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
+mk_DigitReader5iter
 
-    mk_Rope = lazy_import4func_('seed.types.Rope', 'mk_Rope', __name__)
-    lazy_import4func_('seed.types.Rope', 'Rope', __name__, '_Rope')
-    if 0:from seed.types.Rope import mk_Rope, Rope as _Rope
-    _Rope
-    #[iter_subseq__opaque_,iter_subseq__transparent_] = lazy_import4funcs_('seed.iters.iter_subseq', 'iter_subseq__opaque_,iter_subseq__transparent_', __name__)
+mk_Rope = lazy_import4func_('seed.types.Rope', 'mk_Rope', __name__)
+lazy_import4func_('seed.types.Rope', 'Rope', __name__, '_Rope')
+if 0:from seed.types.Rope import mk_Rope, Rope as _Rope
+_Rope
+#[iter_subseq__opaque_,iter_subseq__transparent_] = lazy_import4funcs_('seed.iters.iter_subseq', 'iter_subseq__opaque_,iter_subseq__transparent_', __name__)
 
 ___end_mark_of_excluded_global_names__0___ = ...
 __all__
@@ -1902,7 +1908,7 @@ class IStepDecoder(ABC):
     @property
     @abstractmethod
     def emay_radix_info4macro_header(sf, /):
-        '-> emay IRadixInfo{radix>=2}'
+        '-> emay IRadixInfo{radix>=2} #required by fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_()'
     @property
     @abstractmethod
     def radix_info4digit(sf, /):
@@ -3018,6 +3024,12 @@ def _cut_low_uint(num_bits4remain, u, /):
 
 
 
+def fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_(rxdigit8remain7subcall, step_decoder, /):
+    'IRadixedDigit -> IStepDecoder -> IStepDecoder # ==>> ++IStepDecoder.emay_radix_info4macro_header #serial4step_decoder:eg:IStepDecoder__dependent_pair,IStepDecoder__rational_with_inf'
+    if rxdigit8remain7subcall.is_null and not ... is (ri:=step_decoder.emay_radix_info4macro_header) and not ri.is_null:
+        #?DONE?:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header
+        step_decoder = StepDecoder__skip_macro_header(step_decoder)
+    return step_decoder
 class IStepDecoder__dependent_pair(IStepDecoder):
     r'''[[[
     '[dependent_pair =[def]= (fst_part, snd_part{fst_oresult})]'
@@ -3056,6 +3068,9 @@ class IStepDecoder__dependent_pair(IStepDecoder):
                 fst_oresult = oresult7subcall
                 dr4snd_part = sf.mk_step_decoder4snd_part_(fst_oresult)
                 #if 0b0001 and isinstance(sf, IStepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits):raise Exception(len_dybits:=fst_oresult, rxdigit8remain7subcall)
+                #######
+                dr4snd_part = fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_(rxdigit8remain7subcall, dr4snd_part)
+                #######
                 return _CallST.mk_call_st5four_args_(1,fst_oresult,   dr4snd_part,rxdigit8remain7subcall, state_vs_rxdigit=True)
             case 1:
                 fst_oresult = st.payload
@@ -3286,7 +3301,7 @@ DONE:IStepDecoder__dynamic_bibits{body_bibit:="10"}
     [imay_max_num_bits4read>=1]:
         regex"1{0,max_num_bits4read-1}0|1{max_num_bits4read}(01)*(00|1)"
 
-TODO:IStepDecoder__dynamic_nbits{imay_max_num_bits4read,body_nbit}
+?TODO:IStepDecoder__dynamic_nbits{imay_max_num_bits4read,body_nbit}
     nbit:n bit
     [body_nbit:=regex"10{n-1}"]
         regex"(10{n-1})*(0|10{0,n-2}1|1{2,n-1}0|11)"
@@ -4610,7 +4625,7 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
         check_type_is(bool, with_sign)
         if with_sign:
             if not sf.support_kw_with_sign:raise TypeError('not support{kw:with_sign}')
-            #raise NotImplementedError('@(kw:with_sign:=True)')
+            #.raise NotImplementedError('@(kw:with_sign:=True)')
         radix4H = sf.radix_info4macro_header.radix
         if not rxdigit8macro_header.radix_info.radix == radix4H:raise 000
         return sf._work(rxdigit8macro_header, with_sign)
@@ -4750,7 +4765,7 @@ class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
     ######################
     IStepDecoder__flip_digits
     ######################
-    #TODO:rational_number_codec.cf_symmetry_scheme:see:support_kw_with_sign,support_three_zeros,codec_scheme_case
+    #DONE:rational_number_codec.cf_symmetry_scheme:see:support_kw_with_sign,support_three_zeros,codec_scheme_case
     @property
     @abstractmethod
     def codec_scheme_case(sf, /):
@@ -4902,9 +4917,10 @@ class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
         #######
         lnkls, _case, dr
         #######
-        if rxdigit8remain7subcall.is_null and not dr.emay_radix_info4macro_header.is_null:
-            #TODO:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header
-            dr = StepDecoder__skip_macro_header(dr)
+        dr = fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_(rxdigit8remain7subcall, dr)
+        #.if rxdigit8remain7subcall.is_null and not dr.emay_radix_info4macro_header.is_null:
+        #.    #?DONE?:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header
+        #.    dr = StepDecoder__skip_macro_header(dr)
         #######
         return _CallST.mk_call_st5four_args_(_case,lnkls,   dr,rxdigit8remain7subcall, state_vs_rxdigit=True)
     ######################
@@ -5392,8 +5408,10 @@ def _impl_iter_encode4rational_with_inf__alnum__5over8_(b_symmetry, _b_lift_one,
     (N, D) = (rational.numerator, rational.denominator)
     iter_cf_digits = iter_continued_fraction_digits5ND_(N, D)
     assert iter(iter_cf_digits) is iter_cf_digits
+
+    ######################
     #######ver:iter
-        #TODO:iter instead of list one time...
+    #DONE:iter instead of list one time...
     i = _next(iter_cf_digits)
     777; us = iter_cf_digits
     to_flip = False
@@ -5435,6 +5453,7 @@ def _impl_iter_encode4rational_with_inf__alnum__5over8_(b_symmetry, _b_lift_one,
         777;to_flip = not to_flip
     return
 
+    ######################
     #######ver:list
     #.[i, *us] = iter_cf_digits
     #.#if 0b0001:print_err(i, us)
@@ -5466,6 +5485,7 @@ def _impl_iter_encode4rational_with_inf__alnum__5over8_(b_symmetry, _b_lift_one,
     #.    yield from it
     #.    777;to_flip = not to_flip
     #.return
+    ######################
 def encode4int_with_inf__alnum__5over8_(xi, /, *, digits_vs_str:bool, sign4zero):
     '(int|-oo|+oo) -> (digits/bytes if digits_vs_str else str/alnum)'
     it = iter_encode4int_with_inf__alnum__5over8_(xi, digits_vs_str=digits_vs_str, sign4zero=sign4zero)
@@ -5867,7 +5887,7 @@ def incremental_decode4int_with_inf__alnum__5over8_(may_wst7inc, s, /, *, empty_
 encode4int_with_inf__alnum__5over8_
 decode4int_with_inf__alnum__5over8_
 incremental_decode4int_with_inf__alnum__5over8_
-    #TODO:test
+    #DONE:test
 ######################
 
 
@@ -5907,7 +5927,7 @@ def incremental_decode4rational_with_inf__alnum__5over8_(may_wst7inc, s, /, *, c
 encode4rational_with_inf__alnum__5over8_
 decode4rational_with_inf__alnum__5over8_
 incremental_decode4rational_with_inf__alnum__5over8_
-    #TODO:test
+    #DONE:test
 ######################
 
 
@@ -6116,13 +6136,14 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
     [arg4period =[def]= (name4period,period4jump_back)]
     [name4period :: Hashable{not None}]
     [period4jump_back :: uint{>=1}]
+        # !! 『period』 >= 1
         # relpace:arg8one_way_inf_cycle_prefix_tree4step_decoder
-        #fixed bug by Target4prefix_tree4step_decoder.may_name4period,step_decoder.support_kw_lnkls7PrefixTree,step_decoder.start_():kw:lnkls7PrefixTree
+        #fixed bug by Target4prefix_tree4step_decoder.may_name4period,step_decoder.support_kw_szlnkls7PrefixTree,step_decoder.start_():kw:szlnkls7PrefixTree
             #<<==:
             #bug:static-fill() cause inf-recur
             #bug:runtime-decode() required extra param:num_periods
     [target4prefix_tree :: (None/undefined_interval|.../reserved_interval|Target4prefix_tree4step_decoder)]
-    [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> whole_head_radix4step_decoder -> peculiar_args4step_decoder -> step_decoder{[[.support_kw_lnkls7PrefixTree::bool][support_kw_lnkls7PrefixTree=>.start_()::kw:lnkls7PrefixTree/(lnkls{(prefix_tree4step_decoder, idx4tgt, may_arg4period)})]]}]
+    [mkr4step_decoder :: common_args4step_decoder -> fixed_min_prefix4step_decoder -> fixed_radix_prefix4step_decoder -> whole_head_radix4step_decoder -> peculiar_args4step_decoder -> step_decoder{[[.support_kw_szlnkls7PrefixTree::bool][support_kw_szlnkls7PrefixTree=>.start_()::kw:szlnkls7PrefixTree/(len(...following-lnkls), lnkls{(prefix_tree4step_decoder, idx4tgt, may_arg4period)})]]}]
     [common_args4step_decoder :: (radix4digit, ...usrdefined...)]
     [begin_size_pair_prefix4step_decoder :: [(begin/min{interval}, size/radix/len{interval})]] =>:
         [fixed_min_prefix4step_decoder :: [uint]]
@@ -6167,8 +6188,9 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
         if not tree.filled:
             tree.fill_prefix_tree_(sf)
         lnkls = ()
-        return sf._work(lnkls, rxdigit8no_bits, rxdigit8macro_header, tree)
-    def _work(sf, lnkls, rxdigit8acc, rxdigit8H, tree, /):
+        len_lnkls = 0
+        return sf._work(len_lnkls, lnkls, rxdigit8no_bits, rxdigit8macro_header, tree)
+    def _work(sf, len_lnkls, lnkls, rxdigit8acc, rxdigit8H, tree, /):
         # [tree.filled]
         assert tree.filled
         digit8H = rxdigit8H.digit
@@ -6191,37 +6213,41 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
             #.nmXdr = tgt.either_name4period_or_step_decoder
             #.if nmXdr.is_left:
             #.    name4period = nmXdr.left
-            if not tgt.may_name4period is None:
-                # jump back
-                arg4period = tgt.cased_target.payload
-                item = (tree, j, may_arg4period:=arg4period)
+            if tgt.may_name4period is None:
+                # [tgt.may_name4period is None]
+                # go advance
+                item = (tree, j, may_arg4period:=None)
                 _lnkls = (lnkls, item)
-                (name4period,period4jump_back) = arg4period
-                check_int_ge(1, period4jump_back)
-                n = period4jump_back-1
-                for (_tree, _j, may_arg4period) in rglnkls2reversed_iterable(_lnkls):
-                    #jump_back...
-                    if n == 0:
-                        old_tree = _tree
-                        break
-                    n -= 1
-                else:
-                    raise 000
-                old_tree
-                #.raise NotImplementedError('PrefixTree4step_decoder*Target4prefix_tree4step_decoder:', arg4period)
-                return _LoopST(Cased(False, (_lnkls, old_tree)),  _rxdigit8acc,  1)
-            # [tgt.may_name4period is None]
-            # go advance
-            item = (tree, j, may_arg4period:=None)
+                777;_len_lnkls = 1+len_lnkls
+                dr = tgt.step_decoder
+                ex_kwds = dict(szlnkls7PrefixTree=(_len_lnkls,_lnkls)) if getattr(dr, 'support_kw_szlnkls7PrefixTree', False) else {}
+                return _TCallST.mk_tail_call_st5three_args_(None,   dr,_rxdigit8acc, state_vs_rxdigit=True, extra_kwds4start=ex_kwds)
+            # [not tgt.may_name4period is None]
+            # jump back
+            arg4period = tgt.cased_target.payload
+            #.raise NotImplementedError('PrefixTree4step_decoder*Target4prefix_tree4step_decoder:', arg4period)
+            item = (tree, j, may_arg4period:=arg4period)
             _lnkls = (lnkls, item)
-            dr = tgt.step_decoder
-            ex_kwds = dict(lnkls7PrefixTree=_lnkls) if getattr(dr, 'support_kw_lnkls7PrefixTree', False) else {}
-            return _TCallST.mk_tail_call_st5three_args_(None,   dr,_rxdigit8acc, state_vs_rxdigit=True, extra_kwds4start=ex_kwds)
+            777;_len_lnkls = 1+len_lnkls
+            (name4period,period4jump_back) = arg4period
+            check_int_ge(1, period4jump_back)
+            n = period4jump_back-1
+            for (_tree, _j, _may_arg4period) in rglnkls2reversed_iterable(_lnkls):
+                #jump_back...
+                if n == 0:
+                    old_tree = _tree
+                    break
+                n -= 1
+            else:
+                raise 000
+            old_tree
+            return _LoopST(Cased(False, (_len_lnkls, _lnkls, old_tree)),  _rxdigit8acc,  1)
         assert type(x) is PrefixTree4step_decoder
         inner_tree = x
         item = (tree, j, may_arg4period:=None)
         _lnkls = (lnkls, item)
-        return _LoopST(Cased(False, (_lnkls, inner_tree)),  _rxdigit8acc,  1)
+        777;_len_lnkls = 1+len_lnkls
+        return _LoopST(Cased(False, (_len_lnkls, _lnkls, inner_tree)),  _rxdigit8acc,  1)
     @override
     def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
         st = loop_st7nonfinal
@@ -6229,8 +6255,8 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
         [digit] = required_digits
         rx8low = RadixedDigit(sf.radix_info4digit, digit)
         rx8acc = st.rxdigit8remain
-        (lnkls, tree) = st.payload
-        return sf._work(lnkls, rx8acc, rx8low, tree)
+        (len_lnkls, lnkls, tree) = st.payload
+        return sf._work(len_lnkls, lnkls, rx8acc, rx8low, tree)
     #@override
     feed_oresult_remain_ = _Dead.feed_oresult_remain_
     ######################
@@ -6280,7 +6306,7 @@ def fill_prefix_tree_(mkr4step_decoder, common_args4step_decoder, prefix_tree4st
                         # [[period4jump_back==1] -> [inner_tree is prefix_tree4step_decoder is trees[-1]]]
                         assert tgt.may_name4period is name4period is not None
                         777;#not fill step_decoder, leave None
-                        777_777;#see:kw:lnkls7PrefixTree&attr:support_kw_lnkls7PrefixTree
+                        777_777;#see:kw:szlnkls7PrefixTree&attr:support_kw_szlnkls7PrefixTree
                         pass
                         #.if 0:
                         #.    recur_(inner_tree)
@@ -6459,6 +6485,7 @@ from seed.int_tools.StepDecoder import IInput4StepDecoder, IPartialOutput4StepDe
 
 from seed.int_tools.StepDecoder import IUIntLinearTransform
 from seed.int_tools.StepDecoder import IOps4IterDigitsWithHeadCell
+from seed.int_tools.StepDecoder import fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_
 
 from seed.int_tools.StepDecoder import CallEntry4StepDecoder, Kind4State4StepDecoder, LoopState4StepDecoder__plain, CallState4StepDecoder__plain, mk_nontail_call_st4step_decoder_, TailCallState4StepDecoder__plain, mk_tail_call_st4step_decoder_, XCallState4StepDecoder__plain
 

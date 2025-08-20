@@ -214,6 +214,24 @@ py_adhoc_call   seed.math.GaussInteger ,100:iter_right_angled_triangles_with_cop
 (629, 429, 460)
 ===
 ]]]
+[[[
+time:23:57
+gb2312
+===
+py_adhoc_call   seed.math.GaussInteger ,iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq =2357 '={2357:1}' +SML_vs_HOE +to_sort -turnoff__coprime
+(2357, 1005, 2132)
+===
+$ factor 2357
+2357: 2357
+$ factor 18030
+18030: 2 3 5 601
+$ factor 2312
+2312: 2 2 2 17 17
+$ factor 2132
+2132: 2 2 13 41
+===
+]]]
+
 
 
 #]]]'''
