@@ -34,6 +34,19 @@ from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
 repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
 lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,ifNone:ifNone_', __name__)
 if 0:from seed.tiny import mk_tuple,print_err,ifNone as ifNone_ #xxx:null_tuple #xxx:echo,fst,snd
+
+lazy_import4funcs_('seed.tiny_.containers', 'mk_tuple,mk_immutable_seq,mk_immutable_seq5iterT_,mk_immutable_seq5iter__,mk_bytes5iter_', __name__)
+if 0:from seed.tiny_.containers import mk_tuple,mk_immutable_seq,mk_immutable_seq5iterT_,mk_immutable_seq5iter__,mk_bytes5iter_
+
+lazy_import4funcs_('seed.debug.print_err', 'print_err', __name__)
+if 0:from seed.debug.print_err import print_err
+
+lazy_import4funcs_('seed.helper.ifNone', 'ifNone,ifNonef', __name__)
+if 0:from seed.helper.ifNone import ifNone,ifNonef
+
+lazy_import4funcs_('seed.tiny_.funcs', 'echo,fst,snd', __name__)
+if 0:from seed.tiny_.funcs import echo,fst,snd
+
 ]]
 
 
@@ -252,6 +265,11 @@ __all__ = str2__all__(r'''
     mk_pair             # :: Iter a -> pair a
     is_pair             # :: a -> bool
     mk_immutable_seq    # :: Iter a -> (tuple a | str | bytes | range)
+    mk_immutable_seq5iterT_
+                        # :: type{==(tuple|str|bytes|bytearray|?range?)} -> (Iter x -> [x])
+    mk_immutable_seq5iter__
+                        # :: type{==(tuple|str|bytes|bytearray|?range?)} -> Iter x -> [x]
+    mk_bytes5iter_      # :: Iter (uint%256 | bytes) -> bytes
     mk_reiterable       # :: Iter a -> ReIter a
     mk_reiterables      # :: Iter<Iter a> -> ReIter<ReIter a>
     mk_reiterable__depth_
@@ -710,7 +728,7 @@ assert next(null_iter, None) is None
 #null_set = empty_set
 #null_mapping = empty_mapping
 
-from seed.tiny_.containers import mk_immutable_seq
+from seed.tiny_.containers import mk_immutable_seq,mk_immutable_seq5iterT_,mk_immutable_seq5iter__,mk_bytes5iter_
 assert mk_immutable_seq('') is null_tuple
 assert mk_immutable_seq(b'') is null_tuple
 assert mk_immutable_seq(range(9,9)) is null_tuple
@@ -721,6 +739,12 @@ assert mk_immutable_seq(__:=b'a') is __
 assert mk_immutable_seq(__:=range(999)) is __
 assert mk_immutable_seq(__:=(999,)) is __
 assert mk_immutable_seq([999]) == (999,)
+
+assert mk_immutable_seq5iter__(str, iter('abc')) == 'abc'
+assert mk_immutable_seq5iter__(bytes, iter(b'abc')) == b'abc'
+assert mk_immutable_seq5iter__(bytearray, iter(b'abc')) == bytearray(b'abc')
+assert mk_immutable_seq5iter__(tuple, iter('abc')) == tuple('abc')
+assert mk_immutable_seq5iter__(range, iter('abc')) == tuple('abc')
 
 
 assert mk_tuple__split_first_if_str(b'0 1') == (48, 32, 49)

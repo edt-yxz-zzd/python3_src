@@ -119,6 +119,48 @@ class _IBase4named_pseudo_tuple(Sequence):
         return reversed(sf._0_args)
     def __getitem__(sf, k, /):
         return sf._0_args[k]
+    @cached_property
+    def __hash(sf, /):
+        return hash((type(sf), len(sf), sf._0_args))
+    def __hash__(sf, /):
+        return sf.__hash
+    def __eq__(sf, ot, /):
+        if ot is sf:
+            return True
+        if not type(sf) is type(ot):
+            #if not isinstance(ot, type(sf)):
+            return NotImplemented
+        if not len(sf) == len(ot):
+            return False
+        if not hash(sf) == hash(ot):
+            return False
+        return sf._0_args == ot._0_args
+    def __ne__(sf, ot, /):
+        return not sf == ot
+    def __lt__(sf, ot, /):
+        if ot is sf:
+            return False
+        if not isinstance(ot, type(sf)):
+            return NotImplemented
+        return sf._0_args < ot._0_args
+    def __gt__(sf, ot, /):
+        if ot is sf:
+            return False
+        if not isinstance(ot, type(sf)):
+            return NotImplemented
+        return sf._0_args > ot._0_args
+    def __le__(sf, ot, /):
+        if ot is sf:
+            return True
+        if not isinstance(ot, type(sf)):
+            return NotImplemented
+        return sf._0_args <= ot._0_args
+    def __ge__(sf, ot, /):
+        if ot is sf:
+            return True
+        if not isinstance(ot, type(sf)):
+            return NotImplemented
+        return sf._0_args >= ot._0_args
 #end-class _IBase4named_pseudo_tuple(Sequence):
 #def namedtuple(typename, field_names, *, rename=False, defaults=None, module=None):
 #def namedtuple(typename, field_names, *, rename=False, defaults=None, module=None):

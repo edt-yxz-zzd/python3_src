@@ -1,6 +1,9 @@
 #py -m seed.tiny_.containers
 __all__ = '''
     mk_immutable_seq
+        mk_immutable_seq5iterT_
+        mk_immutable_seq5iter__
+        mk_bytes5iter_
 
     mk_Just
     mk_Left
@@ -123,7 +126,42 @@ assert mk_immutable_seq(__:=range(999)) is __
 assert mk_immutable_seq(__:=(999,)) is __
 assert mk_immutable_seq([999]) == (999,)
 
-
+import builtins as _B
+def mk_immutable_seq5iterT_(T, /):
+    'type{==(tuple|str|bytes|bytearray|?range?)} -> (Iter x -> [x])'
+    match T:
+        case _B.tuple | _B.range:
+            return mk_immutable_seq
+        case _B.str:
+            return ''.join
+        case _B.bytes | _B.bytearray:
+            return mk_bytes5iter_
+            return bytes
+            return b''.join
+        case _:
+            raise TypeError(T)
+    raise 000
+def _iter_bss(xs, /):
+    'Iter (uint%256 | bytes) -> Iter bytes'
+    for x in xs:
+        try:
+            bs = bytes([x])
+        except TypeError:
+            bs = x
+        bs
+        yield bs
+def mk_bytes5iter_(xs, /):
+    'Iter (uint%256 | bytes) -> bytes'
+    bss = _iter_bss(xs)
+    return b''.join(bss)
+def mk_immutable_seq5iter__(T, xs, /):
+    'type{==(tuple|str|bytes|bytearray|?range?)} -> Iter x -> [x]'
+    return mk_immutable_seq5iterT_(T)(xs)
+assert mk_immutable_seq5iter__(str, iter('abc')) == 'abc'
+assert mk_immutable_seq5iter__(bytes, iter(b'abc')) == b'abc'
+assert mk_immutable_seq5iter__(bytearray, iter(b'abc')) == bytearray(b'abc')
+assert mk_immutable_seq5iter__(tuple, iter('abc')) == tuple('abc')
+assert mk_immutable_seq5iter__(range, iter('abc')) == tuple('abc')
 
 
 def mk_tuple__split_first_if_str(xs, /, chars8blank=''):
@@ -154,7 +192,7 @@ assert mk_tuple__split_first_if_str('0 1,2;3', ',;') == ('0', '1', '2', '3')
 from seed.tiny_.containers import mk_tuple__split_first_if_str
 
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
-from seed.tiny_.containers import mk_immutable_seq
+from seed.tiny_.containers import mk_immutable_seq, mk_immutable_seq5iterT_, mk_immutable_seq5iter__, mk_bytes5iter_
 
 from seed.tiny_.containers import mk_pair, mk_pair_tuple
 from seed.tiny_.containers import is_pair

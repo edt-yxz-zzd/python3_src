@@ -399,10 +399,54 @@ False
 ...     for n in range(2, 2**16):
 ...         assert is_kth_power_(k, n) == _is_kth_power_(k, n), (k, n)
 
+
+
+
+
+
+
+
+
+
+
+>>> may_perfect_kth_root_(2, 27)
+>>> may_perfect_kth_root_(2, -4)
+>>> may_perfect_kth_root_(-2, -4)
+>>> may_perfect_kth_root_(-2, 1)
+1
+>>> may_perfect_kth_root_(-2, 0)
+>>> may_perfect_kth_root_(2, 0)
+0
+>>> may_perfect_kth_root_(1, 0)
+0
+>>> may_perfect_kth_root_(0, 0)
+>>> may_perfect_kth_root_(0, 0, default='')
+''
+
+
+>>> may_perfect_kth_root_(3, 27)
+3
+>>> may_perfect_kth_root_(9, 999**9)
+999
+>>> may_perfect_kth_root_(3, -27)
+-3
+>>> may_perfect_kth_root_(9, -999**9)
+-999
+>>> may_perfect_cbrt_(-27)
+-3
+>>> may_perfect_sqrt_(-27)
+>>> may_perfect_sqrt_(4)
+2
+
+
+
+
+
+
+
+
 #]]]'''
 _4doctest = r'''[[[
-
-
 
 
 #]]]'''#'''
@@ -411,7 +455,9 @@ factor_pint_as_pefect_power_
 is_kth_power_
     is_square_
     is_cube_
-
+may_perfect_kth_root_
+    may_perfect_sqrt_
+    may_perfect_cbrt_
 
 
 get_or_mk_config4primes4le_zpow_
@@ -463,55 +509,102 @@ _k2kpows = _prepare4is_kth_power_(10, 2**10)
 assert len(_k2kpows) == 11
 assert _k2kpows[-1] is _k2kpows[10]
 assert _k2kpows[-1] == {1024}, _k2kpows[-1]
+
+def _prepare4kth_root_(max_k, max_n, /):
+    _k2pow2rt = [None, None]
+    for k in range(2, 1+max_k):
+        d = {}
+        for i in range(2, 1+max_n):
+            n = i**k #kpow
+            if n > max_n:break
+            d[n] = i
+        _k2pow2rt.append(d)
+    return _k2pow2rt
+_k2pow2rt = _prepare4kth_root_(10, 2**10)
+assert len(_k2pow2rt) == 11
+assert _k2pow2rt[-1] is _k2pow2rt[10]
+assert _k2pow2rt[-1] == {1024:2}, _k2pow2rt[-1]
+
+
 _3_5_7_11_13 = (3,5,7,11,13)
 _II_3_5_7_11_13 = II(_3_5_7_11_13)
 def is_kth_power_(k, n, /):
     'k/int -> n/int -> bool/(floor_kth_root_(k;n)**k==n)'
     #def is_perfect_kth_power_(k, n, /):
+    return not None is may_perfect_kth_root_(k, n)
+def may_perfect_kth_root_(k, n, /, *, default=None):
+    'k/int -> n/int -> may perfect_kth_root/int{perfect_kth_root**k==n}'
     check_type_is(int, k)
     check_type_is(int, n)
+    m = _0_may_perfect_kth_root_(k, n)
+    if m is None:
+        return default
+    check_type_is(int, m)
+    return m
+def _0_may_perfect_kth_root_(k, n, /):
+    m = _1_may_perfect_kth_root_(k, n)
+    if type(m) is bool:raise 000
+    return m
+def _1_may_perfect_kth_root_(k, n, /):
+    default = None
     #_try_best_to_detect_non_pefect_power_
     if n < 0:
         # [n < 0]
         if k&1 == 0:
+            # [even k]
+            return default
             return False
         # [odd k]
         n = -n
         # [n > 0]
+        if 0x0001:
+            mr = _0_may_perfect_kth_root_(k, n)
+            return default if mr is None else -mr
     # [n >= 0]
     if n < 2:
         if n == 1:
+            return 1
             return True
         if n == 0:
             # 0**0 ok
             # 0**0==1 not 0
+            return 0 if k >= 1 else default
             return k >= 1
         raise 000
     # [n >= 2]
     if k < 2:
+        return n if k == 1 else default
         return k == 1
     # [k >= 2]
     # [n >= 2]
     if n&1 == 0:
         # [n%2 == 0]
         # [n >= 2]
-        ez, n = factor_pint_out_power_of_base_(2, n)
+        (ez, n) = factor_pint_out_power_of_base_(2, n)
         # [n >= 1]
         # [n%2 == 1]
         if not ez%k == 0:
+            return default
             return False
+        ez //= k
         if n == 1:
+            return 1 << ez
             return True
         # [n >= 2]
         # [n%2 == 1]
         # [n >= 3]
+        if 0x0001:
+            mr = _0_may_perfect_kth_root_(k, n)
+            return default if mr is None else (mr << ez)
     # [n%2 == 1]
     # [n >= 3]
 
     if n <= 1024:
         # [2 <= n <= 1024]
         if k > 10:
+            return default
             return False
+        return _k2pow2rt[k].get(n, default)
         return n in _k2kpows[k]
     # [n > 1024]
     # [n%2 == 1]
@@ -520,6 +613,7 @@ def is_kth_power_(k, n, /):
     # [L >= 11]
     # [k >= 2]
     if k >= L:
+        return default
         return False
     # [2 <= k < L]
 
@@ -532,6 +626,7 @@ def is_kth_power_(k, n, /):
         # [k >= 2*L/3]
         # [3**k >= 3**(2*L/3) > n]
         # [n%2 == 1]
+        return default
         return False
         return k == L-1 and n == (1<<k)
     # [2 <= k < 2*L/3]
@@ -548,9 +643,11 @@ def is_kth_power_(k, n, /):
         for p in _3_5_7_11_13:
             if _n%p == 0:
                 if ds and p > 5:
+                    return default
                     return False
                 ds.append(p)
         if not ds:
+            return default
             return False
         assert len(ds) == 1 or ds == [3,5]
         # [9==3**2 is not useless since k const]
@@ -558,6 +655,12 @@ def is_kth_power_(k, n, /):
             if len(ds) == 2:
                 ds.append(15)
             ds.append(9)
+        if 0x0001:
+            for d in ds:
+                if d**k == n:
+                    return d
+            return default
+        raise 000
         return any(d**k == n for d in ds)
     # [2 <= k < L/4]
     # [1024 < 2**L <= n < 2**L]
@@ -566,14 +669,25 @@ def is_kth_power_(k, n, /):
     if _try_best_to_detect_non_pefect_power_(k, n):
         # NOTE:[k may be not prime]
         #   intended to abuse
+        return default
         return False
     if L > 257 and k >= 4:
         for (p,ep) in iter_factor_pint__naive_brute_force_(k):
             if _try_best_to_detect_non_pefect_power_(p, n):
+                return default
                 return False
+    _rt = floor_kth_root_(k, n)
+    return _rt if n == _rt**k else default
     return n == floor_kth_root_(k, n)**k
 def _is_kth_power_(k, n, /):
     return n == floor_kth_root_(k, n)**k
+
+def may_perfect_sqrt_(n, /, *, default=None):
+    'n/int -> may perfect_sqrt/int{perfect_sqrt**2==n}'
+    return may_perfect_kth_root_(2, n, default=default)
+def may_perfect_cbrt_(n, /, *, default=None):
+    'n/int -> may perfect_cbrt/int{perfect_cbrt**3==n}'
+    return may_perfect_kth_root_(3, n, default=default)
 
 def is_square_(n, /):
     #def is_perfect_square_(n, /):
@@ -2051,4 +2165,5 @@ __all__
 
 from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
 from seed.math.factor_pint_as_pefect_power_ import is_kth_power_, is_square_, is_cube_
+from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_
 from seed.math.factor_pint_as_pefect_power_ import *

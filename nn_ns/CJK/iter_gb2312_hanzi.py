@@ -35,7 +35,7 @@ def main():
     assert 6763 == ranges.len_ints()
     assert 3542 == ranges.len_rngs()
     assert (0x4E00, 0x4E02) == (19968, 19970) == ranges.ranges[0]
-    assert (0x9F9F, 0x9FA1) = (40863, 40865) == ranges.ranges[-1]
+    assert (0x9F9F, 0x9FA1) == (40863, 40865) == ranges.ranges[-1]
     assert 0x4E00 == js[0]
     assert 0x9FA0 == js[-1]
         #=>: [gb2312 |<=| {0x4E00..=0x9FA0}]

@@ -11646,6 +11646,14 @@ view ../lots/NOTE/compiler/Compilers and Compiler Generators(1996-2000)(Terry).t
 T-diagram:
   program :: implementation_language=>input_data->output_data
   translator :: host_language=>source_language->target_language
+      #宿，源，靶/受，施/授/供
+      host宿主/寄主
+      reservoir贮主
+        寄主,贮主:病毒 相关
+      acceptor受主
+      donor施主
+        施主,受主:电子的得失...
+      靶机:应当是军事向，与计算机没关系
 编译器相关冫三语言:
   * 一:用户 使用 programming_language/source_language{program}
   * 二:compiler_generator 确定 host_language{compiler}/target_language{compiler}, target_language{program}

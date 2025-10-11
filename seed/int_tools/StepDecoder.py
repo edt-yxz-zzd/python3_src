@@ -1,4 +1,6 @@
 #__all__:goto
+#注意:bug警惕:非规范零=>为了确保 词典序，需得确认『编码{规范零}<编码{带正号的非规范零}<编码{规范一}』
+#   ++whether_std_zero_lt_fst_nonstd_zero_lt_std_one
 #TODO:goto
 #NotImplementedError:goto
 #TODO:_58_iter_encode4uint-->参数化、泛化... 特殊值、立即数区间、多凡层区间、超凡层区间(前缀循环节)
@@ -7,6 +9,35 @@
 #?DONE?:bug:serial=>rxdigit8remain.is_null => whether skip??? 深入/IStepDecoder__skip_macro_header:see:fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_()
 #?TODO?:incremental_decode4int_with_inf__alnum__5over8_/incremental_decode4rational_with_inf__alnum__5over8_ : len()? size_eq? size_le? fullmatch? nonnull_rxdigit8remain_ok?
 #64,65,67:[0-9A-Za-z._@+-]:std_rational_codec_scheme_case{cf_symmetry_scheme__via_trunc_using_signed_zero} => ((3+2*k)+2**e) => (3+64) for (int|ratiinal),64 for inner uint
+#   64+3:『.09AZ_az』『-=@』，次序『-.09=@AZ_az』#base64:std『+/』urlsafe『-_』都是填充『=』
+#63=32+31=16+47
+#94-64-10<>()[]{},;-3'"\=17 一半9=0~6深入+oo
+#94-64-4(),;-3'"\=23 一半12=0~9深入+oo
+#94-64-8<>()[]{}-3'"\=19 一半10=8+2=0~7深入+oo
+#TODO:IStepDecoder__rational_without_inf #vs:IStepDecoder__rational_with_inf
+    #94-64-9&<>()[]{}-4`'"\=17 一半9=4(0~3)*2(整|续/小数部分)+1(深入) | 2(0~1)*2(整|续) +2(共2字节) +2(共3字节) +1(深入)  #有理数，无扩增:正负无穷
+    #63-32=31 一半16=8(0~7)(整)+7(0~6)(续)+1(深入)  #有理数，无扩增:正负无穷
+#255=128+127 64=16*2+16+8+4+2+1into+1inf
+#  头苞:正负*连分数后继*动态爻元=>耗3爻元
+##IStep... 对称性... 注意:标准0的编码长度，注意:若要求对称性，则头胞基数为奇数，注意:若前值>=2,并且 要求对称性，则要求:躯胞基数为奇数
+##各层分离式编码方案:分离式：输出各层长度，数值...
+##  第零层:除开无穷大保留区=>动态求和，分段:立即数，末层长度，总凡层数
+##  +分离式：36-1=35=16+10*2-1 10=4(立即数0~3)+4(末层长度1~4)+1into+1inf 16=12(末层长度5~16)+2(凡层数3~4)+1into+1res
+##  +分离式：63-6=57=16+21*2-1 21=16+3(2~4)+1into+1inf 16=8(5~12)+7(凡层数2~8)+1into
+##  分离式：63=32+16*2-1 16=11(0~10)+3(凡层数1~3)+1into+1inf
+##  分离式：37=32+3*2-1 3=1(0)+1(1#0~32)+1into 32=30(凡层数2~31)+1into+1inf
+##  分离式：37=32+3*2-1 3=2(0~1)+1into 32=17(0~16)+11(末层长度1~11)+2(凡层数2~3)+1into+1inf
+##  分离式：37=32+3*2-1 3=1(0)+1into+1inf 32=21(0~20)+8(末层长度1~8)+2(凡层数2~3)+1into
+##  分离式：37=16+11*2-1 11=4(0~3)+4(末层长度1~4)+1(凡层数2)+1into+1inf
+##  分离式：37=16+11*2-1 11=4(0~3)+4(1#4~67)+1(2#68~323)+1into+1inf
+##  分离式:命名方式:hd31_bd32__8u_4sz_2meta_1into_1inf
+##
+##极简分离式:首层-总凡层数，凡层第零层长度为2(或者可配置;radix4digit==2时 凡层第零层长度为 需大于1)，永远0偏移;各层数据界限分明不混杂 #但是 缺点:绝对值小的整数 非常浪费空间，长度变化也不够平滑
+##ok见『_acc4up:=acc4up+L-1-idx4lvl』:bug?:超层保留区 负数 是否单调递降？同一苞内越大则绝对值越小，深入后的绝对值更大
+##超层->(凡层第零层.(长度,单位,偏移量),凡层第一层.欤头胞另计)，至于后续凡层单位固定为 胞；解码结果是 lnkls{uint}
+##  decode -> [uint]
+#首层不透明的分离式=>分离式是高层的大模样，混淆式只用于首层
+
 r'''[[[
 e ../../python3_src/seed/int_tools/StepDecoder.py
     vs:codecs.IncrementalDecoder
@@ -18,6 +49,9 @@ view others/数学/编程/设计/自定义编码之要点.txt
         IStepDecoder__hardwired__prefix_tree
             #?TODO:分层表{base;radix} #...似乎无必要,因为 整除分阶层 更像是会被参数化的特征
         ?TODO:阶跃式分阶层、强幂级进分阶层
+    强除分阶层:Unit4Size4EncodedUInt.LEVEL
+    稠密二幂分阶层:shortest_dense_zpows_ex5radix_()
+view ../../python3_src/seed/seq_tools/InfLenSeqWithRecurringPeriod.py
 
 seed.int_tools.StepDecoder
 py -m nn_ns.app.debug_cmd   seed.int_tools.StepDecoder -x # -off_defs
@@ -58,7 +92,7 @@ rename:
 #[词典序&&变长]=>(动态爻元|动态苞元)
 #[变殿后<:语境相关有序对]
 DONE:dependent_pair
-?TODO:dependent_serial#连锁依赖串联
+DONE:dependent_serial#连锁依赖串联
     fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_()
 ?TODO:带多层长度的负载冃自然数#宏头胞 代表 层数; (统一单位:爻元|躯胞，但 线性变换:step{j8layer}*u+offset{j8layer} 或者 非线性变换:f(j8layer,u))
 DONE:dynamic_bits-->dynamic_digits
@@ -83,8 +117,10 @@ DONE:fixed_size_bits-->fixed_size_digits
     IStepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits
         #覆盖:IStepDecoder__dynamic_bits
         #覆盖:IStepDecoder__dynamic_bibits
+        #new:IStepDecoder__zeroth_layer__low_dynamic_part8uint
     IStepDecoder__fixed_size_xbcells
         #覆盖:IStepDecoder__fixed_size_bits
+        #new:IStepDecoder__single_layer__fixed_unitted_size4encoded_uint
 分叉:
     IStepDecoder__extend_macro_header
         #糅合深入型
@@ -1202,19 +1238,22 @@ IStepDecoder
             IStepDecoder__flatten
             IStepDecoder__dynamic_bits
                 StepDecoder__dynamic_bits
+            IStepDecoder__dynamic_bibits
+                StepDecoder__dynamic_bibits
             IStepDecoder__fixed_size_bits
             IStepDecoder__fixed_size_xbcells
                 StepDecoder__fixed_size_xbcells
                 IStepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
                     StepDecoder__fixed_size_xbcells__zeroth_layer4body4infinite_uint_interval
-            IStepDecoder__dynamic_bibits
-                StepDecoder__dynamic_bibits
+            IStepDecoder__single_layer__fixed_unitted_size4encoded_uint
+                StepDecoder__single_layer__fixed_unitted_size4encoded_uint
     IStepDecoder__wrapper
         IStepDecoder__postprocess_wrapper
         IStepDecoder__flatten
             StepDecoder__flatten
         IStepDecoder__flip_digits
             StepDecoder__flip_digits
+    IStepDecoder__dependent_serial
     IStepDecoder__dependent_pair
         IStepDecoder__dynamic_bits_with_dependent_size_bits
         IStepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits
@@ -1238,6 +1277,9 @@ IUIntCompressor
             uint_linear_transform8echo
 rxdigit8one
 rxdigit8two
+IStepDecoder__fixed_size_layers__API_verII__functional
+    IStepDecoder__fixed_size_layers__API_verII
+        StepDecoder__fixed_size_layers__API_verII
 IStepDecoder__fixed_size_layers__functional
     Exception__min_layer_idx4end_by_cell_boundary
     IStepDecoder__fixed_size_layers__body4infinite_uint_interval
@@ -1271,10 +1313,14 @@ IStepDecoder__plugin4uint_interval__base
 
 
 
+IStepDecoder__fixed_radix4macro_header
+    IStepDecoder__fixed_size_layers__functional__fixed_radix4macro_header
+    IStepDecoder__postprocess_wrapper__fixed_radix4macro_header
+
 
 
 check_radix_info4macro_header
-check_radix_info4digit
+check_radix_info4digit__zpow
 check_uint_with_unit
     check_unit
 check_uint_linear_transforms4each_layer
@@ -1390,15 +1436,25 @@ IStepDecoder__hardwired__prefix_tree
 
 
 
+Exception__duplicated__slot4deep_into
+Exception__has_no__slot4deep_into
+SpecialSlotCase
+IStepDecoder__zeroth_layer__low_dynamic_part8uint
+    StepDecoder__zeroth_layer__low_dynamic_part8uint
 
 
 
+check_offset4header
+Unit4Size4EncodedUInt
+IStepDecoder__single_layer__fixed_unitted_size4encoded_uint
+    StepDecoder__single_layer__fixed_unitted_size4encoded_uint
 
 
 
+IStepDecoder__fixed_size_layers__API_verII__functional
 
 
-
+shortest_dense_zpows_ex5radix_
 
 
 
@@ -1409,7 +1465,7 @@ IStepDecoder__hardwired__prefix_tree
 max_digit5num_bits_ex_
 max_digit5num_bits_
 '''.split()#'''
-    #IStepDecoder__fixed_size_layers
+    #IStepDecoder__fixed_size_layers-->IStepDecoder__plugin4finite_uint_interval__fixed_size_layers(IStepDecoder__fixed_size_layers__functional)
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.for_libs.for_importlib__reload import clear_later_variables_if_reload_
@@ -1421,11 +1477,11 @@ Rational.numerator
 Rational.denominator
 from operator import __neg__
 from functools import cached_property
-from itertools import islice, chain
+from itertools import islice, chain, pairwise
 from itertools import accumulate
 #accumulate(iterable, func=None, *, initial=None)
 from bisect import bisect_right
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_non_ABC, check_pair, check_callable, check_iterator
+from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_ABC, check_non_ABC, check_pair, check_callable, check_iterator, check_all_
 
 from seed.tiny_.oo8inf import oo
 
@@ -1466,7 +1522,8 @@ lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,co
 if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
 
 ceil_div = lazy_import4func_('seed.math.floor_ceil', 'ceil_div', __name__)
-#from seed.math.floor_ceil import ceil_div
+ceil_log_ = lazy_import4func_('seed.math.floor_ceil', 'ceil_log_', __name__)
+#from seed.math.floor_ceil import ceil_div, ceil_log_
 
 uint5radix_repr_ = lazy_import4func_('seed.int_tools.digits.uint25radix_repr', 'uint5radix_repr_', __name__)
 #from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
@@ -1496,6 +1553,12 @@ lazy_import4func_('seed.types.Rope', 'Rope', __name__, '_Rope')
 if 0:from seed.types.Rope import mk_Rope, Rope as _Rope
 _Rope
 #[iter_subseq__opaque_,iter_subseq__transparent_] = lazy_import4funcs_('seed.iters.iter_subseq', 'iter_subseq__opaque_,iter_subseq__transparent_', __name__)
+
+[mk_inf_len_seq_] = lazy_import4funcs_('seed.seq_tools.InfLenSeqWithRecurringPeriod', 'mk_inf_len_seq_,mk_double_ended_inf_len_seq_', __name__)
+if 0:from seed.seq_tools.InfLenSeqWithRecurringPeriod import mk_inf_len_seq_
+#.from seed.seq_tools.InfLenSeqWithRecurringPeriod import InfLenSeqWithRecurringPeriod
+
+
 
 ___end_mark_of_excluded_global_names__0___ = ...
 __all__
@@ -1872,7 +1935,7 @@ class FullOutput4StepDecoder(_BaseFullOutput4StepDecoder, IFullOutput4StepDecode
 def check_radix_info4macro_header(radix_info4macro_header, /):
     check_type_le(IRadixInfo, radix_info4macro_header)
     check_int_ge(1, radix_info4macro_header.radix)
-def check_radix_info4digit(radix_info4digit, /):
+def check_radix_info4digit__zpow(radix_info4digit, /):
     check_type_le(IRadixInfo, radix_info4digit)
     check_int_ge(2, radix_info4digit.radix)
     assert radix_info4digit.is_zpow_radix
@@ -3050,6 +3113,18 @@ class IStepDecoder__dependent_pair(IStepDecoder):
         'fst_oresult -> IStepDecoder{snd_part{fst_oresult}}'
 
     ######################
+    @cached_property
+    @override
+    def emay_radix_info4macro_header(sf, /):
+        return sf.step_decoder4fst_part.emay_radix_info4macro_header
+    @cached_property
+    @override
+    def radix_info4digit(sf, /):
+        '-> IRadixInfo{radix>=2}'
+        return sf.step_decoder4fst_part.radix_info4digit
+    ######################
+
+    ######################
     @override
     def start_(sf, rxdigit8macro_header, /):
         dr4fst_part = sf.step_decoder4fst_part
@@ -3083,7 +3158,81 @@ class IStepDecoder__dependent_pair(IStepDecoder):
         raise 000
     ######################
 #end-class IStepDecoder__dependent_pair(IStepDecoder):
+class IStepDecoder__dependent_serial(IStepDecoder):
+    r'''[[[
+    '[dependent_serial{nonempty} =[def]= (fst_part, snd_part{1,ctx{1}}, ...)]'
 
+    [oresult =[def]= oresult{whole_serial}]
+    [st =[def]= final_st | call_st]
+    [final_st == LoopState4StepDecoder__plain(last_k,ctx{last_k}, ..., 0)]
+    [call_st == CallState4StepDecoder__plain((0|k{>=1}),(ctx{0}|ctx{k}), ...)]
+    #]]]'''#'''
+    __slots__ = ()
+    ######################
+    IStepDecoder__dependent_pair
+    ######################
+    @property
+    @abstractmethod
+    def step_decoder4fst_part(sf, /):
+        '-> IStepDecoder{fst_part}'
+    @property
+    @abstractmethod
+    def context4fst_part(sf, /):
+        '-> ctx{0}'
+    @abstractmethod
+    def mk__ctx__may_step_decoder4kth_part__pair_(sf, k, prev_ctx, prev_oresult, /):
+        'k/uint{>=1} -> ctx{k-1} -> oresult{k-1} -> (ctx{k}, may IStepDecoder{kth_part{k,ctx{k}}})'
+    @abstractmethod
+    def mk_oresult4whole_(sf, k, ctx, /):
+        'k/uint{>=1} -> ctx{k} -> oresult{whole_serial}'
+
+    ######################
+    @cached_property
+    @override
+    def emay_radix_info4macro_header(sf, /):
+        return sf.step_decoder4fst_part.emay_radix_info4macro_header
+    @cached_property
+    @override
+    def radix_info4digit(sf, /):
+        '-> IRadixInfo{radix>=2}'
+        return sf.step_decoder4fst_part.radix_info4digit
+    ######################
+
+    ######################
+    @override
+    def start_(sf, rxdigit8macro_header, /):
+        k = 0
+        dr4fst_part = sf.step_decoder4fst_part
+        ctx0 = sf.context4fst_part
+        return _CallST.mk_call_st5four_args_(k,ctx0,   dr4fst_part,rxdigit8macro_header, state_vs_rxdigit=True)
+    ######################
+    #@override
+    feed_digits_ = _Dead.feed_digits_
+    ######################
+    @override
+    def feed_oresult_remain_(sf, call_st7nontail, oresult7subcall, rxdigit8remain7subcall, /):
+        rxdigit8remain = rxdigit8remain7subcall
+        st = call_st7nontail
+        k = 1+st.case
+        prev_ctx = st.payload
+            # ctx{k-1}
+        prev_oresult = oresult7subcall
+            # oresult{k-1}
+        (ctx, may_dr4kth_part) = sf.mk__ctx__may_step_decoder4kth_part__pair_(k, prev_ctx, prev_oresult)
+            # ctx{k}
+        if may_dr4kth_part is None:
+            oresult = sf.mk_oresult4whole_(k, ctx)
+                # oresult{whole_serial}
+            return _LoopST(Cased(k,oresult),   rxdigit8remain,   0)
+        else:
+            dr4kth_part = may_dr4kth_part
+            #######
+            dr4kth_part = fixed_bug6serial4step_decoder_when_null_rxdigit8remain_via_skip_(rxdigit8remain, dr4kth_part)
+            #######
+            return _CallST.mk_call_st5four_args_(k,ctx,   dr4kth_part,rxdigit8remain, state_vs_rxdigit=True)
+        raise 000
+    ######################
+#end-class IStepDecoder__dependent_serial(IStepDecoder):
 
 def _mk_step_decoder4fixed_size_bits_(sf, num_bits4read, /):
     'num_bits4read/uint{>=0} -> IStepDecoder__fixed_size_bits{num_bits4read}/IStepDecoder__fixed_size_xbcells'
@@ -3132,36 +3281,6 @@ class IStepDecoder__dynamic_bits_with_dependent_size_bits(IStepDecoder__dependen
         return dr4szbits
     ######################
 
-    ######################
-    ###before:IStepDecoder__dependent_pair###
-    #.######################
-    #.@override
-    #.def start_(sf, rxdigit8macro_header, /):
-    #.    dr4dybits = sf.step_decoder4dynamic_bits
-    #.    return _CallST.mk_call_st5four_args_(0,None,   dr4dybits,rxdigit8macro_header, state_vs_rxdigit=True)
-    #.######################
-    #.#@override
-    #.feed_digits_ = _Dead.feed_digits_
-    #.######################
-    #.@override
-    #.def feed_oresult_remain_(sf, call_st7nontail, oresult7subcall, rxdigit8remain7subcall, /):
-    #.    st = call_st7nontail
-    #.    match st.case:
-    #.        case 0:
-    #.            len_dybits = oresult7subcall
-    #.            num_bits4read = sf.num_bits4read5len_dybits_(len_dybits)
-    #.            dr4szbits = sf.mk_step_decoder4fixed_size_bits_(num_bits4read)
-    #.            return _CallST.mk_call_st5four_args_(1,len_dybits,   dr4szbits,rxdigit8remain7subcall, state_vs_rxdigit=True)
-    #.        case 1:
-    #.            len_dybits = st.payload
-    #.            u8szbits = oresult7subcall
-    #.            oresult = (len_dybits, u8szbits)
-    #.            rxdigit8remain = rxdigit8remain7subcall
-    #.            return _LoopST(Cased(2,oresult),   rxdigit8remain,   0)
-    #.        case _:
-    #.            raise 000
-    #.    raise 000
-    #.######################
 #end-class IStepDecoder__dynamic_bits_with_dependent_size_bits(IStepDecoder):
 
 class IStepDecoder__fixed_radix4macro_header(IStepDecoder):
@@ -3180,12 +3299,15 @@ class IStepDecoder__fixed_radix4macro_header(IStepDecoder):
     def emay_radix_info4macro_header(sf, /):
         return sf.radix_info4macro_header
     ######################
-    @abstractmethod
+    #@abstractmethod
     @override#update:__doc__
     def start_(sf, rxdigit8macro_header, /):
         'rxdigit8macro_header/IRadixedDigit{radix==sf.radix4macro_header} -> st/IBaseState4StepDecoder # allow [num_bits4macro_header > num_bits4digit]'
-        assert rxdigit8macro_header.radix_info.radix == sf.radix4macro_header
-        ...
+        if not rxdigit8macro_header.radix_info.radix == sf.radix4macro_header:raise Exception(sf.radix_info4macro_header, rxdigit8macro_header.radix_info)
+        return sf._start_(rxdigit8macro_header)
+    @abstractmethod
+    def _start_(sf, rxdigit8macro_header, /):
+        'rxdigit8macro_header/IRadixedDigit{radix==sf.radix4macro_header} -> st/IBaseState4StepDecoder # allow [num_bits4macro_header > num_bits4digit]'
     ######################
 
 class IStepDecoder__skip_macro_header(IStepDecoder__fixed_radix4macro_header, IStepDecoder__wrapper):
@@ -3194,7 +3316,7 @@ class IStepDecoder__skip_macro_header(IStepDecoder__fixed_radix4macro_header, IS
     #@override
     radix_info4macro_header = rxdigit8no_bits.radix_info
     @override
-    def start_(sf, rxdigit8macro_header, /):
+    def _start_(sf, rxdigit8macro_header, /):
         assert rxdigit8macro_header.is_null
         return _LoopST(Cased(False,None),   rxdigit8macro_header,   1)
     @override
@@ -3210,7 +3332,7 @@ class IStepDecoder__extend_macro_header(IStepDecoder__fixed_radix4macro_header, 
     #糅合深入型
     __slots__ = ()
     @override
-    def start_(sf, rxdigit8macro_header, /):
+    def _start_(sf, rxdigit8macro_header, /):
         return _LoopST(Cased(False,None),   rxdigit8macro_header,   1)
     @override
     def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
@@ -3259,7 +3381,7 @@ class IStepDecoder__parallel__partition_space4macro_header(IStepDecoder__fixed_r
     def radix_info4digit(sf, /):
         return sf.child_step_decoder_seq[0].radix_info4digit
     @override
-    def start_(sf, rxdigit8macro_header, /):
+    def _start_(sf, rxdigit8macro_header, /):
         assert rxdigit8macro_header.radix_info.radix == sf.radix4macro_header, (rxdigit8macro_header, sf.radix4macro_header)
         digit = rxdigit8macro_header.digit
         check_int_ge(0, digit)
@@ -3398,7 +3520,7 @@ view others/数学/编程/设计/自定义编码之要点.txt
 class IStepDecoder__init_radix_info4digit(IStepDecoder):
     ___no_slots_ok___ = True
     def __init__(sf, radix_info4digit, /):
-        check_radix_info4digit(radix_info4digit)
+        check_radix_info4digit__zpow(radix_info4digit)
         sf._ri = radix_info4digit
     def __repr__(sf, /):
         return repr_helper(sf, sf.radix_info4digit)
@@ -3433,7 +3555,7 @@ check_non_ABC(StepDecoder__dynamic_bibits)
 class StepDecoder__dynamic_bits(IStepDecoder__dynamic_bits):
     ___no_slots_ok___ = True
     def __init__(sf, radix_info4digit, imay_max_num_bits4read, /):
-        check_radix_info4digit(radix_info4digit)
+        check_radix_info4digit__zpow(radix_info4digit)
         check_int_ge(-1, imay_max_num_bits4read)
         sf._riB = radix_info4digit
         sf._im = imay_max_num_bits4read
@@ -3546,7 +3668,7 @@ class IStepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits(IStepDecoder_
 class StepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits(IStepDecoder__truncated_dynamic_bits_with_may_dynamic_bibits):
     ___no_slots_ok___ = True
     def __init__(sf, radix_info4digit, imay_max_num_bits4read, /):
-        check_radix_info4digit(radix_info4digit)
+        check_radix_info4digit__zpow(radix_info4digit)
         check_int_ge(-1, imay_max_num_bits4read)
         sf._riB = radix_info4digit
         sf._im = imay_max_num_bits4read
@@ -3635,18 +3757,33 @@ eg: [offset:<-[0..]][u:<-[offset..]][v:<-[0..]][R:<-[2..]]:
     @abstractmethod
     def uncompress(sf, v, /):
         'small_uint -> big_uint #eg:u+offset'
+    @property
+    def min_legal_compressed_uint(sf, /):
+        '-> min_legal_small_uint{>=0}'
+        return 0
     @cached_property
     def min_legal_uncompressed_uint(sf, /):
         '-> offset/(min_legal_big_uint{>=0})'
+        return sf.uncompress(sf.min_legal_small_uint)
         return sf.uncompress(0)
         return sf.offset
-    def min_legal_uncompressed_uint_ge(sf, u, /):
+    def min_legal_uncompressed_uint_ge_(sf, u, /):
         'u/big_uint -> min_legal_big_uint{>=u}'
+        if u <= (_u:=sf.min_legal_uncompressed_uint):
+            u = _u
         v = sf.compress(u)
         _u = sf.uncompress(v)
         _v = sf.compress(_u)
         if not 0 <= v == _v <= u <= _u:raise Exception((u, v, _u, _v))
         return _u
+    def _test(sf, n=3, /):
+        u0 = sf.min_legal_compressed_uint
+        check_int_ge(0, u0)
+        us = [*range(u0, u0+n)]
+        vs = [sf.uncompress(u) for u in us]
+        if not all(map(int.__le__, us, vs)):raise Exception(sf, us, vs)
+        _us = [sf.compress(v) for v in vs]
+        if not _us == us:raise Exception(sf, us, vs)
 
 
 #class IUIntCompressor__bisect_left(IUIntCompressor):
@@ -3888,7 +4025,7 @@ class StepDecoder__fixed_size_xbcells(_BaseStepDecoder__fixed_size_xbcells, ISte
     #@override
     emay_radix_info4macro_header = ...
     def _check6make_(sf, /):
-        check_radix_info4digit(sf.radix_info4digit)
+        check_radix_info4digit__zpow(sf.radix_info4digit)
         check_int_ge(0, sf.offset4macro_header)
         check_type_is(bool, sf.macro_header_extra)
         check_int_ge(0, sf.num_xbcells4read)
@@ -3930,7 +4067,7 @@ _BaseStepDecoder__fixed_size_layers__body4infinite_uint_interval = mk_named_pseu
 class StepDecoder__fixed_size_layers__body4infinite_uint_interval(_BaseStepDecoder__fixed_size_layers__body4infinite_uint_interval, IStepDecoder__fixed_size_layers__body4infinite_uint_interval):
     ___no_slots_ok___ = True
     def _check6make_(sf, /):
-        check_radix_info4digit(sf.radix_info4digit)
+        check_radix_info4digit__zpow(sf.radix_info4digit)
         check_int_ge(1, sf.num_layers)
 check_non_ABC(StepDecoder__fixed_size_layers__body4infinite_uint_interval)
 
@@ -4089,7 +4226,7 @@ class IStepDecoder__plugin4infinite_uint_interval__truncated_dynamic_bits_with_m
         return sf.step_decoder4truncated_dynamic_bits_with_may_dynamic_bibits.radix_info4digit
     ######################
     @override
-    def start_(sf, rxdigit8macro_header, /):
+    def _start_(sf, rxdigit8macro_header, /):
         dr4meta_layer = sf.step_decoder4truncated_dynamic_bits_with_may_dynamic_bibits
         return _CallST.mk_call_st5four_args_(0,None,   dr4meta_layer,rxdigit8macro_header, state_vs_rxdigit=True)
     #.#@override
@@ -4180,7 +4317,13 @@ def check_uint_linear_transforms4each_layer(uint_linear_transforms4each_layer, /
     for uint_linear_transform in layer_idx2uint_linear_transform__except_last_layer:
         check_type_le(IUIntLinearTransform, uint_linear_transform)
     check_int_ge(0, offset4last_layer)
-class IStepDecoder__plugin4finite_uint_interval__fixed_size_layers(IStepDecoder__plugin4finite_uint_interval, IStepDecoder__fixed_size_layers__functional, IStepDecoder__fixed_radix4macro_header):
+class IStepDecoder__fixed_size_layers__functional__fixed_radix4macro_header(IStepDecoder__fixed_size_layers__functional, IStepDecoder__fixed_radix4macro_header):
+    __slots__ = ()
+    #@override
+    start_ = IStepDecoder__fixed_radix4macro_header.start_
+    #@override
+    _start_ = IStepDecoder__fixed_size_layers__functional.start_
+class IStepDecoder__plugin4finite_uint_interval__fixed_size_layers(IStepDecoder__plugin4finite_uint_interval, IStepDecoder__fixed_size_layers__functional__fixed_radix4macro_header):
     # see:并联型
     #.    __slots__ = ()
     #.class IStepDecoder__fixed_size_layers(IStepDecoder__fixed_size_layers__functional):
@@ -4249,6 +4392,7 @@ class IStepDecoder__plugin4finite_uint_interval__fixed_size_layers(IStepDecoder_
         return sf.layer_idx2uint_linear_transform[layer_idx]
     ######################
 #end-class IStepDecoder__fixed_size_layers(IStepDecoder):
+#end-class IStepDecoder__plugin4finite_uint_interval__fixed_size_layers(IStepDecoder__plugin4finite_uint_interval, IStepDecoder__fixed_size_layers__functional__fixed_radix4macro_header):
 
 
 class IStepDecoder__plugin4uint_interval__extend_macro_header(IStepDecoder__plugin4uint_interval__base, IStepDecoder__extend_macro_header):
@@ -4413,7 +4557,7 @@ class StepDecoder__plugin4finite_uint_interval__fixed_size_layers(_BaseStepDecod
     ___no_slots_ok___ = True
     def _check6make_(sf, /):
         check_radix_info4macro_header(sf.radix_info4macro_header)
-        #check_radix_info4digit(sf.radix_info4digit)
+        #check_radix_info4digit__zpow(sf.radix_info4digit)
         check_uint_with_unit(sf.min_with_unit4uint_interval)
         check_uint_with_unit(sf.max1_with_unit4finite_uint_interval)
         check_type_le(IStepDecoder__fixed_size_xbcells, sf.step_decoder4fixed_size_xbcells4zeroth_layer)
@@ -4516,11 +4660,30 @@ class IStepDecoder__uint_without_inf__uint_zero_encoded_as_head_digit_zero(IStep
     def the_wrapped_step_decoder(sf, /):
         '-> IStepDecoder__plugin4infinite_uint_interval{[min_with_unit4uint_interval:=(0,0)][included_inf:=False][uint_zero_encoded_as_head_digit_zero]}'
     ######################
+class IStepDecoder__postprocess_wrapper__fixed_radix4macro_header(IStepDecoder__fixed_radix4macro_header, IStepDecoder__postprocess_wrapper):
+    __slots__ = ()
+    ######################
+    #@override
+    start_ = IStepDecoder__fixed_radix4macro_header.start_
+    #@override
+    _start_ = IStepDecoder__postprocess_wrapper.start_
+    ######################
+    @cached_property
+    @override
+    def radix_info4macro_header(sf, /):
+        return sf.the_wrapped_step_decoder.radix_info4macro_header
+    ######################
 
-class IStepDecoder__uint_with_inf(IStepDecoder__fixed_radix4macro_header, IStepDecoder__wrapper):
+#class IStepDecoder__uint_with_inf(IStepDecoder__fixed_radix4macro_header, IStepDecoder__wrapper):
+#class IStepDecoder__uint_with_inf(IStepDecoder__fixed_radix4macro_header, IStepDecoder__postprocess_wrapper):
+class IStepDecoder__uint_with_inf(IStepDecoder__postprocess_wrapper__fixed_radix4macro_header):
+    #IStepDecoder__wrapper-->IStepDecoder__postprocess_wrapper{start_,feed_digits_,feed_oresult_remain_}
     __slots__ = ()
     ######################
     IStepDecoder__plugin4infinite_uint_interval
+    ######################
+    #@override
+    may_postprocess = None
     ######################
     @property
     @abstractmethod
@@ -4542,6 +4705,12 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
     @abstractmethod
     def step_decoder4uint_withxxx_inf(sf, /):
         '-> (IStepDecoder__uint_with_inf | [sf.radix_info4macro_header.radix is odd{>=3}]:IStepDecoder__uint_without_inf__uint_zero_encoded_as_head_digit_zero{uint 0 encoded as head_digit 0}) # [half_int==(positive_int|nonnegative_int)]'
+    ######################
+    @property
+    @abstractmethod
+    def whether_std_zero_lt_fst_nonstd_zero_lt_std_one(sf, /):
+        '-> bool{[encode(0|std_zero) < encode(+0|nonstd_zero) < encode(1|std_one)]}'
+        #@20250908:注意:bug警惕:非规范零=>为了确保 词典序，需得确认『编码{规范零}<编码{带正号的非规范零}<编码{规范一}』
     ######################
     @cached_property
     @override
@@ -4621,7 +4790,7 @@ class IStepDecoder__int_with_inf(IStepDecoder__fixed_radix4macro_header):
     #    1,even{>=2},odd{>=3}
     ######################
     @override
-    def start_(sf, rxdigit8macro_header, /, *, with_sign=False):
+    def _start_(sf, rxdigit8macro_header, /, *, with_sign=False):
         check_type_is(bool, with_sign)
         if with_sign:
             if not sf.support_kw_with_sign:raise TypeError('not support{kw:with_sign}')
@@ -4825,7 +4994,7 @@ class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
         return dict(with_sign=True) if sf._b_signed_zero else {}
     ######################
     @override
-    def start_(sf, rxdigit8macro_header, /):
+    def _start_(sf, rxdigit8macro_header, /):
         if not sf._support_codec_scheme_case:
             raise Exception(sf.codec_scheme_case)
         #.if not sf.codec_scheme_case is _Case4scheme.cf_asymmetry_scheme__via_floor:
@@ -5030,8 +5199,8 @@ class IStepDecoder__rational_with_inf(IStepDecoder__fixed_radix4macro_header):
 
 
 
-#class StepDecoder__uint_with_inf(IStepDecoder__uint_with_inf):
-class StepDecoder__uint_with_inf(IStepDecoder__postprocess_wrapper, IStepDecoder__uint_with_inf):
+class StepDecoder__uint_with_inf(IStepDecoder__uint_with_inf):
+#class StepDecoder__uint_with_inf(IStepDecoder__postprocess_wrapper, IStepDecoder__uint_with_inf):
     r'''[[[
 
     ######################
@@ -5110,17 +5279,11 @@ class StepDecoder__uint_with_inf(IStepDecoder__postprocess_wrapper, IStepDecoder
         sf._args4repr = (radix_info4digit, included_inf, arg4inf)
     def __repr__(sf, /):
         return repr_helper(sf, *sf._args4repr)
-    #@override
-    may_postprocess = None
     @property
     @override
     def the_wrapped_step_decoder(sf, /):
         '-> IStepDecoder__plugin4infinite_uint_interval{[min_with_unit4uint_interval:=(0,0)][included_inf:=True]}'
         return sf._dr
-    @cached_property
-    @override
-    def radix_info4macro_header(sf, /):
-        return sf.the_wrapped_step_decoder.radix_info4macro_header
     ######################
 
 def _mk_plugin4step_decoder4uint_with_inf_(radix_info4digit, included_inf, _arg4inf, /):
@@ -6183,7 +6346,7 @@ class IStepDecoder__hardwired__prefix_tree(IStepDecoder__fixed_radix4macro_heade
         return RadixInfo(radix4macro_header)
     ######################
     @override
-    def start_(sf, rxdigit8macro_header, /):
+    def _start_(sf, rxdigit8macro_header, /):
         tree = sf.prefix_tree4step_decoder
         if not tree.filled:
             tree.fill_prefix_tree_(sf)
@@ -6338,7 +6501,7 @@ class StepDecoder__hardwired__prefix_tree(IStepDecoder__hardwired__prefix_tree):
     def __init__(sf, mkr4step_decoder, common_args4step_decoder, arg8prefix_tree4step_decoder, /):
         check_callable(mkr4step_decoder)
         check_type_is(tuple, common_args4step_decoder)
-        #check_radix_info4digit
+        #check_radix_info4digit__zpow
         check_int_ge(2, radix4digit:=common_args4step_decoder[0])
         prefix_tree4step_decoder = PrefixTree4step_decoder.mk_prefix_tree4step_decoder_(arg8prefix_tree4step_decoder)
         check_type_is(PrefixTree4step_decoder, prefix_tree4step_decoder)
@@ -6376,6 +6539,682 @@ check_non_ABC(StepDecoder__hardwired__prefix_tree)
 
 
 
+bisect_right
+ConstantRepr
+class SpecialSlotCase:
+    slot4special_value = ConstantRepr('slot4special_value')
+    777;(1,)
+    slot4deep_into = ConstantRepr('slot4deep_into')
+    777;...
+class Exception__duplicated__slot4deep_into(Exception):pass
+class Exception__has_no__slot4deep_into(Exception):pass
+class IStepDecoder__zeroth_layer__low_dynamic_part8uint(IStepDecoder__plugin4infinite_uint_interval, IStepDecoder__fixed_radix4macro_header, IStepDecoder__without_subcall):
+    'linear instead of tree(prefix_tree) #[lt_limit{dynamic_part}->uint][gt_limit{dynamic_part}->neg_int]'
+    __slots__ = ()
+    ######################
+    IStepDecoder__uint_with_inf
+    IStepDecoder__plugin4infinite_uint_interval
+    ######################
+    @property
+    @abstractmethod
+    def level_tables(sf, /):
+        '-> [[(slot4deep_into|slot4special_value|max1{of digit_interval}/uint{>=1})]]{[[as_max1(level_tables[i][-1])==(radix4macro_header if i==0 else radix4digit)][@[level_table:<-level_tables] -> @[i,j:<-[0..<len(level_table)]] -> [i<j]  -> [as_max1(level_table[i]) < as_max1(level_table[j])]][slot->as_max1 inc 1][level_table.count(slot4deep_into) == 1]]} # [branches after slot4deep_into -> neg_int][branches before slot4deep_into -> uint]'
+    @property
+    @abstractmethod
+    def period4jump_back(sf, /):
+        '-> uint{>=1}{<=len(level_tables)}{[[period4jump_back==len(level_tables)] -> [radix4macro_header==radix4digit]]}'
+    ######################
+    @cached_property
+    def degenerated_level_tables_ex(sf, /):
+        '-> (degenerated_level_tables, radixess4remain, idc4slot4deep_into)/([[max1{of digit_interval}/uint{>=1}]], [[radix4remain/uint{>=1}]], [idx4slot4deep_into])'
+        lsls = []
+        radixess4remain = []
+        idc = []
+        for level_table in sf.level_tables:
+            ls = []
+            radixes4remain = []
+            prev_max1 = 0
+            imay_idx = -1
+            for j, x in enumerate(level_table):
+                match x:
+                    case SpecialSlotCase.slot4deep_into:
+                        max1 = 1+prev_max1
+                        if not -1==imay_idx:raise Exception__duplicated__slot4deep_into
+                        imay_idx = j
+                    case SpecialSlotCase.slot4special_value:
+                        max1 = 1+prev_max1
+                    case max1:
+                        check_int_ge(1+prev_max1, max1)
+                        max1
+                max1
+                radix4remain = max1-prev_max1
+                max1
+                ls.append(max1)
+                radixes4remain.append(radix4remain)
+                777;prev_max1 = max1
+            (ls, radixes4remain)
+            if -1==imay_idx:raise Exception__has_no__slot4deep_into
+            idx4slot4deep_into = imay_idx
+            (ls, radixes4remain, idx4slot4deep_into)
+            lsls.append(tuple(ls))
+            radixess4remain.append(tuple(radixes4remain))
+            idc.append(idx4slot4deep_into)
+        (lsls, radixess4remain, idc)
+        if not lsls:raise Exception('len(level_tables) == 0')
+        if not (sf.period4jump_back > 0):raise Exception
+        if not (sf.period4jump_back < len(lsls) or (sf.period4jump_back == len(lsls) and sf.radix4macro_header == sf.radix4digit)):raise Exception
+        for j, ls in enumerate(lsls):
+            radix = (sf.radix4macro_header if j==0 else sf.radix4digit)
+            if not ls[-1] == radix:raise Exception((j, ls, radix))
+        (lsls, radixess4remain, idc)
+        degenerated_level_tables = tuple(lsls)
+        radixess4remain = tuple(radixess4remain)
+        idc4slot4deep_into = tuple(idc)
+        return (degenerated_level_tables, radixess4remain, idc4slot4deep_into)
+    ######################
+
+    ######################
+    @override
+    def _start_(sf, rxdigit8macro_header, /):
+        return sf._work((0,0), 0, rxdigit8macro_header.digit)
+    @override
+    def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
+        st = loop_st7nonfinal
+        [digit] = required_digits
+        (acc_pair, idx4tbl) = st.payload
+        return sf._work(acc_pair, idx4tbl, digit)
+    ######################
+    def _work(sf, acc_pair, idx4tbl, digit, /):
+        (degenerated_level_tables, radixess4remain, idc4slot4deep_into) = sf.degenerated_level_tables_ex
+        idx4slot4deep_into = idc4slot4deep_into[idx4tbl]
+        tbl = degenerated_level_tables[idx4tbl]
+        idx4lvl = bisect_right(tbl, digit)
+        assert idx4lvl < len(tbl)
+        radix4remain = radixess4remain[idx4tbl][idx4lvl]
+        digit8remain = digit -(0 if idx4lvl==0 else tbl[idx4lvl-1])
+        rxdigit8remain = RadixedDigit(RadixInfo(radix4remain), digit8remain)
+
+        LL = len(degenerated_level_tables)
+        L = len(tbl)
+        (acc4low, acc4up) = acc_pair
+        _acc_pair = (_acc4low, _acc4up) = (acc4low+idx4lvl, acc4up+L-1-idx4lvl)
+            # 『_acc4up:=acc4up+L-1-idx4lvl』since 『n = -1-_acc4up』: [inf at outmost(as possible) layer][『into』=> [n descending][acc4up ascending]][『inside same digit』[digit(i.e. idx4lvl) ascending] => [n ascending][acc4up,_acc4up descending]]
+        if idx4lvl == idx4slot4deep_into:
+            #deep_into
+            assert digit+1 == tbl[idx4slot4deep_into]
+            assert radix4remain == 1
+            assert digit8remain == 0
+            _idx4tbl = 1+idx4tbl
+            if _idx4tbl == LL:
+                _idx4tbl -= sf.period4jump_back
+            assert 0 <= _idx4tbl < LL
+            _payload = (_acc_pair, _idx4tbl)
+            return _LoopST(Cased(False, _payload),  rxdigit8no_bits,  1)
+        elif idx4lvl < idx4slot4deep_into:
+            assert _acc4low >= 0
+            u = _acc4low
+            assert u >= 0
+            i = u
+        elif idx4lvl > idx4slot4deep_into:
+            assert _acc4up >= 0
+            n = -1-_acc4up
+            assert n < 0
+            i = n
+        else:
+            raise 000
+        i
+        return _LoopST(Cased(True, i),  rxdigit8remain,  0)
+    ######################
+#end-class IStepDecoder__zeroth_layer__low_dynamic_part8uint(IStepDecoder__plugin4infinite_uint_interval, IStepDecoder__fixed_radix4macro_header, IStepDecoder__without_subcall):
+
+_BaseStepDecoder__zeroth_layer__low_dynamic_part8uint = mk_named_pseudo_tuple_(__name__, 'BaseStepDecoder__zeroth_layer__low_dynamic_part8uint', 'radix_info4macro_header radix_info4digit included_inf min_with_unit4uint_interval period4jump_back level_tables')
+class StepDecoder__zeroth_layer__low_dynamic_part8uint(_BaseStepDecoder__zeroth_layer__low_dynamic_part8uint, IStepDecoder__zeroth_layer__low_dynamic_part8uint):
+    ___no_slots_ok___ = True
+check_non_ABC(StepDecoder__zeroth_layer__low_dynamic_part8uint)
+
+
+
+def check_offset4header(null_header_skipped, header_extra, offset4header, /):
+    '# [[offset4header > 0] -> [[not null_header_skipped][header_extra]]]'
+    check_int_ge(0, offset4header)
+    if not (offset4header == 0 or (not null_header_skipped and header_extra)):raise TypeError
+    #check_offset4header(null_header_skipped, header_extra, offset4header)
+class Unit4Size4EncodedUInt:
+    r'''[[[
+    [unitted_size4encoded_uint =[def]= (let_uint_be_one_if_null/bool, null_header_skipped/bool, header_extra/bool, offset4header/uint, unit4size4encoded_uint/Unit4Size4EncodedUInt.(CELL|LEVEL|BIT), size4encoded_uint/uint)]
+        #[header_extra ~= macro_header_extra]
+        #[offset4header ~= offset4macro_header]
+
+    [[offset4header > 0] -> [[not null_header_skipped][header_extra]]]
+
+    [[unit4size4encoded_uint==LEVEL] -> [num_levels:=size4encoded_uint]]
+        !! [num_levels >= 1]
+        => [size4encoded_uint >= 1]
+
+    [[unit4size4encoded_uint==BIT] -> [num_bits:=size4encoded_uint]]
+        required:[radix_info4digit.is_zpow_radix]
+        #after skip null header if null_header_skipped:
+        => [num_levels := radix4macro_header**header_extra * 2**num_bits]
+
+    [[unit4size4encoded_uint==CELL] -> [num_cells:=size4encoded_uint]]
+        #after skip null header if null_header_skipped:
+        => [num_digits := num_cells-1+header_extra]
+        => [num_levels := radix4macro_header**header_extra * radix4digit**(num_cells-1+header_extra)]
+
+    #]]]'''#'''
+    CELL = ConstantRepr('CELL')
+    777;0
+    LEVEL = ConstantRepr('LEVEL')
+    777;1
+    BIT = ConstantRepr('BIT')
+    777;2
+
+class IStepDecoder__single_layer__fixed_unitted_size4encoded_uint(IStepDecoder__without_subcall):
+    __slots__ = ()
+    ######################
+    IStepDecoder__fixed_size_bits
+    IStepDecoder__fixed_size_xbcells
+    ######################
+    @property
+    @abstractmethod
+    def let_uint_be_one_if_null(sf, /):
+        '-> bool'
+    @property
+    @abstractmethod
+    def null_header_skipped(sf, /):
+        '-> bool'
+    @property
+    @abstractmethod
+    def header_extra(sf, /):
+        '-> bool'
+    @property
+    @abstractmethod
+    def offset4header(sf, /):
+        '-> uint{>=0} # [[offset4header > 0] -> [[not null_header_skipped][header_extra]]]'
+    @property
+    @abstractmethod
+    def unit4size4encoded_uint(sf, /):
+        '-> Unit4Size4EncodedUInt.(CELL|LEVEL|BIT)'
+    @property
+    @abstractmethod
+    def size4encoded_uint(sf, /):
+        '-> uint'
+    ######################
+    @cached_property
+    def _checked_offset4header_(sf, /):
+        '-> uint{>=0} # [[offset4header > 0] -> [[not null_header_skipped][header_extra]]]'
+        check_offset4header(sf.null_header_skipped, sf.header_extra, sf.offset4header)
+        return sf.offset4header
+
+
+    ######################
+    @override
+    def start_(sf, rxdigit8macro_header, /):
+        return sf._work(rxdigit8macro_header)
+    @override
+    def feed_digits_(sf, loop_st7nonfinal, required_digits, /):
+        st = loop_st7nonfinal
+        (extra_num_cells, total_used_cells) = st.payload
+        rxdigit8H = st.rxdigit8remain
+        return sf._4final(extra_num_cells, total_used_cells, rxdigit8H, required_digits)
+    ######################
+    def _work(sf, rxdigit8H, /):
+        radix_info4H = rxdigit8H.radix_info
+        extra_num_cells = int(bool(sf.null_header_skipped and radix_info4H.is_null)) + int(bool(sf.header_extra))
+        # [0 <= extra_num_cells <= 2]
+        match sf.unit4size4encoded_uint:
+            case Unit4Size4EncodedUInt.CELL:
+                num_cells = sf.size4encoded_uint
+                # [num_cells >= 0]
+                _num_required_digits = max(0,num_cells-1) if 0==extra_num_cells else num_cells
+                # [_num_required_digits >= 0]
+            case Unit4Size4EncodedUInt.LEVEL:
+                num_levels = sf.size4encoded_uint
+                check_int_ge(1, num_levels)
+                # [num_levels >= 1]
+                if 0==extra_num_cells:
+                    num_levels = ceil_div(num_levels, radix_info4H.radix)
+                    # [num_levels >= 1]
+                # [num_levels >= 1]
+                _num_required_digits = ceil_log_(sf.radix4digit, num_levels)
+                # [_num_required_digits >= 0]
+            case Unit4Size4EncodedUInt.BIT:
+                num_bits = sf.size4encoded_uint
+                if not sf.radix_info4digit.is_zpow_radix:raise NotImplementedError('???convert to [num_levels:=2**num_bits]???')
+                if 0==extra_num_cells:
+                    if not radix_info4H.is_zpow_radix:raise NotImplementedError('???convert to [num_levels:=2**num_bits]???')
+                    xnum_bits6body = num_bits -radix_info4H.num_bits4digit
+                    # MAYBE:[xnum_bits6body < 0]
+                else:
+                    xnum_bits6body = num_bits
+                xnum_bits6body
+                # MAYBE:[xnum_bits6body < 0]
+                _num_required_digits = ceil_div(xnum_bits6body, sf.radix_info4digit.num_bits4digit) if xnum_bits6body >= 0 else 0
+                # [_num_required_digits >= 0]
+            case _:
+                raise 000
+        _num_required_digits
+        # _num_required_digits:excluded extra_num_cells
+        # [_num_required_digits >= 0]
+        total_used_cells = extra_num_cells +_num_required_digits
+        # !! [0 <= extra_num_cells <= 2]
+        # [total_used_cells >= 0]
+        assert total_used_cells >= 0
+        total_used_cells
+        if total_used_cells <= 1:
+            return sf._4final(extra_num_cells, total_used_cells, rxdigit8H, required_digits:=())
+        assert total_used_cells >= 2
+        num_required_digits = total_used_cells-1
+        assert num_required_digits >= 1
+        payload = (extra_num_cells, total_used_cells)
+        return _LoopST(Cased(False, payload),  rxdigit8H,  num_required_digits)
+    def _4final(sf, extra_num_cells, total_used_cells, rxdigit8H, required_digits, /):
+        '_4final():overrided@IStepDecoder__fixed_size_layers__API_verII__functional'
+        #######
+        offset4header = sf._checked_offset4header_
+        # [[offset4header > 0] -> [[not null_header_skipped][header_extra]]]
+        #######
+        _num_required_digits = total_used_cells - extra_num_cells
+        assert _num_required_digits >= 0
+        # _num_required_digits:excluded extra_num_cells
+        # [_num_required_digits >= 0]
+        assert 0 <= extra_num_cells <= 2
+        # [0 <= extra_num_cells <= 2]
+        if total_used_cells == 0:
+            assert offset4header == 0
+            assert not required_digits
+            u = 0 if not sf.let_uint_be_one_if_null else 1
+            rxdigit8remain = rxdigit8H
+        else:
+            assert total_used_cells == 1 +len(required_digits)
+            assert not offset4header or sf.header_extra
+            uv = uint5radix_repr_(sf.radix4digit, chain([rxdigit8H.digit+offset4header], required_digits), is_big_endian=True)
+            radix_info4H = rxdigit8H.radix_info
+            match sf.unit4size4encoded_uint:
+                case Unit4Size4EncodedUInt.CELL:
+                    num_cells = sf.size4encoded_uint
+                    if num_cells == 0 == extra_num_cells:raise 000
+                    u = uv
+                    rxdigit8remain = rxdigit8no_bits
+                    if u==0 and total_used_cells==1 and radix_info4H.is_null and sf.let_uint_be_one_if_null and not offset4header:
+                        u = 1
+                case Unit4Size4EncodedUInt.LEVEL:
+                    num_levels = sf.size4encoded_uint
+                    match extra_num_cells:
+                        case 0:
+                            _num_levels = num_levels
+                        case 1:
+                            _num_levels = (radix_info4H.radix+offset4header) * num_levels
+                        case 2:
+                            # [radix_info4H.radix == 1]
+                            # [offset4header == 0]
+                            assert radix_info4H.radix == 1
+                            assert offset4header == 0
+                            _num_levels = (radix_info4H.radix+offset4header) * sf.radix4digit * num_levels
+                        case _:
+                            raise 000
+                    _num_levels
+                    radix4uv = (radix_info4H.radix+offset4header) * sf.radix4digit**len(required_digits)
+                    assert 1 <= _num_levels <= radix4uv < _num_levels*sf.radix4digit
+                    (q,r) = divmod(radix4uv, _num_levels)
+                    # [radix4uv == q*_num_levels +r]
+                    # [radix4uv == (q+1)*r +q*(_num_levels-r)]
+                    radix4high = q
+                    radix4low = 1+q
+                    # [radix4uv == radix4low*r +radix4high*(_num_levels-r)]
+                    min4high = radix4low*r
+                    if uv < min4high:
+                        #low
+                        # [uv < radix4low*r]
+                        (u, digit8remain) = divmod(uv, radix4low)
+                        # [uv == radix4low*u + digit8remain]
+                        # [u < r]
+                        radix4remain = radix4low
+                    else:
+                        #high
+                        # [uv >= radix4low*r]
+                        # [uv-r >= radix4high*r]
+                        #(_u, digit8remain) = divmod(uv-min4high, q); u = _u+r
+                        (u, digit8remain) = divmod(uv-r, radix4high)
+                        # [uv-r == radix4high*u + digit8remain]
+                        # !! [uv-r >= radix4high*r]
+                        # [u >= r]
+                        # [uv == radix4low*r + radix4high*(u-r) + digit8remain]
+                        radix4remain = radix4high
+                    (u, digit8remain, radix4remain)
+                    radix_info4remain = RadixInfo(radix4remain)
+                    rxdigit8remain = RadixedDigit(radix_info4remain, digit8remain)
+                    if u==0 and _num_levels==1 and sf.let_uint_be_one_if_null:
+                        u = 1
+                case Unit4Size4EncodedUInt.BIT:
+                    num_bits = sf.size4encoded_uint
+                    if 0==extra_num_cells:
+                        assert offset4header == 0
+                        xnum_bits6body = num_bits -radix_info4H.num_bits4digit
+                        # MAYBE:[xnum_bits6body < 0]
+                    else:
+                        xnum_bits6body = num_bits
+                    xnum_bits6body
+                    # MAYBE:[xnum_bits6body < 0]
+                    if xnum_bits6body < 0:
+                        assert not required_digits
+                        assert 0==extra_num_cells
+                        num_bits4remain = -xnum_bits6body
+                    else:
+                        body_used_bits = sf.radix_info4digit.num_bits4digit * _num_required_digits
+                            #bug:len(required_digits)
+                            #   _num_required_digits:excluded extra_num_cells
+                        num_bits4remain = body_used_bits -xnum_bits6body
+                    num_bits4remain
+                    assert 0 <= num_bits4remain <= (sf.radix_info4digit.num_bits4digit if len(required_digits) else radix_info4H.num_bits4digit)
+                    (u, rxdigit8remain) = _cut_uint(num_bits4remain, uv)
+                    if offset4header and not offset4header == radix_info4H.radix:raise NotImplementedError
+                    # [[offset4header > 0] -> [offset4header == radix_info4H.radix]]
+                    num_bits7offset = bool(offset4header)
+                    num_bits4uv = (radix_info4H.num_bits4digit + num_bits7offset) + sf.num_bits4digit*len(required_digits)
+                    if u==0 and num_bits4remain==num_bits4uv and sf.let_uint_be_one_if_null:
+                        u = 1
+                case _:
+                    raise 000
+            (u, rxdigit8remain)
+        (u, rxdigit8remain)
+        return _LoopST(Cased(True, u),  rxdigit8remain,  0)
+
+    ######################
+    ######################
+#end-class IStepDecoder__single_layer__fixed_unitted_size4encoded_uint(IStepDecoder__without_subcall):
+
+
+_BaseStepDecoder__single_layer__fixed_unitted_size4encoded_uint = mk_named_pseudo_tuple_(__name__, 'BaseStepDecoder__single_layer__fixed_unitted_size4encoded_uint', 'emay_radix_info4macro_header radix_info4digit let_uint_be_one_if_null null_header_skipped header_extra offset4header unit4size4encoded_uint size4encoded_uint')
+class StepDecoder__single_layer__fixed_unitted_size4encoded_uint(_BaseStepDecoder__single_layer__fixed_unitted_size4encoded_uint, IStepDecoder__single_layer__fixed_unitted_size4encoded_uint):
+    ___no_slots_ok___ = True
+    #.#@override
+    #.emay_radix_info4macro_header = ...
+check_non_ABC(StepDecoder__single_layer__fixed_unitted_size4encoded_uint)
+
+
+
+
+IStepDecoder__fixed_size_layers__functional
+class IStepDecoder__fixed_size_layers__API_verII__functional(IStepDecoder__dependent_serial):
+    'using:IStepDecoder__single_layer__fixed_unitted_size4encoded_uint'
+    __slots__ = ()
+    ######################
+    @property
+    @abstractmethod
+    def num_layers(sf, /):
+        '-> uint{>=1}'
+    @property
+    @abstractmethod
+    def size4encoded_uint4zeroth_layer(sf, /):
+        '-> uint'
+    #@abstractmethod
+    #@override
+    radix_info4digit = IStepDecoder.radix_info4digit
+        # !! IStepDecoder__dependent_serial.radix_info4digit depends step_decoder{fst_part}
+        # !! mk_step_decoder4kth_layer_() to make step_decoder{fst_part} required sf.radix_info4digit
+    ######################
+    @abstractmethod
+    def get_args4step_decoder4kth_layer_(sf, layer_idx, /):
+        'uint%num_layers -> (emay_radix_info4macro_header, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint)/(bool,bool,bool,Unit4Size4EncodedUInt.(CELL|LEVEL|BIT)) #args@StepDecoder__single_layer__fixed_unitted_size4encoded_uint except {size4encoded_uint,radix_info4digit}'
+    @abstractmethod
+    def get_uint_compressor4kth_layer_(sf, layer_idx, /):
+        'uint%num_layers -> uint_compressor/IUIntCompressor'
+    ######################
+    @cached_property
+    def _check_offset4headers_(sf, /):
+        '-> None'
+        for k in range(sf.num_layers):
+            args4step_decoder4kth_layer = sf.get_args4step_decoder4kth_layer_(k)
+            (emay_radix_info4macro_header, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint) = args4step_decoder4kth_layer
+            check_offset4header(null_header_skipped, header_extra, offset4header)
+    @cached_property
+    def always_end_by_cell_boundary(sf, /):
+        '-> bool'
+        sf._check_offset4headers_
+        for k in range(sf.num_layers)[::-1]:
+            if not sf._is_end_by_cell_boundary_(k):
+                break
+        else:
+            return True
+        k
+        if k == sf.num_layers-1:
+            return False
+        for k in range(1+k)[::-1]:
+            if not sf._is_uncompress_uint_nonzero_(k):
+                break
+        else:
+            return True
+        k
+        if k > 0:
+            return False
+        assert k == 0
+        return sf._is_end_by_cell_boundary_(0) or sf._is_encoded_uint_nonzero4zeroth_layer_()
+    @cached_property
+    def lossless(sf, /):
+        '-> bool'
+        uint_compressor4last_layer = sf.get_uint_compressor4kth_layer_(sf.num_layers-1)
+        return not uint_compressor4last_layer.lossy
+    @cached_property
+    def normal_ending(sf, /):
+        '-> bool'
+        return sf.lossless and sf.always_end_by_cell_boundary
+    ######################
+    def mk_step_decoder4kth_layer_(sf, layer_idx, size4encoded_uint4kth_layer, /):
+        'k/uint%num_layers -> uint -> IStepDecoder__single_layer__fixed_unitted_size4encoded_uint'
+        k = layer_idx
+        (emay_radix_info4macro_header, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint) = sf.get_args4step_decoder4kth_layer_(k)
+        radix_info4digit = sf.radix_info4digit
+        return StepDecoder__single_layer__fixed_unitted_size4encoded_uint(emay_radix_info4macro_header, radix_info4digit, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint, size4encoded_uint4kth_layer)
+
+    ######################
+    @override
+    def start_(sf, rxdigit8macro_header, /):
+        if not sf.lossless:raise 000
+        return super().start_(rxdigit8macro_header)
+    @override
+    def _4final(sf, extra_num_cells, total_used_cells, rxdigit8H, required_digits, /):
+        'check remain null if normal_ending'
+        loop_st7final = super()._4final(extra_num_cells, total_used_cells, rxdigit8H, required_digits)
+        assert loop_st7final.is_final_st
+        if sf.always_end_by_cell_boundary and not loop_st7final.rxdigit8remain.is_null:raise 000
+        return loop_st7final
+    ######################
+    @cached_property
+    @override
+    def step_decoder4fst_part(sf, /):
+        '-> IStepDecoder{fst_part}'
+        k = 0
+        size4encoded_uint4kth_layer = sf.size4encoded_uint4zeroth_layer
+        return sf.mk_step_decoder4kth_layer_(k, size4encoded_uint4kth_layer)
+    @property
+    @override
+    def context4fst_part(sf, /):
+        '-> ctx{0}'
+        return ()
+    @override
+    def mk__ctx__may_step_decoder4kth_part__pair_(sf, k, prev_ctx, prev_oresult, /):
+        'k/uint{>=1} -> ctx{k-1} -> oresult{k-1} -> (ctx{k}, may IStepDecoder{kth_part{k,ctx{k}}})'
+        assert 1 <= k <= sf.num_layers
+        encoded_uint4prev_layer = prev_oresult
+        prev_uint_compressor = sf.get_uint_compressor4kth_layer_(k-1)
+        size4encoded_uint4kth_layer = prev_uint_compressor.uncompress(encoded_uint4prev_layer)
+        ctx = (prev_ctx, (k, prev_oresult, size4encoded_uint4kth_layer))
+        if not k == sf.num_layers:
+            # [1 <= k < sf.num_layers]
+            dr4kth_layer = sf.mk_step_decoder4kth_layer_(k, size4encoded_uint4kth_layer)
+            may_dr4kth_layer = dr4kth_layer
+        else:
+            may_dr4kth_layer = None
+        may_dr4kth_layer
+        return (ctx, may_dr4kth_layer)
+    @override
+    def mk_oresult4whole_(sf, k, ctx, /):
+        'k/uint{>=1} -> ctx{k} -> oresult{whole_serial}'
+        assert k == sf.num_layers
+        (prev_ctx, (_k, prev_oresult, size4encoded_uint4kth_layer)) = ctx
+        assert k == _k
+        oresult4whole = size4encoded_uint4kth_layer
+        return oresult4whole
+    ######################
+
+    ######################
+    def _is_end_by_cell_boundary_(sf, k, /):
+        args4step_decoder4kth_layer = sf.get_args4step_decoder4kth_layer_(k)
+        (emay_radix_info4macro_header, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint) = args4step_decoder4kth_layer
+        if unit4size4encoded_uint is Unit4Size4EncodedUInt.CELL:
+            return True
+        if not k == 0:
+            assert k >= 1
+            #?IUIntLinearTransform? scale == radix4digit? offset<?>riH?
+            return False
+        # [k==0]
+        size4encoded_uint4kth_layer = sf.size4encoded_uint4zeroth_layer
+        if unit4size4encoded_uint is Unit4Size4EncodedUInt.LEVEL:
+            b_BIT = False
+            num_levels = size4encoded_uint4kth_layer
+            assert num_levels >= 1
+        elif unit4size4encoded_uint is Unit4Size4EncodedUInt.BIT:
+            b_BIT = True
+            num_bits = size4encoded_uint4kth_layer
+            assert num_bits >= 0
+            #num_levels = 1<<num_bits
+        else:
+            raise 000
+        if header_extra:
+            pass
+        elif ... is (riH := emay_radix_info4macro_header):
+            return False
+        elif riH.is_null:
+            pass
+        elif b_BIT:
+            assert riH.is_zpow_radix
+            num_bits -= riH.num_bits4digit
+            if num_bits < 0:
+                return False
+            assert num_bits >= 0
+        else:
+            (q,r) = divmod(num_levels, riH.radix)
+            if not q > 0:
+                assert q == 0
+                assert 1 <= num_levels < riH.radix
+                return False
+            if not 0==r:
+                return False
+            num_levels = q
+            assert num_levels >= 1
+        #######
+        # [(num_bits|num_levels) perfect excluded header]
+        #######
+        if b_BIT:
+            return num_bits%sf.num_bits4digit == 0
+        else:
+            e = ceil_log_(sf.num_bits4digit, num_levels)
+            return num_levels == sf.num_bits4digit**e
+        #######
+        raise 000
+    def _is_uncompress_uint_nonzero_(sf, k, /):
+        uint_compressor4kth_layer = sf.get_uint_compressor4kth_layer_(k)
+        if uint_compressor4kth_layer.min_legal_uncompressed_uint > 0:
+            return True
+        args4step_decoder4kth_layer = sf.get_args4step_decoder4kth_layer_(k)
+        (emay_radix_info4macro_header, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint) = args4step_decoder4kth_layer
+        if offset4header > 0:
+            return True
+        return False
+    def _is_encoded_uint_nonzero4zeroth_layer_(sf, /):
+        k = 0
+        size4encoded_uint4kth_layer = sf.size4encoded_uint4zeroth_layer
+        args4step_decoder4kth_layer = sf.get_args4step_decoder4kth_layer_(k)
+        (emay_radix_info4macro_header, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint) = args4step_decoder4kth_layer
+        if offset4header > 0:
+            return True
+        if not let_uint_be_one_if_null:
+            return False
+        if null_header_skipped and header_extra:
+            return False
+        riH_null = ... is not (riH := emay_radix_info4macro_header) and riH.is_null
+        match unit4size4encoded_uint:
+            case Unit4Size4EncodedUInt.CELL:
+                num_cells = size4encoded_uint4kth_layer
+                if num_cells == 0:
+                    if not header_extra:
+                        return True
+                    else:
+                        assert not null_header_skipped
+                        return riH.is_null
+                elif num_cells == 1:
+                    if header_extra or null_header_skipped:
+                        return False
+                    else:
+                        return riH_null
+                else:
+                    assert num_cells >= 2
+                    return False
+            case Unit4Size4EncodedUInt.LEVEL:
+                num_levels = size4encoded_uint4kth_layer
+                if not num_levels == 1:
+                    assert num_levels >= 2
+                    return False
+                if not header_extra:
+                    return True
+                else:
+                    assert not null_header_skipped
+                    return riH.is_null
+            case Unit4Size4EncodedUInt.BIT:
+                num_bits = size4encoded_uint4kth_layer
+                if not num_bits == 0:
+                    assert num_bits >= 1
+                    return False
+                if not header_extra:
+                    return True
+                else:
+                    assert not null_header_skipped
+                    return riH.is_null
+            case _:
+                raise 000
+        raise 000
+    #end-def _is_encoded_uint_nonzero4zeroth_layer_(sf, /):
+    ######################
+#end-class IStepDecoder__fixed_size_layers__API_verII__functional(IStepDecoder__dependent_serial):
+if 0:check_non_ABC(IStepDecoder__fixed_size_layers__API_verII__functional)
+check_ABC(IStepDecoder__fixed_size_layers__API_verII__functional, ['radix_info4digit', 'get_args4step_decoder4kth_layer_', 'get_uint_compressor4kth_layer_', 'num_layers', 'size4encoded_uint4zeroth_layer'])
+
+
+class IStepDecoder__fixed_size_layers__API_verII(IStepDecoder__fixed_size_layers__API_verII__functional):
+    __slots__ = ()
+    ######################
+    @property
+    @abstractmethod
+    def layer_idx2args4step_decoder(sf, /):
+        '-> [(emay_radix_info4macro_header, let_uint_be_one_if_null, null_header_skipped, header_extra, offset4header, unit4size4encoded_uint)/(bool,bool,bool,Unit4Size4EncodedUInt.(CELL|LEVEL|BIT))]{len==num_layers} #args@StepDecoder__single_layer__fixed_unitted_size4encoded_uint except {size4encoded_uint,radix_info4digit}'
+    @property
+    @abstractmethod
+    def layer_idx2uint_compressor(sf, /):
+        '-> [uint_compressor/IUIntCompressor]{len==num_layers}'
+    ######################
+    @cached_property
+    @override
+    def num_layers(sf, /):
+        '-> uint{>=1}'
+        num_layers = len(sf.layer_idx2uint_compressor)
+        if not num_layers == len(sf.layer_idx2args4step_decoder): raise 000
+        if not num_layers >= 1: raise 000
+        return num_layers
+    ######################
+    @override
+    def get_args4step_decoder4kth_layer_(sf, layer_idx, /):
+        return sf.layer_idx2args4step_decoder[layer_idx]
+    @override
+    def get_uint_compressor4kth_layer_(sf, layer_idx, /):
+        return sf.layer_idx2uint_compressor[layer_idx]
+    ######################
+check_ABC(IStepDecoder__fixed_size_layers__API_verII, ['radix_info4digit', 'size4encoded_uint4zeroth_layer', 'layer_idx2args4step_decoder', 'layer_idx2uint_compressor'])
+
+_BaseStepDecoder__fixed_size_layers__API_verII = mk_named_pseudo_tuple_(__name__, 'BaseStepDecoder__fixed_size_layers__API_verII', 'radix_info4digit size4encoded_uint4zeroth_layer layer_idx2args4step_decoder layer_idx2uint_compressor')
+class StepDecoder__fixed_size_layers__API_verII(_BaseStepDecoder__fixed_size_layers__API_verII, IStepDecoder__fixed_size_layers__API_verII):
+    ___no_slots_ok___ = True
+check_non_ABC(StepDecoder__fixed_size_layers__API_verII)
 
 
 
@@ -6384,33 +7223,84 @@ check_non_ABC(StepDecoder__hardwired__prefix_tree)
 
 
 
+if 0:
+    TODO
+    r'''[[[
+#TODO:diff_API_verII
+StepDecoder__zeroth_layer__low_dynamic_part8uint
+StepDecoder__fixed_size_layers__API_verII
+==>>:
+IStepDecoder__uint_with_inf
+IStepDecoder__plugin4infinite_uint_interval
+#]]]'''#'''
 
 
 
+def shortest_dense_zpows_ex5radix_(radix, /, *excludes, ver=2):
+    r'''[[[
+    radix/uint{>=1} -> (*excludes/[uint{>=1}]) -> (shortest_dense_zpows, shortest_dense_exps4zpow)/(descending[uint{>=1}], descending[uint{>=0}])
 
+    decompose:[radix-1-sum(excludes) == sum(shortest_dense_zpows) >= 0]
+    ex:[len(shortest_dense_zpows) == len(shortest_dense_exps4zpow)]
+    zpow:[all(zpow==2**exp4zpow for zpow, exp4zpow in zip(shortest_dense_zpows, shortest_dense_exps4zpow))]
+    dense:[all(0 <= e0-e1 <= 1 for e0,e1 in pairwise(shortest_dense_exps4zpow))][not shortest_dense_exps4zpow or shortest_dense_exps4zpow[-1] == 0]
+    shortest:[all(1 <= e0-e2 <= 2 for e0,e2 in zip(shortest_dense_exps4zpow, shortest_dense_exps4zpow[2:]))]
 
+    view others/数学/编程/设计/自定义编码之要点.txt
+        稠密二幂分阶层
+    #]]]'''#'''
+    check_int_ge(1, radix)
+    check_all_([check_int_ge, 1], excludes)
+    #check_int_ge(0, sum_zpows:=radix-1-sum(excludes))
+    check_int_ge(1, sum_1_zpows:=radix-sum(excludes))
+    shortest_dense_zpows = []
+    shortest_dense_exps4zpow = []
+    if ver==1:
+        #ver1
+        u = sum_1_zpows
+        while u > 1:
+            L = u.bit_length()
+            assert L >= 2
+            exp4zpow8half = L-2
+            zpow8half = 1 << exp4zpow8half
+            shortest_dense_zpows.append(zpow8half)
+            shortest_dense_exps4zpow.append(exp4zpow8half)
+            u -= zpow8half
+        assert u == 1
+        assert sum_1_zpows == 1 + sum(shortest_dense_zpows)
+    elif ver==2:
+        #ver2
+        c01s = bin(sum_1_zpows)[2:]
+        L = len(c01s)
+        Lmm = L-1
+        #ground_decompose:[2**(L-1) -1 == 0b111...111]
+        shortest_dense_exps4zpow = mk_tuple(e for j in range(1,L) for e in [Lmm-j]*(1+(c01s[j] == '1')))
+        shortest_dense_zpows = mk_tuple(1<<e for e in shortest_dense_exps4zpow)
+    else:
+        raise 000
+    shortest_dense_zpows
+    shortest_dense_exps4zpow
+    ######################
+    assert not shortest_dense_exps4zpow or shortest_dense_exps4zpow[-1] == 0
+    assert all(0 <= e0-e1 <= 1 for e0,e1 in pairwise(shortest_dense_exps4zpow))
+    assert all(1 <= e0-e2 <= 2 for e0,e2 in zip(shortest_dense_exps4zpow, shortest_dense_exps4zpow[2:]))
+    #######
+    assert len(shortest_dense_zpows) == len(shortest_dense_exps4zpow)
+    assert all(zpow==2**exp4zpow for zpow, exp4zpow in zip(shortest_dense_zpows, shortest_dense_exps4zpow))
+    assert radix-1-sum(excludes) == sum(shortest_dense_zpows) >= 0
+    ######################
+    shortest_dense_zpows = mk_tuple(shortest_dense_zpows)
+    shortest_dense_exps4zpow = mk_tuple(shortest_dense_exps4zpow)
+    ######################
+    return (shortest_dense_zpows, shortest_dense_exps4zpow)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+assert shortest_dense_zpows_ex5radix_(1) == ((), ())
+assert shortest_dense_zpows_ex5radix_(9,1) == ((4,2,1), (2,1,0))
+assert shortest_dense_zpows_ex5radix_(9) == ((4,2,1,1), (2,1,0,0))
+assert shortest_dense_zpows_ex5radix_(16,2,1) == ((4,4,2,1,1), (2,2,1,0,0))
+assert shortest_dense_zpows_ex5radix_(16,1,ver=2) == ((4,4,2,2,1,1), (2,2,1,1,0,0)) #ver2
+assert not shortest_dense_zpows_ex5radix_(16,1,ver=1) == ((8,4,2), (3,2,1)) #ver1
+assert shortest_dense_zpows_ex5radix_(16,1,ver=1) == shortest_dense_zpows_ex5radix_(16,1,ver=2)
 
 
 
@@ -6467,6 +7357,28 @@ if 0:__()#see:collect_tuple_subclasses_with_cached_property()
         #StepDecoder__plugin4finite_uint_interval__fixed_size_layers.layer_idx2uint_linear_transform::tuple.cached_property
         #StepDecoder__plugin4infinite_uint_interval__truncated_dynamic_bits_with_may_dynamic_bibits_with_dependent_size_layers.radix_info4digit::tuple.cached_property
 assert not (__:=collect_tuple_subclasses_with_cached_property(globals(), to_print_err=True)), __
+
+
+def __():
+    ps = sorted((k,v) for k,v in globals().items() if type(k) is str and isinstance(v, type) and v.__module__ == __name__)
+    for nm, T in ps:
+        for j, c in enumerate(nm):
+            #if not (c == '_' or c.isdigit()):break
+            if c.isalpha():break
+        else:
+            continue
+        if nm[j+0] == 'I' and nm[j+1].isupper():
+            check_ABC(T)
+        else:
+            check_non_ABC(T)
+__()
+
+
+
+
+
+
+
 
 
 

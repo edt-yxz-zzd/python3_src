@@ -3,6 +3,15 @@ r'''
 e ../../python3_src/nn_ns/app/mk_py_template.py
 
 
+
+
+news@20251009
+    ++『-s』『--using_simplified_tpl』:使用简化模板 # 用于脚本文件
+py_tpl -s ./script/tmp.py
+
+
+
+
 old-API:
     py -m nn_ns.app.mk_py_template -o /path/to/python3_src/pkg/module.py
     py -m nn_ns.app.mk_py_template -o ../../python3_src/seed/types/mapping/OpaquePseudoMapping__weakref.py
@@ -13,6 +22,8 @@ rm ./script/tmp.py
 ==>>:
 py_tpl ./script/tmp.py
 py_tpl -o ../../python3_src/seed/tmp.py
+
+
 
 py -m nn_ns.app.mk_py_template --root_dirs '.' --root_dirs '../../python3_src/' -i '<useful_txt>' --begin4template4module $'#[[[[[template4module:begin\n' --end4template4module $'#]]]]]template4module:end\n' --placeholder4path4module 'xxx/yyy' --placeholder4qnm4module 'xxx.yyy' -F  -o ../../python3_src/seed/tmp.py
 view  ../../python3_src/seed/tmp.py
@@ -147,9 +158,10 @@ def _f():
     path4useful_txt = this_pkg_root/'useful.txt'
     assert path4useful_txt.exists()
     path4std_tpl = this_file_path.with_suffix('.py.tpl')
-    return this_pkg_root, path4useful_txt, path4std_tpl
+    path4std_simplified_tpl = this_file_path.with_suffix('.py.simplified.tpl')
+    return this_pkg_root, path4useful_txt, path4std_tpl, path4std_simplified_tpl
 class Globals:
-    this_pkg_root, path4useful_txt, path4std_tpl = _f()
+    this_pkg_root, path4useful_txt, path4std_tpl, path4std_simplified_tpl = _f()
     begin4template4module = '#[[[[[template4module:begin\n'
     end4template4module = '#]]]]]template4module:end\n'
     #placeholder4qnm4module = r'xxx.yyy'
@@ -205,7 +217,10 @@ template from:
     parser.add_argument('-i', '--input', type=str
                         #, default=Globals.path4useful_txt
                         , default=None
-                        , help='input file path for template4module # <~.tpl> | <useful_txt>')
+                        , help='input file path for template4module # <~.tpl> | <~.simplified.tpl> | <useful_txt>')
+    parser.add_argument('-s', '--using_simplified_tpl', action='store_true'
+                        , default = False
+                        , help='as if  file path be "<~.simplified.tpl>"')
     parser.add_argument('-o', '--output', type=str, default=None, required=True
                         , help='output file path for target module')
     parser.add_argument('-e', '--encoding', type=str
@@ -234,10 +249,15 @@ template from:
     #        placeholder4qnm4module = re.compile(placeholder4qnm4module)
 
     may_ifname = args.input
-    if may_ifname is None:
+    using_simplified_tpl = args.using_simplified_tpl
+    if using_simplified_tpl:
+        may_ifname = Globals.path4std_simplified_tpl
+    elif may_ifname is None:
         pass
     elif may_ifname == '<~.tpl>':
         may_ifname = Globals.path4std_tpl
+    elif may_ifname == '<~.simplified.tpl>':
+        may_ifname = Globals.path4std_simplified_tpl
     elif may_ifname == '<useful_txt>':
         may_ifname = Globals.path4useful_txt
     elif may_ifname.startswith('<'):

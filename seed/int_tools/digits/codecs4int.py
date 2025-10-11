@@ -25,6 +25,32 @@ view others/数学/编程/设计/自定义字符编码.txt
     ++{受控范围内胞串内部向外识别两端边界,双端内敛,字节串搜索,字节串词典序}
 
 ]]
+[[
+主要目标:
+
+===
+二幂:扩增自然数编码
+view others/数学/编程/设计/自定义字符编码-兼容utf8.txt
+    自然数编码{候选方案壬}
+    -->扩增自然数编码{候选方案壬牜扩增正无穷}
+        #_4utf8_ex()
+
+===
+二幂:扩增整数编码
+view others/数学/编程/设计/自定义编码纟整数-alnum字母表+5over8效率.txt
+view others/数学/编程/设计/自定义编码纟整数-digit字母表+3over8效率.txt
+    内用扩增自然数编码{方案甲:人工}
+        #_4oct_ex()
+
+===
+非二幂:扩增整数编码:层换字母表
+view others/数学/编程/设计/自定义编码纟自然数冃中文序数.txt
+    内用扩增自然数编码{@20250808}
+        #_4decimal_ex()
+
+===
+]]
+
 
 
 
@@ -75,13 +101,13 @@ view others/数学/编程/设计/自定义字符编码.txt
     #第0层=>偏移扌(映射;uint%数目) 是 立即数
     #第n+1层=>偏移扌(映射;uint%数目) 是 长度{第n层}
     #以上是 不规则的有限区
-    #第-1层=>偏移扌(映射;uint%数目) 是 动态扩展(宏头胞)/规则的无限区
-    #   ？自动扩展方案？
+    #第-1层=>偏移扌(映射;uint%数目) 是 动态扩增(宏头胞)/规则的无限区
+    #   ？自动扩增方案？
     #第-2层=>特殊值区(比如:无穷大)
 [编码空间规模纟不规则的有限区 =[def]= 1+max(最大值纟表达{第n层} for n in [0..])]
     作为 阈值 分隔 有限区、无限区
 [分区表纟躯胞冃颈胞 :: [(总层数/uint,数目/uint,映射)]]
-    => 自动扩展方案
+    => 自动扩增方案
 为啥区分出『宏头胞』？
     1. 比如:采用『数字+英文字母』作字母表:
         为避免标识名，令 头胞 为数字
@@ -774,6 +800,7 @@ from itertools import islice
 from seed.tiny_.check import check_type_is, check_int_ge
 
 
+from seed.int_tools.StepDecoder import IOps4IterDigitsWithHeadCell
 ######################
 from seed.int_tools.StepDecoder import step_decode__input_, step_decode__head_, step_decode__state_
 from seed.int_tools.StepDecoder import incremental_decode__continued_, incremental_decode__init5head_, incremental_decode__init5state_
@@ -808,8 +835,9 @@ repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name_
 #from seed.helper.repr_input import repr_helper
 
 ___end_mark_of_excluded_global_names__0___ = ...
+__all__
 
-class ITable4Codecs(ABC):
+class ITable4Codec(ABC):
     ___no_slots_ok___ = True
     @cached_property
     #@abstractmethod
@@ -844,8 +872,8 @@ class ITable4Codecs(ABC):
         '-> {token:uint%size4body_cell}{len>=size4body_cell}'
 
 class DecodeError(Exception):pass
-class ICodecs(ABC):
-    '[codecs{v} :: v <-> [Digit{j}/uint%radix{j}]]'
+class ICodec(ABC):
+    '[codec{v} :: v <-> [Digit{j}/uint%radix{j}]]'
     __slots__ = ()
     @abstractmethod
     def _encode_(sf, u, /):
@@ -865,11 +893,384 @@ class ICodecs(ABC):
     def decode__iter_(sf, digits, /):
         'Iter digit{j} -> Value|^EOFError|^DecodeError'
         TODO
+    def decode__iter_tokens_(sf, ops4iter_headed_digits, tokens, /):
+        'IOps4IterDigitsWithHeadCell -> Iter token -> Value|^EOFError|^DecodeError'
+        TODO
 
-class ICodecs4int(ABC):
-    '[codecs4int :: int <-> [Digit{j}/uint%radix{j}]]'
+class ICodec4uint(ABC):
+    '[codec4uint :: uint <-> [Digit{j}/uint%radix{j}]]'
     __slots__ = ()
     def __(sf, /):
         ...:
+class ICodec4int(ABC):
+    '[codec4int :: int <-> [Digit{j}/uint%radix{j}]]'
+    __slots__ = ()
+    def __(sf, /):
+        ...:
+class ICodec4rational(ABC):
+    '[codec4rational :: rational <-> [Digit{j}/uint%radix{j}]]'
+    __slots__ = ()
+    def __(sf, /):
+        ...:
+
+from seed.helper.ConstantRepr import ConstantRepr
+class SpecialIntervalCase:
+    forbidden_interval = ConstantRepr('forbidden_interval')
+    777;None
+    undefined_interval = ConstantRepr('undefined_interval')
+    777;NotImplemented
+    reserved_interval = ConstantRepr('reserved_interval')
+    777;...
+    finite_interval = ConstantRepr('finite_interval')
+class SpecialSlotCase:
+    slot4special_value = ConstantRepr('slot4special_value')
+    777;(1,)
+    slot4deep_into = ConstantRepr('slot4deep_into')
+    777;...
+    slot4tail_loop_begin = ConstantRepr('slot4tail_loop_begin')
+    777;...
+r'''[[[
+TODO:简化版:树状结构-->线性化:
+分离出 超层解码器:非负整数@极限胞串以下的层数，负整数@极限胞串以上的层数:IStepDecoder__zeroth_layer__low_dynamic_part8uint
+    (uint6dynamic_header, codec4uint{uint6dynamic_header})
+        + (uint6dynamic_header{<uint4tail_loop_begin}, fixed_size_layers_codec4uint{uint6dynamic_header})
+        + (uint6dynamic_header{>=uint4tail_loop_begin}, dependent_size_layers_codec4uint_with_extra_kw_ctx{num_layers:=(loop_layer_idx +尾部循环节偏移量描述[loop_layer_idx])})
+超层描述/首层分区表:
+    # [emay [emay max1]]{emay_tail_loop}
+    [(slot4tail_loop_begin|[(slot4deep_into|slot4special_value|max1)])]
+        -> uint6dynamic_header
+    -->:改一下，没必要[radix4H{超凡层}==1]否则得手动定义一些定长多凡层
+    [[(slot4deep_into|slot4special_value|(infinite_interval,max1)|(finite_interval,max1))]]
+    ++period4jump_back
+相应目标描述/追附编码方案描述:
+    [(slot4deep_into|(slot4special_value, special_value)|reserved_interval|forbidden_interval|undefined_interval|(finite_interval, fat_arg8target4prefix_tree4codec4uint)|())]
+        # 但 fat_arg8target4prefix_tree4codec4uint.core_arg8target4prefix_tree4codec4uint 删掉 (0,arg8prefix_tree4codec4uint)
+        #自动添加:(max1_head_digit, min_head_digit, radix4head_digit)
+    单位:header_extra, (num_levels7div(总阶层数牜强除均摊)(蕴含:num_bits/爻元数==2**num_levels7div)|num_digits)
+        重启:IUIntCompressor
+        最后一层:offset
+        倒数第二层:单位必是num_digits
+尾部循环节偏移量描述:
+    #emay_tail_loop8j2offset4kth_layer
+    [(slot4tail_loop_begin|offset4kth_layer)]
+        offset4kth_layer:统一全零或全一
+    [loop_layer_idx := uint6dynamic_header - uint4tail_loop_begin]
+#]]]'''#'''
+
+NotImplemented
+class PrefixTree4codec4uint:
+    r'''[[[
+    prefix_tree4codec4uint
+
+    [arg8prefix_tree4codec4uint =[def]= {max1_head_digit/uint:arg8target4prefix_tree4codec4uint}]
+    [radix4head_digit{j} =[def]= max1_head_digit{j} -(0 if j== 0 else max1_head_digit{j-1}})]
+    [arg8target4prefix_tree4codec4uint =[def]= (lean_arg8target4prefix_tree4codec4uint|fat_arg8target4prefix_tree4codec4uint)]
+    [lean_arg8target4prefix_tree4codec4uint =[def]= (None/forbidden_interval{#not part of radix;eg:head vs body;affect rxdigit.flip#}|NotImplemented/undefined_interval{#eg:used to clean up special_value#}|.../reserved_interval|(oresult/special_value{eg:+oo},))]
+    [fat_arg8target4prefix_tree4codec4uint =[def]= (min_target_cased_layer_uint{==offset4target_cased_layer_uint}, may_max1_target_cased_layer_uint{None=>+oo}, core_arg8target4prefix_tree4codec4uint)]
+    [cased_layer_uint =[def]= (rev_idx4layer/uint, uint6neg_kth_layer{radix4body_digit;-1-rev_idx4layer})]
+        #uint_with_unit --> cased_layer_uint
+        [uint6neg_kth_layer{radix4body_digit;-1} =[def]= last_layer_uint]
+    [core_arg8target4prefix_tree4codec4uint =[def]= ((0,arg8prefix_tree4codec4uint)|(1,arg8fixed_size_layers_codec4uint)|(2,arg8dependent_size_layers_codec4uint_with_extra_kw_ctx)|(3,peculiar_args4codec4uint)|(4,codec4uint))]
+        # 取消『(-1,arg4period)|』
+        #   见下面:arg8dependent_size_layers_codec4uint_with_extra_kw_ctx/cyclic_lean_prefix_tree4codec4uint
+    [arg4period =[def]= (name4period,period4jump_back)]
+    [name4period :: Hashable{not None}]
+    [period4jump_back :: uint{>=1}]
+        # !! 『period』 >= 1
+    #old:[arg8fixed_size_layers_codec4uint =[def]= ((num_layers/uint{>=1}|arg8linear_transforms4each_layer_exluded_last_layer/[(offset,scale)]{len==-1+num_layers}), arg8zero_layer_codec4uint)]
+    #-->:分离出 第0层 的 单位
+    [arg8fixed_size_layers_codec4uint =[def]= (num_layers/uint{>=1}, arg8linear_transforms4each_layer_exluded_last_layer, arg8units4pre_uint8num_stairs4each_layer, pre_uint8num_stairs4zero_layer/uint)]
+        #与前面的『线性变换』不同，这里更多的是『幂方』
+        #   合起来大约就是: [num_stairs:=base4pow**(offset+scale*pre_uint)]
+        # 因为 定长，所以 复杂；若是 无限区超凡层，则 负载值很大，起步开销 不必斤斤计较，采用简化假设，固化参数设置
+    [arg8linear_transforms4each_layer_exluded_last_layer =[def]= may [(offset,scale)]{len<=-1+num_layers}{.count(...)<=1}{...=>tail_loop_begin}{default_tail_loop:=[...,(0,1)]}]
+        #尾循环节 并非 必要，因为这里是 定长
+        #default_tail_loop 用于 无尾循环节 并且 长度未满 的 情形
+    [arg8units4pre_uint8num_stairs4each_layer =[def]= may [unit4pre_uint8num_stairs4kth_layer{j}]{len<=num_layers}{.count(...)<=1}{...=>tail_loop_begin}{default_tail_loop:=[...,(False,0)]}]
+        #尾循环节 并非 必要，因为这里是 定长
+        #default_tail_loop 用于 无尾循环节 并且 长度未满 的 情形
+    [arg8zero_layer_codec4uint =[def]= (header_extra/bool, cased_span)]
+    [cased_span =[def]= ((0,num_digits)|(1,num_bits)|(2,num_stairs))]
+        #带单位
+    [unit4pre_uint8num_stairs4kth_layer =[def]= (header_extra/bool, (0{digit}|1{bit}|2{num_stairs}|(3,base4pow{num_stairs:=base4pow**pre_uint8num_stairs4kth_layer})|(4,magnifier/{pre_uint8num_stairs4kth_layer->num_stairs})))]
+        #单位独立
+        # (>=2) => 强除分阶层
+        # (==1) => 前提:二幂
+    [arg8dependent_size_layers_codec4uint_with_extra_kw_ctx =[def]= (emay_tail_loop8j2offset4kth_layer, cyclic_lean_prefix_tree4codec4uint)]
+    [emay_tail_loop8j2offset4kth_layer =[def]= [emay offset4kth_layer{j}]{.count(...)<=1}{...=>tail_loop_begin}{[offset4kth_layer{0}==offset4num_layers==offset4super_layer==offset4zeroth_layer]}]
+    [cyclic_lean_prefix_tree4codec4uint =[def]= [[(emay_max1|(max1,lean_arg8target4prefix_tree4codec4uint))]{.count(...)==1}{[max1{...} := 1+prev_max1]}]{len==period4jump_back>=1}]
+        # all missing tgt are DefaultBuiltinCodec4UInt{support:runtime-kw:ctx:=level_prefix_idx}
+    #peculiar_args4codec4uint:
+    [mkr4codec4uint :: common_args4codec4uint -> fixed_min_prefix4codec4uint -> fixed_radix_prefix4codec4uint -> whole_head_radix4codec4uint -> peculiar_args4codec4uint -> codec4uint{[[.support_kw_szlnkls7PrefixTree::bool][support_kw_szlnkls7PrefixTree=>.start_()::kw:szlnkls7PrefixTree/(len(...following-lnkls), lnkls{(prefix_tree4codec4uint, idx4tgt, may_arg4period)})]]}]
+    [common_args4codec4uint :: (radix4digit, ...usrdefined...)]
+    [fixed_radix_prefix4codec4uint :: [uint{>=1}]]
+        => [whole_head_radix4codec4uint :: [uint{>=1}]]
+    [fixed_min_prefix4codec4uint :: [uint]]
+        # => [fixed_max_prefix4codec4uint :: [uint]]
+
+    #]]]'''#'''
+    def __init__(sf, arg8prefix_tree4codec4uint, /):
+        prepare_encode5PrefixTree4codec4uint_
+import builtins as _B
+def prepare_encode5PrefixTree4codec4uint_(arg8prefix_tree4codec4uint, mk_immutable_digit_seq_=tuple, /):
+    'arg{PrefixTree4codec4uint} -> (special_value2min_shortest_digits, compact_prefix_tree)'
+    special_value2min_shortest_digits = {}
+    digits = []
+    def _on_special_value(special_value, /):
+        m = special_value2min_shortest_digits.get(special_value)
+        if m is None:
+            ok = True
+        else:
+            old_digits = m
+            ok = len(digits) < len(old_digits)
+        ok
+        if ok:
+            special_value2min_shortest_digits[special_value] = mk_immutable_digit_seq_(digits)
+        return
+    def _on_core_arg8target4prefix_tree4codec4uint(j, max1_head_digit, min_head_digit, radix4H, core_arg8target4prefix_tree4codec4uint, /):
+        _case = 0
+        match core_arg8target4prefix_tree4codec4uint:
+            case (0,arg8prefix_tree4codec4uint):
+                _case = 2
+                if not radix4H == 1:raise Exception(digits, j, radix4H)
+                digit = min_head_digit-1
+                digits.append(digit)
+                compact_prefix_tree = recur_(arg8prefix_tree4codec4uint)
+                digits.pop()
+            case (1,arg8fixed_size_layers_codec4uint):
+                codec4uint = mk_fixed_size_layers_codec4uint_(radix4H, arg8fixed_size_layers_codec4uint)
+            case (2,arg8dependent_size_layers_codec4uint_with_extra_kw_ctx):
+                #codec4uint = dependent_size_layers_codec4uint_with_extra_kw_ctx
+                _case = 1
+                dependent_size_layers_codec4uint_with_extra_kw_ctx
+                loop_table = _on_inf_area(j, max1_head_digit, min_head_digit, radix4H, arg8dependent_size_layers_codec4uint_with_extra_kw_ctx)
+            case (3,peculiar_args4codec4uint):
+                codec4uint = mk_codec4uint5peculiar_args_(radix4H, peculiar_args4codec4uint)
+            case (4,codec4uint):
+                codec4uint
+                if not codec4uint.accept_radix4head_digit_(radix4H):raise Exception(digits, j, radix4H, codec4uint)
+            case _:
+                raise Exception(digits, j, radix4H, core_arg8target4prefix_tree4codec4uint)
+        if _case == 0:
+            cased_handler = Cased(_case, codec4uint)
+        elif _case == 1:
+            cased_handler = Cased(_case, loop_table)
+        elif _case == 2:
+            cased_handler = Cased(_case, compact_prefix_tree)
+        else:
+            raise 000
+        return cased_handler
+    def _on_inf_area(j, max1_head_digit, min_head_digit, radix4H, arg8dependent_size_layers_codec4uint_with_extra_kw_ctx, /):
+        (emay_tail_loop8j2offset4kth_layer, cyclic_lean_prefix_tree4codec4uint) = arg8dependent_size_layers_codec4uint_with_extra_kw_ctx
+        period4jump_back = len(cyclic_lean_prefix_tree4codec4uint)
+        if not period4jump_back > 0:raise 000
+        prev_max1 = 0
+        for k, x in enumerate(cyclic_lean_prefix_tree4codec4uint):
+            if x is ...:
+                max1 = 1+prev_max1
+            elif type(x) is int:
+                max1 = x
+            else:
+                (max1,lean_arg8target4prefix_tree4codec4uint) = x
+                match lean_arg8target4prefix_tree4codec4uint:
+                    [lean_arg8target4prefix_tree4codec4uint =[def]= (None/forbidden_interval{#not part of radix;eg:head vs body;affect rxdigit.flip#}|NotImplemented/undefined_interval{#eg:used to clean up special_value#}|.../reserved_interval|(oresult/special_value{eg:+oo},))]
+                TODO
+
+        emay_tail_loop8j2offset4kth_layer
+        j2offset4kth_layer = expand_emay_tail_loop_(period4jump_back, emay_tail_loop8j2offset4kth_layer)
+        codec4uint = mk_dependent_size_layers_codec4uint_with_extra_kw_ctx_(j2offset4kth_layer, ...remainder2radix4head_digit)
+        loop_table = ...codec4uint
+        TODO
+        return loop_table
+    def recur_(arg8prefix_tree4codec4uint, /):
+        items = sorted(arg8prefix_tree4codec4uint.items())
+        compact_prefix_tree = []
+        prev_max1 = 0
+        for j, (max1_head_digit, arg8target4prefix_tree4codec4uint) in enumerate(items):
+            check_int_ge(prev_max1, max1_head_digit)
+            min_head_digit = prev_max1
+            radix4H = max1_head_digit -min_head_digit
+            777;prev_max1 = max1_head_digit
+            match arg8target4prefix_tree4codec4uint:
+                case None:
+                    #forbidden_interval
+                    compact_prefix_tree.append((-1, max1_head_digit, radix4H, None))
+                case _B.NotImplemented:
+                    #undefined_interval
+                    compact_prefix_tree.append((-1, max1_head_digit, radix4H, NotImplemented))
+                case _B.Ellipsis:
+                    #reserved_interval
+                    compact_prefix_tree.append((-1, max1_head_digit, radix4H, ...))
+                case (special_value,):
+                    #oresult
+                    if not radix4H == 1:raise Exception(special_value, radix4H, digits)
+                    digit = min_head_digit-1
+                    digits.append(digit)
+                    _on_special_value(special_value)
+                    digits.pop()
+                    compact_prefix_tree.append((-1, max1_head_digit, radix4H, NotImplemented)) #!!! clean up special_value
+                case (min_target_cased_layer_uint, may_max1_target_cased_layer_uint, core_arg8target4prefix_tree4codec4uint):
+                    #fat_arg8target4prefix_tree4codec4uint
+                    cased_handler = _on_core_arg8target4prefix_tree4codec4uint(j, max1_head_digit, min_head_digit, radix4H, core_arg8target4prefix_tree4codec4uint)
+                    inf_or_max1_target_cased_layer_uint = +oo if may_max1_target_cased_layer_uint is None else may_max1_target_cased_layer_uint
+                    compact_prefix_tree.append((inf_or_max1_target_cased_layer_uint, max1_head_digit, radix4H, cased_handler))
+                    TODO
+                case _:
+                    raise Exception(arg8target4prefix_tree4codec4uint)
+        return compact_prefix_tree
+    compact_prefix_tree = recur_(arg8prefix_tree4codec4uint)
+    return (special_value2min_shortest_digits, compact_prefix_tree)
+
+
+def _4utf8_ex()
+    '扩增自然数编码{候选方案壬牜扩增正无穷}{#不支持无限保留区#可以考虑加入#}'
+    超凡层牜四凡层起步cyclic_lean_prefix_tree4codec4uint = ([
+    #body_digit:0b10ii_iiii
+    [(0b1000_0000, None) #禁用区:头胞.ASCII
+    ,0b1010_0000#4凡层#5bit#0b1010_0000[-6:]
+    ,0b1011_0000#5凡层#4bit
+    ,0b1011_1000#6凡层#3bit
+    ,0b1011_1100#7凡层#2bit
+    ,0b1011_1110#8凡层#1bit
+    ,0b1011_1111#9凡层#0bit(偏移+1)
+    ,...        #深入
+    ,(0x1_00, None) #禁用区:头胞.non_ASCII
+    ]
+    ,
+    #不支持:无限保留区#可以考虑加入
+    #==>> [period4jump_back==1]
+    ])
+
+    #_ux_arg8prefix_tree4codec4uint
+    候选方案壬牜扩增正无穷arg8prefix_tree4codec4uint = (
+    {0b1000_0000 #7bit
+    #:((0,0),(0,2**7), (1,(num_layers:=1,(True,(0,0)))))
+    :((0,0),(0,2**7), (1,(num_layers:=1,None,None,1)))
+    ,0b1100_0000
+    :None #禁用区:body_digit:0b10ii_iiii
+    ,0b1110_0000 #(5+6)bit
+    #:((0,0),(0,2**11), (1,(num_layers:=1,(True,(0,1)))))
+    :((0,0),(0,2**11), (1,(num_layers:=1,None,None,2)))
+    ,0b1111_0000 #(4+6+6)bit
+    #:((0,0),(0,2**16), (1,(num_layers:=1,(True,(0,2)))))
+    :((0,0),(0,2**16), (1,(num_layers:=1,None,None,3)))
+    ,0b1111_1000 #(3+6+6+6)bit
+    #:((0,0),(0,2**21), (1,(num_layers:=1,(True,(0,3)))))
+    :((0,0),(0,2**21), (1,(num_layers:=1,None,None,4)))
+    #以上utf8:[byte2digit_=[def]=head_digit不变,body_digit取低6爻:0b10ii_iiii]
+    #以下超凡层，但是前几项需特殊对待
+    #.,0b1111_1100 #2bit
+    #.:超凡层arg8prefix_tree4codec4uint
+    ,0b1111_1010 #1bit#2凡层#(3+6*((5-1)+2**4-1))bit
+    #:((0,0),(0,2**117), (1,([(offset4zeroth_layer:=5,1)],(True,(UNIT_bit:=1,4)))))
+    :((0,0),(0,2**117), (1,(num_layers:=2, [(offset4zeroth_layer:=5,1)], [(True,UNIT_bit:=1)],4)))
+        #offset4zeroth_layer:4-->5 前面遗留3爻元权算一苞
+    ,0b1111_1011 #1val#3凡层，第一层占6bit(特设)
+    #:((0,0),(rev_idx4layer:=2,2**6), (1,(num_layers:=3,(True,(UNIT_bit:=1,6)))))
+    :((0,0),(rev_idx4layer:=2,2**6), (1,(num_layers:=3,None,[(True,UNIT_bit:=1)],6)))
+    ,0b1111_1100 #1val
+    :([4], 超凡层牜四凡层起步cyclic_lean_prefix_tree4codec4uint)
+    ,0b1111_1101 #1val
+    :(special_value:=+oo,)
+    ,0x1_00 #3val
+    :... #保留区
+    })
+
+    return 候选方案壬牜扩增正无穷arg8prefix_tree4codec4uint
+#end-def _4utf8_ex()
+
+
+def _4oct_ex(ver):
+    '内用扩增自然数编码{方案甲:人工}{支持正无穷}{支持无限保留区}'
+    ver0超凡层牜三凡层起步cyclic_lean_prefix_tree4codec4uint = ([
+    [0b100  #3,6,...凡层#2bit
+    ,0b101  #4,7,...凡层#1val
+    ,...    #深入
+    ,(0b1_000, ...) #保留区#1bit
+    ]
+    ,
+    [0b010  #5,8...凡层#1bit
+    ,...    #深入
+    ,(0b100, ...) #保留区#1val
+    ,(0b1_000, ...) #保留区#2bit
+    ]
+    ,
+    #==>> [period4jump_back==2]
+    ])
+    ver1超凡层牜三凡层起步cyclic_lean_prefix_tree4codec4uint = ([
+    [0b100  #3,5,...凡层#2bit
+    ,0b110  #4,6,...凡层#1bit
+    ,...    #深入
+    ,(0b1_000, ...) #保留区#1val
+    ]
+    ,
+    #==>> [period4jump_back==1]
+    ])
+
+    assert ver >= 0
+    超凡层牜三凡层起步cyclic_lean_prefix_tree4codec4uint = (
+    [ver0超凡层牜三凡层起步cyclic_lean_prefix_tree4codec4uint
+    ,ver1超凡层牜三凡层起步cyclic_lean_prefix_tree4codec4uint
+    ][ver]
+    )
+
+
+    深入arg8prefix_tree4codec4uint = (
+    {0b100 #2bit#(2+3)bit
+    #:((0,2**2+2**3),(0,2**2+2**3+2**5), (1,(num_layers:=1,(True,(0,1)))))
+    :((0,2**2+2**3),(0,2**2+2**3+2**5), (1,(num_layers:=1,None,None,2)))
+    ,0b110 #1bit#(1+3+3)bit
+    #:((0,2**2+2**3+2**5),(0,2**2+2**3+2**5+2**7), (1,(num_layers:=1,(True,(0,2)))))
+    :((0,2**2+2**3+2**5),(0,2**2+2**3+2**5+2**7), (1,(num_layers:=1,None,None,3)))
+    #以下超凡层
+    ,0b111 #1val
+    #:((0,0),(0,2**21), (1,(num_layers:=2,(True,(0,1)))))
+    :((0,0),(0,2**21), (1,(num_layers:=2,None,None,2)))
+    ,0b1_000 #1val
+    :([3], 超凡层牜三凡层起步cyclic_lean_prefix_tree4codec4uint)
+    })
+
+    方案甲arg8prefix_tree4codec4uint = (
+    {0b100 #2bit
+    #:((0,0),(0,2**2), (1,(num_layers:=1,(True,(0,0)))))
+    :((0,0),(0,2**2), (1,(num_layers:=1,None,None,1)))
+    ,0b101 #1val#(0+3)bit
+    #:((0,2**2),(0,2**2+2**3), (1,(num_layers:=1,(True,(0,1)))))
+    :((0,2**2),(0,2**2+2**3), (1,(num_layers:=1,None,None,2)))
+    ,0b110 #1val
+    :深入arg8prefix_tree4codec4uint
+    ,0b111 #1val
+    :(special_value:=+oo,)
+    ,0b1_000 #1val
+    :... #保留区
+    })
+
+    return 方案甲arg8prefix_tree4codec4uint
+#end-def _4oct_ex():
+
+def _4decimal_ex():
+    '内用扩增自然数编码{@20250808}{支持正无穷}{不支持无限保留区}'
+    超凡层cyclic_lean_prefix_tree4codec4uint = ([
+    [0x0007
+    ,...            #深入
+    ,(0x0009, (special_value:=+oo,)) #1val
+    ,(0x000A, ...)  #保留区#1val
+    ]
+    ,
+    #==>> [period4jump_back==1]
+    ])
+
+
+    _20250808_arg8prefix_tree4codec4uint = (
+    {0x000A #10val
+    :([..., 1], 超凡层cyclic_lean_prefix_tree4codec4uint)
+    })
+
+    return _20250808_arg8prefix_tree4codec4uint
+#end-def _4decimal_ex():
+
+
+
+
 __all__
 from seed.int_tools.digits.codecs4int import *

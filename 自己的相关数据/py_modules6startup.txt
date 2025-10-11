@@ -1,0 +1,44 @@
+
+e ../../python3_src/自己的相关数据/py_modules6startup.txt
+[[
+py --version
+Python 3.11.9
+
+Python 3.11.9 (main, Jun 10 2024, 00:57:33) [Clang 17.0.2 (https://android.googlesource.com/toolchain/llvm-project d9f89f4d1 on linux
+  补偿:])
+
+py -c 'import sys; print("\n".join(sorted(sys.modules)))'
+__main__
+_abc
+_codecs
+_collections_abc
+_frozen_importlib
+_frozen_importlib_external
+_imp
+_io
+_signal
+_sitebuiltins
+_stat
+_thread
+_warnings
+_weakref
+abc
+builtins
+codecs
+encodings
+encodings.aliases
+encodings.utf_8
+genericpath
+io
+marshal
+os
+os.path
+posix
+posixpath
+site
+stat
+sys
+time
+zipimport
+]]
+

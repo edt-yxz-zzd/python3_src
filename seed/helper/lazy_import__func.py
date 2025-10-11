@@ -50,6 +50,14 @@ def __():
 
 
 ]]
+[[
+force_lazy_imported_func_:
+old:
+    (echo(0) or echo)
+now:
+    force_lazy_imported_func_(echo)
+]]
+
 
 
 ######################
@@ -151,11 +159,36 @@ _LazyImport4Func('seed.tiny', 'snd', 'seed.helper.lazy_import__func', '_snd_')
 
 
 
-py_adhoc_call   seed.helper.lazy_import__func   @f
+[[
+py_adhoc_call   seed.helper.lazy_import__func   ,str.filter_FromImportStmt6seed_tiny :'mk_tuple,echo'
+===
+from seed.helper.Echo import echo, theEcho
+from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
+from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp, set_doc_
+
+]]
+[[
+py_adhoc_call   seed.helper.lazy_import__func   ,str.filter_FromImportStmt6seed_tiny :'mk_tuple,echo' | py -m seed.helper.lazy_import__func
+===
+lazy_import4funcs_('seed.helper.Echo', 'echo,theEcho', __name__)
+if 0:from seed.helper.Echo import echo, theEcho
+
+lazy_import4funcs_('seed.tiny_.containers', 'null_str,null_bytes,null_int,null_tuple,null_frozenset,null_mapping_view,null_iter,mk_frozenset,mk_tuple,mk_Just,mk_Left,mk_Right', __name__)
+if 0:from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
+
+lazy_import4funcs_('seed.tiny_.funcs', 'no_op,echo_args_kwargs,echo_kwargs,echo_args,echo,unbox_,unbox,fst,snd,const,lazy,lazy_raise_v,lazy_raise_f,eq,not_eq,is_,not_is,in_,not_in,flip,neg_flip,xor,xnor,not_,with_key,mk_fprint,fprint,py_cmp,int2cmp,set_doc_', __name__)
+if 0:from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp, set_doc_
+]]
+
+
 ]]]'''#'''
 __all__ = r'''
 lazy_import4func_
     lazy_import4funcs_
+force_lazy_imported_func_
+
+filter_FromImportStmt6seed_tiny
+    main4convert_FromImportStmt
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -166,7 +199,6 @@ from seed.tiny_.check import check_callable
 from seed.pkg_tools.import_object import import_object, import4qobject
 #def import4qobject(may_qname4module, may_qname4obj, /):
 
-from seed.helper.repr_input import repr_helper
 
 #.from itertools import islice
 #.from seed.tiny_.check import check_type_is, check_int_ge
@@ -204,7 +236,7 @@ def _inject_(sf, smay_qnm4mdl8dst, smay_nm4func8dst, may_func8dst, /):
             pass
         else:
             if not x is sf:
-                raise Exception('dst exist:', (mdl8dst, nm4func8dst), x)
+                raise Exception('dst exist:', (mdl8dst, nm4func8dst), (sf, x), (id(sf), id(x)))
         ########
         setattr(mdl8dst, nm4func8dst, f)
         x = getattr(mdl8dst, nm4func8dst)
@@ -234,6 +266,7 @@ class _LazyImport4Func:
     def __call__(sf, /, *args, **kwds):
         return sf._func_(*args, **kwds)
     def __repr__(sf, /):
+        from seed.helper.repr_input import repr_helper
         return repr_helper(sf, *sf._args4repr)
 def lazy_import4func_(qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst='', smay_nm4func8dst='', /):
     sf = _LazyImport4Func(qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst)
@@ -256,6 +289,102 @@ def lazy_import4funcs_(qnm4mdl8src, xqnms4func8src, smay_qnm4mdl8dst='', /):
         xs.append(x)
     return xs
 
+def force_lazy_imported_func_(f, /):
+    if type(f) is _LazyImport4Func:
+        f = f._func_
+    return f
+
+class _LazyData:
+    @cached_property
+    def regex4FromImportStmt(sf, /):
+        import re
+        regex4FromImportStmt = re.compile(r'^(\s*)from\s+(\S+)\s+import\s+([^()#]+|[(][^()#]+[)]\s+)((?:#.*)?)$')
+        return regex4FromImportStmt
+    def parse4regex4FromImportStmt(sf, match_obj, /):
+        (indent, qnm4mdl, import_list, smay_comment) = match_obj.groups()
+        import_list = import_list.replace('(', ' ').replace(')', ' ').strip()
+        import_list = ' '.join(import_list.split())
+        _import_list = import_list.replace(' as ', ':').replace(' ', '')
+        line = match_obj.group(0)
+        content = line.strip()
+        s = f"{indent}lazy_import4funcs_('{qnm4mdl}', '{_import_list}', __name__)\n{indent}if 0:{content}"
+        return (s, (indent, qnm4mdl, _import_list, smay_comment, content))
+_lazy_data = _LazyData()
+
+#.def main4convert_FromImportStmt6seed_tiny(nms4funcs, /):
+#.    'deeper and lazy version of "from seed.tiny import ..."'
+def filter_FromImportStmt6seed_tiny(nms4funcs, /):
+    'deeper version of "from seed.tiny import ..."'
+    import re
+    from seed.pkg_tools.load_resource import open_under_pkg_, read_under_pkg_
+    from seed.tiny_.containers import mk_tuple__split_first_if_str
+    from seed.tiny_.check import check_pseudo_identifier, check_all_
+
+    nms4funcs = mk_tuple__split_first_if_str(nms4funcs, ',')
+    check_all_(check_pseudo_identifier, nms4funcs)
+    s = '|'.join(nms4funcs)
+    s = fr'\b(?:{s})\b'
+    regex8nms = re.compile(s)
+    txt = read_under_pkg_('seed', 'tiny.py', xencoding='u8')
+    for line in txt.split('\n'):
+        if not line.startswith('from '):
+            continue
+        if line.startswith('from seed.tiny import '):
+            continue
+        j = line.find(mid:=' import ')
+        if j == -1:
+            continue
+        m = regex8nms.search(line[j+len(mid):])
+        if not m:
+            continue
+        yield line
+
+def main4convert_FromImportStmt(args=None, /):
+    regex4FromImportStmt = _lazy_data.regex4FromImportStmt
+    parse4regex4FromImportStmt = _lazy_data.parse4regex4FromImportStmt
+    import argparse
+    from seed.io.may_open import may_open_stdin, may_open_stdout
+
+    parser = argparse.ArgumentParser(
+        description=r'''convert "from xxx.yyy import aaa, bbb as ccc" to "lazy_import4funcs_('xxx.yyy', 'aaa,bbb:ccc', __name__);\nif 0:from xxx.yyy import aaa, bbb as ccc"'''
+        , epilog=''
+        , formatter_class=argparse.RawDescriptionHelpFormatter
+        )
+    parser.add_argument('-i', '--input', type=str, default=None
+                        , help='input file path')
+    parser.add_argument('-o', '--output', type=str, default=None
+                        , help='output file path')
+    parser.add_argument('-ie', '--iencoding', type=str
+                        , default='utf8'
+                        , help='input file encoding')
+    parser.add_argument('-oe', '--oencoding', type=str
+                        , default='utf8'
+                        , help='output file encoding')
+    parser.add_argument('-f', '--force', action='store_true'
+                        , default = False
+                        , help='open mode for output file')
+
+    args = parser.parse_args(args)
+    force = args.force
+    omode = 'wt' if args.force else 'xt'
+    iencoding = args.iencoding
+    oencoding = args.oencoding
+    iencoding = 'utf8' if not iencoding else iencoding
+    oencoding = 'utf8' if not oencoding else oencoding
+
+    may_ifname = args.input
+    may_ofname = args.output
+    with may_open_stdin(may_ifname, 'rt', encoding=iencoding) as fin, may_open_stdout(may_ofname, omode, encoding=oencoding) as fout:
+        for line in fin:
+            m = regex4FromImportStmt.fullmatch(line)
+            if m:
+                (s, _) = parse4regex4FromImportStmt(m)
+                print(s, end='\n\n', file=fout)
+
+if __name__ == "__main__":
+    main4convert_FromImportStmt()
+
 __all__
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
+if 1:from seed.helper.lazy_import__func import filter_FromImportStmt6seed_tiny, main4convert_FromImportStmt
 from seed.helper.lazy_import__func import *
