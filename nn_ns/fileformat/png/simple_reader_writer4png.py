@@ -2259,9 +2259,9 @@ def xpixels2bytes8row_(num_bits4segment, num_bytes4row, segments8padding, xpixel
         bs = bytes(map(f, iter_split__num_rows_(num_bytes4row, segments8row_pad)))
         ...
     elif num_bits4segment == 8:
-        bs = bytes(segments8row_pad)
+        bs = bytes(iter_segments8row_pad)
     elif num_bits4segment == 16:
-        bs = encode__seq_(encode__uint_2byte_BE_, segments8row_pad)
+        bs = encode__seq_(encode__uint_2byte_BE_, iter_segments8row_pad)
     else:
         raise Error__num_bits4segment(num_bits4segment)
     bs
@@ -2528,7 +2528,7 @@ def sample_depth_scaling_(color_type4png, sample_depths7XXX4src, mx7XXX4src, tma
         mx7XXX4png = mx7XXX4src
     mx7XXX4png
     return (color_type4png, sample_depth7uniform, mx7XXX4png, tmay_pixel7RGB8fully_transparent4png, tmay_pixel7RGB8background_color4png)
-def rgb_merging_(color_type4png, sample_depth7uniform, mx7XXX4png, tmay_pixel7RGB8fully_transparent4png, tmay_pixel7RGB8background_color4png, /):
+def rgb_merging_(color_type4png, sample_depths7XXX4src, sample_depth7uniform, mx7XXX4png, tmay_pixel7RGB8fully_transparent4png, tmay_pixel7RGB8background_color4png, /):
     assert color_type4png.truecolor_used
     iter_pixels7RGB4png = chain(tmay_pixel7RGB8fully_transparent4png, tmay_pixel7RGB8background_color4png, (pixel7XXX4png[:3] for row in mx7XXX4png for pixel7XXX4png in row))
     tmay_pixel7XXX8fully_transparent4png = tmay_pixel7RGB8fully_transparent4png
@@ -2588,7 +2588,7 @@ def preprocess__pixel_matrix7RGBA4src_(wh_size4canvas, sample_depths7RGBA4src, j
     else:
         assert len(sample_depths7XXX4src) in (3,4)
         (color_type4png, sample_depth7uniform, mx7XXX4png, tmay_pixel7RGB8fully_transparent4png, tmay_pixel7RGB8background_color4png) = sample_depth_scaling_(color_type4png, sample_depths7XXX4src, mx7XXX4src, tmay_pixel7RGB8fully_transparent4src, tmay_pixel7RGB8background_color4src)
-        (color_type4png, sample_depths7XXX4src, sample_depth7uniform, mx7XXX4png, tmay_pixel7XXX8fully_transparent4png, tmay_pixel7XXX8background_color4png) = rgb_merging_(color_type4png, sample_depth7uniform, mx7XXX4png, tmay_pixel7RGB8fully_transparent4png, tmay_pixel7RGB8background_color4png)
+        (color_type4png, sample_depths7XXX4src, sample_depth7uniform, mx7XXX4png, tmay_pixel7XXX8fully_transparent4png, tmay_pixel7XXX8background_color4png) = rgb_merging_(color_type4png, sample_depths7XXX4src, sample_depth7uniform, mx7XXX4png, tmay_pixel7RGB8fully_transparent4png, tmay_pixel7RGB8background_color4png)
         assert len(sample_depths7XXX4src) in (1,2,3,4)
         may_palette7RGB = None
         may_palette7A = None
