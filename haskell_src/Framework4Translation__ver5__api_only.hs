@@ -44,11 +44,14 @@ view others/数学/编程/编译/翻译框架设计.txt
 ]]
 
 [[
-四基础虚拟封装:
+四基础虚拟封装+二扩展:
   # 串联同文:[tr_t5s_6w == cat_Tr_ tr_t5x_6w tr_x5s_6w]
   # 串联虚拟:[vm_p_6w == cat_Vm_ vm_p_6x vm_x_6w] # [?不太基础?]
   # 虚设格式:[tr_t5s_6w == mock_Tr_ vm_x_6w tr_t5s_6x] #仅限于『程序文件』，其实 串联虚拟cat_Vm_ ~= flip mock_Tr_ 只要 虚设格式 放宽到所有程序而非限于翻译诀
   # 虚设虚拟:[vm_n_6w == mock_Vm_ tr_y5n_6w vm_y_6w]
+  #二扩展@20251018:
+  # 虚饰入端:[tr_t5s_6w == decorate_I4Tr_ vm_s_6x tr_t5x_6w]
+  # 虚饰出端:[tr_t5s_6w == decorate_O4Tr_ vm_x_6t tr_x5s_6w]
     ===
     思考:这几个东西能生成啥样子的系统？
       TODO:
@@ -76,6 +79,12 @@ ls ../../python3_src/haskell_src/Framework4Translation-ver5-images/ -1
 串联虚拟.png
 虚设格式.png
 虚设虚拟.png
+虚饰入端.png
+虚饰出端.png
+===
+e ../../python3_src/haskell_src/Framework4Translation-ver5-images/tools.txt
+PxerStudio
+com.benny.pxerstudio
 ===
 ]]
 
@@ -161,12 +170,16 @@ __all__
       => 双文件可打包为一个虚拟的大文件(翻译诀链)
         即:双文件/(tr_t5w_6t,tr_w5s_6t) --> 单文件/tr_t5s_6t
   ######################
+  news@20251018
+    decorate_I4Tr_
+    decorate_O4Tr_
+  ######################
   news@20251008:
-   mock_Tr_
-   mock_Vm_
-   ==>>:
-   pseudo_cross_translate_
-   pseudo_self_resident_translate_
+    mock_Tr_
+    mock_Vm_
+    ==>>:
+    pseudo_cross_translate_
+    pseudo_self_resident_translate_
   ######################
   ++mk_Mc__income_
   ######################
@@ -305,6 +318,8 @@ tr__echo
 cat_Tr_
 mock_Tr_
 mock_Vm_
+decorate_I4Tr_
+decorate_O4Tr_
 box_BTr_
 unbox_BTr_
 apply_Var_
@@ -488,6 +503,8 @@ __all__
     | MockVm :: Tr w n y -> Vm w y         -> Vm w n
     | MockTr :: Vm w x -> Tr x s t       -> Tr w s t
     | CatTr ::  Tr h a t -> Tr h s a    -> Tr h s t
+    | DecorateI4Tr :: Vm x s -> Tr w x t -> Tr w s t
+    | DecorateO4Tr :: Vm t x -> Tr w s x -> Tr w s t
     | TrECHO :: Tr h s s
     | ManI :: Similar iA iB -> ManualPortI h o iA iB -> Tr h iA o           -> Tr h iB o)
     | ManO :: Similar oA oB -> ManualPortO h i oA oB -> Tr h i oA           -> Tr h i oB
@@ -516,6 +533,8 @@ __all__
 -- .
 -- .cat_Tr_ ::  Tr h a t -> Tr h s a -> Tr h s t
 -- .mock_Tr_ :: Vm w x -> Tr x s t -> Tr w s t
+-- .decorate_I4Tr_ :: Vm x s -> Tr w x t -> Tr w s t
+-- .decorate_O4Tr_ :: Vm t x -> Tr w s x -> Tr w s t
 -- .tr__echo :: Tr__echo h s
 -- .apply_manual_portI_ :: Similar iA iB -> ManualPortI h o iA iB -> (Tr h iA o -> Tr h iB o)
 -- .apply_manual_portO_ :: Similar oA oB -> ManualPortO h i oA oB -> (Tr h i oA -> Tr h i oB)
@@ -781,6 +800,16 @@ mock_Vm_ = primitive
   -- [vm_n_6w == mock_Vm_ tr_y5n_6w vm_y_6w]
 
 
+-- ######################
+-- news@20251018:
+-- decorate_I4Tr_
+-- decorate_O4Tr_
+decorate_I4Tr_ :: Vm x s -> Tr w x t -> Tr w s t
+decorate_I4Tr_ = primitive
+  -- [tr_t5s_6w == decorate_I4Tr_ vm_s_6x tr_t5x_6w]
+decorate_O4Tr_ :: Vm t x -> Tr w s x -> Tr w s t
+decorate_O4Tr_ = primitive
+  -- [tr_t5s_6w == decorate_O4Tr_ vm_x_6t tr_x5s_6w]
 
 
 

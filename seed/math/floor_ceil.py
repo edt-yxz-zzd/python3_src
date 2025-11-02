@@ -203,7 +203,11 @@ move 'import unittest, doctest' into seed.math.floor_ceil:load_tests() body -->:
 
 
 #]]]'''
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
+#################################
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
+
 
 ___end_mark_of_excluded_global_names__0___ = ...
 __all__

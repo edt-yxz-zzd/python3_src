@@ -125,10 +125,21 @@ view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-
 临时性排除:py,txt:同上
 xxx:add 'seed/io/cache_file/README.txt'
 xxx:add 'seed/recognize/rgnr/abc/utilities4IRecognizer.py'
+
 xxx:add 'txt/script/对称多项式讠基表达.py'
 xxx:add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.compact.decompositions_lt_2pow32.out.txt.tar.lzma'
 xxx:add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.len_ge2__grouped_decompositions_lt_2pow32.out.txt.tar.lzma'
 ===
+
+]]
+[[
+@20251011
+g_both__dry_run
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20251011_075113.txt
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20251011_075117.txt
+git add 自己的相关数据/delta4on_working4py_src/README-cmds.txt
+===
+临时性排除:py,txt:同上
 
 ]]
 

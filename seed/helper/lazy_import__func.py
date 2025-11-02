@@ -57,6 +57,17 @@ old:
 now:
     force_lazy_imported_func_(echo)
 ]]
+[[
+from seed.helper.lazy_import__func import lazy_import8lazy_obj_, force_lazy_imported_obj_
+
+usage:
+lazy_null_tuple = lazy_import8lazy_obj_('seed.tiny', 'null_tuple')
+assert () == lazy_null_tuple()
+assert () == force_lazy_imported_obj_(lazy_null_tuple)
+assert () == force_lazy_imported_obj_(())
+
+
+]]
 
 
 
@@ -156,7 +167,19 @@ _LazyImport4Func('seed.tiny', 'snd', 'seed.helper.lazy_import__func', '_snd_')
 [_LazyImport4Func('seed.tiny', 'fst', 'seed.helper.lazy_import__func', ''), _LazyImport4Func('seed.tiny', 'snd', 'seed.helper.lazy_import__func', '_snd_')]
 
 ######################
+######################
+######################
+>>> lazy_null_tuple = lazy_import8lazy_obj_('seed.tiny', 'null_tuple')
+>>> lazy_null_tuple
+_LazyImport8LazyObj('seed.tiny', 'null_tuple', None)
+>>> lazy_null_tuple()
+()
+>>> force_lazy_imported_obj_(lazy_null_tuple)
+()
+>>> force_lazy_imported_obj_(())
+()
 
+######################
 
 
 [[
@@ -187,11 +210,16 @@ lazy_import4func_
     lazy_import4funcs_
 force_lazy_imported_func_
 
+lazy_import8lazy_obj_
+force_lazy_imported_obj_
+
+
 filter_FromImportStmt6seed_tiny
     main4convert_FromImportStmt
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from operator import attrgetter
 from functools import cached_property
 
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name
@@ -243,16 +271,39 @@ def _inject_(sf, smay_qnm4mdl8dst, smay_nm4func8dst, may_func8dst, /):
         if not x is f:raise Exception('setattr fail?:', (mdl8dst, nm4func8dst), x, f)
         ########
 
-class _LazyImport4Func:
-    @cached_property
-    def _func_(sf, /):
-        (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst) = sf._args
+_get = object.__getattribute__
+_set = object.__setattr__
+
+class _Forbid_get_set:
+    def __getattribute__(sf, nm, /):
+        raise AttributeError(nm)
+    def __setattr__(sf, nm, v, /):
+        raise AttributeError(nm)
+
+def _get_func(sf, /):
+    #check_type_is(_LazyImport4Func, sf)
+    try:
+        return _get(sf, '__f')
+    except AttributeError:
+        pass
+    f = type(sf)._fetch_func(sf)
+    _set(sf, '__f', f)
+    return _get_func(sf)
+class _LazyImport4Func(_Forbid_get_set):
+    #.@cached_property
+    #.def _func_(sf, /):
+    def _fetch_func(sf, /):
+        (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst) = _get(sf, '_args7ssdd')
         f = import4qobject(qnm4mdl8src, qnm4func8src)
+        f = force_lazy_imported_func_(f)
+        #.if type(f) is _LazyImport4Func:
+        #.    f = f._func_
+        #.    assert not type(f) is _LazyImport4Func
         check_callable(f)
         _inject_(sf, smay_qnm4mdl8dst, smay_nm4func8dst, may_func8dst:=f)
         return f
     def __init__(sf, qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst, /):
-        sf._args4repr = (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst)
+        _set(sf, '_args4repr', (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst))
         check_pseudo_qual_name(qnm4mdl8src)
         check_pseudo_qual_name(qnm4func8src)
         check_smay_pseudo_qual_name(smay_qnm4mdl8dst)
@@ -260,17 +311,20 @@ class _LazyImport4Func:
         if smay_nm4func8dst and not smay_qnm4mdl8dst:raise TypeError
         if smay_qnm4mdl8dst and not smay_nm4func8dst:
             check_pseudo_identifier(smay_nm4func8dst:=qnm4func8src)
+            #updated:smay_nm4func8dst
         assert bool(smay_qnm4mdl8dst) is bool(smay_nm4func8dst)
-        sf._args = (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst)
+        #updated:smay_nm4func8dst
+        _set(sf, '_args7ssdd', (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst))
 
     def __call__(sf, /, *args, **kwds):
-        return sf._func_(*args, **kwds)
+        #.return sf._func_(*args, **kwds)
+        return _get_func(sf)(*args, **kwds)
     def __repr__(sf, /):
         from seed.helper.repr_input import repr_helper
-        return repr_helper(sf, *sf._args4repr)
+        return repr_helper(sf, *_get(sf, '_args4repr'))
 def lazy_import4func_(qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst='', smay_nm4func8dst='', /):
     sf = _LazyImport4Func(qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst)
-    (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst) = sf._args
+    (qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst, smay_nm4func8dst) = _get(sf, '_args7ssdd')
         # updated:smay_nm4func8dst
     _inject_(sf, smay_qnm4mdl8dst, smay_nm4func8dst, may_func8dst:=None)
     return sf
@@ -291,8 +345,88 @@ def lazy_import4funcs_(qnm4mdl8src, xqnms4func8src, smay_qnm4mdl8dst='', /):
 
 def force_lazy_imported_func_(f, /):
     if type(f) is _LazyImport4Func:
-        f = f._func_
+        #.f = f._func_
+        f = _get_func(f)
+        assert not type(f) is _LazyImport4Func
     return f
+
+
+def force_lazy_imported_obj_(obj, /):
+    ids = set()
+    while 1:
+        ids.add(id(obj))
+        if type(obj) is _LazyImport8LazyObj:
+            obj = _get_obj(obj)
+            assert not type(obj) is _LazyImport8LazyObj
+            if id(obj) in ids:raise 000
+            ids.add(id(obj))
+        _obj = force_lazy_imported_func_(obj)
+        if _obj is obj:
+            break
+        if id(_obj) in ids:raise 000
+        obj = _obj
+    return obj
+
+
+def _get_obj(sf, /):
+    #check_type_is(_LazyImport8LazyObj, sf)
+    try:
+        return _get(sf, '__x')
+    except AttributeError:
+        pass
+    x = type(sf)._fetch_obj(sf)
+    _set(sf, '__x', x)
+    return _get_obj(sf)
+class _LazyImport8LazyObj(_Forbid_get_set):
+    #.@cached_property
+    #.def _obj_(sf, /):
+    def _fetch_obj(sf, /):
+        (qnm4mdl8src, may_qnm4obj8src, may_either_mdl_obj) = _get(sf, '_args4import4qobject')
+        if not may_either_mdl_obj is None:
+            either_mdl_obj = may_either_mdl_obj
+            (mdl_vs_obj, mdl_or_obj) = either_mdl_obj
+            if mdl_vs_obj:
+                obj = mdl_or_obj
+            else:
+                mdl8src = mdl_or_obj
+                if may_qnm4obj8src is None:
+                    obj = mdl8src
+                else:
+                    qnm4obj8src = may_qnm4obj8src
+                    #???buggy???:from operator import attrgetter
+                    #   e ../../python3_src/seed/helper/lazy_import__func7context.py
+                    obj = attrgetter(qnm4obj8src)(mdl8src)
+                obj
+            obj
+        else:
+            obj = import4qobject(qnm4mdl8src, may_qnm4obj8src)
+        obj
+        obj = force_lazy_imported_obj_(obj)
+        return obj
+    def __init__(sf, qnm4mdl8src, smay_qnm4obj8src, may_either_mdl_obj, /):
+        _set(sf, '_args4repr', (qnm4mdl8src, smay_qnm4obj8src, may_either_mdl_obj))
+        check_pseudo_qual_name(qnm4mdl8src)
+        check_smay_pseudo_qual_name(smay_qnm4obj8src)
+        may_qnm4obj8src = None if not smay_qnm4obj8src else smay_qnm4obj8src
+        _set(sf, '_args4import4qobject', (qnm4mdl8src, may_qnm4obj8src, may_either_mdl_obj))
+
+    def __call__(sf, /):
+        #.return sf._obj_
+        return _get_obj(sf)
+    def __repr__(sf, /):
+        from seed.helper.repr_input import repr_helper
+        return repr_helper(sf, *_get(sf, '_args4repr'))
+
+def lazy_import8lazy_obj_(qnm4mdl8src, smay_qnm4obj8src, may_either_mdl_obj=None, /):
+    sf = _LazyImport8LazyObj(qnm4mdl8src, smay_qnm4obj8src, may_either_mdl_obj)
+    return sf
+
+
+
+
+
+
+
 
 class _LazyData:
     @cached_property
@@ -385,6 +519,8 @@ if __name__ == "__main__":
     main4convert_FromImportStmt()
 
 __all__
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
+from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_, force_lazy_imported_obj_, lazy_import8lazy_obj_
+#.def lazy_import4func_(qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst='', smay_nm4func8dst='', /):
+#.def lazy_import8lazy_obj_(qnm4mdl8src, smay_qnm4obj8src, may_either_mdl_obj=None, /):
 if 1:from seed.helper.lazy_import__func import filter_FromImportStmt6seed_tiny, main4convert_FromImportStmt
 from seed.helper.lazy_import__func import *

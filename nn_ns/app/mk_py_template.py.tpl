@@ -43,6 +43,11 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    # <<== seed.pkg_tools.ModuleReloader
 #.
 #.#################################
+#.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
+#.with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', prefix4attr='lazy_', suffix4attr=''):
+#.    from __.seed.tiny_.containers import lazy_null_tuple,lazy_null_iter,lazy_null_frozenset as _lazy_null_frozenset_ #null_tuple,null_iter,null_frozenset
+#.#################################
+#.from seed.helper.lazy_import__func import force_lazy_imported_func_ # lazy_import4func_, lazy_import4funcs_
 #.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 #.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):
 #.    from seed.helper.ifNone import ifNone as _ifNone, ifNonef as _ifNonef
@@ -64,52 +69,15 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import collect_tuple_subclasses_with_cached_property
 #.    #assert not (__:=collect_tuple_subclasses_with_cached_property(globals(), to_print_err=True)), __
 #.#################################
-
-
-
-#.#################################
 #.:s/\v^from +([_[:alnum:].]+) +import +([^# ]( *[^# ])*).*/lazy_import4funcs_('\1', '\2', __name__)\rif 0:\0
-#.from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
-#.repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-#.
-#.lazy_import4funcs_('seed.tiny_.types5py', 'mk_MapView,curry1,kwargs2Attrs', __name__)
-#.if 0:from seed.tiny_.types5py import mk_MapView,curry1,kwargs2Attrs #,MapView
-#.lazy_import4funcs_('seed.tiny_.containers', 'mk_tuple,mk_immutable_seq,mk_immutable_seq5iterT_,mk_immutable_seq5iter__,mk_bytes5iter_,mk_tuple__split_first_if_str', __name__)
-#.if 0:from seed.tiny_.containers import mk_tuple,mk_immutable_seq,mk_immutable_seq5iterT_,mk_immutable_seq5iter__,mk_bytes5iter_,mk_tuple__split_first_if_str #xxx:null_tuple
-#.lazy_import4funcs_('seed.debug.print_err', 'print_err', __name__)
-#.if 0:from seed.debug.print_err import print_err
-#.lazy_import4funcs_('seed.helper.ifNone', 'ifNone,ifNonef', __name__)
-#.if 0:from seed.helper.ifNone import ifNone,ifNonef
-#.lazy_import4funcs_('seed.tiny_.funcs', 'echo,fst,snd', __name__)
-#.if 0:from seed.tiny_.funcs import echo,fst,snd
-#.lazy_import4funcs_('seed.types.Either', 'mk_Left,mk_Right', __name__)
-#.if 0:from seed.types.Either import mk_Left,mk_Right #Either,Cased
-#.
-#.
-#.flatten_recur = lazy_import4func_('seed.iters.flatten_recur', 'flatten_recur', __name__)
-#.# def flatten_recur(g:Generator, /, *, value:object=None, is_exc=False, boxed=False):
-#.
-#.echo_or_mk_PeekableIterator = lazy_import4func_('seed.iters.PeekableIterator', 'echo_or_mk_PeekableIterator', __name__)
-#.dot_ = lazy_import4func_('seed.func_tools.dot_', 'dot_', __name__)
-#.
-#.[mk_named_pseudo_tuple_,collect_tuple_subclasses_with_cached_property] = lazy_import4funcs_('seed.for_libs.for_collections.namedtuple__nontuple4cached_property', 'mk_named_pseudo_tuple_,collect_tuple_subclasses_with_cached_property', __name__)
-#.if 0:from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
-#.#def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
-#.#    def _check6make_(sf, /):
-#.if 0:from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import collect_tuple_subclasses_with_cached_property
-#.#assert not (__:=collect_tuple_subclasses_with_cached_property(globals(), to_print_err=True)), __
+
+
+
 #.#################################
-#.
-#.
 #.from seed.types.LazyList import ToConcatLazyList, decorator4protocol4ToConcatLazyList_
 #.from seed.types.LazyList import LazyList, LazyListError
 #.from seed.types.LazyList import to_LazyList, to_LazyListIter
 #.
-#.
-#.
-#.
-#.
-#.from seed.helper.repr_input import repr_helper
 #.from seed.tiny_._Base4repr import _Base4repr
         #sf._reset4repr(may_args4repr, may_kwds4repr)
         #sf._init4repr(*args4repr, **kwds4repr)
@@ -145,5 +113,4 @@ __all__
 
 
 __all__
-#lazy_import4funcs_('z', '', __name__)
 from z import *

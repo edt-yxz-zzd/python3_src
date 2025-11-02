@@ -1,0 +1,5 @@
+
+e ../../python3_src/haskell_src/Framework4Translation-ver5-images/tools.txt
+
+PxerStudio 1.2.0
+com.benny.pxerstudio

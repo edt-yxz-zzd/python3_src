@@ -37,6 +37,10 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    # <<== seed.pkg_tools.ModuleReloader
 #.
 #.#################################
+#.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
+#.with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', prefix4attr='lazy_', suffix4attr=''):
+#.    from __.seed.tiny_.containers import lazy_null_tuple,lazy_null_iter,lazy_null_frozenset as _lazy_null_frozenset_ #null_tuple,null_iter,null_frozenset
+#.#################################
 #.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 #.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):
 #.    from seed.helper.ifNone import ifNone as _ifNone, ifNonef as _ifNonef

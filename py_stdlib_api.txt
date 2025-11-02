@@ -158,6 +158,7 @@ inspect
 warnings__logging
 contextlib.contextmanager
 pathlib
+shutil
 bz2__gzip__lzma__zlib__header4compress
 sqlite3
 binascii
@@ -169,11 +170,14 @@ random
   secrets
 struct
   array
+codecs
+unicodedata
 TODO:
 hashlib
 hmac
 reprlib
 subprocess
+weakref
 types
   py_stdlib__types:goto
 ]]
@@ -828,9 +832,10 @@ view ~/../usr/lib/python3.10/xxx.py
 cp ~/../usr/lib/python3.10/xxx.py /sdcard/0my_files/tmp/out4py/py_src/
 view /sdcard/0my_files/tmp/out4py/py_src/xxx.py
 
-view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/xxx.html
-html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/xxx.html > $my_tmp/out4py/html2text/py_38_doc/xxx.html.txt
-view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/xxx.html.txt
+view /sdcard/0my_files/unzip/py_doc/python-3.12.4-docs-text/library/xxx.txt
+#.view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/xxx.html
+#.html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/xxx.html > $my_tmp/out4py/html2text/py_38_doc/xxx.html.txt
+#.view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/xxx.html.txt
 
 
 import xxx
@@ -842,8 +847,129 @@ view /sdcard/0my_files/tmp/out4py/py_help.xxx.out.txt
 
 ]]]
 [[[
+weakref
+===
+view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/weakref.html
+html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/weakref.html > $my_tmp/out4py/html2text/py_38_doc/weakref.html.txt
+    from bs4 import BeautifulSoup
+        ModuleNotFoundError: No module named 'bs4'
+#view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/weakref.html.txt
+
+
+import weakref
+weakref.__all__
+ref
+proxy
+getweakrefcount
+getweakrefs
+WeakKeyDictionary
+ReferenceType
+ProxyType
+CallableProxyType
+ProxyTypes
+WeakValueDictionary
+WeakSet
+WeakMethod
+finalize
+
+xxx:help(weakref)
+xxx:py_help weakref > ~/my_tmp/out4py/py_help.weakref.out.txt
+xxx:view /sdcard/0my_files/tmp/out4py/py_help.weakref.out.txt
+
+view /sdcard/0my_files/unzip/py_doc/python-3.12.4-docs-text/library/weakref.txt
+__slots__ = [..., '__weakref__', ...]
+weakref.ref(referent/object[, callback]) -> weak_reference/weakref{referent/obj}/ReferenceType
+    weak_reference() -> may referent
+    callback :: may on_finalize/(weak_reference -> None)
+    ===
+    .__call__()
+    .__callback__
+    ===
+
+weakref.WeakMethod(method[, callback]) -> weak_method{referent&&function}
+  method :: types.MethodWrapperType{referent,function}
+
+weakref.proxy(object[, callback]) -> weak_proxy{nonhashable}/(CallableProxyType{obj{callable}}|ProxyType{obj{noncallable}})
+
+weakref.finalize(referent/obj, func/call_once, /, *args, **kwargs) -> finalizer{-> (func(*args, **kwargs)[#!no referent!#][#!then be dead!#] if alive else None}
+    .__call__()
+        If *self* is alive then mark it as dead and return the result of calling "func(*args, **kwargs)".  If *self* is dead then return "None".
+
+    .detach()
+        If *self* is alive then mark it as dead and return the tuple "(obj, func, args, kwargs)".
+        If *self* is dead then return "None".
+
+    .peek()
+        If *self* is alive then return the tuple "(obj, func, args, kwargs)".
+        If *self* is dead then return "None".
+
+    .alive
+        Property which is true if the finalizer is alive, false otherwise.
+
+    .atexit
+        A writable boolean property which by default is true.
+        When the program exits, it calls all remaining live finalizers for which "atexit" is true.
+        They are called in reverse order of creation.
+
+    Note:
+        It is important to ensure that *func*, *args* and *kwargs* do not own any references to *obj*, either directly or indirectly, since otherwise *obj* will never be garbage collected.
+        In particular, *func* should not be a bound method of *obj*.
+
+
+weakref.getweakrefcount(referent/object) -> uint{==len(getweakrefs(referent))}
+
+weakref.getweakrefs(referent/object) -> [(weak_reference|weak_proxy)]
+
+WeakKeyDictionary :: {k:v}#~={weak_reference{k}:v}
+  .keyrefs() -> [weak_reference]/list
+
+WeakValueDictionary :: {k:v}#~={k:weak_reference{v}}
+  .valuerefs() -> [weak_reference]/list
+
+WeakSet :: {k}#~={weak_reference{k}}
+
+ProxyTypes
+>>> weakref.ProxyTypes
+(<class 'weakref.ProxyType'>, <class 'weakref.CallableProxyType'>)
+
+]]]
+[[[
 types
   py_stdlib__types:here
+===
+>>> types.__all__
+FunctionType
+LambdaType
+CodeType
+MappingProxyType
+SimpleNamespace
+CellType
+GeneratorType
+CoroutineType
+AsyncGeneratorType
+MethodType
+BuiltinFunctionType
+BuiltinMethodType
+WrapperDescriptorType
+MethodWrapperType
+MethodDescriptorType
+ClassMethodDescriptorType
+ModuleType
+TracebackType
+FrameType
+GetSetDescriptorType
+MemberDescriptorType
+new_class
+resolve_bases
+prepare_class
+DynamicClassAttribute
+coroutine
+GenericAlias
+UnionType
+EllipsisType
+NoneType
+NotImplementedType
+
 ===
 :class_property
 types.DynamicClassAttribute(fget=None, fset=None, fdel=None, doc=None)¶
@@ -2730,6 +2856,7 @@ view /sdcard/0my_files/tmp/out4py/py_src/struct.py
 view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/struct.html
 html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/struct.html > $my_tmp/out4py/html2text/py_38_doc/struct.html.txt
 view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/struct.html.txt
+view /sdcard/0my_files/unzip/py_doc/python-3.12.4-docs-text/library/struct.txt
 [[
 std size+alignment =[def]= omit pad
 ===
@@ -2822,33 +2949,48 @@ Functions to convert between Python values and C structs.
       !: same as >
 
     The remaining chars indicate types of args and must match exactly; these can be preceded by a decimal repeat count:
+      #std_sz=1{write 1 null byte but read nothing}:
       x: pad byte (no data);
-      c:char;
+      #std_sz=1:
+      c:bytes{len=1}/char;
       b:signed byte; B:unsigned byte;
       ?: _Bool (requires C99; if not available, char is used instead)
+      #std_sz=2:
       h:short; H:unsigned short;
+      #std_sz=4:
       i:int; I:unsigned int;
       l:long; L:unsigned long;
+      #std_sz=4/8/2:
       f:float; d:double; e:half-float.
     * Special cases (preceding decimal count indicates length):
-      s:string (array of char); char[]
-      p: pascal string (with count byte). char[]
+      #std_sz=???:
+      s:bytes/string (array of char); char[]
+      p:bytes/pascal string (with count byte). char[]
     * Special cases (only available in native format):
+      #std_sz=???:
       n:ssize_t; N:size_t;
       P:an integer type that is wide enough to hold a pointer. (void*)
     * Special case (not in native mode unless 'long long' in platform C):
+      #std_sz=8:
       q:long long; Q:unsigned long long
     Whitespace between formats is ignored.
+    "9c" => 9 element{bytes{len=1}};
+    "9s" => 1 element{bytes{len=9}};
+    "9p" => 1 element{bytes{len<=8}}; # len < 256 1字节长度前置
 
 class Struct(builtins.object)
  |  Struct(fmt) --> compiled struct object
- |  iter_unpack(self, buffer, /)
+ |  iter_unpack(self, buffer, /) -> Iter tuple8struct
  |  pack(...)
  |      S.pack(v1, v2, ...) -> bytes
  |  pack_into(...)
  |      S.pack_into(buffer, offset, v1, v2, ...)
- |  unpack(self, buffer, /)
- |  unpack_from(self, /, buffer, offset=0)
+ |      [buffer[offset:offset+.size] := .pack(v1, v2, ...)]
+ |  unpack(self, buffer, /) -> tuple8struct
+ |      [len(buffer) == .size]
+ |  unpack_from(self, /, buffer, offset=0) -> tuple8struct
+ |      .unpack(buffer[offset:offset+.size])
+ |
  |  Data descriptors defined here:
  |
  |  format
@@ -2856,6 +2998,7 @@ class Struct(builtins.object)
  |
  |  size
  |      struct size in bytes
+ |
     calcsize(format, /) -> size in bytes
     iter_unpack(format, buffer, /) -> Iter tuple8struct
         [len(buffer)%calcsize(format) == 0]
@@ -2865,6 +3008,80 @@ class Struct(builtins.object)
         [len(buffer) == calcsize(format)]
     unpack_from(format, /, buffer, offset=0) -> tuple8struct
         [offset + calcsize(format) <= len(buffer)]
+]]]
+[[[
+codecs
+codecs.lookup :: str -> CodecInfo
+CodecInfo
+'iso8859-1' == 'latin-1' ~ [ord() < 128]
+'ascii' ~ [ord() < 128]
+
+===
+'ascii'
+'latin-1' 不被utf8/gb兼容
+
+===
+'ascii'
+'utf8'
+
+===
+'ascii'
+'gb2312'
+'gbk' == 'gb18030'{2byte}
+'gb18030'
+
+
+===
+'iso8859-1' == 'latin-1'
+>>> codecs.lookup('latin-1')
+<codecs.CodecInfo object for encoding iso8859-1 at 0x6f3fc18520>
+
+'iso8859-1' ~ [ord() < 128]
+>>> bytes('一', 'iso8859-1')
+Traceback (most recent call last):
+    ...
+UnicodeEncodeError: 'latin-1' codec can't encode character '\u4e00' in position 0: ordinal not in range(256)
+
+'ascii' ~ [ord() < 128]
+>>> bytes('一', 'ascii')
+Traceback (most recent call last):
+    ...
+UnicodeEncodeError: 'ascii' codec can't encode character '\u4e00' in position 0: ordinal not in range(128)
+
+>>> bytes('\x80', 'iso8859-1')
+b'\x80'
+
+>>> bytes('\x80', 'gbk')
+Traceback (most recent call last):
+    ...
+UnicodeEncodeError: 'gbk' codec can't encode character '\x80' in position 0: illegal multibyte sequence
+
+>>> bytes('\x80', 'gb18030')
+b'\x810\x810'
+
+>>> bytes('\x80', 'utf8')
+b'\xc2\x80'
+
+# latin1 解码没有异常:
+>>> bs = bytes(range(256))
+>>> bs
+b'\x00\x01...\xfe\xff'
+>>> bs.decode('latin1')
+'\x00\x01...ùúûüýþÿ'
+
+>>> bs = bytes(range(128))
+>>> bs
+b'\x00\x01...z{|}~\x7f'
+>>> bs.decode('ascii')
+'\x00\x01...z{|}~\x7f'
+
+
+]]]
+[[[
+unicodedata
+.name(ch)
+.lookup(nm)
+...
 ]]]
 [[[
 secrets
@@ -3911,7 +4128,9 @@ dir(dobj)
 [..., 'copy', 'decompress', 'eof', 'flush', 'unconsumed_tail', 'unused_data']
 help(dobj)
 decompressobj.decompress :: bytes -> bytes
+  #max_length=0
 decompressobj.flush :: () -> bytes
+  #length=16384
 decompressobj.eof :: bool
 decompressobj.unused_data :: bytes
 decompressobj.unconsumed_tail :: bytes
@@ -3919,6 +4138,16 @@ decompressobj.unconsumed_tail :: bytes
   * classes for incremental (de)compression
   * functions for one-shot (de)compression
 
+======
+import zlib
+cobj = zlib.compressobj()
+dir(cobj)
+[..., 'compress', 'copy', 'flush']
+help(cobj)
+compressobj.compress :: bytes -> bytes
+compressobj.flush :: () -> bytes
+  #mode=4
+    # [Z_FINISH := 4]
 ======
 
 
@@ -4199,6 +4428,7 @@ from _bz2 import BZ2Compressor, BZ2Decompressor
 ]]]]]]]]]]
 [[[
 pathlib
+  see:os.path, shutil
 ===
 #view ~/../usr/lib/python3.10/pathlib.py
 #cp ~/../usr/lib/python3.10/pathlib.py /sdcard/0my_files/tmp/out4py/py_src/
@@ -4207,6 +4437,13 @@ pathlib
 #view /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/pathlib.html
 #html2text -i /sdcard/0my_files/unzip/py_doc/python-3.8.1-docs-html/library/pathlib.html > $my_tmp/out4py/html2text/py_38_doc/pathlipathlipathlib.txt
 #view /sdcard/0my_files/tmp/out4py/html2text/py_38_doc/pathlib.html.txt
+
+view /sdcard/0my_files/unzip/py_doc/python-3.12.4-docs-text/library/pathlib.txt
+  没找到:Path.__enter__(self)/Path.__exit__(self, t, v, tb)
+
+deprecated:
+    PurePath.relative_to(other, walk_up=False)
+    PurePath.is_relative_to(other)
 
 
 from pathlib import Path
@@ -4267,6 +4504,8 @@ Path.absolute(self)
 Path.chmod(self, mode, *, follow_symlinks=True)
          Change the permissions of the path, like os.chmod().
 ----
+#!version 3.12
+Path.exists(*, follow_symlinks=True)
 Path.exists(self)
          Whether this path exists.
 ----
@@ -4274,6 +4513,8 @@ Path.expanduser(self)
          Return a new path with expanded ~ and ~user constructs
          (as returned by os.path.expanduser)
 ----
+##see:fnmatch
+Path.glob(pattern, *, case_sensitive=None)
 Path.glob(self, pattern)
          Iterate over this subtree and yield all existing files (of any
          kind, including directories) matching the given relative pattern.
@@ -4301,6 +4542,11 @@ Path.is_fifo(self)
 Path.is_file(self)
          Whether this path is a regular file (also True for symlinks pointing
          to regular files).
+----
+#:new@version 3.12.
+Path.is_junction()
+   Return "True" if the path points to a junction, and "False" for any
+   other type of file. Currently only Windows supports junctions.
 ----
 Path.is_mount(self)
          Check if this path is a POSIX mount point
@@ -4350,6 +4596,7 @@ Path.read_bytes(self)
 Path.read_text(self, encoding=None, errors=None)
          Open the file in text mode, read it, and close the file.
 ----
+##see:symlink_to()
 Path.readlink(self)
          Return the path to which the symbolic link points.
 ----
@@ -4376,6 +4623,8 @@ Path.resolve(self, strict=False)
          normalizing it (for example turning slashes into backslashes under
          Windows).
 ----
+##see:fnmatch
+Path.rglob(pattern, *, case_sensitive=None)
 Path.rglob(self, pattern)
          Recursively yield all existing files (of any kind, including
          directories) matching the given relative pattern, anywhere in
@@ -4402,6 +4651,14 @@ Path.touch(self, mode=438, exist_ok=True)
 Path.unlink(self, missing_ok=False)
          Remove this file or link.
          If the path is a directory, use rmdir() instead.
+----
+#new@version 3.12.
+Path.walk(top_down=True, on_error=None, follow_symlinks=False)
+   Generate the file names in a directory tree by walking the tree
+   either top-down or bottom-up.
+   For each directory in the directory tree rooted at *self*
+   (including *self* but excluding '.' and '..'), the method yields a
+   3-tuple of "(dirpath, dirnames, filenames)".
 ----
 Path.write_bytes(self, data)
          Open the file in bytes mode, write to it, and close the file.
@@ -4474,6 +4731,7 @@ PurePath.is_absolute(self)
              True if the path is absolute (has both a root and, if applicable,
              a drive).
 ----
+#!Deprecated since version 3.12, will be removed in version 3.14:
 PurePath.is_relative_to(self, *other)
              Return True if the path is relative to another path or False.
 ----
@@ -4487,9 +4745,11 @@ PurePath.joinpath(self, *args)
              paths) or a totally different path (if one of the arguments is
              anchored).
 ----
+PurePath.match(pattern, *, case_sensitive=None)
 PurePath.match(self, path_pattern)
              Return True if this path matches the given pattern.
 ----
+#!Deprecated since version 3.12, will be removed in version 3.14:
 PurePath.relative_to(self, *other)
              Return the relative path to another path identified by the passed
              arguments.  If the operation is not possible (because this is not
@@ -4505,6 +4765,9 @@ PurePath.with_suffix(self, suffix)
              Return a new path with the file suffix changed.  If the path
              has no suffix, add given suffix.  If the given suffix is an empty
              string, remove the suffix from the path.
+----
+#new@version 3.12.
+PurePath.with_segments(*pathsegments)
 ----
 #PurePath.Readonly properties defined here:
 ----
@@ -4558,6 +4821,114 @@ PurePath.suffixes
   ]]
 
 
+]]]
+[[[
+shutil
+===
+view /sdcard/0my_files/unzip/py_doc/python-3.12.4-docs-text/library/filesys.txt
+view /sdcard/0my_files/unzip/py_doc/python-3.12.4-docs-text/library/shutil.txt
+===
+Warning:
+
+  Even the higher-level file copying functions ("shutil.copy()",
+  "shutil.copy2()") cannot copy all file metadata.On POSIX platforms,
+  this means that file owner and group are lost as well as ACLs.  On
+  Mac OS, the resource fork and other metadata are not used. This
+  means that resources will be lost and file type and creator codes
+  will not be correct. On Windows, file owners, ACLs and alternate
+  data streams are not copied.
+
+
+
+
+
+===
+shutil.copy2(src_path, tgt_dir_or_dst_path, *, follow_symlinks=True) -> dst_path{with metadata}
+shutil.copy(src_path, tgt_dir_or_dst_path, *, follow_symlinks=True) -> dst_path{without metadata}
+
+
+
+
+shutil.copytree(src, dst, symlinks=False, ignore=None, copy_function=copy2, ignore_dangling_symlinks=False, dirs_exist_ok=False)
+shutil.rmtree(path, ignore_errors=False, onerror=None, *, onexc=None, dir_fd=None)
+shutil.move(src, dst, copy_function=copy2)
+
+
+
+
+
+
+===
+shutil.copy(src_path, tgt_dir_or_dst_path, *, follow_symlinks=True) -> dst_path{without metadata}
+
+shutil.copy(src, dst, *, follow_symlinks=True)
+
+   Copies the file *src* to the file or directory *dst*.  *src* and
+   *dst* should be *path-like objects* or strings.  If *dst* specifies
+   a directory, the file will be copied into *dst* using the base
+   filename from *src*. If *dst* specifies a file that already exists,
+   it will be replaced. Returns the path to the newly created file.
+
+   If *follow_symlinks* is false, and *src* is a symbolic link, *dst*
+   will be created as a symbolic link.  If *follow_symlinks* is true
+   and *src* is a symbolic link, *dst* will be a copy of the file
+   *src* refers to.
+
+   "copy()" copies the file data and the file's permission mode (see
+   "os.chmod()").  Other metadata, like the file's creation and
+   modification times, is not preserved. To preserve all file metadata
+   from the original, use "copy2()" instead.
+
+   Raises an auditing event "shutil.copyfile" with arguments "src",
+   "dst".
+
+   Raises an auditing event "shutil.copymode" with arguments "src",
+   "dst".
+
+   Changed in version 3.3: Added *follow_symlinks* argument. Now
+   returns path to the newly created file.
+
+   Changed in version 3.8: Platform-specific fast-copy syscalls may be
+   used internally in order to copy the file more efficiently. See
+   Platform-dependent efficient copy operations section.
+
+===
+shutil.copy2(src_path, tgt_dir_or_dst_path, *, follow_symlinks=True) -> dst_path{with metadata}
+
+shutil.copy2(src, dst, *, follow_symlinks=True)
+
+   Identical to "copy()" except that "copy2()" also attempts to
+   preserve file metadata.
+
+   When *follow_symlinks* is false, and *src* is a symbolic link,
+   "copy2()" attempts to copy all metadata from the *src* symbolic
+   link to the newly created *dst* symbolic link. However, this
+   functionality is not available on all platforms. On platforms where
+   some or all of this functionality is unavailable, "copy2()" will
+   preserve all the metadata it can; "copy2()" never raises an
+   exception because it cannot preserve file metadata.
+
+   "copy2()" uses "copystat()" to copy the file metadata. Please see
+   "copystat()" for more information about platform support for
+   modifying symbolic link metadata.
+
+   Raises an auditing event "shutil.copyfile" with arguments "src",
+   "dst".
+
+   Raises an auditing event "shutil.copystat" with arguments "src",
+   "dst".
+
+   Changed in version 3.3: Added *follow_symlinks* argument, try to
+   copy extended file system attributes too (currently Linux only).
+   Now returns path to the newly created file.
+
+   Changed in version 3.8: Platform-specific fast-copy syscalls may be
+   used internally in order to copy the file more efficiently. See
+   Platform-dependent efficient copy operations section.
+
+
+===
+===
 ]]]
 [[[
 contextlib

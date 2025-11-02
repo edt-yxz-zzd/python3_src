@@ -1,0 +1,5 @@
+
+py -m nn_ns.app.copy6root_cmd "$@"
+
+# py -m nn_ns.app.copy6root_cmd   -to script/png/   -from /sdcard/0my_files/tmp/out4py/py_src/  -v -ig  --  site-packages/PIL/_binary.py site-packages/PIL/PngImagePlugin.py site-packages/png/
+

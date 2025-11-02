@@ -1,0 +1,14 @@
+
+e ../../python3_src/ideas/import_into_from__qnm4mdl8dst_X_qnm4mdl8src_X_src_nm4obj_X_dst_nm4obj.txt
+mv -iv ../../python3_src/ideas/import_into_from__qnm4mdl8dst_X_qnm4mdl8src_X_nm4obj.txt ../../python3_src/ideas/import_into_from__qnm4mdl8dst_X_qnm4mdl8src_X_src_nm4obj_X_dst_nm4obj.txt
+
+导入:提供所有信息，源起:
+  view ../../python3_src/seed/helper/lazy_import__func7context.py
+  &&wanted:TODO: ../../python3_src/seed/helper/lazy_import__func7qualified.py
+    from seed.lazy_import__func7qualified._.xxx.yyy import aaa as bbb
+
+__name__ = {qnm4mdl8dst}
+from {qnm4mdl8src} import {src_nm4obj} as {dst_nm4obj}
+==>>
+import_module_(qnm4mdl8src, src_nm4obj, qnm4mdl8dst, dst_nm4obj)
+

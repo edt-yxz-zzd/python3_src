@@ -42,6 +42,7 @@ py_adhoc_call   seed.seq_tools.mk_seq_rng__with_step   @f
 __all__ = r'''
 mk_seq_rng__with_step__len_
     mk_seq_rng__with_step__seq_
+    mk_seq_rng5slice_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -49,6 +50,20 @@ from seed.tiny_.check import check_type_is, check_int_ge
 #.from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
 ___end_mark_of_excluded_global_names__0___ = ...
 
+
+
+
+def mk_seq_rng5slice_(sz, sl, /, *, to_pack=False):
+    'sz/uint -> slice{may int} -> (kw:to_pack/bool) -> (range if to_pack else (b_reversed, begin, end, step, length))'
+    r = mk_seq_rng__with_step__len_(sz, sl.start, sl.stop, sl.step)
+    if not to_pack:
+        return r
+    (b_reversed, begin, end, step, length) = r
+    rg = range(begin, end, step)
+    if b_reversed:
+        rg = rg[::-1]
+    rg
+    return rg
 
 
 def mk_seq_rng__with_step__seq_(seq, /, begin, end, step):
@@ -163,7 +178,7 @@ def mk_seq_rng__with_step__len_(sz, /, begin, end, step):
 
 
 __all__
-#[mk_seq_rng__with_step__len_,mk_seq_rng__with_step__seq_] = lazy_import4funcs_('seed.seq_tools.mk_seq_rng__with_step', 'mk_seq_rng__with_step__len_,mk_seq_rng__with_step__seq_', __name__)
-from seed.seq_tools.mk_seq_rng__with_step import mk_seq_rng__with_step__len_, mk_seq_rng__with_step__seq_
+from seed.seq_tools.mk_seq_rng__with_step import mk_seq_rng__with_step__len_, mk_seq_rng__with_step__seq_, mk_seq_rng5slice_
 # (b_reversed, begin, end, step, length) = mk_seq_rng__with_step__len_(sz, begin, end, step)
+# rg = mk_seq_rng5slice_(sz, sl, to_pack=True)
 from seed.seq_tools.mk_seq_rng__with_step import *
