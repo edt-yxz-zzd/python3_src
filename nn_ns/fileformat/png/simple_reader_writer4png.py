@@ -77,6 +77,11 @@ py_adhoc_call   nn_ns.fileformat.png.simple_reader_writer4png   @convert_png_fil
 
 rm -iv ../../python3_src/haskell_src/Framework4Translation-ver5-images/tmp-串联同文.png ../../python3_src/haskell_src/Framework4Translation-ver5-images/tmp-tmp-串联同文.png
 
+
+
+#py_adhoc_call   nn_ns.fileformat.png.simple_reader_writer4png   @convert_png_file__switch01_interlace_method_   :../../python3_src/haskell_src/Framework4Translation-ver5-images/串联同文.png   :/sdcard/0my_files/tmp/out4py/nn_ns.fileformat.png.simple_reader_writer4png..convert..串联同文.png
+#view /sdcard/0my_files/tmp/out4py/nn_ns.fileformat.png.simple_reader_writer4png..convert..串联同文.png
+
 ]]]'''#'''
 __all__ = r'''
 convert_png_file__switch01_interlace_method_
@@ -181,6 +186,7 @@ decode_IDAT_
     reconstruct_spng_image7pixel7RGBA_
         prepare4parse_IDAT__3_
     reconstruct_src_image7pixel7RGBA_
+        mk__src_pixel5png_pixel_
         fmap__lsls_
 
 
@@ -275,8 +281,12 @@ preprocess__pixel_matrix7RGBA4src_
         mk_may_counter__size_le_
     sample_depth_scaling_
         mk_lowerbound4sample_depth7uniform5sample_depths7XXX4src_
-        mk_scale_sample_depth__std_
+        mk__scale_sample_depth__std_
     rgb_merging_
+
+
+convert_png_file__switch01_interlace_method_
+    mk_may_pixel7RGB8background_color4src__5png_
 
 '''.split()#'''
 __all__
@@ -1561,14 +1571,21 @@ def reconstruct_src_image7pixel7RGBA_(sample_depths7RGBA4png, sample_depths7RGBA
     if sample_depths7RGBA4src == sample_depths7RGBA4png:
         jrow2pixels7RGBA7src_image = jrow2pixels7RGBA7spng_image
     else:
-        diffs = tuple(map(int.__sub__, sample_depths7RGBA4png, sample_depths7RGBA4src))
-        assert min(diffs) >= 0
-        def src_pixel5png_pixel_(png_pixel, /):
-            assert len(png_pixel) == 4
-            src_pixel = tuple(map(int.__rshift__, png_pixel, diffs))
-            return src_pixel
+        src_pixel5png_pixel_ = mk__src_pixel5png_pixel_(sample_depths7RGBA4src, sample_depths7RGBA4png)
         jrow2pixels7RGBA7src_image = fmap__lsls_(src_pixel5png_pixel_, jrow2pixels7RGBA7spng_image)
     return jrow2pixels7RGBA7src_image #===pixel_matrix7RGBA4src
+
+def mk__src_pixel5png_pixel_(sample_depths7XXX4src, sample_depths7XXX4png, /):
+    #mk__scale_sample_depth__std_
+    if not len(sample_depths7XXX4src) == len(sample_depths7XXX4png):raise 000
+    sz = len(sample_depths7XXX4png)
+    diffs = tuple(map(int.__sub__, sample_depths7XXX4png, sample_depths7XXX4src))
+    if not min(diffs) >= 0:raise 000
+    def src_pixel5png_pixel_(png_pixel, /):
+        if not len(png_pixel) == sz:raise 000
+        src_pixel = tuple(map(int.__rshift__, png_pixel, diffs))
+        return src_pixel
+    return src_pixel5png_pixel_
 
 r'''[[[
 sample_depth7A = ?sample_depth7uniform@png?  ([P]8|[A]bit_depth|[L|RGB]1)@src
@@ -2332,7 +2349,8 @@ def mk_may_counter__size_le_(max_sz, xs, /):
     assert len(c) <= max_sz
     return c
 
-def mk_scale_sample_depth__std_(sample_depth7src, sample_depth7dst, /):
+def mk__scale_sample_depth__std_(sample_depth7src, sample_depth7dst, /):
+    #mk__src_pixel5png_pixel_
     check_int_ge(1, sample_depth7src)
     check_int_ge(sample_depth7src, sample_depth7dst)
     d = sample_depth7dst -sample_depth7src
@@ -2446,7 +2464,7 @@ def try_indexing_(color_type4png, sample_depths7XXX4src, mx7XXX4src, tmay_pixel7
 
         sample_depth7dst = 8
         if not min(sample_depths7XXX4src) == sample_depth7dst:
-            scales_ = [mk_scale_sample_depth__std_(sample_depth7src, sample_depth7dst) for sample_depth7src in sample_depths7XXX4src]
+            scales_ = [mk__scale_sample_depth__std_(sample_depth7src, sample_depth7dst) for sample_depth7src in sample_depths7XXX4src]
             def f(pixel7XXX4src, /):
                 pixel7XXX4png = tuple(scale_sample_depth__std_(sample7src)for scale_sample_depth__std_, sample7src in zip(scales_, pixel7XXX4src))
                 return pixel7XXX4png
@@ -2494,7 +2512,7 @@ def sample_depth_scaling_(color_type4png, sample_depths7XXX4src, mx7XXX4src, tma
     assert max(sample_depths7XXX4src) <= sample_depth7dst
     if not min(sample_depths7XXX4src) == sample_depth7dst:
         #sample_depth_scaling
-        scales_ = [mk_scale_sample_depth__std_(sample_depth7src, sample_depth7dst) for sample_depth7src in sample_depths7XXX4src]
+        scales_ = [mk__scale_sample_depth__std_(sample_depth7src, sample_depth7dst) for sample_depth7src in sample_depths7XXX4src]
         def f(pixel7XXX4src, /):
             pixel7XXX4png = tuple(scale_sample_depth__std_(sample7src)for scale_sample_depth__std_, sample7src in zip(scales_, pixel7XXX4src))
             return pixel7XXX4png
@@ -2613,8 +2631,21 @@ def convert_png_file__switch01_interlace_method_(may_ibfile_or_ipath8png_file, m
     wh_size4canvas = d['wh_size4canvas']
     interlace_method = d['interlace_method']
     may_pixel7RGB8background_color4png = d.get('pixel7RGB8background_color')
-    may_pixel7RGB8background_color4src = None
+    may_pixel7RGB8background_color4src = mk_may_pixel7RGB8background_color4src__5png_(sample_depths7RGBA4src, sample_depths7RGBA4png, may_pixel7RGB8background_color4png)
     dump_png_file__pixel_matrix7RGBA4src_(may_obfile_or_opath8png_file, wh_size4canvas, sample_depths7RGBA4src, jrow2pixels7RGBA7src_image, may_pixel7RGB8background_color4src=may_pixel7RGB8background_color4src, interlace_method=1-interlace_method, force=force)
+    return
+
+def mk_may_pixel7RGB8background_color4src__5png_(sample_depths7RGBA4src, sample_depths7RGBA4png, may_pixel7RGB8background_color4png, /):
+    if not None is may_pixel7RGB8background_color4png:
+        pixel7RGB8background_color4png = may_pixel7RGB8background_color4png
+        src_pixel5png_pixel_ = mk__src_pixel5png_pixel_(sample_depths7RGBA4src[:3], sample_depths7RGBA4png[:3])
+        pixel7RGB8background_color4src = src_pixel5png_pixel_(pixel7RGB8background_color4png)
+        may_pixel7RGB8background_color4src = pixel7RGB8background_color4src
+    else:
+        may_pixel7RGB8background_color4src = None
+    may_pixel7RGB8background_color4src
+    return may_pixel7RGB8background_color4src
+
 
 
 
