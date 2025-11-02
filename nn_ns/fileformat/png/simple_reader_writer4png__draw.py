@@ -146,22 +146,22 @@ def 制表冫三基色灬扌(width4macro_pixel, height4macro_pixel, sample_depth
     check_samples_(max_sample, samples4B)
     check_samples_(max_sample, samples4A)
 
-    num_macro_pixels4row = len(samples4R)*len(samples4G)*len(samples4B)
-    num_macro_pixels4column = len(samples4A)
+    num_macro_pixels4row = len(samples4R)*len(samples4G)
+    num_macro_pixels4column = len(samples4B)*len(samples4A)
     width4canvas = width4macro_pixel * num_macro_pixels4column
     height4canvas = height4macro_pixel * num_macro_pixels4row
     check_pint_31bit_(width4canvas)
     check_pint_31bit_(height4canvas)
     wh_size4canvas = (width4canvas, height4canvas)
     mx7RGBA = mk_mx_(width4canvas, height4canvas, pixel7RGBA8trns_blk)
-    for jrow4macro, pixel7RGB in enumerate(product(samples4R, samples4G, samples4B)):
+    for jrow4macro, RG in enumerate(product(samples4R, samples4G)):
         jrow = jrow4macro*height4macro_pixel
         rows7RGBA = mx7RGBA[jrow:jrow+height4macro_pixel]
         for row7RGBA in rows7RGBA:
-            for jcolumn4macro_pixel, sample4A in enumerate(samples4A):
+            for jcolumn4macro_pixel, BA in enumerate(product(samples4B, samples4A)):
                 jcolumn = jcolumn4macro_pixel*width4macro_pixel
                 _jcolumn = jcolumn+width4macro_pixel
-                pixel7RGBA = (*pixel7RGB, sample4A)
+                pixel7RGBA = (*RG, *BA)
                 pixels7RGBA = [pixel7RGBA]*width4macro_pixel
                 row7RGBA[jcolumn:_jcolumn] = pixels7RGBA
 
