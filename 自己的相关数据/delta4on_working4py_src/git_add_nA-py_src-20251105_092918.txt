@@ -1,0 +1,9 @@
+../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20251105_092918.txt
+======= git add --dry-run --all
+add 'nn_ns/fileformat/png/simple_reader_writer4png__draw.py'
+add '自己的相关数据/delta4on_working4py_src/README-cmds.txt'
+add 'seed/int_tools/step_decoder/IStepDecoder__ver2.py'
+add 'seed/io/cache_file/README.txt'
+add 'seed/recognize/rgnr/abc/utilities4IRecognizer.py'
+add '自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20251105_092918.txt'
+add '自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20251105_092914.txt'

@@ -1,6 +1,8 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/nn_ns/fileformat/png/simple_reader_writer4png__draw.py
+TODO:
+    view others/数学/编程/设计/设计冫图纸格式.txt
 
 nn_ns.fileformat.png.simple_reader_writer4png__draw
 py -m nn_ns.app.debug_cmd   nn_ns.fileformat.png.simple_reader_writer4png__draw -x # -off_defs

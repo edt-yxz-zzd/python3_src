@@ -142,4 +142,15 @@ git add 自己的相关数据/delta4on_working4py_src/README-cmds.txt
 临时性排除:py,txt:同上
 
 ]]
+[[
+@20251102
+g_both__dry_run
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20251102_160203.txt
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20251102_160205.txt
+===
+临时性排除:py,txt:同上
+
+]]
+
+
 
