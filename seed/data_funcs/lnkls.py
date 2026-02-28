@@ -1,15 +1,8 @@
 r'''
 seed.data_funcs.lnkls
 py -m nn_ns.app.debug_cmd   seed.data_funcs.lnkls
-from seed.data_funcs.lnkls import lflnkls_ops, empty_lflnkls, lflnkls_ipush_left, lflnkls_ipop_left, lflnkls2iterable, lflnkls5reversed_iterable
 
-from seed.data_funcs.lnkls import lflnkls5reverseable, lflnkls5args
-
-
-from seed.data_funcs.lnkls import rglnkls_ops, empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
-
-from seed.data_funcs.lnkls import rglnkls2list
-
+@20251223:++mk_empty_lflnkls,mk_empty_rglnkls:to support 『with mk_ctx4lazy_import4funcs_(__name__):』
 
 
 
@@ -36,6 +29,7 @@ rglnkls = () | (rglnkls, x)
 __all__ = '''
     lflnkls_ops
         empty_lflnkls
+            mk_empty_lflnkls
 
         lflnkls_ipush_left
         lflnkls_ipop_left
@@ -49,6 +43,7 @@ __all__ = '''
 
     rglnkls_ops
         empty_rglnkls
+            mk_empty_rglnkls
 
         rglnkls_ipush_right
         rglnkls_ipop_right
@@ -68,6 +63,8 @@ _empty_lnkls = ()
 #[[[
 def _mk_lflnkls_ops():
     empty_lflnkls = _empty_lnkls
+    def mk_empty_lflnkls():
+        return empty_lflnkls
     def ipush_left(lflnkls, x, /):
         _lflnkls = (x, lflnkls)
         result = None
@@ -91,16 +88,16 @@ def _mk_lflnkls_ops():
     def lflnkls5args(*args):
         return lflnkls5reverseable(args)
     ######################
-    return (empty_lflnkls, ipush_left, ipop_left, lflnkls2iterable, lflnkls5reversed_iterable, lflnkls5reverseable, lflnkls5args)
+    return (empty_lflnkls, mk_empty_lflnkls, ipush_left, ipop_left, lflnkls2iterable, lflnkls5reversed_iterable, lflnkls5reverseable, lflnkls5args)
     ######################
 #end def _mk_lflnkls_ops():
 
 
 lflnkls_ops = _mk_lflnkls_ops()
-(empty_lflnkls, lflnkls_ipush_left, lflnkls_ipop_left, lflnkls2iterable, lflnkls5reversed_iterable, lflnkls5reverseable, lflnkls5args) = lflnkls_ops
+(empty_lflnkls, mk_empty_lflnkls, lflnkls_ipush_left, lflnkls_ipop_left, lflnkls2iterable, lflnkls5reversed_iterable, lflnkls5reverseable, lflnkls5args) = lflnkls_ops
 class lflnkls_ops:
     __slots__ = ()
-    (empty_lflnkls, ipush_left, ipop_left, lflnkls2iterable, lflnkls5reversed_iterable, lflnkls5reverseable, lflnkls5args) = map(staticmethod, lflnkls_ops)
+    (empty_lflnkls, mk_empty_lflnkls, ipush_left, ipop_left, lflnkls2iterable, lflnkls5reversed_iterable, lflnkls5reverseable, lflnkls5args) = map(staticmethod, lflnkls_ops)
 lflnkls_ops = lflnkls_ops()
 #]]]
 
@@ -114,6 +111,8 @@ lflnkls_ops = lflnkls_ops()
 #[[[
 def _mk_rglnkls_ops():
     empty_rglnkls = _empty_lnkls
+    def mk_empty_rglnkls():
+        return empty_rglnkls
     def ipush_right(rglnkls, x, /):
         _rglnkls = (rglnkls, x)
         result = None
@@ -138,14 +137,29 @@ def _mk_rglnkls_ops():
             rglnkls, _ = ipush_right(rglnkls, x)
         return rglnkls
     ######################
-    return (empty_rglnkls, ipush_right, ipop_right, rglnkls2reversed_iterable, rglnkls2list, rglnkls5iterable)
+    return (empty_rglnkls, mk_empty_rglnkls, ipush_right, ipop_right, rglnkls2reversed_iterable, rglnkls2list, rglnkls5iterable)
     ######################
 #end def _mk_rglnkls_ops():
 
 rglnkls_ops = _mk_rglnkls_ops()
-(empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls2list, rglnkls5iterable) = rglnkls_ops
+(empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls2list, rglnkls5iterable) = rglnkls_ops
 class rglnkls_ops:
     __slots__ = ()
-    (empty_rglnkls, ipush_right, ipop_right, rglnkls2reversed_iterable, rglnkls2list, rglnkls5iterable) = map(staticmethod, rglnkls_ops)
+    (empty_rglnkls, mk_empty_rglnkls, ipush_right, ipop_right, rglnkls2reversed_iterable, rglnkls2list, rglnkls5iterable) = map(staticmethod, rglnkls_ops)
 rglnkls_ops = rglnkls_ops()
 #]]]
+
+
+
+from seed.data_funcs.lnkls import lflnkls_ops, empty_lflnkls, mk_empty_lflnkls, lflnkls_ipush_left, lflnkls_ipop_left, lflnkls2iterable, lflnkls5reversed_iterable
+
+from seed.data_funcs.lnkls import lflnkls5reverseable, lflnkls5args
+
+
+from seed.data_funcs.lnkls import rglnkls_ops, empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
+
+from seed.data_funcs.lnkls import rglnkls2list
+
+
+
+

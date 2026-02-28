@@ -1,0 +1,1 @@
+source $my_git_sh/app/echo_result.def.sh "$@"

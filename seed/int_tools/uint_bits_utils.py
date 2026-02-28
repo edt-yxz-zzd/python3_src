@@ -79,7 +79,7 @@ __all__ = '''
 ##import operator
 ##import functools
 import itertools
-from collections import Sequence
+from collections.abc import Sequence
 
 from seed.iters.icut_to import icut_to, icut_seq_to
 from seed.helper.check_utils import to_uint, to_pint

@@ -1,0 +1,6 @@
+rename -o -v "$@"
+# -o : --no-overwrite
+# -v : --verbose
+# usage: 
+#   call『rename aaa bbb   /path/to/xxx-aaa-yyy』
+#   then: 『/path/to/xxx-aaa-yyy』 --> 『/path/to/xxx-bbb-ddd』

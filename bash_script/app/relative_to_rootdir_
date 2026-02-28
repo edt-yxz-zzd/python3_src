@@ -1,0 +1,25 @@
+
+
+#e ../../python3_src/bash_script/app/relative_to_rootdir_
+#view ../../python3_src/bash_script/app/relative_to_if_under_rootdir_
+
+#come_from:find ~/../usr/share/doc/docs/html/ -maxdepth 2 -name 'index.*' -exec realpath -m -L --relative-to ~/../usr/share/doc/docs/html/ '{}' '+'
+#   view others/app/termux/httpd-confs/all_in_one--httpd.conf
+#view others/app/termux/help/realpath.man.txt
+
+: <<'EOF__cmp'
+relative_to_if_under_rootdir_ $my_git_txt ../../python3_src/bash_script/app/relative_to_rootdir_
+    /storage/emulated/0/0my_files/git_repos/python3_src/bash_script/app/relative_to_rootdir_
+
+relative_to_if_under_rootdir_ $my_git_py ../../python3_src/bash_script/app/relative_to_rootdir_
+    bash_script/app/relative_to_rootdir_
+
+relative_to_rootdir_ $my_git_txt ../../python3_src/bash_script/app/relative_to_rootdir_
+    ../python3_src/bash_script/app/relative_to_rootdir_
+relative_to_rootdir_ $my_git_py ../../python3_src/bash_script/app/relative_to_rootdir_
+    bash_script/app/relative_to_rootdir_
+EOF__cmp
+
+
+realpath -m -L --relative-to "$@"
+

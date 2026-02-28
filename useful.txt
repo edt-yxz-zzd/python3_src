@@ -484,6 +484,9 @@ ls: list or seq
   it: iterator not reiterable
   d: dict
   s: str,set
+  stk:stack
+  hp:heap
+  dq:deque:double-ended queue
   lss/lsls:seq<seq>
 sf: self
   cls: class
@@ -508,6 +511,7 @@ nm: name #vs: k,idx,sym
     ixxx - 前缀『i』
       inplace/emplace method: iadd
       immutable method: ireplace, ipush
+        vxxx:前缀『v』:~=(『ii』/{info;I/me|immutable} or 『valued/verbose』):stk.vpop()->(value, new_stk)
       idx4???: istr[#str===strings[istr]#]
   o:output
     ifnm

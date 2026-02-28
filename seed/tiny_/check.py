@@ -1,5 +1,6 @@
 #__all__:goto
 r'''[[[
+e ../../python3_src/seed/tiny_/check.py
 
 [[
 !!!!! [x in container] or [x in iterable] or [x in seq_subscriptable] !!!!!
@@ -27,13 +28,11 @@ AttributeError: 'tuple_iterator' object has no attribute '__contains__'
 
 
 
-from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
+from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_, icheck_
 
 
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     from seed.tiny_.check import check_getitemable, icheck_getitemable
-from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
-from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_iterator, check_is_obj, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
@@ -50,13 +49,21 @@ __all__ = '''
     check_tmay_
     check_may_
     check_not_
+    icheck_
 
     check_subscriptable
         check_getitemable
 
+    check_type_le_in
     check_type_in
     check_type_le
     check_type_is
+    check_tuple__len_le
+    check_tuple__len_ge
+    check_tuple__len_eq
+    check_len_le
+    check_len_ge
+    check_len_eq
     check_tmay
     check_pair
     check_either
@@ -107,7 +114,7 @@ __all__ = '''
 __all__
 
 def _call_(check_, obj, /):
-    'check_ :: (obj->None) | ((obj->None), *args)'
+    'check_ :: (obj->None) | ((obj->(*args)->None), *args)'
     if callable(check_):
         check_(obj)
     else:
@@ -133,18 +140,43 @@ def check_not_(check_, obj, Types=(TypeError, ValueError, AssertionError), /):
         pass
     else:
         raise TypeError(type(obj))
+def icheck_(check_, obj, /):
+    _call_(check_, obj)
+    return obj
 
+#.def check_hashable(obj, /):
+#.    #bug:must use __mro__:if not getattr(type(obj), '__hash__', None) is None: raise TypeError(type(obj))
+#.    #   view /sdcard/0my_files/tmp/out4py/py_src/_collections_abc.py
+#.    #       Hashable:_check_methods()
+#.    #.if not hasattr(type(obj), '__hash__'): raise TypeError(type(obj))
 def check_subscriptable(obj, /):
     if not hasattr(type(obj), '__getitem__'): raise TypeError(type(obj))
 check_getitemable = check_subscriptable
 
-def check_type_in(clss, obj, /):
-    if not type(obj) in clss: raise TypeError(type(obj))
+def check_type_le_in(clss, obj, /):
+    if not isinstance(obj, clss): raise TypeError(type(obj))
 def check_type_le(cls, obj, /):
     if not isinstance(obj, cls): raise TypeError(type(obj))
 def check_type_is(cls, obj, /):
     if not type(obj) is cls: raise TypeError(type(obj))
+def check_type_in(clss, obj, /):
+    if not type(obj) in clss: raise TypeError(type(obj))
 #no check_tuple
+def check_tuple__len_eq(sz, tpl, /):
+    check_type_is(tuple, tpl)
+    if not len(tpl) == sz: raise TypeError(sz, len(tpl))
+def check_tuple__len_le(sz, tpl, /):
+    check_type_is(tuple, tpl)
+    if not len(tpl) <= sz: raise TypeError(sz, len(tpl))
+def check_tuple__len_ge(sz, tpl, /):
+    check_type_is(tuple, tpl)
+    if not len(tpl) >= sz: raise TypeError(sz, len(tpl))
+def check_len_eq(sz, xs, /):
+    if not len(xs) == sz: raise TypeError(sz, len(xs))
+def check_len_le(sz, xs, /):
+    if not len(xs) <= sz: raise TypeError(sz, len(xs))
+def check_len_ge(sz, xs, /):
+    if not len(xs) >= sz: raise TypeError(sz, len(xs))
 def check_tmay(tpl, /):
     check_type_is(tuple, tpl)
     if not len(tpl) < 2: raise TypeError(len(tpl))
@@ -181,6 +213,9 @@ def icheck_subscriptable(obj, /):
     check_subscriptable(obj)
     return obj
 icheck_getitemable = icheck_subscriptable
+def icheck_type_le_in(clss, obj, /):
+    check_type_le_in(clss, obj)
+    return obj
 def icheck_type_in(clss, obj, /):
     check_type_in(clss, obj)
     return obj
@@ -221,12 +256,26 @@ def icheck_imay_le(max, i, /):
     return i
 
 check_uint(1)
+check_tuple__len_eq(0, ())
+check_tuple__len_eq(3, (0,1,2))
+check_tuple__len_le(3, ())
+check_tuple__len_le(3, (0,1,2))
+check_tuple__len_ge(0, ())
+check_tuple__len_ge(0, (0,1,2))
+check_len_eq(0, '')
+check_len_eq(3, '012')
+check_len_le(3, '')
+check_len_le(3, '012')
+check_len_ge(0, '')
+check_len_ge(0, '012')
 check_tmay(())
 check_tmay((0,))
 check_pair((0, 0))
 check_either((False, 0))
 check_type_is(str, '')
 check_type_le(object, '')
+check_type_le_in((int, object), '')
+check_type_in((int, str), '')
 assert 1 == icheck_uint(1)
 assert (0,) == icheck_tmay((0,))
 assert (0,0) == icheck_pair((0, 0))
@@ -357,7 +406,7 @@ __()
 
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     #from seed.tiny_.check import check_getitemable, icheck_getitemable
-from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
+from seed.tiny_.check import check_type_le_in, check_type_in, check_type_le, check_type_is, check_tuple__len_le, check_tuple__len_ge, check_tuple__len_eq, check_len_le, check_len_ge, check_len_eq, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_is_obj, check_is_None
 

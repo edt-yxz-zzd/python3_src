@@ -1,0 +1,21 @@
+
+py_adhoc_call   nn_ns.math_nn.numbers.shortest_addition_chain_length__ver3   @打印冫最小总小步数灬巛靶值灬扌 $(printf ' =%d' "$@")
+
+USAGE="$(cat <<'EOF__USAGE'
+USAGE:
+
+num_small_steps4shortest_addition_chain 12 13  781  12509  17010  18030  18146  18180
+  [ℓ(12) == 4][s(12) == 1]
+  [ℓ(13) == 5][s(13) == 2]
+  [ℓ(781) == 12][s(781) == 3]
+  [ℓ(12509) == 17][s(12509) == 4]
+  [ℓ(17010) == 18][s(17010) == 4]
+  [ℓ(18030) == 18][s(18030) == 4]
+  [ℓ(18146) == 18][s(18146) == 4]
+  [ℓ(18180) == 18][s(18180) == 4]
+
+
+EOF__USAGE
+)"
+
+

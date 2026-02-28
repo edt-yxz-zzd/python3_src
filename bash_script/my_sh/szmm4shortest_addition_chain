@@ -1,0 +1,1 @@
+source $my_git_sh/app/szmm4shortest_addition_chain "$@"

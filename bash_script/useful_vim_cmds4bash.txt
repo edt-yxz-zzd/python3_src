@@ -1,0 +1,8 @@
+
+e ../../python3_src/bash_script/useful_vim_cmds4bash.txt
+
+
+find unmatched quotes
+^[^"]*"[^"]*\([^"]*"[^"]*"\)*$
+^[^']*'[^']*\([^']*'[^']*'\)*$
+

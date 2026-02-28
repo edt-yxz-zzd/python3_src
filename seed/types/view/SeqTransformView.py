@@ -28,13 +28,16 @@ example:
 
 see: SeqSliceView
 '''
-    __slots__ = ('__f', '__seq')
+    __slots__ = ('__f', '__seq', '__smay_repr')
 
-    def __init__(self, transform, seq):
+    def __init__(self, transform, seq, *, smay_repr=''):
         ':: (a->b) -> [a] -> [b]'
+        if not (transform is None or callable): raise TypeError
         if not isinstance(seq, Sequence): raise TypeError
+        if not type(smay_repr) is str: raise TypeError
         self.__f = transform if transform is not None else echo
         self.__seq = seq
+        self.__smay_repr = smay_repr
 
     def __getitem__(self, i):
         r = self.__seq[i]
@@ -52,6 +55,8 @@ see: SeqSliceView
     '''
 
     def __repr__(self):
+        if self.__smay_repr:
+            return self.__smay_repr
         return repr_helper(self, self.__f, self.__seq) # ? list(self.__seq)
 
     @classmethod

@@ -3,7 +3,7 @@ r'''[[[
 e ../../python3_src/nn_ns/math_nn/numbers/shortest_recursive_addition_chain__the_min_and_max_if_revered.py
 view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length.py
 
-nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered
+py -m nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered
 py -m nn_ns.app.debug_cmd   nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered -x # -off_defs
 py -m nn_ns.app.doctest_cmd nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered:__doc__ -ht # -ff -df
 
@@ -17,6 +17,40 @@ but:
 注意:已有更新版:
     这里是:无缺版
     已有:无缺深一版，无缺精深版...
+<<==:
+    [[
+view script/*lzma<TAB>
+###
+压缩文件{最短加链}:
+du -h script/min_add_ver4__pseudo_addition_chain.py.._提取另档冫加链扌.无缺.le12021.out.txt.tar.lzma
+    124K
+    ==>>:
+    du -h ../../python3_src/nn_ns/math_nn/numbers/shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.le12021.tar.lzma
+        124K
+    vs:
+    du -h ../../python3_src/nn_ns/math_nn/numbers/shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.lt12509-until_fst_failure.tar.lzma
+        132K
+###
+文本文件{最短加链}:
+view script/min_add_ver4__pseudo_addition_chain.py.._提取另档冫加链扌.无缺.le12021.out.txt
+    1.7M
+view script/min_add_ver4__pseudo_addition_chain.py.._提取另档冫加链扌.无缺深一.le12321.out.txt
+    1.8M
+view script/min_add_ver4__pseudo_addition_chain.py.._提取另档冫加链扌.无缺精深.lt12509-until_fst_failure.out.txt
+    1.8M
+###
+压缩文件{中间数据}:
+du -h script/min_add_ver4__pseudo_addition_chain.py..枚举冫相关信息纟最短短程加链牜简并态算法扌.RT.无缺.le12021.out.txt.tar.lzma
+    4.6M
+du -h script/min_add_ver4__pseudo_addition_chain.py..枚举冫相关信息纟最短短程加链牜简并态算法扌.RT.无缺深一.le12321.out.txt.tar.lzma
+    4.5M
+du -h script/min_add_ver4__pseudo_addition_chain.py..枚举冫相关信息纟最短短程加链牜简并态算法扌.RT.无缺精深.le12345.out.txt.tar.lzma
+    3.6M
+du -h script/min_add_ver4__pseudo_addition_chain.py..枚举冫相关信息纟最短短程加链牜简并态算法扌.RT.无缺精深.lt12509-until_fst_failure.out.txt.tar.lzma
+    3.6M
+###
+    ]]
+
 ===
 view script/min_add_ver4__pseudo_addition_chain.py
     =>:
@@ -42,6 +76,12 @@ tar -cvf script/min_add_ver4__pseudo_addition_chain.py.._提取另档冫加链�
 cp -iv script/min_add_ver4__pseudo_addition_chain.py.._提取另档冫加链扌.无缺.le12021.out.txt.tar.lzma   ../../python3_src/nn_ns/math_nn/numbers/shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.le12021.tar.lzma
 
 ===
+@20260123
+tar -cvf  ../../python3_src/nn_ns/math_nn/numbers/shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.lt12509-until_fst_failure.tar.lzma  --lzma -C script/    min_add_ver4__pseudo_addition_chain.py.._提取另档冫加链扌.无缺精深.lt12509-until_fst_failure.out.txt
+tar -tvf  ../../python3_src/nn_ns/math_nn/numbers/shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.lt12509-until_fst_failure.tar.lzma
+du -h ../../python3_src/nn_ns/math_nn/numbers/shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.lt12509-until_fst_failure.tar.lzma
+    132K
+===
 ]]
 
 py_adhoc_call   nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered   @f
@@ -50,10 +90,14 @@ __all__ = r'''
 pint2revmin_shortest_recursive_addition_chain
 pint2revmax_shortest_recursive_addition_chain
 
-pint2revmin_shortest_recursive_addition_chain__first_12021_terms
-pint2revmax_shortest_recursive_addition_chain__first_12021_terms
 
 '''.split()#'''
+    #pint2revmin_shortest_recursive_addition_chain__first_12021_terms
+    #pint2revmax_shortest_recursive_addition_chain__first_12021_terms
+
+    #pint2revmin_shortest_recursive_addition_chain__first_12508_terms
+    #pint2revmax_shortest_recursive_addition_chain__first_12508_terms
+
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.tiny_.check import check_type_is, check_int_ge
@@ -66,31 +110,51 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 
-_pint2revmin_revmax = tuple(tuple(us)
-for us in map(literal_eval, iter_read_solo_tarfile_
-    (BytesIO(read_under_pkg_
-        (__package__
-        , 'shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.le12021.tar.lzma'
-        , xencoding=None
+def _load(basename, /):
+    _pint2revmin_revmax = tuple(tuple(us)
+    for us in map(literal_eval, iter_read_solo_tarfile_
+        (BytesIO(read_under_pkg_
+            (__package__
+            , basename
+            , xencoding=None
+            ))
+        , xencoding4data='ascii'
         ))
-    , xencoding4data='ascii'
-    ))
-)
-pint2revmin_shortest_recursive_addition_chain__first_12021_terms = (None, *_pint2revmin_revmax[2::2])
-pint2revmax_shortest_recursive_addition_chain__first_12021_terms = (None, *_pint2revmin_revmax[3::2])
-del _pint2revmin_revmax
+    )
+    _pint2revmin = pint2revmin_shortest_recursive_addition_chain__first_N_terms = (None, *_pint2revmin_revmax[2::2])
+    _pint2revmax = pint2revmax_shortest_recursive_addition_chain__first_N_terms = (None, *_pint2revmin_revmax[3::2])
+    del _pint2revmin_revmax
+    return (_pint2revmin, _pint2revmax)
 
-assert len(pint2revmin_shortest_recursive_addition_chain__first_12021_terms) == 1+12021
-assert len(pint2revmax_shortest_recursive_addition_chain__first_12021_terms) == 1+12021
+def _load_le(max_u, basename, /):
+    lss = (_pint2revmin, _pint2revmax) = _load(basename)
+    for ls in lss:
+        assert len(ls) == 1+max_u
+        assert ls[0] is None
+        assert ls[1][-1] == 1
+        assert ls[max_u][-1] == max_u
+    return (_pint2revmin, _pint2revmax)
 
-assert pint2revmin_shortest_recursive_addition_chain__first_12021_terms[1][-1] == 1
-assert pint2revmin_shortest_recursive_addition_chain__first_12021_terms[12021][-1] == 12021
 
-assert pint2revmax_shortest_recursive_addition_chain__first_12021_terms[1][-1] == 1
-assert pint2revmax_shortest_recursive_addition_chain__first_12021_terms[12021][-1] == 12021
 
-pint2revmin_shortest_recursive_addition_chain = pint2revmin_shortest_recursive_addition_chain__first_12021_terms
-pint2revmax_shortest_recursive_addition_chain = pint2revmax_shortest_recursive_addition_chain__first_12021_terms
+
+if 0:
+    [pint2revmin_shortest_recursive_addition_chain__first_12021_terms
+    ,pint2revmax_shortest_recursive_addition_chain__first_12021_terms
+    ] = _load_le(12021, 'shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.le12021.tar.lzma')
+else:
+    [pint2revmin_shortest_recursive_addition_chain__first_12508_terms
+    ,pint2revmax_shortest_recursive_addition_chain__first_12508_terms
+    ] = _load_le(-1+12509, 'shortest_recursive_addition_chain__the_min_and_max_if_revered.py..data.lt12509-until_fst_failure.tar.lzma')
+
+
+if 0:
+    pint2revmin_shortest_recursive_addition_chain = pint2revmin_shortest_recursive_addition_chain__first_12021_terms
+    pint2revmax_shortest_recursive_addition_chain = pint2revmax_shortest_recursive_addition_chain__first_12021_terms
+else:
+    pint2revmin_shortest_recursive_addition_chain = pint2revmin_shortest_recursive_addition_chain__first_12508_terms
+    pint2revmax_shortest_recursive_addition_chain = pint2revmax_shortest_recursive_addition_chain__first_12508_terms
+
 
 #view others/数学/最小加法链.txt
     #[存在反例382==191*2,最少加法(382)==11==最少加法(191)]
@@ -111,6 +175,7 @@ assert pint2revmax_shortest_recursive_addition_chain[171] == (1, 2, 4, 8, 10, 20
 __all__
 from nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered import pint2revmin_shortest_recursive_addition_chain, pint2revmax_shortest_recursive_addition_chain
 
-from nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered import pint2revmin_shortest_recursive_addition_chain__first_12021_terms, pint2revmax_shortest_recursive_addition_chain__first_12021_terms
+#.from nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered import pint2revmin_shortest_recursive_addition_chain__first_12021_terms, pint2revmax_shortest_recursive_addition_chain__first_12021_terms
+#.from nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered import pint2revmin_shortest_recursive_addition_chain__first_12508_terms, pint2revmax_shortest_recursive_addition_chain__first_12508_terms
 
 from nn_ns.math_nn.numbers.shortest_recursive_addition_chain__the_min_and_max_if_revered import *

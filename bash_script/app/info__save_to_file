@@ -1,0 +1,38 @@
+#
+
+#!bash
+
+exit_status=0
+
+for prog_name ; do
+  #echo "${prog_name}"
+  if ! [[ ${prog_name} =~ ^[[:alnum:]a-zA-Z0-9_.+-]+$ ]] ; then
+    # no space to form a path
+    echo >&2 "${prog_name@Q} is not identifier"
+    exit_status=1
+  fi
+done
+[[ exit_status -eq 0 ]] || exit "${exit_status}"
+
+for prog_name ; do
+  opath="others/app/termux/help/${prog_name}.info.txt"
+  if [[ -a "${opath}" ]] ; then
+    echo "existed: ${opath@Q}" >&2
+  else
+    #.info "${prog_name}" > "${opath}"
+    txt="$(info "${prog_name}")"
+      #ok: nest "" via $()
+    if [[ $? -eq 0 ]] ; then
+      #.cat <<< "${txt}" > "${opath}"
+      info -o "${opath}" "${prog_name}"
+      #.echo "view ${opath@Q}"
+      echo ":view ${opath}"
+        #no quote for vim cmd
+    else
+      echo >&2 "fail: info ${prog_name@Q}"
+    fi
+  fi
+done
+
+exit
+

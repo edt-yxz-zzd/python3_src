@@ -233,8 +233,12 @@ class _IBaseIO(ABC):
                 if not sf._closed_: raise 000
                 sf.close()
 
-    __del__ = IOBase.__del__
+    #bug:__del__ = IOBase.__del__
         #"""Destructor.  Calls close()."""
+        #^TypeError: descriptor '__del__' requires a '_io._IOBase' object but received a 'InputStream5Bytes'
+    def __del__(sf, /):
+        """Destructor.  Calls close()."""
+        sf.close()
 
     ######################
 
@@ -411,7 +415,7 @@ def _mk_imay_max_size(size, /):
         size = -1
     size
     check_type_is(int, size)
-    imay_max_size = -1 if size < 0 else imay_max_size
+    imay_max_size = -1 if size < 0 else size
     check_int_ge(-1, imay_max_size)
     return imay_max_size
 #end-class _IBaseIO(ABC):
@@ -885,8 +889,8 @@ class _InputStream5xs(_IBaseInputStream):
     def _read6xs_(sf, imay_max_size, /):
         '[not _closed_][_readable_] => imay max_sz/uint -> xs/(str|bytes){len<=max_sz}{eof|max_sz} # [eof<==>[len(xs)==0]]'
         pos = sf._pos
-        bs = sf._bs
-        L = len(bs)
+        xs = sf._xs
+        L = len(xs)
         if imay_max_size < 0:
             end = L
         else:
@@ -895,7 +899,7 @@ class _InputStream5xs(_IBaseInputStream):
         end
         _pos = end
         sf._pos = _pos
-        return bs[pos:_pos]
+        return xs[pos:_pos]
     ######################
 #end-class _InputStream5xs(ABC):
 class InputStream5Bytes(_InputStream5xs, _IBufferedIO):

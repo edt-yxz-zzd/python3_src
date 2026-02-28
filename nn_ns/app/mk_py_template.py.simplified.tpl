@@ -1,7 +1,6 @@
 #__all__:goto
 r'''[[[
 e zz
-#view ../../python3_src/nn_ns/app/mk_py_template.py.tpl
 
 z
 py -m nn_ns.app.debug_cmd   z -x # -off_defs
@@ -37,6 +36,11 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    # <<== seed.pkg_tools.ModuleReloader
 #.
 #.#################################
+#.def mk_context4lazy_import_registered_names_(qnm4mdl7inject, qnm4pseudo_mdl7import, name7importZqnm4mdl, name7importZalias7inject={}, may_bifix4lazy_name7import=None, lazy_name7importZoriginal_name7import={}):
+#.from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
+#.with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny):
+#.    from seed._lazy_ import print_err, fst, echo, ifNone
+#.#################################
 #.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
 #.with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', prefix4attr='lazy_', suffix4attr=''):
 #.    from __.seed.tiny_.containers import lazy_null_tuple,lazy_null_iter,lazy_null_frozenset as _lazy_null_frozenset_ #null_tuple,null_iter,null_frozenset
@@ -64,5 +68,4 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 __all__
-#lazy_import4funcs_('z', '', __name__)
 from z import *

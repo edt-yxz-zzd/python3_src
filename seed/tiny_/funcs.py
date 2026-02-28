@@ -9,6 +9,7 @@ __all__ = '''
 
     unbox_
     unbox
+    box
     fst
     snd
     const
@@ -53,6 +54,7 @@ def unbox_(default, it01, /):
 def unbox(it1, /):
     [x] = it1
     return x
+def box(x, /):return (x,)
 def fst(seq, /): return seq[0]
 def snd(seq, /): return seq[1]
 def const(a, /): return lambda _,/:a
@@ -111,5 +113,5 @@ def set_doc_(doc, /, *, force=False):
         return f
     return _set_doc_
 
-from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp, set_doc_
+from seed.tiny_.funcs import no_op, echo_args_kwargs, echo_kwargs, echo_args, echo, unbox_, unbox, box, fst, snd, const, lazy, lazy_raise_v, lazy_raise_f, eq, not_eq, is_, not_is, in_, not_in, flip, neg_flip, xor, xnor, not_, with_key, mk_fprint, fprint, py_cmp, int2cmp, set_doc_
 from seed.tiny_.funcs import *

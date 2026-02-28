@@ -4,6 +4,9 @@ __all__ = '''
         mk_immutable_seq5iterT_
         mk_immutable_seq5iter__
         mk_bytes5iter_
+        mk_tuple
+            mk_tuple__split_first_if_str
+            mk_tuple__split_first_if_str__sep_
 
     mk_Just
     mk_Left
@@ -164,15 +167,49 @@ assert mk_immutable_seq5iter__(tuple, iter('abc')) == tuple('abc')
 assert mk_immutable_seq5iter__(range, iter('abc')) == tuple('abc')
 
 
+def mk_tuple__split_first_if_str__sep_(may_emay_smay_sep, xs, /):
+    'may emay smay sep/str -> (str|Iter x) -> tuple{str|x} # [spaces are treated as regular char] # [may_emay_smay_sep/(None=>.split()|''=>singleton#no-split)|.../Ellipsis=>iter#chars|sep/nonempty_str=>.split(sep)]'
+    if type(xs) is str:
+        s = xs
+        777;del xs
+        if type(may_emay_smay_sep) is str:
+            smay_sep = may_emay_smay_sep
+            if not smay_sep:
+                xs = (s,)
+            else:
+                sep = smay_sep
+                xs = s.split(sep)
+            xs
+        else:
+            mm = may_emay_smay_sep
+            if mm is None:
+                xs = s.split()
+            elif mm is ...:
+                xs = iter(s)
+            else:
+                raise TypeError(may_emay_smay_sep)
+            xs
+        xs
+    xs
+    assert not type(xs) is str
+    xs = mk_tuple(xs)
+    return xs
+assert mk_tuple__split_first_if_str__sep_(',;', [0, 1]) == (0, 1)
+assert mk_tuple__split_first_if_str__sep_(',;', ',; ,   ; ,;') == ('', ' ,   ; ', '')
+assert mk_tuple__split_first_if_str__sep_('', ',; ,   ; ,;') == (',; ,   ; ,;',)
+assert mk_tuple__split_first_if_str__sep_(..., ',; ,   ; ,;') == (',', ';', ' ', ',', ' ', ' ', ' ', ';', ' ', ',', ';')
+assert mk_tuple__split_first_if_str__sep_(None, ',; ,   ; ,;') == (',;', ',', ';', ',;')
+
 def mk_tuple__split_first_if_str(xs, /, chars8blank=''):
-    '(str|Iter x) -> (chars8blank="") -> tuple{str|x}'
+    '(str|Iter x) -> (chars8blank="") -> tuple{str|x} # [spaces are ALWAYS sep]'
     if type(xs) is str:
         s = xs
         if not chars8blank:
             pass
         elif len(chars8blank) == 1:
-            ch = chars8blank
+            [ch] = chars8blank
             s = s.replace(ch, ' ')
+                #not bug: space are sep too
         else:
             tbl = dict.fromkeys(map(ord, chars8blank), ' ')
             s = s.translate(tbl)
@@ -189,7 +226,7 @@ assert mk_tuple__split_first_if_str('0 1,2;3', ',;') == ('0', '1', '2', '3')
 
 
 
-from seed.tiny_.containers import mk_tuple__split_first_if_str
+from seed.tiny_.containers import mk_tuple__split_first_if_str, mk_tuple__split_first_if_str__sep_
 
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
 from seed.tiny_.containers import mk_immutable_seq, mk_immutable_seq5iterT_, mk_immutable_seq5iter__, mk_bytes5iter_

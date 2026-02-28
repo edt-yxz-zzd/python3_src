@@ -1,0 +1,5 @@
+#
+#
+#e ../../python3_src/bash_script/app/int_repr7compact
+#py -m seed.int_tools.int_repr7compact7lex_order7baseGL "$@"
+py -m nn_ns.app.int_repr7compact "$@"

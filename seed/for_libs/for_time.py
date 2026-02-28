@@ -959,8 +959,19 @@ datetime.datetime(2023, 8, 24, 12, 15, 31, 808421, tzinfo=datetime.timezone(date
 >>> get_now__aware_datetime_(tz4utc) #doctest: +SKIP
 datetime.datetime(2023, 8, 24, 4, 15, 31, 808944, tzinfo=datetime.timezone.utc)
 
+
+
+
+py_adhoc_call   seed.for_libs.for_time   @sleep9KeyboardInterrupt_  =100.0 =2.0
+py_adhoc_call   seed.for_libs.for_time   @resting9KeyboardInterrupt_  =100.0 =2.0
+
+
 #]]]'''
 __all__ = r'''
+sleep9KeyboardInterrupt_
+    resting9KeyboardInterrupt_
+        mk_rest_func_
+
 PeriodicToilLeisureTime
     default_mkr4seconds4leisure
     mkr4try_resting_
@@ -1045,6 +1056,7 @@ timestamp5formatted_str__via_datetime__
 '''.split()#'''
     #timegm__float
     #Result4Timer
+    #try_resting__no_resting_
 __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -1055,20 +1067,23 @@ from time import sleep
 from time import strftime, strptime
 from time import struct_time
 from time import gmtime
-from calendar import timegm as timegm__int
 from time import mktime, localtime
 from time import time as _time
 from time import monotonic, perf_counter, process_time, thread_time
+
 from enum import Enum, auto
 
-
-from seed.tiny import check_callable
-from seed.tiny import check_type_is
-from seed.tiny import ifNone
-from seed.helper.with4cleanup import with4cleanup__on_exit
-from seed.tiny import print_err
-
+from calendar import timegm as timegm__int
 from datetime import timedelta
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.with4cleanup import with4cleanup__on_exit
+    from seed.debug.print_err import print_err
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.check import check_type_in, check_type_is, check_callable
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 time_struct8platform_epoch___tz4utc = gmtime(0.0)
@@ -2022,6 +2037,169 @@ def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureT
 ######################
 ######################
 
+######################
+######################
+#@20260207
+def sleep9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, /, *, smay_fmt4prompt7sleep='', smay_fmt4prompt7waking='', smay_prompt7wake=''):
+    'num_seconds7sleep/float{unit:second} -> None #ask if KeyboardInterrupt'
+    check_type_is(float, num_seconds7sleep)
+    check_type_is(float, num_seconds7waking)
+    check_type_is(str, smay_fmt4prompt7sleep)
+    check_type_is(str, smay_fmt4prompt7waking)
+    check_type_is(str, smay_prompt7wake)
+    smay_fmt4prompt7sleep.format(1.0)
+    smay_fmt4prompt7waking.format(1.0)
+    #xxx:smay_prompt7wake.format()
+
+    b_ask = False
+    b_raise = False
+    while 1:
+        try:
+            if b_ask:
+                num_seconds7sleep = _ask9K()
+                if num_seconds7sleep is True:
+                    #Wake/to_stop
+                    break # => return
+                elif num_seconds7sleep is False:
+                    #Quit/Abort/to_raise
+                    b_raise = True
+                    break # => ^KeyboardInterrupt
+            else:
+                b_ask = True
+            if _sleep9K(num_seconds7sleep, smay_fmt4prompt7sleep, num_seconds7waking, smay_fmt4prompt7waking):
+                break # => return
+            continue
+        except KeyboardInterrupt:
+            continue
+        raise 000
+    if b_raise:
+        raise KeyboardInterrupt
+    if smay_prompt7wake:
+        print_err(smay_prompt7wake)
+    return
+KeyboardInterrupt
+def _ask9K():
+    '-> (num_seconds7sleep/float|True/Wake/to_stop|False/Quit/Abort/to_raise)'
+    prompt7QWS = 'Enter char:{q{Quit/Abort}|w{Wake}|s{Sleep}}?'
+    prompt7time = 'Enter duration to sleep:{(empty|blank|negative|zero) => goback}?'
+    while 1:
+        try:
+            c = input(prompt7QWS).strip().lower()
+                # ^EOFError if ctrl_D
+                # ^KeyboardInterrupt if ctrl_C
+            match c:
+                case 'w':
+                    return True
+                case 'q':
+                    return False
+                case 's':
+                    pass
+                case _:
+                    continue
+                #case
+            while 1:
+                s = input(prompt7time).strip()
+                if not s:
+                    break
+                try:
+                    t = float(s)
+                        # ^ValueError
+                except ValueError:
+                    continue
+                if not t > 0.0:
+                    break
+                return t
+            continue
+        except (KeyboardInterrupt, EOFError, ValueError):
+            continue
+        raise 000
+def _sleep9K(num_seconds7sleep, smay_fmt4prompt7sleep, num_seconds7waking, smay_fmt4prompt7waking, /):
+    '-> b_stop'
+    check_type_is(float, num_seconds7sleep)
+    check_type_is(float, num_seconds7waking)
+    while 1:
+        try:
+            if smay_fmt4prompt7sleep:
+                print_err(smay_fmt4prompt7sleep.format(num_seconds7sleep))
+
+            if num_seconds7sleep > num_seconds7waking:
+                sleep(num_seconds7sleep - num_seconds7waking)
+            else:
+                num_seconds7waking = num_seconds7sleep
+            num_seconds7waking
+            if smay_fmt4prompt7waking:
+                print_err(smay_fmt4prompt7waking.format(num_seconds7waking))
+            sleep(num_seconds7waking)
+        except KeyboardInterrupt:
+            return False
+        else:
+            return True
+def resting9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, /):
+    sleep9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, smay_prompt7wake='working...', smay_fmt4prompt7sleep='resting...: {} seconds', smay_fmt4prompt7waking='waking...: {} seconds')
+    return
+######################
+######################
+
+
+
+
+##################
+#move_from: view script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py
+##################
+#.def _resting_(t, wt, /):
+#.    print_err(f'resting...: {t} seconds')
+#.    if t > wt:
+#.        sleep(t-wt)
+#.        print_err(f'waking...: {wt} seconds')
+#.        sleep(wt)
+#.    else:
+#.        sleep(t)
+#.    print_err(f'working...')
+def _resting_(t, wt, /):
+    resting9KeyboardInterrupt_(t, wt)
+def mk_rest_func_(休眠期, 苏醒期, /):
+    check_type_in([float, str], 休眠期)
+    check_type_is(float, 苏醒期)
+    欤记录耗时 = False
+    match 休眠期:
+        case 'auto':
+            欤记录耗时 = True
+            def _rest():
+                _耗时扌()
+                _resting_(作业耗时, 苏醒期)
+            _rest
+        case str(_):
+            raise ValueError('unknown case', 休眠期)
+        case float(t):
+            if 休眠期 > 0.0:
+                def _rest():
+                    _耗时扌()
+                    _resting_(休眠期, 苏醒期)
+                _rest
+            else:
+                def _rest():
+                    _耗时扌()
+                    pass
+                _rest
+            _rest
+        case _:
+            raise TypeError([str, float], type(休眠期))
+    _rest
+    #if 欤记录耗时:
+    if 1 or 欤记录耗时:
+        process_time()# thread_time()
+        get_time_ = process_time
+        def _耗时扌():
+            nonlocal t0, 作业耗时
+            t1 = get_time_()
+            作业耗时 = dt = t1 -t0
+            t0 = t1
+            print_err(f'consumed: {dt} seconds')
+        t0 = get_time_()
+        作业耗时 = 0
+    return _rest
+##################
+
 __all__
 
 if __name__ == "__main__":
@@ -2134,6 +2312,7 @@ from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
 
 
 
+from seed.for_libs.for_time import sleep9KeyboardInterrupt_, resting9KeyboardInterrupt_, mk_rest_func_
 
 
 

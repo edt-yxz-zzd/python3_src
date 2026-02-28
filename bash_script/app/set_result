@@ -1,0 +1,3 @@
+exit "$@"
+#see: echo_result
+  # echo $?

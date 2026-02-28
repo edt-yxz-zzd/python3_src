@@ -25,11 +25,12 @@ mk_namedtuple_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from functools import wraps
+#.from functools import wraps
 #.from collections import namedtuple
 from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
 repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
 namedtuple = lazy_import4func_('collections', 'namedtuple', __name__)
+wraps = lazy_import4func_('functools', 'wraps', __name__)
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
@@ -61,7 +62,8 @@ def _4check6make_(T, /):
     old_make_ = vars(T)['_make'].__func__
     @classmethod
     def _make(cls, iterable, /):
-        sf = old_make_(iterable)
+        #bug:sf = old_make_(iterable)
+        sf = old_make_(cls, iterable)
         cls._check6make_(sf)
         return sf
     T.__new__ = __new__

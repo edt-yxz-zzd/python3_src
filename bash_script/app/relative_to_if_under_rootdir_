@@ -1,0 +1,5 @@
+
+#e ../../python3_src/bash_script/app/relative_to_if_under_rootdir_
+#view ../../python3_src/bash_script/app/relative_to_rootdir_
+realpath -m -L --relative-base "$@"
+

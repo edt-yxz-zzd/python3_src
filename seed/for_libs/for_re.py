@@ -125,6 +125,17 @@ ValueError: logic-err: len(matched sub-xstring) not in expected range: 3 not bet
 [(0, 3), (1, 4), (2, 5), (4, 7), (6, 9), (9, 11), (10, 12), (11, 13)]
 
 
+>>> regex = mk_regex5or_pattern_('a')
+>>> regex is mk_regex5or_pattern_(regex)
+True
+>>> regex
+re.compile('a')
+>>> regex.pattern
+'a'
+
+
+
+
 #]]]'''
 __all__ = r'''
 iter_find_matchobjs_
@@ -134,6 +145,9 @@ iter_find_matchobjs_
     prepare4finditer1
     prepare4finditer2
     check_may_int
+
+mk_regex5or_pattern_
+
 '''.split()#'''
 __all__
 
@@ -246,8 +260,16 @@ def _find_iter__overlap(regex, minlen4match, maxlen4match, xstring, first4both, 
         begin += 1
 
 
+
+def mk_regex5or_pattern_(regex_or_pattern, /):
+    '(regex|pattern) -> regex'
+    pattern = getattr(regex_or_pattern, 'pattern', regex_or_pattern)
+    regex = re.compile(pattern) if pattern is regex_or_pattern else regex_or_pattern
+    return regex
+
 __all__
 
 
 from seed.for_libs.for_re import iter_find_matchobjs_, iter_find_spans_, list_find_spans_
+from seed.for_libs.for_re import mk_regex5or_pattern_
 from seed.for_libs.for_re import *

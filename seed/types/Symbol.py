@@ -316,12 +316,11 @@ __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 
-from seed.tiny_.check import check_type_is
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.abc.eq_by_id.AddrAsHash import AddrAsHash as EqById, le_AddrAsHash # BaseAddrAsHash
 from seed.helper.repr_input import repr_helper
-from seed.tiny import MapView
-from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, check_pair, check_callable
+from seed.tiny_.types5py import MapView
+from seed.tiny_.check import check_type_is, check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, check_pair, check_callable
 from seed.pkg_tools.import_object import import4qobject
 from seed.types.DottedAttrCollector import DottedAttrCollector, ReDefRepr
 

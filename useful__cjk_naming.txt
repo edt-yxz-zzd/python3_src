@@ -126,6 +126,10 @@ normal - 常规  #xxx正常xxx
   specification - 规范
   regular - 规整 #?正则?
 TODO - 待办#待办事项
+compiler:编译器
+interpreter:措译器
+token:料符#令牌/代币/记号
+  feed:投料#投喂/投食
 parse - 解读/解析/分析
 read_ - 读囗 --> 读扌/读冫某扌
 fetch - 获取囗 --> 获取扌/获取冫某扌
@@ -167,7 +171,7 @@ tuple - 元组
 array - 数组
 seq/list - 列表
 iterable - 序列
-iterator
+iterator - 迭代器/趃某某某
 lsp/lnkls - 单向链表
 iter() - 枚举扌/枚举冫某某某扌
 asc/ascend - 升序/顺序/正序 #???有序
@@ -212,7 +216,7 @@ finger_tree - 双侧展翅树
 packet - 封包
 closure - 闭包
 lazy - 惰性求值
-fallback 打底？保底?垫衬？垫底?垫背?救急？救场？压队？压场？
+fallback 打底？保底?垫衬？垫底?垫背?救急？救场？压队？压场？退路？后路？后手？后步？后备？
   撤退; 退路; 应急的办法
   低效运行,可靠的东西
   ===
@@ -464,6 +468,8 @@ view ../lots/NOTE/abbr/software.txt
   logic:（逻辑|理则|论理）--> [私译]理薮--> [私译]理矩--> [私译]理格
   bit:爻元
   bool:真值
+  digit:位元:uint%radix
+  radix:位模/位基/基模#xxx:基数
 沓:numerous; many; repeated
   复
 摞:pile up; stack up
@@ -481,6 +487,7 @@ Case(Enum) ?况型/况框? case 况例/况态
     匡某某况态
 类型名:首字符:乸/魖/筐/错
 实例名:首字符:魊/鬽/囿
+  趃:iter:iterator:迭代器
   魊:tmay:()|(x,)
   彧:emay:...|obj
   鬽:may:None|obj
@@ -1409,6 +1416,64 @@ II
 兜的
 突然、立刻。
  金董解元《西廂記諸宮調》卷六：“行不到書窗直下，兜地回來又說些兒話。”
+===
+退路
+现代汉语词典
+tuìlù
+①退回去的道路：切断敌军的～。
+②回旋的余地：留个～。
+21世纪英汉汉英双向词典
+1.a route for retreat; room for maneuver; fallback position
+===
+后路
+现代汉语词典
+hòulù
+①军队背后的运输线或退路：抄～。
+②（～儿）比喻回旋的余地；后步。
+21世纪英汉汉英双向词典
+1.communication lines to the rear; route of retreat
+2.room for maneuver; a way of escape
+===
+后手
+现代汉语词典
+hòushǒu
+①旧时指接替的人。
+②旧时指接受票据的人。
+③下棋时被动的形势（跟‘先手’相对）：～棋丨这一着儿一走错，就变成～了。
+④（～儿）后路
+21世纪英汉汉英双向词典
+1.defensive position (in chess)
+2.room for maneuver; a way of escape
+===
+后步
+现代汉语词典
+hòubù
+说话做事时为了以后伸缩回旋而留的地步：话不要说绝，得给自己留个～。
+21世纪英汉汉英双向词典
+1.rooms for retreat or maneuver
+===
+后备
+现代汉语词典
+hòubèi
+为补充而准备的（人员、物资等）：～军丨～力量丨精打细算，留有～。
+21世纪英汉汉英双向词典
+1.reserve; (a) back-up; (a) support
+===
+后盾
+现代汉语词典
+hòudùn
+指背后的支持和缓助力量：坚强的～。
+21世纪英汉汉英双向词典
+1.a prop; a supporter; backing(背衬，背书/保证)
+===
+fallback:
+view /sdcard/0my_files/tmp/out4py/script.汇编冫牛津英汉双解..牛津英汉双解.4ed.out.词典.txt
+fall back:
+  move or turn back; retreat 後退; 撤退; 退却:
+    The enemy fell back as our troops advanced. 我军前进, 敌军後退.
+  fall back on sb/sth (be able to) go to sb for support or use sth when in difficulty 有困难时（能）求助於某人, 依靠某事物:
+    At least we can fall back on candles if the electricity fails. 停电时我们至少可以使用蜡烛.
+    She's completely homeless  at least I have my parents to fall back on. 她是真正无家可归--我至少有父母可依靠.
 ]]
 ######################
 [[
@@ -7954,6 +8019,8 @@ grep '[踔倬㦸㪕鵫啅婥悼掉晫棹淖焯㹿琸䂽竨綽繛绰䑲鋽䮓䈇�
 :囡nān
 /方言，小孩儿：小囡。阿囡。囡囡（对小孩儿的亲热称呼）。
 ,
+vs:囡:囝:屘
+,屘:5797:尸:10:5133115521:ntfb:man:mǎn:屘mǎn/方言，小儿子。
 ]]
 ######################
 [[
@@ -11643,6 +11710,14 @@ view ../lots/NOTE/compiler/Compilers and Compiler Generators(1996-2000)(Terry).t
 翻译器 :: 宿主语言=>编程语言/源语言->目标语言
 编译器 :: 囥语=>圙语->囷语
 ===
+#也许应该翻译成:compiler译编器,interpreter译措器#碰撞:易边,易错
+compiler:编译器
+interpreter:[我译:仿-编译器]措译器/履译器/办译器/颁译器/践译器/行译器/闹译器/鲜译器
+  #候选:措译器(碰撞:措意/错意/错译)/操译器/演译器(碰撞:演绎/演艺/演义)/舞译器/徙译器/驱译器/驶译器
+  #候选:操 演 步骤 施 行 动 作 做 执 持 纵 履 治 处理 迫 制 运 算 奏 效 走 驶 航 滚 指挥 驱 趋 追赶 迁徙 挤兑 经营 决策 即时 鼓舞 办 筹措 颁布 实践 搞 弄 展 庖 推敲琢磨 活动暖热闹生鲜
+  #《易‧繫辭上》：“推而行之謂之通，舉而措之天下之民謂之事業。”高亨注：“措，施也。”
+
+===
 T-diagram:
   program :: implementation_language=>input_data->output_data
   translator :: host_language=>source_language->target_language
@@ -11803,6 +11878,11 @@ ocr错误？:
 2.古邏輯學名詞。指反映單一事物的概念。相當於專有名詞。語本《墨子‧經上》：“名：達、類、私。”
  章炳麟《原儒》：“故有理情性，陳王道，而不麗保氏，身不跨馬，射不穿札，即與駁者，則以呰窳詬之，以多藝匡之－－是以類名宰私名也。”
 
+]]
+######################
+[[
+趃:iter:iterator:迭代器
+,趃:17568:走:12:121213431134:fhrw:die:dié:趃dié/大步快跑。//趃/tú/走貌。
 ]]
 ######################
 [[

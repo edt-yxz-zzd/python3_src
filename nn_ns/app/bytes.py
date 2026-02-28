@@ -19,6 +19,9 @@ r'''
 1024^8 => YiB - yobibyte
 
 see:man fallocate
+see:man numfmt
+numfmt --to=iec-i 1024
+    1.0Ki
 
 '''
 epilog_str = __doc__

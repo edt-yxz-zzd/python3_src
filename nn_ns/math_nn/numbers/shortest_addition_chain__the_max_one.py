@@ -2,6 +2,7 @@
 r'''[[[
 e ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain__the_max_one.py
     @20241226
+    静态加载:[1..=4333]
 max optimal addition chain
 max shortest addition chain
 see:
@@ -11,6 +12,20 @@ see:
     # my-data-is-generated-by:
     view script/搜索冫最短加链长度.py
         20241220
+see:
+    view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain__the_max_one__ver2.py
+        @20260227
+        动态加载牜逐项:[1..=4333]
+    from nn_ns.math_nn.numbers.shortest_addition_chain__the_max_one__ver2 import 取冫靶值讠最短加链牜左侧最大扌, 靶值讠最短加链牜左侧最大扌
+
+@20260223
+注意:『最短』未必是『递归最短』
+[1..=4333]中只有[1..<309]被完全涵盖:
+    #{已经数据校验}:_校验冫兼容性纟替代方案扌()
+    view ../../python3_src/seed/math/power/addition_chain/data/get_target_uint2may_optimal_addition_chain7max_recur_shortest_stem_.py
+        #<<==:view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain__max_recur_shortest_stem.py
+        from seed.math.power.addition_chain.data.get_target_uint2may_optimal_addition_chain7max_recur_shortest_stem_ import 取冫靶值讠婪溟链牜递归最短牜左侧最大扌# 靶值讠婪溟链牜递归最短牜左侧最大扌
+        靶值讠最短加链 = 取冫靶值讠婪溟链牜递归最短牜左侧最大扌()
 
 
 py -m nn_ns.math_nn.numbers.shortest_addition_chain__the_max_one
@@ -66,6 +81,32 @@ py_adhoc_call   script.搜索冫最短加链长度   ,排序冫输出文件纟�
 (45303465, (3199, 15, ((1, 2, 4, 8, 16, 32, 33, 65, 98, 196, 392, 457, 914, 1828, 2742, 3199), (1, 10409484, 45303465))))
 (109283366, (3583, 16, ((1, 2, 4, 8, 16, 32, 64, 128, 256, 320, 328, 329, 649, 1298, 1627, 3254, 3583), (1, 16141962, 109283366))))
 ]]
+
+
+
+
+[[
+py_adhoc_call   nn_ns.math_nn.numbers.shortest_addition_chain__the_max_one   @_校验冫兼容性纟替代方案扌
+    ^AssertionError: (309, (1, 2, 4, 8, 16, 32, 48, 49, 98, 130, 260, 309), (1, 2, 4, 8, 16, 32, 36, 68, 136, 272, 308, 309))
+
+py_adhoc_call   nn_ns.math_nn.numbers.shortest_addition_chain__the_max_one   @_校验冫兼容性纟替代方案扌 +raise_vs_print | lineno
+1:(309, (1, 2, 4, 8, 16, 32, 48, 49, 98, 130, 260, 309), (1, 2, 4, 8, 16, 32, 36, 68, 136, 272, 308, 309))
+2:(383, (1, 2, 4, 8, 16, 32, 64, 80, 84, 85, 149, 298, 383), (1, 2, 4, 8, 16, 32, 40, 41, 82, 114, 228, 342, 383))
+3:(569, (1, 2, 4, 8, 16, 32, 48, 49, 98, 130, 260, 520, 569), (1, 2, 4, 8, 16, 32, 40, 41, 81, 122, 244, 488, 569))
+4:(613, (1, 2, 4, 8, 16, 32, 64, 96, 97, 194, 258, 516, 613), (1, 2, 4, 8, 16, 32, 64, 68, 136, 272, 544, 612, 613))
+5:(618, (1, 2, 4, 8, 16, 32, 64, 96, 98, 196, 260, 520, 618), (1, 2, 4, 8, 16, 32, 64, 72, 136, 272, 544, 616, 618))
+... ...
+158:(4306, (1, 2, 4, 8, 16, 32, 64, 128, 192, 194, 386, 514, 1028, 2056, 4112, 4306), (1, 2, 4, 8, 16, 32, 64, 128, 130, 260, 520, 1040, 2080, 4160, 4290, 4306))
+159:(4311, (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 516, 1028, 1092, 1093, 1609, 3218, 4311), (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 513, 641, 657, 1314, 1827, 3654, 4311))
+160:(4315, (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 1088, 1096, 1097, 2194, 3291, 4315), (1, 2, 4, 8, 16, 32, 64, 128, 256, 384, 392, 784, 1176, 1177, 2354, 3531, 4315))
+161:(4317, (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 513, 1025, 1089, 1097, 1610, 3220, 4317), (1, 2, 4, 8, 16, 32, 64, 128, 256, 384, 392, 784, 785, 1570, 3140, 3925, 4317))
+162:(4331, (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 520, 1032, 1096, 1097, 1617, 3234, 4331), (1, 2, 4, 8, 16, 32, 64, 128, 256, 384, 385, 770, 1155, 1187, 2374, 3561, 4331))
+163:(4333, (1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 520, 521, 1033, 1097, 1618, 3236, 4333), (1, 2, 4, 8, 16, 32, 64, 128, 256, 320, 321, 353, 674, 995, 1990, 3980, 4333))
+
+]]
+
+
+
 ]]]'''#'''
 __all__ = r'''
 pint2max_shortest_addition_chain
@@ -277,6 +318,22 @@ pint2may__i2may_jk4max_shortest_addition_chain = pint2may__i2may_jk4max_shortest
 
 pint2may__i2may_jk4arbitrary_shortest_addition_chain = pint2may__i2may_jk4arbitrary_shortest_addition_chain__first_4333_terms = pint2may__i2may_jk4max_shortest_addition_chain__first_4333_terms
 
+######################
+def _校验冫兼容性纟替代方案扌(*, raise_vs_print=False):
+    from nn_ns.math_nn.numbers.shortest_addition_chain__the_max_one import pint2arbitrary_shortest_addition_chain as 靶值讠最短加链
+    from seed.math.power.addition_chain.data.get_target_uint2may_optimal_addition_chain7max_recur_shortest_stem_ import 取冫靶值讠婪溟链牜递归最短牜左侧最大扌, 靶值讠婪溟链牜递归最短牜左侧最大扌
+    _靶值讠最短加链 = 取冫靶值讠婪溟链牜递归最短牜左侧最大扌()
+    assert len(靶值讠最短加链) <= len(_靶值讠最短加链)
+    for 靶值 in range(0, len(靶值讠最短加链)):
+        #包括:0
+        try:
+            assert 靶值讠最短加链[靶值] == _靶值讠最短加链[靶值], (靶值, 靶值讠最短加链[靶值], _靶值讠最短加链[靶值])
+        except AssertionError as exc:
+            if raise_vs_print:
+                print(exc)
+            else:
+                raise
+######################
 __all__
 from nn_ns.math_nn.numbers.shortest_addition_chain__the_max_one import pint2max_shortest_addition_chain, pint2arbitrary_shortest_addition_chain
 from nn_ns.math_nn.numbers.shortest_addition_chain__the_max_one import pint2max_shortest_addition_chain__first_4333_terms, pint2arbitrary_shortest_addition_chain__first_4333_terms

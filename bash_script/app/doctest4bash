@@ -1,0 +1,874 @@
+
+失败:bash本身机制有毛病！
+
+TODO:goto
+#__TEST__:goto
+#__DEBUG__:goto
+#! bash
+
+: <<'EOF__note'
+e ../../python3_src/bash_script/app/doctest4bash
+come_from:
+    view ../../python3_src/bash_script/app/parse_args_kwds_.def.sh
+    view ../../python3_src/bash_script/app/parse_options_.def.sh
+auto test
+
+@20251129
+TODO:doctest4bash
+如何获取并标记区别标准输出文件与标准错误文件？
+  DONE
+  如何切换标准输出文件与标准错误文件？
+  view others/app/termux/shell-redirection--swap-stdin-stdout.txt
+  unset tmp; (f | sed 's/^/1:/') {tmp}>&1 1>&2 2>&${tmp} | sed 's/^/2:/' 2>&1; echo "tmp=${tmp@Q}"
+
+主流程:
+  setup4global
+  setup4instance
+  shopt4instance
+  eval setup4global
+  for test_case ;
+    bash ??? -c setup4global 2>&1 > ???
+
+如何展开 shopt4instance?
+  DONE
+  view others/app/termux/shell_string_expansion.txt
+  <<==:
+  bash -O extglob -O extquote -c ''
+  echo "-O "{a,b,c}
+    -O a -O b -O c
+  s="a,b,c"; eval "echo '-O '{${s}}"
+    -O a -O b -O c
+
+shopt4instance=extglob,extquote
+if [[ ! "${shopt4instance}" =~ ^([_[:alnum:]]+(,[_[:alnum:]]+)*)?$ ]] ; then
+  echo >&2 "..."
+  return 1
+elif [[ "${shopt4instance}" =~ , ]] ; then
+  expanded_shopt4instance="$(eval "echo '-O '{${shopt4instance}}")"
+elif [[ -n "${shopt4instance}" ]] ; then
+  expanded_shopt4instance="-O ${shopt4instance}"
+else
+  expanded_shopt4instance=""
+
+fi
+bash ${expanded_shopt4instance} -c "
+${setup4instance}
+
+${test_case}
+
+"
+
+testfile like:
+
+:::setup4global:begin:::
+{shell-code}
+:::setup4global:end:::
+
+:::setup4instance:begin:::
+{shell-code}
+:::setup4instance:end:::
+
+:::shopt4instance:begin:::
+{fmt like:'extglob,extquote'}
+:::shopt4instance:end:::
+
+
+:::test_case:begin:::
+>:{shell-code}
+1:{stdout-text}
+2:{stderr-text}
+1:{stdout-text}
+2:{stderr-text}
+
+>:{shell-code}
+>:{shell-code}
+1:{stdout-text}
+2:{stderr-text}
+
+:::test_case:end:::
+
+now discard『0:{stdin-text}』
+
+
+read_words_and_tail_ :<<==:
+如何 输出到变量名？
+通过 『set | more』发现如下代码:
+__expand_tilde_by_ref ()
+{
+  [[ -n ${1+set} ]] || return 0;
+  [[ $1 == REPLY ]] || local REPLY;
+  _comp_expand_tilde "${!1-}";
+  [[ $1 == REPLY ]] || printf -v "$1" "$REPLY"
+}
+
+  『+』感觉等价于『:+』
+  『-』无效，不同于『:-』
+
+如何解引用？
+  local this_section="__git_second_level_config_vars_for_section_${section}";
+  __gitcomp "${!this_section}" "$pfx" "$cur_" "$sfx";
+
+set a b c
+echo "${!#}"
+  c
+echo "${!#-xxxx}" # 无效
+  c
+echo "${!$((#-1))}"
+  bad substitution
+echo "${!!#}" 进行历史展开
+echo "${!{!#}}" 失败
+...似乎只能进行一次解引用
+
+
+
+f() { FUNCNAME=XXX ; echo "${FUNCNAME@Q}" ; }
+f
+  'f'
+echo "${FUNCNAME@Q}"
+  <BLANK>
+f() { local FUNCNAME=XXX ; echo "${FUNCNAME@Q}" ; }
+  bash: local: FUNCNAME: variable may not be assigned value
+  'f'
+
+
+无法传出参数!!
+感觉 设计逻辑有毛病:使用变量名输出，几乎不可能有简单方案避免命名碰撞
+  考虑改用数组?
+    还是不行！数组名 也会被私用变量名碰撞，nameref 无用!
+  看来bash不行
+function f
+{
+  local a b
+  g b a
+  echo "$a" "$b"
+}
+function g
+{
+  [[ 'a' == "$1" ]] || local -n a="$1"
+  [[ 'b' == "$2" ]] || local -n b="$2"
+  a=1
+  b=2
+}
+f
+  bash: warning: a: circular name reference
+  bash: warning: b: circular name reference
+
+
+
+function f
+{
+  local -a a=()
+  g a
+  echo "f:${a@K}"
+}
+function g
+{
+  [[ 'ls' == "$1" ]] || local -n ls="$1"
+  local -i a=1
+  ls+=(1 2 3)
+  echo "g:${a@K}"
+  echo "g:${ls@K}"
+}
+f
+  g:'1'
+  g:'1'
+  f:
+
+
+
+EOF__note
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+: <<'EOF__test_example'
+
+mkdir /sdcard/0my_files/tmp/out4sh/
+
+(cat > '/sdcard/0my_files/tmp/out4sh/doctest4bash-test_example-001.testfile.txt' ) <<'EOF__test_example__doctest4bash'
+:::setup4global:begin:::
+echo 'setup4global!'
+echo 'test backslash:\\\n\t'
+echo 'test spaces:.     .'
+:::setup4global:end:::
+
+:::setup4instance:begin:::
+echo 'setup4instance!  !'
+:::setup4instance:end:::
+
+:::shopt4instance:begin:::
+extglob,extquote
+:::shopt4instance:end:::
+
+
+:::test_case:begin:::
+>:echo 'echo to   stdout'
+1:echo to stdout
+
+>:echo >&2 'echo to   stderr'
+2:echo to stderr
+
+:::test_case:end:::
+
+
+:::test_case:begin:::
+>:echo '1.echo to stdout' ; echo >&2 '2.echo to stderr' ; echo '3.echo to stdout' ; echo >&2 '4.echo to stderr'
+1:1.echo to stdout
+2:2.echo to stderr
+1:3.echo to stdout
+2:4.echo to stderr
+
+:::test_case:end:::
+
+:::test_case:begin:::
+#failure example:
+>:echo 'echo to stdout'
+1:failure example:unmatched!
+
+:::test_case:end:::
+
+EOF__test_example__doctest4bash
+
+cat '/sdcard/0my_files/tmp/out4sh/doctest4bash-test_example-001.testfile.txt'
+
+#__TEST__:here
+doctest4bash '/sdcard/0my_files/tmp/out4sh/doctest4bash-test_example-001.testfile.txt'  2>&1 | more
+
+EOF__test_example
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function doctest4bash
+{
+  local path4testfile
+  local -i exit_status=0
+  local -i r=0
+  for path4testfile ; do
+    ! : __DEBUG__ && echo >&2 "path4testfile-begin:${path4testfile@Q}"
+    _doctest4bash "$path4testfile"
+    r=$?
+    ! : __DEBUG__ && echo >&2 "path4testfile-end:${path4testfile@Q}"
+    (( r == 0 )) || exit_status=1
+  done
+  return "$exit_status"
+}
+
+
+function expand_shopt4instance_
+{
+  if [[ ! $# -eq 1 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 1]"
+    return 1
+  fi
+  local pattern='^[_[:alnum:]]+(,[_[:alnum:]]+)*$'
+  local shopt4instance="$1"
+  [[ -n "$shopt4instance" ]] || return 0
+  if [[ ! "$shopt4instance" =~ $pattern ]] ; then
+    echo >&2 "$FUNCNAME: shopt4instance not match regex${pattern@Q}: ${shopt4instance@Q}"
+    return 2
+  elif [[ ! "$shopt4instance" =~ , ]] ; then
+    echo "-O $shopt4instance"
+  else
+    echo "$(eval "echo '-O '{${shopt4instance}}")"
+  fi
+  return 0
+}
+
+
+#.function _find_tag__ver1
+#.{
+#.  [[ lines == "$1" ]] || local -n lines="$1"
+#.  local -i begin="$2"
+#.  local -i end="$3"
+#.  local -i j
+#.  local -a BASH_REMATCH=()
+#.  for (( j=begin ; j < end ; ++j )) ; do
+#.      line=lines[j]
+#.      if [[ "$line" =~ ^:::([_[:alnum:]]+):(begin|end):::$ ]] ; then
+#.          echo "$j" "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}"
+#.          #return 0
+#.      fi
+#.  done
+#.  #echo "$end"
+#.  #return 1
+#.  return 0
+#.}
+function _find_tag
+{
+  # why not merge _find_tag() into _step()?
+  #     !! set IFS locally => _find_tag()
+  #
+  local -i j=-1
+  #bug:local -a BASH_REMATCH=()
+  local line
+  while read_line_ line ; do
+  #.local IFS=$'\n'
+  #.while read -r -d $'\n' line ; do
+    let ++j
+      #bug:『++j』without 『let』
+    #bug:『: __DEBUG__ && echo "line-$j:${line@Q}"』
+    #     mix into normal output!
+    ! : __DEBUG__ && echo >&2 "line-$j:${line@Q}"
+
+    if [[ "$line" =~ ^:::([_[:alnum:]]+):(begin|end):::$ ]] ; then
+        ! : __DEBUG__ && echo >&2 "output-$j:" "${BASH_REMATCH[2]} $j ${BASH_REMATCH[1]}"
+        echo "${BASH_REMATCH[2]} $j ${BASH_REMATCH[1]}"
+          # <<: whence j title
+    else
+        ! : __DEBUG__ && echo >&2 "output-$j:" "- $j ${line@Q}"
+        echo "- $j ${line@Q}"
+          # <<: whence j quoted_line
+    fi
+    # <<: whence j (title|quoted_line)
+  done
+  return 0
+}
+
+#失败的尝试:改用『printf -v』
+#.function set_v
+#.{
+#.  # $1="$2"
+#.    #set_v xxx yyy
+#.    #   xxx=yyy: command not found
+#.  # $@[1]="$2"
+#.  set "$1=$2"
+#.}
+function split_into_words_and_tail_
+{
+  #new:split_into_words_and_tail_ line delimeter4word num_words
+  #old:split_into_words_and_tail_ line delimeter4word nm4word0 nm4word1... nm4wordN nm4tail
+  #.if [[ ! $# -ge 3 ]] ; then
+  #.  echo >&2 "$FUNCNAME: [num_args < 3]: required:line,delimeter4word,nm4tail"
+  #.  return 1
+  #.fi
+function split_into_last_line_into_words_and_tail_
+{
+  #new:split_into_words_and_tail_ line delimeter4word num_words
+  if [[ ! $# -eq 3 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 3]: required:lines,delimeter4word,num_words{not count tail}"
+    return 1
+  fi
+  line="$1"
+  sep="$2" #delimeter4word
+  : ;   shift 2
+
+  read_line_ "$2"
+  TODO
+}
+function read_words_and_tail_
+{
+  #read_words_and_tail_ tmp_ls delimeter4word nm4word0 nm4word1... nm4wordN nm4tail
+  if [[ ! $# -ge 2 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args < 2]: required:delimeter4word,nm4tail"
+    return 1
+  fi
+  #echo "${!#-xxxx}"
+  # <==>:
+  #echo "${!#}"
+  read_line_ "${!#}" #nm4tail as nm4line
+  split_into_words_and_tail_ "${!!#}" 
+  TODO
+}
+function read_line_
+{
+  #read_line_ nm4line
+  if [[ ! $# -eq 1 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 1]"
+    return 1
+  fi
+  read_lines_ "$@"
+}
+function read_lines_
+{
+  #read_lines_ nm4line0 nm4line1...
+  ######################
+  #to avoid 'read': word splitting   and   backslash acting as an escape character.
+  ######################
+  while [[ $# -gt 0 ]] ; do
+    if [[ "$1" == "IFS" ]] ; then
+      echo >&2 "$FUNCNAME: [name to output variable == 'IFS']"
+      return 2
+    fi
+    (local IFS=$'\n' ; read -r -d $'\n' "$1")
+    shift
+  done
+  ######################
+  #.local nm4line
+  #.for nm4line ; do
+  #.  (local IFS=$'\n' ; read -r -d $'\n' "$nm4line")
+  #.  #.  bug:howto del local var:nm4line?
+
+  #.for nm4line ; do
+  #.  [[ "line" == "$nm4line" ]] || local -n line="$nm4line"
+  #.    bug:howto del prev local var:line?
+  #.  local -a ls=()
+  #.  readarray -n 1 ls
+  #.  line="${ls[0]}"
+  #.  $nm4line="${ls[0]}"
+  ######################
+}
+function _step
+{
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:IFS:${IFS@Q}"
+  local -i j
+  local whence title
+  local -n quoted_line=title
+  local unquoted_line
+
+  local title7begin=""
+  local -i j7begin_title=-1
+  local -a ls=()
+
+  : || while read s ; do
+    : __DEBUG__ && echo >&2 "$FUNCNAME:whole_line:${s}"
+      # 发现:read之后:
+      # #   'echo '\''setup4global!'\'''
+      # -->:
+      # #   'echo '''setup4global!''''
+      # 必须『-r』
+      # 虽然避免了『\』消失，但是 词切分依然起作用，导致空格缩水
+      # 考虑使用 readarray:
+      #     -n -u
+      #     -C -c
+       readarray [-d delim] [-n count] [-O origin] [-s count] [-t] [-u fd] [-C callback] [-c quantum] [array]
+  done
+  while read_line_ whence j title ; do
+  #while read -r whence j title ; do
+    # >>: whence j (title|quoted_line)
+    : __DEBUG__ && echo >&2 "$FUNCNAME:whence:${whence}, j:${j}, quoted_line:${title}"
+    case "$whence" in
+      (-)
+        if [[ -n "${title7begin}" ]] ; then
+          #bug:unquoted_line=$quoted_line
+          #bug:unquoted_line="$(printf %s $quoted_line)"
+          unquoted_line="$(eval printf %s $quoted_line)"
+          #bug:unquoted_line="$(eval "printf %s $quoted_line")"
+          #unquoted_line=???
+          : __DEBUG__ && printf >&2 '%s %s\n' "quoted_line:" "${quoted_line}"
+          : __DEBUG__ && printf >&2 '%s %s\n' "unquoted_line:" "${unquoted_line}"
+          #bug:ls += $quoted_line
+          #bug:ls+=$quoted_line
+          #bug:ls+=($quoted_line) #unquote once
+                #why fail???
+                #   echo $quoted => keep the same result
+          ls+=("$unquoted_line")
+        fi
+        continue
+      ;;
+      (begin)
+        if [[ -n "${title7begin}" ]] ; then
+          echo >&2 "FORMAT ERROR: unclosed tag: ${title@Q} @lineno:${j}"
+          return 2
+          # goto reset
+        else
+          title7begin="$title"
+          continue
+        fi
+      ;;
+      (end)
+        if [[ ! "${title7begin}" == "${title}" ]] ; then
+          echo >&2 "FORMAT ERROR: close_tag not match the open_tag: ${title7begin@Q} @lineno:${j7begin_title} ${title@Q} @lineno:${j}"
+          return 3
+        else
+          _handle $j7begin_title $j "$title7begin"   'ls' # ie. "$nm4ls"
+          #bug: (( $? )) || return 11
+          (( $? == 0 )) || return 11
+        fi
+        # goto reset
+      ;;
+      (*)
+        echo >&2 "LOGIC ERROR: whence=${whence@Q}"
+        return 4
+      ;;
+    esac
+    # reset:
+    title7begin=""
+    j7begin_title=-1
+    ls=()
+  done
+  return 0
+}
+function join_comma_
+{
+  #join_comma_ nm4ls begin end
+  join__ ',' "$@"
+}
+function join_newline_
+{
+  #join_newline_ nm4ls begin end
+  join__ $'\n' "$@"
+}
+function join__
+{
+  #join__ sep nm4ls begin end
+  if [[ ! $# -eq 4 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 4]"
+    return 1
+  fi
+  #.local IFS="$1" #$'\n'
+  #.[[ ls == "$2" ]] || local -n ls="$2"
+  #.printf %s "${ls[*]}"
+
+  local sep="$1" #$'\n'
+  [[ ls == "$2" ]] || local -n ls="$2"
+  #bug:local -i begin = "$3"
+  #     space!
+  local -i begin="$3"
+  local -i end="$4"
+  local -i j
+  local -i fst=1
+  for (( j=begin ; j < end ; ++j )) ; do
+    if (( fst == 1 )) ; then
+      let fst=0
+    else
+      printf '%s' "$sep"
+    fi
+    printf '%s' "${ls[j]}"
+      ! : __DEBUG__ && printf >&2 '%s\n' "join__: ${sep@Q} ${ls[j]@Q}  : $j $begin $end"
+  done
+}
+function _handle
+{
+  #_handle j7begin_title j7end_title title nm4ls
+  if [[ ! $# -eq 4 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 4]"
+    return 1
+  fi
+  local -i j7begin_title="$1"
+  local -i j7end_title="$2"
+  local title="$3"
+  [[ ls == "$4" ]] || local -n ls="$4"
+
+  if (( ! "${#ls[@]}" ==  $j7end_title - $j7begin_title - 1 )) ; then
+    echo >&2 "LOGIC ERROR: len(ls)=${#ls[@]}, but: j7begin_title=$j7begin_title j7end_title=$j7end_title"
+    return 2
+  fi
+
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:IFS:${IFS@Q}"
+
+  local setup4global=""
+  local setup4instance=""
+  local shopt4instance=""
+  local expanded_shopt4instance=""
+  local test_case=""
+  #local txt="$(join_newline_ ls $begin $end)"
+  local -i num_errs=0
+  local -i begin end
+  #bug:let begin=j7begin_title+1
+  #bug:let end=j7end_title
+  let begin=0
+  let end="${#ls[@]}"
+  case "$title" in
+    (setup4global)
+      setup4global="$(join_newline_ ls $begin $end)"
+      ! : __DEBUG__ && printf >&2 '%s\n' "setup4global: ${setup4global}"
+      eval "${setup4global}"
+      #eval "$(printf %q ${setup4global})"
+        #?err ok?
+        #no:SHOULD set_result@test_case
+      #bug:if (( $? )) ; then
+      if (( ! $? == 0 )) ; then
+        echo >&2 "setup4global: fail"
+        return 3
+      fi
+    ;;
+    (setup4instance)
+      setup4instance="$(join_newline_ ls $begin $end)"
+    ;;
+    (shopt4instance)
+      shopt4instance="$(join_comma_ ls $begin $end)"
+      expanded_shopt4instance="$(expand_shopt4instance_ "$shopt4instance")"
+      if (( ! $? == 0 )) ; then
+        #echo >&2 "FORMAT ERROR: shopt4instance"
+          #expand_shopt4instance_() has shown ermsg
+        return 4
+      fi
+    ;;
+    (test_case)
+      _run_test_case_ expanded_shopt4instance setup4instance ls $begin $end # first 3s are names
+        # err
+      [[ $? -eq 0 ]] || let num_errs+=1
+    ;;
+    (*)
+      echo >&2 "FORMAT ERROR: title=${title@Q}"
+      return 5
+    ;;
+  esac
+  if [[ ! $num_errs -eq 0 ]] ; then
+    echo "num_errs=${num_errs@Q}"
+    return 6
+  fi
+  return 0
+}
+function _run_test_case_
+{
+  #_run_test_case_ nm4expanded_shopt4instance nm4setup4instance nm4ls begin end
+  if [[ ! $# -eq 5 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 5]"
+    return 1
+  fi
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:IFS:${IFS@Q}"
+
+  [[ expanded_shopt4instance == "$1" ]] || local -n expanded_shopt4instance="$1"
+  [[ setup4instance == "$2" ]] || local -n setup4instance="$2"
+  [[ ls == "$3" ]] || local -n ls="$3"
+  local -i i j="$4" #begin
+  local -i end="$5"
+  local -i a b
+  local txt7script txt7expected txt7actual
+  local acc_txt7script='' acc_txt7expected='' acc_txt7actual=''
+  local _acc_txt7script='' _acc_txt7expected='' _acc_txt7actual=''
+  while : ; do
+    acc_txt7script="$_acc_txt7script"
+    acc_txt7expected="$_acc_txt7expected"
+    acc_txt7actual="$_acc_txt7actual"
+    let i=j
+
+    rng_find_in_array_ i j 'is_cmd_line_' ls $i $end
+    (( i < end )) || break
+    if (( j < end )) && is_display_line_ "${ls[j+1]}" ; then
+      rng_find_in_array_ a b 'is_display_line_' ls $j $end
+    else
+      let a=end
+      let b=end
+    fi
+    txt7script="$(mk_txt7script_ ls $i $j)"
+    txt7expected="$(mk_txt7expected_ ls $a $b)"
+    _acc_txt7script="$acc_txt7script\n$txt7script"
+    _acc_txt7expected="$acc_txt7expected\n$txt7expected"
+
+    ! : __DEBUG__ && printf >&2 '%s\n' "${setup4instance}"$'\n\n'"${_acc_txt7script}"
+    _acc_txt7actual="$(get_tagged_output5both_stdout_stderr_ bash ${expanded_shopt4instance} -c "${setup4instance}"$'\n\n'"${_acc_txt7script}")"
+    if [[ "$acc_txt7actual" != "${_acc_txt7actual:0:${#acc_txt7actual}}" ]] ; then
+      echo >&2 "doctest fail at lines: [$i..=$b]"
+      echo >&2 "actual output unstable"
+      echo >&2 "prev actual output:"
+      echo >&2 "$acc_txt7actual"
+      echo >&2 "prefix of curr actual output:"
+      echo >&2 "${_acc_txt7actual:0:${#acc_txt7actual}}"
+      return 2
+    fi
+
+    txt7actual="${_acc_txt7actual:${#acc_txt7actual}}"
+    if [[ "$txt7actual" != "$txt7expected" ]] ; then
+      echo >&2 "doctest fail at lines: [$i..=$b]"
+      echo >&2 "##################"
+      echo >&2 "cmds:"
+      echo >&2 "$txt7script"
+      echo >&2 "##################"
+      echo >&2 "expected output:"
+      echo >&2 "$txt7expected"
+      echo >&2 "##################"
+      echo >&2 "actual output:"
+      echo >&2 "$txt7actual"
+      echo >&2 "##################"
+      return 2
+      break#continue
+    fi
+
+  done
+}
+function get_tagged_output5both_stdout_stderr_
+{
+  #get_tagged_output5both_stdout_stderr_ ...cmdline...
+  #参考:『unset tmp; (f | sed 's/^/1:/') {tmp}>&1 1>&2 2>&${tmp} | sed 's/^/2:/' 2>&1; echo "tmp=${tmp@Q}"』
+  ({ "$@" ; } | sed 's/^/1:/') {tmp}>&1 1>&2 2>&${tmp} | sed 's/^/2:/' 2>&1
+}
+function mk_txt7script_
+{
+  #mk_txt7script_ nm4ls begin end
+  [[ ls == "$1" ]] || local -n ls="$1"
+  local -i begin="$2"
+  local -i end="$3"
+  local -i j
+  for (( j=begin ; j < end ; ++j )) ; do
+    printf '%s\n' "${ls[j]:2}"
+    ! : __DEBUG__ && printf >&2 '%s\n' "$FUNCNAME: ${ls[j]}"
+    ! : __DEBUG__ && printf >&2 '%s\n' "$FUNCNAME: ${ls[j]:2}"
+  done
+}
+function mk_txt7expected_
+{
+  #mk_txt7expected_ nm4ls begin end
+  join_newline_ "$@"
+  return
+
+  [[ ls == "$1" ]] || local -n ls="$1"
+  local -i begin="$2"
+  local -i end="$3"
+  local -i j
+  for (( j=begin ; j < end ; ++j )) ; do
+    printf '%s\n' "${ls[j]}"
+  done
+}
+function is_cmd_line_
+{
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:args:$(args2quoted "$@")"
+  case "${1:0:2}" in
+    (">:")
+      return 0
+    ;;
+  esac
+  return 1
+}
+function is_display_line_
+{
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:args:$(args2quoted "$@")"
+  case "${1:0:2}" in
+    ("1:"|"2:")
+      return 0
+    ;;
+  esac
+  return 1
+}
+function rng_find_in_array_
+{
+  #rng_find_in_array_ nm4i nm4j nm4predicate nm4ls begin end
+  if [[ ! $# -eq 6 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 6]"
+    return 1
+  fi
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:IFS:${IFS@Q}"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:args:$(args2quoted "$@")"
+
+  [[ i == "$1" ]] || local -n i="$1"
+  [[ j == "$2" ]] || local -n j="$2"
+  #bug:local nm4predicate_="$3"
+  local nm4predicate="$3"
+  local nm4ls="$4"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:nm4predicate:${nm4predicate}"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:nm4ls:${nm4ls}"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:\$3:${3}"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:\$4:${4}"
+
+  local -i begin="$5"
+  local -i end="$6"
+  i="$(find_in_array_ 0 "$nm4predicate" "$nm4ls" "$begin" "$end")"
+  j="$(find_in_array_ 1 "$nm4predicate" "$nm4ls" "$i" "$end")"
+  #.j="$(neg_find_in_array_ "$nm4predicate" "$nm4ls" "$i" "$end")"
+  #     死循环
+}
+#xxx#:function neg_find_in_array_
+#xxx#:{
+#xxx#:  #neg_find_in_array_ nm4predicate nm4ls begin end
+#xxx#:  if [[ ! $# -eq 4 ]] ; then
+#xxx#:    echo >&2 "$FUNCNAME: [num_args != 4]"
+#xxx#:    return 1
+#xxx#:  fi
+#xxx#:  ! : __DEBUG__ && echo >&2 "$FUNCNAME:IFS:${IFS@Q}"
+#xxx#:  : __DEBUG__ && echo >&2 "$FUNCNAME:args:$(args2quoted "$@")"
+#xxx#:  local nm4predicate="$1"
+#xxx#:  # [[ predicate_ == "$1" ]] || local -n predicate_="$1"
+#xxx#:  : ;                   shift
+#xxx#:    ! : __DEBUG__ && echo >&2 "$FUNCNAME:predicate_:${predicate_}"
+#xxx#:  local __neg_predicate_
+#xxx#:  find_in_array_ '__neg_predicate_' "$@"
+#xxx#:  : __DEBUG__ && echo >&2 "$FUNCNAME:exit"
+#xxx#:}
+#xxx#:  #bug:function __neg_predicate_ { ! predicate_ "$@" }
+#xxx#:  #     missing:『;』
+#xxx#:  #function __neg_predicate_ { ! predicate_ "$@" ; }
+#xxx#:  function __neg_predicate_ { ! $nm4predicate "$@" ; }
+#xxx#:    #死循环:nm4predicate:=__neg_predicate_
+function find_in_array_
+{
+  #find_in_array_ b_flip nm4predicate nm4ls begin end
+    #old:find_in_array_ nm4predicate nm4ls begin end
+    #   =>neg_find_in_array_()死循环
+  if [[ ! $# -eq 5 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 5]"
+    return 1
+  fi
+  local -i b_flip="($1) != 0"
+  : ;           shift
+
+  local nm4predicate="$1"
+  #[[ predicate_ == "$1" ]] || local -n predicate_="$1"
+  [[ ls == "$2" ]] || local -n ls="$2"
+  local -i begin="$3"
+  local -i end="$4"
+  local -i j
+
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:IFS:${IFS@Q}"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:args:$(args2quoted "$@")"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:predicate_:${predicate_@A}"
+      #这里一直为空:
+      #     !! 函数 并非 通过 declare定义，函数名 与 变量名 的 命名空间 不同！！所以 用于 函数名 无效
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:nm4predicate:${nm4predicate@A}"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:ls:(${ls[@]@K})"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:\$1:${1}"
+  ! : __DEBUG__ && echo >&2 "$FUNCNAME:\$2:${2}"
+
+  for (( j=begin ; j < end ; ++j )) ; do
+      #if predicate_ "${ls[j]}" ; then
+      $nm4predicate "${ls[j]}"
+      let b_ok="$? == 0"
+      if (( b_flip !=  b_ok )) ; then
+          echo "$j"
+          return 0
+      fi
+      ! : __DEBUG__ && echo >&2 "$FUNCNAME: $j : $begin $end"
+  done
+  echo "$end"
+  return 1
+}
+function _doctest4bash
+{
+  if [[ ! $# -eq 1 ]] ; then
+    echo >&2 "$FUNCNAME: [num_args != 1]"
+    return 1
+  fi
+  local path4testfile="$1"
+  if [[ ! -f "$path4testfile" ]] ; then
+    echo >&2 "$FUNCNAME: not file: ${path4testfile@Q}"
+    return 1
+  fi
+
+  #_find_tag < "$path4testfile" | cat
+  _find_tag < "$path4testfile" | _step
+  return
+
+  #.local txt="$(<"${path4testfile}")"
+
+  #.local -a lines
+  #.readarray -t lines < "${path4testfile}")
+  #.  # -t : without tailing newline
+  #._find_tag "$@" | _step
+  return
+}
+
+
+
+doctest4bash "$@"
+

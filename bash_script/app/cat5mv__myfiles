@@ -1,0 +1,267 @@
+
+#USAGE:
+#  cat5mv__myfiles [-f <cat5mv__myfiles.conf>]... [-- [my_textfile.txt]...]
+#usage:
+#cat5mv__myfiles -f cat5mv__myfiles.conf
+#cat5mv__myfiles -f xxx.conf -f yyy.conf -- aaa.txt bbb.txt
+#
+function __doc__
+{
+  cat <<'EOF'
+e ../../python3_src/bash_script/app/cat5mv__myfiles
+view others/app/termux/shell_string_expansion.txt
+view others/app/termux/shell_note--example--fxt-scripts-replace.txt
+view ../lots/NOTE/abbr/software.txt
+view others/我的叶子/囿于.txt
+view cat5mv__myfiles.conf
+e ../lots/NOTE/abbr/software.fragment.txt
+e others/我的叶子/囿于.fragment.txt
+
+view others/app/termux/help/xargs.man.txt
+cat ../../python3_src/bash_script/app/cat5mv__myfiles | xargs echo
+  #xargs: unmatched single quote; by default quotes are special to xargs unless you use the -0 option
+echo $'a b c \n d \n \n\n $0' | xargs echo
+  a b c d $0
+echo $'"a b c "\n" d "\n" "\n""\n" $0"' | xargs echo
+  a b c   d      $0
+
+for x in $(cat ../../python3_src/bash_script/app/cat5mv__myfiles) ; do echo "$x" ; done
+
+#test:
+cat5mv__myfiles -- '../lots/NOTE/abbr/software.txt' 'others/我的叶子/囿于.txt'
+#test:
+cat5mv__myfiles -f cat5mv__myfiles.conf -f cat5mv__myfiles.conf -- '../lots/NOTE/abbr/software.txt' 'others/我的叶子/囿于.txt'
+
+#usage:
+cat5mv__myfiles -f cat5mv__myfiles.conf
+
+#########
+#读文件到数组
+#########
+
+#数组巛文件行牜带换行符
+mapfile z < cat5mv__myfiles.conf
+declare -p z
+  declare -a z=([0]=$'../lots/NOTE/abbr/software.txt\n' [1]=$'others/我的叶子/囿于.txt\n' [2]=$'/sdcard/0my_files/tmp/0 tmp.txt\n')
+
+#数组巛文件行牜不带换行符
+mapfile -t z < cat5mv__myfiles.conf
+declare -p z
+  declare -a z=([0]="../lots/NOTE/abbr/software.txt" [1]="others/我的叶子/囿于.txt" [2]="/sdcard/0my_files/tmp/0 tmp.txt")
+
+echo ${z[*]@Q}
+<==>
+echo ${z[@]@Q}
+<==>
+echo "${z[*]@Q}"
+<==>
+echo "${z[@]@Q}"
+'../lots/NOTE/abbr/software.txt' 'others/我的叶子/囿于.txt' '/sdcard/0my_files/tmp/0 tmp.txt'
+
+echo ${z[*]}
+<==>
+echo ${z[@]}
+<==>
+echo "${z[*]}"
+<==>
+echo "${z[@]}"
+../lots/NOTE/abbr/software.txt others/我的叶子/囿于.txt /sdcard/0my_files/tmp/0 tmp.txt
+
+args ${z[*]@Q}
+<==>
+args ${z[@]@Q}
+['/sdcard/0my_files/git_repos/python3_src/nn_ns/app/args.py', "'../lots/NOTE/abbr/software.txt'", "'others/我的叶子/囿于.txt'", "'/sdcard/0my_files/tmp/0", "tmp.txt'"]
+
+args "${z[*]@Q}"
+['/sdcard/0my_files/git_repos/python3_src/nn_ns/app/args.py', "'../lots/NOTE/abbr/software.txt' 'others/我的叶子/囿于.txt' '/sdcard/0my_files/tmp/0 tmp.txt'"]
+
+args "${z[@]@Q}"
+['/sdcard/0my_files/git_repos/python3_src/nn_ns/app/args.py', "'../lots/NOTE/abbr/software.txt'", "'others/我的叶子/囿于.txt'", "'/sdcard/0my_files/tmp/0 tmp.txt'"]
+
+args ${z[*]}
+<==>
+args ${z[@]}
+['/sdcard/0my_files/git_repos/python3_src/nn_ns/app/args.py', '../lots/NOTE/abbr/software.txt', 'others/我的叶子/囿于.txt', '/sdcard/0my_files/tmp/0', 'tmp.txt']
+
+args "${z[*]}"
+['/sdcard/0my_files/git_repos/python3_src/nn_ns/app/args.py', '../lots/NOTE/abbr/software.txt others/我的叶子/囿于.txt /sdcard/0my_files/tmp/0 tmp.txt']
+
+args "${z[@]}"
+['/sdcard/0my_files/git_repos/python3_src/nn_ns/app/args.py', '../lots/NOTE/abbr/software.txt', 'others/我的叶子/囿于.txt', '/sdcard/0my_files/tmp/0 tmp.txt']
+
+EOF
+}
+if false ; then
+  __="$(__doc__)"
+  #.echo "${__@A}"
+  #.echo "${__}"
+  echo "${__@Q}"
+  echo "${#__}"
+    # 区别在于:是否加引号『<<'EOF'』vs『<<EOF』
+fi
+
+
+
+#『label』:win.bat
+#no:goto start
+#   exit 66
+#.saved_IFS="${IFS}" ; IFS='' ;
+#.IFS="${saved_IFS}" ;
+#.local IFS=''
+
+__doc__="$(cat <<'EOF'
+"x
+'y
+EOF
+)"
+if false ; then # : ; else
+  echo "${__doc__}"
+  #   => "x
+  #   => 'y
+  #   ok!
+  echo "${__doc__@Q}"
+  #   => $'"x\n\'y'
+  echo "${#__doc__}"
+  #   => 5
+fi
+
+
+function buggy__doc__
+{
+  cat <<EOF
+#. $(cat ../../python3_src/bash_script/app/cat5mv__myfiles)
+EOF
+}
+
+if false ; then
+  __="$(buggy__doc__)"
+  #.echo "${__@A}"
+  #.echo "${__}"
+  echo "${__@Q}"
+  echo "${#__}"
+    exit 77
+    # bug:inner:『$(cat ../../python3_src/bash_script/app/cat5mv__myfiles)』 be exec!!
+fi
+
+
+
+#. :start
+
+function usage
+{
+cat <<EOF
+USAGE:
+  cat5mv__myfiles [-f <cat5mv__myfiles.conf>]... [-- [my_textfile.txt]...]
+
+EOF
+}
+function cat5mv__myfile__path_
+{
+  cat5mv -i -- "$1.txt" "$1.fragment.txt"
+  #cat5mv "$1.txt" "$1.fragment.txt"
+  #echo $?
+  #return
+}
+function cat5mv__myfile__conf_
+{
+  case 5 in
+    #. (6)
+    #.   ########fail:6:『IFS=$'\n'』 take effect bit after 『$(< "$2")』 word split
+    #.   IFS=$'\n' bash "$1" -- $(< "$2")
+    #.   return
+    #.   #.ans=$?
+    #.   #.[[ "${IFS}" == $' \t\n' ]] || { echo 1>&2 "post-assert fail: IFS" ; exit 96 ; }
+    #.   #.return $ans
+    #.   ;;
+    (5)
+      ########ok:5
+      ( IFS=$'\n' ; bash "$1" -- $(< "$2") )
+      return
+      #. [[ "${IFS}" == $' \t\n' ]] || { echo 1>&2 "pre-assert fail: IFS" ; exit 69 ; }
+      #. ( IFS=$'\n' ; bash "$1" -- $(< "$2") )
+      #.     # !! (list) 拥有独立变量空间
+      #.     # vs { list ; } 共享shell变量空间
+      #.     ans=$?
+      #. [[ "${IFS}" == $' \t\n' ]] || { echo 1>&2 "post-assert fail: IFS" ; exit 96 ; }
+      #. return $ans
+      ;;
+    (4)
+      ########ok:4
+      local -a lines
+      mapfile -t lines < "$2"
+      bash "$1" -- "${lines[@]}"
+      return
+      ;;
+    (3)
+      ########ok:3
+      local IFS=$'\n'
+          bash "$1" -- $(< "$2")
+      return
+      ;;
+    (2)
+      ########ok:2
+      saved_IFS="${IFS}" ; IFS=$'\n' ;
+          #.echo $(echo $'x y \n a ' ) ;
+          #.for my_textfile_txt in $(< "$2") ; do bash "$1" -- "$my_textfile_txt" ; done
+          #echo -- "$1" -- $(< "$2") ;
+          bash "$1" -- $(< "$2") ;
+          ans=$?
+      IFS="${saved_IFS}" ;
+          #.echo ${IFS@A}
+      return $ans
+      ;;
+    (1)
+      ########ok:1
+      xargs --arg-file="$2" -- bash "$1" --
+      return
+      ;;
+    (*)
+      echo 1>&2 'bad case'
+      exit 55
+      ;;
+      ########fail:
+      #.xargs --arg-file="$2" -- "$1"
+      #.  #xargs: /sdcard/0my_files//git_repos//python3_src//bash_script//app/cat5mv__myfiles: Permission denied
+  esac
+}
+
+
+while  [[ $# -gt 0 ]] ; do
+  case $1 in
+    (-f)
+      if [[ $# -lt 2 ]] ; then
+        usage
+        exit 1
+      else
+        cat5mv__myfile__conf_ "$0" "$2" || exit 33
+        shift 2
+        #.echo "${lines@Q}"
+        #.[[ $lines == '' ]] || { echo 1>&2 'fail: "local -a lines"' ; exit 22 ; }
+      fi
+      ;;
+    (--)
+      shift
+      for my_textfile_txt ; do
+        if [[ ! $my_textfile_txt == *.txt ]] ; then
+          echo 1>&2 "skipping not '*.txt': ${my_textfile_txt@Q}" ;
+          #continue
+        else
+          cat5mv__myfile__path_ "${my_textfile_txt%.txt}" || exit 44
+        fi
+      done
+      exit 0
+      ;;
+    (*)
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+exit
+for path_ in '../lots/NOTE/abbr/software' 'others/我的叶子/囿于' ; do
+  #echo "$path_.txt" ;
+  cat5mv__myfile__path_ "$path_" ;
+done
+
+#ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ

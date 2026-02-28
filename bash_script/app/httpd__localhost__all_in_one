@@ -1,0 +1,12 @@
+conf=/sdcard/0my_files/git_repos/txt_phone/txt/others/app/termux/httpd-confs/all_in_one--httpd.conf
+
+if [[ '' == $( httpd -f "${conf}" -k stop ) ]] ; then echo "stop!" ;
+elif [[ '' == $( httpd -f "${conf}" -k start ) ]] ; then echo "start!" ;
+else echo "fail on: ${conf}" ;
+fi
+
+#httpd -f /sdcard/0my_files/git_repos/txt_phone/txt/others/app/termux/httpd-confs/all_in_one--httpd.conf -k start
+#httpd (pid 6984) already running
+#
+#httpd -f /sdcard/0my_files/git_repos/txt_phone/txt/others/app/termux/httpd-confs/all_in_one--httpd.conf -k stop
+#httpd (no pid file) not running

@@ -79,7 +79,7 @@ class _IBase4named_pseudo_tuple(Sequence):
         field_names = cls._fields
         if not len(field_names) == len(args) + len(kwds):raise TypeError
         if kwds:
-            if not dict(nms:=field_names[-len(kwds):]) == kwds.keys():raise TypeError
+            if not set(nms:=field_names[-len(kwds):]) == kwds.keys():raise TypeError
             args = (*args, *(kwds[nm] for nm in nms))
         del kwds
         args

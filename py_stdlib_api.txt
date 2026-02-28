@@ -4513,7 +4513,8 @@ Path.expanduser(self)
          Return a new path with expanded ~ and ~user constructs
          (as returned by os.path.expanduser)
 ----
-##see:fnmatch
+##see:fnmatch#os.path.normcase()
+#kw:case_sensitive:new@version 3.12.
 Path.glob(pattern, *, case_sensitive=None)
 Path.glob(self, pattern)
          Iterate over this subtree and yield all existing files (of any
@@ -4623,7 +4624,8 @@ Path.resolve(self, strict=False)
          normalizing it (for example turning slashes into backslashes under
          Windows).
 ----
-##see:fnmatch
+##see:fnmatch#os.path.normcase()
+#kw:case_sensitive:new@version 3.12.
 Path.rglob(pattern, *, case_sensitive=None)
 Path.rglob(self, pattern)
          Recursively yield all existing files (of any kind, including
@@ -4745,6 +4747,8 @@ PurePath.joinpath(self, *args)
              paths) or a totally different path (if one of the arguments is
              anchored).
 ----
+##see:fnmatch#os.path.normcase()
+#kw:case_sensitive:new@version 3.12.
 PurePath.match(pattern, *, case_sensitive=None)
 PurePath.match(self, path_pattern)
              Return True if this path matches the given pattern.
@@ -6369,6 +6373,28 @@ tanh
 trunc
 ulp
 ===
+[[
+感兴趣的部分:浮点数微调操作:
+  frexp:分解
+  nextafter:微调
+  copysign:变号
+  ulp:微调步长
+===
+frexp(x, /)
+    -> (mantissa/float, exponent/int)
+    [x == mantissa * 2.0**exponent]
+    [[x == 0] -> [mantissa==0.0][exponent==0]]
+    [[x =!= 0] -> [0.5 <= abs(mantissa) < 1.0]]
+nextafter(x, y, /)
+    -> float{~=x+copysign(ulp(x), y-x)}
+    Return the next floating-point value after x towards y.
+copysign(x, y, /)
+    Return a float with the magnitude (absolute value) of x but the sign of y.
+    On platforms that support signed zeros, copysign(1.0, -0.0) returns -1.0.
+ulp(x, /)
+    Return the value of the least significant bit of the float x.
+]]
+<<==:
 py -c 'import math;help(math)' | cat
 [[
 Help on module math:

@@ -7,8 +7,11 @@ e ../../python3_src/nn_ns/app/mk_py_template.py
 
 news@20251009
     ++『-s』『--using_simplified_tpl』:使用简化模板 # 用于脚本文件
-py_tpl -s ./script/tmp.py
+py_tpl ./script/tmp.py -s
 
+news@20251109
+    ++『-t』『--using_tiny_tpl』:使用简化模板 # 用于脚本文件
+py_tpl ../../python3_src/seed/tiny_/map_.py -t
 
 
 
@@ -158,10 +161,11 @@ def _f():
     path4useful_txt = this_pkg_root/'useful.txt'
     assert path4useful_txt.exists()
     path4std_tpl = this_file_path.with_suffix('.py.tpl')
+    path4std_tiny_tpl = this_file_path.with_suffix('.py.tiny.tpl')
     path4std_simplified_tpl = this_file_path.with_suffix('.py.simplified.tpl')
-    return this_pkg_root, path4useful_txt, path4std_tpl, path4std_simplified_tpl
+    return this_pkg_root, path4useful_txt, path4std_tpl, path4std_tiny_tpl, path4std_simplified_tpl
 class Globals:
-    this_pkg_root, path4useful_txt, path4std_tpl, path4std_simplified_tpl = _f()
+    this_pkg_root, path4useful_txt, path4std_tpl, path4std_tiny_tpl, path4std_simplified_tpl = _f()
     begin4template4module = '#[[[[[template4module:begin\n'
     end4template4module = '#]]]]]template4module:end\n'
     #placeholder4qnm4module = r'xxx.yyy'
@@ -217,7 +221,10 @@ template from:
     parser.add_argument('-i', '--input', type=str
                         #, default=Globals.path4useful_txt
                         , default=None
-                        , help='input file path for template4module # <~.tpl> | <~.simplified.tpl> | <useful_txt>')
+                        , help='input file path for template4module # <~.tpl> | <~.tiny.tpl> | <~.simplified.tpl> | <useful_txt>')
+    parser.add_argument('-t', '--using_tiny_tpl', action='store_true'
+                        , default = False
+                        , help='as if  file path be "<~.tiny.tpl>"')
     parser.add_argument('-s', '--using_simplified_tpl', action='store_true'
                         , default = False
                         , help='as if  file path be "<~.simplified.tpl>"')
@@ -249,13 +256,18 @@ template from:
     #        placeholder4qnm4module = re.compile(placeholder4qnm4module)
 
     may_ifname = args.input
+    using_tiny_tpl = args.using_tiny_tpl
     using_simplified_tpl = args.using_simplified_tpl
-    if using_simplified_tpl:
+    if using_tiny_tpl:
+        may_ifname = Globals.path4std_tiny_tpl
+    elif using_simplified_tpl:
         may_ifname = Globals.path4std_simplified_tpl
     elif may_ifname is None:
         pass
     elif may_ifname == '<~.tpl>':
         may_ifname = Globals.path4std_tpl
+    elif may_ifname == '<~.tiny.tpl>':
+        may_ifname = Globals.path4std_tiny_tpl
     elif may_ifname == '<~.simplified.tpl>':
         may_ifname = Globals.path4std_simplified_tpl
     elif may_ifname == '<useful_txt>':

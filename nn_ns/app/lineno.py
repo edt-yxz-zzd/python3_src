@@ -16,6 +16,38 @@ cat /sdcard/0my_files/tmp/0tmp | lineno
 lineno < /sdcard/0my_files/tmp/0tmp
 
 ===
+发现nl
+===
+view words5share-lua-spell-dict.txt
+  82834行
+nl - number lines of files
+  每行冠以行号
+nl --starting-line-number=1 --number-width=6 --number-format=rz --number-separator=':' words5share-lua-spell-dict.txt | head
+nl -v 1 -w 6 -n rz -s ':' words5share-lua-spell-dict.txt | head
+000001:the
+000002:of
+000003:and
+000004:to
+000005:a
+000006:in
+000007:for
+000008:is
+000009:on
+000010:that
+nl -v 1 -w 6 -n rz -s ':' words5share-lua-spell-dict.txt | tail
+082825:who's
+082826:why'd
+082827:why're
+082828:why's
+082829:you'd
+082830:you'll
+082831:you're
+082832:you'v
+082833:covid
+082834:hi
+
+
+===
 发现cat,grep,awk/gawk也有类似功能:
 ===
 echo -e -n 'abc\n123\n...\n' | cat -n

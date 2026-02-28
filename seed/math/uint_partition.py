@@ -47,6 +47,8 @@ view others/数学/编程/密码学/我的设计冫加密框架.txt
 
 >>> [uint2num_uint_partitions_(u, cache=...) for u in range(20)]
 [1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, 56, 77, 101, 135, 176, 231, 297, 385, 490]
+>>> [*islice(iter_uint_and_num_uint_partitions_pairs_(cache=...), 0, 20)]
+[1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, 56, 77, 101, 135, 176, 231, 297, 385, 490]
 >>> print_iterable_with_lineno_(99999, [uint2num_uint_partitions_(u, cache=...) for u in range(20)], offset=0)
 0:1
 1:1
@@ -706,6 +708,7 @@ view others/数学/编程/密码学/我的设计冫加密框架.txt
 #
 ]
 
+[[
 py_adhoc_call   seed.math.uint_partition   ,partition_uint_factorial_  =4
 (6, (4,))
 (8, (3, 1))
@@ -713,6 +716,8 @@ py_adhoc_call   seed.math.uint_partition   ,partition_uint_factorial_  =4
 (6, (2, 1, 1))
 (1, (1, 1, 1, 1))
 
+]]
+[[
 py_adhoc_call   seed.math.uint_partition   ,_iter_all_subsets_of_seq_  ='range(4)'
 ()
 (3,)
@@ -731,11 +736,15 @@ py_adhoc_call   seed.math.uint_partition   ,_iter_all_subsets_of_seq_  ='range(4
 (0, 1, 2)
 (0, 1, 2, 3)
 
+]]
+[[
 py_adhoc_call   seed.math.uint_partition   ,_find_zpows  =3
 (3, 2, [3, 1])
 (3, 1, [2])
 (3, 0, [1])
 
+]]
+[[
 py_adhoc_call   seed.math.uint_partition   ,_find_zpows4us  ='range(9)' > /sdcard/0my_files/tmp/0tmp
 view /sdcard/0my_files/tmp/0tmp
 (0, 0, [1])
@@ -774,6 +783,42 @@ view /sdcard/0my_files/tmp/0tmp
 (8, 12, [3360, 420, 105, 210, 1])
 (8, 0, [1])
 
+]]
+[[
+py_adhoc_call   seed.math.uint_partition   ,20:iter_uint_and_num_uint_partitions_pairs_ --cache=...
+py_adhoc_call   seed.math.uint_partition   @list.20:iter_uint_and_num_uint_partitions_pairs_ --cache=...
+    [(0, 1), (1, 1), (2, 2), (3, 3), (4, 5), (5, 7), (6, 11), (7, 15), (8, 22), (9, 30), (10, 42), (11, 56), (12, 77), (13, 101), (14, 135), (15, 176), (16, 231), (17, 297), (18, 385), (19, 490)]
+
+py_adhoc_call   seed.math.uint_partition   @list.10:iter_uint_and_num_uint_partitions_pairs_ --cache=... +without_uint
+    [1, 1, 2, 3, 5, 7, 11, 15, 22, 30]
+
+py_adhoc_call   seed.math.uint_partition   @sum.10:iter_uint_and_num_uint_partitions_pairs_ --cache=... +without_uint
+    97
+
+py_adhoc_call   seed.math.uint_partition   ,10:iter_validate_total4uint2iter_uint_partitions_ --cache=... +without_uint
+    1
+    1
+    2
+    3
+    5
+    7
+    11
+    15
+    22
+    30
+
+py_adhoc_call   seed.math.uint_partition   ,uint2iter_uint_partitions_ -to_expand =5
+    ((5, 1),)
+    ((4, 1), (1, 1))
+    ((3, 1), (2, 1))
+    ((3, 1), (1, 2))
+    ((2, 2), (1, 1))
+    ((2, 1), (1, 3))
+    ((1, 5),)
+
+]]
+
+
 from seed.math.uint_partition import *
 ]]]'''#'''
 __all__ = r'''
@@ -781,6 +826,7 @@ partition_uint_factorial_
     uint2iter_uint_partitions_
     num_permutations5uint_partition_
     uint2num_uint_partitions_
+        iter_uint_and_num_uint_partitions_pairs_
     uint2num_uint_partitions__len_le_
 num_set_partitions5uint_partition_      num_unordered_choices5uint_partition_
     num_ordered_choices5uint_partition_
@@ -790,9 +836,10 @@ num_set_partitions5uint_partition_      num_unordered_choices5uint_partition_
 
 
 
-
+iter_validate_total4uint2iter_uint_partitions_
 uint2iter_uint_partitions_
     uint2num_uint_partitions_
+        iter_uint_and_num_uint_partitions_pairs_
     uint2num_uint_partitions__len_le_
 
 iter_parts5uint_partition_
@@ -810,7 +857,7 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from enum import Enum, auto
 from math import factorial, comb, perm
-from itertools import repeat, groupby, compress# permutation# islice
+from itertools import repeat, groupby, compress, count as count_, islice # permutation
 from seed.tiny_.check import check_type_is, check_int_ge
 from seed.debug.print_err import print_err
 
@@ -1079,15 +1126,8 @@ def __():
 
 
 _global_cache = []
-def uint2num_uint_partitions_(u, /, *, cache, max4part=None):
-    '[O(u**2)] => u/uint -> (kw:max4part/uint) -> (kw:cache/(None=>local|...=>global|[[uint]])) -> num_uint_partitions{all parts <= max4part}/uint{==cache[u][max4part]} # [cache==u2max4part2num_uint_partitions :: [[uint]] / list{list{uint}}]'
-    #if not max4num_parts is None: return uint2num_uint_partitions__len_le_(u, cache2=???cache)
-    check_int_ge(0, u)
-
-    max4part = u if max4part is None else max4part
-    check_int_ge(0, max4part)
-    max4part = min(u, max4part)
-
+def _prepare_cache_(cache, /):
+    '(cache/(None=>local|...=>global|[[uint]]))'
     if cache is None:
         cache = []
     elif cache is ...:
@@ -1098,6 +1138,23 @@ def uint2num_uint_partitions_(u, /, *, cache, max4part=None):
     #assert cache
     #assert cache[0]
     assert cache[0][0] == 1
+    return cache
+def iter_uint_and_num_uint_partitions_pairs_(*, cache, max4part=None, without_uint=False):
+    '[O(u**2)] => (kw:max4part/uint) -> (kw:cache/(None=>local|...=>global|[[uint]])) -> Iter (u/uint, num_uint_partitions{all parts <= max4part}/uint{==cache[u][max4part]}) # [cache==u2max4part2num_uint_partitions :: [[uint]] / list{list{uint}}]'
+    cache = _prepare_cache_(cache)
+    for u in count_(0):
+        num_uint_partitions = uint2num_uint_partitions_(u, cache=cache, max4part=max4part)
+        yield (u, num_uint_partitions) if not without_uint else num_uint_partitions
+def uint2num_uint_partitions_(u, /, *, cache, max4part=None):
+    '[O(u**2)] => u/uint -> (kw:max4part/uint) -> (kw:cache/(None=>local|...=>global|[[uint]])) -> num_uint_partitions{all parts <= max4part}/uint{==cache[u][max4part]} # [cache==u2max4part2num_uint_partitions :: [[uint]] / list{list{uint}}]'
+    #if not max4num_parts is None: return uint2num_uint_partitions__len_le_(u, cache2=???cache)
+    check_int_ge(0, u)
+
+    max4part = u if max4part is None else max4part
+    check_int_ge(0, max4part)
+    max4part = min(u, max4part)
+
+    cache = _prepare_cache_(cache)
 
     for v in range(len(cache), u+1):
         _4u2m2n(cache, v)
@@ -1121,6 +1178,11 @@ def _4u2m2n(cache, u, /):
     #ls[u]
     #cache[u][u]
 
+def iter_validate_total4uint2iter_uint_partitions_(*, cache, max4part=None, to_expand=True, without_uint=False):
+    for (u, num_uint_partitions) in iter_uint_and_num_uint_partitions_pairs_(cache=cache, max4part=max4part):
+        uss = [*uint2iter_uint_partitions_(u, to_expand=to_expand, max4part=max4part, max4num_parts=None)]
+        if not len(uss) == num_uint_partitions:raise Exception(u, num_uint_partitions, len(uss))
+        yield (u, num_uint_partitions) if not without_uint else num_uint_partitions
 def uint2iter_uint_partitions_(u, /, *, to_expand=True, max4part=None, max4num_parts=None):
     'u/uint -> (kw:to_expand/bool) -> Iter ([part] if to_expand else [(part, count)]) # in decreasing order'
     ##############

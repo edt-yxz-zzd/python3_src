@@ -7,6 +7,7 @@ ad hoc fashion
 see:py_all@bash_script
     py_adhoc_call ''  ,str.list '%difflib:__all__@all' =all
     py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
+    py_adhoc_call ''  ,str.list %%:P  ='P.difflib().__all__'
 
 py -m nn_ns.app.debug_cmd   seed.recognize.cmdline.adhoc_argparser -x
 py -m nn_ns.app.doctest_cmd   seed.recognize.cmdline.adhoc_argparser:__doc__
@@ -30,6 +31,14 @@ view ../../python3_src/seed/helper/safe_eval.py
     ++kw:smay_kwd4supply_func4resting
         supply/provide
 
+取消:@20260121
+    ++kw:P
+    取消<<=={见『%%:@rjstplr』}
+
+@20260121
+    ++『%%:P』
+    ++『%%:P@alias4P』
+    #vs:『%%:@alias4rjstplr』
 
 [[
 TODO:
@@ -174,12 +183,21 @@ xxx.yyy 模块全名
         <==> py_adhoc_call { --lineno=0 } xxx.yyy ,f
     py_adhoc_call { +lineno } xxx.yyy ,f
         <==> py_adhoc_call { --lineno=1 } xxx.yyy ,f
+
+取消:新增:++kw:P
+    取消<<=={见『%%:@rjstplr』}
+    +P
+        %!from seed.types.Symbol import P
+        %seed.types.Symbol:P
+    --P=xxx
+        %!from seed.types.Symbol import P as xxx
+        %seed.types.Symbol:P@xxx
 新增:++smay_kwd4supply_func4resting
     py_adhoc_call { +flush4print +to_show_timedelta  --may_args4PeriodicToilLeisureTime='(60,60)' --may_prompt_string6resting:$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  script.辅助冫有限域本原根判定牜泛化梅森指数   ,枚举冫拟泛化梅森指数纟素基灬牜输出指定数量每基扌  --case4trial_division:bit_length --bases4SPRP=[2,3,5,7]  +verbose --num_exps_per_radix=1  --radix2begin4exp='{269:3167+1}'  >> /sdcard/0my_files/tmp/0tmp
     if try_resting_ is None:
         def try_resting_():pass
 
-新增::++to_show_StopIteration_value
+新增:++to_show_StopIteration_value
     py_adhoc_call  { +to_show_StopIteration_value } seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cube_root   ,iter_try_factor1_pint__via_Lehman_method__layered__easy_   ='(2**17-1)*(2**31-1)'
 新增:
     ++kw:to_show_timedelta
@@ -209,6 +227,8 @@ xxx.yyy 模块全名
     _.pkg.xxx().obj.yyy
 新增:
     %%:@zzz     [zzz:=rjstplr]
+    %%:P@zzz    [zzz:=P]
+    %%:P        [P:=P]
 
 py_adhoc_call       seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN @matrix_chain_product__polygon_partitioning__O_NlogN  --may_imin=None  '--_turnon_debug=0'  ='[10,11,25,40,12]'
 
@@ -281,6 +301,15 @@ False
 >>> not_match_(import_regex, '%%:@0')
 >>> not_match_(import_regex, '%%:@a.b')
 
+>>> match_(import_regex, '%%:P@loader')
+>>> match_(import_regex, '%%:P')
+>>> not_match_(import_regex, '%%:P@0')
+>>> not_match_(import_regex, '%%:P@a.b')
+>>> not_match_(import_regex, '%%:P@a.')
+>>> not_match_(import_regex, '%%:P@.a')
+>>> not_match_(import_regex, '%%:P@.')
+>>> not_match_(import_regex, '%%:P@')
+
 
 py_adhoc_call   seed.recognize.cmdline.adhoc_argparser @_fwd_call_    %seed.math.matrix_chain_product.test4matrix_chain_product__polygon_partitioning__O_NlogN:随机测试囗囗矩阵乘法链囗多边形囗词典序最先的最优三角化方案囗类同排序算法耗时@f  =f '--L2num_tests={L:1000//L for L in range(2,100)}' '--upper4weight=10000' '--version=3' '--_turnon_debug=0'
     # %xxx.yyy:aaa@f
@@ -342,6 +371,13 @@ py_adhoc_call  { --lineno=-10 } seed.math.continued_fraction.iter_radix_digits_o
 -7:8
 -6:0
 
+
+
+
+py_adhoc_call   '' @str   %%:P  ='P.nn_ns.math_nn.numbers.shortest_addition_chain_length__ver3().取冫靶值讠最小显链长扌()[12509]'
+    =>『'17'』
+py_adhoc_call   '' @str   %%:P  ='P.nn_ns.math_nn.numbers.shortest_addition_chain_length__ver3().取冫靶值讠最小显链长扌()'
+    =>『'P.nn_ns.math_nn.numbers.shortest_addition_chain_length__ver3().取冫靶值讠最小显链长扌()'』
 
 
 #]]]'''
@@ -452,48 +488,91 @@ adhoc_argparse__args__ver1
 #__all__:goto
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from pprint import pformat as _pprint__pformat
-    #pformat(object, indent=1, width=80, depth=None, *, compact=False, sort_dicts=True, underscore_numbers=False)
-    #==>>pprint__pformat
-from importlib import import_module
-from operator import attrgetter
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+#.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):
+with mk_ctx4lazy_import4funcs_(__name__):
+    from pprint import pformat as _pprint__pformat
+        #pformat(object, indent=1, width=80, depth=None, *, compact=False, sort_dicts=True, underscore_numbers=False)
+        #==>>pprint__pformat
+    from importlib import import_module
+    from operator import attrgetter
+    from itertools import islice
 from collections.abc import Mapping
 import sys
 import re
 import builtins
-from itertools import islice
-
-from seed.for_libs.for_signal import PostponeKeyboardInterrupt
-    # ++kw:to_postpone_KeyboardInterrupt_until_yield => flush4print
-
-# ++kw:to_show_total_timedelta
-
-# ++kw:to_show_timedelta
-# ++kw:may_prompt_string6resting
-# ++kw:may_args4PeriodicToilLeisureTime
-from seed.for_libs.for_time import timer__print_err__thread_wide as timer
-#   with postpone, timer(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
-from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
-#def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
-#    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
 
 
+#.from seed.types.Symbol import P
+    # ++kw:P
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
+with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', prefix4attr='_lazy_', suffix4attr=''):
+    from __.seed.types.Symbol import _lazy_P
+    from __.seed.pkg_tools.load_module5attr import _lazy_rjstplr
+#.if 0:
+#.    from seed.types.Symbol import P as _P
+#.def _lazy_P():
+#.    global _P
+#.    try:
+#.        return _P
+#.    except NameError:
+#.        pass
+#.    from seed.types.Symbol import P as _P
+#.    return _lazy_P()
+#.
+#.if 0:
+#.    from seed.pkg_tools.load_module5attr import rjstplr as _rjstplr
+#.def _lazy_rjstplr():
+#.    global _rjstplr
+#.    try:
+#.        return _rjstplr
+#.    except NameError:
+#.        pass
+#.    from seed.pkg_tools.load_module5attr import rjstplr as _rjstplr
+#.    return _lazy_rjstplr()
 
-from seed.pkg_tools.load_module5attr import Rjstplr, rjstplr
-from seed.lang.call_ import call_
-from seed.func_tools.detect_depth4fail import decorator4show_py_help
-from seed.helper.stable_repr import stable_repr
-    #def stable_repr(obj, *, indent:str='    ', depth:int=-1, maybe_max_depth:[None, int]=None, has_head_eol_when_indent:bool=True):
-    #==>> regex'stable_repr__[TF]__i\d+(__d\d+)?'
-    #   _match__stable_repr_regex(nm) -> kwds4stable_repr
-    # stable_repr__F__i1__d3/stable_repr__T__i1__d3
-from seed.helper.stable_repr import stable_repr__expand_all_layer
-from seed.helper.stable_repr import stable_repr__expand_all_layer__noindent
-from seed.helper.stable_repr import stable_repr__expand_top_layer
-#from seed.helper.safe_eval import safe_eval, safe_exec
-from seed.helper.safe_eval import safe_eval_ex as safe_eval, safe_exec_ex as safe_exec
-    #@20250118: ++kw:using_extended_globals
-from seed.tiny import mk_tuple, check_type_is, check_type_le, check_callable, ifNone, echo
+
+
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.for_libs.for_signal import PostponeKeyboardInterrupt
+        # ++kw:to_postpone_KeyboardInterrupt_until_yield => flush4print
+
+    # ++kw:to_show_total_timedelta
+
+    # ++kw:to_show_timedelta
+    # ++kw:may_prompt_string6resting
+    # ++kw:may_args4PeriodicToilLeisureTime
+    from seed.for_libs.for_time import timer__print_err__thread_wide as timer
+    #   with postpone, timer(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
+    from seed.for_libs.for_time import mkr4try_resting_ #PeriodicToilLeisureTime
+    #def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+    #    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
+
+
+
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.lang.call_ import call_
+    from seed.func_tools.detect_depth4fail import decorator4show_py_help
+    from seed.helper.stable_repr import stable_repr
+        #def stable_repr(obj, *, indent:str='    ', depth:int=-1, maybe_max_depth:[None, int]=None, has_head_eol_when_indent:bool=True):
+        #==>> regex'stable_repr__[TF]__i\d+(__d\d+)?'
+        #   _match__stable_repr_regex(nm) -> kwds4stable_repr
+        # stable_repr__F__i1__d3/stable_repr__T__i1__d3
+    from seed.helper.stable_repr import stable_repr__expand_all_layer
+    from seed.helper.stable_repr import stable_repr__expand_all_layer__noindent
+    from seed.helper.stable_repr import stable_repr__expand_top_layer
+
+with mk_ctx4lazy_import4funcs_(__name__, 'safe_eval_ex:safe_eval, safe_exec_ex:safe_exec'):
+    #from seed.helper.safe_eval import safe_eval, safe_exec
+    from seed.helper.safe_eval import safe_eval_ex as safe_eval, safe_exec_ex as safe_exec
+        #@20250118: ++kw:using_extended_globals
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_smay_pseudo_identifier, check_type_in, check_type_is, check_type_le, check_callable
+    from seed.tiny_.funcs import echo
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.containers import mk_tuple
+
+
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
     #nm__pattern = r'(?:(?!\d)\w+)'
     #qnm__pattern = fr'(?:{nm__pattern}(?:[.]{nm__pattern})*)'
@@ -508,7 +587,7 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 qnm_as__pattern = fr'(?:{qnm__pattern}(?:@{nm__pattern}?)?)'
 smay_qnm_as__pattern = fr'(?:{qnm__pattern}?(?:@{nm__pattern}?)?)'
-import_pattern = fr'(?:%%:@(?P<rjstplr>{nm__pattern})|%(?P<pkg_as>{smay_qnm_as__pattern})(?:(?P<from_import>[:])(?P<ls4import>(?:{qnm_as__pattern}(?:,{qnm_as__pattern})*)?))?)'##++smay_qnm_as__pattern
+import_pattern = fr'(?:%%:P(?P<as_P>(?:@{nm__pattern})?)|%%:@(?P<alias4rjstplr>{nm__pattern})|%(?P<pkg_as>{smay_qnm_as__pattern})(?:(?P<from_import>[:])(?P<ls4import>(?:{qnm_as__pattern}(?:,{qnm_as__pattern})*)?))?)'##++smay_qnm_as__pattern
     # %xxx.yyy:aaa.bbb,ddd.eee@ccc
         #import the name "aaa", "ccc"
     # %xxx.yyy@:aaa.bbb@
@@ -528,6 +607,10 @@ import_pattern = fr'(?:%%:@(?P<rjstplr>{nm__pattern})|%(?P<pkg_as>{smay_qnm_as__
     # %%:@zzz
     #   <==> %seed.pkg_tools.load_module5attr:rjstplr
     #   <==> from seed.pkg_tools.load_module5attr import rjstplr as zzz
+    # %%:P@zzz
+    #   <==> %seed.types.Symbol:P@xxx
+    # %%:P
+    #   <==> %seed.types.Symbol:P
     #
 
 arg_pattern = r'(?:(?P<pos_or_kw>(?P<sgl_or_ls>[-][-]|[+][+])(?P<kw_nm>[^:=+-]+))?(?P<str_or_expr>[:=].*)|(?P<off_or_on>[-]|[+])(?P<flag_nm>[^:=+-]+))'
@@ -675,6 +758,14 @@ def adhoc_argparser__main__call8module(may_argv, /):
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
     def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting=''):
         ######################
+        #.P=False
+        #.check_type_in([bool, str], P)
+        #.if type(P) is bool:
+        #.    P = 'P' if P else ''
+        #.P
+        #.check_smay_pseudo_identifier(P)
+        #.dict(**{P:1})
+        ######################
         check_type_is(str, smay_kwd4supply_func4resting)
         if smay_kwd4supply_func4resting:dict(**{smay_kwd4supply_func4resting:1})
         ######################
@@ -724,8 +815,10 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 lineno += offset
                 print(lineno, end=':')
                 pass
+        #取消:@20260121:++kw:P
         #@20250404:++kw:smay_kwd4supply_func4resting
-        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting)
+        arg_tpl = (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting)
+        return arg_tpl
         #@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
         return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta)
         #@20250118: ++kw:flush4print
@@ -744,8 +837,8 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         options4argparser
     (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
     _mk_postprocess_ex
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting) = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
-    return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, options4argparser)
+    arg_tpl = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
+    return (arg_tpl, options4argparser)
 
 def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv, /):
   if 1:
@@ -757,7 +850,8 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     except AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag:
         show_help();exit(0);
 
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
+    (arg_tpl, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting) = arg_tpl
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
@@ -941,8 +1035,13 @@ def _parse__qnm_as(s, /):
         qnm4obj = first_nm
     return (qnm4check, qnm4obj, smay_at, as_nm)
 def _parse__import_pattern(m, /):
-    if (alias4rjstplr := m['rjstplr']):
+    if (alias4rjstplr := m['alias4rjstplr']):
+        rjstplr = _lazy_rjstplr()
         return {alias4rjstplr:rjstplr}
+    elif not None is (smay_at_alias4P := m['as_P']):
+        alias4P = 'P' if not smay_at_alias4P else smay_at_alias4P[1:]
+        P = _lazy_P()
+        return {alias4P:P}
 
     pkg_as = m['pkg_as']
     may_from_import = m['from_import']

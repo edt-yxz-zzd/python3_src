@@ -1,0 +1,64 @@
+
+: <<'EOF__doc'
+e ../../python3_src/bash_script/app/mysh
+vs:
+  view ../../python3_src/bash_script/main_sh/my_app
+mysh vs my_app:
+  mysh is newer than my_app
+  my_app doesnot check num_args..., broken if no args
+
+
+EOF__doc
+
+function USAGE() {
+cat >&2 <<'EOF__usage'
+USAGE:
+  mysh -h
+    help
+  mysh -l
+    list all apps
+  mysh -- <nm> [arg...]
+    call app
+  mysh <nm> [arg...]
+    call app iff nm not startswith "-"
+
+EOF__usage
+}
+function list_my_sh_apps() {
+  ls -1 "${my_git_sh}/app/"
+}
+
+function main() {
+if [[ $# -eq 0 ]] ; then
+  USAGE
+  return 1
+else
+  case "$1" in
+    (-h)
+      USAGE
+      return 0
+    ;;
+    (-l)
+      list_my_sh_apps
+      return 0
+    ;;
+    (--)
+      shift 1
+    ;;
+    (-*)
+      echo >&2 "unknown option: ${1@Q}"
+      USAGE
+      return 1
+    ;;
+    (*)
+      :
+    ;;
+  esac
+  local app="${my_git_sh}/app/$1"
+  : ;   shift 1
+  bash -- "$app" "$@"
+  : ;   return
+fi
+}
+
+main "$@"

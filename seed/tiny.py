@@ -54,10 +54,9 @@ from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
 from seed.tiny import fst, snd, at
 from seed.tiny import mk_tuple, mk_frozenset, mk_immutable_seq, mk_tuple__split_first_if_str
 from seed.tiny import mk_pair, mk_pair_tuple, is_pair
+from seed.tiny_.map_ import map_, cmap_, call_, prepare4call_, dots_
 from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
-from seed.tiny import check_tmay, check_pair, check_uint, check_imay, icheck_tmay, icheck_pair, icheck_uint, icheck_imay
-from seed.tiny import check_type_le, check_type_is, icheck_type_le, icheck_type_is
-from seed.tiny import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
+from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
 from seed.tiny import check_callable, check_iterator, check_is_obj, check_is_None
 from seed.tiny_.check import check_str, check_char
 from seed.tiny import get_abstractmethod_names, check_manifest4abstractmethods
@@ -188,6 +187,11 @@ __all__ = str2__all__(r'''
     items2dict__reject_duplicates
                         # iter<(k,v)> -> {k:v} #raise if duplicates occur
 
+    map_                # :: (f_/(*xs->r)|f_args/(?_args_or_kwds?, ?kwds?, f_/(*args->*xs->*_args->**kwds->r), *args)) -> (*xss) -> Iter r
+    cmap_               # :: (Iter r -> T) -> (f_/(*xs->r)|f_args/(?_args_or_kwds?, ?kwds?, f_/(*args->*xs->*_args->**kwds->r), *args)) -> (*xss) -> T
+    call_               # :: (f_/(*xs->r)|f_args/(?_args_or_kwds?, ?kwds?, f_/(*args->*xs->*_args->**kwds->r), *args)) -> (*xs) -> r
+    prepare4call_       # :: (f_/(*xs->r)|f_args/(?_args_or_kwds?, ?kwds?, f_/(*args->*xs->*_args->**kwds->r), *args)) -> (*xs -> r)
+    dots_               # (*fs/[(f_/(x->r)|f_args/(?_args_or_kwds?, ?kwds?, f_/(*args->x->*_args->**kwds->r), *args))..., (f_/(*xs->r)|f_args/(?_args_or_kwds?, ?kwds?, f_/(*args->*xs->*_args->**kwds->r), *args))] -> (*xs -> r)
     check_Weakable      # :: obj -> None|raise TypeError
     is_Weakable         # :: obj -> bool
     WeakableDict        # <: Weakable&dict
@@ -204,6 +208,7 @@ __all__ = str2__all__(r'''
         check_getitemable   # :: a -> None|raise TypeError
         icheck_getitemable  # :: a -> a|raise TypeError
 
+    check_type_le_in    # :: [cls] -> a -> None|raise TypeError
     check_type_in       # :: [cls] -> a -> None|raise TypeError
     check_type_le       # :: cls -> a -> None|raise TypeError
     check_type_is       # :: cls -> a -> None|raise TypeError
@@ -217,6 +222,12 @@ __all__ = str2__all__(r'''
     check_not_          # :: checker -> a -> None|raise TypeError
                         # where: [checker == ((a -> None|raise TypeError) | [arged_checker, *args4arged_checker])]
                         # where: [args4arged_checker == ((*args4arged_checker) -> a -> None|raise TypeError)]
+    check_tuple__len_le # :: uint -> a -> None|raise TypeError
+    check_tuple__len_ge # :: uint -> a -> None|raise TypeError
+    check_tuple__len_eq # :: uint -> a -> None|raise TypeError
+    check_len_le        # :: uint -> a -> None|raise TypeError
+    check_len_ge        # :: uint -> a -> None|raise TypeError
+    check_len_eq        # :: uint -> a -> None|raise TypeError
     check_tmay          # :: a -> None|raise TypeError
     check_pair          # :: a -> None|raise TypeError
     check_either        # :: a -> None|raise TypeError
@@ -248,7 +259,18 @@ __all__ = str2__all__(r'''
     check_is_None       # :: a -> None|raise TypeError
     check_str           # :: a -> None|raise TypeError
     check_char          # :: a -> None|raise TypeError
-    check_bool           # :: a -> None|raise TypeError
+    check_bool          # :: a -> None|raise TypeError
+
+    check_path_exists_
+    check_path_not_exists_
+    check_file_path_
+    check_dir_path_
+    check_not_file_path_
+    check_not_dir_path_
+    check_same_path_
+    check_not_same_path_
+    AreSameFileError
+    NotSameFileError
 
     get_abstractmethod_names
                         # :: cls -> frozenset<attr>
@@ -258,9 +280,11 @@ __all__ = str2__all__(r'''
 
     echo_key            # echo_key[k...] -> (k...)
     mk_frozenset        # :: Iter a -> frozenset a
+    mk_tuple__split_first_if_str__sep_
+                        # :: may emay smay sep/str -> Iter a -> tuple a
     mk_tuple__split_first_if_str
-                        # :: Iter a -> -> tuple a
-    mk_tuple            # :: Iter a -> (chars8blank="") -> tuple a
+                        # :: Iter a -> (chars8blank="") -> tuple a
+    mk_tuple            # :: Iter a -> tuple a
     mk_pair_tuple       # :: Iter (Iter a) -> tuple (pair a)
     mk_pair             # :: Iter a -> pair a
     is_pair             # :: a -> bool
@@ -388,6 +412,11 @@ __all__ = str2__all__(r'''
     is_subscriptable    # a -> Bool
     is_container        # a -> Bool
     is_sized            # a -> Bool
+    is_pair             # :: a -> bool
+    is_pair_
+    is_bytes_
+    is_bytes_like_object_
+    to_may_int_         #__int__
 
     flip                # (a->b->r) -> (b->a->r)
     neg_flip            # (a->b->r) -> (b->a->-r)
@@ -599,6 +628,16 @@ assert (4-1,-1,-1) == fix_slice_by_len_of_(tuple, range(4), echo_key[::-1])
 assert range(4-1,-1,-1) == fix_slice_by_len_of_(range, range(4), echo_key[::-1])
 
 
+from seed.tiny_.map_ import map_, cmap_, call_, prepare4call_, dots_
+assert cmap_(tuple, [cmap_, tuple, int], '123') == ((1,), (2,), (3,))
+assert cmap_(tuple, [cmap_, list, int], '123') == ([1], [2], [3])
+assert cmap_(tuple, [cmap_, list, str], [[], [1, 2], [999]]) == ([], ['1', '2'], ['999'])
+
+assert tuple(map_([cmap_, list, str], [[], [1, 2], [999]])) == ([], ['1', '2'], ['999'])
+assert tuple(map_(dots_(list, [map_, str]), [[], [1, 2], [999]])) == ([], ['1', '2'], ['999'])
+assert dots_(tuple, map_)(dots_(list, [map_, str]), [[], [1, 2], [999]]) == ([], ['1', '2'], ['999'])
+
+
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
 from seed.tiny_.check import check_getitemable, icheck_getitemable
 assert check_getitemable is check_subscriptable
@@ -607,7 +646,7 @@ assert expectError(TypeError, lambda:check_subscriptable(set()))
 assert check_subscriptable('') is None
 
 from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
-from seed.tiny_.check import check_type_le, check_type_is, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
+from seed.tiny_.check import check_type_le, check_type_is, check_type_le_in, check_type_in, check_tuple__len_le, check_tuple__len_ge, check_tuple__len_eq, check_len_le, check_len_ge, check_len_eq, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
 from seed.tiny_.check import check_type_in, icheck_type_in
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
 from seed.tiny_.check import check_callable, check_iterator, check_is_obj, check_is_None
@@ -626,6 +665,18 @@ check_not_(check_uint, -1)
 
 check_iterator(iter(''))
 check_uint(1)
+check_tuple__len_eq(0, ())
+check_tuple__len_eq(3, (0,1,2))
+check_tuple__len_le(3, ())
+check_tuple__len_le(3, (0,1,2))
+check_tuple__len_ge(0, ())
+check_tuple__len_ge(0, (0,1,2))
+check_len_eq(0, '')
+check_len_eq(3, '012')
+check_len_le(3, '')
+check_len_le(3, '012')
+check_len_ge(0, '')
+check_len_ge(0, '012')
 check_tmay(())
 check_tmay((0,))
 check_pair((0, 0))
@@ -665,6 +716,12 @@ assert expectError(TypeError, lambda:check_char(''))
 assert expectError(TypeError, lambda:check_char('ab'))
 
 
+from seed.tiny_.check_path import check_path_exists_, check_path_not_exists_, check_file_path_, check_dir_path_, check_not_file_path_, check_not_dir_path_
+from seed.tiny_.check_path import check_same_path_, check_not_same_path_, AreSameFileError, NotSameFileError
+
+
+
+
 
 from seed.tiny_.nmay5tmay import nmay5star_tmay_, nmay5tmay_, nmay2tmay_
 
@@ -693,11 +750,13 @@ from seed.tiny_.null_dev import null_context, null_context5result_
 
 from seed.tiny_.constants import inf, pos_inf, neg_inf
 
-from seed.tiny_.containers import mk_tuple__split_first_if_str
+from seed.tiny_.containers import mk_tuple__split_first_if_str, mk_tuple__split_first_if_str__sep_
 
 from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
 from seed.tiny_.containers import mk_pair, mk_pair_tuple
 from seed.tiny_.containers import is_pair
+from seed.tiny_.is_xxx import is_pair_, is_bytes_, is_bytes_like_object_
+from seed.tiny_.to_may_int_ import to_may_int_
 
 
 assert mk_pair(__:=(1,2)) is __
@@ -753,6 +812,14 @@ assert mk_tuple__split_first_if_str('0 1,2') == ('0', '1,2')
 assert mk_tuple__split_first_if_str('0 1,2', ',') == ('0', '1', '2')
 assert mk_tuple__split_first_if_str('0 1,2;3', ',') == ('0', '1', '2;3')
 assert mk_tuple__split_first_if_str('0 1,2;3', ',;') == ('0', '1', '2', '3')
+
+
+
+assert mk_tuple__split_first_if_str__sep_(',;', [0, 1]) == (0, 1)
+assert mk_tuple__split_first_if_str__sep_(',;', ',; ,   ; ,;') == ('', ' ,   ; ', '')
+assert mk_tuple__split_first_if_str__sep_('', ',; ,   ; ,;') == (',; ,   ; ,;',)
+assert mk_tuple__split_first_if_str__sep_(..., ',; ,   ; ,;') == (',', ';', ' ', ',', ' ', ' ', ' ', ';', ' ', ',', ';')
+assert mk_tuple__split_first_if_str__sep_(None, ',; ,   ; ,;') == (',;', ',', ';', ',;')
 
 
 

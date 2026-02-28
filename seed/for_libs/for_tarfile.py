@@ -1,11 +1,13 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/for_libs/for_tarfile.py
+view ../../python3_src/seed/io/decompress_truncated_file.py
 see:
     view ../../python3_src/seed/for_libs/for_tarfile.py
     view others/app/termux/tar_7zip.txt
     view others/app/termux/help/xz.txt
     view others/app/termux/help/lzma-see-xz.txt
+    view /sdcard/0my_files/unzip/py_doc/python-3.12.4-docs-text/library/tarfile.txt
 
 
 seed.for_libs.for_tarfile
@@ -54,6 +56,9 @@ py -m tarfile -l script/搜索冫最短加链长度.py..statistics.out.txt.tar.l
   => 『script/搜索冫最短加链长度.py..statistics.out.txt』
 
 
+class tarfile.TarInfo(name='')
+class tarfile.TarFile(name=None, mode='r', fileobj=None, format=DEFAULT_FORMAT, tarinfo=TarInfo, dereference=False, ignore_zeros=False, encoding=ENCODING, errors='surrogateescape', pax_headers=None, debug=0, errorlevel=1)
+    vs:
 tarfile.open(name=None, mode='r', fileobj=None, bufsize=10240, **kwargs)
   mode has to be a string of the form 'filemode[:compression]':
   * 'r' or 'r:*'
@@ -197,20 +202,211 @@ py_adhoc_call  { -end4print }  seed.for_libs.for_tarfile   ,str.iter_read_solo_t
 
 
 ]]
+[[
+@20260216
+源起:打包多个文件
+===
+1-16016完成@20260209晚八点
+tar -cvf script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py..枚举生成冫文件后续简并记录纟递归婪溟链扌.ver2.part-1-2-3-4.1-16016.out.txt.tar.lzma --lzma   script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py..枚举生成冫文件后续简并记录纟递归婪溟链扌.ver2.part00*.out.txt
+tar -xf script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py..枚举生成冫文件后续简并记录纟递归婪溟链扌.ver2.part-1-2-3-4.1-16016.out.txt.tar.lzma -O | head -n 6019 | tail -n +6016 | more
+===
+测试:
+mkdir $my_tmp/test
+mkdir $my_tmp/test/tar
+mkdir $my_tmp/test/tar/c-d/
+
+echo -n $'123\nabc\n...' >  $my_tmp/test/tar/a.txt
+echo -n $'999\n666\n' >  $my_tmp/test/tar/b.txt
+echo -n $'\n' >  $my_tmp/test/tar/c-d/c.txt
+echo -n $'' >  $my_tmp/test/tar/c-d/d.txt
+tree $my_tmp/test/tar/
+
+tar -cvf $my_tmp/test/a-b-c-d.txt.tar.lzma --lzma   -C $my_tmp/test/tar/  a.txt b.txt c-d/c.txt c-d/d.txt
+tar -tf $my_tmp/test/a-b-c-d.txt.tar.lzma
+tar -xf $my_tmp/test/a-b-c-d.txt.tar.lzma -O
+    123
+    abc
+    ...999
+    666
+    <BLANK>
+
+du -b $my_tmp/test/a-b-c-d.txt.tar.lzma
+    191
+hexdump $my_tmp/test/a-b-c-d.txt.tar.lzma
+
+rm -iv $my_tmp/test/a-b-c-d.txt.tar.lzma
+
+#>>> from pathlib import Path
+#>>> p = Path('/sdcard/0my_files/tmp/test/a-b-c-d.txt.tar.lzma')
+#>>> bs = p.read_bytes()
+#>>> len(bs)
+#191
+#>>> bs.hex(':', -4).upper()
+>>> hex_str = ('5D000080:00FFFFFF:FFFFFFFF:FF00308B:8A87C40E:F297A4F8:7540BA02:ABBB6CD9:CFB7DC2F:8BB90662:416B9C75:D9744603:5DD8B610:94FAE819:1F4CCC76:366CB468:BD7BD819:54185245:BE0C4935:C0E64277:34106ABF:46C053B9:0F8E7511:A3BAB40D:00746AAE:E7377A3E:AAB87C6D:D1F8D482:9127EB1E:67BA9F04:B58FEF3A:A2CF3260:1FE44F1F:3C1CCCD0:0627EA73:815380CF:131B12CC:A0AE2A29:AF8A89DA:156D57AD:0E9FF231:AD4BED25:6FE64D7D:97EC833C:6DB5D0EE:F2C98BD8:AC44FFE1:B6A8D6')
+>>> bs = bytes.fromhex(hex_str.replace(':', ''))
+>>> import tarfile
+>>> from io import BytesIO, TextIOWrapper
+>>> ibfile = BytesIO(bs)
+>>> ifile4tar = tarfile.open(fileobj=ibfile)
+>>> for tarinfo8member in ifile4tar:
+...     print(tarinfo8member)  #doctest: +ELLIPSIS
+<TarInfo 'a.txt' at 0x...>
+<TarInfo 'b.txt' at 0x...>
+<TarInfo 'c-d/c.txt' at 0x...>
+<TarInfo 'c-d/d.txt' at 0x...>
+>>> for tarinfo8member in ifile4tar:
+...     print(tarinfo8member)  #doctest: +ELLIPSIS
+<TarInfo 'a.txt' at 0x...>
+<TarInfo 'b.txt' at 0x...>
+<TarInfo 'c-d/c.txt' at 0x...>
+<TarInfo 'c-d/d.txt' at 0x...>
+>>> ifile4tar is iter(ifile4tar)
+False
+
+>>> for tarinfo8member in ifile4tar:
+...     print(f'@{tarinfo8member.name!r}')
+...     with ifile4tar.extractfile(tarinfo8member) as ifile4data, TextIOWrapper(ifile4data, encoding='ascii') as ifile:
+...         for line in ifile:
+...             print(repr(line))
+@'a.txt'
+'123\n'
+'abc\n'
+'...'
+@'b.txt'
+'999\n'
+'666\n'
+@'c-d/c.txt'
+'\n'
+@'c-d/d.txt'
+
+
+>>> ibfile.seek(0)
+0
+>>> for line in iter_chain_read_multi_tarfile_(ibfile, xencoding4data='ascii', required_newline=False):
+...     print(repr(line))
+'123\n'
+'abc\n'
+'...'
+'999\n'
+'666\n'
+'\n'
+>>> for line in iter_chain_read_multi_tarfile_(ibfile, xencoding4data='', required_newline=False):
+...     print(repr(line))
+>>> ibfile.seek(0)
+0
+>>> for line in iter_chain_read_multi_tarfile_(ibfile, xencoding4data='', required_newline=False):
+...     print(repr(line))
+b'123\n'
+b'abc\n'
+b'...'
+b'999\n'
+b'666\n'
+b'\n'
+>>> ibfile.seek(0)
+0
+>>> for line in iter_chain_read_multi_tarfile_(ibfile, xencoding4data='ascii'):
+...     print(repr(line))
+Traceback (most recent call last):
+    ...
+seed.for_libs.for_tarfile.Error__line_not_endswith_newline
+>>> for line in iter_chain_read_multi_tarfile_(ibfile, xencoding4data=''):
+...     print(repr(line))
+>>> ibfile.seek(0)
+0
+>>> for line in iter_chain_read_multi_tarfile_(ibfile, xencoding4data=''):
+...     print(repr(line))
+Traceback (most recent call last):
+    ...
+seed.for_libs.for_tarfile.Error__line_not_endswith_newline
+
+===
+>>> ibfile1 = BytesIO(bs)
+>>> ibfile2 = BytesIO(bs)
+>>> for line in iter_chain_read_multi_tarfiles_(ibfile1, ibfile2, xencoding4data='ascii', required_newline=False):
+...     print(repr(line))
+'123\n'
+'abc\n'
+'...'
+'999\n'
+'666\n'
+'\n'
+'123\n'
+'abc\n'
+'...'
+'999\n'
+'666\n'
+'\n'
+>>> ibfile1.seek(0)
+0
+>>> ibfile2.seek(0)
+0
+>>> for line in iter_chain_read_multi_tarfiles_(ibfile1, ibfile2, xencoding4data='ascii'):
+...     print(repr(line))
+Traceback (most recent call last):
+    ...
+seed.for_libs.for_tarfile.Error__line_not_endswith_newline
+>>> for line in iter_chain_read_multi_tarfiles_(ibfile1, ibfile2, xencoding4data=''):
+...     print(repr(line))
+Traceback (most recent call last):
+    ...
+seed.for_libs.for_tarfile.Error__line_not_endswith_newline
+
+===
+]]
+[[
+ifile4tar donot auto close ibfile, no optional way to do it...
+>>> ibfile = BytesIO(bs)
+>>> ibfile.tell()
+0
+>>> ifile4tar = tarfile.open(fileobj=ibfile)
+>>> ibfile.closed
+False
+>>> ibfile.tell()
+191
+>>> ifile4tar.close()
+>>> ibfile.closed
+False
+>>> ibfile.tell()
+191
+>>> ibfile.close()
+>>> ibfile.closed
+True
+>>> ibfile.tell()
+Traceback (most recent call last):
+    ...
+ValueError: I/O operation on closed file.
+
+
+>>> ibfile = BytesIO(bs)
+>>> ifile4tar = tarfile.open(ibfile)
+Traceback (most recent call last):
+    ...
+TypeError: expected str, bytes or os.PathLike object, not BytesIO
+
+]]
+
+
 
 
 ]]]'''#'''
 __all__ = r'''
 double_open_solo_tarfile_
-group_open_solo_tarfile_
+    group_open_solo_tarfile_
 read_solo_tarfile_
-iter_read_solo_tarfile_
+    iter_read_solo_tarfile_
+iter_chain_read_multi_tarfile_
+    iter_chain_read_multi_tarfiles_
+
 
 fmts4compression4read
 mk_mode4read_tarfile_
 distinguish5may_ipath_or_ifile_
+
+mk_echo_or_wrap_
+
 Error
     Error__not_solo_tarfile
+    Error__line_not_endswith_newline
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -224,6 +420,7 @@ ___end_mark_of_excluded_global_names__0___ = ...
 fmts4compression4read = ('*', '', 'gz', 'bz2', 'xz')
 class Error(Exception):pass
 class Error__not_solo_tarfile(Error):pass
+class Error__line_not_endswith_newline(Error):pass
 
 def distinguish5may_ipath_or_ifile_(may_ipath_or_ifile, /):
     ipath_or_ifile = sys.stdin if may_ipath_or_ifile is None else may_ipath_or_ifile
@@ -245,20 +442,14 @@ def mk_mode4read_tarfile_(may_fmt4compression4read, /):
     mode4read_tarfile = f'r:{fmt4compression4read}'
     return mode4read_tarfile
 
-def double_open_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, /, xencoding4data=None, *, kwds4open_tarfile={}, group=False):
-    '-> ((ifile4tar, (ifile4data|ifile4text))|grp_ctx_mngr{(ifile4tar, ifile4data_or_ifile4text)})/(TarFile, (BufferedReader if not xencoding4data else TextIOWrapper) if not group else GroupContextManager)|^Error__not_solo_tarfile'
-    return group_open_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read, xencoding4data, kwds4open_tarfile=kwds4open_tarfile, not_group=not group)
-def group_open_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, /, xencoding4data=None, *, kwds4open_tarfile={}, not_group=False):
-    '-> ((ifile4tar, (ifile4data|ifile4text))|grp_ctx_mngr{(ifile4tar, ifile4data_or_ifile4text)})/(TarFile, (BufferedReader if not xencoding4data else TextIOWrapper) if not_group else GroupContextManager)|^Error__not_solo_tarfile'
-    check_type_is(bool, not_group)
-    ######################
+def mk_echo_or_wrap_(xencoding4data, /):
     if xencoding4data:
         # str
         encoding4data = xencoding4data
         check_type_is(str, encoding4data)
         def echo_or_wrap_(ifile4data, /):
             # [ifile4data :: BufferedReader]
-            ifile4text = TextIOWrapper(ifile4data)
+            ifile4text = TextIOWrapper(ifile4data, encoding=encoding4data)
             # [ifile4text :: TextIOWrapper]
             return ifile4text
     else:
@@ -266,8 +457,15 @@ def group_open_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, 
         def echo_or_wrap_(ifile4data, /):
             # [ifile4data :: BufferedReader]
             return ifile4data
-    echo_or_wrap_
+    return echo_or_wrap_
+def double_open_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, /, xencoding4data=None, *, kwds4open_tarfile={}, group=False):
+    '-> ((ifile4tar, (ifile4data|ifile4text))|grp_ctx_mngr{(ifile4tar, ifile4data_or_ifile4text)})/(TarFile, (BufferedReader if not xencoding4data else TextIOWrapper) if not group else GroupContextManager)|^Error__not_solo_tarfile'
+    return group_open_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read, xencoding4data, kwds4open_tarfile=kwds4open_tarfile, not_group=not group)
+def group_open_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, /, xencoding4data=None, *, kwds4open_tarfile={}, not_group=False):
+    '-> ((ifile4tar, (ifile4data|ifile4text))|grp_ctx_mngr{(ifile4tar, ifile4data_or_ifile4text)})/(TarFile, (BufferedReader if not xencoding4data else TextIOWrapper) if not_group else GroupContextManager)|^Error__not_solo_tarfile'
+    check_type_is(bool, not_group)
     ######################
+    echo_or_wrap_ = mk_echo_or_wrap_(xencoding4data)
     (may_ipath, may_ifile) = distinguish5may_ipath_or_ifile_(may_ipath_or_ifile)
     mode4read_tarfile = mk_mode4read_tarfile_(may_fmt4compression4read)
     ######################
@@ -325,7 +523,7 @@ def read_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, /, xen
     #.    check_type_is(str, encoding4data)
     #.    def read_(ifile4data, /):
     #.        # [ifile4data :: BufferedReader]
-    #.        ifile4text = TextIOWrapper(ifile4data)
+    #.        ifile4text = TextIOWrapper(ifile4data, encoding=encoding4data)
     #.        txt = ifile4text.read()
     #.        check_type_is(str, txt)
     #.        return txt
@@ -353,6 +551,28 @@ def read_solo_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, /, xen
     #.return bs_or_txt
 
 
+def iter_chain_read_multi_tarfile_(may_ipath_or_ifile, may_fmt4compression4read=None, /, xencoding4data=None, *, kwds4open_tarfile={}, required_newline=True):
+    '-> Iter line/(bytes if not xencoding4data else str)|^Error__not_solo_tarfile'
+    echo_or_wrap_ = mk_echo_or_wrap_(xencoding4data)
+    (may_ipath, may_ifile) = distinguish5may_ipath_or_ifile_(may_ipath_or_ifile)
+    mode4read_tarfile = mk_mode4read_tarfile_(may_fmt4compression4read)
+    with tarfile.open(may_ipath, mode4read_tarfile, may_ifile, **kwds4open_tarfile) as ifile4tar:
+        for tarinfo8member in ifile4tar:
+            if not tarinfo8member.isfile():
+                continue
+            with ifile4tar.extractfile(tarinfo8member) as ifile4data, echo_or_wrap_(ifile4data) as ixfile:
+                if not required_newline:
+                    yield from ixfile
+                else:
+                    newline = '\n' if xencoding4data else b'\n'
+                    for line in ixfile:
+                        if not line[-1:] == newline:raise Error__line_not_endswith_newline
+def iter_chain_read_multi_tarfiles_(*ls4may_ipath_or_ifile, may_fmt4compression4read=None, xencoding4data=None, kwds4open_tarfile={}, required_newline=True):
+    '-> Iter line/(bytes if not xencoding4data else str)|^Error__not_solo_tarfile'
+    for may_ipath_or_ifile in ls4may_ipath_or_ifile:
+        yield from iter_chain_read_multi_tarfile_(may_ipath_or_ifile, may_fmt4compression4read, xencoding4data=xencoding4data, kwds4open_tarfile=kwds4open_tarfile, required_newline=required_newline)
+
 __all__
 from seed.for_libs.for_tarfile import double_open_solo_tarfile_, group_open_solo_tarfile_, read_solo_tarfile_, iter_read_solo_tarfile_
+from seed.for_libs.for_tarfile import iter_chain_read_multi_tarfile_, iter_chain_read_multi_tarfiles_
 from seed.for_libs.for_tarfile import *

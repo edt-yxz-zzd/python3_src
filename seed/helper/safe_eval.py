@@ -268,6 +268,45 @@ from collections import UserDict as _UserDict
 import builtins
 # NOTE: <built-in function __import__>
 
+#see:DictKeyAsObjAttrAndAsMapping:
+#._get = object.__getattribute__
+#._set = object.__setattr__
+#.class _MapViewAsModule:
+#.    #!! safe_eval_ex():_global_eval:^AttributeError: 'mappingproxy' object has no attribute '__import__'. Did you mean: '__ior__'?
+#.    # => _std4args():_MappingProxyType-->_MapViewAsModule
+#.    def __init__(sf, d, /):
+#.        #sf._d = d
+#.        _set(sf, '_d', d)
+#.    def __getattribute__(sf, nm, /):
+#.        return sf[nm]
+#.    def __len__(sf, /):
+#.        d = _get(sf, '_d')
+#.        return len(d)
+#.    def __getitem__(sf, k, /):
+#.        #d = sf._d
+#.        d = _get(sf, '_d')
+#.        return d[k]
+#.    def __contains__(sf, k, /):
+#.        d = _get(sf, '_d')
+#.        return k in d
+#.    def __iter__(sf, /):
+#.        d = _get(sf, '_d')
+#.        return iter(d)
+#.    def keys(sf, /):
+#.        d = _get(sf, '_d')
+#.        return d.keys()
+#.    def items(sf, /):
+#.        d = _get(sf, '_d')
+#.        return d.items()
+#.    def values(sf, /):
+#.        d = _get(sf, '_d')
+#.        return d.values()
+#.assert 'a' in _MapViewAsModule(dict(a=999))
+#.assert len(_MapViewAsModule(dict(a=999))) == 1
+#.assert _MapViewAsModule(dict(a=999))['a'] == 999
+#.assert _MapViewAsModule(dict(a=999)).a == 999
+
+
 def _vars5module(qnm4mdl, nms4check, /):
     import importlib
     mdl = importlib.import_module(qnm4mdl)
@@ -432,10 +471,13 @@ _builtins_ex = {**_vars5itertools(), **_builtins}
     # @20250118: ++safe_eval_ex(), safe_exec_ex()
     # for 『py_adhoc_call   aaa.bbb   ,stable_repr.f ='range(1,10)' ='count(4)'』
 
-_builtins = _MappingProxyType(_builtins)
-#_builtins = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins))
-_builtins_ex = _MappingProxyType(_builtins_ex)
-#_builtins_ex = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins_ex))
+if 0:
+    _builtins = _MappingProxyType(_builtins)
+    _builtins_ex = _MappingProxyType(_builtins_ex)
+else:
+    #!! safe_eval_ex():_global_eval:^AttributeError: 'mappingproxy' object has no attribute '__import__'. Did you mean: '__ior__'?
+    _builtins = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins))
+    _builtins_ex = DictKeyAsObjAttrAndAsMapping(_MappingProxyType(_builtins_ex))
 
 _globals = {'__builtins__' : _builtins}
 _globals = _MappingProxyType(_globals)
@@ -474,8 +516,9 @@ __builtins__ = _builtins; del _builtins
 
 
 assert ...
-__builtins__, _global_eval, _global_eval
+__builtins__, _global_eval, _global_exec
 def _std4args(locals, nonlocals, /, *, readonly, using_extended_globals):
+    #_MappingProxyType = _MapViewAsModule
     # ??? globals is used to be bound to func ???
     # ??? locals is used to lookup vats (?hence should _ChainMap globals?) ???
     if locals is None:
@@ -605,6 +648,7 @@ def safe_eval_ex(expression, /,*, locals=None, nonlocals=None, using_extended_gl
 
     result = _global_eval(expression, nonlocals_globals, locals_nonlocals)
         # TypeError: globals must be a real dict; try eval(expr, {}, mapping)
+        # AttributeError: 'mappingproxy' object has no attribute '__import__'. Did you mean: '__ior__'?
     return result
 r'''
 Help on built-in function eval in module builtins:
@@ -661,7 +705,7 @@ exec(source, globals=None, locals=None, /)
 
 
 if 1:
-    __nms4globals4this_module = {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', '__all__', 'literal_eval', 'data_eval', '_global_eval', '_global_exec', '_globals', '_globals_ex', 'safe_eval', 'safe_eval_ex', 'safe_exec', 'safe_exec_ex', '_ImportError__forbid_import_stmt', '_allowed_modules', '_saved__import__', '_MappingProxyType', '_ChainMap', '_global_print', '_pseudo_py_dict', '_UserDict', '_std4args', '__nms4globals4this_module'}
+    __nms4globals4this_module = {'__name__', '__doc__', '__package__', '__loader__', '__spec__', '__file__', '__cached__', '__builtins__', '__all__', 'literal_eval', 'data_eval', '_global_eval', '_global_exec', '_globals', '_globals_ex', 'safe_eval', 'safe_eval_ex', 'safe_exec', 'safe_exec_ex', '_ImportError__forbid_import_stmt', '_allowed_modules', '_saved__import__', '_MappingProxyType', '_ChainMap', '_global_print', '_pseudo_py_dict', '_UserDict', '_std4args', '__nms4globals4this_module'} # | {'_set', '_get', '_MapViewAsModule'}
     assert set(globals()) ^ __nms4globals4this_module <= {'__annotations__'}, set(globals()) ^ __nms4globals4this_module
 
 

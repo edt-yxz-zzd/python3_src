@@ -1,0 +1,1180 @@
+#__all__:goto
+#.DONE:设计冫树构造算法:pushs:采用直构方法:O(N) vs O(NlnN)
+r'''[[[
+e ../../python3_src/seed/data_funcs/finger_tree/ft23.py
+
+seed.data_funcs.finger_tree.ft23
+py -m nn_ns.app.debug_cmd   seed.data_funcs.finger_tree.ft23 -x # -off_defs
+py -m nn_ns.app.doctest_cmd seed.data_funcs.finger_tree.ft23:__doc__ -ht # -ff -df
+#######
+
+[[
+源起:
+e script/对称多项式讠基表达.py
+    需要:排列组合:幂次讠重数@乸瓧称重式.eval(序列纟变量值)
+e ../../python3_src/seed/math/combination__parts.py
+    排列组合:简化实现 或 泛化实现 都需要 全序集合 或 全序序列
+        #具体到 三层排列组合 需要 两个 双向链表 而且 还有痛点 有待考虑。
+
+e ../../python3_src/seed/data_funcs/finger_tree/ft23_7sized_seq.py
+e ../../python3_src/seed/data_funcs/finger_tree/ft23_7sized_ascend_set.py
+    ft23_7sized_sorted_set
+]]
+
+[[
+2_3_finger_tree
+[finger_tree{depth} == (cane{depth}|fork{depth})]
+# (branch,trunk,branch)
+
+[fork{depth} :: (auto, etree{depth})]
+[etree{depth} :: (twig{depth}, stem{depth}, twig{depth})]
+[stem{depth} :: finger_tree{1+depth}]
+    !!!
+[twig{depth} :: (auto, nodes/[node{depth}])]
+[cane{depth} :: (auto, nodes/[node{depth}])]
+[node{depth} == if depth==0 then leaf else nonleaf{depth}]
+[nonleaf == (auto, nodes/[node{-1+depth}])]
+    !!!
+[leaf == (auto, data)]
+
+[0 <= len(cane.nodes) <= 3]
+[1 <= len(twig.nodes) <= 3]
+[2 <= len(nonleaf.nodes) <= 3]
+    #2_3_finger_tree
+
+basic_types:
+    + data
+    + auto
+    + leaf
+        .auto
+        .data
+    + nonleaf
+        .auto
+        .nodes
+    + cane
+        .auto
+        .nodes
+    + twigL
+        .auto
+        .nodes
+    + twigR
+        .auto
+        .nodes
+    + fork
+        .auto
+        .etree
+            .twigL
+            .stem
+            .twigR
+]]
+[[
+path:
+[path{finger_tree} == (path{cane}|path{fork})]
+[path{cane} == (0,path{cane.nodes})]
+[path{fork} == (1,path{fork.etree})]
+[path{xs} == (L, uint{2*[0..=L]}|(L, uint{1+2*[0..<L]}, path{x})) where [L:=len(xs)]]
+
+[path{twigL} == path{twigL.nodes}]
+[path{twigR} == path{twigR.nodes}]
+[path{nonleaf} == path{nonleaf.nodes}]
+[path{leaf} :: uint%3]
+    0:起
+    1:data
+    2:讫
+
+]]
+
+
+
+'#'; __doc__ = r'#'
+>>>
+
+
+
+py_adhoc_call   seed.data_funcs.finger_tree.ft23   @f
+]]]'''#'''
+__all__ = r'''
+BaseFingerTreeError
+    EmptyError
+    BadOffsetError
+
+IBaseOps4Auto6FingerTree
+    mk_auto5chain_many_
+    IBasicOps4FingerTree
+        IOps4FingerTree
+
+'''.split()#'''
+__all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.tiny_.check import check_type_is, check_int_ge
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
+#.#################################
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
+with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', prefix4attr='lazy_', suffix4attr=''):
+    from __.seed.tiny_.containers import lazy_null_tuple,lazy_null_iter,lazy_null_frozenset as _lazy_null_frozenset_ #null_tuple,null_iter,null_frozenset
+#.#################################
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.containers import mk_tuple
+    from seed.iters.chains import chains
+    from itertools import islice, chain
+    from seed.iters.FixedSizeTailTrapIterator import FixedSizeTailTrapIterator
+        #FixedSizeTailTrapIterator(maxlen4trap, iterable)
+        #   .eof
+        #   .len_trap
+        #   .trap2tuple_()
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+class BaseFingerTreeError(Exception):pass
+class EmptyError(BaseFingerTreeError):pass
+class BadOffsetError(BaseFingerTreeError):pass
+
+#.    ___no_slots_ok___ = True
+class IBaseOps4Auto6FingerTree(ABC):
+    __slots__ = ()
+    #########
+    @abstractmethod
+    def get_auto8null_(sf, /):
+        '-> auto'
+    @abstractmethod
+    def mk_auto5chain_two_(sf, lhs_auto, rhs_auto, /):
+        'auto -> auto -> auto #maybe noncommutable'
+    @abstractmethod
+    def mk_auto5data_(sf, data, /):
+        'data -> auto'
+    #########
+def mk_auto5chain_many_(sf, autos, /):
+    it = iter(autos)
+    for acc in it:
+        break
+    else:
+        acc = sf.get_auto8null_()
+    acc
+    for rhs_auto in it:
+        acc = sf.mk_auto5chain_two_(acc, rhs_auto)
+    auto = acc
+    return auto
+class IBasicOps4FingerTree(IBaseOps4Auto6FingerTree):
+    __slots__ = ()
+    #########
+    @abstractmethod
+    def _mk_node7leaf_(sf, auto, data, /):
+        'auto -> data -> leaf/node{depth==0}'
+    @abstractmethod
+    def _mk_node7nonleaf_(sf, depth, auto, _nodes, /):
+        'depth/uint{>0} -> auto -> [node{-1+depth}]{2<=len<=3} -> node{depth>0}'
+    @abstractmethod
+    def _mk_twigL_(sf, depth, auto, nodes, /):
+        'depth/uint -> auto -> [node{depth}]{1<=len<=3} -> twigL{depth}'
+    @abstractmethod
+    def _mk_twigR_(sf, depth, auto, nodes, /):
+        'depth/uint -> auto -> [node{depth}]{1<=len<=3} -> twigR{depth}'
+    @abstractmethod
+    def _mk_tree7fork_(sf, depth, auto, etree, /):
+        'depth/uint -> auto -> etree/(twigL{depth}, stem{depth}/finger_tree{1+depth}, twigR{depth}) -> fork{depth}/finger_tree{depth}'
+    @abstractmethod
+    def _mk_tree7cane_(sf, depth, auto, nodes, /):
+        'depth/uint -> auto -> [node{depth}]{0<=len<=3} -> cane{depth}/finger_tree{depth}'
+
+    #########
+    @abstractmethod
+    def is_fork_tree_(sf, depth, tree, /):
+        'depth/uint -> finger_tree{depth} -> bool/(cane_vs_fork)'
+    #########
+    @abstractmethod
+    def get_auto5node_(sf, depth, node, /):
+        'depth/uint -> node{depth} -> auto #(leaf|nonleaf)'
+    @abstractmethod
+    def get_auto5twigL_(sf, depth, twigL, /):
+        'depth/uint -> twigL{depth} -> auto'
+    @abstractmethod
+    def get_auto5twigR_(sf, depth, twigR, /):
+        'depth/uint -> twigR{depth} -> auto'
+    #.def get_auto5fork_(sf, depth, fork, /):
+    #.    'depth/uint -> fork{depth} -> auto'
+    #.def get_auto5cane_(sf, depth, cane, /):
+    #.    'depth/uint -> cane{depth} -> auto'
+    #########
+    @abstractmethod
+    def get_auto5tree_(sf, depth, tree, /):
+        'depth/uint -> finger_tree{depth} -> auto # (fork|cane)'
+        #.if sf.is_fork_tree_(depth, tree):
+        #.    fork = tree
+        #.    auto = sf.get_auto5fork_(depth, fork)
+        #.else:
+        #.    cane = tree
+        #.    auto = sf.get_auto5cane_(depth, cane)
+        #.auto
+        #.return auto
+
+    #########
+    @abstractmethod
+    def get_data5leaf_(sf, leaf, /):
+        'leaf -> data'
+    @abstractmethod
+    def get_nodes5nonleaf_(sf, depth, nonleaf, /):
+        'depth/uint{>0} -> nonleaf/node{depth} -> [node{-1+depth}]'
+    @abstractmethod
+    def get_nodes5cane_(sf, depth, cane, /):
+        'depth/uint -> cane{depth} -> [node{depth}]'
+    @abstractmethod
+    def get_nodes5twigL_(sf, depth, twigL, /):
+        'depth/uint -> twigL{depth} -> [node{depth}]'
+    @abstractmethod
+    def get_nodes5twigR_(sf, depth, twigR, /):
+        'depth/uint -> twigR{depth} -> [node{depth}]'
+    @abstractmethod
+    def get_etree5fork_(sf, depth, fork, /):
+        'depth/uint -> fork{depth} -> etree{depth}'
+    @abstractmethod
+    def get_stem5fork_(sf, depth, fork, /):
+        'depth/uint -> fork{depth} -> stem{depth}/finger_tree{1+depth}'
+    @abstractmethod
+    def get_twigL5fork_(sf, depth, fork, /):
+        'depth/uint -> fork{depth} -> twigL{depth}'
+    @abstractmethod
+    def get_twigR5fork_(sf, depth, fork, /):
+        'depth/uint -> fork{depth} -> twigR{depth}'
+    #########
+
+
+
+
+
+
+
+
+
+
+class IOps4FingerTree(IBasicOps4FingerTree):
+    __slots__ = ()
+    #########
+    def mk_empty_tree_(sf, depth, /):
+        'depth/uint  -> finger_tree{depth}{len==0}'
+        tree = cane = sf.mk_tree7cane_(depth, nodes:=lazy_null_tuple())
+        return tree
+    #########
+    def _mk_twigX_(sf, depth, auto, nodes, /, *, atL_vs_atR:bool):
+        'depth/uint -> auto -> [node{depth}]{1<=len<=3} -> twigX{depth,atL_vs_atR}'
+        f = sf._mk_twigL_ if not atL_vs_atR else sf._mk_twigR_
+        return f(depth, auto, nodes)
+    def get_auto5twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
+        'depth/uint -> twigX{depth,atL_vs_atR} -> auto'
+        f = sf.get_auto5twigL_ if not atL_vs_atR else sf.get_auto5twigR_
+        return f(depth, twigX)
+    def get_nodes5twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
+        'depth/uint -> twigX{depth,atL_vs_atR} -> [node{depth}]'
+        f = sf.get_nodes5twigL_ if not atL_vs_atR else sf.get_nodes5twigR_
+        return f(depth, twigX)
+    def get_twigX5fork_(sf, depth, fork, /, *, atL_vs_atR:bool):
+        'depth/uint -> fork{depth} -> twigX{depth,atL_vs_atR}'
+        f = sf.get_twigL5fork_ if not atL_vs_atR else sf.get_twigR5fork_
+        return f(depth, fork)
+    #########
+    def mk_auto5nodes_(sf, depth, nodes, /):
+        'depth/uint -> [node{depth}] -> auto'
+        return mk_auto5chain_many_(sf, (sf.get_auto5node_(depth, node) for node in nodes))
+    #########
+    def mk_node7leaf_(sf, data, /):
+        'data -> leaf/node{depth==0}'
+        auto = sf.mk_auto5data_(data)
+        leaf = sf._mk_node7leaf_(auto, data)
+        return leaf
+    def mk_node7nonleaf_(sf, depth, _nodes, /):
+        'depth/uint{>0} -> [node{-1+depth}]{2<=len<=3} -> node{depth>0}'
+        _nodes = mk_tuple(_nodes)
+        _depth = -1+depth
+        assert 2 <= len(_nodes) <= 3
+        auto = sf.mk_auto5nodes_(_depth, _nodes)
+        nonleaf = sf._mk_node7nonleaf_(depth, auto, _nodes)
+        return nonleaf
+    def mk_twigX_(sf, depth, nodes, /, *, atL_vs_atR:bool):
+        'depth/uint -> [node{depth}]{1<=len<=3} -> twigX{depth,atL_vs_atR}'
+        nodes = mk_tuple(nodes)
+        assert 1 <= len(nodes) <= 3
+        auto = sf.mk_auto5nodes_(depth, nodes)
+        twigX = sf._mk_twigX_(depth, auto, nodes, atL_vs_atR=atL_vs_atR)
+        return twigX
+    def mk_twigL_(sf, depth, nodes, /):
+        'depth/uint -> [node{depth}]{1<=len<=3} -> twigL{depth}'
+        return sf.mk_twigX_(depth, nodes, atL_vs_atR=False)
+    def mk_twigR_(sf, depth, nodes, /):
+        'depth/uint -> [node{depth}]{1<=len<=3} -> twigR{depth}'
+        return sf.mk_twigX_(depth, nodes, atL_vs_atR=True)
+    def mk_tree7fork_(sf, depth, etree, /):
+        'depth/uint -> etree/(twigL{depth}, stem{depth}/finger_tree{1+depth}, twigR{depth}) -> fork{depth}/finger_tree{depth}'
+        (twigL, stem, twigR) = etree = mk_tuple(etree)
+        autos = (
+        [sf.get_auto5twigL_(depth, twigL)
+        ,sf.get_auto5tree_(1+depth, stem)
+        ,sf.get_auto5twigR_(depth, twigR)
+        ])
+        auto = mk_auto5chain_many_(sf, autos)
+        fork = sf._mk_tree7fork_(depth, auto, etree)
+        return fork
+    def mk_tree7cane_(sf, depth, nodes, /):
+        'depth/uint -> [node{depth}]{0<=len<=3} -> cane{depth}/finger_tree{depth}'
+        nodes = mk_tuple(nodes)
+        assert 0 <= len(nodes) <= 3
+        auto = sf.mk_auto5nodes_(depth, nodes)
+        cane = sf._mk_tree7cane_(depth, auto, nodes)
+        return cane
+    #########
+    def iter_nodes5nonleaf_(sf, depth, nonleaf, /, *, reverse:bool):
+        'depth/uint -> nonleaf{depth} -> Iter node{-1+depth}'
+        assert depth > 0
+        nodes = sf.get_nodes5nonleaf_(depth, nonleaf)
+        return _iter_(reverse, nodes)
+    #########
+    def iter_nodes5cane_(sf, depth, cane, /, *, reverse:bool):
+        'depth/uint -> cane{depth} -> Iter node{depth}'
+        nodes = sf.get_nodes5cane_(depth, cane)
+        return _iter_(reverse, nodes)
+    def iter_nodes5twigL_(sf, depth, twigL, /, *, reverse:bool):
+        'depth/uint -> twigL{depth} -> Iter node{depth}'
+        nodes = sf.get_nodes5twigL_(depth, twigL)
+        return _iter_(reverse, nodes)
+    def iter_nodes5twigR_(sf, depth, twigR, /, *, reverse:bool):
+        'depth/uint -> twigR{depth} -> Iter node{depth}'
+        nodes = sf.get_nodes5twigR_(depth, twigR)
+        return _iter_(reverse, nodes)
+    #########
+    def iter_nodes5tree_(sf, depth, tree, /, *, reverse:bool):
+        'depth/uint -> finger_tree{depth} -> Iter node{depth}'
+        if sf.is_fork_tree_(depth, tree):
+            fork = tree
+            (twigL, stem, twigR) = sf.get_etree5fork_(depth, fork)
+            _depth = 1+depth
+            ls = (
+            [sf.iter_nodes5twigL_(depth, twigL, reverse=reverse)
+            ,chains(sf.iter_nodes5nonleaf_(_depth, nonleaf, reverse=reverse) for nonleaf in sf.iter_nodes5tree_(_depth, stem, reverse=reverse))
+            ,sf.iter_nodes5twigR_(depth, twigR, reverse=reverse)
+            ])
+            for it in _iter_(reverse, ls):
+                yield from it
+        else:
+            cane = tree
+            yield from sf.iter_nodes5cane_(depth, cane, reverse=reverse)
+        return
+    #########
+    def iter_leafs5node_(sf, depth, node, /, *, reverse:bool):
+        'depth/uint -> node{depth} -> Iter leaf'
+        if depth == 0:
+            leaf = node
+            yield leaf
+            return
+        nonleaf = node
+        _depth = -1+depth
+        for _node in sf.iter_nodes5nonleaf_(depth, nonleaf, reverse=reverse):
+            yield from sf.iter_leafs5node_(_depth, _node, reverse=reverse)
+    def iter_leafs5tree_(sf, depth, tree, /, *, reverse:bool):
+        'depth/uint -> finger_tree{depth} -> Iter leaf'
+        for node in sf.iter_nodes5tree_(depth, tree, reverse=reverse):
+            yield from sf.iter_leafs5node_(depth, node, reverse=reverse)
+    #########
+    def iter_datas5tree_(sf, depth, tree, /, *, reverse:bool):
+        'depth/uint -> finger_tree{depth} -> Iter data'
+        for leaf in sf.iter_leafs5tree_(depth, tree, reverse=reverse):
+            data = sf.get_data5leaf_(leaf)
+            yield data
+    #########
+    def mk_twigX7push_ex_(sf, depth, node, twigX, /, *, atL_vs_atR:bool):
+        'depth/uint -> node{depth} -> twigX{depth,atL_vs_atR} -> (twigX{depth,atL_vs_atR}, may nonleaf{1+depth})'
+        nodes = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+        nodes = _mk_nodes7push_(depth, node, nodes, atL_vs_atR=atL_vs_atR)
+        if len(nodes) == 4:
+            nodess = [nodes[:2], nodes[2:]]
+            if atL_vs_atR:
+                nodess.reverse()
+            [nodesX, nodesY] = nodess
+            twigX = sf.mk_twigX_(depth, nodesX, atL_vs_atR=atL_vs_atR)
+            nonleaf = sf.mk_node7nonleaf_(1+depth, nodesY)
+            may_nonleaf = nonleaf
+        else:
+            assert 1 <= len(nodes) <= 3
+            twigX = sf.mk_twigX_(depth, nodes, atL_vs_atR=atL_vs_atR)
+            may_nonleaf = None
+        return (twigX, may_nonleaf)
+    def mk_tree7push_(sf, depth, node, tree, /, *, atL_vs_atR:bool):
+        'depth/uint -> node{depth} -> finger_tree{depth} -> finger_tree{depth}'
+        if sf.is_fork_tree_(depth, tree):
+            fork = tree
+            #twigX = sf.get_twigX5fork_(depth, fork, atL_vs_atR=atL_vs_atR)
+            #.etree = sf.get_etree5fork_(depth, fork)
+            #.(twigX, stem, twigY) = _iter_(atL_vs_atR, etree)
+            (twigX, stem, twigY) = sf.get_etreeX5fork_(depth, fork, reverse=atL_vs_atR)
+            (twigX, may_nonleaf) = sf.mk_twigX7push_ex_(depth, node, twigX, atL_vs_atR=atL_vs_atR)
+            if not None is may_nonleaf:
+                nonleaf = may_nonleaf
+                stem = sf.mk_tree7push_(1+depth, nonleaf, stem, atL_vs_atR=atL_vs_atR)
+            stem
+            #.etree = mk_tuple(_iter_(atL_vs_atR, (twigX, stem, twigY)))
+            #.fork = sf.mk_tree7fork_(depth, etree)
+            fork = sf.mk_tree7forkX_(depth, (twigX, stem, twigY), reverse=atL_vs_atR)
+            tree = fork
+        else:
+            cane = tree
+            nodes = sf.get_nodes5cane_(depth, cane)
+            nodes = _mk_nodes7push_(depth, node, nodes, atL_vs_atR=atL_vs_atR)
+            if len(nodes) == 4:
+                twigL = sf.mk_twigL_(depth, nodes[:2])
+                twigR = sf.mk_twigR_(depth, nodes[2:])
+                stem = _tree = sf.mk_empty_tree_(1+depth)
+                etree = (twigL, stem, twigR)
+                fork = sf.mk_tree7fork_(depth, etree)
+                tree = fork
+            else:
+                assert 1 <= len(nodes) <= 3
+                cane = sf.mk_tree7cane_(depth, nodes)
+                tree = cane
+            tree
+        tree
+        return tree
+    def mk_tree7pushs_(sf, depth, nodes, tree, /, *, atL_vs_atR:bool, reverse:bool):
+        'depth/uint -> nodes/(Iter node{depth}) -> finger_tree{depth} -> finger_tree{depth} # reverse{nodes}'
+        # [:设计冫树构造算法]:goto
+        check_type_is(bool, atL_vs_atR)
+        check_type_is(bool, reverse)
+        ##################
+        #old-ver:using:_reversed():
+        ##################
+        #.if 0:
+        #.    if reverse is atL_vs_atR:
+        #.        nodes = _reversed(nodes)
+        #.        777;reverse = not reverse
+        #.    assert reverse is (not atL_vs_atR)
+        #.    for node in nodes:
+        #.        tree = sf.mk_tree7push_(depth, node, tree, atL_vs_atR=atL_vs_atR)
+        #.    return tree
+        ##################
+        tails = iter(nodes)
+        777;del nodes
+        heads = _take_le(4, tails)
+        if len(heads) < 4:
+            nodes = heads
+            if reverse is atL_vs_atR:
+                nodes = reversed(nodes)
+                777;reverse = not reverse
+            assert reverse is (not atL_vs_atR)
+            for node in nodes:
+                tree = sf.mk_tree7push_(depth, node, tree, atL_vs_atR=atL_vs_atR)
+            return tree
+        tails
+        (reverse, (heads, tails))
+
+        if not sf.is_fork_tree_(depth, tree):
+            cane = tree
+            nodes8cane = sf.iter_nodes5tree_(depth, cane, reverse=reverse)
+            nodes8in = chain(heads, tails)
+            ls = [nodes8cane, nodes8in]
+                #atR and not reverse
+                #atL and reverse
+                #<=> atL_vs_atR is not reverse
+            if reverse is atL_vs_atR:
+                ls.reverse()
+                # [ls := [nodes8in, nodes8cane]]
+                #atL and not reverse
+                #atR and reverse
+                #<=> atL_vs_atR is not reverse
+            nodes = chain(*ls)
+            tree = sf.mk_tree5nodes_(depth, nodes, reverse=reverse)
+        else:
+            fork = tree
+            (twigX, stem, twigY) = sf.get_etreeX5fork_(depth, fork, reverse=atL_vs_atR)
+            twigX#focus:twigX not twigY
+            # nodes{reverse?}++twigX++stem++twigY
+            nodesX = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+            args_as_nodes8in = (reverse, (heads, tails))
+            args_as_fork = (atL_vs_atR, (nodesX, stem, twigY))
+            tree = _mk_tree7half_fork_pushs7sz_ge_4_(sf, depth, args_as_nodes8in, args_as_fork)
+        return tree
+        ##################
+    #########
+    def mk_tree5nodes_(sf, depth, nodes, /, *, reverse:bool):
+        'depth/uint -> nodes/(Iter node{depth}) -> finger_tree{depth} # reverse{nodes}'
+        check_type_is(bool, reverse)
+        ##################
+        #.if 0:
+        #.    tree = sf.mk_empty_tree_(depth)
+        #.    tree = sf.mk_tree7pushs_(depth, nodes, tree, atL_vs_atR=not reverse, reverse=reverse)
+        #.    return tree
+        ##################
+        # [:设计冫树构造算法]:goto
+        tails = iter(nodes)
+        777;del nodes
+        heads = _take_le(6, tails)
+        if len(heads) < 6:
+            nodes = heads
+            if reverse:
+                nodes = nodes[::-1]
+                777;reverse = not reverse
+            assert not reverse
+            if len(heads) < 4:
+                #cane
+                tree = cane = sf.mk_tree7cane_(depth, nodes)
+            else:
+                #hollow_fork:2+(2|3)
+                nodesL, nodesR = nodes[:2], nodes[2:]
+                twigL = sf.mk_twigL_(depth, nodesL)
+                twigR = sf.mk_twigR_(depth, nodesR)
+                empty_stem = sf.mk_empty_tree_(1+depth)
+                etree = (twigL, empty_stem, twigR)
+                tree = hollow_fork = sf.mk_tree7fork_(depth, etree)
+            tree
+            return tree
+        tails
+        (reverse, (heads, tails))
+        assert len(heads) >= 6
+
+        atL_vs_atR = not reverse
+        rv_nodesY = heads[:2]
+        heads = heads[2:]
+        (reverse, (rv_nodesY, heads, tails))
+        assert len(heads) >= 4
+
+        nodesY = rv_nodesY[::-1] if reverse else rv_nodesY
+        twigY = sf.mk_twigY_(depth, nodesY, atL_vs_atR=atL_vs_atR)
+        empty_stem = sf.mk_empty_tree_(1+depth)
+        empty_nodesX = ()
+
+        args_as_nodes8in = (reverse, (heads, tails))
+        args_as_fork = (atL_vs_atR, (empty_nodesX, empty_stem, twigY))
+        tree = _mk_tree7half_fork_pushs7sz_ge_4_(sf, depth, args_as_nodes8in, args_as_fork)
+        return tree
+
+    def mk_tree5leafs_(sf, leafs, /, *, reverse:bool):
+        'leafs/(Iter leaf) -> finger_tree{depth==0} # reverse{leafs}'
+        return sf.mk_tree5nodes_(depth:=0, leafs, reverse=reverse)
+    def mk_tree5datas_(sf, datas, /, *, reverse:bool):
+        'datas/(Iter data) -> finger_tree{depth==0} # reverse{datas}'
+        leafs = map(sf.mk_node7leaf_, datas)
+        return sf.mk_tree5leafs_(leafs, reverse=reverse)
+    #########
+    def mk_tree7chainLMR_(sf, depth, treeL, nodesM, treeR, /):
+        'depth/uint -> finger_tree{depth} -> nodes/(Iter node{depth}) -> finger_tree{depth} -> finger_tree{depth}'
+        # [:设计冫树构造算法]:goto
+        if not sf.is_fork_tree_(depth, treeR):
+            caneR = treeR
+            nodes = chain(nodesM, sf.iter_nodes5tree_(depth, caneR, reverse=False))
+            tree = sf.mk_tree7pushs_(depth, nodes, treeL, atL_vs_atR=True, reverse=False)
+        elif not sf.is_fork_tree_(depth, treeL):
+            caneL = treeL
+            #new-ver:avoid:_reversed():
+            nodes = chain(sf.iter_nodes5tree_(depth, caneL, reverse=False), nodesM)
+            tree = sf.mk_tree7pushs_(depth, nodes, treeR, atL_vs_atR=False, reverse=False)
+
+            #old-ver:using:_reversed():
+            #.nodes = chain(_reversed(nodesM), sf.iter_nodes5tree_(depth, caneL, reverse=True))
+            #.tree = sf.mk_tree7pushs_(depth, nodes, treeR, atL_vs_atR=False, reverse=True)
+        else:
+            forkL = treeL
+            forkR = treeR
+            (twigL, stemL, twigR6L) = sf.get_etree5fork_(depth, forkL)
+            (twigL6R, stemR, twigR) = sf.get_etree5fork_(depth, forkR)
+            _nodesM = _merge_nodes5LMR(sf, depth, twigR6L, nodesM, twigL6R)
+            stem = sf.mk_tree7chainLMR_(1+depth, stemL, _nodesM, stemR)
+            etree = (twigL, stem, twigR)
+            fork = sf.mk_tree7fork_(depth, etree)
+            tree = fork
+        return tree
+    #########
+    #########
+    #########
+    def is_empty_tree_(sf, depth, tree, /):
+        'depth/uint -> finger_tree{depth} -> bool'
+        if sf.is_fork_tree_(depth, tree):
+            fork = tree
+            return False
+        else:
+            cane = tree
+            nodes = sf.get_nodes5cane_(depth, cane)
+            return len(nodes) == 0
+    #########
+    def mk_twigX7pop_ex_(sf, depth, twigX, stem, /, *, atL_vs_atR:bool):
+        'depth/uint -> twigX{depth,atL_vs_atR} -> stem{depth} -> (node{depth}, twigX{depth,atL_vs_atR}, stem{depth}) | ^EmptyError'
+        nodesX = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+        if len(nodesX) == 1:
+            [nodeX] = nodesX
+            (nonleafX, stem) = sf.mk_tree7pop_(1+depth, stem, atL_vs_atR=atL_vs_atR)
+                # ^EmptyError
+            _nodesX = sf.get_nodes5nonleaf_(1+depth, nonleafX)
+        else:
+            assert len(nodesX) >= 2
+            (nodeX, _nodesX) = _mk_nodes7pop_(depth, nodesX, atL_vs_atR=atL_vs_atR)
+        nodeX, _nodesX, stem
+        twigX = sf.mk_twigX_(depth, _nodesX, atL_vs_atR=atL_vs_atR)
+        return (nodeX, twigX, stem)
+
+    def mk_tree7pop_(sf, depth, tree, /, *, atL_vs_atR:bool):
+        'depth/uint -> finger_tree{depth} -> (node{depth}, finger_tree{depth}) | ^EmptyError'
+        if sf.is_empty_tree_(depth, tree):
+            raise EmptyError
+        if sf.is_fork_tree_(depth, tree):
+            fork = tree
+            #.etree = sf.get_etree5fork_(depth, fork)
+            #.(twigX, stem, twigY) = _iter_(atL_vs_atR, etree)
+            (twigX, stem, twigY) = sf.get_etreeX5fork_(depth, fork, reverse=atL_vs_atR)
+            try:
+                (nodeX, twigX, stem) = sf.mk_twigX7pop_ex_(depth, twigX, stem, atL_vs_atR=atL_vs_atR)
+            except EmptyError:
+                # [stem empty]
+                # [len(twigX.nodes) == 1]
+                assert sf.is_empty_tree_(1+depth, stem)
+                nodesX = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+                assert len(nodesX) == 1
+                [nodeX] = nodesX
+                nodesY = sf.get_nodes5twigY_(depth, twigY, atL_vs_atR=atL_vs_atR)
+                _cane = sf.mk_tree7cane_(depth, nodesY)
+                _tree = _cane
+            else:
+                nodeX
+                #._etree = mk_tuple(_iter_(atL_vs_atR, (twigX, stem, twigY)))
+                #._fork = sf.mk_tree7fork_(depth, _etree)
+                _fork = sf.mk_tree7forkX_(depth, (twigX, stem, twigY), reverse=atL_vs_atR)
+                _tree = _fork
+            (nodeX, _tree)
+        else:
+            cane = tree
+            nodes = sf.get_nodes5cane_(depth, cane)
+            (nodeX, _nodes) = _mk_nodes7pop_(depth, nodes, atL_vs_atR=atL_vs_atR)
+            _cane = sf.mk_tree7cane_(depth, _nodes)
+            _tree = _cane
+        (nodeX, _tree)
+        return (nodeX, _tree)
+    #########
+    def mk_tree7pops_(sf, depth, num_pops, tree, /, *, atL_vs_atR:bool, reverse:bool):
+        'depth/uint -> finger_tree{depth} -> (node{depth}, finger_tree{depth}) | ^EmptyError # reverse{nodes}'
+        #vs:mk_tree7pushs_
+        check_int_ge(0, num_pops)
+        check_type_is(bool, atL_vs_atR)
+        check_type_is(bool, reverse)
+        nodes = []
+        for _ in range(num_pops):
+            (nodeX, tree) = sf.mk_tree7pop_(depth, tree, atL_vs_atR=atL_vs_atR)
+            nodes.append(nodeX)
+        if not reverse is atL_vs_atR:
+            nodes.reverse()
+            777;reverse = not reverse
+        assert reverse is atL_vs_atR
+        return (mk_tuple(nodes), tree)
+    #########
+    #########
+    def split_tree__max_treeR_(sf, depth, auto2whether_treeR_, tree, /, *, known_begin_ok:bool, known_end_not_ok:bool):
+        'depth/uint -> auto2whether_treeR_/(auto -> bool) -> finger_tree{depth} -> (treeR, autoM, treeL)/(finger_tree{depth}, finger_tree{depth}) | ^BadOffsetError # [tree == (treeL++treeR)][autoM == (treeR.auto)][auto2whether_treeR_(autoM) is True][treeR as long as possible]'
+        return sf.split_tree__max_treeR__offset_(depth, sf.get_auto8null_(), auto2whether_treeR_, tree, known_begin_ok=known_begin_ok, known_end_not_ok=known_end_not_ok)
+    def split_tree__max_treeR__offset_(sf, depth, auto8offset, auto2whether_treeR_, tree, /, *, known_begin_ok:bool, known_end_not_ok:bool):
+        'depth/uint -> auto8offset/auto -> auto2whether_treeR_/(auto -> bool) -> finger_tree{depth} -> (treeR, autoM, treeL)/(finger_tree{depth}, finger_tree{depth}) | ^BadOffsetError # [tree == (treeL++treeR)][autoM == (treeR.auto<++>auto8offset)][auto2whether_treeR_(autoM) is True][treeR as long as possible]'
+        return sf.split_tree__max_treeX__offset_(depth, auto8offset, auto2whether_treeR_, tree, known_begin_ok=known_begin_ok, known_end_not_ok=known_end_not_ok, atL_vs_atR=True)
+    #########
+    def split_tree__max_treeL_(sf, depth, auto2whether_treeL_, tree, /, *, known_begin_ok:bool, known_end_not_ok:bool):
+        'depth/uint -> auto2whether_treeL_/(auto -> bool) -> finger_tree{depth} -> (treeL, autoM, treeR)/(finger_tree{depth}, finger_tree{depth}) | ^BadOffsetError # [tree == (treeL++treeR)][autoM == (treeL.auto)][auto2whether_treeL_(autoM) is True][treeL as long as possible]'
+        return sf.split_tree__max_treeL__offset_(depth, sf.get_auto8null_(), auto2whether_treeL_, tree, known_begin_ok=known_begin_ok, known_end_not_ok=known_end_not_ok)
+    def split_tree__max_treeL__offset_(sf, depth, auto8offset, auto2whether_treeL_, tree, /, *, known_begin_ok:bool, known_end_not_ok:bool):
+        'depth/uint -> auto8offset/auto -> auto2whether_treeL_/(auto -> bool) -> finger_tree{depth} -> (treeL, autoM, treeR)/(finger_tree{depth}, finger_tree{depth}) | ^BadOffsetError # [tree == (treeL++treeR)][autoM == (auto8offset<++>treeL.auto)][auto2whether_treeL_(autoM) is True][treeL as long as possible]'
+        return sf.split_tree__max_treeX__offset_(depth, auto8offset, auto2whether_treeL_, tree, known_begin_ok=known_begin_ok, known_end_not_ok=known_end_not_ok, atL_vs_atR=False)
+        r'''[[[
+        #.#########
+        #.if not known_begin_ok:
+        #.    if not auto2whether_treeL_(auto8offset):
+        #.        raise BadOffsetError
+        #.    known_begin_ok = True
+        #.#########
+        #.if not known_end_not_ok:
+        #.    auto7end = sf.mk_auto5chain_two_(auto8offset, sf.get_auto5tree_(depth, tree))
+        #.    if auto2whether_treeL_(auto7end):
+        #.        treeL = tree
+        #.        autoM = auto7end
+        #.        treeR = sf.mk_empty_tree_(depth)
+        #.        return (treeL, autoM, treeR)
+        #.    known_end_not_ok = True
+        #.#########
+        #.assert known_begin_ok
+        #.assert known_end_not_ok
+        #.#########
+        #.if sf.is_fork_tree_(depth, tree):
+        #.    fork = tree
+        #.    (twigL, stem, twigR) = sf.get_etree5fork_(depth, fork)
+        #.    if not auto2whether_treeL_(autoL:=sf.mk_auto5chain_two_(auto8offset, sf.get_auto5twigL_(depth, twigL))):
+        #.        #into:twigL
+        #.        nodesLL = sf.get_nodes5twigL_(depth, twigL)
+        #.        (nodesL, autoM, _nodesR) = _split_nodes__max_treeL__offset_(sf, depth, auto8offset, auto2whether_treeL_, nodesLL)
+        #.        treeL = sf.mk_tree7cane_(depth, nodesL)
+        #.        _, treeR = sf.mk_tree7pops_(depth, num_pops:=len(nodesL), tree, atL_vs_atR=False, reverse=False)
+        #.    elif auto2whether_treeL_(autoR:=sf.mk_auto5chain_two_(autoL, sf.get_auto5tree_(1+depth, stem))):
+        #.        #into:twigR
+        #.        nodesRR = sf.get_nodes5twigR_(depth, twigR)
+        #.        (_nodesL, autoM, nodesR) = _split_nodes__max_treeL__offset_(sf, depth, autoR, auto2whether_treeL_, nodesRR)
+        #.        treeR = sf.mk_tree7cane_(depth, nodesR)
+        #.        _, treeL = sf.mk_tree7pops_(depth, num_pops:=len(nodesR), tree, atL_vs_atR=True, reverse=True)
+        #.    else:
+        #.        #into:stem
+        #.        (stemL, autoM_, _stemR) = sf.split_tree__max_treeL__offset_(1+depth, autoL, auto2whether_treeL_, stem, known_begin_ok=True, known_end_not_ok=True)
+        #.        # [stemL maybe empty]
+        #.        # [_stemR not empty]
+        #.        (nonleafL6R, stemR) = sf.mk_tree7pop_(1+depth, _stemR, atL_vs_atR=False)
+        #.        nodes = sf.get_nodes5nonleaf_(1+depth, nonleafL6R)
+        #.        (_nodesL, autoM, _nodesR) = _split_nodes__max_treeL__offset_(sf, depth, autoM_, auto2whether_treeL_, nodes)
+        #.        autoM
+        #.        # [_nodesL maybe empty]
+        #.        # [_nodesR not empty]
+        #.        if not _nodesR:raise 000
+        #.        if not _nodesL:
+        #.            #tmp_node = sf.iter_nodes5tree_(depth, tree, reverse=False)
+        #.            tmp_node = _nodesR[0]
+        #.            tmp_twigR6L = sf.mk_twigR_(depth, [tmp_node])
+        #.            _treeL = sf.mk_tree7fork_(depth, (twigL, stemL, tmp_twigR6L))
+        #.            _, treeL = sf.mk_tree7pop_(depth, _treeL, atL_vs_atR=True)
+        #.        else:
+        #.            twigR6L = sf.mk_twigR_(depth, _nodesL)
+        #.            treeL = sf.mk_tree7fork_(depth, (twigL, stemL, twigR6L))
+        #.        treeL
+        #.        twigL6R = sf.mk_twigL_(depth, _nodesR)
+        #.        treeR = sf.mk_tree7fork_(depth, (twigL6R, stemR, twigR))
+        #.    (treeL, autoM, treeR)
+        #.else:
+        #.    cane = tree
+        #.    nodes = sf.get_nodes5cane_(depth, cane)
+        #.    (nodesL, autoM, nodesR) = _split_nodes__max_treeL__offset_(sf, depth, auto8offset, auto2whether_treeL_, nodes)
+        #.    treeL = sf.mk_tree7cane_(depth, nodesL)
+        #.    treeR = sf.mk_tree7cane_(depth, nodesR)
+        #.return (treeL, autoM, treeR)
+        #.#########
+
+        #]]]'''#'''
+
+    #########
+    def split_tree__max_treeX_(sf, depth, auto2whether_treeX_, tree, /, *, atL_vs_atR:bool, known_begin_ok:bool, known_end_not_ok:bool):
+        'depth/uint -> auto2whether_treeX_/(auto -> bool) -> finger_tree{depth} -> (treeX, autoM, treeY)/(finger_tree{depth}, finger_tree{depth}) | ^BadOffsetError # [tree == (treeX++treeY if not atL_vs_atR else treeY++treeX)][autoM == treeX.auto][auto2whether_treeX_(autoM) is True][treeX as long as possible]'
+        return sf.split_tree__max_treeX__offset_(depth, sf.get_auto8null_(), auto2whether_treeX_, tree, known_begin_ok=known_begin_ok, known_end_not_ok=known_end_not_ok, atL_vs_atR=atL_vs_atR)
+
+    def get_etreeX5fork_(sf, depth, fork, /, *, reverse:bool):
+        'depth/uint -> fork{depth} -> etreeX{depth,reverse}'
+        etree = sf.get_etree5fork_(depth, fork)
+        etreeX = etree if not reverse else etree[::-1]
+        return etreeX
+    def mk_tree7forkX_(sf, depth, etreeX, /, *, reverse:bool):
+        'depth/uint -> etreeX{depth,reverse} -> fork{depth}'
+        #etreeX = (twigX, stemX, twigY6X)
+        etree = (etreeX if not reverse else etreeX[::-1])
+        tree7fork = sf.mk_tree7fork_(depth, etree)
+        return tree7fork
+    def mk_twigY_(sf, depth, nodes, /, *, atL_vs_atR:bool):
+        'depth/uint -> [node{depth}]{1<=len<=3} -> twigY{depth,atL_vs_atR}/twigX{depth,not atL_vs_atR}'
+        return sf.mk_twigX_(depth, nodes, atL_vs_atR=not atL_vs_atR)
+    def get_nodes5twigY_(sf, depth, twigY, /, *, atL_vs_atR:bool):
+        'depth/uint -> twigY{depth,atL_vs_atR}/twigX{depth,not atL_vs_atR} -> [node{depth}]'
+        return sf.get_nodes5twigX_(depth, twigY, atL_vs_atR=not atL_vs_atR)
+    def mk_auto5chain_twoX_(sf, autoX, autoY, /, *, reverse:bool):
+        if reverse:
+            (autoX, autoY) = (autoY, autoX)
+        return sf.mk_auto5chain_two_(autoX, autoY)
+        #.(autoL, autoR) = (autoY, autoX) if reverse else (autoX, autoY)
+        #.return sf.mk_auto5chain_two_(autoL, autoR)
+    def split_tree__max_treeX__offset_(sf, depth, auto8offset, auto2whether_treeX_, tree, /, *, atL_vs_atR:bool, known_begin_ok:bool, known_end_not_ok:bool):
+        'depth/uint -> auto8offset/auto -> auto2whether_treeX_/(auto -> bool) -> finger_tree{depth} -> (treeX, autoM, treeY)/(finger_tree{depth}, finger_tree{depth}) | ^BadOffsetError # [tree == (treeX++treeY if not atL_vs_atR else treeY++treeX)][autoM == (auto8offset<++>treeX.auto if not atL_vs_atR else treeX.auto<++>auto8offset)][auto2whether_treeX_(autoM) is True][treeX as long as possible]'
+        #########
+        if not known_begin_ok:
+            if not auto2whether_treeX_(auto8offset):
+                raise BadOffsetError
+            known_begin_ok = True
+        #########
+        if not known_end_not_ok:
+            auto7end = sf.mk_auto5chain_twoX_(auto8offset, sf.get_auto5tree_(depth, tree), reverse=atL_vs_atR)
+            if auto2whether_treeX_(auto7end):
+                treeX = tree
+                autoM = auto7end
+                treeY = sf.mk_empty_tree_(depth)
+                return (treeX, autoM, treeY)
+            known_end_not_ok = True
+        #########
+        assert known_begin_ok
+        assert known_end_not_ok
+        del known_begin_ok
+        del known_end_not_ok
+        #########
+        if sf.is_fork_tree_(depth, tree):
+            fork = tree
+            #.(twigX, stem, twigY) = _iter_(atL_vs_atR, sf.get_etree5fork_(depth, fork))
+            (twigX, stem, twigY) = sf.get_etreeX5fork_(depth, fork, reverse=atL_vs_atR)
+            if not auto2whether_treeX_(autoX:=sf.mk_auto5chain_twoX_(auto8offset, sf.get_auto5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR), reverse=atL_vs_atR)):
+                #into:twigX
+                nodesXX = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+                (nodesX, autoM, _nodesY) = _split_nodes__max_treeX__offset_(sf, depth, auto8offset, auto2whether_treeX_, nodesXX, atL_vs_atR=atL_vs_atR)
+                treeX = sf.mk_tree7cane_(depth, nodesX)
+                _, treeY = sf.mk_tree7pops_(depth, num_pops:=len(nodesX), tree, atL_vs_atR=atL_vs_atR, reverse=atL_vs_atR)
+            elif auto2whether_treeX_(autoY:=sf.mk_auto5chain_twoX_(autoX, sf.get_auto5tree_(1+depth, stem), reverse=atL_vs_atR)):
+                #into:twigY
+                nodesYY = sf.get_nodes5twigY_(depth, twigY, atL_vs_atR=atL_vs_atR)
+                (_nodesX, autoM, nodesY) = _split_nodes__max_treeX__offset_(sf, depth, autoY, auto2whether_treeX_, nodesYY, atL_vs_atR=atL_vs_atR)
+                treeY = sf.mk_tree7cane_(depth, nodesY)
+                _, treeX = sf.mk_tree7pops_(depth, num_pops:=len(nodesY), tree, atL_vs_atR=not atL_vs_atR, reverse=not atL_vs_atR)
+            else:
+                #into:stem
+                (stemX, autoM_, _stemY) = sf.split_tree__max_treeX__offset_(1+depth, autoX, auto2whether_treeX_, stem, known_begin_ok=True, known_end_not_ok=True, atL_vs_atR=atL_vs_atR)
+                # [stemX maybe empty]
+                # [_stemY not empty]
+                (nonleafX6Y, stemY) = sf.mk_tree7pop_(1+depth, _stemY, atL_vs_atR=atL_vs_atR)
+                nodes = sf.get_nodes5nonleaf_(1+depth, nonleafX6Y)
+                (_nodesX, autoM, _nodesY) = _split_nodes__max_treeX__offset_(sf, depth, autoM_, auto2whether_treeX_, nodes, atL_vs_atR=atL_vs_atR)
+                autoM
+                # [_nodesX maybe empty]
+                # [_nodesY not empty]
+                if not _nodesY:raise 000
+                #######
+                #_nodesX -> treeX
+                #######
+                if not _nodesX:
+                    #tmp_node = sf.iter_nodes5tree_(depth, tree, reverse=False)
+                    tmp_node = _nodesY[0]
+                    tmp_twigY6X = sf.mk_twigY_(depth, [tmp_node], atL_vs_atR=atL_vs_atR)
+                    _treeX = sf.mk_tree7forkX_(depth, (twigX, stemX, tmp_twigY6X), reverse=atL_vs_atR)
+                    _, treeX = sf.mk_tree7pop_(depth, _treeX, atL_vs_atR=not atL_vs_atR)
+                else:
+                    twigY6X = sf.mk_twigY_(depth, _nodesX, atL_vs_atR=atL_vs_atR)
+                    treeX = sf.mk_tree7forkX_(depth, (twigX, stemX, twigY6X), reverse=atL_vs_atR)
+                treeX
+                #######
+                #_nodesY -> treeY
+                #######
+                _nodesY
+                twigX6Y = sf.mk_twigX_(depth, _nodesY, atL_vs_atR=atL_vs_atR)
+                treeY = sf.mk_tree7forkX_(depth, (twigX6Y, stemY, twigY), reverse=atL_vs_atR)
+                #######
+            (treeX, autoM, treeY)
+        else:
+            cane = tree
+            nodes = sf.get_nodes5cane_(depth, cane)
+            (nodesX, autoM, nodesY) = _split_nodes__max_treeX__offset_(sf, depth, auto8offset, auto2whether_treeX_, nodes, atL_vs_atR=atL_vs_atR)
+            treeX = sf.mk_tree7cane_(depth, nodesX)
+            treeY = sf.mk_tree7cane_(depth, nodesY)
+        return (treeX, autoM, treeY)
+        #########
+
+    #def split_tree_at_(sf, depth, path, tree, /):
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    #########
+    r'''[[[
+        if sf.is_fork_tree_(depth, tree):
+            fork = tree
+        else:
+            cane = tree
+    #]]]'''#'''
+
+def _take_le(sz, it, /):
+    assert iter(it) is it
+    return tuple(islice(it, 0, sz))
+def _take2(it, /):
+    return tuple(islice(it, 0, 2))
+def _merge_nodes5LMR(sf, depth, twigR6L, nodesM, twigL6R, /):
+    it = nodes = chain(*''
+        ,sf.iter_nodes5twigR_(depth, twigR6L, reverse=False)
+        ,iter(nodesM)
+        ,sf.iter_nodes5twigL_(depth, twigL6R, reverse=False)
+        )
+    return _merge_nodes7sink7sz_ge_2(sf, depth, it, reverse=False)
+def _merge_nodes7sink7sz_ge_2(sf, depth, nodes7sz_ge_2, /, *, reverse:bool):
+    '[len(nodes7sz_ge_2) >= 2]'
+    it = iter(nodes7sz_ge_2)
+    _depth = 1+depth
+    def f(*nodes):
+        return sf.mk_node7nonleaf_(_depth, nodes)
+    if reverse:
+        g = f
+        def f(*nodes):
+            return g(*reversed(nodes))
+    (a, b) = _take2(it)
+        # !! [len(nodes7sz_ge_2) >= 2]
+    while 1:
+        ls = _take2(it)
+        if len(ls) < 2:
+            yield f(a, b, *ls)
+            break
+        yield f(a, b)
+        (a, b) = ls
+    return
+def _iter_(reverse, ls, /):
+    f = iter if not reverse else reversed
+    return f(ls)
+#.def _reversed(it, /):
+#.    try:
+#.        return reversed(it)
+#.    except TypeError:
+#.        pass
+#.    return reversed([*it])
+def _mk_nodes7pop_(depth, nodes, /, *, atL_vs_atR:bool):
+    if len(nodes) == 0:
+        raise EmptyError
+    nodeX = nodes[0] if not atL_vs_atR else nodes[-1]
+    _nodes = nodes[1:] if not atL_vs_atR else nodes[:-1]
+    return (nodeX, _nodes)
+def _mk_nodes7push_(depth, node, nodes, /, *, atL_vs_atR:bool):
+    nodes = (node, *nodes) if not atL_vs_atR else (*nodes, node)
+    return nodes
+
+
+def _split_nodes__max_treeL__offset_(sf, depth, auto8offset, auto2whether_treeL_, nodes, /):
+    '[known_begin_ok][known_end_not_ok] => ... -> (nodesL, autoM, nodesR)'
+    return _split_nodes__max_treeX__offset_(sf, depth, auto8offset, auto2whether_treeL_, nodes, atL_vs_atR=False)
+    r'''[[[
+    #.#assert known_begin_ok
+    #.#assert known_end_not_ok
+    #.assert len(nodes) >= 1
+    #.    # !! [known_begin_ok][known_end_not_ok]
+
+    #.assert len(nodes) <= 3
+    #.    # !! nonleaf.nodes
+    #.    # !! twigX.nodes
+    #.    # !! cane.nodes
+    #.auto7acc = auto8offset
+    #.for j, node in enumerate(nodes[:-1]):
+    #.    autoM = auto7acc
+    #.    auto7acc = sf.mk_auto5chain_two_(auto7acc, sf.get_auto5node_(depth, node))
+    #.    if not auto2whether_treeL_(auto7acc):
+    #.        break
+    #.else:
+    #.    j = -1+len(nodes)
+    #.    autoM = auto7acc
+    #.j
+    #.(nodesL, nodesR) = nodes[:j], nodes[j:]
+    #.return (nodesL, autoM, nodesR)
+
+    #]]]'''#'''
+def _split_nodes__max_treeX__offset_(sf, depth, auto8offset, auto2whether_treeX_, nodes, /, *, atL_vs_atR:bool):
+    '[known_begin_ok][known_end_not_ok] => ... -> (nodesX, autoM, nodesY)'
+    #assert known_begin_ok
+    #assert known_end_not_ok
+    assert len(nodes) >= 1
+        # !! [known_begin_ok][known_end_not_ok]
+
+    assert len(nodes) <= 3
+        # !! nonleaf.nodes
+        # !! twigX.nodes
+        # !! cane.nodes
+    auto7acc = auto8offset
+    for j, node in enumerate(nodes[:-1] if not atL_vs_atR else reversed(nodes[1::])):
+        autoM = auto7acc
+        auto7acc = sf.mk_auto5chain_twoX_(auto7acc, sf.get_auto5node_(depth, node), reverse=atL_vs_atR)
+        if not auto2whether_treeX_(auto7acc):
+            break
+    else:
+        j = -1+len(nodes)
+        autoM = auto7acc
+    j
+    if atL_vs_atR:
+        j = len(nodes) -j
+    j
+    (nodesX, nodesY) = nodes[:j], nodes[j:]
+    if atL_vs_atR:
+        (nodesX, nodesY) = (nodesY, nodesX)
+    return (nodesX, autoM, nodesY)
+
+
+
+
+def _mk_tree7half_fork_pushs7sz_ge_4_(sf, depth, args_as_nodes8in, args_as_fork, /):
+    # [:设计冫树构造算法]:goto
+    (reverse, (heads, tails)) = args_as_nodes8in
+    (atL_vs_atR, (nodesX, stem, twigY)) = args_as_fork
+    assert len(heads) >= 4
+        #but required only:
+    assert len(heads)+len(nodesX) >= 4
+        # MAYBE:[len(nodesX) == 0]
+        #   see:empty_nodesX@mk_tree5nodes_
+    assert 0 <= len(nodesX) <= 3
+    r'''[[[
+    if reverse is atL_vs_atR:
+        if not reverse:
+            #atL
+            #heads++tails++nodesX++stem++twigY
+        else:
+            #atR
+            #twigY++stem++nodesX++~tails++~heads
+    else:
+        #std/expected:
+        if not reverse:
+            #atR
+            #twigY++stem++nodesX++heads++tails
+        else:
+            #atL
+            #~tails++~heads++nodesX++stem++twigY
+    #]]]'''#'''
+    rv_nodesX = _iter_(reverse, nodesX)
+
+    if reverse is atL_vs_atR:
+        rv_nodesXX = chain(heads, tails, rv_nodesX)
+    else:
+        rv_nodesXX = chain(rv_nodesX, heads, tails)
+    rv_nodesXX#rv_nodesXX{reverse}
+    777;del nodesX, heads, tails
+    ##################common:
+    # (atL_vs_atR, ((reverse, rv_nodesXX), stem, twigY))
+    ##################
+
+
+
+    ##################ver2-iter:
+    # (atL_vs_atR, ((reverse, rv_nodesXX), stem, twigY))
+    ############
+    if reverse is atL_vs_atR:
+        new_nodesX = _take_le(2, rv_nodesXX)
+        if reverse:
+            new_nodesX = new_nodesX[::-1]
+    else:
+        rv_nodesXX = FixedSizeTailTrapIterator(2, rv_nodesXX)
+    rv_nodesXX
+    rv_nodesXXXX = _sink7iter7sz_ge_2(sf, depth, rv_nodesXX, reverse=reverse)
+
+    new_stem = sf.mk_tree7pushs_(1+depth, rv_nodesXXXX, stem, atL_vs_atR=atL_vs_atR, reverse=reverse)
+    # (atL_vs_atR, ((new_nodesX|FixedSizeTailTrapIterator), new_stem, twigY))
+    if reverse is atL_vs_atR:
+        new_nodesX
+    else:
+        rv_nodesXX
+        assert rv_nodesXX.eof
+        new_nodesX = rv_nodesXX.trap2tuple_()
+        if reverse:
+            new_nodesX = new_nodesX[::-1]
+    new_nodesX
+    # (atL_vs_atR, (new_nodesX, new_stem, twigY))
+
+    new_twigX = sf.mk_twigX_(depth, new_nodesX, atL_vs_atR=atL_vs_atR)
+    # (atL_vs_atR, (new_twigX, new_stem, twigY))
+    tree = fork = sf.mk_tree7forkX_(depth, (new_twigX, new_stem, twigY), reverse=atL_vs_atR)
+    return tree
+
+
+    ##################ver1-seq:
+    # (atL_vs_atR, ((reverse, rv_nodesXX), stem, twigY))
+    ############
+    #.rv_nodesXX = [*rv_nodesXX]
+    #.if reverse is atL_vs_atR:
+    #.    rv_nodesXX.reverse()
+    #.    777;reverse = not reverse
+    #.assert reverse is (not atL_vs_atR)
+    #.assert len(rv_nodesXX) >= 4
+    #.new_nodesX = rv_nodesXX[-2:]
+    #.if reverse:new_nodesX.reverse()
+    #.777;del rv_nodesXX[-2:]
+
+    #.assert len(rv_nodesXX) >= 2
+    #.rv_nodesXXXX = _sink7seq7sz_ge_2(sf, depth, rv_nodesXX, reverse=reverse)
+
+    #.new_twigX = sf.mk_twigX_(depth, new_nodesX, atL_vs_atR=atL_vs_atR)
+    #.# (atL_vs_atR, (new_twigX, ((reverse, rv_nodesXXXX), stem), twigY))
+    #.new_stem = sf.mk_tree7pushs_(1+depth, rv_nodesXXXX, stem, atL_vs_atR=atL_vs_atR, reverse=reverse)
+    #.# (atL_vs_atR, (new_twigX, new_stem, twigY))
+    #.tree = fork = sf.mk_tree7forkX_(depth, (new_twigX, new_stem, twigY), reverse=atL_vs_atR)
+    #.return tree
+
+def _sink7seq7sz_ge_2(sf, depth, node_seq7sz_ge_2, /, *, reverse:bool):
+    '-> Iter node{1+depth}'
+    assert len(node_seq7sz_ge_2) >= 2
+    nodes = node_seq7sz_ge_2
+    _depth = 1+depth
+    sz = 2 + (len(nodes) &1)
+    L = len(nodes) -sz
+    for j in range(0, L, 2):
+        yield sf.mk_node7nonleaf_(_depth, nodes[j:j+2])
+    yield sf.mk_node7nonleaf_(_depth, nodes[L:])
+def _sink7iter7sz_ge_2(sf, depth, node_iter7sz_ge_2, /, *, reverse:bool):
+    return _merge_nodes7sink7sz_ge_2(sf, depth, node_iter7sz_ge_2, reverse=reverse)
+    #it = FixedSizeTailTrapIterator(2, node_iter7sz_ge_2)
+r'''[[[
+[:设计冫树构造算法]:here
+mk_tree7chainLMR_
+mk_tree7pushs_
+mk_tree5nodes_
+_mk_tree7half_fork_pushs7sz_ge_4_
+
+[node{depth}.min_num_leafs == 1 if depth==0 else 2*node{-1+depth}.min_num_leafs == 2**depth]
+[node{depth}.max_num_leafs == 1 if depth==0 else 3*node{-1+depth}.max_num_leafs == 3**depth]
+[2**(1+depth) <= 3**depth]
+    <==> [depth >= 2]
+
+[twigX{depth}.min_num_leafs == 1*node{depth}.min_num_leafs == 2**depth]
+[twigX{depth}.max_num_leafs == 3*node{depth}.max_num_leafs == 3**(1+depth)]
+
+[cane{depth}.min_num_leafs == 0]
+[cane{depth}.max_num_leafs == 3*node{depth}.max_num_leafs == 3**(1+depth)]
+
+[0..=3] => cane
+[4..=5] => hollow_fork # with empty stem
+    [4==2+0+2]
+    [5==2+0+3]
+[6..] => [2+middle{>=2}+2]
+
+归组:nodes{depth} -> [2,4,8,...,2**(1+j),...,2**L]{len==L>=0}+tail{<2**(1+L)}{>=0}
+    (2**(1+L)-2)+tail
+case:
+    * []+[0..1] -> cane
+    * [2]+[0..3] -> cane or hollow_fork
+    # [total>=6]:
+    * [L>=1] => [2,...,2**(1+L)]+tail/[0..<2**(2+L)]:
+        bin(tail)
+        [2*2**0,2*2**1,...,2*2**(L-1),2*2**L==1*2**(1+L); ?*2**L,?*2**(L-1),...,?*2**1,?*2**0]
+            [『?』<-{0,1}]
+        退两位:
+        [2*2**0,2*2**1,...,2*2**(L-1),0*2**L==0*2**(1+L); (1+?)*2**L,(1+?)*2**(L-1),...,(1+?)*2**1,(2+?)*2**0]
+            [『(2+?)』<-{2,3}]
+            [『(1+?)』<-{1,2}]
+
+case:
+    #mk_tree7chainLMR_
+    * tree++nodes++tree
+        * fork++nodes++fork
+            => twigL ++(stemL++sink(twigR6L++nodes++twigL6R)++stemR)++twigR
+                recur
+        * cane++nodes++tree
+            => image:
+        * tree++nodes++cane
+            => tree++nodes
+                pushs
+    #mk_tree7pushs_
+    * tree++nodes
+        #pushs
+        * tree++nodes{len<=3}
+            => for_loop:push
+        * tree++nodes{len>=4}
+            * cane++nodes{len>=4}
+                => nodes
+                    from_nodes
+            * fork++nodes{len>=4-fork.twigR.num_nodes}
+                => twigL++stem++(twigR++nodes){len>=4}
+                    half_fork_pushs7sz_ge_4
+    #mk_tree5nodes_
+    * nodes
+        #from_nodes
+        * nodes{len<=3}
+            => cane
+        * nodes{4<=len<=5}
+            => hollow_fork
+        * nodes{len>=6}
+            => twigL++empty_stem++nodes{len>=4}
+                half_fork_pushs7sz_ge_4
+    #_mk_tree7half_fork_pushs7sz_ge_4_
+    * twigL++stem++nodes{len>=4}
+        #half_fork_pushs7sz_ge_4
+        => twigL ++(stem++sink(nodes[:-2]))++twigR(nodes[-2:])
+            pushs
+#]]]'''#'''
+
+__all__
+from seed.data_funcs.finger_tree.ft23 import BaseFingerTreeError, EmptyError, BadOffsetError
+
+
+from seed.data_funcs.finger_tree.ft23 import IOps4FingerTree, IBasicOps4FingerTree, IBaseOps4Auto6FingerTree
+from seed.data_funcs.finger_tree.ft23 import mk_auto5chain_many_
+
+from seed.data_funcs.finger_tree.ft23 import *

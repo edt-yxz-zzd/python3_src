@@ -43,6 +43,17 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    # <<== seed.pkg_tools.ModuleReloader
 #.
 #.#################################
+#.def mk_context4lazy_import_registered_names_(qnm4mdl7inject, qnm4pseudo_mdl7import, name7importZqnm4mdl, name7importZalias7inject={}, may_bifix4lazy_name7import=None, lazy_name7importZoriginal_name7import={}):
+#.from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
+#.with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny):
+#.    from seed._lazy_ import print_err, fst, echo, ifNone
+#.with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny, name7importZalias7inject={'echo':'echo_'}):
+#.    from seed._lazy_ import echo as echo_
+#.with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny, lazy_name7importZoriginal_name7import={'lazy_null_tuple':'null_tuple'}):
+#.    from seed._lazy_ import lazy_null_tuple
+#.with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny, may_bifix4lazy_name7import=('lazy_','_')):
+#.    from seed._lazy_ import lazy_null_tuple_
+#.#################################
 #.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
 #.with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', prefix4attr='lazy_', suffix4attr=''):
 #.    from __.seed.tiny_.containers import lazy_null_tuple,lazy_null_iter,lazy_null_frozenset as _lazy_null_frozenset_ #null_tuple,null_iter,null_frozenset
@@ -53,9 +64,11 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    from seed.helper.ifNone import ifNone as _ifNone, ifNonef as _ifNonef
 #.with mk_ctx4lazy_import4funcs_(__name__):
 #.    from seed.helper.repr_input import repr_helper
+#.    from seed.tiny_.map_ import map_, cmap_, call_, prepare4call_, dots_
 #.    from seed.tiny_.types5py import mk_MapView,curry1,kwargs2Attrs #,MapView
-#.    from seed.tiny_.containers import mk_tuple,mk_immutable_seq,mk_immutable_seq5iterT_,mk_immutable_seq5iter__,mk_bytes5iter_,mk_tuple__split_first_if_str #xxx:null_tuple
+#.    from seed.tiny_.containers import mk_tuple,mk_immutable_seq,mk_immutable_seq5iterT_,mk_immutable_seq5iter__,mk_bytes5iter_,mk_tuple__split_first_if_str,mk_tuple__split_first_if_str__sep_ #xxx:null_tuple
 #.    from seed.debug.print_err import print_err
+#.    from seed.debug.expectError import expectError
 #.    from seed.helper.ifNone import ifNone,ifNonef
 #.    from seed.tiny_.funcs import echo,fst,snd
 #.    from seed.types.Either import mk_Left,mk_Right #Either,Cased

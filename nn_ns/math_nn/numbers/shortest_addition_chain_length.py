@@ -1,6 +1,15 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length.py
+    [1..=100000]#十万
+vs:
+    view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length.py
+        静态加载:100000
+    view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length__ver2.py
+        惰性完整加载:7320000
+    view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length__ver3.py
+        动态逐项加载:7322932
+
 see:
     view script/min_add_ver2.py
         view script/min_add_ver2.py.4.out.txt

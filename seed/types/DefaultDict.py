@@ -11,6 +11,9 @@ from collections.abc import MutableMapping
 curryDefaultDict = lambda mapping: lambda default_factory:\
                      DefaultDict(mapping, default_factory)
 class DefaultDict(MutableMapping):
+    def __repr__(sf, /):
+        args = (sf.mapping, sf.default_factory)
+        return f'DefaultDict{args}'
     def __init__(self, mapping, default_factory):
         self.mapping = mapping
         self.default_factory = type(None) if default_factory is None \
@@ -36,9 +39,12 @@ class DefaultDict(MutableMapping):
         return len(self.mapping)
 
 
-del MutableMapping
-
-class DefaultDict2(DefaultDict):
+#.del MutableMapping
+#.class DefaultDict2(DefaultDict):
+class DefaultDict2(MutableMapping):
+    def __repr__(sf, /):
+        args = (sf.mapping, sf.ncall, sf.value_mkr, *sf.ex_args)
+        return f'DefaultDict2{args}'
     def __init__(self, mapping, ncall, value_mkr, /, *ex_args):
         assert type(ncall) is int
         assert -1 <= ncall <= 2
@@ -125,6 +131,7 @@ r'''
 #'''
 
 
+del MutableMapping
 from seed.types.DefaultDict import DefaultDict, curryDefaultDict
 from seed.types.DefaultDict import DefaultDict2
 from seed.types.DefaultDict import *

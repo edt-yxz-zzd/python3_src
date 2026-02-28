@@ -1,0 +1,158 @@
+
+USAGE="$(cat <<'EOF__USAGE'
+USAGE:
+
+szmm4shortest_addition_chain 23 103
+  [ℓ(23) == 6]
+  [ℓ(103) == 9]
+
+szmm4shortest_addition_chain 23 103 23 55
+  [ℓ(23) == 6]
+  [ℓ(55) == 8]
+  [ℓ(103) == 9]
+
+szmm4shortest_addition_chain $(seq 1 9)
+szmm4shortest_addition_chain {1..9}
+  [ℓ(1) == 0]
+  [ℓ(2) == 1]
+  [ℓ(3) == 2]
+  [ℓ(4) == 2]
+  [ℓ(5) == 3]
+  [ℓ(6) == 3]
+  [ℓ(7) == 4]
+  [ℓ(8) == 3]
+  [ℓ(9) == 4]
+
+szmm4shortest_addition_chain $(seq 1 2 9)
+szmm4shortest_addition_chain {1..9..2}
+  [ℓ(1) == 0]
+  [ℓ(3) == 2]
+  [ℓ(5) == 3]
+  [ℓ(7) == 4]
+  [ℓ(9) == 4]
+
+
+szmm4shortest_addition_chain 12 13  781  12509
+  [ℓ(12) == 4]
+  [ℓ(13) == 5]
+  [ℓ(781) == 12]
+  [ℓ(12509) == 17]
+
+EOF__USAGE
+)"
+
+
+: <<'EOF__doc'
+e ../../python3_src/bash_script/app/szmm4shortest_addition_chain
+
+$ u=23 ; ipath='../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length.py' ; head -n $[$u + 50] $ipath | tail -n 7
+  ,5#20
+  ,6#21
+  ,6#22
+  ,6#23
+  ,5#24
+  ,6#25
+  ,6#26
+
+$ u=1 ; ipath='../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length.py' ; head -n $[$u + 50] $ipath | tail -n 7
+  # :%s/^\(\d\+\) \(\d\+\)$/,\2#\1/g
+  pint2shortest_addition_chain_length__first_100000_terms = (
+  (None
+  ,0#1
+  ,1#2
+  ,2#3
+  ,2#4
+
+
+补偿:))
+
+EOF__doc
+
+#if [[ $# -eq 0 ]] ; then
+#elif [[ $# -eq 1 ]] ; then
+#elif [[ $# -eq 2 ]] ; then
+
+function lines5args() {
+  local x
+  for x ; do
+    printf '%s\n' "$x"
+  done
+}
+function check_args4main() {
+  local -i exit_status=0
+  #local -i u # ==>> always show:"bad arg: 0"
+  local u
+  for u ; do
+    if ! [[ "$u" =~ ^[1-9][0-9]*$ ]] ; then
+      echo >&2 "bad arg: ${u@Q}"
+      exit_status=2
+      break
+    #.elif ! [[ "$u" -gt "$v" ]] ; then
+    #.  echo >&2 "not ascending: not [${v@Q} < ${u@Q}]"
+    #.  exit_status=3
+    #.  break
+    elif ! [[ "$u" -le 100000 ]] ; then
+      echo >&2 "not [${u@Q} < 100000]"
+      exit_status=4
+      break
+    fi
+  done
+  return "$exit_status"
+}
+function main__ver1() {
+  check_args4main "$@"
+  local -i exit_status=$?
+
+  if [[ "$exit_status" -eq 0 ]] ; then
+
+    local IFS=$'\n'
+    local -i v=0
+    local -i u
+
+    for u in $(lines5args "$@" | sort -u -n) ; do
+      exit_status=1 # for "not found"
+      if [[ "$v" -eq 0 ]] ; then
+        #skip to data
+        while read -r -d $'\n' -u 0 line ; do
+          ! : && echo >&2 "__DEBUG__: skip: ${line@Q}"
+          if [[ "$line" == "(None" ]] ; then
+            break
+          fi
+        done
+      fi
+      v="$u"
+      while read -r -d $'\n' -u 0 line ; do
+        ! : && echo >&2 "__DEBUG__: ${line@Q}"
+        if ! [[ "$line" =~ ^,([0-9][0-9]*)"#"([0-9][0-9]*)$ ]] ; then
+          exit_status=1 # for "not found"
+          break
+        #elif [[ "$line" =~ ^,([0-9][0-9]*)"#$u"$ ]] ; then
+        elif [[ "${BASH_REMATCH[2]}" == "$u" ]] ; then
+          echo "[ℓ($u) == ${BASH_REMATCH[1]}]"
+          exit_status=0
+          break
+        fi
+      done
+      if ! [[ "$exit_status" -eq 0 ]] ; then
+        # "not found"
+        echo >&2 "LOGIC ERROR: ${u@Q}"
+        exit_status=9
+        break
+      fi
+    done
+  fi
+
+  if ! [[ "$exit_status" -eq 0 ]] ; then
+    echo >&2 "$USAGE"
+  fi
+  return "$exit_status"
+}
+
+
+
+# ver1:main__ver1 "$@" < '../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain_length.py'
+
+function main__ver2() {
+  py_adhoc_call   nn_ns.math_nn.numbers.shortest_addition_chain_length__ver3   @打印冫最小显链长灬巛靶值灬扌 $(printf ' =%d' "$@")
+}
+main__ver2 "$@"

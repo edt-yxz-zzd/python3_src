@@ -1,0 +1,81 @@
+
+#
+#cat5mv dst7to_be_appended src8tail_patch_snippet7to_be_truncated
+#
+__='
+view others/app/termux/shell-script-example.txt
+
+du /sdcard/0my_files/tmp/*tmp
+view /sdcard/0my_files/tmp/084tmp
+view /sdcard/0my_files/tmp/085tmp
+view /sdcard/0my_files/tmp/083tmp
+
+#expect-ok:
+cat5mv /sdcard/0my_files/tmp/085tmp /sdcard/0my_files/tmp/084tmp
+view /sdcard/0my_files/tmp/085tmp
+
+#expect-fail:
+cat5mv /sdcard/0my_files/tmp/085tmp /sdcard/0my_files/tmp/085tmp
+cat5mv /sdcard/0my_files/tmp/085tmp
+cat5mv /sdcard/0my_files/tmp/085tmp /sdcard/0my_files/tmp/085tmp /sdcard/0my_files/tmp/085tmp
+cat5mv /sdcard/0my_files/tmp/xxxx-nonexist /sdcard/0my_files/tmp/085tmp
+cat5mv /sdcard/0my_files/tmp/085tmp /sdcard/0my_files/tmp/xxxx-nonexist
+' #'
+  #weird: above 『'# '』 => err; but『' #'』=> ok
+  # 『#』become part of string: '...'# '... !!!  ...'
+
+INTERACTIVE=0
+if [[ $# -eq 4 && "$1" == '-i' && "$2" == '--' ]] ; then
+  shift 2
+  INTERACTIVE=1
+elif [[ $# -eq 3 && "$1" == '--' ]] ; then
+  shift
+fi
+
+
+dst7append="$1"
+src7clear="$2"
+if [ $# -ne 2 ] ; then
+    printf >&2 '%s\n' "there must be two operands: 'cat5mv <dst7to_be_appended> <src8tail_patch_snippet7to_be_truncated>'"
+    exit 1
+elif [ ! -f "$dst7append" ] ; then
+    printf >&2 '%s\n' "nonexist file: ${dst7append@Q}"
+    exit 1
+elif [ ! -f "$src7clear" ] ; then
+    printf >&2 '%s\n' "nonexist file: ${src7clear@Q}"
+    exit 1
+elif [ "$src7clear" -ef "$dst7append" ] ; then
+    printf >&2 '%s\n' "same file: ${dst7append@Q}  ${src7clear@Q}"
+    exit 1
+elif [ ! -s "$src7clear" ] ; then
+    # !! -s:size
+    # => empty src7clear
+    # => skip
+    exit 0
+else
+    if (( $INTERACTIVE )) ; then
+      source GUARD4INCLUDE.def.sh
+      include7guarded_ ask.def.sh
+      YesNoErr="$(ask_YN_ "cut out all content of ${src7clear@Q} and append to ${dst7append@Q} ? (Y/N)")"
+      case "$YesNoErr" in
+        (YES)
+          : # pass
+          printf >&2 '%s\n' "do: ${dst7append@Q} << ${src7clear@Q}"
+          ;;
+        (NO|EOF)
+          #cancel
+          printf >&2 '%s\n' "cancel: ${dst7append@Q} << ${src7clear@Q}"
+          exit 0
+          ;;
+        (*)
+          echo >&2 "LOGIC ERROR: ${YesNoErr@Q}"
+          exit 3
+          ;;
+      esac
+    fi
+    cat "$src7clear" >> "$dst7append"  && truncate -c -s 0 "$src7clear"
+    exit 0
+fi
+
+
+exit 99

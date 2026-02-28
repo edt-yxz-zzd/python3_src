@@ -53,6 +53,8 @@ IRangeBasedIntMapping
     ranges5char_pairs__str
     ranges2wave_rngtxt
     ranges5wave_rngtxt
+    ranges2delta_txt_
+    ranges5delta_txt_
 
     check_input4isomorphism_mapping__RangeBased
     isomorphism_mapping__RangeBased
@@ -1423,6 +1425,35 @@ NonTouchRanges(())
 
 
 
+[[
+???:
+    ranges2compact_txt_
+    ranges5compact_txt_
+>>> ranges = make_Ranges([(0x30, 0x39), (0x41, 0x42), (0x4e00, 0x4e09)])
+>>> ranges.to_compact_txt()
+'#19\n;1:41\n;9:30,4E00'
+>>> IRanges.from_compact_txt(ranges.to_compact_txt())
+NonTouchRanges(((48, 57), (65, 66), (19968, 19977)))
+>>> IRanges.from_compact_txt(ranges.to_compact_txt()).to_compact_txt()
+'#19\n;1:41\n;9:30,4E00'
+
+]]
+
+[[
+@20260204:
+    ranges2delta_txt_
+    ranges5delta_txt_
+>>> ranges = make_Ranges([(0x30, 0x39), (0x41, 0x42), (0x4e00, 0x4e09)])
+>>> ranges.to_delta_txt()
+'[#w+J-I-E2_+J]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt())
+NonTouchRanges(((48, 57), (65, 66), (19968, 19977)))
+>>> IRanges.from_delta_txt(ranges.to_delta_txt()).to_delta_txt()
+'[#w+J-I-E2_+J]'
+
+]]
+
+
 ]]]
 
 #]]]]]'''
@@ -1545,7 +1576,17 @@ __all__ = """
     ranges5hex2sz
     ranges2compact_txt_
     ranges5compact_txt_
+    ranges2delta_txt_
+    ranges5delta_txt_
+        uint2base64_
+        uint5base64_
     """.split()#"""
+    #all_map
+    #LeftRightHandSideFlip
+    #valid_range
+    #check_range
+    #to_tuple
+    #uint2hex_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.lazy_import__func import lazy_import4funcs_
@@ -1578,6 +1619,10 @@ from seed.tiny_.HexReprInt import HEXReprInt as HexReprInt
     #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
 from seed.tiny import fmap4dict_value
 from seed.tiny import check_type_is
+
+from seed.text.base64 import uint__to__radix64_digits__b64__str_ as _encode64_, uint__from__radix64_digits__b64__str_ as _decode64_
+#def uint__to__radix64_digits__b64__str_(u, /, *, b64_cfg_case, bigendian):
+#def uint__from__radix64_digits__b64__str_(s, /, *, b64_cfg_case, bigendian):
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def all_map(pred, iterable, /):
@@ -2780,6 +2825,18 @@ TODO:
     @staticmethod
     def from_hex2sz(hex2sz, /):
         return ranges5hex2sz(hex2sz)
+    def to_compact_txt(sf, /, *, validate=False):
+        '-> compact_txt/regex"#{len_ints}(\n;{len_rng}:{hex_begin}+)*"'
+        return ranges2compact_txt_(sf, validate=validate)
+    @staticmethod
+    def from_compact_txt(compact_txt, /):
+        return ranges5compact_txt_(compact_txt)
+    def to_delta_txt(sf, /, *, validate=False):
+        '-> delta_txt/regex"\[(([~#][[:base64digits:]]*[+][[:base64digits:]]*)([-][[:base64digits:]]*[+][[:base64digits:]]*)*)?\]" where [[[:base64digits:]] =[def]= [0-9A-Za-z_.]]'
+        return ranges2delta_txt_(sf, validate=validate)
+    @staticmethod
+    def from_delta_txt(delta_txt, /):
+        return ranges5delta_txt_(delta_txt)
 
     def __init__(sf, ranges, /):
         #ranges = tuple(ranges)
@@ -3791,6 +3848,119 @@ ranges5compact_txt_
 
 
 
+
+#def int2hex_(i, /): return f'{i:X}'
+def uint2hex_(u, /):
+    assert u >= 0
+    return f'{u:X}'
+def uint2base64_(u, /):
+    assert u >= 0
+    return _encode64_(u, b64_cfg_case=b'_.', bigendian=True)
+def uint5base64_(s, /):
+    return _decode64_(s, b64_cfg_case=b'_.', bigendian=True)
+
+_encode64_
+_decode64_
+def ranges2delta_txt_(ranges, /, *, validate=False):
+    delta_txt = _ranges2delta_txt_(ranges)
+    if validate:
+        assert ranges.ranges == ranges5delta_txt_(delta_txt).ranges
+    return delta_txt
+def _find_char_in(chars, s, i, /):
+    while not s[i] in chars:
+        i += 1
+    return i
+def _ranges2delta_txt_(ranges, /):
+    def __():
+        yield '[' # begin
+        yield from __0()
+        yield ']' # end
+    def __0():
+        it = ranges.iter_rngs()
+        for (begin, end) in it:
+            break
+        else:
+            return
+        if begin < 0:
+            yield '~' #neg offset
+        else:
+            yield '#' #pos offset
+        yield uint2base64_(abs(begin))
+        yield '+' #rng
+        yield uint2base64_(end-begin)
+        prev_end = end
+        for (begin, end) in it:
+            yield '-' #gap
+            yield uint2base64_(begin-prev_end)
+            if not end-begin == 1:
+                yield '+' #rng
+                yield uint2base64_(end-begin)
+            prev_end = end
+        return
+    delta_txt = ''.join(__())
+    return delta_txt
+def ranges5delta_txt_(delta_txt, /):
+    if not delta_txt: raise Exception('bad format')
+    if not delta_txt[0] == '[': raise Exception('bad format')
+    if not delta_txt[-1] == ']': raise Exception('bad format')
+    if delta_txt == '[]':
+        return make_Ranges(())
+    match delta_txt[1]:
+        case '~':
+            sign = -1
+        case '#':
+            sign = +1
+        case _:
+            raise Exception('bad format')
+        #case
+    sign
+    i = 2
+    #_j = delta_txt.index('+', i)
+    _j = _find_char_in('+-[]', delta_txt, i)
+    s8offset = delta_txt[i:_j]
+    offset = sign*uint5base64_(s8offset)
+    i, _j, offset
+    rngs = _iter_rngs5delta_txt_(delta_txt, _j, offset)
+    ranges = make_Ranges(rngs)
+    return ranges
+def _iter_rngs5delta_txt_(delta_txt, _j, begin, /):
+    L = len(delta_txt)
+    while 1:
+        #########
+        _j, begin
+        #########
+        sep = delta_txt[_j]
+        if sep == '+':
+            j = 1 + _j
+            _i = _find_char_in('+-[]', delta_txt, j)
+            s8span = delta_txt[j:_i]
+            len_rng = uint5base64_(s8span)
+            del j
+        else:
+            _i = _j
+            len_rng = 1
+        len_rng
+        end = begin + len_rng
+        #########
+        yield (begin, end)
+        del _j, begin
+        #########
+        _i, end
+        #########
+        sep = delta_txt[_i]
+        if not sep == '-':
+            if not '+-[]'.index(sep) == 3: raise Exception('bad format')
+            break
+        i = 1 + _i
+        #_j = delta_txt.index('+', i)
+        _j = _find_char_in('+-[]', delta_txt, i)
+        s8gap = delta_txt[i:_j]
+        len_gap = uint5base64_(s8gap)
+        begin = end + len_gap
+        del _i, i, end
+        #########
+        _j, begin
+        #########
 
 
 

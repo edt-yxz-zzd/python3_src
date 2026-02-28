@@ -1,0 +1,17 @@
+#
+#
+#! bash
+#
+#.  args2quoted -n - -- xx bnn $'\\\\ \t \n \\\n'
+#.      =>:
+#.      '-n' '-' '--' 'xx' 'bnn' $'\\\\ \t \n \\\n'
+#
+echo -E '' "${@@Q}"
+# bug:echo -- "${@@Q}"
+#   !! echo not support "--"
+#
+
+# lessecho -a -- "$@"
+#   but not escape \t \n
+
+

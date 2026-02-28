@@ -1,0 +1,64 @@
+##
+#
+#e ../../python3_src/bash_script/app/txz
+#view others/app/termux/tar_7zip.txt
+
+#txz opath idir -ipaths ipaths...
+#txz opath idir -find options4find...
+USAGE='USAGE:txz opath idir -find options4find... ; txz opath idir -ipaths ipaths...'
+
+if [[ $# -lt 4 ]] ; then
+  echo >&2 "${USAGE}"
+  exit 1
+fi
+opath="$1"
+idir="$2"
+subcmd="$3"
+shift 3
+
+if ! [[ "${opath}" == *.txz ]] ; then
+  #if ! [[ "${opath}" =~ ^.*\.txz$ ]] ; then
+  echo >&2 "not '*.txz': ${opath}"
+  exit 2
+fi
+
+if [[ -a "${opath}" ]] ; then
+  echo >&2 "exists: ${opath}"
+  exit 3
+fi
+
+if ! [[ -d "${idir}" ]] ; then
+  echo >&2 "not dir: ${idir}"
+  exit 4
+fi
+
+if ! [[ "${subcmd}" == -* ]] ; then
+  echo >&2 "not subcmd: ${subcmd}"
+  echo >&2 "${USAGE}"
+  exit 5
+fi
+
+work(){
+  echo >&2 "$@"
+  "$@"
+}
+main_cmd(){
+  work tar -cJvf "${opath}"   -C "${idir}"  $(realpath -m --relative-to="${idir}"  "$@")
+}
+
+
+case  "${subcmd}" in
+  -find)
+      main_cmd $(find "${idir}" "$@")
+  ;;
+  -ipaths)
+      main_cmd "$@"
+  ;;
+  *)
+    echo >&2 "not subcmd: ${subcmd}"
+    echo >&2 "${USAGE}"
+    exit 6
+  ;;
+esac
+
+
