@@ -1,5 +1,7 @@
 
 e ../../python3_src/自己的相关数据/delta4on_working4py_src/README-cmds.txt
+剪切整合临时文件内容:
+  cat5mv__myfiles -f cat5mv__myfiles.conf
 
 
 2 places:
@@ -159,7 +161,32 @@ view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-
 ===
 临时性排除:py,txt:同上
 ]]
+[[
+@20260228
+g_both__dry_run
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20260228_213447.txt
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20260228_213451.txt
+===
+临时性排除:py,txt:同上
+xxx:add 'seed/io/cache_file/README.txt'
+xxx:add 'seed/recognize/rgnr/abc/utilities4IRecognizer.py'
+
+xxx:add 'txt/script/对称多项式讠基表达.py'
+xxx:add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.compact.decompositions_lt_2pow32.out.txt.tar.lzma'
+xxx:add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.len_ge2__grouped_decompositions_lt_2pow32.out.txt.tar.lzma'
+排除许多:add txt/script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py..*
+xxx:add 'txt/script/对称多项式讠基表达.py..枚举冫瓧称重式辻础称组式巛序列纟自然数牜整数拆分牜缓存文件扌.le20.未曾数值校验.out.txt'
+===
+cat5mv__myfiles -f cat5mv__myfiles.conf
+===
+'txt/cat5mv__myfiles.conf'
+'lots/NOTE/cryptography-book/Introduction to Modern Cryptography(2th)(2015)(Jonathan Katz)(Yehuda Lindell).txt'
+'seed/recognize/step_recognizer/IStepRecognizer.py'
+
+===
+g6_ 'seed/math/power/addition_chain/shortest/mixed_recursive_greedy_zpow_addition_chain__doc__py_adhoc_call.py;search_star_chain7recursive_shortest.py;shortest_addition_chain__arbitrary_recur_shortest_stem.py..址距溟次形式纟任意纟递归婪溟链.ge38039.le70070.txt.tar.lzma;对称多项式讠基表达.py;input7timeout.py;finger_tree/ft23_7sized_seq.py;ft23_7sized_ascend_set;txz;int_repr7human;int_repr7compact;'
 
 
+]]
 
 
