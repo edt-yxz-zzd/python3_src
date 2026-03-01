@@ -1,0 +1,4 @@
+#
+#
+#e ../../python3_src/bash_script/app/fraction_repr7compact
+py -m nn_ns.app.fraction_repr7compact "$@"

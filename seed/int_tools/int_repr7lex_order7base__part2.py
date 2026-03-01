@@ -56,6 +56,7 @@ __all__ = r'''
             无效后手编解码器牜自然数
                 Error__TODO
     魖越界断头编解码器
+        乸越界断头编解码器牜正无穷大
         乸越界断头编解码器牜无效
             无效越界断头编解码器
                 Error__TODO
@@ -63,6 +64,7 @@ __all__ = r'''
         乸自然数分区断头编解码器牜体胞符型唯一牜带偏移
 
 魖自由编码器
+    乸单值自由编码器牜体胞符型唯一牜零偏移
     乸自然数自由编码器牜体胞符型唯一牜零偏移
     乸自然数自由编码器牜体胞符型唯一牜带偏移
 
@@ -100,6 +102,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     #def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
     #    def _check6make_(sf, /):
     from seed.types.FrozenDict import mk_FrozenDict
+    from seed.tiny_.oo8inf import OO8inf
 #.#################################
 #.def mk_context4lazy_import_registered_names_(qnm4mdl7inject, qnm4pseudo_mdl7import, name7importZqnm4mdl, name7importZalias7inject={}, may_bifix4lazy_name7import=None, lazy_name7importZoriginal_name7import={}):
 #.from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
@@ -647,6 +650,7 @@ class 魖自然数位元串表达牜词典序牜前置长度牜无颈胞牜分�
                 偏移量纟首胞牜越界 = 1+位元冃深入指示符
                 首胞 = 首胞牜越界 +偏移量纟首胞牜越界
                 check_int_ge(偏移量纟首胞牜越界, 首胞)
+                偏移量纟首胞牜囜囜 = 偏移量纟首胞牜越界
             else:
                 区号 = 鬽区号
                 自然数 = 扩增自然数
@@ -672,9 +676,10 @@ class 魖自然数位元串表达牜词典序牜前置长度牜无颈胞牜分�
                 偏移量纟首胞牜分区 = 区号讠偏移量纟位元[区号]
                 首胞 = 首胞牜分区 +偏移量纟首胞牜分区
                 check_uint_lt(位元冃深入指示符, 首胞)
-            层号讠带符型位元串, 首胞
+                偏移量纟首胞牜囜囜 = 偏移量纟首胞牜分区
+            层号讠带符型位元串, 首胞, 偏移量纟首胞牜囜囜
             #窜改/替换:层号讠带符型位元串:首胞牜分区or首胞牜越界-->首胞
-            if not 0 == 偏移量纟首胞牜分区:
+            if not 0 == 偏移量纟首胞牜囜囜:
                 符型牜首胞 = 层号讠带符型位元串[0][0]
                 位元串纟首层 = sf.位元串巛趃位元串牜子表扌(符型牜首胞, chain([首胞], 位元串纟首层[1:]))
                 层号讠带符型位元串 = ((符型牜首胞, 位元串纟首层), *层号讠带符型位元串[1:])
@@ -787,6 +792,30 @@ class 乸越界断头编解码器牜无效(魖越界断头编解码器):
         raise Error__TODO(sf)
 无效越界断头编解码器 = 乸越界断头编解码器牜无效()
 
+class 乸越界断头编解码器牜正无穷大(魖越界断头编解码器):
+    '正无穷大越界断头编解码器{扩增自然数}'
+    ___no_slots_ok___ = True
+    def __init__(sf, 符型纟体胞, /):
+        check_int_ge(0, 符型纟体胞)
+        sf._j = 符型纟体胞
+    @property
+    def 符型纟体胞(sf, /):
+        return sf._j
+    @cached_property
+    def 越界值(sf, /):
+        return OO8inf(is_neg:=False)
+    @cached_property
+    @override
+    def 自由编码器(sf, /):
+        return 乸单值自由编码器牜体胞符型唯一牜零偏移(sf.符型纟体胞, sf.越界值)
+    @override
+    def 解码牜分离首胞牜越界扌(sf, 匴全局参数设置, 首胞牜子表, 定型定长前取器, /):
+        #乸异常牜出界
+        check_uint_lt(1, 首胞牜子表)
+        return sf.越界值
+乸越界断头编解码器牜正无穷大(0)
+
+
 
 class 乸自然数分区断头编解码器牜体胞符型唯一牜带偏移(魖自然数分区断头编解码器):
     '分区断头编解码器牜分区自然数 #体胞符型唯一:受限于:真*自由编码器'
@@ -864,9 +893,37 @@ class _repr魖自由编码器(魖自由编码器):
         args = sf._args4hash_
         nm = type(sf).__name__
         return f'{nm!s}{args}'
+class 乸单值自由编码器牜体胞符型唯一牜零偏移(_repr魖自由编码器):
+    ___no_slots_ok___ = True
+    def __init__(sf, 符型纟体胞, 越界值, /):
+        check_int_ge(0, 符型纟体胞)
+        sf._j = 符型纟体胞
+        sf._v = 越界值
+    @property
+    def 符型纟体胞(sf, /):
+        return sf._j
+    @property
+    def 越界值(sf, /):
+        return sf._v
+    @property
+    @override
+    def _args4hash_(sf, /):
+        return (sf.符型纟体胞, sf.越界值)
+    @override
+    def 罓自由编码扌(sf, 缓存纟自由编码器, 越界值, /):
+        if not 越界值 in [sf.越界值]:raise 乸异常牜出界(sf, 越界值)
+        符型纟体胞 = sf.符型纟体胞
+            # !! 体胞符型唯一
+        #bug:u = 1
+        u = 0
+        带符型位元串 = 缓存纟自由编码器.符型讠自然数讠带符型位元串扌(符型纟体胞, u)
+        层号讠带符型位元串 = (带符型位元串,)
+        return 层号讠带符型位元串
+
 class 乸自然数自由编码器牜体胞符型唯一牜零偏移(_repr魖自由编码器):
     ___no_slots_ok___ = True
     def __init__(sf, 符型纟体胞, /):
+        check_int_ge(0, 符型纟体胞)
         sf._j = 符型纟体胞
     @property
     def 符型纟体胞(sf, /):
@@ -1193,6 +1250,10 @@ class 乸自然数位元串表达牜词典序牜前置长度牜无颈胞牜分�
         return None
     #########
     #########
+    @cached_property
+    @override
+    def 欤含无穷大(sf, /):
+        return OO8inf(is_neg:=False) in sf.越界值讠深度
 
     @property
     @override
@@ -1206,6 +1267,7 @@ class 乸自然数位元串表达牜词典序牜前置长度牜无颈胞牜分�
 
 
 check_non_ABC(乸自然数分区断头编解码器牜体胞符型唯一牜带偏移)
+check_non_ABC(乸单值自由编码器牜体胞符型唯一牜零偏移)
 check_non_ABC(乸自然数自由编码器牜体胞符型唯一牜零偏移)
 check_non_ABC(乸自然数自由编码器牜体胞符型唯一牜带偏移)
 check_non_ABC(乸匴全局参数设置纟自然数编解码器)
@@ -1213,6 +1275,7 @@ check_non_ABC(乸分区方案纟扩增自然数编码)
 check_non_ABC(乸缓存纟自由编码器)
 check_non_ABC(乸分区表配置纟扩增自然数编码方案)
 check_non_ABC(乸自然数位元串表达牜词典序牜前置长度牜无颈胞牜分区表配置)
+check_non_ABC(乸越界断头编解码器牜正无穷大)
 
 
 __all__
@@ -1223,7 +1286,7 @@ from seed.int_tools.int_repr7lex_order7base__part2 import 乸自然数分区断�
 
 from seed.int_tools.int_repr7lex_order7base__part2 import 乸异常牜出界
 
-from seed.int_tools.int_repr7lex_order7base__part2 import 乸自然数自由编码器牜体胞符型唯一牜零偏移, 乸自然数自由编码器牜体胞符型唯一牜带偏移
+from seed.int_tools.int_repr7lex_order7base__part2 import 乸单值自由编码器牜体胞符型唯一牜零偏移, 乸自然数自由编码器牜体胞符型唯一牜零偏移, 乸自然数自由编码器牜体胞符型唯一牜带偏移
 
 
 
@@ -1240,8 +1303,9 @@ def _API():
         #乸分区方案纟扩增自然数编码(总层数, 规模纟占位, 体胞数纟首层, 符型牜首层体胞, 分区编解码器)
         #乸匴全局参数设置纟自然数编解码器(ops:(_魖共通, 魖数据位元串表达牜词典序牜前置长度))
         #乸缓存纟自由编码器(匴全局参数设置, 罓扩增自然数讠自由编码器讠层号讠带符型位元串, 罓体胞规模讠自然数讠位元串)
-    from seed.int_tools.int_repr7lex_order7base__part2 import 乸自然数分区断头编解码器牜体胞符型唯一牜带偏移, 无效后手编解码器牜自然数, 无效越界断头编解码器
+    from seed.int_tools.int_repr7lex_order7base__part2 import 乸自然数分区断头编解码器牜体胞符型唯一牜带偏移, 无效后手编解码器牜自然数, 无效越界断头编解码器, 乸越界断头编解码器牜正无穷大
         #乸自然数分区断头编解码器牜体胞符型唯一牜带偏移(总层数, 体胞数纟首层, 符型纟体胞, 末层偏移量, 首胞偏移量)
+        #乸越界断头编解码器牜正无穷大(符型纟体胞)
 
 
 

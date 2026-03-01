@@ -7,9 +7,11 @@ mv -iv ../../python3_src/seed/int_tools/int_repr7compact7baseGA7lex_order.py ../
 
 view ../../python3_src/nn_ns/app/int_repr7human.py
 view ../../python3_src/nn_ns/app/int_repr7compact.py
+view ../../python3_src/nn_ns/app/fraction_repr7compact.py
 
 view ../../python3_src/bash_script/app/int_repr7human
 view ../../python3_src/bash_script/app/int_repr7compact
+view ../../python3_src/bash_script/app/fraction_repr7compact
 
 
 seed.int_tools.int_repr7compact7lex_order7baseGL
@@ -143,6 +145,12 @@ Traceback (most recent call last):
 ValueError: Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit
 
 
+>>> +oo
+(+oo)
+>>> -oo
+(-oo)
+
+
 
 >>> _匴自然数位元串表达牜基表六四.表述冫数据讠位元串表达扌(0, 欤校验=False)
 b'\x00'
@@ -260,6 +268,9 @@ True
 True
 
 
+>>> 表述冫整数讠文本表达牜紧凑牜词典序牜基表六七扌(+oo)
+'@y'
+
 grep '表述冫整数讠文本表达牜紧凑牜词典序牜基表六七扌([0-9]\+)' ../../python3_src/seed/int_tools/int_repr7compact7lex_order7baseGL.py -o | grep '[0-9]\+' -o
 
 >>> us = (
@@ -299,6 +310,7 @@ grep '表述冫整数讠文本表达牜紧凑牜词典序牜基表六七扌([0-9
 ... ,5846006549323611672814739330865132078623730171904
 ... ,615656346818663737691860001564743965704370926101022604186692084441339402679643915803347910232576806887603562348543
 ... ,615656346818663737691860001564743965704370926101022604186692084441339402679643915803347910232576806887603562348544
+... ,+oo
 ... ])
 
 >>> ns = [-u for u in reversed(us)]
@@ -317,6 +329,7 @@ True
 True
 >>> for s, i in zip(ss, ints):
 ...     print(s, i, sep=':')
+-0:(-oo)
 -1Dyzyzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz:-615656346818663737691860001564743965704370926101022604186692084441339402679643915803347910232576806887603562348544
 -1E................................................................:-615656346818663737691860001564743965704370926101022604186692084441339402679643915803347910232576806887603562348543
 -1EYyzzzzzzzzzzzzzzzzzzzzzzzzzzz:-5846006549323611672814739330865132078623730171904
@@ -390,6 +403,162 @@ True
 @xkR0...........................:5846006549323611672814739330865132078623730171904
 @xkzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz:615656346818663737691860001564743965704370926101022604186692084441339402679643915803347910232576806887603562348543
 @xl0.0...............................................................:615656346818663737691860001564743965704370926101022604186692084441339402679643915803347910232576806887603562348544
+@y:(+oo)
+
+
+
+
+
+
+
+
+>>> from fractions import Fraction
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(0)
+'='
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(1)
+'@1'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(2)
+'@3'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(3)
+'@5'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(666)
+'@VJo'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(999)
+'@VUD'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(1/2))
+'@0yy'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(1/3))
+'@0xx.KKKKKKKKJ0'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(1/4))
+'@0wy'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(3/2))
+'@2yy'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(5/2))
+'@4yy'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(5/3))
+'@2z01zueeeeeeefy'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(5/4))
+'@2wy'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(377/233))
+'@2z.z.z.z.z.z.3uyY47z650'
+>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(Fraction(144/233))
+'@0z.z.z.z.z.z.3uyY47z650'
+
+>>> 解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌('=')
+Fraction(0, 1)
+
+
+
+
+
+grep '^>>> 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌(.*)$' ../../python3_src/seed/int_tools/int_repr7compact7lex_order7baseGL.py -o | grep '(.*)$' -o
+.+1,.+16s/(\(.*\))/\1
+>>> ps = (
+... (1
+... ,2
+... ,3
+... ,666
+... ,999
+... ,Fraction(1/3)
+... ,Fraction(5/3)
+... ,Fraction(377/233)
+... ,Fraction(144/233)
+... ,Fraction(1,3)
+... ,Fraction(1,4)
+... ,Fraction(3,2)
+... ,Fraction(5,2)
+... ,Fraction(5,3)
+... ,Fraction(5,4)
+... ,Fraction(1,2)
+... ,Fraction(2,3)
+... ,Fraction(3,5)
+... ,Fraction(5,8)
+... ,Fraction(8,13)
+... ,Fraction(13,21)
+... ,Fraction(21,34)
+... ,Fraction(34,55)
+... ,Fraction(55,89)
+... ,Fraction(89,144)
+... ,Fraction(144,233)
+... ,Fraction(233,377)
+... ,Fraction(377,233)
+... ,+oo
+... ))
+
+>>> ns = [-p for p in reversed(ps)]
+>>> frs = [*ns, 0, *ps]
+>>> len(frs) == len(set(frs))
+True
+>>> frs = sorted(frs)
+>>> ss = [*map(表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌, frs)]
+>>> len(ss) == len(set(ss))
+True
+>>> ss == sorted(ss)
+True
+>>> _frs = [*map(解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌, ss)]
+>>> _frs == frs
+True
+>>> for s, i in zip(ss, frs):
+...     print(s, i, sep=':')
+-0:(-oo)
+-UVl:-999
+-UfA:-666
+-t:-3
+-u00:-5/2
+-v:-2
+-w.yx.4KKKKKKKJ0:-7505999378950827/4503599627370496
+-w.yy:-5/3
+-w.z.z.z.z.z.zv40Rur.sty:-910867521201007/562949953421312
+-w.z.z.z.z.z00:-377/233
+-w00:-3/2
+-w20:-5/4
+-x:-1
+-y.yy:-2/3
+-y.z.yy:-5/8
+-y.z.z.yy:-13/21
+-y.z.z.z.yy:-34/55
+-y.z.z.z.z.yy:-89/144
+-y.z.z.z.z.z.yy:-233/377
+-y.z.z.z.z.z.zv40Rur.sty:-347917567779695/562949953421312
+-y.z.z.z.z.z00:-144/233
+-y.z.z.z.z00:-55/89
+-y.z.z.z00:-21/34
+-y.z.z00:-8/13
+-y.z00:-3/5
+-y00:-1/2
+-y10:-1/3
+-y11zeeeeeeeefy:-6004799503160661/18014398509481984
+-y20:-1/4
+=:0
+@0wy:1/4
+@0xx.KKKKKKKKJ0:6004799503160661/18014398509481984
+@0xy:1/3
+@0yy:1/2
+@0z.yy:3/5
+@0z.z.yy:8/13
+@0z.z.z.yy:21/34
+@0z.z.z.z.yy:55/89
+@0z.z.z.z.z.yy:144/233
+@0z.z.z.z.z.z.3uyY47z650:347917567779695/562949953421312
+@0z.z.z.z.z.z00:233/377
+@0z.z.z.z.z00:89/144
+@0z.z.z.z00:34/55
+@0z.z.z00:13/21
+@0z.z00:5/8
+@0z00:2/3
+@1:1
+@2wy:5/4
+@2yy:3/2
+@2z.z.z.z.z.yy:377/233
+@2z.z.z.z.z.z.3uyY47z650:910867521201007/562949953421312
+@2z00:5/3
+@2z01zueeeeeeefy:7505999378950827/4503599627370496
+@3:2
+@4yy:5/2
+@5:3
+@VJo:666
+@VUD:999
+@y:(+oo)
 
 
 
@@ -409,6 +578,73 @@ True
 
 
 
+
+
+
+
+
+
+
+[[
+e ../../python3_src/bash_script/app/fraction_repr7compact
+fraction_repr7compact encode -- 7777 +233/377
+    @Yn1
+    @0z.z.z.z.z.z00
+
+]]
+py -m nn_ns.app.fraction_repr7compact
+[[
+fraction_repr7compact encode -- 0 1 -1 999 -999 +11 -11 +7777 -7777  +144/233 -144/233 +233/377 -233/377
+    =
+    @1
+    -x
+    @VUD
+    -UVl
+    @FL
+    -jd
+    @Yn1
+    -RBx
+    @0z.z.z.z.z.yy
+    -y.z.z.z.z.z00
+    @0z.z.z.z.z.z00
+    -y.z.z.z.z.z.yy
+
+
+fraction_repr7compact decode -- = @1 -x @VUD -UVl @FL -jd @Yn1 -RBx @0z.z.z.z.z.yy -y.z.z.z.z.z00 @0z.z.z.z.z.z00 -y.z.z.z.z.z.yy
+    0
+    1
+    -1
+    999
+    -999
+    11
+    -11
+    7777
+    -7777
+    144/233
+    -144/233
+    233/377
+    -233/377
+
+fraction_repr7compact xdecode  aaa-y.z.z.z.z.z.yy555bbb --begin 3 --end -3
+    (Fraction(-233, 377), 18)
+
+fraction_repr7compact xdecode  aaa-y.z.z.z.z.z.yy555bbb --begin 3 --end 17
+    ^EOFError: (1, 0, b'')
+fraction_repr7compact xdecode  aaa-y.z.z.z.z.z.yy555bbb --begin 3 --end -7
+    ^EOFError: (1, 0, b'')
+
+fraction_repr7compact xdecode  aaa-y.z.z.z.z.z.yy555bbb --begin 3 --end -6
+    (Fraction(-233, 377), 18)
+fraction_repr7compact xdecode  aaa-y.z.z.z.z.z.yy555bbb --begin 3 --end 18
+    (Fraction(-233, 377), 18)
+
+fraction_repr7compact xdecode  aaa-y.z.z.z.z.z.yy555bbb --begin 3 --end 18 --strict
+    -233/377
+
+fraction_repr7compact xdecode  aaa-y.z.z.z.z.z.yy555bbb --begin 3 --end 19 --strict
+    ^seed.int_tools.int_repr7lex_order7base.FormatError: ('5', 18, 19)
+
+]]
 
 [[
 e ../../python3_src/bash_script/app/int_repr7compact
@@ -490,6 +726,21 @@ __all__ = r'''
         xdecode_int5txt7compact7lex_order7baseGL_
         xdecode_int5iter_chars7compact7lex_order7baseGL_
 
+
+
+
+
+
+匴有理数耂文本表达牜紧凑牜词典序牜基表六七
+    表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌
+    解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌
+    详解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌
+    详解读冫有理数巛趃文本表达牜紧凑牜词典序牜基表六七扌
+        encode_fraction2txt7compact7lex_order7baseGL_
+        decode_fraction5txt7compact7lex_order7baseGL_
+        xdecode_fraction5txt7compact7lex_order7baseGL_
+        xdecode_fraction5iter_chars7compact7lex_order7baseGL_
+
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -509,8 +760,10 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.types.FrozenDict import mk_FrozenDict
 
 from seed.int_tools.int_repr7lex_order7base import FormatError
-from seed.int_tools.int_repr7lex_order7base import 魖数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达, 乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达
+from seed.int_tools.int_repr7lex_order7base import 乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达, 乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾
     #乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达(匴数据位元串表达, 列表纟字母表牜头胞辻多种体胞)
+    #乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾(毝延后无穷大收尾, 匴整数位元串表达, 匴自然数位元串表达, 内符型讠外符型纟匴整数位元串表达, 内符型讠外符型纟匴自然数位元串表达)
+
 
 from seed.int_tools.int_repr7lex_order7base import 乸整数位元串表达牜词典序牜前置长度牜整数零编码为单胞牜使用自然数编码器
     #乸整数位元串表达牜词典序牜前置长度牜整数零编码为单胞牜使用自然数编码器(欤深一, 规模纟头胞, 匴自然数位元串表达牜词典序牜前置长度)
@@ -521,8 +774,10 @@ from seed.int_tools.int_repr7lex_order7base__part2 import 乸匴全局参数设�
     #乸分区方案纟扩增自然数编码(总层数, 规模纟占位, 体胞数纟首层, 符型牜首层体胞, 分区编解码器)
     #乸匴全局参数设置纟自然数编解码器(ops:(_魖共通, 魖数据位元串表达牜词典序牜前置长度))
     #乸缓存纟自由编码器(匴全局参数设置, 罓扩增自然数讠自由编码器讠层号讠带符型位元串, 罓体胞规模讠自然数讠位元串)
-from seed.int_tools.int_repr7lex_order7base__part2 import 乸自然数分区断头编解码器牜体胞符型唯一牜带偏移, 无效后手编解码器牜自然数, 无效越界断头编解码器
+from seed.int_tools.int_repr7lex_order7base__part2 import 乸自然数分区断头编解码器牜体胞符型唯一牜带偏移, 无效后手编解码器牜自然数, 无效越界断头编解码器, 乸越界断头编解码器牜正无穷大
     #乸自然数分区断头编解码器牜体胞符型唯一牜带偏移(总层数, 体胞数纟首层, 符型纟体胞, 末层偏移量, 首胞偏移量)
+    #乸越界断头编解码器牜正无穷大(符型纟体胞)
+from seed.tiny_.oo8inf import oo
 
 
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -534,7 +789,7 @@ ___end_mark_of_excluded_global_names__0___ = ...
 #整数:牜紧凑牜词典序牜基表六七
 #自然数:牜紧凑牜词典序牜基表六四
 def _prepare():
-    '-> (匴自然数位元串表达牜基表六四, 匴整数位元串表达牜基表六七, 匴数据字符串表达牜基表六七)'
+    '-> (匴自然数位元串表达牜基表六四, 匴整数位元串表达牜基表六七, 匴整数字符串表达牜基表六七)'
     #########
     '自然数:牜紧凑牜词典序牜基表六四'
     符型讠规模纟字母表 = (64,)
@@ -565,6 +820,7 @@ def _prepare():
             #取消最后一项<<==将会变成(2**最大爻元数) ^MemoryError
         ))
 
+    越界值讠深度 = mk_FrozenDict({+oo:0})
     升列纟自然数范围辻分区定位 = tuple(((起点, 讫点), (深度, 区号)) for (_, _, 起点), (深度, 区号, 讫点) in pairwise(chain([(-1, -1, 0)], ((深度, 区号, 1<<最大爻元数) for 深度, 区号讠最大爻元数 in enumerate(深度讠区号讠最大爻元数) for 区号, 最大爻元数 in enumerate(区号讠最大爻元数)))))
         #((0, 1<<4), (0, 0))
         #((1<<4, 1<<10), (0, 1))
@@ -572,7 +828,7 @@ def _prepare():
 
     分区表配置纟扩增自然数编码方案 = _5cfg(cfg)
     #########
-    匴自然数位元串表达牜基表六四 = 乸自然数位元串表达牜词典序牜前置长度牜无颈胞牜分区表配置(欤编码无需头胞:=True, 符型讠规模纟字母表, 分区表配置纟扩增自然数编码方案, 越界值讠深度:=mk_FrozenDict(), 升列纟自然数范围辻分区定位)
+    匴自然数位元串表达牜基表六四 = 乸自然数位元串表达牜词典序牜前置长度牜无颈胞牜分区表配置(欤编码无需头胞:=True, 符型讠规模纟字母表, 分区表配置纟扩增自然数编码方案, 越界值讠深度, 升列纟自然数范围辻分区定位)
     #########
     '整数:牜紧凑牜词典序牜基表六七'
     匴整数位元串表达牜基表六七 = 乸整数位元串表达牜词典序牜前置长度牜整数零编码为单胞牜使用自然数编码器(欤深一:=True, 规模纟头胞:=3, 匴自然数位元串表达牜基表六四)
@@ -582,32 +838,38 @@ def _prepare():
     ,'.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'
     ))
     #########
-    匴数据字符串表达牜基表六七 = 乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达(匴整数位元串表达牜基表六七, 列表纟字母表牜三丶六四)
+    匴整数字符串表达牜基表六七 = 乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达(匴整数位元串表达牜基表六七, 列表纟字母表牜三丶六四)
     #########
-    return (匴自然数位元串表达牜基表六四, 匴整数位元串表达牜基表六七, 匴数据字符串表达牜基表六七)
+    return (匴自然数位元串表达牜基表六四, 匴整数位元串表达牜基表六七, 匴整数字符串表达牜基表六七)
 
 def _5cfg(cfg, /):
     唯一符型 = 0
     符型牜首层体胞 = 唯一符型
     符型纟体胞 = 唯一符型
     末层偏移量 = 0
-    越界断头编解码器 = 无效越界断头编解码器
     后手编解码器 = 无效后手编解码器牜自然数
+    越界断头编解码器 = 无效越界断头编解码器
+    越界断头编解码器牜正无穷大 = 乸越界断头编解码器牜正无穷大(唯一符型)
 
     深度讠配置 = []
-    for ts in cfg:
+    for j, ts in enumerate(cfg):
         区号讠分区方案 = []
         for (总层数, 规模纟占位, 体胞数纟首层, 首胞偏移量) in ts:
             分区编解码器 = 乸自然数分区断头编解码器牜体胞符型唯一牜带偏移(总层数, 体胞数纟首层, 符型纟体胞, 末层偏移量, 首胞偏移量)
             分区方案 = 乸分区方案纟扩增自然数编码(总层数, 规模纟占位, 体胞数纟首层, 符型牜首层体胞, 分区编解码器)
             区号讠分区方案.append(分区方案)
         区号讠分区方案 = tuple(区号讠分区方案)
-        配置乊深度 = (唯一符型, 区号讠分区方案, 越界断头编解码器)
+        配置乊深度 = (唯一符型, 区号讠分区方案, 越界断头编解码器 if j else 越界断头编解码器牜正无穷大)
         深度讠配置.append(配置乊深度)
     深度讠配置 = tuple(深度讠配置)
     分区表配置纟扩增自然数编码方案 = 乸分区表配置纟扩增自然数编码方案(深度讠配置, 后手编解码器)
     return 分区表配置纟扩增自然数编码方案
-(_匴自然数位元串表达牜基表六四, _匴整数位元串表达牜基表六七, _匴数据字符串表达牜基表六七) = _prepare()
+(_匴自然数位元串表达牜基表六四, _匴整数位元串表达牜基表六七, _匴整数字符串表达牜基表六七) = _prepare()
+def _prepare2():
+    匴有理数位元串表达牜基表六七 = 乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾(毝延后无穷大收尾:=0, 匴整数位元串表达:=_匴整数位元串表达牜基表六七, 匴自然数位元串表达:=_匴自然数位元串表达牜基表六四, 内符型讠外符型纟匴整数位元串表达:=(0,1), 内符型讠外符型纟匴自然数位元串表达:=(1,))
+    匴有理数字符串表达牜基表六七 = 乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达(匴有理数位元串表达牜基表六七, _匴整数字符串表达牜基表六七.列表纟字母表牜头胞辻多种体胞)
+    return 匴有理数字符串表达牜基表六七
+_匴有理数字符串表达牜基表六七 = _prepare2()
 
 
 __all__
@@ -638,7 +900,12 @@ FormatError = FormatError
 #.        yield (0, 头胞串)
 #.        yield from _罓表述冫正整数讠趃序列纟带符型位元串扌(sf, 正整数)
 #._匴六七 = 匴整数耂文本表达牜紧凑牜词典序牜基表六七 = 乸匴整数耂文本表达牜紧凑牜词典序牜基表六七()
-_匴六七 = 匴整数耂文本表达牜紧凑牜词典序牜基表六七 = _匴数据字符串表达牜基表六七
+###########################
+###########################
+#整数:
+###########################
+###########################
+_匴六七 = 匴整数耂文本表达牜紧凑牜词典序牜基表六七 = _匴整数字符串表达牜基表六七
 
 表述冫整数讠文本表达牜紧凑牜词典序牜基表六七扌 = _匴六七.encode_dat2txt7lex_order_
 解读冫整数巛文本表达牜紧凑牜词典序牜基表六七扌 = _匴六七.decode_dat5txt7lex_order_
@@ -650,6 +917,25 @@ xdecode_int5txt7compact7lex_order7baseGL_ = 详解读冫整数巛文本表达牜
 xdecode_int5iter_chars7compact7lex_order7baseGL_ = 详解读冫整数巛趃文本表达牜紧凑牜词典序牜基表六七扌
 
 
+###########################
+###########################
+#有理数:
+###########################
+###########################
+_匴六七 = 匴有理数耂文本表达牜紧凑牜词典序牜基表六七 = _匴有理数字符串表达牜基表六七
+
+表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌 = _匴六七.encode_dat2txt7lex_order_
+解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌 = _匴六七.decode_dat5txt7lex_order_
+详解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌 = _匴六七.xdecode_dat5txt7lex_order_
+详解读冫有理数巛趃文本表达牜紧凑牜词典序牜基表六七扌 = _匴六七.xdecode_dat5iter_chars7lex_order_
+encode_fraction2txt7compact7lex_order7baseGL_ = 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌
+decode_fraction5txt7compact7lex_order7baseGL_ = 解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌
+xdecode_fraction5txt7compact7lex_order7baseGL_ = 详解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌
+xdecode_fraction5iter_chars7compact7lex_order7baseGL_ = 详解读冫有理数巛趃文本表达牜紧凑牜词典序牜基表六七扌
+
+
+
+###########################
 
 ###########################
 #.class 乸匴自然数耂文本表达牜紧凑牜词典序牜基表六四(魖自然数位元串表达牜词典序牜前置长度, 魖数据字符串表达牜词典序牜前置长度):
@@ -734,6 +1020,65 @@ if __name__ == '__main__':
 ###########################
 
 
+
+
+###########################
+def _main4fraction_(args=None, /):
+    from fractions import Fraction
+    from seed.int_tools.int_repr7compact7lex_order7baseGL import encode_fraction2txt7compact7lex_order7baseGL_, decode_fraction5txt7compact7lex_order7baseGL_, xdecode_fraction5txt7compact7lex_order7baseGL_, xdecode_fraction5iter_chars7compact7lex_order7baseGL_
+    import argparse
+    parser = argparse.ArgumentParser(
+        description='encode/decode fraction: [-=@][.0-9A-Z_a-z]*'
+        , epilog=''
+        , formatter_class=argparse.RawDescriptionHelpFormatter
+        )
+    action7subcmd = parser.add_subparsers(dest='subcmd', required=True)
+
+
+    #######
+    subparser7encode = action7subcmd.add_parser('encode', description='encode fractions...')
+    subparser7encode.add_argument('fractions', nargs='*', type=Fraction, help='fractions to be encoded')
+
+    #######
+    subparser7decode = action7subcmd.add_parser('decode', description='strict decode strs as fractions...')
+    subparser7decode.add_argument('strs', nargs='*', type=str, help='strs to be encoded')
+
+
+    #######
+    subparser7xdecode = action7subcmd.add_parser('xdecode', description='nonstrict decode txt as Fraction:output:(Fraction, end)')
+    subparser7xdecode.add_argument('txt', type=str, help='txt to be encoded')
+    subparser7xdecode.add_argument('--strict', action='store_true', default=False, help='strict mode:output:Fraction only')
+    subparser7xdecode.add_argument('--begin', type=int, default=None, help='begin addr for txt')
+    subparser7xdecode.add_argument('--end', type=int, default=None, help='end addr for txt')
+
+    #######
+    args = parser.parse_args(args)
+    match args.subcmd:
+        case 'encode':
+            # encode_fraction2txt7compact7lex_order7baseGL_(Fraction, /, *, validate=True) -> str
+            for i in args.fractions:
+                print(encode_fraction2txt7compact7lex_order7baseGL_(i))
+        case 'decode':
+            # decode_fraction5txt7compact7lex_order7baseGL_(txt, begin=None, end=None, /, *, validate=True) -> Fraction
+            for s in args.strs:
+                print(decode_fraction5txt7compact7lex_order7baseGL_(s))
+        case 'xdecode':
+            # xdecode_fraction5txt7compact7lex_order7baseGL_(txt, begin=None, end=None, /, *, validate=True) -> (Fraction, end)
+            (s, j, k) = _args = (args.txt, args.begin, args.end)
+            (j, k, _1) = slice(j, k).indices(len(s))
+            if args.strict:
+                print(decode_fraction5txt7compact7lex_order7baseGL_(s, j, k))
+            else:
+                print(xdecode_fraction5txt7compact7lex_order7baseGL_(s, j, k))
+        case bad:
+            raise Exception(bad)
+if __name__ == '__main__':
+    from seed.int_tools.int_repr7compact7lex_order7baseGL import *
+    from seed.int_tools.int_repr7compact7lex_order7baseGL import encode_fraction2txt7compact7lex_order7baseGL_, decode_fraction5txt7compact7lex_order7baseGL_, xdecode_fraction5txt7compact7lex_order7baseGL_, xdecode_fraction5iter_chars7compact7lex_order7baseGL_
+    if 1:from seed.int_tools.int_repr7compact7lex_order7baseGL import _main4fraction_
+    #_main4fraction_()
+
+###########################
 
 
 
@@ -1088,5 +1433,15 @@ from seed.int_tools.int_repr7compact7lex_order7baseGL import 表述冫整数讠�
 from seed.int_tools.int_repr7compact7lex_order7baseGL import encode_int2txt7compact7lex_order7baseGL_, decode_int5txt7compact7lex_order7baseGL_, xdecode_int5txt7compact7lex_order7baseGL_, xdecode_int5iter_chars7compact7lex_order7baseGL_
 
 
+
+
+from seed.int_tools.int_repr7compact7lex_order7baseGL import 匴有理数耂文本表达牜紧凑牜词典序牜基表六七
+from seed.int_tools.int_repr7compact7lex_order7baseGL import 表述冫有理数讠文本表达牜紧凑牜词典序牜基表六七扌, 解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌, 详解读冫有理数巛文本表达牜紧凑牜词典序牜基表六七扌, 详解读冫有理数巛趃文本表达牜紧凑牜词典序牜基表六七扌
+from seed.int_tools.int_repr7compact7lex_order7baseGL import encode_fraction2txt7compact7lex_order7baseGL_, decode_fraction5txt7compact7lex_order7baseGL_, xdecode_fraction5txt7compact7lex_order7baseGL_, xdecode_fraction5iter_chars7compact7lex_order7baseGL_
+
+
+
+
 if 1:from seed.int_tools.int_repr7compact7lex_order7baseGL import _main_
+if 1:from seed.int_tools.int_repr7compact7lex_order7baseGL import _main4fraction_
 from seed.int_tools.int_repr7compact7lex_order7baseGL import *

@@ -34,6 +34,7 @@ __all__ = r'''
 
 魖数据位元串表达牜词典序牜前置长度
     魖有理数位元串表达牜词典序牜前置长度
+        魖有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾
     魖整数位元串表达牜词典序牜前置长度
         魖整数位元串表达牜词典序牜前置长度牜整数零编码为单胞
             魖整数位元串表达牜词典序牜前置长度牜整数零编码为单胞牜使用自然数编码器
@@ -76,6 +77,7 @@ FormatError
             乸定型定长前取器巛趃位元串
                 乸计耗器
             乸定型定长前取器牜符型偏移
+            乸定型定长前取器牜符型变换
             乸定型定长前取器牜添加头胞
 
 
@@ -86,7 +88,17 @@ FormatError
 魖数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达
     乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达
 
+魖有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾
+    乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾
 
+
+欤无穷大扌
+    欤正无穷大扌
+    取冫正无穷大扌
+符型变换扌
+    符型内移扌
+    符型外移扌
+构造冫外符型讠内符型扌
 
 
 位元串巛趃位元串乊规模牜基准版扌
@@ -102,6 +114,7 @@ from numbers import Rational
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
     from functools import cached_property
+    from fractions import Fraction
     from itertools import islice, accumulate, chain
     from seed.types.FrozenDict import mk_FrozenDict
     from seed.iters.chains import chains
@@ -109,6 +122,8 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.types.WordSeq import mk_WordSeq
     #def mk_WordSeq(may_words=None, imay_num_bytes4word=-1, imay_num_words=-1, may_bytes8words=None, /, *, imay_max_num_bytes4word=-1):
 
+    from seed.tiny_.oo8inf import OO8inf
+    from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, calc_Fraction5finite_continued_fraction_
 #.    from seed.helper.repr_input import repr_helper
 
 #.#################################
@@ -553,7 +568,6 @@ def 趃子串扌(列表, 起址=None, 讫址=None, /):
     for j in range(len(列表))[起址:讫址]:
         yield 列表[j]
 
-
 class 乸计耗器:
     def __new__(cls, 趃, /):
         if type(趃) is cls:
@@ -622,7 +636,7 @@ class 乸定型定长前取器巛趃位元串(魖定型定长前取器牜造反)
         return sf.趃位元串.diff(sf._起点)
     @override
     def 罓造反扌(sf, /):
-        return 乸定型定长前取器巛趃位元串(sf._ops, sf.已消耗位元数目, sf.趃位元串, 欤取反=not sf.欤取反)
+        return __class__(sf._ops, sf.已消耗位元数目, sf.趃位元串, 欤取反=not sf.欤取反)
     @override
     def 读取冫位元串牜子表扌(sf, 符型, 数目, /):
         '符型/uint%len(列表纟字母表牜头胞辻多种体胞) -> 数目/uint -> 子表位元串/[位元/uint%len(列表纟字母表牜头胞辻多种体胞[符型])]{len==数目}/(tuple|bytes|WordSeq)|^EOFError'
@@ -669,10 +683,36 @@ class 乸定型定长前取器牜符型偏移(魖定型定长前取器牜造反)
         return sf._定型定长前取器.已消耗位元数目
     @override
     def 罓造反扌(sf, /):
-        return 乸定型定长前取器牜符型偏移(sf._符型偏移量, sf._定型定长前取器.取反扌())
+        return __class__(sf._符型偏移量, sf._定型定长前取器.取反扌())
     @override
     def 读取冫位元串牜子表扌(sf, 符型, 数目, /):
         return sf._定型定长前取器.读取冫位元串牜子表扌(符型+sf._符型偏移量, 数目)
+class 乸定型定长前取器牜符型变换(魖定型定长前取器牜造反):
+    ___no_slots_ok___ = True
+    def __new__(cls, 内符型讠外符型, 定型定长前取器, /):
+        #def __new__(cls, 内符型讠外符型, 外符型讠内符型, 定型定长前取器, /):
+        check_type_is(tuple, 内符型讠外符型)
+        #check_type_is(type(mk_FrozenDict()), 外符型讠内符型)
+        #check_all_([check_int_ge, 0], 内符型讠外符型)
+        #check_all_([check_int_ge, 0], 外符型讠内符型.values())
+        #check_all_([check_int_ge, 0], 外符型讠内符型.keys())
+        sf = super(__class__, cls).__new__(cls)
+        sf._内符型讠外符型 = 内符型讠外符型
+        #sf._外符型讠内符型 = 外符型讠内符型
+        sf._定型定长前取器 = 定型定长前取器
+        return sf
+    @property
+    @override
+    def 已消耗位元数目(sf, /):
+        return sf._定型定长前取器.已消耗位元数目
+    @override
+    def 罓造反扌(sf, /):
+        #return __class__(sf._内符型讠外符型, sf._外符型讠内符型, sf._定型定长前取器.取反扌())
+        return __class__(sf._内符型讠外符型, sf._定型定长前取器.取反扌())
+    @override
+    def 读取冫位元串牜子表扌(sf, 符型, 数目, /):
+        return sf._定型定长前取器.读取冫位元串牜子表扌(sf._内符型讠外符型[符型], 数目)
+
 
 class 乸定型定长前取器牜添加头胞(魖定型定长前取器牜造反):
     ___no_slots_ok___ = True
@@ -692,7 +732,7 @@ class 乸定型定长前取器牜添加头胞(魖定型定长前取器牜造反)
         return sf._定型定长前取器.已消耗位元数目
     @override
     def 罓造反扌(sf, /):
-        return 乸定型定长前取器牜添加头胞(sf._ops, sf._头胞, sf._定型定长前取器.取反扌())
+        return __class__(sf._ops, sf._头胞, sf._定型定长前取器.取反扌())
     @override
     def 读取冫位元串牜子表扌(sf, 符型, 数目, /):
         if sf._欤过头:
@@ -713,35 +753,61 @@ class 乸定型定长前取器牜添加头胞(魖定型定长前取器牜造反)
 
 
 
-
-class 魖有理数位元串表达牜词典序牜前置长度(魖数据位元串表达牜词典序牜前置长度):
+class _魖欤含无穷大(魖数据位元串表达牜词典序牜前置长度):
+    __slots__ = ()
+    @property
+    @abstractmethod
+    def 欤含无穷大(sf, /):
+        '-> bool #eg:是否包含越界值:-oo,+oo'
+    欤非负 = False
+    @abstractmethod
+    def 罓检查冫普通数据扌(sf, 数据, /):
+        '数据 -> None'
+    @override
+    def 检查冫数据扌(sf, 数据, /):
+        if sf.欤含无穷大:
+            if 欤无穷大扌(数据):
+                if sf.欤非负:
+                    if not 欤正无穷大扌(数据):raise TypeError(数据)
+                return
+        sf.罓检查冫普通数据扌(数据)
+def 欤无穷大扌(数据, /):
+    777;OO8inf(False)#lazy()
+    return type(数据) is OO8inf
+def 欤正无穷大扌(数据, /):
+    return 数据 is OO8inf(is_neg:=False)
+def 取冫正无穷大扌():
+    return OO8inf(is_neg:=False)
+class 魖有理数位元串表达牜词典序牜前置长度(_魖欤含无穷大, 魖数据位元串表达牜词典序牜前置长度):
     __slots__ = ()
     #@override
     欤编码呈奇性对称分布 = True
     @override
-    def 检查冫数据扌(sf, 数据, /):
+    def 罓检查冫普通数据扌(sf, 数据, /):
         '数据 -> None'
         #check_type_is(Fraction, 数据)
         check_type_le(Rational, 数据)
-        (分子, 分母) = 数据.int.as_integer_ratio()
+        (分子, 分母) = 数据.as_integer_ratio()
 
-class 魖整数位元串表达牜词典序牜前置长度(魖数据位元串表达牜词典序牜前置长度):
+class 魖整数位元串表达牜词典序牜前置长度(_魖欤含无穷大, 魖数据位元串表达牜词典序牜前置长度):
     __slots__ = ()
     #@override
     欤编码无需头胞 = False
     #@override
     欤编码呈奇性对称分布 = True
     @override
-    def 检查冫数据扌(sf, 数据, /):
+    def 罓检查冫普通数据扌(sf, 数据, /):
         '数据 -> None'
         check_type_is(int, 数据)
 
-class 魖自然数位元串表达牜词典序牜前置长度(魖数据位元串表达牜词典序牜前置长度):
+class 魖自然数位元串表达牜词典序牜前置长度(_魖欤含无穷大, 魖数据位元串表达牜词典序牜前置长度):
     __slots__ = ()
     #@override
     欤编码呈奇性对称分布 = False
+    #@override
+    欤非负 = True
     @override
-    def 检查冫数据扌(sf, 数据, /):
+    def 罓检查冫普通数据扌(sf, 数据, /):
         '数据 -> None'
         check_int_ge(0, 数据)
 
@@ -826,6 +892,11 @@ class 魖整数位元串表达牜词典序牜前置长度牜整数零编码为�
     def 欤深一(sf, /):
         '-> bool'
 
+    @cached_property
+    @override
+    def 欤含无穷大(sf, /):
+        匴 = sf.匴自然数位元串表达牜词典序牜前置长度
+        return 匴.欤含无穷大
     @cached_property
     @override
     def 符型讠规模纟字母表(sf, /):
@@ -961,6 +1032,320 @@ class 乸数据字符串表达牜词典序牜前置长度牜使用匴数据位�
 check_non_ABC(乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达)
 
 
+
+
+
+
+
+class 魖有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾(魖有理数位元串表达牜词典序牜前置长度):
+    r'''[[[
+    采用:奇继续偶结束
+    <<==:
+    整数部分处理方案:抬升一:
+        整数部分:
+            0 => 0
+            1 => 0.?
+            ge2 => ge1,ge1.?
+        缺点:爻元变化太大
+    整数部分处理方案:奇继续偶结束:
+        整数部分:
+            2k => k
+            2k+1 => k.?
+        缺点:不兼容整数编码，不过本来就是不兼容
+    整数部分处理方案:非标准0:
+        整数部分:
+            0 => 0
+            非标准0 => 0.?
+            k => k,k.?
+        缺点:非标准数据需特殊对待
+    ]]]'''#'''
+    __slots__ = ()
+    整数部分处理方案 = '奇继续偶结束'
+    @property
+    @abstractmethod
+    def 毝延后无穷大收尾(sf, /):
+        '-> imay uint # [-1=>无限期推迟/不使用无穷大收尾; 0=>尽早使用无穷大收尾; ge1=>推迟使用无穷大收尾] #见:奇继续偶结束'
+    @property
+    @abstractmethod
+    def 罓匴整数位元串表达(sf, /):
+        '-> 魖整数位元串表达牜词典序牜前置长度'
+    @property
+    @abstractmethod
+    def 罓匴自然数位元串表达(sf, /):
+        '-> 魖自然数位元串表达牜词典序牜前置长度{欤含无穷大:=True}'
+
+
+    @property
+    @abstractmethod
+    def 内符型讠外符型纟匴整数位元串表达(sf, /):
+        '-> [uint%len(sf.符型讠规模纟字母表)]{len=len(匴整数位元串表达.符型讠规模纟字母表)}'
+    @property
+    @abstractmethod
+    def 内符型讠外符型纟匴自然数位元串表达(sf, /):
+        '-> [uint%len(sf.符型讠规模纟字母表)]{len=len(匴自然数位元串表达.符型讠规模纟字母表)}'
+
+
+
+
+    @cached_property
+    def 匴整数位元串表达(sf, /):
+        匴 = sf.罓匴整数位元串表达
+        check_type_le(魖整数位元串表达牜词典序牜前置长度, 匴)
+        return 匴
+    @cached_property
+    def 匴自然数位元串表达(sf, /):
+        匴 = sf.罓匴自然数位元串表达
+        check_type_le(魖自然数位元串表达牜词典序牜前置长度, 匴)
+        if not 匴.欤含无穷大:raise TypeError
+        return 匴
+    @cached_property
+    @override
+    def 欤含无穷大(sf, /):
+        return sf.匴整数位元串表达.欤含无穷大
+    @cached_property
+    @override
+    def 欤编码无需头胞(sf, /):
+        return sf.匴整数位元串表达.欤编码无需头胞
+
+    @cached_property
+    def 外符型讠内符型纟匴整数位元串表达(sf, /):
+        '-> {uint%len(sf.符型讠规模纟字母表):uint%len(匴整数位元串表达.符型讠规模纟字母表)}'
+        return 构造冫外符型讠内符型扌(len(sf.匴整数位元串表达.符型讠规模纟字母表), sf.内符型讠外符型纟匴整数位元串表达)
+    @cached_property
+    def 外符型讠内符型纟匴自然数位元串表达(sf, /):
+        '-> {uint%len(sf.符型讠规模纟字母表):uint%len(匴自然数位元串表达.符型讠规模纟字母表)}'
+        return 构造冫外符型讠内符型扌(len(sf.匴自然数位元串表达.符型讠规模纟字母表), sf.内符型讠外符型纟匴自然数位元串表达)
+
+    @cached_property
+    @override
+    def 符型讠规模纟字母表(sf, /):
+        最大符型 = max(max(sf.内符型讠外符型纟匴整数位元串表达), max(sf.内符型讠外符型纟匴自然数位元串表达))
+        符型讠规模纟字母表 = [None]*(1+最大符型)
+        _赋值冫符型讠规模扌(符型讠规模纟字母表, sf.外符型讠内符型纟匴整数位元串表达, sf.匴整数位元串表达)
+        _赋值冫符型讠规模扌(符型讠规模纟字母表, sf.外符型讠内符型纟匴自然数位元串表达, sf.匴自然数位元串表达)
+        if any(x is None for x in 符型讠规模纟字母表):raise TypeError(sf.内符型讠外符型纟匴整数位元串表达, sf.内符型讠外符型纟匴自然数位元串表达)
+        符型讠规模纟字母表 = tuple(符型讠规模纟字母表)
+        check_all_([check_int_ge, 1], 符型讠规模纟字母表)
+        return 符型讠规模纟字母表
+
+    @override
+    def 罓表述冫数据讠趃序列纟带符型位元串扌(sf, 数据, /):
+        欤负数 = 数据 < 0
+        绝对值 = abs(数据)
+        #欤无穷大 = 欤无穷大扌(数据)
+        if 欤正无穷大扌(绝对值):
+            xuint = 绝对值
+            us = ()
+        else:
+            有理数 = 数据
+            (N, D) = 绝对值.as_integer_ratio()
+            cf_digits = iter_continued_fraction_digits5ND_(N, D)
+            it = iter(cf_digits)
+            uint_part = next(it, None)
+            us = [*map((-1).__add__, it)]
+            欤继续 = len(us) > 0
+            xuint = (uint_part<<1) | 欤继续
+            if sf.毝延后无穷大收尾 >= 0 and 欤继续:
+                #可能:使用无穷大收尾
+                延后 = sf.毝延后无穷大收尾
+            else:
+                #不使用无穷大收尾
+                延后 = len(us)
+            延后
+            延后 = min(延后, len(us))
+            for j in range(延后):
+                us[j] = (us[j]<<1)^1
+            if 延后 < len(us):
+                us.append(取冫正无穷大扌())
+            else:
+                assert 延后 == len(us)
+                if 欤继续:
+                    us[-1] = (us[-1]^1)
+                    assert us[-1]&1 == 0
+            us
+        #########
+        欤负数, xuint, us
+        #########
+        xint = -xuint if 欤负数 else xuint
+
+        #########
+        欤负数, xint, us
+        #########
+
+        #########
+        xint
+        #########
+        趃序列纟带符型位元串牜匴整数 = sf.匴整数位元串表达.罓表述冫数据讠趃序列纟带符型位元串扌(xint)
+        趃序列纟带符型位元串牜匴有理数 = 符型外移扌(sf.内符型讠外符型纟匴整数位元串表达, 趃序列纟带符型位元串牜匴整数)
+        yield from 趃序列纟带符型位元串牜匴有理数
+
+        #########
+        us
+        #########
+        匴 = sf.匴自然数位元串表达
+        欤取反 = 欤负数
+        for u in us:
+            欤取反 = not 欤取反
+            趃序列纟带符型位元串牜匴自然数 = 匴.罓表述冫数据讠趃序列纟带符型位元串扌(u)
+            if 欤取反:
+                趃序列纟带符型位元串牜匴自然数 = 匴.取反冫趃序列纟带符型位元串扌(趃序列纟带符型位元串牜匴自然数)
+            趃序列纟带符型位元串牜匴自然数
+            趃序列纟带符型位元串牜匴有理数 = 符型外移扌(sf.内符型讠外符型纟匴自然数位元串表达, 趃序列纟带符型位元串牜匴自然数)
+            yield from 趃序列纟带符型位元串牜匴有理数
+
+    @override
+    def 罓解读冫数据巛定型定长前取器扌(sf, 定型定长前取器, /):
+        '魖定型定长前取器{位元{符型}} -> 数据'
+        定型定长前取器牜匴整数 = 乸定型定长前取器牜符型变换(sf.内符型讠外符型纟匴整数位元串表达, 定型定长前取器)
+        定型定长前取器牜匴自然数 = 乸定型定长前取器牜符型变换(sf.内符型讠外符型纟匴自然数位元串表达, 定型定长前取器)
+        777;del 定型定长前取器
+
+        xint = sf.匴整数位元串表达.罓解读冫数据巛定型定长前取器扌(定型定长前取器牜匴整数)
+        if 欤无穷大扌(xint):
+            数据 = 正负无穷大 = xint
+            return 数据
+
+        欤负数 = xint < 0
+        欤继续 = xint&1 == 1
+        if 0:
+            #bug:int_part = xint >> 1
+            int_part = -((-xint) >> 1) if 欤负数 else xint >> 1
+        uint_part = abs(xint) >>1
+        int_part = -uint_part if 欤负数 else uint_part
+        #bug:assert xint == (__:=(int_part<<1)^欤继续), (xint, uint_part, int_part, 欤继续, __)
+            # !! [(-4)^1 == -3]
+        assert xint == (__:=(int_part<<1) + ((-1)**欤负数 * 欤继续)), (xint, uint_part, int_part, 欤继续, __)
+        if not 欤继续:
+            数据 = Fraction(int_part)
+            return 数据
+
+        def _iter_us(定型定长前取器牜匴自然数, /):
+            匴 = sf.匴自然数位元串表达
+            us = []
+            欤取反 = 欤负数
+            while 1:
+                欤取反 = not 欤取反
+                定型定长前取器牜或反 = 定型定长前取器牜匴自然数 if not 欤取反 else 定型定长前取器牜匴自然数.取反扌()
+                u = 匴.罓解读冫数据巛定型定长前取器扌(定型定长前取器牜或反)
+                if 欤正无穷大扌(u):
+                    #收尾二处
+                    break
+                yield u
+        it = _iter_us(定型定长前取器牜匴自然数)
+
+        if sf.毝延后无穷大收尾 >= 0 and 欤继续:
+            #可能:使用无穷大收尾
+            延后 = sf.毝延后无穷大收尾
+            _it = islice(it, 0, 延后)
+        else:
+            #不使用无穷大收尾
+            延后 = 取冫正无穷大扌()
+            _it = it
+        _it
+        us = []
+        for v in _it:
+            u = v >> 1
+            us.append(u)
+            if v&1 == 0:
+                #收尾一处
+                break
+        else:
+            if len(us) == 延后 == 0:
+                pass
+            else:
+                assert len(us) < 延后, (len(us), 延后)
+                raise FormatError('连分数提取被无穷大终止')
+        it = chain(us, it)
+        us = [*map((+1).__add__, it)]
+        if not us:raise FormatError('整数部分提示非整数，而小数部分为零')
+
+        #########
+        欤负数, uint_part, us
+        #########
+        cf_digits = chain([uint_part], us)
+        绝对值 = calc_Fraction5finite_continued_fraction_(cf_digits)
+        有理数 = -绝对值 if 欤负数 else 绝对值
+        数据 = 有理数
+        return 数据
+
+
+def 符型变换扌(入符型讠出符型, 趃序列纟带符型位元串牜入匴, /):
+    return ((入符型讠出符型[入符型], 位元串) for (入符型, 位元串) in 趃序列纟带符型位元串牜入匴)
+def 符型内移扌(外符型讠内符型, 趃序列纟带符型位元串牜外匴, /):
+    return 符型变换扌(外符型讠内符型, 趃序列纟带符型位元串牜外匴)
+def 符型外移扌(内符型讠外符型, 趃序列纟带符型位元串牜内匴, /):
+    return 符型变换扌(内符型讠外符型, 趃序列纟带符型位元串牜内匴)
+
+def 构造冫外符型讠内符型扌(长度纟预期, 内符型讠外符型, /):
+    check_type_is(tuple, 内符型讠外符型)
+    check_all_([check_int_ge, 0], 内符型讠外符型)
+    if not 长度纟预期 == len(内符型讠外符型):raise TypeError(长度纟预期, 内符型讠外符型)
+    外符型讠内符型 = mk_FrozenDict((外符型, 内符型) for 内符型, 外符型 in enumerate(内符型讠外符型))
+    if not 长度纟预期 == len(外符型讠内符型):raise TypeError('重复', 长度纟预期, 内符型讠外符型, 外符型讠内符型)
+    return 外符型讠内符型
+def _赋值冫符型讠规模扌(符型讠规模纟字母表, 外符型讠内符型, 匴数据位元串表达, /):
+    j2sz = 匴数据位元串表达.符型讠规模纟字母表
+    for 外符型, 内符型 in 外符型讠内符型.items():
+        规模纟字母表 = j2sz[内符型]
+        if None is 符型讠规模纟字母表[外符型]:
+            符型讠规模纟字母表[外符型] = 规模纟字母表
+        else:
+            if not 规模纟字母表 == 符型讠规模纟字母表[外符型]:raise TypeError(外符型, (规模纟字母表, 符型讠规模纟字母表[外符型]))
+
+
+class 乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾(魖有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾):
+    ___no_slots_ok___ = True
+    def __init__(sf, 毝延后无穷大收尾, 匴整数位元串表达, 匴自然数位元串表达, 内符型讠外符型纟匴整数位元串表达, 内符型讠外符型纟匴自然数位元串表达, /):
+        check_int_ge(-1, 毝延后无穷大收尾)
+        check_type_le(魖整数位元串表达牜词典序牜前置长度, 匴整数位元串表达)
+        check_type_le(魖自然数位元串表达牜词典序牜前置长度, 匴自然数位元串表达)
+        if not 匴自然数位元串表达.欤含无穷大:raise TypeError
+
+        内符型讠外符型纟匴整数位元串表达 = tuple(内符型讠外符型纟匴整数位元串表达)
+        内符型讠外符型纟匴自然数位元串表达 = tuple(内符型讠外符型纟匴自然数位元串表达)
+
+        if not len(内符型讠外符型纟匴整数位元串表达) == len(匴整数位元串表达.符型讠规模纟字母表):raise TypeError
+        if not len(内符型讠外符型纟匴自然数位元串表达) == len(匴自然数位元串表达.符型讠规模纟字母表):raise TypeError
+
+        check_all_([check_int_ge, 0], 内符型讠外符型纟匴整数位元串表达)
+        check_all_([check_int_ge, 0], 内符型讠外符型纟匴自然数位元串表达)
+
+        sf._im = 毝延后无穷大收尾
+        sf._opsI = 匴整数位元串表达
+        sf._opsU = 匴自然数位元串表达
+        sf._i2oI = 内符型讠外符型纟匴整数位元串表达
+        sf._i2oU = 内符型讠外符型纟匴自然数位元串表达
+    ##################
+    @property
+    @override
+    def 毝延后无穷大收尾(sf, /):
+        return sf._im
+    @property
+    @override
+    def 罓匴整数位元串表达(sf, /):
+        return sf._opsI
+    @property
+    @override
+    def 罓匴自然数位元串表达(sf, /):
+        return sf._opsU
+    @property
+    @override
+    def 内符型讠外符型纟匴整数位元串表达(sf, /):
+        return sf._i2oI
+    @property
+    @override
+    def 内符型讠外符型纟匴自然数位元串表达(sf, /):
+        return sf._i2oU
+
+
+check_non_ABC(乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾)
+
+
+
+
+
+
+
 __all__
 from seed.int_tools.int_repr7lex_order7base import FormatError
 from seed.int_tools.int_repr7lex_order7base import 魖数据位元串表达牜词典序牜前置长度, 魖数据字符串表达牜词典序牜前置长度,魖有理数位元串表达牜词典序牜前置长度,魖整数位元串表达牜词典序牜前置长度,魖自然数位元串表达牜词典序牜前置长度
@@ -973,6 +1358,17 @@ from seed.int_tools.int_repr7lex_order7base import encode_dat2digit_seq7lex_orde
 from seed.int_tools.int_repr7lex_order7base import 表述冫数据讠字符串表达扌, 解读冫数据巛字符串表达扌, 详解读冫数据巛字符串表达扌, 详解读冫数据巛趃字符串扌
 from seed.int_tools.int_repr7lex_order7base import encode_dat2txt7lex_order_, decode_dat5txt7lex_order_, xdecode_dat5txt7lex_order_, xdecode_dat5iter_chars7lex_order_
 
+
+from seed.int_tools.int_repr7lex_order7base import 乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达, 乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾
+    #乸数据字符串表达牜词典序牜前置长度牜使用匴数据位元串表达(匴数据位元串表达, 列表纟字母表牜头胞辻多种体胞)
+    #乸有理数位元串表达牜词典序牜前置长度牜连分数牜无穷大收尾(毝延后无穷大收尾, 匴整数位元串表达, 匴自然数位元串表达, 内符型讠外符型纟匴整数位元串表达, 内符型讠外符型纟匴自然数位元串表达)
+
+from seed.int_tools.int_repr7lex_order7base import 乸定型定长前取器巛趃位元串, 乸定型定长前取器牜符型偏移, 乸定型定长前取器牜符型变换, 乸定型定长前取器牜添加头胞, 乸计耗器
+    #.乸计耗器(趃)
+    #.乸定型定长前取器巛趃位元串(ops, 已消耗位元数目, 趃位元串)
+    #.乸定型定长前取器牜符型偏移(符型偏移量, 定型定长前取器)
+    #.乸定型定长前取器牜符型变换(内符型讠外符型, 定型定长前取器)
+    #.乸定型定长前取器牜添加头胞(ops, 头胞, 定型定长前取器)
 
 if 1:from seed.int_tools.int_repr7lex_order7base import _魖共通
 from seed.int_tools.int_repr7lex_order7base import *
