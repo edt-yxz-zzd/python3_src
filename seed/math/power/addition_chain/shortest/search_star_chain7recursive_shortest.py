@@ -194,6 +194,14 @@ file_startswith_ /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.sho
 file_startswith_ /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0small.ver2.out.txt  /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0.out.txt
     => same
 ]]
+[[
+修改代码后校验:++contains7bisect_@put_:
+py_adhoc_call   seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest   ,枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌 --ver=2 --鬽最大靶值=500  --休眠期:auto :/sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0small.put_.ver2.out.txt :/sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-1small.put_.ver2.out.txt
+file_startswith_ /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-1small.put_.ver2.out.txt  /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-1.ver2.out.txt
+    => same
+file_startswith_ /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0small.put_.ver2.out.txt  /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0.out.txt
+    => same
+]]
 
 
 
@@ -247,6 +255,7 @@ from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOT
 with mk_ctx4lazy_import4funcs_(__name__):
     from itertools import islice
     from bisect import bisect_left
+    from seed.for_libs.for_bisect import contains7bisect_
     from seed.for_libs.for_time import mk_rest_func_
     from seed.tiny_.check import check_type_in, check_type_is, check_int_ge, check_int_ge_le, check_may_
     from seed.debug.print_err import print_err
@@ -340,8 +349,15 @@ def 枚举冫加星链牜递归最短巛靶值扌(靶值, /, *, 欤次大数降�
             # [[existed == (-1)] <-> [u =!= us[szmm]]]
         else:
             # [existed == (0)]
-            us[szmm] = u
-            # [u == us[szmm]]
+            if u < len(靶值讠升列纟次大数) and szmm > 0 and not None is (prev:=us[szmm-1]) and not contains7bisect_(靶值讠升列纟次大数[u], prev):
+                existed = -1
+            elif szmm+1 < len(us) and not None is (succ:=us[szmm+1]) and succ < len(靶值讠升列纟次大数) and not contains7bisect_(靶值讠升列纟次大数[succ], u):
+                existed = -1
+            else:
+                # [existed == (0)]
+                us[szmm] = u
+                # [u == us[szmm]]
+                # [[existed == (-1)] <-> [u =!= us[szmm]]]
             # [[existed == (-1)] <-> [u =!= us[szmm]]]
         # [[existed == (-1)] <-> [u =!= us[szmm]]]
         return existed
@@ -381,8 +397,11 @@ def 枚举冫加星链牜递归最短巛靶值扌(靶值, /, *, 欤次大数降�
                 return 0
             if u < len(靶值讠升列纟次大数):
                 vs = 靶值讠升列纟次大数[u]
-                j = bisect_left(vs, v)
-                if not (j < len(vs) and vs[j] == v):
+                if 0:
+                    j = bisect_left(vs, v)
+                    if not (j < len(vs) and vs[j] == v):
+                        return 0
+                if not contains7bisect_(vs, v):
                     return 0
             vs = [v]
             js = [0]
