@@ -1,6 +1,10 @@
 #__all__:goto
 #TODO:goto
 #DONE:靶值讠次大数讠首尾加链@枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌
+# [:主要命令行纟输出文件]:goto
+# [:已知空缺靶值]:goto
+# [:主要输出文件]:goto
+# [:次要输出文件]:goto
 r'''[[[
 e ../../python3_src/seed/math/power/addition_chain/shortest/search_star_chain7recursive_shortest.py
 
@@ -173,8 +177,115 @@ echo $[23219 -20753]
 >>> bin(18815)
 '0b100100101111111'
 
+===
+prefixAB=/sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌
 py_adhoc_call   seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest   ,枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌 -欤询问中止乊靶值牜无加星链牜递归最短  --ver=2 --鬽最大靶值=None  --休眠期:auto :"${prefixAB}".-0.out.txt :"${prefixAB}".-1.ver2.out.txt
+    [:主要命令行纟输出文件]:here
+    ^KeyboardInterrupt@le74174
     TODO
+
+head /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0.out.txt
+echo '[#LMr+B]' | grep '\[#[^+-]*+B\]'
+grep '\[#[^+-]*+B\]' -n /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0.out.txt > /sdcard/0my_files/tmp/-0tmp
+view /sdcard/0my_files/tmp/-0tmp
+    75行@le74174
+    [:已知空缺靶值]:here
+1:[#B+B]
+12509:[#DDd+B]
+13207:[#DOX+B]
+13705:[#DWJ+B]
+15473:[#Dxx+B]
+16537:[#ECZ+B]
+20753:[#FER+B]
+22955:[#Fmr+B]
+23219:[#Fqz+B]
+23447:[#FuX+B]
+24797:[#GDd+B]
+25018:[#GG6+B]
+26027:[#GWr+B]
+26253:[#GaN+B]
+26391:[#GcX+B]
+26414:[#Gcu+B]
+26801:[#Gix+B]
+27401:[#GsJ+B]
+27410:[#GsS+B]
+30897:[#Hix+B]
+30946:[#Hji+B]
+31001:[#HkZ+B]
+32921:[#ICZ+B]
+33065:[#IEp+B]
+33074:[#IEy+B]
+41489:[#KIR+B]
+41506:[#KIi+B]
+43755:[#Krr+B]
+43927:[#KuX+B]
+45867:[#LMr+B]
+46355:[#LUT+B]
+46419:[#LVT+B]
+46797:[#LbN+B]
+46871:[#LcX+B]
+46894:[#Lcu+B]
+47761:[#LqR+B]
+49373:[#MDd+B]
+49577:[#MGp+B]
+49593:[#MG5+B]
+49594:[#MG6+B]
+49611:[#MHL+B]
+50036:[#MN0+B]
+50829:[#MaN+B]
+51667:[#MnT+B]
+51891:[#Mqz+B]
+52011:[#Msr+B]
+52054:[#MtW+B]
+52493:[#M0N+B]
+52506:[#M0a+B]
+52759:[#M4X+B]
+52782:[#M4u+B]
+52828:[#M5c+B]
+53602:[#NFi+B]
+54033:[#NMR+B]
+54802:[#NYS+B]
+54820:[#NYk+B]
+61665:[#PDh+B]
+61745:[#PEx+B]
+61794:[#PFi+B]
+61892:[#PHE+B]
+61977:[#PIZ+B]
+62002:[#PIy+B]
+62225:[#PMR+B]
+62259:[#PMz+B]
+65689:[#QCZ+B]
+65833:[#QEp+B]
+65842:[#QEy+B]
+66035:[#QHz+B]
+66130:[#QJS+B]
+66148:[#QJk+B]
+67067:[#QX7+B]
+69407:[#Q8f+B]
+70167:[#RIX+B]
+70295:[#RKX+B]
+72953:[#Rz5+B]
+
+du -bh /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-1.ver2.out.txt
+    231M #@le74174
+du -bh /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0.out.txt
+    9.9M #@le74174
+
+mkdir /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/
+txz /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空升列纟次大数纟加星链牜递归最短.le74174.txt.txz   /sdcard/0my_files/tmp/out4py/   -ipaths  /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-0.out.txt
+#rm -iv /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空升列纟次大数纟加星链牜递归最短.le74174.txt.txz
+du -bh /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空升列纟次大数纟加星链牜递归最短.le74174.txt.txz
+    4.3M # <- 9.9M #@le74174
+    [:主要输出文件]:here
+
+txz /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空次大数讠首尾加星链牜递归最短.le74174.txt.txz   /sdcard/0my_files/tmp/out4py/   -ipaths  /sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest..枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌.-1.ver2.out.txt
+du -bh /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空次大数讠首尾加星链牜递归最短.le74174.txt.txz
+    36M # <- 231M #@le74174
+    [:次要输出文件]:here
+
+#mv -iv /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空次大数讠首尾加星链牜递归最短.txt.txz /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空次大数讠首尾加星链牜递归最短.le74174.txt.txz
+#mv -iv /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空升列纟次大数纟加星链牜递归最短.txt.txz /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短/靶值讠允空升列纟次大数纟加星链牜递归最短.le74174.txt.txz
+===
 ]]
 [[
 修改代码后校验:
