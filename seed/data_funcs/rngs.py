@@ -55,6 +55,8 @@ IRangeBasedIntMapping
     ranges5wave_rngtxt
     ranges2delta_txt_
     ranges5delta_txt_
+    ranges2delta_xints_
+    ranges5delta_xints_
 
     check_input4isomorphism_mapping__RangeBased
     isomorphism_mapping__RangeBased
@@ -1451,7 +1453,64 @@ NonTouchRanges(((48, 57), (65, 66), (19968, 19977)))
 >>> IRanges.from_delta_txt(ranges.to_delta_txt()).to_delta_txt()
 '[#w+J-I-E2_+J]'
 
+>>> ranges = make_Ranges([(0x30, 0x31)])
+>>> ranges.to_delta_txt()
+'[#w+B]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt())
+NonTouchRanges(((48, 49),))
+
+>>> ranges = make_Ranges([(0x30, 0x31)])
+>>> ranges.to_delta_txt(fixed_bug0=True)
+'[#w]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt(fixed_bug0=True))
+NonTouchRanges(((48, 49),))
+
+>>> ranges = make_Ranges([])
+>>> ranges.to_delta_txt()
+'[]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt())
+NonTouchRanges(())
+
+>>> ranges = make_Ranges([(-999, 666)])
+>>> ranges.to_delta_txt()
+'[~Pn+aB]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt())
+NonTouchRanges(((-999, 666),))
+
 ]]
+[[
+@20260308
+ranges2delta_xints_
+ranges5delta_xints_
+
+>>> ranges = make_Ranges([(0x30, 0x39), (0x41, 0x42), (0x4e00, 0x4e09)])
+>>> ranges.to_delta_xints()
+(48, 9, 8, 1, 19902, 9)
+>>> IRanges.from_delta_xints(ranges.to_delta_xints())
+NonTouchRanges(((48, 57), (65, 66), (19968, 19977)))
+>>> IRanges.from_delta_xints(ranges.to_delta_xints()) == ranges
+True
+
+>>> ranges = make_Ranges([(0x30, 0x31)])
+>>> ranges.to_delta_xints()
+(48, 1)
+>>> IRanges.from_delta_xints(ranges.to_delta_xints())
+NonTouchRanges(((48, 49),))
+
+>>> ranges = make_Ranges([])
+>>> ranges.to_delta_xints()
+()
+>>> IRanges.from_delta_xints(ranges.to_delta_xints())
+NonTouchRanges(())
+
+>>> ranges = make_Ranges([(-999, 666)])
+>>> ranges.to_delta_xints()
+(-999, 1665)
+>>> IRanges.from_delta_xints(ranges.to_delta_xints())
+NonTouchRanges(((-999, 666),))
+
+]]
+
 
 
 ]]]
@@ -1580,6 +1639,8 @@ __all__ = """
     ranges5delta_txt_
         uint2base64_
         uint5base64_
+    ranges2delta_xints_
+    ranges5delta_xints_
     """.split()#"""
     #all_map
     #LeftRightHandSideFlip
@@ -1591,7 +1652,8 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.lazy_import__func import lazy_import4funcs_
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-#from seed.helper.repr_input import repr_helper
+from seed.func_tools.fmapT.fmapT__tiny import fmap_rngs2hex_repr, fmapT__pairs, dot
+#from seed.func_tools.dot2 import dot
 #class _(ABC):
 #    __slots__ = ()
 #    raise NotImplementedError
@@ -1602,27 +1664,35 @@ from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 #        ...
 #if __name__ == "__main__":
 
-import bisect
-from itertools import chain
-from operator import lt, le
-from seed.iters.PeekableIterator import PeekableIterator
-from seed.iters.iter_subsets_of import iter_subsets_of__dictionary_order as iter_subsets_of
-from seed.tiny import print_err
-from seed.func_tools.fmapT.fmapT__tiny import fmap_rngs2hex_repr, fmapT__pairs, dot
-#from seed.func_tools.dot2 import dot
-from seed.tiny_.HexReprInt import HexReprInt
-from seed.tiny_.HexReprInt import HEXReprInt as HexReprInt
-    # using HEXReprInt to replace HexReprInt
-    #   API.output.format changed!
-    #   !!!maybe cause some doctest fail!!!
-    #   ???to change:fmap_rngs2hex_repr
-    #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
-from seed.tiny import fmap4dict_value
-from seed.tiny import check_type_is
+#.#################################
+#.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
+#.with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', prefix4attr='lazy_', suffix4attr=''):
+#.    from __.seed.tiny_.containers import lazy_null_tuple,lazy_null_iter,lazy_null_frozenset as _lazy_null_frozenset_ #null_tuple,null_iter,null_frozenset
+#.#################################
+#.from seed.helper.lazy_import__func import force_lazy_imported_func_ # lazy_import4func_, lazy_import4funcs_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'iter_subsets_of__dictionary_order:iter_subsets_of, HEXReprInt:mk_HexReprInt, uint__to__radix64_digits__b64__str_:_encode64_, uint__from__radix64_digits__b64__str_:_decode64_'):
+    #from seed.helper.repr_input import repr_helper
+    from bisect import bisect_left
+    from itertools import chain
+    from operator import lt, le
+    from seed.iters.PeekableIterator import echo_or_mk_PeekableIterator
+    from seed.iters.iter_subsets_of import iter_subsets_of__dictionary_order as iter_subsets_of
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_type_is# check_int_ge
+    from seed.tiny_.HexReprInt import HEXReprInt as mk_HexReprInt
+    #from seed.tiny_.HexReprInt import HexReprInt
+    #from seed.tiny_.HexReprInt import HEXReprInt as HexReprInt
+        # using HEXReprInt to replace HexReprInt
+        #   API.output.format changed!
+        #   !!!maybe cause some doctest fail!!!
+        #   ???to change:fmap_rngs2hex_repr
+        #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
+    from seed.tiny_.dict__add_fmap_filter import fmap4dict_value
 
-from seed.text.base64 import uint__to__radix64_digits__b64__str_ as _encode64_, uint__from__radix64_digits__b64__str_ as _decode64_
-#def uint__to__radix64_digits__b64__str_(u, /, *, b64_cfg_case, bigendian):
-#def uint__from__radix64_digits__b64__str_(s, /, *, b64_cfg_case, bigendian):
+    from seed.text.base64 import uint__to__radix64_digits__b64__str_ as _encode64_, uint__from__radix64_digits__b64__str_ as _decode64_
+        #def uint__to__radix64_digits__b64__str_(u, /, *, b64_cfg_case, bigendian):
+        #def uint__from__radix64_digits__b64__str_(s, /, *, b64_cfg_case, bigendian):
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def all_map(pred, iterable, /):
@@ -1705,7 +1775,7 @@ def len_ints_of_nonoverlap_rngs(nonoverlap_rngs, /):
 
 
 def sorted_rngs_to_iter_nontouch_ranges(sorted_rngs, /):
-    it = PeekableIterator(sorted_rngs)
+    it = echo_or_mk_PeekableIterator(sorted_rngs)
     while not it.is_empty():
         (begin, end_) = it.read1() # raise StopIteration
 
@@ -1750,8 +1820,8 @@ def symmetric_difference_ex__xtouch_ranges(lhs_xtouch_ranges, rhs_xtouch_ranges,
         xtouch_ranges -> touch_ranges -> touch_ranges
 
     #"""
-    lhs = PeekableIterator(lhs_xtouch_ranges)
-    rhs = PeekableIterator(rhs_xtouch_ranges)
+    lhs = echo_or_mk_PeekableIterator(lhs_xtouch_ranges)
+    rhs = echo_or_mk_PeekableIterator(rhs_xtouch_ranges)
     faster_output_iter_touch_ranges = bool(faster_output_iter_touch_ranges)
     while 1:
         if lhs.is_empty():
@@ -1833,8 +1903,8 @@ def union_ex__xtouch_ranges(lhs_xtouch_ranges, rhs_xtouch_ranges, /,*, faster_ou
         xtouch_ranges -> touch_ranges -> touch_ranges
 
     #"""
-    lhs = PeekableIterator(lhs_xtouch_ranges)
-    rhs = PeekableIterator(rhs_xtouch_ranges)
+    lhs = echo_or_mk_PeekableIterator(lhs_xtouch_ranges)
+    rhs = echo_or_mk_PeekableIterator(rhs_xtouch_ranges)
     faster_output_iter_touch_ranges = bool(faster_output_iter_touch_ranges)
     while 1:
         if lhs.is_empty():
@@ -1897,8 +1967,8 @@ def intersection__xtouch_ranges(lhs_xtouch_ranges, rhs_xtouch_ranges, /):
 
     touch_ranges -> touch_ranges -> touch_ranges
     #"""
-    lhs = PeekableIterator(lhs_xtouch_ranges)
-    rhs = PeekableIterator(rhs_xtouch_ranges)
+    lhs = echo_or_mk_PeekableIterator(lhs_xtouch_ranges)
+    rhs = echo_or_mk_PeekableIterator(rhs_xtouch_ranges)
     while not (lhs.is_empty() or rhs.is_empty()):
         (begin_, end_) = lhs.head # raise StopIteration
         (_begin, _end) = rhs.head # raise StopIteration
@@ -1937,8 +2007,8 @@ def difference__xtouch_ranges(lhs_xtouch_ranges, rhs_xtouch_ranges, /):
 
     touch_ranges -> xtouch_ranges -> touch_ranges
     #"""
-    lhs = PeekableIterator(lhs_xtouch_ranges)
-    rhs = PeekableIterator(rhs_xtouch_ranges)
+    lhs = echo_or_mk_PeekableIterator(lhs_xtouch_ranges)
+    rhs = echo_or_mk_PeekableIterator(rhs_xtouch_ranges)
     while not lhs.is_empty():
         (begin_, end_) = lhs.head # raise StopIteration
         if rhs.is_empty():
@@ -2131,8 +2201,8 @@ def iter_with_middle_state_of_subset_relation_ex__xtouch_ranges(lhs_xtouch_range
     #"""
     R = PartialOrderingCompareResult
     F = R.get_mirror_class()
-    lhs = PeekableIterator(lhs_xtouch_ranges)
-    rhs = PeekableIterator(rhs_xtouch_ranges)
+    lhs = echo_or_mk_PeekableIterator(lhs_xtouch_ranges)
+    rhs = echo_or_mk_PeekableIterator(rhs_xtouch_ranges)
     lhs_maynot_be_nontouch_ranges = bool(lhs_maynot_be_nontouch_ranges)
     rhs_maynot_be_nontouch_ranges = bool(rhs_maynot_be_nontouch_ranges)
 
@@ -2246,8 +2316,8 @@ def subset_cmp_ex__xtouch_ranges(lhs_xtouch_ranges, rhs_xtouch_ranges, /,*, rhs_
     else:
         raise logic-err
     ############# old impl ##########
-    lhs = PeekableIterator(lhs_xtouch_ranges)
-    rhs = PeekableIterator(rhs_xtouch_ranges)
+    lhs = echo_or_mk_PeekableIterator(lhs_xtouch_ranges)
+    rhs = echo_or_mk_PeekableIterator(rhs_xtouch_ranges)
     #lhs_maynot_be_nontouch_ranges = bool(lhs_maynot_be_nontouch_ranges)
     rhs_maynot_be_nontouch_ranges = bool(rhs_maynot_be_nontouch_ranges)
 
@@ -2438,7 +2508,7 @@ def rngs_op__get_maybe_range_contained_ex(rngs, i, /):
     L = len(rngs)
 
     j = i + 1
-    idx = bisect.bisect_left(rngs, (j,j)) - 1
+    idx = bisect_left(rngs, (j,j)) - 1
     if idx < 0:
         assert not L or rngs[0][0] > i
         return None, idx
@@ -2831,12 +2901,17 @@ TODO:
     @staticmethod
     def from_compact_txt(compact_txt, /):
         return ranges5compact_txt_(compact_txt)
-    def to_delta_txt(sf, /, *, validate=False):
+    def to_delta_txt(sf, /, *, validate=False, fixed_bug0=False):
         '-> delta_txt/regex"\[(([~#][[:base64digits:]]*[+][[:base64digits:]]*)([-][[:base64digits:]]*[+][[:base64digits:]]*)*)?\]" where [[[:base64digits:]] =[def]= [0-9A-Za-z_.]]'
-        return ranges2delta_txt_(sf, validate=validate)
+        return ranges2delta_txt_(sf, validate=validate, fixed_bug0=fixed_bug0)
     @staticmethod
     def from_delta_txt(delta_txt, /):
         return ranges5delta_txt_(delta_txt)
+    def to_delta_xints(sf, /, *, validate=False):
+        return ranges2delta_xints_(sf, validate=validate)
+    @staticmethod
+    def from_delta_xints(delta_xints, /):
+        return ranges5delta_xints_(delta_xints)
 
     def __init__(sf, ranges, /):
         #ranges = tuple(ranges)
@@ -3316,7 +3391,7 @@ class IRangeBasedIntMapping__view_part_API(IMixin4_get_rngs_AND_len_ints):
         '-> value2begin2sz/v2hx2sz/{v:{begin/HexReprInt:sz}}'
         v2hx2sz = value2begin2sz = {}
         for (i,j), v in sf.iter_rng_value_pairs_(reverse=False):
-            hx = HexReprInt(i)
+            hx = mk_HexReprInt(i)
             sz = j-i
             hx2sz = v2hx2sz.setdefault(v, {})
             hx2sz[hx] = sz
@@ -3625,7 +3700,7 @@ def iter_rngs2iter_hexXhexszpair_list(rngs, /):
     'Iter rng -> Iter (HexReprInt|(HexReprInt, int))'
     for begin, end in rngs:
         sz = end-begin
-        begin__HexReprInt = HexReprInt(begin)
+        begin__HexReprInt = mk_HexReprInt(begin)
         if sz==1:
             x = begin__HexReprInt
         elif sz >= 2:
@@ -3676,7 +3751,7 @@ def ranges2len_rng2hexbegins(ranges, /):
     for rng in ranges.iter_rngs():
         len_rng = len_of__rng(rng)
         begin, _ = rng
-        begin__HexReprInt = HexReprInt(begin)
+        begin__HexReprInt = mk_HexReprInt(begin)
         len_rng2hexbegins[len_rng].append(begin__HexReprInt)
     assert all(len_rng2hexbegins.values())
     return len_rng2hexbegins
@@ -3696,7 +3771,7 @@ def hexbegins2str(hexbegins, /):
 def hexbegins5str(hexbegins_str, /):
     hex_ls = hexbegins_str.split(',')
     #map(HexReprInt, map(hex2int, hex_ls))
-    return [HexReprInt(h, 16) for h in hex_ls]
+    return [mk_HexReprInt(h, 16) for h in hex_ls]
 
 def ranges2len_rng2hexbegins_str(ranges, /):
     'IRanges -> {len_rng/int: ",".join(f"{begin:X}"...)}'
@@ -3715,7 +3790,7 @@ ranges5len_rng2hexbegins_str
 def hexbegins2chars(hexbegins, /):
     return ''.join(map(chr, hexbegins))
 def hexbegins5chars(begin_chars, /):
-    return [*map(HexReprInt, map(ord, begin_chars))]
+    return [*map(mk_HexReprInt, map(ord, begin_chars))]
 
 def ranges2len_rng2begin_chars(ranges, /):
     'IRanges -> {len_rng/int: "".join(map(chr,begins))}'
@@ -3861,8 +3936,8 @@ def uint5base64_(s, /):
 
 _encode64_
 _decode64_
-def ranges2delta_txt_(ranges, /, *, validate=False):
-    delta_txt = _ranges2delta_txt_(ranges)
+def ranges2delta_txt_(ranges, /, *, validate=False, fixed_bug0=False):
+    delta_txt = _ranges2delta_txt_(ranges, fixed_bug0=fixed_bug0)
     if validate:
         assert ranges.ranges == ranges5delta_txt_(delta_txt).ranges
     return delta_txt
@@ -3870,7 +3945,7 @@ def _find_char_in(chars, s, i, /):
     while not s[i] in chars:
         i += 1
     return i
-def _ranges2delta_txt_(ranges, /):
+def _ranges2delta_txt_(ranges, /, *, fixed_bug0):
     def __():
         yield '[' # begin
         yield from __0()
@@ -3886,8 +3961,9 @@ def _ranges2delta_txt_(ranges, /):
         else:
             yield '#' #pos offset
         yield uint2base64_(abs(begin))
-        yield '+' #rng
-        yield uint2base64_(end-begin)
+        if not (fixed_bug0 and end-begin == 1):
+            yield '+' #rng
+            yield uint2base64_(end-begin)
         prev_end = end
         for (begin, end) in it:
             yield '-' #gap
@@ -3962,6 +4038,33 @@ def _iter_rngs5delta_txt_(delta_txt, _j, begin, /):
         _j, begin
         #########
 
+ranges2delta_txt_
+ranges5delta_txt_
+def ranges2delta_xints_(ranges, /, *, validate=False):
+    delta_xints = _ranges2delta_xints_(ranges)
+    if validate:
+        assert ranges.ranges == ranges5delta_xints_(delta_xints).ranges
+    return delta_xints
+def _ranges2delta_xints_(ranges, /):
+    def __():
+        prev_end = 0
+        for begin, end in ranges.ranges:
+            yield begin -prev_end
+            yield end -begin
+            prev_end = end
+    return tuple(__())
+def ranges5delta_xints_(delta_xints, /):
+    #if not len(delta_xints)&1 == 0:raise TypeError
+    def __():
+        it = iter(delta_xints)
+        prev_end = 0
+        for delta in it:
+            begin = prev_end +delta
+            delta = next(it, None)
+            end = begin +delta
+            yield (begin, end)
+            prev_end = end
+    return make_Ranges(__())
 
 
 def check_input4isomorphism_mapping__RangeBased(*, src_ranges, dst_ranges, dst_ranges__is__idc4seq, full_check):
