@@ -8,6 +8,8 @@
 #/def \<\(_get_rngs_\|_to_NonTouchRanges_\|_len_ints_\|_valid_ranges_\|_to_TouchRangeBasedIntMapping_\|__len__\|_get_rngs_values_pair_\|_get_type_of_seq4both_rngs_and_values\)\>
 
 r'''[[[[[
+e ../../python3_src/seed/data_funcs/rngs.py
+
 py -m seed.data_funcs.rngs
 py -m nn_ns.app.debug_cmd   seed.data_funcs.rngs -x
 py -m nn_ns.app.doctest_cmd seed.data_funcs.rngs:__doc__ -ht
@@ -1753,8 +1755,6 @@ __all__ = """
     ranges5compact_txt_
     ranges2delta_txt_
     ranges5delta_txt_
-        uint2base64_
-        uint5base64_
     ranges2delta_xints_
     ranges5delta_xints_
         ranges2iter_delta_xints_
@@ -1768,7 +1768,10 @@ __all__ = """
     #valid_range
     #check_range
     #to_tuple
+    #uint2base64_
+    #uint5base64_
     #uint2hex_
+    #uint5hex_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.lazy_import__func import lazy_import4funcs_
@@ -1810,10 +1813,8 @@ with mk_ctx4lazy_import4funcs_(__name__, 'iter_subsets_of__dictionary_order:iter
         #   ???to change:fmap_rngs2hex_repr
         #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
     from seed.tiny_.dict__add_fmap_filter import fmap4dict_value
+    from seed.text.base64_base16 import uint2base64_, uint5base64_, uint2hex_, uint5hex_
 
-    from seed.text.base64 import uint__to__radix64_digits__b64__str_ as _encode64_, uint__from__radix64_digits__b64__str_ as _decode64_
-        #def uint__to__radix64_digits__b64__str_(u, /, *, b64_cfg_case, bigendian):
-        #def uint__from__radix64_digits__b64__str_(s, /, *, b64_cfg_case, bigendian):
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def all_map(pred, iterable, /):
@@ -4050,18 +4051,8 @@ ranges5compact_txt_
 
 
 
-#def int2hex_(i, /): return f'{i:X}'
-def uint2hex_(u, /):
-    assert u >= 0
-    return f'{u:X}'
-def uint2base64_(u, /):
-    assert u >= 0
-    return _encode64_(u, b64_cfg_case=b'_.', bigendian=True)
-def uint5base64_(s, /):
-    return _decode64_(s, b64_cfg_case=b'_.', bigendian=True)
-
-_encode64_
-_decode64_
+uint2base64_
+uint5base64_
 def ranges2delta_txt_(ranges, /, *, validate=False, fixed_bug0=False):
     delta_txt = _ranges2delta_txt_(ranges, fixed_bug0=fixed_bug0)
     if validate:
