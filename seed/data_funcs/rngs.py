@@ -61,6 +61,10 @@ IRangeBasedIntMapping
     ranges5delta_xints_
     ranges2shifted_delta_txt_
     ranges5shifted_delta_txt_
+    ranges2zdelta_uints_
+    ranges5zdelta_uints_
+    ranges2zdelta_txt_
+    ranges5zdelta_txt_
 
     check_input4isomorphism_mapping__RangeBased
     isomorphism_mapping__RangeBased
@@ -1627,6 +1631,105 @@ TypeError: not valid_touch_ranges(((1, 1),))
 
 
 ]]
+[[
+@20260308
+    ranges2zdelta_uints_
+    ranges5zdelta_uints_
+>>> def test1_(rngs, /):
+...     ranges = make_Ranges(rngs)
+...     s = ranges.to_zdelta_uints(validate=True)
+...     print(s)
+...     if not (_0:=ranges.ranges) == (_1:=IRanges.from_zdelta_uints(s).ranges):raise Exception(_0, _1, s)
+>>> test1_([])
+()
+>>> test1_([(-9, -5)])
+(38, 2)
+>>> test1_([(-2, -1), (-1, 0), (0, 1), (1, 2), (2, 3)])
+(11, 1, 1, 1, 1)
+>>> test1_([(-2, 0), (0, 2), (3, 6)])
+(10, 0, 0, 0, 2, 1)
+>>> test1_([(0, 1)])
+(1,)
+>>> test1_([(0, 2)])
+(0, 0)
+>>> test1_([(0, 3)])
+(0, 1)
+>>> test1_([(0, 4)])
+(0, 2)
+>>> test1_([(1, 2)])
+(5,)
+>>> test1_([(1, 3)])
+(4, 0)
+>>> test1_([(1, 4)])
+(4, 1)
+>>> test1_([(2, 3)])
+(9,)
+>>> test1_([(2, 4)])
+(8, 0)
+>>> test1_([(2, 5)])
+(8, 1)
+>>> test1_([(0, 1), (1, 2)])
+(1, 1)
+>>> test1_([(0, 1), (2, 4)])
+(1, 2, 0)
+>>> test1_([(0, 1), (3, 6)])
+(1, 4, 1)
+>>> test1_([(0, 1), (4, 8)])
+(1, 6, 2)
+
+
+
+]]
+[[
+@20260308
+    ranges2zdelta_txt_
+    ranges5zdelta_txt_
+>>> def test1_(rngs, /):
+...     ranges = make_Ranges(rngs)
+...     s = ranges.to_zdelta_txt(validate=True)
+...     print(s)
+...     if not (_0:=ranges.ranges) == (_1:=IRanges.from_zdelta_txt(s).ranges):raise Exception(_0, _1, s)
+>>> test1_([])
+[]
+>>> test1_([(-9, -5)])
+[Fa1]
+>>> test1_([(-2, -1), (-1, 0), (0, 1), (1, 2), (2, 3)])
+[A0000]
+>>> test1_([(-2, 0), (0, 2), (3, 6)])
+[9...10]
+>>> test1_([(0, 1)])
+[0]
+>>> test1_([(0, 2)])
+[..]
+>>> test1_([(0, 3)])
+[.0]
+>>> test1_([(0, 4)])
+[.1]
+>>> test1_([(1, 2)])
+[4]
+>>> test1_([(1, 3)])
+[3.]
+>>> test1_([(1, 4)])
+[30]
+>>> test1_([(2, 3)])
+[8]
+>>> test1_([(2, 4)])
+[7.]
+>>> test1_([(2, 5)])
+[70]
+>>> test1_([(0, 1), (1, 2)])
+[00]
+>>> test1_([(0, 1), (2, 4)])
+[01.]
+>>> test1_([(0, 1), (3, 6)])
+[030]
+>>> test1_([(0, 1), (4, 8)])
+[051]
+
+
+
+]]
+
 
 
 
@@ -1762,6 +1865,13 @@ __all__ = """
     ranges2shifted_delta_txt_
     ranges5shifted_delta_txt_
 
+    ranges2zdelta_uints_
+    ranges5zdelta_uints_
+        ranges2iter_zdelta_uints_
+        ranges5iter_zdelta_uints_
+    ranges2zdelta_txt_
+    ranges5zdelta_txt_
+        iter_zdelta_uints5zdelta_txt_
     """.split()#"""
     #all_map
     #LeftRightHandSideFlip
@@ -1772,6 +1882,8 @@ __all__ = """
     #uint5base64_
     #uint2hex_
     #uint5hex_
+    #int2uint_
+    #int5uint_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.lazy_import__func import lazy_import4funcs_
@@ -1814,8 +1926,9 @@ with mk_ctx4lazy_import4funcs_(__name__, 'iter_subsets_of__dictionary_order:iter
         #       too tedious, now: rename:HexReprInt-->LowHexReprInt, let HexReprInt:=HEXReprInt
     from seed.tiny_.dict__add_fmap_filter import fmap4dict_value
     from seed.text.base64_base16 import uint2base64_, uint5base64_, uint2hex_, uint5hex_
-
+    from seed.int_tools.int_repr7compact7lex_order7baseGL import encode_uint2txt7compact7lex_order7baseGL_, decode_uint5txt7compact7lex_order7baseGL_, xdecode_uint5txt7compact7lex_order7baseGL_# xdecode_uint5iter_chars7compact7lex_order7baseGL_
 ___end_mark_of_excluded_global_names__0___ = ...
+__all__
 
 def all_map(pred, iterable, /):
     return all(map(pred, iterable))
@@ -3039,6 +3152,16 @@ TODO:
     @staticmethod
     def from_shifted_delta_txt(shifted_delta_txt, /):
         return ranges5shifted_delta_txt_(shifted_delta_txt)
+    def to_zdelta_uints(sf, /, *, validate=False):
+        return ranges2zdelta_uints_(sf, validate=validate)
+    @staticmethod
+    def from_zdelta_uints(zdelta_uints, /):
+        return ranges5zdelta_uints_(zdelta_uints)
+    def to_zdelta_txt(sf, /, *, validate=False):
+        return ranges2zdelta_txt_(sf, validate=validate)
+    @staticmethod
+    def from_zdelta_txt(zdelta_txt, /):
+        return ranges5zdelta_txt_(zdelta_txt)
 
     def __init__(sf, ranges, /):
         #ranges = tuple(ranges)
@@ -4272,6 +4395,109 @@ def ranges5shifted_delta_txt_(shifted_delta_txt, /):
     return ranges5iter_delta_xints_(_iter_delta_xints())
 
 
+
+
+
+
+def int2uint_(i, /):
+    u = (abs(i) << 1) ^ (i < 0)
+    return u
+def int5uint_(u, /):
+    assert u >= 0
+    i = (u >> 1) * (-1)**(u&1)
+    return i
+
+def ranges2zdelta_uints_(ranges, /, *, validate=False):
+    zdelta_uints = tuple(ranges2iter_zdelta_uints_(ranges))
+    if validate:
+        if not (_0:=ranges.ranges) == (_1:=ranges5zdelta_uints_(zdelta_uints).ranges):raise Exception('validate fail:', _0, _1, zdelta_uints)
+    return zdelta_uints
+def ranges2iter_zdelta_uints_(ranges, /):
+    it = ranges2iter_delta_xints_(ranges)
+    for head in it:
+        break
+    else:
+        return
+    u0 = int2uint_(head)
+    for j, u in enumerate(it, 1):
+        if j&1:
+            len_rng = u
+            check_int_ge(1, len_rng)#IRanges
+            #shift:
+            sft_sz = len_rng-2
+            b = sft_sz == -1
+            _u = (u0 << 1) ^ b
+            yield _u
+            if not b:
+                yield sft_sz
+            del u0
+        else:
+            len_gap = u
+            check_int_ge(0, len_gap)#TouchRanges
+            u0 = len_gap
+def ranges5zdelta_uints_(zdelta_uints, /):
+    return ranges5iter_zdelta_uints_(iter(zdelta_uints))
+def ranges5iter_zdelta_uints_(zdelta_uints, /):
+    def _0():
+        it = iter(zdelta_uints)
+        for _u in it:
+            u0 = _u >> 1
+            b = _u & 1
+            if b:
+                sft_sz = -1
+            else:
+                sft_sz = next(it, None)
+            sft_sz
+            len_rng = 2 + sft_sz
+            len_gap = u0
+            yield len_gap
+            yield len_rng
+    def _1():
+        us = _0()
+        for u0 in us:
+            break
+        else:
+            return
+        head = int5uint_(u0)
+        yield head
+        yield from us
+    return ranges5iter_delta_xints_(_1())
+
+def ranges2zdelta_txt_(ranges, /, *, validate=False):
+    zdelta_txt = _ranges2zdelta_txt_(ranges)
+    if validate:
+        if not (_0:=ranges.ranges) == (_1:=ranges5zdelta_txt_(zdelta_txt).ranges):raise Exception('validate fail:', _0, _1, zdelta_txt)
+    return zdelta_txt
+def _ranges2zdelta_txt_(ranges, /):
+    return ''.join(_ranges2iter_zdelta_txt_(ranges))
+def _ranges2iter_zdelta_txt_(ranges, /):
+    yield '['
+    yield from _ranges2iter_body4zdelta_txt_(ranges)
+    yield ']'
+def _ranges2iter_body4zdelta_txt_(ranges, /):
+    #uint2base64_ vs encode_uint2txt7compact7lex_order7baseGL_
+    return map(encode_uint2txt7compact7lex_order7baseGL_, ranges2iter_zdelta_uints_(ranges))
+def ranges5zdelta_txt_(zdelta_txt, /):
+    iter_zdelta_uints = iter_zdelta_uints5zdelta_txt_(zdelta_txt)
+    return ranges5iter_zdelta_uints_(iter_zdelta_uints)
+def iter_zdelta_uints5zdelta_txt_(zdelta_txt, /):
+    if not zdelta_txt: raise Exception('bad format')
+    if not zdelta_txt[0] == '[': raise Exception('bad format')
+    if not zdelta_txt[-1] == ']': raise Exception('bad format')
+    ilast = -1+len(zdelta_txt)
+    begin = 1
+    while not begin == ilast:
+        (u, begin) = xdecode_uint5txt7compact7lex_order7baseGL_(zdelta_txt, begin, ilast)
+        yield u
+
+
+
+
+
+
+
+
+
 def check_input4isomorphism_mapping__RangeBased(*, src_ranges, dst_ranges, dst_ranges__is__idc4seq, full_check):
     if not dst_ranges.len_rngs() == src_ranges.len_rngs():raise TypeError
     if not dst_ranges.len_ints() == src_ranges.len_ints():raise TypeError
@@ -4311,6 +4537,7 @@ def isomorphism_mapping__RangeBased(mkError, src_int, src_ranges, dst_ranges, /)
 
 
 
+__all__
 if __name__ == "__main__":
     print('\n'.join(s for s in globals() if not s.startswith('_')))
     import doctest
@@ -4320,3 +4547,4 @@ if __name__ == "__main__":
         test_subset_relation_ex__xtouch_ranges()
 
 
+from seed.data_funcs.rngs import *
