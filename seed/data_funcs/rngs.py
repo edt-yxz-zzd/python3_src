@@ -57,6 +57,8 @@ IRangeBasedIntMapping
     ranges5delta_txt_
     ranges2delta_xints_
     ranges5delta_xints_
+    ranges2shifted_delta_txt_
+    ranges5shifted_delta_txt_
 
     check_input4isomorphism_mapping__RangeBased
     isomorphism_mapping__RangeBased
@@ -1465,6 +1467,26 @@ NonTouchRanges(((48, 49),))
 >>> IRanges.from_delta_txt(ranges.to_delta_txt(fixed_bug0=True))
 NonTouchRanges(((48, 49),))
 
+>>> ranges = make_Ranges([(0x30, 0x31), (49, 50)])
+>>> ranges.to_delta_txt(fixed_bug0=False)
+'[#w+B-]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt(fixed_bug0=False))
+TouchRanges(((48, 49), (49, 50)))
+>>> ranges.to_delta_txt(fixed_bug0=True)
+'[#w-]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt(fixed_bug0=True))
+TouchRanges(((48, 49), (49, 50)))
+
+>>> ranges = make_Ranges([(0x30, 0x31), (49, 50), (50, 51), (52, 53), (53, 54), (55, 57), (59, 61)])
+>>> ranges.to_delta_txt(fixed_bug0=False)
+'[#w+B---B--B+C-C+C]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt(fixed_bug0=False))
+TouchRanges(((48, 49), (49, 50), (50, 51), (52, 53), (53, 54), (55, 57), (59, 61)))
+>>> ranges.to_delta_txt(fixed_bug0=True)
+'[#w---B--B+C-C+C]'
+>>> IRanges.from_delta_txt(ranges.to_delta_txt(fixed_bug0=True))
+TouchRanges(((48, 49), (49, 50), (50, 51), (52, 53), (53, 54), (55, 57), (59, 61)))
+
 >>> ranges = make_Ranges([])
 >>> ranges.to_delta_txt()
 '[]'
@@ -1476,6 +1498,44 @@ NonTouchRanges(())
 '[~Pn+aB]'
 >>> IRanges.from_delta_txt(ranges.to_delta_txt())
 NonTouchRanges(((-999, 666),))
+
+===
+>>> make_Ranges([(0, 0)])
+Traceback (most recent call last):
+    ...
+TypeError: not valid_touch_ranges(((0, 0),))
+>>> uint2base64_(-1)
+Traceback (most recent call last):
+    ...
+AssertionError
+>>> uint2base64_(0)
+''
+>>> uint2base64_(1)
+'B'
+>>> uint2base64_(2)
+'C'
+>>> uint2base64_(61)
+'9'
+>>> uint2base64_(62)
+'_'
+>>> uint2base64_(63)
+'.'
+>>> uint2base64_(64)
+'BA'
+>>> uint5base64_('')
+0
+>>> uint5base64_('B')
+1
+>>> uint5base64_('C')
+2
+>>> uint5base64_('9')
+61
+>>> uint5base64_('_')
+62
+>>> uint5base64_('.')
+63
+>>> uint5base64_('BA')
+64
 
 ]]
 [[
@@ -1510,6 +1570,62 @@ NonTouchRanges(())
 NonTouchRanges(((-999, 666),))
 
 ]]
+[[
+@20260308
+    ranges2shifted_delta_txt_
+    ranges5shifted_delta_txt_
+>>> def test1_(rngs, /):
+...     ranges = make_Ranges(rngs)
+...     s = ranges.to_shifted_delta_txt(validate=True)
+...     print(s)
+...     if not (_0:=ranges.ranges) == (_1:=IRanges.from_shifted_delta_txt(s).ranges):raise Exception(_0, _1, s)
+>>> def tests_(rngss, /):
+...     for rngs in rngss:
+...         test1_(rngs)
+>>> test1_([])
+[]
+>>> test1_([(-9, -5)])
+[-J+C]
+>>> test1_([(-2, -1), (-1, 0), (0, 1), (1, 2), (2, 3)])
+[-C----]
+>>> test1_([(-2, 0), (0, 2), (3, 6)])
+[-C+-+-B+B]
+>>> test1_([(0, 1)])
+[+]
+>>> test1_([(0, 2)])
+[++]
+>>> test1_([(0, 3)])
+[++B]
+>>> test1_([(0, 4)])
+[++C]
+>>> test1_([(1, 1)])
+Traceback (most recent call last):
+    ...
+TypeError: not valid_touch_ranges(((1, 1),))
+>>> test1_([(1, 2)])
+[+B]
+>>> test1_([(1, 3)])
+[+B+]
+>>> test1_([(1, 4)])
+[+B+B]
+>>> test1_([(2, 3)])
+[+C]
+>>> test1_([(2, 4)])
+[+C+]
+>>> test1_([(2, 5)])
+[+C+B]
+>>> test1_([(0, 1), (1, 2)])
+[+-]
+>>> test1_([(0, 1), (2, 4)])
+[+-B+]
+>>> test1_([(0, 1), (3, 6)])
+[+-C+B]
+>>> test1_([(0, 1), (4, 8)])
+[+-D+C]
+
+
+]]
+
 
 
 
@@ -1641,6 +1757,11 @@ __all__ = """
         uint5base64_
     ranges2delta_xints_
     ranges5delta_xints_
+        ranges2iter_delta_xints_
+        ranges5iter_delta_xints_
+    ranges2shifted_delta_txt_
+    ranges5shifted_delta_txt_
+
     """.split()#"""
     #all_map
     #LeftRightHandSideFlip
@@ -1679,7 +1800,7 @@ with mk_ctx4lazy_import4funcs_(__name__, 'iter_subsets_of__dictionary_order:iter
     from seed.iters.PeekableIterator import echo_or_mk_PeekableIterator
     from seed.iters.iter_subsets_of import iter_subsets_of__dictionary_order as iter_subsets_of
     from seed.debug.print_err import print_err
-    from seed.tiny_.check import check_type_is# check_int_ge
+    from seed.tiny_.check import check_type_is, check_int_ge
     from seed.tiny_.HexReprInt import HEXReprInt as mk_HexReprInt
     #from seed.tiny_.HexReprInt import HexReprInt
     #from seed.tiny_.HexReprInt import HEXReprInt as HexReprInt
@@ -2912,6 +3033,11 @@ TODO:
     @staticmethod
     def from_delta_xints(delta_xints, /):
         return ranges5delta_xints_(delta_xints)
+    def to_shifted_delta_txt(sf, /, *, validate=False):
+        return ranges2shifted_delta_txt_(sf, validate=validate)
+    @staticmethod
+    def from_shifted_delta_txt(shifted_delta_txt, /):
+        return ranges5shifted_delta_txt_(shifted_delta_txt)
 
     def __init__(sf, ranges, /):
         #ranges = tuple(ranges)
@@ -3939,7 +4065,8 @@ _decode64_
 def ranges2delta_txt_(ranges, /, *, validate=False, fixed_bug0=False):
     delta_txt = _ranges2delta_txt_(ranges, fixed_bug0=fixed_bug0)
     if validate:
-        assert ranges.ranges == ranges5delta_txt_(delta_txt).ranges
+        #assert ranges.ranges == ranges5delta_txt_(delta_txt).ranges
+        if not (_0:=ranges.ranges) == (_1:=ranges5delta_txt_(delta_txt).ranges):raise Exception('validate fail:', _0, _1, delta_txt)
     return delta_txt
 def _find_char_in(chars, s, i, /):
     while not s[i] in chars:
@@ -4046,15 +4173,17 @@ def ranges2delta_xints_(ranges, /, *, validate=False):
         assert ranges.ranges == ranges5delta_xints_(delta_xints).ranges
     return delta_xints
 def _ranges2delta_xints_(ranges, /):
-    def __():
-        prev_end = 0
-        for begin, end in ranges.ranges:
-            yield begin -prev_end
-            yield end -begin
-            prev_end = end
-    return tuple(__())
+    return tuple(ranges2iter_delta_xints_(ranges))
+def ranges2iter_delta_xints_(ranges, /):
+    prev_end = 0
+    for begin, end in ranges.ranges:
+        yield begin -prev_end
+        yield end -begin
+        prev_end = end
 def ranges5delta_xints_(delta_xints, /):
     #if not len(delta_xints)&1 == 0:raise TypeError
+    return ranges5iter_delta_xints_(iter(delta_xints))
+def ranges5iter_delta_xints_(delta_xints, /):
     def __():
         it = iter(delta_xints)
         prev_end = 0
@@ -4065,6 +4194,91 @@ def ranges5delta_xints_(delta_xints, /):
             yield (begin, end)
             prev_end = end
     return make_Ranges(__())
+
+def ranges2shifted_delta_txt_(ranges, /, *, validate=False):
+    shifted_delta_txt = _ranges2shifted_delta_txt_(ranges)
+    if validate:
+        if not (_0:=ranges.ranges) == (_1:=ranges5shifted_delta_txt_(shifted_delta_txt).ranges):raise Exception('validate fail:', _0, _1, shifted_delta_txt)
+    return shifted_delta_txt
+def _ranges2shifted_delta_txt_(ranges, /):
+    return ''.join(_ranges2iter_shifted_delta_txt_(ranges))
+def _ranges2iter_shifted_delta_txt_(ranges, /):
+    yield '['
+    yield from _ranges2iter_body4shifted_delta_txt_(ranges)
+    yield ']'
+def _ranges2iter_body4shifted_delta_txt_(ranges, /):
+    it = ranges2iter_delta_xints_(ranges)
+    for head in it:
+        break
+    else:
+        return
+    yield '-' if head < 0 else '+'
+    yield uint2base64_(abs(head))
+    for j, u in enumerate(it, 1):
+        if j&1:
+            len_rng = u
+            check_int_ge(1, len_rng)#IRanges
+            #shift:
+            sft_sz = len_rng-2
+            if not sft_sz == -1:
+                yield '+'
+                yield uint2base64_(sft_sz)
+        else:
+            len_gap = u
+            check_int_ge(0, len_gap)#TouchRanges
+            yield '-'
+            yield uint2base64_(len_gap)
+
+def ranges5shifted_delta_txt_(shifted_delta_txt, /):
+    check_type_is(str, shifted_delta_txt)
+    if not shifted_delta_txt[:1] == '[':raise Exception('bad format')
+    if not shifted_delta_txt[-1:] == ']':raise Exception('bad format')
+    def _4len_rng(_j, /):
+        #sft_sz
+        if shifted_delta_txt[_j] == '+':
+            j = 1 + _j
+            _i = _find_char_in('+-[]', shifted_delta_txt, j)
+            s8sft_sz = shifted_delta_txt[j:_i]
+            sft_sz = uint5base64_(s8sft_sz)
+        else:
+            _i = _j
+            sft_sz = -1
+        _i, sft_sz
+        #shift back:
+        len_rng =  2 + sft_sz
+        return (len_rng, _i)
+    def _4len_gap(_i, /):
+        #len_gap
+        if not shifted_delta_txt[_i] == '-':raise Exception('bad format')
+        i = 1 + _i
+        _j = _find_char_in('+-[]', shifted_delta_txt, i)
+        s8len_gap = shifted_delta_txt[i:_j]
+        len_gap = uint5base64_(s8len_gap)
+        return (len_gap, _j)
+    def _iter_delta_xints():
+        if shifted_delta_txt == '[]':
+            return
+        sign = (-1)**('+-'.index(shifted_delta_txt[1]))
+        i = 2
+        _j = _find_char_in('+-[]', shifted_delta_txt, i)
+        s8abs4head = shifted_delta_txt[i:_j]
+        abs4head = uint5base64_(s8abs4head)
+        head = sign*abs4head
+        yield head
+        ilast = -1+len(shifted_delta_txt)
+        while 1:
+            _j
+            #len_rng
+            (len_rng, _i) = _4len_rng(_j)
+            yield len_rng
+
+            if _i == ilast:
+                break
+
+            #len_gap
+            (len_gap, _j) = _4len_gap(_i)
+            yield len_gap
+    return ranges5iter_delta_xints_(_iter_delta_xints())
 
 
 def check_input4isomorphism_mapping__RangeBased(*, src_ranges, dst_ranges, dst_ranges__is__idc4seq, full_check):
