@@ -166,7 +166,10 @@ class BijectionsImpl:
             if d != E:
                 ch = d
             else:
-                n = next(it) # may raise
+                try:
+                    n = next(it) # may raise
+                except StopIteration as exc:
+                    return exc.value
                 if n == B:
                     inside_comment = not inside_comment
                     continue
@@ -797,7 +800,9 @@ def main(argv=None):
 
     args = parser.parse_args(argv)
     psw = args.psw
-    if not all(ch in aCrypt.char2idxP for ch in psw): raise TypeError
+    cs = aCrypt.char2idxP.keys()
+    _pack = lambda s:''.join(sorted(set(s)))
+    if not all(ch in cs for ch in psw): raise TypeError((_pack(cs), _pack(ch for ch in psw if not ch in cs)))
     omode = 'wt' if args.force else 'xt'
     does_encrypt = args.cmd == 'encrypt'
     iencoding = encodingI if does_encrypt else encodingO

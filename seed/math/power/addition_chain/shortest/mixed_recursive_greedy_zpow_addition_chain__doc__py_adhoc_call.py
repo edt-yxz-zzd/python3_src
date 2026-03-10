@@ -1236,10 +1236,103 @@ prefixAB=/sdcard/0my_files/tmp/out4py/seed.math.power.addition_chain.shortest.se
 py_adhoc_call   seed.math.power.addition_chain.shortest.search_star_chain7recursive_shortest   ,枚举生成冫文件冃靶值讠升列纟次大数牜递归最短丶文件冃靶值讠次大数讠首尾加星链牜递归最短扌 +欤询问中止乊靶值牜无加星链牜递归最短  --ver=2 --鬽最大靶值=None  --休眠期:auto :"${prefixAB}".-0.out.txt :"${prefixAB}".-1.ver2.out.txt
     # [:当前主要作业命令行]:here
     # [:额外生成数据]:here
+    命令结束:见:
+view ../../python3_src/seed/math/power/addition_chain/shortest/search_star_chain7recursive_shortest.py
+ls /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短
+    靶值讠允空升列纟次大数纟加星链牜递归最短.le74174.txt.txz
+    靶值讠允空次大数讠首尾加星链牜递归最短.le74174.txt.txz
+
 
 泛化版{婪溟链牜递归最短:次大数}:编辑中...:
 发现病蛊:e ../../python3_src/seed/math/power/addition_chain/shortest/search_greedy_zpow_chain7recursive_shortest.py
+    [内点:<-简并态{次大数}]但未必是 主干值
 ]]
+[[
+@20260309
+tree /sdcard/0my_files/zip/addition_chain/
+ls /sdcard/0my_files/zip/addition_chain/
+    偏移值文本冃靶值讠最小显链长.le131157856.txt.txz
+    偏移值文本冃靶值讠最小显链长.le7320000.txt.txz
+    靶值讠允空升列纟次大数纟加星链牜递归最短
+    靶值讠简并记录纟递归婪溟链
+ls /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链
+    extract
+    tar
+    txt
+    txt-asis
+    txt-asis-2
+ls /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/tar
+ls /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/txt
+
+
+:r !ls /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/txt
+:.+1,.+12s/^min_.*\([.]ver2[.].*[.]\)out[.]txt/\1
+    min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py..枚举生成冫文件后续简并记录纟递归婪溟链扌{.???.}out.txt
+.ver2.part0001.1-6017.
+.ver2.part0002.6018-9192.
+.ver2.part0003.9193-13013.bottomup.
+.ver2.part0004.13014-16016.bottomup.
+.ver2.part0005.16017-20020.bottomup.
+.ver2.part0006.20021-23023.bottomup.
+.ver2.part0007.23024-26026.bottomup.
+.ver2.part0008.26027-29029.bottomup.
+.ver2.part0009.29030-32032.bottomup.
+.ver2.part0010.32033-35035.bottomup.
+.ver2.part0011.35036-38038.bottomup.
+.ver2.part0012.38039-39363.topdown.
+-->:
+    靶值讠简并记录纟递归婪溟链{.???.}txt.txz
+.v2p01.1-6017.
+.v2p02.6018-9192.
+.v2p03.9193-13013.
+.v2p04.13014-16016.
+.v2p05.16017-20020.
+.v2p06.20021-23023.
+.v2p07.23024-26026.
+.v2p08.26027-29029.
+.v2p09.29030-32032.
+.v2p10.32033-35035.
+.v2p11.35036-38038.
+.v2p12.38039-39363.
+
+
+==>>:
+mkdir /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/tar-12parts/
+rt_dir=/sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/
+f(){ txz $rt_dir/tar-12parts/靶值讠简并记录纟递归婪溟链${1}txt.txz   $rt_dir/txt/  -ipaths  $rt_dir/txt/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py..枚举生成冫文件后续简并记录纟递归婪溟链扌${2}out.txt ; }
+f  .v2p01.1-6017.         .ver2.part0001.1-6017.
+f  .v2p02.6018-9192.      .ver2.part0002.6018-9192.
+f  .v2p03.9193-13013.     .ver2.part0003.9193-13013.bottomup.
+f  .v2p04.13014-16016.    .ver2.part0004.13014-16016.bottomup.
+f  .v2p05.16017-20020.    .ver2.part0005.16017-20020.bottomup.
+f  .v2p06.20021-23023.    .ver2.part0006.20021-23023.bottomup.
+f  .v2p07.23024-26026.    .ver2.part0007.23024-26026.bottomup.
+f  .v2p08.26027-29029.    .ver2.part0008.26027-29029.bottomup.
+f  .v2p09.29030-32032.    .ver2.part0009.29030-32032.bottomup.
+f  .v2p10.32033-35035.    .ver2.part0010.32033-35035.bottomup.
+f  .v2p11.35036-38038.    .ver2.part0011.35036-38038.bottomup.
+f  .v2p12.38039-39363.    .ver2.part0012.38039-39363.topdown.
+
+==>>:
+ls /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/tar-12parts/
+:r !du -ch /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/tar-12parts/*
+    1.0M
+    0.9M
+    1.2M
+    1.1M
+    1.8M
+    1.1M
+    1.2M
+    1.4M
+    1.8M
+    1.6M
+    1.4M
+    676K
+    ==>>:
+    16M
+
+]]
+
 
 
 

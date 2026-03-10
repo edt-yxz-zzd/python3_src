@@ -4,13 +4,21 @@ __all__ = ['fun_chars']
 
 import os.path
 import io
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, FeatureNotFound
 
 fun_chars_html_basename = 'total_fun_chars.html'
 html_path = os.path.join(os.path.dirname(__file__), fun_chars_html_basename)
 with open(html_path, encoding='utf8') as fin:
     #soup = BeautifulSoup(fin, 'html.parser')
-    soup = BeautifulSoup(fin, 'lxml')
+    if 0:
+        try:
+            soup = BeautifulSoup(fin, 'lxml')
+        except FeatureNotFound:
+            soup = BeautifulSoup(fin, 'html.parser')
+    else:
+        #bad:soup = BeautifulSoup(fin, ('lxml', 'html.parser'))
+        from seed.for_libs.for_bs4 import mk_BeautifulSoup4html_
+        soup = mk_BeautifulSoup4html_(fin)
 s = str(soup.body.pre.string); del soup
 def good_line(line):
     line = line.strip()
