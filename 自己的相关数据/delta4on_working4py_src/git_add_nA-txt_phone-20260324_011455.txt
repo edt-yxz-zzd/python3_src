@@ -1,0 +1,16 @@
+../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-txt_phone-20260324_011455.txt
+======= git add --dry-run --all
+add 'lots/NOTE/abbr/software.fragment.txt'
+add 'txt/others/book/已读小说.txt'
+add 'txt/others/我的叶子/wage.txt'
+add 'txt/others/我的叶子/囿于.fragment.txt'
+add 'txt/others/我的叶子/待办事项牜短期.fragment.txt'
+add 'lots/NOTE/Python/lang/except_star-usage.txt'
+add 'lots/NOTE/Python/python-bug/cached_property-bug.txt'
+add 'lots/NOTE/Python/python-bug/isinstance-bug.txt'
+add 'lots/NOTE/novel/我怎么当上了皇帝_note.txt'
+add 'txt/others/我的叶子/cmds.txt'
+add 'txt/others/杂/词语解释/收尾vs煞尾vs首尾vs手尾.txt'
+add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.compact.decompositions_lt_2pow32.out.txt.tar.lzma'
+add 'txt/script/枚举冫双幂方和型素数.py.out/lzma/枚举冫双幂方和型素数.py.len_ge2__grouped_decompositions_lt_2pow32.out.txt.tar.lzma'
+add 'txt/script/求冫极限纟位元和纟自然数扌.py'

@@ -94,12 +94,22 @@ class _G:
 
 
 
-def 枚举冫婪溟链牜递归最短牜任意灬巛靶值灬扌(*列表纟靶值, 欤带靶值=False):
+def 枚举冫婪溟链牜递归最短牜任意灬巛靶值灬扌(*列表纟靶值, 欤带靶值=False, fmt_case=None):
+    '[fmt_case == may ("stem_str" | "dnzw_str")]'
+    if not fmt_case is None:
+        from seed.math.power.addition_chain.shortest.rewrite3 import 严序加链讠最短缩写文本纟递归婪溟链扌
+        def r5us_(us, /):
+            return 严序加链讠最短缩写文本纟递归婪溟链扌(us, fmt_case=fmt_case)
+    else:
+        def r5us_(us, /):
+            return us
+    r5us_
     靶值讠婪溟链牜递归最短牜任意 = 取冫靶值讠婪溟链牜递归最短牜任意扌()
     for 靶值 in 列表纟靶值:
         check_int_ge(1, 靶值)
         婪溟链牜递归最短牜任意 = 靶值讠婪溟链牜递归最短牜任意[靶值]
-        yield (靶值, 婪溟链牜递归最短牜任意) if 欤带靶值 else 婪溟链牜递归最短牜任意
+        r = r5us_(婪溟链牜递归最短牜任意)
+        yield (靶值, r) if 欤带靶值 else r
 
 def 靶值讠婪溟链牜递归最短牜任意扌(靶值, /):
     #===靶值讠最短加链牜递归婪溟链牜任意扌

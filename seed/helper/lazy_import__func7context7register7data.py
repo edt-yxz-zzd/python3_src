@@ -12,12 +12,12 @@ name7importZqnm4mdl:
 
 def __(s, /):
     #t = ''.join(s.split())
-    s = s.replace('\nfrom ', ';').replace(' import ', ':')
+    s = '\n'.join(t for t in map(str.strip, s.split('\n')) if t and not t.startswith('#'))
+    s = s.replace('\nfrom ', '\n;').replace(' import ', ':')
     ss = s.split(';')
     for stmt in ss:
         stmt = stmt.strip()
-        if not stmt:
-            continue
+        #if not stmt or stmt.startswith('#'): continue
         [qnm4mdl, nms4obj] = stmt.split(':')
         ok = False
         for nm4obj in nms4obj.split(','):
@@ -32,6 +32,7 @@ def __(s, /):
 name7importZqnm4mdl = dict(__(
 r'''
 
+#@20260220
 from seed.debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f
 from seed.debug.expectError import expectError
 from seed.debug.lazy_raise import lazy_raise
@@ -119,6 +120,37 @@ from seed.tiny_.verify import is_callable, is_subscriptable, is_container, is_si
 from seed.tiny_.verify import is_iterable, is_iterator, is_reiterable
 from seed.types.Namespace import Namespace, NamespaceSetOnce
 from seed.types.Namespace import Namespace, NamespaceSetOnce, NamespaceForbidOverwriteImplicitly, NamespaceForbidNewKey, NamespaceForbidSetitem, NamespaceForbidDelitem, NamespaceForbidAlterKeySet, NamespaceForbidModify
+
+
+
+
+
+
+
+
+#@20260321
+from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
+    #.u = uint5radix_repr_(radix, digits, is_big_endian=is_big_endian, **kwds)
+    #.digits = uint2radix_repr_(radix, u, is_big_endian=is_big_endian, **kwds)
+from seed.int_tools.digits.uint25bijective_numeration import uint5bijective_numeration_, uint2bijective_numeration_
+    #.def uint2bijective_numeration_(radix, u, /, *, is_big_endian, offset4digit):
+    #.def uint5bijective_numeration_(radix, offsetted_digits, /, *, is_big_endian, offset4digit):
+
+
+#@20260323
+from seed.tiny_.mk_fdefault import mk_default
+    #.def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
+from seed.tiny_.mk_fdefault import check4mk_default_, check4mk_default__len_
+    #.def check4mk_default_(imay_xdefault_rank, xdefault, /, *args4xdefault):
+    #.def check4mk_default__len_(imay_xdefault_rank, xdefault, len_args4xdefault, /):
+from seed.tiny_.mk_fdefault import mk_default__easy, mk_default_or_raise
+    #.def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
+    #.  (mirror_imay_xedefault_rank, xedefault, *args4xedefault) = args4mk_default = tmay_Nothing___or___args4mk_default_or_raise
+    #.  [default if not mirror else exception] = tmay_Nothing = tmay_Nothing___or___args4mk_default_or_raise
+    #.def mk_default_or_raise(mirror_imay_xedefault_rank, xedefault, /, *args4xedefault, mirror:bool):
+    #.  imay_xdefault_ranks = (-3)-mirror_imay_xedefault_rank if mirror_imay_xedefault_rank < -1 else mirror_imay_xedefault_rank
+    #.  mirrored = (mirror_imay_xedefault_rank < -1) ^ bool(mirror)
+    #
 
 '''#'''
 ))

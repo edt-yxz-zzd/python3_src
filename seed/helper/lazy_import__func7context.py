@@ -173,6 +173,10 @@ True
 True
 
 
+>>> with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
+...     from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
+>>> rglnkls_ops.empty_rglnkls
+()
 
 
 
@@ -361,7 +365,7 @@ __all__
 
 class PseudoModule4lazy_import4func:
     'pseudo_mdl{lazy_import4func}  # role relations:[mdl{dst}.attr{nm} := mdl{src}.attr{nm}]'
-    def __init__(sf, qnm4mdl8src, qnm4mdl8dst, mapping4alias, /):
+    def __init__(sf, qnm4mdl8src, qnm4mdl8dst, mapping4alias, arbitrary_ok, /):
         #.sf._qnm4mdl8src = qnm4mdl8src
         #.sf._qnm4mdl8dst = qnm4mdl8dst
         #.sf._d4alias = mapping4alias
@@ -371,6 +375,7 @@ class PseudoModule4lazy_import4func:
         _set(sf, '_qnm4mdl8dst', qnm4mdl8dst)
         _set(sf, '_d4alias', mapping4alias)
         _set(sf, '_d', {})
+        _set(sf, '_arbitrary_ok', arbitrary_ok)
     def __setattr__(sf, nm, x, /):
         d = _get(sf, '_d')
         d[nm] = x
@@ -388,7 +393,8 @@ class PseudoModule4lazy_import4func:
         mapping4alias = _get(sf, '_d4alias')
         # role relations:[mdl{dst}.attr{nm} := mdl{src}.attr{nm}]
         smay_alias = mapping4alias.get(nm, '')
-        x = lazy_import4func_(qnm4src, nm, qnm4dst, smay_alias)
+        arbitrary_ok = _get(sf, '_arbitrary_ok')
+        x = lazy_import4func_(qnm4src, nm, qnm4dst, smay_alias, arbitrary_ok=arbitrary_ok)
             #def lazy_import4func_(qnm4mdl8src, qnm4func8src, smay_qnm4mdl8dst='', smay_nm4func8dst='', /):
         #d[nm] = x
         setattr(sf, nm, x)
@@ -397,7 +403,7 @@ class PseudoModule4lazy_import4func:
 class Wrapper4the_sys_modules_dict4lazy_import4func(Mapping):
     #def __init__(sf, qnm4mdl8dst, d, depth, /):
     #def __init__(sf, qnm4mdl8dst, mapping4alias, d, /):
-    def __new__(cls, qnm4mdl8dst, mapping4alias, d, /):
+    def __new__(cls, qnm4mdl8dst, mapping4alias, d, arbitrary_ok, /):
         if type(d) is Wrapper4the_sys_modules_dict4lazy_import4func and qnm4mdl8dst in [d._qnm4mdl8dst] and mapping4alias in [d._d4alias]:
             sf = d
         else:
@@ -410,6 +416,7 @@ class Wrapper4the_sys_modules_dict4lazy_import4func(Mapping):
             sf._d = d
             sf._d4missing = {}
             #sf._depth = depth
+            sf._arbitrary_ok = arbitrary_ok
         sf
         return sf
     #.if 0:
@@ -417,7 +424,7 @@ class Wrapper4the_sys_modules_dict4lazy_import4func(Mapping):
     #.        return sf._original_d
     def _mk_pseudo_mdl4lazy_import4func_(sf, qnm4mdl8src, /):
         'qnm4mdl -> pseudo_mdl{lazy_import4func}'
-        return PseudoModule4lazy_import4func(qnm4mdl8src, sf._qnm4mdl8dst, sf._d4alias)
+        return PseudoModule4lazy_import4func(qnm4mdl8src, sf._qnm4mdl8dst, sf._d4alias, sf._arbitrary_ok)
     #TypeError: Can't instantiate abstract class Wrapper4the_sys_modules_dict4lazy_import4func with abstract methods __getitem__, __iter__, __len__
     def __getitem__(sf, qnm4mdl, /):
         m = sf._d.get(qnm4mdl)
@@ -446,11 +453,12 @@ class Wrapper4the_sys_modules_dict4lazy_import4func(Mapping):
 _on4ctx4func = False
 class Context4LazyImport4Func:
     'globally there is at most one ctx on working'
-    def __init__(sf, qnm4mdl8dst, decl_str_or_mapping4alias, /):
+    def __init__(sf, qnm4mdl8dst, decl_str_or_mapping4alias, arbitrary_ok, /):
         sf._qnm4mdl8dst = qnm4mdl8dst
         sf._d4alias = mapping4alias5or_decl_str_(decl_str_or_mapping4alias)
         sf._st = 0
         sf._saved_sys_modules = None
+        sf._arbitrary_ok = arbitrary_ok
     #@override
     def __enter__(sf, /):
         global _on4ctx4func
@@ -458,7 +466,7 @@ class Context4LazyImport4Func:
         if _on4ctx4func:raise Exception
         d = sys.modules
         if type(d) is Wrapper4the_sys_modules_dict4lazy_import4func:raise Exception
-        new_d = Wrapper4the_sys_modules_dict4lazy_import4func(sf._qnm4mdl8dst, sf._d4alias, d)
+        new_d = Wrapper4the_sys_modules_dict4lazy_import4func(sf._qnm4mdl8dst, sf._d4alias, d, sf._arbitrary_ok)
         try:
             _on4ctx4func = True
             sf._saved_sys_modules = d
@@ -483,7 +491,7 @@ class Context4LazyImport4Func:
         sf._st = 0
         return False
 
-def mk_ctx4lazy_import4funcs_(qnm4mdl8dst, decl_str_or_mapping4alias='', /):
+def mk_ctx4lazy_import4funcs_(qnm4mdl8dst, decl_str_or_mapping4alias='', /, *, arbitrary_ok=False):
     r'''
 usage:
     with mk_ctx4lazy_import4funcs_(__name__):
@@ -497,7 +505,7 @@ NOTE:not support 『as』:
         ==>> 『_ifNone』 always be _LazyImport4Func object
         ==>> 『ifNone』 will be injected unexpectedly
     '''#'''
-    return Context4LazyImport4Func(qnm4mdl8dst, decl_str_or_mapping4alias)
+    return Context4LazyImport4Func(qnm4mdl8dst, decl_str_or_mapping4alias, arbitrary_ok)
 
 
 class _Empty__mapping4alias:

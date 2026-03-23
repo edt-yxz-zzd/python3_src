@@ -2,6 +2,10 @@
 r'''[[[
 e ../../python3_src/seed/tiny_/check.py
 
+py -m seed.tiny_.check
+py -m nn_ns.app.debug_cmd   seed.tiny_.check -x # -off_defs
+py -m nn_ns.app.doctest_cmd seed.tiny_.check:__doc__ -ht # -ff -df
+
 [[
 !!!!! [x in container] or [x in iterable] or [x in seq_subscriptable] !!!!!
 
@@ -20,20 +24,99 @@ True
 Traceback (most recent call last):
   ...
 AttributeError: 'tuple_iterator' object has no attribute '__contains__'
->>> [].__contains__
+>>> [].__contains__  #doctest: +ELLIPSIS
 <method-wrapper '__contains__' of list object at 0x...>
+
+]]
+
+
+[[
+++force_lazy_imported_func_
+from seed.types.LazyObj import Lazy
+>>> from seed.helper.lazy_import__func import lazy_import4func_
+>>> Lazy = lazy_import4func_('seed.types.LazyObj', 'Lazy')
+>>> x = Lazy(999)
+>>> x
+Lazy(999)
+>>> Lazy
+_LazyImport4Func('seed.types.LazyObj', 'Lazy', '', '')
+
+
+>>> Lazy = lazy_import4func_('seed.types.LazyObj', 'Lazy')
+>>> Lazy
+_LazyImport4Func('seed.types.LazyObj', 'Lazy', '', '')
+>>> type(x)
+<class 'seed.types.LazyObj.Lazy'>
+>>> check_is_(Lazy, type(x))
+>>> Lazy is type(x)
+False
+>>> check_is_(int, type(x))
+Traceback (most recent call last):
+    ...
+TypeError: <class 'type'>
+
+>>> Lazy = lazy_import4func_('seed.types.LazyObj', 'Lazy')
+>>> check_eq_(Lazy, type(x))
+>>> Lazy == type(x) # <<== _LazyImport4Func.__eq__
+True
+>>> type(x) == Lazy
+True
+>>> Lazy
+_LazyImport4Func('seed.types.LazyObj', 'Lazy', '', '')
+>>> check_eq_(int, type(x))
+Traceback (most recent call last):
+    ...
+TypeError: <class 'type'>
+
+>>> Lazy = lazy_import4func_('seed.types.LazyObj', 'Lazy')
+>>> check_type_is(Lazy, x)
+>>> Lazy is type(x)
+False
+>>> Lazy
+_LazyImport4Func('seed.types.LazyObj', 'Lazy', '', '')
+>>> check_type_is(int, x)
+Traceback (most recent call last):
+    ...
+TypeError: <class 'seed.types.LazyObj.Lazy'>
+
+>>> isinstance(999, ()) # => _tmay_force_lazy_imported_func_
+False
+>>> Lazy = lazy_import4func_('seed.types.LazyObj', 'Lazy')
+>>> check_type_le(Lazy, x)
+
+################
+#before:++__instancecheck__@_LazyImport4Func
+#.>>> isinstance(x, Lazy) #???why not raise TypeError
+#.False
+################
+#after:++__instancecheck__@_LazyImport4Func
+>>> isinstance(x, Lazy)
+True
+>>> Lazy
+_LazyImport4Func('seed.types.LazyObj', 'Lazy', '', '')
+>>> type(Lazy).__mro__
+(<class 'seed.helper.lazy_import__func._LazyImport4Func'>, <class 'seed.helper.lazy_import__func._Forbid_get_set_del'>, <class 'object'>)
+>>> isinstance(666, 999) #???TypeError
+Traceback (most recent call last):
+    ...
+TypeError: isinstance() arg 2 must be a type, a tuple of types, or a union
+>>> check_type_le(int, x)
+Traceback (most recent call last):
+    ...
+TypeError: <class 'seed.types.LazyObj.Lazy'>
 
 ]]
 
 
 
 
-from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_, icheck_
+
+from seed.tiny_.check import check_or_, check_all_, check_tmay_, check_may_, check_not_, icheck_
 
 
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     from seed.tiny_.check import check_getitemable, icheck_getitemable
-from seed.tiny_.check import check_callable, check_iterator, check_is_obj, check_is_None
+from seed.tiny_.check import check_callable, check_iterator, check_is_, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
 from seed.tiny_.check import check_str, check_char, check_bool, check_tribool
@@ -45,6 +128,7 @@ __all__ = '''
     check_non_ABC
     check_ABC
 
+    check_or_
     check_all_
     check_tmay_
     check_may_
@@ -53,6 +137,9 @@ __all__ = '''
 
     check_subscriptable
         check_getitemable
+        is_subscriptable
+    check_callable
+    check_iterator
 
     check_type_le_in
     check_type_in
@@ -72,18 +159,27 @@ __all__ = '''
 
     check_uint_lt
     check_int_ge_lt
+        check_int_between
     check_int_ge
     check_int_ge_le
+    check_uint_le
+    check_imay_le
 
     icheck_subscriptable
         icheck_getitemable
+    icheck_type_le_in
     icheck_type_in
     icheck_type_le
     icheck_type_is
     icheck_tmay
     icheck_pair
+    icheck_either
     icheck_uint
     icheck_imay
+    icheck_int_ge
+    icheck_int_ge_le
+    icheck_uint_le
+    icheck_imay_le
 
     check_pseudo_identifier
     check_smay_pseudo_identifier
@@ -95,9 +191,9 @@ __all__ = '''
     icheck_smay_pseudo_qual_name
     icheck_pseudo_qual_name
 
-    check_callable
-    check_iterator
-    check_is_obj
+    check_eq_
+    check_is_
+        check_is_obj
     check_is_None
 
     check_str
@@ -111,7 +207,34 @@ __all__ = '''
     icheck_tribool
 
 '''.split()#'''
+    #_force_lazy_imported_func_
+    #_is_class_
 __all__
+####################################
+def _is_class_(x, /):
+    global _is_class_
+    from inspect import isclass as _is_class_
+    return _is_class_(x)
+def _force_lazy_imported_func_(f, /):
+    global _force_lazy_imported_func_
+    from seed.helper.lazy_import__func import force_lazy_imported_func_ as _force_lazy_imported_func_
+    return _force_lazy_imported_func_(f)
+def _tmay_force_lazy_imported_func_(f, /):
+    g = _force_lazy_imported_func_(f)
+    if g is f:
+        return ()
+    return (g,)
+####################################
+__all__
+
+
+
+
+
+
+
+
+
 
 def _call_(check_, obj, /):
     'check_ :: (obj->None) | ((obj->(*args)->None), *args)'
@@ -121,6 +244,17 @@ def _call_(check_, obj, /):
         check_, *args = check_
         check_(*args, obj)
 
+def check_or_(ls4check_, obj, /):
+    es = []
+    for check_ in ls4check_:
+        try:
+            _call_(check_, obj)
+            777;return#break
+        except Exception as exc:
+            es.append(exc)
+            continue
+    else:
+        raise TypeError(es)
 def check_all_(check_, objs, /):
     for obj in objs:
         _call_(check_, obj)
@@ -149,16 +283,49 @@ def icheck_(check_, obj, /):
 #.    #   view /sdcard/0my_files/tmp/out4py/py_src/_collections_abc.py
 #.    #       Hashable:_check_methods()
 #.    #.if not hasattr(type(obj), '__hash__'): raise TypeError(type(obj))
+def is_subscriptable(obj, /):
+    return hasattr(type(obj), '__getitem__') or (_is_class_(obj) and hasattr(obj, '__class_getitem__'))
 def check_subscriptable(obj, /):
-    if not hasattr(type(obj), '__getitem__'): raise TypeError(type(obj))
+    if not is_subscriptable(obj): raise TypeError(type(obj))
 check_getitemable = check_subscriptable
 
+def check_callable(obj, /):
+    if not callable(obj): raise TypeError(type(obj))
+check_callable(check_callable)
+
+def check_iterator(obj, /):
+    if not iter(obj) is obj: raise TypeError(type(obj))
+check_iterator(iter(''))
+
+
+
 def check_type_le_in(clss, obj, /):
-    if not isinstance(obj, clss): raise TypeError(type(obj))
+    check_type_le(clss, obj)
+    return
+    #.if not isinstance(obj, clss): raise TypeError(type(obj))
 def check_type_le(cls, obj, /):
+    # !! ++__instancecheck__@_LazyImport4Func
     if not isinstance(obj, cls): raise TypeError(type(obj))
+    return
+    ################
+    try:
+        b = isinstance(obj, cls)
+    except TypeError:
+        b = False
+        pass
+    #.if not (b or any(isinstance(obj, C) for C in _tmay_force_lazy_imported_func_(cls))): raise TypeError(type(obj))
+    if not (b or isinstance(obj, _tmay_force_lazy_imported_func_(cls))): raise TypeError(type(obj))
+    return
+    ################
+    cls = _force_lazy_imported_func_(cls)
+    if not isinstance(obj, cls): raise TypeError(type(obj))
+    return
+    ################
 def check_type_is(cls, obj, /):
-    if not type(obj) is cls: raise TypeError(type(obj))
+    if not ((T:=type(obj)) is cls or T is _force_lazy_imported_func_(cls)): raise TypeError(T)
+    return
+    #.cls = _force_lazy_imported_func_(cls)
+    #.if not type(obj) is cls: raise TypeError(type(obj))
 def check_type_in(clss, obj, /):
     if not type(obj) in clss: raise TypeError(type(obj))
 #no check_tuple
@@ -184,7 +351,8 @@ def check_pair(tpl, /):
     check_type_is(tuple, tpl)
     if not len(tpl) == 2: raise TypeError(len(tpl))
 def check_either(tpl, /):
-    check_pair(tpl); check_type_is(bool, tpl[0])
+    check_pair(tpl)
+    check_type_is(bool, tpl[0])
 
 def check_int_ge(min, i, /):
     check_type_is(int, i)
@@ -255,34 +423,6 @@ def icheck_imay_le(max, i, /):
     check_imay_le(max, i)
     return i
 
-check_uint(1)
-check_tuple__len_eq(0, ())
-check_tuple__len_eq(3, (0,1,2))
-check_tuple__len_le(3, ())
-check_tuple__len_le(3, (0,1,2))
-check_tuple__len_ge(0, ())
-check_tuple__len_ge(0, (0,1,2))
-check_len_eq(0, '')
-check_len_eq(3, '012')
-check_len_le(3, '')
-check_len_le(3, '012')
-check_len_ge(0, '')
-check_len_ge(0, '012')
-check_tmay(())
-check_tmay((0,))
-check_pair((0, 0))
-check_either((False, 0))
-check_type_is(str, '')
-check_type_le(object, '')
-check_type_le_in((int, object), '')
-check_type_in((int, str), '')
-assert 1 == icheck_uint(1)
-assert (0,) == icheck_tmay((0,))
-assert (0,0) == icheck_pair((0, 0))
-assert (False, 0) == icheck_either((False, 0))
-assert '' == icheck_type_is(str, '')
-assert '' == icheck_type_le(object, '')
-
 
 def check_pseudo_identifier(s, /):
     'pseudo_identifier identifier includes py-keyword'
@@ -316,6 +456,39 @@ def icheck_pseudo_qual_name(s, /):
     check_pseudo_qual_name(s)
     return s
 
+
+#move from above:<<==since force_lazy_imported_func_():ImportError: cannot import name '...' from partially initialized module 'seed.tiny_.check' (most likely due to a circular import)
+check_uint(1)
+check_tuple__len_eq(0, ())
+check_tuple__len_eq(3, (0,1,2))
+check_tuple__len_le(3, ())
+check_tuple__len_le(3, (0,1,2))
+check_tuple__len_ge(0, ())
+check_tuple__len_ge(0, (0,1,2))
+check_len_eq(0, '')
+check_len_eq(3, '012')
+check_len_le(3, '')
+check_len_le(3, '012')
+check_len_ge(0, '')
+check_len_ge(0, '012')
+check_tmay(())
+check_tmay((0,))
+check_pair((0, 0))
+check_either((False, 0))
+check_type_is(str, '')
+check_type_le(object, '')
+check_type_le_in((int, object), '')
+check_type_in((int, str), '')
+assert 1 == icheck_uint(1)
+assert (0,) == icheck_tmay((0,))
+assert (0,0) == icheck_pair((0, 0))
+assert (False, 0) == icheck_either((False, 0))
+assert '' == icheck_type_is(str, '')
+assert '' == icheck_type_le(object, '')
+
+
+
+
 assert 'class'.isidentifier()
 assert 'def'.isidentifier()
 assert ''.split('.') == ['']
@@ -328,18 +501,16 @@ check_smay_pseudo_qual_name('x.def')
 check_pseudo_qual_name('x')
 check_pseudo_qual_name('x.def')
 
-def check_callable(obj, /):
-    if not callable(obj): raise TypeError(type(obj))
-check_callable(check_callable)
-
-def check_iterator(obj, /):
-    if not iter(obj) is obj: raise TypeError(type(obj))
-check_iterator(iter(''))
-
-def check_is_obj(expected, obj, /):
-    if not obj is expected: raise TypeError(type(obj))
+def check_eq_(expected, obj, /):
+    #.if not (obj == expected or any(obj == x for x in _tmay_force_lazy_imported_func_(expected))): raise TypeError(type(obj))
+    if not (obj == expected or obj in _tmay_force_lazy_imported_func_(expected)): raise TypeError(type(obj))
+def check_is_(expected, obj, /):
+    if not (obj is expected or any(obj is x for x in _tmay_force_lazy_imported_func_(expected))): raise TypeError(type(obj))
+    #.expected = _force_lazy_imported_func_(expected)
+    #.if not obj is expected: raise TypeError(type(obj))
+check_is_obj = check_is_
 def check_is_None(obj, /):
-    check_is_obj(None, obj)
+    check_is_(None, obj)
 
 
 def check_str(s, /):
@@ -408,7 +579,7 @@ from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     #from seed.tiny_.check import check_getitemable, icheck_getitemable
 from seed.tiny_.check import check_type_le_in, check_type_in, check_type_le, check_type_is, check_tuple__len_le, check_tuple__len_ge, check_tuple__len_eq, check_len_le, check_len_ge, check_len_eq, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
-from seed.tiny_.check import check_callable, check_is_obj, check_is_None
+from seed.tiny_.check import check_callable, check_is_, check_is_None
 
 from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
 from seed.tiny_.check import check_str, check_char, check_bool, check_tribool

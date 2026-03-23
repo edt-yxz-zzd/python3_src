@@ -163,10 +163,13 @@ __getitem__/lookup - 索取扌/索取冫某某某巛流水号扌 :: 索引号 ->
 index() - 定位扌/定位冫某某某讠流水号扌 :: 元素 -> 索引号
 index/key/addr/ptr - 址引 #索引,路引,指引,指针
   ?ref:引用?
-unit - 位元#量纲? #单位? #感觉不太行:事业单位
+unit - 度础?单位?#件元/元件#位元？#量纲? #个位数？#单元？#单位? #感觉不太行:事业单位
+  #见下面:digit:位元:uint%radix
   component/unit/primitive/building-block:构件
+  #个位:十进制计数的基础的一位。个位以上有十位、百位等，以下有十分位、百分位等。
+  #数位:数字在数中的所在位置。如十进制数整数部分的数位从右向左依次为个位、十位、百位…，小数部分的数位从左向右依次为十分位、百分位、千分位…。
 1/one/unity - 幺元
-token - 码元/字元
+token - 码元/字元/料符
 tuple - 元组
 array - 数组
 seq/list - 列表
@@ -468,7 +471,7 @@ view ../lots/NOTE/abbr/software.txt
   logic:（逻辑|理则|论理）--> [私译]理薮--> [私译]理矩--> [私译]理格
   bit:爻元
   bool:真值
-  digit:位元:uint%radix
+  digit:位元/数元:uint%radix #手指/脚趾，数字/数码
   radix:位模/位基/基模#xxx:基数
 沓:numerous; many; repeated
   复

@@ -55,8 +55,7 @@ from seed.tiny import fst, snd, at
 from seed.tiny import mk_tuple, mk_frozenset, mk_immutable_seq, mk_tuple__split_first_if_str
 from seed.tiny import mk_pair, mk_pair_tuple, is_pair
 from seed.tiny_.map_ import map_, cmap_, call_, prepare4call_, dots_
-from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
-from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
+from seed.tiny_.check import check_or_, check_all_, check_tmay_, check_may_, check_not_
 from seed.tiny import check_callable, check_iterator, check_is_obj, check_is_None
 from seed.tiny_.check import check_str, check_char
 from seed.tiny import get_abstractmethod_names, check_manifest4abstractmethods
@@ -139,6 +138,16 @@ def print_iterableT(max_sz, /, *, to_str=repr, may_min_lineno=None):
 from seed.helper.str2__all__ import str2__all__
 __all__ = str2__all__(r'''
     oo                  # usage: +oo, -oo
+    Cased               # :: case -> payload -> Cased
+    Either              # :: bool -> payload -> Either
+    KindedName          # :: type -> hashable -> KindedName
+    TagT                # :: tag -> TagT/(payload -> (tag, payload))
+    CaseT               # :: case -> CaseT/(payload -> Cased)
+    EitherT             # :: bool -> EitherT/(payload -> Either)
+    mk_Left             # :: payload -> Either
+    mk_Right            # :: payload -> Either
+    TupleT              # :: (*args) -> TupleT/((*more_args) -> (*args, *more_args))
+
     dict_add            # :: mapping -> k -> v -> is_new_key/bool
     set_add             # :: set -> k -> is_new_key/bool
     dict_update         # :: mapping -> view<mapping> -> are_all_new_keys/bool
@@ -216,6 +225,7 @@ __all__ = str2__all__(r'''
     icheck_type_le      # :: cls -> a -> a|raise TypeError
     icheck_type_is      # :: cls -> a -> a|raise TypeError
 
+    check_or_          # :: Iter checker -> a -> None|raise TypeError
     check_all_          # :: checker -> a -> None|raise TypeError
     check_tmay_         # :: checker -> a -> None|raise TypeError
     check_may_          # :: checker -> a -> None|raise TypeError
@@ -307,6 +317,19 @@ __all__ = str2__all__(r'''
     theEcho             # .__getattribute__ :: str -> str
     ifNone              # :: (None|a) -> default -> (a|default)
     ifNonef             # :: (None|a) -> (()->default) -> (a|default)
+    if_is_              # :: expected -> obj -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj if not obj is expected else default)
+                        #   {default:=mk_default(imay_xdefault_rank, xdefault, *args4xdefault)}
+    if_eq_              # :: expected -> obj -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj if not obj == expected else default)
+    if_in_              # :: expected -> obj -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj if not obj in expected else default)
+
+    if_tmay_            # :: tmay obj -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj|default)
+    if_imay_            # :: imay uint -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (uint|default)
+    if_smay_            # :: smay txt7nonempty -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (txt7nonempty|default)
+    if_emay_            # :: (...|obj) -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj|default)
+    if_nmay_            # :: (None|obj) -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj|default)
+    if_True_            # :: (True|obj) -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj|default)
+    if_False_           # :: (False|obj) -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj|default)
+    if_NotImplemented_  # :: (NotImplemented|obj) -> imay_xdefault_rank -> xdefault -> (*args4xdefault) -> (obj|default)
 
     catched_call__either
                         # :: may_Base4Exception -> calc_value -> (is_value, exc_vs_value)
@@ -362,6 +385,9 @@ __all__ = str2__all__(r'''
     in_                 # :: xs -> (x -> bool)
     not_in              # :: xs -> (x -> bool)
 
+    mk_lazy_            # :: (...|-1|num_args) -> (obj|((*args[len(args)-num_args:]) -> obj)) -> (*args) -> (() -> obj)/(Lazy|LazyX)
+    mk_lazy5func_       # :: ((*args) -> obj) -> (*args) -> (() -> obj)/LazyX
+    mk_lazy5obj_        # :: a -> (() -> a)/Lazy
     lazy                # :: a -> (() -> a)
     lazy_raise          # eg. get_fdefault(d, key, lazy_raise(KeyError, ...))
     lazy_raise_v        # raise exc
@@ -533,6 +559,11 @@ __all__
 
 from seed.math.sign_of import sign_of
 from seed.helper.ifNone import ifNone, ifNonef
+from seed.helper.if_is_ import ifNone, ifNonef
+from seed.helper.if_is_ import if_is_, if_eq_, if_in_
+    # def if_is_(expected, obj, imay_xdefault_rank, xdefault, /, *args4xdefault):
+from seed.helper.if_is_ import if_tmay_, if_imay_, if_smay_, if_nmay_, if_emay_, if_True_, if_False_, if_NotImplemented_
+    #def if_tmay_(tmay_obj, imay_xdefault_rank, xdefault, /, *args4xdefault):
 from seed.helper.Echo import echo, theEcho
 from seed.helper.with_if import with_if
 from seed.debug.expectError import expectError
@@ -645,7 +676,7 @@ assert icheck_getitemable is icheck_subscriptable
 assert expectError(TypeError, lambda:check_subscriptable(set()))
 assert check_subscriptable('') is None
 
-from seed.tiny_.check import check_all_, check_tmay_, check_may_, check_not_
+from seed.tiny_.check import check_or_, check_all_, check_tmay_, check_may_, check_not_
 from seed.tiny_.check import check_type_le, check_type_is, check_type_le_in, check_type_in, check_tuple__len_le, check_tuple__len_ge, check_tuple__len_eq, check_len_le, check_len_ge, check_len_eq, check_tmay, check_pair, check_either, check_uint, check_imay, icheck_type_le, icheck_type_is, icheck_tmay, icheck_pair, icheck_either, icheck_uint, icheck_imay
 from seed.tiny_.check import check_type_in, icheck_type_in
 from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
@@ -654,6 +685,7 @@ from seed.tiny_.check import check_str, check_char
 from seed.tiny_.check import check_bool, icheck_bool
 
 
+check_or_([check_callable, check_subscriptable], range(3))
 check_all_(check_uint, range(3))
 check_tmay_(check_uint, (3,))
 check_tmay_(check_uint, ())
@@ -1000,6 +1032,15 @@ assert not dict_add({222:333}, 222, 333)
 
 
 from seed.tiny_.oo8inf import oo
+
+
+from seed.types.LazyObj import mk_lazy_, mk_lazy5obj_, mk_lazy5func_, mk_lazy_attrs_
+    #def mk_lazy_(emay_imay_num_args, obj_or_func, /, *args):
+    #from seed.types.LazyObj import Lazy, LazyX, LazyAttrs
+
+from seed.types.Either import Cased, Either, KindedName
+from seed.types.Either import mk_Left, mk_Right
+from seed.types.Either import TagT, CaseT, EitherT, TupleT
 
 
 

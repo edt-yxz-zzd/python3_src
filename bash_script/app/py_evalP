@@ -1,0 +1,9 @@
+##
+py_adhoc_call ''  @str %%:P  "$@"
+#example:
+#   py_adhoc_call ''  @str %%:P@q  ='q().__name__'
+#       => 'builtins'
+#example:
+#   py_evalP ='[P().hex(P().ord(ch)) for ch in "一龥"]'
+#       => "['0x4e00', '0x9fa5']"
+#

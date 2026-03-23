@@ -1,12 +1,97 @@
+#__all__:goto
 r'''
 e ../../python3_src/seed/types/Either.py
 py -m nn_ns.app.debug_cmd   seed.types.Either -x
+py -m nn_ns.app.doctest_cmd seed.types.Either:__doc__ -ht # -ff -df
+
+>>> issubclass(Cased, tuple)
+True
+>>> issubclass(Either, Cased)
+True
+>>> issubclass(KindedName, Cased)
+True
+>>> Cased(666, 999)
+Cased(666, 999)
+>>> Either(True, 999)
+Either(True, 999)
+>>> mk_Left(666)
+Either(False, 666)
+>>> mk_Right(999)
+Either(True, 999)
+>>> KindedName(int, 999)
+KindedName(<class 'int'>, 999)
+
+
+>>> Cased(666, 999).case
+666
+>>> Cased(666, 999).payload
+999
+>>> KindedName(int, 999).kind
+<class 'int'>
+>>> KindedName(int, 999).name
+999
+
+
+
+
+
+
+
+>>> TagT(666)
+TagT(666)
+>>> TagT(666).tag
+666
+>>> TagT(666)(999)
+(666, 999)
+>>> CaseT(666)
+CaseT(666)
+>>> CaseT(666).case
+666
+>>> CaseT(666)(999)
+Cased(666, 999)
+>>> EitherT(666)
+Traceback (most recent call last):
+    ...
+TypeError: <class 'int'>
+>>> EitherT(True)
+EitherT(True)
+>>> EitherT(True).case
+True
+>>> EitherT(True)(999)
+Either(True, 999)
+
+>>> TupleT(666)
+TupleT(666)
+>>> TupleT(666).args
+(666,)
+>>> TupleT(666)(999)
+(666, 999)
+>>> TupleT(666, 777)
+TupleT(666, 777)
+>>> TupleT(666, 777).args
+(666, 777)
+>>> TupleT(666, 777)(888, 111, 999)
+(666, 777, 888, 111, 999)
+>>> TupleT(666, 777)(888, 111, 999, curry=True)
+TupleT(666, 777, 888, 111, 999)
+>>> TupleT(666, 777).curry_(888, 111, 999)
+TupleT(666, 777, 888, 111, 999)
+>>> TupleT(666, 777)[888, 111, 999]
+TupleT(666, 777, 888, 111, 999)
+>>> TupleT(666, 777)[:1]
+TupleT(666)
+
 '''#'''
 
 __all__ = '''
 Cased
 Either mk_Left mk_Right
 KindedName
+
+TagT
+CaseT
+EitherT
+TupleT
 '''.split()#'''
 
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -256,8 +341,68 @@ def mk_Right(right, /):
     return Either.from_right(right)
 
 
+class _BaseTagT:
+    def __init__(sf, tag, /):
+        sf._t = tag
+        sf._check6make_()
+    def _check6make_(sf, /):
+        pass
+    def __repr__(sf, /):
+        return repr_helper(sf, sf._tag_)
+    @property
+    def _tag_(sf, /):
+        return sf._t
+    def __call__(sf, payload, /):
+        return (sf.tag, payload)
+class TagT(_BaseTagT):
+    @property
+    def tag(sf, /):
+        return sf._tag_
+    def __call__(sf, payload, /):
+        return (sf.tag, payload)
+class CaseT(_BaseTagT):
+    @property
+    def case(sf, /):
+        return sf._tag_
+    def __call__(sf, payload, /):
+        return Cased(sf.case, payload)
+class EitherT(CaseT):
+    def _check6make_(sf, /):
+        check_type_is(bool, sf.case)
+    def __call__(sf, payload, /):
+        return Either(sf.case, payload)
+
+class TupleT:
+    def __init__(sf, /, *args):
+        sf._t = args
+    def __repr__(sf, /):
+        return repr_helper(sf, *sf.args)
+    @property
+    def args(sf, /):
+        return sf._t
+    def __call__(sf, /, *more_args, curry=False):
+        if curry:
+            return __class__(*sf.args, *more_args)
+        return (*sf.args, *more_args)
+    def curry_(sf, /, *more_args):
+        return sf(*more_args, curry=True)
+    def __getitem__(sf, slice_or_more_args, /):
+        match slice_or_more_args:
+            #case slice(sl):
+                #^TypeError: slice() accepts 0 positional sub-patterns (1 given)
+            #case slice() & sl:
+                #^SyntaxError: invalid syntax
+            case slice():
+                sl = slice_or_more_args
+                return __class__(*sf.args[sl])
+            case more_args:
+                return sf(*more_args, curry=True)
+            #
+        raise 000
+
 
 
 from seed.types.Either import Cased, Either, KindedName
 from seed.types.Either import mk_Left, mk_Right
+from seed.types.Either import TagT, CaseT, EitherT, TupleT
 from seed.types.Either import *

@@ -8,6 +8,10 @@ see:py_all@bash_script
     py_adhoc_call ''  ,str.list '%difflib:__all__@all' =all
     py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
     py_adhoc_call ''  ,str.list %%:P  ='P.difflib().__all__'
+    py_adhoc_call ''  @str %%:P@q  ='q().__name__'
+        => 'builtins'
+    py_evalP ='[P().hex(P().ord(ch)) for ch in "一龥"]'
+        => "['0x4e00', '0x9fa5']"
 
 py -m nn_ns.app.debug_cmd   seed.recognize.cmdline.adhoc_argparser -x
 py -m nn_ns.app.doctest_cmd   seed.recognize.cmdline.adhoc_argparser:__doc__

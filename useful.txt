@@ -41,6 +41,10 @@ __new__ over ABC:
     sf = ABC.__new__(cls)
 
 
+help()
+help('topics')
+help('SPECIALMETHODS')
+
 
 #################################
 #[[[doctest_examples:begin

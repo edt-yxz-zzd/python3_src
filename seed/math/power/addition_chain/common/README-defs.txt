@@ -52,10 +52,36 @@ view others/数学/最短加链/最短加链-论文-概览.txt
   #xx:[乸加链:=乸严序加链]
   addition_chain : [k > j >= i]
   # 允许非末点出度为零 以 允许多靶值
-[乸加星链 =[def]= {us | [[us :: 乸严序加链][@[k<-[1..<L]] -> ?[i :<- [0..<k]] -> [us[k] == us[k-1] + us[i]]]]}]
+[乸加星链 =[def]= {us | [[us :: 乸严序加链][L:=len(us)][@[k<-[1..<L]] -> ?[i :<- [0..<k]] -> [us[k] == us[k-1] + us[i]]]]}]
   #<<== [j:=k-1]
   star_chain : [k > k-1 >= i]
   #带星号版#贪婪算法
+  ###加星链,婪溟链,加靶链,加列链
+[乸主干线纟婪溟链 =[def]= {ms | [[ms :: [uint]][L:=len(ms)][L >= 1][ms[0] == 1][@[k<-[1..<L]] -> ?[i :<- [0..<k]] -> ?[ez :<- [0..]] -> [[ms[k] == ms[k-1] + 2**ez*ms[i]][[i==k-1] -> [ez==0]]]]]}]
+    # stem
+    # 非必要条件:[[i==k-1] -> [ez==0]]
+    #       !! 用于糅合等价主干线
+[乸婪溟链 =[def]= {us | [[us :: 乸严序加链][ms :: 乸主干线纟婪溟链][us[-1] == ms[-1]][set(ms) |<=| set(us)][@[k<-[0..<len(us)]] -> ?[i :<- [0..<len(ms)]] -> ?[ez :<- [0..]] -> [[us[k] == 2**ez*ms[i]][[ez >= 1] -> ?[_k<-[0..<k]] -> [us[k] == 2*us[_k]]]]]]}]
+    view ../../python3_src/seed/math/power/addition_chain/shortest/rewrite3.py
+    #加星链.次大数 vs 婪溟链.次大主干值
+    #   代码里，命名混乱:以 次大数 命名 次大主干值
+    #   主线=主干线
+    #   [靶值 == 主干线[-1] == 婪溟链[-1]]
+    #   [主干值 <- 主干线]
+    #   [次大主干值 == 主干值 -内点*2**溟次]
+    #   ##[溟化值 == 内点*2**溟次]
+    #   [溟化值集 == {内点*2**ez | [ez:<-[0..=溟次]]}]
+    #   [内点 <- 简并态纟婪溟链{次大主干值}]
+    #   [内点 未必是 主干值, 可能是 某主干值耂非平凡溟化值, 这给搜索带来麻烦]
+    # fail:停滞:e ../../python3_src/seed/math/power/addition_chain/shortest/search_greedy_zpow_chain7recursive_shortest.py
+[乸加星链牜递归最短 =[def]= {us | [[us :: 乸加星链][L:=len(us)][最小显链长{us[-1]} == L-1][[L >= 2] -> [us[:L-1] <- 乸加星链牜递归最短]]]}]
+    view ../../python3_src/seed/math/power/addition_chain/shortest/search_star_chain7recursive_shortest.py
+[乸婪溟链牜递归最短 =[def]= {us | [[us :: 乸婪溟链][L:=len(us)][最小显链长{us[-1]} == L-1][ms:<-[主干线集纟婪溟链{us}]][@[m:<-ms[:-1]] -> [j:=us.index(m)] -> [us[:j+1]] <- 乸婪溟链牜递归最短]]}]
+    view ../../python3_src/seed/math/power/addition_chain/shortest/mixed_recursive_greedy_zpow_addition_chain__doc__py_adhoc_call.py
+    view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain__arbitrary_recur_shortest_stem.py
+[乸加星链 <: 乸婪溟链]
+[乸加星链牜递归最短 <: 乸婪溟链牜递归最短]
+
 #加靶链
 [靶值集 :: {uint}][us :: [uint]]:
   [欤加靶链扌(靶值集;us) =[def]= [[us <- 乸散漫加链][@[u:<-靶值集] -> [u<-us]]]]

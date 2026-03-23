@@ -9,6 +9,7 @@
 # [:主要数据备份命令牜最后一跃:2路]:goto
 # [:当前主要作业命令行]:goto
 # [:额外生成数据]:goto
+# [:主要数据备份牜逐个文件打包]:goto
 r'''[[[
 e ../../python3_src/seed/math/power/addition_chain/shortest/mixed_recursive_greedy_zpow_addition_chain.py
     简并态{递归婪溟链}
@@ -1241,11 +1242,12 @@ view ../../python3_src/seed/math/power/addition_chain/shortest/search_star_chain
 ls /sdcard/0my_files/zip/addition_chain/靶值讠允空升列纟次大数纟加星链牜递归最短
     靶值讠允空升列纟次大数纟加星链牜递归最短.le74174.txt.txz
     靶值讠允空次大数讠首尾加星链牜递归最短.le74174.txt.txz
+    @20260311:通过万维网得到末尾三个空缺靶值的最短加链，已然可以拼凑出来le74174的所有靶值的某条婪溟链牜递归最短
 
 
 泛化版{婪溟链牜递归最短:次大数}:编辑中...:
 发现病蛊:e ../../python3_src/seed/math/power/addition_chain/shortest/search_greedy_zpow_chain7recursive_shortest.py
-    [内点:<-简并态{次大数}]但未必是 主干值
+    停滞:[内点:<-简并态{次大数}]但未必是 主干值
 ]]
 [[
 @20260309
@@ -1330,6 +1332,7 @@ ls /sdcard/0my_files/zip/addition_chain/靶值讠简并记录纟递归婪溟链/
     676K
     ==>>:
     16M
+    # [:主要数据备份牜逐个文件打包]:here
 
 ]]
 

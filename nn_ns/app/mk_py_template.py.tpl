@@ -30,11 +30,6 @@ __all__ = r'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
-#.from functools import cached_property
-#.from itertools import islice
-#.from seed.tiny_.check import check_type_is, check_int_ge
-#see:dot_#from seed.func_tools.dot2 import dot
-#.
 #.from abc import update_abstractmethods
 #.from seed.abc.abc__ver1 import abstractmethod, override, ABC
 #.#################################
@@ -42,6 +37,9 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.clear_later_variables_if_reload_(globals(), '')
 #.    # <<== seed.pkg_tools.ModuleReloader
 #.
+#.#################################
+#.from seed.helper.lazy_import__func7dict import lazy_import__funcs7dict_
+#.(check_type_is, check_int_ge, _ifNone) = lazy_import__funcs7dict_(__name__ or globals() or locals(), 'seed.tiny_.check',  'check_type_is, check_int_ge      ifNone:_ifNone')
 #.#################################
 #.def mk_context4lazy_import_registered_names_(qnm4mdl7inject, qnm4pseudo_mdl7import, name7importZqnm4mdl, name7importZalias7inject={}, may_bifix4lazy_name7import=None, lazy_name7importZoriginal_name7import={}):
 #.from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
@@ -62,7 +60,17 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 #.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):
 #.    from seed.helper.ifNone import ifNone as _ifNone, ifNonef as _ifNonef
+#.with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
+#.    from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
 #.with mk_ctx4lazy_import4funcs_(__name__):
+#.    from itertools import islice
+#.    from functools import cached_property
+#.    from seed.for_libs.for_functools.cached_property import cached_property
+#.    from seed.types.CachedProperty import CachedProperty, mk_cached_propertyT_
+#.    from seed.func_tools.dot2 import dot
+#.    from seed.tiny_.bmk_pairs import bmk_pairs
+#.    from seed.tiny_.check import check_type_is, check_int_ge
+#.
 #.    from seed.helper.repr_input import repr_helper
 #.    from seed.tiny_.map_ import map_, cmap_, call_, prepare4call_, dots_
 #.    from seed.tiny_.types5py import mk_MapView,curry1,kwargs2Attrs #,MapView
