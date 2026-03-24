@@ -519,6 +519,7 @@ TextRecognizer__fullmatched
 TextRecognizer__span6regex
 TextRecognizer__span
 TextRecognizer__inside
+TextRecognizer__repr
 
 >>> TextRecognizer__fullmatched(TextRecognizer__constant_text('xyz'))
 TextRecognizer__fullmatched(TextRecognizer__constant_text('xyz'))
@@ -582,6 +583,25 @@ OResult('bb', 6)
 
 
 
+>>> TextRecognizer__repr(mk_txt_rgnr__span6regex_(r'\s+', 0, method=1), mk_txt_rgnr__span6regex_, r'\s+', 0, method=1)
+mk_txt_rgnr__span6regex_('\\s+', 0, method = 1)
+>>> print(TextRecognizer__repr(mk_txt_rgnr__span6regex_(r'\s+', 0, method=1), mk_txt_rgnr__span6regex_, r'\s+', 0, method=1))  #doctest: +ELLIPSIS
+TextRecognizer__repr(TextRecognizer__span6regex(re.compile('\\s+'), 0, 1), <function mk_txt_rgnr__span6regex_ at 0x...>, '\\s+', 0, method = 1)
+>>> _parse_text_(TextRecognizer__repr(mk_txt_rgnr__span6regex_(r'\s+', 0, method=1), mk_txt_rgnr__span6regex_, r'\s+', 0, method=1), env, '\t'*4, 0, 4)
+OResult(4, 4)
+
+>>> name5or_named_obj_('xxx yyy')
+'xxx yyy'
+>>> name5or_named_obj_(999)
+'int'
+>>> name5or_named_obj_(lambda:0)
+'<lambda>'
+>>> name5or_named_obj_(name5or_named_obj_)
+'name5or_named_obj_'
+>>> name5or_named_obj_(mk_txt_rgnr__text_(''))
+'TextRecognizer__constant_text'
+>>> name5or_named_obj_(TextRecognizer__repr)
+'TextRecognizer__repr'
 
 
 
@@ -822,6 +842,7 @@ all methods of _BaseTextRecognizer__ops4mkr:
     .insideV_
     .span_
     .spanB_
+    .repr_as_
 >>> mk_txt_rgnr__text_(r'xyz').else_(mk_txt_rgnr__text_(r'012'), mk_txt_rgnr__errmsg_(r'fail:ko'))
 TextRecognizer__fallback((TextRecognizer__constant_text('xyz'), TextRecognizer__constant_text('012'), TextRecognizer__constant_errmsg('fail:ko', False)))
 >>> mk_txt_rgnr__text_(r'xyz').else_trial_()
@@ -1000,6 +1021,7 @@ TextRecognizer__unbox(TextRecognizer__box(TextRecognizer__constant_text('xyz')))
     .insideV_
     .span_
     .spanB_
+    .repr_as_
 
 >>> mk_txt_rgnr__text_(r'xyz').fullmatched_()
 TextRecognizer__fullmatched(TextRecognizer__constant_text('xyz'))
@@ -1036,6 +1058,15 @@ TextRecognizer__span(None, TextRecognizer__span6regex(re.compile('\\W*\\w+'), 0,
 TextRecognizer__span(None, TextRecognizer__span6regex(re.compile('\\W*\\w+'), 0, 1))
 >>> mk_txt_rgnr__span6regex_(r'\W*\w+', 0, method=1).spanB_(mk_txt_rgnr__span6regex_(r'\w+', 0, method=0))
 TextRecognizer__span(TextRecognizer__span6regex(re.compile('\\w+'), 0, 0), TextRecognizer__span6regex(re.compile('\\W*\\w+'), 0, 1), True)
+
+>>> mk_txt_rgnr__text_(r'xyz').repr_as_(mk_txt_rgnr__text_, r'xyz')
+mk_txt_rgnr__text_('xyz')
+>>> print(mk_txt_rgnr__text_(r'xyz').repr_as_(mk_txt_rgnr__text_, r'xyz'))   #doctest: +ELLIPSIS
+TextRecognizer__repr(TextRecognizer__constant_text('xyz'), <function mk_txt_rgnr__text_ at 0x...>, 'xyz')
+>>> mk_txt_rgnr__span6regex_(r'\s+', 0, method=1).repr_as_(mk_txt_rgnr__span6regex_, r'\s+', 0, method=1)
+mk_txt_rgnr__span6regex_('\\s+', 0, method = 1)
+>>> print(mk_txt_rgnr__span6regex_(r'\s+', 0, method=1).repr_as_(mk_txt_rgnr__span6regex_, r'\s+', 0, method=1))   #doctest: +ELLIPSIS
+TextRecognizer__repr(TextRecognizer__span6regex(re.compile('\\s+'), 0, 1), <function mk_txt_rgnr__span6regex_ at 0x...>, '\\s+', 0, method = 1)
 
 
 ################
@@ -1108,6 +1139,7 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.from itertools import islice
 #.from seed.tiny_.check import check_type_is, check_int_ge
+from seed.recognize.text_recognizer.ITextRecognizer import name5or_named_obj_
 from seed.recognize.text_recognizer.ITextRecognizer import xget_groups5re_match_, check_may_group_or_groups_
 from seed.recognize.text_recognizer.ITextRecognizer import (ITextRecognizer
 ,BaseError
@@ -1139,6 +1171,7 @@ from seed.recognize.text_recognizer.ITextRecognizer import (ITextRecognizer
 ,   TextRecognizer__inside
 ,   TextRecognizer__span
 ,   TextRecognizer__span6regex
+,   TextRecognizer__repr
 #
 ,   ITextRecognizer__postprocess
 ,       TextRecognizer__fullmatched
@@ -1214,6 +1247,7 @@ ITextRecognizer
 #   .insideV_#kw:backward,no_seekback
 #   .span_#kw:backward
 #   .spanB_#kw:backward
+#   .repr_as_
 #
 #   .enclosed_by_#kw:as_regex
 #   .end_by_#kw:cased

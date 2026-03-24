@@ -1,10 +1,6 @@
 #__all__:goto
 #TODO:test&update__all__:
-    #fullmatched_:TextRecognizer__fullmatched
-    #inside_:TextRecognizer__inside
-    #insideV_,insideR_
-    #span_,spanB_
-    #parse_text7exact_:kw:fullmatched, to_raise_if_fail
+    #repr_as_,TextRecognizer__repr
 r'''[[[
 e ../../python3_src/seed/recognize/text_recognizer/ITextRecognizer.py
 view ../../python3_src/seed/recognize/text_recognizer/ITextRecognizer__doctest.py
@@ -62,6 +58,7 @@ ITextRecognizer
     TextRecognizer__inside
     TextRecognizer__span
     TextRecognizer__span6regex
+    TextRecognizer__repr
 
     ITextRecognizer__postprocess
         TextRecognizer__fullmatched
@@ -187,6 +184,10 @@ mk_txt_rgnr__span_
 mk_txt_rgnr__span6regex_
 span5re_matchT_
 check_xgroup_
+
+
+TextRecognizer__repr
+    name5or_named_obj_
 '''.split()#'''
     # ++@20260313:_BaseTextRecognizer__ops4mkr
 __all__
@@ -204,7 +205,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from functools import cached_property
     #.from itertools import islice
     from seed.tiny_.containers import mk_tuple
-    from seed.helper.repr_input import repr_helper
+    from seed.helper.repr_input import repr_helper, repr_helper__str
     from seed.tiny_.check import check_int_ge_le, check_int_ge, check_type_le, check_type_in, check_type_is, check_all_, check_may_, check_non_ABC, check_ABC, check_callable
     from seed.helper.ifNone import ifNone#ifNonef
     from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
@@ -314,6 +315,9 @@ class _BaseTextRecognizer__ops4mkr:
         return mk_txt_rgnr__span_(may_txt_rgnr7begin:=txt_rgnr, may_txt_rgnr7end, backward=backward)
     def spanB_(txt_rgnr, may_txt_rgnr7begin, /, *, backward=True):
         return mk_txt_rgnr__span_(may_txt_rgnr7begin, may_txt_rgnr7end:=txt_rgnr, backward=backward)
+    ##################
+    def repr_as_(txt_rgnr, name_or_named_obj, /, *args4repr, **kwds4repr):
+        return TextRecognizer__repr(txt_rgnr, name_or_named_obj, *args4repr, **kwds4repr)
     ##################
     def then_unbox_(txt_rgnr, /):
         'see:enclosed_by_'
@@ -1861,6 +1865,50 @@ class TextRecognizer__span6regex(ITextRecognizer):
         return sf._rgnr._parse_text_(env, txt, begin, end)
 
 
+def name5or_named_obj_(name_or_named_obj, /):
+    if type(name_or_named_obj) is str:
+        name = name_or_named_obj
+    else:
+        named_obj = name_or_named_obj
+        try:
+            name = named_obj.__name__
+        except AttributeError:
+            name = type(named_obj).__name__
+        #.    name = None
+        #.if not type(name) is str or not name.isidentifier(): name = type(named_obj).__name__
+    return name
+
+
+class TextRecognizer__repr(ITextRecognizer):
+    'see:_ex_mk_txt_rgnr__span6regex_ #.repr_as_'
+    ___no_slots_ok___ = True
+    def __init__(sf, txt_rgnr, name_or_named_obj, /, *args4repr, **kwds4repr):
+        check_type_le(ITextRecognizer, txt_rgnr)
+        name = name5or_named_obj_(name_or_named_obj)
+        sf._rgnr = txt_rgnr
+        sf._nmx = name_or_named_obj
+        sf._args4repr = args4repr
+        sf._kwds4repr = kwds4repr
+        sf._nm = name
+    def __str__(sf, /):
+        txt_rgnr = sf._rgnr
+        name_or_named_obj = sf._nmx
+        args4repr = sf._args4repr
+        kwds4repr = sf._kwds4repr
+        return repr_helper(sf, txt_rgnr, name_or_named_obj, *args4repr, **kwds4repr)
+    def __repr__(sf, /):
+        txt_rgnr = sf._rgnr
+        name = sf._nm
+        args4repr = sf._args4repr
+        kwds4repr = sf._kwds4repr
+        return repr_helper__str(name, *args4repr, **kwds4repr)
+    #.@property
+    #.def _txt_rgnr_(sf, /):
+    #.    return sf._rgnr
+    @override
+    def _parse_text_(sf, env, txt, begin, end, /):
+        return sf._rgnr._parse_text_(env, txt, begin, end)
+
 
 
 
@@ -2204,6 +2252,7 @@ ITextRecognizer
 #   .insideV_#kw:backward,no_seekback
 #   .span_#kw:backward
 #   .spanB_#kw:backward
+#   .repr_as_
 #
 #   .enclosed_by_#kw:as_regex
 #   .end_by_#kw:cased

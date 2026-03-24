@@ -36,3 +36,8 @@
 /**/_ignore__tmp
 
 
+#@20260324
+#tmp excluded:
+/seed/io/cache_file/README.txt
+/seed/recognize/rgnr/abc/utilities4IRecognizer.py
+
