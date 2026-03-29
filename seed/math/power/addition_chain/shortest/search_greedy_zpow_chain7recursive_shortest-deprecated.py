@@ -3,6 +3,13 @@
 #   『内点』 的 使用有误: 根据 最小显链长差值 倒推出来的 未必是 内点，有可能是 溟化值，由于 可能是主干值或支线值，所以才需要 简并集 判定
 #   doing...
 r'''[[[
+[[
+@20260329
+cd $my_git_py
+git mv -v seed/math/power/addition_chain/shortest/search_greedy_zpow_chain7recursive_shortest.py seed/math/power/addition_chain/shortest/search_greedy_zpow_chain7recursive_shortest-deprecated.py
+e ../../python3_src/seed/math/power/addition_chain/shortest/search_greedy_zpow_chain7recursive_shortest-deprecated.py
+]]
+
 e ../../python3_src/seed/math/power/addition_chain/shortest/search_greedy_zpow_chain7recursive_shortest.py
     婪溟链牜递归最短:搜索{通过:靶值讠最小显链长}
 vs:
