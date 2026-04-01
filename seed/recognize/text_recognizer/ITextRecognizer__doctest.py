@@ -1293,7 +1293,7 @@ ITextRecognizer
 #   .span_#kw:backward
 #   .spanB_#kw:backward
 #   .repr_as_
-#   .ref_as_
+#   .ref_as_#kw:to_name
 #
 #   .enclosed_by_#kw:as_regex
 #   .end_by_#kw:cased
