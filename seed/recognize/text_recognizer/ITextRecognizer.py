@@ -1,6 +1,5 @@
 #__all__:goto
 #TODO:test&update__all__:
-    #repr_as_,TextRecognizer__repr
     #ref_as_,mk_txt_rgnr__ref_,TextRecognizer__ref
 r'''[[[
 e ../../python3_src/seed/recognize/text_recognizer/ITextRecognizer.py
@@ -325,7 +324,9 @@ class _BaseTextRecognizer__ops4mkr:
     ##################
     def repr_as_(txt_rgnr, name_or_named_obj, /, *args4repr, **kwds4repr):
         return TextRecognizer__repr(txt_rgnr, name_or_named_obj, *args4repr, **kwds4repr)
-    def ref_as_(txt_rgnr, nm2txt_rgnr, name, /):
+    def ref_as_(txt_rgnr, nm2txt_rgnr, name, /, *, to_name=False):
+        if to_name:
+            txt_rgnr = txt_rgnr.named_(name, global_vs_local=False)
         if not txt_rgnr is nm2txt_rgnr.setdefault(name, txt_rgnr):raise KeyError('existed:', name)
         return mk_txt_rgnr__ref_(name)
     ##################

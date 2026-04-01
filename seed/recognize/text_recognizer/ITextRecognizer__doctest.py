@@ -1100,6 +1100,14 @@ Traceback (most recent call last):
     ...
 KeyError: ('existed:', 666)
 
+>>> nm2txt_rgnr = {}
+>>> mk_txt_rgnr__text_(r'xyz').ref_as_(nm2txt_rgnr, 666, to_name=True)
+TextRecognizer__ref(666)
+>>> nm2txt_rgnr
+{666: TextRecognizer__named(False, 666, ...)}
+>>> print(nm2txt_rgnr[666])
+TextRecognizer__named(False, 666, TextRecognizer__constant_text('xyz'))
+
 ################
 parse_text_
 parse_text7full_
