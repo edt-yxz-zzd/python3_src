@@ -618,6 +618,8 @@ OResult('xyz', 3)
 >>> mk_txt_rgnr__text_(r'xyz').ref_as_(nm2txt_rgnr, 666)
 TextRecognizer__ref(666)
 >>> _env = mk_env5nm2txt_rgnr_(nm2txt_rgnr, case4ops4flow_txt_rgnr='list')
+>>> _env = mk_env5nm2txt_rgnr_(nm2txt_rgnr, case4ops4flow_txt_rgnr='ftSeq')
+>>> _env = mk_env5nm2txt_rgnr_(nm2txt_rgnr)
 >>> _parse_text_(TextRecognizer__ref(666), _env, 'xyzaaa', 0, 6)
 OResult('xyz', 3)
 >>> nm2txt_rgnr
@@ -1259,7 +1261,7 @@ from seed.recognize.text_recognizer.ITextRecognizer import (ITextRecognizer
 #from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list
     #def parse_text_(txt_rgnr, env, txt, begin, end, /):
 from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, parse_text7full_, parse_text7raise_, parse_text7exact_, ParseFail, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list, mk_env5nm2txt_rgnr_
-    #def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'):
+    #def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'=None):
     #def parse_text_(txt_rgnr, env, txt, begin, end, /, *, fullmatched=False, to_raise_if_fail=False):
     #   'ITextRecognizer -> env -> txt/str -> begin/uint%(1+len(txt)) -> end/uint%(1+len(txt)) -> ParseResult/(OResult|Errmsg)'
     #   Errmsg(errmsg,end,severe){ok:=False}{ko:=True}

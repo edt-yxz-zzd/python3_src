@@ -1600,6 +1600,8 @@ class TextRecognizer__named(_ITextRecognizer__init__wrapped_txt_rgnr, ITextRecog
     global_vs_local:
         * global_name:
             unique to be referred via env
+            see:mk_env5nm2txt_rgnr_
+            see:mk_txt_rgnr__ref_, TextRecognizer__ref
         * local_name:
             eg:
                 idx4child{serial}
@@ -1944,9 +1946,9 @@ class TextRecognizer__ref(ITextRecognizer):
         txt_rgnr = nm2txt_rgnr[name]
         return txt_rgnr._parse_text_(env, txt, begin, end)
 
-def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'):
+def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'=None):
     match case4ops4flow_txt_rgnr:
-        case 'list':
+        case None | 'list':
             base_env = env4ops4oresult_seq__list
         case 'ftSeq':
             #finger_tree_seq
@@ -2270,7 +2272,7 @@ if __name__ == "__main__":
 __all__
 from seed.recognize.text_recognizer.ITextRecognizer import check_parse_result__between_, check_parse_result_
 from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, parse_text7full_, parse_text7raise_, parse_text7exact_, ParseFail, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list, mk_env5nm2txt_rgnr_
-    #def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'):
+    #def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'=None):
     #def parse_text_(txt_rgnr, env, txt, begin, end, /, *, fullmatched=False, to_raise_if_fail=False):
     #   'ITextRecognizer -> env -> txt/str -> begin/uint%(1+len(txt)) -> end/uint%(1+len(txt)) -> ParseResult/(OResult|Errmsg)'
     #   Errmsg(errmsg,end,severe){ok:=False}{ko:=True}
