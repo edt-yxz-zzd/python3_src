@@ -129,6 +129,112 @@ Seq([11, 22, 33, 11, 22, 33, 11, 22, 33, 11, 22, 33, 11, 22, 33])
 
 
 
+
+
+
+
+
+
+@20260401:++cut_, find, index
+>>> Seq([11, 22, 33]).cut_(5, 6)
+(3, 3, Seq())
+>>> Seq([11, 22, 33]).cut_(6, 5)
+(3, 3, Seq())
+>>> Seq([11, 22, 33]).cut_(3, -1)
+(3, 3, Seq())
+>>> Seq([11, 22, 33]).cut_(2, -1)
+(2, 2, Seq())
+>>> Seq([11, 22, 33]).cut_(1, -1)
+(1, 2, Seq([22]))
+>>> Seq([11, 22, 33]).cut_(-3, -1)
+(0, 2, Seq([11, 22]))
+
+>>> Seq([11, 22, 33]).find(22)
+1
+>>> Seq([11, 22, 33]).find(24)
+-1
+>>> Seq([11, 22, 33]).find(22, 1, 2)
+1
+>>> Seq([11, 22, 33]).find(22, 2, 3)
+-1
+
+
+>>> Seq([11, 22, 33]).index(22)
+1
+>>> Seq([11, 22, 33]).index(24)
+Traceback (most recent call last):
+    ...
+ValueError: 24
+
+
+>>> Seq([11, 22, 33]).index(22, 1, 2)
+1
+>>> Seq([11, 22, 33]).index(22, 2, 3)
+Traceback (most recent call last):
+    ...
+ValueError: 22
+
+
+
+>>> Seq([11, 22, 33]).isetitem_(1, 66)
+Seq([11, 66, 33])
+>>> Seq([11, 22, 33]).isetitem_(-1, 66)
+Seq([11, 22, 66])
+>>> Seq([11, 22, 33]).isetitem_(-3, 66)
+Seq([66, 22, 33])
+>>> Seq([11, 22, 33]).isetitem_(-4, 66)
+Traceback (most recent call last):
+    ...
+IndexError: -4
+>>> Seq([11, 22, 33]).isetitem_(2, 66)
+Seq([11, 22, 66])
+>>> Seq([11, 22, 33]).isetitem_(3, 66)
+Traceback (most recent call last):
+    ...
+IndexError: 3
+
+
+
+>>> Seq([44, 33]) == Seq([44, 33])
+True
+>>> Seq([44, 33]) <= Seq([44, 33])
+True
+>>> Seq([44, 33]) >= Seq([44, 33])
+True
+>>> Seq([44, 33]) != Seq([44, 33])
+False
+>>> Seq([44, 33]) < Seq([44, 33])
+False
+>>> Seq([44, 33]) > Seq([44, 33])
+False
+
+>>> Seq([44]) == Seq([44, 33])
+False
+>>> Seq([44]) <= Seq([44, 33])
+True
+>>> Seq([44]) >= Seq([44, 33])
+False
+>>> Seq([44]) != Seq([44, 33])
+True
+>>> Seq([44]) < Seq([44, 33])
+True
+>>> Seq([44]) > Seq([44, 33])
+False
+
+>>> Seq([33, 44]) == Seq([44, 33])
+False
+>>> Seq([33, 44]) <= Seq([44, 33])
+True
+>>> Seq([33, 44]) >= Seq([44, 33])
+False
+>>> Seq([33, 44]) != Seq([44, 33])
+True
+>>> Seq([33, 44]) < Seq([44, 33])
+True
+>>> Seq([33, 44]) > Seq([44, 33])
+False
+
+
 py_adhoc_call   seed.data_funcs.finger_tree.ft23_7sized_seq   @f
 ]]]'''#'''
 __all__ = r'''
@@ -141,8 +247,11 @@ from itertools import pairwise#islice
 from seed.tiny_.check import check_type_is, check_int_ge
 from collections.abc import Sequence
 from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_len, check_ops4sized_finger_tree_, len5sized_finger_tree_, split_sized_finger_tree_
+#.from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_len, check_ops4sized_finger_tree_, len5sized_finger_tree_, split_sized_finger_tree_, ops4attr_hash, check_ops4hashable_finger_tree_, hash5hashable_finger_tree_
 ___end_mark_of_excluded_global_names__0___ = ...
 
+#._ops = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len, ops4attr_hash, ops4attr_rightmost7echo]))
+    #hash5hashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
 _ops = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len]))
 _empty_tree = _ops.mk_empty_tree_(0)
 _leaf2data_ = _ops.get_data5leaf_
@@ -180,6 +289,77 @@ class Seq(Sequence):
     def __repr__(sf, /):
         xs = [*sf]
         return f'Seq({xs})' if xs else f'Seq()'
+    #.@property
+    #.def _args4hash(sf, /):
+    #.    return (type(sf), len(sf), sf._t)
+    #.@cached_property
+    #.def _hash(sf, /):
+    #.    return hash(sf._args4hash)
+    #.def __hash__(sf, /):
+    #.    return sf._hash
+    #.def __eq__(sf, ot, /):
+    #.    if sf is ot:
+    #.        return True
+    #.    if not type(sf) is type(ot):
+    #.        return NotImplemented
+    #.    return sf._args4hash == ot._args4hash
+
+    def __hash__(sf, /):
+        'slow hash#not delta algo'
+        return sf._hash
+    @cached_property
+    def _hash(sf, /):
+        # !! 『TypeError: unhashable type: 'Seq'』
+        # => should be 『hash5hashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)』
+        # => simplified as 『hash(tuple(sf))』
+        return hash((type(sf), tuple(sf)))
+    def __eq__(sf, ot, /):
+        if sf is ot:
+            return True
+        if not type(sf) is type(ot):
+            return NotImplemented
+        if '_hash' in vars(sf) and '_hash' in vars(ot):
+            if not hash(sf) == hash(ot):
+                return False
+        if not len(sf) is len(ot):
+            return False
+        return all(a==b for a, b in zip(sf, ot))
+    def __le__(sf, ot, /):
+        if sf is ot:
+            return True
+        if not isinstance(ot, Sequence):
+            return NotImplemented
+        for a, b in zip(sf, ot):
+            if a == b:
+                continue
+            return a < b
+        return len(sf) <= len(ot)
+    def __lt__(sf, ot, /):
+        if sf is ot:
+            return False
+        if not isinstance(ot, Sequence):
+            return NotImplemented
+        for a, b in zip(sf, ot):
+            if a == b:
+                continue
+            return a < b
+        return len(sf) < len(ot)
+    def __ne__(sf, ot, /):
+        b = type(sf).__eq__(sf, ot)
+        if b is NotImplemented:
+            return b
+        return not b
+    def __gt__(sf, ot, /):
+        b = type(sf).__le__(sf, ot)
+        if b is NotImplemented:
+            return b
+        return not b
+    def __ge__(sf, ot, /):
+        b = type(sf).__lt__(sf, ot)
+        if b is NotImplemented:
+            return b
+        return not b
+
     def __len__(sf, /):
         return sf._sz
     def __iter__(sf, /):
@@ -252,6 +432,16 @@ class Seq(Sequence):
         return (seqL, seqR)
     #def __delitem__(sf, z, /):
     #def __setitem__(sf, z, v, /):
+    def isetitem_(sf, j, v, /):
+        '-> Seq | ^IndexError'
+        L = len(sf)
+        if j < 0:
+            if not j >= -L:raise IndexError(j)
+            j += L
+        if not 0 <= j < L:raise IndexError(j)
+        sf_, _v_, _sf = sf.splits_at_(j, j+1)
+        ot = sf_.ipushR(v) + _sf
+        return ot
     def __getitem__(sf, z, /):
         y = range(L:=len(sf))[z]
         #if type(z) is slice:
@@ -280,6 +470,32 @@ class Seq(Sequence):
             for x in iter(seqR):
                 return x
             raise 000
+    def cut_(sf, begin=None, end=None, /):
+        '-> (begin, end, Seq)'
+        if not sf:
+            return (0, 0, sf)
+        (i, j, _1) = slice(begin, end, 1).indices(len(sf))
+        if not i < j:
+            j = i
+            _sf_ = sf[:0]
+        elif i == 0 and j == len(sf):
+            _sf_ = sf
+        else:
+            #_sf_ = sf[i:j]
+            (_, _sf_, _) = sf.splits_at_(i, j)
+        _sf_
+        return (i, j, _sf_)
+    def find(sf, v, begin=None, end=None, /):
+        (i, j, _sf_) = sf.cut_(begin, end)
+        vs = [v]
+        for k, x in enumerate(_sf_, i):
+            if x in vs:
+                return k
+        return -1
+    def index(sf, v, begin=None, end=None, /):
+        if not -1 == (j:=sf.find(v, begin, end)):
+            return j
+        raise ValueError(v)
     def ipopX(sf, /, *, atL_vs_atR:bool):
         '-> seqY{atL_vs_atR} | ^EmptyError'
         return sf.vpopX(atL_vs_atR=atL_vs_atR)[1]

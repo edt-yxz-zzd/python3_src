@@ -37,23 +37,43 @@ AscendSet([0, 1, 2])
 1
 >>> AscendSet([0,11,22]).index_eq_(11)
 1
+>>> AscendSet([0,11,22]).find_eq_(11)
+1
 >>> AscendSet([0,11,22]).index_ge_(11)
 1
 >>> AscendSet([0,11,22]).index_gt_(11)
 2
 
+>>> ([0,22]).index(11)
+Traceback (most recent call last):
+    ...
+ValueError: 11 is not in list
 >>> AscendSet([0,22]).index(11)
 Traceback (most recent call last):
     ...
-IndexError: 11
+ValueError: 11
 >>> AscendSet([0,22]).index_eq_(11)
 Traceback (most recent call last):
     ...
-IndexError: 11
+ValueError: 11
+>>> AscendSet([0,22]).find_eq_(11)
+-1
 >>> AscendSet([0,22]).index_ge_(11)
 1
 >>> AscendSet([0,22]).index_gt_(11)
 1
+
+
+>>> AscendSet([0,11,22]).index_eq_(11, -2, -1)
+1
+>>> AscendSet([0,11,22]).find_eq_(11, -2, -1)
+1
+>>> AscendSet([0,11,22]).index_eq_(11, 0, 1)
+Traceback (most recent call last):
+    ...
+ValueError: 11
+>>> AscendSet([0,11,22]).find_eq_(11, 0, 1)
+-1
 
 
 
@@ -209,6 +229,10 @@ AscendSet([0, 22])
 ((11,), AscendSet([0, 22]))
 >>> AscendSet([0,True,22]).vdiscard(1)
 ((True,), AscendSet([0, 22]))
+>>> AscendSet([0,True,22]).wdiscard(1)
+((True,), 1, AscendSet([0, 22]))
+>>> AscendSet([0,11,22]).wdiscard(5)
+((), 1, AscendSet([0, 11, 22]))
 
 >>> AscendSet([0,True,22]).iremove(22)
 AscendSet([0, True])
@@ -231,7 +255,7 @@ False
 >>> 11 in AscendSet([0,11,22])
 True
 
-__hash_
+__hash__
 >>> {AscendSet([0,11,22])} #hash
 {AscendSet([0, 11, 22])}
 
@@ -475,7 +499,7 @@ class AscendSet(ISet):
                 #case
             tree
             it = _ops.iter_datas5tree_(depth:=0, tree, reverse=False)
-            if not all(a < b for a, b in pairwise(it)):raise TypeError
+            if not all(a < b for a, b in pairwise(it)):raise NotAscendError
             tree
         tree
         sf._t = tree
@@ -498,13 +522,49 @@ class AscendSet(ISet):
         return _ops.iter_datas5tree_(depth:=0, sf._t, reverse=False)
     def __reversed__(sf, /):
         return _ops.iter_datas5tree_(depth:=0, sf._t, reverse=True)
-    def index(sf, x, /):
-        return sf.index_eq_(x)
-    def index_eq_(sf, x, /):
-        (setL, setR) = sf.split_at_key_(x)
-        if setL and setL[-1] == x:
-            return -1+len(setL)
-        raise IndexError(x)
+    def cut_(sf, begin=None, end=None, /):
+        '-> (begin, end, Seq)'
+        if not sf:
+            return (0, 0, sf)
+        (i, j, _1) = slice(begin, end, 1).indices(len(sf))
+        if not i < j:
+            j = i
+            _sf_ = sf[:0]
+        elif i == 0 and j == len(sf):
+            _sf_ = sf
+        else:
+            #_sf_ = sf[i:j]
+            (_, _sf_, _) = sf.splits_at_(i, j)
+        _sf_
+        return (i, j, _sf_)
+    def find_eq_(sf, v, begin=None, end=None, /):
+        (i, j, _sf_) = sf.cut_(begin, end)
+        vs = [v]
+        for k, x in enumerate(_sf_, i):
+            if x in vs:
+                return k
+        return -1
+    def index_eq_(sf, v, begin=None, end=None, /):
+        if not -1 == (j:=sf.find_eq_(v, begin, end)):
+            return j
+        raise ValueError(v)
+
+    def index(sf, v, begin=None, end=None, /):
+        return sf.index_eq_(v, begin, end)
+    #.def index(sf, x, /):
+    #.    return sf.index_eq_(x)
+    #.def index_eq_(sf, x, /):
+    #.    if not -1 == (j:=sf.find_eq_(x)):
+    #.        return j
+    #.    #.raise IndexError(x)
+    #.    #@20260401:
+    #.    raise ValueError(x)
+    #.def find_eq_(sf, x, /):
+    #.    '-> imay idx'
+    #.    (setL, setR) = sf.split_at_key_(x)
+    #.    if setL and setL[-1] == x:
+    #.        return -1+len(setL)
+    #.    return -1
     def index_gt_(sf, x, /):
         (setL, setR) = sf.split_at_key_(x)
         return len(setL)
@@ -697,13 +757,22 @@ class AscendSet(ISet):
         return sf.vdiscard(x)[1]
     def vdiscard(sf, x, /):
         '-> (tmay_hit, AscendSet) # see:vremove()'
-        (setL, setR) = sf.split_at_key_(x)
-        if setL and (hit:=setL[-1]) == x:
+        (tmay_hit, j, ot) = sf.wdiscard(x)
+        return (tmay_hit, ot)
+    def wdiscard(sf, x, /):
+        '-> (tmay_hit, idx, AscendSet) # see:vremove()'
+        (setLM, setR) = sf.split_at_key_(x)
+        if setLM and (hit:=setLM[-1]) == x:
+            (_hit, setL) = setLM.vpopR()
+            assert _hit is hit
             tmay_hit = (hit,)
-            (_, setL) = setL.vpopR()
-            return (tmay_hit, setL + setR)
-        tmay_hit = ()
-        return (tmay_hit, sf)
+            ot = setL + setR
+        else:
+            setL = setLM
+            tmay_hit = ()
+            ot = sf
+        j = len(setL)
+        return (tmay_hit, j, ot)
     def __contains__(sf, x, /):
         (setL, setR) = sf.split_at_key_(x)
         return setL and setL[-1] == x
@@ -717,6 +786,9 @@ class AscendSet(ISet):
             return NotImplemented
         if not len(sf) == len(ot):
             return False
+        if '_hash' in vars(sf) and '_hash' in vars(ot):
+            if not hash(sf) == hash(ot):
+                return False
         return all(a == b for a, b in zip(sf, ot))
     def __ne__(sf, ot, /):
         if not type(ot) is type(sf):
