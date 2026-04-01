@@ -520,6 +520,7 @@ TextRecognizer__span6regex
 TextRecognizer__span
 TextRecognizer__inside
 TextRecognizer__repr
+TextRecognizer__ref
 
 >>> TextRecognizer__fullmatched(TextRecognizer__constant_text('xyz'))
 TextRecognizer__fullmatched(TextRecognizer__constant_text('xyz'))
@@ -606,6 +607,22 @@ OResult(4, 4)
 
 
 
+>>> TextRecognizer__ref(666)
+TextRecognizer__ref(666)
+>>> nm2txt_rgnr = {666:mk_txt_rgnr__text_(r'xyz')}
+>>> _env = {TextRecognizer__ref:nm2txt_rgnr, **env4ops4oresult_seq__list}
+>>> _parse_text_(TextRecognizer__ref(666), _env, 'xyzaaa', 0, 6)
+OResult('xyz', 3)
+
+>>> nm2txt_rgnr = {}
+>>> mk_txt_rgnr__text_(r'xyz').ref_as_(nm2txt_rgnr, 666)
+TextRecognizer__ref(666)
+>>> _env = mk_env5nm2txt_rgnr_(nm2txt_rgnr, case4ops4flow_txt_rgnr='list')
+>>> _parse_text_(TextRecognizer__ref(666), _env, 'xyzaaa', 0, 6)
+OResult('xyz', 3)
+>>> nm2txt_rgnr
+{666: TextRecognizer__constant_text('xyz')}
+>>> #_env
 
 
 
@@ -779,6 +796,7 @@ mk_txt_rgnr__regex_
 mk_txt_rgnr__text_
 mk_txt_rgnr__oresult_
 mk_txt_rgnr__errmsg_
+mk_txt_rgnr__ref_
 >>> mk_txt_rgnr__span_(None, None)
 TextRecognizer__span(None, None)
 >>> mk_txt_rgnr__span_(None, None, backward=True)
@@ -804,6 +822,8 @@ TextRecognizer__constant_errmsg(666, False)
 >>> mk_txt_rgnr__errmsg_(666, True)
 TextRecognizer__constant_errmsg(666, True)
 
+>>> mk_txt_rgnr__ref_(666)
+TextRecognizer__ref(666)
 
 ################
 all methods of _BaseTextRecognizer__ops4mkr:
@@ -843,6 +863,7 @@ all methods of _BaseTextRecognizer__ops4mkr:
     .span_
     .spanB_
     .repr_as_
+    .ref_as_
 >>> mk_txt_rgnr__text_(r'xyz').else_(mk_txt_rgnr__text_(r'012'), mk_txt_rgnr__errmsg_(r'fail:ko'))
 TextRecognizer__fallback((TextRecognizer__constant_text('xyz'), TextRecognizer__constant_text('012'), TextRecognizer__constant_errmsg('fail:ko', False)))
 >>> mk_txt_rgnr__text_(r'xyz').else_trial_()
@@ -1022,6 +1043,7 @@ TextRecognizer__unbox(TextRecognizer__box(TextRecognizer__constant_text('xyz')))
     .span_
     .spanB_
     .repr_as_
+    .ref_as_
 
 >>> mk_txt_rgnr__text_(r'xyz').fullmatched_()
 TextRecognizer__fullmatched(TextRecognizer__constant_text('xyz'))
@@ -1068,6 +1090,15 @@ mk_txt_rgnr__span6regex_('\\s+', 0, method = 1)
 >>> print(mk_txt_rgnr__span6regex_(r'\s+', 0, method=1).repr_as_(mk_txt_rgnr__span6regex_, r'\s+', 0, method=1))   #doctest: +ELLIPSIS
 TextRecognizer__repr(TextRecognizer__span6regex(re.compile('\\s+'), 0, 1), <function mk_txt_rgnr__span6regex_ at 0x...>, '\\s+', 0, method = 1)
 
+>>> nm2txt_rgnr = {}
+>>> mk_txt_rgnr__text_(r'xyz').ref_as_(nm2txt_rgnr, 666)
+TextRecognizer__ref(666)
+>>> nm2txt_rgnr
+{666: TextRecognizer__constant_text('xyz')}
+>>> mk_txt_rgnr__text_(r'xyz').ref_as_(nm2txt_rgnr, 666)
+Traceback (most recent call last):
+    ...
+KeyError: ('existed:', 666)
 
 ################
 parse_text_
@@ -1172,6 +1203,7 @@ from seed.recognize.text_recognizer.ITextRecognizer import (ITextRecognizer
 ,   TextRecognizer__span
 ,   TextRecognizer__span6regex
 ,   TextRecognizer__repr
+,   TextRecognizer__ref
 #
 ,   ITextRecognizer__postprocess
 ,       TextRecognizer__fullmatched
@@ -1212,12 +1244,14 @@ from seed.recognize.text_recognizer.ITextRecognizer import (ITextRecognizer
 #
 ,   env4ops4oresult_seq__ftSeq
 ,   env4ops4oresult_seq__list
+,   mk_env5nm2txt_rgnr_
 )
 
 
 #from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list
     #def parse_text_(txt_rgnr, env, txt, begin, end, /):
-from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, parse_text7full_, parse_text7raise_, parse_text7exact_, ParseFail, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list
+from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, parse_text7full_, parse_text7raise_, parse_text7exact_, ParseFail, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list, mk_env5nm2txt_rgnr_
+    #def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'):
     #def parse_text_(txt_rgnr, env, txt, begin, end, /, *, fullmatched=False, to_raise_if_fail=False):
     #   'ITextRecognizer -> env -> txt/str -> begin/uint%(1+len(txt)) -> end/uint%(1+len(txt)) -> ParseResult/(OResult|Errmsg)'
     #   Errmsg(errmsg,end,severe){ok:=False}{ko:=True}
@@ -1234,6 +1268,7 @@ ITextRecognizer
 ,mk_txt_rgnr__text_#kw:as_regex
 ,mk_txt_rgnr__oresult_
 ,mk_txt_rgnr__errmsg_
+,mk_txt_rgnr__ref_
 #_BaseTextRecognizer__ops4mkr::
 #   .on_ok_
 #   .on_ko_
@@ -1248,6 +1283,7 @@ ITextRecognizer
 #   .span_#kw:backward
 #   .spanB_#kw:backward
 #   .repr_as_
+#   .ref_as_
 #
 #   .enclosed_by_#kw:as_regex
 #   .end_by_#kw:cased

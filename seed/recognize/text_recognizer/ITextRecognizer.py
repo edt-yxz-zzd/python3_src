@@ -1,6 +1,7 @@
 #__all__:goto
 #TODO:test&update__all__:
     #repr_as_,TextRecognizer__repr
+    #ref_as_,mk_txt_rgnr__ref_,TextRecognizer__ref
 r'''[[[
 e ../../python3_src/seed/recognize/text_recognizer/ITextRecognizer.py
 view ../../python3_src/seed/recognize/text_recognizer/ITextRecognizer__doctest.py
@@ -59,6 +60,7 @@ ITextRecognizer
     TextRecognizer__span
     TextRecognizer__span6regex
     TextRecognizer__repr
+    TextRecognizer__ref
 
     ITextRecognizer__postprocess
         TextRecognizer__fullmatched
@@ -131,13 +133,13 @@ IOps4oresult_seq4cased_flow_txt_rgnr
         IOps4oresult_seq4cased_flow_txt_rgnr__using_env_ops4oresult_seq__env_is_mapping
 env4ops4oresult_seq__ftSeq
 env4ops4oresult_seq__list
+mk_env5nm2txt_rgnr_
 
 
 
 
 
-
-
+mk_txt_rgnr__ref_
 mk_txt_rgnr__span_
 mk_txt_rgnr__span6regex_
 mk_txt_rgnr__regex_
@@ -188,6 +190,11 @@ check_xgroup_
 
 TextRecognizer__repr
     name5or_named_obj_
+
+
+TextRecognizer__ref
+    mk_txt_rgnr__ref_
+    mk_env5nm2txt_rgnr_
 '''.split()#'''
     # ++@20260313:_BaseTextRecognizer__ops4mkr
 __all__
@@ -318,6 +325,9 @@ class _BaseTextRecognizer__ops4mkr:
     ##################
     def repr_as_(txt_rgnr, name_or_named_obj, /, *args4repr, **kwds4repr):
         return TextRecognizer__repr(txt_rgnr, name_or_named_obj, *args4repr, **kwds4repr)
+    def ref_as_(txt_rgnr, nm2txt_rgnr, name, /):
+        if not txt_rgnr is nm2txt_rgnr.setdefault(name, txt_rgnr):raise KeyError('existed:', name)
+        return mk_txt_rgnr__ref_(name)
     ##################
     def then_unbox_(txt_rgnr, /):
         'see:enclosed_by_'
@@ -395,6 +405,8 @@ class _BaseTextRecognizer__ops4mkr:
 ,   TextRecognizer__regex
 
     ]]]'''#'''
+def mk_txt_rgnr__ref_(name, /):
+    return TextRecognizer__ref(name)
 class span5re_matchT_:
     def __init__(sf, xgroup, method=None, /):
         check_type_in((int, str), xgroup)
@@ -1911,6 +1923,40 @@ class TextRecognizer__repr(ITextRecognizer):
 
 
 
+class TextRecognizer__ref(ITextRecognizer):
+    'see:mk_txt_rgnr__ref_ # .ref_as_'
+    #xxx  #.referred_
+    ___no_slots_ok___ = True
+    def __init__(sf, name, /):
+        hash(name)
+        sf._nm = name
+    def __repr__(sf, /):
+        name = sf._name_
+        return repr_helper(sf, name)
+    @property
+    def _name_(sf, /):
+        return sf._nm
+    @override
+    def _parse_text_(sf, env, txt, begin, end, /):
+        name = sf._name_
+        nm2txt_rgnr = env[TextRecognizer__ref]
+        txt_rgnr = nm2txt_rgnr[name]
+        return txt_rgnr._parse_text_(env, txt, begin, end)
+
+def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'):
+    match case4ops4flow_txt_rgnr:
+        case 'list':
+            base_env = env4ops4oresult_seq__list
+        case 'ftSeq':
+            #finger_tree_seq
+            base_env = env4ops4oresult_seq__ftSeq
+        case _:
+            raise Exception(case4ops4flow_txt_rgnr)
+    base_env
+    env = mk_MapView({TextRecognizer__ref:mk_MapView(nm2txt_rgnr), **base_env})
+    return env
+
+
 
 
 
@@ -2222,7 +2268,8 @@ if __name__ == "__main__":
 
 __all__
 from seed.recognize.text_recognizer.ITextRecognizer import check_parse_result__between_, check_parse_result_
-from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, parse_text7full_, parse_text7raise_, parse_text7exact_, ParseFail, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list
+from seed.recognize.text_recognizer.ITextRecognizer import parse_text_, parse_text7full_, parse_text7raise_, parse_text7exact_, ParseFail, env4ops4oresult_seq__ftSeq, env4ops4oresult_seq__list, mk_env5nm2txt_rgnr_
+    #def mk_env5nm2txt_rgnr_(nm2txt_rgnr, /, *, case4ops4flow_txt_rgnr:'list|ftSeq'):
     #def parse_text_(txt_rgnr, env, txt, begin, end, /, *, fullmatched=False, to_raise_if_fail=False):
     #   'ITextRecognizer -> env -> txt/str -> begin/uint%(1+len(txt)) -> end/uint%(1+len(txt)) -> ParseResult/(OResult|Errmsg)'
     #   Errmsg(errmsg,end,severe){ok:=False}{ko:=True}
@@ -2239,6 +2286,7 @@ ITextRecognizer
 ,mk_txt_rgnr__errmsg_
 ,mk_txt_rgnr__span_#kw:backward
 ,mk_txt_rgnr__span6regex_#kw:method
+,mk_txt_rgnr__ref_
 #_BaseTextRecognizer__ops4mkr::
 #   .on_ok_
 #   .on_ko_
@@ -2253,6 +2301,7 @@ ITextRecognizer
 #   .span_#kw:backward
 #   .spanB_#kw:backward
 #   .repr_as_
+#   .ref_as_
 #
 #   .enclosed_by_#kw:as_regex
 #   .end_by_#kw:cased
