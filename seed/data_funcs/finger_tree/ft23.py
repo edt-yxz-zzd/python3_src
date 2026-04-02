@@ -1,5 +1,6 @@
 #__all__:goto
 #.DONE:设计冫树构造算法:pushs:采用直构方法:O(N) vs O(NlnN)
+#TODO:(leaf|nonleaf|twig|cane|fork).auto.cached_lazy_may_hash: ftSeq 依照 元素 动态确定是否可以 散列(可行方案:tmay_hash实时计算)，另外 为了避免不必要的浪费，散列值应当按需惰性计算
 r'''[[[
 e ../../python3_src/seed/data_funcs/finger_tree/ft23.py
 
@@ -84,6 +85,23 @@ path:
 
 ]]
 
+[[
+@20260402
+news:
+    _get_emay_may_hash6auto_
+    _set_may_hash6auto_
+    _get_may_size6auto_
+    eval_seq_hash_size_pair5hash_size_pairs_
+news:
+    get_may_hash6tree_
+    get_may_hash6twigX_
+    get_may_hash6node_
+    _gget_may_hash_size_pair6tree_
+    _gget_may_hash_size_pair6twigX_
+    _gget_may_hash_size_pair6node_
+    _gget_may_hash_size_pair6nodes_
+
+]]
 
 
 '#'; __doc__ = r'#'
@@ -100,6 +118,7 @@ BaseFingerTreeError
 
 IBaseOps4Auto6FingerTree
     mk_auto5chain_many_
+    std_eval_seq_hash_size_pair5hash_size_pairs_
     IBasicOps4FingerTree
         IOps4FingerTree
 
@@ -124,6 +143,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
         #   .len_trap
         #   .trap2tuple_()
 
+    from seed.iters.generator_iterator2result_ import generator_iterator2result_
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class BaseFingerTreeError(Exception):pass
@@ -144,6 +164,35 @@ class IBaseOps4Auto6FingerTree(ABC):
     def mk_auto5data_(sf, data, /):
         'data -> auto'
     #########
+    #@20260402
+    @abstractmethod
+    def _get_emay_may_hash6auto_(sf, auto, /):
+        'auto -> emay may hash/uint # {...=>not yet eval; None=>unhashable or unsupported ops; uint=>cached hash value}'
+    @abstractmethod
+    def _set_may_hash6auto_(sf, auto, may_hash, /):
+        '[... is _get_emay_may_hash6auto_(auto)] => auto -> may hash/uint -> None | ^Exception if [not ... is _get_emay_may_hash6auto_(auto)]'
+    @abstractmethod
+    def _get_may_size6auto_(sf, auto, /):
+        'auto -> may size{num_leafs/num_datas}/uint # None=>unsupported'
+    @abstractmethod
+    def eval_seq_hash_size_pair5hash_size_pairs_(sf, hash_size_pairs, /):
+        'Iter (hash, num_datas) -> (hash, num_datas)'
+    #########
+def std_eval_seq_hash_size_pair5hash_size_pairs_(hash_size_pairs, /):
+    'Iter (hash, num_datas) -> (hash, num_datas)'
+    import sys
+    M = sys.hash_info.modulus
+    it = iter(hash_size_pairs)
+    h = 0
+    sz = 0
+    for (h, sz) in it:
+        break
+    for (_h, _sz) in it:
+        #.h = hash(h*5**sz + _h)
+        #.h = (h*5**_sz + _h)%M
+        h = (h*pow(5, _sz, M) + _h)%M
+        sz += _sz
+    return (h, sz)
 def mk_auto5chain_many_(sf, autos, /):
     it = iter(autos)
     for acc in it:
@@ -249,6 +298,152 @@ class IBasicOps4FingerTree(IBaseOps4Auto6FingerTree):
 
 class IOps4FingerTree(IBasicOps4FingerTree):
     __slots__ = ()
+    #########
+    #@20260402
+    def get_may_hash6tree_(sf, depth, tree, /):
+        'depth -> tree -> may hash/uint # {None=>unhashable or unsupported ops; uint=>cached hash value}'
+        autoT = sf.get_auto5tree_(depth, tree)
+        emmh = sf._get_emay_may_hash6auto_(autoT)
+        if not ... is emmh:
+            may_hash = may_hash
+            return may_hash
+        mhzT = generator_iterator2result_(sf._gget_may_hash_size_pair6tree_(depth, tree))
+        if None is mhzT:
+            mhT = None
+        else:
+            (hT, szT) = hzT = mhzT
+            mhT = hT
+        sf._set_may_hash6auto_(autoT, mhT)
+        return sf.get_may_hash6tree_(depth, tree)
+    def get_may_hash6twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
+        'depth -> twigX -> may hash/uint'
+        autoW = sf.get_auto5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+        emmh = sf._get_emay_may_hash6auto_(autoW)
+        if not ... is emmh:
+            may_hash = may_hash
+            return may_hash
+        mhzW = generator_iterator2result_(sf._gget_may_hash_size_pair6twigX_(depth, twigX, atL_vs_atR=atL_vs_atR))
+        if None is mhzW:
+            mhW = None
+        else:
+            (hW, szW) = hzW = mhzW
+            mhW = hW
+        sf._set_may_hash6auto_(autoW, mhW)
+        return sf.get_may_hash6twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+
+    def get_may_hash6node_(sf, depth, node, /):
+        'depth -> node -> may hash/uint'
+        autoN = sf.get_auto5node_(depth, node)
+        emmh = sf._get_emay_may_hash6auto_(autoN)
+        if not ... is emmh:
+            may_hash = may_hash
+            return may_hash
+        mhzN = generator_iterator2result_(sf._gget_may_hash_size_pair6node_(depth, node))
+        if None is mhzN:
+            mhN = None
+        else:
+            (hN, szN) = hzN = mhzN
+            mhN = hN
+        sf._set_may_hash6auto_(autoN, mhN)
+        return sf.get_may_hash6node_(depth, node)
+
+    def _gget_may_hash_size_pair6tree_(sf, depth, tree, /):
+        'depth -> tree -> GI{may (hash/uint, num_datas/uint)}'
+        autoT = sf.get_auto5tree_(depth, tree)
+        mszT = sf._get_may_size6auto_(autoT)
+        if None is mszT: return None
+        szT = mszT
+        emmh = sf._get_emay_may_hash6auto_(autoT)
+        if not ... is emmh:
+            mhT = emmh
+            if mhT is None:return None
+            hT = mhT
+            return (hT, szT)
+        if sf.is_fork_tree_(depth, tree):
+            fork = tree
+            (twigL, stem, twigR) = sf.get_etree5fork_(depth, fork)
+            mhzL = yield from sf._gget_may_hash_size_pair6twigX_(depth, twigL, atL_vs_atR=False)
+            if None is mhzL: return None
+            hL = mhzL
+            (hL, szL) = mhzL
+            mhzR = yield from sf._gget_may_hash_size_pair6twigX_(depth, twigR, atL_vs_atR=True)
+            if None is mhzR: return None
+            (hR, szR) = mhzR
+            mhzM = yield from sf._gget_may_hash_size_pair6tree_(1+depth, stem)
+            if None is mhzM: return None
+            (hM, szM) = mhzM
+            (hT, _szT) = sf.eval_seq_hash_size_pair5hash_size_pairs_([(hL, szL), (hM, szM), (hR, szR)])
+        else:
+            cane = tree
+            nodes = sf.get_nodes5cane_(depth, cane)
+            mhzT = yield from sf._gget_may_hash_size_pair6nodes_(depth, nodes)
+            if None is mhzT: return None
+            (hT, _szT) = mhzT
+        if not szT == _szT:raise 000
+        return (hT, szT)
+        #return sf.get_may_hash6tree_(depth, tree)
+    def _gget_may_hash_size_pair6twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
+        'depth -> twigX -> GI{may (hash/uint, num_datas/uint)}'
+        autoW = sf.get_auto5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+        mszW = sf._get_may_size6auto_(autoW)
+        if None is mszW: return None
+        szW = mszW
+        emmh = sf._get_emay_may_hash6auto_(autoW)
+        if not ... is emmh:
+            mhW = emmh
+            if mhW is None:return None
+            hW = mhW
+            return (hW, szW)
+        nodes = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+        mhzW = yield from sf._gget_may_hash_size_pair6nodes_(depth, nodes)
+        if None is mhzW: return None
+        (hW, _szW) = mhzW
+        if not szW == _szW:raise 000
+        return (hW, szW)
+    def _gget_may_hash_size_pair6node_(sf, depth, node, /):
+        'depth -> node -> GI{may (hash/uint, num_datas/uint)}'
+        autoN = sf.get_auto5node_(depth, node)
+        mszN = sf._get_may_size6auto_(autoN)
+        if None is mszN: return None
+        szN = mszN
+        emmh = sf._get_emay_may_hash6auto_(autoN)
+        if not ... is emmh:
+            mhN = emmh
+            if mhN is None:return None
+            hN = mhN
+            return (hN, szN)
+        if depth == 0:
+            leaf = node
+            _szN = 1
+            data = sf.get_data5leaf_(leaf)
+            try:
+                hN = hash(data)
+            except TypeError:
+                mhN = None
+                return None
+            hN
+        else:
+            nonleaf = node
+            _nodes = sf.get_nodes5nonleaf_(depth, nonleaf)
+            mhzN = yield from sf._gget_may_hash_size_pair6nodes_(-1+depth, _nodes)
+            if None is mhzN: return None
+            (hN, _szN) = mhzN
+        if not szN == _szN:raise 000
+        return (hN, szN)
+    def _gget_may_hash_size_pair6nodes_(sf, depth, nodes, /):
+        'depth -> Iter node -> GI{may (hash/uint, num_datas/uint)}'
+        szS = 0
+        ps = []
+        for node in nodes:
+            mhzN = yield from sf._gget_may_hash_size_pair6node_(depth, node)
+            if mhzN is None:return None
+            hzN = mhzN
+            ps.append(hzN)
+            (hN, szN) = hzN
+            szS += szN
+        (hS, _szS) = sf.eval_seq_hash_size_pair5hash_size_pairs_(ps)
+        if not szS == _szS:raise 000
+        return (hS, szS)
     #########
     def mk_empty_tree_(sf, depth, /):
         'depth/uint  -> finger_tree{depth}{len==0}'

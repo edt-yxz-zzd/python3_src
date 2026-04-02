@@ -8,6 +8,7 @@ py -m nn_ns.app.doctest_cmd seed.data_funcs.finger_tree.ft23_7types:__doc__ -ht 
 #######
 
 [[
+@20260402
 ]]
 
 
@@ -125,6 +126,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.types.FrozenDict import mk_FrozenDict
     from seed.tiny_.types5py import mk_MapView
     from seed.types.Record import mk_RecordType_
+    from seed.data_funcs.finger_tree.ft23 import std_eval_seq_hash_size_pair5hash_size_pairs_
     #from seed.helper.ifNone import ifNone,ifNonef
 #from seed.helper.lazy_import__func import force_lazy_imported_func_ # lazy_import4func_, lazy_import4funcs_
 from seed.tiny_.funcs import box, echo#fst,snd
@@ -230,6 +232,20 @@ class Ops4FingerTree(IOps4FingerTree):
     def mk_auto5data_(sf, data, /):
         'data -> auto'
         return sf._ops.mk_auto5data_(data)
+    #########
+    #@20260402
+    @override
+    def _get_emay_may_hash6auto_(sf, auto, /):
+        return sf._ops._get_emay_may_hash6auto_(auto)
+    @override
+    def _set_may_hash6auto_(sf, auto, may_hash, /):
+        return sf._ops._set_may_hash6auto_(auto, may_hash)
+    @override
+    def _get_may_size6auto_(sf, auto, /):
+        return sf._ops._get_may_size6auto_(auto)
+    @override
+    def eval_seq_hash_size_pair5hash_size_pairs_(sf, hash_size_pairs, /):
+        return sf._ops.eval_seq_hash_size_pair5hash_size_pairs_(hash_size_pairs)
     #########
     #########
     @override
@@ -447,6 +463,23 @@ class Ops4Auto6FingerTree(IBaseOps4Auto6FingerTree):
         #.auto = mk_FrozenDict(d)
         auto = sf._Auto(*ls)
         return auto
+    #########
+    #########
+    #@20260402
+    @override
+    def _get_emay_may_hash6auto_(sf, auto, /):
+        return None#unsupport lazy-hash yet
+    @override
+    def _set_may_hash6auto_(sf, auto, may_hash, /):
+        raise 000
+        raise TypeError
+        raise NotImplementedError
+    @override
+    def _get_may_size6auto_(sf, auto, /):
+        raise 000
+    @override
+    def eval_seq_hash_size_pair5hash_size_pairs_(sf, hash_size_pairs, /):
+        return std_eval_seq_hash_size_pair5hash_size_pairs_(hash_size_pairs)
     #########
 check_non_ABC(Ops4Auto6FingerTree)
 
