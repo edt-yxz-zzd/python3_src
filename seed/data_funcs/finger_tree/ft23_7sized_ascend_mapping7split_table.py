@@ -309,9 +309,79 @@ AscendMap(AscendSet([2, 3, 6]), Seq([44, 33]), using_split_table = True)
 
 
 
+xsetfdefault
+vsetdefault
+isetdefault
+>>> mkAscendMap[2: 44, 3: 33].xsetfdefault(2, lambda:999)
+((2, 44), False, 0, mkAscendMap[2: 44, 3: 33])
+>>> mkAscendMap[2: 44, 3: 33].xsetfdefault(2.5, lambda:999)
+((2.5, 999), True, 1, mkAscendMap[2: 44, 2.5: 999, 3: 33])
+>>> mkAscendMap[2: 44, 3: 33].xsetfdefault(3, lambda:999)
+((3, 33), False, 1, mkAscendMap[2: 44, 3: 33])
+
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).xsetfdefault(2, lambda:999)
+((2, 44), False, 0, AscendMap(AscendSet([2, 3, 6]), Seq([44, 33]), using_split_table = True))
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).xsetfdefault(2.5, lambda:999)
+Traceback (most recent call last):
+    ...
+seed.data_funcs.finger_tree.ft23_7sized_ascend_mapping7split_table.DisorderKeyError: 2.5
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).xsetfdefault(3, lambda:999)
+((3, 33), False, 1, AscendMap(AscendSet([2, 3, 6]), Seq([44, 33]), using_split_table = True))
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).xsetfdefault(6, lambda:999)
+((6, 999), True, 2, AscendMap(AscendSet([2, 3, 6]), Seq([44, 33, 999]), using_split_table = True))
+
+>>> mkAscendMap[2: 44, 3: 33].vsetdefault(2, 999)
+(44, mkAscendMap[2: 44, 3: 33])
+>>> mkAscendMap[2: 44, 3: 33].vsetdefault(2.5, lambda:999, lazy=True)
+(999, mkAscendMap[2: 44, 2.5: 999, 3: 33])
+>>> mkAscendMap[2: 44, 3: 33].vsetdefault(2.5, 999)
+(999, mkAscendMap[2: 44, 2.5: 999, 3: 33])
+
+>>> mkAscendMap[2: 44, 3: 33].isetdefault(2, 999)
+mkAscendMap[2: 44, 3: 33]
+>>> mkAscendMap[2: 44, 3: 33].isetdefault(2.5, lambda:999, lazy=True)
+mkAscendMap[2: 44, 2.5: 999, 3: 33]
+>>> mkAscendMap[2: 44, 3: 33].isetdefault(2.5, 999)
+mkAscendMap[2: 44, 2.5: 999, 3: 33]
 
 
 
+getitem_at_
+getval_at_
+getkey_at_
+>>> mkAscendMap[2: 44, 3: 33].getitem_at_(1)
+(3, 33)
+>>> mkAscendMap[2: 44, 3: 33].getitem_at_(-1)
+(3, 33)
+>>> mkAscendMap[2: 44, 3: 33].getitem_at_(-2)
+(2, 44)
+
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getitem_at_(1)
+(3, 33)
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getitem_at_(-1)
+(3, 33)
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getitem_at_(-2)
+(2, 44)
+
+
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getval_at_(-1)
+33
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getkey_at_(-1)
+3
+
+
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getitem_at_(2)
+Traceback (most recent call last):
+    ...
+IndexError: 2
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getval_at_(2)
+Traceback (most recent call last):
+    ...
+IndexError: 2
+>>> AscendMap(AscendSet([2, 3, 6]), [44,33], using_split_table=True).getkey_at_(2)
+Traceback (most recent call last):
+    ...
+IndexError: 2
 
 
 
@@ -362,7 +432,7 @@ __all__
 
 
 class TableLenError(Exception):pass
-class DisorderKeyError(Exception):pass
+class DisorderKeyError(KeyError):pass
 
 
 class AscendMap(IMapping):
@@ -472,7 +542,7 @@ class AscendMap(IMapping):
             return repr_helper(sf, sf.key_asc_set, sf.value_seq, using_split_table=True)
         #bug:return show_ordered_pairs_as_bmk_pairs(zip(sf.key_asc_set, sf.value_seq), name=type(sf).__name__)
         #.return repr_helper(sf, sf.key_asc_set, sf.value_seq)
-        name = 'mkAscendMap' if type(sf) is AscendMap else (type(sf).__name__+'.bmk')
+        name = 'mkAscendMap' if type(sf) is __class__ else (type(sf).__name__+'.bmk')
         return show_ordered_pairs_as_bmk_pairs(zip(sf.key_asc_set, sf.value_seq), name=name)
 
     @property
@@ -516,11 +586,13 @@ class AscendMap(IMapping):
             return sf.value_seq[j]
         raise KeyError(k)
     def idelitem_(sf, k, /):
-        '-> AscendMap | ^KeyError | ^DisorderKeyError'
+        '-> map | ^KeyError | ^DisorderKeyError'
+        #__delitem__
         (v, ot) = sf.vpop_(k)
         return ot
     def isetitem_(sf, k, v, /):
-        '-> AscendMap | ^KeyError | ^DisorderKeyError'
+        '-> map | ^DisorderKeyError'
+        #__setitem__
         cls = type(sf)
         (setL, tmay_kM, setR) = sf.key_asc_set[:len(sf.value_seq)].partition_at_key_(k)
         if tmay_kM:
@@ -538,14 +610,15 @@ class AscendMap(IMapping):
 
         #insert new item
         #(setL, setR) = sf.key_asc_set.split_at_key_(k)
-        new_keys = setL.ipushR(k) + setR
-        return cls.from_key_and_value_tables(sf.using_split_table, new_keys, sf.value_seq.iput_at_(len(setL), v))
+        ks = setL.ipushR(k) + setR
+        vs = sf.value_seq.iput_at_(len(setL), v)
+        return cls.from_key_and_value_tables(sf.using_split_table, ks, vs)
     def vpop_(sf, /, *kv):
-        '-> (v, AscendMap) | ^KeyError | ^DisorderKeyError'
+        '-> (v, map) | ^KeyError | ^DisorderKeyError'
         ((k,v), ot) = sf.vpopitem_(*kv)
         return (v, ot)
     def vpopitem_(sf, /, *kv):
-        '-> ((k,v), AscendMap) | ^KeyError | ^DisorderKeyError'
+        '-> ((k,v), map) | ^KeyError | ^DisorderKeyError'
         if not len(kv) <=2:raise TypeError
         match kv:
             case ():
@@ -558,7 +631,7 @@ class AscendMap(IMapping):
                 raise 000
         raise 000
     def vpopitemR(sf, /):
-        '-> ((k,v), AscendMap) | ^KeyError'
+        '-> ((k,v), map) | ^KeyError'
         if not sf: raise KeyError('pop empty')
             #dict: KeyError: 'popitem(): dictionary is empty'
         (vR, seqL) = sf.value_seq.vpopR()
@@ -575,7 +648,7 @@ class AscendMap(IMapping):
         return (kvR, ot)
 
     def vpopitem_at_key_(sf, k, /, *tmay_default):
-        '-> ((k,v), AscendMap) | ^KeyError | ^DisorderKeyError'
+        '-> ((k,v), map) | ^KeyError | ^DisorderKeyError'
         if not len(tmay_default) <=1:raise TypeError
         if not sf: raise KeyError(k)
         cls = type(sf)
@@ -607,7 +680,7 @@ class AscendMap(IMapping):
         ot = cls.from_key_and_value_tables(sf.using_split_table, ks, vs)
         return (_kv, ot)
     def vpopitem_at_key7default_(sf, k, default=None, /):
-        '-> ((k,v), AscendMap) | ^DisorderKeyError'
+        '-> ((k,v), map) | ^DisorderKeyError'
         return sf.vpopitem_at_key_(k, default)
     def wdiscard(sf, k, /):
         '-> (tmay_kv, idx, map) | ^DisorderKeyError iff [using_split_table][k in sf][k =!= sf.key_asc_set[len(sf)-1]]'
@@ -651,6 +724,74 @@ class AscendMap(IMapping):
         '-> map | ^DisorderKeyError iff [using_split_table][k in sf][k =!= sf.key_asc_set[len(sf)-1]]'
         (tmay_kv, ot) = sf.vdiscard(k)
         return ot
+    def _std_idx_(sf, j, /, *, end_ok=True):
+        check_type_is(int, j)
+        L = len(sf)
+        if not -L <= j <= (L-(not end_ok)): raise IndexError(j)
+        if j < 0:
+            j += L
+        return j
+    def xsetfdefault(sf, k, lazy_v, /):
+        '-> ((k,v), old_vs_new, idx, map) | ^DisorderKeyError'
+        cls = type(sf)
+        (setL, tmay_kM, setR) = sf.key_asc_set[:len(sf.value_seq)].partition_at_key_(k)
+        if tmay_kM:
+            j = len(setL)
+            #using old value
+            ot = sf
+            [old_k] = tmay_kM
+            old_v = sf.value_seq[j]
+            return ((old_k, old_v), False, j, ot)
+
+        if sf.using_split_table:
+            #append new value
+            if setR:raise DisorderKeyError(k)
+            if sf._b_full_kvs:raise DisorderKeyError(k)
+            j = len(sf.value_seq)
+            old_k = sf.key_asc_set[j]
+            if not k in [old_k]:raise DisorderKeyError(k)
+            new_v = lazy_v()
+            ot = cls.from_key_and_value_tables(sf.using_split_table, sf.key_asc_set, sf.value_seq.ipushR(new_v))
+            return ((old_k,new_v), True, j, ot)
+
+        #insert new item
+        new_v = lazy_v()
+        new_k = k
+        ks = setL.ipushR(new_k) + setR
+        j = len(setL)
+        vs = sf.value_seq.iput_at_(j, new_v)
+        ot = cls.from_key_and_value_tables(sf.using_split_table, ks, vs)
+        return ((new_k,new_v), True, j, ot)
+
+    def vsetdefault(sf, k, v, /, *, lazy=False):
+        '-> (v, map) | ^DisorderKeyError'
+        lazy_v = v if lazy else lambda:v
+        ((_k,_v), old_vs_new, j, ot) = sf.xsetfdefault(k, lazy_v)
+        return (_v, ot)
+    def isetdefault(sf, k, v, /, *, lazy=False):
+        '-> map | ^DisorderKeyError'
+        #setdefault
+        (v, ot) = sf.vsetdefault(k, v, lazy=lazy)
+        return ot
+    def getitem_at_(sf, j, /):
+        '-> (k,v) | ^IndexError'
+        j = sf._std_idx_(j, end_ok=False)
+            # ^IndexError
+        v = sf.value_seq[j]
+        k = sf.key_asc_set[j]
+        return (k, v)
+    def getval_at_(sf, j, /):
+        '-> v | ^IndexError'
+        j = sf._std_idx_(j, end_ok=False)
+            # ^IndexError
+        v = sf.value_seq[j]
+        return v
+    def getkey_at_(sf, j, /):
+        '-> v | ^IndexError'
+        j = sf._std_idx_(j, end_ok=False)
+            # ^IndexError
+        k = sf.key_asc_set[j]
+        return k
 
 _empty_map = AscendMap()
 class _MkAscendMap:
