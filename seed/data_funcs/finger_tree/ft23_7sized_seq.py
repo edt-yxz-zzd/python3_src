@@ -235,6 +235,71 @@ True
 False
 
 
+
+__hash__
+_ops = _ops7lazy if 1 else _ops7strict
+>>> _ops.ops4auto._Auto.Nothing is default_Nothing
+True
+>>> _ops.ops4auto._strict
+False
+
+>>> {Seq()}
+{Seq()}
+>>> {Seq([33])}
+{Seq([33])}
+>>> {Seq([33, 44])}
+{Seq([33, 44])}
+>>> {Seq([33, 44, 55])}
+{Seq([33, 44, 55])}
+>>> {Seq([33, 44, 55, []])}
+Traceback (most recent call last):
+    ...
+TypeError: some elems are unhashable
+>>> hash(Seq([33, 44, 55, []]))
+Traceback (most recent call last):
+    ...
+TypeError: some elems are unhashable
+>>> hash(Seq([[]]))
+Traceback (most recent call last):
+    ...
+TypeError: some elems are unhashable
+
+
+>>> ft_seq = Seq([33, 44, 55])
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (3,)
+may_hash: ()
+>>> h = hash(ft_seq)
+>>> h #doctest: +SKIP
+-6623189263665364036
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (3,)
+may_hash: (1100,)
+>>> ((33*5+ 44)*5+ 55)
+1100
+
+>>> ft_seq = Seq(range(100_00))
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (10000,)
+may_hash: ()
+>>> h = hash(ft_seq)
+>>> _show_tmay_properties6auto_(ft_seq) #doctest: +ELLIPSIS
+len: (10000,)
+may_hash: (...,)
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (10000,)
+may_hash: (665014891999583672,)
+
+
+
+
+
+
+
+
+
+
+
 py_adhoc_call   seed.data_funcs.finger_tree.ft23_7sized_seq   @f
 ]]]'''#'''
 __all__ = r'''
@@ -247,12 +312,30 @@ from itertools import pairwise#islice
 from seed.tiny_.check import check_type_is, check_int_ge
 from collections.abc import Sequence
 from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_len, check_ops4sized_finger_tree_, len5sized_finger_tree_, split_sized_finger_tree_
-#.from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_len, check_ops4sized_finger_tree_, len5sized_finger_tree_, split_sized_finger_tree_, ops4attr_hash, check_ops4hashable_finger_tree_, hash5hashable_finger_tree_
+from seed.data_funcs.finger_tree.ft23_7types import default_Nothing, ops4attr_may_hash, check_ops4mhashable_finger_tree_, may_hash5mhashable_finger_tree_
 ___end_mark_of_excluded_global_names__0___ = ...
 
-#._ops = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len, ops4attr_hash, ops4attr_rightmost7echo]))
-    #hash5hashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
-_ops = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len]))
+def _show_tmay_properties6auto_(ft_seq, /):
+    for k, v in _iter_keyed_tmay_properties6auto_(ft_seq):
+        print(k, v, sep=': ')
+def _iter_keyed_tmay_properties6auto_(ft_seq, /):
+    from seed.data_funcs.finger_tree.ft23 import Wrapper4ft_tree
+    ops4ft = _ops
+    tree = ft_seq._t
+    wrp = Wrapper4ft_tree(ops4ft, depth:=0, tree)
+    auto = wrp.auto
+    for key6auto in sorted(ops4ft.available_keys6auto):
+        tmay_property6auto = ops4ft.tmay_property5auto_and_key6auto_(auto, key6auto)
+        yield (key6auto, tmay_property6auto)
+
+_ops__ver0 = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len]))
+    # hash(tuple(Seq...))
+_ops7strict = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len, ops4attr_may_hash]))
+    #pass doctest
+_ops7lazy = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len], default_Nothing, [ops4attr_may_hash]))
+    #may_hash5mhashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
+    #len5sized_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
+_ops = _ops7lazy if 1 else _ops7strict
 _empty_tree = _ops.mk_empty_tree_(0)
 _leaf2data_ = _ops.get_data5leaf_
 _leaf5data_ = _ops.mk_node7leaf_
@@ -304,25 +387,42 @@ class Seq(Sequence):
     #.        return NotImplemented
     #.    return sf._args4hash == ot._args4hash
 
+    if 0x00000:
+        @cached_property
+        def _hash(sf, /):
+            # !! 『TypeError: unhashable type: 'Seq'』
+            # => should be 『hash5hashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)』
+            # => simplified as 『hash(tuple(sf))』
+            return hash((type(sf), tuple(sf)))
+        def __hash__(sf, /):
+            'slow hash#not delta algo'
+            return sf._hash
     def __hash__(sf, /):
-        'slow hash#not delta algo'
-        return sf._hash
+        if not None is (h:=sf._mh):
+            return h
+        raise TypeError('some elems are unhashable')
     @cached_property
-    def _hash(sf, /):
-        # !! 『TypeError: unhashable type: 'Seq'』
-        # => should be 『hash5hashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)』
-        # => simplified as 『hash(tuple(sf))』
-        return hash((type(sf), tuple(sf)))
+    def _mh(sf, /):
+        mh = may_hash5mhashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
+        if mh is default_Nothing:raise 000
+        if not None is mh:
+            mh = hash((type(sf), mh))
+        return mh
     def __eq__(sf, ot, /):
         if sf is ot:
             return True
         if not type(sf) is type(ot):
             return NotImplemented
-        if '_hash' in vars(sf) and '_hash' in vars(ot):
-            if not hash(sf) == hash(ot):
-                return False
-        if not len(sf) is len(ot):
+        if not len(sf) == len(ot):
             return False
+        if 0x00000:
+            if '_hash' in vars(sf) and '_hash' in vars(ot):
+                if not hash(sf) == hash(ot):
+                    return False
+        nm = '_mh'
+        if nm in vars(sf) and nm in vars(ot):
+                if not vars(sf)[nm] == vars(ot)[nm]:
+                    return False
         return all(a==b for a, b in zip(sf, ot))
     def __le__(sf, ot, /):
         if sf is ot:

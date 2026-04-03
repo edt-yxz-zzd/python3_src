@@ -86,7 +86,7 @@ path:
 ]]
 
 [[
-@20260402
+取消:@20260402
 news:
     _get_emay_may_hash6auto_
     _set_may_hash6auto_
@@ -102,6 +102,23 @@ news:
     _gget_may_hash_size_pair6nodes_
 
 ]]
+[[
+@20260402
+to impl lazy_auto_properties (eg: hash)
+    some auto_properties be strict: eg:len, max, min, ...
+    some auto_properties be lazy: eg:hash, ...
+
+IWrapper4ft_xxx
+    Wrapper4ft_tree
+    Wrapper4ft_twigX
+    Wrapper4ft_node_seq
+    Wrapper4ft_node
+IVisit4Wrapper4ft_xxx
+    Visit4Wrapper4ft_xxx__7fill_part6auto
+        IFiller4PartialAuto
+
+]]
+
 
 
 '#'; __doc__ = r'#'
@@ -122,10 +139,26 @@ IBaseOps4Auto6FingerTree
     IBasicOps4FingerTree
         IOps4FingerTree
 
+
+
+
+
+
+
+
+
+IWrapper4ft_xxx
+    Wrapper4ft_tree
+    Wrapper4ft_twigX
+    Wrapper4ft_node_seq
+    Wrapper4ft_node
+IVisit4Wrapper4ft_xxx
+    Visit4Wrapper4ft_xxx__7fill_part6auto
+        IFiller4PartialAuto
+
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.tiny_.check import check_type_is, check_int_ge
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import8lazy_objs__ver2_
@@ -134,6 +167,7 @@ with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', p
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_le, check_type_is, check_int_ge
     from seed.tiny_.containers import mk_tuple
     from seed.iters.chains import chains
     from itertools import islice, chain
@@ -144,6 +178,9 @@ with mk_ctx4lazy_import4funcs_(__name__):
         #   .trap2tuple_()
 
     from seed.iters.generator_iterator2result_ import generator_iterator2result_
+    from seed.iters.flatten_recur import flatten_recur
+    # def flatten_recur(g:Generator, /, *, value:object=None, is_exc=False, boxed=False):
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class BaseFingerTreeError(Exception):pass
@@ -164,19 +201,43 @@ class IBaseOps4Auto6FingerTree(ABC):
     def mk_auto5data_(sf, data, /):
         'data -> auto'
     #########
-    #@20260402
+    #:#########
+    #:#@20260402
+    #:@abstractmethod
+    #:def _get_emay_may_hash6auto_(sf, auto, /):
+    #:    'auto -> emay may hash/uint # {...=>not yet eval; None=>unhashable or unsupported ops; uint=>cached hash value}'
+    #:@abstractmethod
+    #:def _set_may_hash6auto_(sf, auto, may_hash, /):
+    #:    '[... is _get_emay_may_hash6auto_(auto)] => auto -> may hash/uint -> None | ^Exception if [not ... is _get_emay_may_hash6auto_(auto)]'
+    #:@abstractmethod
+    #:def _get_may_size6auto_(sf, auto, /):
+    #:    'auto -> may size{num_leafs/num_datas}/uint # None=>unsupported'
+    #:@abstractmethod
+    #:def eval_seq_hash_size_pair5hash_size_pairs_(sf, hash_size_pairs, /):
+    #:    'Iter (hash, num_datas) -> (hash, num_datas)'
+    #:#########
+    #########
+    #########
+    #@20260403
+    @property
     @abstractmethod
-    def _get_emay_may_hash6auto_(sf, auto, /):
-        'auto -> emay may hash/uint # {...=>not yet eval; None=>unhashable or unsupported ops; uint=>cached hash value}'
+    def available_keys6auto(sf, /):
+        '-> {key6auto}'
+        return frozenset() #_lazy_null_frozenset_() #null_frozenset
     @abstractmethod
-    def _set_may_hash6auto_(sf, auto, may_hash, /):
-        '[... is _get_emay_may_hash6auto_(auto)] => auto -> may hash/uint -> None | ^Exception if [not ... is _get_emay_may_hash6auto_(auto)]'
+    def key_closure5key6auto_(sf, key6auto, /):
+        'key6auto -> [key6auto] | ^KeyError'
+        raise KeyError(key6auto)
     @abstractmethod
-    def _get_may_size6auto_(sf, auto, /):
-        'auto -> may size{num_leafs/num_datas}/uint # None=>unsupported'
+    def tmay_property5auto_and_key6auto_(sf, auto, key6auto, /):
+        'auto -> key6auto -> tmay property6auto | ^KeyError # {() => lazy; (property6auto,)=>settled; ^KeyError=>illegal key}'
+        raise KeyError(key6auto)
     @abstractmethod
-    def eval_seq_hash_size_pair5hash_size_pairs_(sf, hash_size_pairs, /):
-        'Iter (hash, num_datas) -> (hash, num_datas)'
+    def property5wrapper4ft_xxx_and_key6auto_(sf, wrapper4ft_xxx, key6auto, /):
+        'IWrapper4ft_xxx -> key6auto -> property6auto | ^KeyError'
+        #resolve and settle lazy attr
+        wrapper4ft_xxx.ops4ft # >= sf
+        raise KeyError(key6auto)
     #########
 def std_eval_seq_hash_size_pair5hash_size_pairs_(hash_size_pairs, /):
     'Iter (hash, num_datas) -> (hash, num_datas)'
@@ -299,151 +360,153 @@ class IBasicOps4FingerTree(IBaseOps4Auto6FingerTree):
 class IOps4FingerTree(IBasicOps4FingerTree):
     __slots__ = ()
     #########
-    #@20260402
-    def get_may_hash6tree_(sf, depth, tree, /):
-        'depth -> tree -> may hash/uint # {None=>unhashable or unsupported ops; uint=>cached hash value}'
-        autoT = sf.get_auto5tree_(depth, tree)
-        emmh = sf._get_emay_may_hash6auto_(autoT)
-        if not ... is emmh:
-            may_hash = may_hash
-            return may_hash
-        mhzT = generator_iterator2result_(sf._gget_may_hash_size_pair6tree_(depth, tree))
-        if None is mhzT:
-            mhT = None
-        else:
-            (hT, szT) = hzT = mhzT
-            mhT = hT
-        sf._set_may_hash6auto_(autoT, mhT)
-        return sf.get_may_hash6tree_(depth, tree)
-    def get_may_hash6twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
-        'depth -> twigX -> may hash/uint'
-        autoW = sf.get_auto5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
-        emmh = sf._get_emay_may_hash6auto_(autoW)
-        if not ... is emmh:
-            may_hash = may_hash
-            return may_hash
-        mhzW = generator_iterator2result_(sf._gget_may_hash_size_pair6twigX_(depth, twigX, atL_vs_atR=atL_vs_atR))
-        if None is mhzW:
-            mhW = None
-        else:
-            (hW, szW) = hzW = mhzW
-            mhW = hW
-        sf._set_may_hash6auto_(autoW, mhW)
-        return sf.get_may_hash6twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+    #:#########
+    #:#@20260402
+    #:def get_may_hash6tree_(sf, depth, tree, /):
+    #:    'depth -> tree -> may hash/uint # {None=>unhashable or unsupported ops; uint=>cached hash value}'
+    #:    autoT = sf.get_auto5tree_(depth, tree)
+    #:    emmh = sf._get_emay_may_hash6auto_(autoT)
+    #:    if not ... is emmh:
+    #:        may_hash = may_hash
+    #:        return may_hash
+    #:    mhzT = generator_iterator2result_(sf._gget_may_hash_size_pair6tree_(depth, tree))
+    #:    if None is mhzT:
+    #:        mhT = None
+    #:    else:
+    #:        (hT, szT) = hzT = mhzT
+    #:        mhT = hT
+    #:    sf._set_may_hash6auto_(autoT, mhT)
+    #:    return sf.get_may_hash6tree_(depth, tree)
+    #:def get_may_hash6twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
+    #:    'depth -> twigX -> may hash/uint'
+    #:    autoW = sf.get_auto5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+    #:    emmh = sf._get_emay_may_hash6auto_(autoW)
+    #:    if not ... is emmh:
+    #:        may_hash = may_hash
+    #:        return may_hash
+    #:    mhzW = generator_iterator2result_(sf._gget_may_hash_size_pair6twigX_(depth, twigX, atL_vs_atR=atL_vs_atR))
+    #:    if None is mhzW:
+    #:        mhW = None
+    #:    else:
+    #:        (hW, szW) = hzW = mhzW
+    #:        mhW = hW
+    #:    sf._set_may_hash6auto_(autoW, mhW)
+    #:    return sf.get_may_hash6twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
 
-    def get_may_hash6node_(sf, depth, node, /):
-        'depth -> node -> may hash/uint'
-        autoN = sf.get_auto5node_(depth, node)
-        emmh = sf._get_emay_may_hash6auto_(autoN)
-        if not ... is emmh:
-            may_hash = may_hash
-            return may_hash
-        mhzN = generator_iterator2result_(sf._gget_may_hash_size_pair6node_(depth, node))
-        if None is mhzN:
-            mhN = None
-        else:
-            (hN, szN) = hzN = mhzN
-            mhN = hN
-        sf._set_may_hash6auto_(autoN, mhN)
-        return sf.get_may_hash6node_(depth, node)
+    #:def get_may_hash6node_(sf, depth, node, /):
+    #:    'depth -> node -> may hash/uint'
+    #:    autoN = sf.get_auto5node_(depth, node)
+    #:    emmh = sf._get_emay_may_hash6auto_(autoN)
+    #:    if not ... is emmh:
+    #:        may_hash = may_hash
+    #:        return may_hash
+    #:    mhzN = generator_iterator2result_(sf._gget_may_hash_size_pair6node_(depth, node))
+    #:    if None is mhzN:
+    #:        mhN = None
+    #:    else:
+    #:        (hN, szN) = hzN = mhzN
+    #:        mhN = hN
+    #:    sf._set_may_hash6auto_(autoN, mhN)
+    #:    return sf.get_may_hash6node_(depth, node)
 
-    def _gget_may_hash_size_pair6tree_(sf, depth, tree, /):
-        'depth -> tree -> GI{may (hash/uint, num_datas/uint)}'
-        autoT = sf.get_auto5tree_(depth, tree)
-        mszT = sf._get_may_size6auto_(autoT)
-        if None is mszT: return None
-        szT = mszT
-        emmh = sf._get_emay_may_hash6auto_(autoT)
-        if not ... is emmh:
-            mhT = emmh
-            if mhT is None:return None
-            hT = mhT
-            return (hT, szT)
-        if sf.is_fork_tree_(depth, tree):
-            fork = tree
-            (twigL, stem, twigR) = sf.get_etree5fork_(depth, fork)
-            mhzL = yield from sf._gget_may_hash_size_pair6twigX_(depth, twigL, atL_vs_atR=False)
-            if None is mhzL: return None
-            hL = mhzL
-            (hL, szL) = mhzL
-            mhzR = yield from sf._gget_may_hash_size_pair6twigX_(depth, twigR, atL_vs_atR=True)
-            if None is mhzR: return None
-            (hR, szR) = mhzR
-            mhzM = yield from sf._gget_may_hash_size_pair6tree_(1+depth, stem)
-            if None is mhzM: return None
-            (hM, szM) = mhzM
-            (hT, _szT) = sf.eval_seq_hash_size_pair5hash_size_pairs_([(hL, szL), (hM, szM), (hR, szR)])
-        else:
-            cane = tree
-            nodes = sf.get_nodes5cane_(depth, cane)
-            mhzT = yield from sf._gget_may_hash_size_pair6nodes_(depth, nodes)
-            if None is mhzT: return None
-            (hT, _szT) = mhzT
-        if not szT == _szT:raise 000
-        return (hT, szT)
-        #return sf.get_may_hash6tree_(depth, tree)
-    def _gget_may_hash_size_pair6twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
-        'depth -> twigX -> GI{may (hash/uint, num_datas/uint)}'
-        autoW = sf.get_auto5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
-        mszW = sf._get_may_size6auto_(autoW)
-        if None is mszW: return None
-        szW = mszW
-        emmh = sf._get_emay_may_hash6auto_(autoW)
-        if not ... is emmh:
-            mhW = emmh
-            if mhW is None:return None
-            hW = mhW
-            return (hW, szW)
-        nodes = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
-        mhzW = yield from sf._gget_may_hash_size_pair6nodes_(depth, nodes)
-        if None is mhzW: return None
-        (hW, _szW) = mhzW
-        if not szW == _szW:raise 000
-        return (hW, szW)
-    def _gget_may_hash_size_pair6node_(sf, depth, node, /):
-        'depth -> node -> GI{may (hash/uint, num_datas/uint)}'
-        autoN = sf.get_auto5node_(depth, node)
-        mszN = sf._get_may_size6auto_(autoN)
-        if None is mszN: return None
-        szN = mszN
-        emmh = sf._get_emay_may_hash6auto_(autoN)
-        if not ... is emmh:
-            mhN = emmh
-            if mhN is None:return None
-            hN = mhN
-            return (hN, szN)
-        if depth == 0:
-            leaf = node
-            _szN = 1
-            data = sf.get_data5leaf_(leaf)
-            try:
-                hN = hash(data)
-            except TypeError:
-                mhN = None
-                return None
-            hN
-        else:
-            nonleaf = node
-            _nodes = sf.get_nodes5nonleaf_(depth, nonleaf)
-            mhzN = yield from sf._gget_may_hash_size_pair6nodes_(-1+depth, _nodes)
-            if None is mhzN: return None
-            (hN, _szN) = mhzN
-        if not szN == _szN:raise 000
-        return (hN, szN)
-    def _gget_may_hash_size_pair6nodes_(sf, depth, nodes, /):
-        'depth -> Iter node -> GI{may (hash/uint, num_datas/uint)}'
-        szS = 0
-        ps = []
-        for node in nodes:
-            mhzN = yield from sf._gget_may_hash_size_pair6node_(depth, node)
-            if mhzN is None:return None
-            hzN = mhzN
-            ps.append(hzN)
-            (hN, szN) = hzN
-            szS += szN
-        (hS, _szS) = sf.eval_seq_hash_size_pair5hash_size_pairs_(ps)
-        if not szS == _szS:raise 000
-        return (hS, szS)
+    #:def _gget_may_hash_size_pair6tree_(sf, depth, tree, /):
+    #:    'depth -> tree -> GI{may (hash/uint, num_datas/uint)}'
+    #:    autoT = sf.get_auto5tree_(depth, tree)
+    #:    mszT = sf._get_may_size6auto_(autoT)
+    #:    if None is mszT: return None
+    #:    szT = mszT
+    #:    emmh = sf._get_emay_may_hash6auto_(autoT)
+    #:    if not ... is emmh:
+    #:        mhT = emmh
+    #:        if mhT is None:return None
+    #:        hT = mhT
+    #:        return (hT, szT)
+    #:    if sf.is_fork_tree_(depth, tree):
+    #:        fork = tree
+    #:        (twigL, stem, twigR) = sf.get_etree5fork_(depth, fork)
+    #:        mhzL = yield from sf._gget_may_hash_size_pair6twigX_(depth, twigL, atL_vs_atR=False)
+    #:        if None is mhzL: return None
+    #:        hL = mhzL
+    #:        (hL, szL) = mhzL
+    #:        mhzR = yield from sf._gget_may_hash_size_pair6twigX_(depth, twigR, atL_vs_atR=True)
+    #:        if None is mhzR: return None
+    #:        (hR, szR) = mhzR
+    #:        mhzM = yield from sf._gget_may_hash_size_pair6tree_(1+depth, stem)
+    #:        if None is mhzM: return None
+    #:        (hM, szM) = mhzM
+    #:        (hT, _szT) = sf.eval_seq_hash_size_pair5hash_size_pairs_([(hL, szL), (hM, szM), (hR, szR)])
+    #:    else:
+    #:        cane = tree
+    #:        nodes = sf.get_nodes5cane_(depth, cane)
+    #:        mhzT = yield from sf._gget_may_hash_size_pair6nodes_(depth, nodes)
+    #:        if None is mhzT: return None
+    #:        (hT, _szT) = mhzT
+    #:    if not szT == _szT:raise 000
+    #:    return (hT, szT)
+    #:    #return sf.get_may_hash6tree_(depth, tree)
+    #:def _gget_may_hash_size_pair6twigX_(sf, depth, twigX, /, *, atL_vs_atR:bool):
+    #:    'depth -> twigX -> GI{may (hash/uint, num_datas/uint)}'
+    #:    autoW = sf.get_auto5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+    #:    mszW = sf._get_may_size6auto_(autoW)
+    #:    if None is mszW: return None
+    #:    szW = mszW
+    #:    emmh = sf._get_emay_may_hash6auto_(autoW)
+    #:    if not ... is emmh:
+    #:        mhW = emmh
+    #:        if mhW is None:return None
+    #:        hW = mhW
+    #:        return (hW, szW)
+    #:    nodes = sf.get_nodes5twigX_(depth, twigX, atL_vs_atR=atL_vs_atR)
+    #:    mhzW = yield from sf._gget_may_hash_size_pair6nodes_(depth, nodes)
+    #:    if None is mhzW: return None
+    #:    (hW, _szW) = mhzW
+    #:    if not szW == _szW:raise 000
+    #:    return (hW, szW)
+    #:def _gget_may_hash_size_pair6node_(sf, depth, node, /):
+    #:    'depth -> node -> GI{may (hash/uint, num_datas/uint)}'
+    #:    autoN = sf.get_auto5node_(depth, node)
+    #:    mszN = sf._get_may_size6auto_(autoN)
+    #:    if None is mszN: return None
+    #:    szN = mszN
+    #:    emmh = sf._get_emay_may_hash6auto_(autoN)
+    #:    if not ... is emmh:
+    #:        mhN = emmh
+    #:        if mhN is None:return None
+    #:        hN = mhN
+    #:        return (hN, szN)
+    #:    if depth == 0:
+    #:        leaf = node
+    #:        _szN = 1
+    #:        data = sf.get_data5leaf_(leaf)
+    #:        try:
+    #:            hN = hash(data)
+    #:        except TypeError:
+    #:            mhN = None
+    #:            return None
+    #:        hN
+    #:    else:
+    #:        nonleaf = node
+    #:        _nodes = sf.get_nodes5nonleaf_(depth, nonleaf)
+    #:        mhzN = yield from sf._gget_may_hash_size_pair6nodes_(-1+depth, _nodes)
+    #:        if None is mhzN: return None
+    #:        (hN, _szN) = mhzN
+    #:    if not szN == _szN:raise 000
+    #:    return (hN, szN)
+    #:def _gget_may_hash_size_pair6nodes_(sf, depth, nodes, /):
+    #:    'depth -> Iter node -> GI{may (hash/uint, num_datas/uint)}'
+    #:    szS = 0
+    #:    ps = []
+    #:    for node in nodes:
+    #:        mhzN = yield from sf._gget_may_hash_size_pair6node_(depth, node)
+    #:        if mhzN is None:return None
+    #:        hzN = mhzN
+    #:        ps.append(hzN)
+    #:        (hN, szN) = hzN
+    #:        szS += szN
+    #:    (hS, _szS) = sf.eval_seq_hash_size_pair5hash_size_pairs_(ps)
+    #:    if not szS == _szS:raise 000
+    #:    return (hS, szS)
+    #:#########
     #########
     def mk_empty_tree_(sf, depth, /):
         'depth/uint  -> finger_tree{depth}{len==0}'
@@ -1364,6 +1427,333 @@ case:
         => twigL ++(stem++sink(nodes[:-2]))++twigR(nodes[-2:])
             pushs
 #]]]'''#'''
+
+
+
+
+
+
+
+#################################
+#@20260402
+#################################
+class IWrapper4ft_xxx(ABC):
+    __slots__ = ()
+    #########
+    @property
+    @abstractmethod
+    def ops4ft(sf, /):
+        '-> ops4ft/IOps4FingerTree'
+    @property
+    @abstractmethod
+    def depth(sf, /):
+        '-> uint'
+    @property
+    @abstractmethod
+    def auto(sf, /):
+        '-> auto'
+    @property
+    @abstractmethod
+    def ft_kind(sf, /):
+        '-> str/regex"tree|twig|node|node_seq"'
+    @property
+    @abstractmethod
+    def is_leaf(sf, /):
+        '-> bool'
+    @abstractmethod
+    def iter_children_(sf, /):
+        '-> Iter IWrapper4ft_xxx | ^TypeError if is_leaf'
+    #########
+class Wrapper4ft_tree(IWrapper4ft_xxx):
+    'cane|fork'
+    ___no_slots_ok___ = True
+    def __init__(sf, ops4ft, depth, tree, /):
+        sf._ops = ops4ft
+        sf._dph = depth
+        sf._t = tree
+    @property
+    @override
+    def ops4ft(sf, /):
+        return sf._ops
+    @property
+    @override
+    def depth(sf, /):
+        return sf._dph
+    @property
+    def tree(sf, /):
+        '-> finger_tree'
+        return sf._t
+    @property
+    def is_cane(sf, /):
+        '-> bool'
+        return not sf.ops4ft.is_fork_tree_(sf.depth, sf.tree)
+    @property
+    @override
+    def auto(sf, /):
+        return sf.ops4ft.get_auto5tree_(sf.depth, sf.tree)
+    #@override
+    ft_kind = 'tree'
+    #@override
+    is_leaf = False
+    @override
+    def iter_children_(sf, /):
+        ops4ft = sf.ops4ft
+        depth = sf.depth
+        if sf.is_cane:
+            cane = sf.tree
+            node_seq = ops4ft.get_nodes5cane_(depth, cane)
+            yield Wrapper4ft_node_seq(ops4ft, depth, node_seq, sf.auto)
+        else:
+            fork = sf.tree
+            (twigL, stem, twigR) = ops4ft.get_etree5fork_(depth, fork)
+            yield Wrapper4ft_twigX(ops4ft, depth, twigL, False)
+            yield Wrapper4ft_tree(ops4ft, 1+depth, stem)
+            yield Wrapper4ft_twigX(ops4ft, depth, twigR, True)
+class Wrapper4ft_twigX(IWrapper4ft_xxx):
+    ___no_slots_ok___ = True
+    def __init__(sf, ops4ft, depth, twigX, atL_vs_atR, /):
+        check_type_is(bool, atL_vs_atR)
+        sf._ops = ops4ft
+        sf._dph = depth
+        sf._w = twigX
+        sf._R = atL_vs_atR
+    @property
+    @override
+    def ops4ft(sf, /):
+        return sf._ops
+    @property
+    @override
+    def depth(sf, /):
+        return sf._dph
+    @property
+    def twigX(sf, /):
+        '-> twigX'
+        return sf._w
+    @property
+    def atL_vs_atR(sf, /):
+        '-> twigX'
+        return sf._R
+    @property
+    def atL(sf, /):
+        '-> bool'
+        return not sf.atL_vs_atR
+    @property
+    @override
+    def auto(sf, /):
+        return sf.ops4ft.get_auto5twigX_(sf.depth, sf.twigX, atL_vs_atR=sf.atL_vs_atR)
+    #@override
+    ft_kind = 'twig'
+    #@override
+    is_leaf = False
+    @override
+    def iter_children_(sf, /):
+        ops4ft = sf.ops4ft
+        depth = sf.depth
+        node_seq = ops4ft.get_nodes5twigX_(depth, sf.twigX, atL_vs_atR=sf.atL_vs_atR)
+        yield Wrapper4ft_node_seq(ops4ft, depth, node_seq, sf.auto)
+class Wrapper4ft_node_seq(IWrapper4ft_xxx):
+    ___no_slots_ok___ = True
+    def __init__(sf, ops4ft, depth, node_seq, auto, /):
+        #get_nodes5cane_
+        len(node_seq)
+        node_seq[:0]
+        sf._ops = ops4ft
+        sf._dph = depth
+        sf._ns = node_seq
+        sf._au = auto
+    @property
+    @override
+    def ops4ft(sf, /):
+        return sf._ops
+    @property
+    @override
+    def depth(sf, /):
+        return sf._dph
+    @property
+    def node_seq(sf, /):
+        '-> [node]'
+        return sf._ns
+    @property
+    @override
+    def auto(sf, /):
+        return sf._au
+    #@override
+    ft_kind = 'node_seq'
+    #@override
+    is_leaf = False
+    @override
+    def iter_children_(sf, /):
+        ops4ft = sf.ops4ft
+        depth = sf.depth
+        for node in sf.node_seq:
+            yield Wrapper4ft_node(ops4ft, depth, node)
+class Wrapper4ft_node(IWrapper4ft_xxx):
+    'leaf|nonleaf'
+    ___no_slots_ok___ = True
+    def __init__(sf, ops4ft, depth, node, /):
+        sf._ops = ops4ft
+        sf._dph = depth
+        sf._nd = node
+    @property
+    @override
+    def ops4ft(sf, /):
+        return sf._ops
+    @property
+    @override
+    def depth(sf, /):
+        return sf._dph
+    @property
+    def node(sf, /):
+        '-> node'
+        return sf._nd
+    @property
+    @override
+    def auto(sf, /):
+        return sf.ops4ft.get_auto5node_(sf.depth, sf.node)
+    #@override
+    ft_kind = 'node'
+    @property
+    @override
+    def is_leaf(sf, /):
+        return 0 == sf.depth
+    @override
+    def iter_children_(sf, /):
+        if sf.is_leaf: raise TypeError
+        nonleaf = sf.node
+        ops4ft = sf.ops4ft
+        depth = sf.depth
+        _node_seq = ops4ft.get_nodes5nonleaf_(depth, nonleaf)
+        yield Wrapper4ft_node_seq(ops4ft, -1+depth, _node_seq, sf.auto)
+    @property
+    def data(sf, /):
+        '[is_leaf] => -> data'
+        if not sf.is_leaf: raise TypeError
+        leaf = sf.node
+        ops4ft = sf.ops4ft
+        depth = sf.depth
+        data = ops4ft.get_data5leaf_(leaf)
+        return data
+IWrapper4ft_xxx
+#################################
+class IVisit4Wrapper4ft_xxx(ABC):
+    'used to eval lazy_properties6auto'
+    #view ../../python3_src/seed/types/VisitTree__ver2.py
+    __slots__ = ()
+    @abstractmethod
+    def _enter_wrapper4ft_xxx_(sf, wrapper4ft_xxx, /):
+        'IWrapper4ft_xxx -> tmay oresult # {() => step into; (oresult,) => step over/skip subtree}'
+    @abstractmethod
+    def _exit_wrapper4ft_xxx_7not_leaf_(sf, wrapper4ft_xxx7not_leaf, child_oresult_seq, /):
+        'IWrapper4ft_xxx{not .is_leaf} -> [oresult] -> oresult'
+    @abstractmethod
+    def _exit_wrapper4ft_xxx_7is_leaf_(sf, wrapper4ft_xxx7is_leaf, /):
+        'IWrapper4ft_xxx{.is_leaf} -> oresult'
+    def visit_wrapper4ft_xxx_(sf, wrapper4ft_xxx, /):
+        'IWrapper4ft_xxx -> oresult'
+        gi = _gi_visit_wrapper4ft_xxx_(sf, wrapper4ft_xxx)
+        oresult = flatten_recur(gi)
+        return oresult
+
+def _gi_visit_wrapper4ft_xxx_(sf, wrapper4ft_xxx, /):
+    'IWrapper4ft_xxx -> GI{oresult}'
+    match sf._enter_wrapper4ft_xxx_(wrapper4ft_xxx):
+        case [oresult]:
+            return oresult
+        case []:
+            pass
+        case bad:
+            raise TypeError(bad)
+    if wrapper4ft_xxx.is_leaf:
+        oresult = sf._exit_wrapper4ft_xxx_7is_leaf_(wrapper4ft_xxx)
+    else:
+        rs = []
+        for child in wrapper4ft_xxx.iter_children_():
+            child_oresult = yield _gi_visit_wrapper4ft_xxx_(sf, child)
+            rs.append(child_oresult)
+        child_oresult_seq = tuple(rs)
+        oresult = sf._exit_wrapper4ft_xxx_7not_leaf_(wrapper4ft_xxx, child_oresult_seq)
+    oresult
+    return oresult
+IVisit4Wrapper4ft_xxx
+#################################
+class Visit4Wrapper4ft_xxx__7fill_part6auto(IVisit4Wrapper4ft_xxx):
+    '[oresult := part4auto]'
+    ___no_slots_ok___ = True
+    def __init__(sf, filler, /):
+        check_type_le(IFiller4PartialAuto, filler)
+        sf._filler = filler
+    @override
+    def _enter_wrapper4ft_xxx_(sf, wrapper4ft_xxx, /):
+        filler = sf._filler
+        auto = wrapper4ft_xxx.auto
+        return filler.get_tmay_part6auto_(auto)
+    @override
+    def _exit_wrapper4ft_xxx_7not_leaf_(sf, wrapper4ft_xxx7not_leaf, child_oresult_seq, /):
+        filler = sf._filler
+        auto = wrapper4ft_xxx7not_leaf.auto
+        parts4auto = child_oresult_seq
+        part4auto = filler.chain_many_parts4auto_(parts4auto)
+        filler.setdefault_part6auto_(auto, part4auto)
+        oresult = part4auto
+        return oresult
+    @override
+    def _exit_wrapper4ft_xxx_7is_leaf_(sf, wrapper4ft_xxx7is_leaf, /):
+        filler = sf._filler
+        auto = wrapper4ft_xxx7is_leaf.auto
+        data = wrapper4ft_xxx7is_leaf.data
+        part4auto = filler.mk_part4auto5data_(data, auto)
+        filler.setdefault_part6auto_(auto, part4auto)
+        oresult = part4auto
+        return oresult
+
+#################################
+class IFiller4PartialAuto(ABC):
+    'used by Visit4Wrapper4ft_xxx__7fill_part6auto'
+    __slots__ = ()
+    @abstractmethod
+    def get_tmay_part6auto_(sf, auto, /):
+        'auto -> tmay part4auto'
+    @abstractmethod
+    def _setdefault_part6auto_(sf, auto, part4auto, /):
+        'auto -> part4auto -> None'
+    @abstractmethod
+    def eq_part4auto_(sf, lhs_part4auto, rhs_part4auto, /):
+        'part4auto -> part4auto -> bool'
+    #IBaseOps4Auto6FingerTree
+    @abstractmethod
+    def get_null_part4auto_(sf, /):
+        '-> part4auto'
+    @abstractmethod
+    def mk_part4auto5data_(sf, data, auto, /):
+        'data -> auto -> part4auto'
+    @abstractmethod
+    def chain_two_parts4auto_(sf, lhs_part4auto, rhs_part4auto, /):
+        'part4auto -> part4auto -> part4auto'
+    def chain_many_parts4auto_(sf, parts4auto, /):
+        'Iter part4auto -> part4auto'
+        it = iter(parts4auto)
+        #.lhs_part4auto = sf.get_null_part4auto_()
+        #.lhs_part4auto = next(it, lhs_part4auto)
+        for lhs_part4auto in it:
+            break
+        else:
+            lhs_part4auto = sf.get_null_part4auto_()
+        lhs_part4auto
+        for rhs_part4auto in it:
+            lhs_part4auto = sf.chain_two_parts4auto_(lhs_part4auto, rhs_part4auto)
+        return lhs_part4auto
+    def setdefault_part6auto_(sf, auto, part4auto, /):
+        'auto -> part4auto -> None'
+        if not (tm:=sf.get_tmay_part6auto_(auto)):
+            sf._setdefault_part6auto_(auto, part4auto)
+            if not (tm:=sf.get_tmay_part6auto_(auto)):raise Exception(sf, auto, part4auto)
+        tm
+        [_part4auto] = tm
+        if not sf.eq_part4auto_(part4auto, _part4auto):raise Exception(sf, auto, part4auto, _part4auto)
+        return
+IFiller4PartialAuto
+#################################
+#################################
 
 __all__
 from seed.data_funcs.finger_tree.ft23 import BaseFingerTreeError, EmptyError, BadOffsetError
