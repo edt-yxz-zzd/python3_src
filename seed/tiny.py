@@ -554,6 +554,9 @@ __all__ = str2__all__(r'''
         # .getter(self, fget) -> new_sf
         # .setter(self, fset) -> new_sf
 
+    get_keys6set_       # {k} -> k -> [k]
+    get_tmay_key6set_   # {k} -> k -> (tmay k)|^TooManyEqvKeysError
+    get_key6set_        # {k} -> k -> k|^KeyError|^TooManyEqvKeysError
     #''')
 __all__
 
@@ -1046,10 +1049,20 @@ from seed.types.Either import TagT, CaseT, EitherT, TupleT
 
 
 
+#@20260404
+from seed.helper.get_key6set import get_keys6set_, get_tmay_key6set_, get_key6set_, TooManyEqvKeysError
+assert get_key6set_({True, False}, 1) is True
+assert repr(get_tmay_key6set_({True, False}, 0)) == repr((False,))
+assert repr(get_keys6set_({True, False}, 0)) == repr((False,))
+assert get_keys6set_({True, False}, 2) == ()
 
 
 
 
+###########################
+###########################
+###########################
+###########################
 def does_run_as_main(__name__):
     '''to replace '__name__ == "__main__"'
 

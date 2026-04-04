@@ -1,0 +1,33 @@
+
+
+#e ../../python3_src/bash_script/app/prime_gen
+#prime_gen[:46]
+if [[ $# -ge 2 ]] ; then
+  echo >&2 'USAGE: prime_gen [NUM_PRIMES]'
+  exit 1
+fi
+
+if [[ $# -eq 0 ]] ; then
+    s=
+elif [[ "$1" =~ ^[0-9]+$ ]] ; then
+    s="$1:"
+else
+    echo >&2 'USAGE: prime_gen [NUM_PRIMES]'
+    exit 1
+fi
+
+#.case "$1" in
+#.  ('')
+#.    s=
+#.    ;;
+#.  (+([0-9]))
+#.    s="$1:"
+#.    ;;
+#.  (*)
+#.    echo >&2 'USAGE: prime_gen [NUM_PRIMES]'
+#.    exit 1
+#.    ;;
+#.esac
+
+py_adhoc_call   seed.math.prime_gens   ,"${s}"raw_iter_all_strict_sorted_primes_  -to_cache_only_busy_primes_plus_next --may_primes=None
+

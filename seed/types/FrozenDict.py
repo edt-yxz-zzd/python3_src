@@ -37,6 +37,10 @@ from types import MappingProxyType
 from collections.abc import Mapping, Set, Hashable
 import itertools
 
+#@20260404
+from seed.mapping_tools.hash4set import hash5set_, hash5setII_, perhash5elem6set_, perhash5hash4elem6set_
+    #mapping_hash
+
 def __():
     'logic-err:HalfFrozenDict is Mutable, except empty_HalfFrozenDict'
     _Types = (FrozenDict, HalfFrozenDict)
@@ -68,7 +72,10 @@ def __():
         assert type(d) is FrozenDict
         return d
 
-def mapping_hash(mapping):
+def mapping_hash__ver2(mapping):
+    'like Set._hash; to provide a std algo for all mapping'
+    return hash5setII_(len(mapping), map(perhash5elem6set_, mapping.items()))
+def mapping_hash__ver1(mapping):
     'like Set._hash; to provide a std algo for all mapping'
     return hash(__Mapping2Set_for_hash(mapping))
 class __Mapping2Set_for_hash(Set):
@@ -90,6 +97,12 @@ class __Mapping2Set_for_hash(Set):
         return ((a, b) for a, b in self.__d.items())
     def __len__(self):
         return len(self.__d)
+mapping_hash = mapping_hash__ver2
+def __():
+    d = {2:444, 5:999, 1:666}
+    assert mapping_hash__ver2(d) == mapping_hash__ver1(d)
+    assert mapping_hash__ver2(d) == hash(frozenset(d.items()))
+__()
 
 
 

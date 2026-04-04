@@ -1,5 +1,6 @@
 #__all__:goto
 #TODO:goto
+#DONE:
 #   property5wrapper4ft_xxx_and_key6auto_
 #       #xxx:_settle7lazy_attr
 r'''[[[
@@ -34,6 +35,8 @@ IOps4Attr4Auto6FingerTree
         ops4attr_hash
     Ops4Attr4Auto6FingerTree__may_hash
         ops4attr_may_hash
+    Ops4Attr4Auto6FingerTree__may_xorhash
+        ops4attr_may_xorhash
     IOps4Attr4Auto6FingerTree__ord_key
         IOps4Attr4Auto6FingerTree__mixin__init_key_func
             IOps4Attr4Auto6FingerTree__max
@@ -59,6 +62,9 @@ ops4attr_hash
 ops4attr_may_hash
     check_ops4mhashable_finger_tree_
     may_hash5mhashable_finger_tree_
+ops4attr_may_xorhash
+    check_ops4mxrhashable_finger_tree_
+    may_xorhash5mxrhashable_finger_tree_
 ops4attr_leftmost7echo
     check_ops4descend_finger_tree_
     tmay_leftmost5descend_finger_tree_
@@ -155,6 +161,9 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
     from seed.seq_tools.find_sequent_indices import find_sequent_indices_
     from seed.types.CachedProperty import CachedProperty
+
+    #.from seed.helper.hash4set import hash5set_, hash5setII_, perhash5elem6set_, perhash5hash4elem6set_
+    from seed.helper.hash4set import perhash5hash4elem6set_
 
     #from seed.helper.ifNone import ifNone,ifNonef
 #from seed.helper.lazy_import__func import force_lazy_imported_func_ # lazy_import4func_, lazy_import4funcs_
@@ -913,6 +922,39 @@ ops4attr_may_hash = Ops4Attr4Auto6FingerTree__may_hash()
 
 
 
+class Ops4Attr4Auto6FingerTree__may_xorhash(IOps4Attr4Auto6FingerTree):
+    'used by SlowSet/HashSet'
+    ___no_slots_ok___ = True
+    #########
+    #@override
+    key6auto = 'may_xorhash'
+    #@override
+    using_keys6auto = null_frozenset
+
+    @override
+    def mk_property6auto8null_(sf, mapping_view8partial_auto, /):
+        return 0
+    @override
+    def mk_property6auto5chain_two_(sf, lhs_auto, rhs_auto, lhs_property6auto, rhs_property6auto, mapping_view8partial_auto, /):
+        if None is lhs_property6auto:return None
+        if None is rhs_property6auto:return None
+        return lhs_property6auto ^ rhs_property6auto
+    @override
+    def mk_property6auto5data_(sf, data, mapping_view8partial_auto, /):
+        try:
+            h = hash(data)
+        except TypeError:
+            return None
+        #.return h
+        return perhash5hash4elem6set_(h)
+    #########
+check_non_ABC(Ops4Attr4Auto6FingerTree__may_xorhash)
+ops4attr_may_xorhash = Ops4Attr4Auto6FingerTree__may_xorhash()
+
+
+
+
+
 
 
 class IOps4Attr4Auto6FingerTree__ord_key(IOps4Attr4Auto6FingerTree):
@@ -1057,6 +1099,7 @@ def mkr4check_ops4finger_tree_with_keys6autoT_(keys6auto, /):
 check_ops4sized_finger_tree_ = mkr4check_ops4finger_tree_with_keys6autoT_('len')
 check_ops4hashable_finger_tree_ = mkr4check_ops4finger_tree_with_keys6autoT_('hash')
 check_ops4mhashable_finger_tree_ = mkr4check_ops4finger_tree_with_keys6autoT_('may_hash')
+check_ops4mxrhashable_finger_tree_ = mkr4check_ops4finger_tree_with_keys6autoT_('may_xorhash')
 check_ops4descend_finger_tree_ = mkr4check_ops4finger_tree_with_keys6autoT_('leftmost')
 check_ops4ascend_finger_tree_ = mkr4check_ops4finger_tree_with_keys6autoT_('rightmost')
 check_ops4maxheap_finger_tree_ = mkr4check_ops4finger_tree_with_keys6autoT_('max')
@@ -1131,6 +1174,7 @@ def split_finger_tree_with_keys6auto_(ops4finger_tree, depth, key6auto, max_key4
 
 hash5hashable_finger_tree_ = mkr4get_attr5finger_tree_with_keys6autoT_('hash', is_lazy_attr=False)
 may_hash5mhashable_finger_tree_ = mkr4get_attr5finger_tree_with_keys6autoT_('may_hash', is_lazy_attr=True)
+may_xorhash5mxrhashable_finger_tree_ = mkr4get_attr5finger_tree_with_keys6autoT_('may_xorhash', is_lazy_attr=True)
 
 
 split_sized_finger_tree_ = mkr4split_finger_tree_with_keys6autoT_('len', attr2tmay_=box)
@@ -1186,7 +1230,7 @@ from seed.data_funcs.finger_tree.ft23_7types import IOps4Attr4Auto6FingerTree, I
 
 from seed.data_funcs.finger_tree.ft23_7types import Ops4Attr4Auto6FingerTree__sized, ops4attr_len, Ops4Attr4Auto6FingerTree__hash, ops4attr_hash, Ops4Attr4Auto6FingerTree__max, ops4attr_max7echo, Ops4Attr4Auto6FingerTree__min, ops4attr_min7echo, Ops4Attr4Auto6FingerTree__rightmost, ops4attr_rightmost7echo, Ops4Attr4Auto6FingerTree__leftmost, ops4attr_leftmost7echo
 
-from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_len, check_ops4sized_finger_tree_, len5sized_finger_tree_, split_sized_finger_tree_, ops4attr_hash, check_ops4hashable_finger_tree_, hash5hashable_finger_tree_, default_Nothing, ops4attr_may_hash, check_ops4mhashable_finger_tree_, may_hash5mhashable_finger_tree_
+from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_len, check_ops4sized_finger_tree_, len5sized_finger_tree_, split_sized_finger_tree_, ops4attr_hash, check_ops4hashable_finger_tree_, hash5hashable_finger_tree_, default_Nothing, ops4attr_may_hash, check_ops4mhashable_finger_tree_, may_hash5mhashable_finger_tree_, ops4attr_may_xorhash, check_ops4mxrhashable_finger_tree_, may_xorhash5mxrhashable_finger_tree_
 
 
 from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_rightmost7echo, check_ops4ascend_finger_tree_, tmay_rightmost5ascend_finger_tree_, split_ascend_finger_tree_

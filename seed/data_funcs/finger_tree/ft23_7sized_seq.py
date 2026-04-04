@@ -264,37 +264,98 @@ Traceback (most recent call last):
     ...
 TypeError: some elems are unhashable
 
+>>> xorhash5ft_seq_(Seq([33, 44, 55])) == xorhash5ft_seq_(Seq([44, 33, 55]))
+True
+>>> xorhash5ft_seq_(Seq([33, 44, 55])) == xorhash5ft_seq_(Seq([44, 55, 33]))
+True
+>>> xorhash5ft_seq_(Seq([[]]))
+Traceback (most recent call last):
+    ...
+TypeError: some elems are unhashable
+
+
 
 >>> ft_seq = Seq([33, 44, 55])
 >>> _show_tmay_properties6auto_(ft_seq)
 len: (3,)
 may_hash: ()
+may_xorhash: ()
 >>> h = hash(ft_seq)
 >>> h #doctest: +SKIP
 -6623189263665364036
 >>> _show_tmay_properties6auto_(ft_seq)
 len: (3,)
 may_hash: (1100,)
+may_xorhash: ()
 >>> ((33*5+ 44)*5+ 55)
 1100
+>>> h = xorhash5ft_seq_(ft_seq)
+>>> h #doctest: +SKIP
+-5789040535446808768
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (3,)
+may_hash: (1100,)
+may_xorhash: (333085818365040843,)
+
+may_xorhash: (58,) #before:hash5setII_
+>>> (33 ^ 44 ^ 55)
+58
+
 
 >>> ft_seq = Seq(range(100_00))
 >>> _show_tmay_properties6auto_(ft_seq)
 len: (10000,)
 may_hash: ()
+may_xorhash: ()
 >>> h = hash(ft_seq)
 >>> _show_tmay_properties6auto_(ft_seq) #doctest: +ELLIPSIS
 len: (10000,)
 may_hash: (...,)
+may_xorhash: ()
 >>> _show_tmay_properties6auto_(ft_seq)
 len: (10000,)
 may_hash: (665014891999583672,)
+may_xorhash: ()
+>>> h = xorhash5ft_seq_(ft_seq)
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (10000,)
+may_hash: (665014891999583672,)
+may_xorhash: (2860248114624984400,)
+
+may_xorhash: (0,) #before:hash5setII_
 
 
+>>> ft_seq = Seq(range(100_00, 120_00, 999))
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (3,)
+may_hash: ()
+may_xorhash: ()
+>>> h7seq = hash(ft_seq)
+>>> h7set = xorhash5ft_seq_(ft_seq)
+>>> _show_tmay_properties6auto_(ft_seq)
+len: (3,)
+may_hash: (316993,)
+may_xorhash: (1261111095516955762,)
+
+may_xorhash: (9017,) #before:hash5setII_
+
+>>> h7set == hash((type(ft_seq), frozenset(ft_seq)))
+True
 
 
-
-
+ipushsX
+>>> Seq([33, 44]).ipushsL([11, 22], reverse=False)
+Seq([11, 22, 33, 44])
+>>> Seq([33, 44]).ipushsL([11, 22], reverse=True)
+Seq([22, 11, 33, 44])
+>>> Seq([33, 44]).ipushsL(iter([11, 22]), reverse=True)
+Seq([22, 11, 33, 44])
+>>> Seq([33, 44]).ipushsR(iter([11, 22]), reverse=True)
+Seq([33, 44, 22, 11])
+>>> Seq([33, 44]).ipushsR(iter([11, 22]), reverse=False)
+Seq([33, 44, 11, 22])
+>>> Seq([33, 44]).ipushsX(iter([11, 22]), atL_vs_atR=True, reverse=False)
+Seq([33, 44, 11, 22])
 
 
 
@@ -303,16 +364,20 @@ may_hash: (665014891999583672,)
 py_adhoc_call   seed.data_funcs.finger_tree.ft23_7sized_seq   @f
 ]]]'''#'''
 __all__ = r'''
-    Seq
+Seq
+xorhash5ft_seq_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.seq_tools.force_reversed import force_reversed as _force_reversed
 from functools import cached_property
 from itertools import pairwise#islice
 from seed.tiny_.check import check_type_is, check_int_ge
 from collections.abc import Sequence
 from seed.data_funcs.finger_tree.ft23_7types import Ops4FingerTree, Ops4Auto6FingerTree, ops4attr_len, check_ops4sized_finger_tree_, len5sized_finger_tree_, split_sized_finger_tree_
 from seed.data_funcs.finger_tree.ft23_7types import default_Nothing, ops4attr_may_hash, check_ops4mhashable_finger_tree_, may_hash5mhashable_finger_tree_
+from seed.data_funcs.finger_tree.ft23_7types import ops4attr_may_xorhash, check_ops4mxrhashable_finger_tree_, may_xorhash5mxrhashable_finger_tree_
+from seed.helper.hash4set import hash5setII_
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def _show_tmay_properties6auto_(ft_seq, /):
@@ -332,7 +397,9 @@ _ops__ver0 = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len]))
     # hash(tuple(Seq...))
 _ops7strict = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len, ops4attr_may_hash]))
     #pass doctest
-_ops7lazy = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len], default_Nothing, [ops4attr_may_hash]))
+#_ops7lazy = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len], default_Nothing, [ops4attr_may_hash]))
+_ops7lazy = Ops4FingerTree(Ops4Auto6FingerTree([ops4attr_len], default_Nothing, [ops4attr_may_hash, ops4attr_may_xorhash]))
+    #may_xorhash5mxrhashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
     #may_hash5mhashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
     #len5sized_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
 _ops = _ops7lazy if 1 else _ops7strict
@@ -401,6 +468,19 @@ class Seq(Sequence):
         if not None is (h:=sf._mh):
             return h
         raise TypeError('some elems are unhashable')
+    def _xorhash_(sf, /):
+        if not None is (h:=sf._mxrh):
+            return h
+        raise TypeError('some elems are unhashable')
+    @cached_property
+    def _mxrh(sf, /):
+        mxrh = may_xorhash5mxrhashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
+        if mxrh is default_Nothing:raise 000
+        if not None is mxrh:
+            xor_phs = mxrh
+            h = hash5setII_(len(sf), [xor_phs])
+            mxrh = hash((type(sf), h))
+        return mxrh
     @cached_property
     def _mh(sf, /):
         mh = may_hash5mhashable_finger_tree_(_ops, depth:=0, sf._t, _no_check=True)
@@ -629,6 +709,34 @@ class Seq(Sequence):
         leaf = _leaf5data_(x)
         tree = _ops.mk_tree7push_(depth:=0, leaf, sf._t, atL_vs_atR=atL_vs_atR)
         return Seq(_tree=tree)
+    def ipushsL(sf, xs, /, *, reverse:bool):
+        '-> Seq'
+        return sf.ipushsX(xs, atL_vs_atR=False, reverse=reverse)
+    def ipushsR(sf, xs, /, *, reverse:bool):
+        '-> Seq'
+        return sf.ipushsX(xs, atL_vs_atR=True, reverse=reverse)
+    def ipushsX(sf, xs, /, *, atL_vs_atR:bool, reverse:bool):
+        '-> Seq'
+        ot = type(sf)(xs, reverse=reverse)
+        if atL_vs_atR:
+            #atR
+            return sf + ot
+        else:
+            #atL
+            return ot + sf
+        raise 000
+        check_type_is(bool, atL_vs_atR)
+        check_type_is(bool, reverse)
+
+        if atL_vs_atR == reverse:
+            xs = _force_reversed(xs)
+            reverse = not reverse
+        assert atL_vs_atR is {not reverse}
+        for x in xs:
+            sf = sf.ipushsX(x, atL_vs_atR=atL_vs_atR)
+        return sf
+
+
     def __add__(sf, ot, /):
         if not type(ot) is type(sf):
             return NotImplemented
@@ -657,8 +765,17 @@ class Seq(Sequence):
                 ot += sf
         return ot
 _empty_seq = Seq()
+def xorhash5ft_seq_(ft_seq, /):
+    return type(ft_seq)._xorhash_(ft_seq)
 
+#.def _force_reversed(xs, /):
+#.    try:
+#.        xs = reversed(xs)
+#.    except TypeError:
+#.        xs = list(xs)
+#.        xs = reversed(xs)
+#.    return xs
 
 __all__
-from seed.data_funcs.finger_tree.ft23_7sized_seq import Seq
+from seed.data_funcs.finger_tree.ft23_7sized_seq import Seq, xorhash5ft_seq_
 from seed.data_funcs.finger_tree.ft23_7sized_seq import *

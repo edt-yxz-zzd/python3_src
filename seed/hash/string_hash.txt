@@ -1,0 +1,54 @@
+
+e ../../python3_src/seed/hash/string_hash.txt
+view ../../python3_src/seed/hash/pyhash.txt
+  copy whole files:pyhash.h, pyhash.c for _Py_HashBytes
+
+
+[_Py_HashBytes <<== djbx33a <+> PyHash_Func.hash]
+[PyHash_Func.hash <<== fnv/FNV <+> siphash/SIPHASH24/pysiphash]
+
+
+
+
+
+[[
+view /sdcard/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Objects/unicodeobject.c
+
+/* Believe it or not, this produces the same value for ASCII strings
+   as bytes_hash(). */
+static Py_hash_t
+unicode_hash(PyObject *self)
+{
+    Py_uhash_t x;  /* Unsigned for defined overflow behavior. */
+
+#ifdef Py_DEBUG
+    assert(_Py_HashSecret_Initialized);
+#endif
+    if (_PyUnicode_HASH(self) != -1)
+        return _PyUnicode_HASH(self);
+    if (PyUnicode_READY(self) == -1)
+        return -1;
+
+    x = _Py_HashBytes(PyUnicode_DATA(self),
+                      PyUnicode_GET_LENGTH(self) * PyUnicode_KIND(self));
+    _PyUnicode_HASH(self) = x;
+    return x;
+}
+
+
+]]
+[[
+view /sdcard/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Objects/unicodeobject.c
+
+static Py_hash_t
+bytes_hash(PyBytesObject *a)
+{
+    if (a->ob_shash == -1) {
+        /* Can't fail */
+        a->ob_shash = _Py_HashBytes(a->ob_sval, Py_SIZE(a));
+    }
+    return a->ob_shash;
+}
+
+]]
+

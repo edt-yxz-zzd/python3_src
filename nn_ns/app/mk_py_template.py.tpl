@@ -84,6 +84,10 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    # def flatten_recur(g:Generator, /, *, value:object=None, is_exc=False, boxed=False):
 #.    from seed.func_tools.dot_ import dot_
 #.    from seed.iters.PeekableIterator import echo_or_mk_PeekableIterator
+#.    from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
+#.    #def mk_namedtuple_(__module__, nm, nms_or_str, /, *args, **kwds):
+#.    #def mk_namedtuple__check6make_(__module__, nm, nms_or_str, /, *args, **kwds):
+#.    #    def _check6make_(sf, /):
 #.    from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
 #.    #def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
 #.    #    def _check6make_(sf, /):

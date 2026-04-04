@@ -1,0 +1,106 @@
+
+e ../../python3_src/seed/hash/frozenset_hash.txt
+
+
+[[
+view /sdcard/20220614_copy5sd__0my_files/unzip/py/Python3_9_13-20220517/Python-3.9.13/Python-3.9.13/Objects/setobject.c
+
+
+/* Work to increase the bit dispersion for closely spaced hash values.
+   This is important because some use cases have many combinations of a
+   small number of elements with nearby hashes so that many distinct
+   combinations collapse to only a handful of distinct hash values. */
+
+static Py_uhash_t
+_shuffle_bits(Py_uhash_t h)
+{
+    return ((h ^ 89869747UL) ^ (h << 16)) * 3644798167UL;
+}
+
+/* Most of the constants in this hash algorithm are randomly chosen
+   large primes with "interesting bit patterns" and that passed tests
+   for good collision statistics on a variety of problematic datasets
+   including powersets and graph structures (such as David Eppstein's
+   graph recipes in Lib/test/test_set.py) */
+
+static Py_hash_t
+frozenset_hash(PyObject *self)
+{
+    PySetObject *so = (PySetObject *)self;
+    Py_uhash_t hash = 0;
+    setentry *entry;
+
+    if (so->hash != -1)
+        return so->hash;
+
+    /* Xor-in shuffled bits from every entry's hash field because xor is
+       commutative and a frozenset hash should be independent of order.
+
+       For speed, include null entries and dummy entries and then
+       subtract out their effect afterwards so that the final hash
+       depends only on active entries.  This allows the code to be
+       vectorized by the compiler and it saves the unpredictable
+       branches that would arise when trying to exclude null and dummy
+       entries on every iteration. */
+
+    for (entry = so->table; entry <= &so->table[so->mask]; entry++)
+        hash ^= _shuffle_bits(entry->hash);
+
+    /* Remove the effect of an odd number of NULL entries */
+    if ((so->mask + 1 - so->fill) & 1)
+        hash ^= _shuffle_bits(0);
+
+    /* Remove the effect of an odd number of dummy entries */
+    if ((so->fill - so->used) & 1)
+        hash ^= _shuffle_bits(-1);
+
+    /* Factor in the number of active entries */
+    hash ^= ((Py_uhash_t)PySet_GET_SIZE(self) + 1) * 1927868237UL;
+
+    /* Disperse patterns arising in nested frozensets */
+    hash ^= (hash >> 11) ^ (hash >> 25);
+    hash = hash * 69069U + 907133923UL;
+
+    /* -1 is reserved as an error code */
+    if (hash == (Py_uhash_t)-1)
+        hash = 590923713UL;
+
+    so->hash = hash;
+    return hash;
+}
+
+
+]]
+[[
+view ../../python3_src/seed/helper/hash4set.py
+view /sdcard/0my_files/tmp/out4py/py_src/_collections_abc.py
+less ~/../usr/lib/python3.11/_collections_abc.py
+tail -n +632 ~/../usr/lib/python3.11/_collections_abc.py | head -n 32 > /sdcard/0my_files/tmp/-1tmp
+view /sdcard/0my_files/tmp/-1tmp
+===
+class Set(Collection):
+    ... ...
+    def _hash(self):
+        ... ...
+        MAX = sys.maxsize
+        MASK = 2 * MAX + 1
+        n = len(self)
+        h = 1927868237 * (n + 1)
+        h &= MASK
+        for x in self:
+            hx = hash(x)
+            h ^= (hx ^ (hx << 16) ^ 89869747)  * 3644798167
+            h &= MASK
+        h ^= (h >> 11) ^ (h >> 25)
+        h = h * 69069 + 907133923
+        h &= MASK
+        if h > MAX:
+            h -= MASK + 1
+        if h == -1:
+            h = 590923713
+        return h
+===
+class Mapping(Collection):
+    has no ._hash()
+===
+]]
