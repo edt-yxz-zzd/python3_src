@@ -5,6 +5,13 @@ e ../../python3_src/seed/tiny_/null_dev.py
 mimic:
     /dev/null
 
+os.devnull == os.path.devnull
+    The file path of the null device.
+    For example:
+        '/dev/null' for POSIX
+        'nul' for Windows
+    Also available via os.path.
+
 view ../../python3_src/seed/io/ReversedBufferedReader.py
   IOBase-fail?
 

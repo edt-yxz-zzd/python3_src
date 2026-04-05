@@ -44,6 +44,8 @@ view ../../python3_src/seed/helper/safe_eval.py
     ++『%%:P@alias4P』
     #vs:『%%:@alias4rjstplr』
 
+@20260405: ++kw:also_stderr
+
 [[
 TODO:
 
@@ -219,6 +221,9 @@ xxx.yyy 模块全名
     『-end4print』 <==> 『--end4print='""'』
     『+end4print』 <==> 『--end4print='None'』 <==> 『--end4print='"\n"'』
     py_adhoc_call  { -end4print }  seed.for_libs.for_tarfile   @str.read_solo_tarfile_  :script/搜索冫最短加链长度.py..statistics.out.txt.tar.lzma  --xencoding4data:ascii
+
+新增『+also_stderr』:
+    py_adhoc_call  { +also_stderr +flush4print }  nn_ns.app.iter_SPSPs   ,iter_SPSPs_ =1  =2000 ='2**22' +verbose +_stdout_too_if_raise > /dev/null
 
 新增:
     %!<py_script>
@@ -575,6 +580,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.funcs import echo
     from seed.helper.ifNone import ifNone
     from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
 
 
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
@@ -760,7 +766,9 @@ def adhoc_argparser__main__call8module(may_argv, /):
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
-    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting=''):
+    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting='', also_stderr=False):
+        ######################
+        check_type_is(bool, also_stderr)
         ######################
         #.P=False
         #.check_type_in([bool, str], P)
@@ -821,7 +829,7 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 pass
         #取消:@20260121:++kw:P
         #@20250404:++kw:smay_kwd4supply_func4resting
-        arg_tpl = (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting)
+        arg_tpl = (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr)
         return arg_tpl
         #@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
         return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta)
@@ -855,11 +863,11 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
         show_help();exit(0);
 
     (arg_tpl, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting) = arg_tpl
+    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr) = arg_tpl
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
-    setting4prefix = _parse_payload4prefix(prefix, payload4prefix, may_end4print=may_end4print, flush4print=flush4print)
+    setting4prefix = _parse_payload4prefix(prefix, payload4prefix, may_end4print=may_end4print, flush4print=flush4print, also_stderr=also_stderr)
     777;postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta
     to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
@@ -1106,15 +1114,17 @@ def _pickle_dump8show(x, /):
     import sys
     import pickle
     pickle.dump(x, sys.stdout.buffer)
-def _mk__to_show(to_str, /, *, may_end4print, flush4print:bool):
+def _mk__to_show(to_str, /, *, may_end4print, flush4print:bool, also_stderr:bool):
     if not callable(to_str):raise logic-err
     #if not callable(to_str):raise AdhocArgParserError
     def to_show(x, /):
-        print(to_str(x), end=may_end4print, flush=flush4print)
+        s = to_str(x)
+        if also_stderr:print_err(s, end=may_end4print, flush=True)
+        print(s, end=may_end4print, flush=flush4print)
     return to_show
 
 _payload4prefix__regex = re.compile(r'(?P<nm>(?:\w+[.])?)(?P<num4islice>(?:\d+[:])?)')
-def _parse_payload4prefix(prefix, payload4prefix, /, *, may_end4print, flush4print):
+def _parse_payload4prefix(prefix, payload4prefix, /, *, may_end4print, flush4print, also_stderr):
     'prefix -> payload4prefix -> setting4prefix'
     check_type_is(str, payload4prefix)
     m = _payload4prefix__regex.fullmatch(payload4prefix)
@@ -1151,21 +1161,21 @@ def _parse_payload4prefix(prefix, payload4prefix, /, *, may_end4print, flush4pri
     #if payload4prefix: raise NotImplementedError
     #if payload4prefix.endswith(':'): ...
     #smay_nm_dot = payload4prefix
-    to_show = _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, may_end4print=may_end4print, flush4print=flush4print)
+    to_show = _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, may_end4print=may_end4print, flush4print=flush4print, also_stderr=also_stderr)
     setting4prefix = to_show, islice_
     return setting4prefix
 
-def _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, /, *, may_end4print, flush4print):
+def _payload4prefix_smay_nm_dot2to_show(smay_nm_dot, /, *, may_end4print, flush4print, also_stderr):
     if not smay_nm_dot:
         to_str = repr
-        to_show = _mk__to_show(to_str, may_end4print=may_end4print, flush4print=flush4print)
+        to_show = _mk__to_show(to_str, may_end4print=may_end4print, flush4print=flush4print, also_stderr=also_stderr)
         to_str = None
     elif not smay_nm_dot.endswith('.'):raise AdhocArgParserError(smay_nm_dot)
     else:
         nm = smay_nm_dot[:-1]
-        to_show = _payload4prefix_nm2to_show(nm, may_end4print=may_end4print, flush4print=flush4print)
+        to_show = _payload4prefix_nm2to_show(nm, may_end4print=may_end4print, flush4print=flush4print, also_stderr=also_stderr)
     return to_show
-def _payload4prefix_nm2to_show(nm, /, *, may_end4print, flush4print):
+def _payload4prefix_nm2to_show(nm, /, *, may_end4print, flush4print, also_stderr):
     if nm == 'not_show':
         to_show = _not_show
     elif nm == 'dump8show':
@@ -1192,7 +1202,7 @@ def _payload4prefix_nm2to_show(nm, /, *, may_end4print, flush4print):
         elif not hasattr(builtins, nm):raise AdhocArgParserError(nm)
         else:
             to_str = getattr(builtins, nm)
-        to_show = _mk__to_show(to_str, may_end4print=may_end4print, flush4print=flush4print)
+        to_show = _mk__to_show(to_str, may_end4print=may_end4print, flush4print=flush4print, also_stderr=also_stderr)
         to_str = None
     return to_show
 
