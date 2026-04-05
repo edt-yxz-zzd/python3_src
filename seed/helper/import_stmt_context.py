@@ -60,15 +60,17 @@ raise ...
 ######################
 >>> with mk_context4import_stmts_():
 ...     from _000_xxx import yyy
-...     from _999_xxx import z
+...     from _999_xxx import z, kkk
 ...     from _999.xww import xy
 >>> yyy
 ImportStmt('yyy', '_000_xxx', None)
 >>> z
 ImportStmt('z', '_999_xxx', None)
+>>> kkk
+ImportStmt('kkk', '_999_xxx', None)
 >>> xy
 ImportStmt('xy', '_999.xww', None)
->>> del yyy, z
+>>> del yyy, z, kkk, xy
 
 
 
@@ -118,6 +120,23 @@ True
 ...     from _000_xxx import yyy
 >>> yyy
 ImportStmt('yyy', '_000_xxx', 999)
+>>> del yyy
+
+
+
+######################
+>>> with mk_context4import_stmts_(mk_ImportStmt=dict):
+...     from _000_xxx import yyy
+>>> yyy == {'name4target': 'yyy', 'qname4module': '_000_xxx', 'extra': None}
+True
+>>> del yyy
+
+>>> with mk_context4import_stmts_(mk_ImportStmt=SimpleNamespace):
+...     from _000_xxx import yyy
+>>> yyy
+namespace(name4target='yyy', qname4module='_000_xxx', extra=None)
+>>> yyy == SimpleNamespace(name4target='yyy', qname4module='_000_xxx', extra=None)
+True
 >>> del yyy
 
 
