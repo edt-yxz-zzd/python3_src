@@ -5,6 +5,8 @@ e ../../python3_src/seed/helper/import_stmt_context.py
 py -m seed.helper.import_stmt_context
 py -m nn_ns.app.debug_cmd   seed.helper.import_stmt_context -x # -off_defs
 py -m nn_ns.app.doctest_cmd seed.helper.import_stmt_context:__doc__ -ht # -ff -df
+py -m nn_ns.app.doctest_cmd seed.helper.import_stmt_context:_test.doc4ver1 -ht # -ff -df
+py -m nn_ns.app.doctest_cmd seed.helper.import_stmt_context:_test.doc4ver2 -ht # -ff -df
 #######
 
 [[
@@ -53,6 +55,7 @@ raise ...
 
 
 '#'; __doc__ = r'#'
+>>> 'mk_context4import_stmts_' # to see which ver: _test.doc4ver2
 
 ######################
 >>> with mk_context4import_stmts_():
@@ -197,7 +200,11 @@ py_adhoc_call   seed.helper.import_stmt_context   @f
 ]]]'''#'''
 __all__ = r'''
 mk_context4import_stmts_
-ImportStmt
+    ImportStmt
+
+mk_context4import_stmts_
+    mk_context4import_stmts__ver1_
+    mk_context4import_stmts__ver2_
 
 Conflict
 BadUsage
@@ -253,11 +260,11 @@ class ImportStmt(_ImportStmt):
         assert sf.name4target.isidentifier()
         assert all(nm.isidentifier() for nm in sf.qname4module.split('.'))
 
-def _import_from(nm4tgt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok, /):
+def _import_from(mk_ImportStmt, nm4tgt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok, /):
     0b000 and print_err(444, qnm4mdl, nm4tgt)
     if not (overwrite_ok or (_qnm4mdl:=nm4tgtZqnm4mdl.get(nm4tgt, qnm4mdl)) == qnm4mdl): raise Conflict(nm4tgt, (qnm4mdl, _qnm4mdl))
     nm4tgtZqnm4mdl[nm4tgt] = qnm4mdl
-    return ImportStmt(name4target=nm4tgt, qname4module=qnm4mdl, extra=extra)
+    return mk_ImportStmt(name4target=nm4tgt, qname4module=qnm4mdl, extra=extra)
 
 
 
@@ -268,8 +275,8 @@ _get = object.__getattribute__
 _set = object.__setattr__
 _nms4bypass = '__spec__ __path__'.split()
 class _Mdl4import_stmts:
-    def __init__(sf, qnm4mdl, nm4tgtZqnm4mdl, extra, /, *, overwrite_ok):
-        args = (qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok)
+    def __init__(sf, mk_ImportStmt, qnm4mdl, nm4tgtZqnm4mdl, extra, /, *, overwrite_ok):
+        args = (mk_ImportStmt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok)
         _set(sf, '_args', args)
         if 0x000_000:
             sf._qnm = qnm4mdl
@@ -294,13 +301,14 @@ class _Mdl4import_stmts:
             #if nm4tgt == '__path__':
             raise AttributeError(nm4tgt)
             return None
-        (qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok) = _get(sf, '_args')
-        return _import_from(nm4tgt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok)
+        (mk_ImportStmt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok) = _get(sf, '_args')
+        return _import_from(mk_ImportStmt, nm4tgt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok)
     def __setattr__(sf, nm, v, /):
         raise AttributeError(nm, v)
 class _Dict4import_stmts(Mapping):
-    def __init__(sf, sys_modules, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, /, *, overwrite_ok):
+    def __init__(sf, sys_modules, mk_ImportStmt, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, /, *, overwrite_ok):
         sf._sd = sys_modules
+        sf._mk = mk_ImportStmt
         sf._nm2qnm = nm4tgtZqnm4mdl
         sf._b = bool(overwrite_ok)
         sf._x = extra
@@ -308,6 +316,9 @@ class _Dict4import_stmts(Mapping):
     @property
     def sys_modules(sf, /):
         return sf._sd
+    @property
+    def mk_ImportStmt(sf, /):
+        return sf._mk
     @property
     def nm4tgtZqnm4mdl(sf, /):
         return sf._nm2qnm
@@ -340,10 +351,11 @@ class _Dict4import_stmts(Mapping):
             under_tgt_pkg
             if not under_tgt_pkg:
                 return mdl
-        return _Mdl4import_stmts(qnm4mdl, sf.nm4tgtZqnm4mdl, sf.extra, overwrite_ok=sf.overwrite_ok)
+        return _Mdl4import_stmts(sf.mk_ImportStmt, qnm4mdl, sf.nm4tgtZqnm4mdl, sf.extra, overwrite_ok=sf.overwrite_ok)
 class _Ctx4import_stmts__ver1:
-    def __init__(sf, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, /, *, overwrite_ok):
+    def __init__(sf, mk_ImportStmt, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, /, *, overwrite_ok):
         nm4tgtZqnm4mdl.items()
+        sf._mk = mk_ImportStmt
         sf._nm2qnm = nm4tgtZqnm4mdl
         sf._b = bool(overwrite_ok)
         sf._x = extra
@@ -351,6 +363,9 @@ class _Ctx4import_stmts__ver1:
         sf._d = None
         sf._m = None
         sf._mc = None
+    @property
+    def mk_ImportStmt(sf, /):
+        return sf._mk
     @property
     def nm4tgtZqnm4mdl(sf, /):
         return sf._nm2qnm
@@ -367,7 +382,7 @@ class _Ctx4import_stmts__ver1:
         if not sf._mc is None:raise BadUsage('reenter')
         if not sf._m is None:raise BadUsage('reenter')
         if not sf._d is None:raise BadUsage('reenter')
-        sf._d = _Dict4import_stmts(sys.modules, sf.nm4tgtZqnm4mdl, sf.qnms4pkg7tgt, sf.extra, overwrite_ok=sf.overwrite_ok)
+        sf._d = _Dict4import_stmts(sys.modules, sf.mk_ImportStmt, sf.nm4tgtZqnm4mdl, sf.qnms4pkg7tgt, sf.extra, overwrite_ok=sf.overwrite_ok)
         sf._m = sys.modules
         sf._mc = sys.modules.copy()#MOVE_SYS_MODULES
         if sf._m is None:raise BadUsage('unknown err')
@@ -389,8 +404,8 @@ class _Ctx4import_stmts__ver1:
 
 class _NewImport:
     '_new_import'
-    def __init__(sf, nm4tgtZqnm4mdl, extra, /, *, overwrite_ok):
-        sf._args = (nm4tgtZqnm4mdl, extra, overwrite_ok)
+    def __init__(sf, mk_ImportStmt, nm4tgtZqnm4mdl, extra, /, *, overwrite_ok):
+        sf._args = (mk_ImportStmt, nm4tgtZqnm4mdl, extra, overwrite_ok)
     builtins.__import__
     def __call__(sf, /, name, globals=None, locals=None, fromlist=(), level=0):
         qnm4mdl = name
@@ -398,22 +413,26 @@ class _NewImport:
         if qnm4mdl[0] == '.':raise BadUsage(qnm4mdl)
         if not fromlist:raise BadUsage(qnm4mdl)
 
-        (nm4tgtZqnm4mdl, extra, overwrite_ok) = sf._args
+        (mk_ImportStmt, nm4tgtZqnm4mdl, extra, overwrite_ok) = sf._args
         ns = SimpleNamespace()
         for nm4tgt in fromlist:
-            tgt = _import_from(nm4tgt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok)
+            tgt = _import_from(mk_ImportStmt, nm4tgt, qnm4mdl, nm4tgtZqnm4mdl, extra, overwrite_ok)
             setattr(ns, nm4tgt, tgt)
         return ns
 class _Ctx4import_stmts__ver2:
-    def __init__(sf, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, /, *, overwrite_ok):
-        _new_import = _NewImport(nm4tgtZqnm4mdl, extra, overwrite_ok=overwrite_ok)
+    def __init__(sf, mk_ImportStmt, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, /, *, overwrite_ok):
+        _new_import = _NewImport(mk_ImportStmt, nm4tgtZqnm4mdl, extra, overwrite_ok=overwrite_ok)
         nm4tgtZqnm4mdl.items()
+        sf._mk = mk_ImportStmt
         sf._nm2qnm = nm4tgtZqnm4mdl
         sf._b = bool(overwrite_ok)
         sf._x = extra
         sf._qps = qnms4pkg7tgt
         sf._new_import = _new_import
         sf._old_import = None
+    @property
+    def mk_ImportStmt(sf, /):
+        return sf._mk
     @property
     def nm4tgtZqnm4mdl(sf, /):
         return sf._nm2qnm
@@ -445,21 +464,47 @@ class _Ctx4import_stmts__ver2:
 
 
 
-def mk_context4import_stmts_(nm4tgtZqnm4mdl=None, /, *, extra=None, overwrite_ok=False):
+def mk_context4import_stmts__ver1_(nm4tgtZqnm4mdl=None, /, *, mk_ImportStmt=None, extra=None, overwrite_ok=False, ver=1):
+    return mk_context4import_stmts_(nm4tgtZqnm4mdl, mk_ImportStmt=mk_ImportStmt, extra=extra, overwrite_ok=overwrite_ok, ver=ver)
+def mk_context4import_stmts__ver2_(nm4tgtZqnm4mdl=None, /, *, mk_ImportStmt=None, extra=None, overwrite_ok=False, ver=2):
+    return mk_context4import_stmts_(nm4tgtZqnm4mdl, mk_ImportStmt=mk_ImportStmt, extra=extra, overwrite_ok=overwrite_ok, ver=ver)
+def mk_context4import_stmts_(nm4tgtZqnm4mdl=None, /, *, mk_ImportStmt=None, extra=None, overwrite_ok=False, ver=2):
     777;qnms4pkg7tgt=()
     #def mk_context4import_stmts_(nm4tgtZqnm4mdl=None, qnms4pkg7tgt=(), /, *, extra=None, overwrite_ok=False):
     if not type(overwrite_ok) is bool:raise TypeError
     if qnms4pkg7tgt:raise TypeError#MOVE_SYS_MODULES
 
+    mk_ImportStmt = ImportStmt if mk_ImportStmt is None else mk_ImportStmt
+    assert callable(mk_ImportStmt)
+
+
     nm4tgtZqnm4mdl = {} if nm4tgtZqnm4mdl is None else nm4tgtZqnm4mdl
     777;nm4tgtZqnm4mdl.items()
+
+
 
     if type(qnms4pkg7tgt) is str:
         qnms4pkg7tgt = qnms4pkg7tgt.split()
     if not type(qnms4pkg7tgt) is tuple:
         qnms4pkg7tgt = tuple(qnms4pkg7tgt)
 
-    return _Ctx4import_stmts__ver2(nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, overwrite_ok=overwrite_ok)
+    #_Ctx4import_stmts__ver2
+    Ctx = _ver2Ctx[ver]
+    return Ctx(mk_ImportStmt, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, overwrite_ok=overwrite_ok)
+_ver2Ctx = {1:_Ctx4import_stmts__ver1, 2:_Ctx4import_stmts__ver2}
+
+class _Test:
+    def mk_doc4verX(sf, /, ver):
+        nmX = f'mk_context4import_stmts__ver{ver}_'
+        nmO = 'mk_context4import_stmts_'
+        return __doc__.replace(nmO, nmX)
+    @property
+    def doc4ver1(sf, /):
+        return sf.mk_doc4verX(1)
+    @property
+    def doc4ver2(sf, /):
+        return sf.mk_doc4verX(2)
+_test = _Test()
 
 def __():
     with mk_context4import_stmts_(None, 'sys os'):
@@ -475,6 +520,7 @@ if __name__ == '__main__':
 
 __all__
 from seed.helper.import_stmt_context import Conflict, BadUsage
+from seed.helper.import_stmt_context import mk_context4import_stmts__ver1_, mk_context4import_stmts__ver2_
 from seed.helper.import_stmt_context import mk_context4import_stmts_, ImportStmt
 #ImportStmt(name4target, qname4module, extra)
 #def mk_context4import_stmts_(nm4tgtZqnm4mdl=None, /, *, extra=None, overwrite_ok=False):
