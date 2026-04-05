@@ -10,7 +10,7 @@ __all__ = '''
     uint8_to_reversed_uint8
     uint8_to_reversed_byte
     byte2reversed_byte_table
-'''
+'''.split()
 from seed.helper.check_utils import to_uint, to_pint
 
 def uint2expsLE(u):
