@@ -55,7 +55,8 @@ raise ...
 
 
 '#'; __doc__ = r'#'
->>> 'mk_context4import_stmts_' # to see which ver: _test.doc4ver2
+>>> 'mk_context4import_stmts_' # to see which ver: _test.doc4ver[12]
+>>> type(mk_context4import_stmts_()).__name__ # to see which ver: _test.doc4ver[12]
 
 ######################
 >>> with mk_context4import_stmts_():
