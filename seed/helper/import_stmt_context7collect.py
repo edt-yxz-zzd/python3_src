@@ -61,71 +61,21 @@ collect_import_stmts_
     iter_collect_import_stmts_
         iter_collect_import_stmts5py_source_path_
             extract_may_all_export_names5py_source_
-iter_py_source_paths_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from pathlib import Path
-import os
-from os.path import join
 
 import ast
 from seed.lang.read_py_source import read_py_source5path_
 from seed.filesys.relative_to import relative_to
 
+from seed.pkg_tools.iter_py_source_paths_ import iter_py_source_paths_
+
 from seed.debug.print_err import print_err
 
-#.#################################
-#.from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#.#################################
-#.from seed.helper.lazy_import__func7dict import lazy_import__funcs7dict_
-#.(check_type_is, check_int_ge, _ifNone) = lazy_import__funcs7dict_(__name__ or globals() or locals(), 'seed.tiny_.check',  'check_type_is, check_int_ge      ifNone:_ifNone')
-#.#################################
-#.def mk_context4lazy_import_registered_names_(qnm4mdl7inject, qnm4pseudo_mdl7import, name7importZqnm4mdl, name7importZalias7inject={}, may_bifix4lazy_name7import=None, lazy_name7importZoriginal_name7import={}):
-#.from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
-#.with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny):
-#.    from seed._lazy_ import print_err, fst, echo, ifNone
-#.#################################
-#.from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
-#.with mk_ctx4lazy_import4funcs_(__name__):
-#.    from itertools import islice
-#.    from functools import cached_property
-#.    from seed.for_libs.for_functools.cached_property import cached_property
-#.    from seed.types.CachedProperty import CachedProperty, mk_cached_propertyT_
-#.    from seed.func_tools.dot2 import dot
-#.    from seed.tiny_.check import check_type_is, check_int_ge
-#.with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
-#.    from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
-#.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):
-#.    from seed.helper.ifNone import ifNone as _ifNone, ifNonef as _ifNonef
-#.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
-
-#.def iter_py_source_paths_(dir8py_pkg, /, *, ex=False):
-#.    for path in Path(dir8py_pkg).rglob('*.py'):
-#.        if not path.stem.isidentifier():
-#.            continue
-#.        rpath = relative_to(dir8py_pkg, path)
-#.        if not all(map(str.isidentifier, rpath.parent.parts)):
-#.            continue
-#.        yield (rpath, path) if ex else path
-def iter_py_source_paths_(dir8py_pkg, /, *, ex=False, leading_underscore_ok=False):
-    for parent, children7dir, children7file in os.walk(dir8py_pkg):
-        ok_dirs = [*filter(str.isidentifier, children7dir)]
-        if not len(ok_dirs) == len(children7dir):
-            children7dir[:] = ok_dirs
-        ok_files = [basename for basename in children7file if basename.endswith('.py') and basename[:-3].isidentifier()]
-        if not leading_underscore_ok:
-            ok_files = [basename for basename in ok_files if not basename.startswith('_')]
-
-        for basename in ok_files:
-            path = join(parent, basename)
-            if ex:
-                rpath = relative_to(dir8py_pkg, path)
-                yield (rpath, path)
-            else:
-                yield path
 
 def _iter_collect_import_stmts_(root_dir8py, dir8py_pkg, /):
     '-> Iter (nm4tgt, qnm4mdl)'
@@ -222,5 +172,4 @@ __all__
 from seed.helper.import_stmt_context7collect import collect_import_stmts_
 from seed.helper.import_stmt_context7collect import iter_collect_import_stmts_, iter_collect_import_stmts5py_source_path_
 from seed.helper.import_stmt_context7collect import extract_may_all_export_names5py_source_
-from seed.helper.import_stmt_context7collect import iter_py_source_paths_
 from seed.helper.import_stmt_context7collect import *
