@@ -12,7 +12,7 @@ name7importZqnm4mdl:
 py -m seed.helper.lazy_import__func7context7register7data
 ]]]'''#'''
 
-#..:def __(s, /):
+#..:def _parse(s, /):
 #..:    #t = ''.join(s.split())
 #..:    s = '\n'.join(t for t in map(str.strip, s.split('\n')) if t and not t.startswith('#'))
 #..:    s = s.replace('\nfrom ', '\n;').replace(' import ', ':')
@@ -31,18 +31,20 @@ py -m seed.helper.lazy_import__func7context7register7data
 #..:        if not ok: raise Exception(stmt)
 #..:
 #..:
-#..:name7importZqnm4mdl = dict(__(
+#..:name7importZqnm4mdl = dict(_parse(
 #..:r'''
 #..:from ... import ...
 #..:'''#'''
 #..:))
 
-from seed.helper.import_stmt_context import mk_context4import_stmts_, ImportStmt
-#ImportStmt(name4target, qname4module, extra)
-#def mk_context4import_stmts_(nm4tgtZqnm4mdl=None, /, *, extra=None, overwrite_ok=False):
-#with mk_context4import_stmts_(name7importZqnm4mdl:={}):
-#    from xxx.yyy import zzz, www
-with mk_context4import_stmts_(name7importZqnm4mdl:={}):
+def _load():
+  if 1:
+    from seed.helper.import_stmt_context import mk_context4import_stmts_, ImportStmt
+    #ImportStmt(name4target, qname4module, extra)
+    #def mk_context4import_stmts_(nm4tgtZqnm4mdl=None, /, *, extra=None, overwrite_ok=False):
+    #with mk_context4import_stmts_(name7importZqnm4mdl:={}):
+    #    from xxx.yyy import zzz, www
+  with mk_context4import_stmts_(name7importZqnm4mdl:={}):
     #@20260220
     from seed.debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f
     from seed.debug.expectError import expectError
@@ -173,8 +175,10 @@ with mk_context4import_stmts_(name7importZqnm4mdl:={}):
     from seed.tiny_.check import check_eq_, check_is_, check_is_obj, check_is_None
 
     from seed.tiny_.check import check_str, check_char, check_bool, check_tribool, icheck_str, icheck_char, icheck_bool, icheck_tribool
+  if 1:
+    return name7importZqnm4mdl
 
-name7importZqnm4mdl
+name7importZqnm4mdl = _load()
 assert name7importZqnm4mdl['print_err'] == 'seed.debug.print_err'
 
 from seed.helper.lazy_import__func7context7register7data import name7importZqnm4mdl
