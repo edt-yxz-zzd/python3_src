@@ -1,4 +1,6 @@
 
+#py -m seed.algo.bucket_sort.is_uint_bijection_array
+__all__ = 'is_uint_bijection_array'.split()
 
 def is_uint_bijection_array(old2new, *, key=None, alphabet_size=None):
     ''':: [ArrayIdx] -> Bool
@@ -62,3 +64,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.algo.bucket_sort.is_uint_bijection_array import is_uint_bijection_array

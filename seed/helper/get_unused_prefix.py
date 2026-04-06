@@ -1,5 +1,5 @@
 
-
+__all__ = 'get_unused_prefix'.split()
 
 
 def char_range(a, z):
@@ -23,14 +23,14 @@ NOTE: pre may be empty
     assert not any(name.startswith(pre) for name in names)
     assert set(pre[len(prefix):]) <= alphabet
     return pre
-    
+
 def _get_unused_prefix(prefix, names, alphabet):
     min_ = min(alphabet)
     while True:
         names = set(name for name in names if name.startswith(prefix))
         if not names:
             return prefix
-        
+
         i = len(prefix)
         not_next_chars = set(name[i] for name in names if len(name) > i)
         next_chars = alphabet - not_next_chars
@@ -40,4 +40,5 @@ def _get_unused_prefix(prefix, names, alphabet):
             next_char = min(next_chars)
         prefix += next_char
 
-    
+
+from seed.helper.get_unused_prefix import get_unused_prefix

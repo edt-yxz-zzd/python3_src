@@ -12,8 +12,12 @@ bucket_classify
             may_alphabet_size, iterable, sorted_wheres, table
             , *, key=None, reverse=False):
         but sorted_wheres are not neccesary sorted since we donot known the order
+
+
+py -m seed.algo.bucket_sort.bucket_classify
 '''
 
+__all__ = 'bucket_classify'.split()
 
 def bucket_classify(iterable, buffer__uint_mapping, *, key):
     ''' :: Iter a -> OneTimeMap -> (a->UInt) -> [[a]]
@@ -32,4 +36,4 @@ buffer__uint_mapping::OneTimeMap
     return list(buffer__uint_mapping.values())
 
 
-
+from seed.algo.bucket_sort.bucket_classify import bucket_classify

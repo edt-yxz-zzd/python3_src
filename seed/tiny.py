@@ -135,6 +135,7 @@ def print_iterableT(max_sz, /, *, to_str=repr, may_min_lineno=None):
 #]]]'''
 
 
+___this_is_forwarding_module___ = True
 from seed.helper.str2__all__ import str2__all__
 __all__ = str2__all__(r'''
     oo                  # usage: +oo, -oo

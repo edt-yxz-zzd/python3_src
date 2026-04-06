@@ -1,5 +1,7 @@
 
 #copy from:from seed.io.savefile__str_tuple import iter_split_ex_by_
+__all__ = 'iter_split_ex_by_'.split()
+
 def iter_split_ex_by_(substr, s, /):
     '-> Iter (gap, smay substr)  # str | bytes'
     if not len(substr): raise ValueError

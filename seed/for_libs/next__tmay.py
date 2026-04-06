@@ -1,4 +1,5 @@
 
+__all__ = 'next__tmay'.split()
 def next__tmay(iterator, /):
     try:
         return (next(iterator),)
@@ -18,5 +19,6 @@ safe_head = head__tmay
 assert () == next__tmay(iter([]))
 assert (9,) == next__tmay(iter([9,5]))
 
+from seed.for_libs.next__tmay import next__tmay
 
 

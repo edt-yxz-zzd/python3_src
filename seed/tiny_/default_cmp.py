@@ -9,6 +9,8 @@ used in:
 
 #'''
 
+__all__ = 'default_cmp'.split()
+
 def default_cmp(a, b, /):
     if a < b:
         return -1

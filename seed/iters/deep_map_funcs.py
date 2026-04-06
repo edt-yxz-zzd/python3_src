@@ -17,14 +17,17 @@ usage source:
         return deep_map(2, sympy_fraction2py_fraction, lsls)
     def sympy_mx2lsls_with_fraction_convert(mx):
         return lsls_of_sympy_fraction2py_fraction(sympy_mx2lsls(mx))
-        
+
 '''
+
+__all__ = 'deep_map_funcs'.split()
 
 from ..types.pair_based_leftward_list import to_leftward_list
 def deep_map_funcs(funcs, ls):
     'deep_map_funcs((tuple, None, set), [[[1]]]) == ([{1}],)'
     funcs = to_leftward_list(funcs)
-    
+    return __deep_map_funcs_impl(funcs, ls)
+
 def __deep_map_funcs_impl(funcs, x):
     if not funcs:
         return x
@@ -60,3 +63,5 @@ if 0:
             raise ValueError('n < 0')
 
         raise ValueError('unkown')
+
+from seed.iters.deep_map_funcs import deep_map_funcs

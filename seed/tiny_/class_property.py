@@ -14,7 +14,14 @@ New in version 3.4.
 .setter(self, fset) -> new_sf
 
 #]]]'''#'''
-from types import DynamicClassAttribute as class_property
+___this_is_forwarding_module___ = True
+
+if 0:
+    #bug:
+    from types import DynamicClassAttribute as class_property
+else:
+    #@20260406
+    from seed.lang.class_property import class_property
 
 
 from seed.tiny_.class_property import class_property

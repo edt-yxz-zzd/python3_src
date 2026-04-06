@@ -1,4 +1,4 @@
-
+__all__ = 'expectError'.split()
 #def exceptError(Error, f):
 def expectError(Error, f):
     # expectError(Error, f, *args, **kwargs)??
@@ -14,4 +14,4 @@ def expectError(Error, f):
         pass
     return False
 
-
+from seed.debug.expectError import expectError

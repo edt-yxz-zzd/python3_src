@@ -1,5 +1,6 @@
 
 # e ../../python3_src/seed/types/GetArgsKwargs.py
+__all__ = 'GetArgsKwargs  GetFuncArgsKwargs'.split()
 
 from seed.helper.repr_input import repr_helper
 from seed.tiny import check_callable

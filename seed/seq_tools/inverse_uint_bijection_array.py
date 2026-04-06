@@ -2,6 +2,7 @@
 
 '''
 inverse_uint_bijection_array
+py -m seed.seq_tools.inverse_uint_bijection_array
 '''
 __all__ = '''
     inverse_uint_bijection_array
@@ -107,3 +108,4 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.seq_tools.inverse_uint_bijection_array import inverse_uint_bijection_array

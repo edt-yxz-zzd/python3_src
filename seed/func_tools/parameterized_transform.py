@@ -11,6 +11,11 @@ scenarios:
 
 #'''
 
+__all__ = '''
+IPureParameterized
+IParameterizedTransform
+'''.split()#'''
+
 
 from abc import ABC, abstractmethod
 from seed.types.FrozenDict import FrozenDict
@@ -78,4 +83,5 @@ class IParameterizedTransform(IPureParameterized):
 
 
 
+from seed.func_tools.parameterized_transform import IPureParameterized, IParameterizedTransform
 

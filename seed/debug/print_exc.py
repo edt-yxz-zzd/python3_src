@@ -12,7 +12,8 @@ e ../../python3_src/seed/debug/print_exc.py
 ...     print_exc(file=stdout) #doctest: +ELLIPSIS
 
 '''#'''
-
+__all__ = 'print_exc  format_exc'.split()
+___this_is_forwarding_module___ = True
 #from sys import stdout
 from traceback import print_exc, format_exc
 # print_exc(limit=None, file=None, chain=True)
@@ -22,3 +23,4 @@ from traceback import print_exc, format_exc
 #   Like print_exc() but return a string.
 
 
+from seed.debug.print_exc import print_exc, format_exc

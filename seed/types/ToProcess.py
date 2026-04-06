@@ -1,4 +1,5 @@
 
+#py -m seed.types.ToProcess
 __all__ = '''
 
 ToProcessQueue
@@ -9,7 +10,7 @@ ToProcessQueue
         UnorderedSetOnce
         FILOOnce
         FIFOOnce
-'''
+'''.split()
 
 
 import collections
@@ -19,7 +20,7 @@ import collections
 class ToProcessQueue:
     def __bool__(self):
         raise NotImplementedError
-    
+
     def update(self, iterable):
         raise NotImplementedError
 
@@ -41,20 +42,20 @@ class ToProcessQueue:
         new_handler = lambda x: handler(x, *args, **kwargs)
         self.apply(new_handler)
         return
-    
+
         while self:
             x = self.pop()
             news = handler(x, *args, **kwargs)
             self.update(news)
-        
-        
-    
+
+
+
 class UnorderedSet(ToProcessQueue):
     def __init__(self, iterable=()):
         self.__x = set(iterable)
     def __bool__(self):
         return bool(self.__x)
-    
+
     def update(self, iterable):
         self.__x.update(iterable)
 
@@ -63,13 +64,13 @@ class UnorderedSet(ToProcessQueue):
 
     def add(self, e):
         self.__x.add(e)
-        
+
 class FILO(ToProcessQueue):
     def __init__(self, iterable=()):
         self.__x = list(iterable)
     def __bool__(self):
         return bool(self.__x)
-    
+
     def update(self, iterable):
         self.__x.extend(iterable)
 
@@ -84,7 +85,7 @@ class FIFO(ToProcessQueue):
         self.__x = collections.deque(iterable)
     def __bool__(self):
         return bool(self.__x)
-        
+
     def update(self, iterable):
         self.__x.extend(iterable)
 
@@ -93,8 +94,8 @@ class FIFO(ToProcessQueue):
 
     def add(self, e):
         self.__x.append(e)
-    
-    
+
+
 
 class ToProcessQueueOnce(ToProcessQueue):
     '''holds all input processed or to process to avoid duplicate processing
@@ -135,7 +136,7 @@ eg:
         for v in g.vertics():
             to_proc.add(v)
             to_proc.apply(visit)
-        
+
 
 
 subclassing:
@@ -147,11 +148,11 @@ subclassing:
         update(iterable)
         pop()
         add(elem)
-    
+
 '''
     # __ToProcessQueue__ = ??
-        
-    
+
+
     def unordered_update(self, iterable):
         known = self.known_inputs
         unordered_news = set(iterable) - known
@@ -164,7 +165,7 @@ subclassing:
     def update(self, iterable):
         'update = ordered_update | unordered_update'
         raise NotImplementedError
-    
+
     def __update(self, disjoint_inputs):
         'disjoint_inputs should be a Container instead of Iterator'
 
@@ -172,7 +173,7 @@ subclassing:
         self.known_inputs.update(disjoint_inputs)
         self.to_process.update(disjoint_inputs)
 
-        
+
     def __init__(self, iterable):
         self.known_inputs = set()
         self.to_process = type(self).__ToProcessQueue__()
@@ -189,7 +190,7 @@ if x in known_inputs and x not in to_process, then x is processed
 
     def known(self, elem):
         return elem in self.known_inputs
-    
+
 
 
 class UnorderedSetOnce(ToProcessQueueOnce):
@@ -220,4 +221,8 @@ def test__FILOOnce():
 
 test__FILOOnce()
 
-    
+
+from seed.types.ToProcess import ToProcessQueue, UnorderedSet, FILO, FIFO
+from seed.types.ToProcess import ToProcessQueueOnce, UnorderedSetOnce, FILOOnce, FIFOOnce
+
+

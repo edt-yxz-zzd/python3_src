@@ -164,7 +164,9 @@ std lib bugs:
 '''
 
 
-__all__ = r'''
+#from seed.tiny import str2__all__
+from seed.helper.str2__all__ import str2__all__
+__all__ = str2__all__(r'''
     OP_DELETE       # = None
     OP_READ         # = ...
     OP_NOT_FOUND    # = False
@@ -216,9 +218,9 @@ __all__ = r'''
     get_root_key
         # root_name -> HKEY_CONSTANT
     '''
+    )
 
-from seed.tiny import str2__all__
-__all__ = str2__all__(__all__)
+#__all__ = str2__all__(__all__)
 
 
 
@@ -644,3 +646,27 @@ if __name__ == '__main__':
     pprint(__all__)
     print_global_names(globals())
 
+from seed.windows.winreg_helper import (
+    OP_DELETE       # = None
+,   OP_READ         # = ...
+,   OP_NOT_FOUND    # = False
+,   reg_read_into
+,   reg_update_from
+,   reg_read_into_key_table
+,   reg_update_from_key_table
+,   reg_read_into_value_table
+,   reg_update_from_value_table
+,   reg_read_into_table
+,   reg_update_from_table
+,   reg_read_table
+,   reg_read_key_table
+,   reg_read_value_table
+,   reg_exists_path
+,   reg_open
+,   reg_create
+,   reg_delete_key_tree__by_path
+,   reg_delete_key_tree
+,   reg_split_path
+,   reg_path_split_root
+,   get_root_key
+)

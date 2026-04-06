@@ -194,6 +194,15 @@ view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-
 
 g6_ 'seed/helper/lazy_import__func7dict.py;seed/math/power/addition_chain/shortest/may_optimal_addition_chain5target_uint7generally_solved_small_step_cases.py;seed/recognize/text_recognizer/ITextRecognizer.py'
 ]]
+[[
+e ../../python3_src/seed/helper/import_stmt_context7collect.py
+e ../../python3_src/seed/helper/import_stmt_context7collect.py.excluded_paths.txt
+==>>:
+添加:__all___;___delta_all___;__this_is_forwarding_module___
+==>>:
+view ../../python3_src/自己的相关数据/delta4on_working4py_src/git_add_nA-py_src-20260406_133315.txt
+]]
+
 '自己的相关数据/delta4on_working4py_src/README-cmds.txt'
 
 

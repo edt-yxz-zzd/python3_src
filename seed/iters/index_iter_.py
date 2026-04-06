@@ -1,5 +1,7 @@
 
 #e ../../python3_src/seed/iters/index_iter_.py
+__all__ = 'index_iter_'.split()
+
 from operator import index as _to_index
 
 def index_iter_(i, it, /):

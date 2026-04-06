@@ -1,5 +1,6 @@
 
 # v.s. project_keys
+__all__ = 'unzip  unzip_keys'.split()
 
 from itertools import islice as _islice
 def unzip(n, iterable):
@@ -39,9 +40,9 @@ assert unzip_keys(range(2), [(1,2,4), (1,3,9)]) == ([1,1], [2,3])
 
 
 
-        
-    
-    
+
+
+from seed.iters.unzip import unzip, unzip_keys
 
 
 

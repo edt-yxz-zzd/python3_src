@@ -1,5 +1,7 @@
 
 #e ../../python3_src/seed/tiny_/std____key__le__reverse_.py
+__all__ = 'std____key__le__reverse_'.split()
+
 import operator #__le__
 from seed.tiny_.check import check_callable, check_type_is
 from seed.helper.ifNone import ifNone

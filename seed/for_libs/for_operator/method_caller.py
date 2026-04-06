@@ -1,5 +1,5 @@
 
-
+__all__ = 'method_caller'.split()
 
 class method_caller:
     'operator.methodcaller(attr, *args, **kwargs)(obj) # no more args!'
@@ -11,3 +11,4 @@ class method_caller:
         return getattr(obj, self.method_name)(
                 *self.args, *args, **self.kwargs, **kwargs)
 
+from seed.for_libs.for_operator.method_caller import method_caller

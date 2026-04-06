@@ -1,4 +1,4 @@
-
+___this_is_forwarding_module___ = True
 from func_tools.dot2 import dot
 from mapping_tools.fdefault import \
     ( get_fdefault

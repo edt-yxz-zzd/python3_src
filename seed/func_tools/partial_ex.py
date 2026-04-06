@@ -1,4 +1,5 @@
 
+___this_is_forwarding_module___ = True
 
 from seed.func_tools.func_pow_ import partial_ex
 

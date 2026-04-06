@@ -50,6 +50,12 @@ TypeError:
 
 #'''
 
+
+__all__ = '''
+get_abstractmethod_names
+check_manifest4abstractmethods
+'''.split()#'''
+
 #from seed.tiny_.check_abc import get_abstractmethod_names, check_manifest4abstractmethods
 
 from seed.tiny_.containers import mk_frozenset
@@ -98,3 +104,4 @@ if __name__ == "__main__":
 
 
 
+from seed.tiny_.check_abc import get_abstractmethod_names, check_manifest4abstractmethods

@@ -4,6 +4,8 @@ https://stackoverflow.com/questions/16380394/getting-battery-capacity-windows-wi
 
 '''
 
+__all__ = 'BatteryCapacity'.split()
+
 import wmi
 class BatteryCapacity:
     __t = wmi.WMI(moniker = "//./root/wmi")
@@ -91,3 +93,4 @@ if __name__ == "__main__":
     _via_wmi()
     _via_psutil()
 
+from seed.windows.BatteryCapacity import BatteryCapacity

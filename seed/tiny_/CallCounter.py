@@ -8,6 +8,8 @@ used in:
 
 #'''
 
+__all__ = 'CallCounter'.split()
+
 class CallCounter:
     def __init__(sf, f, /):
         assert callable(f)

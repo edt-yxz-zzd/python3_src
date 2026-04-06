@@ -1,5 +1,13 @@
 
 #e ../../python3_src/seed/tiny_/types5py.py
+__all__ = '''
+mk_MapView
+MapView
+kwargs2Attrs
+curry1
+'''.split()#'''
+
+
 from types import MappingProxyType as MapView, SimpleNamespace as kwargs2Attrs, MethodType as curry1
 if 1:
     #bug:

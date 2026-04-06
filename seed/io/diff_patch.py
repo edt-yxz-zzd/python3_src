@@ -1,3 +1,4 @@
+doing...
 r'''[[[
 e ../../python3_src/seed/io/diff_patch.py
 
@@ -57,7 +58,7 @@ class mk_child_gi_protocol__fix_bg_st:
 if 0:
   def diff_(ops4bg, background4recur_typ, plugin4diff, __nm4diff__, acc_st4recur_call, curr_typ_info, lhs, rhs, /):
     __diff__ = ops4bg.get_attr(background4recur_typ, plugin4diff, curr_typ_info, __nm4diff__)
-    ;   del curr_typ_info
+    777;del curr_typ_info
     return __diff__(ops4bg, background4recur_typ, plugin4diff, __nm4diff__, acc_st4recur_call, lhs, rhs)
 
 import contextlib # contextlib.ContextManager

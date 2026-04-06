@@ -49,7 +49,7 @@ ZZ
 
 __all__ = '''
     is_prime__le_pow2_64
-    '''#'''
+    '''.split()#'''
 import operator
 def as_int(n, /):
     return operator.index(n)

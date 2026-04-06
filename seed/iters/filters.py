@@ -1,4 +1,5 @@
 
+__all__ = 'filters'.split()
 import itertools
 from .not_dot import not_dot
 
@@ -54,3 +55,4 @@ def filter_not_pair2filter(filter_not_pair):
 
 
 
+from seed.iters.filters import filters

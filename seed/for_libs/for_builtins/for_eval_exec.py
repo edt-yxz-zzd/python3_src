@@ -13,6 +13,8 @@ usage:
 
 #]]]'''#'''
 
+___this_is_forwarding_module___ = True
+
 from seed.types.ObjAttrAsDictKey import ObjAsEnv__readonly, ObjAsEnv__mutable
 from seed.types.ObjAttrAsDictKey import ObjAsEnv__readonly_dict, ObjAsEnv__mutable_dict
 

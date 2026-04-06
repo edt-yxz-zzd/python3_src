@@ -1,5 +1,6 @@
 
 
+__all__ = 'to_may_int_'.split()
 
 from operator import __index__# __contains__ #no:__int__
 

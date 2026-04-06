@@ -1,5 +1,7 @@
 
 #e ../../python3_src/seed/pkg_tools/is_pkg.py
+__all__ = 'is_pkg_  is_module_'.split()
+
 from inspect import ismodule as is_module_
 
 def is_pkg_(module_obj, /):

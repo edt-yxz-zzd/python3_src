@@ -7,6 +7,9 @@
 #       K[5] == K[3] --> 0 --3-> 1 --4-> 2 --3-4-> 0
 #   [L > 2][L%2==0]: L///2笔#其中(L///2-1)笔 各连接两点，消除(L-2)各奇节点，剩下两个奇节点 可一笔画
 #       K[4] == K[3] --> 0 --3-> 1; 3 --> 2.
+
+__all__ = 'iter_pair_schedule4complete_graph_'.split()
+
 def iter_pair_schedule4complete_graph_(L, /):
     '-> Iter (int%L, int%L) # [total num pairs == L*(L-1)///2] # [total num sort phases == if L<2 then 0 elif L==2 or L&1==1 then L*(L-1)///2+1 else L*L///2]'
     if L < 3:

@@ -1,8 +1,9 @@
-
+doing...
 
 r'''
 see: "E:\my_data\my_record_txt\NOTE\other\subclass multi inheritance.txt"
 
+py -m seed.meta.Override_Meta
 
 @override
     when define a method:
@@ -87,6 +88,7 @@ override_meta_dict_ops = Override_Meta_DictOps()
 __define__ = '__define__'
 #@define
 def define(f): return f
+def define(f):
     override_meta_dict_ops.set_value(f, '__define__', True)
     return f
 

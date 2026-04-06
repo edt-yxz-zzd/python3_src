@@ -28,7 +28,8 @@ check_identifier <: check_pseudo_identifier <: check_str
 
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.tiny import str2__all__
+#from seed.tiny import str2__all__
+from seed.helper.str2__all__ import str2__all__
 __all__ = str2__all__(r'''#)
     checkers
     check_funcs

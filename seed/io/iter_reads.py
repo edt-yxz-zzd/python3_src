@@ -1,3 +1,4 @@
+__all__ = 'iter_reads'.split()
 def iter_reads(fin, block_size):
     # File -> Maybe NonZeroInt -> Iter [a]{1..}
     read = fin.read
@@ -12,4 +13,4 @@ def iter_reads(fin, block_size):
         if not bs: break
         yield bs
     return
-
+from seed.io.iter_reads import iter_reads

@@ -1,4 +1,6 @@
 
+__all__ = 'is_subsequence_of  is_subsequence_of_ex'.split()
+
 def is_subsequence_of_ex(sub, seq, sub_begin, sub_end, seq_begin, seq_end):
     subL = sub_end - sub_begin
     seqL = seq_end - seq_begin
@@ -26,3 +28,4 @@ def is_subsequence_of(sub, seq):
     return is_subsequence_of_ex(sub, seq, 0, len(sub), 0, len(seq))
 
 
+from seed.seq_tools.is_subsequence_of import is_subsequence_of, is_subsequence_of_ex

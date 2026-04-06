@@ -45,7 +45,7 @@ from seed.iters.find import mk_last_succ_pos2restart_pos__from_seq
 #from collections.abc import Sequence
 from collections import defaultdict
 import operator
-:
+
 
 if __name__ == "__main__":
     if 1:

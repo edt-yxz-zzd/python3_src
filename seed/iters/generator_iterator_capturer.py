@@ -31,6 +31,8 @@ return5it = yield from it
 
 #]]]'''#'''
 
+__all__ = 'GeneratorIteratorCapturer'.split()
+
 class GeneratorIteratorCapturer:
     def __init__(sf, generator_iterator, /):
         sf._g = generator_iterator

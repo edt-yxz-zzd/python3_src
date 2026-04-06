@@ -1,4 +1,6 @@
 
+__all__ = 'Mapping2Callable'.split()
+
 class Mapping2Callable:
     def __init__(self, mapping):
         self.mapping = mapping
@@ -9,3 +11,4 @@ class Mapping2Callable:
         return f'{cls.__name__!s}({self.mapping!r})'
 
 
+from seed.types.Mapping2Callable import Mapping2Callable

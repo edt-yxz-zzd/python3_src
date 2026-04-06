@@ -12,6 +12,9 @@ name7importZqnm4mdl:
 py -m seed.helper.lazy_import__func7context7register7data
 ]]]'''#'''
 
+__all__ = 'name7importZqnm4mdl'.split()
+
+
 #..:def _parse(s, /):
 #..:    #t = ''.join(s.split())
 #..:    s = '\n'.join(t for t in map(str.strip, s.split('\n')) if t and not t.startswith('#'))

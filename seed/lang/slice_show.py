@@ -1,5 +1,6 @@
 
 #e ../../python3_src/seed/lang/slice_show.py
+__all__ = 'show_slice_'.split()
 
 def _f(m, /):
     return '' if m is None else repr(m)

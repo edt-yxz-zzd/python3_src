@@ -1,15 +1,19 @@
 
+r'''[[[
+e ../../python3_src/seed/iters/direct_product.py
+py -m seed.iters.direct_product
+]]]'''#'''
 __all__ = '''
     list_direct_product
     direct_product
     direct_product_view
     '''.split()
 
-from seed.types.View import SeqView
+from seed.types.view.View import SeqView
 from itertools import product
 #from .null_iter import null_iter
 
-def list_direct_product(fiters):
+def list_direct_product(*fiters):
     return list(direct_product(fiters))
 def direct_product(fiters):
     return map(tuple, direct_product_view(fiters))
@@ -119,7 +123,9 @@ def test():
     assert list_direct_product(iter_12, null) == []
     assert list_direct_product(iter_12, iter_34, null) == []
     assert list_direct_product(iter_12) == [(1,), (2,)]
-    assert list_direct_product(iter_12, iter_34) == [(1,3), (1,4), (2,3), (2,4]
+    assert list_direct_product(iter_12, iter_34) == [(1,3), (1,4), (2,3), (2,4)]
 test(); del test
 
 
+from seed.iters.direct_product import list_direct_product, direct_product, direct_product_view
+from seed.iters.direct_product import *

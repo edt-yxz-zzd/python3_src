@@ -1,4 +1,4 @@
-
+__all__ = 'fprint'.split()
 
 class fprint:
     def __init__(self, file, **kwargs):
@@ -9,3 +9,4 @@ class fprint:
     def __call__(self, *args, **kwargs):
         self.print(*args, **kwargs)
 
+from seed.helper.fprint import fprint

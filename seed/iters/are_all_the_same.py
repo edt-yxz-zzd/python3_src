@@ -1,5 +1,6 @@
 
 #e ../../python3_src/seed/iters/are_all_the_same.py
+__all__ = 'are_all_the_same'.split()
 
 from itertools import pairwise, starmap
 import operator

@@ -1,4 +1,5 @@
 
+__all__ = 'try_'.split()
 
 #from seed.tiny_.try_ import try_
 #from seed.tiny_.mk_fdefault import mk_tmay_from_try_fvalue

@@ -7,6 +7,8 @@ from seed.mapping_tools.mapping_reversable_update__tmay import mapping_reversabl
 
 #'''
 
+__all__ = 'mapping_reversable_update__tmay'.split()
+
 def mapping_reversable_update__tmay(mapping, key, tmay_new_value, /):
     '-> tmay_old_value'
     if key in mapping:
@@ -25,3 +27,4 @@ def mapping_reversable_update__tmay(mapping, key, tmay_new_value, /):
     return tmay_old_value
 
 
+from seed.mapping_tools.mapping_reversable_update__tmay import mapping_reversable_update__tmay

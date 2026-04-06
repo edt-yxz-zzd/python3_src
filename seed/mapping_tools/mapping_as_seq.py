@@ -1,4 +1,5 @@
 
+___this_is_forwarding_module___ = True
 #from seed.mapping_tools.mapping_as_seq import MappingAsSeq
 
 

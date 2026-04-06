@@ -1,10 +1,12 @@
-
 '''
 from seed.ECHO import x, y, z
 assert x == 'x'
 
 '''
-from seed.tiny import theEcho
+___this_is_forwarding_module___ = True
+
+#from seed.tiny import theEcho
+from seed.helper.Echo import theEcho
 import sys
 sys.modules[__name__] = theEcho
 

@@ -153,6 +153,7 @@ lines""")
 
 
 
+__all__ = 'escape_as_c_string__narrow  iter_escape_as_c_string__narrow'.split()
 
 def escape_as_c_string__narrow(s):
     return ''.join(iter_escape_as_c_string__narrow(s))
@@ -193,4 +194,4 @@ _t()
 
 
 
-
+from seed.text.escape_as_c_string import escape_as_c_string__narrow, iter_escape_as_c_string__narrow

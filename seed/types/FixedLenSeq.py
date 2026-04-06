@@ -1,4 +1,6 @@
 
+#e ../../python3_src/seed/types/FixedLenSeq.py
+#py -m seed.types.FixedLenSeq
 
 
 __all__ = '''
@@ -78,7 +80,7 @@ class _ReadSeqBase(Sequence): #(SeqView):
         if t is tuple: raise TypeError
         if t is slice:
             r = self.__s[i]
-            assert isinstance(r, Sequence):
+            assert isinstance(r, Sequence)
             r = type(self).from_sequence(r)
         else:
             i = __index__(i)

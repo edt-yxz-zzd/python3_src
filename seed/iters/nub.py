@@ -1,5 +1,5 @@
 
-
+__all__ = 'nub'.split()
 def nub(iterable):
     '''removes duplicate elements. keeps only the first occurrence of each element.'''
     s = set()
@@ -9,3 +9,4 @@ def nub(iterable):
             yield x
 
 assert list(nub([1,0,1])) == [1,0]
+from seed.iters.nub import nub

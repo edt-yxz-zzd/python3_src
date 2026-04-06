@@ -1,4 +1,6 @@
 
+__all__ = 'sign_of'.split()
+
 def sign_of(x):
     if x == 0:
         return 0

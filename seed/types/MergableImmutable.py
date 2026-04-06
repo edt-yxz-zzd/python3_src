@@ -72,6 +72,8 @@ example:
 
 '''
 
+__all__ = 'MergableImmutable'.split()
+
 class MergableImmutable:
     # __xobj = parent_mergable_immutable or underlying_object
     # __is_root :: bool
@@ -143,4 +145,5 @@ if __name__ == "__main__":
     #doctest: +IGNORE_EXCEPTION_DETAIL
     #Traceback (most recent call last):
 
+from seed.types.MergableImmutable import MergableImmutable
 

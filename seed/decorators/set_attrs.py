@@ -1,4 +1,4 @@
-
+__all__ = 'set_attrs'.split()
 def set_attrs(**kwargs):
     '''
 set_attrs decorator
@@ -11,4 +11,4 @@ usage:
             setattr(f, attr, obj)
         return f
     return decorator
-
+from seed.decorators.set_attrs import set_attrs

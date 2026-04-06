@@ -1,4 +1,5 @@
 
+__all__ = 'lookup__tmay'.split()
 def lookup__tmay(lookupable, key, /):
     try:
         return (lookupable[key],)
@@ -9,4 +10,5 @@ assert (5,) == lookup__tmay({3:5}, 3)
 assert () == lookup__tmay([2,3,5], 3)
 assert (7,) == lookup__tmay([2,3,5,7], 3)
 
+from seed.for_libs.lookup__tmay import lookup__tmay
 

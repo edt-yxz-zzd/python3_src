@@ -1,4 +1,5 @@
 
+___this_is_forwarding_module___ = True
 from .write_fdefault import \
     ( write_fdefault
     , read

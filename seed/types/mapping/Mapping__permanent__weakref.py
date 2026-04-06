@@ -26,6 +26,7 @@ from seed.types.mapping.Mapping__permanent__weakref import WeakKeyDictionary4Add
 
 #'''
 
+___this_is_forwarding_module___ = True
 
 
 from seed.types.mapping.OpaquePseudoMapping__weakref import WeakableDict, mk_callback4auto_discard_WeakableDict_key

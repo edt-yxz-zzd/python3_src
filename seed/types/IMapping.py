@@ -1,4 +1,6 @@
 
+#e ../../python3_src/seed/types/IMapping.py
+#py -m seed.types.IMapping
 
 
 '''
@@ -18,7 +20,8 @@ from abc import ABCMeta, abstractmethod
 
 
 
-key2default = lambda key: raise KeyError
+#key2default = lambda key: raise KeyError
+def key2default(key): raise KeyError(key)
 key2key_to_key2item = lambda key2key: lambda key: (key2key(key), None)
 key2value_to_key2item = lambda key2value: lambda key: (None, key2value(key))
 class IMapping(metaclass=ABCMeta):
@@ -189,7 +192,7 @@ class IMapping_NewItem(IMapping):
         if nkey not in self:
             self.new_item(nkey, key2default(nkey))
         return self[nkey]
-class IMapping_SetItem(IMapping_NewItem, IMapping_ResetValueOrItem)
+class IMapping_SetItem(IMapping_NewItem, IMapping_ResetValueOrItem):
     # reset_value, reset_item, new_item
     def set_item(self, nkey, new_value):
         f = self.reset_value_or_item if nkey in self else self.new_item

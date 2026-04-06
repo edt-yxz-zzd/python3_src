@@ -21,6 +21,15 @@ used by:
 
 #'''
 
+__all__ = '''
+HexReprInt
+
+LowHexReprInt
+HEXReprInt__without_0x
+HEXReprInt
+
+'''.split()#'''
+
 
 #class HexReprInt(int):
 #   rename:HexReprInt-->LowHexReprInt

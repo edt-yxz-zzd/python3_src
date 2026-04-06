@@ -6,6 +6,8 @@ from seed.tiny_.fmap4may import fmap4may
 
 '''#'''
 
+__all__ = 'fmap4may'.split()
+
 def fmap4may(f, may_x, /):
     '(x->y) -> may x -> may y'
     if may_x is None:
@@ -17,3 +19,4 @@ def fmap4may(f, may_x, /):
         may_y = y
     return may_y
 
+from seed.tiny_.fmap4may import fmap4may

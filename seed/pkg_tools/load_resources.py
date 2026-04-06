@@ -2,6 +2,7 @@
 #e ../../python3_src/seed/pkg_tools/load_resources.py
 #view ../../python3_src/seed/types/SeqPrefixRegister.py
 #seed.pkg_tools.load_resources
+___this_is_forwarding_module___ = True
 
 
 from seed.types.SeqPrefixRegister import *

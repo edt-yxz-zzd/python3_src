@@ -1,4 +1,11 @@
 
+__all__ = '''
+is_pair_
+is_bytes_
+is_bytes_like_object_
+'''.split()#'''
+
+
 _BytesTypes = (bytes, bytearray)
 def is_bytes_like_object_(x, /):
     if type(x) in _BytesTypes:return True

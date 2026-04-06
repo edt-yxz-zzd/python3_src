@@ -37,4 +37,6 @@ view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/extracted/DerivedGeneralCate
 view ../../python3_src/nn_ns/CJK/CJK_data/raw/U+FF00全角字符.txt
 #'''
 
+___this_is_forwarding_module___ = True
 from nn_ns.CJK.unicode.ucd_unihan.ucd.parsed_result__of__Blocks_txt__of_ver13_0 import readonly__char_pt2code_block_name4ver13_0, readonly__code_block_name2char_pt_rngs4ver13_0
+

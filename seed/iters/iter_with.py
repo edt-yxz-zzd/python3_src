@@ -1,5 +1,6 @@
 
 #e ../../python3_src/seed/iters/iter_with.py
+__all__ = 'iter_with_'.split()
 
 def __():
     from seed.tiny import ifNonef, ifNone, echo

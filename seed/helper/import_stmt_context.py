@@ -2,6 +2,8 @@
 r'''[[[
 e ../../python3_src/seed/helper/import_stmt_context.py
 view ../../python3_src/seed/helper/import_stmt_context7collect.py
+_Ctx4import_stmts__ver2 ==[generalized]==>>:
+    view ../../python3_src/seed/helper/context4overwrite_module_attrs.py
 
 py -m seed.helper.import_stmt_context
 py -m nn_ns.app.debug_cmd   seed.helper.import_stmt_context -x # -off_defs
@@ -52,6 +54,15 @@ import seed
 from collections.abc import Mapping
 raise ...
 ]]
+[[
+http://127.0.0.1:31204/reference/executionmodel.html
+
+4.2.5. Builtins and restricted execution
+CPython implementation detail: Users should not touch __builtins__; it is strictly an implementation detail. Users wanting to override values in the builtins namespace should import the builtins module and modify its attributes appropriately.
+
+The builtins namespace associated with the execution of a code block is actually found by looking up the name __builtins__ in its global namespace; this should be a dictionary or a module (in the latter case the module’s dictionary is used). By default, when in the __main__ module, __builtins__ is the built-in module builtins; when in any other module, __builtins__ is an alias for the dictionary of the builtins module itself.
+]]
+
 
 
 
@@ -418,6 +429,7 @@ class _NewImport:
             setattr(ns, nm4tgt, tgt)
         return ns
 class _Ctx4import_stmts__ver2:
+    '=>view ../../python3_src/seed/helper/context4overwrite_module_attrs.py'
     def __init__(sf, mk_ImportStmt, nm4tgtZqnm4mdl, qnms4pkg7tgt, extra, /, *, overwrite_ok):
         _new_import = _NewImport(mk_ImportStmt, nm4tgtZqnm4mdl, extra, overwrite_ok=overwrite_ok)
         nm4tgtZqnm4mdl.items()

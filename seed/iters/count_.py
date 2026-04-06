@@ -1,4 +1,6 @@
 
+___this_is_forwarding_module___ = True
+
 from seed.tiny_.count_ import count_
 #def count_(start=0, may_stop=None, /, step=1):
 #    'count_(start=0, may_stop=None, /, step=1):diff:itertools.count(start=0, step=1)'

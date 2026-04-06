@@ -1,4 +1,5 @@
 
+__all__ = 'raw_text2html_content'.split()
 from .replace_substrings import replace_substrings
 
 def raw_text2html_content(txt):
@@ -9,3 +10,4 @@ def raw_text2html_content(txt):
         ('\n', '\n<br/>'),
         ])
     return content
+from seed.text.raw_text2html_content import raw_text2html_content

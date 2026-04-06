@@ -339,7 +339,7 @@ b64decode__bs2bs__altchars
                 uint__from__radix64_digits_
 
 
-    #'''.split()
+'''.split()#'''
 
 
 from base64 import standard_b64encode as b64encode__bs2bs__std, standard_b64decode as b64decode__bs2bs__std
@@ -858,4 +858,8 @@ if __name__ == "__main__":
     #<BLANKLINE>
     #Traceback (most recent call last):
 
+from seed.text.base64 import uint__to__radix64_digits_, uint__from__radix64_digits_, uint__to__radix64_digits__b64__str_, uint__from__radix64_digits__b64__str_
+#def uint__to__radix64_digits_(u, /, *, bigendian, may_digit5uint6):
+#def uint__from__radix64_digits_(bs, /, *, bigendian, may_digit2uint6):
+from seed.text.base64 import *
 

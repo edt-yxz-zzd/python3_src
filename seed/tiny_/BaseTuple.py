@@ -1,4 +1,6 @@
 
+__all__ = 'BaseTuple'.split()
+
 class BaseTuple(tuple):
     __slots__ = ()
     def __new__(cls, /, *args):

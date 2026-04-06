@@ -66,7 +66,10 @@ py_adhoc_call   seed.filesys.relative_to   @f
 
 ]]]'''#'''
 __all__ = r'''
+may_relative_to
 relative_to
+NotUnderRootDirError
+
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -97,5 +100,5 @@ def _relative_to(rootdir, path, /):
 
 
 __all__
-from seed.filesys.relative_to import relative_to
+from seed.filesys.relative_to import relative_to, NotUnderRootDirError, may_relative_to
 from seed.filesys.relative_to import *

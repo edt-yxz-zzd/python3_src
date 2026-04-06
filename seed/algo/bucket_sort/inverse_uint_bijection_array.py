@@ -1,3 +1,4 @@
 
-from seed.seq_tools.inverse_uint_bijection_array inverse_uint_bijection_array
+___this_is_forwarding_module___ = True
+from seed.seq_tools.inverse_uint_bijection_array import inverse_uint_bijection_array
 

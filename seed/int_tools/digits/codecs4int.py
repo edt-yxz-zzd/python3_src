@@ -2,6 +2,11 @@
 #_history:goto
 doing...
 TODO:goto
+see:
+    view ../../python3_src/seed/int_tools/int_repr7compact7lex_order7baseGL.py
+    view ../../python3_src/seed/int_tools/int_repr7human7lex_order7alnum.py
+    view ../../python3_src/seed/int_tools/int_repr7lex_order7base.py
+    view ../../python3_src/seed/int_tools/int_repr7lex_order7base__part2.py
 r'''[[[
 e ../../python3_src/seed/int_tools/digits/codecs4int.py
 view others/数学/编程/设计/自定义字符编码.txt

@@ -1,5 +1,6 @@
 #e ../../python3_src/seed/debug/with_expect_error.py
 #view ../../python3_src/seed/debug/expectError.py
+__all__ = 'with_expect_error'.split()
 
 import contextlib
 @contextlib.contextmanager

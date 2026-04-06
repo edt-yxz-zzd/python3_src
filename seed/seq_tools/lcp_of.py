@@ -1,5 +1,15 @@
 
 #e ../../python3_src/seed/seq_tools/lcp_of.py
+__all__ = r'''
+len_lcp_of2  lcp_of2
+len_lcp_of  lcp_of
+view_seq_ex  len_lcp_of_ex
+len_lcp_of__lsls  len_lcs_of__lsls  lcp_of__lsls  lcs_of__lsls
+
+'''.split()#'''
+
+___delta_all___ = 'lcp_of2  lcp_of2'.split()
+
 from seed.seq_tools.is_prefix_of_seq import len_lcp_of, lcp_of
 from seed.seq_tools.is_prefix_of_seq import view_seq_ex, len_lcp_of_ex
 from seed.seq_tools.is_prefix_of_seq import len_lcp_of__lsls, len_lcs_of__lsls, lcp_of__lsls, lcs_of__lsls

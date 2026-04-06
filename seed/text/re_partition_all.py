@@ -4,6 +4,8 @@
 # returned as part of the resulting list.
 
 
+__all__ = 're_partition_to_head_bodyls  re_partition_all  iter_re_partition_all'.split()
+
 #from seed.iters.zip_me import zip_me
 from seed.iters.icut_to import icut_seq_to
 
@@ -31,15 +33,16 @@ def re_partition_to_head_bodyls(re_sep, txt):
     assert sum(map(len, ls)) == len(txt)
     if len(ls) % 2 != 1:
         raise logic-error
-    
+
     head = ls[0]
     # bodyls = list(zip_me(2, ls[1:])) # bug: once zip_me update
     bodyls = list(icut_seq_to(ls, 2, 1))
     assert len(bodyls) == len(ls)//2
     return head, bodyls
 
-    
+
     for i in range(1, len(ls), 2):
         bodyls.append((ls[i], ls[i+1]))
     return head, bodyls
 
+from seed.text.re_partition_all import re_partition_to_head_bodyls, re_partition_all, iter_re_partition_all

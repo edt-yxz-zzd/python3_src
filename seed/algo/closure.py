@@ -2,9 +2,14 @@
 r'''
 e ../../python3_src/seed/algo/closure.py
 loop until result unchanged
+
+py -m seed.algo.closure
+
 #'''
+__all__ = 'IClosureAlgorithm'.split()
+
 from seed.abc.abc__ver1 import ABC, abstractmethod
-from seed.tiny import check_type_is
+from seed.tiny_.check import check_type_is
 
 class IClosureAlgorithm(ABC):
     r'''
@@ -70,3 +75,4 @@ class IClosureAlgorithm(ABC):
         return st
 
 
+from seed.algo.closure import IClosureAlgorithm

@@ -7,6 +7,11 @@ hash algo:
 
 '''
 
+__all__ = '''
+FrozenOrderedMap
+OrderedMap
+'''.split()#'''
+
 from collections.abc import Mapping, MutableMapping, Hashable
 from seed.types.OrderedSet import _Node, OrderedSet, FrozenOrderedSet
 from seed.lang.class_property import class_property
@@ -86,7 +91,7 @@ class FrozenOrderedMap(_OrderedMap, Hashable):
     def __init__(self, iterable = (), *, constructor_case = None):
         self.__set = None
         _OrderedMap.__init__(self, iterable, constructor_case = constructor_case)
-        
+
     @property
     def _OrderedMap__set(self):
         return self.__set
@@ -128,4 +133,5 @@ assert dd == d
 
 
 
-
+from seed.types.OrderedMap import FrozenOrderedMap, OrderedMap
+from seed.types.OrderedMap import *
