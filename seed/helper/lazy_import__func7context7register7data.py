@@ -9,6 +9,11 @@ name7importZqnm4mdl:
         view ../../python3_src/seed/tiny.py
             @20260220
 
+    selective data from:
+        @20260406
+        view ../../python3_src/seed/helper/_ignore__tmp/list_format_collect_import_stmts_.20260406-noon.stdout.txt
+            <<== view ../../python3_src/seed/helper/import_stmt_context7collect.py
+
 py -m seed.helper.lazy_import__func7context7register7data
 ]]]'''#'''
 

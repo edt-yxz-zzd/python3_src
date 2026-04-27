@@ -11,47 +11,135 @@ py -m nn_ns.app.doctest_cmd seed.math.floor_ceil_log__via_div_log2:__doc__ -ht #
 
 
 [[
-[floor_log2(p) = p.bit_length()-1]
+[[p::uint{>=1}] -> [floor_log2(p) = p.bit_length()-1]]
+
+[b,x::uint][b >= 2][x >= 1]
+[b,x::real][b > 0][b=!=1][x > 0]
+==>>:
+[[b>=2] -> [floor_log2(b) >= 1]]
+[[1<b<2] -> [floor_log2(b) == 0]] # !!!
+[[1/2<=b<1] -> [floor_log2(b) == -1]]
+[[0<b<1/2] -> [floor_log2(b) <= -2]]
+
+[[b>1] -> [ceil_log2(b) >= 1]]
+[[1/2<b<1] -> [ceil_log2(b) == 0]] # !!!
+[[0<b<=1/2] -> [ceil_log2(b) <= -1]]
 
 [log_(b; x) == log2(x)/log2(b)]
-[log_(b; x) >= floor_div_(log2(b); log2(x)) >= floor_div_(ceil_log2(b); floor_log2(x))]
-[log_(b; x) <= ceil_div_(log2(b); log2(x)) <= ceil_div_(floor_log2(b); ceil_log2(x))]
-[floor_div_(ceil_log2(b); floor_log2(x)) <= log_(b; x) <= ceil_div_(floor_log2(b); ceil_log2(x))]
+
+[b > 1][x >= 1]:
+    [ceil_log2(b) >= 1]
+    [ceil_log2(b) =!= 0]
+    [floor_log2(x) >= 0]
+    [log_(b; x) >= 0]
+    [log_(b; x) >= floor_div_(log2(b); log2(x)) >= floor_div_(ceil_log2(b); floor_log2(x))]
+[b >= 2][x >= 1]:
+    [floor_log2(b) >= 1]
+    [floor_log2(b) =!= 0]
+    [ceil_log2(x) >= 0]
+    [log_(b; x) >= 0]
+    [log_(b; x) <= ceil_div_(log2(b); log2(x)) <= ceil_div_(floor_log2(b); ceil_log2(x))]
+[b >= 2][x >= 1]:
+    [floor_div_(ceil_log2(b); floor_log2(x)) <= log_(b; x) <= ceil_div_(floor_log2(b); ceil_log2(x))]
+
+[@[k::uint{>=1}] -> [log_(b; x) == log_(b**k; x**k)]]
 
 !! [ceil_log2(x) -floor_log2(x) <= 1]
 !! [ceil_log2(b) -floor_log2(b) <= 1]
 * [ceil_log2(b) -floor_log2(b) == 0]:
-    [ceil_log2(b) == floor_log2(b) == log2(b)]
+    ?ez :=> [ez::uint][b == 2**ez]
+    [ez == ceil_log2(b) == floor_log2(b) == log2(b)]
     [log_(b; x) == log2(x)/log2(b) == log2(x)/floor_log2(b)]
-    [floor_log_(b; x) == floor_div_(floor_log2(b); log2(x)) == floor_div_(floor_log2(b); floor_log2(x))]
+    !! [b =!= 1]
+    [b >= 2]:
+    [floor_log2(b) >= 1]
+    [floor_log_(b; x)
+    == floor_div_(log2(b); log2(x))
+    !! [floor_log2(b) == log2(b)]
+    == floor_div_(floor_log2(b); log2(x))
+    !! [floor_log2(b) >= 1]
+    == floor_div_(floor_log2(b); floor_log2(x))
+    ]
     [floor_log_(b; x) == floor_log2(x)//floor_log2(b)]
 
 * [ceil_log2(b) -floor_log2(b) == 1]:
     [b =!= 2]
-    * [b > 2][floor_log2(b)**2 >= ceil_log2(x) > 0]:
-        !! [0 <= sqrt(floor_log2(x)) <= sqrt(ceil_log2(x)) <= floor_log2(b) <= ceil_log2(b)]
-        !! [(ceil_log2(b) -floor_log2(b)) <= 1]
-        [true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); 1+floor_log2(x)) == true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); ceil_log2(x)) <= (ceil_log2(b) -floor_log2(b)) <= 1]
-        [true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); floor_log2(x)) <= 1 +true_div_(ceil_log2(b); 1)]
-        [ceil_div_(floor_log2(b); ceil_log2(x)) -floor_div_(ceil_log2(b); floor_log2(x)) <= (1-1/floor_log2(b))+true_div_(floor_log2(b); ceil_log2(x)) -(-(1-1/ceil_log2(b))+true_div_(ceil_log2(b); floor_log2(x))) <= (1-1/floor_log2(b)) +(1-1/ceil_log2(b)) +1 +true_div_(ceil_log2(b); 1) == (3-1/floor_log2(b))]
+    * [x >= 1][b > 2][floor_log2(b)**2 >= ceil_log2(x)]:
+        #old:* [b > 2][floor_log2(b)**2 >= ceil_log2(x) > 0]:
+        !! [x >= 1]
+        [ceil_log2(x) >= floor_log2(x) >= 0]
+        [ceil_log2(x) >= 0]
+
         !! [b > 2]
         [log2(b) > 1]
         [floor_log2(b) >= 1]
+        [ceil_log2(b) >= 2]
+        [floor_log2(b) =!= 1]
+        [ceil_log2(b) =!= 1]
+
+        [true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); 1+floor_log2(x))
+        !! [ceil_log2(x) <= 1 +floor_log2(x)]
+        <= true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); ceil_log2(x))
+        == (ceil_log2(b) -floor_log2(b)) *ceil_log2(x) /(ceil_log2(b) *floor_log2(b))
+        !! [(ceil_log2(b) -floor_log2(b)) == 1]
+        == 1*ceil_log2(x) /(ceil_log2(b) *floor_log2(b))
+        !! [ceil_log2(x) >= 0]
+        !! [ceil_log2(b) >= floor_log2(b) >= 1]
+        # => [whole expr >= 0]
+        <= ceil_log2(x) /floor_log2(b)**2
+        !! [floor_log2(b)**2 >= ceil_log2(x) >= 0]
+        !! [floor_log2(b) >= 1]
+        <= 1
+        ]
+        # <==>:
+        [true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); 1+floor_log2(x)) <= 1]
+
+        [true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); floor_log2(x))
+        == true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); 1+floor_log2(x)) +true_div_(ceil_log2(b); 1)
+        !! [true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); 1+floor_log2(x)) <= 1]
+        <= 1 +true_div_(ceil_log2(b); 1)
+        ]
+        # <==>:
+        [true_div_(floor_log2(b); ceil_log2(x)) -true_div_(ceil_log2(b); floor_log2(x)) <= 1 +true_div_(ceil_log2(b); 1)]
+
+        [ceil_div_(floor_log2(b); ceil_log2(x)) -floor_div_(ceil_log2(b); floor_log2(x))
+        <= +((1-1/floor_log2(b))+true_div_(floor_log2(b); ceil_log2(x)))
+           -(-(1-1/ceil_log2(b))+true_div_(ceil_log2(b); floor_log2(x)))
+        <= (1-1/floor_log2(b)) +(1-1/ceil_log2(b)) +1 +true_div_(ceil_log2(b); 1)
+        == (3-1/floor_log2(b))
+        ]
+        # <==>:
+        [ceil_div_(floor_log2(b); ceil_log2(x)) -floor_div_(ceil_log2(b); floor_log2(x)) <= (3-1/floor_log2(b))]
+
+        !! [floor_log2(b) >= 1]
         [1/floor_log2(b) > 0]
+        !! [ceil_div_(floor_log2(b); ceil_log2(x)) -floor_div_(ceil_log2(b); floor_log2(x)) <= (3-1/floor_log2(b))]
         [ceil_div_(floor_log2(b); ceil_log2(x)) -floor_div_(ceil_log2(b); floor_log2(x)) <= (3-1/floor_log2(b)) < 3]
 
         [ceil_div_(floor_log2(b); ceil_log2(x)) < 3+floor_div_(ceil_log2(b); floor_log2(x))]
-        !! [floor_div_(ceil_log2(b); floor_log2(x)) <= log_(b; x) <= ceil_div_(floor_log2(b); ceil_log2(x))]
+        !! [x >= 1][b > 2]
+        => [floor_div_(ceil_log2(b); floor_log2(x)) <= log_(b; x) <= ceil_div_(floor_log2(b); ceil_log2(x))]
         [0 <= log_(b; x) -floor_div_(ceil_log2(b); floor_log2(x)) < 3]
         [0 <= floor_log_(b; x) -floor_div_(ceil_log2(b); floor_log2(x)) <= 2]
         [floor_log_(b; x) == floor_log2(x)//ceil_log2(b) +(0|1|2)]
 
-    * [b > 2][floor_log2(b)**2 < ceil_log2(x)]:
+    * [x >= 1][b > 2][floor_log2(b)**2 < ceil_log2(x)]:
         ... ...
-    * [b < 2]:
+    * [x >= 1][1 < b < 2]:
+        ... ...
+    * [x >= 1][0 < b < 1]:
+        ... ...
+    * [0 < x < 1][b > 2]:
+        ... ...
+    * [0 < x < 1][1 < b < 2]:
+        ... ...
+    * [0 < x < 1][0 < b < 1]:
         ... ...
 
 ]]
+==>>:
+[[[b > 0][b=!=1][ceil_log2(b) -floor_log2(b) == 0]] -> [floor_log_(b; x) == floor_log2(x)//floor_log2(b)]]
+[[[x >= 1][b >= 2][ceil_log2(b) -floor_log2(b) == 1][floor_log2(b)**2 >= ceil_log2(x) >= 0]] -> [floor_log_(b; x) == floor_log2(x)//ceil_log2(b) +(0|1|2)]]
 
 
 
@@ -73,6 +161,9 @@ _validated_floor_log__via_div_log2_
 >>> for b, x in product([3,17], range(1, 3000)):
 ...     __ = _validated_floor_log__via_div_log2_(b, x, with_floor_pow=False)
 
+
+>>> for x in range(1, 1_0000):
+...     __ = _validated_floor_log__via_div_log2_(3, x, with_floor_pow=False)
 
 >>> for x in range(1, 100_0000): #doctest: +SKIP
 ...     __ = _validated_floor_log__via_div_log2_(3, x, with_floor_pow=False)
@@ -156,14 +247,37 @@ class FloorLogarithm:
             return (ec, fl_pw)
         return ec
     def floor_log_(sf, x, /, *, with_floor_pow:bool):
+        'x -> floor_log_(b;x)'
         check_type_is(bool, with_floor_pow)
         check_int_ge(1, x)
-        e0b, e1b, zpowb = sf._ex
         b = sf._b
 
         # [b >= 2]
+        # [x >= 1]
+        while 1:
+            if x < b:
+                ef = 0
+                fl_pw = 1
+            # [2 <= b <= x]
+            elif x == b:
+                ef = 1
+                fl_pw = b
+            # [2 <= b < x]
+            else:
+                # [2 <= b < x]
+                break
+            # ef, fl_pw
+            if with_floor_pow:
+                return (ef, fl_pw)
+            return ef
+
+        # [2 <= b < x]
+        e0b, e1b, zpowb = sf._ex
         if zpowb:
-            # [ceil_log2(b) -floor_log2(b) == 0] => [floor_log_(b; x) == floor_log2(x)//floor_log2(b)]
+            # [ceil_log2(b) -floor_log2(b) == 0]
+            # !! [[[b > 0][b=!=1][ceil_log2(b) -floor_log2(b) == 0]] -> [floor_log_(b; x) == floor_log2(x)//floor_log2(b)]]
+            # !! [2 <= b < x]
+            # [floor_log_(b; x) == floor_log2(x)//floor_log2(b)]
             ef = floor_log2(x)//e0b
             if with_floor_pow:
                 #fl_pw = b**ef
@@ -171,11 +285,14 @@ class FloorLogarithm:
             #ef, ?fl_pw
         else:
             # [ceil_log2(b) -floor_log2(b) == 1]
-            # [b > 2]
+            # [b =!= 2]
+            # [2 < b < x]
             e0x, e1x = floor_ceil_log2(x, with_floor_pow=False)
             #e1x = ceil_log2(x)
             if e0b**2 >= e1x:
-                # [b > 2][floor_log2(b)**2 >= ceil_log2(x) > 0]
+                # [floor_log2(b)**2 >= ceil_log2(x)]
+                # !! [[[x >= 1][b >= 2][ceil_log2(b) -floor_log2(b) == 1][floor_log2(b)**2 >= ceil_log2(x) >= 0]] -> [floor_log_(b; x) == floor_log2(x)//ceil_log2(b) +(0|1|2)]]
+                # !! [2 < b < x]
                 # [floor_log_(b; x) == floor_log2(x)//ceil_log2(b) +(0|1|2)]
                 ef = e0x//e1b
                 fl_pw = b**ef
@@ -187,21 +304,20 @@ class FloorLogarithm:
                     ef += 1
                 #ef, fl_pw
             else:
-                # [b > 2][floor_log2(b)**2 < ceil_log2(x)]
+                # [floor_log2(b)**2 < ceil_log2(x)]
+                # [2 < b < x]
 
-                #.if e0b == 1:
-                #.    assert b == 3, b
-                #.    sq = _flg_9
-                #.else:
-                #.    assert b >= 5, b
                 sq = sf._sq
                 eh, fl_pw = sq.floor_log_(x, with_floor_pow=True)
+                # [eh == floor_log_(b**2; x)]
+                # [ef =[def]= floor_log_(b; x)]
+                # [ef == eh*2+(0|1)]
                 cl_pw = b*fl_pw
                 ef = eh*2
                 if not x < cl_pw:
                     fl_pw = cl_pw
                     ef += 1
-                    cl_pw = None
+                cl_pw = None
                 #ef, fl_pw
             #ef, fl_pw
             #ef, ?fl_pw
@@ -228,8 +344,10 @@ def _validated_floor_log__via_div_log2_(b, x, /, *, with_floor_pow:bool):
         assert fl_pw == b**ef, (b, x, with_floor_pow, r)
     else:
         ef = r
-    ef
+        #fl_pw = b**ef
+    ef#, fl_pw
     assert b**ef <= x < b**(ef+1), (b, x, with_floor_pow, r)
+    #assert fl_pw <= x < b*fl_pw, (b, x, (ef, fl_pw), with_floor_pow, r)
     return r
 
 
@@ -240,7 +358,8 @@ def _validated_floor_ceil_log__via_div_log2_(b, x, /, *, with_floor_pow:bool):
         assert fl_pw == b**ef, (b, x, with_floor_pow, r)
     else:
         ef, ec = r
-    ef, ec
+        #fl_pw = b**ef
+    ef, ec#, fl_pw
     assert ef <= ec <= ef+1, (b, x, with_floor_pow, r)
     assert b**ef <= x < b**(ef+1), (b, x, with_floor_pow, r)
     assert b**(ec-1) < x <= b**ec, (b, x, with_floor_pow, r)
@@ -253,10 +372,15 @@ def _validated_ceil_log__via_div_log2_(b, x, /, *, with_floor_pow:bool):
         assert fl_pw == b**(ec-(b**ec > x)), (b, x, with_floor_pow, r)
     else:
         ec = r
-    ec
+    ec#, fl_pw
     assert b**(ec-1) < x <= b**ec, (b, x, with_floor_pow, r)
     return r
 
 __all__
-from seed.math.floor_ceil_log__via_div_log2 import FloorLogarithm, floor_log__via_div_log2_, floor_ceil_log__via_div_log2_
+from seed.math.floor_ceil_log__via_div_log2 import FloorLogarithm, floor_log__via_div_log2_, floor_ceil_log__via_div_log2_, ceil_log__via_div_log2_
+    #.class FloorLogarithm:
+    #.    def __new__(cls, base4logarithm, /):
+    #.    def floor_ceil_log_(sf, x, /, *, with_floor_pow:bool):
+    #.    def ceil_log_(sf, x, /, *, with_floor_pow:bool):
+    #.    def floor_log_(sf, x, /, *, with_floor_pow:bool):
 from seed.math.floor_ceil_log__via_div_log2 import *

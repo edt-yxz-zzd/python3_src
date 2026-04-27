@@ -2,6 +2,16 @@
 r'''[[[
 e ../../python3_src/seed/int_tools/int_repr7human7lex_order7alnum.py
     整数耂文本表达牜极简牜词典序牜字母数字
+[[
+TODO:中文版:
+    view others/数学/编程/设计/自定义编码纟自然数冃中文序数.txt
+    牜头胞集规模五=>叚汱-涳-淂靕
+        头胞一套:叚汱涳淂靕
+        末层正负俩套:呤弌弍弎泗牾翏萋蚆韭,㺵䰾七六妩柶毵衈譩零
+        颈胞偶层正负俩套:灱灺炞炵烥焆焾煶熐熤燝燱爀爅爘爙爠,朰朷杛柉柨栶梑棭椼樃橗橞檞檺櫤欂欃
+        颈胞奇层正负俩套:氿汘沅泃洱涑淇湨滆漳潓濋濝瀍瀖瀷灊,叭吖呖咚咩哧喵嗖嗡嘣噌噼嚓嚗嚯嚹囆
+]]
+
 mv -iv ../../python3_src/seed/int_tools/int_repr7human7alnum7lex_order.py  ../../python3_src/seed/int_tools/int_repr7human7lex_order7alnum.py
 
 seed.int_tools.int_repr7human7lex_order7alnum
@@ -66,6 +76,7 @@ Y = +
 [OIZEASGLBP]...既非升序亦非降序
 
 ]]
+牜头胞集规模三,7headW vs 牜头胞集规模五,7headU
 [[
 版本二:
     版本一:[1-9]需要3字节

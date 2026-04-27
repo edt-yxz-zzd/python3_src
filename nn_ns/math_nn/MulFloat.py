@@ -1,4 +1,9 @@
 '''
+e ../../python3_src/nn_ns/math_nn/MulFloat.py
+
+nn_ns.math_nn.MulFloat
+py -m nn_ns.app.debug_cmd   nn_ns.math_nn.MulFloat -x # -off_defs
+
 f(u, p) in (u -/+ 0.5) * 2**(-p)
 not includes bound
 u > 0, p >= 0(p may be negative!! but the error is large: 0.5*2**(-p)), u,p are both interger
@@ -60,8 +65,8 @@ s = 2.236... = f(s*2**t//1, t)
     so, to calc fibonacci(i), sqrt(5) should be expanded to i+4 number after float point
 
 
-    
-    
+
+
 let u(i) = q**2**i < 2**2**i
 2p(i-1) >= p(i) + 2 + ceil(log2(2u(i-1)*2**p(i-1)+1))
 ceil(log2(2u(i-1)*2**p(i-1)+1)) < ceil(log2(2*2**2**(i-1)*2**p(i-1))) = 1+2**(i-1)+p(i-1)
@@ -79,7 +84,14 @@ p(0) = n + 3log(n) + 5
 '''
 
 
-from sympy import *
+__all__ = r'''
+MulFloat
+fabonacciByGoldenRatio
+'''.split()#'''
+__all__
+
+#from sympy import *
+#from sympy import sqrt, GoldenRatio
 from .math_func import calc_power
 
 
@@ -99,7 +111,7 @@ class MulFloat:
         n = vt1.bit_length()
         if vt1 > 1 << n:
             n += 1
-        
+
         # k = [vt+ 2**(n-1)]//2**n = [2vt//2**n + 1]//2
         k = i>>(n-1)
         k += 1
@@ -133,16 +145,17 @@ class MulFloat:
 
         self.i >>= d
         self.p -= d
-        
 
 
 
-        
+
+
 def fabonacciByGoldenRatio(n):
+    from sympy import sqrt, GoldenRatio
     if n < 10:
         ls = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
         return ls[n]
-        
+
     assert n > 9
     p0 = n + 3* n.bit_length() + 5
 
@@ -164,7 +177,7 @@ def fabonacciByGoldenRatio(n):
         f = f*f
         f.try_to_set_p(px)
         ls.append(f)
-        
+
     assert len(ls) == n.bit_length()
     fqn = calc_power(None, ls, n)
     assert len(ls) == n.bit_length()
@@ -183,7 +196,7 @@ for n in range(30, 0, -1):
     print(n, fn)
 
 '''
-    
+
 
 
 
