@@ -5,7 +5,7 @@
 r'''
 seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild
 py -m    seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild
-py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild
+py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild -x
 
 from seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild import TypeBasedFMapT__literal_rebuild, literal_rebuild
 
@@ -42,10 +42,13 @@ ___begin_mark_of_excluded_global_names__2___ = ...
 from collections.abc import Set, MutableSet, Mapping, MutableMapping, Sequence, MutableSequence, ByteString
 
 
-from seed.func_tools.fmapT.fmapT__tiny import fmapT__dict, fmapT__list, fmapT__tuple
-from seed.tiny import expectError
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.func_tools.fmapT.fmapT__tiny import fmapT__dict, fmapT__list, fmapT__tuple
+    from seed.debug.expectError import expectError
+    from seed.helper.stable_repr import stable_repr
+
 import ast
-from seed.helper.stable_repr import stable_repr
 from seed.func_tools.fmapT.TypeBasedDispatcher import TypeBasedDispatcher, on_type, on_basetype
 if 0:
     #for literal_eval-supported builtin type only

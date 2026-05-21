@@ -65,11 +65,17 @@ PolynomialRingOps
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.math.ops.algebra.IRingOps import IPolynomialRingOps, IRingOps#, is_divisor_of__6IPolynomialRingOps___coeff_ring_is_field_ as _is_divisor_of_
-from seed.tiny import mk_tuple
-from seed.helper.repr_input import repr_helper
-from seed.tiny import check_type_is
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is
+    from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
 
 class PolynomialRingOps(IPolynomialRingOps):
     ___no_slots_ok___ = True

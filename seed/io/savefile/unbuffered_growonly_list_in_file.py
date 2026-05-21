@@ -1,3 +1,4 @@
+#__all__:goto
 r'''
 e ../../python3_src/seed/io/savefile/unbuffered_growonly_list_in_file.py
 
@@ -12,14 +13,18 @@ vs:
         write when close:
             to avoid too many useless contents/history
             since there are delete-/overwrite- operation
+
 from seed.io.savefile.unbuffered_growonly_list_in_file import tabular_cached_calc, UnbufferedGrowonlyListInFile
 from seed.io.savefile.SaveFile import SaveFileSeq__ObjectPerLine
-
 
 SaveFileSeq__ObjectPerLine(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs)
 
 
 UnbufferedGrowonlyListInFile(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs, may_idx2default=may_idx2default, setitem_by_idx2default_only=True)
+
+seed.io.savefile.unbuffered_growonly_list_in_file
+py -m nn_ns.app.debug_cmd   seed.io.savefile.unbuffered_growonly_list_in_file -x
+py -m nn_ns.app.doctest_cmd seed.io.savefile.unbuffered_growonly_list_in_file:__doc__ -ht #  -ff -v -df
 
 #'''
 
@@ -29,12 +34,20 @@ __all__ = '''
     tabular_cached_calc
     '''.split()
 
-from collections.abc import Sequence#, MutableSequence, MutableMapping, MutableSet
+___begin_mark_of_excluded_global_names__0___ = ...
+from collections.abc import Sequence
 #from seed.io.savefile.SaveFile import SaveFileSeq__ObjectPerLine
 from seed.io.savefile.SaveFile import SaveFileMethods__ObjectPerLine, SaveFileSeqABC#, SaveFileContainerABC
-from seed.tiny import check_type_is #check_bool
-from seed.abc.abc__ver0 import override#, abstractmethod, ABC# final
-from itertools import chain
+from seed.abc.abc__ver0 import override
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import chain
+    from seed.tiny_.check import check_type_is
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 
 def _flush(ofile, /):
@@ -166,3 +179,6 @@ def tabular_cached_calc(path_or_iofile, calc, kwargs_as_description4ofile, /, *,
     return UnbufferedGrowonlyListInFile(path_or_iofile, encoding=encoding, allow_create_file=allow_create_file, allow_write_file=allow_write_file, allow_write_header=allow_write_header, kwargs=kwargs_as_description4ofile, may_idx2default=calc, setitem_by_idx2default_only=setitem_by_idx2default_only)
 
 
+from seed.io.savefile.unbuffered_growonly_list_in_file import tabular_cached_calc, UnbufferedGrowonlyListInFile
+#from seed.io.savefile.SaveFile import SaveFileSeq__ObjectPerLine
+from seed.io.savefile.unbuffered_growonly_list_in_file import *

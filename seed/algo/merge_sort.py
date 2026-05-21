@@ -1,7 +1,7 @@
 r'''
 seed.algo.merge_sort
 py -m seed.algo.merge_sort
-py -m nn_ns.app.debug_cmd   seed.algo.merge_sort
+py -m nn_ns.app.debug_cmd   seed.algo.merge_sort -x
 from seed.algo.merge_sort import merge_sort, merge_sort__stable
 
 e ../../python3_src/seed/algo/merge_sort.py
@@ -87,11 +87,14 @@ __all__ = '''
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import islice, chain
 #import heapq
-from seed.tiny import echo
-from seed.tiny_.CallCounter import CallCounter
-from seed.tiny_.default_cmp import default_cmp
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import islice, chain
+    from seed.tiny_.CallCounter import CallCounter
+    from seed.tiny_.default_cmp import default_cmp
+    from seed.tiny_.funcs import echo
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

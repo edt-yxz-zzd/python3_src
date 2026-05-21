@@ -7,7 +7,7 @@ e ../../python3_src/seed/mapping_tools/determine_num_slots4hash_map.py
     view ../../python3_src/seed/types/DictWithNewProtocol.py
 
 seed.mapping_tools.determine_num_slots4hash_map
-py -m nn_ns.app.debug_cmd seed.mapping_tools.determine_num_slots4hash_map
+py -m nn_ns.app.debug_cmd seed.mapping_tools.determine_num_slots4hash_map -x
 py -m seed.mapping_tools.determine_num_slots4hash_map
 
 >>> from seed.mapping_tools.determine_num_slots4hash_map import IDetermineNumSlots4HashMap, determine_num_slots4hash_map
@@ -71,14 +71,31 @@ __all__ = r'''
     IDetermineNumSlots4HashMap
     determine_num_slots4hash_map
 '''.split()#'''
+    #check_pint
 __all__
-#from seed.types.view.SeqTransformView import SeqTransformView
-from seed.tiny import fst, snd, echo, check_callable, check_type_is, check_uint
-from seed.math.primes4hash_mapping import find_suitable_seq_size4hash_mapping__tabular
-from seed.math.search_smallest_prime_ge_ import find_suitable_seq_size4hash_mapping__search, search_smallest_prime_ge_#, search_smallest_prime_gt_, search_largest_prime_le_, search_largest_prime_lt_
-#from math import gcd
+
+
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.iters.are_all_the_same import are_all_the_same
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_callable, check_type_is, check_uint
+    from seed.tiny_.funcs import echo, fst, snd
+    #from seed.types.view.SeqTransformView import SeqTransformView
+    from seed.math.primes4hash_mapping import find_suitable_seq_size4hash_mapping__tabular
+    from seed.math.search_smallest_prime_ge_ import find_suitable_seq_size4hash_mapping__search, search_smallest_prime_ge_
+    #from math import gcd
+    from seed.iters.are_all_the_same import are_all_the_same
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
+
+
 
 class IDetermineNumSlots4HashMap(ABC):
     __slots__ = ()
@@ -352,3 +369,5 @@ if __name__ == "__main__":
     #doctest: +IGNORE_EXCEPTION_DETAIL
 
 
+from seed.mapping_tools.determine_num_slots4hash_map import IDetermineNumSlots4HashMap, determine_num_slots4hash_map
+from seed.mapping_tools.determine_num_slots4hash_map import *

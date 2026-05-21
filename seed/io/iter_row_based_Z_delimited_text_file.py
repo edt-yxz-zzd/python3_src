@@ -1,10 +1,15 @@
-
+#__all__:goto
 r"""
+seed.io.iter_row_based_Z_delimited_text_file
+
+py -m nn_ns.app.debug_cmd   seed.io.iter_row_based_Z_delimited_text_file -x
+py -m nn_ns.app.doctest_cmd seed.io.iter_row_based_Z_delimited_text_file:__doc__ -ht #  -ff -v -df
+
 from seed.io.iter_row_based_Z_delimited_text_file import iter_TSV__file, iter_TSV__path
 
 
-e /storage/emulated/0/0my_files/git_repos/python3_src/seed/io/iter_row_based_Z_delimited_text_file.py
-view /storage/emulated/0/0my_files/git_repos/python3_src/seed/io/iter_line_contents.py
+e ../../python3_src/seed/io/iter_row_based_Z_delimited_text_file.py
+view ../../python3_src/seed/io/iter_line_contents.py
 def iter_line_contents_(input, *, raw_line2content, case:'stream|path|data', encoding):
 #"""
 
@@ -17,8 +22,15 @@ __all__ = '''
                     iter_TSV__file
     '''.split()
 
-from seed.io.iter_line_contents import iter_line_contents_, raw_line2content
-from seed.tiny import echo, print_err, check_type_is
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import echo
+
+    from seed.io.iter_line_contents import iter_line_contents_, raw_line2content
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def iter_TSV__path(path, *, encoding, case='path', **kw):
@@ -92,3 +104,10 @@ def bare_iter_row_based_Z_delimited_text_file__(input, *, sep, case:'stream|path
         parts = line_content.split(sep)
         yield raw_line, line_content, parts
 
+
+
+
+
+
+from seed.io.iter_row_based_Z_delimited_text_file import iter_TSV__file, iter_TSV__path
+from seed.io.iter_row_based_Z_delimited_text_file import *

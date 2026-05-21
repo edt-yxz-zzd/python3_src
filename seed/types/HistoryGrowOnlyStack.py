@@ -4,8 +4,7 @@ r'''
 e ../../python3_src/seed/types/HistoryGrowOnlyStack.py
 seed.types.HistoryGrowOnlyStack
 py -m seed.types.HistoryGrowOnlyStack
-py -m nn_ns.app.debug_cmd   seed.types.HistoryGrowOnlyStack
-from seed.types.HistoryGrowOnlyStack import HistoryGrowOnlyStack, EmptyStackError
+py -m nn_ns.app.debug_cmd   seed.types.HistoryGrowOnlyStack -x
 
 
 
@@ -43,11 +42,11 @@ TypeError: unhashable type: 'HistoryGrowOnlyStack'
 >>> stack.top()
 Traceback (most recent call last):
     ...
-EmptyStackError
+seed.types.HistoryGrowOnlyStack.EmptyStackError
 >>> stack.pop()
 Traceback (most recent call last):
     ...
-EmptyStackError
+seed.types.HistoryGrowOnlyStack.EmptyStackError
 >>> repr_eq(stack)
 HistoryGrowOnlyStack()
 >>> _tell3(stack)
@@ -74,7 +73,7 @@ HistoryGrowOnlyStack([(233,)])
 >>> stack.pop()
 Traceback (most recent call last):
     ...
-EmptyStackError
+seed.types.HistoryGrowOnlyStack.EmptyStackError
 
 >>> stack.push(6789)
 >>> stack.push(1573)
@@ -143,9 +142,11 @@ __all__ = '''
 #################################
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.helper.repr_input import repr_helper
-from seed.tiny import echo
-from seed.tiny import check_pair, check_uint, icheck_pair, icheck_uint
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_pair, check_uint
+    from seed.tiny_.funcs import echo
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -375,9 +376,11 @@ snapshot_point = (history_sz, itop_time)
         '-> obj|raise EmptyStackError'
         #IndexError('pop from empty stack')
         return sf._pop_or_top(pop_vs_top=False, err_vs_tmay=False)
+
     def top(sf, /):
         '-> obj|raise EmptyStackError'
         return sf._pop_or_top(pop_vs_top=True, err_vs_tmay=False)
+
     def pop__tmay(sf, /):
         '-> obj'
         return sf._pop_or_top(pop_vs_top=False, err_vs_tmay=True)
@@ -385,6 +388,10 @@ snapshot_point = (history_sz, itop_time)
         '-> obj'
         return sf._pop_or_top(pop_vs_top=True, err_vs_tmay=True)
 
+
+
+
+from seed.types.HistoryGrowOnlyStack import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -396,3 +403,4 @@ if __name__ == "__main__":
 
 
 
+from seed.types.HistoryGrowOnlyStack import HistoryGrowOnlyStack, EmptyStackError

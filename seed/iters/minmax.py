@@ -1,3 +1,9 @@
+r'''[[[
+seed.iters.minmax
+py -m seed.iters.minmax
+py -m nn_ns.app.debug_cmd   seed.iters.minmax -x
+py -m nn_ns.app.doctest_cmd seed.iters.minmax:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 __all__ = '''
     minmax_default
@@ -6,9 +12,14 @@ __all__ = '''
     UsingLeInsteadOfLt
 '''.split()
 
-#from seed.special_funcs import identity
-from seed.tiny import echo
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+    #from seed.special_funcs import identity
+___end_mark_of_excluded_global_names__0___ = ...
 
 def minmax_default(default, iterable, *, key=None, __lt__=None):
     '''return (default, default) | (only_element, only_element) | (first_min, last_max)
@@ -188,18 +199,18 @@ class UsingLeInsteadOfLt:
         self.obj = obj
     def __lt__(self, other):
         return self.obj <= other.obj
-T = UsingLeInsteadOfLt
-assert tuple(map(lambda t: (t[0], t[1].obj)
-                , maybe_minmax([(0,T(3)), (1,T(3)), (2,T(3)), (3,T(3))]
-                        , key=lambda p:p[1])
-                )
-            ) \
-        == ((3,3),(0,3))
-del T
 
+def __():
+    T = UsingLeInsteadOfLt
+    assert tuple(map(lambda t: (t[0], t[1].obj), maybe_minmax([(0,T(3)), (1,T(3)), (2,T(3)), (3,T(3))], key=lambda p:p[1]))) == ((3,3),(0,3))
+    del T
+if __name__ == "__main__":
+    __()
+
+
+from seed.iters.minmax import *
 if __name__ == "__main__":
     _t()
     import doctest
     doctest.testmod()
-
-
+from seed.iters.minmax import minmax_default, minmax_fdefault, maybe_minmax, UsingLeInsteadOfLt

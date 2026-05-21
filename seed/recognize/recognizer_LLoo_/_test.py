@@ -53,7 +53,10 @@ RecognizerLLoo__tuple(1, (RecognizerLLoo__match_constant_tkey('#'), RecognizerLL
 #>>> reply4LLoo = parse__via_IRecognizerLLoo(_rgnr4sharp, inputter)
 >>> reply4LLoo = parse__via_IRecognizerLLoo(rgnr4fstline, inputter)
 >>> reply4LLoo  #doctest: +ELLIPSIS
-Reply4IRecognizerLLoo(TmpSnapshot4Inputter(ForkableForwardInputStream__using_LazyListIter(Ellipsis, PositionInfo4Gap__text_file('/sdcard/0my_files/git_repos/python3_src/seed/recognize/recognizer_LLoo_/_test.py', None, 14, LinenoColumn(2, 1), 14), <seed.types.LazyList._LazyListIter object at 0x...>), _may_stamp = <seed.types.LazyList._Stamp object at 0x...>), Either(True, (('#',), (('_',), ('_',), 'a', 'l', 'l', ('_',), ('_',)), (':', 'g', 'o', 't', 'o'), ('\n',))))
+Reply4IRecognizerLLoo(TmpSnapshot4Inputter(ForkableForwardInputStream__using_LazyListIter(Ellipsis, PositionInfo4Gap__text_file('.../seed/recognize/recognizer_LLoo_/_test.py', None, 14, LinenoColumn(2, 1), 14), <seed.types.LazyList._LazyListIter object at 0x...>), _may_stamp = <seed.types.LazyList._Stamp object at 0x...>), Either(True, ('#', ('_', '_', 'a', 'l', 'l', '_', '_'), (':', 'g', 'o', 't', 'o'), '\n')))
+
+why changed?
+Reply4IRecognizerLLoo(TmpSnapshot4Inputter(ForkableForwardInputStream__using_LazyListIter(Ellipsis, PositionInfo4Gap__text_file('.../seed/recognize/recognizer_LLoo_/_test.py', None, 14, LinenoColumn(2, 1), 14), <seed.types.LazyList._LazyListIter object at 0x...>), _may_stamp = <seed.types.LazyList._Stamp object at 0x...>), Either(True, (('#',), (('_',), ('_',), 'a', 'l', 'l', ('_',), ('_',)), (':', 'g', 'o', 't', 'o'), ('\n',))))
 >>> 
 >>> 
 
@@ -92,9 +95,9 @@ from seed.recognize.recognizer_LLoo_.stream._common import (IToken
 ,mk_forkable_char_stream5txt, mk_forkable_char_stream5ipath, mk_forkable_char_stream5ifile, iter_char_tokens5ifile
 
 
-,IBaseToken, IToken, BaseToken, Token__char
+,IBaseToken, IToken, Token__char
 ,IBasePositionInfo, IPositionInfo4Gap, IPositionInfo4Span
-,LinenoColumn, PositionInfo4Gap, PositionInfo4Gap__text_file, PositionInfo4Span, PositionInfo4Span__text_file
+,LinenoColumn, PositionInfo4Gap__text_file, PositionInfo4Span, PositionInfo4Span__text_file
 ,Token__char, PositionInfo4Span__text_file, PositionInfo4Gap__text_file, LinenoColumn
 )
 

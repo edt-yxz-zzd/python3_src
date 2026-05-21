@@ -8,6 +8,10 @@ bigendian :: bool
 
 seed.text.base64
 py -m seed.text.base64
+
+py -m nn_ns.app.debug_cmd   seed.text.base64 -x
+py -m nn_ns.app.doctest_cmd seed.text.base64:__doc__ -ht #  -ff -v -df
+
 from seed.text.base64 import uint__to__radix64_digits_, uint__from__radix64_digits_, uint__to__radix64_digits__b64__str_, uint__from__radix64_digits__b64__str_
 
 e ../../python3_src/seed/text/base64.py
@@ -294,7 +298,6 @@ True
 
 
 
-#__all__:goto
 __all__ = '''
 
 uint__to__radix64_digits_
@@ -340,15 +343,25 @@ b64decode__bs2bs__altchars
 
 
 '''.split()#'''
+__all__
 
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.expectError import expectError
+    from seed.tiny_.check import check_int_ge, check_int_ge_le, check_int_ge_lt, check_uint, check_uint_lt
+    from seed.tiny_.types5py import MapView
+    from seed.int_tools.uint_bits_utils import uint2bytes, uint2iter_bits
+    from seed.int_tools.int_tools import uint2bytes_, align_length#, byte_length_of#, bit_length_of, unit_length2block_length, bit_length2byte_length
 
 from base64 import standard_b64encode as b64encode__bs2bs__std, standard_b64decode as b64decode__bs2bs__std
 from base64 import urlsafe_b64encode as b64encode__bs2bs__urlsafe, urlsafe_b64decode as b64decode__bs2bs__urlsafe
 from base64 import b64encode as _b64encode__bs2bs__altchars, b64decode as _b64decode__bs2bs__altchars
 
-from seed.int_tools.uint_bits_utils import uint2bytes, uint2iter_bits
-from seed.tiny import expectError, check_uint, MapView
-from seed.int_tools.int_tools import uint2bytes_, align_length#, byte_length_of#, bit_length_of, unit_length2block_length, bit_length2byte_length
+
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 if 0:
     r'''

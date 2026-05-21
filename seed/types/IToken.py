@@ -54,7 +54,6 @@ TypeError: 777
 
 
 
-#>>> from seed.tiny import echo
 >>> list_rawstream_(mk_token_rawstream__5xs__idx_(990, 'ab', str.upper, tkey_vs_tdat_vs_tkd=0))
 (PositionInfo4Gap__idx(990), [Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(990), PositionInfo4Gap__idx(991)), Cased('a', 'A')), Token__keyed(PositionInfo4Span(PositionInfo4Gap__idx(991), PositionInfo4Gap__idx(992)), Cased('b', 'B'))])
 >>> list_rawstream_(mk_token_rawstream__5xs__idx_(990, 'ab', str.upper, tkey_vs_tdat_vs_tkd=1))
@@ -373,16 +372,22 @@ from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.abc.IHashable import IHashable
 #from seed.abc.ITotalOrdering import ITotalOrdering5le
 from seed.abc.IComparable import IComparable, compare# ITypeComparable, type_compare, check_compare_result, real2compare_result, int2compare_result, compare_by_lt_eq
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_char, check_non_ABC, check_callable# check_pseudo_qual_name
-#from seed.helper.repr_input import repr_helper
-from seed.tiny_._Base4repr import _Base4repr #sf._args4repr = (...)
 
 #see:from seed.types.ForkableForwardInputStream import IForkable, IForkable__stamp, IForkableForwardInputStream, ForkableForwardInputStream__using_LazyListIter
 
-from seed.math.sign_of import sign_of
 
-from seed.types.Either import Cased# Either
-from seed.tiny import echo
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.sign_of import sign_of
+
+    from seed.types.Either import Cased# Either
+
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_char, check_non_ABC, check_callable# check_pseudo_qual_name
+    #from seed.helper.repr_input import repr_helper
+from seed.tiny_._Base4repr import _Base4repr #sf._args4repr = (...)
 
 
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -486,6 +491,8 @@ class IToken(IBaseToken):
 
 class _BaseToken(IToken, _Base4repr):
     '[_BaseToken is for subclassing purpose] # [for datatype, use Token__keyed instead of _BaseToken]'
+    #grep '\<BaseToken\>' ../../python3_src/seed/ -r -l -I
+    #   --> _BaseToken/Token__keyed
     ___no_slots_ok___ = True
     _basetype4tspan_ = IPositionInfo4Span
     @classmethod

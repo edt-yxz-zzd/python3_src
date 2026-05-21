@@ -318,6 +318,8 @@ stop_raise exit: 999
 
 #]]]'''
 __all__ = r'''
+with_many
+    with_many__using_contextmanager__using_ExitStack
     with_many__using_contextmanager
 
 
@@ -334,10 +336,19 @@ Test____with_many__using_contextmanager__using_ExitStack
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
+import unittest
 import contextlib
-#from operator import __enter__, __exit__
-from seed.tiny import fst, check_callable
-from seed.tiny import nmay5tmay_, nmay2tmay_
+#from contextlib import redirect_stdout
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_callable
+    from seed.tiny_.funcs import fst
+    from seed.tiny_.nmay5tmay import nmay2tmay_, nmay5tmay_
+    #from operator import __enter__, __exit__
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 @contextlib.contextmanager
 #def buggy___with_many__using_contextmanager__using_ExitStack(*f_args_ls):
@@ -509,8 +520,6 @@ def with_many__using_contextmanager(*f_args_ls, ErrT=None):
 
 
 
-import unittest
-#from contextlib import redirect_stdout
 
 class _Mixin4Test____with_many:#(unittest.TestCase):
     @property

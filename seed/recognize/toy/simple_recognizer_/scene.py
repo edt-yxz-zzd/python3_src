@@ -47,11 +47,12 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.recognize.toy.simple_recognizer_._common import abstractmethod, override, ABC
 from seed.recognize.toy.simple_recognizer_._common import _4repr, _4repr_named, _巛彧
-from seed.recognize.toy.simple_recognizer_._common import check_type_le, check_type_is, ifNone, ifNonef
-from seed.tiny_.check import check_callable
-from seed.tiny_.check import check_may_
-from seed.tiny_.check import check_pseudo_qual_name
-from seed.tiny import curry1
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.types5py import curry1
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.tiny_.check import check_callable, check_may_, check_pseudo_qual_name, check_type_is, check_type_le
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

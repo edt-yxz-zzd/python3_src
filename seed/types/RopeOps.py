@@ -1,5 +1,8 @@
 r'''
 py -m seed.types.RopeOps
+py -m nn_ns.app.debug_cmd   seed.types.RopeOps -x
+py -m nn_ns.app.doctest_cmd seed.types.RopeOps:__doc__ -ht #  -ff -v -df
+
 from seed.types.RopeOps import RopeOps
 
 e ../../python3_src/seed/types/RopeOps.py
@@ -16,14 +19,17 @@ __all__ = '''
     RopeOps
     '''.split()
 
-import itertools #chain
-from seed.tiny import check_type_is, check_uint
-from seed.tiny import MapView
-from seed.types.DictKeyAsObjAttr import DictKeyAsObjAttr#, DictKeyAsObjAttrAndAsMapping
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import chain
+    from seed.tiny_.check import check_type_is, check_uint
+    from seed.tiny_.types5py import mk_MapView
+    from seed.types.DictKeyAsObjAttr import DictKeyAsObjAttr#, DictKeyAsObjAttrAndAsMapping
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 r'''[[[[[
-import itertools #chain
-from seed.tiny.import check_type_is, check_uint
 class RopeOps:
     'Rope = (size, num_skips, seq, may Rope)'
     empty_rope = (0, 0, (), None)
@@ -96,7 +102,7 @@ class RopeOps:
         if not n == 0: raise logic-err
         #bug:tail_rope = RopeOps.mk(num_skips+n, seq, rope)
         tail_rope = RopeOps.mk(end, seq, rope)
-        it = itertools.chain.from_iterable(lss)
+        it = chain.from_iterable(lss)
         initial_seq = (*it,)
         assert len(initial_seq) == N
         assert L == N + tail_rope[0]
@@ -106,9 +112,6 @@ class RopeOps:
 
 def ___tmp_env():
     __doc__ = 'Rope = (size, num_skips, seq, may Rope)'
-    import itertools #chain
-    from seed.tiny import check_type_is, check_uint
-    from seed.tiny import MapView
     empty_rope = (0, 0, (), None)
     def _len_(rope, /):
         return rope[0]
@@ -179,7 +182,7 @@ def ___tmp_env():
         if not n == 0: raise logic-err
         #bug:tail_rope = RopeOps.mk(num_skips+n, seq, rope)
         tail_rope = mk(end, seq, rope)
-        it = itertools.chain.from_iterable(lss)
+        it = chain.from_iterable(lss)
         initial_seq = (*it,)
         assert len(initial_seq) == N
         assert L == N + tail_rope[0]
@@ -189,9 +192,9 @@ def ___tmp_env():
     return (empty_rope, _len_, _iter_, to_tuple, mk, mk1, mk2, split_at)
     return (__doc__, empty_rope, _len_, _iter_, to_tuple, mk, mk1, mk2, split_at)
     return {**locals()}
-#_d  = MapView(___tmp_env())
-#RopeOps = DictKeyAsObjAttr(MapView(dict(zip('__doc__ empty_rope len iter to_tuple mk mk1 mk2 split_at'.split(), ___tmp_env())))); del ___tmp_env
-RopeOps = DictKeyAsObjAttr(MapView(dict(zip('empty_rope len iter to_tuple mk mk1 mk2 split_at'.split(), ___tmp_env())))); del ___tmp_env
+#_d  = mk_MapView(___tmp_env())
+#RopeOps = DictKeyAsObjAttr(mk_MapView(dict(zip('__doc__ empty_rope len iter to_tuple mk mk1 mk2 split_at'.split(), ___tmp_env())))); del ___tmp_env
+RopeOps = DictKeyAsObjAttr(mk_MapView(dict(zip('empty_rope len iter to_tuple mk mk1 mk2 split_at'.split(), ___tmp_env())))); del ___tmp_env
 #print(dir(RopeOps))
 #assert dir(RopeOps) == ['__doc__', 'empty_rope', 'iter', 'len', 'mk', 'mk1', 'mk2', 'split_at', 'to_tuple']
 assert dir(RopeOps) == ['empty_rope', 'iter', 'len', 'mk', 'mk1', 'mk2', 'split_at', 'to_tuple']
@@ -224,6 +227,6 @@ def _t():
             hs_, _ts = ops.split_at(i, rope)
             assert hs_ == ls[:i]
             assert ops.to_tuple(_ts) == ls[i:]
-_t()
+#_t()
 from seed.types.RopeOps import RopeOps
 

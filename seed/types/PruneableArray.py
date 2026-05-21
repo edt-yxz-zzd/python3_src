@@ -38,7 +38,7 @@ PruneableArray(0, [])
 >>> PruneableArray(-1, [])
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: -1
 >>> PruneableArray(-1, [], negative_offset_ok=True)
 PruneableArray(-1, [], negative_offset_ok = True)
 
@@ -424,15 +424,25 @@ adjust_slice_
 '''.split()#'''
 __all__
 
-from seed.math.sign_of import sign_of
-from seed.tiny import ifNone, echo, print_err
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.helper.repr_input import repr_helper, repr_helper__str
-
-#from seed.lang.calc_len_of_py_range_ import calc_len_of_py_range_
 
 #from collections.abc import MutableSequence
+
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import echo
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.check import check_type_is, check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
+    from seed.math.sign_of import sign_of
+    from seed.helper.repr_input import repr_helper, repr_helper__str
+
+    #from seed.lang.calc_len_of_py_range_ import calc_len_of_py_range_
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 def adjust_until_le_(upB, i, step, /):
     if not i <= upB:

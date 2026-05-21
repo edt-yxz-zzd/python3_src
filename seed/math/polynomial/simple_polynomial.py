@@ -211,39 +211,55 @@ IPolynomial8PyExpr
 
 '''.split()#'''
 __all__
-from itertools import pairwise
-from functools import reduce# total_ordering
-# functools.reduce(function, iterable[, initializer])
 
-from seed.iters.group_by import group_by
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.math.IRingOps import IRingOps
 from seed.math.IRingOps import ring_ops__integer, ring_ex_ops__int, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
 
 from seed.abc.ITotalOrdering import ITotalOrdering5le
 from seed.abc.Ops.ITotalOrderingOps import ITotalOrderingOps
 from seed.abc.Ops.ITotalOrderingOps import ITotalOrderingOps__via_cmp
-from seed.iters.cmp4iterable import eq4iterable, cmp4iterable
-from seed.seq_tools.sorted_via_lt_ import sorted_via_le_
 
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-
-from seed.tiny import fst, snd, null_tuple, check_type_is, check_pair, check_type_le
-from seed.tiny import MapView, mk_tuple
-#from seed.tiny import print_err
-from seed.math.pow__via_binomial_formula import iter_parts5pow__via_binomial_formula__
-from seed.iters.group_by__nonlocal import regroup_if #group_by__nonlocal, sized_regroup__
 
 from seed.abc.Ops.IDisplayerOps import IDisplayerOps
 from seed.abc.Ops__concrete.DisplayerOps import DisplayerOps4py_repr, DisplayerOps4py_str
 from seed.abc.Ops__concrete.DisplayerOps import displayer_ops4py_repr, displayer_ops4py_str
 
-from seed.iters.merge_two_sorted_iterables import merge_two_sorted_iterables
+
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.tiny_.check import check_type_is, check_pair, check_type_le
+    from seed.tiny_.containers import mk_tuple, get_null_tuple_#null_tuple
+    from seed.tiny_.types5py import MapView
+
+    from itertools import pairwise
+    from functools import reduce# total_ordering
+    # functools.reduce(function, iterable[, initializer])
+
+    from seed.iters.group_by import group_by
+
+
+    from seed.iters.cmp4iterable import eq4iterable, cmp4iterable
+    from seed.seq_tools.sorted_via_lt_ import sorted_via_le_
+
+    from seed.helper.repr_input import repr_helper
+
+    from seed.math.pow__via_binomial_formula import iter_parts5pow__via_binomial_formula__
+    from seed.iters.group_by__nonlocal import regroup_if #group_by__nonlocal, sized_regroup__
+
+
+    from seed.iters.merge_two_sorted_iterables import merge_two_sorted_iterables
 def __():
   def merge_two_sorted_iterables(lefts, rights
         , *, left_key=None, right_key=None, before=None
         , Left=None, Right=None):...
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -460,7 +476,7 @@ class Monomial:
         return sf._ps
     @classmethod
     def mk_one(cls, /):
-        return cls(null_tuple, lt4var=None, sketchy_check4var=None, sketchy_check4exp=None)
+        return cls(get_null_tuple_(), lt4var=None, sketchy_check4var=None, sketchy_check4exp=None)
     def is_one(sf, /):
         return not sf._ps
 
@@ -486,7 +502,7 @@ class Polynomial:
         return sf._ps
     @classmethod
     def mk_zero(cls, /):
-        return cls(null_tuple, lt4monomial=None, sketchy_check4monomial=None, sketchy_check4coeff=None)
+        return cls(get_null_tuple_(), lt4monomial=None, sketchy_check4monomial=None, sketchy_check4coeff=None)
     def is_zero(sf, /):
         return not sf._ps
 

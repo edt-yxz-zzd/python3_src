@@ -25,22 +25,20 @@ collect_tuple_subclasses_with_cached_property
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 import sys # intern
-from keyword import iskeyword
-from operator import itemgetter
 from collections.abc import Sequence
-from abc import abstractmethod
-from functools import cached_property
-#from collections import namedtuple
-#namedtuple(typename, field_names, *, rename=False, defaults=None, module=None)
 
-#.from itertools import islice
-#.from seed.tiny_.check import check_type_is, check_int_ge
-#.
-#.from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err', __name__)
-if 0:from seed.tiny import mk_tuple,print_err
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from keyword import iskeyword
+    from operator import itemgetter
+    from abc import abstractmethod
+    from functools import cached_property
+    #from collections import namedtuple
+    #namedtuple(typename, field_names, *, rename=False, defaults=None, module=None)
+
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

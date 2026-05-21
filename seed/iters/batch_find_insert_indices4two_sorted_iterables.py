@@ -6,12 +6,6 @@ view ../../python3_src/seed/iters/merge_two_sorted_iterables.py
 seed.iters.batch_find_insert_indices4two_sorted_iterables
 py -m nn_ns.app.debug_cmd   seed.iters.batch_find_insert_indices4two_sorted_iterables -x # -off_defs
 py -m nn_ns.app.doctest_cmd seed.iters.batch_find_insert_indices4two_sorted_iterables:__doc__ -ht # -ff -df
-#######
-from seed.pkg_tools.ModuleReloader import mk_doctestXmodule_reloader_
-doctestXmodule_reloader = mk_doctestXmodule_reloader_('', 'seed.iters.batch_find_insert_indices4two_sorted_iterables:__doc__', '-ht')
-doctestXmodule_reloader(reload_first=False)
-doctestXmodule_reloader()
-#######
 
 [[
 ]]
@@ -32,26 +26,20 @@ batch_find_insert_indices4two_sorted_iterables
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 import operator as opss
-#.from seed.for_libs.for_importlib__reload import clear_later_variables_if_reload_
-#.clear_later_variables_if_reload_(globals(), '')
-#.    # <<== seed.pkg_tools.ModuleReloader
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
 
-merge_two_sorted_iterables = lazy_import4func_('seed.iters.merge_two_sorted_iterables', 'merge_two_sorted_iterables', __name__)
-if 0:from seed.iters.merge_two_sorted_iterables import merge_two_sorted_iterables
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.helper.ifNone import ifNone
+    from seed.types.Either import mk_Left,mk_Right
+    from seed.func_tools.dot_ import dot_
+    from seed.iters.merge_two_sorted_iterables import merge_two_sorted_iterables
 #def merge_two_sorted_iterables(lefts, rights, /, *, left_key=None, right_key=None, before=None, Left=None, Right=None):
 #    ':: (a->b->Bool) -> [a] -> [b] -> [Either a b] # before :: KeyA -> KeyB -> Bool'
 
 
 
-lazy_import4funcs_('seed.tiny', 'ifNone,echo,fst,snd', __name__)
-if 0:from seed.tiny import ifNone,echo,fst,snd #,mk_tuple,print_err
-
-lazy_import4funcs_('seed.types.Either', 'mk_Left,mk_Right', __name__)
-if 0:from seed.types.Either import mk_Left,mk_Right
-
-lazy_import4funcs_('seed.func_tools.dot_', 'dot_', __name__)
-if 0:from seed.func_tools.dot_ import dot_
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -116,6 +104,5 @@ def batch_find_insert_indices4two_sorted_iterables(lefts, rights, *, left_key=No
     return (idc4LintoR, idc4RintoL)
 
 __all__
-#[batch_find_insert_indices4two_sorted_iterables] = lazy_import4funcs_('seed.iters.batch_find_insert_indices4two_sorted_iterables', 'batch_find_insert_indices4two_sorted_iterables', __name__)
 from seed.iters.batch_find_insert_indices4two_sorted_iterables import batch_find_insert_indices4two_sorted_iterables
 from seed.iters.batch_find_insert_indices4two_sorted_iterables import *

@@ -9,6 +9,8 @@ seed.algo.bucket_sort.bucket_sort_per_row
     vs nn_ns.graph2.bucket_sort.inplace_bucket_sort
     non-inplace vs inplace
 
+py -m nn_ns.app.debug_cmd   seed.algo.bucket_sort.bucket_sort_per_row -x
+py -m nn_ns.app.doctest_cmd seed.algo.bucket_sort.bucket_sort_per_row:__doc__ -ht #  -ff -v -df
 
 '''
 
@@ -17,8 +19,12 @@ __all__ = '''
     bucket_sort_per_row
     '''.split()
 
-from .bucket_sort_with_table import bucket_sort_with_table__easy
-from seed.tiny import echo, snd
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from .bucket_sort_with_table import bucket_sort_with_table__easy
+    from seed.tiny_.funcs import echo, snd
+___end_mark_of_excluded_global_names__0___ = ...
 
 def bucket_sort_per_row(
     alphabet_size
@@ -72,3 +78,5 @@ input:
 
 
 
+from seed.algo.bucket_sort.bucket_sort_per_row import bucket_sort_per_row
+from seed.algo.bucket_sort.bucket_sort_per_row import *

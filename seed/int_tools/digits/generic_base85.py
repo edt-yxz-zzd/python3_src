@@ -1290,33 +1290,36 @@ impl__base64__xx85decode_
 '''.split()#'''
 __all__
 
-from itertools import accumulate, islice, pairwise
+___begin_mark_of_excluded_global_names__0___ = ...
 from enum import Enum, auto
 from numbers import Rational
 from fractions import Fraction
 #from math import gcd
 import math
-from seed.math.gcd import gcd, gcd_many
-from seed.math.floor_ceil import floor_log_, ceil_log_
-from seed.math.floor_ceil import floor_log2
-from seed.math.floor_ceil import floor_sqrt, ceil_sqrt
-from seed.math.floor_ceil import floor_kth_root_, ceil_kth_root_
-from seed.math.continued_fraction.continued_fraction_of_log_ import continued_fraction_of_log_, iter_approximate_fractions_le5continued_fraction_of_log_
-#def iter_approximate_fractions_le5continued_fraction_of_log_(base, y, /, *, may_max1_denominator=None):
-
-from seed.tiny import check_type_is, check_type_le
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.tiny import MapView, chains
-
-from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty
-from seed.iters.PeekableIterator import PeekableIterator
-from seed.int_tools.digits.uint2radix_repr import uint2radix_repr
-from seed.int_tools.digits.radix_repr2uint import radix_repr2uint
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.seq_tools.bisearch import bisearch
-from seed.helper.repr_input import repr_helper
-#from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import accumulate, islice, pairwise
+    from seed.math.gcd import gcd, gcd_many
+    from seed.math.floor_ceil_tools.fc_log import floor_log_, ceil_log_, floor_log2
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_kth_root_, ceil_kth_root_
+
+    from seed.math.continued_fraction.continued_fraction_of_log_ import continued_fraction_of_log_, iter_approximate_fractions_le5continued_fraction_of_log_
+    #def iter_approximate_fractions_le5continued_fraction_of_log_(base, y, /, *, may_max1_denominator=None):
+
+    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le, check_type_is, check_type_le
+    from seed.iters.chains import chains
+    from seed.tiny_.types5py import mk_MapView
+
+    from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty
+    from seed.iters.PeekableIterator import PeekableIterator
+    from seed.int_tools.digits.uint2radix_repr import uint2radix_repr
+    from seed.int_tools.digits.radix_repr2uint import radix_repr2uint
+    from seed.seq_tools.bisearch import bisearch
+    from seed.helper.repr_input import repr_helper
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 class DigitOrder(Enum):
     little_endian = auto()
@@ -1963,7 +1966,7 @@ class WordBasedRadixDigitsCodec__oradix_lt_iradix(_Icommon4WordBasedRadixDigitsC
             otail_len__ext2ospace_sz = (*otail_len__ext2ospace_sz,)
             itail_len2ispace_sz = (*itail_len2ispace_sz,)
         itail_len2otail_len__ext = (*itail_len2otail_len__ext,)
-        otail_len__ext2itail_len = MapView(otail_len__ext2itail_len)
+        otail_len__ext2itail_len = mk_MapView(otail_len__ext2itail_len)
         return (itail_len2otail_len__ext, otail_len__ext2itail_len)
     #end-def _init4min_output__under_len_transform_be_injection(sf, /):
 

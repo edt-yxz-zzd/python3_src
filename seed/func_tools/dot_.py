@@ -6,11 +6,6 @@ seed.func_tools.dot_
 py -m nn_ns.app.debug_cmd   seed.func_tools.dot_ -x # -off_defs
 py -m nn_ns.app.doctest_cmd seed.func_tools.dot_:__doc__ -ht # -ff -df
 #######
-from seed.pkg_tools.ModuleReloader import mk_doctestXmodule_reloader_
-doctestXmodule_reloader = mk_doctestXmodule_reloader_('', 'seed.func_tools.dot_:__doc__', '-ht')
-doctestXmodule_reloader(reload_first=False)
-doctestXmodule_reloader()
-#######
 
 [[
 源起:
@@ -44,15 +39,12 @@ dot_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#.from seed.tiny_.check import check_type_is, check_int_ge
-#.
-#.from seed.for_libs.for_importlib__reload import clear_later_variables_if_reload_
-#.clear_later_variables_if_reload_(globals(), '')
-#.    # <<== seed.pkg_tools.ModuleReloader
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
-repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-lazy_import4funcs_('seed.tiny', 'mk_tuple,echo', __name__)
-if 0:from seed.tiny import mk_tuple,echo#print_err,ifNone as ifNone_ #xxx:null_tuple #xxx:echo,fst,snd
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.containers import mk_tuple
+
+from seed.tiny_.funcs import echo
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

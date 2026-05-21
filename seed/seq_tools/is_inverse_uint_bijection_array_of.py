@@ -1,11 +1,21 @@
 
+r'''[[[
+seed.seq_tools.is_inverse_uint_bijection_array_of
+py -m nn_ns.app.debug_cmd   seed.seq_tools.is_inverse_uint_bijection_array_of -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.is_inverse_uint_bijection_array_of:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 
 __all__ = '''
     is_inverse_uint_bijection_array_of
     '''.split()
-from seed.tiny import echo
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def is_inverse_uint_bijection_array_of(
@@ -35,3 +45,5 @@ see:
 
     return True
 
+from seed.seq_tools.is_inverse_uint_bijection_array_of import is_inverse_uint_bijection_array_of
+from seed.seq_tools.is_inverse_uint_bijection_array_of import *

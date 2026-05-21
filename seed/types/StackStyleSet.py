@@ -4,9 +4,9 @@ e ../../python3_src/seed/types/StackStyleSet.py
 
 
 seed.types.StackStyleSet
-py -m nn_ns.app.debug_cmd   seed.types.StackStyleSet
+py -m nn_ns.app.debug_cmd   seed.types.StackStyleSet -x
+py -m nn_ns.app.doctest_cmd seed.types.StackStyleSet:__doc__ -ff -v
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.StackStyleSet   @f
-py -m nn_ns.app.doctest_cmd seed.types.StackStyleSet:__doc__ -v
 
 [[
 see:
@@ -345,11 +345,20 @@ __all__ = r'''
 __all__
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from collections.abc import MutableSet, Set, Sequence
-from seed.helper.repr_input import repr_helper
-from seed.tiny import check_type_is, snd
-from seed.types.view.View import SeqView#, SetView, MapView
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import snd
+    from seed.helper.repr_input import repr_helper
+    from seed.types.view.View import SeqView
+
+
+
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 class StackStyleSet(MutableSet):
     'add/pop'

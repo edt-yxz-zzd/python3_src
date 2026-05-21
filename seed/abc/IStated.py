@@ -374,19 +374,19 @@ Error
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.types.attr.special_method6class_and_class_only_property import special_method6class
 
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import ifNone
-#from seed.tiny_._Base4repr import _Base4repr
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ifNone import ifNone
+    from seed.helper.repr_input import repr_helper
 
-from seed.tiny_.check import check_type_is, check_int_ge, check_non_ABC
+    from seed.tiny_.check import check_type_is, check_int_ge, check_non_ABC
 
-from seed.abc.IEqTmpVal import IEqTmpVal, IEqTmpVal__via_iter_sized_args_kwds
-from seed.abc.IEqTmpVal import eq8obj, eq8tmp_val, whether_obj_vs_val_
-from seed.abc.IEqTmpVal import lookup_ops8IEqTmpVal4cls_, register_ops8IEqTmpVal4cls_
-from collections import namedtuple
+    #from seed.abc.IEqTmpVal import IEqTmpVal, IEqTmpVal__via_iter_sized_args_kwds
+    from seed.abc.IEqTmpVal import eq8tmp_val
+    from collections import namedtuple
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -710,7 +710,6 @@ class IStated__mk_dummy(IStated):
 
 def _testing_via_RadixNumerationCounter():
   if 1:
-    #from seed.tiny_._Base4repr import _Base4repr
     from seed.int_tools.digits.radix_repr2uint import radix_repr2uint__big_endian
     from seed.int_tools.digits.uint2radix_repr import uint2radix_repr__big_endian
   class RadixNumerationCounter(IStated__mk_dummy, IStated__immutable_core_xstate_is_Eq):

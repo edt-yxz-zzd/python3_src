@@ -6,7 +6,7 @@ copy from:
 
 seed.io.get_size_of_ibfile
 py -m nn_ns.app.debug_cmd   seed.io.get_size_of_ibfile -x
-py -m nn_ns.app.doctest_cmd seed.io.get_size_of_ibfile:__doc__ -v
+py -m nn_ns.app.doctest_cmd seed.io.get_size_of_ibfile:__doc__ -ff -v
 py -m nn_ns.app.doctest_cmd seed.io.get_size_of_ibfile!
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.io.get_size_of_ibfile   @f
 
@@ -24,11 +24,14 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.io.with4seekback import with4seekback__on_exit, with4seekback__on_err, with4seekback__on_no_err
-from seed.tiny_.check import check_uint
-#from seed.tiny import ifNone
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.io.with4seekback import with4seekback__on_exit, with4seekback__on_err, with4seekback__on_no_err
+    from seed.tiny_.check import check_uint
 
 from os import SEEK_CUR, SEEK_END
+___end_mark_of_excluded_global_names__0___ = ...
 
 with4seekback__on_no_err
 check_uint

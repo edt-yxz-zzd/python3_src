@@ -12,7 +12,7 @@ rename:
 
 seed.types.FreeLocalBatchRouter4py
 py -m    seed.types.FreeLocalBatchRouter4py
-py -m nn_ns.app.debug_cmd   seed.types.FreeLocalBatchRouter4py
+py -m nn_ns.app.debug_cmd   seed.types.FreeLocalBatchRouter4py -x
 
 from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py,   Curry, mk_Curry, mk_CurriedFreeLocalBatchRouter4py,   AdaptiveCurry, mk_AdaptiveCurry, mk_AdaptiveCurriedFreeLocalBatchRouter4py,   UnCurry, mk_UnCurry
 
@@ -145,29 +145,31 @@ __all__ = '''
     mk_UnCurry
     '''.split()
     #call5iter
-
+    #
+    #mkF
+    #mkCF
+    #mkACF
+    #mkUC
 #################################
 #HHHHH
+__all__
 ___begin_mark_of_excluded_global_names__1___ = ...
-from seed.tiny_.oXs import eat_iter as _eat_iter, check_intXs_between, check_uintXs_lt, check_uintXs, fold__objXtuple, fold__intXiter, intXiter2intXtuple
-from seed.tiny import echo, mk_tuple, print_err
-from seed.tiny import check_callable, check_type_is, check_uint
-from seed.helper.repr_input import repr_helper
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from functools import partial
+    from itertools import chain
+    from seed.tiny_.oXs import check_uintXs_lt, fold__intXiter, intXiter2intXtuple
 
-from seed.data_funcs.lnkls import lflnkls_ops, empty_lflnkls, lflnkls_ipush_left, lflnkls_ipop_left, lflnkls2iterable, lflnkls5reversed_iterable
+    from seed.data_funcs.lnkls import lflnkls_ipop_left, lflnkls5reverseable
+    from seed.data_funcs.lnkls import rglnkls_ipush_right, rglnkls5iterable, rglnkls2list
 
-from seed.data_funcs.lnkls import lflnkls5reverseable, lflnkls5args
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_callable, check_type_is, check_uint
 
-
-from seed.data_funcs.lnkls import rglnkls_ops, empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
-
-from seed.data_funcs.lnkls import rglnkls2list
-
-
-
-#from functools import partial
-from itertools import chain
 
 ___end_mark_of_excluded_global_names__1___ = ...
 
@@ -488,21 +490,7 @@ def mk_UnCurry(func, num_args4call__total, num_args__s, /):
 
 
 #HHHHH
-if __name__ == "__main__":
-    from seed.types.FreeLocalBatchRouter4py import *
-
-    from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py,   Curry, mk_Curry, mk_CurriedFreeLocalBatchRouter4py,   AdaptiveCurry, mk_AdaptiveCurry, mk_AdaptiveCurriedFreeLocalBatchRouter4py,   UnCurry, mk_UnCurry
-
-    from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py as mkF, mk_CurriedFreeLocalBatchRouter4py as mkCF, mk_AdaptiveCurriedFreeLocalBatchRouter4py as mkACF, mk_UnCurry as mkUC
-
-
-    from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py
-
-    from seed.types.FreeLocalBatchRouter4py import Curry, mk_Curry, mk_CurriedFreeLocalBatchRouter4py
-
-    from seed.types.FreeLocalBatchRouter4py import AdaptiveCurry, mk_AdaptiveCurry, mk_AdaptiveCurriedFreeLocalBatchRouter4py
-
-    from seed.types.FreeLocalBatchRouter4py import UnCurry, mk_UnCurry
+from seed.types.FreeLocalBatchRouter4py import *
 
 
 if __name__ == "__main__":
@@ -515,3 +503,18 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+__all__
+from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py,   Curry, mk_Curry, mk_CurriedFreeLocalBatchRouter4py,   AdaptiveCurry, mk_AdaptiveCurry, mk_AdaptiveCurriedFreeLocalBatchRouter4py,   UnCurry, mk_UnCurry
+
+from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py as mkF, mk_CurriedFreeLocalBatchRouter4py as mkCF, mk_AdaptiveCurriedFreeLocalBatchRouter4py as mkACF, mk_UnCurry as mkUC
+
+
+from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py
+
+from seed.types.FreeLocalBatchRouter4py import Curry, mk_Curry, mk_CurriedFreeLocalBatchRouter4py
+
+from seed.types.FreeLocalBatchRouter4py import AdaptiveCurry, mk_AdaptiveCurry, mk_AdaptiveCurriedFreeLocalBatchRouter4py
+
+from seed.types.FreeLocalBatchRouter4py import UnCurry, mk_UnCurry
+
+from seed.types.FreeLocalBatchRouter4py import *

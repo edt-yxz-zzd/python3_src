@@ -9,9 +9,9 @@ from seed.pkg_tools.load_resources import IFileReader, IFileReader__using_import
 
 
 seed.types.SeqPrefixRegister
-py -m nn_ns.app.debug_cmd   seed.types.SeqPrefixRegister
+py -m nn_ns.app.debug_cmd   seed.types.SeqPrefixRegister -x
+py -m nn_ns.app.doctest_cmd seed.types.SeqPrefixRegister:__doc__ -ff -v
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.SeqPrefixRegister   @f
-py -m nn_ns.app.doctest_cmd seed.types.SeqPrefixRegister:__doc__ -v
 
 from seed.types.SeqPrefixRegister import MainFuncs, a_FileReaderMakerRegister, TextReaderMaker, text_reader_mkr4gb, text_reader_mkr4u8, binary_reader_mkr
     #最简单应用:读字节、读utf8
@@ -263,26 +263,32 @@ IFileReader
     #_Node
 __all__
 
-def _():
-    from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f, expectError
+___begin_mark_of_excluded_global_names__0___ = ...
 
-#from seed.tiny_.dict__add_fmap_filter import fmap4dict_value, group4dict_value#, filter4dict_value, dict_add__is, dict_add__eq, dict_add__new
-from seed.tiny_.mk_fdefault import mk_default
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from operator import __lt__, __le__
+    from seed.tiny_.check import check_callable, check_pseudo_identifier, check_pseudo_qual_name, check_tmay, check_type_is, check_type_le
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.constants import get_inf_#inf
+    from seed.tiny_.mk_fdefault import mk_default
     #def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
-from seed.tiny_.check import check_pseudo_qual_name, check_pseudo_identifier, check_callable#, check_smay_pseudo_qual_name
-from seed.helper.repr_input import repr_helper
-from seed.abc.IReprHelper import IReprHelper
+
+    from seed.helper.repr_input import repr_helper
+
+with mk_ctx4lazy_import4funcs_(__name__, 'is_prefix_of_seq:_is_prefix_of_seq_,lcp_of:_lcp_of_,len_lcp_of_ex:_len_lcp_of_ex_'):
+    from seed.seq_tools.is_prefix_of_seq import is_prefix_of_seq as _is_prefix_of_seq_#, is_suffix_of_seq
+    from seed.seq_tools.lcp_of import lcp_of as _lcp_of_#, len_lcp_of
+    from seed.seq_tools.lcp_of import len_lcp_of_ex as _len_lcp_of_ex_#, view_seq_ex
+
+
+
+
+
+
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import check_type_is, check_type_le, check_tmay, inf, null_tuple
-#from seed.tiny import fst, snd, at
-from seed.seq_tools.is_prefix_of_seq import is_prefix_of_seq as _is_prefix_of_seq_#, is_suffix_of_seq
-#from seed.seq_tools.is_prefix_of_seq import seq_starts_with, seq_ends_with
-from seed.seq_tools.lcp_of import lcp_of as _lcp_of_#, len_lcp_of
-from seed.seq_tools.lcp_of import len_lcp_of_ex as _len_lcp_of_ex_#, view_seq_ex
-
-
+from seed.abc.IReprHelper import IReprHelper
 from collections.abc import Sequence
-from operator import __lt__, __le__
 import sys
 import os.path
 import importlib.abc
@@ -292,6 +298,7 @@ import importlib.resources
 
 os.path.join
 os.path.exists
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -329,9 +336,9 @@ class ISeqPrefixRegister(ABC):
         for ys, tgt in it:
             break
         else:
-            return null_tuple
+            return get_null_tuple_()
         if len(ys) == len(xs):
-            return null_tuple
+            return get_null_tuple_()
         return (tgt,)
     #def _get_len_of_longest_prefix_(sf, /):
     def _check_seq_type_(sf, xs, /):
@@ -407,7 +414,7 @@ class ISeqPrefixRegister(ABC):
     def iter_all_prefix_target_pairs(sf, /, *, len_asc):
         '*len_asc/bool -> Iter ([x], tgt)'
         it = sf._iter_all_prefix_target_pairs_(len_asc=len_asc)
-        L = inf
+        L = get_inf_()
         return sf._itercheck4iter_prefix_target_pairs(__le__, L, it, len_asc=len_asc)
 
 class _Node:
@@ -960,9 +967,9 @@ def _prepare4load(sf, qname4pkg, basename4rsc, /):
 
     #check_pseudo_qual_name(qname4pkg)
     if not '.' in basename4rsc:
-        return null_tuple
+        return get_null_tuple_()
     if not importlib.resources.is_resource(qname4pkg, basename4rsc):
-        return null_tuple
+        return get_null_tuple_()
 
     suffix2author_fmt = _1load__qname_to_suffix2author_fmt(sf, qname4pkg)
 
@@ -974,7 +981,7 @@ def _prepare4load(sf, qname4pkg, basename4rsc, /):
         if file_suffix in suffix2author_fmt:
             break
     else:
-        return null_tuple
+        return get_null_tuple_()
 
 
     (qname8author, fmt_name) = suffix2author_fmt[file_suffix]
@@ -1014,7 +1021,7 @@ class FileReaderMakerRegister(IBaseFileLoaderMakerRegister):
         'qname4pkg -> basename4rsc -> tmay_result|^LoadError'
         m = _prepare4load(sf, qname4pkg, basename4rsc)
         if not m:
-            return null_tuple
+            return get_null_tuple_()
         (qname4pkg, basename4rsc, file_suffix, qname8author, fmt_name, loader_mkr) = m
         reader_mkr = loader_mkr
         reader = reader_mkr(qname8author, fmt_name)

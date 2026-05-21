@@ -18,7 +18,7 @@ e ../../python3_src/seed/helper/case.py
 
 seed.types.flag.Flag
 py -m seed.types.flag.Flag
-py -m nn_ns.app.debug_cmd   seed.types.flag.Flag
+py -m nn_ns.app.debug_cmd   seed.types.flag.Flag -x
 from seed.types.flag.Flag import get_view_of_active_key_set_of_hybrid_flag, get_ops4hybrid_flag_of_hybrid_flag, IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, IFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only___mutex_groups_are_all_discrete, ICase__key_is_str__legal_keys_finite__instance_state_is_active_keys_only___single_mutex_group_only
 
 from seed.types.flag.Flag import KeyError_AttributeError, IOps4Key, IOps4Partition, get_view_of_active_key_set_of_hybrid_flag, get_ops4hybrid_flag_of_hybrid_flag, IHybridFlag, IOps4HybridFlag, Ops4Key__key_is_str, Partition__key_is_str__legal_keys_finite, Ops4Partition__key_is_str__legal_keys_finite, Ops4HybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, IFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only___mutex_groups_are_all_discrete, ICase__key_is_str__legal_keys_finite__instance_state_is_active_keys_only___single_mutex_group_only
@@ -234,7 +234,6 @@ e ../../python3_src/seed/helper/case.py
 
 
 #[[[doctest_examples-begin
-#>>> from seed.tiny import expectError
 
 >>> class HybridFlag4test(IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, constraints=[], partition=['xyz', '', 'w', 'ab', 't', 'ab']): pass
 >>> hybrid_flag_builder = HybridFlag4test.mk_hybrid_flag_builder()
@@ -493,13 +492,16 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 import operator as opss
 import itertools
 import collections
-from seed.helper.repr_input import repr_helper
-from seed.types.FrozenDict import FrozenDict
-from seed.helper.AttrCollector import AttrCollector
 from seed.abc.abc import ABC, abstractmethod, override
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
+from seed.tiny_.containers import mk_frozenset, mk_tuple, null_frozenset
 
-from seed.tiny import mk_tuple, mk_frozenset, null_frozenset
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.AttrCollector import AttrCollector
+    from seed.types.FrozenDict import FrozenDict
+    from seed.helper.repr_input import repr_helper
+    from seed.debug.expectError import expectError
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class KeyError_AttributeError(KeyError, AttributeError):pass
@@ -507,6 +509,7 @@ class IOps4Key(ABC):
     r'''
     ops4key
     #'''
+    __slots__ = ()
     @abstractmethod
     def check__obj_is_key(ops4key, obj, /):
         'obj -> None|raise TypeError'
@@ -531,6 +534,7 @@ class IOps4Partition(ABC):
             * set<key>
             * prefix if key::seq<a>
     #'''
+    __slots__ = ()
     @abstractmethod
     def get_tmay_xgroup_descriptor4discrete_mutex_groups(ops4partition, partition, /):
         'partition -> tmay xgroup_descriptor4discrete_mutex_groups'
@@ -663,6 +667,7 @@ def get_ops4hybrid_flag_of_hybrid_flag(hybrid_flag, /):
     ops4hybrid_flag = cls.___get_ops4hybrid_flag___()
     return ops4hybrid_flag
 class IHybridFlag(IReprImmutableHelper):
+    __slots__ = ()
     @classmethod
     @abstractmethod
     def ___get_ops4hybrid_flag___(cls, /):
@@ -730,6 +735,7 @@ class IOps4HybridFlag(ABC):
         #ops is result???
         ...
     #'''
+    __slots__ = ()
     ###################################
     ###################################
     @abstractmethod
@@ -1032,12 +1038,14 @@ def iter_chain__mutex_groups__with__extra_discrete_mutex_group_keys(legal_key_mu
     legal_key_mutex_groups = itertools.chain(legal_key_mutex_groups, extra_discrete_mutex_groups)
     return legal_key_mutex_groups
 class Ops4Key__key_is_str(IOps4Key):
+    __slots__ = ()
     @override
     def check__obj_is_key(ops4key, obj, /):
         'obj -> None|raise TypeError'
         if not type(obj) is str: raise TypeError
 
 class Partition__key_is_str__legal_keys_finite:
+    ___no_slots_ok___ = True
     def __init__(sf, legal_key_mutex_groups, extra_legal_keys4discrete_mutex_groups=(), /):
         legal_key_mutex_groups = iter_chain__mutex_groups__with__extra_discrete_mutex_group_keys(legal_key_mutex_groups, extra_legal_keys4discrete_mutex_groups)
         #################################
@@ -1067,6 +1075,7 @@ class Ops4Partition__key_is_str__legal_keys_finite(IOps4Partition):
             cls.___legal_key2xgroup_descriptor__mapping_at_ops4partition___ = legal_key2xgroup_descriptor__mapping
             cls.___legal_key_mutex_groups_at_ops4partition___ = legal_key_mutex_groups
     #'''
+    __slots__ = ()
 
     ___ops4key_at_ops4partition___ = Ops4Key__key_is_str()
 
@@ -1095,6 +1104,7 @@ class Ops4Partition__key_is_str__legal_keys_finite(IOps4Partition):
 
 
 class Ops4HybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only(IOps4HybridFlag):
+    __slots__ = ()
     #___ops4key_at_ops4partition___ = Ops4Key__key_is_str()
     ___ops4partition_at_ops4hybrid_flag___ = Ops4Partition__key_is_str__legal_keys_finite()
 
@@ -1125,6 +1135,7 @@ class Ops4HybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_ke
 
 
 class IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only(IHybridFlag):
+    ___no_slots_ok___ = True
     ___ops4hybrid_flag_at_hybrid_flag_cls___ = Ops4HybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only()
     ___partition_at_hybrid_flag_cls___ = NotImplemented
     ___constraints_at_hybrid_flag_cls___ = NotImplemented
@@ -1204,6 +1215,7 @@ class IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_
             args = ()
         return (args, {})
 class IFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only___mutex_groups_are_all_discrete(IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, constraints=NotImplemented, partition=NotImplemented):
+    __slots__ = ()
     def __init_subclass__(cls, /,*, keys4discrete_mutex_groups, constraints):
         if keys4discrete_mutex_groups is NotImplemented or keys4discrete_mutex_groups is None:
             partition = NotImplemented
@@ -1212,6 +1224,7 @@ class IFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only__
         super(__class__, cls).__init_subclass__(partition=partition, constraints=constraints)
 
 class ICase__key_is_str__legal_keys_finite__instance_state_is_active_keys_only___single_mutex_group_only(IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, constraints=NotImplemented, partition=NotImplemented):
+    __slots__ = ()
     def __init_subclass__(cls, /,*, keys4the_only_mutex_group, constraints):
         if keys4the_only_mutex_group is NotImplemented or keys4the_only_mutex_group is None:
             partition = NotImplemented
@@ -1225,8 +1238,8 @@ class ICase__key_is_str__legal_keys_finite__instance_state_is_active_keys_only__
 
 
 def _t():
-    from seed.tiny import expectError
-    class HybridFlag4test(IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, constraints=[], partition=['xyz', '', 'w', 'ab', 't', 'ab']): pass
+    class HybridFlag4test(IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, constraints=[], partition=['xyz', '', 'w', 'ab', 't', 'ab']):
+        __slots__ = ()
     sf = hybrid_flag = HybridFlag4test([])
     assert not sf.x
     assert not sf.y

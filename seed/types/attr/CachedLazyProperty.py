@@ -5,7 +5,7 @@ see: @functools.cached_property
 
 seed.types.attr.CachedLazyProperty
 py -m seed.types.attr.CachedLazyProperty
-py -m nn_ns.app.debug_cmd   seed.types.attr.CachedLazyProperty
+py -m nn_ns.app.debug_cmd   seed.types.attr.CachedLazyProperty -x
 from seed.types.attr.CachedLazyProperty import CachedLazyProperty
 
 e ../../python3_src/seed/types/attr/CachedLazyProperty.py
@@ -61,10 +61,10 @@ class C(builtins.object)
  |  Data descriptors defined here:
  |
  |  __dict__
- |      dictionary for instance variables (if defined)
+ |      dictionary for instance variables
  |
  |  __weakref__
- |      list of weak references to the object (if defined)
+ |      list of weak references to the object
  |
  |  eee
  |      eee()
@@ -83,7 +83,7 @@ class C(builtins.object)
 >>> A()
 Traceback (most recent call last):
     ...
-TypeError: Can't instantiate abstract class A with abstract methods vvv
+TypeError: Can't instantiate abstract class A with abstract method vvv
 
 
 #]]]doctest_examples-end
@@ -96,17 +96,25 @@ __all__ = '''
     '''.split()
 #################################
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.IDescriptor import DataDescriptor4Property #IDataDescriptor__default_mixin, IDescriptor__wrap_func, IDescriptor4Property
 #from seed.abc.IDescriptor import DataDescriptor4Property
 from seed.abc.abc import override, ABC__no_slots
 from seed.abc.eq_by_id.AddrAsHash import AddrAsHash as EqById
-import functools
-from operator import __setitem__
-import operator
+#import functools
 
-from seed.tiny import check_type_is, catched_call__either
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from operator import __setitem__
 
-from seed.tiny import catched_call__either, cached_catched_call__either, get_or_cached_catched_call__either
+    from seed.tiny_.check import check_type_is
+
+    from seed.tiny_.catched_call__either import catched_call__either, cached_catched_call__either, get_or_cached_catched_call__either
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 #e ../../python3_src/seed/types/OpaqueInstanceStorage.py
 #e ../../python3_src/seed/abc/storage/IStorage.py
@@ -145,7 +153,8 @@ class CachedLazyProperty(EqById, DataDescriptor4Property):# IDataDescriptor__def
         #may_either = d.get(key)
         fget = lambda:d.get(key)
         calc = lambda:super(__class__, sf).__get__(instance)
-        fset = lambda v, /:operator.__setitem__(d, key, v)
+        #fset = lambda v, /:operator.__setitem__(d, key, v)
+        fset = lambda v, /:__setitem__(d, key, v)
         either = get_or_cached_catched_call__either(fget, Exception, calc, fset)
 
         (is_value, exc_vs_value) = either

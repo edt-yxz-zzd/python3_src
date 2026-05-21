@@ -1,11 +1,11 @@
-
+#__all__:goto
 #################################
 #[[[__doc__-begin
 r'''
 
 seed.mapping_tools.fdefault
 py -m seed.mapping_tools.fdefault
-py -m nn_ns.app.debug_cmd   seed.mapping_tools.fdefault
+py -m nn_ns.app.debug_cmd   seed.mapping_tools.fdefault -x
 
 from seed.mapping_tools.fdefault import mapping_get__tmay_, mapping_get_fdefault__cased_, mapping_set_fdefault__cxxxvalue_, option2mapping_get__tmay
 from seed.mapping_tools.fdefault import mapping_reversable_update__tmay
@@ -408,10 +408,14 @@ __all__ = '''
     '''.split()
     #mapping_on_key_with_set_fdefault
     #getset_fdefault
-
-from seed.tiny import echo
-from seed.tiny_.mk_fdefault import mk_tmay_from_try_fvalue_KeyError, mk_tmay_from_default2value, mk_tmay_from_is_safe_fvalue, mk_default
-from seed.mapping_tools.mapping_reversable_update__tmay import mapping_reversable_update__tmay
+__all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.mk_fdefault import mk_tmay_from_try_fvalue_KeyError, mk_tmay_from_default2value, mk_tmay_from_is_safe_fvalue, mk_default
+    from seed.mapping_tools.mapping_reversable_update__tmay import mapping_reversable_update__tmay
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 mapping_reversable_update__tmay = mapping_reversable_update__tmay

@@ -1,4 +1,10 @@
 r'''[[[
+原来我的误用来源于 sympy 对pseudoprime的误用
+    sprp:拟素数:strong_probable_prime:既含合数也含素数
+    spsp:伪素数:strong_pseudoprime:只含合数排除素数
+
+    seed.math.primality_test.strong_probable_prime
+
 from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
 
 ===

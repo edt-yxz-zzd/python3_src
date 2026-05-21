@@ -1,5 +1,6 @@
 #__all__
 r'''[[[
+e ../../python3_src/seed/iters/PeekableIterator.py
 
 seed.iters.PeekableIterator
 py -m nn_ns.app.debug_cmd   seed.iters.PeekableIterator -x # -off_defs
@@ -35,17 +36,24 @@ drop_strict
     '''.split()#'''
 
 if __name__ == "__main__":
-    from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
+    from seed.iters.PeekableIterator import *
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from collections import deque
-from seed.types.Deque import Deque as deque
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'Deque:deque'):
+    from itertools import islice, chain
+    from seed.tiny_.containers import get_null_iter_#null_iter
+
+    #from collections import deque
+    from seed.types.Deque import Deque as deque
     #!!  collections.deque:not support slice:
     # dq[n:m]
     # TypeError: sequence index must be integer, not 'slice'
-from itertools import islice, chain
-from seed.tiny import null_iter
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def echo_or_mk_IPeekableIterator(iterable):
@@ -370,14 +378,14 @@ class PeekableIterator(IPeekableIterator):
         it = chain(dq, self.__it) if dq else self.__it
 
         self.__dq = deque()
-        self.__it = null_iter
+        self.__it = get_null_iter_()
         return it
 
     def detach(self):
         'remove and return (self.peek_relax(), underlying_iterator)'
         r = self.peek_relax(), self.__it
         self.__dq.clear()
-        self.__it = null_iter
+        self.__it = get_null_iter_()
         return r
     def append_left(self, x):
         self.__dq.appendleft(x)
@@ -1176,4 +1184,9 @@ if __name__ == "__main__":
 
 #.echo_or_mk_PeekableIterator = lazy_import4func_('seed.iters.PeekableIterator', 'echo_or_mk_PeekableIterator', __name__)
 from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
+
+
+from seed.iters.PeekableIterator import IPeekableIterator, echo_or_mk_IPeekableIterator, PeekableIterator, echo_or_mk_PeekableIterator, PeekableIterator__over_PeekableIterator
+
+
 from seed.iters.PeekableIterator import *

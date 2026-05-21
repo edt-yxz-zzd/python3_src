@@ -57,35 +57,49 @@ IUnlocker
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import islice
-from weakref import ref as wref_# WeakKeyDictionary as WkeyD, WeakValueDictionary as WvalD
+
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 
 
-
-from seed.types.IToken import mk_chr_rawstream5args8chars_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.IToken import mk_chr_rawstream5args8chars_
     # -> chr_rawstream
-from seed.types.IToken import (
+    from seed.types.IToken import (
 mk_chr_rawstream5args8chars_
 ,   mk_chr_rawstream5path_
 ,   mk_chr_rawstream5file_
 ,   mk_chr_rawstream5chars_
 ,       mk_chr_rawstream5text_
 )
-from seed.types.IToken import IBaseToken, IToken, Token__keyed
-from seed.types.IToken import IBasePositionInfo, IPositionInfo4Gap, IPositionInfo4Span
+    from seed.types.IToken import IToken, IPositionInfo4Gap
+
 ###########
 ##if 0:
     ##from seed.types.Deque import Deque
     ##from seed.types.view.View import SeqView
 ###########
-from seed.types.LazyList import LazyList, LazyListError
-from seed.types.LazyList import to_LazyList, to_LazyListIter
 
-from seed.tiny import null_tuple, fst
-from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-from seed.tiny_._Base4repr import _Base4repr
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'ref:wref_'):
+    from itertools import islice
+    from weakref import ref as wref_# WeakKeyDictionary as WkeyD, WeakValueDictionary as WvalD
+
+    from seed.types.LazyList import LazyList
+    from seed.types.LazyList import to_LazyList, to_LazyListIter
+
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.funcs import fst
+
+
+
+
+
+
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -979,7 +993,7 @@ class RecoverableInputStream9LazyList(IRecoverableInputStream):
         ##        # !! py.dict.impl.split_table
         ##        sf._dq = dq
         ##    else:
-        ##        sf._vw = null_tuple
+        ##        sf._vw = get_null_tuple_()
         ###########
 
     ######################
@@ -1052,7 +1066,7 @@ class RecoverableInputStream9LazyList(IRecoverableInputStream):
             sz = min(sz, n)
         sz
         if not sz:
-            return null_tuple
+            return get_null_tuple_()
         it = iter(sf._ly4prev) #to avoid cache LazyList
         it = map(fst, it) # :: Iter token
         return tuple(islice(it, sz))

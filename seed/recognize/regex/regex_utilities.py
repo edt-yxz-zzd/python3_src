@@ -61,11 +61,13 @@ compile_regex_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.recognize.regex.RegexLiteral import Parser4RegexLiteral, parser4RegexLiteral__no_builtins, parser4RegexLiteral__with_2x2_builtins, tokenizer4RegexLiteral, tokenizer4RegexLiteral__with_comment
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ifNone import ifNone
+
+
+from seed.recognize.regex.RegexLiteral import parser4RegexLiteral__no_builtins #Parser4RegexLiteral, parser4RegexLiteral__no_builtins, parser4RegexLiteral__with_2x2_builtins, tokenizer4RegexLiteral, tokenizer4RegexLiteral__with_comment
 from seed.recognize.regex.NFA5RegexRepr import NFA5RegexRepr, DFA5RegexRepr
-
-
-from seed.tiny import ifNone
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

@@ -61,7 +61,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):
 #.    from seed.helper.ifNone import ifNone as _ifNone, ifNonef as _ifNonef
 #.with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
-#.    from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
+#.    from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, get_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
 #.with mk_ctx4lazy_import4funcs_(__name__):
 #.    from itertools import islice
 #.    from functools import cached_property

@@ -6,11 +6,9 @@ see:
 usage:
     _debug_ = True
     if _debug_:
-        from seed.tiny import print_err
-        from seed.tiny import print_ferr
+        from seed.debug.print_err import print_err, print_ferr
     else:
-        from seed.tiny import no_op as print_err
-        from seed.tiny import no_op as print_ferr
+        from seed.tiny_.funcs import no_op as print_err
 
     print_ferr(lambda: f'{i}')
 
@@ -28,4 +26,4 @@ def print_ferr(*fargs, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
-
+from seed.debug.print_err import print_err, print_ferr

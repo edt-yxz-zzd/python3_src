@@ -34,7 +34,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 
 from seed.recognize.recognizer_LLoo_._common import (IForkable__stamp
 #mk#gi4either8xresult
-,BoxedFinalResult, BoxedHalfwayResult
+#,BoxedFinalResult, BoxedHalfwayResult
 #,Cased, Either, mk_Left, mk_Right
 ,check_non_ABC
 ,check_type_is, check_type_le, check_int_ge
@@ -42,22 +42,28 @@ from seed.recognize.recognizer_LLoo_._common import (IForkable__stamp
 ,abstractmethod, override, ABC
 ,repr_helper, _Base4repr #sf._args4repr = (...)
 )
-from seed.recognize.recognizer_LLoo_.IRecognizerLLoo import IRecognizerLLoo, Signal__HeaderCompleted, Reply4IRecognizerLLoo, IDependentTreeNode
-
-from seed.tiny_.check import check_int_ge_lt, check_may_
-from seed.tiny import echo
-
-from seed.recognize.recognizer_LLoo_.combinator_LLoo__serial import IRecognizerLLoo__serial_framework, RecognizerLLoo__tuple
-from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import RecognizerLLoo__tag, recognizer_LLoo__ignore, RecognizerLLoo__unbox
 from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import _IRecognizerLLoo__wrapper_base__single_ref# IRecognizerLLoo__wrapper_base
+from seed.recognize.recognizer_LLoo_.combinator_LLoo__serial import IRecognizerLLoo__serial_framework
+from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import RecognizerLLoo__tag, recognizer_LLoo__ignore, RecognizerLLoo__unbox
 
-from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import mk_LLoo__skip, mk_LLoo__pack, mk_LLoo__unpack, mk_LLoo__with_tribool_skip_as#, mk_LLoo__with_tribool_skip, RecognizerLLoo__skip, RecognizerLLoo__unpack, RecognizerLLoo__pack
-from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import mk_LLoo__optional__default, mk_LLoo__optional__tmay
 
-from seed.recognize.recognizer_LLoo_.combinator_LLoo__parallel import RecognizerLLoo__the_first_one
-from seed.types.view.View import SeqView
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.recognize.recognizer_LLoo_.IRecognizerLLoo import IRecognizerLLoo, Signal__HeaderCompleted# Reply4IRecognizerLLoo, IDependentTreeNode
 
-from itertools import count as count_
+    from seed.tiny_.check import check_int_ge_lt, check_may_
+    from seed.tiny_.funcs import echo
+
+    from seed.recognize.recognizer_LLoo_.combinator_LLoo__serial import RecognizerLLoo__tuple
+
+    from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import mk_LLoo__skip, mk_LLoo__pack, mk_LLoo__unpack, mk_LLoo__with_tribool_skip_as#, mk_LLoo__with_tribool_skip, RecognizerLLoo__skip, RecognizerLLoo__unpack, RecognizerLLoo__pack
+    from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import mk_LLoo__optional__default, mk_LLoo__optional__tmay
+
+    from seed.recognize.recognizer_LLoo_.combinator_LLoo__parallel import RecognizerLLoo__the_first_one
+    from seed.types.view.View import SeqView
+
+with mk_ctx4lazy_import4funcs_(__name__, 'count:count_'):
+    from itertools import count as count_
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

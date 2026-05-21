@@ -1132,9 +1132,13 @@ DoublyList4Idc
     DoublyList4Idc__rollbackable
 '''.split()#'''
 __all__
-from seed.helper.repr_input import repr_helper
-from seed.tiny_.check import check_uint_lt, check_uint, check_type_is
-#from seed.tiny import print_err
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_uint_lt, check_uint, check_type_is
+    from seed.debug.print_err import print_err
+___end_mark_of_excluded_global_names__0___ = ...
 
 def _prime_modifier(f, /):
     f.__is_prime_modifier__ = True

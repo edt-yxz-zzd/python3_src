@@ -38,12 +38,17 @@ IRegister
 
 '''.split()#'''
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
 from enum import Enum
-from seed.tiny import check_type_is, check_type_le
-from seed.tiny import null_tuple
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-from seed.helper.symbol import BaseSymbol, TmpSymbol, PermanentSymbol
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.symbol import BaseSymbol# TmpSymbol, PermanentSymbol
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_type_is, check_type_le
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+___end_mark_of_excluded_global_names__0___ = ...
 
 class RegisterError(Exception):pass
 
@@ -112,7 +117,7 @@ class IRegister(ABC):
 
     def register_(sf, case4existed, key, /, *args4st, **kwds4st):
         'case4existed/Case4Existed -> k -> *args4st -> **kwds4st -> None | ^RegisterPermissionError__register  | ^RegisterPermissionError__overwrite| ^RegisterKeyError__existed | ^TypeError-case4existed | ^from sf._check_key_(k) | ^from sf._check_state_(...) | ^from sf._check_value_(...)'
-        if not does_allow_register():
+        if not sf.does_allow_register():
             raise RegisterPermissionError__register
                 # 1
         check_type_is(Case4Existed, case4existed)
@@ -178,11 +183,11 @@ class IRegister(ABC):
     def lookup__tmay(sf, key, /):
         '-> tmay value | ^from sf._check_key_(key)'
         if not sf.is_registered(key):
-            return null_tuple
+            return get_null_tuple_()
         return (sf._lookup_(key),)
     def unregister(sf, key, /, *, nonexist_ok):
         '-> None | ^RegisterKeyError__nonexisted | ^from sf._check_key_(key)'
-        if not does_allow_unregister():
+        if not sf.does_allow_unregister():
             raise RegisterPermissionError__unregister
         if not sf.is_registered(key):
             if nonexist_ok:
@@ -293,7 +298,7 @@ class RegisterRegister(Register__default_mixins):
     def lookup_lookup__tmay(sf, symbol, k, /):
         tmay_register4symbol = sf.lookup__tmay(symbol)
         if not tmay_register4symbol:
-            return null_tuple
+            return get_null_tuple_()
         [register4symbol] = tmay_register4symbol
         tmay_v = register4symbol.lookup__tmay(k)
         return tmay_v

@@ -179,6 +179,11 @@ prepare4tokenize4arith_
 #    main_rgnr4parse__7arith
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.types5py import mk_MapView
+
 from fractions import Fraction
 #from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import collect_namess5locals_, mk_group_pair4rgnr_ref, Makers4IRecognizerLLoo
 #from seed.types.IToken import TokenKeyQuerySet5xqset
@@ -333,9 +338,8 @@ def prepare4parse4arith_():
     ######################
     name2may_gpostprocess6ok = mk_name2may_gpostprocess6ok_(r'_spost__{}', grp4nm4rgnr, _spostprocess_group7arith)
     assert 4 == len(name2may_gpostprocess6ok), (name2may_gpostprocess6ok.keys(), len(name2may_gpostprocess6ok))
-    #from seed.tiny import fmap4dict_value, MapView
     #from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import mk_gpostprocess6ok__5spost_
-    #.name2may_gpostprocess6ok = MapView(fmap4dict_value(mk_gpostprocess6ok__5spost_, {**{}
+    #.name2may_gpostprocess6ok = mk_MapView(fmap4dict_value(mk_gpostprocess6ok__5spost_, {**{}
     #.,nmd__atom_expr.name4ref:_spost__atom_expr
     #.    #fixed-bug:miss postprocess<atom_expr>
     #.,nmd__pow_expr.name4ref:_spost__pow_expr
@@ -359,7 +363,6 @@ def prepare4parse4arith_():
 def prepare4tokenize4arith_():
     '-> (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, main_rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith)'
     'tkeys = ** // % * / + - ( ) number'
-    from seed.tiny import MapView
     from seed.recognize.recognizer_LLoo__ver2_.tokenize_utils import mk_rgnr4words_
     ######################
 
@@ -382,7 +385,7 @@ def prepare4tokenize4arith_():
     tkeys8noise4tknz__7arith = frozenset(['space'])
     max_num_tokens6backward4tknz__7arith = 0
     may_env4tknz__7arith = None
-    tkey2tdat2tdat4tknz__7arith = MapView({'number':lambda cs:int(''.join(cs))})
+    tkey2tdat2tdat4tknz__7arith = mk_MapView({'number':lambda cs:int(''.join(cs))})
     main_rgnr4tknz__7arith = mkrs.main_(rgnr4tknz__7arith)
     return (tkey2tdat2tdat4tknz__7arith, tkeys8noise4tknz__7arith, main_rgnr4tknz__7arith, max_num_tokens6backward4tknz__7arith, may_env4tknz__7arith)
 #end-def prepare4tokenize4arith_():
@@ -433,7 +436,6 @@ def parse7arith__istream_(istream7arith, may_name2may_gpostprocess6ok4parse=None
     env4parse = env4parse__7arith if may_name2may_gpostprocess6ok4parse is None or may_name2may_gpostprocess6ok4parse == name2may_gpostprocess6ok4parse__7arith else mk_Environment(param2setting:={}, name2rgnr:=name2rgnr4parse__7arith, name2may_gpreprocess:={}, name2may_gpostprocess6err:={}, name2may_gpostprocess6ok:=may_name2may_gpostprocess6ok4parse, name2force_postprocess_when_ignore:={})
     ######################
     if 0b0000:
-        from seed.tiny import print_err
         print_err(env4parse._nm2mpost6ok)
     ######################
     reply = recognize_(main_rgnr4parse__7arith, env4parse, gctx:={}, istream7arith)

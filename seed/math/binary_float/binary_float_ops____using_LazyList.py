@@ -1,4 +1,5 @@
 #__all__:goto
+doing
 r'''[[[
 e ../../python3_src/seed/math/binary_float/binary_float_ops____using_LazyList.py
 see:
@@ -79,6 +80,7 @@ bf_mul(lhs, rhs)
 
 
 
+__all__
 seed.math.binary_float.binary_float_ops____using_LazyList
 py -m nn_ns.app.debug_cmd   seed.math.binary_float.binary_float_ops____using_LazyList -x
 py -m nn_ns.app.doctest_cmd seed.math.binary_float.binary_float_ops____using_LazyList:__doc__ -ff -v
@@ -189,7 +191,7 @@ seed.math.binary_float.binary_float_ops____using_LazyList.FloatNumberError__div0
 
 
 
->>> from seed.tiny import echo
+>>> from seed.tiny_.funcs import echo# fst, snd
 >>> echo(bf_floor_(mk[()]))
 0
 >>> echo(bf_floor_(mk[+1:2, 0, 1, 0, 1]))
@@ -631,38 +633,42 @@ __all__ = r'''
     #_add_bits__p_p__output_carry_bit__input_aligned_
     #
 __all__
-from math import floor
-from itertools import repeat
-from fractions import Fraction
-
-
-from seed.math.PowSeq import PowSeq
-from seed.math.divs import is_even
-
-
-from seed.tiny import print_err
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_pair, check_uint_lt, check_int_ge, check_int_ge_le # , check_int_ge_lt
-from seed.tiny import is_iterator, is_iterable
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.types.LazySeq import LazySeq
 from seed.types.LazyList import decorator4protocol4ToConcatLazyList_, ToConcatLazyList
 from seed.types.LazyList import LazyList, LazyListError
 from seed.types.LazyList import null_lazylist
-
-
-#from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionError__inf__no_cf0
-from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction
-
-
 from seed.math.binary_float.FloatNumberError import FloatNumberError
 #class FloatNumberError(Exception):pass
-from seed.math.binary_float.py_float_repr import float2signed_uint_exp_repr_, hex_float_repr5bin_
-from seed.math.binary_float.py_float_repr import hex_float_repr__pos0, bin_float_repr__pos0, hex_float_repr__neg0, bin_float_repr__neg0
-from seed.math.binary_float.py_float_repr import check_hex_float_repr, check_bin_float_repr
-    #check_hex_mantissa,
-    #heck_bin_mantissa,
 
-from seed.math.binary_float.py_float_repr import (
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction
+    from seed.math.PowSeq import PowSeq
+
+
+    from math import floor
+    from itertools import repeat
+    from fractions import Fraction
+
+
+    from seed.debug.print_err import print_err
+    from seed.tiny_.verify import is_iterable, is_iterator
+    from seed.tiny_.check import check_pair, check_uint_lt, check_int_ge, check_int_ge_le, check_type_is
+
+
+    from seed.math.divs import is_even
+
+
+
+    from seed.math.binary_float.py_float_repr import float2signed_uint_exp_repr_, hex_float_repr5bin_
+    from seed.math.binary_float.py_float_repr import hex_float_repr__pos0, bin_float_repr__pos0, hex_float_repr__neg0, bin_float_repr__neg0
+    from seed.math.binary_float.py_float_repr import check_hex_float_repr, check_bin_float_repr
+        #check_hex_mantissa,
+        #heck_bin_mantissa,
+
+def __():
+    from seed.math.binary_float.py_float_repr import (
 check_signed_uint_exp_repr
 ,   signed_uint_exp_repr2bin_float_repr_
 ,   signed_uint_exp_repr5bin_float_repr_
@@ -695,6 +701,7 @@ check_signed_uint_exp_repr
 )
 
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -1838,6 +1845,7 @@ def _iter4mul(bitsL, bitsR, /):
         if nullL or nullR:
             if nullL:
             . todo
+            doing
             raise logic-err-'p gt p'
         # [nonempty bitsL, bitsR]
         bf0L, bitsL = bitsL.may_unpack()
@@ -2167,25 +2175,7 @@ bf_0 = BinaryFloat(0)
 bf_1 = BinaryFloat(1)
 bf_neg1 = BinaryFloat(-1)
 
-def __():
-    from seed.tiny import ifNonef, ifNone, echo
-    from seed.tiny import check_type_is, fst, snd, at
-    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-    from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
-    from seed.helper.repr_input import repr_helper
 
-def __():
-    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-    from seed.helper.repr_input import repr_helper
-    class _(ABC):
-        __slots__ = ()
-        raise NotImplementedError
-        ___no_slots_ok___ = True
-        def __repr__(sf, /):
-            #return repr_helper(sf, *args, **kwargs)
-            #return repr_helper_ex(sf, args, ordered_attrs, kwargs, ordered_attrs_only=False)
-            ...
 if __name__ == "__main__":
     pass
 __all__

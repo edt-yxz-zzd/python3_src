@@ -829,23 +829,31 @@ iter_radix_digits_of_continued_fraction__with_int__via_cf_ops_
 '''.split()#'''
     #RecursionError:iter_radix_digits_of_continued_fraction__with_int__via_cf_ops_
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    import math
+    from itertools import repeat, chain, islice
 
-from seed.math.continued_fraction.continued_fraction_ops import cf_neg, cf_cmp_, cf_sub, cf_floor_ex_, CachedIterator# to_PeekableIterator
-from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction_, ContinuedFractionError__inf__no_cf0
-from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_lt
-from seed.tiny_.check import check_pair
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-from seed.math.gcd import gcd_ex
-from seed.tiny import null_iter
-from seed.math.continued_fraction.continued_fraction_ops import ContinuedFraction as CF__original
-from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction as CF__using_LazyList
-from seed.math.sign_of import sign_of
-from seed.tiny import print_err
-from seed.math.continued_fraction.continued_fraction_fold import calc_ND5finite_continued_fraction_
-from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_lt, check_pair
 
-import math
-from itertools import repeat, chain, islice
+    from seed.math.continued_fraction.continued_fraction_ops import cf_neg, cf_cmp_, cf_sub, cf_floor_ex_, CachedIterator# to_PeekableIterator
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.gcd import gcd_ex
+    from seed.math.sign_of import sign_of
+    from seed.math.continued_fraction.continued_fraction_fold import calc_ND5finite_continued_fraction_
+    from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+    from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction_, ContinuedFractionError__inf__no_cf0
+with mk_ctx4lazy_import4funcs_(__name__, 'ContinuedFraction:CF__original'):
+    from seed.math.continued_fraction.continued_fraction_ops import ContinuedFraction as CF__original
+with mk_ctx4lazy_import4funcs_(__name__, 'ContinuedFraction:CF__using_LazyList'):
+    from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction as CF__using_LazyList
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
 def check_radix_(radix, /):
     check_int_ge(2, radix)
 def check_ND_(ND, /, *, ge0_le1=False):
@@ -1344,7 +1352,7 @@ def iter_radix_digits_of_continued_fraction__with_int__via_NDs_(radix, cf_digits
         integer_part
 
         if is_int:
-            fraction_part = null_iter
+            fraction_part = get_null_iter_()
             return (integer_part, fraction_part)
         # [cf not int]
 
@@ -1409,7 +1417,7 @@ def iter_radix_digits_of_continued_fraction__with_int__via_NDs_(radix, cf_digits
         floor_part = cf0_x
         if is_int:
             integer_part = floor_part
-            fraction_part = null_iter
+            fraction_part = get_null_iter_()
             #return True, (integer_part, fraction_part)
             frac_cf_digits = [0] #含小数点前面的0
             cf_digits = None
@@ -1806,7 +1814,7 @@ def truncated_continued_fraction2truncated_radix_digits_with_int_(radix, truncat
     if len(t_cf) == 0:
         if raise_vs_return_empty:
             return []
-        raise ContinuedFractionError__inf__no_cf0
+        raise ContinuedFractionError__inf__no_cf0()
     cf0 = t_cf[0]
     assert type(cf0) is int, t_cf
     # [cf0 <= the_exact_value <= cf0+1]

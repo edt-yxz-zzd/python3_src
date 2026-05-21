@@ -17,13 +17,10 @@ e ../../python3_src/seed/seq_tools/mk_nonsubseq_of.py
         [原貌字串囗起止定位串:=mk_nonsubseq_of(原貌字串囗内容串,...)]
 
 seed.seq_tools.mk_nonsubseq_of
-py -m nn_ns.app.debug_cmd   seed.seq_tools.mk_nonsubseq_of
+py -m nn_ns.app.debug_cmd   seed.seq_tools.mk_nonsubseq_of -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.mk_nonsubseq_of:__doc__ -ff -v
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.seq_tools.mk_nonsubseq_of   @f
-py -m nn_ns.app.doctest_cmd seed.seq_tools.mk_nonsubseq_of:__doc__ -v
 
-from seed.seq_tools.mk_nonsubseq_of import check_antisubseq_, mk_a_nonsub_uint_seq_of_uint_seq_, mk_a_nonsubseq_of_
-#def mk_a_nonsub_uint_seq_of_uint_seq_(bad_uint, uint_seq, /)->antisubseq:
-#def mk_a_nonsubseq_of_(key_seq, /, *, is_key_ok, extra_keys)->antisubseq:
 
 
 
@@ -149,25 +146,31 @@ check_antisubseq_
 __all__
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.at import at
+    from seed.tiny_.check import check_callable, check_int_ge, check_int_ge_le, check_int_ge_lt, check_type_is, check_uint_lt
+    from seed.tiny_.funcs import fst, snd
 
 
-from seed.types.StackStyleSet import StackStyleSet#, MultiSetStyleStack
+    from seed.types.StackStyleSet import StackStyleSet#, MultiSetStyleStack
 
-#from nn_ns.RMQ.make_suffix_tree_data import make_suffix_tree_data_from_uint_array
+    #from nn_ns.RMQ.make_suffix_tree_data import make_suffix_tree_data_from_uint_array
     #view ../../python3_src/nn_ns/RMQ/make_suffix_tree_data.py
     #def make_suffix_tree_data_from_uint_array(array):
 
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le, check_callable
-from seed.tiny import check_type_is, fst, snd, at
-from seed.types.RadixNumberCounter import RadixNumberCounter
-    # def to_little_endian_digit_tuple(sf, /, *, reverse=False):
-    # def inc() -> overflow
-from seed.types.RadixNumberCounter import iter_words_in_one_period_, iter_words_in_one_period_with_idx_
+    from seed.types.RadixNumberCounter import iter_words_in_one_period_with_idx_
     #def iter_words_in_one_period_with_idx_(radix, sz, /, *, big_endian):
 
-from seed.iters.find import find_subseq
+    from seed.iters.find import find_subseq
     #view ../../python3_src/seed/iters/find.py
     #def find_subseq(seq, subseq, begin=None, end=None, failure_map=None, _ver=None):
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 
 def check_antisubseq_(typ, may_total_ok_keys, whole_seq, antisubseq, /):
@@ -422,3 +425,4 @@ r'''
 from seed.seq_tools.mk_nonsubseq_of import check_antisubseq_, mk_a_nonsub_uint_seq_of_uint_seq_, mk_a_nonsubseq_of_
 #def mk_a_nonsub_uint_seq_of_uint_seq_(bad_uint, uint_seq, /)->antisubseq:
 #def mk_a_nonsubseq_of_(key_seq, /, *, is_key_ok, extra_keys)->antisubseq:
+from seed.seq_tools.mk_nonsubseq_of import *

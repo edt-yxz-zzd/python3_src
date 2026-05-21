@@ -1,5 +1,7 @@
 
 '''
+e ../../python3_src/seed/decorators/__special_method__.py
+
 why?
     to prevent:
         self.__special_method__
@@ -7,6 +9,9 @@ why?
     to force:
         cls.__special_method__
 
+py -m seed.decorators.__special_method__
+py -m nn_ns.app.debug_cmd   seed.decorators.__special_method__ -x
+py -m nn_ns.app.doctest_cmd seed.decorators.__special_method__:__doc__ -ht #  -ff -v -df
 
 '''
 
@@ -51,7 +56,7 @@ class __instance_method__(__special_method__, staticmethod):
 
 
 def _t():
-    from seed.tiny import expectError
+    from seed.debug.expectError import expectError
     class B:
         @__static_method__
         def __s__():
@@ -121,3 +126,7 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.decorators.__special_method__ import __instance_method__, __class_method__, __static_method__
+
+from seed.decorators.__special_method__ import __special_method__, SpecialMethodAccessError
+from seed.decorators.__special_method__ import *

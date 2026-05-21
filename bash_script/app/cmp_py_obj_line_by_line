@@ -1,0 +1,4 @@
+
+
+py_adhoc_call   nn_ns.app.cmp_py_obj_line_by_line   @cmp_py_obj_line_by_line__ipaths_  "$@"
+#py_adhoc_call   nn_ns.app.cmp_py_obj_line_by_line   @cmp_py_obj_line_by_line__ipaths_  --encoding:u8  :/sdcard/0my_files/tmp/-1tmp :/sdcard/0my_files/tmp/-0tmp

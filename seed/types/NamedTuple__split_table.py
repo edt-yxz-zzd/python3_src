@@ -7,8 +7,7 @@ used in:
 
 seed.types.NamedTuple__split_table
 py -m nn_ns.app.debug_cmd   seed.types.NamedTuple__split_table -x
-py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.NamedTuple__split_table   @f
-py -m nn_ns.app.doctest_cmd seed.types.NamedTuple__split_table:__doc__ -v
+py -m nn_ns.app.doctest_cmd seed.types.NamedTuple__split_table:__doc__ -ff -v
 from seed.types.NamedTuple__split_table import NamedTuple, Descriptor4NamedTuple, gmk_Descriptor4NamedTuple
 
 
@@ -267,12 +266,19 @@ __all__ = r'''
 __all__
 
 
-from seed.tiny import MapView, check_pseudo_identifier, check_type_is, mk_tuple
-from seed.tiny import echo, fst as fst_, snd as snd_
-from seed.tiny import ifNone
-from seed.helper.repr_input import repr_helper
-from seed.iters.duplicate_elements import iter_duplicate_representative_elements
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_pseudo_identifier, check_type_is
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.types5py import MapView
+    from seed.helper.ifNone import ifNone
+    from seed.helper.repr_input import repr_helper
+    from seed.iters.duplicate_elements import iter_duplicate_representative_elements
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 _names2descriptor4named_tuple = {}
@@ -478,8 +484,8 @@ class NamedTuple(_MIXINS):
         if may_iterable is None:
             items = items_or_descriptor4named_tuple_or_names
             items = [(nm,v) for nm,v in items]
-            names = map(fst_, items)
-            iterable = map(snd_, items)
+            names = map(fst, items)
+            iterable = map(snd, items)
             descriptor4named_tuple_or_names = names
             del names, items
         else:

@@ -1,4 +1,5 @@
 #__all__:goto
+TODO
 r'''[[[
 e ../../python3_src/seed/recognize/toy/conservative_shortest_sentence_recognizer.py
 rm:e ../../python3_src/seed/recognize/toy/poor_efficiency_toy_recognizer.py
@@ -614,27 +615,6 @@ def :返回结果缓冲区.保存扌(子入口,扩展结果冃子)
 #]]]'''#'''
 __all__
 __all__
-__all__
-
-def __():
-    from seed.tiny import ifNonef, ifNone, echo
-    from seed.tiny import check_type_is, fst, snd, at
-    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-    from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
-    from seed.helper.repr_input import repr_helper
-
-def __():
-    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-    from seed.helper.repr_input import repr_helper
-    class _(ABC):
-        __slots__ = ()
-        raise NotImplementedError
-        ___no_slots_ok___ = True
-        def __repr__(sf, /):
-            #return repr_helper(sf, *args, **kwargs)
-            #return repr_helper_ex(sf, args, ordered_attrs, kwargs, ordered_attrs_only=False)
-            ...
 if __name__ == "__main__":
     pass
 __all__

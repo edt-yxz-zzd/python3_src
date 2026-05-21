@@ -1,12 +1,23 @@
 
-#from seed.seq_tools.bisearch import bisearch
+r'''[[[
+py -m seed.seq_tools.bisearch
+py -m nn_ns.app.debug_cmd   seed.seq_tools.bisearch -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.bisearch! -v
 
+#]]]'''#'''
 __all__ = ['bisearch']
+    #test_bisearch
+    #test_bisearch2
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from seed.tiny import echo
-from seed.lang.calc_len_of_py_range_ import calc_len_of_py_range_
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+    from seed.lang.calc_len_of_py_range_ import calc_len_of_py_range_
+___end_mark_of_excluded_global_names__0___ = ...
 
 #"../../python3_src/seed/int_tools/digits/uint2radix_repr.py"._uint2radix_repr__big_endian__split__tail use kw "begin/end"
 #def bisearch(x, array, begin=None, end=None, /, *, key=None, __lt__=None, result_case=2):
@@ -269,10 +280,10 @@ def test_bisearch2():
         for x in range(minN-1, maxN+1):
             assert bisearch(x, a) == (bisect_left(a, x), bisect_right(a, x))
 
-this = bisearch
-this(5, [-6,-6,5,5,6,6],4)
-this(5, [-6,-6,5,5,6,6],5)
-this(5, [-6,-6,5,5,6,6],1,1)
+_this = bisearch
+_this(5, [-6,-6,5,5,6,6],4)
+_this(5, [-6,-6,5,5,6,6],5)
+_this(5, [-6,-6,5,5,6,6],1,1)
 
 
 
@@ -287,3 +298,5 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.seq_tools.bisearch import bisearch
+from seed.seq_tools.bisearch import *

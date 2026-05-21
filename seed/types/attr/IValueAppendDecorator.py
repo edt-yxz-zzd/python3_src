@@ -5,7 +5,7 @@
 r'''
 seed.types.attr.IValueAppendDecorator
 py -m    seed.types.attr.IValueAppendDecorator
-py -m nn_ns.app.debug_cmd   seed.types.attr.IValueAppendDecorator
+py -m nn_ns.app.debug_cmd   seed.types.attr.IValueAppendDecorator -x
 
 used in:
     seed.func_tools.fmapT.TypeBasedDispatcher::on_type/on_basetype
@@ -52,7 +52,7 @@ __all__ = '''
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
-from seed.tiny import check_type_is
+from seed.tiny_.check import check_type_is
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -236,7 +236,6 @@ def group_by_case_then_attr__IValueAppendDecorator(BaseValueAppendDecorator, lor
 #HHHHH
 if __name__ == "__main__":
     from seed.types.attr.IValueAppendDecorator import *
-    from seed.types.attr.IValueAppendDecorator import IValueAppendDecorator, IValueAppendDecorator__fix3, IValueAppendDecorator__fixN_lt3, IValueAppendDecorator__fix2, IValueAppendDecorator__fix1, ValueAppendDecorator__fix0, iter_attr_case_args4group_by__IValueAppendDecorator, group_by_attr_then_case__IValueAppendDecorator, group_by_case_then_attr__IValueAppendDecorator
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -247,3 +246,4 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.types.attr.IValueAppendDecorator import IValueAppendDecorator, IValueAppendDecorator__fix3, IValueAppendDecorator__fixN_lt3, IValueAppendDecorator__fix2, IValueAppendDecorator__fix1, ValueAppendDecorator__fix0, iter_attr_case_args4group_by__IValueAppendDecorator, group_by_attr_then_case__IValueAppendDecorator, group_by_case_then_attr__IValueAppendDecorator

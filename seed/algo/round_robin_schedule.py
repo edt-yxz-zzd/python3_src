@@ -39,6 +39,7 @@ e ./script/循环对抗赛配对方案.py
     #这是 首个 完整的非递归算法冫循环赛配对方案
     #非递归冫惑缺一轮奇位移辻惑偶偏心偶中心对称版
 
+__all__
 seed.algo.round_robin_schedule
 py -m nn_ns.app.debug_cmd   seed.algo.round_robin_schedule -x
 py -m nn_ns.app.doctest_cmd seed.algo.round_robin_schedule:__doc__
@@ -939,11 +940,28 @@ __all__ = r'''
 #   简单位移:只能用于二幂
 
 __all__
-from seed.tiny_.check import check_type_is, check_uint_lt, check_int_ge
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.math.floor_ceil import floor_log2, ceil_log2
 from seed.tiny_.constants import inf
-from itertools import count
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import count
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
+    from seed.tiny_.check import check_type_is, check_uint_lt, check_int_ge
+    from seed.tiny_.funcs import mk_fprint
+    from seed.debug.print_err import print_err
+    from ast import literal_eval
+    from pathlib import Path
+    from io import StringIO
+    from seed.data_funcs.idc_mngr import DoublyList4Idc
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
 
 
 def 蛮力搜索冫循环对抗赛配对方案冖冖最小化扌(*, 队伍数半数):
@@ -1787,8 +1805,6 @@ def 枚举冫循环赛配对方案扌(*, 版本名, 鬽队伍数半数纟最大�
     return
 def _读取暨求值冖冖标准库扌(输入路径, /, *, verbose, encoding):
     #导致宕机:52MB #[队伍数半数<-[1..=206]]
-    from ast import literal_eval
-    from seed.tiny import print_err
     txt = 输入路径.read_text(encoding=encoding)
     txt = txt.strip()
     if txt and not txt.startswith(','): raise Exception('bad format')
@@ -1801,7 +1817,6 @@ def _读取暨求值冖冖标准库扌(输入路径, /, *, verbose, encoding):
         print_err(f'求值结束')
     return d
 def _读取暨求值冖冖人工扌(输入路径, /, *, verbose, encoding):
-    from seed.tiny import print_err
     def f(ifile, /):
         for line in ifile:
             line = line.strip()
@@ -1841,8 +1856,6 @@ def 输出枚举冫循环赛配对方案扌(*, 版本名, 欤读取, 输出路�
     #, 欤紧凑文本化=False???True
     if 欤压缩 or 欤标准压缩:raise NotImplementedError
 
-    from pathlib import Path
-    from seed.tiny import mk_fprint, print_err
     输出路径 = Path(输出路径)
     if 欤读取 and 输出路径.exists():
         if verbose:
@@ -1891,8 +1904,6 @@ def _紧凑输出冫配对方案扌(fprint, 队伍数半数, 配对方案, /):
 def 紧凑文本化冫配对方案扌(配对方案, /):
     '-> str'
     #see:紧凑文本化冫合并轮纟二轮扌
-    from seed.tiny import mk_fprint
-    from io import StringIO
     ofile = StringIO()
     fprint = mk_fprint(ofile)
     队伍数总数 = len(配对方案[0])
@@ -2596,7 +2607,6 @@ def __():
     拟遍历圈 = []
     if 队伍数总数==2:
         return (鬽队伍号纟起:=None, 列表纟轮次,拟遍历圈)
-    from seed.data_funcs.idc_mngr import DoublyList4Idc
     #xxx:剩余队伍集合 = DoublyList4Idc(队伍数总数, range(队伍数总数))
     if 0:
         #bug:见下面:Exception(队伍数总数, 队伍数半数, 配对方案, (队伍号纟起, 列表纟轮次,拟遍历圈), 队伍号, 剩余队伍集合, 剩余轮次集合)

@@ -1,6 +1,11 @@
 #HHHHH
 
 r'''[[[
+e ../../python3_src/seed/helper/check/check.py
+
+py -m nn_ns.app.debug_cmd   seed.helper.check.check -x
+py -m nn_ns.app.doctest_cmd seed.helper.check.check:__doc__ -ht #  -ff -v -df
+
 ICheckEchor_with_args
     @classmethod
     @override
@@ -149,11 +154,11 @@ True
 >>> the_checker__is_None(False)
 Traceback (most recent call last):
     ...
-CheckFail
+seed.helper.check.check.CheckFail
 >>> the_fail_checker(False)
 Traceback (most recent call last):
     ...
-CheckFail
+seed.helper.check.check.CheckFail
 
 
 >>> ~the_fail_checker is the_pass_checker
@@ -168,11 +173,11 @@ True
 >>> f(0)
 Traceback (most recent call last):
     ...
-CheckFail
+seed.helper.check.check.CheckFail
 >>> (~p)(0)
 Traceback (most recent call last):
     ...
-CheckFail
+seed.helper.check.check.CheckFail
 
 >>> f_pp = p^p
 >>> f_ff = f^f
@@ -271,11 +276,11 @@ from seed.helper.check.check import Checker__choice, Checker__switch, Checker__o
 >>> Checker__unordered_switch(())
 Traceback (most recent call last):
     ...
-CheckFail_Type
+seed.helper.check.check.CheckFail_Type
 >>> Checker__switch({})
 Traceback (most recent call last):
     ...
-CheckFail_Type
+seed.helper.check.check.CheckFail_Type
 >>> Checker__switch(())
 Checker__switch(())
 >>> Checker__switch(FrozenDict())
@@ -292,17 +297,17 @@ Checker__ordered_choice(())
 >>> check(ff, 'w')
 Traceback (most recent call last):
     ...
-CheckFail
+seed.helper.check.check.CheckFail
 >>> check_then_calc(ff, 'w')
 Traceback (most recent call last):
     ...
-CheckFail
+seed.helper.check.check.CheckFail
 
 >>> s01 = Checker__ordered_switch((the_fail_checker, the_pass_checker))
 >>> check_then_calc(s01, (0, 'w'))
 Traceback (most recent call last):
     ...
-CheckFail
+seed.helper.check.check.CheckFail
 >>> check_then_calc(s01, (1, 'w'))
 'w'
 >>> check_then_calc(s01, (2, 'w'))
@@ -703,16 +708,36 @@ if 0:
     _4bool
     _4checkers
     _4checker
+    IChecker_with_args__arg0_is_checkers_or_key2checker
+    IChecker_one_arg__checkers_or_key2checker
 #HHHHH
 
-from seed.lang.class_property import class_property
+___begin_mark_of_excluded_global_names__0___ = ...
+from collections.abc import Mapping, Set, Sequence
+from collections.abc import Container, Iterable
 from seed.abc.abc import abstractmethod, override, not_implemented, ABC, ABC__no_slots
 from seed.abc.abc__ver1 import Base4check_slots_setting
 from seed.types.FrozenDict import FrozenDict, HalfFrozenDict
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
-from seed.tiny import echo, fst, snd, at, print_err, slice2triple
-from collections.abc import Mapping, Set, Sequence
-from collections.abc import Container, Iterable
+
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.lang.class_property import class_property
+    from seed.tiny_.at import at
+    from seed.tiny_.slice2triple import slice2triple
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import echo, fst, snd
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
+
+
 
 class CheckException(Exception):
     'base exc'
@@ -769,6 +794,7 @@ def mk_checker(pseudo_checker):
     #'''
     Error = CheckHelperExc_not_pseudo_checker
     def this(x):
+        x = force_lazy_imported_func_(x)
         if isinstance(x, IChecker):
             r = checker = x
         elif x is None:

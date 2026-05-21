@@ -1,6 +1,8 @@
 
 r'''
 py -m seed.math.cut_uint_into_uints
+py -m nn_ns.app.debug_cmd   seed.math.cut_uint_into_uints -x
+py -m nn_ns.app.doctest_cmd seed.math.cut_uint_into_uints:__doc__ -ht #  -ff -v -df
 from seed.math.cut_uint_into_uints import Helper4cut_uint_into_uints, calc_lowerbound_of_inf_compact_domain_rng4cut_uint_into_uints
 
 
@@ -62,14 +64,18 @@ __all__ = '''
     Helper4cut_uint_into_uints
     calc_lowerbound_of_inf_compact_domain_rng4cut_uint_into_uints
     '''.split()
-from seed.helper.check.checkers import check_uint
-from seed.math.gcd import gcd_many
-from seed.math.lcm import lcm_many
-from seed.math.floor_ceil import offsetted_divmod
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.check.checkers import check_uint
+    from seed.math.gcd import gcd_many
+    from seed.math.lcm import lcm_many
 
-from seed.types.FrozenDict import FrozenDict
-from collections import defaultdict
+    from seed.types.FrozenDict import FrozenDict
+    from collections import defaultdict
 
+    from seed.math.floor_ceil_tools.fc_div import offsetted_divmod
+___end_mark_of_excluded_global_names__0___ = ...
 
 gcd_many
 lcm_many

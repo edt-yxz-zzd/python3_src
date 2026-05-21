@@ -76,12 +76,17 @@ is_prime__via_complete_factorization_Nmm_
 '''.split()#'''
 __all__
 
-from seed.math.is_complete_factorization_of__ft2e_ import is_complete_factorization_of__ft2e_, check_complete_factorization_of__ft2e_
-from seed.tiny_.check_container import is_mapping, check_mapping
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.is_complete_factorization_of__ft2e_ import is_complete_factorization_of__ft2e_, check_complete_factorization_of__ft2e_
+    from seed.tiny_.check_container import is_mapping, check_mapping
 
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division
-from seed.math.primality_proving__plain import return_version____primality_test__Nmm__plain__sqrt_case_
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division
+    from seed.math.primality_proving__plain import return_version____primality_test__Nmm__plain__sqrt_case_
+
+___end_mark_of_excluded_global_names__0___ = ...
 def __():
   def return_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft4Nmm, j2exp4ft4Nmm, /, *, complete_factorization__vs__using_gcd=True):
     '-> (case, payload)/((odd_prime_case/0, j2g) | (1, witness4composite) | (2, nontrivial_factor) | (even_prime_case/3, None)) | ^ERH__fail/Fail__unknown_fine_upperbound4primitive_root | ^ValueError__not_complete_factorization | ^ValueError__not_sqrt_case'
@@ -92,8 +97,8 @@ def __():
 
 
 def _test_le_(max_N, /):
-    from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_factor4uint_lt_, tabulate_may_factorization4uint_lt_
-    n2p2e = tabulate_may_factorization4uint_lt_(1+max_N)
+    from seed.math.prime_sieve.sieve_lt import tabulate_may_prime_factorization4uint_lt_
+    n2p2e = tabulate_may_prime_factorization4uint_lt_(1+max_N)
     for Nmm in range(1, max_N):
         N = Nmm+1
         p2e4N = n2p2e[N]

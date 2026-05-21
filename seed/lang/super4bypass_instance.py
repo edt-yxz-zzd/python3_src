@@ -17,7 +17,7 @@ why?
 
 seed.lang.super4bypass_instance
 py -m    seed.lang.super4bypass_instance
-py -m nn_ns.app.debug_cmd   seed.lang.super4bypass_instance
+py -m nn_ns.app.debug_cmd   seed.lang.super4bypass_instance -x
 
 from seed.lang.super4bypass_instance import ...
 
@@ -49,23 +49,6 @@ __all__ = '''
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-import ...
-from seed.tiny import str2__all__
-__all__ = str2__all__(r'''#)
-    #(''')
-from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
-from seed.helper.repr_input import repr_helper
-from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f
-from seed.helper.check.checkers import check_pair, check_type_is
-  #from seed.helper.check.checkers import checks, checkers, check_funcs
-  #view ../../python3_src/seed/helper/check/checkers.py
-if 0b00:#[01_to_turn_off]
-    #0b01
-    print(fr'x={x}')
-    from seed.tiny import print_err
-    print_err(fr'x={x}')
-    from pprint import pprint
-    pprint(x)
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH

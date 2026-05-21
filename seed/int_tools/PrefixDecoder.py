@@ -115,19 +115,21 @@ from itertools import pairwise
 from seed.int_tools.RadixInfo import IZpowRadixInfo, ZpowRadixInfo, mk_ZpowRadixInfo_
 from seed.int_tools.RadixInfo import IRadixInfo, RadixInfo, mk_RadixInfo_
 from seed.int_tools.RadixInfo import IRadixedDigit, RadixedDigit, rxdigit8no_bits
-from seed.types.Either import Either
-from seed.types.Either import mk_Left, mk_Right
-from seed.tiny_.check import check_type_le, check_type_is, check_int_ge#no:check_all_
-#.
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,ifNone:ifNone_', __name__)
-if 0:from seed.tiny import mk_tuple,print_err,ifNone as ifNone_ #xxx:null_tuple #xxx:echo,fst,snd
-echo = lazy_import4func_('seed.tiny', 'echo', __name__)
 
-len_lcp_of2 = lazy_import4func_('seed.seq_tools.lcp_of', 'len_lcp_of2', __name__)
-if 0:from seed.seq_tools.lcp_of import len_lcp_of2
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.Either import Either
+    from seed.types.Either import mk_Left, mk_Right
+    from seed.tiny_.check import check_type_le, check_type_is, check_int_ge#no:check_all_
+
+    from seed.helper.repr_input import repr_helper
+    from seed.seq_tools.lcp_of import len_lcp_of2
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
+    from seed.helper.ifNone import ifNone
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #.class __(ABC):
@@ -264,7 +266,7 @@ def mk_IPrefixMappingTree_(mkr, radix4digit, may_elem2digit_, sorted_complete_pr
     assert len(sorted_complete_prefix_code_seq) >= radix4digit >= 2
     R = radix4digit
     xss = sorted_complete_prefix_code_seq
-    x2d_ = ifNone_(may_elem2digit_, echo)
+    x2d_ = ifNone(may_elem2digit_, echo)
     lens4lcps = [len_lcp_of2(map(x2d_, xs), map(x2d_, ys)) for xs, ys in pairwise(xss)]
     assert len(lens4lcps) == len(xss)-1
     def __():

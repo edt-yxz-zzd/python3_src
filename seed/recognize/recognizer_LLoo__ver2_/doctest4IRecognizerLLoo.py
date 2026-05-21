@@ -3267,6 +3267,7 @@ from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import \
 )
 
 
+from seed.debug.print_err import print_err
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -3315,7 +3316,6 @@ def _validate():
     all_method_names = tuple(sorted(Makers4IRecognizerLLoo))
     miss_nms = [nm for nm in all_method_names if not (f'mkrs.{nm}(' if nm[-1] == '_' else f'>>> main_rgnr = mkrs.{nm}\n') in __doc__] #)
     if miss_nms:
-        from seed.tiny import print_err
         print_err('\n'.join(miss_nms))
         raise Exception(miss_nms)
     return

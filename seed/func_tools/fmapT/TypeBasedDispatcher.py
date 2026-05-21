@@ -5,7 +5,7 @@
 r'''
 seed.func_tools.fmapT.TypeBasedDispatcher
 py -m    seed.func_tools.fmapT.TypeBasedDispatcher
-py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT.TypeBasedDispatcher
+py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT.TypeBasedDispatcher -x
 
 from seed.func_tools.fmapT.TypeBasedDispatcher import TypeBasedDispatcher, on_type4dispatcherT, on_basetype4dispatcherT, on_type, on_basetype
 
@@ -42,7 +42,7 @@ __all__ = '''
 ___begin_mark_of_excluded_global_names__1___ = ...
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
 from seed.types.attr.IValueAppendDecorator import IValueAppendDecorator, IValueAppendDecorator__fix2, group_by_case_then_attr__IValueAppendDecorator
-from seed.tiny import dict_add__eq
+from seed.tiny_.dict__add_fmap_filter import dict_add__eq
 
 ___end_mark_of_excluded_global_names__1___ = ...
 
@@ -175,7 +175,6 @@ class TypeBasedDispatcher:
 #HHHHH
 if __name__ == "__main__":
     from seed.func_tools.fmapT.TypeBasedDispatcher import *
-    from seed.func_tools.fmapT.TypeBasedDispatcher import TypeBasedDispatcher, on_type4dispatcherT, on_basetype4dispatcherT, on_type, on_basetype
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -186,3 +185,4 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.func_tools.fmapT.TypeBasedDispatcher import TypeBasedDispatcher, on_type4dispatcherT, on_basetype4dispatcherT, on_type, on_basetype

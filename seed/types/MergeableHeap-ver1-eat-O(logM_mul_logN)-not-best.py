@@ -389,8 +389,9 @@ __all__ = '''
 
 import operator as opss
 from itertools import pairwise
-from seed.tiny import echo, null_tuple
 from seed.helper.repr_input import repr_helper
+from seed.tiny_.containers import null_tuple
+from seed.tiny_.funcs import echo
 
 
 class _MHNodeEmpty:

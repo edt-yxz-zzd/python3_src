@@ -4,6 +4,10 @@ to list all descendants of a package
 
 will actually import package/module
 if unwanted, see pkgutil.walk_packages
+seed.pkg_tools.iter_submodules
+py -m seed.pkg_tools.iter_submodules
+py -m nn_ns.app.debug_cmd   seed.pkg_tools.iter_submodules -x
+py -m nn_ns.app.doctest_cmd seed.pkg_tools.iter_submodules:__doc__ -ht #  -ff -v -df
 '''
 
 __all__ = '''
@@ -11,9 +15,19 @@ __all__ = '''
     iter_submodules_ex
 
     '''.split()
-from pkgutil import walk_packages
-from importlib import import_module
-from seed.tiny import snd
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from pkgutil import walk_packages
+    from importlib import import_module
+    from seed.tiny_.funcs import snd
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
 
 def iter_child_modules(package_obj):
     # :: package_obj -> Iter module_obj
@@ -130,8 +144,10 @@ def try_iter_submodules_ex():
     #[(True, <module 'seed.test_utils' (namespace)>), (False, <module 'generate_test_data' from 'E:\\my_data\\program_source\\python3_src\\seed\\test_utils\\generate_test_data.py'>), (False, <module 'list_submodules' from 'E:\\my_data\\program_source\\python3_src\\seed\\test_utils\\list_submodules.py'>)]
 
 
+from seed.pkg_tools.iter_submodules import *
 if __name__ == '__main__':
     try_walk_packages()
     try_iter_submodules_ex()
 
 
+from seed.pkg_tools.iter_submodules import iter_submodules, iter_submodules_ex

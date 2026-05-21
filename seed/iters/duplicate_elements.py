@@ -1,6 +1,10 @@
 
 '''
 key(element) should be hashable
+
+seed.iters.duplicate_elements
+py -m nn_ns.app.debug_cmd   seed.iters.duplicate_elements -x
+py -m nn_ns.app.doctest_cmd seed.iters.duplicate_elements:__doc__ -ht #  -ff -v -df
 '''
 
 
@@ -13,9 +17,13 @@ __all__ = '''
 '''.split()
 
 
-from collections import Counter, defaultdict
-#from seed.special_funcs import identity as eye_key
-from seed.tiny import echo
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from collections import defaultdict #Counter
+    #from seed.special_funcs import identity as eye_key
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def iter_element_groups(iterable, *, key = None):

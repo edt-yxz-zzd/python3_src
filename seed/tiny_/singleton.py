@@ -2,7 +2,7 @@
 r'''[[[
 e ../../python3_src/seed/tiny_/singleton.py
 
-py -m nn_ns.app.debug_cmd seed.tiny_.singleton
+py -m nn_ns.app.debug_cmd seed.tiny_.singleton -x
 py -m seed.tiny_.singleton
 py -m nn_ns.app.debug_cmd
 
@@ -33,12 +33,18 @@ if __name__ == "__main__":
     #assert __main__.__name__ == __name__
     #del __main__
 
-
-from seed.tiny import null_frozenset
-from seed.helper.repr_input import repr_helper
-from seed.debug.expectError import expectError
+___begin_mark_of_excluded_global_names__0___ = ...
 import pickle
-from seed.tiny_.check import check_type_le, check_type_is
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.containers import get_null_frozenset_#null_frozenset
+    from seed.helper.repr_input import repr_helper
+    from seed.debug.expectError import expectError
+    from seed.tiny_.check import check_type_le, check_type_is
+
+___end_mark_of_excluded_global_names__0___ = ...
+
 __newobj__ = None.__reduce_ex__(2)[0]
 def mk_SingletonClass(module_qname, type_qname, /, *bases, **kw):
     check_type_is(str, module_qname)
@@ -135,7 +141,7 @@ def mk_existing_type_singleton(__class__, /):
     __abstractmethods__ = getattr(__class__, '__abstractmethods__', set())
     if __abstractmethods__:
         if not __abstractmethods__ <= {*_nms4singleton}: raise TypeError((__class__, __abstractmethods__))
-        __class__.__abstractmethods__ = null_frozenset
+        __class__.__abstractmethods__ = get_null_frozenset_()
 
     def _():
         for nm in _nms4singleton:

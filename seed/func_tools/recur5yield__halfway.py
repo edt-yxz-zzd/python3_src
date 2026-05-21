@@ -30,6 +30,8 @@ e ../../python3_src/seed/func_tools/recur5yield__halfway.py
 ]]
 
 e ../../python3_src/seed/func_tools/recur5yield__halfway.py
+
+__all__
 py -m seed.func_tools.recur5yield__halfway
 py -m nn_ns.app.debug_cmd   seed.func_tools.recur5yield__halfway -x
 py -m nn_ns.app.doctest_cmd seed.func_tools.recur5yield__halfway:__doc__ -ff -v
@@ -988,34 +990,51 @@ __all__
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.for_libs.for_time import (
-Timer__print_err
-    ,timer__print_err__thread_wide
-    ,timer__print_err__process_wide
-    ,timer__print_err__system_wide__highest_resolution
-    ,timer__print_err__system_wide__monotonic
-)
+from seed.types.Either import Either
+from types import GeneratorType
+from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
+from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
+from seed.helper.ConstantRepr import repr_as_3dot
 
-timer = timer__print_err__thread_wide
-_to_show_ = __name__ == "__main__"
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'Generator:IGeneratorIterator'):
+    from collections.abc import Generator as IGeneratorIterator #, Callable
+    from functools import wraps
+    from seed.helper.repr_input import repr_helper
 
-with timer(prefix='py:std...', _to_show_=_to_show_):
+    from seed.tiny_.check import check_getitemable, check_callable, check_type_is, check_type_le, check_pair, check_tmay, check_int_ge #no check_tuple
+    from seed.tiny_.dict__add_fmap_filter import dict_add__is
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.types5py import curry1
+    from seed.tiny_.containers import mk_tuple, get_null_tuple_, get_null_iter_#null_tuple, null_iter
+    from seed.debug.print_err import print_err, print_ferr
+
+
+
+
+def __():
+  if 1:
+    from seed.for_libs.for_time import timer__print_err__thread_wide
+
+    timer = timer__print_err__thread_wide
+    _to_show_ = __name__ == "__main__"
+
+  with timer(prefix='py:std...', _to_show_=_to_show_):
     from functools import wraps
     from collections.abc import Generator as IGeneratorIterator #, Callable
 
-with timer(prefix='seed:basic...', _to_show_=_to_show_):
+  with timer(prefix='seed:basic...', _to_show_=_to_show_):
     from seed.tiny_.check import check_getitemable, check_callable, check_type_is, check_type_le, check_pair, check_tmay, check_int_ge #no check_tuple
     from seed.tiny_.dict__add_fmap_filter import dict_add__is
-    from seed.tiny import curry1, echo, null_tuple, mk_tuple, null_iter
-    from seed.tiny import print_err, repr_as_3dot
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.types5py import curry1
+    from seed.tiny_.containers import mk_tuple, get_null_tuple_, get_null_iter_#null_tuple, null_iter
+    from seed.debug.print_err import print_err, print_ferr
+    from seed.helper.ConstantRepr import repr_as_3dot
 
-with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
+  with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
     from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
     from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
-
-from seed.types.Either import Either
-from types import GeneratorType
-from seed.helper.repr_input import repr_helper
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -1388,7 +1407,7 @@ class GeneratorIterator__wrapper(IGeneratorIterator):
         return sf._gi.throw
     def detach_wrapped_gi(sf, /):
         gi = sf._gi
-        sf._gi = null_iter
+        sf._gi = get_null_iter_()
         return gi
     def __getattr__(sf, nm, /):
         #'del sf --> sf.close() --> sf._gi.close() --> next(sf._gi)->^StopIteration(None)'
@@ -1515,7 +1534,7 @@ class GeneratorIterator__bind_the_following_first_value4send(GeneratorIterator__
         if sf._tm:
             if not v is None:raise ValueError('logic-err')
             [v] = sf._tm
-            sf._tm = null_tuple
+            sf._tm = get_null_tuple_()
         return sf._gi.send(v)
 def bind_gi_with_the_following_first_value4send(gi, /, *tmay_following_first_value4send, ___666_close_wrapped_gi_999___=False):
     'bind the (following) first value for gi.send()'

@@ -112,10 +112,20 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.lang.call_ import call_
-from seed.for_libs.for_builtins.py_help import py_help_, py_help
-from seed.tiny import check_type_le, check_uint, print_err, ifNone
-from functools import wraps
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.lang.call_ import call_
+    from seed.for_libs.for_builtins.py_help import py_help_
+    from seed.helper.ifNone import ifNone
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_type_le, check_uint
+    from functools import wraps
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
 
 def detect_depth4fail__exc_(may_max_depth, exc, /):
     'may max_depth/uint -> exc/BaseException -> imay depth/uint # 0 => [not be raised yet] # -1 => [depth > max_depth]'

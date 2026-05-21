@@ -10,7 +10,6 @@ py_adhoc_call   seed.math.factor_pint_by_trial_division_   @f
 from seed.math.factor_pint_by_trial_division_ import *
 
 
-from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_factor4uint_lt_, tabulate_may_factorization4uint_lt_
 
 from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_division_, factor_pint_by_trial_division_ex_
 
@@ -296,7 +295,8 @@ seed.math.factor_pint_by_trial_division_.OverflowError__too_big_to_apply_trial_d
 
 >>> prime_basis4A014233[-1]
 41
->>> next(prime_gen.iter__ge_(1+prime_basis4A014233[-1]))
+>>> #next(prime_gen.iter__ge_(1+prime_basis4A014233[-1]))
+>>> next(iter_sieve4primes_ge_(1+prime_basis4A014233[-1]))
 43
 >>> stable_repr(factor_pint_by_trial_division_(p127, upperbound4probably_prime=100))
 Traceback (most recent call last):
@@ -362,21 +362,25 @@ factor_pint_by_trial_division_
 '''.split()#'''
 #min_prime_factor_gen
     #tabulate_may_min_prime_factor4uint_lt_
-    #tabulate_may_factorization4uint_lt_
+    #tabulate_may_prime_factorization4uint_lt_
 __all__
-from seed.tiny import check_type_is
-from seed.iters.apply_may_args4islice_ import list_islice_, show_islice_, stable_show_islice_, stable_list_islice_
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.iters.apply_may_args4islice_ import list_islice_, show_islice_, stable_show_islice_, stable_list_islice_
 
-from seed.math.II import II
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.II import II
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_
 
 
-from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_factor4uint_lt_, tabulate_may_factorization4uint_lt_
 
-from seed.math.prime_gens import A014233, prime_basis4A014233, prime_gen
-from seed.math.prime_gens import is_prime__tribool_, Case4is_prime__tribool_
-from seed.math.prime_gens import Error
+from seed.math.primality_test.strong_probable_prime import A014233, prime_basis4A014233
+from seed.math.primality_test.strong_probable_prime import is_prime__tribool_, Case4is_prime__tribool_
+from seed.math.primality_test.strong_probable_prime import Error
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 class OverflowError__too_big_to_apply_trial_division__probably_prime(Error):pass
 class OverflowError__too_big_to_apply_trial_division__exceed_prime_factor_limit(Error):pass
@@ -400,14 +404,14 @@ def check_result5factor_pint_(n, p2e, unfactored_part, may_next_prime_factor, ma
     if not (unfactored_part == 1 or (may_upperbound4prime_factor is not None and next_prime_factor >= upperbound4prime_factor) or _is_prime__tribool4factor_pint_(False, unfactored_part) is ...): raise ValidateFail__factor_pint(n, p2e, unfactored_part, may_next_prime_factor, may_upperbound4prime_factor, upperbound4probably_prime)
 
 default4upperbound4probably_prime = 2**40
-    #meaningless, since pseudoprime > 2**81
+    #meaningless, since probable_prime > 2**81
 default4upperbound4probably_prime = A014233[-1] # < is_prime__using_A014233_.upperbound
 def factor_pint_by_trial_division_ex_(n, /, *, upperbound4probably_prime=default4upperbound4probably_prime, may_upperbound4prime_factor=None, next_prime_factor=2):
     r'''[[[
 -> (p2e/{prime:exp}, unfactored_part/pint, may next_prime_factor/prime)
 postcondition:
     [[unfactored_part==1] <-> [may_next_prime_factor is None]]
-    [[unfactored_part==1] or [next_prime_factor >=upperbound4prime_factor] or [unfactored_part is pseudoprime >=upperbound4probably_prime]]
+    [[unfactored_part==1] or [next_prime_factor >=upperbound4prime_factor] or [unfactored_part is probable_prime >=upperbound4probably_prime]]
 
 precondition: [[n > 0][@[k :<- [2..<next_prime_factor]] -> [n%k =!= 0]]]
 
@@ -415,8 +419,8 @@ precondition: [[n > 0][@[k :<- [2..<next_prime_factor]] -> [n%k =!= 0]]]
     try:
         p2e = _factor_pint_by_trial_division_(upperbound4probably_prime, may_upperbound4prime_factor, next_prime_factor, n)
     except OverflowError__too_big_to_apply_trial_division__probably_prime as exc:
-        [(p2e, pseudoprime, next_prime_factor)] = exc.args
-        unfactored_part = pseudoprime
+        [(p2e, probable_prime, next_prime_factor)] = exc.args
+        unfactored_part = probable_prime
         assert unfactored_part > A014233[-1]
         may_next_prime_factor = next_prime_factor
     except OverflowError__too_big_to_apply_trial_division__exceed_prime_factor_limit as exc:
@@ -431,8 +435,8 @@ precondition: [[n > 0][@[k :<- [2..<next_prime_factor]] -> [n%k =!= 0]]]
 def factor_pint_by_trial_division_(n, /, *, upperbound4probably_prime=default4upperbound4probably_prime, may_upperbound4prime_factor=None, next_prime_factor=2):
     r'''[[[
 -> p2e/{prime:exp}
-| ^OverflowError__too_big_to_apply_trial_division__probably_prime((p2e, unfactored_part/pseudoprime, next_prime_factor))
-    when [pseudoprime >= upperbound4probably_prime]
+| ^OverflowError__too_big_to_apply_trial_division__probably_prime((p2e, unfactored_part/probable_prime, next_prime_factor))
+    when [probable_prime >= upperbound4probably_prime]
 | ^OverflowError__too_big_to_apply_trial_division__exceed_prime_factor_limit((p2e, unfactored_part, next_prime_factor))
     when [next_prime_factor >= upperbound4prime_factor]
 
@@ -444,8 +448,9 @@ precondition: [[n > 0][@[k :<- [2..<next_prime_factor]] -> [n%k =!= 0]]]
     may_next_prime_factor = None
     check_result5factor_pint_(n, p2e, unfactored_part, may_next_prime_factor, may_upperbound4prime_factor, upperbound4probably_prime)
     return p2e
-_sqare4next_prime4prime_basis4A014233 = prime_gen[len(prime_basis4A014233)]**2
-assert _sqare4next_prime4prime_basis4A014233 == 43**2
+#_square4next_prime4prime_basis4A014233 = prime_gen[len(prime_basis4A014233)]**2
+_square4next_prime4prime_basis4A014233 = next(iter_sieve4primes_ge_(1+prime_basis4A014233[-1]))**2
+assert _square4next_prime4prime_basis4A014233 == 43**2
 
 def _is_prime__tribool4factor_pint_(skip_check, n, /):
     return is_prime__tribool_(n, case=Case4is_prime__tribool_.II_prime_basis_gtN, skip_check=skip_check)
@@ -475,7 +480,8 @@ def _factor_pint_by_trial_division_(upperbound4probably_prime, may_upperbound4pr
             if _is_prime__tribool4factor_pint_(skip_check, n) is False: raise ValueError(f'violate precondition: next_prime_factor={next_prime_factor}')
             skip_check = True
 
-    ps = prime_gen.iter__ge_(next_prime_factor)
+    #.ps = prime_gen.iter__ge_(next_prime_factor)
+    ps = iter_sieve4primes_ge_(next_prime_factor)
     p2e = {}
     if n == 1:
         return p2e
@@ -546,7 +552,7 @@ def _factor_pint_by_trial_division_(upperbound4probably_prime, may_upperbound4pr
 
 
         ######################
-        # detect limit about pseudoprime:
+        # detect limit about probable_prime:
         ######################
         # [n >= p**2 > p >= 2]
         if (n_changed or n_init) and p > prime_basis4A014233[-1]:
@@ -632,9 +638,9 @@ def _4factor_(upperbound4probably_prime, next_prime_factor, p2e, n, /, *, skip_c
     r = _is_prime__tribool4factor_pint_(skip_check, n)
     if r is ...:
         #probably_prime
-        pseudoprime = n
-        if not pseudoprime < upperbound4probably_prime:
-            raise OverflowError__too_big_to_apply_trial_division__probably_prime((p2e, pseudoprime, next_prime_factor))
+        probable_prime = n
+        if not probable_prime < upperbound4probably_prime:
+            raise OverflowError__too_big_to_apply_trial_division__probably_prime((p2e, probable_prime, next_prime_factor))
         pass
     else:
         if r:

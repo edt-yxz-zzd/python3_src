@@ -82,10 +82,12 @@ radix_pow__bijective_numeration_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.math.log import log_
-from seed.math.floor_ceil import floor_log_, ceil_log_
-from seed.tiny import curry1
-from seed.tiny_.check import check_type_is, check_int_ge
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.types5py import curry1
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.math.log import log_
+    from seed.math.floor_ceil_tools.fc_log import floor_log_, ceil_log_
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

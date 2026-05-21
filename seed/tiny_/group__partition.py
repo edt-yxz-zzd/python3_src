@@ -8,7 +8,6 @@ py -m nn_ns.app.debug_cmd   seed.tiny_.group__partition -x
 py -m nn_ns.app.doctest_cmd seed.tiny_.group__partition:__doc__ -ff -v
 
 >>> from seed.tiny_.group__partition import partition_xs_by_bool_, xs_to_vss_, xs_to_k2vs_
->>> from seed.tiny import fst, snd
 >>> xs_to_k2vs_(fst, snd, [(1,2),(3,4),(1,999,5),(3,4),(5,6)]) == {1: [2, 999], 3: [4, 4], 5: [6]}
 True
 >>> xs_to_k2vs_(len, None, [(1,2),(3,4),(1,999,5),(3,4),(5,6)]) == {2: [(1, 2), (3, 4), (3, 4), (5, 6)], 3: [(1, 999, 5)]}
@@ -33,14 +32,14 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.tiny_.funcs import echo, fst, snd
-from seed.tiny_.check import check_callable, check_uint
-from seed.helper.ifNone import ifNone, ifNonef
-#from seed.helper.Echo import echo
-#from seed.tiny import echo, ifNone, check_callable
-#from seed.iters.group_by import group_by
-from collections import defaultdict
-#from operator import __index__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.tiny_.check import check_callable, check_uint
+    from seed.helper.ifNone import ifNone, ifNonef
+    from collections import defaultdict
+___end_mark_of_excluded_global_names__0___ = ...
 
 def partition_xs_by_bool_(may_predicator, xs, /):
     'may (x->bool) -> Iter x -> (bads/[x], goods/[x])'

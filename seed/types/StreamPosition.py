@@ -197,13 +197,28 @@ Error
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import weakref
-from itertools import islice
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_may_, check_smay_pseudo_qual_name
-from seed.tiny import fst, snd, ifNone
-from seed.types.PruneableArray import PruneableArray
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import islice
+    from seed.types.PruneableArray import PruneableArray
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_may_, check_smay_pseudo_qual_name
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import fst, snd
+
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
 
 class Error(Exception):pass
 class Error__deref(Error):pass

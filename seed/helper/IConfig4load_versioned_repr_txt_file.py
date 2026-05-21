@@ -16,7 +16,7 @@ used in:
 
 seed.helper.IConfig4load_versioned_repr_txt_file
 py -m    seed.helper.IConfig4load_versioned_repr_txt_file
-py -m nn_ns.app.debug_cmd   seed.helper.IConfig4load_versioned_repr_txt_file
+py -m nn_ns.app.debug_cmd   seed.helper.IConfig4load_versioned_repr_txt_file -x
 
 from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versioned_repr_txt_file, Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer
 
@@ -52,20 +52,25 @@ from pathlib import Path
 import re
 
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
-from copy import deepcopy
-from ast import literal_eval
-from seed.helper.safe_eval import safe_eval
-from json import loads as json_load__str
-#import json
-from seed.helper.stable_repr import stable_repr
-from seed.helper.stable_repr import stable_repr__expand_top_layer
-from seed.tiny import echo
-from seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild import literal_rebuild
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'loads:json_load__str'):
+    from copy import deepcopy
+    from ast import literal_eval
+    from seed.helper.safe_eval import safe_eval
+    from json import loads as json_load__str
+    #import json
+    from seed.helper.stable_repr import stable_repr
+    from seed.helper.stable_repr import stable_repr__expand_top_layer
+    from seed.func_tools.fmapT.TypeBasedFMapT__literal_rebuild import literal_rebuild
+
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.dict__add_fmap_filter import dict_add__is
+    from seed.tiny_.check import check_type_is, check_pair, check_callable
+    from seed.tiny_.types5py import mk_MapView
+
+
 from seed.types.view.RecurView import default_cfg4RecurView
-from seed.tiny import dict_add__is
-from seed.tiny import MapView, check_type_is, check_pair
-
-
 from seed.helper.IHelper4parse__xxx_txt import IHelper4parse__xxx_txt
 
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -141,11 +146,11 @@ dataobj5readonly___literal_rebuild
         sf._cache__ver2readonly_dataobj = {}
         sf._cache__ver2immutable_dataobj = {}
         ######################view of cache
-        sf._view__version_str2readonly_dataobj = MapView(sf._cache__ver2readonly_dataobj)
+        sf._view__version_str2readonly_dataobj = mk_MapView(sf._cache__ver2readonly_dataobj)
         if sf.dataobj_immutable:
-            sf._view__version_str2immutable_dataobj = MapView(sf._cache__ver2immutable_dataobj)
+            sf._view__version_str2immutable_dataobj = mk_MapView(sf._cache__ver2immutable_dataobj)
         if sf.state_immutable:
-            sf._view__version_str2immutable_state = MapView(sf._cache__ver2st)
+            sf._view__version_str2immutable_state = mk_MapView(sf._cache__ver2st)
     def get_view_of_cache__version_str2readonly_dataobj(sf, /):
         return sf._view__version_str2readonly_dataobj
     def get_view_of_cache__version_str2immutable_dataobj(sf, /):
@@ -520,9 +525,7 @@ ifile
 
 
 #HHHHH
-if __name__ == "__main__":
-    from seed.helper.IConfig4load_versioned_repr_txt_file import *
-    from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versioned_repr_txt_file, Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer
+from seed.helper.IConfig4load_versioned_repr_txt_file import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -533,3 +536,4 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.helper.IConfig4load_versioned_repr_txt_file import IConfig4load_versioned_repr_txt_file, Config4load_versioned_repr_txt_file__using__IHelper4parse__xxx_txt__stable_repr__expand_top_layer

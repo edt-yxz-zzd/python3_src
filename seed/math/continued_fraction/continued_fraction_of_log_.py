@@ -1,5 +1,10 @@
 #__all__:goto
 r'''[[[
+===
+『xxx # -ff』
+失败？太慢？
+    view ../../python3_src/seed/math/continued_fraction/iter_continued_fraction_of_log__truncated_.py
+===
 e ../../python3_src/seed/math/continued_fraction/continued_fraction_of_log_.py
     view ../../python3_src/nn_ns/math_nn/continued_fraction/continued_fraction.py
     view ../../python3_src/seed/math/continued_fraction/continued_fraction_fold.py
@@ -554,31 +559,36 @@ floor_log_ex_
 
 '''.split()#'''
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from numbers import Rational
+    from fractions import Fraction
+    #from functools import totalordering
+    from itertools import islice
 
-#from functools import totalordering
-from itertools import islice
-from numbers import Rational
-from fractions import Fraction
+    from seed.tiny_.check import check_int_ge, check_type_is, check_type_le
+    from seed.helper.repr_input import repr_helper
+    from seed.iters.apply_may_args4islice_ import apply_may_args4islice_
 
-from seed.math.continued_fraction.continued_fraction_ops import ContinuedFraction
-    #直接用连分数作为对数输入
-from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes, semi_factor_coprimess_via_gcd
-    #互素分解整数+指数同步步进搜索
-from seed.math.II import II
-from seed.math.sign_of import sign_of
-from seed.helper.repr_input import repr_helper
-from seed.math.PowSeq import PowSeq
+    from seed.math.II import II
+    from seed.math.sign_of import sign_of
+    from seed.math.PowSeq import PowSeq
+    from seed.math.gcd import gcd, gcd_many, are_coprime
+    #from seed.math.floor_ceil_tools.fc_log import floor_log_, ceil_log_
+        # int-version-floor_log_
 
-from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fractions5continued_fraction_ #iter_continued_fraction_digits5ND_
-from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction__by_limit_denominator_, iter_approximate_fractions5continued_fraction__by_limit_denominator_, approximate_fraction5continued_fraction__by_limit_denominator_
+    from seed.math.continued_fraction.continued_fraction_ops import ContinuedFraction
+        #直接用连分数作为对数输入
+    from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes, semi_factor_coprimess_via_gcd
+        #互素分解整数+指数同步步进搜索
+
+    from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fractions5continued_fraction_ #iter_continued_fraction_digits5ND_
+    from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fractions5continued_fraction__by_limit_denominator_, approximate_fraction5continued_fraction__by_limit_denominator_
     #def approximate_fraction5continued_fraction__by_limit_denominator_(max1_denominator, cf_digits, /, *, le_vs_any_vs_ge=0):
+___end_mark_of_excluded_global_names__0___ = ...
 
-#from seed.math.floor_ceil import floor_log_, ceil_log_
-    # int-version-floor_log_
-from seed.math.gcd import gcd, gcd_many, are_coprime
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.tiny import check_type_is, check_type_le
-from seed.iters.apply_may_args4islice_ import apply_may_args4islice_
 
 #@totalordering
 class TmpFraction:
@@ -1016,7 +1026,7 @@ def _floor_log_ex__gt1__impl_(base, y, /, *, with_remain):
     # [base > 1][y > 1]
     #   if not first round: [1 < base < y]
     y0 = y; del y
-    if type(base) is ContinuedFraction:
+    if type(base) is force_lazy_imported_func_(ContinuedFraction):
         base_is_int = base.is_int()
         support_floordiv = True
     elif type(base) is TmpFraction:

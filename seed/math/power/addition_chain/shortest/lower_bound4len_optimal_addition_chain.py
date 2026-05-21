@@ -67,7 +67,7 @@ from seed.tiny_.check import check_type_is, check_int_ge
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
     from fractions import Fraction
-    from seed.math.floor_ceil import floor_log2, ceil_log2
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
     from seed.math.power.addition_chain.common.properties import 显链长纟, 阳爻数纟, 首爻位纟
 
     #from seed.debug.print_err import print_err

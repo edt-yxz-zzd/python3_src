@@ -257,16 +257,33 @@ iter_neg_or_certification4easy_prime__trial_division__fixed_known_primes_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import pairwise
-from seed.tiny_.check import check_type_le, check_type_is, check_int_ge
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
 
-from seed.helper.lazy_import import BaseCachedPropertyGroup, ImportProperty
-class _Imports(BaseCachedPropertyGroup):
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import pairwise
+    from seed.iters.count_ import count_
+    from seed.math.prime_sieve.sieve_lt import list_primes__lt_
+
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_type_le, check_type_is, check_int_ge
+    from seed.tiny_.containers import mk_tuple
+
+    from seed.iters.is_sorted import is_strict_sorted
+    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+    from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division
+    from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
+    from seed.helper.repr_input import repr_helper
+
+def __():
+  from seed.helper.lazy_import import BaseCachedPropertyGroup, ImportProperty
+  class _Imports(BaseCachedPropertyGroup):
     def print_err(sf, /):
-        from seed.tiny import print_err
+        from seed.debug.print_err import print_err
         return print_err
     def mk_tuple(sf, /):
-        from seed.tiny import mk_tuple
+        from seed.tiny_.containers import mk_tuple
         return mk_tuple
     def is_strict_sorted(sf, /):
         from seed.iters.is_sorted import is_strict_sorted
@@ -277,26 +294,9 @@ class _Imports(BaseCachedPropertyGroup):
     is_prime__via_complete_factorization_Nmm_ = ImportProperty('seed.math.is_prime__via_complete_factorization_Nmm_', 'is_prime__via_complete_factorization_Nmm_')
     repr_helper = ImportProperty('seed.helper.repr_input', 'repr_helper')
     #z = ImportProperty('x', 'z')
-_imports = _Imports()
-#.from seed.tiny import mk_tuple
-#.from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
-#.from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-#.from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division
-#.from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
-from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#.from seed.helper.repr_input import repr_helper
-#.from seed.tiny_._Base4repr import _Base4repr
-        #sf._reset4repr(may_args4repr, may_kwds4repr)
-        #sf._init4repr(*args4repr, **kwds4repr)
+  _imports = _Imports()
 ___end_mark_of_excluded_global_names__0___ = ...
 
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
 
 
 class IDetectEasyPrime(ABC):
@@ -373,7 +373,8 @@ class IDetectEasyPrime(ABC):
                 #relax_known_prime
                 continue
             ft2e4pmm = emay_ft2e4pmm
-            if not _imports.is_prime__via_complete_factorization_Nmm_(ft2e4pmm, p):
+            #.if not _imports.is_prime__via_complete_factorization_Nmm_(ft2e4pmm, p):
+            if not is_prime__via_complete_factorization_Nmm_(ft2e4pmm, p):
                 return None
         #p2emay_ft2pmm
         certification4easy_primes = primes = tuple(p for p, _ in reversed(items))
@@ -435,7 +436,8 @@ class _DetectEasyPrime4certify(IDetectEasyPrime):
     @override
     def _may_factor_pint__relax_(sf, u, /):
         'u/pint -> may ft2e/{pint:pint}'
-        return _imports.complete_factor_pint_via_trial_division(sf.certification4easy_prime, u)
+        #.return _imports.complete_factor_pint_via_trial_division(sf.certification4easy_prime, u)
+        return complete_factor_pint_via_trial_division(sf.certification4easy_prime, u)
     @override
     def _tribool_detect_prime__relax_(sf, u, /, *, from_factor:bool):
         'u/pint -> tribool/(-1/recur_detect|0/composite/+1/prime)'
@@ -453,13 +455,16 @@ def _prepare_arg__primes(primes_or_spec, /):
             raise Exception(s)
         max1
         check_type_is(int, max1)
-        from seed.math.prime_gens import raw_list_all_strict_sorted_primes__lt_#prime_gen
-        primes = raw_list_all_strict_sorted_primes__lt_(max1, to_cache_only_busy_primes_plus_next=False, may_primes=None)
+        #.from seed.math.prime_[#broken#]gens import raw_list_all_strict_sorted_primes__lt_#prime_gen
+        #.primes = raw_list_all_strict_sorted_primes__lt_(max1, to_cache_only_busy_primes_plus_next=False, may_primes=None)
+        primes = list_primes__lt_(max1)
     else:
         primes = primes_or_spec
     primes
-    prime_seq = _imports.mk_tuple(primes)
-    assert _imports.is_strict_sorted(prime_seq)
+    #.prime_seq = _imports.mk_tuple(primes)
+    prime_seq = mk_tuple(primes)
+    #.assert _imports.is_strict_sorted(prime_seq)
+    assert is_strict_sorted(prime_seq)
         #assert list(prime_seq) == sorted(prime_seq)
     assert prime_seq
     assert prime_seq[0] == 2
@@ -473,13 +478,16 @@ class DetectEasyPrime__trial_division__fixed_known_primes(IDetectEasyPrime):
         sf._ps = prime_seq
         sf._p_set = prime_set
     def __repr__(sf, /):
-        return _imports.repr_helper(sf, sf._ps)
+        #.return _imports.repr_helper(sf, sf._ps)
+        return repr_helper(sf, sf._ps)
     @override
     def _may_factor_pint__relax_(sf, u, /):
         'u/pint -> may ft2e/{pint:pint}'
-        (p2e, unfactored_part) = _imports.semi_factor_pint_via_trial_division(sf._ps, u)
+        #.(p2e, unfactored_part) = _imports.semi_factor_pint_via_trial_division(sf._ps, u)
+        (p2e, unfactored_part) = semi_factor_pint_via_trial_division(sf._ps, u)
         if not unfactored_part == 1:
-            (n, e) = _imports.factor_pint_as_pefect_power_(unfactored_part)
+            #.(n, e) = _imports.factor_pint_as_pefect_power_(unfactored_part)
+            (n, e) = factor_pint_as_pefect_power_(unfactored_part)
             assert not n in p2e
             p2e[n] = e
         return p2e
@@ -492,7 +500,8 @@ class DetectEasyNumber:
         check_type_le(IDetectEasyPrime, aDetectEasyPrime)
         sf._aDetectEasyPrime = aDetectEasyPrime
     def __repr__(sf, /):
-        return _imports.repr_helper(sf, sf._aDetectEasyPrime)
+        #.return _imports.repr_helper(sf, sf._aDetectEasyPrime)
+        return repr_helper(sf, sf._aDetectEasyPrime)
     def is_easy_number_(sf, u, /, *, from_factor:bool=False):
         return bool(sf.may_detect_easy_number_ex_(u, from_factor=from_factor))
     def may_detect_easy_number_ex_(sf, u, /, *, from_factor:bool):
@@ -525,9 +534,8 @@ class DetectEasyNumber:
 #end-class DetectEasyNumber:
 
 def iter_easy_primes__trial_division__fixed_known_primes_(primes_or_spec, /, begin=0, end=None, *, reverse=False, verbose=False, to_show6catch=False):
-    from seed.math.prime_gens import hold_all_weakrefs4caches_
-    __ws = hold_all_weakrefs4caches_()
-    from seed.iters.count_ import count_
+    #.from seed.math.prime_[#broken#]gens import hold_all_weakrefs4caches_
+    #.__ws = hold_all_weakrefs4caches_()
     aDetectEasyPrime = DetectEasyPrime__trial_division__fixed_known_primes(primes_or_spec)
     if not type(begin) is int:
         iter(begin)
@@ -540,7 +548,8 @@ def iter_easy_primes__trial_division__fixed_known_primes_(primes_or_spec, /, beg
         us = count_(begin, end)
     us
     if verbose:
-        def __(us=us, f=_imports.print_err):
+        #.def __(us=us, f=_imports.print_err):
+        def __(us=us, f=print_err):
             for j, u in enumerate(us):
                 f((j, u))
                 yield u
@@ -553,7 +562,8 @@ def iter_easy_primes__trial_division__fixed_known_primes_(primes_or_spec, /, beg
                     if f(u):
                         yield u
             except BaseException as e:
-                _imports.print_err((j, u, e))
+                #._imports.print_err((j, u, e))
+                print_err((j, u, e))
                 raise
         us = __()
     else:

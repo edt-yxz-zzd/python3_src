@@ -95,6 +95,7 @@ tkns2tkns
 tkns2tkeys
 tkns2tdats
 tkns2tkds
+nm_or2case4token_extraction
 '''.split()#'''
 #news:
 #   mk_LLoo__any_tkey
@@ -142,7 +143,7 @@ from seed.recognize.recognizer_LLoo_.IRecognizerLLoo import IRecognizerLLoo__lea
 from seed.recognize.recognizer_LLoo_.combinator_LLoo__wrapper import IRecognizerLLoo__wrapper, _IRecognizerLLoo__wrapper_base__single_ref, recognizer_LLoo__ignore
 from seed.recognize.recognizer_LLoo_.IRecognizerLLoo import IDependentTreeNode__no_ref
 
-from seed.tiny import print_err
+from seed.debug.print_err import print_err
 
 
 

@@ -1,9 +1,8 @@
 r'''
 seed.abc.storage.IOps4Storage4XXX
 py -m seed.abc.storage.IOps4Storage4XXX
-py -m nn_ns.app.debug_cmd   seed.abc.storage.IOps4Storage4XXX
+py -m nn_ns.app.debug_cmd   seed.abc.storage.IOps4Storage4XXX -x
 
-from seed.abc.storage.IOps4Storage4XXX import IOps4Storage4XXX, Ops4Storage4XXX
 
 #'''
 __all__ = '''
@@ -12,13 +11,19 @@ __all__ = '''
     '''.split()
 
 
-from seed.abc.abc import abstractmethod, override, ABC
-from seed.tiny import MapView
-from seed.types.mapping.OpaquePseudoMapping import OpaquePseudoMappingView, MutableOpaquePseudoMappingWrapper__init_new_key_only
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
 
-#from seed.mapping_tools.fdefault import mapping_set__new_or_raise__return_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.types5py import mk_MapView
+    from seed.types.mapping.OpaquePseudoMapping import OpaquePseudoMappingView, MutableOpaquePseudoMappingWrapper__init_new_key_only
+
+    #from seed.mapping_tools.fdefault import mapping_set__new_or_raise__return_
+___end_mark_of_excluded_global_names__0___ = ...
 
 class IOps4Storage4XXX(ABC):
+    __slots__ = ()
     def init_symbol_keyed_property(ops, sf, obj_as_symbol, value, /):
         d = ops._get_storage4xxx_(sf, mutable=True)
         #mapping_set__new_or_raise__return_(mapping, key, -1, value, try_vs_Nothing_vs_in=True, mk_Exception=lambda x:KeyError(x[0]))
@@ -33,7 +38,7 @@ class IOps4Storage4XXX(ABC):
         d = ops._get_storage4xxx_(sf, mutable=False)
         return d
         return OpaquePseudoMappingView(d)
-        return MapView(d)
+        return mk_MapView(d)
     def _get_storage4xxx_(ops, sf, /,*, mutable:bool):
         d = type(ops).___get_storage4xxx___(ops, sf)
         if mutable:
@@ -46,6 +51,7 @@ class IOps4Storage4XXX(ABC):
         '_get_storage4xxx_'
         pass
 class Ops4Storage4XXX(IOps4Storage4XXX):
+    ___no_slots_ok___ = True
     def __init__(sf, ___get_storage4xxx___, /):
         assert type(___get_storage4xxx___) is str
         sf._attr = ___get_storage4xxx___
@@ -73,5 +79,7 @@ class Ops4Storage4XXX(IOps4Storage4XXX):
             print(d)
             print(type(d))
         return d
-        #return MapView(d)
+        #return mk_MapView(d)
 
+from seed.abc.storage.IOps4Storage4XXX import IOps4Storage4XXX, Ops4Storage4XXX
+from seed.abc.storage.IOps4Storage4XXX import *

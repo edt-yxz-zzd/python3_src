@@ -1,3 +1,4 @@
+TODO
 #__all__:goto
 #main_body_src_code:goto
 #HHHHH
@@ -15,7 +16,7 @@ e ../../python3_src/seed/abc/storage/MemberGetter.py
 
 seed.types.OpaqueInstanceStorage
 py -m    seed.types.OpaqueInstanceStorage
-py -m nn_ns.app.debug_cmd   seed.types.OpaqueInstanceStorage
+py -m nn_ns.app.debug_cmd   seed.types.OpaqueInstanceStorage -x
 
 e ../../python3_src/seed/types/OpaqueInstanceStorage.py
 
@@ -88,25 +89,36 @@ __all__ = '''
             OpaqueStorage_KeyPathNotFoundError
 
     '''.split()
-
+__all__
 #################################
 #HHHHH
+
+
 ___begin_mark_of_excluded_global_names__0___ = ...
-import random
-import itertools
-from seed.abc.abc import ABC, abstractmethod, override#, not_implemented, ABCMeta
-from seed.helper.check.checkers import check_type_is, check_callable, check_instance, check_is_None #, check_pair
-from seed.tiny import expectError
-from seed.helper.check.checkers import check_tmay, check_bool, check_int, check_tuple
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from weakref import WeakKeyDictionary
+    from random import randint
+
+    #.from seed.tiny_.check import check_bool, check_callable, check_is_None, check_tmay, check_type_is
+    from seed.helper.check.checkers import check_instance, check_int, check_tuple, check_bool, check_callable, check_is_None, check_tmay, check_type_is
   #from seed.helper.check.checkers import checks, checkers, check_funcs
   #view ../../python3_src/seed/helper/check/checkers.py
 
-from seed.tiny import check_Weakable, is_Weakable, check_Hashable__deep
-import weakref
-from weakref import WeakKeyDictionary
-from seed.abc.eq_by_id.BaseAddrAsHash import BaseAddrAsHash, le_AddrAsHash
+    from seed.debug.expectError import expectError
+    #from seed.debug.print_err import print_err
+    #from seed.tiny_.Hashable import check_Hashable__deep
+    from seed.tiny_.Weakable import check_Weakable, is_Weakable
+    from seed.tiny_.catched_call__either import catched_call__either
+    from seed.tiny_.funcs import echo, mk_fprint
+    from seed.tiny_.mk_fdefault import mk_default, mk_default
+
+
+
+from seed.abc.abc import ABC, abstractmethod, override#, not_implemented, ABCMeta
+from seed.abc.eq_by_id.BaseAddrAsHash import le_AddrAsHash #BaseAddrAsHash
 from seed.abc.eq_by_id.AddrAsHash import AddrAsHash
-from seed.tiny import catched_call__either
 #from seed.types.mapping.OpaquePseudoMapping import IMutableOpaquePseudoMapping__init_new_key_only
 #from collections.abc import Mapping
 from seed.types.mapping.OpaquePseudoMapping__weakref import PermanentKeyRefDict, WeakKeyRefDict, PermanentKeyRefSet
@@ -116,22 +128,6 @@ from seed.types.mapping.OpaquePseudoMapping__weakref import WeakKeyDictionary4Ad
 from seed.types.mapping.OpaquePseudoMapping__weakref import IMutableOpaquePseudoMapping__init_new_key_only__WeakKeyPathDictionary, IMutableOpaquePseudoMapping__init_new_key_only__WeakKeyPathDictionary__init, MutableOpaquePseudoMapping__init_new_key_only__WeakRefDictionary, MutableOpaquePseudoMapping__init_new_key_only__Value_Ref_Weak_KeysTripleDictionary
 
 
-from seed.tiny import check_pseudo_identifier
-
-r'''
-from seed.mapping_tools.fdefault import mapping_get__tmay_, mapping_get_fdefault__cased_, mapping_set_fdefault__cxxxvalue_, option2mapping_get__tmay
-from seed.mapping_tools.fdefault import mapping_reversable_update__tmay
-from seed.mapping_tools.fdefault import mapping_contain_, mapping_set__overwrite_or_raise__pair_, mapping_set__new_or_raise__return_, mapping_set__new_or_overwrite__pair__uniform_, mapping_set__new_or_overwrite__pair__onthen_, mapping_set__new_or_pass__cased_, mapping_set__overwrite_or_pass__may_pair_
-
-from seed.mapping_tools.fdefault import mapping_on_key, get_fdefault, set_fdefault, getitem_fdefault, setitem_fdefault, add_new_item
-
-
-
-
-from seed.tiny_.mk_fdefault import mk_fdefaultP, mk_fdefault, mk_fdefaultP_from_default, mk_fdefault_from_default, Mk_fdefaultP, Mk_fdefault, Mk_fdefault1__caller_args_at_last, Mk_fdefault1__caller_args_at_first, Mk_fdefaultP_from_default, Mk_fdefault_from_default, mk_default2value__default_at_last, mk_default2value__default_at_first, mk_tmay_from_default2value, mk_fvalue, mk_tmay_from_is_safe_fvalue, mk_tmay_from_try_fvalue, mk_tmay_from_try_fvalue_KeyError, mk_default
-
-from seed.helper.get4may import nmay2tmay__Nothing, nmay2tmay, get4nmay__Nothing, get4nmay, fget4nmay__Nothing, fget4nmay, fgetP4nmay__Nothing_, fgetP4nmay_, fget4nmay__human, fget4nmay__Nothing__human, xget4nmay_, xget4nmay__human
-#'''
 
 
 r"""
@@ -140,11 +136,9 @@ from seed.tiny import str2__all__
 __all__ = str2__all__(r'''#)
     #(''')
 from seed.helper.repr_input import repr_helper
-from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f, expectError
 if 0b00:#[01_to_turn_off]
     #0b01
     print(fr'x={x}')
-    from seed.tiny import print_err
     print_err(fr'x={x}')
     from pprint import pprint
     pprint(x)
@@ -164,7 +158,7 @@ class IGetOpaqueStorage(ABC):
     def ___get_opaque_storage4instance___(sf, /):
         '-> OpaqueStorage'
 def _mk_attr():
-    i = hash(random.randint(0, id(object())))
+    i = hash(randint(0, id(object())))
     #attr = f'__{i:X}'
     attr = f'_{i:X}'
     return attr

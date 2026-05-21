@@ -482,27 +482,17 @@ calc_t5max_k_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_factor_pint
-from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
-from seed.math.floor_ceil import floor_kth_root_, ceil_kth_root_
-from math import isqrt, gcd, floor, log
-from decimal import Decimal, Context, localcontext
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #see:from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_factor_pint
+    from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_kth_root_
+    from math import isqrt, gcd, floor, log
+    from decimal import Decimal, Context, localcontext
 
-from seed.tiny_.check import check_type_is, check_int_ge
-#from itertools import islice
-#
-#from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_type_is, check_int_ge
 ___end_mark_of_excluded_global_names__0___ = ...
 
-#TODO:IFramework4sprp_factor_pint
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
 
 
 isqrt

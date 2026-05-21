@@ -174,7 +174,7 @@ True
 
 
 >>> with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
-...     from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
+...     from seed.data_funcs.lnkls import rglnkls_ops
 >>> rglnkls_ops.empty_rglnkls
 ()
 

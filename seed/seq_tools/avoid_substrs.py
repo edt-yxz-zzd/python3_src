@@ -1325,6 +1325,29 @@ check_dual_end_marker_have_no_nonempty_overlaps
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from itertools import islice, compress# count as count_
+import itertools #count
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.tiny_.containers import mk_tuple
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.tiny_.dict__add_fmap_filter import filter4dict_key, filter4dict_item, group4dict_key
+    from seed.iters.chains import chains
+
+
+    from seed.tiny_.check import check_int_ge, check_type_le
+    from seed.tiny_.mk_reiterable import mk_reiterable, mk_reiterables, mk_reiterable__depth_
+
+    from seed.iters.index_iter_ import index_iter_
+    from seed.iters.apply_may_args4islice_ import apply_may_args4islice_
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
+    from seed.helper.repr_input import repr_helper
+
+
+
 #from seed.seq_tools.prefixes2tree import prefixes2tree_ex_
 #from seed.seq_tools.prefixes2tree import calc_transition_table4avoid_substrs_
 
@@ -1332,24 +1355,11 @@ __all__
 #from seed.types.NamedTupleBase import NamedTupleBase, mk_NamedTuple, as_dict, replace, extract_as, format_as, as_mapping_view, MappingView4NamedTuple
 #def mk_NamedTuple(qname4type, field_names, /, *, defaults=None, module=None, ):
 #from seed.seq_tools.prefixes2tree import prefixes2tree_ex_
-
-from seed.tiny import fst, snd, mk_tuple
-from seed.tiny import ifNonef, ifNone, echo
-from seed.tiny_.check import check_int_ge, check_type_le
-from seed.tiny import group4dict_key
-from seed.tiny import filter4dict_key, filter4dict_item
-from seed.tiny_.mk_reiterable import mk_reiterable, mk_reiterables, mk_reiterable__depth_
-from seed.iters.index_iter_ import index_iter_
-from itertools import islice, compress# count as count_
-import itertools #count
-from seed.iters.apply_may_args4islice_ import apply_may_args4islice_
-from seed.tiny import chains
-from seed.math.floor_ceil import floor_log2
-from seed.helper.repr_input import repr_helper
 from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr# register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
 from seed.helper.auto_calc import BaseAutoCalcAndCache, Injector4Property4AutoCalcAndCache, calc_all #, mk_Property4AutoCalcAndCache
 from seed.helper.auto_calc import is_DAG4dependency_graph_, collect_src_names, check_DAG4dependency_graph_, iter_topological_ordering4dependency_graph_
 #from seed.helper.auto_calc import mk_onm2inms4dependency_graph_dedges__reversed, collect_src_names, iter_topological_ordering4dependency_graph_, is_DAG4dependency_graph_, mk_reversed_dependency_digraph_, NotDAG_Error, check_DAG4dependency_graph_
+___end_mark_of_excluded_global_names__0___ = ...
 
 __all__
 

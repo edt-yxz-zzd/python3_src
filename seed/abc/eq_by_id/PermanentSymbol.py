@@ -61,7 +61,7 @@ usage:
 
 >>> class _C:
 ...     def f(*, kw):pass
->>> module_obj = importlib.import_module(__name__)
+>>> module_obj = import_module(__name__)
 >>> module_obj._C = _C
 >>> register_new_PermanentSymbol__compact(f'{__name__}:_C.f:kw', 'kw arg')
 >>> fill_module_with_registered_permanent_symbols(__name__)
@@ -135,15 +135,17 @@ mk_compact_extensional_path
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
+import weakref
 from seed.abc.eq_by_id.AddrAsHash import BaseAddrAsHash, le_AddrAsHash, AddrAsHash as EqById
 
-from seed.debug.expectError import expectError
-from seed.tiny import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name
-from seed.tiny import check_type_is
-from seed.tiny import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter
-from seed.helper.repr_input import repr_helper__str, repr_helper
-import weakref
-import importlib
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from importlib import import_module
+    from seed.debug.expectError import expectError
+    from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name, check_type_is
+    from seed.tiny_.containers import get_null_mapping_view_#null_mapping_view
+    from seed.helper.repr_input import repr_helper__str, repr_helper
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH
@@ -192,7 +194,7 @@ def _get_either_holder_vs_symbol(module_qname4extensional_path, smay_holder_qnam
     check_smay_pseudo_qual_name(smay_holder_qname4extensional_path)
     check_smay_pseudo_qual_name(smay_symbol_qname4extensional_path)
 
-    module_obj = importlib.import_module(module_qname4extensional_path)
+    module_obj = import_module(module_qname4extensional_path)
     if (type(module_obj) is PermanentSymbol): raise TypeError
 
     xss, x = _get_attrs__ex(module_obj, smay_holder_qname4extensional_path, smay_symbol_qname4extensional_path)
@@ -213,7 +215,7 @@ def get_PermanentSymbol(module_qname4extensional_path, smay_holder_qname4extensi
     return symbol
 
 def fill_module_with_registered_permanent_symbols(module_qname4extensional_path, /):
-    smay_holder2qname2symbol = _module2smay_holder2qname2symbol.get(module_qname4extensional_path, null_mapping_view)
+    smay_holder2qname2symbol = _module2smay_holder2qname2symbol.get(module_qname4extensional_path, get_null_mapping_view_())
     for smay_holder_qname, qname2symbol in smay_holder2qname2symbol.items():
         holder_obj = _get_either_holder_vs_symbol(module_qname4extensional_path, smay_holder_qname, '')
         assert type(holder_obj) is not PermanentSymbol
@@ -245,8 +247,8 @@ def lookup_PermanentSymbol(module_qname4extensional_path, smay_holder_qname4exte
 def lookup_may_PermanentSymbol(module_qname4extensional_path, smay_holder_qname4extensional_path, symbol_qname4extensional_path, /):
     may_symbol = (
             _module2smay_holder2qname2symbol
-            .get(module_qname4extensional_path, null_mapping_view)
-            .get(smay_holder_qname4extensional_path, null_mapping_view)
+            .get(module_qname4extensional_path, get_null_mapping_view_())
+            .get(smay_holder_qname4extensional_path, get_null_mapping_view_())
             .get(symbol_qname4extensional_path, None)
             )
     if may_symbol is not None:

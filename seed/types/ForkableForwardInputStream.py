@@ -56,30 +56,36 @@ iter_char_tokens5ifile
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 
-from seed.types.IToken import IBaseToken, IToken, BaseToken
+from seed.types.IToken import IToken, Token__keyed
 from seed.types.IToken import IBasePositionInfo, IPositionInfo4Gap, IPositionInfo4Span
 
 from seed.types.IForkable import IForkable, IForkable__stamp
 
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-from seed.tiny import null_iter, null_tuple, mk_tuple
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
-from seed.types.LazyList import to_LazyList, to_LazyListIter
-
-from itertools import islice
 
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import islice
+    from seed.helper.repr_input import repr_helper
+
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
 
 
-######################
-######################
-from pathlib import Path
-from seed.types.LazyList import to_LazyList, to_LazyListIter
-from seed.types.IToken import Token__char, PositionInfo4Span__text_file, PositionInfo4Gap__text_file, LinenoColumn
-######################
-######################
+
+
+    from seed.types.LazyList import to_LazyList, to_LazyListIter
+
+    ######################
+    ######################
+    from pathlib import Path
+    from seed.types.IToken import Token__char, PositionInfo4Span__text_file, PositionInfo4Gap__text_file, LinenoColumn
+    ######################
+    ######################
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -193,7 +199,7 @@ class IBaseForkableForwardInputStream(IForkableForwardInputStream__peek_only):
         '-> Iter element #immutable_method'
         return sf.iter_elements_(fork_first=True)
 
-_LazyListIter = type(to_LazyListIter(null_iter))
+_LazyListIter = type(to_LazyListIter(get_null_tuple_()))
 class BaseForkableForwardInputStream__using_LazyListIter(IBaseForkableForwardInputStream, IForkable__stamp):
     ___no_slots_ok___ = True
     def __init__(sf, lazylist_iter, /):
@@ -228,7 +234,7 @@ class BaseForkableForwardInputStream__using_LazyListIter(IBaseForkableForwardInp
     def _read_le_(sf, sz, /):
         '-> [element]{len<=sz} #inplace_mutable_method'
         return mk_tuple(islice(sf._it, sz))
-BaseForkableForwardInputStream__using_LazyListIter(to_LazyListIter(null_iter))
+BaseForkableForwardInputStream__using_LazyListIter(to_LazyListIter(get_null_tuple_()))
 
 
 
@@ -299,7 +305,7 @@ def __():
     gap0 = PositionInfo4Gap__text_file('', 0, 0, LinenoColumn(1,1), 0)
     gap1 = PositionInfo4Gap__text_file('', 0, 0, LinenoColumn(1,1), 1)
     span0 = PositionInfo4Span__text_file(gap0, gap1)
-    tkn0 = BaseToken(span0, 'aaa', None)
+    tkn0 = Token__keyed(span0, 'aaa', None)
     global_runtime_info = None
     inputter = ForkableForwardInputStream__using_LazyListIter(global_runtime_info, gap0, to_LazyListIter(iter([tkn0])))
     assert inputter.tell_gap_position_info() is gap0

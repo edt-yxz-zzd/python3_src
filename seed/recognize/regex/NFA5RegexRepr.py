@@ -326,27 +326,35 @@ jpartition2representative_element__5__jpartition2low_boundary
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from functools import cached_property
-from itertools import pairwise, chain
-from collections import defaultdict
-from bisect import bisect_left, bisect_right
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import cached_property
+    from itertools import pairwise, chain
+    from collections import defaultdict
+    from bisect import bisect_left, bisect_right
 
 
 
-from seed.graph.U2Vtc_To_DigraphABC import ObjU2Vtc_To_Digraph# IntU2Vtc_To_Digraph
-from seed.graph.strong_connected_components import decompose_to_strong_connected_components_in_reversed_topological_ordering
-from seed.types.StackStyleSet import StackStyleSet# MultiSetStyleStack
+    from seed.graph.U2Vtc_To_DigraphABC import ObjU2Vtc_To_Digraph# IntU2Vtc_To_Digraph
+    from seed.graph.strong_connected_components import decompose_to_strong_connected_components_in_reversed_topological_ordering
+    from seed.types.StackStyleSet import StackStyleSet# MultiSetStyleStack
+
+    from seed.tiny_.check import check_pair, check_tmay
+    from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
+    from seed.debug.print_err import print_err
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.tiny_.types5py import mk_MapView
 
 
-
-from seed.tiny_.oo8inf import oo, OpenInterval, OO8inf, Tag_o0o8inv_inf
 from seed.recognize.regex.RegexRepr import whole_set_repr
 from seed.recognize.regex.RegexRepr import IRegexRepr, ISetRepr_IntervalBased
 from seed.recognize.regex.RegexRepr import SetRepr_5Intervals, SetRepr_Union
 from seed.recognize.regex.RegexRepr import Colored, HollowTransition, SolidTransition
-from seed.tiny import mk_frozenset, mk_tuple, null_tuple, null_frozenset, fst, snd, echo, ifNone, print_err, MapView, null_mapping_view
-from seed.tiny_.check import check_pair, check_tmay
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
+from seed.tiny_.oo8inf import oo, OpenInterval, OO8inf, Tag_o0o8inv_inf
+from seed.tiny_.containers import mk_frozenset, mk_tuple, null_frozenset, null_mapping_view, null_tuple
+
+
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 #from seed.helper.repr_input import repr_helper
 from seed.tiny_._Base4repr import _Base4repr #sf._args4repr = (...)
@@ -824,7 +832,7 @@ def feed_(partitioned_fwd4NFA, src_mst, sym, /):
 def feed4search_(start_mst, partitioned_fwd4NFA, src_pst2jjhead, sym, j4next_sym, /):
     'mst0/{pst} -> partitioned_fwd4NFA -> src_pst2jjhead/{pst:jjhead} -> tkey/sym -> j4next_sym/uint -> dst_pst2jjhead/{pst:jjhead} # [merged_state <=> {parallel_state}] # [jjhead :: (min_jhead, max_jhead)/(uint,uint)]'
     d = dict.fromkeys(start_mst, (j4next_sym, j4next_sym))
-    dst_pst2jjhead = MapView(d)
+    dst_pst2jjhead = mk_MapView(d)
     assert dst_pst2jjhead #<<==now:using『locked』
         #xxx:assert dst_pst2jjhead
         #xxx   <<== locked_begin_at_min
@@ -1022,7 +1030,7 @@ class NFA5RegexRepr(_Base4repr):
         else:
             src_pst2jjhead = may_src_pst2jjhead
         src_pst2jjhead
-        pst2jjhead = MapView(src_pst2jjhead)
+        pst2jjhead = mk_MapView(src_pst2jjhead)
         ex_syms = enumerate(syms, 1)
         del may_src_pst2jjhead, src_pst2jjhead, syms
         sz = 0

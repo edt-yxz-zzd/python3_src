@@ -52,12 +52,14 @@ unsorted_iter_primes_where_phiP_divs_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
-#def is_prime__via_complete_factorization_Nmm_(p2e4Nmm_or_ps4Nmm, N, /):
-from seed.math.II import II__p2e_
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.tiny import fst, snd
-from itertools import product
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_int_ge
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
+    #def is_prime__via_complete_factorization_Nmm_(p2e4Nmm_or_ps4Nmm, N, /):
+    from seed.math.II import II__p2e_
+    from itertools import product
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

@@ -36,17 +36,21 @@ merge_coprimess_into_smaller_coprimes
     semi_factor_coprimess_via_gcd
 
 '''.split()#'''
+    #on_1_1_
+    #on_s_s__filterout1_
 __all__
 
-from seed.math.gcd import gcd # gcd_many, are_coprime
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.tiny import check_type_is
-from seed.math.gcd import gcd
-from seed.func_tools.recur5yield import recur5yield__list__echo__echo #, recur5yield__list__echo__off, recur5yield__list__0func__echo, recur5yield__list__0func__off
-from seed.tiny import null_tuple, mk_tuple
-#from seed.math.max_power_of_base_as_factor_of_ import max_power_of_base_as_factor_of_
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-from seed.math.are_pairwise_coprime import are_pairwise_coprime
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le, check_type_is
+    from seed.tiny_.containers import mk_tuple, get_null_tuple_#null_tuple
+    from seed.func_tools.recur5yield import recur5yield__list__echo__echo
+    from seed.math.gcd import gcd
+    #from seed.math.max_power_of_base_as_factor_of_ import max_power_of_base_as_factor_of_
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+    from seed.math.are_pairwise_coprime import are_pairwise_coprime
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -259,7 +263,7 @@ def merge_coprimess_into_smaller_coprimes(coprimess, /, *, validate=False):
     #
 
     #it = iter(coprimess8in)
-    lcoprimes = null_tuple
+    lcoprimes = get_null_tuple_() #null_tuple
     for rcoprimes in coprimess8in:
         common_factors4out = []
         (lonly_factors, ronly_factors) = on_s_s__filterout1_(common_factors4out, lcoprimes, rcoprimes)

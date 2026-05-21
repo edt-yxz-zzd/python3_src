@@ -202,10 +202,12 @@ vector_dyadic_product_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#.from itertools import islice
-from seed.func_tools.func_pow_ import func_pow_, func_powT_, partial_ex
-from functools import reduce, partial
-from seed.tiny_.check import check_type_is, check_int_ge
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import reduce, partial
+    from seed.func_tools.func_pow_ import func_pow_, func_powT_, partial_ex
+    from seed.tiny_.check import check_int_ge, check_type_is
+    from seed.debug.print_err import print_err
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def matrix_shape_(A, /):
@@ -390,7 +392,6 @@ def uint_xmul__via_Walsh_transform_(x, y, /):
     #mul = xor
     _zs = vector_dyadic_product_(list, mul, _xs, _ys)
     if 0b0000:
-        from seed.tiny import print_err
         print_err(xs, ys)
         print_err(_xs, _ys)
         print_err(_zs)

@@ -288,9 +288,21 @@ D. The Exact Value of PI(x) and Comparison with x/(log x), Li(x), and Rm(x)
   [@[x :: real] -> [x>=11] -> [num_primes_le(2*x) < 2*num_primes_le(x)]]
 
   [[x :: real][x>1]]:
-    [main_ratio4num_primesLE =[def]= num_primes_le(x)/(x*ln(x))]
-  [@[x :: real] -> [x>1] -> [main_ratio4num_primesLE(x) <= main_ratio4num_primesLE(113) ~=1.25...]]
-  [@[x :: real] -> [x>1] -> [0.95695 < main_ratio4num_primesLE(x) < 1.04423]]
+    [main_ratio4num_primesLE =[def]= num_primes_le(x)/(x/ln(x))]
+  [@[x :: real] -> [x>1] -> [main_ratio4num_primesLE(x) <= main_ratio4num_primesLE(113) == 30/(113/ln(113)) ~=1.25...]]
+    #py=>[30/(113/ln(113)) ~= 1.25505871293248]
+  # bug:[@[x :: real] -> [x>1] -> [0.95695 < main_ratio4num_primesLE(x) < 1.04423]]
+  [?[T :: real{sufficiently large}] -> @[x :: real] -> [x>T] -> [0.95695 < main_ratio4num_primesLE(x) < 1.04423]]
+  #[@[x::real] -> [x>=3] -> [1/2 < main_ratio4num_primesLE(x) < 2]] #Theorem__1_1_3__Chebyshev:goto
+    #下上界
+    #素数数量估值:here
+
+  [@[x :: real] -> [x>=11] -> [main_ratio4num_primesLE(x) >= 1]]
+    #py=>[5/(11/ln(11)) ~= 1.089952396726532]
+    #py=>[5/(12/ln(12)) ~= 1.0353777707450003]
+    #py=>[4/(10/ln(10)) ~= 0.9210340371976184]
+    #py=>[4/(7/ln(7)) ~= 1.111948656603036]
+
 
   the_prime_number_theorem
   the_fundamental_prime_number_theorem
@@ -565,7 +577,7 @@ D. The Exact Value of PI(x) and Comparison with x/(log x), Li(x), and Rm(x)
   [[n>=1] -> [PRIMES_S1[n] > n*ln(n)]]
   [[n>=2] -> [n*ln(n) + n*(lnln(n)-1.0072629) <= PRIMES_S1[n]]]
   [[n>=2] -> [PRIMES_S1[n] <= 10**11] -> [n*ln(n) + n*(lnln(n)-1) <= PRIMES_S1[n]]]
-  [[n>=7022] -> [PRIMES_S1[n] <= n*ln(n) + n*(lnln(n) -0.9385)]]
+  [[n>=7022] -> [PRIMES_S1[n] <= n*ln(n) + n*(lnln(n) -0.9385{???或是:-0.9384})]]
   [PRIMES_S1[7022] == PRIMES[7021] == 70919]
   view ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_..b001918.b002233.out.txt
     0 2 1 1
@@ -900,7 +912,14 @@ end-Table27
 
 
 
-
+[@[x :: real] -> [x>1] -> [main_ratio4num_primesLE(x) <= main_ratio4num_primesLE(113) == 30/(113/ln(113)) ~=1.25...]]
+<<==:
+py_adhoc_call   seed.math.prime_pint.num_primes_le   @num_primes_le__via_the_Meissel_formula_1871_  =112
+    29
+py_adhoc_call   seed.math.prime_pint.num_primes_le   @num_primes_le__via_the_Meissel_formula_1871_  =113
+    30
+py_adhoc_call   seed.math.prime_pint.num_primes_le   @num_primes_le__via_the_Meissel_formula_1871_  =114
+    30
 
 
 
@@ -1692,27 +1711,26 @@ ___begin_mark_of_excluded_global_names__0___ = ...
     #to avoid sys.setrecursionlimit()
 
 import sys
-from time import thread_time
-from functools import cache
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from time import thread_time
+    from functools import cache
     #cache(f).cache_info()
     #CacheInfo(hits=0, misses=0, maxsize=None, currsize=0)
     #[cache(f).cache_info().currsize :: uint]
-from math import isqrt, cbrt, floor
-from bisect import bisect_right
-#from itertools import pairwise #islice
-#.from seed.tiny_.check import check_type_is, check_int_ge
-#.
-#.from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#.from seed.helper.repr_input import repr_helper
-___end_mark_of_excluded_global_names__0___ = ...
 
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
+    from math import isqrt, cbrt, floor
+    from bisect import bisect_right
+
+    #.from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.debug.print_err import print_err
+    from seed.math.prime_sieve.sieve_lt import list_all_strict_sorted_primes__lt_
+
+def list_primes_le_(max_p, /):
+    #deprecated:from seed.math.prime_pint.generate_primes import list_primes_le_
+    return list_all_strict_sorted_primes__lt_(max_p)
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def _icbrt(x, /):
@@ -1721,7 +1739,7 @@ def _icbrt(x, /):
     return r3
 
 def num_primes_le__via_list_primes_le__batch_(xs_or_max_x, /, *, to_pair=False):
-    from seed.math.prime_pint.generate_primes import list_primes_le_
+    #deprecated:from seed.math.prime_pint.generate_primes import list_primes_le_
     try:
         iter(xs_or_max_x)
     except TypeError:
@@ -1762,7 +1780,7 @@ def num_primes_le__via_list_primes_le__batch_(xs_or_max_x, /, *, to_pair=False):
 
 
 def num_primes_le__via_list_primes_le_(x, /):
-    from seed.math.prime_pint.generate_primes import list_primes_le_
+    #deprecated:from seed.math.prime_pint.generate_primes import list_primes_le_
     return len(list_primes_le_(x))
 def num_primes_le__via_the_Meissel_formula_1871_(x, /, *, _upperbound4using_cache=2**38, no_cache=False, with_stats=False, _verbose=False):
     r'''
@@ -1793,10 +1811,8 @@ def num_primes_le__via_the_Meissel_formula_1871_(x, /, *, _upperbound4using_cach
     using_cache = not no_cache
     if using_cache and not x <= _upperbound4using_cache:raise ValueError('too big to use cache # kw:{no_cache,_upperbound4using_cache}') # [cellphone crash at num_primes_le(2**39)]
     _cache = _4stats if not using_cache else cache
-    if _verbose:
-        from seed.tiny import print_err
     def __():
-        from seed.math.prime_pint.generate_primes import list_primes_le_
+        #deprecated:from seed.math.prime_pint.generate_primes import list_primes_le_
         # !! [x >= 0]
         r2 = isqrt(x)
         ps = list_primes_le_(r2)
@@ -1948,7 +1964,7 @@ def num_primes_le__via_the_Meissel_formula_1871_(x, /, *, _upperbound4using_cach
         return m
     def main(x, /):
         old_recursionlimit = sys.getrecursionlimit()
-        sys.setrecursionlimit(len(g_ps)*10)
+        sys.setrecursionlimit(len(g_ps)*10 + 30)
         try:
             return _main(x)
         finally:

@@ -1,5 +1,11 @@
 #__all__:goto
+#@20260510:++优化冫复用小对象
+#.e ../../python3_src/seed/math/__CMDS__.txt
+#%s/seed[.]math[.]prime_gens[.]OverflowError__Miller_Rabin_primality_test__A014233/seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233/g
 r'''[[[
+e ../../python3_src/seed/math/prime_gens.py
+view ../../python3_src/seed/math/prime_gens.py.note.txt
+
 [[
 psp vs prp
 [pseudoprime <: composite_number]
@@ -33,7 +39,7 @@ e ../../python3_src/seed/math/prime_gens.py
         # replaced since 2**64 < A014233[-1]
 
 e ../../python3_src/seed/math/factor_pint_by_trial_division_.py
-e ../../python3_src/seed/math/factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_.py
+e ../../python3_src/seed/math/factor_pint_into_strong_probable_primes_by_quadratic_sieve_.py
 
 [[
 !mv ../../python3_src/seed/math/lazy_prime_seq_by_Eratosthenes_sieve.py ../../python3_src/seed/math/prime_gens.py
@@ -57,7 +63,7 @@ rename:
 
 ]]
 #重命名后:
-
+__all__
 
 seed.math.prime_gens
 py -m seed.math.prime_gens
@@ -70,11 +76,12 @@ py -m nn_ns.app.doctest_cmd seed.math.prime_gens:_doc4tmp_test -ht
 
 
 
+
 from seed.math.prime_gens import hold_all_weakrefs4caches_
 000;    __ws = hold_all_weakrefs4caches_()
 from seed.math.prime_gens import detect_strong_probable_prime__not_waste_too_much_time_
 
-from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_
+from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_, tabulate_may_all_prime_factor_lflnkls4uint_lt_, extract_prime_factorization5uint2may_all_prime_factor_lflnkls_
 
 from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_factor4uint_lt_, tabulate_may_factorization4uint_lt_
 
@@ -149,8 +156,17 @@ py_adhoc_call   seed.math.prime_gens   @_find_mismatch4diff_cases4is_prime__trib
 
 
 
->>> raw_list_all_strict_sorted_primes__lt_(200, to_cache_only_busy_primes_plus_next=False, may_primes=None)
+>>> ps_lt200 = raw_list_all_strict_sorted_primes__lt_(200, to_cache_only_busy_primes_plus_next=False, may_primes=None)
+>>> ps_lt200
 [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199]
+>>> ps_lt200 == list_all_strict_sorted_primes__lt_(200, _mk=list)
+True
+>>> tuple(ps_lt200) == list_all_strict_sorted_primes__lt_(200)
+True
+>>> sieve4uint2is_prime__lt_(20)
+(False, False, True, True, False, True, False, True, False, False, False, True, False, True, False, False, False, True, False, True)
+>>> sieve4uint2is_prime__lt_(20, _mk=list)
+[False, False, True, True, False, True, False, True, False, False, False, True, False, True, False, False, False, True, False, True]
 
 
 
@@ -1182,6 +1198,8 @@ True
 LazySeq(LazyList([<...>]))
 >>> min_prime_factor_gen.get_or_mk_lazy_min_prime_factor_seq_()[:20]
 (None, None, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2, 3, 2, 17, 2, 19)
+>>> min_prime_factor_gen[:20]
+(None, None, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2, 3, 2, 17, 2, 19)
 >>> tabulate_may_min_prime_factor4uint_lt_(20)
 (None, None, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2, 3, 2, 17, 2, 19)
 >>> stable_list_islice_(999, tabulate_may_factorization4uint_lt_(20))
@@ -1233,11 +1251,50 @@ TypeError: -1
 
 
 
+>>> tbl = TabulateMinPrimeFactor(2**9)
+>>> len(tbl)
+512
+>>> rt = [*tabulate_may_min_prime_factor4uint_lt_(len(tbl))]
+>>> rn = [*tbl.iter7naive_()]
+>>> rf = [*tbl.iter7fancy_()]
+>>> ri = [*tbl]
+>>> rf == ri
+True
+>>> rn == rt
+True
+>>> rf == rt
+True
+>>> ri == rt
+True
+>>> rt
+[None, None, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2, 3, 2, 17, 2, 19, 2, 3, 2, 23, 2, 5, 2, 3, 2, 29, 2, 31, 2, 3, 2, 5, 2, 37, 2, 3, 2, 41, 2, 43, 2, 3, 2, 47, 2, 7, 2, 3, 2, 53, 2, 5, 2, 3, 2, 59, 2, 61, 2, 3, 2, 5, 2, 67, 2, 3, 2, 71, 2, 73, 2, 3, 2, 7, 2, 79, 2, 3, 2, 83, 2, 5, 2, 3, 2, 89, 2, 7, 2, 3, 2, 5, 2, 97, 2, 3, 2, 101, 2, 103, 2, 3, 2, 107, 2, 109, 2, 3, 2, 113, 2, 5, 2, 3, 2, 7, 2, 11, 2, 3, 2, 5, 2, 127, 2, 3, 2, 131, 2, 7, 2, 3, 2, 137, 2, 139, 2, 3, 2, 11, 2, 5, 2, 3, 2, 149, 2, 151, 2, 3, 2, 5, 2, 157, 2, 3, 2, 7, 2, 163, 2, 3, 2, 167, 2, 13, 2, 3, 2, 173, 2, 5, 2, 3, 2, 179, 2, 181, 2, 3, 2, 5, 2, 11, 2, 3, 2, 191, 2, 193, 2, 3, 2, 197, 2, 199, 2, 3, 2, 7, 2, 5, 2, 3, 2, 11, 2, 211, 2, 3, 2, 5, 2, 7, 2, 3, 2, 13, 2, 223, 2, 3, 2, 227, 2, 229, 2, 3, 2, 233, 2, 5, 2, 3, 2, 239, 2, 241, 2, 3, 2, 5, 2, 13, 2, 3, 2, 251, 2, 11, 2, 3, 2, 257, 2, 7, 2, 3, 2, 263, 2, 5, 2, 3, 2, 269, 2, 271, 2, 3, 2, 5, 2, 277, 2, 3, 2, 281, 2, 283, 2, 3, 2, 7, 2, 17, 2, 3, 2, 293, 2, 5, 2, 3, 2, 13, 2, 7, 2, 3, 2, 5, 2, 307, 2, 3, 2, 311, 2, 313, 2, 3, 2, 317, 2, 11, 2, 3, 2, 17, 2, 5, 2, 3, 2, 7, 2, 331, 2, 3, 2, 5, 2, 337, 2, 3, 2, 11, 2, 7, 2, 3, 2, 347, 2, 349, 2, 3, 2, 353, 2, 5, 2, 3, 2, 359, 2, 19, 2, 3, 2, 5, 2, 367, 2, 3, 2, 7, 2, 373, 2, 3, 2, 13, 2, 379, 2, 3, 2, 383, 2, 5, 2, 3, 2, 389, 2, 17, 2, 3, 2, 5, 2, 397, 2, 3, 2, 401, 2, 13, 2, 3, 2, 11, 2, 409, 2, 3, 2, 7, 2, 5, 2, 3, 2, 419, 2, 421, 2, 3, 2, 5, 2, 7, 2, 3, 2, 431, 2, 433, 2, 3, 2, 19, 2, 439, 2, 3, 2, 443, 2, 5, 2, 3, 2, 449, 2, 11, 2, 3, 2, 5, 2, 457, 2, 3, 2, 461, 2, 463, 2, 3, 2, 467, 2, 7, 2, 3, 2, 11, 2, 5, 2, 3, 2, 479, 2, 13, 2, 3, 2, 5, 2, 487, 2, 3, 2, 491, 2, 17, 2, 3, 2, 7, 2, 499, 2, 3, 2, 503, 2, 5, 2, 3, 2, 509, 2, 7]
+
+>>> tbl[0]
+>>> tbl[1]
+>>> tbl[2]
+2
+>>> tbl[3]
+3
+>>> tbl[4]
+2
+>>> tbl[6]
+2
+>>> tbl[9]
+3
+>>> tbl[15]
+3
+>>> tbl.extract_prime_factors_at_(2**3*3**2*5)
+(2, 3, 5)
+>>> tbl.extract_prime_factorization_at_(2**3*3**2*5) == {2:3, 3:2, 5:1}
+True
+
 
 
 >>> all_prime_factors_gen.get_or_mk_lazy_all_prime_factors_seq_()
 LazySeq(LazyList([<...>]))
 >>> all_prime_factors_gen.get_or_mk_lazy_all_prime_factors_seq_()[:20]
+(None, (), (2,), (3,), (2,), (5,), (2, 3), (7,), (2,), (3,), (2, 5), (11,), (2, 3), (13,), (2, 7), (3, 5), (2,), (17,), (2, 3), (19,))
+>>> all_prime_factors_gen[:20]
 (None, (), (2,), (3,), (2,), (5,), (2, 3), (7,), (2,), (3,), (2, 5), (11,), (2, 3), (13,), (2, 7), (3, 5), (2,), (17,), (2, 3), (19,))
 >>> tabulate_may_all_prime_factors4uint_lt_(20)
 (None, (), (2,), (3,), (2,), (5,), (2, 3), (7,), (2,), (3,), (2, 5), (11,), (2, 3), (13,), (2, 7), (3, 5), (2,), (17,), (2, 3), (19,))
@@ -1251,6 +1308,11 @@ LazySeq(LazyList([<...>]))
 Traceback (most recent call last):
     ...
 TypeError: -1
+>>> uint2may_all_prime_factor_lflnkls = tabulate_may_all_prime_factor_lflnkls4uint_lt_(20)
+>>> uint2may_all_prime_factor_lflnkls
+(None, (), (2, ()), (3, ()), (2, ()), (5, ()), (2, (3, ())), (7, ()), (2, ()), (3, ()), (2, (5, ())), (11, ()), (2, (3, ())), (13, ()), (2, (7, ())), (3, (5, ())), (2, ()), (17, ()), (2, (3, ())), (19, ()))
+>>> extract_prime_factorization5uint2may_all_prime_factor_lflnkls_(uint2may_all_prime_factor_lflnkls, 12) == {2:2,3:1}
+True
 
 
     is_prime__le_pow2_81_
@@ -1271,7 +1333,7 @@ False
 >>> is_prime__le_pow2_81_(is_prime__le_pow2_81_.upperbound)
 Traceback (most recent call last):
     ...
-seed.math.prime_gens.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 3317044064679887385962123]
+seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 3317044064679887385962123]
 >>> pp = next_probable_prime__ge_(2**82) -2**82
 >>> pp
 9
@@ -1281,11 +1343,11 @@ seed.math.prime_gens.OverflowError__Miller_Rabin_primality_test__A014233: [33170
 >>> is_prime__le_pow2_81_(2**82+pp)
 Traceback (most recent call last):
     ...
-seed.math.prime_gens.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824713]
+seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824713]
 >>> is_prime__le_pow2_81_(2**82-mm)
 Traceback (most recent call last):
     ...
-seed.math.prime_gens.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824647]
+seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824647]
 >>> is_prime__le_pow2_81_(2**83-1)
 False
 
@@ -1300,7 +1362,7 @@ True
 >>> 2**82 -prev_may_prime__le_pow2_81__lt_(2**82)
 Traceback (most recent call last):
     ...
-seed.math.prime_gens.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound < end == 4835703278458516698824704]
+seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound < end == 4835703278458516698824704]
 >>> 2**81 -prev_may_prime__le_pow2_81__lt_(2**81)
 51
 >>> prev_may_prime__le_pow2_81__lt_(2) is None
@@ -1482,6 +1544,571 @@ True
 [3317044064679887385961657, 3317044064679887385961753]
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################
+[[
+check_args4core_sieve_interval__ge_le
+    core_sieve4primes__ge_le
+    core_sieve4offsetted_uint2is_prime__ge_le
+    core_sieve4prime_factorization__ge_le
+    core_sieve4pairs8prime_factorization__ge_le
+    core_sieve4prime_factors__ge_le
+>>> min_u = 10
+>>> max1_u = calc_min_end5begin6args4sieve_interval_(min_u)
+>>> max1_u
+14
+>>> max_u = -1+max1_u
+>>> core_sieve4primes__ge_le(min_u, max_u)
+(11, 13)
+>>> core_sieve4offsetted_uint2is_prime__ge_le(min_u, max_u)
+[False, True, False, True]
+>>> core_sieve4prime_factorization__ge_le(min_u, max_u)
+[{2: 1, 5: 1}, {11: 1}, {2: 2, 3: 1}, {13: 1}]
+>>> core_sieve4pairs8prime_factorization__ge_le(min_u, max_u)
+[((2, 1), (5, 1)), ((11, 1),), ((2, 2), (3, 1)), ((13, 1),)]
+>>> core_sieve4prime_factors__ge_le(min_u, max_u)
+[(2, 5), (11,), (2, 3), (13,)]
+
+
+>>> core_sieve4primes__ge_le(min_u, ...)
+(11, 13)
+>>> core_sieve4offsetted_uint2is_prime__ge_le(min_u, ...)
+[False, True, False, True]
+>>> core_sieve4prime_factorization__ge_le(min_u, ...)
+[{2: 1, 5: 1}, {11: 1}, {2: 2, 3: 1}, {13: 1}]
+>>> core_sieve4pairs8prime_factorization__ge_le(min_u, ...)
+[((2, 1), (5, 1)), ((11, 1),), ((2, 2), (3, 1)), ((13, 1),)]
+>>> core_sieve4prime_factors__ge_le(min_u, ...)
+[(2, 5), (11,), (2, 3), (13,)]
+
+
+
+>>> tabulate_may_all_prime_factors4uint_lt_(1+max_u, _mk=list)[min_u:]
+[(2, 5), (11,), (2, 3), (13,)]
+
+
+
+
+>>> min_u = 2**32
+>>> max1_u = calc_min_end5begin6args4sieve_interval_(min_u)
+>>> max1_u -min_u
+65537
+>>> max1_u
+4295032833
+>>> max_u = -1+max1_u
+
+#>>> core_sieve4prime_factors__ge_le(min_u, max_u) == tabulate_may_all_prime_factors4uint_lt_(1+max_u, _mk=list)[min_u:]
+    手机内存不足
+
+>>> _u2ps = core_sieve4prime_factors__ge_le(min_u, max_u, _validate=True)
+>>> len(_u2ps)
+65537
+>>> _u2ps[:30]
+[(2,), (641, 6700417), (2, 3, 715827883), (7, 613566757), (2, 5, 13, 41, 61, 1321), (3, 47, 3384529), (2, 83, 1277, 20261), (11, 6323, 61751), (2, 3, 59, 3033169), (5, 9629, 89209), (2, 7, 43826197), (3, 23, 53, 1174451), (2, 1073741827), (19, 29, 7794859), (2, 3, 5, 131, 364289), (4294967311,), (2, 17, 15790321), (3, 7, 13, 15732481), (2, 11, 4219, 46273), (5, 26053, 32971), (2, 3, 149, 2402107), (3209, 1338413), (2, 2147483659), (3, 11393, 41887), (2, 5, 7, 1901, 8069), (733, 5859437), (2, 3, 2539, 281933), (31, 43, 3222031), (2, 1073741831), (3, 5, 11, 79, 65899)]
+
+
+
+
+
+
+
+]]
+
+######################
+[[
+new ver: tabulate_may_factorization4uint_lt_<<==:
+    tabulate_may_prime_factorization4uint_lt_
+    tabulate_may_pairs8prime_factorization4uint_lt_
+
+def tabulate_may_prime_factorization4uint_lt_(sz, /, *, _mk=tuple, dict_vs_pairs=False, _validate=False):
+>>> tabulate_may_prime_factorization4uint_lt_(50, _validate=True) == \
+... (None
+... ,{}
+... ,{2: 1}
+... ,{3: 1}
+... ,{2: 2}
+... ,{5: 1}
+... ,{2: 1, 3: 1}
+... ,{7: 1}
+... ,{2: 3}
+... ,{3: 2}
+... ,{2: 1, 5: 1}
+... ,{11: 1}
+... ,{2: 2, 3: 1}
+... ,{13: 1}
+... ,{2: 1, 7: 1}
+... ,{3: 1, 5: 1}
+... ,{2: 4}
+... ,{17: 1}
+... ,{2: 1, 3: 2}
+... ,{19: 1}
+... ,{2: 2, 5: 1}
+... ,{3: 1, 7: 1}
+... ,{2: 1, 11: 1}
+... ,{23: 1}
+... ,{2: 3, 3: 1}
+... ,{5: 2}
+... ,{2: 1, 13: 1}
+... ,{3: 3}
+... ,{2: 2, 7: 1}
+... ,{29: 1}
+... ,{2: 1, 3: 1, 5: 1}
+... ,{31: 1}
+... ,{2: 5}
+... ,{3: 1, 11: 1}
+... ,{2: 1, 17: 1}
+... ,{5: 1, 7: 1}
+... ,{2: 2, 3: 2}
+... ,{37: 1}
+... ,{2: 1, 19: 1}
+... ,{3: 1, 13: 1}
+... ,{2: 3, 5: 1}
+... ,{41: 1}
+... ,{2: 1, 3: 1, 7: 1}
+... ,{43: 1}
+... ,{2: 2, 11: 1}
+... ,{3: 2, 5: 1}
+... ,{2: 1, 23: 1}
+... ,{47: 1}
+... ,{2: 4, 3: 1}
+... ,{7: 2}
+... )
+True
+>>> tabulate_may_pairs8prime_factorization4uint_lt_(50, _validate=True) == \
+... (None
+... ,()
+... ,((2, 1),)
+... ,((3, 1),)
+... ,((2, 2),)
+... ,((5, 1),)
+... ,((2, 1), (3, 1))
+... ,((7, 1),)
+... ,((2, 3),)
+... ,((3, 2),)
+... ,((2, 1), (5, 1))
+... ,((11, 1),)
+... ,((2, 2), (3, 1))
+... ,((13, 1),)
+... ,((2, 1), (7, 1))
+... ,((3, 1), (5, 1))
+... ,((2, 4),)
+... ,((17, 1),)
+... ,((2, 1), (3, 2))
+... ,((19, 1),)
+... ,((2, 2), (5, 1))
+... ,((3, 1), (7, 1))
+... ,((2, 1), (11, 1))
+... ,((23, 1),)
+... ,((2, 3), (3, 1))
+... ,((5, 2),)
+... ,((2, 1), (13, 1))
+... ,((3, 3),)
+... ,((2, 2), (7, 1))
+... ,((29, 1),)
+... ,((2, 1), (3, 1), (5, 1))
+... ,((31, 1),)
+... ,((2, 5),)
+... ,((3, 1), (11, 1))
+... ,((2, 1), (17, 1))
+... ,((5, 1), (7, 1))
+... ,((2, 2), (3, 2))
+... ,((37, 1),)
+... ,((2, 1), (19, 1))
+... ,((3, 1), (13, 1))
+... ,((2, 3), (5, 1))
+... ,((41, 1),)
+... ,((2, 1), (3, 1), (7, 1))
+... ,((43, 1),)
+... ,((2, 2), (11, 1))
+... ,((3, 2), (5, 1))
+... ,((2, 1), (23, 1))
+... ,((47, 1),)
+... ,((2, 4), (3, 1))
+... ,((7, 2),)
+... )
+True
+
+]]
+
+
+
+
+######################
+
+[[
+######################
+check_args4sieve_interval__ge_lt
+    calc_min_end5begin6args4sieve_interval_
+        test4calc_min_end5begin6args4sieve_interval_
+        iter_min_ends5begin6args4sieve_interval_
+    sieve_interval4primes__ge_lt
+    sieve_interval4offsetted_uint2is_prime__ge_lt
+    sieve_interval4prime_factorization__ge_lt
+    sieve_interval4prime_factors__ge_lt
+
+>>> calc_min_end5begin6args4sieve_interval_(9900)
+10000
+>>> prime_gen[1219:1230]
+(9887, 9901, 9907, 9923, 9929, 9931, 9941, 9949, 9967, 9973, 10007)
+>>> sieve_interval4primes__ge_lt(9900, 10001)#, _validate=True
+[9901, 9907, 9923, 9929, 9931, 9941, 9949, 9967, 9973]
+>>> sieve_interval4offsetted_uint2is_prime__ge_lt(9900, 10001) == \
+... [False, True, False, False, False, False, False, True, False, False
+... , False, False, False, False, False, False, False, False, False, False
+... , False, False, False, True, False, False, False, False, False, True
+... , False, True, False, False, False, False, False, False, False, False
+... , False, True, False, False, False, False, False, False, False, True
+... , False, False, False, False, False, False, False, False, False, False
+... , False, False, False, False, False, False, False, True, False, False
+... , False, False, False, True, False, False, False, False, False, False
+... , False, False, False, False, False, False, False, False, False, False
+... , False, False, False, False, False, False, False, False, False, False
+... , False]
+True
+>>> sieve_interval4prime_factorization__ge_lt(9900, 10001, _validate=True) == \
+... [{2: 2, 3: 2, 5: 2, 11: 1}
+... ,{9901: 1}
+... ,{2: 1, 4951: 1}
+... ,{3: 1, 3301: 1}
+... ,{2: 4, 619: 1}
+... ,{5: 1, 7: 1, 283: 1}
+... ,{2: 1, 3: 1, 13: 1, 127: 1}
+... ,{9907: 1}
+... ,{2: 2, 2477: 1}
+... ,{3: 3, 367: 1}
+... ,{2: 1, 5: 1, 991: 1}
+... ,{11: 1, 17: 1, 53: 1}
+... ,{2: 3, 3: 1, 7: 1, 59: 1}
+... ,{23: 1, 431: 1}
+... ,{2: 1, 4957: 1}
+... ,{3: 1, 5: 1, 661: 1}
+... ,{2: 2, 37: 1, 67: 1}
+... ,{47: 1, 211: 1}
+... ,{2: 1, 3: 2, 19: 1, 29: 1}
+... ,{7: 1, 13: 1, 109: 1}
+... ,{2: 6, 5: 1, 31: 1}
+... ,{3: 1, 3307: 1}
+... ,{2: 1, 11: 2, 41: 1}
+... ,{9923: 1}
+... ,{2: 2, 3: 1, 827: 1}
+... ,{5: 2, 397: 1}
+... ,{2: 1, 7: 1, 709: 1}
+... ,{3: 2, 1103: 1}
+... ,{2: 3, 17: 1, 73: 1}
+... ,{9929: 1}
+... ,{2: 1, 3: 1, 5: 1, 331: 1}
+... ,{9931: 1}
+... ,{2: 2, 13: 1, 191: 1}
+... ,{3: 1, 7: 1, 11: 1, 43: 1}
+... ,{2: 1, 4967: 1}
+... ,{5: 1, 1987: 1}
+... ,{2: 4, 3: 3, 23: 1}
+... ,{19: 1, 523: 1}
+... ,{2: 1, 4969: 1}
+... ,{3: 1, 3313: 1}
+... ,{2: 2, 5: 1, 7: 1, 71: 1}
+... ,{9941: 1}
+... ,{2: 1, 3: 1, 1657: 1}
+... ,{61: 1, 163: 1}
+... ,{2: 3, 11: 1, 113: 1}
+... ,{3: 2, 5: 1, 13: 1, 17: 1}
+... ,{2: 1, 4973: 1}
+... ,{7: 3, 29: 1}
+... ,{2: 2, 3: 1, 829: 1}
+... ,{9949: 1}
+... ,{2: 1, 5: 2, 199: 1}
+... ,{3: 1, 31: 1, 107: 1}
+... ,{2: 5, 311: 1}
+... ,{37: 1, 269: 1}
+... ,{2: 1, 3: 2, 7: 1, 79: 1}
+... ,{5: 1, 11: 1, 181: 1}
+... ,{2: 2, 19: 1, 131: 1}
+... ,{3: 1, 3319: 1}
+... ,{2: 1, 13: 1, 383: 1}
+... ,{23: 1, 433: 1}
+... ,{2: 3, 3: 1, 5: 1, 83: 1}
+... ,{7: 1, 1423: 1}
+... ,{2: 1, 17: 1, 293: 1}
+... ,{3: 5, 41: 1}
+... ,{2: 2, 47: 1, 53: 1}
+... ,{5: 1, 1993: 1}
+... ,{2: 1, 3: 1, 11: 1, 151: 1}
+... ,{9967: 1}
+... ,{2: 4, 7: 1, 89: 1}
+... ,{3: 1, 3323: 1}
+... ,{2: 1, 5: 1, 997: 1}
+... ,{13: 2, 59: 1}
+... ,{2: 2, 3: 2, 277: 1}
+... ,{9973: 1}
+... ,{2: 1, 4987: 1}
+... ,{3: 1, 5: 2, 7: 1, 19: 1}
+... ,{2: 3, 29: 1, 43: 1}
+... ,{11: 1, 907: 1}
+... ,{2: 1, 3: 1, 1663: 1}
+... ,{17: 1, 587: 1}
+... ,{2: 2, 5: 1, 499: 1}
+... ,{3: 2, 1109: 1}
+... ,{2: 1, 7: 1, 23: 1, 31: 1}
+... ,{67: 1, 149: 1}
+... ,{2: 8, 3: 1, 13: 1}
+... ,{5: 1, 1997: 1}
+... ,{2: 1, 4993: 1}
+... ,{3: 1, 3329: 1}
+... ,{2: 2, 11: 1, 227: 1}
+... ,{7: 1, 1427: 1}
+... ,{2: 1, 3: 3, 5: 1, 37: 1}
+... ,{97: 1, 103: 1}
+... ,{2: 3, 1249: 1}
+... ,{3: 1, 3331: 1}
+... ,{2: 1, 19: 1, 263: 1}
+... ,{5: 1, 1999: 1}
+... ,{2: 2, 3: 1, 7: 2, 17: 1}
+... ,{13: 1, 769: 1}
+... ,{2: 1, 4999: 1}
+... ,{3: 2, 11: 1, 101: 1}
+... ,{2: 4, 5: 4}
+... ]
+True
+>>> sieve_interval4prime_factors__ge_lt(9900, 10001, _validate=True) == \
+... [(2, 3, 5, 11)
+... ,(9901,)
+... ,(2, 4951)
+... ,(3, 3301)
+... ,(2, 619)
+... ,(5, 7, 283)
+... ,(2, 3, 13, 127)
+... ,(9907,)
+... ,(2, 2477)
+... ,(3, 367)
+... ,(2, 5, 991)
+... ,(11, 17, 53)
+... ,(2, 3, 7, 59)
+... ,(23, 431)
+... ,(2, 4957)
+... ,(3, 5, 661)
+... ,(2, 37, 67)
+... ,(47, 211)
+... ,(2, 3, 19, 29)
+... ,(7, 13, 109)
+... ,(2, 5, 31)
+... ,(3, 3307)
+... ,(2, 11, 41)
+... ,(9923,)
+... ,(2, 3, 827)
+... ,(5, 397)
+... ,(2, 7, 709)
+... ,(3, 1103)
+... ,(2, 17, 73)
+... ,(9929,)
+... ,(2, 3, 5, 331)
+... ,(9931,)
+... ,(2, 13, 191)
+... ,(3, 7, 11, 43)
+... ,(2, 4967)
+... ,(5, 1987)
+... ,(2, 3, 23)
+... ,(19, 523)
+... ,(2, 4969)
+... ,(3, 3313)
+... ,(2, 5, 7, 71)
+... ,(9941,)
+... ,(2, 3, 1657)
+... ,(61, 163)
+... ,(2, 11, 113)
+... ,(3, 5, 13, 17)
+... ,(2, 4973)
+... ,(7, 29)
+... ,(2, 3, 829)
+... ,(9949,)
+... ,(2, 5, 199)
+... ,(3, 31, 107)
+... ,(2, 311)
+... ,(37, 269)
+... ,(2, 3, 7, 79)
+... ,(5, 11, 181)
+... ,(2, 19, 131)
+... ,(3, 3319)
+... ,(2, 13, 383)
+... ,(23, 433)
+... ,(2, 3, 5, 83)
+... ,(7, 1423)
+... ,(2, 17, 293)
+... ,(3, 41)
+... ,(2, 47, 53)
+... ,(5, 1993)
+... ,(2, 3, 11, 151)
+... ,(9967,)
+... ,(2, 7, 89)
+... ,(3, 3323)
+... ,(2, 5, 997)
+... ,(13, 59)
+... ,(2, 3, 277)
+... ,(9973,)
+... ,(2, 4987)
+... ,(3, 5, 7, 19)
+... ,(2, 29, 43)
+... ,(11, 907)
+... ,(2, 3, 1663)
+... ,(17, 587)
+... ,(2, 5, 499)
+... ,(3, 1109)
+... ,(2, 7, 23, 31)
+... ,(67, 149)
+... ,(2, 3, 13)
+... ,(5, 1997)
+... ,(2, 4993)
+... ,(3, 3329)
+... ,(2, 11, 227)
+... ,(7, 1427)
+... ,(2, 3, 5, 37)
+... ,(97, 103)
+... ,(2, 1249)
+... ,(3, 3331)
+... ,(2, 19, 263)
+... ,(5, 1999)
+... ,(2, 3, 7, 17)
+... ,(13, 769)
+... ,(2, 4999)
+... ,(3, 11, 101)
+... ,(2, 5)
+... ]
+True
+
+>>> sieve_interval4primes__ge_lt(9, 14)
+[11, 13]
+>>> sieve_interval4primes__ge_lt(10, 14)
+[11, 13]
+>>> sieve_interval4primes__ge_lt(10, 13)
+Traceback (most recent call last):
+    ...
+TypeError: (10, 13)
+
+
+
+
+
+
+]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################
+[[
+py_adhoc_call { -lineno }  seed.math.prime_gens   ,iter_find_best_wheel_paramss4sieve_lt_  ='[2**ez for ez in range(1+60)]'
+0:(1, (0, 1, 1, ()))
+1:(2, (0, 1, 2, ()))
+2:(4, (0, 1, 4, ()))
+3:(8, (1, 2, 7, (2,)))
+4:(16, (1, 2, 11, (2,)))
+5:(32, (2, 6, 19, (2, 3)))
+6:(64, (2, 6, 30, (2, 3)))
+7:(128, (2, 6, 51, (2, 3)))
+8:(256, (2, 6, 94, (2, 3)))
+9:(512, (3, 30, 175, (2, 3, 5)))
+10:(1024, (3, 30, 312, (2, 3, 5)))
+11:(2048, (3, 30, 585, (2, 3, 5)))
+12:(4096, (3, 30, 1131, (2, 3, 5)))
+13:(8192, (4, 210, 2131, (2, 3, 5, 7)))
+14:(16384, (4, 210, 4003, (2, 3, 5, 7)))
+15:(32768, (4, 210, 7748, (2, 3, 5, 7)))
+16:(65536, (4, 210, 15238, (2, 3, 5, 7)))
+17:(131072, (5, 2310, 30026, (2, 3, 5, 7, 11)))
+18:(262144, (5, 2310, 57262, (2, 3, 5, 7, 11)))
+19:(524288, (5, 2310, 111733, (2, 3, 5, 7, 11)))
+20:(1048576, (5, 2310, 220676, (2, 3, 5, 7, 11)))
+21:(2097152, (6, 30030, 438041, (2, 3, 5, 7, 11, 13)))
+22:(4194304, (6, 30030, 840292, (2, 3, 5, 7, 11, 13)))
+23:(8388608, (6, 30030, 1644794, (2, 3, 5, 7, 11, 13)))
+24:(16777216, (6, 30030, 3253798, (2, 3, 5, 7, 11, 13)))
+25:(33554432, (6, 30030, 6471805, (2, 3, 5, 7, 11, 13)))
+26:(67108864, (7, 510510, 12717522, (2, 3, 5, 7, 11, 13, 17)))
+27:(134217728, (7, 510510, 24832374, (2, 3, 5, 7, 11, 13, 17)))
+28:(268435456, (7, 510510, 49062077, (2, 3, 5, 7, 11, 13, 17)))
+29:(536870912, (7, 510510, 97521484, (2, 3, 5, 7, 11, 13, 17)))
+30:(1073741824, (7, 510510, 194440297, (2, 3, 5, 7, 11, 13, 17)))
+31:(2147483648, (8, 9699690, 378629862, (2, 3, 5, 7, 11, 13, 17, 19)))
+32:(4294967296, (8, 9699690, 745901154, (2, 3, 5, 7, 11, 13, 17, 19)))
+33:(8589934592, (8, 9699690, 1480443737, (2, 3, 5, 7, 11, 13, 17, 19)))
+34:(17179869184, (8, 9699690, 2949528903, (2, 3, 5, 7, 11, 13, 17, 19)))
+35:(34359738368, (9, 223092870, 5880435823, (2, 3, 5, 7, 11, 13, 17, 19, 23)))
+36:(68719476736, (9, 223092870, 11501283416, (2, 3, 5, 7, 11, 13, 17, 19, 23)))
+37:(137438953472, (9, 223092870, 22742978601, (2, 3, 5, 7, 11, 13, 17, 19, 23)))
+38:(274877906944, (9, 223092870, 45226368971, (2, 3, 5, 7, 11, 13, 17, 19, 23)))
+39:(549755813888, (9, 223092870, 90193149711, (2, 3, 5, 7, 11, 13, 17, 19, 23)))
+40:(1099511627776, (9, 223092870, 180126711191, (2, 3, 5, 7, 11, 13, 17, 19, 23)))
+41:(2199023255552, (10, 6469693230, 354821180062, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29)))
+42:(4398046511104, (10, 6469693230, 702150796813, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29)))
+43:(8796093022208, (10, 6469693230, 1396810030315, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29)))
+44:(17592186044416, (10, 6469693230, 2786128497319, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29)))
+45:(35184372088832, (10, 6469693230, 5564765431327, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29)))
+46:(70368744177664, (11, 200560490130, 10987230530628, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31)))
+47:(140737488355328, (11, 200560490130, 21743244468725, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31)))
+48:(281474976710656, (11, 200560490130, 43255272344919, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31)))
+49:(562949953421312, (11, 200560490130, 86279328097308, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31)))
+50:(1125899906842624, (11, 200560490130, 172327439602085, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31)))
+51:(2251799813685248, (12, 7420738134810, 343414305299262, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)))
+52:(4503599627370496, (12, 7420738134810, 678304252777313, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)))
+53:(9007199254740992, (12, 7420738134810, 1348084147733415, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)))
+54:(18014398509481984, (12, 7420738134810, 2687643937645619, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)))
+55:(36028797018963968, (12, 7420738134810, 5366763517470028, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)))
+56:(72057594037927936, (12, 7420738134810, 10725002677118846, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)))
+57:(144115188075855872, (13, 304250263527210, 21258596649612743, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41)))
+58:(288230376151711744, (13, 304250263527210, 42168798248242275, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41)))
+59:(576460752303423488, (13, 304250263527210, 83989201445501340, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41)))
+60:(1152921504606846976, (13, 304250263527210, 167630007840019470, (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41)))
+
+]]
+[[
+test:calc_min_end5begin6args4sieve_interval_
+py_adhoc_call  seed.math.prime_gens   @test4calc_min_end5begin6args4sieve_interval_ ='range(1,1+2**20)'
+    ok
+py_adhoc_call  seed.math.prime_gens   @list.20:iter_min_ends5begin6args4sieve_interval_ =1
+[2, 4, 7, 10, 14, 19, 24, 30, 36, 43, 50, 58, 67, 76, 86, 96, 107, 118, 130, 142]
+py_adhoc_call  seed.math.prime_gens   @list.20:iter_min_ends5begin6args4sieve_interval_ =1 +with_begin
+[(1, 2), (2, 4), (4, 7), (7, 10), (10, 14), (14, 19), (19, 24), (24, 30), (30, 36), (36, 43), (43, 50), (50, 58), (58, 67), (67, 76), (76, 86), (86, 96), (96, 107), (107, 118), (118, 130), (130, 142)]
+
+]]
+[[
+test:_mk_offsetted_u2num_bits7remain_
+py_adhoc_call  seed.math.prime_gens   @_test4mk_offsetted_u2num_bits7remain_
+    ok
+]]
+
+
+
 #]]]'''
 _doc4tmp_test = r'''
 >>> 
@@ -1657,9 +2284,13 @@ is_strong_probable_prime__basis_
 min_prime_factor_gen
     tabulate_may_min_prime_factor4uint_lt_
     tabulate_may_factorization4uint_lt_
+        tabulate_may_prime_factorization4uint_lt_
+            tabulate_may_pairs8prime_factorization4uint_lt_
 
 all_prime_factors_gen
     tabulate_may_all_prime_factors4uint_lt_
+        tabulate_may_all_prime_factor_lflnkls4uint_lt_
+        extract_prime_factorization5uint2may_all_prime_factor_lflnkls_
 
 
 
@@ -1677,6 +2308,7 @@ raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_
     raw_iter_all_strict_sorted_primes_
         raw_iter_all_strict_sorted_primes__lt_
             raw_list_all_strict_sorted_primes__lt_
+                    list_all_strict_sorted_primes__lt_
 
 
     GlobalControl4PrimeGenerator__Eratosthenes_sieve
@@ -1726,11 +2358,15 @@ GlobalControl4MinPrimeFactorGenerator__Eratosthenes_sieve
         min_prime_factor_gen
         tabulate_may_min_prime_factor4uint_lt_
         tabulate_may_factorization4uint_lt_
+            tabulate_may_prime_factorization4uint_lt_
+                tabulate_may_pairs8prime_factorization4uint_lt_
 
 GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve
     all_prime_factors_gen__Eratosthenes_sieve
         all_prime_factors_gen
         tabulate_may_all_prime_factors4uint_lt_
+            tabulate_may_all_prime_factor_lflnkls4uint_lt_
+            extract_prime_factorization5uint2may_all_prime_factor_lflnkls_
 
 
 
@@ -1768,91 +2404,92 @@ iter_pseudoprimes__ge_
 reversed_iter_pseudoprimes__lt_
 iter_pairwise_diff_pseudoprimes__ge_
 
+
+
+TabulateMinPrimeFactor
+    find_best_wheel_params4sieve_lt_
+    iter_find_best_wheel_paramss4sieve_lt_
+
+
+list_all_strict_sorted_primes__lt_
+    sieve4uint2is_prime__lt_
+
+check_args4core_sieve_interval__ge_le
+    core_sieve4primes__ge_le
+    core_sieve4offsetted_uint2is_prime__ge_le
+    core_sieve4prime_factorization__ge_le
+    core_sieve4pairs8prime_factorization__ge_le
+    core_sieve4prime_factors__ge_le
+
+check_args4sieve_interval__ge_lt
+    calc_min_end5begin6args4sieve_interval_
+        test4calc_min_end5begin6args4sieve_interval_
+        iter_min_ends5begin6args4sieve_interval_
+    sieve_interval4primes__ge_lt
+    sieve_interval4offsetted_uint2is_prime__ge_lt
+    sieve_interval4prime_factorization__ge_lt
+    sieve_interval4prime_factors__ge_lt
+
+
+to_std_args4core_sieve_interval__ge_le
+to_std_args4sieve_interval__ge_lt
+
+
+check_offsetted_uint2may_prime_factors_
+    check_offsetted_uint2prime_factors_
+    check_uint2may_prime_factors_
+
+check_offsetted_uint2may_pairs8prime_factorization_
+    check_offsetted_uint2pairs8prime_factorization_
+    check_uint2may_pairs8prime_factorization_
+
+check_offsetted_uint2may_prime_factorization_
+    check_offsetted_uint2prime_factorization_
+    check_uint2may_prime_factorization_
+
+
+tabulate_may_factorization4uint_lt_
+tabulate_may_prime_factorization4uint_lt_
+    tabulate_may_pairs8prime_factorization4uint_lt_
+
+
+
+
+
+
+
+iter_all_strict_sorted_primes_
+
+
+iter_primes__inside_
+    PrimalityUndeterminedError
+
+
+
+
 '''.split()#'''
 __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 
-from seed.for_libs.for_time import (
-Timer__print_err
-    ,timer__print_err__thread_wide
-    ,timer__print_err__process_wide
-    ,timer__print_err__system_wide__highest_resolution
-    ,timer__print_err__system_wide__monotonic
-)
-
-timer = timer__print_err__thread_wide
-_to_show_ = __name__ == "__main__"
-
-with timer(prefix='py:std...', _to_show_=_to_show_):
-    from enum import Enum, auto
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'ref:_ref,count:_count'):
+    #from operator import __index__
     from weakref import ref as _ref
-    import itertools
-    from itertools import count as _count, repeat as _repeat
-    from itertools import islice, chain, pairwise, filterfalse
+    from itertools import count as _count
+    from itertools import islice, chain
 
-with timer(prefix='seed:basic...', _to_show_=_to_show_):
-    from seed.iters.apply_may_args4islice_ import apply_may_args4islice_
     from seed.iters.apply_may_args4islice_ import list_islice_, show_islice_, stable_show_islice_, stable_list_islice_
 
-    from seed.tiny import mk_tuple, mk_reiterable
-    from seed.tiny import ifNonef, snd, print_err, ifNone #, echo
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import snd
     from seed.tiny_.check import check_type_is, check_int_ge
-    from seed.tiny_.dict_op__add import set_add# dict_add, dict_update, set_update
 
-with timer(prefix='seed:math... pass', _to_show_=False):
-    from seed.math.gcd import gcd
-    pass
-    #from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
-    #from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
 
-    #from seed.math.II import II, II_mod
 
-    #from seed.helper.repr_input import repr_helper
-    #from seed.helper.stable_repr import stable_repr
-with timer(prefix='seed.math.max_power_of_base_as_factor_of_', _to_show_=_to_show_):
-    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
-with timer(prefix='seed.math.semi_factor_pint_via_trial_division', _to_show_=_to_show_):
-    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-with timer(prefix='LazySeq', _to_show_=_to_show_):
     from seed.types.LazySeq import LazySeq
 
-r'''[[[
-py -m seed.math.prime_gens
-py:std...:duration: 0.0002503850000000196 *(unit: 0:00:01)
-seed:basic...:duration: 0.002044998999999992 *(unit: 0:00:01)
-seed.math.max_power_of_base_as_factor_of_:duration: 0.001993615000000004 *(unit: 0:00:01)
-seed.math.semi_factor_pint_via_trial_division:duration: 0.18622884699999998 *(unit: 0:00:01)
-LazySeq:duration: 0.008693461999999985 *(unit: 0:00:01)
 
-
-seed.math.semi_factor_pint_via_trial_division
-e ../../python3_src/seed/math/semi_factor_pint_via_trial_division.py
-
-py -m seed.math.semi_factor_pint_via_trial_division
-py:std...:duration: 0.00015815400000002144 *(unit: 0:00:01)
-seed:basic...:duration: 9.846099999999414e-05 *(unit: 0:00:01)
-seed:func_tools...:duration: 0.023295232 *(unit: 0:00:01)
-seed:math...:duration: 0.015590459999999973 *(unit: 0:00:01)
-seed.math.floor_ceil:duration: 0.10961200099999996 *(unit: 0:00:01)
-
-seed.math.floor_ceil
-e ../../python3_src/seed/math/floor_ceil.py
-
-move 'import unittest, doctest' into seed.math.floor_ceil:load_tests() body -->:
-move seed.math.semi_factor_pint_via_trial_division:"_test1__calc_num_products_of_coprime_factors__ge1_le()" under 'if __name__ == "__main__":' -->:
-    py:std...:duration: 0.0001649229999999835 *(unit: 0:00:01)
-    seed:basic...:duration: 0.001496232000000014 *(unit: 0:00:01)
-    seed.math.max_power_of_base_as_factor_of_:duration: 0.0014222299999999966 *(unit: 0:00:01)
-    seed.math.semi_factor_pint_via_trial_division:duration: 0.032522994 *(unit: 0:00:01)
-    LazySeq:duration: 0.006289921000000004 *(unit: 0:00:01)
-
-0.03?? <-- seed.math.semi_factor_pint_via_trial_division
-py -m seed.math.semi_factor_pint_via_trial_division
-seed:func_tools...:duration: 0.02524277199999997 *(unit: 0:00:01)
-
-
-#]]]'''#'''
 
 
 
@@ -1862,235 +2499,22 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 
+__all__
 
 
-class Error(Exception):
+def __():
+  class Error(Exception):
     pass
     r'''[[[
     def __repr__(sf, /):
         return repr_helper(sf, *sf.args)
     #]]]'''#'''
 
-#def _iter_all_strict_sorted_primes():
-def raw_iter_all_strict_sorted_primes__lt_(end, /, *, to_cache_only_busy_primes_plus_next, may_primes):
-    'using Eratosthenes_sieve: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_'
-    '-> (Iter prime){[[last prime < end][next prime >= end]]}'
-    it = raw_iter_all_strict_sorted_primes_(to_cache_only_busy_primes_plus_next=to_cache_only_busy_primes_plus_next, may_primes=may_primes)
-    return _iter__lt_(end, it)
-def _iter__lt_(end, xs, /):
-    xs = iter(xs) #hold iterator only #eg drop LazySeq, hold LazyList tail
-    for p in xs:
-        if not p < end:
-            break
-        yield p
-def raw_list_all_strict_sorted_primes__lt_(end, /, *, to_cache_only_busy_primes_plus_next, may_primes):
-    'using Eratosthenes_sieve: -> [prime]{[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_'
-    return [*raw_iter_all_strict_sorted_primes__lt_(end, to_cache_only_busy_primes_plus_next=to_cache_only_busy_primes_plus_next, may_primes=may_primes)]
+if 1:from seed.math.prime_sieve.sieve_lt import _iter__lt_
 
-
-
-def raw_iter_all_strict_sorted_primes_(*, to_cache_only_busy_primes_plus_next, may_primes):
-    'using Eratosthenes_sieve: -> Iter prime'
-    ps = raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(to_cache_only_busy_primes_plus_next=to_cache_only_busy_primes_plus_next, may_primes=may_primes)
-    for n, m in ps:
-        if n == m:
-            p = n
-            yield p
-def raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_(sz, /, *, to_cache_only_busy_primes_plus_next, may_primes):
-    'using Eratosthenes_sieve: sz -> [(n, min_prime_factor<n>)]{len=sz} # [n >= 2]'
-    return list_islice_(sz, raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(to_cache_only_busy_primes_plus_next=to_cache_only_busy_primes_plus_next, may_primes=may_primes))
-def raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(*, to_cache_only_busy_primes_plus_next, may_primes, ihead2may_itail=None, offsetted_sieve=None, lmay_offset=None, to_export_all_prime_factors=False):
-    'using Eratosthenes_sieve: -> Iter (n, min_prime_factor<n>) if not to_export_all_prime_factors else (n, all_strict_sorted_prime_factors<n>) # [n >= 2]'
-    #no max_prime_factor, since use sqare limit, donot detect p for [i*p | [i :<- [2..<p]]] inside [p..=p**2]
-    #       ...can have max_prime_factor, since miss at most one prime that is a prime <- [next_busy_prime..<next_busy_prime**2]
-    #
-    #the input `may_primes` used as view to outside
-    #
-    primes = ifNonef(may_primes, list)
-
-    if len(primes): raise ValueError
-
-    check_type_is(bool, to_cache_only_busy_primes_plus_next)
-        # `primes` cache all future busy_primes, that occupies too much memory
-        #
-    if to_cache_only_busy_primes_plus_next:
-        #recur call:
-        iter_busy_primes = raw_iter_all_strict_sorted_primes_(may_primes=primes, to_cache_only_busy_primes_plus_next=False)
-        #next_busy_prime = next(iter_busy_primes)
-        _2 = next(iter_busy_primes)
-            # extract&drop 2
-        only_busy_primes_plus_next = primes
-    else:
-        cached_primes = primes
-
-    # [singly_list<idx8prime> === may idx8prime]
-    #idx2may_idx = []
-    ihead2may_itail = ifNonef(ihead2may_itail, list)
-    if len(ihead2may_itail): raise ValueError
-        # :: [may idx8prime]
-        # [singly_list<idx8prime>]
-        # ihead of busy_prime
-        # [len_busy_primes == len(ihead2may_itail)]
-
-    lmay_offset = ifNonef(lmay_offset, list)
-    if len(lmay_offset): raise ValueError
-    #offset = 2 = first_prime
-    lmay_offset.append(2)
-
-    offsetted_sieve = ifNonef(offsetted_sieve, list)
-    if len(offsetted_sieve): raise ValueError
-        # :: [may idx8prime]
-        # :: [may ihead]
-        # :: [singly_list<idx8prime>]
-        # :: [singly_list<idx8prime_factor>]
-    def main():
-        # ihead =[def]= idx8prime__singly_list
-        # iheads =[def]= idx8prime__list
-        # busy_primes =[def]= primes[:len(ihead2may_itail)] that curr used to do trial_division
-
-
-        #len_busy_primes = ?
-        #   deleted since [len_busy_primes == len(ihead2may_itail)]
-
-
-        next_busy_prime = first_prime = 2
-        # sqare4next_busy_prime = next_busy_prime**2
-        sqare4next_busy_prime = 4
-        # prev____sqare4next_busy_prime = 1
-
-        # for n in _count(first_prime):
-        for n in _count(2):
-            # [prev____sqare4next_busy_prime < n <= sqare4next_busy_prime]
-            may_ihead = get_(n)
-            drop_(n)
-            #advance_ should be after drop_!!! since extend offsetted_sieve
-            if may_ihead is None and n == sqare4next_busy_prime:
-                #not prime # next_busy_prime**2
-                ihead4next_busy_prime = len(ihead2may_itail)
-                may_ihead = ihead4next_busy_prime
-                #prev____sqare4next_busy_prime = sqare4next_busy_prime
-                (next_busy_prime, sqare4next_busy_prime) = add_new_busy_prime()
-            iheads = (*iter_(may_ihead),)
-            if not iheads:
-                #prime
-                #m = p = n
-                on_prime(n)
-                    #before yield: put into primes
-                yield mk4prime(n)
-            else:
-                #not prime
-                #m = primes[iheads[0]]
-                on_composite(n, iheads)
-                yield mk4composite(n, iheads, next_busy_prime, sqare4next_busy_prime)
-                advance_(n, iheads)
-        return
-    def advance_(n, iheads, /):
-        #put_ vs get_
-        assert iheads
-        offset = lmay_offset[0]
-        k4n = n - offset
-        k2h = offsetted_sieve
-        h2m = ihead2may_itail
-        prs = primes
-
-        max_k = k4n+prs[iheads[-1]]
-        if not max_k < len(k2h):
-            sz4pad = max_k+1 -len(k2h)
-            k2h.extend(_repeat(None, sz4pad))
-
-        for ihead in iheads:
-            p = prs[ihead]
-            k = k4n+p
-            h2m[ihead] = k2h[k]
-            k2h[k] = ihead
-    def get_(n, /):
-        offset = lmay_offset[0]
-        k4n = n - offset
-        if not k4n >= 0:raise logic-err
-        k2h = offsetted_sieve
-        may_ihead = None if not k4n < len(k2h) else k2h[k4n]
-        return may_ihead
-    def drop_(n, /):
-        #nonlocal offset
-        k2h = offsetted_sieve
-        offset = lmay_offset[0]
-        k4n = n - offset
-        if k4n < len(k2h):
-            k2h[k4n] = -1
-        num_nil_slots = k4n+1
-        L = len(k2h)
-        if not num_nil_slots*3 < L*2:
-            del k2h[:num_nil_slots]
-            #offset += num_nil_slots
-            lmay_offset[0] += num_nil_slots
-    #def add_new_busy_prime(len_busy_primes, /):
-    #    '-> (len_busy_primes, sqare4next_busy_prime)'
-    def add_new_busy_prime():
-        '-> (next_busy_prime, sqare4next_busy_prime)'
-        # in first round: [old-next_busy_prime == 2]
-        # in first round: [old-ihead2may_itail<2> == 0]
-        # in first round: [old-sqare4next_busy_prime<2> == 4]
-
-        # in first round: [new-next_busy_prime == 3]
-        ihead2may_itail.append(None)
-            # len_busy_primes += 1
-        ihead4next_busy_prime = len(ihead2may_itail)
-        # in first round: [new-ihead2may_itail<3> == 1]
-        if to_cache_only_busy_primes_plus_next:
-            next_busy_prime = next(iter_busy_primes)
-            assert len(only_busy_primes_plus_next) == 1+len(ihead2may_itail)
-        else:
-            next_busy_prime = primes[ihead4next_busy_prime]
-
-        sqare4next_busy_prime = next_busy_prime**2
-        # in first round: [new-sqare4next_busy_prime<3> == 9]
-        return (next_busy_prime, sqare4next_busy_prime)
-    def iter_(may_ihead, /):
-        h2m = ihead2may_itail
-        while not may_ihead is None:
-            ihead = may_ihead
-            yield ihead
-            #may_itail = h2m[ihead]
-            may_ihead = h2m[ihead]
-    if to_export_all_prime_factors:
-        def mk4prime(n, /):
-            p = n
-            m = p
-            fs = (p,)
-            return (n, fs)
-        def mk4composite(n, iheads, next_busy_prime, sqare4next_busy_prime, /):
-            #OK@[n==old-sqare4next_busy_prime]
-            #   even call mk4composite() after next_busy_prime,sqare4next_busy_prime updated
-            #       since fs=[old-next_busy_prime] is complete, [_1_or_p==1]
-            fs = [primes[ihead] for ihead in iheads]
-            (p2e, _1_or_p) = semi_factor_pint_via_trial_division(fs, n)
-            if not _1_or_p == 1:
-                p = _1_or_p
-                assert next_busy_prime <= p < sqare4next_busy_prime
-                fs.append(p)
-            fs = (*fs,)
-            return (n, fs)
-    else:
-        def mk4prime(n, /):
-            p = n
-            m = p
-            return (n, m)
-        def mk4composite(n, iheads, next_busy_prime, sqare4next_busy_prime, /):
-            m = primes[iheads[0]]
-            return (n, m)
-    if to_cache_only_busy_primes_plus_next:
-        def on_prime(n, /):
-            pass
-    else:
-        def on_prime(n, /):
-            p = n
-            primes.append(p)
-    def on_composite(n, iheads, /):
-        pass
-    return main()
-
-
-
+from seed.math.prime_sieve.sieve_lt import list_all_strict_sorted_primes__lt_, sieve4uint2is_prime__lt_
+from seed.math.prime_sieve.sieve_lt import iter_all_strict_sorted_primes_
+from seed.math.prime_sieve.sieve_lt import raw_list_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes_, raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_, raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_
 
 class _IBaseGlobalControl4LazySeq:
     #_may_singleton = None
@@ -2169,7 +2593,6 @@ class _IBaseGlobalControl4LazySeq:
             i = i_or_sl
             return sf()[i]
         raise TypeError(type(i_or_sl))
-class Bool5TriboolFail__probably_prime(Error):pass
 class _IBaseGlobalControl4PrimeGenerator(_IBaseGlobalControl4LazySeq):
     #_may_singleton = None
     #_may_wref_singleton = None
@@ -2234,1589 +2657,155 @@ prime_gen = prime_gen__Eratosthenes_sieve
 
 
 
-#view others/数学/prime/primality_test.txt
-# https://oeis.org/A014233
-# A014233 Smallest odd number for which Miller-Rabin primality test on bases <= n-th prime does not reveal compositeness.
-n2upperbound4Miller_Rabin_primality_test_using_first_n_plus1_primes_as_basis = A014233 = (2047, 1373653, 25326001, 3215031751, 2152302898747, 3474749660383, 341550071728321, 341550071728321, 3825123056546413051, 3825123056546413051, 3825123056546413051, 318665857834031151167461, 3317044064679887385961981)
-#assert len(A014233) == 13
-assert len(A014233) >= 13
-assert A014233[10] < 2**64 < A014233[11]
-assert 2**10 < A014233[0] < 2**11
-assert 2**20 < A014233[1] < 2**21
-assert 2**24 < A014233[2] < 2**25
-assert 2**31 < A014233[3] < 2**32
-assert 2**40 < A014233[4] < 2**41
-assert 2**41 < A014233[5] < 2**42
-assert 2**48 < A014233[6] < 2**49
-assert 2**48 < A014233[7] < 2**49
-assert 2**61 < A014233[8] < 2**62
-assert 2**61 < A014233[9] < 2**62
-assert 2**61 < A014233[10] < 2**62
-assert 2**78 < A014233[11] < 2**79
-assert 2**81 < A014233[12] < 2**82
-        # II_prime_basis_gtN___vs___A014233:goto
 
-assert 2**48 < A014233[6] == A014233[7] < 2**49
-assert 2**61 < A014233[8] == A014233[9] == A014233[10] < 2**62
-assert len({*A014233[:13]}) == 13-1-2 == 10
+from seed.math.primality_test.strong_probable_prime import (
+Error
+,   IsPrimeError
+,   PrimalityUndeterminedError
+,       OverflowError__Miller_Rabin_primality_test__A014233
+#
+#
+#
+#
+#
+#
+#
+,A014233     ,n2upperbound4Miller_Rabin_primality_test_using_first_n_plus1_primes_as_basis
+,   prime_basis4A014233
+,   prime_basis_set4A014233
+#
+,is_prime__using_A014233_    ,is_prime__le_pow2_81_
+,   OverflowError__Miller_Rabin_primality_test__A014233
+#
+#
+#
+#
+#
+#
+#
+,is_strong_probable_prime__basis__with_trial_division_
+,   is_strong_probable_prime__basis_
+,       is_strong_probable_prime_
+#
+,   continuous_trial_division_
+,       iter_continuous_prime_bases_
+,       callable5xfilter4continuous_bases
+,       mk_initial_state4filter4continuous_bases_
+,       mk_filter4continuous_bases4fixed_size
+,       filter4continuous_bases4empty
+,       filter4continuous_bases4II_prime_basis_gtN
+#
+#
+#
+#
+#
+#
+#
+,find_min_prime_witness4odd_composite_
+,   iter_until_found_min_prime_witness4odd_composite_
+,       IsPrimeError
+#
+#
+#
+#
+#
+,is_prime__tribool_
+,   mk_tribool_delegate5PRP_test_
+#
+,   detect_strong_probable_prime__not_waste_too_much_time_
+#
+,   Case4is_prime__tribool_
+,       iter_prime_basis4II_prime_basis_gtN_
+,           calc_len_prime_basis4II_prime_basis_gtN_
+#
+,   prev_may_probable_prime__lt_
+,   next_probable_prime__ge_
+,   iter_probable_primes__inside_
+,   iter_probable_primes__ge_lt_
+,       iter_probable_primes__between_
+,   iter_probable_primes__ge_
+,   reversed_iter_probable_primes__lt_
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+,prime_filter__using_primality_test_
+,   default4is_prime_and_may_upperbound
+,       is_prime__le_pow2_81_
+,           OverflowError__Miller_Rabin_primality_test__A014233
+,           next_may_prime__le_pow2_81__ge_
+,           prev_may_prime__le_pow2_81__lt_
+,           iter_primes__inside_
+,               PrimalityUndeterminedError
+,           iter_primes__ge_lt_
+,               iter_primes__between_
+,           iter_primes__le_pow2_81__ge_
+,           reversed_iter_primes__le_pow2_81__lt_
+,               raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
+,               raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
+#
+#
+#
+#
+#
+#
+#
+#
+,pairwise_diff_
+,   iter_pairwise_diff_probable_primes__ge_
+,   iter_pairwise_diff_primes__le_pow2_81__ge_
+#
+)
 
-prime_basis4A014233 = prime_gen[:len(A014233)]
-assert prime_basis4A014233[11] == 37
-assert len(prime_basis4A014233) == len(A014233)
-check_type_is(tuple, A014233)
-check_type_is(tuple, prime_basis4A014233)
-prime_basis_set4A014233 = frozenset(prime_basis4A014233)
-if 0:
-    #move to below
-    assert not any(map(is_prime__using_A014233_, A014233))
 
+class Bool5TriboolFail__probably_prime(PrimalityUndeterminedError):pass
 
 
 
 
-class OverflowError__Miller_Rabin_primality_test__A014233(Error):pass
 
-def _prepare4is_prime__tribool_(prime_basis, n, /, *, skip_check, _not_seq=False):
-    r'''[[[
-precondition:
-    [prime_basis is strict sorted]
-    [len(prime_basis) >= 1]
-    [prime_basis[0] == 2]
-    [set(raw_iter_all_strict_sorted_primes__lt_(1+prime_basis[-1])) |<=| set(prime_basis)]
 
-postcondition:
-    * True:
-        [n is prime]
-    * False:
-        [n is not prime]
-        [[n < 2]or[n is composite]]
-    * ...:
-        [n is odd][n >= 3]
-        [@[b :<- prime_basis] -> [b%n =!= 0]]
-        #extra:
-        [n > prime_basis[-1]]
-        [[not skip_check] -> [@[p :<- prime_basis] -> [n%p =!= 0]]]
-        [[not skip_check] -> [n >= (1+prime_basis[-1])**2]]
 
-    #]]]'''#'''
-    assert prime_basis
-    assert _not_seq or prime_basis[0] == 2
-    #assert set(raw_iter_all_strict_sorted_primes__lt_(1+prime_basis[-1])) <= set(prime_basis)
 
-    if skip_check:
-        #e.g. factor_pint_by_trial_division_, n reduce...
-        check_type_is(int, n)
-        if not (n >= 3 and (n&1) == 1): raise ValueError(n)
-        if not (_not_seq or n > prime_basis[-1]): raise ValueError(n)
-        # [n is odd][n >= 3]
-        # [@[b :<- prime_basis] -> [b%n =!= 0]]
-        # [n > prime_basis[-1]]
-        return ...
+44444; is_strong_pseudoprime_ = is_strong_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; is_strong_pseudoprime__basis__with_trial_division_ = is_strong_probable_prime__basis__with_trial_division_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; is_strong_pseudoprime__basis_ = is_strong_probable_prime__basis_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; detect_strong_pseudoprime__not_waste_too_much_time_ = detect_strong_probable_prime__not_waste_too_much_time_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; prev_may_pseudoprime__lt_ = prev_may_probable_prime__lt_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; next_pseudoprime__ge_ = next_probable_prime__ge_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; iter_pseudoprimes__ge_lt_ = iter_probable_primes__ge_lt_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; iter_pseudoprimes__inside_ = iter_probable_primes__inside_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; iter_pseudoprimes__between_ = iter_probable_primes__between_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; iter_pseudoprimes__ge_ = iter_probable_primes__ge_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; reversed_iter_pseudoprimes__lt_ = reversed_iter_probable_primes__lt_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+44444; iter_pairwise_diff_pseudoprimes__ge_ = iter_pairwise_diff_probable_primes__ge_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
 
-    check_type_is(int, n)
-    if n < 2:
-        return False
-    if n & 1 == 0:
-        return n == 2
-    ######################
-    # [n is odd][n >= 3]
-    ######################
-    if n < 9:
-        return True
-    for p in prime_basis:
-        assert not n < p
-        if n < p**2:
-            return True
-        if n%p == 0:
-            return n == p
-    # [@[p :<- prime_basis] -> [n%p =!= 0]]
-    # [n > prime_basis[-1]]
-    p_6 = p%6
-    if p_6 == 5:
-        d = 2
-    elif p_6 == 1:
-        d = 4
-    elif p_6 == 3:
-        d = 2
-    elif p_6 == 2:
-        d = 1
-    else:
-        raise ValueError(prime_basis)
-    _prp = (p+ d)
-    # [_prp <= next_prime__ge_(1+p)]
-    if n < _prp**2:
-        # [n < _prp**2 <= next_prime__ge_(1+p)**2]
-        return True
+#44444; _kw__is_strong_pseudoprime__basis_ = _kw__is_strong_probable_prime__basis_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+#44444; _is_strong_pseudoprime_ = _is_strong_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
+#44444; _iter_pseudoprimes__inside_ = _iter_probable_primes__inside_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
 
-    ######################
-    # [@[b :<- prime_basis] -> [b%n =!= 0]]
-    ######################
-    return ...
+#_kw__is_strong_pseudoprime__basis_
+#_is_strong_pseudoprime_
+#_iter_pseudoprimes__inside_
 
-def is_prime__using_A014233_(n, /, *, skip_check=False, to_find_sqrt_neg1=False):
-    r'''[[[
-n/int -> is_prime/bool | ^OverflowError__Miller_Rabin_primality_test__A014233
-precondition:
-    [n is int]
-postcondition:
-    * True:
-        [n is prime]
-    * False:
-        [n is not prime]
-        [[n < 2]or[n is composite]]
-    * ^OverflowError__Miller_Rabin_primality_test__A014233:
-        [[n >= is_prime__using_A014233_.upperbound > A014233[-1] > 2**81][is_strong_pseudoprime__basis_(prime_basis4A014233, n) is True]]
-
-        ######################
-        [is_strong_pseudoprime__basis_(prime_basis4A014233, n) is True] ==>> [@[p :<- prime_basis4A014233] -> [n%p =!= 0]]
-        ######################
-        #useless:
-        [n is odd][n >= 3]
-        [@[b :<- prime_basis4A014233] -> [b%n =!= 0]]
-        #extra:
-        [n > prime_basis4A014233[-1]]
-        [[not skip_check] -> [@[p :<- prime_basis4A014233] -> [n%p =!= 0]]]
-        [[not skip_check] -> [n >= (1+prime_basis4A014233[-1])**2]]
-
-
-
-
-######################
-[n,b :: int][n =!= 0][b%n =!= 0]:
-    [is_strong_pseudoprime_(b;n) =[def]= [[n >= 3][n%2==1][(e,t) :=> [[e,t :: pint][t%2==1][t*2**e == n-1]]][[b**t %n == +1]or[?[s :<- [0..<e]] -> [(b**t)**(2**s) %n == -1]]]]]
-
-    [[is_strong_pseudoprime_(b;n)] -> [gcd(n,b) == 1]]
-
-primality_test_of_Miller_Rabin
-  probabilistic primality test
-    return probably_prime | composite
-  --> deterministic algorithm
-
-    #]]]'''#'''
-    #see:is_strong_pseudoprime__basis_
-    #see:is_prime__tribool_
-    #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
-    r = _prepare4is_prime__tribool_(prime_basis4A014233, n, skip_check=skip_check)
-
-    if not r is ...:
-        return r
-    # [n is odd][n >= 3]
-    # [@[b :<- prime_basis4A014233] -> [b%n =!= 0]]
-    #extra:
-    # [n > prime_basis4A014233[-1]]
-    # [[not skip_check] -> [@[p :<- prime_basis4A014233] -> [n%p =!= 0]]]
-    # [[not skip_check] -> [n >= (1+prime_basis4A014233[-1])**2]]
-    #
-    A014233
-    prime_basis4A014233
-    if 0:
-        for i1, max1 in enumerate(A014233, 1):
-            if n <= max1:
-                if n == max1:
-                    return False
-                basis = prime_basis4A014233[:i1]
-                return _kw__is_strong_pseudoprime__basis_(basis, n)
-    else:
-        for i1, max1 in enumerate(A014233, 1):
-            if n < max1:
-                basis = prime_basis4A014233[:i1]
-                return _kw__is_strong_pseudoprime__basis_(basis, n, to_find_sqrt_neg1=to_find_sqrt_neg1)
-        if n == max1:
-            if to_find_sqrt_neg1:
-                bool_or_with_sqrts = _kw__is_strong_pseudoprime__basis_(prime_basis4A014233, n, to_find_sqrt_neg1=to_find_sqrt_neg1)
-                b, sqrts = _pair5bool_or_with_sqrts_(bool_or_with_sqrts)
-                #print(sqrts)
-                assert not b
-                assert sqrts == [806966215798523717614900, 1560865212556530034242163]
-                #if len(sqrts) == 2: return False, sqrts
-                if sqrts:
-                    #must return False
-                    return False, sqrts
-            return False
-    assert n > A014233[-1]
-    # [n > A014233[-1]]
-    #if not _kw__is_strong_pseudoprime__basis_(prime_basis4A014233, n):
-        #return False
-    bool_or_with_sqrts = _kw__is_strong_pseudoprime__basis_(prime_basis4A014233, n, to_find_sqrt_neg1=to_find_sqrt_neg1)
-    if not _bool__5bool_or_with_sqrts_(bool_or_with_sqrts):
-        return bool_or_with_sqrts
-    # [[n >= is_prime__using_A014233_.upperbound > A014233[-1] > 2**81][is_strong_pseudoprime__basis_(prime_basis4A014233, n) is True]]
-        #see:_find_upperbound4is_prime__using_A014233_()
-
-    upperbound = is_prime__using_A014233_.upperbound #max1+2
-    raise OverflowError__Miller_Rabin_primality_test__A014233(f'[{upperbound} == upperbound <= n == {n}]')
-if 1:
-    #see below:_find_upperbound4is_prime__using_A014233_
-    is_prime__using_A014233_.upperbound = A014233[-1]+2
-        #only for first raise in _find_upperbound4is_prime__using_A014233_
-
-def is_strong_probable_prime_(base, n, /, *, to_find_sqrt_neg1=False):
-    'base/int{>=2,%n=!=0} -> n{>=3,odd} -> [n is base-SPRP]'
-    return _kw__is_strong_pseudoprime__basis_([base], n, to_find_sqrt_neg1=to_find_sqrt_neg1)
-44444; is_strong_pseudoprime_ = is_strong_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def _bool__5bool_or_with_sqrts_(bool_or_with_sqrts, /):
-    b, sqrts = _pair5bool_or_with_sqrts_(bool_or_with_sqrts)
-    return b
-def _sqrts__5bool_or_with_sqrts_(bool_or_with_sqrts, /):
-    b, sqrts = _pair5bool_or_with_sqrts_(bool_or_with_sqrts)
-    return sqrts
-def _pair5bool_or_with_sqrts_(bool_or_with_sqrts, /):
-    if type(bool_or_with_sqrts) is bool:
-        b = bool_or_with_sqrts
-        sqrts = []
-    else:
-        b, sqrts = bool_or_with_sqrts
-        assert 1 <= len(sqrts) <= 2
-    return b, sqrts
-
-def iter_continuous_prime_bases_(xfilter4continuous_bases, n, /):
-    # @20250130
-    'may filter4continuous_bases/((k/uint -> st[k] -> prime_gen[k] -> tmay st[k+1])|((-1) -> None -> n/int -> st0)) -> n/int -> Iter prime_gen[k]'
-    f = callable5xfilter4continuous_bases(xfilter4continuous_bases)
-    st = mk_initial_state4filter4continuous_bases_(f, n)
-    for k, p in enumerate(iter(prime_gen)):
-        tm = f(k, st, p)
-        if not tm:break
-        yield p
-        [st] = tm
-    return
-def continuous_trial_division_(xfilter4continuous_bases, n, /):
-    # @20250130
-    'may filter4continuous_bases/((k/uint -> st[k] -> prime_gen[k] -> tmay st[k+1])|((-1) -> None -> n/int -> st0)) -> n/int -> (-1/[is_prime(n)]|0/YET|1/[n < 2]|prime_factor/{2..<n})'
-    check_type_is(int, n)
-    r = _continuous_trial_division_(xfilter4continuous_bases, n)
-    check_int_ge(-1, r)
-    assert (r&1) or (r < 3)
-    return r
-def _continuous_trial_division_(xfilter4continuous_bases, n, /):
-    #see:_prepare4is_prime__tribool_
-    bases4div = iter_continuous_prime_bases_(xfilter4continuous_bases, n)
-
-    check_type_is(int, n)
-    if n < 2:
-        return 1 # [n<2]
-    if n & 1 == 0:
-        return -1 if n == 2 else 2
-    ######################
-    # [n is odd][n >= 3]
-    ######################
-    if n < 9:
-        return -1 # [is_prime(n)]
-    p = 2
-    for p in bases4div:
-        assert not n < p
-        if n < p**2:
-            return -1 # [is_prime(n)]
-        if n%p == 0:
-            return -1 if n == p else p
-    # [@[p :<- bases4div] -> [n%p =!= 0]]
-    # [n > bases4div[-1]]
-    p_6 = p%6
-    d = _041202[p%6]
-        #_041202 = (0,4,1,2,0,2)
-    if d == 0:raise ValueError(n)
-    _prp = (p+d)
-    # [_prp <= next_prime__ge_(1+p)]
-    if n < _prp**2:
-        # [n < _prp**2 <= next_prime__ge_(1+p)**2]
-        return -1 # [is_prime(n)]
-
-    ######################
-    # [@[b :<- bases4div] -> [b%n =!= 0]]
-    ######################
-    return 0 # YET
-_041202 = (0,4,1,2,0,2)
-
-
-def callable5xfilter4continuous_bases(xfilter4continuous_bases, /):
-    x = xfilter4continuous_bases
-    if callable(x):
-        f = x
-        return f
-    if x is None:
-        #default vivi case@is_prime__tribool_
-        return filter4continuous_bases4II_prime_basis_gtN
-    if x is False:
-        #null_iter
-        return filter4continuous_bases4empty
-    if type(x) is int and x >= 0:
-        sz = x
-        return mk_filter4continuous_bases4fixed_size(sz)
-    raise ValueError(x)
-def mk_initial_state4filter4continuous_bases_(filter4continuous_bases, n, /):
-    'filter4continuous_bases -> n/int -> st0'
-    st0 = filter4continuous_bases(-1, None, n)
-    return st0
-#def mk_filter4continuous_bases4iterable(bases4div, /):
-def mk_filter4continuous_bases4fixed_size(sz, /):
-  def filter4continuous_bases4fixed_size(k, st_k, prime_k, /):
-    'imay k -> (st[k] | None) -> (prime_gen[k]|n) -> ((tmay st[k+1]) | st0) # ((k/uint -> st[k] -> prime_gen[k] -> tmay st[k+1])|((-1) -> None -> n/int -> st0))'
-    if k < 0:
-        st0 = 0
-        return st0
-    _sz = st_k
-    if not _sz < sz:
-        return ()
-    st_k1 = _sz+1
-    return (st_k1,)
-  if 1:
-    return filter4continuous_bases4fixed_size
-def filter4continuous_bases4empty(k, st_k, prime_k, /):
-    'imay k -> (st[k] | None) -> (prime_gen[k]|n) -> ((tmay st[k+1]) | st0) # ((k/uint -> st[k] -> prime_gen[k] -> tmay st[k+1])|((-1) -> None -> n/int -> st0))'
-    if k < 0:
-        return None
-    return ()
-def filter4continuous_bases4II_prime_basis_gtN(k, st_k, prime_k, /):
-    'imay k -> (st[k] | None) -> (prime_gen[k]|n) -> ((tmay st[k+1]) | st0) # ((k/uint -> st[k] -> prime_gen[k] -> tmay st[k+1])|((-1) -> None -> n/int -> st0))'
-    # see:II_prime_basis_gtN
-    # see:iter_prime_basis4II_prime_basis_gtN_
-    if k < 0:
-        assert k == -1
-        assert st_k is None
-        n = prime_k
-        st0 = (n, ii:=1)
-        return st0
-    (n, ii) = st_k
-    if ii > n:
-        return ()
-    ii *= prime_k
-    st_k1 = (n, ii)
-    return (st_k1,)
-#filter4continuous_bases4II_prime_basis_gtN.n2st0 = lambda n, /: (n, 1)
-def is_strong_probable_prime__basis__with_trial_division_(xfilter4continuous_bases4div, bases4SPRP, n, /):
-    # @20250130
-    'may filter4continuous_bases4div/((k/uint -> st[k] -> prime_gen[k] -> tmay st[k+1])|((-1) -> None -> n/int -> st0)) -> bases4SPRP/(Iter int) -> n/int -> whether_SPRP/bool # [SPRP == strong probable-prime]'
-    r = continuous_trial_division_(xfilter4continuous_bases4div, n)
-    if r:
-        return r == -1
-        match r:
-            case -1:
-                # [is_prime(n)]
-                return True
-            case 1:
-                # [n < 2]
-                return False
-            case prime_factor:
-                assert 2 <= prime_factor < n
-                assert n%prime_factor == 0
-                return False
-    # [r==0] YET
-    is_ok, factor_or_bases = _std_finite_basis_(n, bases4SPRP)
-    if not is_ok:
-        return False
-    bases = factor_or_bases
-    return is_strong_pseudoprime__basis_(bases, n)
-44444; is_strong_pseudoprime__basis__with_trial_division_ = is_strong_probable_prime__basis__with_trial_division_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-
-def is_strong_probable_prime__basis_(basis, n, /, *, to_find_sqrt_neg1=False):
-    'basis/[base/int{>=2,%n=!=0}] -> n{>=3,odd} -> [n is basis-SPRP] /(bool if not to_find_sqrt_neg1 or not found sqrt_neg1 else (bool, [sqrt_neg1]/[int%n <= n//2]{len=1/(False|True),2/False}))'
-    #see:is_prime__using_A014233_
-    return _kw__is_strong_pseudoprime__basis_(basis, n, to_find_sqrt_neg1=to_find_sqrt_neg1)
-44444; is_strong_pseudoprime__basis_ = is_strong_probable_prime__basis_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def _kw__is_strong_probable_prime__basis_(basis, n, /, *, to_find_sqrt_neg1):
-    check_type_is(int, n)
-    if not (n >= 3 and (n&1) == 1): raise ValueError(n)
-    # [n is odd][n >= 3]
-    n_neg1 = n-1
-
-    def _iter_basis(n, n_neg1, basis, /):
-        s = set()
-        for base in basis:
-            check_type_is(int, base)
-            base %= n
-            if not set_add(s, base):continue
-            if not 1 < base < n_neg1: raise ValueError((base, n))
-            # [base%n !<- {0,1,n-1}]
-            # [base%n =!= 0]
-            yield base
-    basis = _iter_basis(n, n_neg1, basis)
-    # [@[b :<- basis] -> [b%n =!= 0]]
-
-    ######################
-    # [n is odd][n >= 3]
-    # [@[b :<- basis] -> [b%n =!= 0]]
-    ######################
-
-    e, odd = factor_pint_out_2_powers(n_neg1)
-    e_neg1 = e-1
-
-    #return all(_is_strong_pseudoprime_(base, n, n_neg1, e_neg1, odd) for base in basis)
-    #if not to_find_sqrt_neg1:
-    #    return all(_is_strong_pseudoprime_(base, n, n_neg1, e_neg1, odd, False) for base in basis)
-    #else:
-    if 1:
-        sqrts = []
-        def put(bool_or_bool_sqrt_x, /):
-            if type(bool_or_bool_sqrt_x) is bool:
-                b = bool_or_bool_sqrt_x
-            else:
-                b, sqrt = bool_or_bool_sqrt_x
-                neg_sqrt = n -sqrt
-                if neg_sqrt < sqrt:
-                    sqrt, neg_sqrt = neg_sqrt, sqrt
-                assert 0 < sqrt < neg_sqrt < n
-                if b:
-                    sqrt_neg1 = sqrt
-                    if not sqrt in sqrts:
-                        sqrts.append(sqrt)
-                    b = len(sqrts) == 1
-                else:
-                    nonplain_sqrt_1 = sqrt
-                    sqrts.append((nonplain_sqrt_1,))
-                    b; pass
-            return b
-
-        r = all(put(_is_strong_pseudoprime_(base, n, n_neg1, e_neg1, odd, True)) for base in basis)
-        #bug:return sqrts or r
-        #   may be found one sqrt then found not pseudoprime
-        #   hence len(sqrts)==1 donot repr True
-        if to_find_sqrt_neg1 and sqrts:
-            if len(sqrts)==2:
-                assert r is False
-            return (r, sqrts)
-        return r
-44444; _kw__is_strong_pseudoprime__basis_ = _kw__is_strong_probable_prime__basis_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def _is_strong_probable_prime_(base, n, n_neg1, e_neg1, odd, to_find_sqrt_neg1, /):
-    '-> (bool if not to_find_sqrt_neg1 or not found sqrt_neg1 else (True, sqrt_neg1/(int%n))|(False, nonplain_sqrt_1/(int%n)))'
-    ######################
-    # [n is odd][n >= 3]
-    # [[base%n =!= 0]]
-    ######################
-    d = pow(base, odd, n)
-    if d == 1:
-        return True
-    if 1:
-        if d == n_neg1:
-            return True
-    for _ in range(e_neg1):
-        d2 = pow(d, 2, n)
-        if d2 == n_neg1:
-            if to_find_sqrt_neg1:
-                sqrt_neg1 = d
-                return (True, sqrt_neg1)
-            return True
-        if d2 == 1:
-            if to_find_sqrt_neg1:
-                nonplain_sqrt_1 = d
-                return (False, nonplain_sqrt_1)
-            return False
-        d = d2
-    return False
-44444; _is_strong_pseudoprime_ = _is_strong_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-
-if __name__ == "__main__":
-    with timer(prefix='apply is_prime__using_A014233_ on A014233', _to_show_=_to_show_):
-        assert not any(map(is_prime__using_A014233_, A014233))
-        #assert not any(len(_sqrts__5bool_or_with_sqrts_(bool_or_with_sqrts)) == 2 for bool_or_with_sqrts in (ls := [is_prime__using_A014233_(n, to_find_sqrt_neg1=True) for n in A014233])), ls
-        #   SyntaxError: assignment expression cannot be used in a comprehension iterable expression
-        assert (__ := [is_prime__using_A014233_(n, to_find_sqrt_neg1=True) for n in A014233]) == [False, (False, [483061]), False, False, False, False, (False, [27393523843088, 36156112808384]), (False, [27393523843088, 36156112808384]), False, False, False, (False, [107889940756980366727205, 103782637039805229854323]), (False, [806966215798523717614900, 1560865212556530034242163])], __
-
-def _find_upperbound4is_prime__using_A014233_():
-    try:
-        for n in _count(A014233[-1]):
-            is_prime__using_A014233_(n)
-    except OverflowError__Miller_Rabin_primality_test__A014233:
-        pass
-    assert n == 3317044064679887385962123, (n, len(A014233)) #13"
-    return n
-if __name__ == "__main__":
-#if 0b0000:
-    is_prime__using_A014233_.upperbound = _find_upperbound4is_prime__using_A014233_()
-else:
-    assert len(A014233) == 13
-    is_prime__using_A014233_.upperbound = 3317044064679887385962123
-assert is_prime__using_A014233_.upperbound - A014233[-1] == 142
-
-
-
-
-class IsPrimeError(Error):pass
-def iter_until_found_min_prime_witness4odd_composite_(odd_composite, /):
-    'odd_composite/int{odd,>=9} -> Iter (is_pseudoprime, prime_idx, prime_base){if not is_pseudoprime then prime_base is min_prime_witness) | ^IsPrimeError # [[is_pseudoprime == is_strong_pseudoprime_(prime_base, odd_composite)][prime_gen[prime_idx] == prime_base][not is_strong_pseudoprime_(min_prime_witness, odd_composite)]]'
-    #NOTE: may have [min_witness_base < min_prime_witness]
-    check_type_is(int, odd_composite)
-    if not (odd_composite&1 ==1):raise ValueError(odd_composite)
-    if not odd_composite >= 9:raise ValueError(odd_composite)
-    # [odd_composite is odd][odd_composite >= 3**2]
-    return _iter_until_found_min_prime_witness4odd_composite_(odd_composite)
-def _iter_until_found_min_prime_witness4odd_composite_(n, /):
-    #n = odd_composite
-    # [n is composite]
-    #
-    # [n is odd][n >= 3]
-    n_neg1 = n-1
-    e, odd = factor_pint_out_2_powers(n_neg1)
-    e_neg1 = e-1
-    for i, p in enumerate(prime_gen):
-        base = p
-
-        q, r = divmod(n, p)
-        if r == 0:
-            pass
-        elif not q > p: raise IsPrimeError(n) #trial_division prove primality
-
-        # [n == q*p+r >= (p+1)*p+r >= p**2+p > p]
-        # [n > p]
-        # [n > base == p >= 2]
-
-        ######################
-        # [n is odd][n >= 3]
-        # [[base%n =!= 0]]
-        ######################
-        is_pseudoprime = _is_strong_pseudoprime_(base, n, n_neg1, e_neg1, odd, False)
-        yield (is_pseudoprime, i, p)
-        if not is_pseudoprime:
-            return
-        if r == 0:raise logic-err
-def find_min_prime_witness4odd_composite_(odd_composite, /, *, with_prime_idx=False):
-    'odd_composite/int{odd,>=9} -> min_prime_witness/int{prime} if not with_prime_idx else (prime_idx, min_prime_witness) | ^IsPrimeError # [[not is_strong_pseudoprime_(min_prime_witness, odd_composite)][prime_gen[prime_idx] == min_prime_witness]]'
-    #NOTE: may have [min_witness_base < min_prime_witness]
-    for (is_pseudoprime, i, p) in iter_until_found_min_prime_witness4odd_composite_(odd_composite):
-        pass
-    assert not is_pseudoprime
-    min_prime_witness = base = p
-    if with_prime_idx:
-        prime_idx = i
-        return (prime_idx, min_prime_witness)
-    return min_prime_witness
-
-def __():
-    lazy_prime_seq = prime_gen()
-    for i1, max1 in enumerate(A014233, 1):
-        (prime_idx, min_prime_witness) = find_min_prime_witness4odd_composite_(max1, with_prime_idx=True)
-        assert prime_idx >= i1, (prime_idx, i1, max1, min_prime_witness)
-            # dup!! ==>> 『==』->『>=』
-        assert prime_idx == i1 or A014233[i1-1]==A014233[i1], (prime_idx, i1, max1, min_prime_witness)
-        assert prime_gen[prime_idx] == min_prime_witness
-#if __name__ == "__main__":
-if 0b0000:
-    __()
-
-class Case4is_prime__tribool_(Enum):
-    '[case :: (Case4is_prime__tribool_ | [basis/uint] | None{==II_prime_basis_gtN})] #<<==kw:case@is_prime__tribool_()'
-        # @20250130: ++[case :: (___ | [basis/uint] | None)] for kw:case@next_pseudoprime__ge_/prev_may_pseudoprime__lt_/...
-    bit_length = auto()
-    ERH = auto()
-    II_prime_basis_gtN = auto()
-        # def____II_prime_basis_gtN:here
-        # impl____II_prime_basis_gtN:goto
-        # II_prime_basis_gtN___vs___A014233:goto
-def detect_strong_probable_prime__not_waste_too_much_time_(n, /, *, may_bases4SPRP=None):
-    'n/int -> (0|1|-1) # [0=>not prime][1=>prime][-1=>strong_pseudoprime] #[case:=Case4is_prime__tribool_.II_prime_basis_gtN]'
-    #r = is_prime__tribool_(n, case=Case4is_prime__tribool_.II_prime_basis_gtN)
-    if not may_bases4SPRP is None:
-        bases4SPRP = mk_reiterable(may_bases4SPRP)
-        case = bases4SPRP
-    else:
-        case = None
-            #=> case=Case4is_prime__tribool_.II_prime_basis_gtN
-    r = is_prime__tribool_(n, case=case)
-    if r is ...:
-        return -1
-    return int(r)
-44444; detect_strong_pseudoprime__not_waste_too_much_time_ = detect_strong_probable_prime__not_waste_too_much_time_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def mk_tribool_delegate5PRP_test_(is_PRP_, /, *args, **kwds):
-    'probable_primality_test/(*args -> int -> **kwds -> whether_PRP/bool) -> *args -> **kwds -> tribool_primality_test/(int -> tribool_whether_prime/tribool)  # [PRP == probable-prime] # [used by (kw:delegate@is_prime__tribool_)]'
-    def tribool_primality_test(n, /):
-        return ... if is_PRP_(*args, n, **kwds) else False
-    return tribool_primality_test
-def is_prime__tribool_(n, /, *, case:[Case4is_prime__tribool_,tuple], skip_check=False, skip_A014233=False):
-    r'''[[[
-int -> tribool/(bool|...)
-
-[[
-precondition:
-    [n is int]
-    [case :: (Case4is_prime__tribool_ | None{=>II_prime_basis_gtN} | bases4SPRP/[int]) | delegate/callable/(int -> tribool)]
-        eg:
-        [delegate := mk_tribool_delegate5PRP_test_(is_strong_pseudoprime__basis__with_trial_division_, xfilter4continuous_bases4div, bases4SPRP)]
-]]
-[[
-postcondition:
-    * True:
-        [n is prime]
-    * False:
-        [n is not prime]
-        [[n < 2]or[n is composite]]
-    * ...:
-        * [case is CASE.II_prime_basis_gtN]or[case is None]:
-            # [prime_basis <- iter_prime_basis4II_prime_basis_gtN_(n)]
-            [basis <- prime_gen[:min{i | [[i :<- [0..]][II(prime_gen[:i]) > n]]}]]
-        * [case is CASE.bit_length]:
-            [basis <- prime_gen[:n.bit_length()]]
-        * [case is CASE.ERH]:
-            [basis <- range(2, 2*n.bit_length()**2)]
-        * [case :: bases4SPRP/[int]]:
-            [bases := case]
-            [basis <- bases]
-        * [case :: delegate/callable/(int -> tribool)]:
-            [delegate => ignore all other kwds]
-
-        [[n >= is_prime__using_A014233_.upperbound > A014233[-1] > 2**81][is_strong_pseudoprime__basis_(prime_basis4A014233, n) is True][is_strong_pseudoprime__basis_(basis, n) is True]]
-]]
-
-
-[[
-pseudoprime
-strong pseudoprime
-
-probable-prime (PRP)
-strong probable-prime (SPRP)
-  b-SPRP
-Extended Riemann Hypothesis (ERH)
-
-[n,b :: int][n =!= 0][b%n =!= 0]:
-    [is_strong_pseudoprime_(b;n) =[def]= [[n >= 3][n%2==1][(e,t) :=> [[e,t :: pint][t%2==1][t*2**e == n-1]]][[b**t %n == +1]or[?[s :<- [0..<e]] -> [(b**t)**(2**s) %n == -1]]]]]
-
-    [[is_strong_pseudoprime_(b;n)] -> [gcd(n,b) == 1]]
-[[Extended Riemann Hypothesis (ERH)] -> @[n :: int] -> [n > 0] -> [n%2==1] -> [[is_prime_(n)] <-> [@[b :<- [2..<min(n, 2*(log n)**2)]] -> [is_strong_pseudoprime_(b;n)]]]]
-  # what is the base of log?
-==>>:
-!! [2 < e ~= 2.718281828459045 < 10]
-[[Extended Riemann Hypothesis (ERH)] -> @[n :: int] -> [n > 0] -> [n%2==1] -> [[is_prime_(n)] <-> [@[b :<- [2..<min(n, 2*(ceil_log2 n)**2)]] -> [is_strong_pseudoprime_(b;n)]]]]
-==>>:
-!! [[is_strong_pseudoprime_(b;n)] -> [gcd(n,b) == 1]]
-[[Extended Riemann Hypothesis (ERH)] -> @[n :: int] -> [n > 0] -> [n%2==1] -> [[is_prime_(n)] <-> [@[b :<- [2..<min(1+floor_sqrt(n), 2*(ceil_log2 n)**2)]] -> [is_strong_pseudoprime_(b;n)]]]]
-  # switch to trial_division
-]]
-
-[[
-C.bit_length:
-===
-# ??? [prime_gen[n.bit_length()-1] < n]
-    #see:_find_minN4bit_length__not_consider_trial_division_
-    # [[n >= 6] -> [prime_gen[n.bit_length()-1] < n]]
-# ??? [prime_gen[n.bit_length()]**2 <= n]
-    #see:_find_minN4bit_length__consider_trial_division_
-    # [[n >= 1369 == 37**2 == prime_gen[11]**2] -> [prime_gen[n.bit_length()]**2 <= n]]
-===
-[len(prime_basis) >= 1]
-    <==> [n.bit_length() > len(prime_basis4A014233)]
-===
-[len(prime_basis) >= 1][last := prime_gen[n.bit_length()-1]][max(prime_basis) == prime_basis[-1] == last][min(prime_basis) == prime_basis[0] >= 2]:
-    [@[b :<- prime_basis] -> [b%n =!= 0]]
-        <<== [max(prime_basis) < n]
-        <<== [max(prime_basis) == prime_basis[-1] == last == prime_gen[n.bit_length()-1] < n]
-        <<== [prime_gen[n.bit_length()-1] < n]
-        <<== [n >= 6]
-===
-[[n >= 6] -> [prime_gen[n.bit_length()-1] < n]]
-===
-[n >= 6][len(prime_basis) >= 1][last := prime_gen[n.bit_length()-1]][max(prime_basis) == prime_basis[-1] == last][min(prime_basis) == prime_basis[0] >= 2]:
-    !! [[n >= 6] -> [prime_gen[n.bit_length()-1] < n]]
-    !! [n >= 6]
-    [prime_gen[n.bit_length()-1] < n]
-
-    !! [max(prime_basis) == prime_basis[-1] == last]
-    !! [last := prime_gen[n.bit_length()-1]]
-    !! [prime_gen[n.bit_length()-1] < n]
-    [max(prime_basis) < n]
-
-    !! [min(prime_basis) == prime_basis[0] >= 2]
-    !! [max(prime_basis) < n]
-    [@[b :<- prime_basis] -> [2 <= b < n]]
-    [@[b :<- prime_basis] -> [b%n =!= 0]]
-===
-[[[n >= 6][len(prime_basis) >= 1][last := prime_gen[n.bit_length()-1]][max(prime_basis) == prime_basis[-1] == last][min(prime_basis) == prime_basis[0] >= 2]] -> [@[b :<- prime_basis] -> [b%n =!= 0]]]
-    #condition4CASE____bit_length:here
-===
-===
-]]
-[[
-C.ERH:
-===
-# ??? [2* n.bit_length()**2 <= n]
-    #see:_find_minN4ERH__not_consider_trial_division_
-    # [[n >= 98 == 2* 7**2] -> [2* n.bit_length()**2 <= n]]
-# ??? [(2* n.bit_length()**2)**2 <= n]
-    #see:_find_minN4ERH__consider_trial_division_
-    # [[n >= 640000 == ((2* 20**2)**2)] -> [(2* n.bit_length()**2)**2 <= n]]
-===
-[end := 2* n.bit_length()**2][len(prime_basis) >= 1][max(prime_basis) == prime_basis[-1] < end][min(prime_basis) == prime_basis[0] >= 2]:
-    [@[b :<- prime_basis] -> [b%n =!= 0]]
-        <<== [max(prime_basis) < n]
-        <<== [max(prime_basis) == prime_basis[-1] < end == 2* n.bit_length()**2 <= n]
-        <<== [2* n.bit_length()**2 <= n]
-        <<== [n >= 98]
-===
-[[n >= 98] -> [2* n.bit_length()**2 <= n]]
-===
-[n >= 98][len(prime_basis) >= 1][max(prime_basis) == prime_basis[-1] < end == 2* n.bit_length()**2][min(prime_basis) == prime_basis[0] >= 2]:
-    !! [[n >= 98] -> [2* n.bit_length()**2 <= n]]
-    !! [n >= 98]
-    [2* n.bit_length()**2 <= n]
-
-    !! [max(prime_basis) == prime_basis[-1] < end == 2* n.bit_length()**2]
-    !! [2* n.bit_length()**2 <= n]
-    [max(prime_basis) < n]
-
-    !! [min(prime_basis) == prime_basis[0] >= 2]
-    !! [max(prime_basis) < n]
-    [@[b :<- prime_basis] -> [2 <= b < n]]
-    [@[b :<- prime_basis] -> [b%n =!= 0]]
-===
-[[[n >= 98][len(prime_basis) >= 1][max(prime_basis) == prime_basis[-1] < end == 2* n.bit_length()**2][min(prime_basis) == prime_basis[0] >= 2]] -> [@[b :<- prime_basis] -> [b%n =!= 0]]]
-    #condition4CASE____ERH:here
-===
-
-]]
-[[
-C.II_prime_basis_gtN:
-===
-# ??? [[*iter_prime_basis4II_prime_basis_gtN_(n)][-1] < n]
-    #see:_find_minN4II_prime_basis_gtN__not_consider_trial_division_
-    # [[n >= 4 < 2*3] -> [[*iter_prime_basis4II_prime_basis_gtN_(n)][-1] < n]]
-# ??? [next_prime__ge_(1+[*iter_prime_basis4II_prime_basis_gtN_(n)][-1])**2 <= n]
-    #see:_find_minN4II_prime_basis_gtN__consider_trial_division_
-    # [[n >= 121 == (11**2) < 2*3*5*7] -> [next_prime__ge_(1+[*iter_prime_basis4II_prime_basis_gtN_(n)][-1])**2 <= n]]
-===
-[[n >= 4 < 2*3] -> [[*iter_prime_basis4II_prime_basis_gtN_(n)][-1] < n]]
-===
-[[[n >= 4][len(prime_basis) >= 1][max(prime_basis) == prime_basis[-1] == last == [*iter_prime_basis4II_prime_basis_gtN_(n)][-1]][min(prime_basis) == prime_basis[0] >= 2]] -> [@[b :<- prime_basis] -> [b%n =!= 0]]]
-    #condition4CASE____II_prime_basis_gtN:here
-===
-]]
-
-
-######################
-##delegate used in:view script/搜索冫伪素数牜临近幂方.py
-#   !! there are many funcs depends on is_prime__tribool_():next_pseudoprime__ge_,prev_may_pseudoprime__lt_,iter_pseudoprimes__between_,...
-#   to override it by [case:=delegate]
-######################
-    #]]]'''#'''
-    #def is_prime__tribool_(n, /, *, case=Case4is_prime__tribool_.II_prime_basis_gtN, skip_check=False):
-    #def is_prime__tribool_(n, /, *, case:Case4is_prime__tribool_, skip_check=False):
-    #def is_prime__tribool_(n, /, *, case:[Case4is_prime__tribool_,tuple], skip_check=False, skip_A014233=False, params4is_strong_pseudoprime__basis__with_trial_division_=None):
-    #def is_prime__tribool_(n, /, *, case:[Case4is_prime__tribool_,tuple], skip_check=False, skip_A014233=False, delegate=None):
-    #
-    # xxx is_prime__using_A014233_.upperbound
-    #   since trial_division...
-    if 0b0001:params = dict(locals())
-    ######################
-    ##delegate used in:view script/搜索冫伪素数牜临近幂方.py
-    #   !! there are many funcs depends on is_prime__tribool_():next_pseudoprime__ge_,prev_may_pseudoprime__lt_,iter_pseudoprimes__between_,...
-    #   to override it by [case:=delegate]
-    ######################
-    #if not delegate is None:
-    if callable(case):
-        delegate = case
-        # [delegate => ignore all other kwds]
-        return delegate(n)
-    ######################
-    ######################
-    #.if params4is_strong_pseudoprime__basis__with_trial_division_:
-    #.    # use is_strong_pseudoprime__basis__with_trial_division_ instead
-    #.    #   since just required whether_SPRP
-    #.    (xfilter4continuous_bases4div, bases4SPRP) = params4is_strong_pseudoprime__basis__with_trial_division_
-    #.    whether_SPRP = is_strong_pseudoprime__basis__with_trial_division_(xfilter4continuous_bases4div, bases4SPRP, n)
-    #.    return ... if whether_SPRP else False
-    ######################
-    check_type_is(bool, skip_A014233)
-    check_type_is(bool, skip_check)
-    C = Case4is_prime__tribool_
-    if case is None:
-        case = C.II_prime_basis_gtN
-
-    if type(case) is C and skip_A014233:raise TypeError
-
-    if not skip_A014233:
-        try:
-            return is_prime__using_A014233_(n, skip_check=skip_check)
-        except OverflowError__Miller_Rabin_primality_test__A014233:
-            #
-            pass
-        # [[n >= is_prime__using_A014233_.upperbound > A014233[-1] > 2**81][is_strong_pseudoprime__basis_(prime_basis4A014233, n) is True]]
-            #==>>:
-            # [n is odd][n >= 3]
-
-        # [n > 2**81 > 98]
-        # [n >= 98]
-        # [n is odd][n >= 3]
-    else:
-        assert not type(case) is C
-        check_type_is(int, n)
-        if n < 2:
-            return False
-        if n&1 == 0:
-            return n==2
-        # [n is odd][n >= 3]
-    # [n is odd][n >= 3]
-    assert n >= 3
-    assert n&1
-
-    if skip_A014233 and not skip_check:
-        # trial_division_if_skip_A014233
-        #prime_basis4trial_division = prime_gen[n.bit_length()-1]
-        prime_basis4trial_division = iter_prime_basis4II_prime_basis_gtN_(n)
-        #prime_basis4trial_division = tuple(prime_basis4trial_division)
-        r = _prepare4is_prime__tribool_(prime_basis4trial_division, n, skip_check=skip_check, _not_seq=True)
-
-        if not r is ...:
-            return r
-
-    # [n is odd][n >= 3]
-
-
-    # [[not skip_A014233] -> [n >= 98]]
-    # [[type(case) is C] -> [n >= 98]]
-
-    ##################
-    L = len(prime_basis4A014233)
-    C = Case4is_prime__tribool_
-    ############
-    if case is C.bit_length:
-        # ??? [prime_gen[n.bit_length()-1] < n]
-            #see:_find_minN4bit_length__not_consider_trial_division_
-            # [[n >= 6] -> [prime_gen[n.bit_length()-1] < n]]
-        # ??? [prime_gen[n.bit_length()]**2 <= n]
-            #see:_find_minN4bit_length__consider_trial_division_
-            # [[n >= 1369 == 37**2 == prime_gen[11]**2] -> [prime_gen[n.bit_length()]**2 <= n]]
-
-
-        assert not skip_A014233
-        assert n >= 6
-        assert n >= 1369
-        # [[[n >= 6][len(prime_basis) >= 1][last := prime_gen[n.bit_length()-1]][max(prime_basis) == prime_basis[-1] == last][min(prime_basis) == prime_basis[0] >= 2]] -> [@[b :<- prime_basis] -> [b%n =!= 0]]]
-            #condition4CASE____bit_length:goto
-
-        sz = n.bit_length()
-        if not L < sz:
-            basis_ls = []
-            # [@[b :<- chain(prime_basis4A014233, *basis_ls)] -> [b%n =!= 0]]
-        else:
-            prime_basis = prime_gen[L:sz]
-                # exclude prime_basis4A014233
-            # [len(prime_basis) == sz-L >= 1]
-            # [len(prime_basis) >= 1]
-            # [min(prime_basis) == prime_gen[L] >= 2]
-            # [max(prime_basis) == prime_gen[sz-1] <= prime_gen[n.bit_length()-1]]
-            # !! condition4CASE____bit_length:goto
-            # [@[b :<- prime_basis4A014233++prime_basis] -> [b%n =!= 0]]
-            basis_ls = [prime_basis]
-            # [@[b :<- chain(prime_basis4A014233, *basis_ls)] -> [b%n =!= 0]]
-        basis_ls
-
-    ############
-    elif case is C.ERH:
-        # ??? [2* n.bit_length()**2 <= n]
-            #see:_find_minN4ERH__not_consider_trial_division_
-            # [[n >= 98 == 2* 7**2] -> [2* n.bit_length()**2 <= n]]
-        # ??? [(2* n.bit_length()**2)**2 <= n]
-            #see:_find_minN4ERH__consider_trial_division_
-            # [[n >= 640000 == ((2* 20**2)**2)] -> [(2* n.bit_length()**2)**2 <= n]]
-
-        #bug:#assert n >= 1048577 #see:_find_min4ERH_
-        #bug:assert n.bit_length() >= 21 #see:_find_min4ERH_
-        assert not skip_A014233
-        assert n >= 98
-        assert n >= 640000
-        # [[[n >= 98][len(prime_basis) >= 1][max(prime_basis) == prime_basis[-1] < end == 2* n.bit_length()**2][min(prime_basis) == prime_basis[0] >= 2]] -> [@[b :<- prime_basis] -> [b%n =!= 0]]]
-            #condition4CASE____ERH:goto
-
-        #bug:sz = 2* n.bit_length()**2
-        end = 2* n.bit_length()**2
-        #bug:prime_basis = (*prime_gen.iter__lt_(end),)
-            #NOTE: may have [min_witness_base < min_prime_witness]
-        ps = prime_gen.iter__lt_(end)
-        _ps = islice(ps, L, None)
-            # exclude prime_basis4A014233
-        # !! condition4CASE____ERH:goto
-        # [@[b :<- range(2,end)] -> [b%n =!= 0]]
-        s = []
-        def _iter0(s, _ps, /):
-            for p in _ps:
-                yield p
-                s.append(p)
-        def _iter1(s, _ps, /):
-            [] = _ps
-            ps = {*prime_basis4A014233, *s}
-            for b in range(2, end):
-                if b not in ps:
-                    yield b
-        if n&3 == 3:
-            # [n%4 == 3]
-            basis_ls = [_ps]
-        else:
-            # [n%4 == 1]
-            basis_ls = [_iter0(s, _ps), _iter1(s, _ps)]
-        basis_ls
-        # !! [@[b :<- range(2,end)] -> [b%n =!= 0]]
-        # [@[b :<- chain(prime_basis4A014233, *basis_ls)] -> [b%n =!= 0]]
-    ############
-    elif case is C.II_prime_basis_gtN or case is None:
-        # ??? [[*iter_prime_basis4II_prime_basis_gtN_(n)][-1] < n]
-            #see:_find_minN4II_prime_basis_gtN__not_consider_trial_division_
-            # [[n >= 4 < 2*3] -> [[*iter_prime_basis4II_prime_basis_gtN_(n)][-1] < n]]
-        # ??? [next_prime__ge_(1+[*iter_prime_basis4II_prime_basis_gtN_(n)][-1])**2 <= n]
-            #see:_find_minN4II_prime_basis_gtN__consider_trial_division_
-            # [[n >= 121 == (11**2) < 2*3*5*7] -> [next_prime__ge_(1+[*iter_prime_basis4II_prime_basis_gtN_(n)][-1])**2 <= n]]
-        assert not skip_A014233
-        assert n >= 4
-        assert n >= 121
-        # [[[n >= 4][len(prime_basis) >= 1][max(prime_basis) == prime_basis[-1] == last == [*iter_prime_basis4II_prime_basis_gtN_(n)][-1]][min(prime_basis) == prime_basis[0] >= 2]] -> [@[b :<- prime_basis] -> [b%n =!= 0]]]
-            #condition4CASE____II_prime_basis_gtN:goto
-
-        prime_basis = islice(iter_prime_basis4II_prime_basis_gtN_(n), L, None)
-            # exclude prime_basis4A014233
-            #
-            # impl____II_prime_basis_gtN:here
-            # def____II_prime_basis_gtN:goto
-        # !! condition4CASE____II_prime_basis_gtN:goto
-        # [@[b :<- prime_basis4A014233++prime_basis] -> [b%n =!= 0]]
-        for head in prime_basis:
-            assert head > prime_basis4A014233[-1]
-            prime_basis = chain([head], prime_basis)
-            basis_ls = [prime_basis]
-            break
-        else:
-            basis_ls = []
-        # [@[b :<- chain(prime_basis4A014233, *basis_ls)] -> [b%n =!= 0]]
-    ############
-    elif isinstance(case, _int_seq_types):
-        basis = case
-        basis_ls = [basis]
-    ############
-    else:
-        raise Exception(f'unknowm Case4is_prime__tribool_:{case}')
-    ############
-    ##################
-    basis_ls
-    ##################
-
-    # [@[b :<- chain(prime_basis4A014233, *basis_ls)] -> [b%n =!= 0]]
-
-    #if 0:
-    #    if not prime_basis[-1] < n-1: raise logic-err
-    #    if not prime_basis[-1]**2 < n: raise logic-err
-    #    r = _prepare4is_prime__tribool_(prime_basis, n, skip_check=skip_check)
-    #    if not r is ...:
-    #        return r
-    #    # [n is odd][n >= 3]
-    #    # [@[b :<- prime_basis] -> [b%n =!= 0]]
-
-
-
-
-    # [n is odd][n >= 3]
-    # [@[b :<- chain(prime_basis4A014233, *basis_ls)] -> [b%n =!= 0]]
-
-    #for basis in basis_ls:
-    basis = chain.from_iterable(basis_ls)
-    if not skip_A014233:
-        # tested hence drop:
-        basis = filterfalse(prime_basis_set4A014233.__contains__, basis)
-    else:
-        is_ok, factor_or_basis = _std_finite_basis_(n, basis)
-        if not is_ok:
-            return False
-        basis = factor_or_basis
-    basis
-    if 0b0000:
-        basis = tuple(basis)
-        print_err('is_prime__tribool_', params, basis)
-    basis
-    if 1:
-        # !! [@[b :<- chain(prime_basis4A014233, *basis_ls)] -> [b%n =!= 0]]
-        # [@[b :<- basis] -> [b%n =!= 0]]
-        if not _kw__is_strong_pseudoprime__basis_(basis, n, to_find_sqrt_neg1=False):
-            return False
-        # [is_strong_pseudoprime__basis_(basis, n) is True]
-    # [is_strong_pseudoprime__basis_(chain(*basis_ls), n) is True]
-    # !! [is_strong_pseudoprime__basis_(prime_basis4A014233, n) is True]
-    # [is_strong_pseudoprime__basis_(chain(prime_basis4A014233, *basis_ls), n) is True]
-        # hence the above "exclude" prime_basis4A014233 is ok
-
-    # postcondition:
-    # [[n >= is_prime__using_A014233_.upperbound > A014233[-1] > 2**81][is_strong_pseudoprime__basis_(chain(prime_basis4A014233, *basis_ls), n) is True]]
-    return ...
-_int_seq_types = (tuple, list, bytes, bytearray)
-def _std_finite_basis_(n, basis, /):
-    'n -> Iter base -> ((False,factor<n>)|(True,basis/[base/[2..=n-2]{gcd(base,n)==1}]))'
-    basis = set(base%n for base in basis)
-    # [0 <= base <= n-1]
-    basis.discard(0)
-    basis.discard(1)
-    basis.discard(n-1)
-    # [2 <= base <= n-2]
-    #if not all(gcd(n, base) == 1 for base in basis): return False
-    basis = sorted(basis)
-    for base in basis:
-        if not gcd(n, base) == 1:
-            return (False, base)
-    basis = tuple(basis)
-    return (True, basis)
-def calc_len_prime_basis4II_prime_basis_gtN_(n, /):
-    return len([*iter_prime_basis4II_prime_basis_gtN_(n)])
-def iter_prime_basis4II_prime_basis_gtN_(n, /):
-    '-> Iter prime until II(all output prime) > input'
-    #see: II_prime_basis_gtN
-    ii = 1
-    for p in iter(prime_gen):
-        yield p
-        ii *= p
-        if ii > n:
-            break
-
-def _find_minN_(_is_ok_, begin=1, /):
-    from seed.seq_tools.bisearch import bisearch
-    for bit_length in range(1, 500):
-        n = 1<<(bit_length-1)
-        assert n.bit_length() == bit_length
-        if _is_ok_(n):
-            break
-    else:
-        raise 000
-    assert _is_ok_(1<<(bit_length -1))
-    (eqv_begin, eqv_end) = bisearch(True, range(1<<bit_length), max(begin, 1<<max(0, bit_length-2)), key=_is_ok_)
-    if eqv_begin == eqv_end:
-        raise 000
-    n = eqv_begin
-    assert not any(__ := [*map(_is_ok_, __3 := range(__2 := max(begin,n-100), n))]), ((__2, n), __, [*filter(_is_ok_, __3)])
-    assert all(__ := [*map(_is_ok_, range(n, n+100))]), (n, __, n+__.index(False), (1<<(bit_length-1), 1<<bit_length))
-    return n
-
-
-    #bug:
-    for bit_length in range(1, 500):
-        n = (1<<bit_length) -1
-        assert n.bit_length() == bit_length
-        if _is_ok_(n):
-            break
-    else:
-        raise 000
-    assert _is_ok_((1<<bit_length) -1)
-    (eqv_begin, eqv_end) = bisearch(True, range(1<<bit_length), 1<<(bit_length-1), key=_is_ok_)
-    if eqv_begin == eqv_end:
-        raise 000
-    n = eqv_begin
-    assert not any(__ := [*map(_is_ok_, range(__2 := max(1,n-100), n))]), ((__2, n), __)
-    assert all(__ := [*map(_is_ok_, range(n, n+100))]), (n, __, n+__.index(False), (1<<(bit_length-1), 1<<bit_length))
-        # ^(961, ..., 1024, (512, 1024)) @_find_minN4bit_length__consider_trial_division_
-            #assert [*map(_is_ok_, range(n, n+100))] == [True]*(1024-961) + [False]*(100-(1024-961))
-    return n
-
-def _is_ok4find_minN4bit_length__not_consider_trial_division_(n, /):
-    last = prime_gen[n.bit_length()-1]
-    return last < n
-def _find_minN4bit_length__not_consider_trial_division_():
-    # ??? [prime_gen[n.bit_length()-1] < n]
-    lazy_prime_seq = prime_gen() #turnon weakref
-    n = _find_minN_(_is_ok4find_minN4bit_length__not_consider_trial_division_)
-    assert n == 6, n
-    # [[n >= 6] -> [prime_gen[n.bit_length()-1] < n]]
-    return n
-def _is_ok4find_minN4bit_length__consider_trial_division_(n, /):
-    next_prime_factor = prime_gen[n.bit_length()]
-    return next_prime_factor**2 <= n
-def _find_minN4bit_length__consider_trial_division_():
-    # ??? [prime_gen[n.bit_length()]**2 <= n]
-    #return ...
-    lazy_prime_seq = prime_gen() #turnon weakref
-    assert _is_ok4find_minN4bit_length__consider_trial_division_(961)
-    assert _is_ok4find_minN4bit_length__consider_trial_division_(1369)
-    assert not _is_ok4find_minN4bit_length__consider_trial_division_(961 -1)
-    assert not _is_ok4find_minN4bit_length__consider_trial_division_(1369 -1)
-    n = _find_minN_(_is_ok4find_minN4bit_length__consider_trial_division_)
-    assert n == 1369 == 37**2, n
-    # [[n >= 1369 == 37**2 == prime_gen[11]**2] -> [prime_gen[n.bit_length()]**2 <= n]]
-    return n
-
-    assert n == 961 == 31**2, n
-    assert n == 131079601 == 11449**2, n
-    assert 11449 == prime_gen[27], prime_gen[26:30]
-    assert prime_gen[28]**2 < 1<<27
-    return n
-    r'''[[[
-
-min is 961, but 1024...
->>> 31**2
-961
->>> 961 .bit_length()
-10
->>> prime_gen[10]
-31
->>> 1024 .bit_length()
-11
->>> prime_gen[11]
-37
->>> 37**2
-1369
->>> 1369 .bit_length()
-11
->>> 2048 .bit_length()
-12
->>> prime_gen[12]
-41
->>> 41**2
-1681
-
-
-#err:wrong-condition: [next_prime_factor**4 <= n]
->>> 11449**2
-131079601
->>> 131079601 .bit_length()
-27
->>> prime_gen[27]
-107
->>> 107**2
-11449
->>> 107**4
-131079601
-
-    #]]]'''#'''
-
-def _is_ok4find_minN4ERH__not_consider_trial_division_(n, /):
-    end = 2* n.bit_length()**2
-    return end <= n
-def _find_minN4ERH__not_consider_trial_division_():
-    # ??? [2* n.bit_length()**2 <= n]
-    n = _find_minN_(_is_ok4find_minN4ERH__not_consider_trial_division_)
-    assert n == 98, n
-    # [[n >= 98 == 2* 7**2] -> [2* n.bit_length()**2 <= n]]
-    return n
-    r'''[[[
->>> 98 .bit_length()
-7
->>> 7**2
-49
->>> 2* 7**2
-98
-
-    #]]]'''#'''
-    for n in range(1, 1000):
-        if _is_ok4find_minN4ERH__not_consider_trial_division_(n):
-            break
-    else:
-        raise 000
-    assert all(map(_is_ok4find_minN4ERH__not_consider_trial_division_, range(n, 5*n)))
-    assert n == 98, n
-    return n
-def _is_ok4find_minN4ERH__consider_trial_division_(n, /):
-    end = 2* n.bit_length()**2
-    return end**2 <= n
-def _find_minN4ERH__consider_trial_division_():
-    # ??? [(2* n.bit_length()**2)**2 <= n]
-    assert _is_ok4find_minN4ERH__consider_trial_division_(521284)
-    assert _is_ok4find_minN4ERH__consider_trial_division_(640000)
-    assert not _is_ok4find_minN4ERH__consider_trial_division_(521284 -1)
-    assert not _is_ok4find_minN4ERH__consider_trial_division_(640000 -1)
-    n = _find_minN_(_is_ok4find_minN4ERH__consider_trial_division_)
-    assert n == 640000 == ((2* 20**2)**2), n
-    # [[n >= 640000 == ((2* 20**2)**2)] -> [(2* n.bit_length()**2)**2 <= n]]
-    return n
-
-    n = ((2* 20**2)**2)
-    return n
-    assert n == 521284, n
-    assert n == 640000, n
-    return n
-    r'''[[[
->>> 640000 .bit_length()
-20
->>> 800**2
-640000
->>> 2* 20**2
-800
->>> (2* 20**2)**2
-640000
-
->>> 521284 .bit_length()
-19
->>> (2* 19**2)**2
-521284
-
->>> (2* 18**2)**2
-419904
->>> ((2* 18**2)**2) .bit_length()
-19
->>> ((2* 19**2)**2) .bit_length()
-19
->>> ((2* 20**2)**2) .bit_length()
-20
->>> ((2* 21**2)**2) .bit_length()
-20
->>> ((2* 22**2)**2) .bit_length()
-20
->>> ((2* 23**2)**2) .bit_length()
-21
-
-    #]]]'''#'''
-    from seed.seq_tools.bisearch import bisearch
-    #len(range(2**80))
-        # OverflowError: Python int too large to convert to C ssize_t
-        # e ../lots/NOTE/Python/python-bug/len-bug.txt
-        #
-    (eqv_begin, eqv_end) = bisearch(True, range(2**80), 1, key=_is_ok4find_minN4ERH__consider_trial_division_)
-    if eqv_begin == eqv_end:
-        raise 000
-    n = eqv_begin
-    assert not any(map(_is_ok4find_minN4ERH__consider_trial_division_, range(n-100, n)))
-    assert all(map(_is_ok4find_minN4ERH__consider_trial_division_, range(n, n+100)))
-    assert n == 640000, n
-    return n
-
-    #fail:
-    n0 = 98**2
-    for n in range(n0, n0+1000):
-        if _is_ok4find_minN4ERH__consider_trial_division_(n):
-            break
-    else:
-        raise 000
-    assert all(map(_is_ok4find_minN4ERH__consider_trial_division_, range(n, n+100)))
-    assert n == 98, n
-    return n
-
-def _is_ok4find_minN4II_prime_basis_gtN__not_consider_trial_division_(n, /):
-    last = [*iter_prime_basis4II_prime_basis_gtN_(n)][-1]
-    return last < n
-def _find_minN4II_prime_basis_gtN__not_consider_trial_division_():
-    # ??? [[*iter_prime_basis4II_prime_basis_gtN_(n)][-1] < n]
-    n = _find_minN_(_is_ok4find_minN4II_prime_basis_gtN__not_consider_trial_division_)
-    assert n == 4 < 2*3
-    # [[n >= 4 < 2*3] -> [[*iter_prime_basis4II_prime_basis_gtN_(n)][-1] < n]]
-    return n
-
-def _is_ok4find_minN4II_prime_basis_gtN__consider_trial_division_(n, /):
-    last = [*iter_prime_basis4II_prime_basis_gtN_(n)][-1]
-    next_prime_factor = next_may_prime__le_pow2_81__ge_(1+last)
-    return next_prime_factor**2 <= n
-def _find_minN4II_prime_basis_gtN__consider_trial_division_():
-    # ??? [next_prime__ge_(1+[*iter_prime_basis4II_prime_basis_gtN_(n)][-1])**2 <= n]
-    n = _find_minN_(_is_ok4find_minN4II_prime_basis_gtN__consider_trial_division_, 1)
-    assert n == 121 == (11**2) < 2*3*5*7, n
-    # [[n >= 121 == (11**2) < 2*3*5*7] -> [next_prime__ge_(1+[*iter_prime_basis4II_prime_basis_gtN_(n)][-1])**2 <= n]]
-    return n
-
-
-if 0:
-    #bug: prime_gen.iter__lt_(end) --> range(2, end)
-    def _check_min4ERH_(lazy_prime_seq, e, n, /):
-        assert n == 2**(e-1)+1
-        assert n.bit_length() == e
-            # == ceil_log2(n)
-        assert 2**(e-1) < n < 2**e
-        for e_ in range(e, e+100):
-            assert _is_ok4ERH_(lazy_prime_seq, e_)
-        for _e in range(2,e):
-            assert not _is_ok4ERH_(lazy_prime_seq, _e)
-    def _is_ok4ERH_(lazy_prime_seq, e, /):
-        n = 2**(e-1)+1
-        assert n.bit_length() == e
-        #bug:
-            #sz = 2* n.bit_length()**2
-            #prime_basis = lazy_prime_seq[:sz]
-        end = 2* n.bit_length()**2
-        prime_basis = [*_iter__lt_(end, lazy_prime_seq)]
-        p = prime_basis[-1]
-        return p < n-1 and p**2 < n
-    def _find_min4ERH_():
-        lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()
-        for e in _count(2):
-            if _is_ok4ERH_(lazy_prime_seq, e):
-                break
-        n = 2**(e-1)+1
-        _check_min4ERH_(lazy_prime_seq, e, n)
-        assert (n, e) == (1048577, 21), (n, e)
-        return (n, e)
-def _find_mismatch4diff_cases4is_prime__tribool_():
-    # view ../../python3_src/nn_ns/math_nn/numbers/Mersenne_exponents.py
-    from nn_ns.math_nn.numbers.Mersenne_exponents import Mersenne_exponents, Mersenne_exponents__stable, Mersenne_exponents__unstable
-    from nn_ns.math_nn.numbers.Mersenne_exponents import known_Mersenne_exponent_set, is_known_Mersenne_exponent, is_Mersenne_exponent__Lucas_Lehmer_test
-    max_p = Mersenne_exponents__stable[-1]
-    print(f'max_p = {max_p}; max_p.bit_length() = {max_p.bit_length()}')
-    C = Case4is_prime__tribool_
-    #for p in prime_gen:
-    for p in prime_gen.iter__lt_(max_p+1):
-        print(f'2**{p}-1')
-        mn = (1<<p)-1
-
-        r2 = is_prime__tribool_(mn, case=C.II_prime_basis_gtN)
-        if not r2 is ...:
-            assert r2 is is_known_Mersenne_exponent(p)
-            continue
-        else:
-            if not is_known_Mersenne_exponent(p):
-                print(f'II_prime_basis_gtN fail: 2**{p}-1')
-                pass
-            else:
-                continue
-
-
-        r0 = is_prime__tribool_(mn, case=C.bit_length)
-        if not r0 is ...:
-            assert r0 is is_known_Mersenne_exponent(p)
-            continue
-        else:
-            if not is_known_Mersenne_exponent(p):
-                print(f'bit_length fail: 2**{p}-1')
-                pass
-            else:
-                continue
-
-        r1 = is_prime__tribool_(mn, case=C.ERH)
-        if not r0 is r1:
-            print(f'mismatch: 2**{p}-1: {r0} vs {r1}')
-        if not r1 is ...:
-            assert r1 is is_known_Mersenne_exponent(p)
-        else:
-            if not is_known_Mersenne_exponent(p):
-                print(f'ERH err: 2**{p}-1')
-
-if 0b0000:
-    assert len(A014233) == 13
-    #ceil(ceil_log2(A014233[i])/(i+1)) = 11,11,9,8,9,7,7,7,7,7,6,7,7
-    assert (__ := [(max1.bit_length() +i) //(i+1) for i, max1 in enumerate(A014233)]) == [11,11,9,8,9,7,7,7,7,7,6,7,7], __
-
-    #ceil(floor_log2(A014233[i])/(i+1)) = 10,10,8,8,8,7,7,6,7,7,6,7,7
-    assert (__ := [(max1.bit_length()-1 +i) //(i+1) for i, max1 in enumerate(A014233)]) == [10,10,8,8,8,7,7,6,7,7,6,7,7], __
-
-    #floor(floor_log2(A014233[i])/(i+1)) = 10,10,8,7,8,6,6,6,6,6,5,6,6
-    assert (__ := [(max1.bit_length()-1) //(i+1) for i, max1 in enumerate(A014233)]) == [10,10,8,7,8,6,6,6,6,6,5,6,6], __
-
-    #floor(calc_len_prime_basis4II_prime_basis_gtN_(A014233[i])/(i+1)) = ?
-    assert (__ := [calc_len_prime_basis4II_prime_basis_gtN_(max1) //(i+1) for i, max1 in enumerate(A014233)]) == [5, 4, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1], __
-        # II_prime_basis_gtN___vs___A014233:here
-        # def____II_prime_basis_gtN:goto
-        # II_prime_basis_gtN
-        # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    calc_len_prime_basis4II_prime_basis_gtN_
-
-
-
-
-
-
-
-
-
-#def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end, /, *, is_prime_and_may_upperbound=(is_prime__le_pow2_64, 2**64)):
-    # replaced since 2**64 < A014233[-1]
-assert A014233[-1] > 2**81
-is_prime__le_pow2_81_ = is_prime__using_A014233_
-default4is_prime_and_may_upperbound = (is_prime__using_A014233_, is_prime__using_A014233_.upperbound)
-def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_(begin, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
-    'using Miller_Rabin_primality_test: begin -> (Iter prime){[[prev first prime < begin][fist prime >= begin]]}'
-    check_type_is(int, begin)
-
-    (is_prime_, may_upperbound) = is_prime_and_may_upperbound
-    if not may_upperbound is None:
-        upperbound = may_upperbound
-        ints = range(begin, upperbound)
-    else:
-        ints = _count(begin)
-    return prime_filter__using_primality_test_(ints, is_prime_and_may_upperbound=is_prime_and_may_upperbound)
-def raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound, reverse=False):
-    'using Miller_Rabin_primality_test: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__lt_<Eratosthenes_sieve>'
-    check_type_is(int, end)
-
-    (is_prime_, may_upperbound) = is_prime_and_may_upperbound
-    if not may_upperbound is None:
-        upperbound = may_upperbound
-        if upperbound < end:
-            raise OverflowError__Miller_Rabin_primality_test__A014233(f'[{upperbound} == upperbound < end == {end}]')
-    ints = range(2, end)
-    if reverse:
-        ints = reversed(ints)
-    return prime_filter__using_primality_test_(ints, is_prime_and_may_upperbound=is_prime_and_may_upperbound)
-    return filter(is_prime_, range(2, end))
-
-
-def prev_may_probable_prime__lt_(end, /, **kwds):
-    # @20250130: ++kw:case@prev_may_pseudoprime__lt_
-    'using Miller_Rabin_primality_test: end -> (may pseudoprime){[[pseudoprime < end][next pseudoprime >= end]]} #see:prev_may_prime__le_pow2_81__lt_'
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    kwds.setdefault('case', None)
-    for n in reversed(range(3, end|1, 2)):
-        r = is_prime__tribool_(n, **kwds)
-        if not r is False:
-            pseudoprime = n
-            return pseudoprime
-            break
-    else:
-        assert end <= 3, (end, kwds)
-        if 2 < end:
-            return 2
-    return None
-44444; prev_may_pseudoprime__lt_ = prev_may_probable_prime__lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-
-def next_probable_prime__ge_(begin, /, **kwds):
-    # @20250130: ++kw:case@next_pseudoprime__ge_
-    'using Miller_Rabin_primality_test: begin -> (pseudoprime){[[prev pseudoprime < begin][pseudoprime >= begin]]} #see:next_may_prime__le_pow2_81__ge_' \
-    r'''
-
-!! II_prime_basis_gtN___vs___A014233:goto
-=> [II_prime_basis_gtN `better_than` A014233[:13]]
-=> [II_prime_basis_gtN `better_than` __le_pow2_81]
-=> [next_pseudoprime__ge_ `better_than` next_may_prime__le_pow2_81__ge_]
-=> [[n <= 2**81] -> [next_pseudoprime__ge_(n) == next_may_prime__le_pow2_81__ge_(n)]]
-    [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:here
-'''#'''
-    kwds.setdefault('case', None)
-    begin = max(2, begin)
-    if begin == 2:
-        return 2
-    for n in _count(begin|1, 2):
-        r = is_prime__tribool_(n, **kwds)
-        if not r is False:
-            break
-    pseudoprime = n
-    return pseudoprime
-44444; next_pseudoprime__ge_ = next_probable_prime__ge_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def next_may_prime__le_pow2_81__ge_(begin, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
-    'using Miller_Rabin_primality_test: begin -> (may prime){[[prev prime < begin][prime >= begin]]} #see:next_pseudoprime__ge_'
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    it = raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_(begin, is_prime_and_may_upperbound=is_prime_and_may_upperbound)
-    return _next__may_head_(it)
-def _next__may_head_(it, /):
-    for head in it:
-        return head
-    return None
-def prev_may_prime__le_pow2_81__lt_(end, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
-    'using Miller_Rabin_primality_test: end -> (may prime){[[prime < end][next prime >= end]]} #see:prev_may_pseudoprime__lt_'
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    it = raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end, is_prime_and_may_upperbound=is_prime_and_may_upperbound, reverse=True)
-    return _next__may_head_(it)
-def _iter_xs_ge_(next_may_x__ge_, begin, /, **kwds):
-    while 1:
-        m = next_may_x__ge_(begin, **kwds)
-        if m is None:break
-        x = m
-        yield x
-        begin = x+1
-def _reversed_iter_xs_lt_(prev_may_x__lt_, end, /, **kwds):
-    while 1:
-        m = prev_may_x__lt_(end, **kwds)
-        if m is None:break
-        x = m
-        yield x
-        #bug:end = x-1
-        end = x
-def iter_primes__ge_lt_(begin, may_end, /, *, reverse=False):
-    #iter_primes__le_pow2_81__ge_
-    #reversed_iter_primes__le_pow2_81__lt_
-    #is_prime__le_pow2_81_
-    delegate, max_end = default4is_prime_and_may_upperbound
-    assert delegate is is_prime__le_pow2_81_
-    if may_end is None:
-        may_end = max_end
-    else:
-        end = may_end
-        check_type_is(int, end)
-        may_end = min(max_end, end)
-    return iter_pseudoprimes__ge_lt_(begin, may_end, reverse=reverse, case=is_prime__le_pow2_81_)
-iter_primes__between_ = iter_primes__ge_lt_
-
-def iter_probable_primes__ge_lt_(begin, may_end, /, *, reverse=False, **kwds):
-    # @20250130: ++kw:case@next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_&prev_may_pseudoprime__lt_
-    check_type_is(bool, reverse)
-    check_type_is(int, begin)
-    begin = max(2, begin)
-    if may_end is None:
-        if reverse:raise TypeError('reverse but [end := +oo]')
-        _end = 3
-        odds = _count(begin|1, 2)
-    else:
-        end = may_end
-        check_type_is(int, end)
-        _end = end
-        odds = range(begin|1, end, 2)
-        if reverse:
-            odds = reversed(odds)
-        odds
-    odds
-    _end
-    _has2 = (begin == 2 < _end)
-    even_primes = [2][:_has2]
-    odd_primes = _iter_pseudoprimes__inside_(odds, **kwds)
-    primess = (even_primes, odd_primes)
-    if reverse:
-        primess = reversed(primess)
-    primess
-    return chain(*primess)
-44444; iter_pseudoprimes__ge_lt_ = iter_probable_primes__ge_lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def _iter_probable_primes__inside_(uints, /, **kwds):
-    kwds.setdefault('case', None)
-    for n in uints:
-        r = is_prime__tribool_(n, **kwds)
-        if not r is False:
-            pseudoprime = n
-            yield pseudoprime
-    return
-44444; _iter_pseudoprimes__inside_ = _iter_probable_primes__inside_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def iter_probable_primes__inside_(ints, /, **kwds):
-    it = filter(2 .__le__, ints)
-    return _iter_pseudoprimes__inside_(it, **kwds)
-44444; iter_pseudoprimes__inside_ = iter_probable_primes__inside_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-iter_pseudoprimes__inside_
+is_strong_pseudoprime_
+is_strong_pseudoprime__basis_
+is_strong_pseudoprime__basis__with_trial_division_
+detect_strong_pseudoprime__not_waste_too_much_time_
+prev_may_pseudoprime__lt_
+next_pseudoprime__ge_
 iter_pseudoprimes__ge_lt_
-iter_probable_primes__between_ = iter_probable_primes__ge_lt_
-44444; iter_pseudoprimes__between_ = iter_pseudoprimes__ge_lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def iter_probable_primes__ge_(begin, /, **kwds):
-    # @20250130: ++kw:case@next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_&prev_may_pseudoprime__lt_
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    return _iter_xs_ge_(next_pseudoprime__ge_, begin, **kwds)
-44444; iter_pseudoprimes__ge_ = iter_probable_primes__ge_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def reversed_iter_probable_primes__lt_(end, /, **kwds):
-    # @20250130: ++kw:case@next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_&prev_may_pseudoprime__lt_
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    return _reversed_iter_xs_lt_(prev_may_pseudoprime__lt_, end, **kwds)
-44444; reversed_iter_pseudoprimes__lt_ = reversed_iter_probable_primes__lt_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def iter_primes__le_pow2_81__ge_(begin, /):
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    return _iter_xs_ge_(next_may_prime__le_pow2_81__ge_, begin)
-iter_primes__le_pow2_81__ge_ = raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_
-def reversed_iter_primes__le_pow2_81__lt_(end, /):
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    return raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_(end, reverse=True)
-    return _reversed_iter_xs_lt_(prev_may_prime__le_pow2_81__lt_, end)
-#bug:reversed_iter_primes__le_pow2_81__lt_ = raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
-
-def pairwise_diff_(xs, /):
-    xs = iter(xs)
-    for a, b in pairwise(xs):
-        yield b-a
-def iter_pairwise_diff_probable_primes__ge_(begin, /):
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    return pairwise_diff_(iter_pseudoprimes__ge_(begin))
-44444; iter_pairwise_diff_pseudoprimes__ge_ = iter_pairwise_diff_probable_primes__ge_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
-def iter_pairwise_diff_primes__le_pow2_81__ge_(begin, /):
-    # [:next_pseudoprime__ge___vs__next_may_prime__le_pow2_81__ge_]:goto
-    return pairwise_diff_(iter_primes__le_pow2_81__ge_(begin))
-
-def prime_filter__using_primality_test_(ints, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
-    'using Miller_Rabin_primality_test: Iter int -> Iter prime'
-    (is_prime_, may_upperbound) = is_prime_and_may_upperbound
-    return filter(is_prime_, ints)
-if 0:
-    def raw_iter_primes__using_primality_test__inside_(ints, /, *, is_prime_and_may_upperbound=default4is_prime_and_may_upperbound):
-        'using Miller_Rabin_primality_test: Iter int -> Iter prime'
-        (is_prime_, may_upperbound) = is_prime_and_may_upperbound
-        return filter(is_prime_, ints)
-
-if 0:
-    print(_find_minN4bit_length__not_consider_trial_division_())
-    print(_find_minN4bit_length__consider_trial_division_())
-    print(_find_minN4ERH__not_consider_trial_division_())
-    print(_find_minN4ERH__consider_trial_division_())
-    print(_find_minN4II_prime_basis_gtN__not_consider_trial_division_())
-    print(_find_minN4II_prime_basis_gtN__consider_trial_division_())
-    r'''[[[
-6
-1369
-98
-640000
-4
-121
-
-    #]]]'''#'''
-
-
-
-
-
-
-
-
+iter_pseudoprimes__inside_
+iter_pseudoprimes__between_
+iter_pseudoprimes__ge_
+reversed_iter_pseudoprimes__lt_
+iter_pairwise_diff_pseudoprimes__ge_
 
 
 #class StableReprDict(dict):
@@ -3851,7 +2840,15 @@ class GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve(_IBaseGlobalCon
     #see:GlobalControl4MinPrimeFactorGenerator__Eratosthenes_sieve
     #@override
     def _mk_new_lazy_seq_(sf, /):
-        it = raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(to_cache_only_busy_primes_plus_next=True, may_primes=None, to_export_all_prime_factors=True)
+        def u2ps_(u, /):
+            #优化冫复用小对象
+            #assert sf() is lazy_seq, (sf(), lazy_seq)
+            ps4u = lazy_seq[u]
+            #print_err(u, ps4u, sep=':')
+            return ps4u
+
+        it = raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(to_cache_only_busy_primes_plus_next=True, may_primes=None, to_export_all_prime_factors=True, may_uint2all_prime_factors_=u2ps_)
+            #bug:why fail to pass u2ps_? bug@LazySeq fixed
         it = map(snd, it)
         it = chain([None, ()], it)
         lazy_seq = LazySeq(it)
@@ -3865,30 +2862,42 @@ class GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve(_IBaseGlobalCon
 all_prime_factors_gen__Eratosthenes_sieve = GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve()
 all_prime_factors_gen = all_prime_factors_gen__Eratosthenes_sieve
 
-def tabulate_may_min_prime_factor4uint_lt_(sz, /):
-    '-> uint2may_min_prime_factor/[may prime]/[None,None,prime...]'
-    return min_prime_factor_gen[:sz]
-def tabulate_may_factorization4uint_lt_(sz, uint2may_min_prime_factor=None, /):
-    '-> uint2may_factorization/[may p2e/{prime:exp}]/[None,p2e...]'
-    if uint2may_min_prime_factor is None:
-        uint2may_min_prime_factor = tabulate_may_min_prime_factor4uint_lt_(sz)
-    u2p = uint2may_min_prime_factor
 
-    u2f = uint2may_factorization = [None, {}]
-    del u2f[sz:]
-    for u in range(2, sz):
-        assert u == len(u2f)
-        p = u2p[u]
-        v = u//p
-        p2e = u2f[v].copy()
-        p2e.setdefault(p, 0)
-        p2e[p] += 1
-        u2f.append(p2e)
-    assert len(u2f) == sz
-    return (*u2f,)
-def tabulate_may_all_prime_factors4uint_lt_(sz, /):
-    '-> uint2may_all_prime_factors/[may [prime]]/[None,[prime]...]'
-    return all_prime_factors_gen[:sz]
+
+
+from seed.math.prime_sieve.sieve_lt import tabulate_may_min_prime_factor4uint_lt_
+from seed.math.prime_sieve.sieve_lt import TabulateMinPrimeFactor, iter_find_best_wheel_paramss4sieve_lt_, find_best_wheel_params4sieve_lt_
+
+from seed.math.prime_sieve.sieve_lt import tabulate_may_all_prime_factors4uint_lt_, tabulate_may_all_prime_factor_lflnkls4uint_lt_, extract_prime_factorization5uint2may_all_prime_factor_lflnkls_
+
+from seed.math.prime_sieve.sieve_lt import tabulate_may_pairs8prime_factorization4uint_lt_, tabulate_may_prime_factorization4uint_lt_#deprecated: tabulate_may_factorization4uint_lt_
+if 1: from seed.math.prime_sieve.sieve_lt import tabulate_may_factorization4uint_lt_#deprecated
+
+
+
+
+
+from seed.math.prime_sieve.sieve_ge_le import calc_min_end5begin6args4sieve_interval_, test4calc_min_end5begin6args4sieve_interval_, iter_min_ends5begin6args4sieve_interval_
+from seed.math.prime_sieve.sieve_ge_le import check_args4core_sieve_interval__ge_le, check_args4sieve_interval__ge_lt
+from seed.math.prime_sieve.sieve_ge_le import to_std_args4core_sieve_interval__ge_le, to_std_args4sieve_interval__ge_lt
+
+from seed.math.prime_sieve.sieve_ge_le import sieve_interval4primes__ge_lt, sieve_interval4offsetted_uint2is_prime__ge_lt, sieve_interval4prime_factorization__ge_lt, sieve_interval4prime_factors__ge_lt
+
+from seed.math.prime_sieve.sieve_ge_le import core_sieve4primes__ge_le, core_sieve4offsetted_uint2is_prime__ge_le, core_sieve4prime_factorization__ge_le, core_sieve4pairs8prime_factorization__ge_le, core_sieve4prime_factors__ge_le
+
+
+
+
+
+from seed.math.prime_sieve.sieve_lt import check_offsetted_uint2may_prime_factors_, check_offsetted_uint2prime_factors_, check_uint2may_prime_factors_
+
+from seed.math.prime_sieve.sieve_lt import check_offsetted_uint2may_pairs8prime_factorization_, check_offsetted_uint2pairs8prime_factorization_, check_uint2may_pairs8prime_factorization_
+
+from seed.math.prime_sieve.sieve_lt import check_offsetted_uint2may_prime_factorization_, check_offsetted_uint2prime_factorization_, check_uint2may_prime_factorization_
+
+
+
+
 
 #class
 
@@ -3964,12 +2973,12 @@ def _helper4renaming_probable_prime_():
     'helper:rename:pseudoprime --> probable_prime'
 
 @20250419
-:%s/^def \(\w*\)pseudoprime\(\w*\)\((.*):\)$/def \1probable_prime\2\3\r44444; \1pseudoprime\2 = \1probable_prime\2  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+:%s/^def \(\w*\)pseudoprime\(\w*\)\((.*):\)$/def \1probable_prime\2\3\r44444; \1pseudoprime\2 = \1probable_prime\2  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
     只替换了15个 #预期:16个
         缺失:iter_pseudoprimes__between_
 
 @20250419
-:%s/^\(\w*\)pseudoprime\(\w*\) = \(\w*\)pseudoprime\(\w*\)$/\1probable_prime\2 = \3probable_prime\4\r44444; \0  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+:%s/^\(\w*\)pseudoprime\(\w*\) = \(\w*\)pseudoprime\(\w*\)$/\1probable_prime\2 = \3probable_prime\4\r44444; \0  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
 
     #]]]'''#'''
     def is_ok_(nm, x, /):
@@ -3980,13 +2989,10 @@ def _helper4renaming_probable_prime_():
     (_nms, _xs) = _filter4globals_(is_ok_)
     assert _nms == nms, set(nms)^set(_nms)
     return (nms, xs)
-44444; _helper4renaming_pseudoprime_ = _helper4renaming_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_pseudoprime
+44444; _helper4renaming_pseudoprime_ = _helper4renaming_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
 _data4renaming_pseudoprime_ = _helper4renaming_pseudoprime_()
 assert (__:='\n'.join(_data4renaming_pseudoprime_[0])) == (r'''
 _helper4renaming_pseudoprime_
-_is_strong_pseudoprime_
-_iter_pseudoprimes__inside_
-_kw__is_strong_pseudoprime__basis_
 detect_strong_pseudoprime__not_waste_too_much_time_
 is_strong_pseudoprime_
 is_strong_pseudoprime__basis_
@@ -4000,8 +3006,11 @@ next_pseudoprime__ge_
 prev_may_pseudoprime__lt_
 reversed_iter_pseudoprimes__lt_
 '''.strip()), __
+#_is_strong_pseudoprime_
+#_iter_pseudoprimes__inside_
+#_kw__is_strong_pseudoprime__basis_
 ('_helper4renaming_pseudoprime_', '_is_strong_pseudoprime_', '_iter_pseudoprimes__inside_', '_kw__is_strong_pseudoprime__basis_', 'detect_strong_pseudoprime__not_waste_too_much_time_', 'is_strong_pseudoprime_', 'is_strong_pseudoprime__basis_', 'is_strong_pseudoprime__basis__with_trial_division_', 'iter_pairwise_diff_pseudoprimes__ge_', 'iter_pseudoprimes__between_', 'iter_pseudoprimes__ge_', 'iter_pseudoprimes__ge_lt_', 'iter_pseudoprimes__inside_', 'next_pseudoprime__ge_', 'prev_may_pseudoprime__lt_', 'reversed_iter_pseudoprimes__lt_')
-assert (__:=len(_data4renaming_pseudoprime_[0])) == 16, __
+assert (__:=len(_data4renaming_pseudoprime_[0])) == 16-3, __
 ######################
 
 
@@ -4086,9 +3095,10 @@ from seed.math.prime_gens import hold_all_weakrefs4caches_
 #000;    __ws = hold_all_weakrefs4caches_()
 from seed.math.prime_gens import detect_strong_probable_prime__not_waste_too_much_time_
 
-from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_
+from seed.math.prime_gens import all_prime_factors_gen, tabulate_may_all_prime_factors4uint_lt_, tabulate_may_all_prime_factor_lflnkls4uint_lt_, extract_prime_factorization5uint2may_all_prime_factor_lflnkls_
 
-from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_factor4uint_lt_, tabulate_may_factorization4uint_lt_
+from seed.math.prime_gens import min_prime_factor_gen, tabulate_may_min_prime_factor4uint_lt_, TabulateMinPrimeFactor, tabulate_may_prime_factorization4uint_lt_, tabulate_may_pairs8prime_factorization4uint_lt_
+if 1:from seed.math.prime_gens import tabulate_may_factorization4uint_lt_#deprecated
 
 
 
@@ -4114,6 +3124,42 @@ from seed.math.prime_gens import is_strong_probable_prime__basis__with_trial_div
 from seed.math.prime_gens import mk_tribool_delegate5PRP_test_, is_strong_probable_prime__basis__with_trial_division_
     # @20250131
 
+from seed.math.prime_gens import sieve4uint2is_prime__lt_, list_all_strict_sorted_primes__lt_
+    # @20260511
+    #vs:raw_list_all_strict_sorted_primes__lt_
+    #vs:tabulate_may_min_prime_factor4uint_lt_
 
+
+# @20260511
+from seed.math.prime_gens import (
+check_args4core_sieve_interval__ge_le
+,   core_sieve4primes__ge_le
+,   core_sieve4offsetted_uint2is_prime__ge_le
+,   core_sieve4prime_factorization__ge_le
+,   core_sieve4pairs8prime_factorization__ge_le
+,   core_sieve4prime_factors__ge_le
+)
+
+# @20260511
+from seed.math.prime_gens import (
+check_args4sieve_interval__ge_lt
+,   calc_min_end5begin6args4sieve_interval_
+,       test4calc_min_end5begin6args4sieve_interval_
+,       iter_min_ends5begin6args4sieve_interval_
+,   sieve_interval4primes__ge_lt
+,   sieve_interval4offsetted_uint2is_prime__ge_lt
+,   sieve_interval4prime_factorization__ge_lt
+,   sieve_interval4prime_factors__ge_lt
+)
+
+r'''[[[
+TODO:
+e ../../python3_src/seed/math/primality_test/Jacobi_sums_test/selection_of_auxiliary_numbers.py
+    TODO:list_best_Ts_le__ver3_ using:
+        sieve_interval4prime_factorization__ge_lt
+        or:
+        sieve_interval4prime_factors__ge_lt
+
+]]]'''#'''
 
 from seed.math.prime_gens import *

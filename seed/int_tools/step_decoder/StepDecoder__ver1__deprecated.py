@@ -39,6 +39,11 @@
 #首层不透明的分离式=>分离式是高层的大模样，混淆式只用于首层
 
 r'''[[[
+e ../../python3_src/seed/int_tools/step_decoder/StepDecoder__ver1__deprecated.py
+seed.int_tools.step_decoder.StepDecoder__ver1__deprecated
+py -m nn_ns.app.debug_cmd   seed.int_tools.step_decoder.StepDecoder__ver1__deprecated -x # -off_defs
+py -m nn_ns.app.doctest_cmd seed.int_tools.step_decoder.StepDecoder__ver1__deprecated:__doc__ -ht # -ff -df
+
 e ../../python3_src/seed/int_tools/StepDecoder.py
     vs:codecs.IncrementalDecoder
 view ../../python3_src/seed/int_tools/digits/codecs4int.py
@@ -1475,101 +1480,83 @@ from numbers import Rational
 #   AttributeError: type object 'Rational' has no attribute 'as_integer_ratio'
 Rational.numerator
 Rational.denominator
-from operator import __neg__
-from functools import cached_property
-from itertools import islice, chain, pairwise
-from itertools import accumulate
-#accumulate(iterable, func=None, *, initial=None)
-from bisect import bisect_right
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_ABC, check_non_ABC, check_pair, check_callable, check_iterator, check_all_
-
-from seed.tiny_.oo8inf import oo
-
-from seed.int_tools.RadixInfo import IRadixInfo, RadixInfo
-
-
 from enum import Enum, auto
-from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
-#def mk_namedtuple_(__module__, nm, nms_or_str, /, *args, **kwds):
-#def mk_namedtuple__check6make_(__module__, nm, nms_or_str, /, *args, **kwds):
-#    def _check6make_(sf, /):
-from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
-#def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
-#    def _check6make_(sf, /):
-from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import collect_tuple_subclasses_with_cached_property
 
 
-from seed.types.Either import Cased, Either
-from seed.types.Either import mk_Left, mk_Right
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
 
 from seed.int_tools.RadixInfo import IZpowRadixInfo, ZpowRadixInfo# mk_ZpowRadixInfo_
 from seed.int_tools.RadixInfo import IRadixInfo, mk_radix_info5or_radix_# RadixInfo, mk_RadixInfo_
 from seed.int_tools.RadixInfo import IRadixedDigit, RadixedDigit, rxdigit8no_bits
 
-from seed.helper.ConstantRepr import ConstantRepr
-from seed.int_tools.DigitReader import IDigitReader# IDigitReader5iter, IDigitReader5seq, IDigitReader5bytes, IDigitReader5binary_file, IDigitReader5text_file
-#from seed.int_tools.DigitReader import DigitReader5seq, DigitReader5iter, DigitReader5bytes, DigitReader5binary_file, DigitReader5text_file
-#from seed.int_tools.DigitReader import SubSeq, DigitReader5seq
-#from seed.int_tools.count_num_leading1s import count_num_leading1s_, count_num_leading1s_ex_
 
-from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#if not 'lazy_import4func_' in globals():
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,fst,snd,MapView:mk_MapView_,echo', __name__)
-if 0:from seed.tiny import mk_tuple,print_err,fst,snd,MapView as mk_MapView_,echo
-lazy_import4funcs_('seed.int_tools.concat_digits2bytes', 'concat_digits2uint_,concat_digits2bytes_,concat_digits2iter_bytess_', __name__)
-if 0:from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ConstantRepr import ConstantRepr
+    from seed.types.Either import Cased, Either
+    from seed.types.Either import mk_Left, mk_Right
+    from seed.int_tools.DigitReader import IDigitReader# IDigitReader5iter, IDigitReader5seq, IDigitReader5bytes, IDigitReader5binary_file, IDigitReader5text_file
+    #from seed.int_tools.DigitReader import DigitReader5seq, DigitReader5iter, DigitReader5bytes, DigitReader5binary_file, DigitReader5text_file
 
-ceil_div = lazy_import4func_('seed.math.floor_ceil', 'ceil_div', __name__)
-ceil_log_ = lazy_import4func_('seed.math.floor_ceil', 'ceil_log_', __name__)
-#from seed.math.floor_ceil import ceil_div, ceil_log_
+    from operator import __neg__
+    from functools import cached_property
+    from itertools import islice, chain, pairwise
+    from itertools import accumulate
+    #accumulate(iterable, func=None, *, initial=None)
+    from bisect import bisect_right
+    from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_ABC, check_non_ABC, check_pair, check_callable, check_iterator, check_all_
 
-uint5radix_repr_ = lazy_import4func_('seed.int_tools.digits.uint25radix_repr', 'uint5radix_repr_', __name__)
-#from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
+    from seed.tiny_.oo8inf import oo
 
-rglnkls2reversed_iterable = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls2reversed_iterable', __name__)
-#from seed.data_funcs.lnkls import rglnkls2reversed_iterable
-
-calc_Fraction5finite_continued_fraction_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction_fold', 'calc_Fraction5finite_continued_fraction_', __name__)
-#from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
-
-iter_continued_fraction_digits5ND_ = lazy_import4func_('seed.math.continued_fraction.continued_fraction5ND', 'iter_continued_fraction_digits5ND_', __name__)
-#from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
-
-uintZbase32_ = lazy_import4func_('seed.int_tools.digits.uintZSbase32', 'uintZbase32_', __name__)
-#from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet see:_58_tbl6body
-
-mk_seq_rng = lazy_import4func_('seed.seq_tools.mk_seq_rng', 'mk_seq_rng', __name__)
-#from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+    from seed.int_tools.RadixInfo import IRadixInfo, RadixInfo
 
 
-lazy_import4func_('seed.int_tools.DigitReader', 'DigitReader5iter', __name__, 'mk_DigitReader5iter')
-if 0:from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
-mk_DigitReader5iter
+    from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
+    #def mk_namedtuple_(__module__, nm, nms_or_str, /, *args, **kwds):
+    #def mk_namedtuple__check6make_(__module__, nm, nms_or_str, /, *args, **kwds):
+    #    def _check6make_(sf, /):
+    from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
+    #def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
+    #    def _check6make_(sf, /):
+    from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import collect_tuple_subclasses_with_cached_property
 
-mk_Rope = lazy_import4func_('seed.types.Rope', 'mk_Rope', __name__)
-lazy_import4func_('seed.types.Rope', 'Rope', __name__, '_Rope')
-if 0:from seed.types.Rope import mk_Rope, Rope as _Rope
-_Rope
-#[iter_subseq__opaque_,iter_subseq__transparent_] = lazy_import4funcs_('seed.iters.iter_subseq', 'iter_subseq__opaque_,iter_subseq__transparent_', __name__)
 
-[mk_inf_len_seq_] = lazy_import4funcs_('seed.seq_tools.InfLenSeqWithRecurringPeriod', 'mk_inf_len_seq_,mk_double_ended_inf_len_seq_', __name__)
-if 0:from seed.seq_tools.InfLenSeqWithRecurringPeriod import mk_inf_len_seq_
-#.from seed.seq_tools.InfLenSeqWithRecurringPeriod import InfLenSeqWithRecurringPeriod
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'MapView:mk_MapView_'):
+    from seed.tiny_.types5py import MapView as mk_MapView_
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.debug.print_err import print_err
+    from seed.tiny_.containers import mk_tuple
+    from seed.helper.repr_input import repr_helper
+    from seed.int_tools.concat_digits2bytes import concat_digits2uint_, concat_digits2bytes_, concat_digits2iter_bytess_
+
+    from seed.math.floor_ceil import ceil_div, ceil_log_
+
+    from seed.int_tools.digits.uint25radix_repr import uint2radix_repr_, uint5radix_repr_
+
+    from seed.data_funcs.lnkls import rglnkls2reversed_iterable
+
+    from seed.math.continued_fraction.continued_fraction_fold import calc_Fraction5finite_continued_fraction_
+
+    from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+
+    from seed.int_tools.digits.uintZSbase32 import uintZbase32_, uintSbase32_, base32_alplabet #see:_58_tbl6body
+
+    from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+
+
+    from seed.int_tools.DigitReader import DigitReader5iter as mk_DigitReader5iter
+    from seed.types.Rope import mk_Rope, Rope as _Rope
+
+    from seed.seq_tools.InfLenSeqWithRecurringPeriod import mk_inf_len_seq_
 
 
 
 ___end_mark_of_excluded_global_names__0___ = ...
 __all__
 
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
 
 
 def max_digit5num_bits_ex_(num_bits, imay_max_digit, /):

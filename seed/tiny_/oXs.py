@@ -5,13 +5,12 @@
 r'''
 seed.tiny_.oXs
 py -m    seed.tiny_.oXs
-py -m nn_ns.app.debug_cmd   seed.tiny_.oXs
+py -m nn_ns.app.debug_cmd   seed.tiny_.oXs -x
 
 
 e ../../python3_src/seed/tiny_/oXs.py
     py -m nn_ns.app.mk_py_template -o ../../python3_src/seed/tiny_/oXs.py
 
-from seed.tiny_.oXs import eat_iter as _eat_iter, check_intXs_between, check_uintXs_lt, check_uintXs, fold__objXtuple, fold__intXiter, intXiter2intXtuple
 
 
 #[[[doc_sections:begin
@@ -47,11 +46,10 @@ __all__ = '''
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
 
-from seed.tiny_.check import check_uint, check_int_ge_lt as check_int_between
-if 1:
-    from seed.tiny import echo, mk_tuple
-else:
-    from seed.helper.Echo import echo
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_uint, check_int_ge_lt as check_int_between
+    from seed.tiny_.funcs import echo
     from seed.tiny_.containers import mk_tuple
 
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -119,9 +117,6 @@ def intXiter2intXtuple(iXit, /):
 
 #HHHHH
 if __name__ == "__main__":
-    from seed.tiny_.oXs import *
-    from seed.tiny_.oXs import eat_iter as _eat_iter, check_intXs_between, check_uintXs_lt, check_uintXs, fold__objXtuple, fold__intXiter, intXiter2intXtuple
-if __name__ == "__main__":
     import doctest
     doctest.testmod()
     #doctest: +ELLIPSIS
@@ -131,3 +126,5 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.tiny_.oXs import eat_iter as _eat_iter, check_intXs_between, check_uintXs_lt, check_uintXs, fold__objXtuple, fold__intXiter, intXiter2intXtuple
+from seed.tiny_.oXs import *

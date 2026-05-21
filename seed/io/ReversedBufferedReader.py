@@ -726,10 +726,11 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
+from seed.debug.print_err import print_err
+from seed.tiny_.check import check_bool, check_callable, check_char, check_imay, check_is_None, check_pair, check_str, check_tmay, check_type_is, check_uint, check_uint_lt, icheck_bool, icheck_char, icheck_str
+from seed.tiny_.types5py import curry1
+
 from seed.mapping_tools.dict_op import set_symmetric_partition__immutable
-from seed.tiny import print_err, check_uint, check_tmay, curry1, check_callable, check_is_None, check_imay, check_type_is, check_pair
-from seed.tiny_.check import check_str, check_char, check_bool, check_uint_lt
-from seed.tiny_.check import icheck_str, icheck_char, icheck_bool
 from seed.abc.abc import ABC, abstractmethod
 from seed.helper.repr_input import repr_helper
 from seed.io.get_size_of_ibfile import get_size_of_ibfile, get_size_of_ibfile_ex, explain_may_negativeable_end_locations_of_ibfile_ex, explain_negativeable_location_of_ibfile_ex, explain_may_negativeable_location_rng_of_ibfile_ex #; #may have [len(ibfile) < end_location]

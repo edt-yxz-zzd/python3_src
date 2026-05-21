@@ -3,7 +3,7 @@
 #[[[__doc__-begin
 r'''
 py -m seed.types.logic.ZerothOrderLogic
-py -m nn_ns.app.debug_cmd   seed.types.logic.ZerothOrderLogic
+py -m nn_ns.app.debug_cmd   seed.types.logic.ZerothOrderLogic -x
 from seed.types.logic.ZerothOrderLogic import IProposition, ICachedEnvironment, eval_proposition_at_configuration__tribool as eval_prop_at
 from seed.types.logic.ZerothOrderLogic import ALL_STARMAP_SIMPLE_VAR_IMPLY, SIMPLE_VAR_IMPLY, AND, OR, XOR, XNOR, IMPLY, FLIP_IMPLY, TOTAL
 from seed.types.logic.ZerothOrderLogic import VAR, NOT, NOT_VAR, the_FALSE, the_TRUE, the_YET, ERROR, EvalError
@@ -390,25 +390,37 @@ r'''comment-out
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 
-from seed.abc.abc import ABC, abstractmethod, override, ABC__no_slots
+import collections
+import operator as opss
+from seed.tiny_.containers import mk_tuple, null_frozenset, null_iter, null_mapping_view, null_tuple
+
+from seed.abc.abc__ver1 import ABC, abstractmethod, override, ABC__no_slots
 from seed.abc.ISingleton import ISingleton
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
 from seed.types.TriBoolOps import TriBoolOps, LazyTriBoolOps
-from seed.helper.check.checkers import checks, checkers, check_funcs
-from seed.helper.check.check import Checker__FrozenDict, Checker__int_ge, Checker__type_is, mk_checker__pairs, checker4callable, mk_checker__array
-
-from seed.tiny import null_iter, null_tuple, null_frozenset, null_mapping_view, MapView, mk_tuple, snd, print_err, is_iterator
-from seed.iters.fold import foldl0
-#from seed.types.AddrAsHashWrapper import AddrAsHashWrapper
-from seed.abc.eq_by_id.AddrAsHashWrapper import AddrAsHashWrapper
-from seed.types.FrozenDict import FrozenDict
-from seed.data_funcs.rngs import sorted_rngs_to_iter_nontouch_ranges, make_Ranges
-from seed.seq_tools.bisearch import bisearch
 
 
-import collections
-import operator as opss
-import itertools
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import snd
+    from seed.tiny_.types5py import MapView
+    from seed.tiny_.verify import is_iterator
+
+    from seed.helper.check.checkers import checks, checkers, check_funcs
+    from seed.helper.check.check import Checker__FrozenDict, Checker__int_ge, Checker__type_is, mk_checker__pairs, checker4callable, mk_checker__array
+
+    from seed.iters.fold import foldl0
+    #from seed.types.AddrAsHashWrapper import AddrAsHashWrapper
+    from seed.abc.eq_by_id.AddrAsHashWrapper import AddrAsHashWrapper
+    from seed.types.FrozenDict import FrozenDict
+    from seed.data_funcs.rngs import sorted_rngs_to_iter_nontouch_ranges, make_Ranges
+    from seed.seq_tools.bisearch import bisearch
+
+
+    from itertools import starmap
 
 
 
@@ -1951,7 +1963,7 @@ class SIMPLE_VAR_IMPLY(_Base4proxy):
 
 class ALL_STARMAP_SIMPLE_VAR_IMPLY(_Base4proxy):
     r'''
-    ALL(*itertools.starmap(SIMPLE_VAR_IMPLY, [('tz', ['w'], [('b', 'x'), ('', 'yb')])]))
+    ALL(*starmap(SIMPLE_VAR_IMPLY, [('tz', ['w'], [('b', 'x'), ('', 'yb')])]))
     SIMPLE_VAR_IMPLY(['a', 'b'], ['c', 'd'], [(['s', 't'], ['u', 'v']), (['w', 'x'], ['y', 'z'])])
         <==> [[!a][!b][c][d] -->> [[!s][!t][u][v]or[!w][!x][y][z]]]
     #'''
@@ -1968,7 +1980,7 @@ class ALL_STARMAP_SIMPLE_VAR_IMPLY(_Base4proxy):
             return fs, ts
         false_var_names__true_var_names__alternatives___triples = _2immutable___triples(false_var_names__true_var_names__alternatives___triples)
         sf.__saved_args = false_var_names__true_var_names__alternatives___triples
-        prop = ALL(*itertools.starmap(SIMPLE_VAR_IMPLY, false_var_names__true_var_names__alternatives___triples))
+        prop = ALL(*starmap(SIMPLE_VAR_IMPLY, false_var_names__true_var_names__alternatives___triples))
         _Base4proxy.__init__(sf, prop)
 
     @override
@@ -2982,15 +2994,15 @@ class _doctest_examples___XOR__op2:
 >>> XOR()
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 2 required positional arguments: 'lhs_prop' and 'rhs_prop'
+TypeError: _IBase4two_args_props.__init__() missing 2 required positional arguments: 'lhs_prop' and 'rhs_prop'
 >>> XOR(the_YET)
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 1 required positional argument: 'rhs_prop'
+TypeError: _IBase4two_args_props.__init__() missing 1 required positional argument: 'rhs_prop'
 >>> XOR(the_YET, the_YET, the_YET)
 Traceback (most recent call last):
     ...
-TypeError: __init__() takes 3 positional arguments but 4 were given
+TypeError: _IBase4two_args_props.__init__() takes 3 positional arguments but 4 were given
 
 #]]]doctest_examples-end
 #'''
@@ -3203,15 +3215,15 @@ CHAIN_NEIGHBOR
 >>> CHAIN_NEIGHBOR()
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 3 required positional arguments: 'prop0', 'bin_op', and 'prop1'
+TypeError: CHAIN_NEIGHBOR.__init__() missing 3 required positional arguments: 'prop0', 'bin_op', and 'prop1'
 >>> CHAIN_NEIGHBOR(the_YET)
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 2 required positional arguments: 'bin_op' and 'prop1'
+TypeError: CHAIN_NEIGHBOR.__init__() missing 2 required positional arguments: 'bin_op' and 'prop1'
 >>> CHAIN_NEIGHBOR(the_YET, the_YET)
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 1 required positional argument: 'prop1'
+TypeError: CHAIN_NEIGHBOR.__init__() missing 1 required positional argument: 'prop1'
 
 
 >>> CHAIN_NEIGHBOR(the_YET, the_YET, the_YET)
@@ -3271,19 +3283,19 @@ SIMPLE_VAR_IMPLY
 >>> SIMPLE_VAR_IMPLY()
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 3 required positional arguments: 'false_var_names', 'true_var_names', and 'alternatives'
+TypeError: SIMPLE_VAR_IMPLY.__init__() missing 3 required positional arguments: 'false_var_names', 'true_var_names', and 'alternatives'
 >>> SIMPLE_VAR_IMPLY(the_YET)
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 2 required positional arguments: 'true_var_names' and 'alternatives'
+TypeError: SIMPLE_VAR_IMPLY.__init__() missing 2 required positional arguments: 'true_var_names' and 'alternatives'
 >>> SIMPLE_VAR_IMPLY(the_YET, the_YET)
 Traceback (most recent call last):
     ...
-TypeError: __init__() missing 1 required positional argument: 'alternatives'
+TypeError: SIMPLE_VAR_IMPLY.__init__() missing 1 required positional argument: 'alternatives'
 >>> SIMPLE_VAR_IMPLY(the_YET, the_YET, the_YET, the_YET)
 Traceback (most recent call last):
     ...
-TypeError: __init__() takes 4 positional arguments but 5 were given
+TypeError: SIMPLE_VAR_IMPLY.__init__() takes 4 positional arguments but 5 were given
 
 
 >>> SIMPLE_VAR_IMPLY(the_YET, the_YET, the_YET)
@@ -3335,7 +3347,7 @@ class _doctest_examples___ALL_STARMAP_SIMPLE_VAR_IMPLY:
     r'''
 #[[[doctest_examples-begin
 ALL_STARMAP_SIMPLE_VAR_IMPLY
-ALL(*itertools.starmap(SIMPLE_VAR_IMPLY, [('tz', ['w'], [('b', 'x'), ('', 'yb')])]))
+ALL(*starmap(SIMPLE_VAR_IMPLY, [('tz', ['w'], [('b', 'x'), ('', 'yb')])]))
 
 >>> eval_prop_at = eval_proposition_at_configuration__tribool
 

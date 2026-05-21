@@ -1,5 +1,9 @@
-
+#__all__:goto
 r'''
+seed.types.StructBase
+py -m nn_ns.app.debug_cmd   seed.types.StructBase -x
+py -m nn_ns.app.doctest_cmd seed.types.StructBase:__doc__ -ht #  -ff -v -df
+
 
 >>> class I(BasicStructABC):
 ...     @classmethod
@@ -169,13 +173,23 @@ __all__ = '''
     StructBase
     BasicStructABC
     '''.split()
+    #is_str
+    #are_strs
 
-from seed.tiny import print_err
-from seed.helper.repr_input import repr_helper_ex
-from seed.abc import abstractmethod, ABC, final, override
-import inspect # isabstract
+___begin_mark_of_excluded_global_names__0___ = ...
 from collections.abc import Set, Sequence, Mapping
-from types import MappingProxyType
+from seed.abc.abc__ver0 import abstractmethod, ABC, final, override
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.helper.repr_input import repr_helper_ex
+    from inspect import isabstract
+    from types import MappingProxyType
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 def is_str(obj): return type(obj) is str
 def are_strs(iterable): return all(map(is_str, iterable))
@@ -239,7 +253,8 @@ StructBase vs ImmutableNamespaceBase vs ImmutableNamespace
             init_subclass4StructBase = may_init_subclass4StructBase
             init_subclass4StructBase()
 
-        if inspect.isabstract(cls): return
+        #.if inspect.isabstract(cls): return
+        if isabstract(cls): return
 
         primekey_attr_seq = cls.__get_all_primekey_attr_seq__()
         user_attr_seq = cls.__get_all_user_attr_seq__()
@@ -429,7 +444,8 @@ class StructBase(BasicStructABC):
 
     @classmethod
     def _init_subclass4StructBase_(cls):
-        if inspect.isabstract(cls): return
+        #.if inspect.isabstract(cls): return
+        if isabstract(cls): return
         impl_attr_seq = tuple(cls.__iter_all_impl_attrs__())
         cls.__all_impl_attr_set__ = frozenset(impl_attr_seq)
 
@@ -475,6 +491,7 @@ class StructBase(BasicStructABC):
 
 
 
+from seed.types.StructBase import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -484,3 +501,4 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.types.StructBase import StructBase, BasicStructABC

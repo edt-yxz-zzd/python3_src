@@ -23,9 +23,13 @@ iter_counted_parts5pow__via_binomial_formula_
 '''.split()#'''
 __all__
 
-from functools import reduce
-from seed.tiny import check_type_is
-from seed.math.combination import factorial, iter_partitions_of_sum_
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.math.combination import factorial, iter_partitions_of_sum_
+    from functools import reduce
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 

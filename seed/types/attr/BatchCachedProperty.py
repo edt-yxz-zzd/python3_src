@@ -208,11 +208,9 @@ CommonState4BatchCachedProperty
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+
 from seed.tiny_._Base4repr import _Base4repr
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny_.check import check_type_is, check_type_le, check_uint_lt, check_int_ge, check_callable, check_pseudo_identifier
-from seed.tiny import mk_tuple
-
 #from seed.abc.IDescriptor import IDataDescriptor__default_mixin
 from seed.abc.IDescriptor import IDataDescriptor
 
@@ -220,6 +218,14 @@ import re
 from functools import cached_property
 #.class ILazyAttr:
 #.    'see:cached_property'
+
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_type_le, check_uint_lt, check_int_ge, check_callable, check_pseudo_identifier
+    from seed.tiny_.containers import mk_tuple
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

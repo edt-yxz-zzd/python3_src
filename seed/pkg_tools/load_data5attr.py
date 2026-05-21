@@ -146,33 +146,40 @@ _DEBUGGING_VERBOSE_
 '''.split()#'''
     #_DEBUGGING_VERBOSE_:to print_err??
 __all__
-import os.path
-from pathlib import Path, PurePosixPath
-from importlib import import_module
-from seed.pkg_tools.is_pkg import is_pkg_# is_module_
 
-from seed.types.DottedAttrCollector import DottedAttrCollector, ReDefRepr
-from seed.types.DottedAttrCollector import DottedAttrCollector___autocall_at_max_depth as _DataLoader___autocall_at_max_depth
-
-from seed.types.view.RecurView import default_cfg4RecurView
-from seed.pkg_tools.load_resource import read_under_pkg_
-
-from seed.tiny_.check import check_type_le, check_type_is, check_int_ge
-from seed.tiny_.check import check_callable
-from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name
-from seed.tiny import echo, echo_args# null_tuple
-from seed.tiny import print_err
-
-from seed.helper.safe_eval import safe_eval
-from ast import literal_eval
-
+___begin_mark_of_excluded_global_names__0___ = ...
 import pickle
-from seed.pkg_tools.load_resource import open_under_pkg_, does_exist_under_pkg_
-#from seed.pkg_tools.load_resource import open_under_pkg_, read_under_pkg_
-#from seed.pkg_tools.load_resource import list_potential_basenames_under_pkg_, sorted_potential_basenames_under_pkg_, iter_potential_basenames_under_pkg_, does_exist_under_pkg_, with_path_under_pkg_
-from seed.io.may_open import open4w, open4w_err, open4r
+import os.path
+from seed.types.view.RecurView import default_cfg4RecurView
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'DottedAttrCollector___autocall_at_max_depth:_DataLoader___autocall_at_max_depth'):
+    from seed.types.DottedAttrCollector import DottedAttrCollector, ReDefRepr
+    from seed.types.DottedAttrCollector import DottedAttrCollector___autocall_at_max_depth as _DataLoader___autocall_at_max_depth
+
+with mk_ctx4lazy_import4funcs_(__name__):
+    from pathlib import Path, PurePosixPath
+    from importlib import import_module
+    from seed.pkg_tools.is_pkg import is_pkg_# is_module_
+
+
+    from seed.pkg_tools.load_resource import read_under_pkg_
+
+    from seed.tiny_.check import check_type_le, check_type_is, check_int_ge
+    from seed.tiny_.check import check_callable
+    from seed.tiny_.check import check_pseudo_identifier, check_smay_pseudo_qual_name, check_pseudo_qual_name
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import echo, echo_args
+
+    from seed.helper.safe_eval import safe_eval
+    from ast import literal_eval
+
+    from seed.pkg_tools.load_resource import open_under_pkg_, does_exist_under_pkg_
+    from seed.io.may_open import open4w, open4w_err, open4r
+    from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -940,7 +947,8 @@ class _Call4DataLoader5attr__ver1_params:
         if sf._extended_transformer:
             _2_data = sf._transformer(qnm4pkg, qattr, qnm4new_pkg, bnm, _1_data)
         else:
-            _2_data = sf._transformer(qnm4new_pkg, qattr, bnm, _1_data)
+            #?bug?#_2_data = sf._transformer(qnm4new_pkg, qattr, bnm, _1_data)
+            _2_data = sf._transformer(_1_data)
         _2_data
         data_view = sf._viewer(_2_data)
         if not sf._no_cache:

@@ -189,7 +189,6 @@ _LazyImport8LazyObj('seed.tiny', 'null_tuple', None)
 ######################
 ++__getattribute__
 ++kw:arbitrary_ok
-#from seed.data_funcs.lnkls import rglnkls_ops, empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
 >>> rglnkls_ops = lazy_import4func_('seed.data_funcs.lnkls', 'rglnkls_ops', arbitrary_ok=True)
 >>> rglnkls_ops.empty_rglnkls
 ()
@@ -386,7 +385,7 @@ __all__
 
 def _inject_(sf, smay_qnm4mdl8dst, smay_nm4func8dst, may_func8dst, /):
     if 0b0000:
-        from seed.tiny import print_err
+        from seed.debug.print_err import print_err, print_ferr
         print_err((sf, smay_qnm4mdl8dst, smay_nm4func8dst, may_func8dst))
     f = sf if may_func8dst is None else may_func8dst
     if smay_qnm4mdl8dst:

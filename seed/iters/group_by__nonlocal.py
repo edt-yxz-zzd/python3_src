@@ -13,8 +13,12 @@ group_by__nonlocal
         regroup_if
 '''.split()#'''
 __all__
-from seed.tiny import echo, ifNone
-#import operator
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 

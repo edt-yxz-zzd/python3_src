@@ -2,7 +2,7 @@
 r'''
 e ../../python3_src/seed/types/union_find_algo/DisjointSet.py
 py -m seed.types.union_find_algo.DisjointSet
-py -m nn_ns.app.debug_cmd   seed.types.union_find_algo.DisjointSet
+py -m nn_ns.app.debug_cmd   seed.types.union_find_algo.DisjointSet -x
 
 
 
@@ -95,16 +95,19 @@ IUnionFindCtxOps
                 UnionFindCtxOps__opaque_state4DisjointSet__ctx_is_element2opaque_state_mapping__union_by_rank__path_compression
 
     '''.split()
-
+__all__
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import check_type_le, check_type_is, check_tmay, check_pair, check_uint
-from seed.tiny import dict_add__is
 from collections.abc import MutableMapping
-
 from seed.abc.ICtxOps import ICtxOps
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_pair, check_tmay, check_type_is, check_type_le, check_uint
+    from seed.tiny_.dict__add_fmap_filter import dict_add__is
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH

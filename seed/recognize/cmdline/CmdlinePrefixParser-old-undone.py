@@ -263,7 +263,6 @@ my argparser
 #'''
 
 
-___begin_mark_of_excluded_global_names__0___ = ...
 
 __all__ = '''
     PrefixSettingDict
@@ -277,12 +276,15 @@ __all__ = '''
     Globals
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from collections.abc import Mapping
-from seed.tiny import echo, fst, snd
-from seed.helper.check.checkers import check_pair, check_type_is, check_tuple, check_cased_tuple__free, check_str, check_bool, check_obj_is, check_all, check_len_of, check_callable, check_uint
-#from seed.seq_tools.is_prefix_of_seq import is_prefix_of_seq#, is_suffix_of_seq
-from seed.seq_tools.bisearch import bisearch
 from seed.types.FrozenDict import FrozenDict
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.helper.check.checkers import check_pair, check_type_is, check_tuple, check_cased_tuple__free, check_str, check_bool, check_obj_is, check_all, check_len_of, check_callable, check_uint
+    #from seed.seq_tools.is_prefix_of_seq import is_prefix_of_seq#, is_suffix_of_seq
+    from seed.seq_tools.bisearch import bisearch
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

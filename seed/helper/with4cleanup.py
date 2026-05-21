@@ -10,7 +10,7 @@ see:
 
 
 seed.helper.with4cleanup
-py -m nn_ns.app.debug_cmd   seed.helper.with4cleanup
+py -m nn_ns.app.debug_cmd   seed.helper.with4cleanup -x
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.helper.with4cleanup   @f
 py -m nn_ns.app.doctest_cmd seed.helper.with4cleanup:__doc__ -v
 
@@ -89,7 +89,12 @@ __all__
 
 
 
-from seed.tiny_.mk_fdefault import mk_default__easy, mk_default, mk_default_or_raise
+___begin_mark_of_excluded_global_names__0___ = ...
+import contextlib
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.mk_fdefault import mk_default__easy, mk_default, mk_default_or_raise
     #def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
     #def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
     #def mk_default_or_raise(mirror_imay_xedefault_rank, xedefault, /, *args4xedefault, mirror:bool):
@@ -98,8 +103,9 @@ from seed.tiny_.mk_fdefault import mk_default__easy, mk_default, mk_default_or_r
     #
 
 
-from seed.tiny import check_callable, check_type_is, ifNone
-import contextlib
+    from seed.tiny_.check import check_type_is, check_callable
+    from seed.helper.ifNone import ifNone, ifNonef
+___end_mark_of_excluded_global_names__0___ = ...
 
 def no_cleanup(internal_state, external_obj, /): pass
 

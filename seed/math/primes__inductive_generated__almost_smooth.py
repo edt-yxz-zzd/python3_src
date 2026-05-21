@@ -2601,29 +2601,32 @@ __all__ = r'''
 __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from ast import literal_eval
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'count:count_'):
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.tiny_.funcs import fst, snd
+    from seed.tiny_.containers import mk_tuple
 
-from seed.iters.is_sorted import is_strict_sorted
-from seed.tiny import mk_tuple
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, iter_unsorted_products_of_coprime_factors__ge_le
+    from ast import literal_eval
+
+    from seed.iters.is_sorted import is_strict_sorted
+    from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, iter_unsorted_products_of_coprime_factors__ge_le
 
 
-from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
+    from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
 
 
-from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
 
-#枚举冫扩展幺链素数牜归纳生成扌<<==:
-#from collections import deque
-from itertools import count as count_
-from heapq import heappush, heapreplace, heappop
+    #枚举冫扩展幺链素数牜归纳生成扌<<==:
+    #from collections import deque
+    from itertools import count as count_
+    from heapq import heappush, heapreplace, heappop
 
-from seed.tiny import fst, snd
-from seed.types.LazyList import LazyList# LazyListError
-#from seed.types.LazyList import to_LazyList, to_LazyListIter
-from seed.math.iter_sorted_products_of_uints import iter_sorted_products_of_strict_sorted_pairwise_coprime_uints# iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs #iter_sorted_products_of_uints
+    from seed.types.LazyList import LazyList# LazyListError
+    #from seed.types.LazyList import to_LazyList, to_LazyListIter
+    from seed.math.iter_sorted_products_of_uints import iter_sorted_products_of_strict_sorted_pairwise_coprime_uints# iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs #iter_sorted_products_of_uints
 def __():
   def iter_sorted_products_of_strict_sorted_pairwise_coprime_uints(sorted_coprime_factors, /, *, finite_seq_vs_infinite_seq, turnoff__verify_factors_are_pairwise_coprime):
     ...
@@ -2901,15 +2904,15 @@ def 求冫链长纟再扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
     return L#True
 
 
-_f4SPRP = None
+if 0:
+    _f4SPRP = None
 def _is_SPRP_(n, /):
     global _f4SPRP
-    f = _f4SPRP
-    if f is None:
-        from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_ as _f4SPRP
+    try:
         f = _f4SPRP
-    if f is None:
-        raise 000
+    except NameError:
+        from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_ as _f4SPRP
+        return _is_SPRP_(n)
     return bool(f(n))
 
 def 枚举冫再扩展幺链素数牜加二枚举扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
@@ -3217,8 +3220,10 @@ def __():
     else:
         raise 000
 #__()
-_测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=32)
-#_测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=2**16)
+#if __name__ == "__main__":
+if 0:
+    _测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=32)
+    #_测试冫枚举冫扩展幺链素数牜归纳生成扌([], _max1_=2**16)
 
 __all__
 from seed.math.primes__inductive_generated__almost_smooth import 枚举冫幺链素数牜小于六十四比特扌

@@ -100,19 +100,26 @@ findout_all_maximal_points__partial_cmp__O_NNcmp_
 __all__
 
 
-from operator import __getitem__
+___begin_mark_of_excluded_global_names__0___ = ...
+#from operator import __getitem__
 import operator
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_int_ge
+    from seed.tiny_.funcs import echo, fst
+    from seed.seq_tools.remove_strict_sorted_indices import remove_strict_sorted_indices__emplace_
 
-from seed.tiny_.check import check_int_ge
-from seed.tiny import echo, fst
-from seed.seq_tools.remove_strict_sorted_indices import remove_strict_sorted_indices__emplace_
+    from seed.algo.bucket_sort.bucket_sort__plain import bucket_sort__plain
+    #def bucket_sort__plain(alphabet_size, iterable, *, key):
+    #    'may uint -> Iter a -> (key::may (a->uint)) -> [a]'
+    from seed.algo.bucket_sort.utils4tuples import unique_gs5js_, convert_to_index_keys__L_
+    from seed.algo.partial_cmp import mk_partial_cmp_result5subresults_
 
-from seed.algo.bucket_sort.bucket_sort__plain import bucket_sort__plain
-#def bucket_sort__plain(alphabet_size, iterable, *, key):
-#    'may uint -> Iter a -> (key::may (a->uint)) -> [a]'
-from seed.algo.bucket_sort.utils4tuples import unique_gs5js_, convert_to_index_keys__L_
-from seed.algo.partial_cmp import mk_partial_cmp_result5subresults_
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
 
 def findout_all_maximal_points__partial_cmp__O_NNcmp_(partial_cmp, iterable, /, *, key=None, group=False, keep_order=False):
     '(k -> k -> (-1|0|+1|...)) -> Iter a -> (key::a->k) -> ([a] if not group else [(k, [a])]) # [[TIME(partial_cmp) ~= O(L)cmp] -> [TIME(findout_all_maximal_points__partial_cmp__O_NNcmp_) ~= O(N**2)*partial_cmp]] #not O(OUT**2)cmp, since middle state may arbitrary big#'
@@ -198,6 +205,6 @@ def findout_all_maximal_points__L_tuples__O_LNlogNcmp_plus_LNNuintop_(L, tuple_s
 __all__
 
 
-from seed.algo.partial_cmp import partial_cmp4array__py_ord
+#from seed.algo.partial_cmp import partial_cmp4array__py_ord
 from seed.algo.findout_all_maximal_points import findout_all_maximal_points__partial_cmp__O_NNcmp_, findout_all_maximal_points__L_tuples__O_LNlogNcmp_plus_LNNuintop_
 from seed.algo.findout_all_maximal_points import *

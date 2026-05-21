@@ -28,22 +28,8 @@ used in:
 
 
 seed.io.fielded_line_utils
-py -m nn_ns.app.debug_cmd   seed.io.fielded_line_utils
+py -m nn_ns.app.debug_cmd   seed.io.fielded_line_utils -x
 e ../../python3_src/seed/io/fielded_line_utils.py
-
-from seed.io.fielded_line_utils import txt2lines__split, txt2lines__splitlines, txt2iter_lines__regex_search, txt2lines__StringIO
-
-from seed.io.fielded_line_utils import line_remove_EOL, line_remove_comment, line_remove_py_comment, line_strip, line_rstrip, line_split, line_remove_prefix, line_remove_suffix
-
-from seed.io.fielded_line_utils import is_all_spaces, hex2int, hex2char
-
-from seed.io.fielded_line_utils import mk_fT, line_remove_commentT, line_stripT, line_rstripT, line_splitT, line_remove_prefixT, line_remove_suffixT
-
-from seed.io.fielded_line_utils import lines_handler2txt_handler, fielded_lines_parserT__tuple, fielded_lines_preprocesserT, lines_preprocesserT
-
-
-from seed.io.fielded_line_utils import example4lines_parser4UCD_CJKRadicals_txt, example4txt_parser4UCD_CJKRadicals_txt
-
 
 ======================
 view /sdcard/0my_files/unzip/e_book/unicode_13__UCD/CJKRadicals.txt
@@ -100,15 +86,26 @@ __all__ = '''
 
         example4lines_parser4UCD_CJKRadicals_txt
         example4txt_parser4UCD_CJKRadicals_txt
+
+
+
+
+    decimal_nondecimal_str2int_tail_pair
     '''.split()
 
+__all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.tiny import check_type_is, echo
+
 import re
-from io import StringIO
-from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__tuple, fmapT__list
-from seed.func_tools.fmapT.filterT__tiny import filterT__list
-from seed.func_tools.fmapT.predT__tiny import predT__NOT
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from io import StringIO
+    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__tuple, fmapT__list
+    from seed.func_tools.fmapT.filterT__tiny import filterT__list
+    from seed.func_tools.fmapT.predT__tiny import predT__NOT
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import echo
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
@@ -224,7 +221,9 @@ def is_all_spaces(txt, /):
     return (not txt) or txt.isspace()
 def hex2int(s, /):
     return int(s, 16)
-hex2char = dot[chr, hex2int]
+#.hex2char = dot[chr, hex2int] #cancelled for lazy import
+def hex2char(s, /):
+    return chr(hex2int(s))
 def decimal_nondecimal_str2int_tail_pair(decimal_nondecimal_str, /):
     m = _regex4decimal_digit1s.match(decimal_nondecimal_str)
     if not m: raise ValueError(f'not startswith decimal_digit1s: {decimal_nondecimal_str!r}')
@@ -311,4 +310,21 @@ example4lines_parser4UCD_CJKRadicals_txt = fielded_lines_parserT__tuple(';', '#'
 example4txt_parser4UCD_CJKRadicals_txt = lines_handler2txt_handler(example4lines_parser4UCD_CJKRadicals_txt)
 
 from seed.io.fielded_line_utils import unicode_char_pt_rng5field
+
+
+from seed.io.fielded_line_utils import txt2lines__split, txt2lines__splitlines, txt2iter_lines__regex_search, txt2lines__StringIO
+
+from seed.io.fielded_line_utils import line_remove_EOL, line_remove_comment, line_remove_py_comment, line_strip, line_rstrip, line_split, line_remove_prefix, line_remove_suffix
+
+from seed.io.fielded_line_utils import is_all_spaces, hex2int, hex2char
+
+from seed.io.fielded_line_utils import mk_fT, line_remove_commentT, line_stripT, line_rstripT, line_splitT, line_remove_prefixT, line_remove_suffixT
+
+from seed.io.fielded_line_utils import lines_handler2txt_handler, fielded_lines_parserT__tuple, fielded_lines_preprocesserT, lines_preprocesserT
+
+
+from seed.io.fielded_line_utils import example4lines_parser4UCD_CJKRadicals_txt, example4txt_parser4UCD_CJKRadicals_txt
+
+
+
 from seed.io.fielded_line_utils import *

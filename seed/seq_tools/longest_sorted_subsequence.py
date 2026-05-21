@@ -7,12 +7,6 @@ view ../../python3_src/seed/seq_tools/bisearch.py
 seed.seq_tools.longest_sorted_subsequence
 py -m nn_ns.app.debug_cmd   seed.seq_tools.longest_sorted_subsequence -x # -off_defs
 py -m nn_ns.app.doctest_cmd seed.seq_tools.longest_sorted_subsequence:__doc__ -ht # -ff -df
-#######
-from seed.pkg_tools.ModuleReloader import mk_doctestXmodule_reloader_
-doctestXmodule_reloader = mk_doctestXmodule_reloader_('', 'seed.seq_tools.longest_sorted_subsequence:__doc__', '-ht')
-doctestXmodule_reloader(reload_first=False)
-doctestXmodule_reloader()
-#######
 
 [[
 源起:
@@ -211,30 +205,23 @@ _refine_szmm2jxs_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from itertools import pairwise, accumulate, compress
-#.from seed.tiny_.check import check_type_is, check_int_ge
-#.
-#.from seed.for_libs.for_importlib__reload import clear_later_variables_if_reload_
-#.clear_later_variables_if_reload_(globals(), '')
-#.    # <<== seed.pkg_tools.ModuleReloader
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,ifNone,echo,fst,snd', __name__)
-if 0:from seed.tiny import mk_tuple,print_err,ifNone,echo,fst,snd #xxx:null_tuple #xxx:,fst
 
-lazy_import4funcs_('seed.seq_tools.bisearch', 'bisearch', __name__)
-if 0:from seed.seq_tools.bisearch import bisearch
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import pairwise, accumulate, compress
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
+
+    from seed.iters.batch_find_insert_indices4two_sorted_iterables import batch_find_insert_indices4two_sorted_iterables
+    from seed.seq_tools.bisearch import bisearch
 #def bisearch(x, array, /, begin=None, end=None, *, key=None, __lt__=None, result_case=2):
 #       0 - lower_end == middle_begin
 #       1 - middle_end == upper_begin
 #       2 - (middle_begin, middle_end)
 
-#.merge_two_sorted_iterables = lazy_import4func_('seed.iters.merge_two_sorted_iterables', 'merge_two_sorted_iterables', __name__)
-#.if 0:from seed.iters.merge_two_sorted_iterables import merge_two_sorted_iterables
-#.#def merge_two_sorted_iterables(lefts, rights, /, *, left_key=None, right_key=None, before=None, Left=None, Right=None):
-#.#    ':: (a->b->Bool) -> [a] -> [b] -> [Either a b] # before :: KeyA -> KeyB -> Bool'
 
-lazy_import4funcs_('seed.iters.batch_find_insert_indices4two_sorted_iterables', 'batch_find_insert_indices4two_sorted_iterables', __name__)
-if 0:from seed.iters.batch_find_insert_indices4two_sorted_iterables import batch_find_insert_indices4two_sorted_iterables
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

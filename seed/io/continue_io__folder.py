@@ -88,16 +88,22 @@ IStandaloneTask4IFolderBasedContinueJob
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.for_libs.for_signal import PostponeKeyboardInterrupt
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.for_libs.for_signal import PostponeKeyboardInterrupt
     # ++kw:to_postpone_KeyboardInterrupt_until_subtask_switchover
 
-from pathlib import Path
-from seed.io.may_open import open4w, open4w_err, open4r
-#def open4w(may_opath, /, *, force, xencoding, **kwargs):
-from seed.io.make_mode_ex4open import xencoding2may_encoding
+    from pathlib import Path
+    from seed.io.may_open import open4w, open4w_err, open4r
+    #def open4w(may_opath, /, *, force, xencoding, **kwargs):
+    from seed.io.make_mode_ex4open import xencoding2may_encoding
 
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny_.check import check_type_is, check_pair, check_callable, check_non_ABC, check_int_ge
+    from seed.tiny_.check import check_type_is, check_pair, check_callable, check_non_ABC, check_int_ge
+    from seed.debug.print_err import print_err
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class IFolderBasedContinueJob(ABC):
@@ -182,9 +188,6 @@ class IFolderBasedContinueJob(ABC):
         job._run_or_resume_(verbose, force4ofile, force4tmp_ofile, odir)
 
     def _run_or_resume_(sf, verbose, force4ofile, force4tmp_ofile, odir, /):
-        ######################
-        if verbose:
-            from seed.tiny import print_err
         ######################
         job = sf
         odir = Path(odir)

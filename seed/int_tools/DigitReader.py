@@ -37,25 +37,9 @@ from itertools import islice
 from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_lt
 from seed.int_tools.RadixInfo import IRadixInfo, ZpowRadixInfo
 from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_
-#.
-from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#.from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-#.repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-#.lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,ifNone:ifNone_', __name__)
-#.if 0:from seed.tiny import mk_tuple,print_err,ifNone as ifNone_ #xxx:null_tuple #xxx:echo,fst,snd
-#.from seed.helper.repr_input import repr_helper
-#.from seed.tiny_._Base4repr import _Base4repr
-        #sf._reset4repr(may_args4repr, may_kwds4repr)
-        #sf._init4repr(*args4repr, **kwds4repr)
-___end_mark_of_excluded_global_names__0___ = ...
 
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 ######################

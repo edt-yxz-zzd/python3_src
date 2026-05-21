@@ -70,7 +70,7 @@ view ../../python3_src/seed/math/right_angled_triangle_infos__sorted_by.py
     # [:互素整数边长直角三角形的边长表达型式囗囗以斜边的共轭高斯整数分解的实部虚部为参数:[(hypotenuse_side,odd_side,even_side) == (s*s +t*t, s*s -t*t, 2*s*t]]:goto
 [@[hypotenuse_side,short_side, middle_side :: int] -> [hypotenuse_side,short_side,middle_side > 0] -> [gcd(hypotenuse_side,short_side,middle_side) == 1] -> [hypotenuse_side**2 == short_side**2 +middle_side**2] -> [short_side <= middle_side] -> [
     [3 <= short_side < middle_side < hypotenuse_side][pairwise_coprime_(hypotenuse_side,short_side,middle_side)][hypotenuse_side%4 == 1][short_side%2 =!= middle_side%2]
-    [[(odd_side,even_side) := (short_side,middle_side) if short_side%2==1 else (middle_side,short_side)] -> [s := sqrt_((hypotenuse_side +odd_side)/2)] -> [t := sqrt_((hypotenuse_side -odd_side)/2)] -> [[s%1==0][t%1==0][1 <= t < s][gcd(s,t)==1][s%2 =!= t%2][odd_side%2 == 1][even_side%4 == 0][(hypotenuse_side,odd_side,even_side) == (s*s +t*t, s*s -t*t, 2*s*t)]]]
+    [[(odd_side,even_side) := (short_side,middle_side) if short_side%2==1 else (middle_side,short_side)] -> [s := sqrt((hypotenuse_side +odd_side)/2)] -> [t := sqrt((hypotenuse_side -odd_side)/2)] -> [[s%1==0][t%1==0][1 <= t < s][gcd(s,t)==1][s%2 =!= t%2][odd_side%2 == 1][even_side%4 == 0][(hypotenuse_side,odd_side,even_side) == (s*s +t*t, s*s -t*t, 2*s*t)]]]
     [[
     ###########boundary###########
     # [:boundary_about__ST__HOE]:here
@@ -89,28 +89,28 @@ view ../../python3_src/seed/math/right_angled_triangle_infos__sorted_by.py
         # [:boundary_of___even_side___with_respect_to___S]:goto
 
     # s <~~ HOE
-    [(1 +sqrt_(2*hypotenuse_side -1))/2 <= (ceil_sqrt_(2*hypotenuse_side -1)//2 +1) <= s <= floor_sqrt_(((hypotenuse_side -1)//4)*4) <= sqrt_(hypotenuse_side-1)]
+    [(1 +sqrt(2*hypotenuse_side -1))/2 <= (ceil_sqrt(2*hypotenuse_side -1)//2 +1) <= s <= floor_sqrt_(((hypotenuse_side -1)//4)*4) <= sqrt(hypotenuse_side-1)]
         # [:boundary_of___S___with_respect_to___hypotenuse_side]:goto
-    [sqrt_(odd_side +1) <= ceil_sqrt_(((odd_side+4)//4)*4) <= (ceil_sqrt_(odd_side+4)//2 +ceil_sqrt_((odd_side+4)//4)) <= s <= (odd_side +1)//2 <= (odd_side +1)/2]
+    [sqrt(odd_side +1) <= ceil_sqrt(((odd_side+4)//4)*4) <= (ceil_sqrt(odd_side+4)//2 +ceil_sqrt((odd_side+4)//4)) <= s <= (odd_side +1)//2 <= (odd_side +1)/2]
         # [:boundary_of___S___with_respect_to___odd_side]:goto
-    [(1 +sqrt_(2*even_side +1))/2 <= (ceil_sqrt_(2*even_side +1)//2 +1) <= s <= ((even_side//4)*2) <= even_side/2]
+    [(1 +sqrt(2*even_side +1))/2 <= (ceil_sqrt(2*even_side +1)//2 +1) <= s <= ((even_side//4)*2) <= even_side/2]
         # [:boundary_of___S___with_respect_to___even_side]:goto
 
     ###### HOE <~~> HOE
     # H <~~> E
     [even_side +1 <= hypotenuse_side <= even_side**2/4 +1]
         # [:boundary_of___hypotenuse_side___with_respect_to___even_side]:goto
-    [2*sqrt_(hypotenuse_side -1) <= even_side <= hypotenuse_side -1]
+    [2*sqrt(hypotenuse_side -1) <= even_side <= hypotenuse_side -1]
         # [:boundary_of___even_side___with_respect_to___hypotenuse_side]:goto
 
     # O <~~> E
-    [sqrt_(2*even_side +1) <= odd_side <= even_side**2/4 -1]
+    [sqrt(2*even_side +1) <= odd_side <= even_side**2/4 -1]
         # [:boundary_of___odd_side___with_respect_to___even_side]:goto
-    [2*sqrt_(odd_side+1) <= even_side <= (odd_side**2 -1)/2]
+    [2*sqrt(odd_side+1) <= even_side <= (odd_side**2 -1)/2]
         # [:boundary_of___even_side___with_respect_to___odd_side]:goto
 
     # H <~~> O
-    [sqrt_(2*hypotenuse_side -1) <= odd_side <= hypotenuse_side -2]
+    [sqrt(2*hypotenuse_side -1) <= odd_side <= hypotenuse_side -2]
         # [:boundary_of___odd_side___with_respect_to___hypotenuse_side]:goto
     [odd_side +2 <= hypotenuse_side <= (odd_side**2 +1)/2]
         # [:boundary_of___hypotenuse_side___with_respect_to___odd_side]:goto
@@ -139,13 +139,13 @@ view ../../python3_src/seed/math/right_angled_triangle_infos__sorted_by.py
         # [:boundary_of___middle_side___with_respect_to___S]:goto
 
     # s <~~ LSM
-    [sqrt_(short_side*(sqrt2+1)/2) < [slack]:ceil_sqrt_((floor_sqrt_(2*short_side**2)+short_side)//2 +1) <= s <= [slack]:(short_side+1)//2 <= (short_side+1)/2]
+    [sqrt(short_side*(sqrt2+1)/2) < [slack]:ceil_sqrt((floor_sqrt_(2*short_side**2)+short_side)//2 +1) <= s <= [slack]:(short_side+1)//2 <= (short_side+1)/2]
         # [:boundary_of___S___with_respect_to___short_side]:goto
-    [(1 +sqrt_(2*middle_side +1))/2 <= [slack]:(ceil_sqrt_(2*middle_side +1)//2 +1) <= s <= [slack]:floor_sqrt_((floor_sqrt_(2*middle_side**2)+middle_side)//2) < sqrt_(middle_side*(sqrt2+1)/2)]
+    [(1 +sqrt(2*middle_side +1))/2 <= [slack]:(ceil_sqrt(2*middle_side +1)//2 +1) <= s <= [slack]:floor_sqrt_((floor_sqrt_(2*middle_side**2)+middle_side)//2) < sqrt(middle_side*(sqrt2+1)/2)]
         # [:boundary_of___S___with_respect_to___middle_side]:goto
 
     # S <~~> M
-    [sqrt_(2*middle_side+1) <= [slack]:ceil_sqrt_(2*middle_side+1) <= short_side <= [slack]:(middle_side -1)]
+    [sqrt(2*middle_side+1) <= [slack]:ceil_sqrt(2*middle_side+1) <= short_side <= [slack]:(middle_side -1)]
         # [:boundary_of___ short_side___with_respect_to___middle_side]:goto
     [[slack]:(short_side+1) <= middle_side <= [slack]:((short_side**2 -1)//2) <= ((short_side**2 -1)/2)]
         # [:boundary_of___ middle_side___with_respect_to___short_side]:goto
@@ -153,13 +153,13 @@ view ../../python3_src/seed/math/right_angled_triangle_infos__sorted_by.py
     # L <~~> M
     [(middle_side +1) <= [slack]:((middle_side+3)//4*4 +1) <= long_side <= [slack]:floor_sqrt_((middle_side-1)**2 +middle_side**2) < (sqrt2*middle_side)]
         # [:boundary_of___long_side___with_respect_to___middle_side]:goto
-    [(long_side/sqrt2) < ((1 +sqrt_(2*long_side**2 -1))/2) <= [slack]:(ceil_sqrt_(2*long_side**2 -1)//2 +1) <= middle_side <= [slack]:(long_side-1)]
+    [(long_side/sqrt2) < ((1 +sqrt(2*long_side**2 -1))/2) <= [slack]:(ceil_sqrt(2*long_side**2 -1)//2 +1) <= middle_side <= [slack]:(long_side-1)]
         # [:boundary_of___middle_side___with_respect_to___long_side]:goto
 
     # L <~~> S
-    [sqrt_(2*long_side -1) <= [slack]:ceil_sqrt_(2*long_side -1) <= short_side <= [slack]:((-1 +floor_sqrt_(2*long_side**2 -1))//2) <= ((-1 +sqrt_(2*long_side**2 -1))/2) < (long_side/sqrt2)]
+    [sqrt(2*long_side -1) <= [slack]:ceil_sqrt(2*long_side -1) <= short_side <= [slack]:((-1 +floor_sqrt_(2*long_side**2 -1))//2) <= ((-1 +sqrt(2*long_side**2 -1))/2) < (long_side/sqrt2)]
         # [:boundary_of___short_side___with_respect_to___long_side]:goto
-    [(sqrt2*short_side) < [slack]:ceil_sqrt_(short_side**2 +(short_side +1)**2) <= long_side <= [slack]:(1 +short_side**2)//2 <= (1 +short_side**2)/2]
+    [(sqrt2*short_side) < [slack]:ceil_sqrt(short_side**2 +(short_side +1)**2) <= long_side <= [slack]:(1 +short_side**2)//2 <= (1 +short_side**2)/2]
         # [:boundary_of___long_side___with_respect_to___short_side]:goto
 
     ]]
@@ -216,8 +216,8 @@ right_angled_triangle_side_length_difference_ratio
   !! [(y**2 -1/y**2) == 1]
   [z**2 == z+1]
   !! [z >= 1]
-  [z == (1+sqrt_(5))/2]
-  [y == sqrt_((1+sqrt_(5))/2)]
+  [z == (1+sqrt(5))/2]
+  [y == sqrt((1+sqrt(5))/2)]
   [y是无理数]
 直角三角形:边长:等差数列:[只有3-4-5的倍数]
   [0 < (x-y) <= x <= (x+y)][x**2 == (x+y)**2 - (x-y)**2 == 4*x*y]
@@ -232,23 +232,23 @@ right_angled_triangle_side_length_difference_ratio
   [x**2 == (x+b*y)**2 - (x-a*y)**2 == (a+b)*2*x*y +(b**2 -a**2)*y**2]
   [x**2 -(a+b)*2*x*y -(b**2 -a**2)*y**2 == 0]
   [D == ((a+b)*2)**2 +4*(b**2 -a**2) == 8*(a+b)*b]
-  [x/y == ((a+b)*2 +/- sqrt_(8*(a+b)*b))/2]
-  [x/y == ((a+b) +/- sqrt_(2*(a+b)*b))]
+  [x/y == ((a+b)*2 +/- sqrt(8*(a+b)*b))/2]
+  [x/y == ((a+b) +/- sqrt(2*(a+b)*b))]
   !! [y > 0]
   !! [x > 0]
   [x/y > 0]
-  [[x/y == ((a+b) + sqrt_(2*(a+b)*b))]or[b < a][x/y == ((a+b) - sqrt_(2*(a+b)*b))]]
+  [[x/y == ((a+b) + sqrt(2*(a+b)*b))]or[b < a][x/y == ((a+b) - sqrt(2*(a+b)*b))]]
   !! [0 < (x-a*y)]
   [a < x/y]
-  [0 < x/y -a == (b +/- sqrt_(2*(a+b)*b))]
-  !! [b < sqrt_(2*(a+b)*b)]
-  [x/y == ((a+b) + sqrt_(2*(a+b)*b))]
+  [0 < x/y -a == (b +/- sqrt(2*(a+b)*b))]
+  !! [b < sqrt(2*(a+b)*b)]
+  [x/y == ((a+b) + sqrt(2*(a+b)*b))]
 
   !! [x,y是整数]
   [x/y是有理数]
-  [sqrt_(2*(a+b)*b)是有理数]
+  [sqrt(2*(a+b)*b)是有理数]
   !! [a,b是整数]
-  [sqrt_(2*(a+b)*b)是整数]
+  [sqrt(2*(a+b)*b)是整数]
   [(2*(a+b)*b)是平方数]
     # e.g. [(a,b) == (1,1)]
     # e.g. [(a,b) == (7,2)]
@@ -304,16 +304,16 @@ right_angled_triangle_side_length_difference_ratio
     [ez4B := max(0, ceil_half_ez4B*2-1)]
     [pre_min_a := 1]
     [b := sqrt__odd4B**2 * 2**ez4B]
-    [pre_min_sqrt__plus_A_B_or_half := ceil_sqrt_((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0)]
+    [pre_min_sqrt__plus_A_B_or_half := ceil_sqrt((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0)]
     [gcd(a,b) == 1]
     # [gcd(a+b,b) == 1]
     # [gcd(sqrt__plus_A_B_or_half,b) == 1]
     [min_sqrt__plus_A_B_or_half := min{sqrt__plus_A_B_or_half | [[sqrt__plus_A_B_or_half :<- [pre_min_sqrt__plus_A_B_or_half..]][gcd(sqrt__plus_A_B_or_half,b) == 1]]}]
     # [(a+b) == 2**(ez4B==0) *sqrt__plus_A_B_or_half**2]
     [min__plus_A_B := (min_sqrt__plus_A_B_or_half**2) << (ez4B==0)]
-    # [x/y == ((a+b) + sqrt_(2*(a+b)*b))]
+    # [x/y == ((a+b) + sqrt(2*(a+b)*b))]
     [min_y := 1]
-    [min_x := min_y*(min__plus_A_B + sqrt_(2*min__plus_A_B*b))]
+    [min_x := min_y*(min__plus_A_B + sqrt(2*min__plus_A_B*b))]
     [min_hypotenuse := min_x + b*min_y]
     [min__plus_A_B
     == ((min_sqrt__plus_A_B_or_half**2) << (ez4B==0))
@@ -322,7 +322,7 @@ right_angled_triangle_side_length_difference_ratio
     ]
     [min_hypotenuse
     == min_x + b*min_y
-    == (min__plus_A_B + sqrt_(2*min__plus_A_B*b)) + b
+    == (min__plus_A_B + sqrt(2*min__plus_A_B*b)) + b
     == ???cannot simplify!!!
     ]
     ######################
@@ -333,9 +333,9 @@ right_angled_triangle_side_length_difference_ratio
     == ((min_sqrt__plus_A_B_or_half**2) << (ez4B==0))
     >= (min_sqrt__plus_A_B_or_half**2)
     >= (pre_min_sqrt__plus_A_B_or_half**2)
-    == (ceil_sqrt_((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0))**2
-    >= (ceil_sqrt_((pre_min_a + b) /2))**2
-    >= (sqrt_((1 + b) /2))**2
+    == (ceil_sqrt((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0))**2
+    >= (ceil_sqrt((pre_min_a + b) /2))**2
+    >= (sqrt((1 + b) /2))**2
     >= ((1 + b) /2) #too small...
     ]
     [plus_A_B >= pre_min_a + b == 1+b]
@@ -344,10 +344,10 @@ right_angled_triangle_side_length_difference_ratio
     [hypotenuse
     >= min_hypotenuse
     == min_x + b*min_y
-    == (min__plus_A_B + sqrt_(2*min__plus_A_B*b)) + b
-    >= b + lowerbound4plus_A_B(b) + sqrt_(2*b*lowerbound4plus_A_B(b))
-    == b + (1+b) + sqrt_(2*b*(1+b))
-    == b + (1+b) + 2*sqrt_(b*(1+b) ///2)
+    == (min__plus_A_B + sqrt(2*min__plus_A_B*b)) + b
+    >= b + lowerbound4plus_A_B(b) + sqrt(2*b*lowerbound4plus_A_B(b))
+    == b + (1+b) + sqrt(2*b*(1+b))
+    == b + (1+b) + 2*sqrt(b*(1+b) ///2)
     >= (1+2*b) +sqrt2*b
     >= (1+(2+sqrt2)*b)
     # [sqrt2 ~= 1.4142135623730951]
@@ -355,8 +355,8 @@ right_angled_triangle_side_length_difference_ratio
     # [1.4142135623730950 < sqrt2 < 1.4142135623730951]
     > (1+b*3.4142135623730950)
     ]
-    [lowerbound4hypotenuse5lowerbound4B_(b) =[def]= (1+2*b) + 2*ceil_sqrt_(b*(1+b) ///2)]
-    [hypotenuse == b + (1+b) + sqrt_(2*b*(1+b)) == lowerbound4hypotenuse5lowerbound4B_(b)]:
+    [lowerbound4hypotenuse5lowerbound4B_(b) =[def]= (1+2*b) + 2*ceil_sqrt(b*(1+b) ///2)]
+    [hypotenuse == b + (1+b) + sqrt(2*b*(1+b)) == lowerbound4hypotenuse5lowerbound4B_(b)]:
         # [:condition4_WW1_eq_2VV~~[w**2+1==2*v**2]=>???]:goto
         [y == 1]
         [a == 1 == pre_min_a]
@@ -366,7 +366,7 @@ right_angled_triangle_side_length_difference_ratio
             [short_side == middle_side -a*y == 119]
             [119**2 + 120**2 == 28561 == 169**2]
     ######################
-    [hypotenuse(a,b) == x+b*y == ((a+2*b) + sqrt_(2*(a+b)*b))]
+    [hypotenuse(a,b) == x+b*y == ((a+2*b) + sqrt(2*(a+b)*b))]
     [[1 <= a0 < a1] -> [b >= 1] -> [hypotenuse(a0,b) < hypotenuse(a1,b)]]
     [[1 <= b0 < b1] -> [a >= 1] -> [hypotenuse(a,b0) < hypotenuse(a,b1)]]
     [hypotenuse(a,b) >= min_hypotenuse(b) >= lowerbound4hypotenuse5lowerbound4B_(b)]
@@ -380,51 +380,51 @@ right_angled_triangle_side_length_difference_ratio
     !! [ez4B >= 0]
     [b{odd4B,ez4B} >= b{odd4B:=1,ez4B} == 1* 2**ez4B == 2**max(0, ceil_half_ez4B*2-1) >= 2**(ceil_half_ez4B*2-1)]
     [@[odd4B :<- [1..]] -> @[ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [b := odd4B * 2**ez4B] -> [[b < b0] -> [[1 <= odd4B < b0/2**ez4B][2**ez4B < b0]]]]
-    [@[odd4B :<- [1..]] -> @[ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [b := odd4B * 2**ez4B] -> [[b < b0] -> [[0 <= ez4B < ceil_log2_(b0)][1 <= odd4B < ceil_div_(b0,2**ez4B)]]]]
+    [@[odd4B :<- [1..]] -> @[ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [b := odd4B * 2**ez4B] -> [[b < b0] -> [[0 <= ez4B < ceil_log2(b0)][1 <= odd4B < ceil_div(b0,2**ez4B)]]]]
     !! [ez4B == max(0, ceil_half_ez4B*2-1)]
     !! [odd4B == sqrt__odd4B**2 == (floor_half_sqrt__odd4B*2+1)**2]
-    [@[floor_half_sqrt__odd4B :<- [0..]] -> @[ceil_half_ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [odd4B := (floor_half_sqrt__odd4B*2+1)**2] -> [ez4B := max(0, ceil_half_ez4B*2-1)] -> [b := odd4B * 2**ez4B] -> [[b < b0] -> [[0 <= ez4B == max(0, ceil_half_ez4B*2-1) < ceil_log2_(b0)][1 <= odd4B == (floor_half_sqrt__odd4B*2+1)**2 < ceil_div_(b0,2**ez4B)]]]]
+    [@[floor_half_sqrt__odd4B :<- [0..]] -> @[ceil_half_ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [odd4B := (floor_half_sqrt__odd4B*2+1)**2] -> [ez4B := max(0, ceil_half_ez4B*2-1)] -> [b := odd4B * 2**ez4B] -> [[b < b0] -> [[0 <= ez4B == max(0, ceil_half_ez4B*2-1) < ceil_log2(b0)][1 <= odd4B == (floor_half_sqrt__odd4B*2+1)**2 < ceil_div(b0,2**ez4B)]]]]
     #
-    [@[floor_half_sqrt__odd4B :<- [0..]] -> @[ceil_half_ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [odd4B := (floor_half_sqrt__odd4B*2+1)**2] -> [ez4B := max(0, ceil_half_ez4B*2-1)] -> [b := odd4B * 2**ez4B] -> [[b < b0] -> [[b0 >= 2][0 <= ceil_half_ez4B < ceil_div_(ceil_log2_(b0)+1,2)][0 <= floor_half_sqrt__odd4B < ceil_div_(ceil_sqrt_(ceil_div_(b0,2**ez4B))-1,2)]]]]
+    [@[floor_half_sqrt__odd4B :<- [0..]] -> @[ceil_half_ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [odd4B := (floor_half_sqrt__odd4B*2+1)**2] -> [ez4B := max(0, ceil_half_ez4B*2-1)] -> [b := odd4B * 2**ez4B] -> [[b < b0] -> [[b0 >= 2][0 <= ceil_half_ez4B < ceil_div(ceil_log2(b0)+1,2)][0 <= floor_half_sqrt__odd4B < ceil_div(ceil_sqrt(ceil_div(b0,2**ez4B))-1,2)]]]]
     #
     ######################
-    [@[a :<- [1..]] -> @[floor_half_sqrt__odd4B :<- [0..]] -> @[ceil_half_ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [odd4B := (floor_half_sqrt__odd4B*2+1)**2] -> [ez4B := max(0, ceil_half_ez4B*2-1)] -> [b := odd4B * 2**ez4B] -> [[hypotenuse(a,b) < lowerbound4hypotenuse5lowerbound4B_(b0)] -> [[b0 >= 2][0 <= ceil_half_ez4B < ceil_div_(ceil_log2_(b0)+1,2)][0 <= floor_half_sqrt__odd4B < ceil_div_(ceil_sqrt_(ceil_div_(b0,2**ez4B))-1,2)]]]]
+    [@[a :<- [1..]] -> @[floor_half_sqrt__odd4B :<- [0..]] -> @[ceil_half_ez4B :<- [0..]] -> @[b0 :<- [1..]] -> [odd4B := (floor_half_sqrt__odd4B*2+1)**2] -> [ez4B := max(0, ceil_half_ez4B*2-1)] -> [b := odd4B * 2**ez4B] -> [[hypotenuse(a,b) < lowerbound4hypotenuse5lowerbound4B_(b0)] -> [[b0 >= 2][0 <= ceil_half_ez4B < ceil_div(ceil_log2(b0)+1,2)][0 <= floor_half_sqrt__odd4B < ceil_div(ceil_sqrt(ceil_div(b0,2**ez4B))-1,2)]]]]
         # [:boundary_setting4enumerate_hypotenuse_side__layer_by_layer]:here
     ######################
     TODO:how many right_angled_triangles where [b < b0] ?
     TODO:how many right_angled_triangles where [hypotenuse(a,b) < lowerbound4hypotenuse5lowerbound4B_(b0)] ?
     ######################
     [b :<- [1..]]:
-        [all_As___B_eq_(b) =[def]= {a | [[a :<- [1,3..]][gcd(a,b) == 1][a%2 == 1][(a+b)%2=!=b%2][sqrt__plus_A_B_or_half := sqrt_((a+b) >> (b%2==1))][sqrt__plus_A_B_or_half %1 == 0]]}]
+        [all_As___B_eq_(b) =[def]= {a | [[a :<- [1,3..]][gcd(a,b) == 1][a%2 == 1][(a+b)%2=!=b%2][sqrt__plus_A_B_or_half := sqrt((a+b) >> (b%2==1))][sqrt__plus_A_B_or_half %1 == 0]]}]
     [b0 :<- [1..]]:
         [all_Bs_lt_(b0) =[def]= {b | [[floor_half_sqrt__odd4B :<- [0..]][ceil_half_ez4B :<- [0..]][odd4B := (floor_half_sqrt__odd4B*2+1)**2][ez4B := max(0, ceil_half_ez4B*2-1)][b := odd4B * 2**ez4B][b < b0]]}]
         [num_Bs_lt_(b0) =[def]= len(all_Bs_lt_(b0))]
             # given [1 <= b0 < b1]: (num_Bs_lt_(b1) -num_Bs_lt_(b0)) gives number of (floor_half_sqrt__odd4B,ceil_half_ez4B) pairs needed to be pushed into heap.
-        [num_Bs_lt_(b0) == len{(floor_half_sqrt__odd4B,ceil_half_ez4B) | [[b0 >= 2][ceil_half_ez4B :<- [0..<ceil_div_(ceil_log2_(b0)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)][floor_half_sqrt__odd4B :<- [0..<ceil_div_(ceil_sqrt_(ceil_div_(b0,2**ez4B))-1,2)]]]}]
-        [num_Bs_lt_(b0) == sum[ceil_div_(ceil_sqrt_(ceil_div_(b0,2**ez4B))-1,2) | [[b0 >= 2][ceil_half_ez4B :<- [0..<ceil_div_(ceil_log2_(b0)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)]]]]
-        [num_Bs_lt_(b0) == [b0 >= 2]:(ceil_div_(ceil_sqrt_(b0)-1,2) +sum[ceil_div_(ceil_sqrt_(ceil_div_(b0,2**(ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div_(ceil_log2_(b0)+1,2)]]])]
-        [num_Bs_lt_(b0) == [b0 >= 2]:(ceil_((sqrt_(b0)-1)/2) +sum[ceil_((sqrt_(b0/2**(ceil_half_ez4B*2-1))-1)/2) | [ceil_half_ez4B :<- [1..<ceil_div_(ceil_log2_(b0)+1,2)]]])]
+        [num_Bs_lt_(b0) == len{(floor_half_sqrt__odd4B,ceil_half_ez4B) | [[b0 >= 2][ceil_half_ez4B :<- [0..<ceil_div(ceil_log2(b0)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)][floor_half_sqrt__odd4B :<- [0..<ceil_div(ceil_sqrt(ceil_div(b0,2**ez4B))-1,2)]]]}]
+        [num_Bs_lt_(b0) == sum[ceil_div(ceil_sqrt(ceil_div(b0,2**ez4B))-1,2) | [[b0 >= 2][ceil_half_ez4B :<- [0..<ceil_div(ceil_log2(b0)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)]]]]
+        [num_Bs_lt_(b0) == [b0 >= 2]:(ceil_div(ceil_sqrt(b0)-1,2) +sum[ceil_div(ceil_sqrt(ceil_div(b0,2**(ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div(ceil_log2(b0)+1,2)]]])]
+        [num_Bs_lt_(b0) == [b0 >= 2]:(ceil_((sqrt(b0)-1)/2) +sum[ceil_((sqrt(b0/2**(ceil_half_ez4B*2-1))-1)/2) | [ceil_half_ez4B :<- [1..<ceil_div(ceil_log2(b0)+1,2)]]])]
         [num_Bs_lt_(b0)
-        ~= [b0 >= 2]:(((sqrt_(b0)-1)/2) +sum[((sqrt_(b0/2**(ceil_half_ez4B*2-1))-1)/2) | [ceil_half_ez4B :<- [1..<(log2_(2*b0)/2)]]])
-        ~= [b0 >= 2]:(-(log2_(2*b0)/4) +sqrt_(b0)/2 +sum[(sqrt_(b0)/2**ceil_half_ez4B/sqrt2) | [ceil_half_ez4B :<- [1..<(log2_(2*b0)/2)]]])
-        == [b0 >= 2]:(-(log2_(2*b0)/4) +sqrt_(b0)*(1/2 +(1/sqrt2)*sum[(1/2**ceil_half_ez4B) | [ceil_half_ez4B :<- [1..<(log2_(2*b0)/2)]]]))
-        == [b0 >= 2]:(-(log2_(2*b0)/4) +sqrt_(b0)*(1/2 +(1/sqrt2)*(1/2-1/2**ceil_(log2_(2*b0)/2))/(1-1/2)))
-        == [b0 >= 2]:(-(log2_(2*b0)/4) +sqrt_(b0)*(1/2 +(1/sqrt2)*(1-2/2**ceil_(log2_(2*b0)/2))))
-        ~= [b0 >= 2]:(-(log2_(2*b0)/4) +sqrt_(b0)*(1/2 +(1/sqrt2)*(1-2/sqrt_(2*b0))))
-        == [b0 >= 2]:(-(log2_(2*b0)/4) +sqrt_(b0)*(1/2 +(1/sqrt2) -1/sqrt_(b0)))
-        == [b0 >= 2]:(-1 -(log2_(2*b0)/4) +sqrt_(b0)*(1/2 +1/sqrt2))
-        == [b0 >= 2]:(-(5+log2_(b0))/4 +sqrt_(b0)*(1 +sqrt2)/2)
-        ~= [b0 >= 2]:(-(5+log2_(b0))/4 +sqrt_(b0)*1.2071067811865475)
-        ~= [b0 >= 2]:(2*sqrt_(b0) +2*sqrt_(2*b0) -log2_(b0) -5)/4
+        ~= [b0 >= 2]:(((sqrt(b0)-1)/2) +sum[((sqrt(b0/2**(ceil_half_ez4B*2-1))-1)/2) | [ceil_half_ez4B :<- [1..<(log2(2*b0)/2)]]])
+        ~= [b0 >= 2]:(-(log2(2*b0)/4) +sqrt(b0)/2 +sum[(sqrt(b0)/2**ceil_half_ez4B/sqrt2) | [ceil_half_ez4B :<- [1..<(log2(2*b0)/2)]]])
+        == [b0 >= 2]:(-(log2(2*b0)/4) +sqrt(b0)*(1/2 +(1/sqrt2)*sum[(1/2**ceil_half_ez4B) | [ceil_half_ez4B :<- [1..<(log2(2*b0)/2)]]]))
+        == [b0 >= 2]:(-(log2(2*b0)/4) +sqrt(b0)*(1/2 +(1/sqrt2)*(1/2-1/2**ceil_(log2(2*b0)/2))/(1-1/2)))
+        == [b0 >= 2]:(-(log2(2*b0)/4) +sqrt(b0)*(1/2 +(1/sqrt2)*(1-2/2**ceil_(log2(2*b0)/2))))
+        ~= [b0 >= 2]:(-(log2(2*b0)/4) +sqrt(b0)*(1/2 +(1/sqrt2)*(1-2/sqrt(2*b0))))
+        == [b0 >= 2]:(-(log2(2*b0)/4) +sqrt(b0)*(1/2 +(1/sqrt2) -1/sqrt(b0)))
+        == [b0 >= 2]:(-1 -(log2(2*b0)/4) +sqrt(b0)*(1/2 +1/sqrt2))
+        == [b0 >= 2]:(-(5+log2(b0))/4 +sqrt(b0)*(1 +sqrt2)/2)
+        ~= [b0 >= 2]:(-(5+log2(b0))/4 +sqrt(b0)*1.2071067811865475)
+        ~= [b0 >= 2]:(2*sqrt(b0) +2*sqrt(2*b0) -log2(b0) -5)/4
         ]
-        [num_Bs_lt_(b0) ~= [b0 >= 2]:(-(5+log2_(b0))/4 +sqrt_(b0)*1.2071067811865475)]
-        [num_Bs_lt_(b0) ~= [b0 >= 2]:(2*sqrt_(b0) +2*sqrt_(2*b0) -log2_(b0) -5)/4]
+        [num_Bs_lt_(b0) ~= [b0 >= 2]:(-(5+log2(b0))/4 +sqrt(b0)*1.2071067811865475)]
+        [num_Bs_lt_(b0) ~= [b0 >= 2]:(2*sqrt(b0) +2*sqrt(2*b0) -log2(b0) -5)/4]
             #num_Bs_lt__rough_():goto
             #[:cmp__exact_vs_both_vs_rough4num_Bs_lt_]:goto
         ######################
         [num_Bs_lt_(2**k)
-        == sum[ceil_div_(ceil_sqrt_(ceil_div_(2**k,2**ez4B))-1,2) | [[2**k >= 2][ceil_half_ez4B :<- [0..<ceil_div_(ceil_log2_(2**k)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)]]]
-        == sum[ceil_div_(ceil_sqrt_(2**(k-max(0, ceil_half_ez4B*2-1)))-1,2) | [[k>=1][ceil_half_ez4B :<- [0..<ceil_div_(k+1,2)]]]]
+        == sum[ceil_div(ceil_sqrt(ceil_div(2**k,2**ez4B))-1,2) | [[2**k >= 2][ceil_half_ez4B :<- [0..<ceil_div(ceil_log2(2**k)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)]]]
+        == sum[ceil_div(ceil_sqrt(2**(k-max(0, ceil_half_ez4B*2-1)))-1,2) | [[k>=1][ceil_half_ez4B :<- [0..<ceil_div(k+1,2)]]]]
         + [k==0]:
             ... == 0
         + [k==1]:
@@ -432,56 +432,56 @@ right_angled_triangle_side_length_difference_ratio
         + [k==2]:
             ... == 2 # {1,1*2} < 4
         + [k>=1]:
-            ... == sum[ceil_div_(ceil_sqrt_(2**(k-max(0, ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B := 0]]
-                + sum[ceil_div_(ceil_sqrt_(2**(k-max(0, ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div_(k+1,2)]]]
-                == ceil_div_(ceil_sqrt_(2**k)-1,2)
-                + sum[ceil_div_(ceil_sqrt_(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div_(k+1,2)]]]
+            ... == sum[ceil_div(ceil_sqrt(2**(k-max(0, ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B := 0]]
+                + sum[ceil_div(ceil_sqrt(2**(k-max(0, ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div(k+1,2)]]]
+                == ceil_div(ceil_sqrt(2**k)-1,2)
+                + sum[ceil_div(ceil_sqrt(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div(k+1,2)]]]
         ]
 
-        [sum[ceil_div_(ceil_sqrt_(2**((k+2)+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div_((k+2)+1,2)]]]
-        == sum[ceil_div_(ceil_sqrt_(2**(k+1-2*(ceil_half_ez4B-1)))-1,2) | [ceil_half_ez4B :<- [1..<1+ceil_div_(k+1,2)]]]
-        == sum[ceil_div_(ceil_sqrt_(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [0..<ceil_div_(k+1,2)]]]
+        [sum[ceil_div(ceil_sqrt(2**((k+2)+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div((k+2)+1,2)]]]
+        == sum[ceil_div(ceil_sqrt(2**(k+1-2*(ceil_half_ez4B-1)))-1,2) | [ceil_half_ez4B :<- [1..<1+ceil_div(k+1,2)]]]
+        == sum[ceil_div(ceil_sqrt(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [0..<ceil_div(k+1,2)]]]
         ]
         [k>=1]:
             [num_Bs_lt_(2**(k+2)) -num_Bs_lt_(2**k)
-            == ceil_div_(ceil_sqrt_(2**(k+2))-1,2)
-            + sum[ceil_div_(ceil_sqrt_(2**((k+2)+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div_((k+2)+1,2)]]]
+            == ceil_div(ceil_sqrt(2**(k+2))-1,2)
+            + sum[ceil_div(ceil_sqrt(2**((k+2)+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div((k+2)+1,2)]]]
             - num_Bs_lt_(2**k)
-            == ceil_div_(ceil_sqrt_(2**(k+2))-1,2)
-            + sum[ceil_div_(ceil_sqrt_(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [0..<ceil_div_(k+1,2)]]]
-            - ceil_div_(ceil_sqrt_(2**k)-1,2)
-            - sum[ceil_div_(ceil_sqrt_(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div_(k+1,2)]]]
-            == ceil_div_(ceil_sqrt_(2**(k+2))-1,2)
-            - ceil_div_(ceil_sqrt_(2**k)-1,2)
-            + sum[ceil_div_(ceil_sqrt_(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B := 0]]
-            == ceil_div_(ceil_sqrt_(2**(k+2))-1,2)
-            + ceil_div_(ceil_sqrt_(2**(k+1))-1,2)
-            - ceil_div_(ceil_sqrt_(2**k)-1,2)
-            ~= (-1 +sqrt_(2**k)*(1+sqrt2))/2
+            == ceil_div(ceil_sqrt(2**(k+2))-1,2)
+            + sum[ceil_div(ceil_sqrt(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [0..<ceil_div(k+1,2)]]]
+            - ceil_div(ceil_sqrt(2**k)-1,2)
+            - sum[ceil_div(ceil_sqrt(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div(k+1,2)]]]
+            == ceil_div(ceil_sqrt(2**(k+2))-1,2)
+            - ceil_div(ceil_sqrt(2**k)-1,2)
+            + sum[ceil_div(ceil_sqrt(2**(k+1-2*ceil_half_ez4B))-1,2) | [ceil_half_ez4B := 0]]
+            == ceil_div(ceil_sqrt(2**(k+2))-1,2)
+            + ceil_div(ceil_sqrt(2**(k+1))-1,2)
+            - ceil_div(ceil_sqrt(2**k)-1,2)
+            ~= (-1 +sqrt(2**k)*(1+sqrt2))/2
             ]
         [num_Bs_lt_(2**0) == 0]
         [num_Bs_lt_(2**1) == 1]
         [num_Bs_lt_(2**2) == 2]
         [k==0]:
-            [ceil_div_(ceil_sqrt_(2**(k+2))-1,2)
-            + ceil_div_(ceil_sqrt_(2**(k+1))-1,2)
-            - ceil_div_(ceil_sqrt_(2**k)-1,2)
+            [ceil_div(ceil_sqrt(2**(k+2))-1,2)
+            + ceil_div(ceil_sqrt(2**(k+1))-1,2)
+            - ceil_div(ceil_sqrt(2**k)-1,2)
             == 1+1-0
             == 2
             == 2-0
             == num_Bs_lt_(2**2) -num_Bs_lt_(2**0)
             == num_Bs_lt_(2**(k+2)) -num_Bs_lt_(2**k)
             ]
-        [@[k :<- [0..]] -> [num_Bs_lt_(2**(k+2)) -num_Bs_lt_(2**k) == ceil_div_(ceil_sqrt_(2**(k+2))-1,2) + ceil_div_(ceil_sqrt_(2**(k+1))-1,2) - ceil_div_(ceil_sqrt_(2**k)-1,2)]]
+        [@[k :<- [0..]] -> [num_Bs_lt_(2**(k+2)) -num_Bs_lt_(2**k) == ceil_div(ceil_sqrt(2**(k+2))-1,2) + ceil_div(ceil_sqrt(2**(k+1))-1,2) - ceil_div(ceil_sqrt(2**k)-1,2)]]
         [@[k :<- [0..]] ->
             [num_Bs_lt_(2**k) -(k%2)
             == num_Bs_lt_(2**k) -num_Bs_lt_(2**(k%2))
-            == sum[(ceil_div_(ceil_sqrt_(2**(i+2))-1,2) + ceil_div_(ceil_sqrt_(2**(i+1))-1,2) - ceil_div_(ceil_sqrt_(2**i)-1,2)) | [i :<- [k%2,2+k%2..<=k-2]]]
-            == ceil_div_(ceil_sqrt_(2**k)-1,2) -ceil_div_(ceil_sqrt_(2**(k%2))-1,2) +sum[ceil_div_(ceil_sqrt_(2**(i+1))-1,2) | [i :<- [k%2,2+k%2..<=k-2]]]
-            == ceil_div_(ceil_sqrt_(2**k)-1,2) -(k%2) +sum[ceil_div_(ceil_sqrt_(2**i)-1,2) | [i :<- [1+k%2,3+k%2..<=k-1]]]
+            == sum[(ceil_div(ceil_sqrt(2**(i+2))-1,2) + ceil_div(ceil_sqrt(2**(i+1))-1,2) - ceil_div(ceil_sqrt(2**i)-1,2)) | [i :<- [k%2,2+k%2..<=k-2]]]
+            == ceil_div(ceil_sqrt(2**k)-1,2) -ceil_div(ceil_sqrt(2**(k%2))-1,2) +sum[ceil_div(ceil_sqrt(2**(i+1))-1,2) | [i :<- [k%2,2+k%2..<=k-2]]]
+            == ceil_div(ceil_sqrt(2**k)-1,2) -(k%2) +sum[ceil_div(ceil_sqrt(2**i)-1,2) | [i :<- [1+k%2,3+k%2..<=k-1]]]
             ]
         ]
-        [@[k :<- [0..]] -> [num_Bs_lt_(2**k) == ceil_div_(ceil_sqrt_(2**k)-1,2) +sum[ceil_div_(ceil_sqrt_(2**i)-1,2) | [i :<- [1+k%2,3+k%2..<=k-1]]]]]
+        [@[k :<- [0..]] -> [num_Bs_lt_(2**k) == ceil_div(ceil_sqrt(2**k)-1,2) +sum[ceil_div(ceil_sqrt(2**i)-1,2) | [i :<- [1+k%2,3+k%2..<=k-1]]]]]
             #num_Bs_lt__zpow_():goto
 
     [b0 :<- [1..]]:
@@ -502,15 +502,15 @@ right_angled_triangle_side_length_difference_ratio
             #
             target: [limit{(total yield)/(total push) | [[j4b0 --> +oo][b0 := bs[j4b0]][b1 := bs[j4b0+1]]]} >= C(bs) > 0]
             #
-            [num_Bs_lt_(b0) ~= [b0 >= 2]:(-(5+log2_(b0))/4 +sqrt_(b0)*1.2071067811865475)]
-            [num_Bs_lt_(b0) ~= [b0 >= 2]:(2*sqrt_(b0) +2*sqrt_(2*b0) -log2_(b0) -5)/4]
+            [num_Bs_lt_(b0) ~= [b0 >= 2]:(-(5+log2(b0))/4 +sqrt(b0)*1.2071067811865475)]
+            [num_Bs_lt_(b0) ~= [b0 >= 2]:(2*sqrt(b0) +2*sqrt(2*b0) -log2(b0) -5)/4]
                 #num_Bs_lt__rough_():goto
             [(total push)
             == (num_Bs_lt_(b1)-num_Bs_lt_(b0))
-            ~= (-log2_(b1/b0)/4 +(sqrt_(b1) -sqrt_(b0))*(1+sqrt2)/2)
-            ~= (-log2_(b1/b0)/4 +(sqrt_(b1) -sqrt_(b0))*1.2071067811865475)
+            ~= (-log2(b1/b0)/4 +(sqrt(b1) -sqrt(b0))*(1+sqrt2)/2)
+            ~= (-log2(b1/b0)/4 +(sqrt(b1) -sqrt(b0))*1.2071067811865475)
             ]
-            [(total push) ~= (-log2_(b1/b0)/4 +(sqrt_(b1) -sqrt_(b0))*1.2071067811865475)]
+            [(total push) ~= (-log2(b1/b0)/4 +(sqrt(b1) -sqrt(b0))*1.2071067811865475)]
             #
             ???[hypotenuse[k-1] ~= 2*pi*k]???
             ???[num_right_angled_triangles__hypotenuse_lt_lowerbound4hypotenuse5lowerbound4B_(b0) ~= lowerbound4hypotenuse5lowerbound4B_(b0)/(2*pi)]???
@@ -519,24 +519,24 @@ right_angled_triangle_side_length_difference_ratio
             ???[(total yield)
             == (num_right_angled_triangles__hypotenuse_lt_lowerbound4hypotenuse5lowerbound4B_(b1)-num_right_angled_triangles__hypotenuse_lt_lowerbound4hypotenuse5lowerbound4B_(b0))
             ~= (lowerbound4hypotenuse5lowerbound4B_(b1) -lowerbound4hypotenuse5lowerbound4B_(b0))/(2*pi)
-            !!  [lowerbound4hypotenuse5lowerbound4B_(b) =[def]= (1+2*b) + 2*ceil_sqrt_(b*(1+b) ///2)]
+            !!  [lowerbound4hypotenuse5lowerbound4B_(b) =[def]= (1+2*b) + 2*ceil_sqrt(b*(1+b) ///2)]
             ~= (b1-b0)*(2+sqrt2)/(2*pi)
             ~= (b1-b0)*0.5433889652230672
             ]???
             ???[(total yield) ~= ((b1-b0)*0.5433889652230672)]???
             ???[(total yield)/(total push)
-            ~= ((b1-b0)*0.5433889652230672)/(-log2_(b1/b0)/4 +(sqrt_(b1) -sqrt_(b0))*1.2071067811865475)
-            ~= ((b1-b0)*0.5433889652230672)/((sqrt_(b1) -sqrt_(b0))*1.2071067811865475)
-            ~= ((b1-b0)*(2+sqrt2)/(2*pi))/((sqrt_(b1) -sqrt_(b0))*(1+sqrt2)/2)
-            ~= ((b1-b0)*sqrt2)/((sqrt_(b1) -sqrt_(b0))*pi)
+            ~= ((b1-b0)*0.5433889652230672)/(-log2(b1/b0)/4 +(sqrt(b1) -sqrt(b0))*1.2071067811865475)
+            ~= ((b1-b0)*0.5433889652230672)/((sqrt(b1) -sqrt(b0))*1.2071067811865475)
+            ~= ((b1-b0)*(2+sqrt2)/(2*pi))/((sqrt(b1) -sqrt(b0))*(1+sqrt2)/2)
+            ~= ((b1-b0)*sqrt2)/((sqrt(b1) -sqrt(b0))*pi)
 
-            ~= (sqrt2/pi)*(sqrt_(b1) +sqrt_(b0))
-            ~= 0.4501581580785531 *(sqrt_(b1) +sqrt_(b0))
-            ~= 0.4501581580785531 *(sqrt_(bs[+oo])*2)
+            ~= (sqrt2/pi)*(sqrt(b1) +sqrt(b0))
+            ~= 0.4501581580785531 *(sqrt(b1) +sqrt(b0))
+            ~= 0.4501581580785531 *(sqrt(bs[+oo])*2)
             !! bs growing...
             --> +oo
             ]???
-            ???[(total yield)/(total push) ~= (sqrt2/pi)*(sqrt_(b1) +sqrt_(b0))]???
+            ???[(total yield)/(total push) ~= (sqrt2/pi)*(sqrt(b1) +sqrt(b0))]???
                 # [:ratio_of_num_yields_to_num_pushes_per_layer_is_divergent______layered_hypotenuse_generation]:here
             ???[exits C(bs)]???
 
@@ -617,9 +617,9 @@ TODO:我的猜想:证明:
     [num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse, case=coprime_ratio) ~= (max1_hypotenuse/(2*pi))]
     [num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse, case=non_coprime_triple)
     == sum[k*(num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse/k, case=coprime_ratio) -num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse/(k+1), case=coprime_ratio)) | [k :<- [1..]]]
-    ~= sum[k*(num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse/k, case=coprime_ratio) -num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse/(k+1), case=coprime_ratio)) | [k :<- [1..<sqrt_(max1_hypotenuse)]]] + sum[max1_hypotenuse/hypotenuse[i] | [i :<- [1..][hypotenuse[i] < sqrt_(max1_hypotenuse)]]]
-    ~= max1_hypotenuse/2pi*sum{1/k | [k :<- [1..<sqrt_(max1_hypotenuse)]]} + max1_hypotenuse/2pi*sum{1/i | [i :<- [1..<sqrt_(max1_hypotenuse)/2pi]]}
-    ~= max1_hypotenuse/2pi*(ln_(sqrt_(max1_hypotenuse)) +ln_(sqrt_(max1_hypotenuse)/2pi))
+    ~= sum[k*(num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse/k, case=coprime_ratio) -num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse/(k+1), case=coprime_ratio)) | [k :<- [1..<sqrt(max1_hypotenuse)]]] + sum[max1_hypotenuse/hypotenuse[i] | [i :<- [1..][hypotenuse[i] < sqrt(max1_hypotenuse)]]]
+    ~= max1_hypotenuse/2pi*sum{1/k | [k :<- [1..<sqrt(max1_hypotenuse)]]} + max1_hypotenuse/2pi*sum{1/i | [i :<- [1..<sqrt(max1_hypotenuse)/2pi]]}
+    ~= max1_hypotenuse/2pi*(ln_(sqrt(max1_hypotenuse)) +ln_(sqrt(max1_hypotenuse)/2pi))
     ~= (max1_hypotenuse/2pi)*ln_(max1_hypotenuse/2pi)
     ]
     [num_right_angled_triangles__hypotenuse_lt_(max1_hypotenuse, case=non_coprime_triple) ~= (max1_hypotenuse/2pi)*ln_(max1_hypotenuse/2pi)]
@@ -802,19 +802,19 @@ fail:try to proof:min_hypotenuse_is_monotone_nondecreasing_with_respect_to___flo
             <==> [floor_half_sqrt__odd4B(+0,_) >= 1]
     [[b: [(+1,+0) < (0,+1)]] <-> [floor_half_sqrt__odd4B(+0,_) > [ez4B(_,+0) == 0]]]
 
-    !! [pre_min_sqrt__plus_A_B_or_half := ceil_sqrt_((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0)]
+    !! [pre_min_sqrt__plus_A_B_or_half := ceil_sqrt((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0)]
     * [ez4B==0]:
-        [pre_min_sqrt__plus_A_B_or_half == ceil_sqrt_((pre_min_a + b) >> 1) == ceil_sqrt_((sqrt__odd4B**2+1)///2)]
+        [pre_min_sqrt__plus_A_B_or_half == ceil_sqrt((pre_min_a + b) >> 1) == ceil_sqrt((sqrt__odd4B**2+1)///2)]
             # [:condition4_WW1_eq_2VV~~[w**2+1==2*v**2]=>???]:goto
     * [ez4B > 0]:
         [ez4B %2 == 1]
-        [pre_min_sqrt__plus_A_B_or_half == ceil_sqrt_(pre_min_a + b) | 1 == 1|ceil_sqrt_(1+2*sqrt__odd4B**2 *4**((ez4B-1)///2))]
+        [pre_min_sqrt__plus_A_B_or_half == ceil_sqrt(pre_min_a + b) | 1 == 1|ceil_sqrt(1+2*sqrt__odd4B**2 *4**((ez4B-1)///2))]
             # [:condition4_2WW1_eq_VV~~[2*w**2+1==v**2]=>???]:goto
 
-    !! [pre_min_sqrt__plus_A_B_or_half := ceil_sqrt_((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0)]
+    !! [pre_min_sqrt__plus_A_B_or_half := ceil_sqrt((pre_min_a + b) >> (ez4B==0)) | (ez4B > 0)]
     !! [[b: [(+1,+0) < (0,+1)]] <-> [floor_half_sqrt__odd4B(+0,_) > [ez4B(_,+0) == 0]]]
     [[floor_half_sqrt__odd4B(+0,_) > [ez4B(_,+0) == 0]] -> [pre_min_sqrt__plus_A_B_or_half: [(+1,+0) <= (0,+1)]]]
-        # 『<=』<<==『ceil_sqrt_』
+        # 『<=』<<==『ceil_sqrt』
     !! [min_sqrt__plus_A_B_or_half := min{sqrt__plus_A_B_or_half | [[sqrt__plus_A_B_or_half :<- [pre_min_sqrt__plus_A_B_or_half..]][gcd(sqrt__plus_A_B_or_half,b) == 1]]}]
             # [:try_to_find_counterexample_in_src_code]:goto
     ???TODO
@@ -2906,31 +2906,36 @@ iter_right_angled_triangle_side_length_triples_
 '''.split()#'''
 __all__
 
-from itertools import count as count_
-from itertools import takewhile
-from math import sqrt as sqrt_, log2 as log2_
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.tiny_.funcs import fst
 
-from seed.math.gcd import gcd
-from seed.math.gcd import gcd_ex
+    from itertools import count
+    from itertools import takewhile
+    from math import sqrt, log2
 
-from seed.math.floor_ceil import ceil_log2 as ceil_log2_
-from seed.math.floor_ceil import ceil_sqrt as ceil_sqrt_
-from seed.math.floor_ceil import ceil_div as ceil_div_
-#xxx from seed.math.floor_ceil import perfect_sqrt as perfect_sqrt_
-from seed.math.floor_ceil import perfect_kth_root_
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.tiny import fst
-from seed.math.sign_of import sign_of
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-from seed.math.GaussInteger import iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt
-#def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt(may_max1_hypotenuse, /, *, SML_vs_HOE, to_sort, turnoff__coprime):
-from seed.math.right_angled_triangle_infos__sorted_by import iter_right_angled_triangles_with_coprime_side_length___ST_HOE_LSM__sorted_by__
-#def iter_right_angled_triangles_with_coprime_side_length___ST_HOE_LSM__sorted_by__(nm4fst_key, nm4snd_key, /, *, raw_output=False, may_ST4continue=None):
-from seed.math.right_angled_triangle_infos__sorted_by import iter_right_angled_triangle_infos_with_coprime_side_length___ST_HOE_LSM__sorted_by__
-#def iter_right_angled_triangle_infos_with_coprime_side_length___ST_HOE_LSM__sorted_by__(nm4fst_key, nm4snd_key, output_fmt__or__output_formatter__or__SML_vs_HOE, /, *, may_ST4continue=None):
+    from seed.math.gcd import gcd
+    from seed.math.gcd import gcd_ex
+
+    from seed.math.floor_ceil_tools.fc_kth_root import ceil_sqrt
+    from seed.math.floor_ceil_tools.fc_log import ceil_log2
+    from seed.math.floor_ceil_tools.fc_perfect import perfect_kth_root_
+    from seed.math.floor_ceil_tools.fc_div import ceil_div
 
 
-from seed.types.Heap import Heap, HeapWithKey
+    from seed.math.sign_of import sign_of
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.GaussInteger import iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt
+    #def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_lt(may_max1_hypotenuse, /, *, SML_vs_HOE, to_sort, turnoff__coprime):
+    from seed.math.right_angled_triangle_infos__sorted_by import iter_right_angled_triangles_with_coprime_side_length___ST_HOE_LSM__sorted_by__
+    #def iter_right_angled_triangles_with_coprime_side_length___ST_HOE_LSM__sorted_by__(nm4fst_key, nm4snd_key, /, *, raw_output=False, may_ST4continue=None):
+    from seed.math.right_angled_triangle_infos__sorted_by import iter_right_angled_triangle_infos_with_coprime_side_length___ST_HOE_LSM__sorted_by__
+    #def iter_right_angled_triangle_infos_with_coprime_side_length___ST_HOE_LSM__sorted_by__(nm4fst_key, nm4snd_key, output_fmt__or__output_formatter__or__SML_vs_HOE, /, *, may_ST4continue=None):
+
+
+    from seed.types.Heap import Heap, HeapWithKey
 #class Heap(IHeap):
 #    def __init__(self, iterable, *
 #            , sorted=False, copy=False, are_heap_items=True
@@ -2939,6 +2944,7 @@ from seed.types.Heap import Heap, HeapWithKey
 #    def __init__(self, obj2key, iterable, *
 #            , sorted=False, copy=True, are_heap_items=False):
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -3065,23 +3071,23 @@ def mk__min_sqrt__plus_A_B_or_half_(floor_half_sqrt__odd4B, ceil_half_ez4B, /):
 
     ######################
     if 0:
-        min_sqrt__plus_A_B_or_half = ceil_sqrt_((sqrt__odd4B**2 * 2**ez4B + 1) >> (ez4B==0))
-        min_sqrt__plus_A_B_or_half = ceil_sqrt_((sqrt__odd4B**2 * 2**ez4B + 1) >> 1) if (ez4B==0) else ceil_sqrt_((sqrt__odd4B**2 * 2**ez4B + 1))
-        min_sqrt__plus_A_B_or_half = ceil_sqrt_((sqrt__odd4B**2 + 1) >> 1) if (ez4B==0) else ceil_sqrt_((sqrt__odd4B * 2**((ez4B-1)//2))**2 *2 + 1)
-        min_sqrt__plus_A_B_or_half = ceil_div_(ceil_sqrt_((sqrt__odd4B**2 + 1) *2), 2) if (ez4B==0) else ceil_sqrt_((sqrt__odd4B * 2**((ez4B-1)//2))**2 *2)
+        min_sqrt__plus_A_B_or_half = ceil_sqrt((sqrt__odd4B**2 * 2**ez4B + 1) >> (ez4B==0))
+        min_sqrt__plus_A_B_or_half = ceil_sqrt((sqrt__odd4B**2 * 2**ez4B + 1) >> 1) if (ez4B==0) else ceil_sqrt((sqrt__odd4B**2 * 2**ez4B + 1))
+        min_sqrt__plus_A_B_or_half = ceil_sqrt((sqrt__odd4B**2 + 1) >> 1) if (ez4B==0) else ceil_sqrt((sqrt__odd4B * 2**((ez4B-1)//2))**2 *2 + 1)
+        min_sqrt__plus_A_B_or_half = ceil_div(ceil_sqrt((sqrt__odd4B**2 + 1) *2), 2) if (ez4B==0) else ceil_sqrt((sqrt__odd4B * 2**((ez4B-1)//2))**2 *2)
         # [:condition4_WW1_eq_2VV~~[w**2+1==2*v**2]=>???]:goto
         #
-        # !! [ceil_sqrt_(x**2 *2) is irrational]
-        # [ceil_sqrt_(x**2 *2 +1) == ceil_sqrt_(x**2 *2)]
-        # [ceil_sqrt_((sqrt__odd4B * 2**((ez4B-1)///2))**2 *2 +1) == ceil_sqrt_((sqrt__odd4B * 2**((ez4B-1)///2))**2 *2)]
-        #   [sqrt__odd4B := 1][ceil_half_ez4B :<- [1..]] => [rhs == ceil_(sqrt_(2) *2**(ceil_half_ez4B-1))]
+        # !! [ceil_sqrt(x**2 *2) is irrational]
+        # [ceil_sqrt(x**2 *2 +1) == ceil_sqrt(x**2 *2)]
+        # [ceil_sqrt((sqrt__odd4B * 2**((ez4B-1)///2))**2 *2 +1) == ceil_sqrt((sqrt__odd4B * 2**((ez4B-1)///2))**2 *2)]
+        #   [sqrt__odd4B := 1][ceil_half_ez4B :<- [1..]] => [rhs == ceil_(sqrt(2) *2**(ceil_half_ez4B-1))]
         #       #无法简化
         #
-        # !! [ceil_sqrt_(x /2) == ceil_(sqrt_(x*2) /2) == ceil_(ceil_sqrt_(x*2) /2)]
-        # [ceil_sqrt_((sqrt__odd4B**2 + 1) ///2) === ceil_(ceil_sqrt_((sqrt__odd4B**2 + 1) *2) /2)]
-            # [ceil_sqrt_((1**2 + 1) ///2) == 1 == ceil_(ceil_sqrt_((1**2 + 1) *2) /2)]
-            # [ceil_sqrt_((3**2 + 1) ///2) == 3 == ceil_(ceil_sqrt_((3**2 + 1) *2) /2)]
-            # [ceil_sqrt_((5**2 + 1) ///2) == 4 == ceil_(ceil_sqrt_((5**2 + 1) *2) /2)]
+        # !! [ceil_sqrt(x /2) == ceil_(sqrt(x*2) /2) == ceil_(ceil_sqrt(x*2) /2)]
+        # [ceil_sqrt((sqrt__odd4B**2 + 1) ///2) === ceil_(ceil_sqrt((sqrt__odd4B**2 + 1) *2) /2)]
+            # [ceil_sqrt((1**2 + 1) ///2) == 1 == ceil_(ceil_sqrt((1**2 + 1) *2) /2)]
+            # [ceil_sqrt((3**2 + 1) ///2) == 3 == ceil_(ceil_sqrt((3**2 + 1) *2) /2)]
+            # [ceil_sqrt((5**2 + 1) ///2) == 4 == ceil_(ceil_sqrt((5**2 + 1) *2) /2)]
         return min_sqrt__plus_A_B_or_half
     ######################
     # [a%2 == 1]
@@ -3095,7 +3101,7 @@ def mk__min_sqrt__plus_A_B_or_half_(floor_half_sqrt__odd4B, ceil_half_ez4B, /):
         # [b%2 == 1]
         # [min_plus_A_B%2 == 0]
         min_plus_A_B_or_half = min_plus_A_B >>1
-    min_sqrt__plus_A_B_or_half = ceil_sqrt_(min_plus_A_B_or_half)
+    min_sqrt__plus_A_B_or_half = ceil_sqrt(min_plus_A_B_or_half)
     return min_sqrt__plus_A_B_or_half
 
 def _std_with_xxx_(with_side_length_ratio, with_params, /):
@@ -3109,10 +3115,10 @@ def iter_right_angled_triangle_side_length_difference_ratio__given_B_(floor_half
     (with_side_length_ratio, with_params) = _std_with_xxx_(with_side_length_ratio, with_params)
 
     (min_sqrt__plus_A_B_or_half, step) = mk__min_sqrt__plus_A_B_or_half__and_step___care_odd_(floor_half_sqrt__odd4B, ceil_half_ez4B)
-    for sqrt__plus_A_B_or_half in count_(min_sqrt__plus_A_B_or_half, step):
+    for sqrt__plus_A_B_or_half in count(min_sqrt__plus_A_B_or_half, step):
         try:
             (a, b) = mk__right_angled_triangle_side_length_difference_ratio_(floor_half_sqrt__odd4B, ceil_half_ez4B, sqrt__plus_A_B_or_half)
-            # [[gcd(a,b) == 1][sqrt_(2*(a+b)*b) %1 == 0][a%2 == 1][a >= 1][b >= 1]]
+            # [[gcd(a,b) == 1][sqrt(2*(a+b)*b) %1 == 0][a%2 == 1][a >= 1][b >= 1]]
         except Bad___gcd_A_B__gt1:
             continue
             pass
@@ -3122,7 +3128,7 @@ def iter_right_angled_triangle_side_length_difference_ratio__given_B_(floor_half
         yield result_ex
 def _mk_result_ex5A_B_(floor_half_sqrt__odd4B, ceil_half_ez4B, sqrt__plus_A_B_or_half, a, b, /, *, with_side_length_ratio, with_params):
     '-> (a,b) | ((a,b), side_length_ratio) | ((a,b), side_length_ratio, params)'
-    # [[gcd(a,b) == 1][sqrt_(2*(a+b)*b) %1 == 0][a%2 == 1][a >= 1][b >= 1]]
+    # [[gcd(a,b) == 1][sqrt(2*(a+b)*b) %1 == 0][a%2 == 1][a >= 1][b >= 1]]
     #(with_side_length_ratio, with_params) = _std_with_xxx_(with_side_length_ratio, with_params)
 
     if not with_side_length_ratio:
@@ -3141,7 +3147,7 @@ def _mk_result_ex5A_B_(floor_half_sqrt__odd4B, ceil_half_ez4B, sqrt__plus_A_B_or
 
 
 def mk__right_angled_triangle_side_length_difference_ratio_(floor_half_sqrt__odd4B, ceil_half_ez4B, sqrt__plus_A_B_or_half, /):
-    '-> right_angled_triangle_side_length_difference_ratio/(a,b) #[b/a =[def]= (斜边-中边)/(中边-短边)] #[[gcd(a,b) == 1][sqrt_(2*(a+b)*b) %1 == 0][a%2 == 1][a >= 1][b >= 1]]'
+    '-> right_angled_triangle_side_length_difference_ratio/(a,b) #[b/a =[def]= (斜边-中边)/(中边-短边)] #[[gcd(a,b) == 1][sqrt(2*(a+b)*b) %1 == 0][a%2 == 1][a >= 1][b >= 1]]'
     (sqrt__odd4B, odd4B, ez4B, b) = mk____B_ex_(floor_half_sqrt__odd4B, ceil_half_ez4B)
     # [sqrt__odd4B >= 1]
     # [sqrt__odd4B %2 == 1]
@@ -3163,8 +3169,8 @@ def mk__right_angled_triangle_side_length_difference_ratio_(floor_half_sqrt__odd
     # !! [[ez4B == 0]or[ez4B %2 == 1]]
     # [(1+ez4B+(ez4B==0)) %2 == 0]
     # [(2*(a+b)*b) == (2**((1+ez4B+(ez4B==0))///2) *sqrt__plus_A_B_or_half*sqrt__odd4B)**2]
-    # [sqrt_(2*(a+b)*b) == (2**((1+ez4B+(ez4B==0))///2) *sqrt__plus_A_B_or_half*sqrt__odd4B)]
-    # [sqrt_(2*(a+b)*b) %1 == 0]
+    # [sqrt(2*(a+b)*b) == (2**((1+ez4B+(ez4B==0))///2) *sqrt__plus_A_B_or_half*sqrt__odd4B)]
+    # [sqrt(2*(a+b)*b) %1 == 0]
 
     ######################
     a = plus_A_B -b
@@ -3188,7 +3194,7 @@ def mk__right_angled_triangle_side_length_difference_ratio_(floor_half_sqrt__odd
     # [a >= 1]
     # [a%2 == 1]
     # [gcd(a,b) == 1]
-    # [sqrt_(2*(a+b)*b) %1 == 0]
+    # [sqrt(2*(a+b)*b) %1 == 0]
     return (a, b)
 
 def mk__right_angled_triangle_side_length_ratio5difference_ratio_(a, b, /):
@@ -3198,18 +3204,18 @@ def mk__right_angled_triangle_side_length_ratio5difference_ratio_(a, b, /):
     # [a >= 1]
     # [a%2 == 1]
     # [gcd(a,b) == 1]
-    # [sqrt_(2*(a+b)*b) %1 == 0]
+    # [sqrt(2*(a+b)*b) %1 == 0]
     check_odd_pint(a)
     check_int_ge(1, b)
     assert gcd(a, b) == 1
     ######################
-    # [x/y == ((a+b) + sqrt_(2*(a+b)*b))]
+    # [x/y == ((a+b) + sqrt(2*(a+b)*b))]
     ######################
     plus_A_B = a+b
     mul_2B_plus_A_B = 2*b*plus_A_B
     #sqrt__mul_2B_plus_A_B = perfect_sqrt_(mul_2B_plus_A_B)
     sqrt__mul_2B_plus_A_B = perfect_kth_root_(2, mul_2B_plus_A_B)
-        # !! [sqrt_(2*(a+b)*b) %1 == 0]
+        # !! [sqrt(2*(a+b)*b) %1 == 0]
     #assert (plus_A_B > sqrt__mul_2B_plus_A_B) is (a > b)
     assert (b < sqrt__mul_2B_plus_A_B)
     div_x_y = plus_A_B +sqrt__mul_2B_plus_A_B
@@ -3222,29 +3228,29 @@ def mk__right_angled_triangle_side_length_ratio5difference_ratio_(a, b, /):
     middle_side = x
     long_side = x+b*y
     ######################
-    # [x/y == ((a+b) - sqrt_(2*(a+b)*b))]:
-    #   [x/y -a == (b - sqrt_(2*(a+b)*b)) < 0]
+    # [x/y == ((a+b) - sqrt(2*(a+b)*b))]:
+    #   [x/y -a == (b - sqrt(2*(a+b)*b)) < 0]
     #   [x/y -a < 0]
     #   [short_side == x-a*y < 0]
     ######################
-    # !! [x/y == ((a+b) + sqrt_(2*(a+b)*b))]
-    # [x/y -a == (b + sqrt_(2*(a+b)*b)) > 0]
+    # !! [x/y == ((a+b) + sqrt(2*(a+b)*b))]
+    # [x/y -a == (b + sqrt(2*(a+b)*b)) > 0]
     # [x/y -a > 0]
     # [short_side == x-a*y > 0]
     # [0 < x-a*y < x < x+b*y]
     # [0 < short_side < middle_side < long_side]
     ######################
-    # [middle_side**2 == x**2 == div_x_y**2 == ((a+b) + sqrt_(2*(a+b)*b))**2 == (a+b)**2 +(2*(a+b)*b) +2*((a+b) * sqrt_(2*(a+b)*b)) == (a+b)* ((a+b) +2*b +2*sqrt_(2*(a+b)*b))]
-    # [long_side**2 -short_side**2 == (b+a)*y * (2*x +(b-a)*y) == (b+a) * (2*div_x_y +(b-a)) == (b+a) * (2*((a+b) + sqrt_(2*(a+b)*b)) +(b-a)) == (b+a) * (a+3*b + 2*sqrt_(2*(a+b)*b)) == middle_side**2]
+    # [middle_side**2 == x**2 == div_x_y**2 == ((a+b) + sqrt(2*(a+b)*b))**2 == (a+b)**2 +(2*(a+b)*b) +2*((a+b) * sqrt(2*(a+b)*b)) == (a+b)* ((a+b) +2*b +2*sqrt(2*(a+b)*b))]
+    # [long_side**2 -short_side**2 == (b+a)*y * (2*x +(b-a)*y) == (b+a) * (2*div_x_y +(b-a)) == (b+a) * (2*((a+b) + sqrt(2*(a+b)*b)) +(b-a)) == (b+a) * (a+3*b + 2*sqrt(2*(a+b)*b)) == middle_side**2]
     # [long_side**2 -short_side**2 == middle_side**2]
     # [short_side**2 +middle_side**2 == long_side**2]
     ######################
-    # !! [x/y == ((a+b) + sqrt_(2*(a+b)*b))]
-    # [gcd(short_side, middle_side) == gcd(x-a*y,x) == gcd(a*y,x) == gcd(a*1,div_x_y) == gcd(a,((a+b) + sqrt_(2*(a+b)*b))) == gcd(a,(b + sqrt_(2*(a+b)*b)))]
+    # !! [x/y == ((a+b) + sqrt(2*(a+b)*b))]
+    # [gcd(short_side, middle_side) == gcd(x-a*y,x) == gcd(a*y,x) == gcd(a*1,div_x_y) == gcd(a,((a+b) + sqrt(2*(a+b)*b))) == gcd(a,(b + sqrt(2*(a+b)*b)))]
     # !! [gcd(a,b) == 1]
-    # [gcd(a,(b + sqrt_(2*(a+b)*b))*(b - sqrt_(2*(a+b)*b))) == gcd(a,(b**2 - (2*(a+b)*b))) == gcd(a,b*(2*a+b)) == 1]
-    # [0 < gcd(a,(b + sqrt_(2*(a+b)*b))) <= gcd(a,(b + sqrt_(2*(a+b)*b))*(b - sqrt_(2*(a+b)*b))) == 1]
-    # [gcd(a,(b + sqrt_(2*(a+b)*b))) == 1]
+    # [gcd(a,(b + sqrt(2*(a+b)*b))*(b - sqrt(2*(a+b)*b))) == gcd(a,(b**2 - (2*(a+b)*b))) == gcd(a,b*(2*a+b)) == 1]
+    # [0 < gcd(a,(b + sqrt(2*(a+b)*b))) <= gcd(a,(b + sqrt(2*(a+b)*b))*(b - sqrt(2*(a+b)*b))) == 1]
+    # [gcd(a,(b + sqrt(2*(a+b)*b))) == 1]
     # [gcd(short_side, middle_side) == 1]
     ######################
     # !! [gcd(short_side, middle_side) == 1]
@@ -3402,12 +3408,12 @@ def layered_______iter_right_angled_triangle_side_length_ratios__ver1__differenc
     b0, b1 = 0, 1
     while 1:
         b0 = b1
-        #bug:b1 += ceil_log2_(b1)
-        #   [ceil_log2_(1) == 0]
-        b1 += 1+ceil_log2_(b1)
+        #bug:b1 += ceil_log2(b1)
+        #   [ceil_log2(1) == 0]
+        b1 += 1+ceil_log2(b1)
             # !! [:ratio_of_num_yields_to_num_pushes_per_layer_is_divergent______layered_hypotenuse_generation]:goto
             # ==>> [(b1-b0) as small as possible]
-            # see:_iter_basic_params__bound_by_b0_b1_:『for ceil_half_ez4B in range(max1__ceil_half_ez4b1):』==>> 『b1 += 1+ceil_log2_(b1)』
+            # see:_iter_basic_params__bound_by_b0_b1_:『for ceil_half_ez4B in range(max1__ceil_half_ez4b1):』==>> 『b1 += 1+ceil_log2(b1)』
             #
 
         for (floor_half_sqrt__odd4B, ceil_half_ez4B) in _iter_basic_params__bound_by_b0_b1_(b0, b1):
@@ -3450,17 +3456,17 @@ def layered_______iter_right_angled_triangle_side_length_ratios__ver1__differenc
 
 
 def lowerbound4hypotenuse5lowerbound4B_(b, /):
-    # [lowerbound4hypotenuse5lowerbound4B_(b) =[def]= (1+2*b) + 2*ceil_sqrt_(b*(1+b) ///2)]
-    return (1+2*b) + 2*ceil_sqrt_(b*(1+b) //2)
+    # [lowerbound4hypotenuse5lowerbound4B_(b) =[def]= (1+2*b) + 2*ceil_sqrt(b*(1+b) ///2)]
+    return (1+2*b) + 2*ceil_sqrt(b*(1+b) //2)
 def max1__ceil_half_ez4B_(b0, /):
-    return ceil_div_(ceil_log2_(b0)+1,2) if b0 >= 2 else 0
+    return ceil_div(ceil_log2(b0)+1,2) if b0 >= 2 else 0
 def max1__floor_half_sqrt__odd4B_(b0, ez4B, /):
-    return ceil_div_(ceil_sqrt_(ceil_div_(b0,2**ez4B))-1,2)
+    return ceil_div(ceil_sqrt(ceil_div(b0,2**ez4B))-1,2)
 def _iter_basic_params__bound_by_b0_b1_(b0, b1, /):
     ######################
-    # [all_As___B_eq_(b) =[def]= {a | [[a :<- [1,3..]][gcd(a,b) == 1][a%2 == 1][(a+b)%2=!=b%2][sqrt__plus_A_B_or_half := sqrt_((a+b) >> (b%2==1))][sqrt__plus_A_B_or_half %1 == 0]]}]
+    # [all_As___B_eq_(b) =[def]= {a | [[a :<- [1,3..]][gcd(a,b) == 1][a%2 == 1][(a+b)%2=!=b%2][sqrt__plus_A_B_or_half := sqrt((a+b) >> (b%2==1))][sqrt__plus_A_B_or_half %1 == 0]]}]
     # [all_Bs_lt_(b0) =[def]= {b | [[floor_half_sqrt__odd4B :<- [0..]][ceil_half_ez4B :<- [0..]][odd4B := (floor_half_sqrt__odd4B*2+1)**2][ez4B := max(0, ceil_half_ez4B*2-1)][b := odd4B * 2**ez4B][b < b0]]}]
-    # [num_Bs_lt_(b0) == len{(floor_half_sqrt__odd4B,ceil_half_ez4B) | [[b0 >= 2][ceil_half_ez4B :<- [0..<ceil_div_(ceil_log2_(b0)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)][floor_half_sqrt__odd4B :<- [0..<ceil_div_(ceil_sqrt_(ceil_div_(b0,2**ez4B))-1,2)]]]}]
+    # [num_Bs_lt_(b0) == len{(floor_half_sqrt__odd4B,ceil_half_ez4B) | [[b0 >= 2][ceil_half_ez4B :<- [0..<ceil_div(ceil_log2(b0)+1,2)]][ez4B := max(0, ceil_half_ez4B*2-1)][floor_half_sqrt__odd4B :<- [0..<ceil_div(ceil_sqrt(ceil_div(b0,2**ez4B))-1,2)]]]}]
         # ==>> max1__ceil_half_ez4B_()
         # ==>> max1__floor_half_sqrt__odd4B_()
     ######################
@@ -3469,7 +3475,7 @@ def _iter_basic_params__bound_by_b0_b1_(b0, b1, /):
     #if 0b001:print(f'max1__ceil_half_ez4b0={max1__ceil_half_ez4b0}')
     #if 0b001:print(f'max1__ceil_half_ez4b1={max1__ceil_half_ez4b1}')
     for ceil_half_ez4B in range(max1__ceil_half_ez4b1):
-        # 『for ceil_half_ez4B in range(max1__ceil_half_ez4b1):』==>> 『b1 += 1+ceil_log2_(b1)』
+        # 『for ceil_half_ez4B in range(max1__ceil_half_ez4b1):』==>> 『b1 += 1+ceil_log2(b1)』
         ez4B = max(0, ceil_half_ez4B*2-1)
         max1__floor_half_sqrt__odd4b0 = max1__floor_half_sqrt__odd4B_(b0, ez4B) if ceil_half_ez4B < max1__ceil_half_ez4b0 else 0
         max1__floor_half_sqrt__odd4b1 = max1__floor_half_sqrt__odd4B_(b1, ez4B)
@@ -3579,8 +3585,8 @@ def _LSM2basic_params_ex(LSM, /):
     assert ez4B == 0 or ez4B&1 == 1
     sqrt__odd4B = perfect_kth_root_(2, odd4B)
     floor_half_sqrt__odd4B = sqrt__odd4B//2
-    #bug:ceil_half_ez4B = ceil_div_(2, ez4B)
-    ceil_half_ez4B = ceil_div_(ez4B, 2)
+    #bug:ceil_half_ez4B = ceil_div(2, ez4B)
+    ceil_half_ez4B = ceil_div(ez4B, 2)
     basic_params = (floor_half_sqrt__odd4B, ceil_half_ez4B)
     ab = (a, b)
     side_length_ratio = SML = _SML5LSM(LSM)
@@ -3684,30 +3690,30 @@ def num_Bs_ex__lt_(b0, /, *, exact_vs_both_vs_rough):
 def num_Bs_lt__exact_and_rough_(b0, /):
     return (num_Bs_lt__exact_(b0), num_Bs_lt__rough_(b0))
 def num_Bs_lt__exact_(b0, /):
-    '[num_Bs_lt_(b0) == [b0 >= 2]:(ceil_div_(ceil_sqrt_(b0)-1,2) +sum[ceil_div_(ceil_sqrt_(ceil_div_(b0,2**(ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div_(ceil_log2_(b0)+1,2)]]])]'
+    '[num_Bs_lt_(b0) == [b0 >= 2]:(ceil_div(ceil_sqrt(b0)-1,2) +sum[ceil_div(ceil_sqrt(ceil_div(b0,2**(ceil_half_ez4B*2-1)))-1,2) | [ceil_half_ez4B :<- [1..<ceil_div(ceil_log2(b0)+1,2)]]])]'
     if not b0 >= 2:
         return 0
-    return ceil_div_(ceil_sqrt_(b0)-1,2) +sum(ceil_div_(ceil_sqrt_(ceil_div_(b0,2**(ceil_half_ez4B*2-1)))-1,2) for ceil_half_ez4B in range(1,ceil_div_(ceil_log2_(b0)+1,2)))
+    return ceil_div(ceil_sqrt(b0)-1,2) +sum(ceil_div(ceil_sqrt(ceil_div(b0,2**(ceil_half_ez4B*2-1)))-1,2) for ceil_half_ez4B in range(1,ceil_div(ceil_log2(b0)+1,2)))
 def num_Bs_lt__rough_(b0, /):
-    '[num_Bs_lt_(b0) ~= [b0 >= 2]:(2*sqrt_(b0) +2*sqrt_(2*b0) -log2_(b0) -5)/4]'
-    '[num_Bs_lt_(b0) ~= [b0 >= 2]:(-(5+log2_(b0))/4 +sqrt_(b0)*1.2071067811865475)]'
+    '[num_Bs_lt_(b0) ~= [b0 >= 2]:(2*sqrt(b0) +2*sqrt(2*b0) -log2(b0) -5)/4]'
+    '[num_Bs_lt_(b0) ~= [b0 >= 2]:(-(5+log2(b0))/4 +sqrt(b0)*1.2071067811865475)]'
     if not b0 >= 2:
         return 0
-    return (-(5+log2_(b0))/4 +sqrt_(b0)*1.2071067811865475)
+    return (-(5+log2(b0))/4 +sqrt(b0)*1.2071067811865475)
 def iter_nums_Bs_lt__zpow_(ks, /, *, validate):
     return (num_Bs_lt__zpow_(k, validate=validate) for k in ks)
     return map(num_Bs_lt__zpow_, ks)
 def num_Bs_lt__zpow_(k, /, *, validate):
-    '[@[k :<- [0..]] -> [num_Bs_lt_(2**k) == ceil_div_(ceil_sqrt_(2**k)-1,2) +sum[ceil_div_(ceil_sqrt_(2**i)-1,2) | [i :<- [1+k%2,3+k%2..<=k-1]]]]]'
+    '[@[k :<- [0..]] -> [num_Bs_lt_(2**k) == ceil_div(ceil_sqrt(2**k)-1,2) +sum[ceil_div(ceil_sqrt(2**i)-1,2) | [i :<- [1+k%2,3+k%2..<=k-1]]]]]'
     assert k >= 0
-    r = ceil_div_(ceil_sqrt_(2**k)-1,2) +sum(ceil_div_(ceil_sqrt_(2**i)-1,2) for i in range(1+k%2,1+k,2))
+    r = ceil_div(ceil_sqrt(2**k)-1,2) +sum(ceil_div(ceil_sqrt(2**i)-1,2) for i in range(1+k%2,1+k,2))
     if validate:
         if not r == num_Bs_lt__exact_(2**k): raise 000
     return r
 
 def iter_coprime_pints_to_(t, step, /):
     check_int_ge(1, t)
-    for u in count_(1, step):
+    for u in count(1, step):
         if gcd(t,u) == 1:
             yield u
 def _mk_heap_item__ver2_(t, /, *, SML_vs_HOE):

@@ -17,16 +17,22 @@ from seed.seq_tools.prefixes2tree import strings2prefix_st_tree_ex_
 __all__ = r'''
     strings2prefix_st_tree_ex_
 '''.split()#'''
-    #prefixes2tree_ex_
+    #xxx:prefixes2tree_ex_
 __all__
 
-from seed.seq_tools.avoid_substrs import strings2prefix_st_tree_ex_
+___begin_mark_of_excluded_global_names__0___ = ...
+#from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+#with mk_ctx4lazy_import4funcs_(__name__):
+___end_mark_of_excluded_global_names__0___ = ...
+if 1:
+    from seed.seq_tools.avoid_substrs import strings2prefix_st_tree_ex_
 
 
 r'''[[[
+from seed.helper.ifNone import ifNone, ifNonef
 
-from seed.tiny import ifNonef, ifNone, echo
-from seed.tiny import fst, snd, mk_tuple
+from seed.tiny_.containers import mk_tuple
+from seed.tiny_.funcs import echo, fst, snd
 from seed.tiny_.check import check_int_ge
 
 import itertools # islice, count
@@ -172,7 +178,8 @@ def prefixes2tree_ex_(prefixes, /, *, may_element2hashable=None):
 __all__
 
 
-from seed.seq_tools.prefixes2tree import prefixes2tree_ex_
+#xxx:from seed.seq_tools.prefixes2tree import prefixes2tree_ex_
+from seed.seq_tools.prefixes2tree import strings2prefix_st_tree_ex_
 from seed.seq_tools.prefixes2tree import *
 if __name__ == "__main__":
     pass

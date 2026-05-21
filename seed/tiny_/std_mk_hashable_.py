@@ -27,7 +27,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 from collections.abc import Mapping, Set, Sequence
 #from collections import OrderedDict
 from seed.types.FrozenDict import FrozenDict, mk_FrozenDict
-from seed.tiny import mk_frozenset, mk_tuple
+from seed.tiny_.containers import mk_frozenset, mk_tuple
 from seed.tiny_.check import check_type_is
 ___end_mark_of_excluded_global_names__0___ = ...
 

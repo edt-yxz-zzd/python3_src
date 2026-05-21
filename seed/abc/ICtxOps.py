@@ -1,7 +1,7 @@
 r'''
 e ../../python3_src/seed/abc/ICtxOps.py
 py -m seed.abc.ICtxOps
-py -m nn_ns.app.debug_cmd   seed.abc.ICtxOps
+py -m nn_ns.app.debug_cmd   seed.abc.ICtxOps -x
 from seed.abc.ICtxOps import ICtxOps
 
 move from:
@@ -16,7 +16,7 @@ __all__ = '''
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import check_type_is
+from seed.tiny_.check import check_type_is
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH

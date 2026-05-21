@@ -1,11 +1,22 @@
+r'''[[[
+seed.iters.is_subset_of_sorted_iterable
+py -m seed.iters.is_subset_of_sorted_iterable
+py -m nn_ns.app.debug_cmd   seed.iters.is_subset_of_sorted_iterable -x
+py -m nn_ns.app.doctest_cmd seed.iters.is_subset_of_sorted_iterable:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 __all__ = '''
     is_subset_of_sorted_iterable
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from seed.tiny import echo, with_key, snd
-from .PeekableIterator import PeekableIterator
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, snd, with_key
+    from .PeekableIterator import PeekableIterator
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def is_subset_of_sorted_iterable(lefts, rights
@@ -85,7 +96,9 @@ example:
 
 
 
+from seed.iters.is_subset_of_sorted_iterable import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.iters.is_subset_of_sorted_iterable import is_subset_of_sorted_iterable

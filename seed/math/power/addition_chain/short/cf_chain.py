@@ -335,7 +335,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from math import isqrt
 
     from seed.debug.print_err import print_err
-    from seed.math.floor_ceil import floor_log2, ceil_log2
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
     from seed.helper.ifNone import ifNone, ifNonef
     from seed.math.power.addition_chain.common.check import 检查冫严序加链乊靶值扌, 检查冫严序加链扌
     from seed.math.power.addition_chain.short.binary import 构造冫加链巛靶值牜二进制拆分扌

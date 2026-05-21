@@ -500,14 +500,15 @@ IBasePolynomialRingOps
 __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.math.power_of import calc_power
+    #def calc_power(I, T_2pow_ls, power:int, *, mul):
+
+
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.math.ops.algebra.IAlgebraOps import IAlgebraOps, NonInvertibleError, NonInvertibleError__not_injective, NonInvertibleError__out_of_domain, NonInvertibleError__not_implemented, NonInvertibleError__not_commutative
-from seed.tiny import check_type_is
-from seed.math.power_of import calc_power
-#view ../../python3_src/seed/math/power_of.py
-#def calc_power(I, T_2pow_ls, power:int, *, mul):
-
-
 #from seed.math.ops.algebra.IGroupOps import IMagmaOps, IGroupoidOps, ISemigroupOps, IAssociativeMagmaOps, ICommutativeMagmaOps, IIdempotentMagmaOps, ISemilatticeOps, IQuasigroupOps, ICommutativeQuasigroupOps, IMagmaOps__has_identity4mul, ILoopOps, ILoopOps__has_inv, ICommutativeLoopOps, IMonoidOps, ICommutativeMonoidOps, IGroupOps, IAbelianGroupOps, ICommutativeGroupOps
 from seed.math.ops.algebra.IGroupOps import IMonoidOps, ICommutativeMonoidOps, ICommutativeGroupOps
 
@@ -2028,10 +2029,12 @@ assert the_rational_field_ops is RationalFieldOps()
 
 
 ___begin_mark_of_excluded_global_names__2___ = ...
-from seed.helper.repr_input import repr_helper
-from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
-from seed.math.inv_mod_ import inv_mod_
-from seed.tiny_.check import check_int_ge
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+    from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
+    from seed.math.inv_mod_ import inv_mod_
+    from seed.tiny_.check import check_int_ge
 ___end_mark_of_excluded_global_names__2___ = ...
 
 _pow2_64 = 2**64
@@ -2155,9 +2158,12 @@ __all__
 
 
 ___begin_mark_of_excluded_global_names__3___ = ...
-from seed.tiny import fst, snd, null_tuple
-from seed.iters.merge_two_sorted_iterables import merge_two_sorted_iterables
-from seed.tiny import print_err
+from seed.tiny_.containers import null_tuple
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import fst, snd
+    from seed.debug.print_err import print_err
+    from seed.iters.merge_two_sorted_iterables import merge_two_sorted_iterables
 ___end_mark_of_excluded_global_names__3___ = ...
 
 

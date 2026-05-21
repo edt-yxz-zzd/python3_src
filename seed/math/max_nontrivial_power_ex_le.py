@@ -128,25 +128,37 @@ quaternary_tree5quinary_uint_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#.from itertools import islice
-from seed.tiny_.check import check_type_is, check_int_ge
 #.
 #.from seed.abc.abc__ver1 import abstractmethod, override, ABC
 #.from seed.for_libs.for_importlib__reload import clear_later_variables_if_reload_
 #.clear_later_variables_if_reload_(globals(), '')
 #.    # <<== seed.pkg_tools.ModuleReloader
-from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
 
-is_kth_power_ = lazy_import4func_('seed.math.factor_pint_as_pefect_power_', 'is_kth_power_', __name__)
-if 0:from seed.math.factor_pint_as_pefect_power_ import is_kth_power_
-##from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+def __():
+    from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
 
-II__p2e_ = lazy_import4func_('seed.math.II', 'II__p2e_', __name__)
-if 0:from seed.math.II import II__p2e_
+    is_kth_power_ = lazy_import4func_('seed.math.factor_pint_as_pefect_power_', 'is_kth_power_', __name__)
+    if 0:from seed.math.factor_pint_as_pefect_power_ import is_kth_power_
+    ##from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
 
-lazy_import4funcs_('seed.math.floor_ceil', 'floor_log2,floor_kth_root_,floor_sqrt', __name__)
-if 0:from seed.math.floor_ceil import floor_log2, floor_kth_root_, floor_sqrt
+    II__p2e_ = lazy_import4func_('seed.math.II', 'II__p2e_', __name__)
+    if 0:from seed.math.II import II__p2e_
 
+    #.lazy_import4funcs_('seed.math.floor_[#broken#]ceil', 'floor_log2,floor_kth_root_,floor_sqrt', __name__)
+    #.if 0:from seed.math.floor_[#broken#]ceil import floor_log2, floor_kth_root_, floor_sqrt
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #.from itertools import islice
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_lt_
+    from seed.math.factor_pint_as_pefect_power_ import is_kth_power_
+    from seed.math.II import II__p2e_
+
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt, floor_kth_root_
+
+    from seed.int_tools.digits.uint2radix_repr import uint2radix_repr__big_endian
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
@@ -154,7 +166,6 @@ def _max_nontrivial_power_ex_le(u, /):
     check_int_ge(4, u)
     ez = u.bit_length() - 1 #floor_log2(u)
     def __(u, /):
-        from seed.math.floor_ceil import floor_kth_root_
         for e in range(2, 1+ez):
             rt = floor_kth_root_(e, u)
             assert rt >= 2
@@ -173,12 +184,12 @@ def max_nontrivial_power_ex_le(u, /):
     if dz == 0:
         return tz
 
-    from seed.math.prime_gens import prime_gen
     #bug:ls = [(zpow, ez, 2, dz)]
     #   [ez is not prime]
     ls = []
     min_df = dz
-    for ep in prime_gen.iter__lt_(ez):
+    #.for ep in prime_gen.iter__lt_(ez):
+    for ep in iter_sieve4primes_ge_lt_(0, ez):
         #bug:if ez %ep == 0:continue
         #   AssertionError: (25, (16, 4, 2, 9), (25, 2, 5, 0))
         rt = floor_kth_root_(ep, u)
@@ -447,7 +458,6 @@ def quaternary_tree2quinary_str_(quaternary_tree, /):
 ######################
 def quaternary_tree5quinary_uint_(quinary_uint, /):
     'quinary_uint/uint -> tree{quaternary_digit/uint%4} # [tree{T} =[def]= (T, [tree{T}])]'
-    from seed.int_tools.digits.uint2radix_repr import uint2radix_repr__big_endian
     quinary_str = uint2radix_repr__big_endian(5, quinary_uint)
     quaternary_tree = quaternary_tree5quinary_str_(quinary_str)
     return quaternary_tree

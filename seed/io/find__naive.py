@@ -337,17 +337,24 @@ __all__ = r'''
     iter_find_bytes__naive_
         list_find_bytes__naive_
 '''.split()#'''
+    #min_block_size
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import re
-from seed.for_libs.for_re import iter_find_matchobjs_, iter_find_spans_, list_find_spans_
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.for_libs.for_re import iter_find_matchobjs_, iter_find_spans_, list_find_spans_
     #def iter_find_matchobjs_(regex, may_minlen4match, may_maxlen4match, xstring, may_first4both, may_last4begin, may_last4end, /, *, overlap:bool):
-from seed.io.get_size_of_ibfile import get_size_of_ibfile, get_size_of_ibfile_ex, explain_may_negativeable_end_locations_of_ibfile_ex, explain_negativeable_location_of_ibfile_ex, explain_may_negativeable_location_rng_of_ibfile_ex#; #may have [len(ibfile) < end_location]
+    from seed.io.get_size_of_ibfile import get_size_of_ibfile, get_size_of_ibfile_ex, explain_may_negativeable_end_locations_of_ibfile_ex, explain_negativeable_location_of_ibfile_ex, explain_may_negativeable_location_rng_of_ibfile_ex#; #may have [len(ibfile) < end_location]
 
-from seed.math.floor_ceil import floor_log2, ceil_log2
-from seed.tiny import check_type_is, check_uint, mk_tuple
-from itertools import repeat, chain, pairwise
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is, check_uint
+    from itertools import repeat, chain, pairwise
 
+___end_mark_of_excluded_global_names__0___ = ...
 #bufsize4zlib_decompress = 0x4000
 min_block_size = 0x4000 #16K
 #min_block_size = 16<<20 #16M

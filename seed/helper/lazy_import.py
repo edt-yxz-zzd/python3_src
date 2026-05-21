@@ -160,7 +160,8 @@ from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
     #__slots__ = ()
     #___no_slots_ok___ = True
 from seed.tiny_.check import check_type_is, check_type_le, check_callable
-from seed.tiny import mk_tuple, ifNone
+from seed.tiny_.containers import mk_tuple
+from seed.helper.ifNone import ifNone
 
 
 

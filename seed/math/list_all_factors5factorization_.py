@@ -65,8 +65,8 @@ with mk_ctx4lazy_import4funcs_(__name__):
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
-def iter_all_factors5factorization_(u_or_p2e, /):
-    'u_or_p2e/(u/uint{>=1}|p2e/{p/prime:e/uint}) -> factors/(unsorted-Iter uint{>0})'
+def iter_all_factors5factorization_(u_or_p2e, /, *, with_factorization=False):
+    'u_or_p2e/(u/uint{>=1}|p2e/{p/prime:e/uint}) -> unsorted-Iter (factor/uint{>0} if not with_factorization else (factor, p2e4factor))'
     match u_or_p2e:
         case int(u):
             p2e = factor_pint__naive_brute_force_(u)
@@ -77,7 +77,8 @@ def iter_all_factors5factorization_(u_or_p2e, /):
     ps = [p for p, e in pe_pairs]
     es = [e for p, e in pe_pairs]
     for _es in product(*(range(1+e) for e in es)):
-        yield II__ft_e_pairs_(zip(ps, _es))
+        factor = II__ft_e_pairs_(zip(ps, _es))
+        yield factor if not with_factorization else (factor, dict((p,e) for p,e in zip(ps, _es) if e))
 
 def list_all_factors5factorization_(u_or_p2e, /):
     'u_or_p2e/(u/uint{>=1}|p2e/{p/prime:e/uint}) -> factors/sorted[uint{>0}]'

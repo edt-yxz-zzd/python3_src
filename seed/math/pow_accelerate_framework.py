@@ -1,6 +1,7 @@
 r'''[[[
 e ../../python3_src/seed/math/pow_accelerate_framework.py
 py -m seed.math.pow_accelerate_framework
+py -m nn_ns.app.debug_cmd   seed.math.pow_accelerate_framework -x
 
 LucasSequence:
     A[2m] = f1<m>(A[m])
@@ -17,10 +18,16 @@ __all__ = '''
     pow_uint_0SD
     IPowAccelerateFramework__succ1_double1
     IPowAccelerateFramework__succ2_double1_odd2
-    '''.split()
+'''.split()
+
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
-from seed.tiny import check_type_is
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def pow_uint_0M(A0, mul, A1, n, /):

@@ -1,10 +1,19 @@
+r'''[[[
+seed.algo.bucket_sort.bucket_sort_with_table
+py -m nn_ns.app.debug_cmd   seed.algo.bucket_sort.bucket_sort_with_table -x
+py -m nn_ns.app.doctest_cmd seed.algo.bucket_sort.bucket_sort_with_table:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 __all__ = '''
     bucket_sort_with_table
     bucket_sort_with_table__easy
     '''.split()
-from seed.tiny import echo
-from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+    from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def bucket_sort_with_table__easy(
@@ -200,7 +209,9 @@ example:
 
 
 
+from seed.algo.bucket_sort.bucket_sort_with_table import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.algo.bucket_sort.bucket_sort_with_table import bucket_sort_with_table, bucket_sort_with_table__easy

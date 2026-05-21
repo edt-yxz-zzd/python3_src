@@ -3,7 +3,7 @@ r'''[[[
 e ../../python3_src/seed/recognize/recognizer_combinator_utils.py
 
 seed.recognize.recognizer_combinator_utils
-py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_combinator_utils
+py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_combinator_utils -x
 py -m seed.recognize.recognizer_combinator_utils
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.recognize.recognizer_combinator_utils
 
@@ -1023,19 +1023,28 @@ VisitInnerStateTree__dfs
 
 '''.split()#'''
 __all__
-
 #([{
-from collections import OrderedDict, Counter, defaultdict
-from itertools import filterfalse, islice
+___begin_mark_of_excluded_global_names__0___ = ...
 from enum import Enum, Flag, auto
-
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import check_type_is, check_uint, check_tmay, snd, curry1, fst, dict_add__is, dict_add__new, null_tuple #, check_type_le, snd, at, curry1, MapView, print_err
-#from seed.helper.Echo import theEcho
-from seed.types.DictKeyAsObjAttr import namespace5names_str#DictKeyAsObjAttr, DictKeyAsObjAttrAndAsMapping, SetAsNamespace, SetAsNamespaceAndAsMapping, namespace5iterable, namespace5names_str
-from seed.types.Namespace import NamespaceSetOnce, NamespaceForbidOverwriteImplicitly#, NamespaceForbidNewKey#Namespace, NamespaceSetOnce
 from seed.types.VisitTree import IVisitTree__dfs, visit_tree__dfs
-from seed.helper.repr_input import repr_helper
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from collections import OrderedDict, Counter, defaultdict
+    from seed.types.Namespace import NamespaceSetOnce, NamespaceForbidOverwriteImplicitly
+    from seed.tiny_.check import check_tmay, check_type_is, check_uint
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.dict__add_fmap_filter import dict_add__is, dict_add__new
+    from seed.tiny_.funcs import fst, snd
+    from seed.tiny_.types5py import curry1
+
+    from itertools import filterfalse, islice
+
+    from seed.types.DictKeyAsObjAttr import namespace5names_str
+    from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
 
 r'''
 class LockMaskBit(IntFlag):
@@ -1308,7 +1317,7 @@ def nonfinal_inner_st2tmay_lock_mask(sf, nonfinal_inner_st, /):
     tm = moveon_nonfinal_inner_st2tmay_next_inner_st(sf, True, nonfinal_inner_st)
     if not tm:
         [] = tm
-        tmay_lock_mask = null_tuple
+        tmay_lock_mask = get_null_tuple_()
     else:
         [step_success_noninitial_inner_st] = tm
         lock_mask = step_success_noninitial_inner_st2prev_lock_mask(sf, step_success_noninitial_inner_st)
@@ -1332,7 +1341,7 @@ def moveon_nonfinal_inner_st2tmay_next_inner_st(sf, is_on_success, nonfinal_inne
     try:
         next_inner_st = moveon_nonfinal_inner_st2next_inner_st__or_raise(sf, is_on_success, nonfinal_inner_st)
     except Error__moveon_nonfinal_inner_st:
-        tmay_next_inner_st = null_tuple
+        tmay_next_inner_st = get_null_tuple_()
     else:
         tmay_next_inner_st = (next_inner_st,)
 
@@ -1740,7 +1749,7 @@ def _has__LE_relationship_path_between(ns, ppositionL, ppositionB, /):
         if pp in s:
             return False
         s.add(pp)
-        pps = pp2pps.get(pp, null_tuple)
+        pps = pp2pps.get(pp, get_null_tuple_())
         ls.append(map(put, pps))
         return ppositionB in pps
 

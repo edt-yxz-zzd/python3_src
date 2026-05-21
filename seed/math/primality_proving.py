@@ -17,34 +17,38 @@ from seed.math.primality_proving import *
 __all__ = r'''
 '''.split()#'''
 __all__
-from itertools import chain
-from enum import Enum, auto
-from itertools import accumulate, takewhile
-#accumulate(iterable, func=None, *, initial=None)
-
-
-
-
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-from seed.tiny import mk_tuple
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_int_ge, check_int_ge_lt
-from seed.math.II import II, II__ft_e_pairs_
-#from seed.math.II import II, II_mod, II__p2e_, II__ft2e_
-from seed.types.CachedProperty import CachedProperty
-from seed.math.are_pairwise_coprime import are_pairwise_coprime
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-from seed.seq_tools.split_tuples import split_tuples, unzip_pairs
-#from seed.iters.duplicate_elements import find_maybe_duplicate_element1
-from seed.math.divs import is_odd
-from seed.math.gcd import gcd
-from seed.iters.apply_commutative_operations_except_one import iter_apply_commutative_operations_except_one_
-#def iter_apply_commutative_operations_except_one_(apply_, commutative_operation_keys, x0, /):
-from seed.math.floor_ceil import floor_sqrt #perfect_div, perfect_kth_root_
-from seed.seq_tools.remove_strict_sorted_indices import list_values__via_idc_, list_complement_idc_
+from enum import Enum, auto
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import chain
+    from itertools import accumulate, takewhile
+    #accumulate(iterable, func=None, *, initial=None)
 
 
+
+
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_lt
+    from seed.math.II import II, II__ft_e_pairs_
+    #from seed.math.II import II, II_mod, II__p2e_, II__ft2e_
+    from seed.types.CachedProperty import CachedProperty
+    from seed.math.are_pairwise_coprime import are_pairwise_coprime
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.seq_tools.split_tuples import split_tuples, unzip_pairs
+    #from seed.iters.duplicate_elements import find_maybe_duplicate_element1
+    from seed.math.divs import is_odd
+    from seed.math.gcd import gcd
+    from seed.iters.apply_commutative_operations_except_one import iter_apply_commutative_operations_except_one_
+    #def iter_apply_commutative_operations_except_one_(apply_, commutative_operation_keys, x0, /):
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
+    from seed.seq_tools.remove_strict_sorted_indices import list_values__via_idc_, list_complement_idc_
+
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def _iter_pow_II1_except_one_(_pow_, fts, x0, /):
@@ -1103,10 +1107,7 @@ class PrimalityCriterion(Enum):
 #]]]'''#'''
 
 def __():
-    from seed.tiny import ifNonef, ifNone, echo
-    from seed.tiny import check_type_is, fst, snd, at
     from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-    from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
     from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
     from seed.helper.repr_input import repr_helper
 

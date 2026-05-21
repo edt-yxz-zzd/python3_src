@@ -3,6 +3,7 @@ r'''[[[
 e ../../python3_src/seed/math/semi_factor_pint_via_trial_division.py
 seed.math.semi_factor_pint_via_trial_division
 py -m seed.math.semi_factor_pint_via_trial_division
+py -m nn_ns.app.debug_cmd   seed.math.semi_factor_pint_via_trial_division -x
 
 ###py -m seed.math.semi_factor_pint_via_trial_division _test1__iter_unsorted_products_of_coprime_factors__ge_le +show
 ###py -m seed.math.semi_factor_pint_via_trial_division _test1__iter_unsorted_products_of_coprime_factors__ge_le
@@ -10,124 +11,83 @@ py_adhoc_call   seed.math.semi_factor_pint_via_trial_division   @_test1__iter_un
 py_adhoc_call   seed.math.semi_factor_pint_via_trial_division   @_test1__iter_unsorted_products_of_coprime_factors__ge_le
 
 
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, complete_factor_pint_via_trial_division, calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le, iter_unsorted_products_of_coprime_factors__ge_le
+from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, complete_factor_pint_via_trial_division, complete_factor_pint_via_trial_division__lflnkls_, calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le, iter_unsorted_products_of_coprime_factors__ge_le
 
 #]]]'''
 __all__ = '''
     semi_factor_pint_via_trial_division
         complete_factor_pint_via_trial_division
+            complete_factor_pint_via_trial_division__lflnkls_
     calc_num_products_of_coprime_factors__ge1_le
         calc_num_products_of_coprime_factors__ge_le
     iter_unsorted_products_of_coprime_factors__ge_le
-    '''.split()#'''
+'''.split()#'''
+    #check_iterable_of_int_ge2
 
 __all__
-from seed.for_libs.for_time import (
-Timer__print_err
-    ,timer__print_err__thread_wide
-    ,timer__print_err__process_wide
-    ,timer__print_err__system_wide__highest_resolution
-    ,timer__print_err__system_wide__monotonic
-)
-
-timer = timer__print_err__thread_wide
-_to_show_ = __name__ == "__main__"
-
-with timer(prefix='py:std...', _to_show_=_to_show_):
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
     from itertools import takewhile
-with timer(prefix='seed:basic...', _to_show_=_to_show_):
-    from seed.tiny import mk_tuple
-    from seed.tiny import check_type_is
 
-with timer(prefix='seed:func_tools...', _to_show_=_to_show_):
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is
+    from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
+    from seed.math.floor_ceil_tools.fc_log import ceil_log_, floor_log_
+
+    from seed.func_tools.recur5yield import recur5yield__list__echo__echo
+    from seed.func_tools.fmapT.checkT__tiny import (dot, checkT__pattern_list, checkT__AND, check_int, checkT__ge)
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.are_pairwise_coprime import are_pairwise_coprime
+    from seed.math.iter_sorted_products_of_uints import iter_sorted_products_of_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs
+    from seed.data_funcs.lnkls import lflnkls2iterable
+___end_mark_of_excluded_global_names__0___ = ...
+if __name__ == "__main__":
+    from seed.math.semi_factor_pint_via_trial_division import *
+
+def __old():
+  from seed.for_libs.for_time import timer__print_err__thread_wide
+
+  timer = timer__print_err__thread_wide
+  _to_show_ = __name__ == "__main__"
+
+  with timer(prefix='py:std...', _to_show_=_to_show_):
+    from itertools import takewhile
+  with timer(prefix='seed:basic...', _to_show_=_to_show_):
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is
+
+  with timer(prefix='seed:func_tools...', _to_show_=_to_show_):
     with timer(prefix='seed.func_tools.recur5yield', _to_show_=_to_show_):
         from seed.func_tools.recur5yield import recur5yield__list__echo__echo
 
     with timer(prefix='seed.func_tools.checkT__tiny', _to_show_=_to_show_):
         from seed.func_tools.fmapT.checkT__tiny import (dot, checkT__pattern_list, checkT__AND, check_int, checkT__ge)
 
-with timer(prefix='seed:math...', _to_show_=_to_show_):
+  with timer(prefix='seed:math...', _to_show_=_to_show_):
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
     from seed.math.are_pairwise_coprime import are_pairwise_coprime
     from seed.math.iter_sorted_products_of_uints import iter_sorted_products_of_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints, iter_sorted_products_of_strict_sorted_pairwise_coprime_uints__with_ifactor_exp_pairs
 
-with timer(prefix='seed.math.floor_ceil', _to_show_=_to_show_):
-    from seed.math.floor_ceil import floor_div, ceil_div
-    from seed.math.floor_ceil import floor_log_, ceil_log_
+  with timer(prefix='seed.math.floor_ceil_tools', _to_show_=_to_show_):
+    from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
+    from seed.math.floor_ceil_tools.fc_log import ceil_log_, floor_log_
 
-with timer(prefix='seed.math.semi_factor_pint_via_trial_division', _to_show_=_to_show_):
+  with timer(prefix='seed.data_funcs.lnkls', _to_show_=_to_show_):
+    from seed.data_funcs.lnkls import lflnkls2iterable
+
+  with timer(prefix='seed.math.semi_factor_pint_via_trial_division', _to_show_=_to_show_):
     if __name__ == "__main__":
-        from seed.math.semi_factor_pint_via_trial_division import *
+        pass#from seed.math.semi_factor_pint_via_trial_division import *
+            # ^SyntaxError: import * only allowed at module level
 
-r'''[[[
-py -m seed.math.semi_factor_pint_via_trial_division
-py:std...:duration: 0.00015815400000002144 *(unit: 0:00:01)
-seed:basic...:duration: 9.846099999999414e-05 *(unit: 0:00:01)
-seed:func_tools...:duration: 0.023295232 *(unit: 0:00:01)
-seed:math...:duration: 0.015590459999999973 *(unit: 0:00:01)
-seed.math.floor_ceil:duration: 0.10961200099999996 *(unit: 0:00:01)
-
-e ../../python3_src/seed/math/floor_ceil.py
-
-move 'import unittest, doctest' into seed.math.floor_ceil:load_tests() body -->:
-    py:std...:duration: 0.0002469999999999972 *(unit: 0:00:01)
-    seed:basic...:duration: 0.00016530700000000342 *(unit: 0:00:01)
-    seed:func_tools...:duration: 0.024460227 *(unit: 0:00:01)
-    seed:math...:duration: 0.017123306999999977 *(unit: 0:00:01)
-    seed.math.floor_ceil:duration: 0.0029033079999999933 *(unit: 0:00:01)
-    seed.math.semi_factor_pint_via_trial_division:duration: 0.07609600099999997 *(unit: 0:00:01)
-        why (0.07 second)? impossible
-
-
-move "_test1__calc_num_products_of_coprime_factors__ge1_le()" under 'if __name__ == "__main__":' -->:
-    py:std...:duration: 0.00016869299999999754 *(unit: 0:00:01)
-    seed:basic...:duration: 0.00010376900000003131 *(unit: 0:00:01)
-    seed:func_tools...:duration: 0.025223465 *(unit: 0:00:01)
-    seed:math...:duration: 0.016934767000000017 *(unit: 0:00:01)
-    seed.math.floor_ceil:duration: 0.0028098469999999764 *(unit: 0:00:01)
-    seed.math.semi_factor_pint_via_trial_division:duration: 0.0029893069999999966 *(unit: 0:00:01)
-    mk:check_iterable_of_int_ge2:duration: 0.00010238499999998263 *(unit: 0:00:01)
-    mk:calc_num_products_of_coprime_factors__ge1_le:duration: 0.0001351540000000262 *(unit: 0:00:01)
-    _test1__calc_num_products_of_coprime_factors__ge1_le():duration: 0.07287530800000003 *(unit: 0:00:01)
-    mk:iter_unsorted_products_of_coprime_factors__ge_le:duration: 0.0001337689999999503 *(unit: 0:00:01)
-
-
-===
-seed:func_tools...:duration: 0.025223465 *(unit: 0:00:01)
--->:
-seed.func_tools.recur5yield:duration: 0.012779459999999965 *(unit: 0:00:01)
-seed.func_tools.checkT__tiny:duration: 0.010180770000000006 *(unit: 0:00:01)
-seed:func_tools...:duration: 0.02345161499999998 *(unit: 0:00:01)
-
-
-e ../../python3_src/seed/func_tools/recur5yield.py
-[[
-py -m seed.func_tools.recur5yield
-py:std...:duration: 0.0001646160000000063 *(unit: 0:00:01)
-seed:basic...:duration: 0.00011753899999999984 *(unit: 0:00:01)
-seed.types.ops.IEmplaceStackOps:duration: 0.01057238299999999 *(unit: 0:00:01)
-
-seed.types.ops.IEmplaceStackOps
-e ../../python3_src/seed/types/ops/IEmplaceStackOps.py
-
-py -m seed.types.ops.IEmplaceStackOps
-seed:basic...:duration: 0.00015761600000002707 *(unit: 0:00:01)
-seed.abc.abc__ver1:duration: 0.004998077999999989 *(unit: 0:00:01)
-seed.abc.IHashable:duration: 0.001823384999999983 *(unit: 0:00:01)
-seed.types.ops.IEmplaceStackOps:duration: 0.003220001 *(unit: 0:00:01)
-
-
-
-]]
-
-
-e ../../python3_src/seed/func_tools/checkT__tiny.py
-???
-
-#]]]'''#'''
 __all__
 
 
+def complete_factor_pint_via_trial_division__lflnkls_(lflnkls8ps4N, N, /):
+    'lflnkls factor{>=2} -> pint -> (factor2exp/{factor:exp{>=1}})'
+    ps4N = lflnkls2iterable(lflnkls8ps4N)
+    return complete_factor_pint_via_trial_division(ps4N, N)
 def complete_factor_pint_via_trial_division(candidate_factors, pint, /):
     'Iter factor{>=2} -> pint -> (factor2exp/{factor:exp{>=1}})'
     (factor2exp, unfactored_part) = semi_factor_pint_via_trial_division(candidate_factors, pint)
@@ -151,7 +111,8 @@ def semi_factor_pint_via_trial_division(candidate_factors, pint, /):
     unfactored_part = pint
     return (factor2exp, unfactored_part)
 
-with timer(prefix='mk:check_iterable_of_int_ge2', _to_show_=_to_show_):
+#__old:with timer(prefix='mk:check_iterable_of_int_ge2', _to_show_=_to_show_):
+if 1:
     check_iterable_of_int_ge2 = checkT__pattern_list(checkT__AND(check_int, checkT__ge(2)))
 
 def _():
@@ -216,7 +177,9 @@ def _():
             upperbound //= ft
         return True, acc
     return calc_num_products_of_coprime_factors__ge1_le
-with timer(prefix='mk:calc_num_products_of_coprime_factors__ge1_le', _to_show_=_to_show_):
+
+#__old:with timer(prefix='mk:calc_num_products_of_coprime_factors__ge1_le', _to_show_=_to_show_):
+if 1:
     calc_num_products_of_coprime_factors__ge1_le = _()
 
 def _test1__calc_num_products_of_coprime_factors__ge1_le():
@@ -233,7 +196,8 @@ def _test1__calc_num_products_of_coprime_factors__ge1_le():
     for kwargs in kwargss:
         for upperbound, ans in upperbound_ans_pairs:
             assert (calc_num_products_of_coprime_factors__ge1_le(coprime_factors, upperbound, **kwargs) == ans)
-with timer(prefix='_test1__calc_num_products_of_coprime_factors__ge1_le()', _to_show_=_to_show_):
+#__old:with timer(prefix='_test1__calc_num_products_of_coprime_factors__ge1_le()', _to_show_=_to_show_):
+if 1:
     # time-consuming here!!
     if __name__ == "__main__":
         _test1__calc_num_products_of_coprime_factors__ge1_le()
@@ -255,7 +219,7 @@ def calc_num_products_of_coprime_factors__ge_le(coprime_factors, lowerbound, upp
         -calc_num_products_of_coprime_factors__ge1_le(coprime_factors, lowerbound-1, turnoff__verify_factors_are_pairwise_coprime=True)
         )
 
-def _():
+def __():
     r'''
     由于『可重启』(见下面:参数:prev_product4resume)，故不采用递归算法实现
     #'''
@@ -355,8 +319,10 @@ def _():
         assert len(stack) == 1
         return False
     return iter_unsorted_products_of_coprime_factors__ge_le
-with timer(prefix='mk:iter_unsorted_products_of_coprime_factors__ge_le', _to_show_=_to_show_):
-    iter_unsorted_products_of_coprime_factors__ge_le = _()
+
+#__old:with timer(prefix='mk:iter_unsorted_products_of_coprime_factors__ge_le', _to_show_=_to_show_):
+if 1:
+    iter_unsorted_products_of_coprime_factors__ge_le = __()
 
 
 def _test1__iter_unsorted_products_of_coprime_factors__ge_le(*, show=False):
@@ -400,7 +366,7 @@ def _test1__iter_unsorted_products_of_coprime_factors__ge_le(*, show=False):
 
 
 from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division
+from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division, complete_factor_pint_via_trial_division__lflnkls_
 from seed.math.semi_factor_pint_via_trial_division import calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le
 from seed.math.semi_factor_pint_via_trial_division import iter_unsorted_products_of_coprime_factors__ge_le
 from seed.math.semi_factor_pint_via_trial_division import *

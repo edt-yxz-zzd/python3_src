@@ -1,3 +1,4 @@
+#__all__:goto
 r'''
 see also:
     py::csv
@@ -6,7 +7,8 @@ see also:
     view /storage/emulated/0/0my_files/git_repos/python3_src/seed/io/iter_line_contents.py
 
 seed.io.FieldedLineHandler
-from seed.io.FieldedLineHandler import FieldedLineHandler, IFieldedLineHandler
+py -m nn_ns.app.debug_cmd   seed.io.FieldedLineHandler -x
+py -m nn_ns.app.doctest_cmd seed.io.FieldedLineHandler:__doc__ -ht #  -ff -v -df
 e ../../python3_src/seed/io/FieldedLineHandler.py
 
 used in:
@@ -19,8 +21,17 @@ __all__ = '''
         FieldedLineHandler
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from abc import ABC, abstractmethod
-from seed.tiny import check_type_is, echo
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
+
+
 
 class IFieldedLineHandler(ABC):
     __slots__ = ()
@@ -120,3 +131,5 @@ class FieldedLineHandler(IFieldedLineHandler):
 
 
 
+from seed.io.FieldedLineHandler import FieldedLineHandler, IFieldedLineHandler
+from seed.io.FieldedLineHandler import *

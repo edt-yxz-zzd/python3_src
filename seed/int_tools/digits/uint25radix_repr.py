@@ -215,22 +215,24 @@ uint25radix_reprTT_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from functools import partial
-from itertools import product
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import partial
+    from itertools import product
 
 
 
-from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.tiny_.check import check_type_is, check_int_ge
 
-from seed.int_tools.digits.uint25bijective_numeration import decimal_str2iter_digits_, decimal_str5iter_digits_
+    from seed.int_tools.digits.uint25bijective_numeration import decimal_str2iter_digits_, decimal_str5iter_digits_
 
 
 
-from seed.int_tools.digits.uint2radix_repr import uint2radix_repr# IUint2RadixRepr__little_endian__plain, IUint2RadixRepr, Uint2RadixRepr
-#def uint2radix_repr(radix_or_an_IUint2RadixRepr, uint, /,*, is_big_endian:bool, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1, input_is_an_IUint2RadixRepr_not_radix=False):
+    from seed.int_tools.digits.uint2radix_repr import uint2radix_repr# IUint2RadixRepr__little_endian__plain, IUint2RadixRepr, Uint2RadixRepr
+    #def uint2radix_repr(radix_or_an_IUint2RadixRepr, uint, /,*, is_big_endian:bool, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1, input_is_an_IUint2RadixRepr_not_radix=False):
 
-from seed.int_tools.digits.radix_repr2uint import radix_repr2uint# IRadixRepr2Uint, RadixRepr2Uint
-#def radix_repr2uint(radix_or_an_IRadixRepr2Uint, digits, /,*, is_big_endian:bool, _merge_ver:'0|1|2'=0, input_is_an_IRadixRepr2Uint_not_radix=False):
+    from seed.int_tools.digits.radix_repr2uint import radix_repr2uint# IRadixRepr2Uint, RadixRepr2Uint
+    #def radix_repr2uint(radix_or_an_IRadixRepr2Uint, digits, /,*, is_big_endian:bool, _merge_ver:'0|1|2'=0, input_is_an_IRadixRepr2Uint_not_radix=False):
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

@@ -1,8 +1,9 @@
-
+#__all__:goto
 r'''
 seed.text.StepDecoder
 py -m seed.text.StepDecoder
-from seed.text.StepDecoder import StepDecoder__bytes2str, OutputCase_of_StepDecoderABC_feeds as _FOC
+py -m nn_ns.app.debug_cmd   seed.text.StepDecoder -x
+py -m nn_ns.app.doctest_cmd seed.text.StepDecoder:__doc__ -ht #  -ff -v -df
 
 see:
     seed.iters.find
@@ -74,7 +75,7 @@ __all__ = r'''
     IStepBuilder
         StepBuilder__convert
             StepBuilder__list
-            StepBuilderABC__istream
+            StepBuilderABC__stream
                 StepBuilder__str
                 StepBuilder__bytes
         StepBuilder__convert_set
@@ -85,17 +86,23 @@ __all__ = r'''
         StepPredicator__test_last_only
 
     '''.split()
+#ls_map_snd
 
 
-
-#from .abc import ABC, abstractmethod, override, not_implemented, ABCMeta
+__all__
+___begin_mark_of_excluded_global_names__0___ = ...
 from abc import ABC, abstractmethod
-from seed.tiny import snd, fst
 import io
-from enum import Enum, unique, auto
-from collections import deque
 import codecs
-from itertools import islice
+from enum import Enum, unique, auto
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from collections import deque
+    from itertools import islice
+    from seed.tiny_.funcs import fst, snd
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 @unique
@@ -911,7 +918,9 @@ def _t():
             for line in it:
                 print(f'{line!r}')
 
+from seed.text.StepDecoder import *
 if __name__ == '__main__':
     _t()
 
 
+from seed.text.StepDecoder import StepDecoder__bytes2str, OutputCase_of_StepDecoderABC_feeds#as _FOC

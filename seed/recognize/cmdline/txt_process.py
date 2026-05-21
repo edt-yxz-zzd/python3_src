@@ -114,30 +114,37 @@ mk_predicator_on_channel_idc
 __all__
 
 
-#from seed.str_tools.iter_split_ex_by_ import iter_split_ex_by_
-from seed.seq_tools.find_all import find_all_, iter_all_
-from seed.iters.isplit_if import iter_split_if_starts_, iter_split_if_ends_, iter_split_with_sep_if_, iter_split_without_sep_if_
-from seed.io.iter_line_contents__ver2 import iter_line_contents_ex__path__human, iter_line_contents__path
-#def iter_line_contents__path(ipath, /, *, encoding, newline=default_may_smay_newline, kwargs4open=None, may_newlines=default_may_newlines, without_last_line_if_empty=False):
-#from seed.io.iter_line_contents__ver2 import iter_line_contents_ex__file__human, iter_line_contents__file
-from seed.io.iter_line_contents__ver2 import iter_line_contents_ex__path_, iter_line_contents_ex__file_
-#def iter_line_contents_ex__file_(ifile, /, *, newlines__or__may_smay_newline, without_last_line_if_empty):
-#    -> Iter (line_content, smay_newline)
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from seed.str_tools.iter_split_ex_by_ import iter_split_ex_by_
+    from seed.seq_tools.find_all import find_all_, iter_all_
+    from seed.iters.isplit_if import iter_split_if_starts_, iter_split_if_ends_, iter_split_with_sep_if_, iter_split_without_sep_if_
+    from seed.io.iter_line_contents__ver2 import iter_line_contents_ex__path__human, iter_line_contents__path
+    #def iter_line_contents__path(ipath, /, *, encoding, newline=default_may_smay_newline, kwargs4open=None, may_newlines=default_may_newlines, without_last_line_if_empty=False):
+    #from seed.io.iter_line_contents__ver2 import iter_line_contents_ex__file__human, iter_line_contents__file
+    from seed.io.iter_line_contents__ver2 import iter_line_contents_ex__path_, iter_line_contents_ex__file_
+    #def iter_line_contents_ex__file_(ifile, /, *, newlines__or__may_smay_newline, without_last_line_if_empty):
+    #    -> Iter (line_content, smay_newline)
 
-from seed.tiny import mk_fprint, ifNone
-from seed.io.savefile__str_tuple import SaveStrTupleAsMultiLine, std_saver4str_tuple
-    #def iter_read_str_tuple_from_ifile_(sf, ifile, /):
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.check import check_callable, check_type_is, check_uint_lt
+    from seed.tiny_.funcs import mk_fprint
+    #from seed.io.savefile__str_tuple import std_saver4str_tuple
+        #def iter_read_str_tuple_from_ifile_(sf, ifile, /):
 
-#from seed.tiny import fst, snd, at
-from seed.tiny_.check import check_callable, check_type_is, check_uint_lt
-from seed.io.may_open import open4wt, open4wt_err, open4rt
-#def open4wt(may_opath, /, *, force, encoding):
-#def open4rt(may_opath, /, *, encoding):
-from seed.helper.with_many import with_many
-from seed.func_tools.detect_depth4fail import decorator4show_py_help
-from itertools import islice, filterfalse
-from functools import partial
-from pathlib import Path
+    from seed.io.may_open import open4wt, open4wt_err, open4rt
+    #def open4wt(may_opath, /, *, force, encoding):
+    #def open4rt(may_opath, /, *, encoding):
+    from seed.helper.with_many import with_many
+    from seed.func_tools.detect_depth4fail import decorator4show_py_help
+    from itertools import islice, filterfalse
+    from functools import partial
+    from pathlib import Path
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 
 def main(nm4subcmd_or_subcmd, /, *args, may_ipath, encoding, may_opath=None, oencoding=..., force=False, may_smay_newline4in='', may_smay_newline4out='', **kw):

@@ -112,9 +112,22 @@ iter_line_contents_ex__file_
 '''.split()#'''
 __all__
 
-from itertools import pairwise
-from seed.tiny import check_type_is
-from seed.tiny import ifNonef, fst, MapView
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import pairwise
+    from seed.helper.ifNone import ifNonef
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import fst
+    from seed.tiny_.types5py import MapView
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
+
 
 def check_newlines(newlines, /):
     check_type_is(tuple, newlines)

@@ -960,21 +960,76 @@ below deprecated by light_wrap_rgnr_():
 #xxx:Snapshot4IForkableInputStream
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'FunctionType:Func, MethodType:Meth'):
+    from types import FunctionType as Func, MethodType as Meth
+
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.getset_external_cache4func import getset_external_cache4func, getset_external_cache4method
+    from seed.for_libs.for_inspect import check_num_args_ok_, is_num_args_ok_
+
+    from seed.debug.print_err import print_err
+    from seed.debug.with_expect_error import with_expect_error
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.tiny_.types5py import curry1, mk_MapView
+    from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le, check_callable, check_pair
+
+
+    #prefix_tree
+    #   tkey_prefix_tree
+    from seed.seq_tools.mk_prefix_tree import mk_prefix_tree, update4prefix_tree
+    from seed.seq_tools.mk_prefix_tree import lookup4prefix_tree__chars_, lookup_longest_prefix4prefix_tree__chars_, iter_lookup_prefix4prefix_tree__chars_
+
+    from seed.for_libs.for_inspect import get_signature_of__py3_
+    from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
+    from collections.abc import Mapping, MutableMapping
+
+    from seed.iters.count_ import count_
+
+    from seed.types.FrozenDict import FrozenDict, mk_FrozenDict
+    from functools import partial
+    from seed.helper.repr_input import repr_helper
+
+
+
+from seed.tiny_.containers import mk_frozenset, mk_tuple, null_frozenset, null_mapping_view, null_tuple
+
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+from seed.tiny_._Base4repr import _Base4repr
+        #sf._reset4repr(may_args4repr, may_kwds4repr)
+        #sf._init4repr(*args4repr, **kwds4repr)
+        ######################
+        # !! ++ IRecognizerLLoo__serial._not_ignore_toplvl_
+        # !! ++ _Base4repr._kwds4repr:should overwrite both at once
+        #below deprecated:
+        #   #sf._args4repr = (...)
+        #   #if 0:sf._kwds4repr = {...}
+        ######################
+
 from enum import Enum, auto
-from types import FunctionType as Func, MethodType as Meth
-from seed.helper.getset_external_cache4func import getset_external_cache4func, getset_external_cache4method
-from seed.for_libs.for_inspect import check_num_args_ok_, is_num_args_ok_
+from seed.tiny_.types5py import MapView
+from seed.func_tools.recur5yield__strict import IDecorator4recur5yield, Decorator4recur5yield
+from seed.func_tools.recur5yield__strict import IExecutor4recur5yield, IExecutor4recur5yield__dispatch_by_dict, Executor4recur5yield__dispatch_by_dict
+from seed.types.Either import Cased, Either
+from seed.types.Either import mk_Left, mk_Right
+from weakref import ref as wref_, WeakKeyDictionary as WkeyD, WeakValueDictionary as WvalD
 
 
-#prefix_tree
-#   tkey_prefix_tree
-from seed.seq_tools.mk_prefix_tree import mk_prefix_tree, update4prefix_tree
-from seed.seq_tools.mk_prefix_tree import lookup4prefix_tree__chars_, lookup_longest_prefix4prefix_tree__chars_, iter_lookup_prefix4prefix_tree__chars_
 
-
-from seed.types.Tester import is_good, always_tri_test
-from seed.types.Tester import ITester, IXQuerySet
 from seed.types.IToken import (
+ITokenQuerySet
+,is_good_token_
+,TokenKeyQuerySet5xqset
+)
+def __refs():
+    from seed.types.mapping.Bijection import Bijection, MutableBijection
+    from seed.types.mapping.Bijection import explain_hyperkey
+    from seed.func_tools.recur5yield__strict import BoxedTailRecur, BoxedFinalResult
+    from seed.types.Tester import is_good, always_tri_test
+    from seed.types.Tester import ITester, IXQuerySet
+    from seed.types.IToken import (
 ITokenQuerySet
 ,   ITokenKeyedDataQuerySet
 ,       ITokenKeyQuerySet
@@ -988,44 +1043,6 @@ ITokenQuerySet
 ,TokenKeyQuerySet5xqset
 ,TokenDataQuerySet5xqset
 )
-
-
-
-
-from seed.func_tools.recur5yield__strict import BoxedTailRecur, BoxedFinalResult
-from seed.func_tools.recur5yield__strict import IDecorator4recur5yield, Decorator4recur5yield
-from seed.func_tools.recur5yield__strict import IExecutor4recur5yield, IExecutor4recur5yield__dispatch_by_dict, Executor4recur5yield__dispatch_by_dict
-
-from seed.for_libs.for_inspect import get_signature_of__py3_
-from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
-from collections.abc import Mapping, MutableMapping
-from seed.types.Either import Cased, Either
-from seed.types.Either import mk_Left, mk_Right
-
-
-
-from seed.types.mapping.Bijection import Bijection, MutableBijection
-from seed.types.mapping.Bijection import explain_hyperkey
-
-from weakref import ref as wref_, WeakKeyDictionary as WkeyD, WeakValueDictionary as WvalD
-from seed.iters.count_ import count_
-
-from seed.types.FrozenDict import FrozenDict, mk_FrozenDict, empty_FrozenDict
-from seed.tiny import ifNone, echo, mk_tuple, mk_frozenset, null_tuple, null_frozenset, null_mapping_view, fst, MapView, mk_MapView, curry1, print_err, snd, with_expect_error
-from functools import partial
-from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_int_ge, check_int_ge_lt, check_int_ge_le, check_callable, check_pair
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-from seed.tiny_._Base4repr import _Base4repr
-        #sf._reset4repr(may_args4repr, may_kwds4repr)
-        #sf._init4repr(*args4repr, **kwds4repr)
-        ######################
-        # !! ++ IRecognizerLLoo__serial._not_ignore_toplvl_
-        # !! ++ _Base4repr._kwds4repr:should overwrite both at once
-        #below deprecated:
-        #   #sf._args4repr = (...)
-        #   #if 0:sf._kwds4repr = {...}
-        ######################
 
 
 
@@ -1562,7 +1579,7 @@ def _4check_all(rgnr, cenv, /):
     except ValidateError as e:
         return e
 def _4id2rgnr(rgnr, cenv, /):
-    return MapView(WvalD((id(descendant), descendant) for descendant in rgnr.iter_persistent_descendants6cenv_(cenv)))
+    return mk_MapView(WvalD((id(descendant), descendant) for descendant in rgnr.iter_persistent_descendants6cenv_(cenv)))
 def _4back_cache(rgnr, cenv, /):
     return max(descendant._required_num_tokens6backward_ for descendant in rgnr.iter_persistent_descendants6cenv_(cenv))
     #bug:
@@ -1608,7 +1625,7 @@ def collect_namess5rgnrs_(rgnrs, /, *, _no_check__vs__ge__vs__eq_:'{0|1|2}'=0):
     #(nms4ref, nms6ref, nms4pre, nms4post) = map(mk_frozenset, (nms4ref, nms6ref, nms4pre, nms4post))
     ######################
     (nms4ref, nms6ref) = map(mk_frozenset, (nms4ref, nms6ref))
-    nm2rgnr = MapView(nm2rgnr)
+    nm2rgnr = mk_MapView(nm2rgnr)
     ######################
     check_names4ref_names6ref_(_no_check__vs__ge__vs__eq_, nms4ref, nms6ref)
     return (nm2rgnr, nms4ref, nms6ref)
@@ -2302,7 +2319,7 @@ class ContextView(IHalfMap):
     def __init__(sf, isymbols, gctx, ctx, /):
         #check_type_is(WeakKeyHalfMap8AnonymousWeakableSymbol, sym8id4curr_rgnz)
         sf._xs = (isymbols, gctx, ctx)
-            #sf._xs = (SetView(isymbols), MapView(gctx), MapView(ctx))
+            #sf._xs = (SetView(isymbols), mk_MapView(gctx), mk_MapView(ctx))
         #sf._sym4run = sym8id4curr_rgnz
         if 0:
             sf._isz = None
@@ -2683,9 +2700,8 @@ def mk_name2may_gpostprocess6ok_(fmtr_or_fmt4nm4method, grp4nm4rgnr, xpostproces
             sz += 1
         return
         if 0b0000:
-            #from seed.tiny import print_err
             print_err(nm4rgnr)
-    name2may_gpostprocess6ok = MapView({sym4rgnr:gpost_ for nm4rgnr, sym4rgnr in nm2sym4rgnr.items() for gpost_ in iter_ggf_(nm4rgnr)})
+    name2may_gpostprocess6ok = mk_MapView({sym4rgnr:gpost_ for nm4rgnr, sym4rgnr in nm2sym4rgnr.items() for gpost_ in iter_ggf_(nm4rgnr)})
     assert len(name2may_gpostprocess6ok) == sz
     return name2may_gpostprocess6ok
 #end-def mk_name2may_gpostprocess6ok_(fmt4nm4method, grp4nm4rgnr, xpostprocess_group, /):

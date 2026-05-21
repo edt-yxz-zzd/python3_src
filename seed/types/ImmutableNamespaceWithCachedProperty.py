@@ -186,10 +186,6 @@ sorted_cases4per_name = [OUT, INOUT, IN]
 
 e ../../python3_src/seed/math/primality_proving.py
 def __():
-    from seed.tiny import ifNonef, ifNone, echo
-    from seed.tiny import check_type_is, fst, snd, at
-    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-    from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
     from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
     from seed.helper.repr_input import repr_helper
 

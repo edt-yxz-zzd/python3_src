@@ -11,7 +11,6 @@ seed.seq_tools.avoid_substrs__multi_word_delimiter_token__layout_with_std_both_m
 py -m nn_ns.app.debug_cmd   seed.seq_tools.avoid_substrs__multi_word_delimiter_token__layout_with_std_both_marker__solid_counting -x
 py -m nn_ns.app.doctest_cmd seed.seq_tools.avoid_substrs__multi_word_delimiter_token__layout_with_std_both_marker__solid_counting:__doc__ -ff -v
 py_adhoc_call   seed.seq_tools.avoid_substrs__multi_word_delimiter_token__layout_with_std_both_marker__solid_counting   @f
-from seed.seq_tools.avoid_substrs__multi_word_delimiter_token__layout_with_std_both_marker__solid_counting import *
 
 
 [[
@@ -554,15 +553,20 @@ print_mx__semicolon_
 '''.split()#'''
 __all__
 
-from operator import __index__
-from itertools import count as count_
 
-from seed.tiny import check_type_is, check_callable
-from seed.tiny_.check import check_int_ge #check_uint_lt, check_int_ge_lt, , check_int_ge_le
-from seed.tiny_.dict__add_fmap_filter import fmap4dict_value_with_key
-from seed.helper.repr_input import repr_helper
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'count:count_'):
+    from seed.tiny_.check import check_int_ge, check_type_is, check_callable
+    from seed.tiny_.dict__add_fmap_filter import fmap4dict_value_with_key
+    from seed.helper.repr_input import repr_helper
 
-from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_ops__int # ring_ex_ops__Fraction, ring_ex_ops__BinaryField
+
+    from operator import __index__
+    from itertools import count as count_
+
+
+from seed.math.matrix.solve_matrix import linear_solver as _ops4mx , ring_ex_ops__int as _ops4ring #NoRowMatrix, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
     #linear_solver :: LinearEquationSolver <: BasicOps4MatrixOverRing <: BasicMatrixOps
     #
     #BasicMatrixOps.mk_matrix__ij2v/get_matrix_shape
@@ -572,8 +576,10 @@ from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_op
     #seed.math.IRingOps::IRingOps.mk_ring_element5int
     #ring_ex_ops__int :: IRingExOps <: IRingOps
 
-_ops4ring = ring_ex_ops__int
-_ops4mx = linear_solver
+#_ops4ring = ring_ex_ops__int
+#_ops4mx = linear_solver
+___end_mark_of_excluded_global_names__0___ = ...
+
 def _fr(i, /):
     i = __index__(i)
     i = _ops4ring.mk_ring_element5int(i)
@@ -931,8 +937,9 @@ def check_args4multi_cell_delimiter_token__layout_with_std_both_marker(len4begin
     m = len4begin_marker
     w = len4end_marker
     ######################
-if 0:
+def __():
   class SolidCounting__multi_cell_delimiter_token__layout_with_std_both_marker:
+    #fail
     def __init__(sf, len4begin_marker, len4end_marker, sz4alphabet9cell4begin_marker, sz4alphabet9cell4end_marker, sz4alphabet9cell4extra, /):
         check_args4multi_cell_delimiter_token__layout_with_std_both_marker(len4begin_marker, len4end_marker, sz4alphabet9cell4begin_marker, sz4alphabet9cell4end_marker, sz4alphabet9cell4extra)
         sf._args = (len4begin_marker, len4end_marker, sz4alphabet9cell4begin_marker, sz4alphabet9cell4end_marker, sz4alphabet9cell4extra)
@@ -969,24 +976,10 @@ if 0:
         ...
 
 
-def __():
-    from seed.tiny import ifNonef, ifNone, echo
-    from seed.tiny import check_type_is, fst, snd, at
-    from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
-
-def __():
-    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-    from seed.helper.repr_input import repr_helper
-    class _(ABC):
-        __slots__ = ()
-        raise NotImplementedError
-        ___no_slots_ok___ = True
-        def __repr__(sf, /):
-            #return repr_helper(sf, *args, **kwargs)
-            #return repr_helper_ex(sf, args, ordered_attrs, kwargs, ordered_attrs_only=False)
-            ...
 __all__
+
+
+from seed.seq_tools.avoid_substrs__multi_word_delimiter_token__layout_with_std_both_marker__solid_counting import mk__st_trans_mx_ex_, mk__inv_st_trans_mx_ex_, print_mx__semicolon_, print_mx__lsls_
 
 
 from seed.seq_tools.avoid_substrs__multi_word_delimiter_token__layout_with_std_both_marker__solid_counting import *

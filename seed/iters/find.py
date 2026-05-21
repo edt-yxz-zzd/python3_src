@@ -1,8 +1,6 @@
-
+#__all__:goto
 r'''
 seed.iters.find
-py -m seed.iters.find
-from seed.iters.find import iter_search_subseq_on_seq, iter_search_subseq_on_stream
 
 
 see:
@@ -19,8 +17,10 @@ see:
         #def&search "line"
         #using step_builder,step_predicator
 
-py -m nn_ns.app.debug_cmd   seed.iters.find
-py -m nn_ns.app.doctest_cmd seed.iters.find:__doc__ -v
+
+py -m seed.iters.find
+py -m nn_ns.app.debug_cmd   seed.iters.find -x
+py -m nn_ns.app.doctest_cmd seed.iters.find:__doc__ -ff -v
 
 #'''
 
@@ -53,12 +53,19 @@ __all__ = '''
     #mk_iter_pairs5seq
     #mk_iter_pairs5istream
     #is_stop_location5tmay__is_stop_location_or_stop_location
-from seed.types.to_container import to_tuple
-from seed.tiny import snd
-from seed.types.WindowFIFO import WindowQueueRILRO
-from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+__all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.to_container import to_tuple
+    from seed.tiny_.funcs import snd
+    from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+
+    from seed.types.WindowFIFO import WindowQueueRILRO
 from collections.abc import Sequence
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def mk_last_succ_pos2restart_pos__from_seq(seq, /):
@@ -273,7 +280,7 @@ def mk_iter_pairs5seq(seq, /, begin, end):
     #(begin, end) = mk_seq_rng(seq, begin, end)
     (begin, end) = mk_seq_rng(seq, begin, end, strict=False)
     for i in range(begin, end):
-        x = seq[x]
+        x = seq[i]
         yield (x, i+1)
 def is_stop_location5tmay__is_stop_location_or_stop_location(tmay__is_stop_location_or_stop_location, /):
     if not len(tmay__is_stop_location_or_stop_location) <= 1: raise TypeError
@@ -385,7 +392,7 @@ class FindSubseqOverlap:
 
         w = sf.get_len_window()
         w1 = w+1
-        if type(start_locations) is WindowQueueRILRO:
+        if type(start_locations) is force_lazy_imported_func_(WindowQueueRILRO):
             q = start_locations
             if (None is not q.get_may_len_window() < w1):raise ValueError
         else:
@@ -888,7 +895,9 @@ def _t_sl(seq, subseq, ans, overlap, seq2xxx, reset_xxx, gs, /):
         for vs in it:
             reset_xxx(xxx)
             kws = dict(zip(keys, vs))
-            #print(seq, xxx)
+            if 0b0000:print_err(seq, xxx)
+                # b'\x02\x02\x02\x02\x02\x02\x02' <_io.BytesIO object at 0x765d04e520>
+                # b'\x02\x02\x02\x02\x02\x02\x02' b'\x02\x02\x02\x02\x02\x02\x02'
             r = f(xxx, subseq, **kws)
             assert iter(r) is r
             r = [*r]
@@ -896,7 +905,8 @@ def _t_sl(seq, subseq, ans, overlap, seq2xxx, reset_xxx, gs, /):
 if __name__ == "__main__":
     import itertools
     import io
-    from seed.tiny import assert_eq
+    from seed.debug.print_err import print_err
+    from seed.debug.assert_eq import assert_eq #mk_assert_eq_f
     from seed.helper.get_args_kwargs import mk_GetArgsKwargs as G, xcall
     _t()
 
@@ -966,7 +976,9 @@ seq_find = find
 ##    except ValueError:
 ##        return -1
 
+from seed.iters.find import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.iters.find import iter_search_subseq_on_seq, iter_search_subseq_on_stream

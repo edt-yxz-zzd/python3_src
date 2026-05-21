@@ -13,7 +13,7 @@ TODO:
         register/unregister callback
 
 seed.types.CuttableStream
-py -m nn_ns.app.debug_cmd   seed.types.CuttableStream
+py -m nn_ns.app.debug_cmd   seed.types.CuttableStream -x
 py -m seed.types.CuttableStream
 
 >>> from seed.types.CuttableStream import CuttableStream, Position, mk_CuttableStream_from_ground_level_tokens, mk_CuttableStream_from_ground_level_tokens5file, mk_userdata__pair, mk_userdata__token, iter_tokens5file
@@ -637,11 +637,16 @@ CuttableStreamError
     CuttableStreamError__seek_when_cutting
     CuttableStreamError__seek_when_filling
 '''.split()#'''
+    #MayPositionTypes
 __all__
-from seed.tiny import check_type_is, check_type_in
-from seed.tiny import check_callable
-from seed.helper.repr_input import repr_helper
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_callable, check_type_in, check_type_is
+    from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
 
 class _Data:
     __slots__ = r'''

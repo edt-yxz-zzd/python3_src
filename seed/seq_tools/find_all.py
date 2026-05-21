@@ -3,12 +3,11 @@ r'''[[[
 e ../../python3_src/seed/seq_tools/find_all.py
 seed.seq_tools.find_all
 
-py -m nn_ns.app.debug_cmd   seed.seq_tools.find_all
+py -m nn_ns.app.debug_cmd   seed.seq_tools.find_all -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.find_all:__doc__ -ff -v
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.seq_tools.find_all   @f
-py -m nn_ns.app.doctest_cmd seed.seq_tools.find_all:__doc__ -v
 
 
-from seed.seq_tools.find_all import find_all_, iter_all_
 
 >>> from seed.seq_tools.find_all import find_all_, iter_all_
 >>> whole = 'ababababa'
@@ -27,13 +26,18 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.tiny import null_iter, check_callable
-from seed.seq_tools.mk_seq_rng import mk_seq_rng# mk_seq_rng__len
-from seed.iters.find import iter_search_subseq_on_seq, iter_search_subseq_on_stream
-#def iter_search_subseq_on_seq(seq, subseq, *, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0):
-#def iter_search_subseq_on_stream(istream, subseq, *, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0):
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_callable
+    from seed.tiny_.containers import null_iter
+    from seed.seq_tools.mk_seq_rng import mk_seq_rng# mk_seq_rng__len
+    from seed.iters.find import iter_search_subseq_on_seq, iter_search_subseq_on_stream
+    #def iter_search_subseq_on_seq(seq, subseq, *, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0):
+    #def iter_search_subseq_on_stream(istream, subseq, *, overlap:bool, last_pos2restart_pos=None, _ver=None, offset=0):
+___end_mark_of_excluded_global_names__0___ = ...
 
-def _():
+def __():
   def find_all_(sub, whole, /):
     L = max(1,len(sub))
     N = len(whole)
@@ -92,4 +96,5 @@ def _iter_all__1(finder, sub, whole, begin, end, /):
 
 
 from seed.seq_tools.find_all import find_all_, iter_all_
+from seed.seq_tools.find_all import *
 

@@ -12,7 +12,7 @@ py_adhoc_call   seed.iters.isplit_if   @f
 >>> from seed.iters.isplit_if import iter_split_if__
 >>> from seed.iters.isplit_if import iter_split_if_starts_, iter_split_if_ends_, iter_split_with_sep_if_, iter_split_without_sep_if_
 
->>> from seed.tiny import not_
+>>> from seed.tiny_.funcs import not_
 
 >>> f = iter_split_without_sep_if_
 >>> [*f(not_, '111 111 000 111 000 000 111'.split())]
@@ -87,10 +87,15 @@ iter_split_if__
 __all__
 
 
-#from seed.iters.iter_with import iter_with_
-from seed.tiny import ifNonef, ifNone, echo
-from seed.tiny_.check import check_uint_lt
-#from itertools import groupby
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.tiny_.check import check_uint_lt
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
+
+
 
 def iter_split_if__(_0123_, may_predicator, iterable, /, *, key):
     r'''_0123_/uint%4 -> may (k->bool) -> Iter x -> (*key::may (x->k)) -> Iter [x]

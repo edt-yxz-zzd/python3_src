@@ -23,10 +23,10 @@ rename:
     e ../../python3_src/seed/func_tools/fmapT/all_xxxT__tiny.py
     e ../../python3_src/seed/func_tools/fmapT/all_xxxT__common_utils.py
 
-
+__all__
 seed.func_tools.fmapT._xxxT__tiny
 py -m    seed.func_tools.fmapT._xxxT__tiny
-py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT._xxxT__tiny
+py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT._xxxT__tiny -x
 py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT._xxxT__tiny > $my_tmp/out4py/debug_cmd.fmapT._xxxT__tiny.txt
 view /sdcard/0my_files/tmp//out4py/debug_cmd.fmapT._xxxT__tiny.txt
 ]]
@@ -38,7 +38,7 @@ view /sdcard/0my_files/tmp//out4py/debug_cmd.fmapT._xxxT__tiny.txt
 ######################original
 seed.func_tools.fmapT.fmapT__tiny
 py -m    seed.func_tools.fmapT.fmapT__tiny
-py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT.fmapT__tiny
+py -m nn_ns.app.debug_cmd   seed.func_tools.fmapT.fmapT__tiny -x
 
 from seed.func_tools.fmapT.fmapT__tiny import fmapT__dict, fmapT__list, fmapT__iter, fmapT__tuple, fmapT__tpls, fmapT__pairs, fmap_rngs2hex_repr
 
@@ -217,6 +217,8 @@ __all__ = '''
     checkT__le
     checkT__ge
     checkT__ge_lt
+    checkT__len_
+    checkTT__len_
     checkT__len_eq
     checkT__len_ne
     checkT__len_lt
@@ -251,7 +253,6 @@ __all__ = '''
     checkT__dictKV
 
 
-
     '''.split()
 #__all__:end]]
 
@@ -259,19 +260,25 @@ __all__ = '''
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.tiny import fmap4dict_value as _fmapT__dict
-from seed.tiny import HexReprInt
-#from seed.tiny import check_type_is
+def __():
+    from seed.debug.print_err import print_err
+    from seed.tiny_.containers import mk_tuple
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.dict__add_fmap_filter import fmap4dict_value as _fmapT__dict
+    from functools import reduce
+#import operator
+from operator import is_not, not_ as __not_
+from itertools import chain, product, compress
+
+from seed.tiny_.HexReprInt import HexReprInt
+#from seed.tiny_.check import check_type_is
+
 from seed.func_tools.dot2 import dot as __dot
 from seed.func_tools.dotSBC import dotC__fT_g
 #from seed.func_tools.dotSBC import dot, dotC__fT_g, dotB__f_gT, dotS__fT_gT, dotC__f1_g, dotB__f_g1, dotC__fm_g, dotB__f_gm, dotT__fs_gTs_hs, dotT__fs_g1s_hs, dotT__fs_gms_hs
 
-#from functools import
-from functools import reduce
-import operator
-from operator import is_not, not_ as __not_
-
-from itertools import chain, product, compress
 
 r'''[[[
 from seed.types.FreeLocalBatchRouter4py import FreeLocalBatchRouter4py, mk_FreeLocalBatchRouter4py
@@ -325,7 +332,7 @@ def xor5iter(it, /):
     it = map(bool, it)
     #op = operator.__xor__
     #op = bool.__xor__
-    op = operator.is_not
+    op = is_not
     return reduce(op, it, False)
 
 
@@ -1021,6 +1028,8 @@ from seed.func_tools.fmapT._xxxT__tiny import (dot
 ,checkT__le
 ,checkT__ge
 ,checkT__ge_lt
+,checkT__len_
+,checkTT__len_
 ,checkT__len_eq
 ,checkT__len_ne
 ,checkT__len_lt

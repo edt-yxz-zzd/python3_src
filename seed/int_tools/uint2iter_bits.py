@@ -1,15 +1,34 @@
+r'''[[[
+e ../../python3_src/seed/int_tools/uint2iter_bits.py
 
+seed.int_tools.uint2iter_bits
+py -m nn_ns.app.debug_cmd   seed.int_tools.uint2iter_bits -x
+py -m nn_ns.app.doctest_cmd seed.int_tools.uint2iter_bits:__doc__ -ht #  -ff -v -df
+]]]'''#'''
 __all__ = '''
     uint2iter_bits
     uint2bytes
 
     uint2bit_length
     uint2byte_length
-    '''.split()
 
-from itertools import dropwhile, islice
-from seed.math.floor_ceil import ceil_div
-from seed.tiny import null_iter
+
+    '''.split()
+    #bytes2iter_bits
+    #
+    #byte_MSB
+    #byte_LSB
+    #byte_bits_from_LSB_to_MSB
+    #byte_bits_from_MSB_to_LSB
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import dropwhile, islice
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.math.floor_ceil_tools.fc_div import ceil_div
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 def uint2bit_length(u):
     return u.bit_length()
@@ -43,13 +62,13 @@ def uint2iter_bits(is_big_endian, u, *, length=None):
     if length is None:
         #length = u.bit_length()
         bs = uint2bytes(is_big_endian, u)
-        if not bs: return null_iter
+        if not bs: return get_null_iter_()
         #num_lead0s = 8 - bs[0].bit_length()
         it = bytes2iter_bits(is_big_endian, bs)
         return dropwhile(lambda b: not b, it)
     byte_length = ceil_div(length, 8)
     bs = uint2bytes(is_big_endian, u, length=byte_length)
-    if not bs: return null_iter
+    if not bs: return get_null_iter_()
     #num_lead0s = 8 - bs[0].bit_length()
     to_drop = byte_length*8 - length
     it = bytes2iter_bits(is_big_endian, bs)
@@ -75,3 +94,5 @@ assert uint2bytes(True, 256, length=2) == b'\x01\x00'
 assert uint2bytes(True, 256, length=1) == b'\x00'
 
 
+from seed.int_tools.uint2iter_bits import uint2iter_bits, uint2bytes
+from seed.int_tools.uint2iter_bits import *

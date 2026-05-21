@@ -46,11 +46,8 @@ from seed.types.Either import mk_Left, mk_Right
 from seed.tiny_.check import check_may_, check_not_
 from seed.tiny_.check import check_non_ABC
 from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
-from seed.tiny import null_iter, null_tuple, mk_tuple, mk_immutable_seq
+from seed.tiny_.containers import mk_immutable_seq, mk_tuple, null_iter, null_tuple
 #from seed.types.StackStyleSet import StackStyleSet# MultiSetStyleStack
-#from seed.tiny_.check import check_pseudo_qual_name, check_callable, check_pair
-#from seed.tiny import chains, snd
-#from seed.tiny_.dict_op__add import dict_add# set_add, dict_update, set_update
 
 #from seed.types.ForkableForwardInputStream import IForkable, IForkableForwardInputStream# ForkableForwardInputStream__using_LazyListIter
 from seed.types.IForkable import IForkable, IForkable__stamp

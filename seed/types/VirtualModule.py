@@ -3,7 +3,7 @@
 __all__ = '''
     register_virtual_module_from_name2attr
     VirtualModule
-    
+
     SpecialMemberAccess
     register_virtual_module
     echo
@@ -19,7 +19,7 @@ def vars(obj):
 
 class SpecialMemberAccess:
     # obj_attr_name maynot be a valid identifier; but should be hashable
-    
+
     def __init__(self, cls_attr_name_for_obj_attr_name):
         self.cls_attr_name = cls_attr_name_for_obj_attr_name
     def get_obj_attr_name(self, obj):
@@ -31,31 +31,34 @@ class SpecialMemberAccess:
         vars(obj)[self.get_obj_attr_name(obj)] = value
 
 name2attr_accessor = SpecialMemberAccess('__name2attr_name__')
+#creating_accessor = SpecialMemberAccess('__creating__')
 
 virtual_module_pkg = __name__
 
 def split_qual_name(qual_name):
+    smay_pkg, _, last_name = qual_name.rpartition('.')
+    return (smay_pkg, last_name)
     names = qual_name.split('.')
     return '.'.join(names[:-1]), names[-1]
 
-def register_virtual_module(virtual_module,
-                            module_name,
-                            pkg=virtual_module_pkg,
-                            assign=False):
+def register_virtual_module(virtual_module, module_name, pkg=virtual_module_pkg, assign=False):
+    #raise Exception((virtual_module, module_name, pkg, assign))
+    #0b0001 and print((virtual_module, module_name, pkg, assign))
     assert module_name.isidentifier()
 
     qual_name = '.'.join([pkg, module_name]) if pkg else module_name
 
     pkg, basic = split_qual_name(qual_name)
+    #0b0001 and print((virtual_module, module_name, pkg, assign), (qual_name, pkg, basic))
     if qual_name in sys.modules:
         if sys.modules[qual_name] is not virtual_module:
             raise ValueError('other same name module exists')
     else:
         if pkg:
             import_module(pkg)
-        
+
         sys.modules[qual_name] = virtual_module
-        import_module(qual_name)
+        if not import_module(qual_name) is virtual_module:raise 000
 
     if assign and pkg:
         pkg_obj = import_module(pkg)
@@ -65,19 +68,20 @@ def register_virtual_module(virtual_module,
     return qual_name
 
 
-def register_virtual_module_from_name2attr(name2attr,
-                                           module_name,
-                                           pkg=virtual_module_pkg,
-                                           assign=False):
+def register_virtual_module_from_name2attr(name2attr, module_name, pkg=virtual_module_pkg, assign=False):
     vm = VirtualModule(name2attr)
     return register_virtual_module(vm, module_name, pkg, assign=assign)
 
 
+_ok_mdl_attrs = ('__spec__', '__path__')
 class VirtualModule:
     __name2attr_name__ = '--name2attr--'
     def __init__(self, name2attr):
         name2attr_accessor.set_obj_attr(self, name2attr)
+        #creating_accessor.set_obj_attr(self, True)
     def __getattribute__(self, name):
+        #0b0001 and print(('nm:', name))
+        #if sf._creating and name in _ok_mdl_attrs: return None
         return name2attr_accessor.get_obj_attr(self)(name)
 
     __call__ = __getitem__ = __getattribute__
@@ -98,7 +102,7 @@ class CachedName2Attr:
 
         case = self.name2case[name] = self.name2attr(name)
         return case
-    
+
 
 
 def echo_attr(name):
@@ -135,7 +139,7 @@ _test()
 
 
 
-    
+
 
 
 

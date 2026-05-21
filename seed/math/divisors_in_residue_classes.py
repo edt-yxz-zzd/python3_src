@@ -493,10 +493,12 @@ Remark.
 '#'; __doc__ = r'#'
 >>> list_divisors_in_residue_class_(60, 7, 3)
 (3, 10)
->>> list_divisors_in_residue_class_(60, 7, 3, dup_ok=True)
-(3, 3, 10, 10)
->>> [*iter_divisors_in_residue_class_(60, 7, 3)]
-[3, 3, 10, 10]
+>>> list_divisors_in_residue_class_(60, 7, 3, dup_ok=True) #??? (3, 3, 10, 10)
+(3, 10)
+
+
+>>> [*iter_divisors_in_residue_class_(60, 7, 3)] #??? [3, 3, 10, 10]
+[3, 10]
 >>> [*iter_divisors_in_residue_class_(60, 7, 3, dup_ko=True)]
 [3, 10]
 >>> for x in iter_divisors_in_residue_class_(60, 7, 3, with_more_info=True):
@@ -634,7 +636,9 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_
     from seed.math.perfect_div import may_perfect_div, tmay_perfect_div
     from seed.math.perfect_div import perfect_div, perfect_kth_root_
-    from seed.math.floor_ceil import ceil_div, floor_sqrt
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
+    from seed.math.floor_ceil_tools.fc_div import ceil_div
+
     from seed.tiny_.check import check_type_is, check_int_ge
     from seed.math.inv_mod__py_ import inv_mod__py_
     from seed.math.gcd import gcd, are_coprime# gcd_many

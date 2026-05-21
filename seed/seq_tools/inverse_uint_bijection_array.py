@@ -1,14 +1,16 @@
 
 
 '''
-inverse_uint_bijection_array
+seed.seq_tools.inverse_uint_bijection_array
 py -m seed.seq_tools.inverse_uint_bijection_array
+
+py -m nn_ns.app.debug_cmd   seed.seq_tools.inverse_uint_bijection_array -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.inverse_uint_bijection_array:__doc__ -ht #  -ff -v -df
 '''
 __all__ = '''
     inverse_uint_bijection_array
     '''.split()
 
-#from seed.tiny import echo
 def inverse_uint_bijection_array(old2new, *, key=None, alphabet_size=None):
     ''':: [ArrayIdx] -> [ArrayIdx]
     :: (a->ArrayIdx) -> Iter a -> UInt -> [ArrayIdx]

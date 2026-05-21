@@ -1,7 +1,9 @@
 r'''
 seed.iters.cmp4iterable
-from seed.iters.cmp4iterable import eq4iterable, cmp4iterable, lt4iterable, le4iterable
-from seed.iters.cmp4iterable import cmp4iterable__lt, lt4iterable__lt
+
+py -m seed.iters.cmp4iterable
+py -m nn_ns.app.debug_cmd   seed.iters.cmp4iterable -x
+py -m nn_ns.app.doctest_cmd seed.iters.cmp4iterable:__doc__ -ht #  -ff -v -df
 
 #'''
 
@@ -15,9 +17,14 @@ __all__ = '''
 
     '''.split()
 
-from seed.tiny import echo, neg_flip
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from seed.func_tools.cmp import std_cmp, le2lt, lt2le, lt2eq, lt2cmp, cmp2lt, cmp2eq, cmp2le
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.func_tools.cmp import std_cmp, le2lt, lt2le, lt2eq, lt2cmp, cmp2lt, cmp2eq, cmp2le
+    from seed.tiny_.funcs import echo, neg_flip
+___end_mark_of_excluded_global_names__0___ = ...
 
 def eq4iterable(lhs_iterable, rhs_iterable, /, *, lhs_key=None, rhs_key=None, key=None, __eq__=None):
     'Iter a -> Iter b -> (lhs_key::a->x) -> (rhs_key::b->y) -> (key::((x->u)|(y->v))) -> (__eq__::u->v->bool).-> bool'
@@ -118,3 +125,6 @@ def le4iterable(lhs_iterable, rhs_iterable, /, *, lhs_key=None, rhs_key=None, ke
     return not lt4iterable(rhs_iterable, lhs_iterable, lhs_key=rhs_key, rhs_key=lhs_key, key=key, __cmp__=neg_flip(__cmp__))
 
 
+from seed.iters.cmp4iterable import eq4iterable, cmp4iterable, lt4iterable, le4iterable
+from seed.iters.cmp4iterable import cmp4iterable__lt, lt4iterable__lt
+from seed.iters.cmp4iterable import *

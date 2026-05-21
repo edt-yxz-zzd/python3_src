@@ -8,7 +8,8 @@ not fast, see below size_XXX in mk4search_subseqs
 
 seed.iters.search_subseqs
 py -m seed.iters.search_subseqs
-from seed.iters.search_subseqs import mk4search_subseqs
+py -m nn_ns.app.debug_cmd   seed.iters.search_subseqs -x
+py -m nn_ns.app.doctest_cmd seed.iters.search_subseqs:__doc__ -ht #  -ff -v -df
 
 
 see:
@@ -35,16 +36,19 @@ __all__ = '''
     mk4search_subseqs
     '''.split()
 
-#from seed.types.to_container import to_tuple
-#from seed.tiny import MapView
-from seed.types.FrozenDict import FrozenDict
-from seed.tiny import at
-from seed.algo.is_sorted import is_strict_sorted
-from seed.iters.find import mk_last_succ_pos2restart_pos__from_seq
-
-#from collections.abc import Sequence
-from collections import defaultdict
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from seed.types.to_container import to_tuple
+    from seed.types.FrozenDict import FrozenDict
+    from seed.tiny_.at import at
+    from seed.algo.is_sorted import is_strict_sorted
+    from seed.iters.find import mk_last_succ_pos2restart_pos__from_seq
+
+    from collections import defaultdict
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 if __name__ == "__main__":
@@ -313,3 +317,5 @@ def mk4search_subseqs(subseq_seq, *, _use_failure_func=True):
 
 
 
+from seed.iters.search_subseqs import mk4search_subseqs
+from seed.iters.search_subseqs import *

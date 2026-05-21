@@ -20,28 +20,19 @@ IFramework4sprp_factor_pint
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#from itertools import islice
 from seed.tiny_.check import check_type_is, check_int_ge
 from seed.helper.ifNone import ifNonef
 
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#from seed.helper.repr_input import repr_helper
-___end_mark_of_excluded_global_names__0___ = ...
 
-#.class __(ABC):
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
 
 def _lazy_imports():
-    'lazy_import'
+    'lazy_import:see:_prepare4whole_.may_utilities'
     global _lazy_imports
     from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
     from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes
     from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
-    from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_ as _is_SPRP_
+    from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_ as _is_SPRP_
     _4lazy_imports = (_is_SPRP_, factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
         #utilities
     def f():
@@ -50,13 +41,14 @@ def _lazy_imports():
     _lazy_imports = f
     if not f is _lazy_imports:raise 000
     return _lazy_imports()
+___end_mark_of_excluded_global_names__0___ = ...
 #.def _x_is_SPRP_(n, /):
 #.    'used in doctest'
 #.    return _is_SPRP_(n)
 #.def _is_SPRP_(n, /):
 #.    "lazy_import"
 #.    global _is_SPRP_
-#.    from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_ as f
+#.    from from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_ as f
 #.    if f is _is_SPRP_:raise 000
 #.    _is_SPRP_ = f
 #.    if not f is _is_SPRP_:raise 000

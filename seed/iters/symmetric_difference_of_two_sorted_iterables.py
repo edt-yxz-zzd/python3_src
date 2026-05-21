@@ -1,11 +1,22 @@
+r'''[[[
+seed.iters.symmetric_difference_of_two_sorted_iterables
+py -m seed.iters.symmetric_difference_of_two_sorted_iterables
+py -m nn_ns.app.debug_cmd   seed.iters.symmetric_difference_of_two_sorted_iterables -x
+py -m nn_ns.app.doctest_cmd seed.iters.symmetric_difference_of_two_sorted_iterables:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 __all__ = '''
     symmetric_difference_of_two_sorted_iterables
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from seed.tiny import echo, with_key, snd
-from .PeekableIterator import PeekableIterator
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, snd, with_key
+    from .PeekableIterator import PeekableIterator
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def symmetric_difference_of_two_sorted_iterables(lefts, rights
@@ -83,7 +94,9 @@ example:
         yield from map(Left, map(snd, lefts.chain_detach()))
         yield from map(Right, map(snd, rights.chain_detach()))
 
+
+from seed.iters.symmetric_difference_of_two_sorted_iterables import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
+from seed.iters.symmetric_difference_of_two_sorted_iterables import symmetric_difference_of_two_sorted_iterables

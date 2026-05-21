@@ -96,6 +96,7 @@ __all__ = '''
     IRecurView
         RecurView4Seq
         RecurView4Mapping
+        RecurView4IRangeBasedIntMapping
 
     default_cfg4RecurView
         cfg2may_cfg4RecurView
@@ -113,7 +114,7 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.types.view.View import MapView, SetView, SeqView
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
-from seed.tiny import check_tmay, check_pair, check_uint
+from seed.tiny_.check import check_tmay, check_pair, check_uint
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class IConfig4RecurView(ABC):
@@ -304,13 +305,12 @@ class Config4RecurView(IConfig4RecurView):
 ___begin_mark_of_excluded_global_names__1___ = ...
 from collections.abc import Set, Sequence, Mapping, ByteString
 from seed.helper.repr_input import repr_helper
-#from seed.abc.IReprHelper import IReprHelper
 
 from seed.tiny_.slice2triple import slice2triple_, fix_slice_by_len_, fix_slice_by_len_of_
 from seed.tiny_.slice2triple import slice2triple, range2triple, convert_triple_as_, range2triple_, slice2triple_
 
-from seed.tiny import echo_key
-from seed.tiny import check_type_is
+from seed.tiny_.echo_key import echo_key
+from seed.tiny_.check import check_type_is
 import operator
 ___end_mark_of_excluded_global_names__1___ = ...
 

@@ -984,21 +984,38 @@ main4batch4iter_continued_fraction_of_irrational_log_Fraction_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 
-from seed.math.floor_ceil import perfect_div, perfect_kth_root_, NotPerfectError__kth_root
-from seed.math.floor_ceil import floor_div, ceil_div
-from seed.math.floor_ceil import floor_log2, ceil_log2
-from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
-from seed.math.gcd import gcd_ex, gcd
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-from seed.tiny_.iter_stop_with_ import iter_stop_with_, GetStopIterationValue
-from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction_
-from seed.types.LazyList import LazyList
-from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import raw_iter_cf_digits4e_the_natural_logarithm_base_
-from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction, cf_0, cf_1, cf_neg1
-from seed.tiny import is_iterator
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt
+    from seed.tiny_.iter_stop_with_ import iter_stop_with_, GetStopIterationValue
 
-from itertools import islice
-from numbers import Rational
+
+
+
+    #from seed.math.floor_ceil_tools.fc_perfect import perfect_kth_root_, NotPerfectError__kth_root
+    from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_
+    from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
+
+
+
+
+    from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits5ND_
+    from seed.math.gcd import gcd_ex, gcd
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fraction_NDs5continued_fraction_
+    from seed.types.LazyList import LazyList
+    from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import raw_iter_cf_digits4e_the_natural_logarithm_base_
+    from seed.math.continued_fraction.continued_fraction_ops____using_LazyList import ContinuedFraction, cf_0, cf_1, cf_neg1
+
+    from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fractions5continued_fraction_, iter_approximate_fraction_NDs5continued_fraction_
+
+    from seed.math.continued_fraction.convert_to_ContinuedFraction_ import mk_ND5or_rational_, convert_to_ContinuedFraction_
+
+    from itertools import islice
+    from fractions import Fraction
+#from numbers import Rational
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -1156,6 +1173,7 @@ def __():
 
 
     ######################
+    from seed.math.continued_fraction.convert_to_ContinuedFraction_ import mk_ND5or_rational_, convert_to_ContinuedFraction_
     def convert_to_ContinuedFraction_(rational_or_pair_or_list_or_iterator, /):
         'cf_like/(Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction) -> cf/ContinuedFraction'
     def cf_log_(base, y, /, **kwds):
@@ -1727,10 +1745,14 @@ def _detect_rational_log_(n0, d0, n1, d1, /):
             return ...
         gn, _en, _ed = m
     else:
-        try:
-            gn = perfect_kth_root_(ed, n0)
-        except NotPerfectError__kth_root:
+        #.try:
+        #.    gn = perfect_kth_root_(ed, n0)
+        #.except NotPerfectError__kth_root:
+        #.    return ...
+        m = may_perfect_kth_root_(ed, n0)
+        if m is None:
             return ...
+        gn = m
         # [gn**ed == n0]
         if not gn**en == n1:
             return ...
@@ -1987,30 +2009,10 @@ def iter_continued_fraction_of_irrational_log_cf_(cf_digits4base, cf_digits4y, /
 
 
 
-def convert_to_ContinuedFraction_(rational_or_pair_or_list_or_iterator, /):
-    'cf_like/(Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction) -> cf/ContinuedFraction'
-    #see:mk_ND5or_rational_
-    x = rational_or_pair_or_list_or_iterator
-    cls = type(x)
-    if cls is LazyList or cls is ContinuedFraction:
-        cf_digits = x
-    if cls is list:
-        cf_digits = iter(cf_digits)
-    elif cls is tuple:
-        pair = x
-        if not len(pair) == 2: raise TypeError
-        N, D = pair
-        cf_digits = iter_continued_fraction_digits5ND_(N, D)
-    elif cls is int or isinstance(x, Rational):
-        N, D = x.as_integer_ratio()
-        cf_digits = iter_continued_fraction_digits5ND_(N, D)
-    elif is_iterator(x):
-        cf_digits = x
-    else:
-        raise TypeError(cls)
-    #cf_digits = LazyList(cf_digits)
-    cf = ContinuedFraction(cf_digits)
-    return cf
+#.def convert_to_ContinuedFraction_(rational_or_pair_or_list_or_iterator, /, *, str_ok=False):
+#.    'cf_like/(Rational|(N,D)|[int]|(Iterator int)|(LazyList int)|ContinuedFraction|[str_ok]=>str/(cf_digits_list_repr|Fraction_repr)) -> cf/ContinuedFraction'
+from seed.math.continued_fraction.convert_to_ContinuedFraction_ import convert_to_ContinuedFraction_
+
 def cf_log_(base, y, /, **kwds):
     r'''[[[
     :: base/cf_like -> y/cf_like -> cf/ContinuedFraction
@@ -2063,25 +2065,11 @@ ContinuedFraction
 ######################
 #main{iter_continued_fraction_of_irrational_log_Fraction_}
 ######################
-def mk_ND5or_rational_(rational_or_ND, /):
-    '((N,D)|Rational) -> (N,D)'
-    #see:convert_to_ContinuedFraction_
-    from fractions import Fraction
-    cls = type(rational_or_ND)
-    if cls is tuple:
-        ND = rational_or_ND
-        N, D = ND
-    elif cls is int or isinstance(rational_or_ND, Rational):
-        rational = rational_or_ND
-        ND = rational.as_integer_ratio()
-    else:
-        raise TypeError(cls)
-    ND = Fraction(*ND).as_integer_ratio()
-        #std...
-    #mk_tuple
-    return ND
+#.def mk_ND5or_rational_(rational_or_ND, /):
+#.    '((N,D)|Rational) -> (N,D)'
+from seed.math.continued_fraction.convert_to_ContinuedFraction_ import mk_ND5or_rational_
+
 def _prepare4main4batch4until4iter_continued_fraction_of_irrational_log_Fraction_(with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only, /):
-    from seed.tiny_.check import check_uint_lt
     check_uint_lt(6, with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only)
     match with_params__vs__without_params__vs__idx_only__vs__ND_only__vs__N_only__vs__D_only:
         case 0:
@@ -2138,8 +2126,6 @@ def main4until4iter_continued_fraction_of_irrational_log_Fraction_(ND4inv_thresh
         # [until:(1-N4err/D4err)*bN <= yD <= (1+N4err/D4err)*bN]
         # until:[(D4err-N4err)*b**N <= D4err*y**D <= (D4err+N4err)*b**N]
     #]]]'''#'''
-    from seed.tiny_.check import check_type_is, check_int_ge
-    from fractions import Fraction
 
     it__NDs4logb_y = main4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, ND4y, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=2)
     base = Fraction(*mk_ND5or_rational_(ND4base))
@@ -2168,7 +2154,6 @@ def main4until4iter_continued_fraction_of_irrational_log_Fraction_(ND4inv_thresh
     bN, yD
     return (idx6cf:=j, approx_ND4logb_y:=(N, D))
 def main4batch4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, NDs4ys, /, *, size, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=0):
-    from seed.tiny_.check import check_type_is, check_int_ge
     check_int_ge(0, size)
     kwds = dict(cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs, may_size=size, to_list=True)
     for ND4y in NDs4ys:
@@ -2176,12 +2161,13 @@ def main4batch4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, NDs4
         yield (ND4base, ND4y, ls)
 def main4iter_continued_fraction_of_irrational_log_Fraction_(ND4base, ND4y, /, *, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs=0, may_size=None, to_list=False):
     #def iter_continued_fraction_of_irrational_log_Fraction_(N4base, D4base, N4y, D4y, /, *, iter_num_bits4k=None, force4using_big_num_bits4k=False, to_detect_rational_result=False, to_detect_rational_result_when_troubleshooting=True, upperbound4num_bits4k=default_upperbound4num_bits4k, upperbound4failure_num_bits4k=default_upperbound4failure_num_bits4k):
-    from seed.tiny_.check import check_uint_lt
     check_uint_lt(3, cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs)
+    r'''[[[
     if 0 == cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs:
-        from seed.tiny import echo
+        from seed.tiny_.funcs import echo
     elif 1 <= cf_digits__vs__approximate_fractions__vs__approximate_fraction_NDs <= 2:
         from seed.math.continued_fraction.continued_fraction_fold import iter_approximate_fractions5continued_fraction_, iter_approximate_fraction_NDs5continued_fraction_
+    #]]]'''#'''
 
 
     ND4base = mk_ND5or_rational_(ND4base)

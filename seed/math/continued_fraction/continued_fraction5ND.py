@@ -20,8 +20,12 @@ iter_continued_fraction_digits_ex5ND_
 '''.split()#'''
 __all__
 
-from seed.tiny import check_type_is, fst
-from seed.tiny_.check import check_uint, check_int_ge
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, fst
+    from seed.tiny_.check import check_type_is, check_uint, check_int_ge
+___end_mark_of_excluded_global_names__0___ = ...
 
 def iter_continued_fraction_digits5ND_(N, D, /):
     '-> Iter cf_digit'

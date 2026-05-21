@@ -1,5 +1,11 @@
 
 '''
+e ../../python3_src/seed/algo/bucket_sort/sparse_big_uints2iter_groups.py
+
+seed.algo.bucket_sort.sparse_big_uints2iter_groups
+py -m nn_ns.app.debug_cmd   seed.algo.bucket_sort.sparse_big_uints2iter_groups -x
+py -m nn_ns.app.doctest_cmd seed.algo.bucket_sort.sparse_big_uints2iter_groups:__doc__ -ht #  -ff -v -df
+
 sort huge uint
     sort bit length first
     for each len:
@@ -12,7 +18,14 @@ __all__ = '''
     sparse_big_uints2iter_groups
     sparse_big_ints2iter_groups
     '''.split()
-from seed.int_tools.uint2iter_bits import (
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import chain
+    from .classify import classify
+    from seed.math.floor_ceil_tools.fc_div import ceil_div
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.int_tools.uint2iter_bits import (
     uint2iter_bits
     ,uint2bytes
 
@@ -21,10 +34,7 @@ from seed.int_tools.uint2iter_bits import (
     )
 
 
-from seed.tiny import echo, fst, snd
-from itertools import chain
-from .classify import classify
-from seed.math.floor_ceil import ceil_div
+___end_mark_of_excluded_global_names__0___ = ...
 
 class Tmp:
     def __init__(self, key, obj):
@@ -379,3 +389,5 @@ if __name__ == "__main__":
 
 
 
+from seed.algo.bucket_sort.sparse_big_uints2iter_groups import sparse_big_uints2iter_groups, sparse_big_ints2iter_groups
+from seed.algo.bucket_sort.sparse_big_uints2iter_groups import *

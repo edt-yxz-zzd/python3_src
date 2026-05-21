@@ -30,8 +30,10 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.recognize.toy.simple_recognizer_._common import abstractmethod, override, ABC
 from seed.recognize.toy.simple_recognizer_.syntax_tree_base import 魖泛变换纟句法树
+___end_mark_of_excluded_global_names__0___ = ...
 
 class 魖匴后处理纟圁訄乙版(ABC):
     #后处理纟解码扌
@@ -228,6 +230,8 @@ class 魖匴后处理纟圁訄乙版(ABC):
 
 #end-class 魖匴后处理纟圁訄乙版(ABC):
 ######################
+__all__
+___begin_mark_of_excluded_global_names__1___ = ...
 from seed.recognize.toy.simple_recognizer_.expr import 具名式,串联式,首选式,锁隙式,独尊式,前瞻式,反转式,忽略式,兼顾式,变果式,重复式,尾限式
 from seed.recognize.toy.simple_recognizer_.expr import 定长式,码集式,常量式,失败式,成功式,空式,引用式
 from seed.recognize.toy.simple_recognizer_.basic import 乸具名引用变量
@@ -244,7 +248,7 @@ def may5tmay_(tmay, /):
         return i
     return None
 
-
+___end_mark_of_excluded_global_names__1___ = ...
 
 死式 = 具名式('死', None, 失败式(None))
 class 乸匴后处理纟圁訄乙版冫解码为表达式(_4repr, 魖匴后处理纟圁訄乙版):
@@ -555,6 +559,8 @@ def 构造冫尾限式扌(e, n, te, /):
 'copy from: ./grammar.py'
 ######################
 ######################
+__all__
+___begin_mark_of_excluded_global_names__2___ = ...
 from seed.recognize.toy.simple_recognizer_.basic import at, 构造冫具名函数扌# 乸具名函数
 from seed.recognize.toy.simple_recognizer_.basic import 数字表,标识体字集,标识首字集,空白字集
 from ast import literal_eval
@@ -572,7 +578,7 @@ def con_(x_xs, /):
 #fst = at[0]
 snd = at[1]
 mk_int = 构造冫具名函数扌('int', int)
-
+___end_mark_of_excluded_global_names__2___ = ...
 
 
 
@@ -747,7 +753,7 @@ def __(*, 欤调试中):
     from seed.recognize.toy.simple_recognizer_.syntax_tree_base import 乸句法树纟基符,乸句法树纟展符
     from seed.recognize.toy.simple_recognizer_.basic import 构造冫具名函数扌
     from seed.recognize.toy.simple_recognizer_.scene import 构造冫解码场景扌
-    from seed.tiny import curry1
+    from seed.tiny_.types5py import curry1
     def 冃基符扌(果, /):
         return 基符名凵变换结果扌('冃基符', 果)
     冃基符扌 = 构造冫具名函数扌(..., 冃基符扌)
@@ -861,6 +867,9 @@ def 生成冫展符讠表达式纟解码器纟子语言纟圁訄乙版扌(冊句
 assert (_arm:=生成冫展符讠表达式纟解码器纟子语言纟圁訄乙版扌(';A=()&`b!>>h ^g[2:3];.'))[::2] == (
     (22, {'A': 具名式(None, 'A', 独尊式(兼顾式(空式, 锁隙式(变果式(the_one_, 引用式(True, 'b')), 引用式(True, 'h'))), 重复式(2, 3, 引用式(True, 'g'))))})
     ), _arm
+
+
+
 __all__
 from seed.recognize.toy.simple_recognizer_.expr_generator__2nd import 生成冫展符讠表达式纟解码器纟子语言纟圁訄乙版扌
 from seed.recognize.toy.simple_recognizer_.expr_generator__2nd import 解码器纟圁訄乙版右递归句法语言巛欤调试中扌

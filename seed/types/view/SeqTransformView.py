@@ -4,10 +4,14 @@ __all__ = '''
     SeqTransformView
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from collections.abc import Sequence
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.funcs import echo
 #from .View import SeqView
-from seed.tiny import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 class SeqTransformView(Sequence):

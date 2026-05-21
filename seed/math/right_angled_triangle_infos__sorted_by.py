@@ -1400,17 +1400,25 @@ iter_validate_via_iter_outputs4key_combinations_
 '''.split()#'''
 __all__
 
-import operator as opss
-from itertools import islice
-from math import isqrt as floor_sqrt_
+___begin_mark_of_excluded_global_names__0___ = ...
+#import operator as opss
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'isqrt:floor_sqrt_'):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import fst, snd
+    from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_lt
+    from seed.tiny_.types5py import MapView
 
-from seed.math.gcd import gcd
-from seed.math.II import II
+    from itertools import islice
+    from math import isqrt as floor_sqrt_
 
-from seed.helper.repr_input import repr_helper
-from seed.tiny import MapView, fst, snd, check_type_is, print_err
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.mapping_tools.dict_op import inv__k2v_to_v2ks# inv__k2v_to_v2k, , inv__k2vs_to_v2k, inv__k2vs_to_v2ks
+    from seed.math.gcd import gcd
+    from seed.math.II import II
+
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.dict__add_fmap_filter import dict_add__new, fmap4dict_value
+    from seed.mapping_tools.dict_op import inv__k2v_to_v2ks
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -4180,7 +4188,6 @@ def _prepare4names4effective_combinations__of__fst_key__snd_key__thd_key(the__do
 
 def _prepare4names4effective_combinations__of__fst_key__snd_key(the__doc__, /):
     #effective_combinations__of__fst_key__snd_key:goto
-    from seed.tiny_.dict__add_fmap_filter import dict_add__new, fmap4dict_value# filter4dict_value, dict_add__is, dict_add__eq, , group4dict_value
     #import re
     j2nm4key_combination = _get_names(the__doc__, 'names4effective_combinations__of__fst_key__snd_key')
         # eg:

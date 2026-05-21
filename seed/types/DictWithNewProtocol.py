@@ -21,7 +21,7 @@ e ../../python3_src/seed/types/DictWithNewProtocol.py
 
 
 
-py -m nn_ns.app.debug_cmd    seed.types.DictWithNewProtocol
+py -m nn_ns.app.debug_cmd    seed.types.DictWithNewProtocol -x
 py -m seed.types.DictWithNewProtocol
 py -m nn_ns.app.adhoc_argparser__main__call8module    seed.types.DictWithNewProtocol
 
@@ -109,6 +109,9 @@ HashProtocol__default()
 
 _attr_seq4dir
 >>> dir(FrozenDictWithNewProtocol__default())
+['__class__', '__class_getitem__', '__contains__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__getattribute__', '__getitem__', '__getstate__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__len__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'get', 'get_storage_item', 'items', 'iter__query_key__storage_key__target_value__triples', 'iter_query_items', 'iter_query_keys', 'iter_storage_items', 'iter_storage_keys', 'iter_target_values', 'keys', 'values']
+
+ '__getstate__'
 ['__class__', '__class_getitem__', '__contains__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__getattribute__', '__getitem__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__len__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'get', 'get_storage_item', 'items', 'iter__query_key__storage_key__target_value__triples', 'iter_query_items', 'iter_query_keys', 'iter_storage_items', 'iter_storage_keys', 'iter_target_values', 'keys', 'values']
 
 
@@ -183,20 +186,36 @@ IDictWithNewProtocol
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 #from seed.mapping_tools.determine_num_slots4hash_map import IDetermineNumSlots4HashMap, determine_num_slots4hash_map
 from enum import Enum, auto
-from itertools import pairwise, groupby, combinations
 from collections.abc import Mapping
 
 #from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import check_type_is, check_type_le, null_tuple, fst, snd, at, curry1, MapView, print_err
-from seed.algo.bucket_sort.bucket_sort_per_row import bucket_sort_per_row
-from seed.math.primes4hash_mapping import find_suitable_seq_size4hash_mapping__tabular
-from seed.math.search_smallest_prime_ge_ import find_suitable_seq_size4hash_mapping__search, search_smallest_prime_ge_, search_smallest_prime_gt_, search_largest_prime_le_, search_largest_prime_lt_
-from seed.seq_tools.bisearch import bisearch
-#from bisect import bisect_left, bisect_right
-from seed.helper.repr_input import repr_helper
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import pairwise, groupby, combinations
+    from seed.algo.bucket_sort.bucket_sort_per_row import bucket_sort_per_row
+    from seed.math.primes4hash_mapping import find_suitable_seq_size4hash_mapping__tabular
+    from seed.math.search_smallest_prime_ge_ import find_suitable_seq_size4hash_mapping__search, search_smallest_prime_ge_, search_smallest_prime_gt_, search_largest_prime_le_, search_largest_prime_lt_
+    from seed.seq_tools.bisearch import bisearch
+    #from bisect import bisect_left, bisect_right
+    from seed.helper.repr_input import repr_helper
+    from seed.debug.print_err import print_err
+    from seed.tiny_.at import at
+    from seed.tiny_.check import check_type_is, check_type_le
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.funcs import fst, snd
+    from seed.tiny_.types5py import MapView, curry1
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
 
 at2 = at(2)
 at1_ = at[1:]
@@ -556,7 +575,7 @@ def _iter_2_ex(sf, /):
     assert sz == 0
 def _correct_js(js, /):
     if js is None:
-        js = null_tuple
+        js = get_null_tuple_()
     elif type(js) is int:
         j = js
         js = (j,)
@@ -610,7 +629,7 @@ def __get_hash_protocol__(cls_or_sf, /):
 
 def iter_items_from_may_mapping_or_items(may_mapping_or_items, /):
     if may_mapping_or_items is None:
-        items = null_tuple
+        items = get_null_tuple_()
     elif hasattr(may_mapping_or_items, 'items'):
         mapping = may_mapping_or_items
         items = getattr(mapping, 'items')()

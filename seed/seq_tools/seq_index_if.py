@@ -1,9 +1,6 @@
-
+#__all__:goto
 '''
 seed.seq_tools.seq_index_if
-py -m seed.seq_tools.seq_index_if
-from seed.seq_tools.seq_index_if import seq_index, seq_index_if, seq_find, seq_find_if
-
 
 see:
     seed.iters.find
@@ -19,11 +16,16 @@ see:
         #def&search "line"
         #using step_builder,step_predicator
 
+seed.seq_tools.seq_index_if
+py -m seed.seq_tools.seq_index_if
+py -m nn_ns.app.debug_cmd   seed.seq_tools.seq_index_if -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.seq_index_if:__doc__ -ht #  -ff -v -df
+
 
 
 
 example:
-    >>> from seed.tiny import expectError
+    >>> from seed.debug.expectError import expectError
     >>> ls = '0123456789'
 
     # XXX success
@@ -87,9 +89,20 @@ __all__ = '''
     seq_find_if
     '''.split()
 
-from .iter_seq_range import iter_seq_range, enumerate_seq
-from seed.tiny import ifNone
+r'''[[[
+    get_args0
+    get_args1
+    get_args
+    make_fthen_ex
+    make_pred_ex
+#]]]'''#'''
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from .iter_seq_range import iter_seq_range, enumerate_seq
+    from seed.helper.ifNone import ifNone
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 def seq_find(__seq, __a, *args, **kwargs):
     # seq_find :: [a] -> a -> ((uint, a)|(-1, None))
@@ -219,9 +232,11 @@ fthen_case = 0 | 1 | 2
 
 
 
+from seed.seq_tools.seq_index_if import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
 
 
+from seed.seq_tools.seq_index_if import seq_index, seq_index_if, seq_find, seq_find_if

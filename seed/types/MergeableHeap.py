@@ -103,7 +103,7 @@ O(N*log(N))操作:
 
 
 
-py -m nn_ns.app.debug_cmd   seed.types.MergeableHeap
+py -m nn_ns.app.debug_cmd   seed.types.MergeableHeap -x
 py -m seed.types.MergeableHeap
 
 from seed.types.MergeableHeap import MergeableHeap, HeapError__Empty, HeapError__EatSelf, HeapError__Validate
@@ -453,10 +453,18 @@ __all__ = '''
 
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator as opss
-from itertools import pairwise
-from seed.tiny import echo, null_tuple
-from seed.helper.repr_input import repr_helper
+
+
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import pairwise
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 class _MHNodeEmpty:
@@ -567,7 +575,7 @@ class HeapError__Validate(Exception):pass
 
 class MergeableHeap:
     def __init__(sf, iterable=None, /, *, key=None, __lt__=None, reverse=False):
-        sf._key_func = echo if key is None else key
+        sf._key_func = force_lazy_imported_func_(echo) if key is None else key
         sf._lt = opss.__lt__ if __lt__ is None else __lt__
         sf._reverse = bool(reverse)
         #==>> __repr__, eat, _lt__payload
@@ -883,7 +891,7 @@ def _node_as_tree(root, /):
     while xs:
         node = xs.pop()
         if node.is_empty:
-            tree = null_tuple
+            tree = get_null_tuple_()
         else:
             children = []
             children.append(ls.pop())

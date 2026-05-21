@@ -231,31 +231,23 @@ check_uint_tree_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.tiny import mk_tuple, null_tuple, ifNone, echo
-from seed.int_tools.digits.uint25bijective_numeration import uint5bijective_numeration_, uint2bijective_numeration_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.tiny_.funcs import echo
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.int_tools.digits.uint25bijective_numeration import uint5bijective_numeration_, uint2bijective_numeration_
 def _API():
     def uint5bijective_numeration_(radix, offsetted_digits, /, *, is_big_endian, offset4digit):
         'radix/uint{>=2} -> Iter offsetted-digit/int{:<-[offset4digit..<offset4digit+radix]} -> uint # [original-bijective_numeration => [offset4digit:=1]]'
     def uint2bijective_numeration_(radix, u, /, *, is_big_endian, offset4digit):
         'radix/uint{>=2} -> uint -> Iter offsetted-digit/int{:<-[offset4digit..<offset4digit+radix]} # [original-bijective_numeration => [offset4digit:=1]]'
 
-#.from itertools import islice
-#.
-#.from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#.from seed.helper.repr_input import repr_helper
-#.from seed.tiny_._Base4repr import _Base4repr
-        #sf._reset4repr(may_args4repr, may_kwds4repr)
-        #sf._init4repr(*args4repr, **kwds4repr)
 ___end_mark_of_excluded_global_names__0___ = ...
 
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
 
 def uint2sint_(u, /):
     'uint -> int'
@@ -293,7 +285,7 @@ def uint2uints_(u, /, *, x5uint_=None):
     'uint -> [uint]'
     check_int_ge(0, u)
     if u == 0:
-        return null_tuple
+        return get_null_tuple_()
     n = u
     us1 = uint2uints1_(uint5pint_(n))
     rs1 = _mk_tuple_fmap_(x5uint_, us1)
@@ -338,7 +330,7 @@ def imay2pints_(imay, /):
     'imay -> [pint]'
     check_int_ge(-1, imay)
     if imay == -1:
-        return null_tuple
+        return get_null_tuple_()
     u = imay
     return uint2pints1_(u)
 def uint5pints1_(ns1, /, *, x2pint_=None, validate=False):

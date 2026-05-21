@@ -775,20 +775,21 @@ uints5nonempty_uints__inc_or_dec_solo_uint_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from string import digits as _j2digit
-from functools import partial
-from itertools import takewhile, islice, product# chain
-from seed.tiny import null_iter
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import partial
+    from itertools import takewhile, islice, product# chain
 
-from seed.math.log__bijective_numeration import uint2len_bijective_numeration_, radix_pow__bijective_numeration_
+    from seed.math.log__bijective_numeration import uint2len_bijective_numeration_, radix_pow__bijective_numeration_
 
-from seed.int_tools.digits.uint2radix_repr import uint2radix_repr# IUint2RadixRepr__little_endian__plain, IUint2RadixRepr, Uint2RadixRepr
-#def uint2radix_repr(radix_or_an_IUint2RadixRepr, uint, /,*, is_big_endian:bool, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1, input_is_an_IUint2RadixRepr_not_radix=False):
+    from seed.int_tools.digits.uint2radix_repr import uint2radix_repr# IUint2RadixRepr__little_endian__plain, IUint2RadixRepr, Uint2RadixRepr
+    #def uint2radix_repr(radix_or_an_IUint2RadixRepr, uint, /,*, is_big_endian:bool, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1, input_is_an_IUint2RadixRepr_not_radix=False):
 
-from seed.int_tools.digits.radix_repr2uint import radix_repr2uint# IRadixRepr2Uint, RadixRepr2Uint
-#def radix_repr2uint(radix_or_an_IRadixRepr2Uint, digits, /,*, is_big_endian:bool, _merge_ver:'0|1|2'=0, input_is_an_IRadixRepr2Uint_not_radix=False):
+    from seed.int_tools.digits.radix_repr2uint import radix_repr2uint# IRadixRepr2Uint, RadixRepr2Uint
+    #def radix_repr2uint(radix_or_an_IRadixRepr2Uint, digits, /,*, is_big_endian:bool, _merge_ver:'0|1|2'=0, input_is_an_IRadixRepr2Uint_not_radix=False):
 
-from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt
-from seed.tiny_.fmap4may import fmap4may
+    from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt
+    from seed.tiny_.fmap4may import fmap4may
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

@@ -124,10 +124,14 @@ ValueError: Function has keyword-only parameters or annotations, use inspect.sig
 >>> get_signature_of__py2_(f)
 ((('a', ()), ('b', ('bbb',))), None, None)
 >>> f = bool
->>> get_signature_of__py3_(f)
+>>> get_signature_of__py3_(f) #Python 3.11.9
+(((), (), (('args', (), ()),), (), (('kwargs', (), ()),)), ())
+
+#>>> get_signature_of__py3_(f) #pre-Python 3.11.9
 Traceback (most recent call last):
     ...
 ValueError: no signature found for builtin type <class 'bool'>
+
 >>> f = set.add
 >>> get_signature_of__py3_(f)
 Traceback (most recent call last):
@@ -169,7 +173,7 @@ ValueError: Function has keyword-only parameters or annotations, use inspect.sig
 
 >>> from seed.for_libs.for_inspect import pairs5api_, pairs5api__zdefault_
 >>> from seed.for_libs.for_inspect import pairs5api__raise, pairs5api__Nothing_, pairs5api__None
->>> from seed.tiny import echo
+>>> from seed.tiny_.funcs import echo
 
 >>> class ok(Exception):pass
 >>> class bad(Exception):pass
@@ -462,8 +466,8 @@ __all__
 
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import compress
 import inspect
+from inspect import Parameter as _Parameter__py3, Signature as _Signature__py3 # py3/py4 may has diff Parameter, Signature
 try:
     from inspect import getargspec as _getargspec__py2
         #Deprecated since version 3.0:inspect.getargspec(func) -> ArgSpec(args, varargs, keywords, defaults)
@@ -471,14 +475,17 @@ except ImportError:
     #fail@py3_11_9
     _getargspec__py2 = None
 #from inspect import signature as _get_signature_of__py3 #py2/py3 api diff, py3/py4 may be diff too.
-from seed.for_libs.for_inspect__isolated import _get_signature_of__py3
 
-from inspect import Parameter as _Parameter__py3, Signature as _Signature__py3 # py3/py4 may has diff Parameter, Signature
-from seed.helper.get4may import nmay2tmay__Nothing
-    #nmay2tmay__Nothing(Nothing, nmay)
-from seed.tiny import check_type_is
-from seed.tiny_.mk_fdefault import eliminate_tmay__mix# eliminate_tmay, eliminate_tmay__cased, eliminate_tmay_or_raise, eliminate_tmay_or_raise__simple
-from seed.tiny_.mk_fdefault import mk_default__easy#, mk_default, mk_default_or_raise
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import compress
+    from seed.for_libs.for_inspect__isolated import _get_signature_of__py3
+
+    from seed.helper.get4may import nmay2tmay__Nothing
+        #nmay2tmay__Nothing(Nothing, nmay)
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.mk_fdefault import eliminate_tmay__mix# eliminate_tmay, eliminate_tmay__cased, eliminate_tmay_or_raise, eliminate_tmay_or_raise__simple
+    from seed.tiny_.mk_fdefault import mk_default__easy#, mk_default, mk_default_or_raise
     #def mk_default__easy(*tmay_Nothing___or___args4mk_default_or_raise, mirror=False):
     #def mk_default(imay_xdefault_rank, xdefault, /, *args4xdefault):
     #def mk_default_or_raise(mirror_imay_xedefault_rank, xedefault, /, *args4xedefault, mirror:bool):

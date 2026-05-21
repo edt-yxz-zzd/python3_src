@@ -1,11 +1,22 @@
+r'''[[[
+seed.iters.iter_unique_by_eq
+py -m seed.iters.iter_unique_by_eq
+py -m nn_ns.app.debug_cmd   seed.iters.iter_unique_by_eq -x
+py -m nn_ns.app.doctest_cmd seed.iters.iter_unique_by_eq:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 __all__ = '''
     unique_by_eq
     iter_unique_by_eq
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from seed.tiny import echo
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -84,8 +95,10 @@ left_biased objects, keeps the original order
     return
 
 
+from seed.iters.iter_unique_by_eq import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
 
+from seed.iters.iter_unique_by_eq import unique_by_eq, iter_unique_by_eq

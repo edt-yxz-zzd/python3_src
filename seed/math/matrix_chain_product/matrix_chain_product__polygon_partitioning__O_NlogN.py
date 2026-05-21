@@ -42,8 +42,9 @@ e ../../python3_src/seed/math/matrix_chain_product/matrix_chain_product__dynamic
 e ../../python3_src/seed/math/matrix_chain_product/词典序最先的最优三角化方案囗立方算法囗.py
 view ../../python3_src/nn_ns/app/adhoc_argparser__main__call8module.py
 
+__all__
 seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN
-py -m nn_ns.app.debug_cmd   seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN
+py -m nn_ns.app.debug_cmd   seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN -x
 
 py -m nn_ns.app.adhoc_argparser__main__call8module       seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN @matrix_chain_product__polygon_partitioning__O_NlogN  --may_imin=None  '--_turnon_debug=0'  ='range(1,10000)'
     #递归深度？
@@ -66,21 +67,26 @@ matrix_chain_product__polygon_partitioning__O_NlogN
 #囗矩阵乘法链维数序列囗相关函数
 #    Imin8Arc_
 #    IdxArc_
+#    TmpArc_
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import fst, snd
 
-from fractions import Fraction
-from itertools import chain
-from seed.tiny import fst, snd
-from seed.types.MergeableHeap import MergeableHeap
-from seed.algo.bucket_sort.bucket_sort_per_row import bucket_sort_per_row
-from seed.algo.bucket_sort.radix_sort_with_table import radix_sort_with_table
+    from fractions import Fraction
+    from itertools import chain
+    from seed.types.MergeableHeap import MergeableHeap
+    from seed.algo.bucket_sort.bucket_sort_per_row import bucket_sort_per_row
+    from seed.algo.bucket_sort.radix_sort_with_table import radix_sort_with_table
 
-from seed.math.matrix_chain_product.matrix_chain_product__common import is_triangle_order, 准备囗词典序最先的最优三角化方案
-from seed.math.matrix_chain_product.matrix_chain_product__common import unoffset_arcs_, mk_mno_tree_from_unsorted_inner_arcs
+    from seed.math.matrix_chain_product.matrix_chain_product__common import is_triangle_order, 准备囗词典序最先的最优三角化方案
+    from seed.math.matrix_chain_product.matrix_chain_product__common import unoffset_arcs_, mk_mno_tree_from_unsorted_inner_arcs
 
-from seed.math.matrix_chain_product.matrix_chain_product__dynamic_programming__O_NNN import std_api4matrix_chain_product__dynamic_programming__O_NNN
-    #_ONNN_debug__MNO_between_curr_arc_ceil_arcs_
-    #_ONNN_debug__MNO_above_
+    from seed.math.matrix_chain_product.matrix_chain_product__dynamic_programming__O_NNN import std_api4matrix_chain_product__dynamic_programming__O_NNN
+        #_ONNN_debug__MNO_between_curr_arc_ceil_arcs_
+        #_ONNN_debug__MNO_above_
+___end_mark_of_excluded_global_names__0___ = ...
 
 class 囗矩阵乘法链维数序列囗相关函数:
     def fw(sf, i_, /):
@@ -1120,3 +1126,5 @@ def tail4std_api4matrix_chain_product__polygon_partitioning__O_NlogN(矩阵乘�
     return mno_tree
 
 
+from seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN import matrix_chain_product__polygon_partitioning__O_NlogN, std_api4matrix_chain_product__polygon_partitioning__O_NlogN
+from seed.math.matrix_chain_product.matrix_chain_product__polygon_partitioning__O_NlogN import *

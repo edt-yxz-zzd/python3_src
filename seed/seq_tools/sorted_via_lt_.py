@@ -26,10 +26,16 @@ __all__ = r'''
     sorted_via_le_
 '''.split()#'''
 __all__
-from seed.tiny import echo
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+
 import operator #__lt__
 #from seed.abc.Ops__concrete.TotalOrderingOps import TotalOrderingOps
 #from seed.abc.ITotalOrdering import ITotalOrdering
+___end_mark_of_excluded_global_names__0___ = ...
 
 class KeyMkr5lt:
     def __init__(sf, key, lt, /):

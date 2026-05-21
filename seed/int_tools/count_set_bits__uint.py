@@ -1,9 +1,7 @@
 
 r'''
-py -m nn_ns.app.debug_cmd    seed.int_tools.count_set_bits__uint
+py -m nn_ns.app.debug_cmd    seed.int_tools.count_set_bits__uint -x
 py -m seed.int_tools.count_set_bits__uint
-from seed.int_tools.count_set_bits__uint import tabulate4count_set_bits__uint__Brian_Kernighan_Algorithm, itabulate4count_set_bits__uint__Brian_Kernighan_Algorithm
-from seed.int_tools.count_set_bits__uint import  count_set_bits__uint__Brian_Kernighan_Algorithm, count_set_bits__uint__via_binary_repr, count_set_bits__uint__via_hex_repr, count_set_bits__uint__via_bytes_repr
 
 e ../../python3_src/seed/int_tools/count_set_bits__uint.py
 
@@ -44,8 +42,16 @@ __all__ = '''
     '''.split()
 
 
-from seed.tiny import check_uint, MapView
-from seed.int_tools.int_tools import uint2bytes__littleendian
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.types5py import mk_MapView
+    from seed.tiny_.check import check_uint
+    from seed.int_tools.int_tools import uint2bytes__littleendian
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 def itabulate4count_set_bits__uint__Brian_Kernighan_Algorithm(may_uint2num_set_bits, uint_lt, /):
     if may_uint2num_set_bits is None:
@@ -88,7 +94,7 @@ def mk_uint8_to_num_set_bits():
     return uint8_to_num_set_bits
 uint8_to_num_set_bits = mk_uint8_to_num_set_bits()
 def mk_hex2num_set_bits():
-    hex2num_set_bits = MapView({hex(u)[-1]: count_set_bits__uint__via_binary_repr(u) for u in range(16)})
+    hex2num_set_bits = mk_MapView({hex(u)[-1]: count_set_bits__uint__via_binary_repr(u) for u in range(16)})
     return hex2num_set_bits
 hex2num_set_bits = mk_hex2num_set_bits()
 
@@ -112,3 +118,6 @@ if __name__ == "__main__":
     doctest.testmod()
 
 
+from seed.int_tools.count_set_bits__uint import tabulate4count_set_bits__uint__Brian_Kernighan_Algorithm, itabulate4count_set_bits__uint__Brian_Kernighan_Algorithm
+from seed.int_tools.count_set_bits__uint import  count_set_bits__uint__Brian_Kernighan_Algorithm, count_set_bits__uint__via_binary_repr, count_set_bits__uint__via_hex_repr, count_set_bits__uint__via_bytes_repr
+from seed.int_tools.count_set_bits__uint import *

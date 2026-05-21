@@ -277,7 +277,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.debug.print_err import print_err
     from seed.types.Either import mk_Left,mk_Right #Either,Cased
 
-    from seed.data_funcs.lnkls import mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable #rglnkls_ops, empty_rglnkls
+    from seed.data_funcs.lnkls import get_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable #rglnkls_ops, empty_rglnkls
 
     from seed.data_funcs.lnkls import rglnkls2list
 

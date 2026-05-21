@@ -2,6 +2,8 @@
 #r"""[[[
 
 r'''
+py -m nn_ns.app.debug_cmd   seed.int_tools.digits.uint2radix_repr -x
+py -m nn_ns.app.doctest_cmd seed.int_tools.digits.uint2radix_repr:__doc__ -ht #  -ff -v -df
 py -m seed.int_tools.digits.uint2radix_repr
 from seed.int_tools.digits.uint2radix_repr import uint2radix_repr, IUint2RadixRepr__little_endian__plain, IUint2RadixRepr, Uint2RadixRepr
 
@@ -17,15 +19,20 @@ __all__ = '''
                     uint2radix_repr__little_endian
                     uint2radix_repr__big_endian
     '''.split()
-from seed.int_tools.digits._common import _Int, _pow_ge1
-
-
-
-from seed.tiny import null_iter
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc import ABC, abstractmethod, override, ABC__no_slots
-from seed.seq_tools.bisearch import bisearch
-from seed.helper.check.checkers import check_int, check_uint, check_uint_imay, check_type_is
-import itertools
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.int_tools.digits._common import _Int, _pow_ge1
+
+
+
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.seq_tools.bisearch import bisearch
+    from seed.helper.check.checkers import check_int, check_uint, check_uint_imay, check_type_is
+    from itertools import repeat
+___end_mark_of_excluded_global_names__0___ = ...
 
 class IUint2RadixRepr__little_endian__plain(ABC):
     r'''
@@ -90,7 +97,7 @@ class IUint2RadixRepr__little_endian__plain(ABC):
             if sz < min_len:
                 #pad
                 zero = sf.get_zero()
-                yield from itertools.repeat(zero, min_len-sz)
+                yield from repeat(zero, min_len-sz)
 class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
     r'''
     #'''
@@ -165,7 +172,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
             def cut(L):
                 return L > max_len
         if imay_max_len == 0:
-            return null_iter
+            return get_null_iter_()
             return
         #imay_max_len != 0
 
@@ -173,7 +180,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
         zero = sf.get_zero()
         if is_zero(uint):
             #yield from
-            return itertools.repeat(zero, min_len)
+            return repeat(zero, min_len)
             return
         # |uint| != 0
         _divmod = sf.divmod
@@ -214,7 +221,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
                 #min_len >= 1
                 if is_zero(uint):
                     #yield from
-                    return itertools.repeat(zero, min_len)
+                    return repeat(zero, min_len)
                     return
                 # |uint| != 0
                 (eqv_begin, eqv_end) = bisearch(uint, weights, __lt__=lt__abs)
@@ -282,7 +289,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
                 imay_local_iweight, local_low_or_num_pad_zeros = imay_iweight_low_or_num_pad_zeros_pairs.pop()
                 if imay_local_iweight == -1:
                     num_pad_zeros = local_low_or_num_pad_zeros
-                    yield from itertools.repeat(zero, num_pad_zeros)
+                    yield from repeat(zero, num_pad_zeros)
                     local_sz -= num_pad_zeros
                     continue
                 local_iweight, local_low = imay_local_iweight, local_low_or_num_pad_zeros
@@ -295,7 +302,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
                 if eqv_end==0:
                     # 0 <= |local_low| < |radix|
                     yield local_low
-                    yield from itertools.repeat(zero, local_total-1)
+                    yield from repeat(zero, local_total-1)
                     local_sz -= local_total
                     continue
                 local_iweight = eqv_end-1
@@ -314,14 +321,14 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
                 # 0 < |tmp_local_high| < |local_weight|
                 imay_iweight_low_or_num_pad_zeros_pairs.append((local_iweight, tmp_local_high))
                 imay_iweight_low_or_num_pad_zeros_pairs.append((local_iweight, tmp_local_low))
-                #bug:yield from itertools.repeat(zero, local_total-tmp_local_total)
+                #bug:yield from repeat(zero, local_total-tmp_local_total)
                 #   should yield after tmp_local_high, now using num_pad_zeros, see above
             assert local_sz == 0
 
 
         if sz < min_len:
             #pad
-            yield from itertools.repeat(zero, min_len-sz)
+            yield from repeat(zero, min_len-sz)
         return
     #end-def _uint2radix_repr__little_endian__split__tail(sf, uint, /,*, min_len, iweight, weights, lens):
     def _uint2radix_repr__big_endian__split__tail(sf, uint, /,*, min_len, iweight, weights, lens):
@@ -367,7 +374,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
             total4pad -= lens[iweight4high]
                 # total4pad may < 0
             total4pad = max(0, total4pad)
-            yield from itertools.repeat(zero, total4pad)
+            yield from repeat(zero, total4pad)
                 #yield as soon as possible
         total4pad
         del total4pad
@@ -388,7 +395,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
             (eqv_begin, eqv_end) = bisearch(low, weights, begin=0, end=iweight, __lt__=lt__abs)
             if eqv_end==0:
                 # 0 <= |low| < |radix|
-                yield from itertools.repeat(zero, local_total-1)
+                yield from repeat(zero, local_total-1)
                 yield low
                 continue
             iweight = eqv_end-1
@@ -405,7 +412,7 @@ class IUint2RadixRepr(IUint2RadixRepr__little_endian__plain):
             tmp_local_total = lens[eqv_end]#2**eqv_end#2**(1+iweight)
             assert local_total >= tmp_local_total
             if local_total > tmp_local_total:
-                yield from itertools.repeat(zero, local_total-tmp_local_total)
+                yield from repeat(zero, local_total-tmp_local_total)
                     #yield as soon as possible
 
 

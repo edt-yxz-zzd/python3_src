@@ -51,15 +51,17 @@ def python_encoding2html_encoding(encoding):
 
 
 # from seed.text.encodings.known import utf8, gbk, gb18030
+_ok_mdl_attrs = ('__spec__', '__path__')
 def _encoding2encoding(encoding):
     try:
         return lookup_std_encoding(encoding)
     except LookupError:
+        if encoding in _ok_mdl_attrs:
+            return None
         raise ImportError('there are no encoding named {}'.format(encoding))
     raise logic-error
 
-register_virtual_module_from_name2attr(_encoding2encoding, 'known', __name__,
-                                       assign = True)
+register_virtual_module_from_name2attr(_encoding2encoding, 'known', __name__, assign = True)
 
 
 

@@ -296,27 +296,32 @@ ITokenizer4Text
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.types.Either import Cased, Either
-from seed.types.Either import mk_Left, mk_Right
-from seed.tiny_.containers import mk_frozenset, mk_tuple #, null_frozenset, null_iter
-
-from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
-
-from seed.seq_tools.mk_prefix_tree import mk_prefix_tree, lookup_longest_prefix4prefix_tree #, update4prefix_tree, lookup4prefix_tree, iter_lookup_prefix4prefix_tree
-from seed.seq_tools.mk_prefix_tree import view_seq____not_seq_eq_hash #, view_seq____seq_eq_hash
-
-from seed.iters.duplicate_elements import iter_duplicate_representative_elements
-
-from seed.tiny_.check import check_type_le, check_type_is, check_int_ge, check_int_ge_le, check_subscriptable, check_pair
-from seed.tiny_.check import check_non_ABC, check_ABC
-from seed.tiny import MapView, fst, ifNone
-
-
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-
 from enum import Enum
 import re
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+from seed.types.Either import Cased, Either
+from seed.types.Either import mk_Left, mk_Right
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.containers import mk_frozenset, mk_tuple #, null_frozenset, null_iter
+
+    from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+
+    from seed.seq_tools.mk_prefix_tree import mk_prefix_tree, lookup_longest_prefix4prefix_tree #, update4prefix_tree, lookup4prefix_tree, iter_lookup_prefix4prefix_tree
+    from seed.seq_tools.mk_prefix_tree import view_seq____not_seq_eq_hash #, view_seq____seq_eq_hash
+
+    from seed.iters.duplicate_elements import iter_duplicate_representative_elements
+
+    from seed.tiny_.check import check_type_le, check_type_is, check_int_ge, check_int_ge_le, check_subscriptable, check_pair
+    from seed.tiny_.check import check_non_ABC, check_ABC
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import fst
+    from seed.tiny_.types5py import MapView
+    from seed.helper.repr_input import repr_helper
+
+
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

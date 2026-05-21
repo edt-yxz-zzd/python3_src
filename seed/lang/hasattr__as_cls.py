@@ -5,7 +5,7 @@
 r'''
 seed.lang.hasattr__as_cls
 py -m    seed.lang.hasattr__as_cls
-py -m nn_ns.app.debug_cmd   seed.lang.hasattr__as_cls
+py -m nn_ns.app.debug_cmd   seed.lang.hasattr__as_cls -x
 e ../../python3_src/seed/lang/hasattr__as_cls.py
 
 
@@ -123,7 +123,7 @@ __all__ = '''
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.tiny import check_type_is
+from seed.tiny_.check import check_type_is
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH

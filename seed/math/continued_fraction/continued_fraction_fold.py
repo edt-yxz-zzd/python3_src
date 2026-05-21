@@ -981,24 +981,26 @@ continued_fraction_digits_ex5ND_
 '''.split()#'''
 __all__
 
-from itertools import islice, pairwise
-from fractions import Fraction
-from seed.helper.repr_input import repr_helper
-from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
-#from seed.tiny import fst
-#from seed.tiny import check_type_is, check_uint
-from seed.tiny_.check import check_type_is, check_uint, check_int_ge, check_int_ge_lt
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import islice, pairwise
+    from fractions import Fraction
+    from seed.helper.repr_input import repr_helper
+    from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
+    from seed.tiny_.check import check_type_is, check_uint, check_int_ge, check_int_ge_lt
 
-from seed.math.gcd import gcd
-from seed.math.sign_of import sign_of
+    from seed.math.gcd import gcd
+    from seed.math.sign_of import sign_of
 
 
 ######################
 ######move to seed.math.continued_fraction.continued_fraction5ND
 ######re-export:
 ######################
-from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits_ex5ND_, continued_fraction_digits_ex5ND_, iter_continued_fraction_digits5ND_
+    from seed.math.continued_fraction.continued_fraction5ND import iter_continued_fraction_digits_ex5ND_, continued_fraction_digits_ex5ND_, iter_continued_fraction_digits5ND_
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 

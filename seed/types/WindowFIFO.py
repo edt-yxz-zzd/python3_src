@@ -17,9 +17,9 @@ NOTE:
     copy,__repr__,_debug_repr:should update if __init__ api changes
 
 seed.types.WindowFIFO
-py -m nn_ns.app.debug_cmd   seed.types.WindowFIFO
+py -m nn_ns.app.debug_cmd   seed.types.WindowFIFO -x
+py -m nn_ns.app.doctest_cmd seed.types.WindowFIFO:__doc__ -ff -v
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.WindowFIFO   @f
-py -m nn_ns.app.doctest_cmd seed.types.WindowFIFO:__doc__ -v
 
 
 from seed.types.WindowFIFO import WindowQueueRILRO, WindowDeque
@@ -200,18 +200,15 @@ BaseQueueError
 '''.split()#'''
 __all__
 
-def _():
-    from seed.tiny import check_type_is, fst, snd, at
-    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-    from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f, expectError
-    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
-    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-    from seed.helper.repr_input import repr_helper
 
-from seed.tiny_.check import check_uint
-from seed.helper.repr_input import repr_helper
-from itertools import repeat
-    #repeat(elem [,n]) --> elem, elem, elem, ... endlessly or up to n times
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_uint
+    from seed.helper.repr_input import repr_helper
+    from itertools import repeat
+        #repeat(elem [,n]) --> elem, elem, elem, ... endlessly or up to n times
+___end_mark_of_excluded_global_names__0___ = ...
 
 class BaseQueueError(Exception):pass
 class QueueError__full(BaseQueueError):pass

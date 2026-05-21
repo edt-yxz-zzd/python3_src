@@ -4,7 +4,10 @@ e ../../python3_src/seed/math/search_smallest_prime_ge_.py
 !mv ../../python3_src/seed/math/find_prime4hash_mapping.py ../../python3_src/seed/math/search_smallest_prime_ge_.py
 view script/primes4hash_mapping.py
 
-py -m nn_ns.app.debug_cmd    seed.math.search_smallest_prime_ge_
+py -m nn_ns.app.debug_cmd    seed.math.search_smallest_prime_ge_ -x
+
+
+
 py -m nn_ns.app.adhoc_argparser__main__call8module    seed.math.search_smallest_prime_ge_ @_t1
 py -m nn_ns.app.adhoc_argparser__main__call8module    seed.math.search_smallest_prime_ge_ @_t2
 py -m nn_ns.app.adhoc_argparser__main__call8module    seed.math.search_smallest_prime_ge_ @search_smallest_prime_ge_ =585226005592931977
@@ -31,11 +34,15 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from itertools import count
-from seed.tiny import check_uint, check_type_is
-from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
-from seed.math.floor_ceil import floor_log2
-from seed.seq_tools.bisearch import bisearch
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import count
+
+    from seed.tiny_.check import check_uint, check_type_is
+    from seed.seq_tools.bisearch import bisearch
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
+    from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
 if 0:
     from nn_ns.math_nn.prime2 import primes_lt
     _primes_lt1e4 = primes_lt(10**4)
@@ -43,6 +50,7 @@ if 0:
     print(len(_primes_lt1e4))
     assert len(_primes_lt1e4) == 1229
     raise ...
+___end_mark_of_excluded_global_names__0___ = ...
 
 # s/\(, \d\+\)\{16}/\0\r/g
 _primes__first1023 = (

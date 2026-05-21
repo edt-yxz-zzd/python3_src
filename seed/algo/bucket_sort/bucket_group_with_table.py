@@ -1,11 +1,23 @@
+r'''[[[
+seed.algo.bucket_sort.bucket_group_with_table
+py -m nn_ns.app.debug_cmd   seed.algo.bucket_sort.bucket_group_with_table -x
+py -m nn_ns.app.doctest_cmd seed.algo.bucket_sort.bucket_group_with_table:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
+
+
 __all__ = '''
     bucket_group_with_table
     bucket_group
     '''.split()
-from seed.tiny import echo
-from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted
-from seed.iters.ensure import ensure
-from seed.types.DefaultList import DefaultList
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+    from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted
+    from seed.iters.ensure import ensure
+    from seed.types.DefaultList import DefaultList
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -546,8 +558,10 @@ if True:
         raise logic-error
 
 
+from seed.algo.bucket_sort.bucket_group_with_table import *
 if __name__ == "__main__":
     print = new_print
     import doctest
     doctest.testmod()
 
+from seed.algo.bucket_sort.bucket_group_with_table import bucket_group_with_table, bucket_group

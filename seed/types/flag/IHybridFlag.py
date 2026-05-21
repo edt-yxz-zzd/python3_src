@@ -7,7 +7,7 @@ xxTODO
 
 seed.types.flag.IHybridFlag
 py -m seed.types.flag.IHybridFlag
-py -m nn_ns.app.debug_cmd   seed.types.flag.IHybridFlag
+py -m nn_ns.app.debug_cmd   seed.types.flag.IHybridFlag -x
 py -m nn_ns.app.debug_cmd   seed.types.flag.IHybridFlag  > $my_tmp/out4py/seed.types.flag.IHybridFlag.4.__all__.txt
     echo $my_tmp/out4py/seed.types.flag.IHybridFlag.4.__all__.txt
     view /sdcard/0my_files/tmp//out4py/seed.types.flag.IHybridFlag.4.__all__.txt
@@ -237,22 +237,24 @@ IHybridFlag
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    #from seed.tiny_.types5py import MapView
+    from seed.types.view.View import SetView, MapView
+    from seed.helper.AttrCollector import AttrCollector
+    from itertools import chain, starmap
 
 
+from seed.tiny_.containers import mk_frozenset, mk_tuple, null_frozenset, null_iter, null_mapping_view
 import operator as opss # __or__, __and__, __sub__
 import collections # defaultdict
 import collections.abc # Mapping
 
 
-import itertools # chain, starmap
-#from seed.helper.repr_input import repr_helper
-#from seed.types.FrozenDict import FrozenDict
-from seed.helper.AttrCollector import AttrCollector
-from seed.abc.abc import abstractmethod, override # , ABC
+from seed.abc.abc__ver1 import abstractmethod, override # , ABC
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
 
-from seed.tiny import mk_tuple, mk_frozenset, null_frozenset, null_mapping_view, null_iter, print_err
-from seed.types.view.View import SetView, MapView
 from seed.types.logic.ZerothOrderLogic import IProposition, ICachedEnvironment, ICachedEnvironment__cache_is_dict # , eval_proposition_at_configuration__tribool
     # prop.eval_at_configuration__bool
 #from seed.types.logic.ZerothOrderLogic import ALL_STARMAP_SIMPLE_VAR_IMPLY, SIMPLE_VAR_IMPLY, AND, OR, XOR, XNOR, IMPLY, FLIP_IMPLY, TOTAL
@@ -648,6 +650,7 @@ class Helper4HybridFlag___mutex:
     #cinfo[cgroup]->minfo
     #
     #'''
+    ___no_slots_ok___ = True
     def are_two_legal_keys_mutex(sf, lkey, rkey, /):
         if lkey == rkey: return False
         k2minfo_get = sf.合法键互斥归组信息_get
@@ -806,7 +809,7 @@ def mk_k2minfo_ex__from_mgroups_without_cgroups(legal_key_mutex_groups, extra_le
     'Iter (Iter key) -> Iter key -> ((k2minfo, extra_legal_keys), (xgroup_descriptor2legal_key_group, legal_key_group2xgroup_descriptor))'
     extra_discrete_mutex_groups = ([key] for key in extra_legal_keys4discrete_mutex_groups)
     del extra_legal_keys4discrete_mutex_groups
-    legal_key_mutex_groups = itertools.chain(legal_key_mutex_groups, extra_discrete_mutex_groups)
+    legal_key_mutex_groups = chain(legal_key_mutex_groups, extra_discrete_mutex_groups)
     ######################
     ######################
     legal_key_mutex_groups = mk_frozenset(filter(bool, map(mk_frozenset, legal_key_mutex_groups)))
@@ -955,6 +958,7 @@ class IHybridFlag__key_is_str(IHybridFlag):
 class IHybridFlag__instance_state_is_active_keys_only(IHybridFlag):
     r'''
     #'''
+    ___no_slots_ok___ = True
     @classmethod
     def mk_hybrid_flag_builder(cls, /):
         return AttrCollector(cls)
@@ -1049,6 +1053,7 @@ class _View___recur_mapping_value_is_mapping(collections.abc.Mapping):
         ___get_view_of_partial_legal_key2mgroup_info___
             view_of_partial_legal_key2mgroup_info
     #'''
+    ___no_slots_ok___ = True
     def __init__(sf, mapping__recur_value_is_mapping, /):
         sf._d = mapping__recur_value_is_mapping
     def __getitem__(sf, key, /):
@@ -1089,6 +1094,7 @@ class ICachedEnvironment__env_is_hybrid_flag(ICachedEnvironment):
         return cls.___hybrid_flag__is_legal_key_active___(sf, env_variable_name)
 
 class CachedEnvironment__env_is_hybrid_flag(ICachedEnvironment__env_is_hybrid_flag, ICachedEnvironment__cache_is_dict):
+    ___no_slots_ok___ = True
     def __init__(sf, ops4hybrid_flag, may_hybrid_flag, may_legal_keys_as_active_keys, cache=None, /):
         if cache is None:
             cache = {}
@@ -1489,7 +1495,6 @@ example_classes: HybridFlag4test, HybridFlag4test_constraints, Flag4test, Case4t
 >>> from seed.types.logic.ZerothOrderLogic import ALL_STARMAP_SIMPLE_VAR_IMPLY, SIMPLE_VAR_IMPLY, AND, OR, XOR, XNOR, IMPLY, FLIP_IMPLY, TOTAL, ALL
 >>> from seed.types.logic.ZerothOrderLogic import VAR, NOT, NOT_VAR, the_FALSE, the_TRUE, the_YET, ERROR, EvalError
 
-#>>> from seed.tiny import expectError
 
 #old_src: >>> class HybridFlag4test(IHybridFlag__key_is_str__legal_keys_finite__instance_state_is_active_keys_only, constraints=[], partition=['xyz', '', 'w', 'ab', 't', 'ab']): pass
 >>> class HybridFlag4test(IHybridFlag__active_keys_constraints_using_ZerothOrderLogic_at_cls__legal_keys_are_finite__instance_state_is_active_keys_only__key_is_str):
@@ -1685,7 +1690,7 @@ HybridFlag4test({'a'})
 ...     ) = mk_k2minfo_ex__from_mgroups_without_cgroups(['xyz', '', 'w', 'ab', 't', 'ab'], [], shrinkage_k2minfo=True, result_mutable_vs_view=True)[0]
 ...     ___of_obj_at_cls__the_proposition4active_keys_constraints___ = ALL_STARMAP_SIMPLE_VAR_IMPLY([('tz', ['w'], [('b', 'x'), ('', 'yb')])])
 
-#...     ___of_obj_at_cls__the_proposition4active_keys_constraints___ = ALL(*itertools.starmap(SIMPLE_VAR_IMPLY, [('tz', ['w'], [('b', 'x'), ('', 'yb')])]))
+#...     ___of_obj_at_cls__the_proposition4active_keys_constraints___ = ALL(*starmap(SIMPLE_VAR_IMPLY, [('tz', ['w'], [('b', 'x'), ('', 'yb')])]))
 
 
 

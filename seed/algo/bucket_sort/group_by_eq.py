@@ -1,3 +1,8 @@
+r'''[[[
+seed.algo.bucket_sort.group_by_eq
+py -m nn_ns.app.debug_cmd   seed.algo.bucket_sort.group_by_eq -x
+py -m nn_ns.app.doctest_cmd seed.algo.bucket_sort.group_by_eq:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 '''
 group_by_eq
@@ -9,8 +14,13 @@ __all__ = '''
     group_by_eq
     '''.split()
 
-from seed.tiny import echo
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 def group_by_eq(iterable, *, key=None, __eq__=None, list2group=None):
     '''Iter a -> (a -> k) -> (k -> k -> Bool) -> ([a] -> g) -> Iter (k, g)
@@ -98,6 +108,7 @@ example:
 
 
 
+from seed.algo.bucket_sort.group_by_eq import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -108,3 +119,4 @@ if __name__ == "__main__":
 
 
 
+from seed.algo.bucket_sort.group_by_eq import group_by_eq

@@ -17,7 +17,7 @@ __all__ = '''
     assert_seq_eq
     '''.split()
 
-from seed.tiny import print_err
+from seed.debug.print_err import print_err
 
 
 
@@ -60,3 +60,5 @@ def assert_seq_eq(lhs, rhs):
         print_err(rhs[i:])
         raise
 
+from seed.debug.diff_str import diff_str, fst_diff_idx_of__seq, assert_seq_eq
+from seed.debug.diff_str import *

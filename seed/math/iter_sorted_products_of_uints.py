@@ -260,7 +260,7 @@ py -m seed.math.iter_sorted_products_of_uints print_max_gaps_between_sorted_prod
 ==>>
 , (49, 288, 2304, 2592)
 
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='(2304+2592)//2 -5'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='(2304+2592)//2 -5'
 2447
 
 >>> 49**2 < 2447 < 50**2
@@ -441,7 +441,7 @@ e ../../python3_src/seed/math/iter_sorted_products_of_uints.py
 >>> [*iter_approximate_num_pints_lt__generated_by_([2,3,5,7,11,13,17,19], 2**80)]
 [1.0, 81.0, 2150.4495917143804, 27619.935194251317, 235716.78323007358, 1421349.4458287342, 7167370.210745273, 30346393.18970447, 115542533.5714829]
 
->>> from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
+>>> from seed.math.primality_test.strong_probable_prime import is_strong_probable_prime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
 >>> max1 = is_prime__using_A014233_.upperbound
 >>> ls = [*filter(is_prime__using_A014233_, map(1 .__add__, iter_unsorted_products_of_strict_sorted_pairwise_coprime_uints_lt_(max1, [2,3,5,7])))] ; len(ls) #doctest: +SKIP
 18724
@@ -699,15 +699,22 @@ __all__ = r'''
     #iter_sorted_products_of_pairwise_coprime_uints
 
 __all__
-from seed.math.II import II
-from seed.math.gcd import gcd
-from seed.math.lcm import lcm_many
-from seed.math.are_pairwise_coprime import are_pairwise_coprime
-from seed.tiny_.check import check_int_ge
-from seed.tiny import fst
-
+___begin_mark_of_excluded_global_names__0___ = ...
 import heapq
-from itertools import islice, pairwise
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import islice, pairwise
+
+    from seed.tiny_.funcs import fst
+    from seed.tiny_.check import check_int_ge
+
+    from seed.math.II import II
+    from seed.math.gcd import gcd
+    from seed.math.lcm import lcm_many
+    from seed.math.are_pairwise_coprime import are_pairwise_coprime
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 def iter_find_max_gaps_between_sorted_ints(sorted_ints, /):
     sorted_ints = iter(sorted_ints)
@@ -1053,7 +1060,7 @@ def _iter_arrays4approximate_num_pints_lt__generated_by_(coprime_bases, N, /):
         yield ls
 
 def iter_unsorted_primes_lt__prime_eq_one_plus_product_generated_by_strict_sorted_pairwise_coprime_uints_(coprime_bases, may_max1=None, /, *, coprime_factors_is_unsorted_but_finite=False):
-    from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
+    from seed.math.primality_test.strong_probable_prime import is_strong_probable_prime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
     max1 = is_prime__using_A014233_.upperbound
     if not may_max1 is None:
         if may_max1 > max1: raise ValueError(may_max1)

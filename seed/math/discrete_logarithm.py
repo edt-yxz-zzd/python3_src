@@ -126,20 +126,20 @@ IDefaultLookupable
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 
-#from math import isqrt as floor_sqrt_
-from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-from seed.math.floor_ceil import floor_sqrt as floor_sqrt_
-from seed.math.floor_ceil import floor_log2
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from math import isqrt as floor_sqrt
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
 
-from seed.math.II import II, II_mod, II__p2e_
-from seed.math.inv_mod_ import inv_mod_
+    from seed.math.II import II_mod, II__p2e_
+    from seed.math.inv_mod_ import inv_mod_
 
-from seed.math.Chinese_Remainder_Theorem import CRT, ECRT, mk_CRT, apply_CRT, apply_CRT__pairs, check_CRT_ans, CRT_Answer_Error
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
+    from seed.math.Chinese_Remainder_Theorem import apply_CRT__pairs
+    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
 
-#move to: view ../../python3_src/seed/math/find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_.py
-if 1:from seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_ import _find_arbitrary_one_primitive_root_mod_prime_, _find_the_min_primitive_root_mod_prime_, _iter_sorted_primitive_roots_mod_prime_
-#from seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_ import find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_, find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_, iter_sorted_primitive_roots_mod_prime__using_factorization_of_pmm_
+    #move to: view ../../python3_src/seed/math/find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_.py
+    if 1:from seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_ import _find_arbitrary_one_primitive_root_mod_prime_, _find_the_min_primitive_root_mod_prime_, _iter_sorted_primitive_roots_mod_prime_
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def _API():
@@ -416,7 +416,7 @@ def _discrete_logarithm__coprime__order_of_base_is_even_prime_power_(modulus, ba
         # !! [y =!= 1]
         # [k1 =!= 0]
         # [1 <= k1 <= e2]
-        max_sz_per_block = floor_sqrt_(k1)
+        max_sz_per_block = floor_sqrt(k1)
         assert max_sz_per_block >= 1
 
 
@@ -726,7 +726,7 @@ def _discrete_logarithm__coprime__order_of_base_is_odd_prime_power_(modulus, bas
         #below setting [num_blocks := k1**0.5]
         ######################
         # [1 <= k1 <= ep]
-        num_blocks = floor_sqrt_(k1)
+        num_blocks = floor_sqrt(k1)
         # !! [k1 >= 1]
         # [1 <= num_blocks <= k1]
         # [num_blocks ~= O(k1**0.5)]

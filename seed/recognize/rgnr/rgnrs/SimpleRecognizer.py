@@ -76,12 +76,21 @@ SimpleRecognizer__look_ahead
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.func_tools.recur5yield__strict import BoxedTailRecur, BoxedFinalResult
+    from seed.iters.count_ import count_
+    #.from itertools import islice
+    from seed.tiny_.check import check_type_is, check_int_ge, check_pair
+    from seed.tiny_.funcs import const
+    from seed.debug.print_err import print_err
+    from seed.helper.repr_input import repr_helper
+
 #.from seed.func_tools.func_access import FuncAccess
     #for:ci_post(),fpost6ok()
     #see:SimpleRecognizer__ref
     #see:SimpleRecognizer__post6ok
 
-from seed.func_tools.recur5yield__strict import BoxedTailRecur, BoxedFinalResult
 from seed.recognize.rgnr.abc.ISimpleRecognizer import ISimpleRecognizer, ISimpleRecognizeReply, IArgs4recur_call, ICommon4recur_call, ISimpleRecognizerNameServer, IInputSeqEx
 
 from seed.types.Either import Cased, Either# KindedName
@@ -92,14 +101,9 @@ from seed.types.Rope import Rope, null_rope
 import re
 
 from seed.tiny_.containers import mk_tuple, null_tuple
-from seed.iters.count_ import count_
 
-#.from itertools import islice
-from seed.tiny_.check import check_type_is, check_int_ge, check_pair
-from seed.tiny_.funcs import const
 
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.helper.repr_input import repr_helper
 from seed.tiny_._Base4repr import _Base4repr
         #sf._reset4repr(may_args4repr, may_kwds4repr)
         #sf._init4repr(*args4repr, **kwds4repr)
@@ -234,7 +238,6 @@ def _handle6ok4chain(debug, tmay_local_ctx4original, tmay_local_ctx4uncle, args4
     try:
         check_may_oresult_parts(may_oresult_parts)
     except Exception:
-        from seed.tiny import print_err
         print_err('@_handle6ok4chain:', debug)
     return may_oresult_parts
 def _finalize4chain(tmay_local_ctx4original, tmay_local_ctx4uncle, args4recur_call, may_ls, /):
@@ -262,7 +265,6 @@ class SimpleRecognizer__switch(ISimpleRecognizer, _Base4repr):
         sf._init4repr(rgnrs)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnrs = sf._rs
         begin_idx = args4recur_call.begin_idx
         if not rgnrs:
@@ -309,7 +311,6 @@ class SimpleRecognizer__local_ctx_as_dispatch_key(ISimpleRecognizer, _Base4repr)
         sf._init4repr(key2rgnr)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         key2rgnr = sf._d
         rgnr = key2rgnr[args4recur_call.local_ctx]
         return BoxedTailRecur(rgnr._recognize_(args4recur_call))
@@ -332,7 +333,6 @@ class SimpleRecognizer__py_regex(ISimpleRecognizer, _Base4repr):
         sf._init4repr(regex.pattern, matchobj_vs_substr)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         (begin_idx, end_idx, ignore) = args4recur_call.mutable_args[:3]
         matchobj_vs_substr = sf._b
         regex = sf._regex
@@ -366,7 +366,6 @@ class SimpleRecognizer__py_str(ISimpleRecognizer, _Base4repr):
         sf._init4repr(s)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         (begin_idx, end_idx, ignore) = args4recur_call.mutable_args[:3]
         s = sf._s
         ss = args4recur_call.common4recur_call.input_seq_ex.seq_view
@@ -412,7 +411,6 @@ class ISimpleRecognizer__post6ok(ISimpleRecognizer):
         return null_tuple
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnr = sf.wrapped_rgnr
         never_ignore_fpost6ok = sf.never_ignore_fpost6ok
         if not never_ignore_fpost6ok and args4recur_call.ignore:
@@ -716,7 +714,6 @@ class ISimpleRecognizer__local_ctx_manager__projector4local_ctx(ISimpleRecognize
         return old_local_ctx
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnr = sf.wrapped_rgnr
         777;    saved_local_ctx = args4recur_call.local_ctx
         777;    args4recur_call.local_ctx = sf.transfrom4local_ctx(saved_local_ctx)
@@ -812,7 +809,6 @@ class SimpleRecognizer__many(ISimpleRecognizer, _Base4repr):
         sf._init4repr(rgnr, min0, may_max, never_ignore_rope_struct)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         begin_idx = args4recur_call.begin_idx
 
         rgnr = sf._rgnr
@@ -910,7 +906,6 @@ class SimpleRecognizer__look_ahead(ISimpleRecognizer, _Base4repr):
         sf._init4repr(rgnr)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         begin_idx = args4recur_call.begin_idx
         rgnr = sf._rgnr
         rgnz_reply = yield rgnr._recognize_(args4recur_call)
@@ -940,7 +935,6 @@ class SimpleRecognizer__not_follow_by(ISimpleRecognizer, _Base4repr):
         sf._init4repr(rgnr)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnr = sf._rgnr
         rgnz_reply = yield rgnr._recognize_(args4recur_call)
         rgnz_eresult = rgnz_reply.rgnz_eresult.flip()
@@ -957,7 +951,6 @@ class SimpleRecognizer__ref(ISimpleRecognizer, _Base4repr):
         sf._init4repr(nm4rgnr)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         nm4rgnr = sf._nm
         ignore = args4recur_call.ignore
         rgnr5name_ = args4recur_call.common4recur_call.rgnr_name_server.rgnr5name_
@@ -986,7 +979,6 @@ class SimpleRecognizer__constant(ISimpleRecognizer, _Base4repr):
         sf._init4repr(rgnz_eresult)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnz_eresult = sf._er
         end_idx4reply = args4recur_call.begin_idx
         rgnz_reply = args4recur_call.mk_rgnz_reply_(end_idx4reply, rgnz_eresult)
@@ -1071,7 +1063,6 @@ class ISimpleRecognizer__ignore_manager__init(ISimpleRecognizer, _Base4repr):
         '-> bool'
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnr = sf._rgnr
         saved_ignore = args4recur_call.ignore
         777;    args4recur_call.ignore = sf.ignore
@@ -1105,7 +1096,6 @@ class SimpleRecognizer__lift(ISimpleRecognizer, _Base4repr):
         return (args4recur_call.begin_idx,)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnr = sf._rgnr
         777;    infos6pre = sf.collect6pre(args4recur_call)
         rgnz_reply = yield rgnr._recognize_(args4recur_call)
@@ -1142,7 +1132,6 @@ class SimpleRecognizer__nongreedy_end_by0(ISimpleRecognizer, _Base4repr):
         sf._init4repr(rgnr8end, rgnr8body, never_ignore_rope_struct)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnr8end = sf._rgnr8end
         rgnr8body = sf._rgnr8body
 
@@ -1210,7 +1199,6 @@ class SimpleRecognizer__sep_by1(ISimpleRecognizer, _Base4repr):
         sf._init4repr(rgnr8sep, rgnr8body, min0, may_max, never_ignore_rope_struct)
     @override
     def _recognize_(sf, args4recur_call, /):
-        'IArgs4recur_call -> GI(yield:gi/GI;return:(BoxedTailRecur{recur-GI}|BoxedFinalResult{rgnz_reply/ISimpleRecognizeReply})'
         rgnr8whole = sf._rgnr8whole
         return BoxedTailRecur(rgnr8whole._recognize_(args4recur_call))
         777;    yield

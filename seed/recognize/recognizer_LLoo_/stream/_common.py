@@ -107,7 +107,7 @@ from seed.types.ForkableForwardInputStream import mk_forkable_char_stream5txt, m
 
 
 
-from seed.types.IToken import IBaseToken, IToken, BaseToken, Token__char
+from seed.types.IToken import IBaseToken, IToken, Token__char
 from seed.types.IToken import IBasePositionInfo, IPositionInfo4Gap, IPositionInfo4Span
 from seed.types.IToken import LinenoColumn, PositionInfo4Gap__file, PositionInfo4Gap__text_file, PositionInfo4Gap__higher_level, PositionInfo4Span, PositionInfo4Span__text_file
 from seed.types.IToken import Token__char, PositionInfo4Span__text_file, PositionInfo4Gap__text_file, LinenoColumn
@@ -122,7 +122,7 @@ from seed.recognize.recognizer_LLoo_.stream._common import (IToken
 ,mk_forkable_char_stream5txt, mk_forkable_char_stream5ipath, mk_forkable_char_stream5ifile, iter_char_tokens5ifile
 
 
-,IBaseToken, IToken, BaseToken, Token__char
+,IBaseToken, IToken, Token__char
 ,IBasePositionInfo, IPositionInfo4Gap, IPositionInfo4Span
 ,LinenoColumn, PositionInfo4Gap__file, PositionInfo4Gap__text_file, PositionInfo4Gap__higher_level, PositionInfo4Span, PositionInfo4Span__text_file
 ,Token__char, PositionInfo4Span__text_file, PositionInfo4Gap__text_file, LinenoColumn

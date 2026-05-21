@@ -1,5 +1,5 @@
+#__all__:goto
 r'''
-
 e ../../python3_src/seed/math/max_power_of_base_as_factor_of_.py
 
 from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
@@ -25,6 +25,7 @@ SEE ALSO
 Divide, Even Part, Odd Part, p-adic Norm
 ]]]
 
+__all__
 py -m nn_ns.app.debug_cmd   seed.math.max_power_of_base_as_factor_of_ -x
 py -m nn_ns.app.doctest_cmd seed.math.max_power_of_base_as_factor_of_:__doc__ -ff -v
 
@@ -83,12 +84,17 @@ factor_pint_out_2_powers
 ValidateFail__factor_pint_out_power_of_base_
     verify_result5factor_pint_out_power_of_base_
 
-    '''.split()
+'''.split()#'''
+__all__
 
 
-#from nn_ns.math_nn.uint_map import floor_log
-from seed.math.sign_of import sign_of
-from seed.tiny import check_type_is
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from nn_ns.math_nn.uint_map import floor_log
+    from seed.math.sign_of import sign_of
+    from seed.tiny_.check import check_type_is
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def count_num_low_0bits_of_pint(u, /):

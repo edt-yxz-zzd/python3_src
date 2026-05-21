@@ -22,6 +22,7 @@ view script/search_prime_modulus4NTT4len_is_zpow.py
 seed.math.primality_proving__plain
 py -m seed.math.primality_proving__plain
     #see:_debug__N_eq_645
+__all__
 py -m nn_ns.app.debug_cmd   seed.math.primality_proving__plain -x
 py -m nn_ns.app.doctest_cmd seed.math.primality_proving__plain:__doc__ -ff -v
 py_adhoc_call   seed.math.primality_proving__plain   @f
@@ -439,7 +440,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxx
         # [[:素数模的前提] -> [:此前未发现模的非平凡因子的前提]]
         # 模为素数平方 都 不行:
         #   [modulus := 3**2][pseudo_order := 6][partial_ft := 3][b := 2]
-xxxxxxxxxxxx doing 赫拉 海格 鬼畜 纵队
+xxxxxxxxxxxx doing
         #   [6 == phi(9)]
         #   [gcd(9, 2**(6///3)%9 -1) == 3]
         #       #发现模的非平凡因子
@@ -1322,35 +1323,48 @@ RadixPowDominancePlusplusOddNumberRelated
 '''.split()#'''
 __all__
 
-from itertools import count as count_
-from itertools import islice, pairwise
+___begin_mark_of_excluded_global_names__0___ = ...
 from os import SEEK_SET, SEEK_END, SEEK_CUR
 
-from seed.mapping_tools.dict_op import inv__k2v_to_v2ks
-from seed.iters.apply_commutative_operations_except_one import iter_apply_commutative_operations_except_one_
-#def iter_apply_commutative_operations_except_one_(apply_, commutative_operation_keys, x0, /):
-from seed.math.II import II
-from seed.math.gcd import gcd
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-#def semi_factor_pint_via_trial_division(candidate_factors, pint, /):
- #   'Iter factor{>=2} -> pint -> (factor2exp/{factor:exp{>=1}}, unfactored_part{>=1})'
-from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_division_, factor_pint_by_trial_division_ex_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'count:count_'):
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, floor_log_
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import mk_fprint
+    from seed.tiny_.dict__add_fmap_filter import dict_add__new
+    from seed.tiny_.check import check_int_ge, check_int_ge_lt, check_type_is, check_type_le
+    from seed.tiny_.containers import mk_tuple, get_null_tuple_#null_tuple
 
-from seed.math.floor_ceil import floor_log2, floor_sqrt, floor_log_
-from seed.tiny_.dict__add_fmap_filter import dict_add__new
-from seed.math.prime_gens import prime_gen
-from seed.tiny_.check import check_int_ge, check_int_ge_lt# check_uint_lt, check_int_ge_le
-from seed.math.divs import is_odd
-from seed.tiny import check_type_is
-from seed.tiny import check_type_le
+
+
+    from itertools import count as count_
+    from itertools import islice, pairwise
+
+    from seed.mapping_tools.dict_op import inv__k2v_to_v2ks
+    from seed.iters.apply_commutative_operations_except_one import iter_apply_commutative_operations_except_one_
+    #def iter_apply_commutative_operations_except_one_(apply_, commutative_operation_keys, x0, /):
+    from seed.math.II import II
+    from seed.math.gcd import gcd
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+    #def semi_factor_pint_via_trial_division(candidate_factors, pint, /):
+     #   'Iter factor{>=2} -> pint -> (factor2exp/{factor:exp{>=1}}, unfactored_part{>=1})'
+    from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_division_, factor_pint_by_trial_division_ex_
+
+    from seed.math.divs import is_odd
+
+    from seed.helper.repr_input import repr_helper
+
+    from seed.math.primality_test.strong_probable_prime import is_prime__le_pow2_81_
+    from seed.math.prime_sieve.PrimeList import PrimeList
+    #from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_
+#from seed.math.prime_[#broken#]gens import prime_gen
+
+
+
 from seed.io.continue_io import LineContinueIO, IValidatableLineContinueIO
-from seed.tiny import print_err, mk_fprint
-
-#from seed.tiny import null_tuple
-from seed.tiny import mk_tuple
-from seed.helper.repr_input import repr_helper
-
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -1529,7 +1543,6 @@ def _validate_prime_certificate__Nmm__impl_(N, j2prime_factor4ft4Nmm, j2exp4ft4N
 def _4min_witness4composite__may_be_composite(*, begin=9, end=2**16):
     '-> may (N, g, gg0, gg_ls, may_k4gg0) # [[2 <= g < min_prime_factor_of_(N)][not$ is_prime_(g)][[may_k4gg0 is None] <-> [g**(N-1) %N =!= 1]][1 =!= gg0 == g**odd4Nmm %N][[not% may_k4gg0 is None] -> [[k4gg0 > 0][gg0**(2**k4gg0) %N == 1][not$ gg0**(2**(k4gg0-1)) %N <- {1,N-1}]]]] #{enhanced:=False}'
     #   [:min_witness4composite__may_be_composite:primality_test_of_Miller_Rabin]:goto
-    from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
     enhanced = False
     begin = max(9, begin)
     begin |= 1
@@ -2303,8 +2316,9 @@ def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft
 
 
     ######################
-    lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()
+    #.lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()
         # hold weakref
+    prime_list = PrimeList()
 
     ######################
     #trial_division
@@ -2315,7 +2329,9 @@ def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft
         #限制num_primes4trial_division看看是否提速
         num_primes4trial_division = min(256, num_primes4trial_division)
         #没必要:pow(g, Nmm/ft, N) 运算量 大概就是 floor_log2_N次操作
-    for p in islice(prime_gen, num_primes4trial_division):
+
+    #.for p in islice(prime_gen, num_primes4trial_division):
+    for p in islice(prime_list, num_primes4trial_division):
         if not p < max1_p4trial_division:
             # [N is prime]
             break
@@ -2391,7 +2407,8 @@ def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft
     #   !! [[0 < g4ft4Nmm < N] -> [[is_prime_(N)]or[[b :<- [2..<g4ft4Nmm]] -> [is_prime_(b)] -> [b**Nmm %N == 1]]] -> [g4ft4Nmm is_the_least_positive ft4Nmm-partial_pseudo_primitive_root<N>] -> [is_prime_(g4ft4Nmm)]]
     #######
     max1_both = max(max1_witness4composite, max1_partial_pseudo_primitive_root4prime)
-    for p in prime_gen:
+    #.for p in prime_gen:
+    for p in prime_list:
         g = p
         if not g < max1_both:
             break
@@ -2467,7 +2484,8 @@ def raise_version____primality_test__Nmm__plain__sqrt_case_(N, j2prime_factor4ft
                     # ^PrimeCertificate__complete_factorization
             yield
     def iter1(tc, /):
-        for p in prime_gen:
+        #.for p in prime_gen:
+        for p in prime_list:
             if not p < max1_witness4composite:
                 # curr j is unused!
                 # assume [N is prime]
@@ -2654,8 +2672,9 @@ def iter_odd_prime_exs__zpow_dominance_Pmm__P_per_bit_length_(begin_num_bits4N=2
     return
 def iter_until_odd_prime_exs__zpow_dominance_Pmm__P_per_bit_length_(begin_num_bits4N=2, begin_odd4Nmm=1, /):
     '-> Iter (num_bits4N, odd4Nmm, ez4Nmm, case, certificate) # (0,gz)|(1,witness4composite)|(2,nontrivial_factor)'
-    lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()
+    #.lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()
         # hold weakref
+    prime_list = PrimeList()
 
     j2prime_factor4ft4Nmm = (2,)
     for it in iter_N_exss__zpow_dominance_Nmm_(begin_num_bits4N, begin_odd4Nmm):
@@ -3130,7 +3149,7 @@ class RadixPowDominancePlusplusOddPrimeRelated(RadixPowDominancePlusplusOddNumbe
     def iter_until_odd_prime_exs__radix_pow_dominance_Pmm__P_per_num_digits4N_(sf, begin_num_digits4N=2, begin_significand4Nmm=1, /, **kwds):
         '-> Iter (num_digits4N, significand4Nmm, num_tail_zeros4Nmm, case, certificate) # (0,(g|j2g))|(1,witness4composite)|(2,nontrivial_factor)'
         #see:iter_until_odd_prime_exs__zpow_dominance_Pmm__P_per_bit_length_
-        lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()
+        #.lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()
             # hold weakref
 
         j2prime_factor4ft4Nmm = sf.j2prime_factor4radix

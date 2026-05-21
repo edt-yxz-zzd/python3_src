@@ -217,7 +217,10 @@ with timer(prefix='import@seed.recognize.recognizer_LLoo_.grammar...', _to_show_
     #def mk_LLoo__traced(rgnr, /, *, may_label6enter=None, may_label6hdr_sgnl=None, may_label6err=None, may_label6ok=None, may_label6exit=None):
     #def mk_LLoo__traced__simple(label, rgnr, /):
     from seed.tiny_.check import check_type_is, check_type_le, check_tmay, check_pair, check_may_# check_int_ge
-    from seed.tiny import dict_add__new, set_add, dict_add, echo, expectError
+    from seed.debug.expectError import expectError
+    from seed.tiny_.funcs import echo
+    from seed.tiny_.dict_op__add import dict_add, set_add
+    from seed.tiny_.dict__add_fmap_filter import dict_add__new
     from seed.tiny_.mk_fdefault import eliminate_tmay__mix
     #def eliminate_tmay__mix(tmay_value, imay_xdefault_rank, xdefault, /, *args4xdefault):
 

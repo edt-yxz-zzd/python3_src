@@ -1,4 +1,4 @@
-
+#__all__:goto
 
 '''
 key_as_attr/key_as_attr_ex
@@ -11,8 +11,13 @@ a wrapper
         ___mapping_delitem___
 
 
+seed.mapping_tools.key_as_attr
+py -m seed.mapping_tools.key_as_attr
+py -m nn_ns.app.debug_cmd   seed.mapping_tools.key_as_attr -x
+py -m nn_ns.app.doctest_cmd seed.mapping_tools.key_as_attr:__doc__ -ht #  -ff -v -df
+
 example:
-    >>> from seed.tiny import expectError
+    >>> from seed.debug.expectError import expectError
     >>> d = dict(abc='ABC', f='F')
     >>> rw = key_as_attr(d)
     >>> rw.abc
@@ -28,7 +33,8 @@ example:
     >>> rw.f = 'F2'
     >>> rw.f
     'F2'
-    >>> assert rw == KeyAsAttr({'abc': 'ABC', 'f': 'F2', 'a': 'A'})
+    >>> #assert rw == KeyAsAttr({'abc': 'ABC', 'f': 'F2', 'a': 'A'})
+    >>> assert rw == key_as_attr({'abc': 'ABC', 'f': 'F2', 'a': 'A'})
 
 
     >>> r = key_as_attr(d, mutable=False)
@@ -37,15 +43,18 @@ example:
     >>> #assert expectError(KeyError, lambda:r.a = 'A2')
     >>> def assignR(): r.a = 'A2'
     >>> assert expectError(KeyError, assignR)
-    >>> assert r == KeyAsAttr({'abc': 'ABC', 'f': 'F2', 'a': 'A'})
+    >>> #assert r == KeyAsAttr({'abc': 'ABC', 'f': 'F2', 'a': 'A'})
+    >>> assert r == key_as_attr({'abc': 'ABC', 'f': 'F2', 'a': 'A'})
 
 
     >>> w = key_as_attr(d, readable=False)
     >>> assert expectError(KeyError, lambda:w.a)
     >>> w.f = 'F3'
-    >>> assert w == KeyAsAttr({'abc': 'ABC', 'f': 'F3', 'a': 'A'})
+    >>> #assert w == KeyAsAttr({'abc': 'ABC', 'f': 'F3', 'a': 'A'})
+    >>> assert w == key_as_attr({'abc': 'ABC', 'f': 'F3', 'a': 'A'})
     >>> del w.abc
-    >>> assert w == KeyAsAttr({'f': 'F3', 'a': 'A'})
+    >>> #assert w == KeyAsAttr({'f': 'F3', 'a': 'A'})
+    >>> assert w == key_as_attr({'f': 'F3', 'a': 'A'})
 
     >>> rs = key_as_attr_ex(d, has_delitem=False)
     >>> rs.f = 'F4'
@@ -114,13 +123,46 @@ IKeyAsAttrBase
         IKeyAsAttr
     IKeyAsAttr
         KeyAsAttr
+
+
+
+    IKeyAsAttr__setitem
+        UpdatableKeyAsAttr
+    IKeyAsAttr__delitem
+        DeletableKeyAsAttr
+
+
+
+
+
+    final
+    to_be_override
+    to_be_override_in_concrete_subclass
+    the_mapping_getitem
+    the_mapping_setitem
+    the_mapping_newitem
+    the_mapping_overwriteitem
+    the_mapping_delitem
 '''
+__all__
 
 
-
-from itertools import compress
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, ABC
 from seed.abc.IReprHelper import IReprHelper
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import compress
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
+
+
 
 def key_as_attr(mapping, *, mutable=True, readable=True):
     'use the keys of input mapping as the attrs of output obj'
@@ -409,7 +451,7 @@ def __get_KeyAsAttr__bare(key):
 
 
 def _t():
-    from seed.tiny import expectError
+    from seed.debug.expectError import expectError
     d = dict(abc='ABC', f='F')
     rw = key_as_attr(d)
     assert rw.abc == 'ABC'
@@ -446,3 +488,4 @@ if __name__ == "__main__":
 
 
 
+from seed.mapping_tools.key_as_attr import key_as_attr, key_as_attr_ex

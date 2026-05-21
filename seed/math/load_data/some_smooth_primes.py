@@ -6,6 +6,8 @@ see:
 
 
 seed.math.load_data.some_smooth_primes
+py -m nn_ns.app.debug_cmd   seed.math.load_data.some_smooth_primes -x
+py -m nn_ns.app.doctest_cmd seed.math.load_data.some_smooth_primes:__doc__ -ht
 py -m nn_ns.app.doctest_cmd seed.math.load_data.some_smooth_primes:__doc__ -ff -v
 
 >>> from seed.math.load_data.some_smooth_primes import SmoothPrime__base_2_3_5__lt_3317044064679887385962123 as SmP #.smooth_primes__sorted, .prime_bases, .smooth_prime__cofactorization__pairs____sorted, .maxpp
@@ -19,14 +21,18 @@ __all__ = r'''
     SmoothPrime__base_2_3_5__lt_3317044064679887385962123
     '''.split()#'''
 
-from seed.algo.findout_all_maximal_points import findout_all_maximal_points__partial_cmp__O_NNcmp_, findout_all_maximal_points__L_tuples__O_LNlogNcmp_plus_LNNuintop_
-from seed.tiny import snd
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.CachedProperty import CachedProperty
 
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le, iter_unsorted_products_of_coprime_factors__ge_le
-if 0:
-    def semi_factor_pint_via_trial_division(candidate_factors, pint, /):
-        'Iter factor{>=2} -> pint -> (factor2exp/{factor:exp{>=1}}, unfactored_part{>=1})'
-from seed.pkg_tools.load_resource import open_under_pkg_, read_under_pkg_
+    from seed.tiny_.funcs import snd
+
+    from seed.algo.findout_all_maximal_points import findout_all_maximal_points__partial_cmp__O_NNcmp_, findout_all_maximal_points__L_tuples__O_LNlogNcmp_plus_LNNuintop_
+
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division, calc_num_products_of_coprime_factors__ge1_le, calc_num_products_of_coprime_factors__ge_le, iter_unsorted_products_of_coprime_factors__ge_le
+    from seed.pkg_tools.load_resource import open_under_pkg_, read_under_pkg_
+___end_mark_of_excluded_global_names__0___ = ...
 def _read_():
     txt = read_under_pkg_('seed.math._output_', 'seed.math.iter_sorted_products_of_uints..iter_unsorted_primes_lt__prime_eq_one_plus_product_generated_by_strict_sorted_pairwise_coprime_uints_.2-3-5.out.txt', xencoding='u8')
     return (*map(int, txt.split()),)
@@ -41,10 +47,10 @@ def _factors_(prime_bases, smooth_primes, /):
 class SmoothPrime__base_2_3_5__lt_3317044064679887385962123:
     prime_bases = (2,3,5)
     maxpp = 3317044064679887385962123
-        #seed.math.prime_gens:is_prime__using_A014233_.upperbound = 3317044064679887385962123
-    smooth_primes__unsorted = _read_()
-    smooth_primes__sorted = (*sorted(smooth_primes__unsorted),)
-    smooth_prime__cofactorization__pairs____sorted = (*_factors_(prime_bases, smooth_primes__sorted),)
+        #seed.math.primality_test.strong_probable_prime:is_prime__using_A014233_.upperbound = 3317044064679887385962123
+    smooth_primes__unsorted = CachedProperty(lambda sf, /:_read_())
+    smooth_primes__sorted = CachedProperty(lambda sf, /:(*sorted(sf.smooth_primes__unsorted),))
+    smooth_prime__cofactorization__pairs____sorted = CachedProperty(lambda sf, /:(*_factors_(sf.prime_bases, sf.smooth_primes__sorted),))
 
 
     ######################
@@ -301,6 +307,8 @@ class SmoothPrime__base_2_3_5__lt_3317044064679887385962123:
     )
     ######################
     ######################
+SmoothPrime__base_2_3_5__lt_3317044064679887385962123 = SmoothPrime__base_2_3_5__lt_3317044064679887385962123()
+#end-class SmoothPrime__base_2_3_5__lt_3317044064679887385962123:
 
 
 r'''[[[

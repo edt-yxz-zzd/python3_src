@@ -247,13 +247,15 @@ IterUntilEndMarker
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import pairwise
-from unicodedata import lookup as _nm2ch
-from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
-from seed.tiny_.check import check_type_is, check_pair# check_type_le, check_int_ge
-from seed.tiny import fst, snd, ifNone, echo# MapView
-
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from unicodedata import lookup as _nm2ch
+    from itertools import pairwise
+    from seed.iters.PeekableIterator import echo_or_mk_PeekableIterator
+    from seed.tiny_.check import check_type_is, check_pair
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.helper.repr_input import repr_helper
 ___end_mark_of_excluded_global_names__0___ = ...
 
 ######################

@@ -152,9 +152,16 @@ mk_regex5or_pattern_
 __all__
 
 
-from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+___begin_mark_of_excluded_global_names__0___ = ...
 import re
-from seed.tiny import check_type_is, check_uint, null_iter, ifNone
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+    from seed.tiny_.check import check_type_is, check_uint
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.tiny_.containers import get_null_iter_#null_iter
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def check_may_int(mi, /):
@@ -225,7 +232,7 @@ def _find_iter(regex, minlen4match, maxlen4match, xstring, first4both, last4begi
     xstring[:0] #check
     x = prepare4finditer2(minlen4match, maxlen4match, len(xstring), first4both, last4begin, last4end, overlap=overlap)
     if x is False:
-        return null_iter
+        return get_null_iter_()
     (minlen4match, maxlen4match, first4both, last4begin, last4end, overlap) = x
     #print(x)
     f = _find_iter__overlap if overlap else _find_iter__nonoverlap

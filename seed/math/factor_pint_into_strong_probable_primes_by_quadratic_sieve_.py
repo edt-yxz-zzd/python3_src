@@ -1,6 +1,6 @@
 #__all__:goto
 r'''[[[
-e ../../python3_src/seed/math/factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_.py
+e ../../python3_src/seed/math/factor_pint_into_strong_probable_primes_by_quadratic_sieve_.py
 now:
     from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
 
@@ -61,14 +61,15 @@ try:
 
 
 
-seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_
-py -m nn_ns.app.debug_cmd   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ -x
-py -m nn_ns.app.doctest_cmd seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_:__doc__ -ff -v
+__all__
+seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_
+py -m nn_ns.app.debug_cmd   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ -x
+py -m nn_ns.app.doctest_cmd seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_:__doc__ -ff -v
 
 
 
 
-from seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ import factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_, factor_pint_as_pefect_power_, detect_pefect_kth_root_
+from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import factor_pint_into_strong_probable_primes_by_quadratic_sieve_, factor_pint_as_pefect_power_, detect_pefect_kth_root_
 
 
 
@@ -77,13 +78,13 @@ from seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ import f
 
 ######################
 ######################
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='199 * 257' +verbose -grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='199 * 257' +verbose -grow_size_from_null_instead_optimum_size
 semi-factor by trial_division<max1=1024>(51143): ... ...
 semi-factor by trial_division<max1=1024>(51143):duration: 0.005687769999999981 *(unit: 0:00:01)
 {199: 1, 257: 1}
 ######################
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='199 * 257' +verbose --upperbound4prime_factor4trial_division=199 -grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='199 * 257' +verbose --upperbound4prime_factor4trial_division=199 -grow_size_from_null_instead_optimum_size
 ... ...
 sprp-factors-of(51143) = [199, 257]
 sprp-factorization-of(51143) = {199: 1, 257: 1}
@@ -97,14 +98,14 @@ sprp-factorization-of(51143) = {199: 1, 257: 1}
 
 ######################
 ######################
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**17'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**17'
 131101
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**16'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**16'
 65537
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**13'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**13'
 8209
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=199 -grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=199 -grow_size_from_null_instead_optimum_size
 ... ...
 QS-init j2neg1p2e4Qx: ... ...
 QS-init j2neg1p2e4Qx:duration: 0.009505615999999995 *(unit: 0:00:01)
@@ -120,12 +121,12 @@ find factors from solutions: ... ...
 find factors from solutions:duration: 0.00574253899999988 *(unit: 0:00:01)
 _quadratic_sieve_(537993233):duration: 0.562242848 *(unit: 0:00:01)
 _quadratic_sieve_(537993233) = (65537, 8209)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 8209
-detect strong_pseudoprime(8209): ... ...
-detect strong_pseudoprime(8209):duration: 0.0001125390000000781 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 65537
-detect strong_pseudoprime(65537): ... ...
-detect strong_pseudoprime(65537):duration: 9.076999999990676e-05 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 8209
+detect strong_probable_prime(8209): ... ...
+detect strong_probable_prime(8209):duration: 0.0001125390000000781 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 65537
+detect strong_probable_prime(65537): ... ...
+detect strong_probable_prime(65537):duration: 9.076999999990676e-05 *(unit: 0:00:01)
 sprp-factors-of(537993233) = [8209, 65537]
 sprp-factorization-of(537993233) = {8209: 1, 65537: 1}
 {8209: 1, 65537: 1}
@@ -134,7 +135,7 @@ sprp-factorization-of(537993233) = {8209: 1, 65537: 1}
 _quadratic_sieve_(537993233):duration: 0.562242848 *(unit: 0:00:01)
 
 ######################
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=199 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=199 +grow_size_from_null_instead_optimum_size
 ... ...
 ... ...
 QS-init on prime p=47, kk=5: ... ...
@@ -154,12 +155,12 @@ find factors from solutions: ... ...
 find factors from solutions:duration: 0.00046315399999996565 *(unit: 0:00:01)
 _quadratic_sieve_(537993233):duration: 0.06600784599999998 *(unit: 0:00:01)
 _quadratic_sieve_(537993233) = (8209, 65537)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 65537
-detect strong_pseudoprime(65537): ... ...
-detect strong_pseudoprime(65537):duration: 0.00025746100000001437 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 8209
-detect strong_pseudoprime(8209): ... ...
-detect strong_pseudoprime(8209):duration: 0.0001477690000000198 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 65537
+detect strong_probable_prime(65537): ... ...
+detect strong_probable_prime(65537):duration: 0.00025746100000001437 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 8209
+detect strong_probable_prime(8209): ... ...
+detect strong_probable_prime(8209):duration: 0.0001477690000000198 *(unit: 0:00:01)
 sprp-factors-of(537993233) = [65537, 8209]
 sprp-factorization-of(537993233) = {65537: 1, 8209: 1}
 {65537: 1, 8209: 1}
@@ -167,14 +168,14 @@ sprp-factorization-of(537993233) = {65537: 1, 8209: 1}
 0.07 second <<==:
 _quadratic_sieve_(537993233):duration: 0.06600784599999998 *(unit: 0:00:01)
 ######################
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='65537**3' +verbose --upperbound4prime_factor4trial_division=199 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='65537**3' +verbose --upperbound4prime_factor4trial_division=199 +grow_size_from_null_instead_optimum_size
 ... ...
 ... ...
 semi-factor by trial_division<max1=199>(281487861809153): ... ...
 semi-factor by trial_division<max1=199>(281487861809153):duration: 0.005862153000000037 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 281487861809153
-detect strong_pseudoprime(281487861809153): ... ...
-detect strong_pseudoprime(281487861809153):duration: 0.0003166150000000201 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 281487861809153
+detect strong_probable_prime(281487861809153): ... ...
+detect strong_probable_prime(281487861809153):duration: 0.0003166150000000201 *(unit: 0:00:01)
 detect pefect_power(281487861809153): ... ...
 floor_sqrt(281487861809153): ... ...
 floor_sqrt(281487861809153):duration: 0.00018300000000004424 *(unit: 0:00:01)
@@ -191,9 +192,9 @@ floor_kth_root_(11, 65537):duration: 9.599999999998499e-05 *(unit: 0:00:01)
 floor_kth_root_(13, 65537): ... ...
 floor_kth_root_(13, 65537):duration: 9.507699999999897e-05 *(unit: 0:00:01)
 detect pefect_power(281487861809153):duration: 0.0025474620000000003 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 65537
-detect strong_pseudoprime(65537): ... ...
-detect strong_pseudoprime(65537):duration: 0.00023723100000005992 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 65537
+detect strong_probable_prime(65537): ... ...
+detect strong_probable_prime(65537):duration: 0.00023723100000005992 *(unit: 0:00:01)
 sprp-factors-of(281487861809153) = [65537]
 sprp-factorization-of(281487861809153) = {65537: 3}
 {65537: 3}
@@ -230,11 +231,11 @@ floor_kth_root_(5, 65537): ... ...
 
 ######################
 ######################
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**72'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**72'
 4722366482869645213711
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**50'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**50'
 1125899906842679
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='1125899906842679 * 4722366482869645213711' +verbose -grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='1125899906842679 * 4722366482869645213711' +verbose -grow_size_from_null_instead_optimum_size
 ... ...
 ... ...
 QS-init-prepare<n=5316911983139923221788674570210771769, B=943, M=838561807>: floor_log2(n)=122, floor_log2(B)=9, floor_log2(M)=29: ... ...
@@ -244,7 +245,7 @@ QS-init-prepare log2_Qx__ls: ... ...
 ... ...
 ... ...  KeyboardInterrupt
 ######################
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='1125899906842679 * 4722366482869645213711' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='1125899906842679 * 4722366482869645213711' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
 ... ...
 ... ...
 QS-init-prepare<n=5316911983139923221788674570210771769, B=256, M=16777216>: floor_log2(n)=122, floor_log2(B)=8, floor_log2(M)=24: ... ...
@@ -259,10 +260,10 @@ KeyboardInterrupt
 ######################
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
 _quadratic_sieve_: B=18, M=256
     final state
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='8209 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 _quadratic_sieve_: B=23, M=512
     final state
         worse when turnon +time_6
@@ -270,30 +271,30 @@ _quadratic_sieve_: B=23, M=512
 
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='131101 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='131101 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 _quadratic_sieve_: B=37, M=2048
 mk mx<38,68>: ... ...
     final state
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='131101 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='131101 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 _quadratic_sieve_: B=37, M=2048
 mk mx<38,55>: ... ...
     final state
 
 
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**25'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**25'
 33554467
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**25+2**14+2**11'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**25+2**14+2**11'
 33572881
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**35+2**24+2**19'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**35+2**24+2**19'
 34377039877
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33554467 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33554467 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
 _quadratic_sieve_: B=47, M=4096
 mk mx<48,63>: ... ...
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33554467 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33554467 * 65537' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 _quadratic_sieve_: B=37, M=2048
 mk mx<38,75>: ... ...
         better when turnon +time_6
@@ -302,11 +303,11 @@ mk mx<38,75>: ... ...
 
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33554467 * 33572881' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33554467 * 33572881' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
 _quadratic_sieve_: B=6, M=16
 mk mx<7,1>: ... ...
     ??????
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33554467 * 33572881' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33554467 * 33572881' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 _quadratic_sieve_: B=96, M=32768
 mk mx<97,145>: ... ...
     !!!!!!
@@ -315,13 +316,13 @@ mk mx<97,145>: ... ...
 
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33554467 * 33572881 * 34377039877' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33554467 * 33572881 * 34377039877' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 _quadratic_sieve_: B=308, M=1048576
 mk mx<309,212>: ... ...
 KeyboardInterrupt
     to slow at 『solve_matrix: ... ...』
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33554467 * 33572881 * 34377039877' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33554467 * 33572881 * 34377039877' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
 _quadratic_sieve_: B=244, M=524288
 mk mx<245,247>: ... ...
     一次发现3个因子？
@@ -336,14 +337,15 @@ find factors from solutions: ... ...
 find factors from solutions:duration: 0.011779922999991754 *(unit: 0:00:01)
 _quadratic_sieve_(38726427349072400660120479):duration: 117.11754713 *(unit: 0:00:01)
 _quadratic_sieve_(38726427349072400660120479) = (33572881, 34377039877, 33554467)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 33554467
-detect strong_pseudoprime(33554467): ... ...
-detect strong_pseudoprime(33554467):duration: 0.00012346200000479257 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 34377039877
-detect strong_pseudoprime(34377039877): ... ...   detect strong_pseudoprime(34377039877):duration: 0.00013146100000938077 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 33572881
-detect strong_pseudoprime(33572881): ... ...
-detect strong_pseudoprime(33572881):duration: 7.26920000033715e-05 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 33554467
+detect strong_probable_prime(33554467): ... ...
+detect strong_probable_prime(33554467):duration: 0.00012346200000479257 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 34377039877
+detect strong_probable_prime(34377039877): ... ...
+detect strong_probable_prime(34377039877):duration: 0.00013146100000938077 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 33572881
+detect strong_probable_prime(33572881): ... ...
+detect strong_probable_prime(33572881):duration: 7.26920000033715e-05 *(unit: 0:00:01)
 sprp-factors-of(38726427349072400660120479) = [33554467, 34377039877, 33572881]
 sprp-factorization-of(38726427349072400660120479) = {33554467: 1, 34377039877: 1, 33572881: 1}
 {33554467: 1, 34377039877: 1, 33572881: 1}
@@ -359,7 +361,7 @@ sprp-factorization-of(38726427349072400660120479) = {33554467: 1, 34377039877: 1
 
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33572881 * 5**15' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33572881 * 5**15' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 ... ...
 QS-init-prepare<n=6147378112792968750, B=2, M=2>: floor_log2(n)=62, floor_log2(B)=1, floor_log2(M)=1: ... ...
 QS-init-prepare log2_Qx__ls: ... ...
@@ -373,7 +375,7 @@ QS-init drop prime 11
 
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33572881 * 8209**3' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33572881 * 8209**3' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size +time_6
 _quadratic_sieve_: B=153, M=131072
 mk mx<154,109>: ... ...
 _quadratic_sieve_: B=193, M=262144
@@ -381,13 +383,13 @@ mk mx<194,270>: ... ...
 KeyboardInterrupt
 
 
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_  ='33572881 * 8209**3' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @factor_pint_into_strong_probable_primes_by_quadratic_sieve_  ='33572881 * 8209**3' +verbose --upperbound4prime_factor4trial_division=3 +grow_size_from_null_instead_optimum_size
 _quadratic_sieve_: B=96, M=32768
 mk mx<97,183>: ... ...
 mk mx<97,183>:duration: 0.03569646300000073 *(unit: 0:00:01)
 solve_matrix: ... ...
 solve_matrix:duration: 13.157571641999999 *(unit: 0:00:01)
-File "/sdcard/0my_files/git_repos/python3_src/seed/math/factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_.py", line 1002, in _quadratic_sieve_
+File "/sdcard/0my_files/git_repos/python3_src/seed/math/factor_pint_into_strong_probable_primes_by_quadratic_sieve_.py", line 1002, in _quadratic_sieve_
     assert all(e&1==0 for e in acc__neg1p2e.values())
 AssertionError
 ######after fix bug: put 3 into prime_bases when init:
@@ -401,8 +403,8 @@ find factors from solutions: ... ...
 find factors from solutions:duration: 0.02250346199999953 *(unit: 0:00:01)
 _quadratic_sieve_(18572030067003190849):duration: 17.156134272 *(unit: 0:00:01)
 _quadratic_sieve_(18572030067003190849) = (33572881, 553185473329)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 553185473329
-detect strong_pseudoprime(553185473329): ... ...  detect strong_pseudoprime(553185473329):duration: 0.00015846199999813848 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 553185473329
+detect strong_probable_prime(553185473329): ... ...  detect strong_probable_prime(553185473329):duration: 0.00015846199999813848 *(unit: 0:00:01)
 detect pefect_power(553185473329): ... ...
 floor_sqrt(553185473329): ... ...
 floor_sqrt(553185473329):duration: 7.423099999925853e-05 *(unit: 0:00:01)
@@ -419,12 +421,12 @@ floor_kth_root_(11, 8209):duration: 6.461599999951773e-05 *(unit: 0:00:01)
 floor_kth_root_(13, 8209): ... ...
 floor_kth_root_(13, 8209):duration: 8.707699999987994e-05 *(unit: 0:00:01)
 detect pefect_power(553185473329):duration: 0.0011434620000017048 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 8209
-detect strong_pseudoprime(8209): ... ...
-detect strong_pseudoprime(8209):duration: 7.238400000275647e-05 *(unit: 0:00:01)
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: 33572881
-detect strong_pseudoprime(33572881): ... ...
-detect strong_pseudoprime(33572881):duration: 9.446199999985083e-05 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 8209
+detect strong_probable_prime(8209): ... ...
+detect strong_probable_prime(8209):duration: 7.238400000275647e-05 *(unit: 0:00:01)
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 33572881
+detect strong_probable_prime(33572881): ... ...
+detect strong_probable_prime(33572881):duration: 9.446199999985083e-05 *(unit: 0:00:01)
 sprp-factors-of(18572030067003190849) = [8209, 33572881]
 sprp-factorization-of(18572030067003190849) = {8209: 3, 33572881: 1}
 {8209: 3, 33572881: 1}
@@ -443,8 +445,8 @@ quadratic_sieve vs trial_division #_calc_asymptotic_running_time4QS_
     2**40?
     2**16?
     to set "default_upperbound4prime_factor4trial_division"
-        see:factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_()::kw:upperbound4prime_factor4trial_division
-py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_   @_find_e_that_quadratic_sieve_faster_than_trial_division_if_n_eq_pow2_e_
+        see:factor_pint_into_strong_probable_primes_by_quadratic_sieve_()::kw:upperbound4prime_factor4trial_division
+py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_   @_find_e_that_quadratic_sieve_faster_than_trial_division_if_n_eq_pow2_e_
 >>> _find_e_that_quadratic_sieve_faster_than_trial_division_if_n_eq_pow2_e_()
 16
 
@@ -457,54 +459,66 @@ py_adhoc_call   seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_siev
 2.0
 
 >>> from seed.helper.stable_repr import stable_repr
->>> stable_repr(factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_(8209 * 65537, verbose=False, upperbound4prime_factor4trial_division=3, grow_size_from_null_instead_optimum_size=True))
+>>> stable_repr(factor_pint_into_strong_probable_primes_by_quadratic_sieve_(8209 * 65537, verbose=False, upperbound4prime_factor4trial_division=3, grow_size_from_null_instead_optimum_size=True))
 '{8209: 1, 65537: 1}'
 
 
 #]]]'''
 __all__ = r'''
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_
-    factor_pint_as_pefect_power_
-    detect_pefect_kth_root_
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_
 '''.split()#'''
+    #factor_pint_as_pefect_power_
+    #detect_pefect_kth_root_
     #_coprimes5factors_
+    #default_upperbound4prime_factor4trial_division
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
 
 #import math
 from math import log as ln_, log2 as log2_, exp as exp_
 from math import sqrt as sqrt_, isqrt as isqrt_
 from math import ceil as ceil_, floor as floor_
-from seed.math.sqrts_mod_ import iter_sqrts_mod_prime_power_, iter_sqrts_mod_prime_power__coprime__5one_sqrt_
-#from seed.math.sqrts_mod_ import is_square_residual_mod_prime_
-from seed.math.Jacobi_symbol import Jacobi_symbol
-    #def Jacobi_symbol(M, x, /):
-    #    'M/int{%2==1} -> x/int -> Jacobi_symbol(x::/M)/(-1|0|+1)'
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_type_is
+
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt, ceil_sqrt, floor_kth_root_, ceil_kth_root_
+    from seed.math.floor_ceil_tools.fc_log import floor_log_, floor_log2
+    #from seed.math.floor_ceil_tools.fc_perfect import perfect_kth_root_
+    from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, factor_pint_as_pefect_power_
+
+
+    from seed.math.sqrts_mod_ import iter_sqrts_mod_prime_power_, iter_sqrts_mod_prime_power__coprime__5one_sqrt_
+    #from seed.math.sqrts_mod_ import is_square_residual_mod_prime_
+    from seed.math.Jacobi_symbol import Jacobi_symbol
+        #def Jacobi_symbol(M, x, /):
+        #    'M/int{%2==1} -> x/int -> Jacobi_symbol(x::/M)/(-1|0|+1)'
 
 
 
-from seed.math.prime_gens import prime_gen
-from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_, calc_len_prime_basis4II_prime_basis_gtN_
-from seed.math.prime_gens import prime_basis4A014233
+
+
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers #factor_pint_out_power_of_base_
+    from seed.math.factor_pint_by_trial_division_ import _is_prime__tribool4factor_pint_
 
 
 
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers #factor_pint_out_power_of_base_
+    from seed.math.II import II, II_mod
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+
+
+    from seed.math.gcd import gcd#, gcd_many, are_coprime
+    from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes# semi_factor_coprimess_via_gcd
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_
+    from seed.math.prime_sieve.PrimeList import PrimeList
+
+from seed.math.primality_test.strong_probable_prime import prime_basis4A014233
+#from seed.math.prime_[#broken#]gens import prime_gen
+from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_, calc_len_prime_basis4II_prime_basis_gtN_
 from seed.math.factor_pint_by_trial_division_ import factor_pint_by_trial_division_ex_, default4upperbound4probably_prime, check_result5factor_pint_
-from seed.math.factor_pint_by_trial_division_ import _is_prime__tribool4factor_pint_
 
-
-
-from seed.tiny import print_err
-from seed.tiny import check_type_is
-from seed.math.II import II, II_mod
-from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-
-
-from seed.math.gcd import gcd#, gcd_many, are_coprime
-from seed.math.floor_ceil import floor_sqrt, ceil_sqrt
-from seed.math.floor_ceil import floor_kth_root_, ceil_kth_root_
-from seed.math.floor_ceil import floor_log_, floor_log2
-from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes# semi_factor_coprimess_via_gcd
 from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
     #def solve_equations__matrix__to_representative_solutions(sf, ring_ex_ops, lhs_mx, rhs_mx, /, *, validate):
     #    '-> representative_solutions/Array<(0|(1+(N-L)*K)), matrix<N,K> >'
@@ -513,13 +527,8 @@ from seed.math.matrix.solve_matrix import NoRowMatrix, linear_solver, ring_ex_op
 
 
 
-from seed.for_libs.for_time import (
-Timer__print_err
-    ,timer__print_err__thread_wide
-    ,timer__print_err__process_wide
-    ,timer__print_err__system_wide__highest_resolution
-    ,timer__print_err__system_wide__monotonic
-)
+from seed.for_libs.for_time import timer__print_err__thread_wide
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 __all__
@@ -593,7 +602,7 @@ def _sieving_loop_(x0, x_end, p, kk, rs__p_kk, p_kk, x0__p_kk, /):
     ######################
     return
 class _D23_(dict):pass
-def _body4prepare4QS_(n, B, M, ceil_sqrtN, /, *, verbose, time_6):
+def _body4prepare4QS_(n, B, M, ceil_sqrtN, prime_list, /, *, verbose, time_6):
     def save__offseted_x_(p, offseted_x, /):
         j2offseted_x.append(offseted_x)
     j2offseted_x = []
@@ -618,12 +627,12 @@ def _body4prepare4QS_(n, B, M, ceil_sqrtN, /, *, verbose, time_6):
             # treat_3_specially
             uuu = abs(Qx)
             #bug:assert not uuu == 1
-            #(e, uuu) = factor_pint_out_power_of_base_(p, uuu)
+            #.(e, uuu) = factor_pint_out_power_of_base_(p, uuu)
             (p2e__23, uuu) = semi_factor_pint_via_trial_division(spectial_treated_primes, uuu)
-            if 0b0:
-                if verbose:
-                    if e:
-                        print_err(f'n={n}, x={x}, Qx={Qx}={uuu}*{p}**{e}')
+            #.if 0b0:
+            #.    if verbose:
+            #.        if e:
+            #.            print_err(f'n={n}, x={x}, Qx={Qx}={uuu}*{p}**{e}')
             if uuu == 1:
                 #store e for 2,3
                 #   since no other p can found it
@@ -695,7 +704,8 @@ def _body4prepare4QS_(n, B, M, ceil_sqrtN, /, *, verbose, time_6):
     ######################
     with _timer(prefix='QS-init on primes', _show_hint_on_enter_=True, _to_show_=verbose):
         #for p in prime_bases:
-        for p in prime_gen:
+        #.for p in prime_gen:
+        for p in prime_list:
             # [p :: prime]
             if not len(prime_bases) < B:
                 break
@@ -817,8 +827,8 @@ def _body4prepare4QS_(n, B, M, ceil_sqrtN, /, *, verbose, time_6):
         # [Q(x<j>) == II__p2e_(j2neg1p2e4Qx[j])]
         # [len(i2neg1prime_base) == 1+B]
         #
-#end-def _body4prepare4QS_(n, B, M, ceil_sqrtN, /, *, verbose):
-def _prepare4QS_(n, /, *, verbose, grow_size_from_null_instead_optimum_size, time_6):
+#end-def _body4prepare4QS_(n, B, M, ceil_sqrtN, prime_list, /, *, verbose):
+def _prepare4QS_(n, /, *, verbose, grow_size_from_null_instead_optimum_size, time_6, prime_list):
     '-> Iter (B, M, x0, x_end, max_offseted_x4neg_Qx, i2neg1prime_base, j2offseted_x, j2neg1p2e4Qx, found_prime_factors)'
     if time_6:
         assert n%6 in [1,5]
@@ -832,7 +842,7 @@ def _prepare4QS_(n, /, *, verbose, grow_size_from_null_instead_optimum_size, tim
     ceil_sqrtN = isqrt_(n)+1
     while 1:
         with _timer(prefix=f'QS-init-prepare<n={n}, B={B}, M={M}>: floor_log2(n)={floor_log2(n)}, floor_log2(B)={floor_log2(B)}, floor_log2(M)={floor_log2(M)}', _show_hint_on_enter_=True, _to_show_=verbose):
-            (B, M, x0, x_end, max_offseted_x4neg_Qx, i2neg1prime_base, j2offseted_x, j2neg1p2e4Qx, found_prime_factors) = _body4prepare4QS_(n, B, M, ceil_sqrtN, verbose=verbose, time_6=time_6)
+            (B, M, x0, x_end, max_offseted_x4neg_Qx, i2neg1prime_base, j2offseted_x, j2neg1p2e4Qx, found_prime_factors) = _body4prepare4QS_(n, B, M, ceil_sqrtN, prime_list, verbose=verbose, time_6=time_6)
         yield (B, M, x0, x_end, max_offseted_x4neg_Qx, i2neg1prime_base, j2offseted_x, j2neg1p2e4Qx, found_prime_factors)
         ######################
         #next round:
@@ -851,8 +861,8 @@ default_upperbound4prime_factor4trial_division = 2**16
     # !! [_find_e_that_quadratic_sieve_faster_than_trial_division_if_n_eq_pow2_e_() == 16]
     # to use quadratic_sieve, [n >= 2**16]
     #
-def factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_(n, /, *, verbose=False, upperbound4prime_factor4trial_division=default_upperbound4prime_factor4trial_division, grow_size_from_null_instead_optimum_size=True, time_6=False):
-    'n/int{>=1} -> sprp2e/{strong_pseudoprime/int:exp/int{>=1}}'
+def factor_pint_into_strong_probable_primes_by_quadratic_sieve_(n, /, *, verbose=False, upperbound4prime_factor4trial_division=default_upperbound4prime_factor4trial_division, grow_size_from_null_instead_optimum_size=True, time_6=False):
+    'n/int{>=1} -> sprp2e/{strong_probable_prime/int:exp/int{>=1}}'
     check_type_is(int, n)
     check_type_is(int, upperbound4prime_factor4trial_division)
 
@@ -865,7 +875,7 @@ def factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_(n, /, *, verbose=Fa
         #
     with _timer(prefix=f'semi-factor by trial_division<max1={upperbound4prime_factor4trial_division}>({n})', _show_hint_on_enter_=True, _to_show_=verbose):
         (p2e, unfactored_part, may_next_prime_factor) = factor_pint_by_trial_division_ex_(n, may_upperbound4prime_factor=upperbound4prime_factor4trial_division)
-    # [[unfactored_part==1] or [next_prime_factor >=upperbound4prime_factor4trial_division] or [unfactored_part is pseudoprime >=upperbound4probably_prime]]
+    # [[unfactored_part==1] or [next_prime_factor >=upperbound4prime_factor4trial_division] or [unfactored_part is probable_prime >=upperbound4probably_prime]]
     # !! [upperbound4prime_factor4trial_division > 2]
     # [unfactored_part is odd]
     sprp2e = p2e
@@ -882,16 +892,16 @@ def factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_(n, /, *, verbose=Fa
                 return p2e
             # [unfactored_part >= next_prime_factor**2]
         else:
-            # [unfactored_part is pseudoprime >=upperbound4probably_prime]
-            #strong_pseudoprime
+            # [unfactored_part is probable_prime >=upperbound4probably_prime]
+            #strong_probable_prime
             sprp, unfactored_part = unfactored_part, 1
             sprp2e[sprp] = 1
             return sprp2e
         # [unfactored_part >= next_prime_factor**2]
     # [unfactored_part >= next_prime_factor**2]
 
-    if not detect_strong_pseudoprime__not_waste_too_much_time_(unfactored_part) == 0:
-        #strong_pseudoprime
+    if not detect_strong_probable_prime__not_waste_too_much_time_(unfactored_part) == 0:
+        #strong_probable_prime
         sprp, unfactored_part = unfactored_part, 1
         sprp2e[sprp] = 1
         return sprp2e
@@ -906,16 +916,16 @@ def factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_(n, /, *, verbose=Fa
     us = [main_unfactored_part]
         # :: [int{>=3, odd}]
     sprps = []
-        # :: [strong_pseudoprime]
+        # :: [strong_probable_prime]
     while us:
         u = us.pop()
         if verbose:
-            print_err(f'factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ main loop body: {u}')
+            print_err(f'factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: {u}')
 
-        with _timer(prefix=f'detect strong_pseudoprime({u})', _show_hint_on_enter_=True, _to_show_=verbose):
-            #if not detect_strong_pseudoprime__not_waste_too_much_time_(u) == 0:
+        with _timer(prefix=f'detect strong_probable_prime({u})', _show_hint_on_enter_=True, _to_show_=verbose):
+            #if not detect_strong_probable_prime__not_waste_too_much_time_(u) == 0:
             if not False is _is_prime__tribool4factor_pint_(skip_check, u):
-                #strong_pseudoprime
+                #strong_probable_prime
                 sprp = u
                 sprps.append(sprp)
                 continue
@@ -955,6 +965,8 @@ def factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_(n, /, *, verbose=Fa
         print_err(f'sprp-factorization-of({n}) = {sprp2e}')
     return sprp2e
 
+r'''[[[
+from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
 def factor_pint_as_pefect_power_(n, /, *, verbose):
     'n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}'
     check_type_is(int, n)
@@ -964,7 +976,8 @@ def factor_pint_as_pefect_power_(n, /, *, verbose):
     e = 1
     assert 1 < n < (1<<L)
     # [1 < n < (1<<L)]
-    for p in prime_gen:
+    #.for p in prime_gen:
+    for p in prime_list:
         # [1 < n < (1<<L)]
         if p >= L:
             # [2**p >= 2**L > n]
@@ -987,6 +1000,7 @@ def factor_pint_as_pefect_power_(n, /, *, verbose):
     n = n0
     assert n == base**exp
     return (base, exp)
+#]]]'''#'''
 
 def detect_pefect_kth_root_(k, n, /, *, verbose):
     'k/int{>=1} -> n/int{>=2} -> may base/int{>=2}{n==base**k}'
@@ -994,6 +1008,9 @@ def detect_pefect_kth_root_(k, n, /, *, verbose):
     if not n > 1:raise ValueError(n)
     check_type_is(int, k)
     if not k > 0:raise ValueError(n)
+    #########new:
+    return may_perfect_kth_root_(k, n)
+    #########old:
     if k == 1:
         _kth_root = n
     elif k == 2:
@@ -1022,9 +1039,10 @@ def _quadratic_sieve_(odd_composite, /, *, verbose, grow_size_from_null_instead_
     check_type_is(int, odd_composite)
     if not odd_composite >= 3:raise ValueError(odd_composite)
     if not False is _is_prime__tribool4factor_pint_(False, odd_composite):raise ValueError(odd_composite)
-    lazy_prime_seq = prime_gen() #turnon weakref
+    #.lazy_prime_seq = prime_gen() #turnon weakref
+    prime_list = PrimeList()
     _5i_ = ring_ex_ops__BinaryField.mk_ring_element5int
-    for (B, M, x0, x_end, max_offseted_x4neg_Qx, i2neg1prime_base, j2offseted_x, j2neg1p2e4Qx, found_prime_factors) in _prepare4QS_(odd_composite, verbose=verbose, grow_size_from_null_instead_optimum_size=grow_size_from_null_instead_optimum_size, time_6=time_6):
+    for (B, M, x0, x_end, max_offseted_x4neg_Qx, i2neg1prime_base, j2offseted_x, j2neg1p2e4Qx, found_prime_factors) in _prepare4QS_(odd_composite, verbose=verbose, grow_size_from_null_instead_optimum_size=grow_size_from_null_instead_optimum_size, time_6=time_6, prime_list=prime_list):
         if verbose:
             print_err(f'_quadratic_sieve_: B={B}, M={M}')
 
@@ -1170,7 +1188,7 @@ def _coprimes5factors_(n, factors, /):
 ###            factors.append(ft)
 ###    factors = {*factors}
 ###    return factors
-factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_
+factor_pint_into_strong_probable_primes_by_quadratic_sieve_
 factor_pint_as_pefect_power_
 detect_pefect_kth_root_
 _quadratic_sieve_
@@ -1182,6 +1200,6 @@ _quadratic_sieve_
 __all__
 
 
-from seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ import factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_, factor_pint_as_pefect_power_, detect_pefect_kth_root_
+from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import factor_pint_into_strong_probable_primes_by_quadratic_sieve_, factor_pint_as_pefect_power_, detect_pefect_kth_root_
 
-from seed.math.factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_ import *
+from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import *

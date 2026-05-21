@@ -1,11 +1,21 @@
+r'''[[[
+py -m seed.iters.are_two_sorted_iterables_disjoint
+py -m nn_ns.app.debug_cmd   seed.iters.are_two_sorted_iterables_disjoint -x
+py -m nn_ns.app.doctest_cmd seed.iters.are_two_sorted_iterables_disjoint:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 __all__ = '''
     are_two_sorted_iterables_disjoint
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from seed.tiny import echo, with_key, snd
-from .PeekableIterator import PeekableIterator
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, snd, with_key
+    from .PeekableIterator import PeekableIterator
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def are_two_sorted_iterables_disjoint(lefts, rights
@@ -75,3 +85,5 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+from seed.iters.are_two_sorted_iterables_disjoint import are_two_sorted_iterables_disjoint
+from seed.iters.are_two_sorted_iterables_disjoint import *

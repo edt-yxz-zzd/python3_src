@@ -1,11 +1,12 @@
 #__all__:goto
+TODO
 #main_body_src_code:goto
 #HHHHH
 #[[[__doc__:begin
 r'''
 seed.abc.storage.MemberGetter
 py -m    seed.abc.storage.MemberGetter
-py -m nn_ns.app.debug_cmd   seed.abc.storage.MemberGetter
+py -m nn_ns.app.debug_cmd   seed.abc.storage.MemberGetter -x
 see:
     e ../../python3_src/seed/types/OpaqueInstanceStorage.py
 
@@ -142,35 +143,18 @@ __all__ = '''
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import ABC, abstractmethod, override
-from seed.tiny import get_abstractmethod_names, check_manifest4abstractmethods
-from seed.tiny import check_uint, check_pair, is_iterator, check_type_is, expectError#, check_type_le, check_tuple
-from seed.tiny import expectError, MapView
-from seed.helper.check.checkers import check_instance, check_is_None, check_bool, check_int, check_tmay
 from seed.tiny_.mk_fdefault import mk_default, eliminate_tmay__cased, eliminate_tmay__mix
     #mk_tmay_from_default2value
 #from seed.types.mapping.PseudoMapping import IPseudoMapping___get, IPseudoMapping___get__setdefault
 from collections.abc import Mapping
 
+from seed.debug.expectError import expectError
+from seed.tiny_.check import check_bool, check_is_None, check_pair, check_tmay, check_type_is, check_uint
+from seed.helper.check.checkers import check_instance, check_int
+from seed.tiny_.check_abc import check_manifest4abstractmethods, get_abstractmethod_names
+from seed.tiny_.types5py import mk_MapView
+from seed.tiny_.verify import is_iterator
 
-r"""
-import ...
-from seed.tiny import str2__all__
-__all__ = str2__all__(r'''#)
-    #(''')
-from seed.abc.abc import ABC, abstractmethod, override, not_implemented, ABCMeta
-from seed.helper.repr_input import repr_helper
-from seed.tiny import echo, print_err, mk_fprint, mk_assert_eq_f, expectError
-from seed.helper.check.checkers import check_pair, check_type_is
-  #from seed.helper.check.checkers import checks, checkers, check_funcs
-  #view ../../python3_src/seed/helper/check/checkers.py
-if 0b00:#[01_to_turn_off]
-    #0b01
-    print(fr'x={x}')
-    from seed.tiny import print_err
-    print_err(fr'x={x}')
-    from pprint import pprint
-    pprint(x)
-#"""
 ___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH
@@ -752,7 +736,7 @@ class IMemberGetter__parallel_mapping(IMemberGetter__cased_subpackets):
             [submember_value] = tmay_submember_value
             d[case] = (submember_value)
         else:
-            member_value = MapView(d)
+            member_value = mk_MapView(d)
             tmay_member_value = (member_value,)
         return tmay_member_value
 

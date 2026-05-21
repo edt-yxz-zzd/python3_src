@@ -67,7 +67,9 @@ II_floor_log2_star
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.math.floor_ceil import floor_log2
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
 ___end_mark_of_excluded_global_names__0___ = ...
 
 

@@ -517,9 +517,11 @@ signed_uint_exp_repr__neg0
 __all__
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import re
 from seed.math.binary_float.FloatNumberError import FloatNumberError
-from seed.tiny import check_type_is
+from seed.tiny_.check import check_type_is
+___end_mark_of_excluded_global_names__0___ = ...
 
 class FloatNumberError__nan_inf(FloatNumberError):pass
 class FloatNumberError__repr_format(FloatNumberError):pass

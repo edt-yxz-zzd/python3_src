@@ -3,6 +3,8 @@ e ../../python3_src/seed/graph/DAG.py
     view ../../python3_src/seed/graph/DigraphABC.py
         view ../../python3_src/seed/graph/U2Vtc_To_DigraphABC.py
 
+py -m nn_ns.app.debug_cmd   seed.graph.DAG -x
+py -m nn_ns.app.doctest_cmd seed.graph.DAG:__doc__ -ht #  -ff -v -df
 
 #]]]'''#'''
 
@@ -21,12 +23,32 @@ __all__ = '''
     validate_local_sorted_topological_ordering__local_neighbor_pair_only_
         NotLocalSortedTopologicalOrdering
 
+
+
+NotDAG
+mk_vtx2sorted_idx
+mk_dst_vtx2num_src_vtc
+iter_local_sorted_topological_ordering__vtx2sorted_idx_
 '''.split()
 
 
-#from .dfs import *
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.graph.dfs import dfs, ENTER, EXIT, BACK, CROSS_OR_FORWARD
-from seed.types.pair_based_leftward_list import iter_leftward_list
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.pair_based_leftward_list import iter_leftward_list
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.funcs import echo
+    from seed.seq_tools.sorted_via_lt_ import sorted_via_lt_
+    from seed.seq_tools.inverse_uint_bijection_array import inverse_uint_bijection_array
+    from heapq import heapify, heappush, heappop
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
 
 class NotDAG(ValueError):pass
 
@@ -65,7 +87,7 @@ def find_one_cycle(g, roots=None):
             if v == u:
                 break
         else:
-            raise logic-error
+            raise logic-err
         ls.reverse()
         assert ls
     return ls
@@ -75,7 +97,6 @@ def _find_one_cycle(g, roots):
         if case == BACK:
             return path
 
-from seed.graph.DAG import iter_reversed_topological_ordering, is_DAG, find_one_cycle
 
 
 
@@ -83,10 +104,6 @@ from seed.graph.DAG import iter_reversed_topological_ordering, is_DAG, find_one_
 #################################
 #################################
 #################################
-from seed.tiny import echo
-from seed.seq_tools.sorted_via_lt_ import sorted_via_lt_
-from seed.seq_tools.inverse_uint_bijection_array import inverse_uint_bijection_array
-from heapq import heapify, heappush, heappop
 
 
 def mk_vtx2sorted_idx(g, /, *, key=None, __lt__=None, extra=False):
@@ -178,7 +195,6 @@ def iter_local_sorted_topological_ordering__vtx2sorted_idx_(vtx2sorted_idx, g, /
 #################################
 #################################
 #################################
-from seed.tiny import mk_tuple, ifNone
 
 class NotTopologicalOrdering(ValueError):pass
 class NotLocalSortedTopologicalOrdering(ValueError):pass
@@ -245,6 +261,8 @@ def validate_local_sorted_topological_ordering__local_neighbor_pair_only_(g, loc
     return (topo_idx2vtx, vtx2topo_idx, vtx2sorted_idx, src_topo_idx2may_min_dst_topo_idx)
 
 
+
+from seed.graph.DAG import iter_reversed_topological_ordering, is_DAG, find_one_cycle
 
 from seed.graph.DAG import is_DAG, find_one_cycle
 from seed.graph.DAG import iter_reversed_topological_ordering, list_a_cycle_or_reversed_topological_ordering

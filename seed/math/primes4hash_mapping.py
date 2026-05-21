@@ -14,7 +14,10 @@ see:
         find_suitable_seq_size4hash_mapping__search
 
 
-py -m nn_ns.app.debug_cmd    seed.math.primes4hash_mapping
+py -m nn_ns.app.debug_cmd    seed.math.primes4hash_mapping -x
+py -m nn_ns.app.doctest_cmd seed.math.primes4hash_mapping:__doc__ -ht #  -ff -v -df
+
+
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.primes4hash_mapping @find_suitable_seq_size4hash_mapping__tabular =3000_0000
 30314243
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.math.primes4hash_mapping @_t
@@ -30,10 +33,14 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.tiny import check_uint
-from bisect import bisect_left# bisect_right
-from itertools import pairwise
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_uint
+    from bisect import bisect_left# bisect_right
+    from itertools import pairwise
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 

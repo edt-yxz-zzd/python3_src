@@ -1,5 +1,10 @@
-
+#__all__:goto
 r'''
+seed.windows.winreg_helper
+py -m nn_ns.app.debug_cmd   seed.windows.winreg_helper -x
+py -m nn_ns.app.doctest_cmd seed.windows.winreg_helper:__doc__ -ht #  -ff -v -df
+
+
 winreg helper
 
 
@@ -164,7 +169,6 @@ std lib bugs:
 '''
 
 
-#from seed.tiny import str2__all__
 from seed.helper.str2__all__ import str2__all__
 __all__ = str2__all__(r'''
     OP_DELETE       # = None
@@ -222,12 +226,17 @@ __all__ = str2__all__(r'''
 
 #__all__ = str2__all__(__all__)
 
+__all__
 
-
+___begin_mark_of_excluded_global_names__0___ = ...
 import winreg
+    # ^ModuleNotFoundError: No module named 'winreg'
 import os.path
-from seed.for_libs.for_os_path.split_path_into_parts import \
-    split_path_into_parts
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.for_libs.for_os_path.split_path_into_parts import split_path_into_parts
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 OP_DELETE       = None
@@ -670,3 +679,4 @@ from seed.windows.winreg_helper import (
 ,   reg_path_split_root
 ,   get_root_key
 )
+from seed.windows.winreg_helper import *

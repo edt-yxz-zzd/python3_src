@@ -857,7 +857,7 @@ total 4.3M
 
 .+1,.+122s/.* \(\S\+\)\.out.txt/\1
 .+1,.+122s/.*/, '\0'
->>> (pas:=
+>>> pas = (
 ... [ 'na'
 ... , 'dm'
 ... , 'kTGT_MergedSrc'
@@ -1668,6 +1668,8 @@ BaseVisitor4ParseResult4XML
     Visitor4ParseResult4XML4ucd_unihan_flat
 
 '''.split()#'''
+    #int5hex
+    #check_dir
 __all__
 
 class BaseVisitor4ParseResult4XML:
@@ -1768,21 +1770,31 @@ def _visit(sf, nodes6top_layer, /):
 
 
 
-from seed.func_tools.fmapT.fmapT__tiny import (dot
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.func_tools.fmapT.fmapT__tiny import (dot
 ,fmapT__dict
 ,fmapT__iter
 ,fmapT__pairs
 )
-from seed.tiny import echo, snd, print_err
-from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
-from seed.tiny_.dict__add_fmap_filter import dict_add__new# fmap4dict_value# filter4dict_value, dict_add__is, dict_add__eq, , group4dict_value
-from seed.data_funcs.rngs import StackStyleSimpleIntSet, make_Ranges, sorted_rngs_to_iter_nontouch_ranges# sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, , StackStyleSimpleIntMapping, TouchRangeBasedIntMapping
-from seed.data_funcs.rngs import NonTouchRanges# TouchRanges, make_NonTouchRanges, make_TouchRanges
-from seed.data_funcs.rngs import IRanges
+    from seed.tiny_.funcs import echo, snd
+    from seed.tiny_.HexReprInt import HexReprInt
+    from seed.tiny_.check import check_type_is, check_callable
+    from seed.tiny_.dict__add_fmap_filter import dict_add__new
+    from seed.debug.print_err import print_err
+    from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
+    from seed.mapping_tools.dict_op import inv__k2v_to_v2ks #inv__k2v_to_v2k, , inv__k2vs_to_v2k, inv__k2vs_to_v2ks
+    from seed.data_funcs.rngs import StackStyleSimpleIntSet, make_Ranges, sorted_rngs_to_iter_nontouch_ranges
+with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
+    from seed.data_funcs.rngs import IRanges
     #for:.from_hexXhexszpair_list/.from_hex_repr_pair_list/.from_len_rng2hexbegins/.from_len_rng2begin_chars/.from_char_pairs__str/.from_hex_sz_pair_list/.from_hex2sz
-from seed.tiny_.HexReprInt import HexReprInt
-from seed.mapping_tools.dict_op import inv__k2v_to_v2ks #inv__k2v_to_v2k, , inv__k2vs_to_v2k, inv__k2vs_to_v2ks
-from seed.tiny_.check import check_type_is, check_callable
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
 
 
 _first_cp_ = 'first-cp'

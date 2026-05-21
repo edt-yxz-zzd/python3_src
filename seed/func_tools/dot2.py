@@ -1,5 +1,8 @@
 
 r'''
+py -m nn_ns.app.debug_cmd   seed.func_tools.dot2 -x
+py -m nn_ns.app.doctest_cmd seed.func_tools.dot2:__doc__ -ht #  -ff -v -df
+
 from seed.func_tools.dot2 import dot
 NOTE:
     use dot[[...],] instead of dot[[...]]
@@ -29,10 +32,19 @@ dot[[f, a...]::[b...], g](*args, **kwargs)
 
 __all__ = '''
     dot
-    '''.split()
-#from itertools
-from functools import partial
-from seed.tiny import ifNone, echo
+'''.split()
+    #pseudo_func2func_last_args
+    #pseudo_funcB2func
+    #Dot
+    #echo_args
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import partial
+    from seed.tiny_.funcs import echo
+    from seed.helper.ifNone import ifNone
+___end_mark_of_excluded_global_names__0___ = ...
 
 def pseudo_func2func_last_args(pseudo_func):
     if type(pseudo_func) is slice:
@@ -118,7 +130,7 @@ class Dot:
         for f, last_args in it:
             r = f(*args, *last_args, **kwargs)
             break
-        else: raise logic-error
+        else: raise logic-err
         for f, last_args in it:
             r = f(r, *last_args)
         return r

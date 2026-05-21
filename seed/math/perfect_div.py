@@ -32,22 +32,11 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
-from seed.math.floor_ceil import perfect_div, perfect_kth_root_
+from seed.math.floor_ceil_tools.fc_perfect import perfect_div, perfect_kth_root_, may_perfect_div, tmay_perfect_div
 
 __all__
 
 
-
-
-def may_perfect_div(n, d, /):
-    'n/int -> d/int{=!=0} -> may q/int{[q*d == n]}'
-    (q, r) = divmod(n, d)
-    return q if r == 0 else None
-def tmay_perfect_div(n, d, /):
-    'n/int -> d/int{=!=0} -> tmay q/int{[q*d == n]}'
-    if not None is (q:=may_perfect_div(n, d)):
-        return (q,)
-    return ()
 
 
 

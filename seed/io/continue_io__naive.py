@@ -60,27 +60,32 @@ ILineContinueIO
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#from itertools import count as count_ #islice
-from pathlib import Path
-from functools import cached_property
-from io import SEEK_END
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from itertools import count as count_ #islice
+    from pathlib import Path
+    from functools import cached_property
 
+    from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
+    #def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+    #    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
+
+
+
+    from seed.pkg_tools.import_object import import_object, import4qobject
+    from seed.tiny_.check import check_callable, check_type_is, check_int_ge, check_non_ABC
+    from seed.debug.print_err import print_err
+
+    from seed.helper.stable_repr import stable_repr
+    from seed.helper.safe_eval import safe_eval
+    #from seed.helper.repr_input import repr_helper
+
+
+from io import SEEK_END
 from seed.for_libs.for_time import timer__print_err__thread_wide as timer
 #   with postpone, timer(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
-from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
-#def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
-#    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
 
-
-
-from seed.pkg_tools.import_object import import_object, import4qobject
-from seed.tiny_.check import check_callable, check_type_is, check_int_ge, check_non_ABC
-from seed.tiny import print_err
-
-from seed.helper.stable_repr import stable_repr
-from seed.helper.safe_eval import safe_eval
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#from seed.helper.repr_input import repr_helper
 from seed.tiny_._Base4repr import _Base4repr
         #sf._reset4repr(may_args4repr, may_kwds4repr)
         #sf._init4repr(*args4repr, **kwds4repr)

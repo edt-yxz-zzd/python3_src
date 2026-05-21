@@ -881,25 +881,29 @@ dry_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import chain# pairwise
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import chain# pairwise
+    #DONE:ctx-->HistoryMapping
+    from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
+    #p0 = d.env_tell()
+    #d.env_pop_until(p0)
+    #with d.mk_contextmanager() as p0:
+    from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
+
+    from seed.tiny_.check import check_type_is, check_type_le
+    from seed.tiny_.types5py import mk_MapView
+    from seed.tiny_.HashedPair import Solo
+
+
+
 import re
 #from string import hexdigits as _hxs
 #isxdigit = _hxs.__contains__
 #from unicodedata import lookup as _nm2ch
 
-#DONE:ctx-->HistoryMapping
-from seed.types.mapping.DynamicStackedMapping import DynamicStackedMapping
-    #p0 = d.env_tell()
-    #d.env_pop_until(p0)
-    #with d.mk_contextmanager() as p0:
-from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
-from seed.tiny_.check import check_type_is, check_type_le# check_int_ge, check_pair
 
-
-
-#from seed.tiny import fst, snd, ifNone, echo, MapView
-from seed.tiny import MapView
-from seed.tiny_.HashedPair import Solo
 from seed.recognize.regex.RegexRepr import hollow_regex, dead_regex, empty_set_repr, whole_set_repr
 from seed.recognize.regex.RegexRepr import SetRepr_5Unicode_property
 from seed.recognize.regex.RegexRepr import \
@@ -975,7 +979,7 @@ class Parser4RegexLiteral:
     [token :: (position_info, (tkey/str, tdat/dict), position_info)]
     #]]]'''#'''
     def __init__(sf, gctx4builtins, /):
-        sf._gctx = MapView(gctx4builtins)
+        sf._gctx = mk_MapView(gctx4builtins)
             # vs:ctx-usrdef
     def parse__text(sf, text, position_info=(1,1), /):
         tokens = tokenizer4regex_literal.tokenize__text(text, position_info)

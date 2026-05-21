@@ -18,9 +18,9 @@ seed.io.num_head1s_of_byte
         集合纟首字节/-\集合纟尾字节=={}
 
 
-py -m nn_ns.app.debug_cmd seed.io.num_head1s_of_byte
-py -m nn_ns.app.adhoc_argparser__main__call8module seed.io.num_head1s_of_byte
+py -m nn_ns.app.debug_cmd seed.io.num_head1s_of_byte -x
 py -m seed.io.num_head1s_of_byte
+py -m nn_ns.app.adhoc_argparser__main__call8module seed.io.num_head1s_of_byte
 
 TODO:
     ByteDecoder__1s0
@@ -904,22 +904,34 @@ TokenError
     枚举囗完全累计序号囗囗多单元首比特联合编码方案囗首尾纯色相反囗囗扩展囗任意格式囗囗字长为一囗
 
 '''.split()#'''
+    #cased_lens_from_OIs_or_XYs
+    #囗字数之首比特类别昵称字符串囗
 __all__
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.tiny_.check import check_type_is
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.mapping_tools.dict_op import inv__k2v_to_v2k
-from seed.tiny import snd
-#from seed.tiny_.check import check_uint
-from seed.helper.repr_input import repr_helper
 
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from enum import auto, Enum #, Flag
 from io import UnsupportedOperation
 from os import SEEK_END
-from itertools import count, chain, islice
-from math import ceil
-from fractions import Fraction
 import re
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import count, chain, islice
+    from math import ceil
+    from fractions import Fraction
+    from seed.mapping_tools.dict_op import inv__k2v_to_v2k
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_int_ge, check_int_ge_le, check_int_ge_lt, check_type_is, check_uint_lt
+    from seed.tiny_.funcs import snd
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
 
 
 

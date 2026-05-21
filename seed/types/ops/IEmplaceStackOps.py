@@ -226,39 +226,43 @@ r'''
 
 
 __all__ = '''
-    IEmplaceStackOps
+IEmplaceStackOps
+    IEmplaceStackOps__singleton_ops
         EmplaceStackOps4list
             the_emplace_stack_ops4list
         EmplaceStackOps4HugeStack
             the_emplace_stack_ops4HugeStack
-    '''.split()
+'''.split()
 
 __all__
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.for_libs.for_time import (
-Timer__print_err
-    ,timer__print_err__thread_wide
-    ,timer__print_err__process_wide
-    ,timer__print_err__system_wide__highest_resolution
-    ,timer__print_err__system_wide__monotonic
-)
+from seed.abc.abc__ver1 import abstractmethod, ABC, override
+from seed.abc.IHashable import IHashable
 
-timer = timer__print_err__thread_wide
-_to_show_ = __name__ == "__main__"
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.debug.print_err import print_err
 
-with timer(prefix='seed:basic...', _to_show_=_to_show_):
-    from seed.tiny import check_type_is, check_tmay
-    from seed.tiny import print_err
+def __old():
+  from seed.for_libs.for_time import timer__print_err__thread_wide
 
-with timer(prefix='seed.abc.abc__ver1', _to_show_=_to_show_):
+  timer = timer__print_err__thread_wide
+  _to_show_ = __name__ == "__main__"
+
+  with timer(prefix='seed:basic...', _to_show_=_to_show_):
+    from seed.tiny_.check import check_type_is
+    from seed.debug.print_err import print_err
+
+  with timer(prefix='seed.abc.abc__ver1', _to_show_=_to_show_):
     from seed.abc.abc__ver1 import abstractmethod, ABC, override
-with timer(prefix='seed.abc.IHashable', _to_show_=_to_show_):
+  with timer(prefix='seed.abc.IHashable', _to_show_=_to_show_):
     from seed.abc.IHashable import IHashable
 
-with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
+  with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
     if __name__ == "__main__":
-        from seed.types.ops.IEmplaceStackOps import *
+        pass#from seed.types.ops.IEmplaceStackOps import *
 ___end_mark_of_excluded_global_names__0___ = ...
 r'''[[[
 py -m seed.types.ops.IEmplaceStackOps

@@ -1,6 +1,8 @@
 #HHHHH
 r'''
 py -m seed.types.TriBoolOps
+py -m nn_ns.app.debug_cmd   seed.types.TriBoolOps -x
+py -m nn_ns.app.doctest_cmd seed.types.TriBoolOps:__doc__ -ht #  -ff -v -df
 
 from seed.types.TriBoolOps import TriBoolOps
 from seed.util_class.Lazy__call import Lazy
@@ -27,13 +29,19 @@ __all__ = '''
     TriBoolOps__std_name_and_aliases
         LazyTriBoolOps
     '''.split()
+    #test_TriBool_binary_ops
+    #test_TriBool_lazy_binary_ops
+    #BoolOps
 
 
 
-
-import itertools
-from seed.tiny import assert_eq, assert_eq_f, mk_assert_eq_f
-from seed.util_class.Lazy__call import Lazy
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import product
+    from seed.debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f
+    from seed.util_class.Lazy__call import Lazy
+___end_mark_of_excluded_global_names__0___ = ...
 
 #HHHHH
 class TriBoolOps:
@@ -173,7 +181,7 @@ class test_TriBool_binary_ops:
 
     @classmethod
     def test_bool_by_py_op(cls, tribool_op, py_op):
-        for x, y in  itertools.product([False, True], repeat=2):
+        for x, y in  product([False, True], repeat=2):
             r = py_op(x, y)
             assert_eq_f(r, tribool_op, x, y)
     @classmethod
@@ -188,14 +196,14 @@ class test_TriBool_binary_ops:
     @classmethod
     def test_tribool_by_bool_and_constraint(cls, tribool_op, py_op):
 
-        for xy in  itertools.product([..., False, True], repeat=2):
-            r = cls.bools2tri(py_op(a,b) for a, b in  itertools.product(*map(cls.tri2bools, xy)))
+        for xy in  product([..., False, True], repeat=2):
+            r = cls.bools2tri(py_op(a,b) for a, b in  product(*map(cls.tri2bools, xy)))
             assert_eq_f(r, tribool_op, *xy)
 
     @classmethod
     def mk_table_of_tribpol_binary_op(cls, tribool_op):
         d = {}
-        for xy in  itertools.product([..., False, True], repeat=2):
+        for xy in  product([..., False, True], repeat=2):
             r = tribool_op(*xy)
             d[xy] = r
         return d
@@ -626,7 +634,7 @@ class test_TriBool_lazy_binary_ops:
             lazyL_op = get_lazyL_op(alias)
             lazyR_op = get_lazyR_op(alias)
             assert op is not None
-            for x, y in  itertools.product([False, True, ...], repeat=2):
+            for x, y in  product([False, True, ...], repeat=2):
                 f(data, alias, std_name, op, std_op, lazyL_op, lazyR_op, x, y)
     @classmethod
     def _test_op_result(cls, data, alias, std_name, op, std_op, lazyL_op, lazyR_op, lhs, rhs):
@@ -692,3 +700,6 @@ if __name__ == '__main__':
 #HHHHH
 
 
+from seed.types.TriBoolOps import TriBoolOps
+from seed.types.TriBoolOps import TriBoolOps, TriBoolOps__std_name_and_aliases, LazyTriBoolOps
+from seed.types.TriBoolOps import *

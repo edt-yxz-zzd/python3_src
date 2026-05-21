@@ -35,10 +35,14 @@ erase_spaces_
             #regex4split_out__py_str_literal
 
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
 import re
-from seed.for_libs.for_re___split import split as asif_re__split_, iter_split as iter_asif_re__split_
 from seed.text.useful_regex_patterns import py_str__pattern, py_str__regex
-#from seed.tiny import check_type_is, echo, mk_fprint, print_err
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'split:asif_re__split_,iter_split:iter_asif_re__split_'):
+    from seed.for_libs.for_re___split import split as asif_re__split_, iter_split as iter_asif_re__split_
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 regex4erase_spaces = re.compile(r'\s+')

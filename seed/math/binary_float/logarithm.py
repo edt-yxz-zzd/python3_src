@@ -21,14 +21,21 @@ __all__ = r'''
     #bf5flatten_
 __all__
 
-from functools import wraps
-from math import floor
-from seed.math.floor_ceil import floor_log2
+___begin_mark_of_excluded_global_names__0___ = ...
+######################
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import wraps
+    from math import floor
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
 
-from seed.types.LazyList import LazyList, LazyListError
+    from seed.types.LazyList import LazyList
+
 from seed.math.binary_float.binary_float_ops____using_LazyList import BinaryFloat, bf_0, positive_bf_digits5flatten_
     #mk_binary_float_digits5int_ as bf5int_
     #bf5int_ = BinaryFloat
+___end_mark_of_excluded_global_names__0___ = ...
+######################
 
 def bf5flatten_(f, /):
     @wraps(f)

@@ -485,8 +485,15 @@ Error
 __all__
 
 
-from seed.tiny import ifNone, check_type_is, null_tuple
-from seed.helper.repr_input import repr_helper
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 r'''[[[
 class IDoublyLinkedList_BaseNode:
@@ -516,7 +523,7 @@ class DoublyLinkedList_EndNode(IDoublyLinkedList_BaseNode):
         sf.may_prev_node = may_prev_node
     def get_tmay_payload(sf, /):
         '-> tmay payload'
-        return null_tuple
+        return get_null_tuple_()
     def is_end_node(sf, /):
         '-> [not$ contains payload]'
         return True
@@ -783,7 +790,7 @@ payload:
             payloads = [*sf]
             args = (payloads,)
         else:
-            args = null_tuple
+            args = get_null_tuple_()
         return repr_helper(sf, *args)
     def __init__(sf, iterable=None, /):
         #sf._head = sf._end = DoublyLinkedList_Node(None)
@@ -1112,15 +1119,6 @@ def _reorder_(*args, reverse):
         args = args[::-1]
     return args
 
-def __():
-    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-    from seed.helper.repr_input import repr_helper
-    class _(ABC):
-        __slots__ = ()
-        raise NotImplementedError
-        ___no_slots_ok___ = True
-if __name__ == "__main__":
-    pass
 __all__
 
 

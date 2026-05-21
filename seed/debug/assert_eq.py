@@ -3,8 +3,6 @@ r"""
     assert_eq_f         # :: ans -> f -> *args -> (_fmt=...) -> **vars -> ()
     mk_assert_eq_f      # :: (_fmt=...) -> **vars -> (ans -> f -> *args -> **kwargs -> ())
 
-from seed.tiny import assert_eq, assert_eq_f, mk_assert_eq_f
-from seed.debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f
 #"""
 
 __all__ = '''
@@ -45,3 +43,4 @@ def mk_assert_eq_f(_fmt='ans={!r};\nresult={!r}={!s}(*{!r}, **{!r});\nvars={vars
             raise
     return assert_eq_f
 
+from seed.debug.assert_eq import assert_eq, assert_eq_f, mk_assert_eq_f

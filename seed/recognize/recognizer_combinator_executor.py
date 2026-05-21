@@ -1,4 +1,5 @@
 #__all__:goto
+TODO
 r'''[[[
 e ../../python3_src/seed/recognize/recognizer_combinator_executor.py
 to replace:view ../../python3_src/seed/recognize/recognizer_combinator.py
@@ -7,7 +8,7 @@ view ../../python3_src/seed/types/CuttableStream.py
 view ../../python3_src/seed/helper/check/ADT.py
 
 seed.recognize.recognizer_combinator_executor
-py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_combinator_executor
+py -m nn_ns.app.debug_cmd   seed.recognize.recognizer_combinator_executor -x
 py -m seed.recognize.recognizer_combinator_executor
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.recognize.recognizer_combinator_executor
 from seed.recognize.recognizer_combinator_executor import ...
@@ -231,22 +232,34 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from enum import Enum, Flag, auto
 
-from seed.tiny import check_type_le, check_either
-from seed.tiny_.containers import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter, mk_frozenset, mk_tuple, mk_Just, mk_Left, mk_Right
-
-from seed.debug.expectError import expectError
 from seed.tiny_.CompactData import Base4CompactData, mk_CompactDataType, mk_CompactDataType_then_write_to_module
+from seed.tiny_.containers import null_tuple, mk_Just, mk_Left, mk_Right
 
-from seed.types.CuttableStream import CuttableStream, Position
 
 from seed.recognize.recognizer_combinator_utils import LockMaskBit
 from seed.recognize.recognizer_combinator_utils import LockMask
-from seed.recognize.recognizer_combinator_utils import moveon_nonfinal_inner_st2tmay_next_inner_st
-from seed.recognize.recognizer_combinator_utils import ISymbolExprInnerStateController
+def __refs():
+    from seed.recognize.recognizer_combinator_utils import ISymbolExprInnerStateController
 
-from seed.recognize.recognizer_combinator_utils import step_success_noninitial_inner_st2prev_lock_mask, check_step_success_noninitial_inner_st
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.CuttableStream import CuttableStream, Position
+
+    from seed.recognize.recognizer_combinator_utils import moveon_nonfinal_inner_st2tmay_next_inner_st
+
+
+    from seed.recognize.recognizer_combinator_utils import step_success_noninitial_inner_st2prev_lock_mask, check_step_success_noninitial_inner_st
+
+    from seed.tiny_.check import check_either, check_type_le
+    from seed.debug.expectError import expectError
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 class FailCase_pre_stepinto(Enum):
     is_bad_position_rng = auto()
@@ -392,7 +405,7 @@ class RecognizerCombinatorExecutor:
         #
         # ???_return__symbol_expr__eGrammarAttribute
         #   [pops__at__return__symbol_expr__eGrammarAttribute]
-        ..
+        ..TODO
         #
         the_pruning_position = sf.the_pruning_position
         if position is the_pruning_position:return

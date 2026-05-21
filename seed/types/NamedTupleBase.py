@@ -304,21 +304,29 @@ IndexedReadOnlyProperty
 '''.split()#'''
 __all__
 
-
-#grep special -i -r ../../python3_src/seed/ -l -a
-from seed.tiny_.call2getattr import get5cls, call5cls, get5cls_, call5cls_
-from seed.types.NamedTuple__split_table import Descriptor4NamedTuple, gmk_Descriptor4NamedTuple #NamedTuple
-from seed.types.mk_ordered_field_name_seq_ import mk_ordered_field_name_seq_, mk_field_name2default_
-from seed.tiny_.check import check_pseudo_qual_name, check_pseudo_identifier, check_smay_pseudo_qual_name
-from seed.tiny_.check import check_bool, check_uint, check_int_ge_lt, check_type_is
-from seed.tiny import ifNone
-from seed.helper.safe_eval import safe_eval# safe_exec, data_eval
-
-from seed.helper.repr_input import repr_helper, repr_helper_ex
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs
 from seed.abc.abc__ver0 import abstractmethod, override, ABC, final
 
 from collections.abc import Mapping
+
+#grep special -i -r ../../python3_src/seed/ -l -a
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.NamedTuple__split_table import gmk_Descriptor4NamedTuple
+    from seed.types.mk_ordered_field_name_seq_ import mk_ordered_field_name_seq_, mk_field_name2default_
+
+    from seed.tiny_.call2getattr import get5cls, call5cls, get5cls_, call5cls_
+    from seed.tiny_.check import check_pseudo_qual_name, check_pseudo_identifier, check_smay_pseudo_qual_name
+    from seed.tiny_.check import check_bool, check_uint, check_int_ge_lt, check_type_is
+    from seed.helper.ifNone import ifNone
+
+    from seed.helper.safe_eval import safe_eval# safe_exec, data_eval
+
+    from seed.helper.repr_input import repr_helper, repr_helper_ex
+
+
+___end_mark_of_excluded_global_names__0___ = ...
 __all__
 
 

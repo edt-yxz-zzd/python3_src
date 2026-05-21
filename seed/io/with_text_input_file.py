@@ -1,7 +1,14 @@
-
-
-
+#__all__:goto
 r"""
+py -m seed.io.with_text_input_file
+py -m nn_ns.app.debug_cmd   seed.io.with_text_input_file -x
+py -m nn_ns.app.doctest_cmd seed.io.with_text_input_file:__doc__ -ht #  -ff -v -df
+
+
+
+
+
+
 >>> f = lambda fin: fin.read()
 >>> g = None
 
@@ -91,10 +98,20 @@ __all__ = '''
         yield_from4with_text_input_file
     '''.split()
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import io
 from pathlib import PurePath
-from seed.tiny import ifNone, echo
-#from seed.tiny import print_err
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import echo
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 
 def is_RawIO(stream):
@@ -267,6 +284,7 @@ def with_text_input_file__binary(bfile, on_file, may_post_file, *, encoding, yie
 
 
 
+from seed.io.with_text_input_file import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
@@ -276,3 +294,18 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.io.with_text_input_file import (
+binary_input_file2text_input_file
+
+,with_text_input_file
+,with_text_input_file_
+,   with_text_input_file__text
+,   with_text_input_file__path
+,   with_text_input_file__bytes
+,   with_text_input_file__binary
+#
+,   kwargs2tuple4with_text_input_file
+,   open_ex4with_text_input_file
+,   return4with_text_input_file
+,   yield_from4with_text_input_file
+)

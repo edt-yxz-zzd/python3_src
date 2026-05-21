@@ -9,7 +9,7 @@ import sys, os.path
 from collections import OrderedDict
 from pprint import pprint
 from seed.iters.duplicate_elements import iter_duplicate_representative_elements
-from seed.tiny import fst
+from seed.tiny_.funcs import fst
 
 
 def _read_name_color_pairs(fin):

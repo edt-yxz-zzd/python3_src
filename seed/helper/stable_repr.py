@@ -48,6 +48,7 @@ TODO:
 
 
 
+__all__
 py -m nn_ns.app.debug_cmd   seed.helper.stable_repr -x
 py -m seed.helper.stable_repr
 py -m nn_ns.app.doctest_cmd seed.helper.stable_repr:__doc__ -ff -v
@@ -59,7 +60,7 @@ from seed.helper.stable_repr import stable_repr__expand_all_layer__noindent, sta
 
 
 SortableIterReprable4builtins.register_datatype_and_name_and_SortableIterReprable
-    后来注册了个seed.tiny.HexReprInt
+    后来注册了个seed.tiny_.HexReprInt.HexReprInt
 
 from seed.helper.stable_repr import IGetFuncNameArgsOrderedKwds4stable_repr, register4get__funcname__args__ordered_kwdxxxs, get4get__funcname__args__ordered_kwdxxxs
     [seed.types.NamedTupleBase <: seed.helper.stable_repr.IGetFuncNameArgsOrderedKwds4stable_repr]
@@ -565,29 +566,41 @@ IGetFuncNameArgsOrderedKwds4stable_repr
     #check_echo
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver0 import abstractmethod, override, ABC, final
-from seed.for_libs.for_operator.method_caller import method_caller
-from seed.tiny import echo, fst
-from seed.tiny import HexReprInt
-from itertools import repeat
-from types import MappingProxyType
 from fractions import Fraction
 from collections import OrderedDict
-from functools import cmp_to_key, partial
+from seed.tiny_.HexReprInt import HexReprInt
+
 import operator # __lt__, methodcaller
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.funcs import echo, fst
 
-from seed.tiny_.check import check_pseudo_qual_name, check_pseudo_identifier, check_smay_pseudo_qual_name
-from seed.tiny_.check import check_str, check_type_le, check_callable
-from seed.tiny import ifNone, mk_tuple
-from seed.lang.is_valid_python_id import is_valid_python_id
-from keyword import iskeyword
+
+    from seed.tiny_.check import check_pseudo_qual_name, check_pseudo_identifier, check_smay_pseudo_qual_name
+    from seed.tiny_.check import check_str, check_type_le, check_callable
+
+    from seed.lang.is_valid_python_id import is_valid_python_id
+    from keyword import iskeyword
+
+
+    from seed.for_libs.for_operator.method_caller import method_caller
+    from itertools import repeat
+    from functools import cmp_to_key, partial
+
+
 
 #grep 'is.*abstrac' -i -r ../../python3_src/seed/ -l -a
 import inspect #.isabstract
 inspect.isabstract
 import sys
 sys.stdout
+___end_mark_of_excluded_global_names__0___ = ...
 
 __all__
 
@@ -595,7 +608,6 @@ def check_echo(type_, obj):
     try:
         if type(obj) is not type_: raise TypeError
     except TypeError:
-        from seed.tiny import print_err
         print_err(type, repr(obj))
     return obj
 class IterEOLIndentsABC(ABC):
@@ -1279,7 +1291,6 @@ class SortableIterReprableABC(ABC):
         try:
             return ''.join(mk_it())
         except Exception:
-            from seed.tiny import print_err
             print_err(list(mk_it()))
             raise
     @classmethod

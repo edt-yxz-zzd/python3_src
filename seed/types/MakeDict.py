@@ -163,8 +163,10 @@ OrderedDict__replace_then_move_to_end([('c', 3), ('a', 4), ('b', 5)])
 ]]
 
 
-py -m nn_ns.app.debug_cmd   seed.types.MakeDict
+__all__
+py -m nn_ns.app.debug_cmd   seed.types.MakeDict -x
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.types.MakeDict   @f
+py -m nn_ns.app.doctest_cmd seed.types.MakeDict! -v
 py -m nn_ns.app.doctest_cmd seed.types.MakeDict:__doc__ -v
 py -m nn_ns.app.doctest_cmd seed.types.MakeDict:_D
 py -m nn_ns.app.doctest_cmd seed.types.MakeDict:MakeDict_Meta
@@ -401,14 +403,16 @@ __all__ = '''
         ListOrderedItems__replace_then_move_to_end
     '''.split()#'''
 
+    #check_dict_mkr_ex
 
-
-from seed.tiny import check_type_is, check_callable, check_pair
-from seed.tiny import echo
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.tiny_.check import check_type_is, check_callable, check_pair
+from seed.tiny_.funcs import echo
 from collections import UserDict #, defaultdict
-
-
 py_dict = dict
+___end_mark_of_excluded_global_names__0___ = ...
+
+
 __all__
 ######################
 ######################

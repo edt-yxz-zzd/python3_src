@@ -481,7 +481,7 @@ class Factory4RecognizerLLoo__inputter_is_IForkable__stamp(IFactory4RecognizerLL
         'IScene -> kinded_name/Hashable -> IRecognizerLLoo'
         return mk_LLoo__ref(scene, kinded_name)
     @override
-    def mk_LLoo__lazy(lazy_or_rgnr, /, *, non_lazy=False):
+    def mk_LLoo__lazy(sf, lazy_or_rgnr, /, *, non_lazy=False):
         r'lazy_or_rgnr/(IRecognizerLLoo if non_lazy else (()->IRecognizerLLoo)) -> (*,non_lazy/bool) -> IRecognizerLLoo'
         return mk_LLoo__lazy(lazy_or_rgnr, non_lazy=non_lazy)
     ######################
@@ -557,7 +557,7 @@ class Factory4RecognizerLLoo__inputter_is_IForkableForwardInputStream666IToken99
         '[tkey] -> IRecognizerLLoo'
         return mk_LLoo__match_constant_tkeys(tkeys, nm_or_case4token_extraction=nm_or_case4token_extraction)
     @override
-    def mk_LLoo__match_constant_tkey(tkey, /, *, nm_or_case4token_extraction='tkey'):
+    def mk_LLoo__match_constant_tkey(sf, tkey, /, *, nm_or_case4token_extraction='tkey'):
         'tkey -> IRecognizerLLoo'
         return mk_LLoo__match_constant_tkey(tkey, nm_or_case4token_extraction=nm_or_case4token_extraction)
     @override
@@ -570,7 +570,7 @@ class Factory4RecognizerLLoo__inputter_is_IForkableForwardInputStream666IToken99
         return mk_LLoo__raw_string(set4sep8open, set4sep8close, set4token6tag, nm_or_case4token_extraction=nm_or_case4token_extraction, oresult_with_tag4raw_string=oresult_with_tag4raw_string)
     #######
     #@override
-    #def mk_LLoo__tkey_set(token_set_query, /, *, to_invert=False):
+    #def mk_LLoo__tkey_set(sf, token_set_query, /, *, to_invert=False):
     #    'ITokenSetQuery -> IRecognizerLLoo'
     #    return mk_LLoo__tkey_set(token_set_query, to_invert=to_invert)
     #@override

@@ -1123,3 +1123,5 @@ del __register_ECHO, __register
 
 
 from seed.tiny import *
+if not __name__ == '__main__':
+    raise DeprecationWarning('too slow to be imported, import directly from original module instead')

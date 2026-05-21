@@ -12,9 +12,6 @@ e ../../python3_src/seed/seq_tools/lsls52ls.py
 seed.seq_tools.lsls52ls
 py -m seed.seq_tools.lsls52ls
 py -m nn_ns.app.debug_cmd   seed.seq_tools.lsls52ls -x
-from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset
-from seed.seq_tools.lsls52ls import GroundIdx5IndirectIdxPair, GroundIdx52IndirectIdxPair__list, GroundIdx52IndirectIdxPair__list__bisearch, GroundIdx52IndirectIdxPair__func
-from seed.seq_tools.lsls52ls import IGroundIdx5IndirectIdxPair, IGroundIdx52IndirectIdxPair
 
 used in:
     seed.math.matrix.solve_matrix
@@ -242,14 +239,22 @@ __all__ = '''
             GroundIdx52IndirectIdxPair__func
 
     '''.split()
+
+
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.IReprImmutableHelper import IReprImmutableHelper
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 
-#from seed.helper.repr_input import repr_helper
-from seed.tiny import mk_tuple, check_uint, check_callable
-from itertools import accumulate, chain
-from seed.seq_tools.bisearch import bisearch
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_callable, check_uint
+    from seed.tiny_.containers import mk_tuple
+
+    from itertools import accumulate, chain
+    from seed.seq_tools.bisearch import bisearch
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 #def sizes2offsets(sizes, /):
@@ -625,6 +630,10 @@ class GroundIdx52IndirectIdxPair__func(GroundIdx5IndirectIdxPair, IGroundIdx52In
         (super_idx, inner_idx_at) = sf._f4gi2si_ni(ground_idx)
         return (super_idx, inner_idx_at)
 
+from seed.seq_tools.lsls52ls import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset
+from seed.seq_tools.lsls52ls import GroundIdx5IndirectIdxPair, GroundIdx52IndirectIdxPair__list, GroundIdx52IndirectIdxPair__list__bisearch, GroundIdx52IndirectIdxPair__func
+from seed.seq_tools.lsls52ls import IGroundIdx5IndirectIdxPair, IGroundIdx52IndirectIdxPair

@@ -10,7 +10,6 @@ py -m nn_ns.app.debug_cmd   seed.math.continued_fraction.continued_fraction_ops 
 py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_ops:__doc__ -ff -v
 py -m nn_ns.app.doctest_cmd seed.math.continued_fraction.continued_fraction_ops:__doc__ -ht
 py_adhoc_call   seed.math.continued_fraction.continued_fraction_ops   @f
-from seed.math.continued_fraction.continued_fraction_ops import *
 
 
 
@@ -1092,29 +1091,39 @@ cf_cmp_
         cf_ne_
 
 ContinuedFraction
+    cf_0
+    cf_1
+    cf_neg1
 
 '''.split()#'''
 __all__
-from fractions import Fraction
-from itertools import chain, islice, count as _count_
-import itertools # count
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'count:_count_'):
+    from fractions import Fraction
+    from itertools import chain, islice, count as _count_
+
+    from seed.tiny_.check import check_uint, check_int_ge, check_type_is
+    from seed.tiny_.funcs import echo
+    from seed.debug.print_err import print_err
+    from seed.tiny_.verify import is_iterable
+    from seed.tiny_.containers import get_null_iter_#null_iter
 
 
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_uint, check_int_ge
-from seed.tiny import echo, null_iter, is_iterable
-from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-from seed.math.PowSeq import PowSeq
-from seed.math.divs import is_even
-from seed.iters.PeekableIterator import PeekableIterator
-    #view ../../python3_src/seed/iters/PeekableIterator.py
-from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionError__inf__no_cf0
-#from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionFoldState, continued_fraction_fold_state0
-from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, iter_approximate_fractions5continued_fraction_
 
-from seed.helper.repr_input import repr_helper
+    from seed.helper.repr_input import repr_helper
+    from seed.math.PowSeq import PowSeq
+    from seed.math.divs import is_even
+    from seed.iters.PeekableIterator import echo_or_mk_PeekableIterator
+        #view ../../python3_src/seed/iters/PeekableIterator.py
+    from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionError__inf__no_cf0
+    from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, iter_approximate_fractions5continued_fraction_
+
+
 from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
 from seed.types.exc.UnsupportedOperation import Attr4UnsupportedOperation
+___end_mark_of_excluded_global_names__0___ = ...
 
 NaN = object()
 class ContinuedFractionState__2vars:
@@ -1458,7 +1467,7 @@ def cf_inv(cf_digits, /):
     for cf0 in cf_digits:
         break
     else:
-        raise ContinuedFractionError__inf__no_cf0
+        raise ContinuedFractionError__inf__no_cf0()
     _1_cf_digits = cf_digits
     1;  del cf_digits
     if cf0 == 0:
@@ -1473,7 +1482,7 @@ def cf_neg(cf_digits, /):
     for cf0 in cf_digits:
         break
     else:
-        raise ContinuedFractionError__inf__no_cf0
+        raise ContinuedFractionError__inf__no_cf0()
     _1_cf_digits = cf_digits
     1;  del cf_digits
     cf0, _1_cf_digits
@@ -1520,8 +1529,8 @@ def _cf_add__optimize_on_int(lhs, rhs, /):
         rhs = j2xhs[j4rhs]
         try:
             (lhs, (is_int4lhs, floor4lhs)) = icf_floor_ex_(lhs)
-        except ContinuedFractionError__inf__no_cf0:
-            return (done:=True, result:=null_iter)
+        except force_lazy_imported_func_(ContinuedFractionError__inf__no_cf0):
+            return (done:=True, result:=get_null_iter_())
         j2xhs[j4lhs] = lhs
             #restore original value: lhs/rhs
         if not is_int4lhs:
@@ -1531,8 +1540,8 @@ def _cf_add__optimize_on_int(lhs, rhs, /):
         for cf0 in rhs:
             break
         else:
-            return (done:=True, result:=null_iter)
-            raise ContinuedFractionError__inf__no_cf0
+            return (done:=True, result:=get_null_iter_())
+            raise ContinuedFractionError__inf__no_cf0()
         _1_rhs = rhs; rhs = None
         i8lhs, cf0, _1_rhs
         result = chain([i8lhs+cf0], _1_rhs)
@@ -1576,7 +1585,7 @@ def cf_floor_ex_(cf_digits, /):
     for cf0 in cf_digits:
         break
     else:
-        raise ContinuedFractionError__inf__no_cf0
+        raise ContinuedFractionError__inf__no_cf0()
     _1_cf_digits = cf_digits
     1;  del cf_digits
     cf0, _1_cf_digits
@@ -1626,7 +1635,7 @@ class _BaseLazySeq:
         return ls[i]
     def __iter__(sf, /):
         try:
-            for i in itertools.count(0):
+            for i in _count_(0):
                 yield sf[i]
         except IndexError:
             pass
@@ -1646,7 +1655,7 @@ class MutableLazySeq(_BaseLazySeq):
         ls = sf._ls
         it = sf._it
         sf._ls = []
-        sf._it = null_iter
+        sf._it = get_null_iter_()
         return ls, it
 def to_MutableLazySeq(it, /):
     if isinstance(it, MutableLazySeq):
@@ -1685,7 +1694,7 @@ class CachedIterator:
         ls = sf._ls
         it = sf._it
         sf._ls = []
-        sf._it = null_iter
+        sf._it = get_null_iter_()
         return ls, it
 
 
@@ -1723,11 +1732,8 @@ def cf_mul(lhs, rhs, /):
     return st4cf_mul.iter_cf_digitsO__if_determined_by_1_and_inf_(lhs, rhs)
 
 
-
 def to_PeekableIterator(it, /):
-    if not isinstance(it, PeekableIterator):
-        it = PeekableIterator(it)
-    return it
+    return echo_or_mk_PeekableIterator(it)
 def cf_ge_(lhs, rhs, /):
     return not cf_lt_(lhs, rhs)
 def cf_le_(lhs, rhs, /):
@@ -1844,7 +1850,7 @@ class ContinuedFraction:
         for cf0 in it:
             break
         else:
-            raise ContinuedFractionError__inf__no_cf0
+            raise ContinuedFractionError__inf__no_cf0()
         check_type_is(int, cf0)
         yield cf0
         for u in it:

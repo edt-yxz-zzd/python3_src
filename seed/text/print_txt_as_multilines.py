@@ -106,10 +106,14 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-
-from seed.iters.icut_to import icut_to, icut_seq_to
-from seed.text.contains_spaces import contains_spaces, check_contains_no_spaces
-from seed.tiny import check_type_is, mk_fprint#, ifNone
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import mk_fprint
+    from seed.iters.icut_to import icut_to, icut_seq_to
+    from seed.text.contains_spaces import contains_spaces, check_contains_no_spaces
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def print_txt_without_space_as_py_src_varable_(ofile, sz4row, nm2var, nm4txt, alias=None, /, *, to_show_assert_len=True):

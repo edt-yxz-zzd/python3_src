@@ -4,7 +4,8 @@ e ../../python3_src/seed/mapping_tools/example4py_dict_impl.py
 view ../../python3_src/seed/mapping_tools/determine_num_slots4hash_map.py_dict_impl.txt
 
 seed.mapping_tools.example4py_dict_impl
-py -m nn_ns.app.debug_cmd seed.mapping_tools.example4py_dict_impl
+py -m nn_ns.app.debug_cmd seed.mapping_tools.example4py_dict_impl -x
+py -m nn_ns.app.doctest_cmd seed.mapping_tools.example4py_dict_impl:__doc__ -ht #  -ff -v -df
 py -m seed.mapping_tools.example4py_dict_impl
 py -m nn_ns.app.adhoc_argparser__main__call8module seed.mapping_tools.example4py_dict_impl
 
@@ -247,15 +248,20 @@ Dict__mixed_table
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from collections.abc import Set, Mapping
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.math.floor_ceil import floor_log2, ceil_log2
-from seed.tiny_.mk_fdefault import mk_default
-#def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
-from seed.helper.repr_input import repr_helper, repr_helper_ex
-from seed.tiny_.check import check_int_ge_lt, check_int_ge, check_imay, check_uint, check_pair, check_type_le, check_type_is, check_callable #check_uint_lt, check_int_ge_le, check_tmay
-from seed.tiny import null_tuple
-from seed.tiny_.singleton import mk_SingletonClass, mk_existing_type_singleton
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper, repr_helper_ex
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
+    from seed.tiny_.mk_fdefault import mk_default
+    #def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
+    from seed.tiny_.check import check_int_ge_lt, check_int_ge, check_imay, check_uint, check_pair, check_type_le, check_type_is, check_callable #check_uint_lt, check_int_ge_le, check_tmay
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.singleton import mk_SingletonClass, mk_existing_type_singleton
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 class IDictSetting(ABC):
@@ -1170,7 +1176,7 @@ class Dict__mixed_table:
             if isinstance(mapping_or_items, __class__):
                 ot = mapping_or_items
                 if ot._is_table_split_ver_():
-                    sf._set_table_(sf._mk_split_table_(ot._get_table_().shared_hkey_table, null_tuple))
+                    sf._set_table_(sf._mk_split_table_(ot._get_table_().shared_hkey_table, get_null_tuple_()))
 
             sf.update(mapping_or_items)
     def __len__(sf, /):

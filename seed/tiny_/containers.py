@@ -1,4 +1,7 @@
-#py -m seed.tiny_.containers
+r'''[[[
+py -m seed.tiny_.containers
+py -m nn_ns.app.debug_cmd   seed.tiny_.containers -x
+#]]]'''#'''
 __all__ = '''
     mk_immutable_seq
         mk_immutable_seq5iterT_
@@ -25,6 +28,15 @@ __all__ = '''
     null_frozenset
     null_mapping_view
     null_iter
+
+
+    get_null_str_
+    get_null_bytes_
+    get_null_int_
+    get_null_tuple_
+    get_null_frozenset_
+    get_null_mapping_view_
+    get_null_iter_
     '''.split()
 from types import MappingProxyType as MapView
 
@@ -76,6 +88,7 @@ null_tuple = ()
 null_frozenset = frozenset()
 null_mapping_view = MapView({})
 null_iter = iter(null_str)#iter(())
+
 
 assert mk_Just(1) == (1,)
 assert mk_Left(1) == (False, 1)
@@ -225,6 +238,16 @@ assert mk_tuple__split_first_if_str('0 1,2;3', ',') == ('0', '1', '2;3')
 assert mk_tuple__split_first_if_str('0 1,2;3', ',;') == ('0', '1', '2', '3')
 
 
+#.,.+8s/^\w\+$/def get_\0_():return \0
+def get_null_str_():return null_str
+def get_null_bytes_():return null_bytes
+def get_null_int_():return null_int
+def get_null_tuple_():return null_tuple
+def get_null_frozenset_():return null_frozenset
+def get_null_mapping_view_():return null_mapping_view
+def get_null_iter_():return null_iter
+
+
 
 from seed.tiny_.containers import mk_tuple__split_first_if_str, mk_tuple__split_first_if_str__sep_
 
@@ -233,4 +256,8 @@ from seed.tiny_.containers import mk_immutable_seq, mk_immutable_seq5iterT_, mk_
 
 from seed.tiny_.containers import mk_pair, mk_pair_tuple
 from seed.tiny_.containers import is_pair
+
+#old:from seed.tiny_.containers import mk_null_str_, mk_null_bytes_, mk_null_int_, mk_null_tuple_, mk_null_frozenset_, mk_null_mapping_view_, mk_null_iter_
+from seed.tiny_.containers import get_null_str_, get_null_bytes_, get_null_int_, get_null_tuple_, get_null_frozenset_, get_null_mapping_view_, get_null_iter_
+    # for lazy_import
 from seed.tiny_.containers import *

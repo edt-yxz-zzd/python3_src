@@ -1,3 +1,4 @@
+#__all__:goto
 r'''
 e ../../python3_src/seed/io/savefile/unbuffered_growonly_set_in_file.py
 
@@ -12,15 +13,20 @@ vs:
         write when close:
             to avoid too many useless contents/history
             since there are delete-/overwrite- operation
+
 from seed.io.savefile.unbuffered_growonly_set_in_file import mk_cached_set, UnbufferedGrowonlySetInFile, UnbufferedSetInFile
 from seed.io.savefile.SaveFile import SaveFileSet
-
 
 SaveFileSet(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs)
 
 UnbufferedSetInFile(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs, growing=False)
 
 UnbufferedGrowonlySetInFile(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs)
+
+
+seed.io.savefile.unbuffered_growonly_set_in_file
+py -m nn_ns.app.debug_cmd   seed.io.savefile.unbuffered_growonly_set_in_file -x
+py -m nn_ns.app.doctest_cmd seed.io.savefile.unbuffered_growonly_set_in_file:__doc__ -ht #  -ff -v -df
 
 #'''
 
@@ -31,14 +37,21 @@ __all__ = '''
     mk_cached_set
     '''.split()
 
-from collections.abc import MutableSet#, Sequence, MutableMapping
+___begin_mark_of_excluded_global_names__0___ = ...
+from collections.abc import MutableSet
 #from seed.io.savefile.SaveFile import SaveFileSet
 from seed.io.savefile.SaveFile import SaveFileMethods__UpdatableSet, SaveFileContainerABC, SaveFile__UpdatableSet
-from seed.tiny import check_type_is #check_bool
-from seed.abc.abc__ver0 import override#, abstractmethod, ABC# final
+from seed.abc.abc__ver0 import override
 
 #from seed.types.GrowingSet import GrowingSet
 #view ../../python3_src/seed/types/GrowingSet.py
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 def _flush(ofile, /):
     ofile.flush()
@@ -143,3 +156,6 @@ def mk_cached_set(path_or_iofile, kwargs_as_description4ofile, /, *, growonly=Tr
     return UnbufferedSetInFile(path_or_iofile, growonly=growonly, encoding=encoding, allow_create_file=allow_create_file, allow_write_file=allow_write_file, allow_write_header=allow_write_header, kwargs=kwargs_as_description4ofile)
 
 
+from seed.io.savefile.unbuffered_growonly_set_in_file import mk_cached_set, UnbufferedGrowonlySetInFile, UnbufferedSetInFile
+#from seed.io.savefile.SaveFile import SaveFileSet
+from seed.io.savefile.unbuffered_growonly_set_in_file import *

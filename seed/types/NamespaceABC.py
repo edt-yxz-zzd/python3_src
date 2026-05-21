@@ -1,6 +1,13 @@
-
+#__all__:goto
 r'''
->>> class S(StaticImmutableNamespaceBase, ordered_user_attr_seq='ab'):pass
+seed.types.NamespaceABC
+py -m nn_ns.app.debug_cmd   seed.types.NamespaceABC -x
+py -m nn_ns.app.doctest_cmd seed.types.NamespaceABC:__doc__ -ht #  -ff -v -df
+
+
+
+>>> class S(StaticImmutableNamespaceBase, ordered_user_attr_seq='ab'):
+...     ___no_slots_ok___ = True
 >>> ns = S(b=-1, a=2)
 >>> del ns.a #doctest: +IGNORE_EXCEPTION_DETAIL
 Traceback (most recent call last):
@@ -79,23 +86,36 @@ class StaticImmutableNamespaceBase(StaticImmutableNamespaceABC, _ImmutableNamesp
 class DynamicImmutableNamespace(_ImmutableNamespaceBase):
 #"""
 
+__all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.types.empty_containers import EmptyMapping#empty_mapping
+    from seed.debug.print_err import print_err
+
+    from types import MappingProxyType
+    from inspect import isabstract
+    #from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty
+    from seed.verify.common_verify import is_Sequence
+    from seed.helper.repr_input import repr_helper_ex
+
 
 
 #from collections.abc import Set, Sequence, Mapping
-from types import MappingProxyType
-import inspect # isabstract
-from seed.types.empty_containers import empty_mapping
-#from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty
-from seed.verify.common_verify import is_Sequence
-from seed.tiny import null_iter, print_err
-from seed.helper.repr_input import repr_helper_ex
-#from seed.abc import abstractmethod, ABC, final, override
-from seed.abc.abc__ver1 import abstractmethod, override, final, ABC #, ABC__no_slots
+from seed.abc.abc__ver1 import abstractmethod, override, final, ABC
 from seed.decorators.__special_method__ import (
     __static_method__
     ,__class_method__
     ,__instance_method__
     )
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
 
 class NamespaceABC(ABC):
     '''
@@ -675,7 +695,7 @@ overrided abstract_methods:
     @__instance_method__
     @override
     def __get_user_cached_attr2eval__(self):
-        return empty_mapping
+        return EmptyMapping()
 
     @__instance_method__
     @override
@@ -715,7 +735,8 @@ overrided abstract_methods:
         , type_attr4ordered_user_attr_seq=None
         , **kwargs
         ):
-        if not inspect.isabstract(cls) and not cls is __class__:
+        #.if not inspect.isabstract(cls) and not cls is __class__:
+        if not isabstract(cls) and not cls is __class__:
             cls.__init_subclass(
                 ordered_user_attr_seq=ordered_user_attr_seq
                 ,type2ordered_user_attr_seq=type2ordered_user_attr_seq

@@ -13,6 +13,8 @@ py_adhoc_call   seed.io.continue_io   @f
 #]]]'''
 __all__ = r'''
     IncompleteLastLineError
+    Mismatch__line_value_with_no_continuity_info
+
     Setting4LineContinueIO
         setting4LineContinueIO__newline_utf8
     LineContinueIO
@@ -21,16 +23,20 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from os import SEEK_SET, SEEK_END, SEEK_CUR
-#from itertools import repeat
 
-from seed.for_libs.for_io.stream_obj_converter import binary_stream_obj2text_stream_obj
-#def binary_stream_obj2text_stream_obj(binary_stream_obj, /,*, encoding, buffered_case, kwargs4buffered_binary_stream, kwargs4text_stream):
-    #buffered_cases = ('read', 'write', 'rw_seek')
-from seed.tiny import check_type_is
-from seed.tiny import check_type_le
-from seed.helper.safe_eval import safe_eval
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from itertools import repeat
+
+    from seed.for_libs.for_io.stream_obj_converter import binary_stream_obj2text_stream_obj
+    #def binary_stream_obj2text_stream_obj(binary_stream_obj, /,*, encoding, buffered_case, kwargs4buffered_binary_stream, kwargs4text_stream):
+        #buffered_cases = ('read', 'write', 'rw_seek')
+    from seed.tiny_.check import check_type_is, check_type_le
+    from seed.helper.safe_eval import safe_eval
+    from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
 
 class IncompleteLastLineError(Exception):pass
 

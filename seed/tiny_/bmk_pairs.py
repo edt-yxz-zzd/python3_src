@@ -488,7 +488,7 @@ def mk_argpackEO(eithers, /, *, to_group):
     argpack = mk_result()
     assert argpack
     #assert all(rs or i==0 for i, rs in enumerate(argpack))
-    #from seed.tiny import print_err
+    #from seed.debug.print_err import print_err
     #if 0b001:print_err(argpack)
     check_argpack(argpack, grouped=to_group)
     return argpack

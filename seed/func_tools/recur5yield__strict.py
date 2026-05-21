@@ -104,17 +104,27 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 if 1:
     from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
-    from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
-from seed.func_tools.recur5yield import recur5yield__decoratorT__all_gi_protocols# child_gi_protocol__echo, child_gi_protocol__0func, child_gi_protocolT__0func5ref, tail_recur_gi_protocol__echo, tail_recur_gi_protocol__off
-
-from functools import update_wrapper, wraps
-from types import GeneratorType
-
-from seed.types.Either import Either
-from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_subscriptable, check_callable
-from seed.tiny import echo, ifNone, null_mapping_view, print_err
-from seed.helper.repr_input import repr_helper
+    from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list# the_emplace_stack_ops4HugeStack
+#from seed.func_tools.recur5yield import recur5yield__decoratorT__all_gi_protocols# child_gi_protocol__echo, child_gi_protocol__0func, child_gi_protocolT__0func5ref, tail_recur_gi_protocol__echo, tail_recur_gi_protocol__off
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+
+
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import update_wrapper, wraps
+    from types import GeneratorType
+
+    from seed.types.Either import Either
+    from seed.tiny_.check import check_type_is, check_type_le, check_non_ABC, check_subscriptable, check_callable
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.funcs import echo
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.debug.print_err import print_err
+    from seed.tiny_.containers import get_null_mapping_view_#null_mapping_view
+
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class _BoxedXxx:
@@ -335,7 +345,7 @@ class Executor4recur5yield__dispatch_by_dict(IExecutor4recur5yield__dispatch_by_
         check_type_is(bool, _allow__gi2gi_)
         emplace_stack_ops = ifNone(may_emplace_stack_ops, the_emplace_stack_ops4list)
         check_type_le(IEmplaceStackOps, emplace_stack_ops)
-        type2attr_or_child_gi_protocol = ifNone(may_type2attr_or_child_gi_protocol, null_mapping_view)
+        type2attr_or_child_gi_protocol = ifNone(may_type2attr_or_child_gi_protocol, get_null_mapping_view_())
         check_subscriptable(type2attr_or_child_gi_protocol)
 
         sf._ops = emplace_stack_ops

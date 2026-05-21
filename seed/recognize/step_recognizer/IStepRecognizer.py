@@ -135,8 +135,6 @@ from typing import Union
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 #.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):
 #.    from seed.helper.ifNone import ifNone as _ifNone, ifNonef as _ifNonef
-#.with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
-#.    from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.types.Tester import is_good, ITester
     from seed.types.CachedProperty import CachedProperty# mk_cached_propertyT_

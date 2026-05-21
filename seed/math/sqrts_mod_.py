@@ -252,7 +252,7 @@ _may_output4debug_
 
 >>> from seed.math.sqrts_mod_ import iter_sqrts_mod_prime_
 >>> import sys
->>> del sys.modules['seed.math.sqrts_mod_']
+>>> #del sys.modules['seed.math.sqrts_mod_']
 >>> from seed.math.sqrts_mod_ import iter_sqrts_mod_prime_
 
 >>> [*iter_sqrts_mod_prime_(2, 0, _may_output4debug_=None)]
@@ -352,9 +352,9 @@ True
 
 (2,3,5,7,13,17,19,31,61,89,107,127,521,607,1279,2203,2281,3217,4253,4423,9689,9941,11213,19937,21701,23209,44497,86243,110503,132049,216091,756839,859433,1257787,1398269,2976221,3021377,6972593,13466917,20996011,24036583,25964951,30402457,32582657,37156667,42643801,43112609,57885161       #unstable: ,74207281,77232917,82589933)
 
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**72'
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**72'
 4722366482869645213711
-py_adhoc_call   seed.math.prime_gens   @next_may_prime__le_pow2_81__ge_  ='2**50'
+py_adhoc_call   seed.math.seed.math.primality_test.strong_probable_prime   @next_may_prime__le_pow2_81__ge_  ='2**50'
 1125899906842679
 
 >>> selective_test4iter_sqrts_mod_prime_power_(2, 8) #doctest: +SKIP
@@ -580,6 +580,9 @@ def inv_mod__coprime_(M, x, /):
 
 
 
+py_adhoc_call   seed.math.sqrts_mod_   @find_arbitrary_one_square_nonresidual_mod_odd_prime_ ='2**16+1'
+    3
+
 #]]]'''
 __all__ = r'''
 iter_sqrts_mod_prime_
@@ -693,57 +696,47 @@ def __():
         'p -> k -> q -> x_q/(int%q) -> xs_q/Iter w_q/(int%q) # [[p is prime][x_q%p =!= 0][k >= 1][q == p**k][0 <= x_q < q][0 <= w_q < q][w_q**2%q == x_q**2%q]] #used in degrade all sqrts; see:upgrade_or_maybe_after_flip_MSB_if_p_eq2__sqrt_mod_prime_power__coprime_'
 
 __all__
-from seed.math.discrete_logarithm import discrete_logarithm__coprime_
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'inv_mod_:inv_mod__coprime_,count:_count,isqrt:floor_sqrt_'):
+    from seed.math.discrete_logarithm import discrete_logarithm__coprime_
     #def discrete_logarithm__coprime_(modulus, base, order_of_base, factorization_of_order_of_base, y, /)
     #sqrts_mod__prime_
 
-from seed.for_libs.for_time import (
-Timer__print_err
-    ,timer__print_err__thread_wide
-    ,timer__print_err__process_wide
-    ,timer__print_err__system_wide__highest_resolution
-    ,timer__print_err__system_wide__monotonic
-)
 
-timer = timer__print_err__thread_wide
-_to_show_ = False
-_to_show_ = True
-_to_show_ = __name__ == "__main__"
 
-with timer(prefix='basic...', _to_show_=_to_show_):
+
     from math import isqrt as floor_sqrt_
     from itertools import pairwise, islice, count as _count
 
     from seed.math.Jacobi_symbol import Jacobi_symbol
         #def Jacobi_symbol(M, x, /):
         #    'M/int{%2==1} -> x/int -> Jacobi_symbol(x::/M)/(-1|0|+1)'
-    from seed.tiny import print_err
-    from seed.tiny import null_iter
-    from seed.tiny import check_callable
-    from seed.tiny import check_type_is
+
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.tiny_.check import check_type_is, check_callable
+    from seed.debug.print_err import print_err
+
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
     #def factor_pint_out_power_of_base_(base, n, /):
     #    'base/int{>=2} -> n/pint -> (exp/uint, unfactored_part) #[n == base**exp * unfactored_part][unfactored_part%base =!= 0]'
 
-with timer(prefix='prime_gens', _to_show_=_to_show_):
-    from seed.math.prime_gens import prime_gen
-    from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_
-    #def detect_strong_pseudoprime__not_waste_too_much_time_(n, /):
-    #    'n/int -> (0|1|-1) # [0=>not prime][1=>prime][-1=>strong_pseudoprime]'
-with timer(prefix='inv_mod_(<-- seed.math.continued_fraction.continued_fraction_fold)', _to_show_=_to_show_):
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_
+    from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_
+    #def detect_strong_probable_prime__not_waste_too_much_time_(n, /):
+    #    'n/int -> (0|1|-1) # [0=>not prime][1=>prime][-1=>strong_probable_prime]'
     from seed.math.inv_mod_ import inv_mod_ as inv_mod__coprime_
     #from seed.math.sqrts_mod_ import inv_mod__coprime_
     #from seed.math.continued_fraction.continued_fraction_fold import inv_mod_ as inv_mod__coprime_
-with timer(prefix='radix_repr2uint', _to_show_=_to_show_):
     from seed.int_tools.digits.radix_repr2uint import radix_repr2uint, IRadixRepr2Uint, RadixRepr2Uint
     #def radix_repr2uint(radix_or_an_IRadixRepr2Uint, digits, /,*, is_big_endian:bool, _merge_ver:'0|1|2'=0, input_is_an_IRadixRepr2Uint_not_radix=False):
-with timer(prefix='uint2radix_repr', _to_show_=_to_show_):
     from seed.int_tools.digits.uint2radix_repr import uint2radix_repr, IUint2RadixRepr__little_endian__plain, IUint2RadixRepr, Uint2RadixRepr
     #def uint2radix_repr(radix_or_an_IUint2RadixRepr, uint, /,*, is_big_endian:bool, _split_ver:'0|1'=1, min_len=0, imay_max_len=-1, input_is_an_IUint2RadixRepr_not_radix=False):
-with timer(prefix='sqrts_mod_', _to_show_=_to_show_):
-    if __name__ == "__main__":
-        from seed.math.sqrts_mod_ import *
+
+#detect_strong_probable_prime__not_waste_too_much_time_(1)
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 def _dummy1_(_, /):pass
 
@@ -1009,7 +1002,8 @@ def find_arbitrary_one_square_nonresidual_mod_odd_prime_(p, /):
         # [[p,q :: odd_prime] -> [p=!=q] -> [(p:/q)(q:/p)==(-1)^((p-1)(q-1)/4)]]
         #
         # [[p,q :: odd_prime] -> [q < p == 8*k+1] -> [(q:/p) == (p:/q)]]
-        for q in prime_gen.iter__ge_(3):
+        #.for q in prime_gen.iter__ge_(3):
+        for q in iter_sieve4primes_ge_(3):
             #if q == p: raise logic-err
             if p < q**2: raise logic-err
             if -1 == Jacobi_symbol(q, p%q):
@@ -1855,7 +1849,7 @@ def _body4iter_sqrts_mod_prime_power__coprime_(fnm_params, output4debug_, p, k, 
         if not Jacobi_symbol(p, xx_p) == 1:
             # [not$ is_square_residual_mod(p;xx)]
             999;    output4debug_(('[[[xx%p =!= 0][k>=2][p%2 == 1][Jacobi_symbol(p, xx%p) =!= 1]] -> [sqrts_mod__prime_power__coprime_(p**k;xx) == {}]]', fnm_params))
-            return null_iter
+            return get_null_iter_()
         # [is_square_residual_mod(p;xx)]
         # [is_square_residual_mod(q;xx)]
     else:
@@ -1870,7 +1864,7 @@ def _body4iter_sqrts_mod_prime_power__coprime_(fnm_params, output4debug_, p, k, 
                 # [k == 2][xx%4 =!= 1]
                 # [not$ is_square_residual_mod(4;xx)]
                 999;    output4debug_(('[[[xx%p =!= 0][k==2][p == 2][xx%4 =!= 1]] -> [sqrts_mod__prime_power__coprime_(p**k;xx) == {}]]', fnm_params))
-                return null_iter
+                return get_null_iter_()
             # [k == 2][xx%4 == 1]
             # [is_square_residual_mod(4;xx)]
         else:
@@ -1881,7 +1875,7 @@ def _body4iter_sqrts_mod_prime_power__coprime_(fnm_params, output4debug_, p, k, 
                 # !! [k >= 3]
                 # [not$ is_square_residual_mod(q;xx)]
                 999;    output4debug_(('[[[xx%p =!= 0][k>=3][p == 2][xx%8 =!= 1]] -> [sqrts_mod__prime_power__coprime_(p**k;xx) == {}]]', fnm_params))
-                return null_iter
+                return get_null_iter_()
             # [k >= 3][xx%8 == 1]
             # [is_square_residual_mod(8;xx)]
             # [is_square_residual_mod(q;xx)]
@@ -2971,7 +2965,7 @@ def _check4upgrade_sqrt_mod_(p, i, j, x_0_i, xx_i_ij, p_i, p_j, /, *, may_inv_x_
     if not p_i == p**i: raise ValueError((p, i, p_i))
     if not p_j == p**j: raise ValueError((p, j, p_j))
 
-    if 0 == detect_strong_pseudoprime__not_waste_too_much_time_(p): raise Error__not_prime_number(p)
+    if 0 == detect_strong_probable_prime__not_waste_too_much_time_(p): raise Error__not_prime_number(p)
 
     if 0 == x_0_i%p: raise Error__not_coprime((p, x_0_i))
 
@@ -3140,7 +3134,9 @@ if __name__ == "__main__":
     pass
 __all__
 
-if 0:
+def __():
+    timer = ...
+    _to_show_ = ...
     with timer(prefix='inv_mod_', _to_show_=_to_show_):
         from seed.math.inv_mod_ import inv_mod_ as inv_mod__coprime_
 

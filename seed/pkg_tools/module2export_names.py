@@ -7,7 +7,7 @@ to get module_obj.__all__
 
 
 py -m seed.pkg_tools.module2export_names
-py -m nn_ns.app.debug_cmd  seed.pkg_tools.module2export_names
+py -m nn_ns.app.debug_cmd  seed.pkg_tools.module2export_names -x
 py -m nn_ns.app.adhoc_argparser__main__call8module  seed.pkg_tools.module2export_names
 
 >>> from seed.pkg_tools.module2export_names import is_export_name_by_default_setting__nonstrict, is_export_name_by_default_setting
@@ -33,8 +33,12 @@ __all__ = r'''
 __all__
 
 
-#from seed.tiny import mk_tuple, check_type_is
-from seed.pkg_tools.xmodule2module_qname import xmodule2module_obj
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.pkg_tools.xmodule2module_qname import xmodule2module_obj
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 def is_export_name_by_default_setting__nonstrict(name, /):
     return is_export_name_by_default_setting(name, strict=False)

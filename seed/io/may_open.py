@@ -107,9 +107,15 @@ open4rt
 
 '''.split()#'''
 
-from seed.io.make_mode_ex4open import is_binary_mode5xencoding, xencoding2may_encoding, mk_mode_ex4open4w, mk_mode_ex4open4r
-from seed.tiny import with_if
+___begin_mark_of_excluded_global_names__0___ = ...
 import sys
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.io.make_mode_ex4open import is_binary_mode5xencoding, xencoding2may_encoding, mk_mode_ex4open4w, mk_mode_ex4open4r
+    from seed.helper.with_if import with_if
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 def may_open(fdefault, may_file, mode, /, *, encoding, **kwargs):
     # should be used with "with"

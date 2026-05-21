@@ -74,6 +74,9 @@ __all__ = r'''
 
 
 
+匴解码器表达式包纟圁訄甲版右递归句法语言
+宽解码冃辅助表达式巛冊句法文本扌
+'''.split()#'''
 
 
 
@@ -87,6 +90,11 @@ __all__ = r'''
 
 
 
+
+
+
+__all__
+r'''
 may_int5smay_
 add_
 con4str_
@@ -162,6 +170,7 @@ mk_int
 前缀表达式
 '''.split()#'''
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
 ######################
 # 构造 表达式:
 from seed.recognize.toy.simple_recognizer import 定长式,码集式,常量式,失败式,成功式,空式,引用式
@@ -191,6 +200,7 @@ from seed.recognize.toy.simple_recognizer import 检查冫讫错果扌,检查冫
 from ast import literal_eval
 from seed.recognize.toy.simple_recognizer_.basic import the_one_
 from seed.recognize.toy.simple_recognizer_.basic import 数字表,标识体字集,标识首字集,空白字集
+
 
 __all__
 变换器冫取原文片段
@@ -234,6 +244,7 @@ mk_int = 构造冫具名函数扌('int', lambda x:int(x))
     #ValueError: no signature found for builtin type <class 'int'>
 #con_ = 构造冫具名函数扌(..., con_)
 
+___end_mark_of_excluded_global_names__0___ = ...
 
 ######################
 
@@ -420,7 +431,9 @@ if __name__ == '__main__':
 ######################
 ######################
 #_名集
-def call__(n, f, /):
+def __not_used():
+  '???'
+  def call__(n, f, /):
     def call_(args, /):
         args = (*args,)
         assert len(args) == n, (n, args)
@@ -695,7 +708,7 @@ def __():
     from seed.recognize.toy.simple_recognizer_.expr import 具名式,串联式,首选式,锁隙式,独尊式,前瞻式,反转式,忽略式,兼顾式,变果式,重复式,尾限式
     ######################
     from seed.recognize.toy.simple_recognizer_.syntax_tree_base import 乸句法树纟基符,乸句法树纟展符
-    from seed.tiny import curry1
+    from seed.tiny_.types5py import curry1
     def 冃基符扌(果, /):
         return 基符名凵变换结果扌('冃基符', 果)
     冃基符扌 = 构造冫具名函数扌(..., 冃基符扌)
@@ -839,5 +852,5 @@ __all__
 if __name__ == '__main__':
     __()
 __all__
-del __all__
+#del __all__
 from seed.recognize.toy.simple_recognizer_.grammar import *

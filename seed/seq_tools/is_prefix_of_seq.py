@@ -4,6 +4,8 @@ view ../../python3_src/seed/seq_tools/mk_slice.py
 view ../../python3_src/seed/types/view/SeqSliceView.py
 
 
+py -m nn_ns.app.debug_cmd   seed.seq_tools.is_prefix_of_seq -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.is_prefix_of_seq:__doc__ -ht #  -ff -v -df
 
 from seed.seq_tools.is_prefix_of_seq import is_prefix_of_seq, is_suffix_of_seq
 from seed.seq_tools.is_prefix_of_seq import seq_starts_with, seq_ends_with
@@ -44,11 +46,21 @@ __all__ = '''
     lcs_of__lsls
     '''.split()
 
-from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
-from seed.seq_tools.mk_slice import mk_slice
-from seed.types.view.SeqSliceView import SeqSliceView
-from seed.tiny import echo, check_type_is
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+    from seed.seq_tools.mk_slice import mk_slice
+    from seed.types.view.SeqSliceView import SeqSliceView
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
 
 def seq_starts_with(seq, prefix):
     return is_prefix_of_seq(prefix, seq)
@@ -62,7 +74,7 @@ def is_prefix_of_seq(prefix, seq, begin=None, end=None, *, __eq__=None):
 
 
 def seq_ends_with(seq, prefix):
-    return is_suffix_of_seq(suffix, seq)
+    return is_suffix_of_seq(prefix, seq)
 
 def is_suffix_of_seq(suffix, seq, begin=None, end=None, *, __eq__=None):
     (begin, end) = mk_seq_rng(seq, begin, end)

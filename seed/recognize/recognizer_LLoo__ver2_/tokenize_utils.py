@@ -54,21 +54,24 @@ IHelper4Tokenization
 
 isinstance
 '''.split()#'''
+
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.types.IToken import mk_high_lvl_rawstream5low_high_low_triples_
-#def mk_high_lvl_rawstream5low_high_low_triples_(high_lvl_offset, low_lvl_tgbegin, low_high_low_triples, /, *, to_flatten:bool):
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.IToken import mk_high_lvl_rawstream5low_high_low_triples_
+    #def mk_high_lvl_rawstream5low_high_low_triples_(high_lvl_offset, low_lvl_tgbegin, low_high_low_triples, /, *, to_flatten:bool):
 
-#from seed.types.IToken import mk_chr_rawstream5args8chars_
-    # -> chr_rawstream
-from seed.types.stream.IRecoverableInputStream import mk_istream5rawstream_, mk_chr_istream5args8chars_, mk_chr_istream5path_, mk_chr_istream5file_, mk_chr_istream5chars_
+    #from seed.types.IToken import mk_chr_rawstream5args8chars_
+        # -> chr_rawstream
+    from seed.types.stream.IRecoverableInputStream import mk_istream5rawstream_, mk_chr_istream5args8chars_, mk_chr_istream5path_, mk_chr_istream5file_, mk_chr_istream5chars_
     # -> chr_istream
     # -> istream
 #def mk_chr_istream5args8chars_(args8chars, max_num_tokens6backward=0, /):
 #def mk_istream5rawstream_(rawstream, max_num_tokens6backward=0, /):
 #def mk_chr_istream5path_(ipath, /, *, encoding, may_pseudo_fname=None, max_num_tokens6backward=0):
 #def mk_chr_istream5chars_(chr_tgbegin, chars, /, *, max_num_tokens6backward=0):
-from seed.types.IToken import (
+    from seed.types.IToken import (
 mk_chr_rawstream5args8chars_
 ,   mk_chr_rawstream5path_
 ,       mk_chr_tgbegin5fname_
@@ -83,19 +86,24 @@ mk_chr_rawstream5args8chars_
 #       args8chars = mk_args8chars5path_(ipath, encoding=encoding, may_pseudo_fname=may_pseudo_fname)
 )
 
+
+    from seed.helper.getset_external_cache4func import getset_external_cache4func# getset_external_cache4method
+    #def getset_external_cache4func(get_vs_set_vs_set_ex, f, /, *weakable_args, __depth=0):
+
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.funcs import echo, fst
+    from seed.tiny_.types5py import curry1
+    from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_char
+
+
+
+
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import recognize_, mk_Environment, IRecognizerLLoo
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import Makers4IRecognizerLLoo
 
 from seed.types.Either import Cased, Either
 from seed.types.Either import mk_Left, mk_Right
-
-from seed.helper.getset_external_cache4func import getset_external_cache4func# getset_external_cache4method
-#def getset_external_cache4func(get_vs_set_vs_set_ex, f, /, *weakable_args, __depth=0):
-
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
-from seed.tiny import ifNone, echo, fst, curry1# print_err
-
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 ___end_mark_of_excluded_global_names__0___ = ...
 
 __all__
@@ -235,7 +243,6 @@ def _spost4xint(oresult, /):
 def _mk_common_rgnr4tknz():
     '-> (ns4common_rgnr4tknz, (xqset2rgnr4tdat_, xqset2rgnr4tkey_, tkey2rgnr4tdat_, tkey2rgnr4tkey_), (xqset2both_rgnrs4tdat_, xqset2both_rgnrs4tkey_, tkey2both_rgnrs4tdat_, tkey2both_rgnrs4tkey_), (xqset2rgnr4tkd_, tkey2rgnr4tkd_))'
     ######################
-    from seed.tiny import MapView
     from seed.types.Namespace import NamespaceForbidModify
     ######################
 

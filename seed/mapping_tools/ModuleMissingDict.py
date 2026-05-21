@@ -10,6 +10,10 @@ if missing,
 MissingModule
     a moduler obj, whose __dict__ is a ModuleMissingDict
 
+seed.mapping_tools.ModuleMissingDict
+py -m seed.mapping_tools.ModuleMissingDict
+py -m nn_ns.app.debug_cmd   seed.mapping_tools.ModuleMissingDict -x
+py -m nn_ns.app.doctest_cmd seed.mapping_tools.ModuleMissingDict:__doc__ -ht #  -ff -v -df
 '''
 
 __all__ = '''
@@ -80,17 +84,18 @@ class MissingModule:
         d = object.__getattribute__(self, '_MissingModule__dict')
         d[name] = obj
 
-mm = MissingModule()
-assert type(mm.__dict__) is DynamicMissingDict
-assert not mm.__dict__
-mm.abc = 'A'
-assert mm.abc == 'A'
-assert len(mm.__dict__) == 1
+def __():
+    mm = MissingModule()
+    assert type(mm.__dict__) is DynamicMissingDict
+    assert not mm.__dict__
+    mm.abc = 'A'
+    assert mm.abc == 'A'
+    assert len(mm.__dict__) == 1
+__()
 
 
-
-def t():
-    from seed.tiny import expectError
+def _t():
+    from seed.debug.expectError import expectError
     def missing1(d, name):
         return name # not setitem!!
     D = dynamic_missing_dict(missing1)
@@ -109,10 +114,10 @@ def t():
     assert d # set it!!
 
 
-t()
+_t()
 
 
-'''
+r'''
 class DynamicMissingDict(dict):
     # missing :: dict -> name -> called_by_get -> (value|raise KeyError)
     #   called_by_get :: () | (default,)
@@ -126,5 +131,9 @@ class DynamicMissingDict(dict):
     def get(self, name, default=None):
     def __missing__(self, name):
         self.__missing(self, name, ())
-'''
+'''#'''
 
+from seed.mapping_tools.ModuleMissingDict import MissingModule
+from seed.mapping_tools.ModuleMissingDict import ModuleMissingDict, module_missing
+from seed.mapping_tools.ModuleMissingDict import dynamic_missing_dict, DynamicMissingDict
+from seed.mapping_tools.ModuleMissingDict import *

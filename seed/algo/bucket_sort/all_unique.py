@@ -1,4 +1,11 @@
 
+r'''[[[
+seed.algo.bucket_sort.all_unique
+py -m nn_ns.app.debug_cmd   seed.algo.bucket_sort.all_unique -x
+py -m nn_ns.app.doctest_cmd seed.algo.bucket_sort.all_unique:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
+
+
 
 __all__ = '''
     all_unique
@@ -6,7 +13,11 @@ __all__ = '''
 
 
 
-from seed.tiny import echo
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def all_unique(alphabet_size, iterable, *, key=None):
@@ -53,8 +64,10 @@ example:
     return True
 
 
+from seed.algo.bucket_sort.all_unique import *
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
 
+from seed.algo.bucket_sort.all_unique import all_unique

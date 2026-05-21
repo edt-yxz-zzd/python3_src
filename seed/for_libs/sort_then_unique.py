@@ -1,4 +1,4 @@
-
+raise 000
 '''
 for not sort unique:
     see:
@@ -7,14 +7,13 @@ for not sort unique:
 '''
 
 __all__ = '''
-    sorted_ex
+    sort_then_unique
 '''.split()
 
 
 from seed.iters.neighbor_unique import neighbor_unique
 #from functools import cmp_to_key
-#from seed.tiny import echo, py_cmp
-from seed.tiny import int2cmp
+from seed.tiny_.funcs import int2cmp
 from .sorted_ex import sorted_ex
 
 

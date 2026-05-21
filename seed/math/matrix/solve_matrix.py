@@ -183,16 +183,30 @@ __all__ = '''
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from fractions import Fraction
-from operator import is_
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from fractions import Fraction
+    from operator import is_
+    from functools import reduce
+    from seed.helper.repr_input import repr_helper
+    from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset
+
+
+
+
+from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
+with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny):
+    from seed._lazy_ import print_err, fst, echo, ifNone, curry1
+    from seed._lazy_ import check_callable, check_uint, check_tmay, check_type_is
+
+
+
+
+from enum import IntEnum, auto, unique
+
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import echo, fst
-from seed.tiny import print_err#, mk_fprint, mk_assert_eq_f, expectError
-from seed.tiny import check_callable, check_uint, check_tmay, check_type_is
-from seed.tiny import curry1
-from seed.helper.repr_input import repr_helper
-from seed.seq_tools.lsls52ls import sizes_to_ground_idx2super_idx_inner_idx_pair, sizes_to_ground_idx2super_idx, sizes_to_super_idx2ground_offset
-from functools import reduce
 
 from seed.math.IRingOps import ring_ops__integer, ring_ex_ops__int, ring_ex_ops__Fraction, ring_ex_ops__BinaryField
 
@@ -1218,7 +1232,7 @@ class LinearEquationSolver(BasicOps4MatrixOverRing):
 linear_solver = LinearEquationSolver()
 ring_ex_ops__Fraction = FractionRingExOps()
 
-from enum import IntEnum, auto, unique
+#from enum import IntEnum, auto, unique
 @unique
 class InequalitySign(IntEnum):
     # 6=2*3=(==/!=)*(?/</>)

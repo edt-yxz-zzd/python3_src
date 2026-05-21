@@ -180,21 +180,22 @@ FloorLogarithm
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from functools import cached_property
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from functools import cached_property
 
 
-#from seed.math.floor_ceil import floor_div, ceil_div
-#from seed.math.floor_ceil import floor_div_, ceil_div_
-#from seed.math.floor_ceil import floor_log2, ceil_log2, floor_ceil_log2
-#from seed.math.floor_ceil import floor_log_, ceil_log_, floor_ceil_log_
-#assert (2, 2, 4) == (__:=floor_ceil_log_(2, 4, with_floor_pow=True)), __
-#assert (1, 1, 2) == (__:=floor_ceil_log_(2, 2, with_floor_pow=True)), __
-#assert (0, 0, 1) == (__:=floor_ceil_log_(2, 1, with_floor_pow=True)), __
+    from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div, floor_div_, ceil_div_
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2, floor_ceil_log2
+    from seed.math.floor_ceil_tools.fc_log import floor_log_, ceil_log_, floor_ceil_log_
+    #assert (2, 2, 4) == (__:=floor_ceil_log_(2, 4, with_floor_pow=True)), __
+    #assert (1, 1, 2) == (__:=floor_ceil_log_(2, 2, with_floor_pow=True)), __
+    #assert (0, 0, 1) == (__:=floor_ceil_log_(2, 1, with_floor_pow=True)), __
 
-from seed.math.floor_ceil import floor_log2, floor_ceil_log2
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, floor_ceil_log2
 
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.helper.repr_input import repr_helper
 ___end_mark_of_excluded_global_names__0___ = ...
 
 _b2flgB = {}

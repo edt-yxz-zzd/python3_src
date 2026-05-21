@@ -269,18 +269,23 @@ __all__ = '''
     #sign_of
 __all__
 
-from itertools import count, islice
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.types5py import curry1
 
-from seed.tiny import curry1
-from seed.iters.iterate import iterate
+    from itertools import count, islice
 
-from seed.math.max_power_of_base_as_factor_of_ import max_power_of_base_as_factor_of_
-from seed.math.sign_of import sign_of
-from seed.math.II import II
-from seed.math.gcd import gcd
-from seed.math.divmod__half import divmod__half#, mod__half
+    from seed.iters.iterate import iterate
 
-from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
+    from seed.math.max_power_of_base_as_factor_of_ import max_power_of_base_as_factor_of_
+    from seed.math.sign_of import sign_of
+    from seed.math.II import II
+    from seed.math.gcd import gcd
+    from seed.math.divmod__half import divmod__half#, mod__half
+
+    from seed.math.is_prime__le_pow2_64 import is_prime__le_pow2_64
+___end_mark_of_excluded_global_names__0___ = ...
 
 if 0:
   def sign_of(x, /):
@@ -1368,18 +1373,27 @@ if 1:
 #end2-def iter_right_angled_triangles_with_coprime_side_length__len_hypotenuse_eq(c, factorisation_of_c, /, *, SML_vs_HOE, to_sort, turnoff__coprime):
 
 
+def __old():
+    r'''[[[
+def _iter_uint_and_factorization_pairs_ge_five_():
+    from seed.math.prime_[#break#]gens import all_prime_factors_gen
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
+    #all_prime_factors_gen.get_or_mk_lazy_seq_()
+    for u, may_prime_factors4u in enumerate(all_prime_factors_gen, 0):
+        #if u < 2: continue
+        if u < 5: continue
+        prime_factors4u = may_prime_factors4u
+        (p2e, _1) = semi_factor_pint_via_trial_division(prime_factors4u, u)
+        assert _1 == 1
+        yield (u, p2e)
+    #]]]'''#'''
+def _iter_uint_and_factorization_pairs_ge_five_():
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4prime_factorizations_ge_
+    return iter_sieve4prime_factorizations_ge_(5, with_uint=True)
 def iter_len_hypotenuse_of_right_angled_triangles_with_coprime_side_length__with_factorisation__lt(may_max1_hypotenuse, /, *, turnoff__coprime):
     '-> Iter (c, factorisation_of_c)'
     if may_max1_hypotenuse is None:
-        from seed.math.prime_gens import all_prime_factors_gen
-        from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-        #all_prime_factors_gen.get_or_mk_lazy_seq_()
-        for u, may_prime_factors4u in enumerate(all_prime_factors_gen, 0):
-            #if u < 2: continue
-            if u < 5: continue
-            prime_factors4u = may_prime_factors4u
-            (p2e, _1) = semi_factor_pint_via_trial_division(prime_factors4u, u)
-            assert _1 == 1
+        for (u, p2e) in _iter_uint_and_factorization_pairs_ge_five_():
             if not turnoff__coprime:
                 if u%4 == 1 and all(p%4==1 for p in p2e):
                     yield u, p2e

@@ -513,21 +513,23 @@ is_good_sexconfigpack_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.types.stream.IRecoverableInputStream import dummy_unlocker, DetectionUnlocker#detection_unlocker
-
-from collections import OrderedDict
 from enum import Enum, auto
-from itertools import product# combinations
-from functools import partial
-from math import prod
-
-
 from seed.types.FrozenOrderedSet import FrozenOrderedSet, FrozenOrderedDict
 from seed.types.mapping.symbolize import WeakSymbolizeRegister, ISymbolizeRegister__subset# PersistentSymbolizeRegister
     # to symbolize sexconfigpack
 
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.tiny_.group__partition import partition_xs_by_bool_, xs_to_vss_, xs_to_k2vs_
-from seed.tiny import fst, snd, print_err
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+
+    from collections import OrderedDict
+    from itertools import product# combinations
+    from functools import partial
+    from math import prod
+
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.tiny_.group__partition import partition_xs_by_bool_, xs_to_vss_, xs_to_k2vs_
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import echo, echo, fst, snd
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class _Lt:
@@ -1546,7 +1548,6 @@ class _Pseudo_sconfigpack:
 #behin:validate____roughly_composite__case4protection_
 
 def _init4validate____roughly_composite__case4protection_(setting, /):
-    from seed.tiny import echo
     from seed.types.Either import Cased, Either
     from seed.types.Either import mk_Left, mk_Right
 
@@ -1742,7 +1743,6 @@ _echo_,lookahead,not_followed_by,protect_header,lift__forgivable,lift__strict,wh
     ######################
     def mk_sconfigpack_(forbid_xxx_protected_ok, name, /):
         '-> sconfigpack'
-        from seed.tiny import echo
         setting = get_setting_(forbid_xxx_protected_ok)
         filter_ = getattr(__class__, name)
         g = __class__._on_forbid_xxx_protected_ok if forbid_xxx_protected_ok else echo

@@ -694,11 +694,11 @@ b'#a\rb\r\n%c\n%\n'
 >>> std_saver4str_tuple.save_str_tuple_to_ofile_(sys.stdout, [], **kw)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: <class 'list'>
 >>> std_saver4str_tuple.save_str_tuple_to_ofile_(sys.stdout, (1,), **kw)
 Traceback (most recent call last):
     ...
-TypeError
+TypeError: <class 'int'>
 
 
 
@@ -876,28 +876,42 @@ SaveStrTupleAsMultiLine
 '''.split()#'''
             #ReadFail__following_element_without_first_element
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ifNone import ifNone
+    from seed.iters.chains import chains
+    from seed.tiny_.check import check_type_is, check_type_le
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.funcs import echo_args_kwargs
+    from seed.str_tools.iter_split_ex_by_ import iter_split_ex_by_
+    from seed.helper.repr_input import repr_helper
+    from seed.seq_tools.bisearch import bisearch
 
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.str_tools.iter_split_ex_by_ import iter_split_ex_by_
-from seed.helper.repr_input import repr_helper
-from seed.seq_tools.bisearch import bisearch
-from seed.io.with4seekback import with4seekback__on_exit, with4seekback__on_err, with4seekback__on_no_err
-from seed.tiny import check_type_is, null_tuple, chains, mk_tuple, check_type_le, ifNone, echo_args_kwargs
-from seed.text.are_all_prefixes_mutex import find_may_non_mutex_prefix_pair_, are_all_prefixes_mutex, check_all_prefixes_mutex
-from operator import __index__
-#from itertools import chain
-from itertools import islice, starmap
+    from seed.io.with4seekback import with4seekback__on_exit, with4seekback__on_err, with4seekback__on_no_err
+    from seed.text.are_all_prefixes_mutex import find_may_non_mutex_prefix_pair_, are_all_prefixes_mutex, check_all_prefixes_mutex
+    from operator import __index__
+    #from itertools import chain
+    from itertools import islice, starmap
+    from io import StringIO
+
+
+
+
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
 import re
-from io import StringIO
 import logging
-logging.log
+#logging.log
 import warnings
-warnings.warn
+#warnings.warn
 import sys
+___end_mark_of_excluded_global_names__0___ = ...
 __all__
 
-assert [*StringIO('\r\n|\n\r-\r\t\n')] == [*StringIO('\r\n|\n\r-\r\t\n', '\n')] == ['\r\n', '|\n', '\r-\r\t\n']
-assert [*StringIO('\r\n|\n\r-\r\t\n', None)] == ['\n', '|\n', '\n', '-\n', '\t\n']
+if 0:
+    assert [*StringIO('\r\n|\n\r-\r\t\n')] == [*StringIO('\r\n|\n\r-\r\t\n', '\n')] == ['\r\n', '|\n', '\r-\r\t\n']
+    assert [*StringIO('\r\n|\n\r-\r\t\n', None)] == ['\n', '|\n', '\n', '-\n', '\t\n']
     #universal_newline
 
 def _warn4may_smay_newline_(may_smay_newline, /):
@@ -1661,7 +1675,7 @@ class SaveStrTupleAsMultiLine:
             return (0, comment)
         if idx == may_idx4nll_hdlr:
             #empty_tuple
-            return (3, null_tuple)
+            return (3, get_null_tuple_())
         assert 0 <= idx < 2
         if idx == 1:
             #flw_hdlr

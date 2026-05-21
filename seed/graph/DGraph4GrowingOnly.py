@@ -6,7 +6,7 @@ used in:
     view ../../python3_src/seed/algo/computing_network.py
 
 seed.graph.DGraph4GrowingOnly
-py -m nn_ns.app.debug_cmd seed.graph.DGraph4GrowingOnly
+py -m nn_ns.app.debug_cmd seed.graph.DGraph4GrowingOnly -x
 py -m seed.graph.DGraph4GrowingOnly
 
 
@@ -19,13 +19,20 @@ __all__ = r'''
     DGraph4GrowingOnly
     explain_pn_idx
 '''.split()#'''
+    #Data4Vtx
+    #Data4DEdge
+    #Data4PDEdge
 __all__
 
 
-from seed.tiny import null_iter #null_tuple, 
-from seed.tiny import check_uint
-from seed.tiny_.mk_fdefault import mk_default
-#def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.tiny_.check import check_uint
+    from seed.tiny_.mk_fdefault import mk_default
+    #def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 class _Data:
@@ -378,7 +385,7 @@ auto_extend_graph__pdedge
         return sf.dedge2dst(sf.pdedge2dedge(pdedge))
 
     def uv2iter_pdedges(sf, uv, /):
-        for dedge in sf.uv2dedges.get(uv, null_iter):
+        for dedge in sf.uv2dedges.get(uv, get_null_iter_()):
             yield from sf.dedge2iter_pdedges(dedge)
 
     def src2iter_pdedges(sf, src, /):
@@ -453,3 +460,5 @@ if __name__ == '__main__':
     wrapped_print_methods(XXX)
 
 
+from seed.graph.DGraph4GrowingOnly import DGraph4GrowingOnly, explain_pn_idx
+from seed.graph.DGraph4GrowingOnly import *

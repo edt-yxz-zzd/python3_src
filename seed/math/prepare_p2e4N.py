@@ -1,6 +1,7 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/prepare_p2e4N.py
+view ../../python3_src/seed/math/factor_pint/factor_pint5or_emay_prime_factors4target_pint_.py
 
 seed.math.prepare_p2e4N
 py -m nn_ns.app.debug_cmd   seed.math.prepare_p2e4N -x # -off_defs

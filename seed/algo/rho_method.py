@@ -603,14 +603,16 @@ rho_method__brute_force_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from operator import __eq__
-from itertools import islice
-from math import isqrt, gcd
-#from seed.math.gcd import gcd
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from operator import __eq__
+    from itertools import islice
+    from math import isqrt, gcd
+    #from seed.math.gcd import gcd
 
-from seed.helper.ifNone import ifNone
-#from seed.tiny_.types5py import curry1
-from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.helper.ifNone import ifNone
+    #from seed.tiny_.types5py import curry1
+    from seed.tiny_.check import check_type_is, check_int_ge
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def _key_(j, xj, /):
@@ -753,7 +755,7 @@ def _x_is_SPRP_(n, /):
 def _is_SPRP_(n, /):
     "lazy_import"
     global _is_SPRP_
-    from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_ as f
+    from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_ as f
     if f is _is_SPRP_:raise 000
     _is_SPRP_ = f
     if not f is _is_SPRP_:raise 000

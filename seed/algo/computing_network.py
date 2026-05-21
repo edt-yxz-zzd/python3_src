@@ -4,7 +4,7 @@ e ../../python3_src/seed/algo/computing_network.py
 view ../../python3_src/seed/iters/generator_iterator_capturer.py
 
 seed.algo.computing_network
-py -m nn_ns.app.debug_cmd seed.algo.computing_network
+py -m nn_ns.app.debug_cmd seed.algo.computing_network -x
 py -m seed.algo.computing_network
 py -m nn_ns.app.adhoc_argparser__main__call8module seed.algo.computing_network
 
@@ -79,8 +79,6 @@ question-example:
 #]]]'''
 
 
-#QuestionKind
-#IQuestion
 __all__ = r'''
 IQuestionEnv
 
@@ -127,25 +125,40 @@ solve4CFG__head_set
 solve4CFG__head_set__qenv
 
 '''.split()#'''
+    #QuestionKind
+    #IQuestion
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from enum import Enum
 from collections.abc import Hashable, Mapping, Sequence
-
-from seed.tiny import mk_tuple, fmap4dict_value
-from seed.debug.expectError import expectError
-from seed.tiny_.singleton import mk_SingletonClass, mk_existing_type_singleton
-
-from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
-from seed.tiny import mk_tuple, mk_frozenset, null_frozenset, null_tuple, null_iter
-
-from seed.tiny import check_uint
-from seed.tiny_.check import check_tmay, check_type_is, check_type_le, check_pair, check_callable  #, , check_uint, check_imay
-from seed.tiny_.mk_fdefault import mk_default
-#def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
-from seed.graph.DGraph4GrowingOnly import DGraph4GrowingOnly
-from seed.helper.repr_input import repr_helper_ex
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.expectError import expectError
+    from seed.tiny_.check import check_callable, check_pair, check_tmay, check_type_is, check_type_le, check_uint
+    from seed.tiny_.containers import mk_frozenset, mk_tuple, mk_tuple
+    from seed.tiny_.containers import get_null_frozenset_#null_frozenset
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+
+    from seed.tiny_.dict__add_fmap_filter import fmap4dict_value
+    from seed.tiny_.mk_fdefault import mk_default
+    #def mk_default(imay_xdefault_rank, xdefault, /,*args4xdefault):
+
+    from seed.tiny_.singleton import mk_SingletonClass, mk_existing_type_singleton
+
+
+
+    from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
+
+    from seed.graph.DGraph4GrowingOnly import DGraph4GrowingOnly
+    from seed.helper.repr_input import repr_helper_ex
+
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 r"""[[[
 class IHQuestion(Hashable):
@@ -329,7 +342,7 @@ class Handler4IQuestionEnv__handler_dispatcher__fix_answer(IHandler4IQuestionEnv
     @override
     def on_start6hdlr4qenv(sf, question_env, question, /):
         '-> (st, tmay_whole_answer, actions)'
-        return None, sf._tm, null_iter
+        return None, sf._tm, get_null_iter_()
     @override
     def on_news6hdlr4qenv(sf, question_env, question, st, old_tmay_whole_answer, tag, subquestion, old_tmay_sub_answer, new_tmay_sub_answer, /):
         '-> (tmay_st, tmay_new_tmay_whole_answer, actions)'
@@ -337,7 +350,7 @@ class Handler4IQuestionEnv__handler_dispatcher__fix_answer(IHandler4IQuestionEnv
     @override
     def on_stable6hdlr4qenv(sf, question_env, question, st, old_tmay_whole_answer, /):
         '-> tmay_new_tmay_whole_answer'
-        return null_tuple
+        return get_null_tuple_()
 
 
 def question2handler6qenv(handler_dispatcherer, question, /):
@@ -704,7 +717,7 @@ vtx-turnoff:
         sf.cancelled = True
             #see:on_action_ask
         sf.subquestion_has_news = bool(subquestion_has_news)
-        sf.old_tmay_sub_answer = null_tuple
+        sf.old_tmay_sub_answer = get_null_tuple_()
 
 def computing_network_exec(question_env, orginal_main_questions=None, /, *, on_start6qenv=None, on_news6qenv=None, on_stable6qenv=None):
     if orginal_main_questions is None:
@@ -1222,10 +1235,10 @@ class Handler4QuestionEnv4CFG__min_len__sequential(IHandler4IQuestionEnv__handle
         if not symbol_seq:
             tmay_sz = (0,)
             st = None
-            actions = null_tuple
+            actions = get_null_tuple_()
         else:
-            tmay_sz = null_tuple
-            st = tmays = [null_tuple]*len(symbol_seq)
+            tmay_sz = get_null_tuple_()
+            st = tmays = [get_null_tuple_()]*len(symbol_seq)
             actions = []
             for i, symbol in enumerate(symbol_seq):
                 tag = i
@@ -1249,14 +1262,14 @@ class Handler4QuestionEnv4CFG__min_len__sequential(IHandler4IQuestionEnv__handle
             assert not new_tmay_whole_answer == old_tmay_whole_answer
             tmay_new_tmay_whole_answer = (new_tmay_whole_answer,)
         else:
-            tmay_new_tmay_whole_answer = null_tuple
-        tmay_st = null_tuple
-        actions = null_tuple
+            tmay_new_tmay_whole_answer = get_null_tuple_()
+        tmay_st = get_null_tuple_()
+        actions = get_null_tuple_()
         return (tmay_st, tmay_new_tmay_whole_answer, actions)
     @override
     def on_stable6hdlr4qenv(sf, qenv, question, st, old_tmay_whole_answer, /):
         '-> tmay_new_tmay_whole_answer'
-        return null_tuple
+        return get_null_tuple_()
 
 
 
@@ -1282,7 +1295,7 @@ class Handler4QuestionEnv4CFG__min_len__arbitrary(IHandler4IQuestionEnv__handler
             actions.append(action)
         actions
         st = None
-        tmay_sz = null_tuple
+        tmay_sz = get_null_tuple_()
         tmay_whole_answer = tmay_sz
 
         return (st, tmay_whole_answer, actions)
@@ -1294,15 +1307,15 @@ class Handler4QuestionEnv4CFG__min_len__arbitrary(IHandler4IQuestionEnv__handler
         if not old_tmay_whole_answer or new_tmay_sub_answer < old_tmay_whole_answer:
             tmay_new_tmay_whole_answer = (new_tmay_sub_answer,)
         else:
-            tmay_new_tmay_whole_answer = null_tuple
+            tmay_new_tmay_whole_answer = get_null_tuple_()
         #rint(question, old_tmay_whole_answer, new_tmay_sub_answer, tmay_new_tmay_whole_answer)
-        tmay_st = null_tuple
-        actions = null_tuple
+        tmay_st = get_null_tuple_()
+        actions = get_null_tuple_()
         return (tmay_st, tmay_new_tmay_whole_answer, actions)
     @override
     def on_stable6hdlr4qenv(sf, qenv, question, st, old_tmay_whole_answer, /):
         '-> tmay_new_tmay_whole_answer'
-        return null_tuple
+        return get_null_tuple_()
 
 
 
@@ -1321,7 +1334,7 @@ class Handler4QuestionEnv4CFG__min_len__terminal(IHandler4IQuestionEnv__handler_
         st = None
         tmay_sz = (1,)
         tmay_whole_answer = tmay_sz
-        actions = null_tuple
+        actions = get_null_tuple_()
 
         return (st, tmay_whole_answer, actions)
 
@@ -1332,7 +1345,7 @@ class Handler4QuestionEnv4CFG__min_len__terminal(IHandler4IQuestionEnv__handler_
     @override
     def on_stable6hdlr4qenv(sf, qenv, question, st, old_tmay_whole_answer, /):
         '-> tmay_new_tmay_whole_answer'
-        return null_tuple
+        return get_null_tuple_()
 
 _Hs = (
 [Handler4QuestionEnv4CFG__min_len__sequential
@@ -1419,7 +1432,7 @@ class Handler4QuestionEnv4CFG__head_set__sequential(IHandler4IQuestionEnv__handl
 
         #st :: {head_terminal}
         #anwser :: lnkls<head_terminal>
-        empty = (null_frozenset, null_tuple, null_iter)
+        empty = (get_null_frozenset_(), get_null_tuple_(), get_null_iter_())
         if not qenv.symbol2tmay_min_len[lsymbol]:
             #dead:+inf
             return empty
@@ -1438,7 +1451,7 @@ class Handler4QuestionEnv4CFG__head_set__sequential(IHandler4IQuestionEnv__handl
             if min_len:
                 break
         actions
-        tmay_whole_answer = null_tuple
+        tmay_whole_answer = get_null_tuple_()
         st = set()
 
         return (st, tmay_whole_answer, actions)
@@ -1453,7 +1466,7 @@ class Handler4QuestionEnv4CFG__head_set__sequential(IHandler4IQuestionEnv__handl
             if tmay_xxx_answer:
                 [lnkls] = tmay_xxx_answer
             else:
-                lnkls = null_tuple
+                lnkls = get_null_tuple_()
             return lnkls
         new_lnkls = tmay2lnkls(new_tmay_sub_answer)
         old_lnkls = tmay2lnkls(old_tmay_sub_answer)
@@ -1466,10 +1479,10 @@ class Handler4QuestionEnv4CFG__head_set__sequential(IHandler4IQuestionEnv__handl
             if terminal not in head_set:
                 head_set.add(terminal)
                 whole_lnkls = (terminal, whole_lnkls)
-        tmay_new_tmay_whole_answer = null_tuple if L == len(head_set) else ((whole_lnkls ,) ,)
+        tmay_new_tmay_whole_answer = get_null_tuple_() if L == len(head_set) else ((whole_lnkls ,) ,)
 
-        tmay_st = null_tuple
-        actions = null_iter
+        tmay_st = get_null_tuple_()
+        actions = get_null_iter_()
         return (tmay_st, tmay_new_tmay_whole_answer, actions)
 
     @override
@@ -1502,7 +1515,7 @@ class Handler4QuestionEnv4CFG__head_set__arbitrary(IHandler4IQuestionEnv__handle
             actions.append(action)
         actions
         st = set()
-        tmay_whole_answer = null_tuple
+        tmay_whole_answer = get_null_tuple_()
 
         return (st, tmay_whole_answer, actions)
 
@@ -1526,9 +1539,9 @@ class Handler4QuestionEnv4CFG__head_set__terminal(IHandler4IQuestionEnv__handler
         '-> (st, tmay_whole_answer, actions)'
         terminal = rsymbol = question
         st = None
-        lnkls = (terminal, null_tuple)
+        lnkls = (terminal, get_null_tuple_())
         tmay_whole_answer = (lnkls,)
-        actions = null_iter
+        actions = get_null_iter_()
 
         return (st, tmay_whole_answer, actions)
 

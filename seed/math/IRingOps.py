@@ -18,7 +18,7 @@ view ../../python3_src/seed/math/IRingOps.py
 ]]
 
 py -m seed.math.IRingOps
-py -m nn_ns.app.debug_cmd   seed.math.IRingOps
+py -m nn_ns.app.debug_cmd   seed.math.IRingOps -x
 
 vs:
     ring_ops__integer: domain not field, no div
@@ -77,9 +77,12 @@ __all__ = '''
 ___begin_mark_of_excluded_global_names__0___ = ...
 from fractions import Fraction
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import print_err
-from seed.tiny import check_callable, check_uint, check_tmay, check_type_is
-from seed.math.pow_accelerate_framework import pow_uint_0M
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_callable, check_uint, check_tmay, check_type_is
+    from seed.math.pow_accelerate_framework import pow_uint_0M
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

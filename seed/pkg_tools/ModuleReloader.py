@@ -15,11 +15,11 @@ py -m nn_ns.app.doctest_cmd seed.pkg_tools.ModuleReloader:__doc__ -ht # -ff -df
 using reload when debugging and patching many times:
     $ py -m nn_ns.app.doctest_cmd seed.int_tools.StepDecoder:__doc__ -ht # -ff -df
     -->:
-    >>>> from seed.for_libs.for_doctest import main
-    >>>> main('seed.int_tools.StepDecoder:__doc__ -ht'.split())
-    >>>> reloader = ModuleReloader(['seed.int_tools.StepDecoder'])
-    >>>> reloader()
-    >>>> main('seed.int_tools.StepDecoder:__doc__ -ht'.split())
+    #>>> from seed.for_libs.for_doctest import main
+    #>>> main('seed.int_tools.StepDecoder:__doc__ -ht'.split())
+    #>>> reloader = ModuleReloader(['seed.int_tools.StepDecoder'])
+    #>>> reloader()
+    #>>> main('seed.int_tools.StepDecoder:__doc__ -ht'.split())
 ]]
 
 [[
@@ -99,22 +99,20 @@ mk_doctestXmodule_reloader_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from importlib import import_module
-from importlib import reload as inplace_reload# inplace reload <<== spec.loader.exec_module(module)
-from seed.tiny_.check import check_all_, check_pseudo_qual_name #check_type_is, check_int_ge
-#.from itertools import islice
-#.
-#.from seed.abc.abc__ver1 import abstractmethod, override, ABC
-if not 'lazy_import4func_' in globals():
-    from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
-    repr_helper = lazy_import4func_('seed.helper.repr_input', 'repr_helper', __name__)
-    lazy_import4funcs_('seed.tiny', 'mk_tuple,print_err,mk_tuple__split_first_if_str', __name__)
-    if 0:from seed.tiny import mk_tuple,print_err,mk_tuple__split_first_if_str #xxx:null_tuple #xxx:echo,fst,snd
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'reload:inplace_reload,main:_main4doctest_cmd'):
+    from importlib import import_module
+    from importlib import reload as inplace_reload# inplace reload <<== spec.loader.exec_module(module)
+    from seed.tiny_.check import check_all_, check_pseudo_qual_name
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.containers import mk_tuple, mk_tuple__split_first_if_str
+    from seed.debug.print_err import print_err
 
-    parse4module_qname_and_obj_qnames = lazy_import4func_('seed.for_libs.for_doctest', 'parse4module_qname_and_obj_qnames', __name__)
-    lazy_import4func_('seed.for_libs.for_doctest', 'main', __name__, '_main4doctest_cmd')
-    #from seed.for_libs.for_doctest import parse4module_qname_and_obj_qnames, main as _main4doctest_cmd
-    _main4doctest_cmd
+    from seed.for_libs.for_doctest import parse4module_qname_and_obj_qnames, main as _main4doctest_cmd
+#_main4doctest_cmd
+
+#.if not 'lazy_import4func_' in globals():
+#.    from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_
 ___end_mark_of_excluded_global_names__0___ = ...
 
 def _4qnm4mdl(module_qname_and_obj_qnames__str, /):

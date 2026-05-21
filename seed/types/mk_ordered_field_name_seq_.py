@@ -24,8 +24,13 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.verify.common_verify import is_Sequence
-from seed.tiny import ifNone, MapView
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.verify.common_verify import is_Sequence
+    from seed.tiny_.types5py import mk_MapView
+    from seed.helper.ifNone import ifNone
+___end_mark_of_excluded_global_names__0___ = ...
 
 def mk_ordered_field_name_seq_(cls, *
     , ordered_field_name_seq=None
@@ -94,7 +99,7 @@ def mk_field_name2default_(ordered_field_name_seq, /, *
     assert _2_field_name2default.keys() <= field_name_set
     assert len(_2_field_name2default) == len(field_name2default) + len(_1_field_name2default)
 
-    field_name2default = MapView(_2_field_name2default)
+    field_name2default = mk_MapView(_2_field_name2default)
     return field_name2default
 
 

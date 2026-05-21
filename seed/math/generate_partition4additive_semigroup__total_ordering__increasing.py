@@ -363,13 +363,25 @@ __all__
 
 
 
-from seed.iters.ensure_sorted import ensure_strict_sorted
-#def ensure_strict_sorted(iterable, /, *, key=None, __lt__=None, reverse=False, on_error=None, __le__=None, with_key=False):
+___begin_mark_of_excluded_global_names__0___ = ...
+import operator
 
-from seed.tiny import check_type_is, fst, snd, at
-######################
-from seed.for_libs.for_heapq import heappushs_, heappops_, heapify, heappush, heappop, heappushpop, heappoppush, heapreplace
-from seed.for_libs.for_heapq import Heap, std____key__le__reverse_
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import pairwise
+
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.tiny_.at import at
+    from seed.tiny_.check import check_type_is, check_callable
+
+    from seed.iters.ensure_sorted import ensure_strict_sorted
+    #def ensure_strict_sorted(iterable, /, *, key=None, __lt__=None, reverse=False, on_error=None, __le__=None, with_key=False):
+
+    ######################
+    from seed.for_libs.for_heapq import heappushs_, heappops_, heapify, heappush, heappop, heappushpop, heappoppush, heapreplace
+    from seed.for_libs.for_heapq import Heap, std____key__le__reverse_
 #class Heap:
 #    def __init__(sf, heap, /, *, item5obj_, item2val_, key, __le__, reverse, obj_vs_item, applied__heapify):
 ######################
@@ -384,11 +396,7 @@ from seed.for_libs.for_heapq import Heap, std____key__le__reverse_
 #  #            , sorted=False, copy=True, are_heap_items=False):
 
 
-from itertools import pairwise
-import operator #__le__
-from seed.tiny import ifNonef, ifNone, echo
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_callable
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 

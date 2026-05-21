@@ -128,12 +128,16 @@ OverrideOrdering
 '''.split()#'''
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 #from functools import total_ordering
 from seed.abc.ITotalOrdering import ITotalOrdering5le
 
-from seed.tiny_.std____key__le__reverse_ import std____key__le__reverse_
-from seed.tiny import null_tuple
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.std____key__le__reverse_ import std____key__le__reverse_
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.helper.repr_input import repr_helper
+___end_mark_of_excluded_global_names__0___ = ...
 
 class OrderingSetting:
     def __repr__(sf, /):
@@ -166,7 +170,7 @@ class OverrideOrdering(ITotalOrdering5le):
     def __init__(sf, ordering_setting, obj, /):
         sf._ordering_setting = ordering_setting
         sf._obj = obj
-        sf._tmay_key4obj = null_tuple
+        sf._tmay_key4obj = get_null_tuple_()
     @property
     def ordering_setting(sf, /):
         return sf._ordering_setting

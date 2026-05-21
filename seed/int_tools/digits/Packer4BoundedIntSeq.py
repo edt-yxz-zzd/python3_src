@@ -4,6 +4,9 @@
 
 r'''
 py -m seed.int_tools.digits.Packer4BoundedIntSeq
+py -m nn_ns.app.debug_cmd   seed.int_tools.digits.Packer4BoundedIntSeq -x
+py -m nn_ns.app.doctest_cmd seed.int_tools.digits.Packer4BoundedIntSeq:__doc__ -ht #  -ff -v -df
+
 from seed.int_tools.digits.Packer4BoundedIntSeq import pack_from_bounded_int_seq, Packer4BoundedIntSeq, Packer4BoundedIntSeq__little_endian, Packer4BoundedIntSeq__big_endian
 
 e ../../python3_src/seed/int_tools/digits/Packer4BoundedIntSeq.py
@@ -117,7 +120,7 @@ _doc_test4little_endian = (
 __doc__ += _doc_test4big_endian
 __doc__ += _doc_test4little_endian
 if 0:
-    from seed.tiny import print_err
+    from seed.debug.print_err import print_err
     print_err(__doc__)
 
 __all__ = '''
@@ -129,9 +132,13 @@ __all__ = '''
     '''.split()
 
 
-from seed.int_tools.digits.ConvertBoundedIntSeqToUIntWithLen import ConvertBoundedIntSeqToUIntWithLen
-from seed.helper.check.checkers import check_uint, check_int, check_bool
-from seed.helper.repr_input import repr_helper_ex
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.int_tools.digits.ConvertBoundedIntSeqToUIntWithLen import ConvertBoundedIntSeqToUIntWithLen
+    from seed.helper.check.checkers import check_uint, check_int, check_bool
+    from seed.helper.repr_input import repr_helper_ex
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 

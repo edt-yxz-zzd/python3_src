@@ -1,8 +1,11 @@
 #HHHHH
 r'''
 e ../../python3_src/seed/helper/check/checkers.py
+
 debug_pym seed.helper.check.checkers
 py -m seed.helper.check.checkers
+py -m nn_ns.app.debug_cmd   seed.helper.check.checkers -x
+py -m nn_ns.app.doctest_cmd seed.helper.check.checkers:__doc__ -ht #  -ff -v -df
 from seed.helper.check.checkers import checks, checkers, check_funcs
 
 why?
@@ -27,9 +30,9 @@ check_identifier <: check_pseudo_identifier <: check_str
 
 
 
-___begin_mark_of_excluded_global_names__0___ = ...
-#from seed.tiny import str2__all__
+___begin_mark_of_excluded_global_names__1___ = ...
 from seed.helper.str2__all__ import str2__all__
+___end_mark_of_excluded_global_names__1___ = ...
 __all__ = str2__all__(r'''#)
     checkers
     check_funcs
@@ -155,21 +158,29 @@ __all__ = str2__all__(r'''#)
 $
 $
     #(''')
-
+#is_py_keyword
+#split_by_dot
 
 #HHHHH
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import math, cmath
 import keyword#iskeyword
 
 from collections.abc import Mapping, Set, Sequence
 from collections.abc import Container, Iterable
-from seed.tiny import is_iterator, is_reiterable, fst, snd
-from seed.iters.is_sorted import is_sorted, is_strict_sorted
+
+from seed.helper.check.check import CheckFail
 from seed.types.FrozenDict import FrozenDict
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo, fst, snd
+    from seed.tiny_.verify import is_iterable, is_iterator, is_reiterable
+    from seed.iters.is_sorted import is_sorted, is_strict_sorted
 
-if 0:
+
+def __():
     from seed.helper.check.check import IChecker, mk_checker, check, verify, CheckFail, CheckError, CheckException
     from seed.helper.check.check import mk_checker__point, mk_checker__pair
 
@@ -189,14 +200,20 @@ from seed.types.TriBoolOps import TriBoolOps#is_tribool
 
 
 
-___end_mark_of_excluded_global_names__0___ = ...
 
-#####################################
 #####################################
 #####################################
 from seed.helper.check.check import Checker__type_is, Checker__verify_func, mk_checker__array
 
+___end_mark_of_excluded_global_names__0___ = ...
 
+
+
+
+
+
+
+#####################################
 #####################################
 #last import for print_global_names()
 from seed.helper.check.check import (

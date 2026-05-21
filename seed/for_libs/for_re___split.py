@@ -27,7 +27,6 @@ seed.for_libs.for_re___split
 py -m nn_ns.app.debug_cmd   seed.for_libs.for_re___split -x
 py -m nn_ns.app.doctest_cmd seed.for_libs.for_re___split:__doc__ -ff -v
 py_adhoc_call   seed.for_libs.for_re___split   @f
-from seed.for_libs.for_re___split import *
 
 
 
@@ -98,14 +97,18 @@ extract_group0s_with_smay_name5matchobj_
 '''.split()#'''
 __all__
 
-#from re import finditer
-from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-from seed.tiny import check_type_is
-from seed.tiny import print_err
-
-from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+___begin_mark_of_excluded_global_names__0___ = ...
 from enum import Enum, auto
-from itertools import islice
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #from re import finditer
+    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le, check_type_is
+    from seed.debug.print_err import print_err
+
+    from seed.seq_tools.mk_seq_rng import mk_seq_rng, mk_seq_rng__len
+    from itertools import islice
+___end_mark_of_excluded_global_names__0___ = ...
 
 class OutputCase4tail4re_split(Enum):
     'kw:case4tail'

@@ -109,15 +109,18 @@ __all__ = r'''
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import islice
-from seed.tiny_.check import check_type_is, check_int_ge
-
-from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-from seed.math.floor_ceil import floor_div, ceil_div
-from seed.math.floor_ceil import floor_div_, ceil_div_
-
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.helper.repr_input import repr_helper
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import islice
+    from seed.tiny_.check import check_type_is, check_int_ge
+
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
+    from seed.math.floor_ceil_tools.fc_div import floor_div_, ceil_div_
+
+    from seed.helper.repr_input import repr_helper
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class IContext4FloatNumberBoundary(ABC):

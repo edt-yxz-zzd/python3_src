@@ -5,7 +5,7 @@
 r'''
 seed.types.mapping.OpaquePseudoMapping__weakref
 py -m    seed.types.mapping.OpaquePseudoMapping__weakref
-py -m nn_ns.app.debug_cmd   seed.types.mapping.OpaquePseudoMapping__weakref
+py -m nn_ns.app.debug_cmd   seed.types.mapping.OpaquePseudoMapping__weakref -x
 
 used in seed.types.OpaqueInstanceStorage::IProtocol4OpaqueStorage
     view ../../python3_src/seed/types/OpaqueInstanceStorage.py
@@ -182,6 +182,7 @@ False
 #################################
 #HHHHH
 __all__ = '''
+    WeakableSet
     WeakableDict
         mk_callback4auto_discard_WeakableDict_key
 
@@ -210,23 +211,32 @@ __all__ = '''
             MutableOpaquePseudoMapping__init_new_key_only__WeakRefDictionary
             MutableOpaquePseudoMapping__init_new_key_only__Value_Ref_Weak_KeysTripleDictionary
     '''.split()
+    #mapping_to_key_id2value
+    #mapping_eq4key_eq_by_id
+    #set_to_key_id_set
+    #set_eq4key_eq_by_id
+__all__
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.abc.abc import ABC, abstractmethod, override#, not_implemented, ABCMeta
-from seed.debug.expectError import expectError
-from seed.tiny import fst, check_type_le
-from seed.helper.check.checkers import check_type_is, check_tuple
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.expectError import expectError
+    from seed.tiny_.Hashable import check_Hashable__shallow
+    from seed.tiny_.Weakable import WeakableDict, check_Weakable, is_Weakable
+    from seed.tiny_.check import check_type_is, check_type_le
+    from seed.helper.check.checkers import check_tuple
+    from seed.tiny_.funcs import fst
+    from seed.abc.eq_by_id.AddrAsHashWrapper import AddrAsHashWrapper
+    from seed.abc.eq_by_id.BaseAddrAsHash import le_AddrAsHash
+
+
+from seed.abc.abc__ver1 import ABC, abstractmethod, override
 import weakref
 from weakref import WeakKeyDictionary as _
 from weakref import WeakSet as _
-from seed.abc.eq_by_id.BaseAddrAsHash import le_AddrAsHash#, BaseAddrAsHash
-#from seed.abc.eq_by_id.AddrAsHash import AddrAsHash
-from seed.abc.eq_by_id.AddrAsHashWrapper import AddrAsHashWrapper
 from seed.types.mapping.OpaquePseudoMapping import IMutableOpaquePseudoMapping__init_new_key_only
 from collections.abc import Mapping, MutableMapping, MutableSet, Hashable
-from seed.tiny import check_Weakable, is_Weakable
-from seed.tiny_.Hashable import check_Hashable__shallow#, is_Hashable__shallow, check_Hashable__deep, is_Hashable__deep
 
 
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -245,9 +255,10 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 
-class WeakableDict(dict):
-    __slots__ = '__weakref__'
-check_Weakable(WeakableDict())
+def __():
+    class WeakableDict(dict):
+        __slots__ = '__weakref__'
+    check_Weakable(WeakableDict())
 def mk_callback4auto_discard_WeakableDict_key(wd, k, /):
     check_type_is(WeakableDict, wd)
     wd = weakref.ref(wd)
@@ -786,7 +797,6 @@ class MutableOpaquePseudoMapping__init_new_key_only__WeakRefDictionary(IMutableO
 
 MutableOpaquePseudoMapping__init_new_key_only__WeakRefDictionary()
 def _t():
-    from seed.debug.expectError import expectError
     d = MutableOpaquePseudoMapping__init_new_key_only__WeakRefDictionary()
     class X:
         __slots__ = '__weakref__'

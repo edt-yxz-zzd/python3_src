@@ -345,17 +345,35 @@ mk_validate4sub_call_
 
 '''.split()#'''
 __all__
-from itertools import cycle as cycle_
 
+___begin_mark_of_excluded_global_names__0___ = ...
+import re
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.tiny import fst, snd, print_err# echo, chains
-from seed.seq_tools.split_tuples import unzip_pairs
-from seed.seq_tools.inverse_uint_bijection_array import inverse_uint_bijection_array
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge
-#from seed.iters.group_by import group_by
-
-from seed.helper.repr_input import repr_helper
 from seed.text.mk_char_pt_ranges5predicator import punctuation_ascii_sorted_chars #punctuation_ascii_char_pt_ranges
+from seed.text.unicode.constant import CHAR_ORD_UPPER# MAX_CHAR_ORD
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'cycle:cycle_'):
+    from itertools import cycle as cycle_
+    #from seed.iters.group_by import group_by
+
+    from seed.data_funcs.rngs import StackStyleSimpleIntMapping
+    from seed.seq_tools.split_tuples import unzip_pairs
+    from seed.seq_tools.inverse_uint_bijection_array import inverse_uint_bijection_array
+
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_int_ge, check_type_is, check_type_le
+    from seed.tiny_.funcs import fst, snd
+    from seed.helper.repr_input import repr_helper
+
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
 
 def mk_validate4sub_call_(validate, /):
     r'''[[[
@@ -1255,10 +1273,6 @@ class 乸注册处纟加密牜防识别牜文本(魖注册处纟加密牜防识�
         匾协议 = 匴转义冫用于分隔匾协议.还原冫文本扌(nm4protocol)
         return (匾协议, 密文文本牜裹)
 
-import re
-
-from seed.data_funcs.rngs import StackStyleSimpleIntMapping #make_Ranges, sorted_ints_to_iter_nontouch_ranges, detect_iter_ranges, StackStyleSimpleIntSet, , TouchRangeBasedIntMapping
-from seed.text.unicode.constant import CHAR_ORD_UPPER# MAX_CHAR_ORD
 
 
 class 乸区位配置牜码元为字符编码点(魖区位配置):

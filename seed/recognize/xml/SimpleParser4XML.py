@@ -284,12 +284,21 @@ read_while_
 
 '''.split()#'''
 __all__
-from seed.recognize.xml.unescape__entitydefs4xhtml_1_0 import unescape__entitydefs4xhtml_1_0
-from seed.str_tools.cut_text_by_marker_seq import cut_text_by_marker_seq, strip_text_by_marker_pair
-from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
-from seed.tiny_.check import check_type_is, check_int_ge, check_callable
-from seed.tiny import echo
-from collections import OrderedDict
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.recognize.xml.unescape__entitydefs4xhtml_1_0 import unescape__entitydefs4xhtml_1_0
+    from seed.str_tools.cut_text_by_marker_seq import cut_text_by_marker_seq, strip_text_by_marker_pair
+    from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
+    from seed.tiny_.check import check_type_is, check_int_ge, check_callable
+    from seed.tiny_.funcs import echo
+    from collections import OrderedDict
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
 
 _i2case4w = 'WGMQ'
     #W: normal tag/whole_tree

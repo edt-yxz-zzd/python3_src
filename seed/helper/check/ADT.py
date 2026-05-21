@@ -1,10 +1,9 @@
-
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/helper/check/ADT.py
 
 seed.helper.check.ADT
-py -m nn_ns.app.debug_cmd   seed.helper.check.ADT
+py -m nn_ns.app.debug_cmd   seed.helper.check.ADT -x
 py -m seed.helper.check.ADT
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.helper.check.ADT
 #from seed.helper.check.ADT import ADT
@@ -49,11 +48,16 @@ IADT_basic
     #ADT
 __all__
 
-from seed.tiny import check_type_is, check_type_le
-from seed.types.FrozenDict import FrozenDict
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
+from seed.tiny_.BaseTuple import BaseTuple
 
-from seed.tiny import BaseTuple
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_type_le
+    from seed.types.FrozenDict import FrozenDict
+___end_mark_of_excluded_global_names__0___ = ...
+
 
 
 class IADT_basic(ABC):

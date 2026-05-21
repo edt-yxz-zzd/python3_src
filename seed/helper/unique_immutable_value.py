@@ -1,3 +1,5 @@
+#__all__:goto
+TODO
 r'''
 seed.helper.unique_immutable_value
 see:
@@ -7,7 +9,7 @@ see:
 
 
 py -m seed.helper.unique_immutable_value
-py -m nn_ns.app.debug_cmd   seed.helper.unique_immutable_value
+py -m nn_ns.app.debug_cmd   seed.helper.unique_immutable_value -x
 
 
 from seed.helper.unique_immutable_value import UniqueWrapper4bytes, UniqueWrapper4str, UniqueWrapper4int, UniqueWrapper4tuple, UniqueWrapper4frozenset, UniqueWrapper4FrozenDict
@@ -143,29 +145,32 @@ __all__ = '''
         UniquePoint4value_key
 
     '''.split()
+#__all__:goto
 
 
 
-from seed.abc.abc import abstractmethod, override, ABC
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
 from seed.abc.eq_by_id.AddrAsHash import AddrAsHash as EqById
-from seed.helper.repr_input import repr_helper, repr_helper__str
 from seed.types.FrozenDict import FrozenDict, empty_FrozenDict
-from seed.tiny import null_frozenset, null_tuple, null_str, null_bytes, null_int, check_type_is, check_type_le
-from seed.helper.check.checkers import checker4pseudo_identifier #check_pair, check_type_is, check_seq, 
-from seed.mapping_tools.fdefault import mapping_set__new_or_pass__cased_, mapping_get__tmay__get_Nothing
-
+from seed.tiny_.containers import null_frozenset, null_tuple
 from seed.abc.wrapper.IWrapper import init_the_wrapped_obj, get_the_wrapped_obj, MkWrapperMixin, SequenceWrapperMixin, ByteStringWrapperMixin, MappingWrapperMixin, ISetWrapperMixin
 import weakref
 
 
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper, repr_helper__str
+    from seed.helper.check.checkers import checker4pseudo_identifier
+    from seed.tiny_.check import check_type_is, check_type_le
 
-#from seed.tiny import MapView
-#from seed.abc.storage.IStorage4Cache import IStorage4Cache, Storage4CacheMixin, ops4Storage4Cache, init_symbol_keyed_cached_property, get_symbol_keyed_cached_property
-#from seed.abc.storage.IStorage4Property import IStorage4Property, Storage4PropertyMixin, ops4Storage4Property, init_symbol_keyed_property, get_symbol_keyed_property
+    from seed.mapping_tools.fdefault import mapping_set__new_or_pass__cased_, mapping_get__tmay__get_Nothing
 
-#from seed.abc.abc import abstractmethod, override, ABC
-#from collections.abc import Sequence, Mapping, Set, ByteString
-#from seed.abc.wrapper.IWrapper import IWrapper, init_the_wrapped_obj, get_the_wrapped_obj, WrapperMixin, _IMkWrapper, _MkWrapperMixin, IMkWrapper, MkWrapperMixin, ISequenceWrapper, SequenceWrapperMixin, IByteStringWrapper, ByteStringWrapperMixin, IMappingWrapper, MappingWrapperMixin, ISetWrapper, ISetWrapperMixin
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
 
 
 

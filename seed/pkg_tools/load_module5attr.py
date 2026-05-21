@@ -138,15 +138,21 @@ RigidJavaStyleProxyLoader__terminal_attr            Rjstplr
 __all__
 
 
-import importlib
-from seed.pkg_tools.is_pkg import is_pkg_, is_module_
-from seed.tiny import check_type_is, curry1
-
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-from seed.data_funcs.lnkls import rglnkls_ops, empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
 
-from seed.data_funcs.lnkls import rglnkls2list
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from importlib import import_module
+    from seed.pkg_tools.is_pkg import is_pkg_, is_module_
+
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.types5py import curry1
+
+    from seed.helper.repr_input import repr_helper
+    from seed.data_funcs.lnkls import get_empty_rglnkls, rglnkls_ipush_right
+    from seed.data_funcs.lnkls import rglnkls2list
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def _call_(nm, sf, /, *args):
@@ -220,7 +226,7 @@ class IBaseJavaStyleProxyLoader(_Base4repr, ABC__no_slots):
         qname4module = _mk_qname4module_(smay_pkg_qname, nm)
 
         try:
-            module_obj = importlib.import_module(qname4module)
+            module_obj = import_module(qname4module)
         except ImportError:
             return _get_attr_or_reraise___failure_(sf, smay_pkg_qname, may_pkg_obj, nm, qname4module)
         return _mk_proxy_or_echo___success_(sf, smay_pkg_qname, may_pkg_obj, nm, qname4module, module_obj)
@@ -343,7 +349,7 @@ class RigidJavaStyleProxyLoader__step1(_Base4repr):
     def __getattribute__(sf, nm, /):
         smay_pkg_qname = get_smay_pkg_qname_(sf)
         qname4module = _mk_qname4module_(smay_pkg_qname, nm)
-        module_obj = importlib.import_module(qname4module)
+        module_obj = import_module(qname4module)
         return module_obj
 
 class RigidJavaStyleProxyLoader__terminal_attr(_Base4repr):
@@ -362,9 +368,9 @@ class RigidJavaStyleProxyLoader__terminal_attr(_Base4repr):
         if not type(smay_pkg_qname__or__rglnkls) is tuple:
             smay_pkg_qname = smay_pkg_qname__or__rglnkls
             if not smay_pkg_qname:
-                rglnkls8smay_pkg_qname = empty_rglnkls
+                rglnkls8smay_pkg_qname = get_empty_rglnkls()
             else:
-                rglnkls8smay_pkg_qname, _ = rglnkls_ipush_right(empty_rglnkls, smay_pkg_qname)
+                rglnkls8smay_pkg_qname, _ = rglnkls_ipush_right(get_empty_rglnkls(), smay_pkg_qname)
             rglnkls8smay_pkg_qname
         else:
             rglnkls8smay_pkg_qname = smay_pkg_qname__or__rglnkls

@@ -129,15 +129,14 @@ __all__ = r'''
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#from itertools import islice
-from collections import namedtuple
-from math import log, floor, ceil
-from seed.math.floor_ceil import floor_log_, ceil_kth_root_, ceil_log_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from collections import namedtuple
+    from math import log, floor, ceil
+    from seed.math.floor_ceil_tools.fc_log import floor_log_, ceil_log_
+    from seed.math.floor_ceil_tools.fc_kth_root import ceil_kth_root_
+    from seed.tiny_.check import check_type_is, check_int_ge
 
-from seed.tiny_.check import check_type_is, check_int_ge
-
-#from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#from seed.helper.repr_input import repr_helper
 ___end_mark_of_excluded_global_names__0___ = ...
 乸配置纟非完美编码 = namedtuple('乸配置纟非完美编码', r'''
 规模纟源符集

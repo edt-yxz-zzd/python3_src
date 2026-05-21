@@ -18,6 +18,7 @@ fst
 snd
 at
 check_int_ge_le
+check_int_ge
 ifNonef
 ifNone
 echo
@@ -34,10 +35,10 @@ __all__
 
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.helper.repr_input import repr_helper
-from seed.tiny import check_type_le, check_type_is, fst, snd, at
-from seed.tiny_.check import check_int_ge_le, check_int_ge
-from seed.tiny import ifNonef, ifNone, echo
-from seed.tiny import check_pseudo_qual_name# check_pseudo_identifier
+from seed.helper.ifNone import ifNone, ifNone, ifNonef
+from seed.tiny_.at import at
+from seed.tiny_.check import check_int_ge, check_int_ge_le, check_pseudo_qual_name, check_type_is, check_type_is, check_type_le, check_type_le
+from seed.tiny_.funcs import echo, fst, snd
 
 def _巛彧(彧, 值, /):
     if not 彧 is ...:

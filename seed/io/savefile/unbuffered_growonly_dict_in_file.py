@@ -1,3 +1,4 @@
+#__all__:goto
 r'''
 e ../../python3_src/seed/io/savefile/unbuffered_growonly_dict_in_file.py
     #deprecated:e ../../python3_src/seed/io/savefile/UnbufferedGrowonlyDictInFile.py
@@ -14,15 +15,22 @@ vs:
         write when close:
             to avoid too many useless contents/history
             since there are delete-/overwrite- operation
+
 from seed.io.savefile.unbuffered_growonly_dict_in_file import tabular_cached_calc, UnbufferedGrowonlyDictInFile, UnbufferedDictInFile
 from seed.io.savefile.SaveFile import SaveFileDict
-
 
 SaveFileDict(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs)
 
 UnbufferedDictInFile(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs)
 
 UnbufferedGrowonlyDictInFile(path_or_iofile, encoding='u8', allow_create_file=False, allow_write_file=True, allow_write_header=True, kwargs=kwargs, may_key2default=may_key2default, setitem_by_key2default_only=True)
+
+
+
+seed.io.savefile.unbuffered_growonly_dict_in_file
+py -m nn_ns.app.debug_cmd   seed.io.savefile.unbuffered_growonly_dict_in_file -x
+py -m nn_ns.app.doctest_cmd seed.io.savefile.unbuffered_growonly_dict_in_file:__doc__ -ht #  -ff -v -df
+
 
 #'''
 
@@ -33,14 +41,27 @@ __all__ = '''
     tabular_cached_calc
     '''.split()
 
-from collections.abc import MutableMapping#, Sequence, MutableSet
-#from seed.io.savefile.SaveFile import SaveFileDict
+
+___begin_mark_of_excluded_global_names__0___ = ...
+from collections.abc import MutableMapping
 from seed.io.savefile.SaveFile import SaveFileMethods__UpdatableDict, SaveFileContainerABC, SaveFile__UpdatableDict
-from seed.tiny import check_type_is #check_bool
-from seed.abc.abc__ver0 import override#, abstractmethod, ABC# final
+#from seed.io.savefile.SaveFile import SaveFileDict
 
 #from seed.types.GrowingDict import GrowingDict
 #view ../../python3_src/seed/types/GrowingDict.py
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is
+    from seed.abc.abc__ver0 import override
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
+
+
 
 def _flush(ofile, /):
     ofile.flush()
@@ -63,7 +84,7 @@ class UnbufferedDictInFile(
         case = SaveFile__UpdatableDict.caseNEWorOVERWRITE
             #caseOVERWRITE
             #caseNEW
-        case = caseOVERWRITE if k in self._data else caseNEW
+        case = SaveFile__UpdatableDict.caseOVERWRITE if k in self._data else SaveFile__UpdatableDict.caseNEW
         #may_old_v = self._data.get(k)
         self._data[k] = v
         #try:
@@ -186,3 +207,7 @@ def tabular_cached_calc(path_or_iofile, calc, kwargs_as_description4ofile, /, *,
     return UnbufferedGrowonlyDictInFile(path_or_iofile, encoding=encoding, allow_create_file=allow_create_file, allow_write_file=allow_write_file, allow_write_header=allow_write_header, kwargs=kwargs_as_description4ofile, may_key2default=calc, setitem_by_key2default_only=setitem_by_key2default_only)
 
 
+
+from seed.io.savefile.unbuffered_growonly_dict_in_file import tabular_cached_calc, UnbufferedGrowonlyDictInFile, UnbufferedDictInFile
+#from seed.io.savefile.SaveFile import SaveFileDict
+from seed.io.savefile.unbuffered_growonly_dict_in_file import *

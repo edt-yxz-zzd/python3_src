@@ -374,22 +374,23 @@ _xpostprocess_group7grammar
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.types.Either import Cased, Either
 from seed.types.Either import mk_Left, mk_Right
 
 
-from seed.tiny import fst, snd
-from seed.tiny_.check import check_type_is, check_type_le, check_int_ge_le, check_int_ge
-from seed.tiny_.dict__add_fmap_filter import dict_add__new# fmap4dict_value, filter4dict_value, dict_add__is, dict_add__eq, group4dict_value
-from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-    #def __repr__(sf, /):
-    #    return repr_helper(sf, *args, **kwargs)
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import fst, snd
+    from seed.tiny_.check import check_type_is, check_type_le, check_int_ge_le, check_int_ge
+    from seed.tiny_.dict__add_fmap_filter import dict_add__new
 
-from seed.types.FrozenOrderedSet import FrozenOrderedSet, FrozenOrderedDict
-from seed.types.StackStyleSet import StackStyleSet
-from collections import OrderedDict
-frozenset
+    from seed.helper.repr_input import repr_helper
+
+    #.from seed.types.FrozenOrderedSet import FrozenOrderedSet, FrozenOrderedDict
+    from seed.types.StackStyleSet import StackStyleSet
+    from collections import OrderedDict
+    frozenset
 
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import BaseRecognizerLLoo__main__split_teardown__default_mixins, BaseRecognizerLLoo__alias__default_mixins
 from seed.recognize.recognizer_LLoo__ver2_.IRecognizerLLoo import mk_group_pair4rgnr_ref, Makers4IRecognizerLLoo

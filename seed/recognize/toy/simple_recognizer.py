@@ -246,6 +246,8 @@ py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   %seed.recogni
 
 #]]]'''
 __all__ = r'''
+生成冫展符讠表达式纟解码器纟子语言纟圁訄乙版扌
+
 定长式
 码集式
 常量式
@@ -267,6 +269,10 @@ at
 魖解码场景
 乸解码场景
 构造冫解码场景扌
+
+具名扌
+注册冫变换结果函数纟具名解码器扌
+取冫变换结果函数纟具名解码器扌
 
 
 取冫变量值扌
@@ -293,7 +299,6 @@ at
 检查冫讫错果冖扩展扌
 '''.split()#'''
 __all__
-
 
 # [:本模块使用流程]:here
 ######################
@@ -376,7 +381,7 @@ if 1:
 
 
 def __():
-    from seed.tiny import null_tuple
+    from seed.tiny_.containers import null_tuple
     from enum import Enum, auto
     class __:
         @property

@@ -1,19 +1,12 @@
+#__all__:goto
 r'''
 
 from seed.types.empty_containers import empty_mapping
 seed.types.empty_containers
     <--- seed.types.EmptyMapping
 py -m seed.types.empty_containers
-py -m nn_ns.app.debug_cmd   seed.types.empty_containers
+py -m nn_ns.app.debug_cmd   seed.types.empty_containers -x
 
-from seed.types.empty_containers import EmptyMapping, EmptySet, EmptySequence, empty_mapping, empty_set, empty_sequence, empty_tuple, empty_iterator
-
-from seed.types.empty_containers import IndexError_KeyError
-from seed.types.empty_containers import EmptyHashableBase, EmptyIterable, EmptyReversible, EmptySized, EmptyContainer, EmptyCollection
-
-from seed.types.empty_containers import EmptyMapping, EmptySet, EmptySequence, EmptyThree
-
-from seed.types.empty_containers import theEmptyHashableBase, theEmptyIterable, theEmptySized, theEmptyContainer, theEmptyCollection, theEmptyReversible, theEmptyMapping, theEmptySet, theEmptySequence, theEmptyThree, empty_mapping, empty_set, empty_sequence, empty_three, empty_tuple, empty_iterator
 
 
 
@@ -391,12 +384,15 @@ __all__ = '''
     empty_tuple
     empty_iterator
     '''.split()
+__all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from collections.abc import Mapping, Sequence, Set, Hashable, Collection, Reversible, Sized, Iterable, Container, MappingView, KeysView, ItemsView, ValuesView
-from types import MappingProxyType
+#from types import MappingProxyType
 #import operator
 #import builtins
-from seed.tiny import null_str, null_bytes, null_int, null_tuple, null_frozenset, null_mapping_view, null_iter  #,    null_sequence, null_set, null_mapping
+
+from seed.tiny_.containers import null_tuple, null_frozenset, null_mapping_view, null_iter
 #
 #from seed.abc.ISingleton import ISingleton
 #   why not use ISingleton?
@@ -411,7 +407,16 @@ from seed.tiny import null_str, null_bytes, null_int, null_tuple, null_frozenset
 
 #from seed.types.AddrAsHash import BaseAddrAsHash
 from seed.abc.eq_by_id.BaseAddrAsHash import BaseAddrAsHash
-from seed.helper.repr_input import repr_helper
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+
 
 class EmptyHashableBase(BaseAddrAsHash):
     r'''
@@ -756,3 +761,11 @@ if __name__ == "__main__":
     #Traceback (most recent call last):
 
 
+from seed.types.empty_containers import EmptyMapping, EmptySet, EmptySequence, empty_mapping, empty_set, empty_sequence, empty_tuple, empty_iterator
+
+from seed.types.empty_containers import IndexError_KeyError
+from seed.types.empty_containers import EmptyHashableBase, EmptyIterable, EmptyReversible, EmptySized, EmptyContainer, EmptyCollection
+
+from seed.types.empty_containers import EmptyMapping, EmptySet, EmptySequence, EmptyThree
+
+from seed.types.empty_containers import theEmptyHashableBase, theEmptyIterable, theEmptySized, theEmptyContainer, theEmptyCollection, theEmptyReversible, theEmptyMapping, theEmptySet, theEmptySequence, theEmptyThree, empty_mapping, empty_set, empty_sequence, empty_three, empty_tuple, empty_iterator

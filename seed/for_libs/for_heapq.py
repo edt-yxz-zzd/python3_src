@@ -28,6 +28,8 @@ view /sdcard/0my_files/tmp/out4py/py_src/py-heapq.py
 ]]
 
 
+__all__
+
 seed.for_libs.for_heapq
 py -m nn_ns.app.debug_cmd   seed.for_libs.for_heapq -x
 py -m nn_ns.app.doctest_cmd seed.for_libs.for_heapq:__doc__ -ht
@@ -399,14 +401,17 @@ no_op8set_idx4item_
 __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
-from itertools import count as count_, repeat
-from itertools import islice
-#from seed.tiny import print_err
-from seed.tiny import at
-from seed.tiny import ifNonef, ifNone, echo
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.tiny_.check import check_callable
-from seed.tiny_.std____key__le__reverse_ import std____key__le__reverse_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'count:count_'):
+    from itertools import count as count_, repeat
+    from itertools import islice
+    from seed.debug.print_err import print_err
+    from seed.tiny_.at import at
+    from seed.tiny_.funcs import echo
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.tiny_.check import check_callable
+    from seed.tiny_.std____key__le__reverse_ import std____key__le__reverse_
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class ValidateFail__not_heap(Exception):pass

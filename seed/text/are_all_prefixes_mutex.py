@@ -54,8 +54,12 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from itertools import pairwise
-from seed.tiny import check_type_is
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import pairwise
+    from seed.tiny_.check import check_type_is
+___end_mark_of_excluded_global_names__0___ = ...
 
 if 1:
     is_sorted=False

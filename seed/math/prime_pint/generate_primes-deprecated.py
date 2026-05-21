@@ -1,4 +1,7 @@
 #__all__:goto
+deprecate:发现公式病蛊
+改用:
+    view ../../python3_src/seed/math/prime_pint/bounds4kth_prime.py
 #TODO:goto
 r'''[[[
 e ../../python3_src/seed/math/prime_pint/generate_primes.py
@@ -30,6 +33,11 @@ view script/制表冫间歇性素数数量.py
   [[n>=1] -> [PRIMES_S1[n] > n*ln(n)]]
   [[n>=2] -> [PRIMES_S1[n] <= 10**11] -> [n*ln(n) + n*(lnln(n)-1) <= PRIMES_S1[n]]]
   [[n>=7022] -> [PRIMES_S1[n] <= n*ln(n) + n*(lnln(n) -0.9385???)]] # [third_coeff4inv_num_primesLE(7022) ~= -0.9384449719153126] => 此处应当是-0.9384而非-0.9385
+    发现公式病蛊:
+    view ../../python3_src/seed/math/prime_pint/bounds4kth_prime.py
+    n -> (PRIMES_S1[n]/n -(ln(n) +lnln(n) -1))
+      (7012, 70841, Fraction(982349692781576617, 14789857194304345535), 0.06642049885105616)
+      (7022, 70919, Fraction(586245561946526104, 9523926479896484331), 0.0615550280846874)
   [PRIMES_S1[7022] == PRIMES[7021] == 70919]
 
   [[n>=2] -> [n*ln(n) + n*(lnln(n)-1.0072629) <= PRIMES_S1[n] <= n*ln(n) + n*(lnln(n) +(head [err | [(j,p,err) :<- [(7021, 70919, -0.9384) ,(2193, 19381, -0.9002) ,(226, 1433, -0.8031) ,(102, 563, -0.7022) ,(48, 227, -0.6180) ,(24, 97, -0.5079) ,(16, 59, -0.4040) ,(11, 37, -0.3118) ,(9, 29, -0.2366) ,(6, 17, -0.1830) ,(1, 3, 1.1734)]][n>=j+1]])]]
@@ -2043,6 +2051,7 @@ py_adhoc_call   seed.math.continued_fraction.continued_fraction_fold   ,iter_app
 ]]]'''#'''
 __all__ = r'''
 list_primes__len_ge_
+    estimate_upper_bound4Kth_prime_
 
 list_primes_le_
 list_primes_lt_
@@ -2056,21 +2065,10 @@ estimate_upper_bound4Kth_prime__formula1__using_467over398__inexact_float_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from math import floor, ceil, isqrt
-
 from itertools import repeat, compress, islice, chain
-#.from seed.tiny_.check import check_type_is, check_int_ge
-#.
-#.from seed.abc.abc__ver1 import abstractmethod, override, ABC
-#.from seed.helper.repr_input import repr_helper
+#gt_ln2:see:from seed.math.constants.lnN import interval5lnN__via_limit_denominator_
 ___end_mark_of_excluded_global_names__0___ = ...
 
-#.class __(ABC):
-#.    __slots__ = ()
-#.    ___no_slots_ok___ = True
-#.    def __repr__(sf, /):
-#.        return repr_helper(sf, *args, **kwargs)
-#.if __name__ == "__main__":
-#.    raise NotImplementedError
 
 
 def list_primes_le_(max0, T=None, BitList=None, /):
@@ -2203,7 +2201,12 @@ def estimate_upper_bound4Kth_prime__formula1__using_467over398_(k, /, *, inexact
     return floor(n*(cf__lnN + cf__lnlnN + cf__467over398))
 
 #end-def estimate_upper_bound4Kth_prime__formula1__using_467over398_(k, /, *, inexact=False, using_param6n7022=False):
+def estimate_upper_bound4Kth_prime_(k, /):
+    'k/uint -> upper_bound{PRIMES[k]} # [PRIMES[k] <= upper_bound{PRIMES[k]}] # [PRIMES[0] == 2]'
+    return estimate_upper_bound4Kth_prime__formula1__using_467over398__inexact_float_(k)
 def estimate_upper_bound4Kth_prime__formula1__using_467over398__inexact_float_(k, /, *, using_param6n7022=False, using_best_param_known=False, _with_param=False):
+    #『float』:实际已不再使用浮点数！
+    #『inexact』:放大上限，而不精确遵循声明的计算式{精确计算版使用连分数，可能较慢}
     r'''
     'k -> upper_bound{PRIMES[k]} # == upper_bound{PRIMES_S1[1+k]}'
     [PRIMES[k] <= upper_bound{PRIMES[k]}]
@@ -2287,6 +2290,7 @@ def _中选耂第三系数尾峰点集牜前七千二十二个素数():
         #,(2, 3, Fraction(467,398), )
     ][::-1]
 _4using_best_param_known = _中选耂第三系数尾峰点集牜前七千二十二个素数()
+#.from seed.math.constants.lnN import lt_ln_, gt_ln_
 def _gt_ln_(n, /):
     gt_lbN = floor(n).bit_length() # == 1+floor_log2(floor(n)) > log2(n)
     _gt_ln2 # > ln(2)
@@ -2295,6 +2299,9 @@ def _gt_ln_(n, /):
 def __():
     from fractions import Fraction
     gt_ln2 = Fraction(1385328996563313413, 1998607273341576092)
+    return gt_ln2
+    from seed.math.constants.lnN import interval5lnN__via_limit_denominator_
+    (lt_ln2, gt_ln2) = interval5lnN__via_limit_denominator_(2**64, 2)
     return gt_ln2
 _gt_ln2 = __() # [N<D<2**64]
 def __():
@@ -2310,7 +2317,7 @@ def __():
     return gt_ln2
 #_ln2 = __()
 if 0b0000:
-    print(_ln2)
+    #print(_ln2)
     390207173010335/562949953421312
 if 1:
     assert float.fromhex('0x1.62e42fefa39efp-1') == 6243314768165359/9007199254740992 == 6243314768165359/2**53
@@ -3199,6 +3206,10 @@ def list_primes__len_ge_(min_sz, T=None, BitList=None, /):
 
 __all__
 from seed.math.prime_pint.generate_primes import list_primes__len_ge_
+from seed.math.prime_pint.generate_primes import estimate_upper_bound4Kth_prime_
+
+
+
 from seed.math.prime_pint.generate_primes import estimate_upper_bound4Kth_prime__formula1__using_467over398__inexact_float_ #estimate_upper_bound4Kth_prime__formula1__using_467over398_
 #def estimate_upper_bound4Kth_prime__formula1__using_467over398__inexact_float_(k, /, *, using_param6n7022=False, using_best_param_known=False, _with_param=False):
 

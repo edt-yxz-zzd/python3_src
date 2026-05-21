@@ -525,16 +525,28 @@ ToConcatLazyList
     #_LazyListRelaxIter
     #_LazyListIter
 __all__
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.types.IForkable import IForkable, IForkable__stamp
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-
-from seed.tiny import check_type_is, null_tuple, mk_tuple, check_type_le  # null_iter
-from seed.tiny import echo as basic_method, is_iterator, print_err
-from seed.helper.repr_input import repr_helper
 from seed.helper.ConstantRepr import ConstantRepr, repr_as_3dot
-from itertools import islice
-import functools
-from functools import wraps
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'echo:basic_method'):
+    from seed.debug.print_err import print_err
+    from seed.tiny_.verify import is_iterator
+    from seed.tiny_.funcs import echo as basic_method
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is, check_type_le
+
+    from seed.helper.repr_input import repr_helper
+    from itertools import islice
+    from functools import wraps
+___end_mark_of_excluded_global_names__0___ = ...
+
+
+
 
 class _mk4clr_get:
     def __init__(sf, /, *fs):
@@ -746,7 +758,8 @@ def _concat4protocol4ToConcatLazyList_(initial_iterator, tail_lazylist, /):
 
 
 def decorator4protocol4ToConcatLazyList_(iter_xs_, /):
-    @functools.wraps(iter_xs_)
+    #@functools.wraps(iter_xs_)
+    @wraps(iter_xs_)
     def mk_LazyList(*args, **kwds):
         it = iter_xs_(*args, **kwds)
         return LazyList(it, non_iterator_ok=False, input_raise_ToConcatLazyList_ok=True)
@@ -1039,13 +1052,13 @@ class LazyList:
         'LazyList x -> may x'
         m = sf.may_unpack()
         if m is None:
-            return null_tuple
+            return get_null_tuple_()
         return m[:1]
     def extract_tmay_tail(sf, /):
         'LazyList x -> may (LazyList x)'
         m = sf.may_unpack()
         if m is None:
-            return null_tuple
+            return get_null_tuple_()
         return m[1:]
 
     def unpack_or_raise(sf, /):

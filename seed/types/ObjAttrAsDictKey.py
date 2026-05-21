@@ -25,7 +25,7 @@ py -m nn_ns.app.doctest_cmd seed.types.ObjAttrAsDictKey:__doc__ -ff -v
 py_adhoc_call   seed.types.ObjAttrAsDictKey   @f
 
 
->>> from seed.tiny import kwargs2Attrs
+>>> from seed.tiny_.types5py import kwargs2Attrs
 >>> obj = kwargs2Attrs(a=222, b=999)
 >>> env = ObjAsEnv__readonly(obj)
 >>> eval('(a,b)', env)

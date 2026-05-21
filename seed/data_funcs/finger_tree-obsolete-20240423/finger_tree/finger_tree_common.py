@@ -1069,22 +1069,22 @@ __all__
 
 
 
-from seed.math.floor_ceil import floor_log2
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.types.NamespaceABC import StaticImmutableNamespaceBase
 
-from seed.types.FrozenDict import FrozenDict, mk_FrozenDict
-from seed.tiny_.check import check_int_ge
-from seed.tiny import check_type_is
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
 
-from itertools import count
+    from seed.types.FrozenDict import FrozenDict, mk_FrozenDict
+    from seed.tiny_.check import check_type_is, check_int_ge
+
+    from itertools import count
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
-#from seed.iters.PeekableIterator import PeekableIterator, echo_or_mk_PeekableIterator
-#from seed.tiny import check_type_is, null_tuple, mk_reiterable, ifNone, echo
-#from itertools import count, islice, chain
-#import operator as opss
 
 
 

@@ -28,6 +28,15 @@ False
 >>> hasattr(X(), '__bool__')
 False
 
+>>> class X:
+...     __len__ = Attr4UnsupportedOperation()
+...     def __iter__(sf, /):
+...         yield 999
+>>> [*iter(X())]
+[999]
+>>> [*X()] # requires [UnsupportedOperation <: TypeError]
+[999]
+
 #]]]'''
 __all__ = r'''
 UnsupportedOperation
@@ -42,7 +51,10 @@ from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 
 
 class UnsupportedOperation(Exception):pass
-class UnsupportedOperation(AttributeError):pass
+class UnsupportedOperation(AttributeError, TypeError):pass
+    # 『[*x]』 where type(x).__len__ = Attr4UnsupportedOperation()
+    #   => raise TypeError to make py work as 『[*iter(x)]』
+    # see: view ../../python3_src/seed/types/LazySeq.py
 class Attr4UnsupportedOperation(INonDataDescriptor, ABC__no_slots):
     def __init__(sf, smay_nm='', /):
         check_smay_pseudo_identifier(smay_nm)

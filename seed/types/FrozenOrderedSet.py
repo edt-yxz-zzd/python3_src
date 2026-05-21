@@ -103,10 +103,15 @@ FrozenOrderedDict
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from collections import OrderedDict
 from collections.abc import Set, Mapping
-from seed.tiny import MapView, mk_tuple, mk_pair #mk_frozenset
-from seed.helper.repr_input import repr_helper
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from collections import OrderedDict
+    from seed.tiny_.containers import mk_tuple, mk_pair #mk_frozenset
+    from seed.tiny_.types5py import mk_MapView
+    from seed.helper.repr_input import repr_helper
+
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class FrozenOrderedSet(Set):
@@ -171,7 +176,7 @@ class FrozenOrderedDict(Mapping):
     @property
     def map_view(sf, /):
         '-> ordered-view-{k:v} #for:__eq__<Mapping>()'
-        return MapView(sf._k2v)
+        return mk_MapView(sf._k2v)
     def __getitem__(sf, k, /):
         'k -> v'
         return sf._k2v[k]

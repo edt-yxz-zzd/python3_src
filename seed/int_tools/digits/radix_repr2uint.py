@@ -2,6 +2,9 @@
 #r"""[[[
 
 r'''
+py -m nn_ns.app.debug_cmd   seed.int_tools.digits.radix_repr2uint -x
+py -m nn_ns.app.doctest_cmd seed.int_tools.digits.radix_repr2uint:__doc__ -ht #  -ff -v -df
+
 py -m seed.int_tools.digits.radix_repr2uint
 from seed.int_tools.digits.radix_repr2uint import radix_repr2uint, IRadixRepr2Uint, RadixRepr2Uint
 used in:
@@ -29,8 +32,11 @@ __all__ = '''
 ___begin_mark_of_excluded_global_names__0___ = ...
 
 from seed.abc.abc import ABC, abstractmethod, override, ABC__no_slots
-from seed.helper.check.checkers import check_int, check_type_is
-from seed.int_tools.digits._common import _Int
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.check.checkers import check_int, check_type_is
+    from seed.int_tools.digits._common import _Int
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

@@ -11,11 +11,11 @@ usage:
 from seed.helper.lazy_import__func7ast import mk_decorator4lazy_import__funcs_, decorator4lazy_import__funcs_
 @decorator4lazy_import__funcs_
 def __():
-    from seed.tiny import fst, snd as _snd_
+    from seed._tiny_ import fst, snd as _snd_
     ##if toplevel then eqv:
 @mk_decorator4lazy_import__funcs_(__name__)
 def __():
-    from seed.tiny import fst, snd as _snd_
+    from seed._tiny_ import fst, snd as _snd_
 
 ]]
 

@@ -76,12 +76,18 @@ NonInvertibleError
 __all__
 
 
-from seed.tiny import check_type_is
-from seed.tiny import print_err#echo, , mk_fprint, mk_assert_eq_f, expectError
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.lang.hasattr__as_cls import hasattr__as_cls
-from seed.tiny import mk_frozenset, null_frozenset
-from seed.helper.str2__all__ import str2__all__
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.lang.hasattr__as_cls import hasattr__as_cls
+    from seed.helper.str2__all__ import str2__all__
+    from seed.debug.print_err import print_err
+    from seed.tiny_.check import check_type_is
+from seed.tiny_.containers import mk_frozenset, null_frozenset
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 

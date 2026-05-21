@@ -21,9 +21,9 @@ see:
 
 
 seed.helper.mk_pairs
-py -m nn_ns.app.debug_cmd   seed.helper.mk_pairs
+py -m nn_ns.app.debug_cmd   seed.helper.mk_pairs -x
 py -m nn_ns.app.adhoc_argparser__main__call8module   seed.helper.mk_pairs   @f
-py -m nn_ns.app.doctest_cmd seed.helper.mk_pairs:__doc__ -v
+py -m nn_ns.app.doctest_cmd seed.helper.mk_pairs:__doc__ -ff -v
 
 
 from seed.helper.mk_pairs import bmk_pairs, bmk_triples, show_ordered_pairs_as_bmk_pairs, show_ordered_triples_as_bmk_triples#, bmk_OrderedDict, show_ordered_pairs_as_bmk_OrderedDict, show_ordered_dict_as_bmk_OrderedDict, cased_bmk
@@ -45,7 +45,7 @@ from seed.helper.mk_pairs import triples5api__raise, triples5api__Nothing_, trip
 
 
 
->>> from seed.tiny import echo
+>>> from seed.tiny_.funcs import echo
 >>> class ok(Exception):pass
 >>> class bad(Exception):pass
 >>> ok.__module__ = '__main__'

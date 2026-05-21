@@ -154,15 +154,19 @@ Error
 __all__
 
 
-
-from itertools import islice
-from seed.iters.iterate import iterate
-
-from seed.tiny import check_type_le
-from seed.tiny_.check import check_int_ge
+___begin_mark_of_excluded_global_names__0___ = ...
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-from seed.helper.repr_input import repr_helper
-from seed.math.floor_ceil import ceil_log2 as ceil_log2_
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, 'ceil_log2:ceil_log2_'):
+    from itertools import islice
+    from seed.iters.iterate import iterate
+
+    from seed.tiny_.check import check_int_ge, check_type_le
+    from seed.helper.repr_input import repr_helper
+    from seed.math.floor_ceil_tools.fc_log import ceil_log2 as ceil_log2_
+
+___end_mark_of_excluded_global_names__0___ = ...
 
 class RhoCommon__key:
     __slots__ = ()

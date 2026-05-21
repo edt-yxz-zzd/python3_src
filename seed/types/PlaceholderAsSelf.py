@@ -34,13 +34,16 @@ reconfig_placeholder_
 '''.split()#'''
 __all__
 
-from seed.tiny import check_type_is, curry1, ifNone
-from seed.tiny_.check import check_pseudo_identifier
-from seed.helper.repr_input import repr_helper
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.types5py import curry1
+    from seed.helper.ifNone import ifNone
+    from seed.tiny_.check import check_type_is, check_pseudo_identifier
+    from seed.helper.repr_input import repr_helper
 
-from seed.data_funcs.lnkls import rglnkls_ops, empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
-
-from seed.data_funcs.lnkls import rglnkls2list
+from seed.data_funcs.lnkls import empty_rglnkls, rglnkls_ipush_right, rglnkls2list
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 class PlaceholderAsSelf:

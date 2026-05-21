@@ -1,8 +1,8 @@
 r'''
 seed.int_tools.int_tools
-from seed.int_tools.int_tools import divs, is_even, is_odd, even, odd
-from seed.int_tools.int_tools import bit_length_of, byte_length_of, align_length, unit_length2block_length, bit_length2byte_length
-from seed.int_tools.int_tools import uint2bytes_, uint2bytes__littleendian
+py -m nn_ns.app.debug_cmd   seed.int_tools.int_tools -x
+py -m nn_ns.app.doctest_cmd seed.int_tools.int_tools:__doc__ -ht #  -ff -v -df
+
 
 
 #'''
@@ -27,8 +27,12 @@ __all__ = '''
     '''.split()
 
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.tiny_.check import check_uint
+
+___end_mark_of_excluded_global_names__0___ = ...
+
 from seed.math.divs import divs, is_odd, is_even, odd, even
-from seed.tiny import check_uint
 
 
 
@@ -88,3 +92,12 @@ def uint2bytes__littleendian(u, /):
     check_uint(u)
     return uint2bytes_(u, byteorder='little', alignment=1)
 
+
+
+
+
+
+from seed.int_tools.int_tools import divs, is_even, is_odd, even, odd
+from seed.int_tools.int_tools import bit_length_of, byte_length_of, align_length, unit_length2block_length, bit_length2byte_length
+from seed.int_tools.int_tools import uint2bytes_, uint2bytes__littleendian
+from seed.int_tools.int_tools import *

@@ -1,5 +1,7 @@
 r'''[[[
 py -m seed.iters.ensure_sorted
+py -m nn_ns.app.debug_cmd   seed.iters.ensure_sorted -x
+py -m nn_ns.app.doctest_cmd seed.iters.ensure_sorted:__doc__ -ht #  -ff -v -df
 
 
 from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted, ensure_neighbor_relationship
@@ -17,12 +19,13 @@ __all__ = '''
     ensure_neighbor_relationship
     '''.split()#'''
 
+___begin_mark_of_excluded_global_names__0___ = ...
 import operator
-from seed.tiny import echo
-#from seed.iters.map_if import map_if
-#from seed.iters.zip_me import zip_me2
-#from itertools import starmap
-#from itertools import pairwise
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+___end_mark_of_excluded_global_names__0___ = ...
 
 def ensure_strict_sorted(iterable, /, *, key=None, __lt__=None, reverse=False, on_error=None, __le__=None, with_key=False):
     '''ensure_strict_sorted :: Iter a -> Iter a
@@ -225,10 +228,10 @@ example:
 
 
 
-from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted, ensure_neighbor_relationship
+from seed.iters.ensure_sorted import *
 if __name__ == "__main__":
     import doctest
     import seed.iters.ensure_sorted as M
     doctest.testmod(M)
 
-from seed.iters.ensure_sorted import *
+from seed.iters.ensure_sorted import ensure_sorted, ensure_strict_sorted, ensure_neighbor_relationship

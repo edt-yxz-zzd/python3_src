@@ -6,6 +6,7 @@ e ../../python3_src/seed/types/LazySeq.py
 seed.types.LazySeq
 py -m nn_ns.app.debug_cmd   seed.types.LazySeq -x
 py -m nn_ns.app.doctest_cmd seed.types.LazySeq:__doc__ -ff -v
+py -m nn_ns.app.doctest_cmd seed.types.LazySeq:__doc__ -ht
 py_adhoc_call   seed.types.LazySeq   @f
 
 
@@ -52,9 +53,10 @@ LazySeq(LazyList([5, 6, 7, 8, <...>]))
 4
 >>> _5
 LazySeq(LazyList([5, 6, 7, 8, <...>]))
+>>> [*iter(_5)]
+[5, 6, 7, 8, 9]
 >>> [*_5]
 [5, 6, 7, 8, 9]
-
 
 >>> _5 = LazySeq(range(5, 10))
 >>> _5[:...]
@@ -70,20 +72,40 @@ LazySeq(LazyList([5, 6, 7, 8, <...>]))
 >>> _5.extract_pairs_between_(3, 999)
 ((8, LazyList([9])), (9, LazyList()))
 
+
+
+>>> def recur_refer():
+...     yield 999
+...     while 1:yield lazy_seq.get_len__relax_(to_extend=True)
+>>> lazy_seq = LazySeq(recur_refer())
+>>> lazy_seq[:5] # bug:(999, 1, 2, 3, 999)
+(999, 1, 2, 3, 4)
+>>> lazy_seq[:9] # bug:(999, 1, 2, 3, 999, 1, 2, 3, 4)
+(999, 1, 2, 3, 4, 5, 6, 7, 8)
+
 #]]]'''
 __all__ = r'''
     LazySeq
 '''.split()#'''
 __all__
 
-from seed.types.LazyList import LazyList, LazyListError
+___begin_mark_of_excluded_global_names__0___ = ...
 
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_uint, check_int_ge
-from seed.tiny import echo, null_iter, is_iterable, null_tuple
-from seed.helper.repr_input import repr_helper
+from seed.tiny_.containers import null_tuple, null_iter
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.LazyList import LazyList, LazyListError
+
+    from seed.tiny_.check import check_type_is, check_uint, check_int_ge
+    from seed.tiny_.verify import is_iterable
+    from seed.helper.repr_input import repr_helper
+    from itertools import islice
+
 from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
 from seed.types.exc.UnsupportedOperation import Attr4UnsupportedOperation
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 class LazySeq:
@@ -130,14 +152,36 @@ class LazySeq:
         'may uint -> None # call .may_unpack(relax=relax)'
         _init_seq = sf._init_seq
         _tails = sf._tails
-        ps = _tails[-1].extract_prefix__le(may_max_sz4extend, relax=relax, to_iter_pairs=True)
-        if ps:
+        #########
+        # bug: the input xs refers back to sf/LazySeq
+        #   come_from:
+        #       view ../../python3_src/seed/math/prime_gens.py
+        #       @GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve._mk_new_lazy_seq_:u2ps_ => raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_.kw:may_uint2all_prime_factors_
+        #########
+        if 0b0001:
+            #new:fix bug:
             begin4init_seq = len(_init_seq)
             begin4tails = len(_tails)
-            for x, tail in ps:
+            it4ps = _tails[-1].iter__le(may_max_sz4extend, relax=relax, to_iter_pairs=True)
+            b_more = False
+            for x, tail in it4ps:
                 _init_seq.append(x)
                 _tails.append(tail)
                 # [len(_tails) == len(_init_seq)+1]
+                b_more = True
+            b_more
+        else:
+            #old:buggy@recur_refer
+            ps = _tails[-1].extract_prefix__le(may_max_sz4extend, relax=relax, to_iter_pairs=True)
+            b_more = bool(ps)
+            if b_more:
+                begin4init_seq = len(_init_seq)
+                begin4tails = len(_tails)
+                for x, tail in ps:
+                    _init_seq.append(x)
+                    _tails.append(tail)
+                    # [len(_tails) == len(_init_seq)+1]
+        if b_more:
             try:
                 sf._check_post__extend_more_(_init_seq, begin4init_seq, _tails, begin4tails)
             except:

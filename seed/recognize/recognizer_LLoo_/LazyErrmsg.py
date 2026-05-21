@@ -2,6 +2,10 @@
 r'''[[[
 e ../../python3_src/seed/recognize/recognizer_LLoo_/LazyErrmsg.py
 [[
+slow caused by tiny.py !!!
+]]
+
+[[
 !!wrong guess!!
 <<==:
 ??? "slow"/inefficiency maybe caused by f-string/strig-formatting to generate errmsg @20240911
@@ -36,9 +40,11 @@ SimpleFormatter
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 import re
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.tiny import ifNone
-from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.helper.ifNone import ifNone
+    from seed.helper.repr_input import repr_helper
 ___end_mark_of_excluded_global_names__0___ = ...
 
 class FormatError(Exception):pass

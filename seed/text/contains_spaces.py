@@ -44,8 +44,12 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.text.useful_regex_patterns import space__regex
-from seed.tiny import check_type_is
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
+    from seed.text.useful_regex_patterns import space__regex
+    from seed.tiny_.check import check_type_is
+___end_mark_of_excluded_global_names__0___ = ...
 
 def contains_spaces(s, /):
     check_type_is(str, s)

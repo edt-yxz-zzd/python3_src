@@ -33,6 +33,7 @@ py_adhoc_call   nn_ns.fileformat.sqlite3_dump_cmd   @sqlite3_dump_cmd --ipath:/s
 ]]
 
 
+__all__
 seed.for_libs.for_sqlite3
 py -m nn_ns.app.debug_cmd   seed.for_libs.for_sqlite3 -x
 py -m nn_ns.app.doctest_cmd seed.for_libs.for_sqlite3:__doc__ -ff -v
@@ -83,12 +84,16 @@ __all__ = r'''
 '''.split()#'''
 __all__
 
-from seed.tiny import check_callable, echo_args
-from itertools import islice, starmap
-import sqlite3
+___begin_mark_of_excluded_global_names__0___ = ...
 import re
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_may_
+#import sqlite3
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from sqlite3 import connect
+    from itertools import islice, starmap
+    from seed.tiny_.check import check_may_, check_type_is, check_callable
+    from seed.tiny_.funcs import echo_args
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 def sqlite3_dump_meta_(ipath, /):
@@ -161,7 +166,8 @@ def sqlite3_iter_dump_(*args4islice, ipath, nm4table='', nms4columns='*', condit
     check_callable(fmtr4row)
 
 
-    with sqlite3.connect(ipath) as cx:
+    #with sqlite3.connect(ipath) as cx:
+    with connect(ipath) as cx:
         if not nm4table:
             it = sql_stmts = cx.iterdump()
             if not py_condition is None:

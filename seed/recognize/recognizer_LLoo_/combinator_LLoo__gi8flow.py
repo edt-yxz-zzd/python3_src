@@ -41,7 +41,7 @@ from seed.recognize.recognizer_LLoo_.IRecognizerLLoo import mk_gi4patch_header_s
 
 from seed.recognize.recognizer_LLoo_.IRecognizerLLoo import mk_gi4skip_header_signal, mk_gi4patch_header_signal_if_ok# mk_gi4validate_two_phases
 
-from seed.tiny import check_callable
+from seed.tiny_.check import check_callable
 
 ___end_mark_of_excluded_global_names__0___ = ...
 

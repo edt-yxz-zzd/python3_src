@@ -1,10 +1,11 @@
+raise 000
 
 __all__ = '''
     sorted_ex
 '''.split()
 
 from functools import cmp_to_key
-from seed.tiny import echo, py_cmp
+from seed.tiny_.funcs import echo, py_cmp
 
 def sorted_ex(iterable, *, key=None, cmp=None, reverse=False):
     '''

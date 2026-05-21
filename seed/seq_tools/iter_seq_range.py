@@ -1,3 +1,9 @@
+r'''[[[
+seed.seq_tools.iter_seq_range
+
+py -m nn_ns.app.debug_cmd   seed.seq_tools.iter_seq_range -x
+py -m nn_ns.app.doctest_cmd seed.seq_tools.iter_seq_range:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
 
 __all__ = '''
     seq_islice
@@ -6,7 +12,11 @@ __all__ = '''
     std_seq_range
     '''.split()
 
-from seed.tiny import ifNone
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.ifNone import ifNone
+___end_mark_of_excluded_global_names__0___ = ...
 
 def seq_islice(seq, begin ,end, step=None, *, reverse=False):
     for i in iter_seq_range(len(seq), begin, end, step, reverse=reverse):
@@ -53,3 +63,9 @@ def std_seq_range(L, begin, end):
 
     assert 0 <= begin < end <= L
     return (begin, end)
+
+
+
+
+from seed.seq_tools.iter_seq_range import seq_islice, enumerate_seq, iter_seq_range, std_seq_range
+from seed.seq_tools.iter_seq_range import *

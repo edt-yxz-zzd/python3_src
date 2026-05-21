@@ -240,18 +240,29 @@ __all__ = r'''
             mk_Property4AutoCalcAndCache
             Injector4Property4AutoCalcAndCache
 '''.split()#'''
+    #export_nms__pattern
+    #return_export_nms__pattern
+    #export_nms__regex
+    #return_export_nms__regex
 __all__
 
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func import force_lazy_imported_func_
 
-from collections import OrderedDict
-from seed.graph.U2Vtc_To_DigraphABC import ObjU2Vtc_To_Digraph
-from seed.graph.DAG import iter_reversed_topological_ordering, is_DAG, find_one_cycle
-from seed.for_libs.for_inspect import get_signature_of__py3_
-from seed.helper.repr_input import repr_helper
-from seed.tiny import check_type_is, check_type_le, check_callable, mk_tuple
-from seed.tiny_.check import check_pseudo_identifier# check_smay_pseudo_qual_name, check_pseudo_qual_name, icheck_pseudo_identifier, icheck_smay_pseudo_qual_name, icheck_pseudo_qual_name
-from seed.text.useful_regex_patterns import nm__pattern
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from collections import OrderedDict
+    from seed.graph.U2Vtc_To_DigraphABC import ObjU2Vtc_To_Digraph
+    from seed.graph.DAG import iter_reversed_topological_ordering, is_DAG, find_one_cycle
+    from seed.for_libs.for_inspect import get_signature_of__py3_
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_pseudo_identifier, check_type_is, check_type_le, check_callable
+    from seed.tiny_.containers import mk_tuple
+
 import re
+from seed.text.useful_regex_patterns import nm__pattern
+___end_mark_of_excluded_global_names__0___ = ...
+
 export_nms__pattern = f'(?:(?P<nm1>{nm__pattern})|[(](?P<nm2s>{nm__pattern}(?:, *{nm__pattern})+)[)])'
 return_export_nms__pattern = f'-> *{export_nms__pattern}'
 export_nms__regex = re.compile(export_nms__pattern)
@@ -575,7 +586,7 @@ def mk_reversed_dependency_digraph_(cls, /, *, stable=True, u2vtc__vs__dedges=Fa
     if u2vtc__vs__dedges is False:
         g = ObjU2Vtc_To_Digraph(u2vtc)
     else:
-        g = ObjU2Vtc_To_Digraph.from_vertex_pairs(dedges, some_vtc)
+        g = force_lazy_imported_func_(ObjU2Vtc_To_Digraph).from_vertex_pairs(dedges, some_vtc)
             #bug:nonstable-impl:.from_vertex_pairs()
 
     return g

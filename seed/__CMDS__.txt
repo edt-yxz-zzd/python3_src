@@ -1,0 +1,446 @@
+
+e ../../python3_src/seed/__CMDS__.txt
+old name: ../../python3_src/seed/math/__CMDS__.txt
+doing:goto
+TODO:goto
+
+e ../../python3_src/seed/math/floor_ceil_tools/__ALSO__.txt
+tiny
+view ../../python3_src/seed/helper/lazy_import__func7context7register7data.py
+[[
+view ../../python3_src/nn_ns/app/rename_module6py_stmts.py
+view ../../python3_src/seed/helper/lazy_import__func7context7register7data.py
+py -m nn_ns.app.rename_module6py_stmts -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old ../../python3_src/seed/func_tools/[20220405]fmapT.py ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree3/bases.py
+    ok
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ... ...
+ bug:-o /sdcard/0my_files/tmp/-0tmp -force
+    『-force』 <==> 『-f -o rce』
+ -o /sdcard/0my_files/tmp/-0tmp --force
+view /sdcard/0my_files/tmp/-0tmp
+]]
+
+
+
+
+TODO:数据:perfect_kth_root_:打包
+TODO:
+doctest 分离式？prime_sieve,floor_ceil_tools
+grep ...perfect
+grep ...Error
+bash_...app
+
+
+global lazy value
+  =>
+  @LazyValue
+  def lazy_...mkr...
+
+
+
+
+
+
+
+
+
+
+DONE:grep 'seed\.tiny\>' ../../python3_src/seed/ -r -l -I
+DONE:grep 'seed\.math\.prime_gens\>' ../../python3_src/seed/ -r -l -I
+DONE:grep '\<floor_ceil\>' ../../python3_src/seed/ -r -l -I
+DONE:grep 'pseudoprime' ../../python3_src/seed/ -r -l -I
+
+
+DONE:grep 'seed\.tiny\>' ../../python3_src/seed/math/ -r -l -I
+DONE:grep 'seed\.math\.prime_gens\>' ../../python3_src/seed/math/ -r -l -I
+DONE:grep '\<floor_ceil\>' ../../python3_src/seed/math/ -r -l -I
+DONE:grep 'factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_' ../../python3_src/seed/math/ -r -l -I
+DONE:grep 'pseudoprime' ../../python3_src/seed/math/ -r -l -I
+  -->strong_probable_prime
+DONE:grep 'sqare' ../../python3_src/seed/math/ -r -l -I
+  -->square
+
+
+DONE:grep 'tiny.*import.*mk_null_' ../../python3_src/seed/ -r -l -I
+  grep ...null_ #null_tuple
+  mk_null_... -> get_null_...
+
+数据准备:分离式:
+  DONE:view ../../python3_src/seed/math/prime_pint/bounds4kth_prime.py
+DONE:rgnr整理分类 删减
+e ../../python3_src/seed/recognize/README.txt
+
+
+
+
+[[[
+doing:template
+===
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  
+
+r'''[[[
+z
+py -m z
+py -m nn_ns.app.debug_cmd   z -x
+py -m nn_ns.app.doctest_cmd z:__doc__ -ht #  -ff -v -df
+from z import *
+#]]]'''#'''
+___begin_mark_of_excluded_global_names__0___ = ...
+___end_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from itertools import islice
+    from seed.helper.repr_input import repr_helper
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
+#__all__:goto
+def __refs():
+
+
+
+
+]]]
+from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
+with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny):
+    from seed._lazy_ import print_err, check_type_is, mk_frozenset, null_frozenset
+
+
+
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+___begin_mark_of_excluded_global_names__0___ = ...
+___end_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt, check_int_ge_lt, check_callable
+    from seed.tiny_.funcs import echo, fst, snd, mk_fprint
+    from seed.tiny_.containers import get_null_iter_#null_iter
+    from seed.tiny_.containers import get_null_tuple_#null_tuple
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
+    from seed.tiny_.containers import get_null_str_, get_null_bytes_, get_null_int_, get_null_tuple_, get_null_frozenset_, get_null_mapping_view_, get_null_iter_
+    from seed.tiny_.verify import is_iterable, is_iterator, is_reiterable
+    from seed.tiny_.types5py import curry1
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
+    from seed.math.floor_ceil_tools.fc_perfect import perfect_kth_root_
+    from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
+    from seed.helper.repr_input import repr_helper
+    from seed.iters.chains import chains
+
+
+py -m nn_ns.app.debug_cmd   . -x
+py -m nn_ns.app.doctest_cmd .:__doc__ -ht #  -ff -v -df
+
+[[
+===
+grep 'seed\.tiny\>' ../../python3_src/seed/ -r -l -I
+  234个文件
+doing
+e ../../python3_src/seed/func_tools/[20220405]fmapT.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree3/bases.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree2/finger_tree_init.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree2/finger_tree_basic_types.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree/finger_tree__external_packed_config.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree/measurement.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree/finger_tree_ops__instances.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree/FingerTree.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree/finger_tree__EPC__default.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree/finger_tree_ops.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree__config.py
+e ../../python3_src/seed/data_funcs/finger_tree-obsolete-20240423/finger_tree__ABC.py
+  #过气文件
+
+e ../../python3_src/seed/math/primality_proving-202310.py
+e ../../python3_src/seed/ops/___IOps4OneMainObjType___[20210509].py
+xxx:e ../../python3_src/seed/types/ImmutableNamespaceWithCachedProperty.py
+xxx:e ../../python3_src/seed/types/frontier.py
+  #过气文件
+
+
+
+
+
+e ../../python3_src/seed/helper/lazy_import__func.py
+  ok:针对
+e ../../python3_src/seed/helper/lazy_import__func7context.py
+  ok:针对
+e ../../python3_src/seed/helper/lazy_import__func7multilines.py
+  ok:针对
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/algo/merge_sort.py ../../python3_src/seed/algo/bucket_sort/all_unique.py ../../python3_src/seed/algo/bucket_sort/bucket_group_with_table.py ../../python3_src/seed/algo/bucket_sort/bucket_sort_per_row.py ../../python3_src/seed/algo/bucket_sort/bucket_sort_with_table.py ../../python3_src/seed/algo/bucket_sort/bucket_unique.py ../../python3_src/seed/algo/bucket_sort/group_by_eq.py ../../python3_src/seed/algo/bucket_sort/radix_sort_with_table.py ../../python3_src/seed/algo/findout_all_maximal_points.py ../../python3_src/seed/algo/computing_network.py ../../python3_src/seed/algo/FFT/Walsh_transform.py
+
+
+
+
+
+
+
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/io/FieldedLineHandler.py ../../python3_src/seed/io/fielded_line_utils.py ../../python3_src/seed/io/iter_row_based_Z_delimited_text_file.py ../../python3_src/seed/io/with_text_input_file.py ../../python3_src/seed/io/savefile/unbuffered_growonly_dict_in_file.py ../../python3_src/seed/io/savefile/unbuffered_growonly_set_in_file.py ../../python3_src/seed/io/savefile/unbuffered_growonly_list_in_file.py ../../python3_src/seed/io/ReversedBufferedReader.py ../../python3_src/seed/io/num_head1s_of_byte.py ../../python3_src/seed/io/get_size_of_ibfile.py ../../python3_src/seed/io/continue_io__folder.py ../../python3_src/seed/io/savefile__str_tuple.py ../../python3_src/seed/io/iter_line_contents__ver2.py ../../python3_src/seed/io/continue_io__naive.py
+
+e ../../python3_src/seed/io/ReversedBufferedReader.py
+  #draft
+e ../../python3_src/seed/recognize/recognizer_LLoo_/--old/interface_LLoo.py
+  #draft
+
+
+
+
+
+
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/iters/are_two_sorted_iterables_disjoint.py ../../python3_src/seed/iters/cmp4iterable.py ../../python3_src/seed/iters/difference_of_two_sorted_iterables.py ../../python3_src/seed/iters/ensure_sorted.py ../../python3_src/seed/iters/find.py ../../python3_src/seed/iters/group_by.py ../../python3_src/seed/iters/intersect_two_sorted_iterables.py ../../python3_src/seed/iters/is_subset_of_sorted_iterable.py ../../python3_src/seed/iters/iter_unique_by_eq.py ../../python3_src/seed/iters/iter_unique_by_hash.py ../../python3_src/seed/iters/merge_two_sorted_iterables.py ../../python3_src/seed/iters/minmax.py ../../python3_src/seed/iters/neighbor_unique.py ../../python3_src/seed/iters/search_subseqs.py ../../python3_src/seed/iters/symmetric_difference_of_two_sorted_iterables.py ../../python3_src/seed/iters/isplit_if.py ../../python3_src/seed/iters/iter_with.py ../../python3_src/seed/iters/group_by__nonlocal.py ../../python3_src/seed/iters/batch_find_insert_indices4two_sorted_iterables.py
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/lang/super4bypass_instance.py ../../python3_src/seed/mapping_tools/ModuleMissingDict.py ../../python3_src/seed/mapping_tools/fdefault.py ../../python3_src/seed/mapping_tools/key_as_attr.py ../../python3_src/seed/mapping_tools/determine_num_slots4hash_map.py ../../python3_src/seed/mapping_tools/SandBoxDict.py ../../python3_src/seed/pkg_tools/iter_submodules.py ../../python3_src/seed/pkg_tools/module2export_names.py ../../python3_src/seed/pkg_tools/ModuleReloader.py ../../python3_src/seed/pkg_tools/load_module5attr.py ../../python3_src/seed/pkg_tools/load_data5attr.py
+
+
+
+
+
+
+
+
+
+
+
+
+e ../../python3_src/seed/recognize/toy/conservative_shortest_sentence_recognizer.py
+  #draft
+
+e ../../python3_src/seed/recognize/cmdline/CmdlinePrefixParser-old-undone.py
+e ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/solo_rgnr_transform_cases-old.py
+e ../../python3_src/seed/recognize/recognizer_LLoo_/--old/combinator_LLoo__parallel.py
+e ../../python3_src/seed/recognize/recognizer_LLoo_/--old/combinator_LLoo__serial.py
+e ../../python3_src/seed/recognize/recognizer_LLoo_/--old/combinator_LLoo__wrapper.py
+e ../../python3_src/seed/recognize/recognizer_LLoo_/--old/interface_LLoo.py
+e ../../python3_src/seed/recognize/recognizer_LLoo_/--old/recognizer_LLoo.py
+  #过气文件
+
+e ../../python3_src/seed/recognize/recognizer_combinator_executor.py
+  #draft
+
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/recognize/cmdline/CmdlinePrefixParser-old-undone.py ../../python3_src/seed/recognize/cmdline/txt_process.py ../../python3_src/seed/recognize/toy/poor_efficiency_toy_recognizer.py ../../python3_src/seed/recognize/toy/simple_recognizer_/grammar.py ../../python3_src/seed/recognize/toy/simple_recognizer_/_common.py ../../python3_src/seed/recognize/toy/simple_recognizer_/scene.py ../../python3_src/seed/recognize/toy/simple_recognizer_/expr_generator__2nd.py ../../python3_src/seed/recognize/toy/conservative_shortest_sentence_recognizer.py ../../python3_src/seed/recognize/toy/simple_recognizer.py ../../python3_src/seed/recognize/xml/SimpleParser4XML.py ../../python3_src/seed/recognize/xml/Visitor4ParseResult4XML.py ../../python3_src/seed/recognize/recognizer_combinator_executor-save-20221218.py ../../python3_src/seed/recognize/recognizer_combinator_utils.py ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__loop.py ../../python3_src/seed/recognize/recognizer_LLoo_/_common.py ../../python3_src/seed/recognize/recognizer_LLoo_/stream/token_stream.py ../../python3_src/seed/recognize/recognizer_LLoo_/--old/combinator_LLoo__parallel.py ../../python3_src/seed/recognize/recognizer_LLoo_/--old/combinator_LLoo__serial.py ../../python3_src/seed/recognize/recognizer_LLoo_/--old/combinator_LLoo__wrapper.py ../../python3_src/seed/recognize/recognizer_LLoo_/--old/interface_LLoo.py ../../python3_src/seed/recognize/recognizer_LLoo_/--old/recognizer_LLoo.py ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__gi8flow.py ../../python3_src/seed/recognize/recognizer_LLoo_/grammar.py ../../python3_src/seed/recognize/recognizer_combinator_executor.py ../../python3_src/seed/recognize/tokenizer_/Tokenizer4Text.py ../../python3_src/seed/recognize/regex/NFA5RegexRepr.py ../../python3_src/seed/recognize/regex/RegexLiteral.py ../../python3_src/seed/recognize/regex/regex_utilities.py ../../python3_src/seed/recognize/BaseTokenizer4MetaSymbol.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/IRecognizerLLoo.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/solo_rgnr_transform_cases.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/solo_rgnr_transform_cases-old.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/tokenize_utils.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/doctest4IRecognizerLLoo.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/example__arithmetic_expression.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/grammar4IRecognizerLLoo.py ../../python3_src/seed/recognize/rgnr/rgnrs/SimpleRecognizer.py
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/recognize/recognizer_combinator_utils.py ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__loop.py ../../python3_src/seed/recognize/recognizer_LLoo_/_common.py ../../python3_src/seed/recognize/recognizer_LLoo_/stream/token_stream.py ../../python3_src/seed/recognize/recognizer_LLoo_/combinator_LLoo__gi8flow.py ../../python3_src/seed/recognize/recognizer_LLoo_/grammar.py ../../python3_src/seed/recognize/recognizer_combinator_executor.py ../../python3_src/seed/recognize/tokenizer_/Tokenizer4Text.py ../../python3_src/seed/recognize/regex/NFA5RegexRepr.py ../../python3_src/seed/recognize/regex/RegexLiteral.py ../../python3_src/seed/recognize/regex/regex_utilities.py ../../python3_src/seed/recognize/BaseTokenizer4MetaSymbol.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/IRecognizerLLoo.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/solo_rgnr_transform_cases.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/tokenize_utils.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/doctest4IRecognizerLLoo.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/example__arithmetic_expression.py ../../python3_src/seed/recognize/recognizer_LLoo__ver2_/grammar4IRecognizerLLoo.py ../../python3_src/seed/recognize/rgnr/rgnrs/SimpleRecognizer.py
+
+
+
+
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/seq_tools/inverse_uint_bijection_array.py ../../python3_src/seed/seq_tools/is_inverse_uint_bijection_array_of.py ../../python3_src/seed/seq_tools/iter_seq_range.py ../../python3_src/seed/seq_tools/lsls52ls.py ../../python3_src/seed/seq_tools/min_index_of_seq.py ../../python3_src/seed/seq_tools/seq_index_if.py ../../python3_src/seed/seq_tools/prefixes2tree.py ../../python3_src/seed/seq_tools/find_all.py ../../python3_src/seed/seq_tools/sorted_via_lt_.py ../../python3_src/seed/seq_tools/mk_nonsubseq_of.py ../../python3_src/seed/seq_tools/longest_sorted_subsequence.py ../../python3_src/seed/seq_tools/avoid_substrs__multi_word_delimiter_token__layout_with_std_both_marker__solid_counting.py ../../python3_src/seed/text/StepDecoder.py ../../python3_src/seed/text/base64.py ../../python3_src/seed/text/encrypt/anti_recognition_encrypt.py ../../python3_src/seed/text/are_all_prefixes_mutex.py ../../python3_src/seed/text/pack_char_set.py ../../python3_src/seed/text/contains_spaces.py ../../python3_src/seed/text/avoid_py_str_literal.py ../../python3_src/seed/text/print_txt_as_multilines.py
+
+
+
+
+
+
+
+
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/types/HistoryGrowOnlyStack.py ../../python3_src/seed/types/NamespaceABC.py ../../python3_src/seed/types/OpaqueInstanceStorage.py ../../python3_src/seed/types/StructBase.py ../../python3_src/seed/types/empty_containers.py ../../python3_src/seed/types/attr/BatchCachedProperty.py ../../python3_src/seed/types/flag/Flag.py ../../python3_src/seed/types/flag/IHybridFlag.py ../../python3_src/seed/types/logic/ZerothOrderLogic.py ../../python3_src/seed/types/mapping/OpaquePseudoMapping__weakref.py ../../python3_src/seed/types/union_find_algo/DisjointSet.py
+
+e ../../python3_src/seed/types/OpaqueInstanceStorage.py
+  #draft
+
+
+
+
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/types/view/SeqTransformView.py ../../python3_src/seed/types/MergeableHeap.py '../../python3_src/seed/types/MergeableHeap-ver1-eat-O(logM_mul_logN)-not-best.py' ../../python3_src/seed/types/MergeableHeap__immutable_tree.py ../../python3_src/seed/types/CuttableStream.py ../../python3_src/seed/types/DictWithNewProtocol.py ../../python3_src/seed/types/GetArgsKwargs.py ../../python3_src/seed/types/SeqPrefixRegister.py ../../python3_src/seed/types/WindowFIFO.py ../../python3_src/seed/windows/winreg_helper.py
+ bug:-o /sdcard/0my_files/tmp/-0tmp -force
+    『-force』 <==> 『-f -o rce』
+ -o /sdcard/0my_files/tmp/-0tmp --force
+view /sdcard/0my_files/tmp/-0tmp
+
+
+
+
+
+e ../../python3_src/seed/abc/storage/IStorage4Attachment.py
+e ../../python3_src/seed/abc/storage/MemberGetter.py
+e ../../python3_src/seed/helper/unique_immutable_value.py
+  #draft
+
+py -m nn_ns.app.rename_module6py_stmts  -o /sdcard/0my_files/tmp/-0tmp  --force -new ../../python3_src/seed/helper/lazy_import__func7context7register7data.py -old  ../../python3_src/seed/abc/storage/IOps4Storage4XXX.py ../../python3_src/seed/abc/storage/IStorage4Attachment.py ../../python3_src/seed/abc/storage/MemberGetter.py ../../python3_src/seed/helper/unique_immutable_value.py ../../python3_src/seed/helper/check/ADT.py ../../python3_src/seed/helper/register.py ../../python3_src/seed/helper/with_many.py ../../python3_src/seed/helper/converter_pairs.py
+
+
+
+
+
+
+???draft:
+e ../../python3_src/seed/helper/repr/repr_api.py
+e ../../python3_src/seed/helper/repr/repr_sys.py
+e ../../python3_src/seed/hierarchy/plugin_api4register/stable_repr4export_long_term_storage.py
+e ../../python3_src/seed/hierarchy/register/AttachmentDataRegister4cls.py
+e ../../python3_src/seed/ops/___IOps4OneMainObjType___.py
+e ../../python3_src/seed/ops/flatten_ops_hierarchy.py
+e ../../python3_src/seed/ops/meta.py
+
+
+
+===
+]]
+[[
+e ../../python3_src/seed/func_tools/fmapT/_xxxT__tiny.py
+
+grep 'seed\.tiny\>' ../../python3_src/seed/math/ -r -l -I
+e ../../python3_src/seed/math/primality_proving-202310.py
+draft:
+  e ../../python3_src/seed/math/floor_log__ops_.py
+  e ../../python3_src/seed/math/binary_float/binary_float_ops____using_LazyList.py
+  e ../../python3_src/seed/math/continued_fraction/continued_fraction_of_log_.py
+  e ../../python3_src/seed/math/primality_proving.py
+  e ../../python3_src/seed/math/float/IFloatNumber.py
+
+
+
+e ../../python3_src/seed/math/prime_gens.py
+
+
+
+]]
+[[
+grep 'generate_primes\>' ../../python3_src/seed/math/ -r -l -I
+cd $my_git_py
+git mv -v seed/math/prime_pint/generate_primes.py seed/math/prime_pint/generate_primes-deprecated.py
+]]
+[[
+grep 'seed\.math\.prime_gens\>' ../../python3_src/seed/math/ -r -l -I
+
+view ../../python3_src/seed/math/prime_sieve/sieve_ge_le.py
+view ../../python3_src/seed/math/primality_test/strong_probable_prime.py
+from seed.math.primality_test.strong_probable_prime import 
+seed.math.primality_test.strong_probable_prime
+pseudoprime-->probable_prime
+all_prime_factors_gen-->???
+    from seed.math.prime_[#break#]gens import all_prime_factors_gen
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4prime_factorizations_ge_, iter_sieve4primes_ge_
+    return iter_sieve4prime_factorizations_ge_(5, with_uint=True)
+
+e ../../python3_src/seed/math/GaussInteger.py
+  nn_ns:
+  factor via min_prime_factor
+  =>PrimeList兄弟版
+
+
+e ../../python3_src/seed/math/factor_pint_as_pefect_power_.py
+  数据 压缩 lzma
+  每行数据 参考:最短加链 加载...
+  view ../../python3_src/nn_ns/math_nn/numbers/shortest_addition_chain__arbitrary_recur_shortest_stem.py
+    from seed.io.line_index_file import ILineIndexArray__tiny_solo_tarfile
+        #ILineIndexArray__tiny_solo_tarfile(may_cache, offset4lineno, iopath7line_index, ipath7data6tiny_solo_tarfile, /, *, smay_repr='')
+
+
+
+
+
+
+
+
+
+
+    from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_
+    from seed.math.prime_sieve.sieve_lt import tabulate_may_prime_factorization4uint_lt_
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4prime_factorizations_ge_lt_, iter_sieve4prime_factorss_ge_lt_
+    from seed.math.prime_sieve.sieve_lt import list_primes__lt_
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_, iter_sieve4primes_ge_lt_
+    from seed.math.prime_sieve.PrimeList import PrimeList
+    prime_list = PrimeList()
+    iter_sieve4primes_ge_
+    prime_[#broken#]gens
+
+git mv -v seed/math/factor_pint_into_strong_pseudoprimes_by_quadratic_sieve_.py seed/math/factor_pint_into_strong_probable_primes_by_quadratic_sieve_.py
+]]
+[[
+grep 'pseudoprime' ../../python3_src/seed/math/ -r -l -I
+pseudoprime-->probable_prime
+
+
+e ../../python3_src/seed/math/is_prime__le_pow2_64.py
+  保持原文，不做改动
+原来我的误用来源于 sympy 对pseudoprime的误用
+    sprp:拟素数:strong_probable_prime:既含合数也含素数
+    spsp:伪素数:strong_pseudoprime:只含合数排除素数
+
+e ../../python3_src/seed/math/prime_gens.py.note.txt
+  ok:正确用法:oeis
+e ../../python3_src/seed/math/primality_test/strong_probable_prime.py
+  ok
+
+
+
+]]
+[[
+grep '\<floor_ceil\>' ../../python3_src/seed/math/ -r -l -I
+
+
+floor_[#broken#]ceil
+
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt, floor_kth_root_
+    from seed.math.floor_ceil_tools.fc_perfect import perfect_kth_root_
+
+]]
+[[
+grep 'tiny.*import.*mk_null_' ../../python3_src/seed/ -r -l -I
+]]
+
+[[
+===
+grep 'seed\.math\.prime_gens\>' ../../python3_src/seed/ -r -l -I
+e ../../python3_src/seed/for_libs/for_time.py
+  ok!示例
+
+e ../../python3_src/seed/helper/_ignore__tmp/list_format_collect_import_stmts_.20260406-noon.stdout.txt
+
+===
+grep '\<floor_ceil\>' ../../python3_src/seed/ -r -l -I
+e ../../python3_src/seed/int_tools/step_decoder/StepDecoder__ver1__deprecated.py
+e ../../python3_src/seed/helper/_ignore__tmp/list_format_collect_import_stmts_.20260406-noon.stdout.txt
+e ../../python3_src/seed/for_libs/for_doctest.py
+  ok!测试用命令
+e ../../python3_src/seed/int_tools/step_decoder/StepDecoder__ver1__deprecated.py
+  #过气文件
+
+
+===
+grep 'pseudoprime' ../../python3_src/seed/ -r -l -I
+e ../../python3_src/seed/helper/_ignore__tmp/list_format_collect_import_stmts_.20260406-noon.stdout.txt
+===
+]]
+
+
+
+
+
+
+
+

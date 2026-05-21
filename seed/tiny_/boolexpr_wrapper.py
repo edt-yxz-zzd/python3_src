@@ -8,7 +8,7 @@ from functools import wraps
 
 def boolexpr_wrapper(predicator, /):
     r'''
-from seed.tiny import curry1
+from seed.tiny_.types5py import curry1
 from operator import __eq__,__contains__#no:__call__
 from seed.for_libs.for_operator.__call__ import caller, __call__, call
 

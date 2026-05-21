@@ -2,7 +2,7 @@ r'''
 e ../../python3_src/seed/helper/IHelper4parse__xxx_txt.py
 
 seed.helper.IHelper4parse__xxx_txt
-py -m nn_ns.app.debug_cmd   seed.helper.IHelper4parse__xxx_txt
+py -m nn_ns.app.debug_cmd   seed.helper.IHelper4parse__xxx_txt -x
 py -m seed.helper.IHelper4parse__xxx_txt
 
 from seed.helper.IHelper4parse__xxx_txt import IHelper4parse__xxx_txt
@@ -46,8 +46,14 @@ used by:
 
 __all__ = ['IHelper4parse__xxx_txt']
 
+___begin_mark_of_excluded_global_names__0___ = ...
 from abc import ABC, abstractmethod
-from seed.tiny import print_err, echo
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.funcs import echo
+    from seed.debug.print_err import print_err
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 class IHelper4parse__xxx_txt(ABC):

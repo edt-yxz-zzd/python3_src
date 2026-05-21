@@ -9,6 +9,7 @@ see also:
 e ../../python3_src/seed/func_tools/recur5yield.py
 py -m seed.func_tools.recur5yield
 py -m nn_ns.app.debug_cmd   seed.func_tools.recur5yield -x
+py -m nn_ns.app.doctest_cmd seed.func_tools.recur5yield:__doc__ -ht
 py -m nn_ns.app.doctest_cmd seed.func_tools.recur5yield:__doc__ -ff -v
 
 
@@ -103,14 +104,14 @@ True
 >>> callable(collector['f'])
 True
 >>> collector.put_named_generator_func(collector['f']) #same callable is ok
->>> @collector.put_named_generator_func
+>>> @collector.put_named_generator_func  #doctest: +ELLIPSIS
 ... def f():    #not same callable => raise
 ...     yield
 Traceback (most recent call last):
     ...
-ValueError
+ValueError: ('f', <function f at 0x...>, <function f at 0x...>)
 
->>> def _():
+>>> def __():
 ...     @recur5yield__list__echo__echo
 ...     def mul(n, m, /):
 ...         if m > 0:
@@ -137,7 +138,7 @@ ValueError
 ...         return True, n-1
 ...         yield
 ...     return mul
->>> mul = _()
+>>> mul = __()
 >>> mul(100, 233)
 23300
 
@@ -398,27 +399,35 @@ __all__
 #################################
 #HHHHH
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.for_libs.for_time import (
-Timer__print_err
-    ,timer__print_err__thread_wide
-    ,timer__print_err__process_wide
-    ,timer__print_err__system_wide__highest_resolution
-    ,timer__print_err__system_wide__monotonic
-)
+if 1:
+    from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
+    from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
 
-timer = timer__print_err__thread_wide
-_to_show_ = __name__ == "__main__"
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_getitemable, check_callable, check_type_is, check_type_le, check_pair #no check_tuple
+    from seed.tiny_.dict__add_fmap_filter import dict_add__is
+    from seed.tiny_.types5py import curry1
 
-with timer(prefix='py:std...', _to_show_=_to_show_):
     from functools import wraps
     from collections.abc import Generator as GeneratorIterator #, Callable
 
-with timer(prefix='seed:basic...', _to_show_=_to_show_):
+def __old():
+  from seed.for_libs.for_time import timer__print_err__thread_wide
+
+  timer = timer__print_err__thread_wide
+  _to_show_ = __name__ == "__main__"
+
+  with timer(prefix='py:std...', _to_show_=_to_show_):
+    from functools import wraps
+    from collections.abc import Generator as GeneratorIterator #, Callable
+
+  with timer(prefix='seed:basic...', _to_show_=_to_show_):
     from seed.tiny_.check import check_getitemable, check_callable, check_type_is, check_type_le, check_pair #no check_tuple
     from seed.tiny_.dict__add_fmap_filter import dict_add__is
-    from seed.tiny import curry1
+    from seed.tiny_.types5py import curry1
 
-with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
+  with timer(prefix='seed.types.ops.IEmplaceStackOps', _to_show_=_to_show_):
     from seed.types.ops.IEmplaceStackOps import IEmplaceStackOps
     from seed.types.ops.IEmplaceStackOps import the_emplace_stack_ops4list, the_emplace_stack_ops4HugeStack
 
@@ -613,7 +622,8 @@ explain__emplace_stack_ops_vs_may_ops4list_vs_ops4huge
 def child_gi_protocol__echo(exprlist5yield, /):
     'exprlist5yield/generator_iterator -> generator_iterator'
     generator_iterator = exprlist5yield
-    if not isinstance(generator_iterator, GeneratorIterator): raise TypeError
+    #.if not isinstance(generator_iterator, GeneratorIterator): raise TypeError
+    check_type_le(GeneratorIterator, generator_iterator)
     return generator_iterator
 def child_gi_protocol__0func(exprlist5yield, /):
     'exprlist5yield/(generator_func, *args4gi_mkr) -> generator_iterator'
@@ -681,7 +691,8 @@ def recur5yield__eval__main_generator_iterator(emplace_stack_ops, main_generator
         it = child_gi_protocol(exprlist5yield)
         push_gi(it)
     def push_gi(generator_iterator, /):
-        if not isinstance(generator_iterator, GeneratorIterator): raise TypeError
+        #.if not isinstance(generator_iterator, GeneratorIterator): raise TypeError
+        check_type_le(GeneratorIterator, generator_iterator)
         if tmay_value4send: raise logic-err
         ops.push(stack, generator_iterator) #ls.append(generator_iterator)
         tmay_value4send.append(init_value4send)
@@ -721,7 +732,7 @@ def recur5yield__eval__main_generator_iterator(emplace_stack_ops, main_generator
 
 
 
-if 0:
+def __():
   def check_getitemable(x, /):
     if not hasattr(type(x), '__getitem__'): raise TypeError
 

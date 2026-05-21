@@ -113,7 +113,10 @@ __all__ = r'''
     Error__not_disjoint_dels_updates
 '''.split()#'''
 __all__
-from seed.tiny import MapView, null_tuple, ifNonef
+
+from seed.tiny_.types5py import MapView
+from seed.tiny_.containers import null_tuple
+from seed.helper.ifNone import ifNone, ifNonef
 from seed.types.view.View import MapView, SetView
 from collections.abc import MutableMapping
 from seed.helper.repr_input import repr_helper
@@ -305,27 +308,6 @@ class SandBoxDict:
 
 
 
-def __():
-    from seed.tiny import ifNonef, ifNone, echo
-    from seed.tiny import check_type_is, fst, snd, at
-    from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check_int_ge_le
-    from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-    from seed.func_tools.fmapT.fmapT__tiny import dot, fmapT__dict, fmapT__list, fmapT__iter
-    from seed.helper.repr_input import repr_helper
-
-def __():
-    from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
-    from seed.helper.repr_input import repr_helper
-    class _(ABC):
-        __slots__ = ()
-        raise NotImplementedError
-        ___no_slots_ok___ = True
-        def __repr__(sf, /):
-            #return repr_helper(sf, *args, **kwargs)
-            #return repr_helper_ex(sf, args, ordered_attrs, kwargs, ordered_attrs_only=False)
-            ...
-if __name__ == "__main__":
-    pass
 __all__
 
 

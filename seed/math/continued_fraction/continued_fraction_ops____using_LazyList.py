@@ -1340,34 +1340,42 @@ ContinuedFraction
 '''.split()#'''
     #chain__strict_
     #cf_unpack_or_raise
+    #cf5float_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.types.LazySeq import LazySeq
 from seed.types.LazyList import decorator4protocol4ToConcatLazyList_, ToConcatLazyList
-from seed.types.LazyList import LazyList, LazyListError
-
-from seed.math.continued_fraction.prepare_continued_fraction_from_string import prepare_continued_fraction_from_string_
-from seed.math.floor_ceil__tiny import fractional_fixed_point_part_of_, fractional_fixed_point_part_of_neg_
-from fractions import Fraction
-from math import floor
-#from itertools import chain, islice, count as _count_
-    # chain__strict_
-#import itertools # count
+from seed.types.LazyList import LazyList
 
 
-from seed.tiny import check_type_is
-from seed.tiny_.check import check_uint, check_int_ge, check_uint_lt
-from seed.tiny import echo, null_iter, is_iterable, is_iterator
-from seed.tiny import print_err, mk_fprint, mk_assert_eq_f, expectError
-from seed.math.PowSeq import PowSeq
-from seed.math.divs import is_even
-#from seed.iters.PeekableIterator import PeekableIterator
-    #view ../../python3_src/seed/iters/PeekableIterator.py
-from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionError__inf__no_cf0
-#from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionFoldState, continued_fraction_fold_state0
-from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, iter_approximate_fractions5continued_fraction_
 
-from seed.helper.repr_input import repr_helper
+
+from seed.helper.lazy_import__func import force_lazy_imported_func_
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from fractions import Fraction
+    from math import floor
+    #from itertools import chain
+        # chain__strict_
+
+    from seed.math.floor_ceil__tiny import fractional_fixed_point_part_of_, fractional_fixed_point_part_of_neg_
+
+    from seed.helper.repr_input import repr_helper
+
+    from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt
+    from seed.tiny_.funcs import echo
+    from seed.debug.print_err import print_err
+    from seed.tiny_.verify import is_iterable, is_iterator
+    from seed.tiny_.containers import get_null_iter_#null_iter
+
+    from seed.math.PowSeq import PowSeq
+    from seed.math.divs import is_even
+
+    from seed.math.continued_fraction.prepare_continued_fraction_from_string import prepare_continued_fraction_from_string_
+
+    from seed.math.continued_fraction.continued_fraction_fold import ContinuedFractionError__inf__no_cf0
+    from seed.math.continued_fraction.continued_fraction_fold import iter_continued_fraction_digits5ND_, iter_approximate_fractions5continued_fraction_
+
 from seed.types.NamedReadOnlyProperty import NamedReadOnlyProperty, set_NamedReadOnlyProperty4cls_, set_NamedReadOnlyProperty4sf_
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -1697,7 +1705,7 @@ def cf_unpack_or_raise(cf_digits, /):
     'cf_digits :: LazyList<int>{fst int; others pint}'
     m = cf_digits.may_unpack()
     if m is None:
-        raise ContinuedFractionError__inf__no_cf0
+        raise ContinuedFractionError__inf__no_cf0()
     return m
 
 def cf_inv(cf_digits, /):
@@ -1755,8 +1763,8 @@ def _cf_add__optimize_on_int(lhs, rhs, /):
     for xhs in (lhs, rhs):
         m = xhs.may_unpack()
         if m is None:
-            return (done:=True, result:=null_iter)
-            raise ContinuedFractionError__inf__no_cf0
+            return (done:=True, result:=get_null_iter_())
+            raise ContinuedFractionError__inf__no_cf0()
 
     for lhs, rhs in [(rhs, lhs), (lhs, rhs)]:
         (is_int4lhs, floor4lhs) = cf_floor_ex_(lhs)
@@ -1976,7 +1984,7 @@ Fraction(22, 7)
             raise Exception('max_denominator too small:', max_denominator)
         if fr1 is Nothing:
             raise logic-err
-            raise ContinuedFractionError__inf__no_cf0
+            raise ContinuedFractionError__inf__no_cf0()
         # [fr1 is not Nothing]
         # [fr0 may be Nothing]
         assert (fr1 is fr) is finite
@@ -2048,7 +2056,7 @@ Fraction(22, 7)
         def _check_on_no_more_extend_(sf, _init_seq, _tails, /):
             super()._check_on_no_more_extend_(_init_seq, _tails)
             if not _init_seq:
-                raise ContinuedFractionError__inf__no_cf0
+                raise ContinuedFractionError__inf__no_cf0()
     #@override
     def _check_post__extend_more_(sf, _init_seq, begin4init_seq, _tails, begin4tails, /):
         super()._check_post__extend_more_(_init_seq, begin4init_seq, _tails, begin4tails)
@@ -2070,7 +2078,7 @@ Fraction(22, 7)
         for cf0 in it:
             break
         else:
-            raise ContinuedFractionError__inf__no_cf0
+            raise ContinuedFractionError__inf__no_cf0()
         check_type_is(int, cf0)
         yield cf0
         del cf0
@@ -2090,7 +2098,7 @@ Fraction(22, 7)
             pass
         if fr is Nothing:
             raise logic-err
-            raise ContinuedFractionError__inf__no_cf0
+            raise ContinuedFractionError__inf__no_cf0()
         return fr
     def iter_approximate_fractions_(sf, /):
         it = iter(sf)
@@ -2164,7 +2172,7 @@ Fraction(22, 7)
         ot = __class__(ot)
         if ot == cf_0:
             raise ZeroDivisionError
-            raise ContinuedFractionError__inf__no_cf0
+            raise ContinuedFractionError__inf__no_cf0()
         if sf._cf_digits is ot._cf_digits:
             return cf_1
         return sf * ot.inv_()

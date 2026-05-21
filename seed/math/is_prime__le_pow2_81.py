@@ -4,7 +4,7 @@ e ../../python3_src/seed/math/is_prime__le_pow2_81.py
 see:
     view ../../python3_src/seed/math/is_prime__le_pow2_64.py
     view ../../python3_src/seed/math/is_prime__le_pow2_81.py
-    view ../../python3_src/seed/math/prime_gens.py
+    view ../../python3_src/seed/math/primality_test/strong_probable_prime.py
 
 seed.math.is_prime__le_pow2_81
 py -m nn_ns.app.debug_cmd   seed.math.is_prime__le_pow2_81 -x # -off_defs
@@ -36,26 +36,26 @@ echo $PATH
 ls $my_git_sh/my_sh/ -1 | grep prim
 filter4prime
 is_prime
-next_pseudoprime
-prev_pseudoprime
+next_probable_prime
+prev_probable_prime
 ===
 for nm in $(ls $my_git_sh/my_sh/ -1 | grep prim) ; do which ${nm} ; done
 /data/data/com.termux/files/usr/bin/my_sh/filter4prime
 /data/data/com.termux/files/usr/bin/my_sh/is_prime
-/data/data/com.termux/files/usr/bin/my_sh/next_pseudoprime
-/data/data/com.termux/files/usr/bin/my_sh/prev_pseudoprime
+/data/data/com.termux/files/usr/bin/my_sh/next_probable_prime
+/data/data/com.termux/files/usr/bin/my_sh/prev_probable_prime
 ===
 for nm in $(ls $my_git_sh/my_sh/ -1 | grep prim) ; do cat $(which ${nm}) ; echo ; done
 bash $my_git_sh/app/filter4prime "$@"
 bash $my_git_sh/app/is_prime "$@"
-bash $my_git_sh/app/next_pseudoprime "$@"
-bash $my_git_sh/app/prev_pseudoprime "$@"
+bash $my_git_sh/app/next_probable_prime "$@"
+bash $my_git_sh/app/prev_probable_prime "$@"
 ===
 for nm in $(ls $my_git_sh/my_sh/ -1 | grep prim) ; do cat $my_git_sh/app/${nm} | grep '^[^#]' ; done
 py -m nn_ns.app.filter4prime "$@"
-py_adhoc_call   seed.math.prime_gens   @is_prime__le_pow2_81_  "$@"
-py_adhoc_call   seed.math.prime_gens   @next_pseudoprime__ge_  "$@"
-py_adhoc_call   seed.math.prime_gens   @prev_may_pseudoprime__lt_  "$@"
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @is_prime__le_pow2_81_  "$@"
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_probable_prime__ge_  "$@"
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @prev_may_probable_prime__lt_  "$@"
 ===
 ]]
 
@@ -72,13 +72,11 @@ is_prime__le_pow2_81_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-#from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
-#from seed.math.prime_gens import is_prime__le_pow2_81_, next_pseudoprime__ge_, prev_may_pseudoprime__lt_, next_may_prime__le_pow2_81__ge_, prev_may_prime__le_pow2_81__lt_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__ge_, raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
 
-from seed.math.prime_gens import is_prime__le_pow2_81_
+from seed.math.primality_test.strong_probable_prime import is_prime__le_pow2_81_
 assert is_prime__le_pow2_81_.upperbound == 3317044064679887385962123
 is_prime__le_pow2_81 = is_prime__le_pow2_81_ #to match is_prime__le_pow2_64
 

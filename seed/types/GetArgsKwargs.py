@@ -1,10 +1,20 @@
+r'''[[[
+e ../../python3_src/seed/types/GetArgsKwargs.py
 
-# e ../../python3_src/seed/types/GetArgsKwargs.py
+seed.types.GetArgsKwargs
+py -m nn_ns.app.debug_cmd   seed.types.GetArgsKwargs -x
+py -m nn_ns.app.doctest_cmd seed.types.GetArgsKwargs:__doc__ -ht #  -ff -v -df
+#]]]'''#'''
+
 __all__ = 'GetArgsKwargs  GetFuncArgsKwargs'.split()
 
-from seed.helper.repr_input import repr_helper
-from seed.tiny import check_callable
-from seed.tiny_.funcs import echo_args_kwargs
+___begin_mark_of_excluded_global_names__0___ = ...
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+    from seed.tiny_.check import check_callable
+    from seed.tiny_.funcs import echo_args_kwargs
+___end_mark_of_excluded_global_names__0___ = ...
 
 
 
@@ -67,3 +77,4 @@ assert GetFuncArgsKwargs(GetArgsKwargs, 1,2).call0_input_then_me_(3,4) == GetArg
 
 from seed.types.GetArgsKwargs import GetArgsKwargs, GetFuncArgsKwargs
 
+from seed.types.GetArgsKwargs import *
