@@ -15,7 +15,11 @@ py -m nn_ns.app.doctest_cmd seed.math.perfect_kth_root:__doc__ -ht # -ff -df
 >>>
 
 
-py_adhoc_call   seed.math.perfect_kth_root   @f
+py_adhoc_call   seed.math.perfect_kth_root   @factor_pint_as_pefect_power_ =1000
+    (10, 3)
+py_adhoc_call   seed.math.perfect_kth_root   @factor_pint_as_pefect_power_ =1001
+    (1001, 1)
+
 ]]]'''#'''
 __all__ = r'''
 factor_pint_as_pefect_power_
@@ -43,10 +47,6 @@ from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, may_pe
 
 
 __all__
-#[is_kth_power_,is_square_,is_cube_] = lazy_import4funcs_('seed.math.perfect_kth_root', 'is_kth_power_,is_square_,is_cube_', __name__)
-#[may_perfect_kth_root_,may_perfect_sqrt_,may_perfect_cbrt_] = lazy_import4funcs_('seed.math.perfect_kth_root', 'may_perfect_kth_root_,may_perfect_sqrt_,may_perfect_cbrt_', __name__)
-#[factor_pint_as_pefect_power_] = lazy_import4funcs_('seed.math.perfect_kth_root', 'factor_pint_as_pefect_power_', __name__)
-
 from seed.math.perfect_kth_root import factor_pint_as_pefect_power_
 from seed.math.perfect_kth_root import is_kth_power_, is_square_, is_cube_
 from seed.math.perfect_kth_root import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_

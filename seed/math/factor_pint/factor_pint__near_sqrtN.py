@@ -709,7 +709,109 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   ,_debug_2x3  ='(
 
 
 
-py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @factor_pint__near_sqrtN
+
+[[
+next_probable_prime ='(2**28)'
+    268435459
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*268435459' =4 +to_show_num_bits6fail
+    fail: 23999 bits
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*268435459' =4 +to_show_num_bits6fail +composite_ok
+    fail: 18407 bits
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*268435459' =4 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((65537, 268435459), (4094, 4095))
+next_probable_prime ='(2**16+2**11)'
+    67589
+next_probable_prime ='(2**28+2**17)'
+    268566559
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='67589*268566559' =4 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((67589, 268566559), (3972, 3973))
+next_probable_prime ='(2**16+2**15+3567)'
+    101873
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='101873*268566559' =4 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((101873, 268566559), (2635, 2636))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='101873*268566559' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((101873, 268566559), (2635, 2636))
+next_probable_prime ='(2**16+1)*2**14+2**15'
+    1073790979
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='101873*1073790979' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((101873, 1073790979), (10539, 10540))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1073790979' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((65537, 1073790979), (16383, 16384))
+        #最难情形:[q%p ~= p/2]
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1073790979*2' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((131074, 1073790979), (8191, 8192))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1073790979*2**6' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((4194368, 1073790979), (255, 256))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1073790979*2**12' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((268439552, 1073790979), (3, 4))
+next_probable_prime ='(2**16+1)*(2**14+3576)+2**15'
+    1308151301
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1308151301*2**12' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((4194368, 83721683264), (79841, 79842))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1308151301*2**6' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((2097184, 2616302602), (4989, 4990))
+        #竟然有用！！
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1308151301*2**1' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((131074, 1308151301), (9979, 9980))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pint__near_sqrtNmulIIps_  ='(2**16+1)*1308151301*2**0' =1 +to_show_num_bits6fail +composite_ok +no_II +with_position6ok
+    ((65537, 1308151301), (19959, 19960))
+
+
+]]
+[[
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**13)'
+    None
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**65)'
+    ((31, 1190112520884487201), (False, (11, 31)))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='1190112520884487201'
+    None
+
+view ../../python3_src/nn_ns/math_nn/factor_Mersenne_number_into_prime2exp.py.cached.txt
+>57
+: {7: 1, 32377: 1, 524287: 1, 1212847: 1}
+>59
+: {179951: 1, 3203431780337: 1}
+>62
+: {3: 1, 715827883: 1, 2147483647: 1}
+>67
+: {193707721: 1, 761838257287: 1}
+>>> 193707721*761838257287==-1+2**67
+True
+>>> 761838257287/193707721
+3932.9266451232475
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**57)'
+    ((7, 20587884010836553), (False, (4, 7)))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='20587884010836553' -verbose
+    ((32377, 635879915089), (False, (3475, 32377)))
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='635879915089' -verbose
+    ((524287, 1212847), (True, (37, 4)))
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**67)'
+    超过5分钟
+    ^C #KeyboardInterrupt
+    try_factor_pint__near_sqrtNmulCmulZpow_(147573952589676412927):[last_c =3685][log2(N) ~= 67]
+    total::duration: 4.573469 *(unit: 0:00:01)
+
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**67)' --ground_scale=3932
+    ^C
+    try_factor_pint__near_sqrtNmulCmulZpow_(147573952589676412927):[last_c =26532][log2(N) ~= 67][ground_scale == 3932]
+    total::duration: 31.824571770999995 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**67)' --ground_scale=3933
+    #即使猜得极准，也得迭代许多次
+    ((193707721, 761838257287), (True, (10035, 16, 3933)))
+    total::duration: 12.051795262 *(unit: 0:00:01)
+
+
+]]
+
+
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @factor_pint__near_sqrtN_
+
 ]]]'''#'''
 __all__ = r'''
 factor_pint__two_digit_number_multiplication_with_second_carry_
@@ -723,19 +825,28 @@ factor_pint__near_sqrtN_
 
 
 factor_pint__depart_from_sqrtN__via_scaled_to_near_sqrtN_
+
+
+try_factor_pint__near_sqrtNmulCmulZpow_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.primality_test.errors import IsStrongProbablePrimeError
+
     from seed.debug.print_err import print_err
-    from itertools import islice
+    from itertools import islice, chain
     from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_lt
     from seed.math.gcd import gcd
     from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
     from seed.math.floor_ceil_tools.fc_perfect import may_perfect_div
     from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_
+    from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_
+
 #.with mk_ctx4lazy_import4funcs_(__name__, 'isqrt:floor_sqrt'):
 #.    from math import isqrt as floor_sqrt
 def __():
@@ -1102,6 +1213,136 @@ def _debug_2x3(ZsubA, QZaddB, z, /):
     BmulQA = Q*(-d0 +s0*z)
 
     return ((N, z), (d2, d1, d0), (a, q, b), (s0, s1, c1), (Q, BsubQA, BmulQA), (q, b-q*a, b*q*a))
+
+
+
+def _try_factor_pint__near_sqrtNmulIIps_(N, k=1, /, *, to_show_num_bits6fail=False, composite_ok=False, no_II=False, with_position6ok=False):
+    'N/uint -> may (n0, n1) # via factor_pint__near_sqrtN_(N*II[p | [p:<-PRIMRES[:sz]]]) where [sz:<-[0..=floor_log2(n)**2]] # [[log2(N)**4 == N] -> [N == 2**16]]'
+    max_sz = floor_log2(N)**(2 if not no_II else 3)
+    if composite_ok:
+        vs = range(1, 2+max_sz)
+    else:
+        ps = islice(iter_sieve4primes_ge_(0), 0, max_sz)
+        vs = chain([1], ps)
+    vs
+    u = N
+    for j, v in enumerate(vs):
+        if no_II:
+            u = v*N
+        else:
+            u *= v
+        m = factor_pint__near_sqrtN_(u, k)
+        match m:
+            case (n0, n1):
+                n2 = gcd(n0, N)
+                if 1 < n2 < N:
+                    n3 = N//n2
+                    (n0, n1) = sorted([n2,n3])
+                    return (n0, n1) if not with_position6ok else ((n0, n1), (j, v))
+    if to_show_num_bits6fail:
+        print('fail:', floor_log2(u), 'bits')
+            #23999
+    return None
+
+def try_factor_pint__near_sqrtNmulCmulZpow_(N, k=1, /, *, force6sprp=False, with_position6ok=False, verbose=False, ground_scale=1):
+    'N/uint -> may (n0, n1) # via factor_pint__near_sqrtN_(N*c*2**ez) where [c:<-[1..]][ez:<-[0..=floor_log2(n)**2]]'
+    #TODO:trial_division split out to iter both
+    check_int_ge(1, N)
+    check_int_ge(1, ground_scale)
+    if N < 4:
+        if verbose:print_err('N < 4')
+        return None
+    ###########################
+    trbl = detect_strong_probable_prime__not_waste_too_much_time_(N)
+    match trbl:
+        case 0:
+            #composite
+            pass
+        case 1:
+            #prime
+            if verbose:print_err('N is prime')
+            return None
+        case -1:
+            #sprp
+            if verbose:print_err('N is sprp')
+            if force6sprp:
+                #sprp ok
+                pass
+            else:
+                #reject sprp
+                raise IsStrongProbablePrimeError(N)
+        case _:
+            raise 000
+        #case _:
+    ###########################
+    ps = iter_sieve4primes_ge_(0)
+    it = enumerate(ps, 1)
+    lbN = 1+floor_log2(N)
+    assert lbN > 0
+    #ez2NmulZpow = None
+    last_c = 0
+    gNmulC = 0 # [c==0]
+    gN = ground_scale*N
+    done = False
+    try:
+      while 1:
+        if verbose:print_err(f'trial_division: from PRIMRES[{last_c}]')
+        #######################
+        for c, pc in islice(it, 0, lbN):
+            if verbose:print_err(f'trial_division: @PRIMRES[{c-1}]=={pc}')
+            if N%pc == 0:
+                if pc < N:
+                    if verbose:print_err(f'trial_division: @PRIMRES[{c-1}]=={pc}')
+                    n0 = pc
+                    n1 = N//n0
+                    777;done = True
+                    777;position = (False, (c, pc))
+                else:
+                    if verbose:print_err(f'trial_division: [N is prime]@PRIMRES[{c-1}]=={pc}')
+                break
+        if done:break
+        if pc**2 > N: break
+        #if not ez2NmulZpow: ez2NmulZpow = [N<<ez for ez in range(lbN)]
+        if verbose:print_err(f'trial_division: fail@PRIMRES[{last_c}:{c}]')
+        #######################
+        c
+        assert last_c < c
+        for c in range(1+last_c, 1+c):
+            gNmulC += gN
+            if verbose:print_err(f'factor_pint__near_sqrtN_(N*{c})')
+            for ez in range(lbN):
+                gNmulCmulZpow = gNmulC << ez
+                if verbose:print_err(f'factor_pint__near_sqrtN_(N*{c}*2**{ez})')
+                m = factor_pint__near_sqrtN_(gNmulCmulZpow, k)
+                if m:
+                    #bug:(n0, n1) = m
+                        #here cause bug:once pre-『done』 using『if n0:break』
+                    (u0, u1) = m
+                    n2 = gcd(u0, N)
+                    if 1 < n2 < N:
+                        if verbose:print_err(f'factor_pint__near_sqrtN_(N*{c}*2**{ez}):succ')
+                        n3 = N//n2
+                        (n0, n1) = sorted([n2,n3])
+                        777;done = True
+                        777;position = (True, (c, ez, ground_scale))
+                        break
+            else:
+                continue
+            break
+        else:
+            last_c = c
+            continue
+        break
+        #######################
+      #while 1:
+    except KeyboardInterrupt:
+        print_err(f'try_factor_pint__near_sqrtNmulCmulZpow_({N}):[last_c ={last_c}][log2(N) ~= {lbN}][ground_scale == {ground_scale}]')
+        raise
+    #try:
+    if done:
+        assert 1 < n0 <= n1 < N == n0*n1, (N, (n0, n1), n0*n1)
+        return (n0, n1) if not with_position6ok else ((n0, n1), position)
+    return None
 
 
 __all__

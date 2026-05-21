@@ -1,8 +1,22 @@
 #__all__:goto
 #@20260510:++优化冫复用小对象
 #.e ../../python3_src/seed/math/__CMDS__.txt
-#%s/seed[.]math[.]prime_gens[.]OverflowError__Miller_Rabin_primality_test__A014233/seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233/g
-r'''[[[
+#%s/seed[.]math[.]prime_gens[.]OverflowError__Miller_Rabin_primality_test__A014233/seed.math.primality_test.errors.OverflowError__Miller_Rabin_primality_test__A014233/g
+if 1:
+    # !! doctest_cmd => "warnings" instead of "raise"
+    import warnings
+    warnings.warn('too slow to be imported, import directly from original module instead', DeprecationWarning)
+
+
+
+
+
+
+
+
+
+# !! no more first stmt
+__doc__ = r'''[[[
 e ../../python3_src/seed/math/prime_gens.py
 view ../../python3_src/seed/math/prime_gens.py.note.txt
 
@@ -98,6 +112,10 @@ from seed.math.prime_gens import is_strong_probable_prime__basis_, is_prime__usi
 
 
 
+>>> 'warnings'
+doctest_cmd on action
+
+>>> from seed.iters.apply_may_args4islice_ import list_islice_, show_islice_, stable_show_islice_, stable_list_islice_
 
 >>> list_islice_(9, reversed_iter_probable_primes__lt_(7))
 [5, 3, 2]
@@ -142,7 +160,7 @@ py_adhoc_call   seed.math.prime_gens   @_find_mismatch4diff_cases4is_prime__trib
 
 
 
-#>>> from itertools import islice
+>>> from itertools import islice
 >>> raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_(200, to_cache_only_busy_primes_plus_next=False, may_primes=None)
 [(2, 2), (3, 3), (4, 2), (5, 5), (6, 2), (7, 7), (8, 2), (9, 3), (10, 2), (11, 11), (12, 2), (13, 13), (14, 2), (15, 3), (16, 2), (17, 17), (18, 2), (19, 19), (20, 2), (21, 3), (22, 2), (23, 23), (24, 2), (25, 5), (26, 2), (27, 3), (28, 2), (29, 29), (30, 2), (31, 31), (32, 2), (33, 3), (34, 2), (35, 5), (36, 2), (37, 37), (38, 2), (39, 3), (40, 2), (41, 41), (42, 2), (43, 43), (44, 2), (45, 3), (46, 2), (47, 47), (48, 2), (49, 7), (50, 2), (51, 3), (52, 2), (53, 53), (54, 2), (55, 5), (56, 2), (57, 3), (58, 2), (59, 59), (60, 2), (61, 61), (62, 2), (63, 3), (64, 2), (65, 5), (66, 2), (67, 67), (68, 2), (69, 3), (70, 2), (71, 71), (72, 2), (73, 73), (74, 2), (75, 3), (76, 2), (77, 7), (78, 2), (79, 79), (80, 2), (81, 3), (82, 2), (83, 83), (84, 2), (85, 5), (86, 2), (87, 3), (88, 2), (89, 89), (90, 2), (91, 7), (92, 2), (93, 3), (94, 2), (95, 5), (96, 2), (97, 97), (98, 2), (99, 3), (100, 2), (101, 101), (102, 2), (103, 103), (104, 2), (105, 3), (106, 2), (107, 107), (108, 2), (109, 109), (110, 2), (111, 3), (112, 2), (113, 113), (114, 2), (115, 5), (116, 2), (117, 3), (118, 2), (119, 7), (120, 2), (121, 11), (122, 2), (123, 3), (124, 2), (125, 5), (126, 2), (127, 127), (128, 2), (129, 3), (130, 2), (131, 131), (132, 2), (133, 7), (134, 2), (135, 3), (136, 2), (137, 137), (138, 2), (139, 139), (140, 2), (141, 3), (142, 2), (143, 11), (144, 2), (145, 5), (146, 2), (147, 3), (148, 2), (149, 149), (150, 2), (151, 151), (152, 2), (153, 3), (154, 2), (155, 5), (156, 2), (157, 157), (158, 2), (159, 3), (160, 2), (161, 7), (162, 2), (163, 163), (164, 2), (165, 3), (166, 2), (167, 167), (168, 2), (169, 13), (170, 2), (171, 3), (172, 2), (173, 173), (174, 2), (175, 5), (176, 2), (177, 3), (178, 2), (179, 179), (180, 2), (181, 181), (182, 2), (183, 3), (184, 2), (185, 5), (186, 2), (187, 11), (188, 2), (189, 3), (190, 2), (191, 191), (192, 2), (193, 193), (194, 2), (195, 3), (196, 2), (197, 197), (198, 2), (199, 199), (200, 2), (201, 3)]
 
@@ -1109,6 +1127,7 @@ True
 >>> prime_gen.get_or_mk_global_singleton_() is lazy_prime_seq
 True
 >>> prime_gen.remove_global_singleton_()
+>>> from weakref import ref as _ref
 >>> w = _ref(lazy_prime_seq)
 >>> lazy_prime_seq is w()
 True
@@ -1162,8 +1181,8 @@ True
 #@20250419
 #新增这两行测试移至此处，以避免影响以上测试:
 >>> __ws = hold_all_weakrefs4caches_()
->>> __ws.index(prime_gen.get_or_mk_lazy_prime_seq_())
-4
+>>> __ws.index(prime_gen.get_or_mk_lazy_prime_seq_()) # original -> 4
+0
 
 ######################
 
@@ -1333,7 +1352,7 @@ False
 >>> is_prime__le_pow2_81_(is_prime__le_pow2_81_.upperbound)
 Traceback (most recent call last):
     ...
-seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 3317044064679887385962123]
+seed.math.primality_test.errors.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 3317044064679887385962123]
 >>> pp = next_probable_prime__ge_(2**82) -2**82
 >>> pp
 9
@@ -1343,11 +1362,11 @@ seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_prima
 >>> is_prime__le_pow2_81_(2**82+pp)
 Traceback (most recent call last):
     ...
-seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824713]
+seed.math.primality_test.errors.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824713]
 >>> is_prime__le_pow2_81_(2**82-mm)
 Traceback (most recent call last):
     ...
-seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824647]
+seed.math.primality_test.errors.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound <= n == 4835703278458516698824647]
 >>> is_prime__le_pow2_81_(2**83-1)
 False
 
@@ -1362,7 +1381,7 @@ True
 >>> 2**82 -prev_may_prime__le_pow2_81__lt_(2**82)
 Traceback (most recent call last):
     ...
-seed.math.primality_test.strong_probable_prime.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound < end == 4835703278458516698824704]
+seed.math.primality_test.errors.OverflowError__Miller_Rabin_primality_test__A014233: [3317044064679887385962123 == upperbound < end == 4835703278458516698824704]
 >>> 2**81 -prev_may_prime__le_pow2_81__lt_(2**81)
 51
 >>> prev_may_prime__le_pow2_81__lt_(2) is None
@@ -2472,25 +2491,6 @@ __all__
 
 ___begin_mark_of_excluded_global_names__0___ = ...
 
-from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
-with mk_ctx4lazy_import4funcs_(__name__, 'ref:_ref,count:_count'):
-    #from operator import __index__
-    from weakref import ref as _ref
-    from itertools import count as _count
-    from itertools import islice, chain
-
-    from seed.iters.apply_may_args4islice_ import list_islice_, show_islice_, stable_show_islice_, stable_list_islice_
-
-    from seed.debug.print_err import print_err
-    from seed.tiny_.funcs import snd
-    from seed.tiny_.check import check_type_is, check_int_ge
-
-
-
-    from seed.types.LazySeq import LazySeq
-
-
-
 
 
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -2510,153 +2510,41 @@ def __():
         return repr_helper(sf, *sf.args)
     #]]]'''#'''
 
-if 1:from seed.math.prime_sieve.sieve_lt import _iter__lt_
+if 0:from seed.math.prime_sieve.sieve_lt import _iter__lt_
 
 from seed.math.prime_sieve.sieve_lt import list_all_strict_sorted_primes__lt_, sieve4uint2is_prime__lt_
 from seed.math.prime_sieve.sieve_lt import iter_all_strict_sorted_primes_
 from seed.math.prime_sieve.sieve_lt import raw_list_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes_, raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_, raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_
 
-class _IBaseGlobalControl4LazySeq:
-    #_may_singleton = None
-    #_may_wref_singleton = None
-
-    #@abstractmethod
-    def _mk_new_lazy_seq_(sf, /):
-        raise 000
-    def __new__(cls, /):
-        #if not cls is __class__: raise TypeError
-        while 1:
-            try:
-                return cls._sf
-            except AttributeError:
-                pass
-            sf = cls._sf = object.__new__(cls)
-            sf._may_singleton = None
-            sf._may_wref_singleton = None
-    def remove_global_singleton_(sf, /):
-        'del strong ref to the global lazy_seq if exist'
-        sf._may_singleton = None
-        #hold sf._may_wref_singleton
-    def get_or_mk_global_singleton_(sf, /, *, not_set_global=False):
-        '-> LazySeq<x> # get if weak ref exist else mk new lazy_seq (store as strong ref unless not_set_global=True)'
-        while 1:
-            m = sf._may_singleton
-            if not m is None:
-                lazy_seq = m
-                return lazy_seq
-            while 1:
-                w = sf._may_wref_singleton
-                if not (w is None or w() is None):
-                    lazy_seq = w()
-                    break
-                #weak_ref = w
-                #if no_make: return None
-                #rebuild:
-                lazy_seq = sf._mk_new_lazy_seq_()
-                sf._may_wref_singleton = _ref(lazy_seq)
-            #end-inner-while 1:
-            assert lazy_seq is not None
-            if not_set_global:
-                return lazy_seq
-            sf._may_singleton = lazy_seq
-    def get_or_mk_lazy_seq_(sf, /):
-        '-> LazySeq<x> # get if weak ref exist else mk new lazy_seq (not store as strong ref)'
-        '-> LazySeq<x>'
-        lazy_seq = sf.get_or_mk_global_singleton_(not_set_global=True)
-        return lazy_seq
-    def __call__(sf, /):
-        '-> LazySeq<x> # === get_or_mk_lazy_seq_'
-        return sf.get_or_mk_lazy_seq_()
-    def iter__sized_(sf, sz, /):
-        '-> Iter<,>{len=sz}'
-        return islice(iter(sf), sz)
-    def __bool__(sf, /):
-        return True
-    #__bool__ = ...
-    __len__ = ...
-    __contains__ = ...
-
-    def __iter__(sf, /):
-        '-> Iter<x>{len=+oo}'
-        return iter(sf[...]) #del lazy_seq, hold LazyList tail only
-        return iter(sf()) # hold lazy_seq
-    def __getitem__(sf, i_or_sl_or_3dot, /):
-        'i -> x; i:j -> [x]; ... -> LazyList<x>'
-        if i_or_sl_or_3dot is ...:
-            return sf().the_lazylist
-        i_or_sl = i_or_sl_or_3dot
-        return sf()[i_or_sl]
-        if type(i_or_sl) is slice:
-            sl = i_or_sl
-            return sf()[sl]
-        if type(i_or_sl) is int:
-            i = i_or_sl
-            return sf()[i]
-        raise TypeError(type(i_or_sl))
-class _IBaseGlobalControl4PrimeGenerator(_IBaseGlobalControl4LazySeq):
-    #_may_singleton = None
-    #_may_wref_singleton = None
-
-    #@abstractmethod
-    #def _mk_new_lazy_seq_(sf, /):
-    ...
-
-    def get_or_mk_lazy_prime_seq_(sf, /):
-        '-> LazySeq<prime> # get if weak ref exist else mk new lazy_prime_seq (not store as strong ref)'
-        '-> LazySeq<prime>'
-        lazy_seq = sf.get_or_mk_lazy_seq_()
-        return lazy_seq
-    def iter__lt_(sf, end, /):
-        '-> Iter<prime{<end}>'
-        return _iter__lt_(end, iter(sf))
-    def iter__ge_(sf, begin, /):
-        '-> Iter<prime{>=begin}>'
-        check_type_is(int, begin)
-        if begin <= 2:
-            return iter(sf)
-        lazylist = sf[...]
-        it = lazylist.iter__hardwork(to_iter_pairs=True)
-        for prime, tail in it:
-            if not prime < begin:
-                break
-            lazylist = tail # del lazylist to free memory
-        return iter(lazylist)
-    def __bool__(sf, /):
-        return True
-    __len__ = ...
-    def __contains__(sf, x, /):
-        'using is_prime__using_A014233_/is_prime__tribool_'
-        check_type_is(int, x)
-        #r = is_prime__tribool_(x, case=Case4is_prime__tribool_.II_prime_basis_gtN)
-        r = is_prime__tribool_(x, case=None)
-        if r is ...:
-            raise Bool5TriboolFail__probably_prime(x)
-        return r
-
-class GlobalControl4PrimeGenerator__Eratosthenes_sieve(_IBaseGlobalControl4PrimeGenerator):
-    'using Eratosthenes_sieve'
-    #@override
-    def _mk_new_lazy_seq_(sf, /):
-        it = raw_iter_all_strict_sorted_primes_(to_cache_only_busy_primes_plus_next=True, may_primes=None)
-        lazy_seq = LazySeq(it)
-        return lazy_seq
-
-class GlobalControl4PrimeGenerator__Miller_Rabin_primality_test(_IBaseGlobalControl4PrimeGenerator):
-    'using Miller_Rabin_primality_test; not inf long, halt between [2**81..<2**82]'
-    #@override
-    def _mk_new_lazy_seq_(sf, /):
-        it = prime_filter__using_primality_test_(_count(2))
-        lazy_seq = LazySeq(it)
-        return lazy_seq
 
 
+from seed.math.primality_test.errors import Error, IsPrimeError, PrimalityUndeterminedError, OverflowError__Miller_Rabin_primality_test__A014233, Bool5TriboolFail__probably_prime
 
-prime_gen__Eratosthenes_sieve = GlobalControl4PrimeGenerator__Eratosthenes_sieve()
-prime_gen__Miller_Rabin_primality_test = GlobalControl4PrimeGenerator__Miller_Rabin_primality_test()
-prime_gen = prime_gen__Eratosthenes_sieve
+from seed.math.prime_gens__7objs import hold_all_weakrefs4caches_, prime_gen, prime_gen__Miller_Rabin_primality_test, min_prime_factor_gen, all_prime_factors_gen
 
-
-
+from seed.math.prime_gens__7objs import (
+hold_all_weakrefs4caches_
+,   prime_gen
+,   prime_gen__Miller_Rabin_primality_test
+,   min_prime_factor_gen
+,   all_prime_factors_gen
+#
+#
+,GlobalControl4PrimeGenerator__Eratosthenes_sieve
+,   prime_gen__Eratosthenes_sieve
+,   prime_gen
+#
+,GlobalControl4PrimeGenerator__Miller_Rabin_primality_test
+,   prime_gen__Miller_Rabin_primality_test
+#
+,GlobalControl4MinPrimeFactorGenerator__Eratosthenes_sieve
+,   min_prime_factor_gen__Eratosthenes_sieve
+,   min_prime_factor_gen
+#
+,GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve
+,   all_prime_factors_gen__Eratosthenes_sieve
+,   all_prime_factors_gen
+)
 
 from seed.math.primality_test.strong_probable_prime import (
 Error
@@ -2764,7 +2652,6 @@ Error
 )
 
 
-class Bool5TriboolFail__probably_prime(PrimalityUndeterminedError):pass
 
 
 
@@ -2808,59 +2695,9 @@ reversed_iter_pseudoprimes__lt_
 iter_pairwise_diff_pseudoprimes__ge_
 
 
-#class StableReprDict(dict):
-#    def __repr__(sf, /):
-#        return stable_repr(dict(sf))
 
 
 
-
-class GlobalControl4MinPrimeFactorGenerator__Eratosthenes_sieve(_IBaseGlobalControl4LazySeq):
-    'using Eratosthenes_sieve'
-    #see:GlobalControl4PrimeGenerator__Eratosthenes_sieve
-    #@override
-    def _mk_new_lazy_seq_(sf, /):
-        it = raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(to_cache_only_busy_primes_plus_next=True, may_primes=None)
-        it = map(snd, it)
-        it = chain([None, None], it)
-        lazy_seq = LazySeq(it)
-        return lazy_seq
-    def __bool__(sf, /):
-        return True
-    def get_or_mk_lazy_min_prime_factor_seq_(sf, /):
-        '-> LazySeq<may min_prime_factor> # get if weak ref exist else mk new lazy_seq (not store as strong ref)'
-        lazy_seq = sf.get_or_mk_lazy_seq_()
-        return lazy_seq
-min_prime_factor_gen__Eratosthenes_sieve = GlobalControl4MinPrimeFactorGenerator__Eratosthenes_sieve()
-min_prime_factor_gen = min_prime_factor_gen__Eratosthenes_sieve
-
-
-class GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve(_IBaseGlobalControl4LazySeq):
-    'using Eratosthenes_sieve'
-    #see:GlobalControl4MinPrimeFactorGenerator__Eratosthenes_sieve
-    #@override
-    def _mk_new_lazy_seq_(sf, /):
-        def u2ps_(u, /):
-            #优化冫复用小对象
-            #assert sf() is lazy_seq, (sf(), lazy_seq)
-            ps4u = lazy_seq[u]
-            #print_err(u, ps4u, sep=':')
-            return ps4u
-
-        it = raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(to_cache_only_busy_primes_plus_next=True, may_primes=None, to_export_all_prime_factors=True, may_uint2all_prime_factors_=u2ps_)
-            #bug:why fail to pass u2ps_? bug@LazySeq fixed
-        it = map(snd, it)
-        it = chain([None, ()], it)
-        lazy_seq = LazySeq(it)
-        return lazy_seq
-    def __bool__(sf, /):
-        return True
-    def get_or_mk_lazy_all_prime_factors_seq_(sf, /):
-        '-> LazySeq<may all_prime_factors> # get if weak ref exist else mk new lazy_seq (not store as strong ref)'
-        lazy_seq = sf.get_or_mk_lazy_seq_()
-        return lazy_seq
-all_prime_factors_gen__Eratosthenes_sieve = GlobalControl4AllPrimeFactorsGenerator__Eratosthenes_sieve()
-all_prime_factors_gen = all_prime_factors_gen__Eratosthenes_sieve
 
 
 
@@ -2899,7 +2736,6 @@ from seed.math.prime_sieve.sieve_lt import check_offsetted_uint2may_prime_factor
 
 
 
-#class
 
 
 
@@ -2920,53 +2756,7 @@ from seed.math.prime_sieve.sieve_lt import check_offsetted_uint2may_prime_factor
 
 
 
-
-
-
-
-
-######################
-#@20250419
-def _filter4globals_(is_ok_, /):
-    nms = []
-    xs = []
-    for nm, x in sorted(globals().items()):
-        if not is_ok_(nm, x):
-            continue
-        nms.append(nm)
-        xs.append(x)
-    nms = tuple(nms)
-    xs = tuple(xs)
-    return (nms, xs)
-_IBaseGlobalControl4LazySeq.get_or_mk_lazy_seq_
-def _prepare4hold_all_weakrefs4caches_():
-    'all:instance:_IBaseGlobalControl4LazySeq'
-    def is_ok_(nm, x, /):
-        return isinstance(x, _IBaseGlobalControl4LazySeq)
-    (nms, xs) = _filter4globals_(is_ok_)
-    for x in xs:
-        x.get_or_mk_lazy_seq_()
-    return (nms, xs)
-_data4hold_all_weakrefs4caches_ = _prepare4hold_all_weakrefs4caches_()
-assert (__:='\n'.join(_data4hold_all_weakrefs4caches_[0])) == (r'''
-all_prime_factors_gen
-all_prime_factors_gen__Eratosthenes_sieve
-min_prime_factor_gen
-min_prime_factor_gen__Eratosthenes_sieve
-prime_gen
-prime_gen__Eratosthenes_sieve
-prime_gen__Miller_Rabin_primality_test
-'''.strip()), __
-('all_prime_factors_gen', 'all_prime_factors_gen__Eratosthenes_sieve', 'min_prime_factor_gen', 'min_prime_factor_gen__Eratosthenes_sieve', 'prime_gen', 'prime_gen__Eratosthenes_sieve', 'prime_gen__Miller_Rabin_primality_test')
-assert (__:=len(_data4hold_all_weakrefs4caches_[0])) == 7, __
-#@20250419
-def hold_all_weakrefs4caches_():
-    '-> tuple<weakref<lazy_seq>> # to replace 『lazy_prime_seq = prime_gen.get_or_mk_lazy_prime_seq_()』' \
-    ' # all:instance:_IBaseGlobalControl4LazySeq.get_or_mk_lazy_seq_'
-    (nms, xs) = _data4hold_all_weakrefs4caches_
-    ws = tuple(x.get_or_mk_lazy_seq_() for x in xs)
-    return ws
-hold_all_weakrefs4caches_()
+if 1:from seed.math.prime_gens__7objs import _filter4globals_
 
 def _helper4renaming_probable_prime_():
     r'''[[[
@@ -2983,10 +2773,10 @@ def _helper4renaming_probable_prime_():
     #]]]'''#'''
     def is_ok_(nm, x, /):
         return 'pseudo' in nm
-    (nms, xs) = _filter4globals_(is_ok_)
+    (nms, xs) = _filter4globals_(is_ok_, globals())
     def is_ok_(nm, x, /):
         return 'pseudoprime' in nm
-    (_nms, _xs) = _filter4globals_(is_ok_)
+    (_nms, _xs) = _filter4globals_(is_ok_, globals())
     assert _nms == nms, set(nms)^set(_nms)
     return (nms, xs)
 44444; _helper4renaming_pseudoprime_ = _helper4renaming_probable_prime_  # backward_compatible_for_renaming_pseudoprime_as_probable_prime
@@ -3005,7 +2795,7 @@ iter_pseudoprimes__inside_
 next_pseudoprime__ge_
 prev_may_pseudoprime__lt_
 reversed_iter_pseudoprimes__lt_
-'''.strip()), __
+'''.strip()), __#repr(__)
 #_is_strong_pseudoprime_
 #_iter_pseudoprimes__inside_
 #_kw__is_strong_pseudoprime__basis_
@@ -3163,3 +2953,10 @@ e ../../python3_src/seed/math/primality_test/Jacobi_sums_test/selection_of_auxil
 ]]]'''#'''
 
 from seed.math.prime_gens import *
+if 0:
+  # !! doctest_cmd
+  if not __name__ == '__main__':
+    raise DeprecationWarning('too slow to be imported, import directly from original module instead')
+if not __name__ == '__main__':
+    import warnings
+    warnings.warn('too slow to be imported, import directly from original module instead', DeprecationWarning)

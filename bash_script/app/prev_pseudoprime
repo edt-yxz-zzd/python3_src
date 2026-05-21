@@ -1,15 +1,4 @@
-# prev_pseudoprime
-#
-# deprecate:from seed.math.prime_gens import detect_strong_pseudoprime__not_waste_too_much_time_
-# deprecate:from seed.math.prime_gens import next_pseudoprime__ge_, prev_may_pseudoprime__lt_
-# #=>:from seed.math.prime_gens import next_probable_prime__ge_, prev_may_probable_prime__lt_
-#
-# from seed.math.prime_gens import is_prime__le_pow2_81_
-# from seed.math.prime_gens import next_may_prime__le_pow2_81__ge_, prev_may_prime__lt_
-#
 # strong probable-prime (SPRP)
-#
-#
 echo >&2 'deprecate:wrong naming:use "prev_probable_prime" instead'
-py_adhoc_call   seed.math.prime_gens   @prev_may_probable_prime__lt_  "$@"
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @prev_may_probable_prime__lt_  "$@"
 #deprecate:py_adhoc_call   seed.math.prime_gens   @prev_may_pseudoprime__lt_  "$@"

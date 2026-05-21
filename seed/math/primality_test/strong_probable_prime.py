@@ -153,6 +153,10 @@ with mk_ctx4lazy_import4funcs_(__name__, 'count:_count'):
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
+from seed.math.primality_test.errors import Error, IsPrimeError, PrimalityUndeterminedError, OverflowError__Miller_Rabin_primality_test__A014233
+    # !! except OverflowError__Miller_Rabin_primality_test__A014233:
+    # => not lazy import
+    # => add to __all__ ok
 
 
 
@@ -200,9 +204,6 @@ if 0:
 
 
 
-class Error(Exception):pass
-class PrimalityUndeterminedError(Error):pass
-class OverflowError__Miller_Rabin_primality_test__A014233(PrimalityUndeterminedError):pass
 
 def _prepare4is_prime__tribool_(prime_basis, n, /, *, skip_check, _not_seq=False):
     r'''[[[
@@ -660,7 +661,6 @@ assert is_prime__using_A014233_.upperbound - A014233[-1] == 142
 
 
 
-class IsPrimeError(Error):pass
 def iter_until_found_min_prime_witness4odd_composite_(odd_composite, /):
     'odd_composite/int{odd,>=9} -> Iter (whether_sprp, prime_idx, prime_base){if not whether_sprp then prime_base is min_prime_witness) | ^IsPrimeError # [[whether_sprp == is_strong_probable_prime_(prime_base, odd_composite)][prime_gen[prime_idx] == prime_base][not is_strong_probable_prime_(min_prime_witness, odd_composite)]]'
     #NOTE: may have [min_witness_base < min_prime_witness]

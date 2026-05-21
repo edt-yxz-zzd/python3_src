@@ -1,2 +1,2 @@
 
-py_adhoc_call   seed.math.prime_gens   @next_probable_prime__ge_  "$@"
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_probable_prime__ge_  "$@"

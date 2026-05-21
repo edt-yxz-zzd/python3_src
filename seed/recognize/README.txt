@@ -6,7 +6,7 @@ e ../../python3_src/seed/recognize/README.txt
 @20260521
 泛用型:
 ===
-中文标识
+中文标识+支持运算符
 view ../../python3_src/seed/recognize/toy/simple_recognizer.py
 view ../../python3_src/seed/recognize/toy/simple_recognizer_/test.py
 py -m nn_ns.app.doctest_cmd seed.recognize.toy.simple_recognizer_.test!
@@ -24,7 +24,7 @@ view ../../python3_src/seed/recognize/rgnr/rgnrs/SimpleRecognizer.py
 
 
 ===
-文本:显式文本范围+未步进型失败可容忍
+文本:显式文本范围+未步进型失败可容忍+识别器自带大量构造器{允许对象式构造而不只函数式构造}
 view ../../python3_src/seed/recognize/text_recognizer/ITextRecognizer.py
 view ../../python3_src/seed/recognize/text_recognizer/ITextRecognizer__doctest.py
 py -m nn_ns.app.doctest_cmd seed.recognize.text_recognizer.ITextRecognizer__doctest:__doc__ -ht # -ff -df
@@ -41,7 +41,7 @@ py -m nn_ns.app.doctest_cmd seed.recognize.tokenizer_.Tokenizer4Text:__doc__ -ht
 
 ===
 xxx:慢！
-输入快照+半途声明步进{返回父部件外部解锁}
+输入快照+半途声明步进{迭代器中途返回父部件外部解锁}
 view ../../python3_src/seed/recognize/recognizer_LLoo_/IRecognizerLLoo.py
 view ../../python3_src/seed/recognize/recognizer_LLoo_/Factory4RecognizerLLoo.py
 view ../../python3_src/seed/recognize/recognizer_LLoo_/_test.py
