@@ -1,3 +1,1 @@
-
-py_adhoc_call   seed.math.prime_gens   ,reversed_iter_probable_primes__lt_  "$@"
-#from seed.math.prime_gens import iter_probable_primes__ge_, reversed_iter_probable_primes__lt_, iter_primes__le_pow2_81__ge_, reversed_iter_primes__le_pow2_81__lt_
+py_adhoc_call   seed.math.primality_test.strong_probable_prime   ,reversed_iter_probable_primes__lt_  "$@"

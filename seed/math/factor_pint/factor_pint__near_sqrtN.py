@@ -763,10 +763,14 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @_try_factor_pin
 py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**13)'
     None
 
+>13
+: {8191: 1}
+>65
+: {31: 1, 8191: 1, 145295143558111: 1}
 py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='(-1+2**65)'
     ((31, 1190112520884487201), (False, (11, 31)))
 py_adhoc_call   seed.math.factor_pint.factor_pint__near_sqrtN   @try_factor_pint__near_sqrtNmulCmulZpow_ +with_position6ok   ='1190112520884487201'
-    None
+    ((8191, 145295143558111), (False, (1028, 8191)))
 
 view ../../python3_src/nn_ns/math_nn/factor_Mersenne_number_into_prime2exp.py.cached.txt
 >57

@@ -56,7 +56,7 @@ __all__ = r'''
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.math.prime_gens import is_strong_pseudoprime__basis_, is_prime__using_A014233_, is_prime__le_pow2_81_, is_prime__tribool_, Case4is_prime__tribool_
+from seed.math.primality_test.strong_probable_prime import is_prime__using_A014233_
 _max1 = is_prime__using_A014233_.upperbound
 ___end_mark_of_excluded_global_names__0___ = ...
 

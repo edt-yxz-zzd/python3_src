@@ -6,5 +6,6 @@ if [[ $# -ne 1 ]] ; then
   exit 1
 fi
 
-py_adhoc_call   seed.math.prime_gens   ,raw_iter_all_strict_sorted_primes__lt_  -to_cache_only_busy_primes_plus_next --may_primes=None  ="1+(${1})"
+#py_adhoc_call   seed.math.prime_gens   ,raw_iter_all_strict_sorted_primes__lt_  -to_cache_only_busy_primes_plus_next --may_primes=None  ="1+(${1})"
+py_adhoc_call   seed.math.prime_sieve.sieve_ge_le   ,iter_sieve4primes_ge_lt_  =0  ="1+(${1})"
 

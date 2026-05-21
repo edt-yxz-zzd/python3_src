@@ -1,12 +1,13 @@
 #__all__:goto
+#DONOT_RAISE_DeprecationWarning:goto
 #@20260510:++优化冫复用小对象
 #.e ../../python3_src/seed/math/__CMDS__.txt
 #%s/seed[.]math[.]prime_gens[.]OverflowError__Miller_Rabin_primality_test__A014233/seed.math.primality_test.errors.OverflowError__Miller_Rabin_primality_test__A014233/g
-if 1:
+def __():
     # !! doctest_cmd => "warnings" instead of "raise"
     import warnings
     warnings.warn('too slow to be imported, import directly from original module instead', DeprecationWarning)
-
+__()
 
 
 
@@ -80,6 +81,11 @@ rename:
 __all__
 
 seed.math.prime_gens
+DONOT_RAISE_DeprecationWarning='[seed.math.prime_gens]'   py -m seed.math.prime_gens
+DONOT_RAISE_DeprecationWarning='[seed.math.prime_gens]'   py -m nn_ns.app.debug_cmd   seed.math.prime_gens -x
+DONOT_RAISE_DeprecationWarning='[seed.math.prime_gens]'   py -m nn_ns.app.doctest_cmd seed.math.prime_gens:__doc__ -ht # -ff
+
+
 py -m seed.math.prime_gens
 py -m nn_ns.app.debug_cmd   seed.math.prime_gens -x
 py -m nn_ns.app.doctest_cmd seed.math.prime_gens:__doc__ -ht #  -ff -v -df
@@ -111,9 +117,6 @@ from seed.math.prime_gens import is_strong_probable_prime__basis_, is_prime__usi
 
 
 
-
->>> 'warnings'
-doctest_cmd on action
 
 >>> from seed.iters.apply_may_args4islice_ import list_islice_, show_islice_, stable_show_islice_, stable_list_islice_
 
@@ -2128,6 +2131,9 @@ py_adhoc_call  seed.math.prime_gens   @_test4mk_offsetted_u2num_bits7remain_
 
 
 
+>>> 'warnings'
+doctest_cmd on action
+
 #]]]'''
 _doc4tmp_test = r'''
 >>> 
@@ -2953,10 +2959,17 @@ e ../../python3_src/seed/math/primality_test/Jacobi_sums_test/selection_of_auxil
 ]]]'''#'''
 
 from seed.math.prime_gens import *
-if 0:
-  # !! doctest_cmd
-  if not __name__ == '__main__':
-    raise DeprecationWarning('too slow to be imported, import directly from original module instead')
+def __():
+    import doctest
+    doctest.testmod()
+if __name__ == '__main__':
+    __()
+
+def __():
+    # !! doctest_cmd
+    import os
+    if not f'[{__name__}]' in os.environ.get('DONOT_RAISE_DeprecationWarning', ''):
+        raise DeprecationWarning('too slow to be imported, import directly from original module instead')
 if not __name__ == '__main__':
-    import warnings
-    warnings.warn('too slow to be imported, import directly from original module instead', DeprecationWarning)
+    __()
+

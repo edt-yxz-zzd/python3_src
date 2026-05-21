@@ -29,5 +29,6 @@ fi
 #.    ;;
 #.esac
 
-py_adhoc_call   seed.math.prime_gens   ,"${s}"raw_iter_all_strict_sorted_primes_  -to_cache_only_busy_primes_plus_next --may_primes=None
+#py_adhoc_call   seed.math.prime_gens   ,"${s}"raw_iter_all_strict_sorted_primes_  -to_cache_only_busy_primes_plus_next --may_primes=None
+py_adhoc_call   seed.math.prime_sieve.sieve_ge_le   ,"${s}"iter_sieve4primes_ge_  =0
 
