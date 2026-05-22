@@ -1,4 +1,0 @@
-# strong probable-prime (SPRP)
-echo >&2 'deprecate:wrong naming:use "prev_probable_prime" instead'
-py_adhoc_call   seed.math.primality_test.strong_probable_prime   @prev_may_probable_prime__lt_  "$@"
-#deprecate:py_adhoc_call   seed.math.prime_gens   @prev_may_pseudoprime__lt_  "$@"

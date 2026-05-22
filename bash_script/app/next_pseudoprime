@@ -1,2 +1,0 @@
-echo >&2 'deprecate:wrong naming:use "next_probable_prime" instead'
-py_adhoc_call   seed.math.primality_test.strong_probable_prime   @next_probable_prime__ge_  "$@"
