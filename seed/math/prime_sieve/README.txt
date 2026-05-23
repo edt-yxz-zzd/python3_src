@@ -1,5 +1,20 @@
 
 e ../../python3_src/seed/math/prime_sieve/README.txt
+[[
+main_exports:
+
+PrimeList
+
+iter_primes_
+iter_sieve4primes_ge_lt_
+iter_sieve4prime_factorizations_ge_lt_
+
+list_primes__len_ge_
+list_primes__lt_
+tabulate_may_prime_factorization4uint_lt_
+
+]]
+
 
 
 [[
@@ -15,6 +30,8 @@ view ../../python3_src/seed/math/prime_sieve/sieve_ge_le.py
 ===
 main_exports:
 #筛多次:点输迭代出模式
+    iter_primes_
+
     #kw:reverse,with_interval
     iter_sieve4primes_ge_lt_
         iter_sieve4prime_chunks_ge_lt_
@@ -37,6 +54,7 @@ iter_sieve4prime_chunks_ge_lt_
     reverse_iter_sieve4prime_chunks_lt_
     iter_sieve4primes_ge_lt_
         iter_sieve4primes_ge_
+            iter_primes_===iter_primes__new_ver_
         reverse_iter_sieve4primes_lt_
 
 iter_sieve4prime_factors_chunks_ge_lt_
@@ -84,7 +102,6 @@ tabulate_may_all_prime_factor_lflnkls4uint_lt_
     tabulate_may_all_prime_factors4uint_lt_
 tabulate_may_prime_factorization4uint_lt_
 
-?iter_primes_-->改用:见上面:iter_sieve4primes_ge_
 
 ===
 分类注释:
@@ -111,7 +128,8 @@ tabulate_may_pairs8prime_factorization4uint_lt_
 ===
 #旧版遗存:参数控制输出类型
 #筛多次:点输迭代出模式:从零开始,内部保存平方根数量的小素数用于筛选
-iter_primes_===iter_all_strict_sorted_primes_
+iter_primes__old_ver_===iter_all_strict_sorted_primes_
+    ?iter_primes__old_ver_-->改用:见上面:iter_primes_
   def iter_all_strict_sorted_primes_(*, size=None, end=None, may_primes=None):
 raw_list_all_strict_sorted_primes__lt_
     raw_iter_all_strict_sorted_primes__lt_

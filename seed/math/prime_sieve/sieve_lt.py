@@ -20,9 +20,9 @@ e ../../python3_src/seed/math/prime_gens.py
 '#'; __doc__ = r'#'
 
 list_primes__len_ge_
-list_primes__lt_    list_all_strict_sorted_primes__lt_
+list_primes__lt_        list_all_strict_sorted_primes__lt_
     sieve4uint2is_prime__lt_
-iter_primes_        iter_all_strict_sorted_primes_
+iter_primes__old_ver_   iter_all_strict_sorted_primes_
 raw_list_all_strict_sorted_primes__lt_
     raw_iter_all_strict_sorted_primes__lt_
         raw_iter_all_strict_sorted_primes_
@@ -41,9 +41,9 @@ True
 >>> sieve4uint2is_prime__lt_(20)
 (False, False, True, True, False, True, False, True, False, False, False, True, False, True, False, False, False, True, False, True)
 
->>> iter_primes_ is iter_all_strict_sorted_primes_
+>>> iter_primes__old_ver_ is iter_all_strict_sorted_primes_
 True
->>> [*islice(iter_primes_(), 20)]
+>>> [*islice(iter_primes__old_ver_(), 20)]
 [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 >>> raw_list_all_strict_sorted_primes__lt_(20, **kwds4raw)
 [2, 3, 5, 7, 11, 13, 17, 19]
@@ -112,7 +112,7 @@ __all__ = r'''
 list_primes__len_ge_
 list_primes__lt_    list_all_strict_sorted_primes__lt_
     sieve4uint2is_prime__lt_
-iter_primes_        iter_all_strict_sorted_primes_
+iter_primes__old_ver_        iter_all_strict_sorted_primes_
 raw_list_all_strict_sorted_primes__lt_
     raw_iter_all_strict_sorted_primes__lt_
         raw_iter_all_strict_sorted_primes_
@@ -206,7 +206,7 @@ def iter_all_strict_sorted_primes_(*, size=None, end=None, may_primes=None):
     if not None is size:
         it = islice(it, 0, size)
     return it
-iter_primes_ = iter_all_strict_sorted_primes_
+iter_primes__old_ver_ = iter_all_strict_sorted_primes_
 
 def raw_iter_all_strict_sorted_primes__lt_(end, /, *, to_cache_only_busy_primes_plus_next, may_primes):
     'using Eratosthenes_sieve: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_'
@@ -1059,7 +1059,7 @@ from seed.math.prime_sieve.sieve_lt import list_all_strict_sorted_primes__lt_, s
 from seed.math.prime_sieve.sieve_lt import list_primes__lt_, list_primes__len_ge_
 
 #from seed.math.prime_sieve.sieve_lt import iter_all_strict_sorted_primes_, PrimeList #to_replace:prime_gen
-from seed.math.prime_sieve.sieve_lt import iter_primes_#==iter_all_strict_sorted_primes_ #to_replace:prime_gen
+from seed.math.prime_sieve.sieve_lt import iter_primes__old_ver_#==iter_all_strict_sorted_primes_ #to_replace:prime_gen
 from seed.math.prime_sieve.sieve_lt import raw_list_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes_, raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_, raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_
 
 from seed.math.prime_sieve.sieve_lt import tabulate_may_min_prime_factor4uint_lt_

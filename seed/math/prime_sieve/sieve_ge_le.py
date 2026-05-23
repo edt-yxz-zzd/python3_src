@@ -403,6 +403,10 @@ TypeError: iter_sieve4primes_ge_lt_() got an unexpected keyword argument 'with_u
 [(8, {2: 3}), (7, {7: 1}), (6, {2: 1, 3: 1}), (5, {5: 1}), (4, {2: 2}), (3, {3: 1}), (2, {2: 1}), (1, {}), (0, None)]
 
 
+>>> iter_primes_ is iter_primes__new_ver_
+True
+>>> [*islice(iter_primes_(), 20)]
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
 
 
@@ -411,6 +415,9 @@ TypeError: iter_sieve4primes_ge_lt_() got an unexpected keyword argument 'with_u
 py_adhoc_call   seed.math.prime_sieve.sieve_ge_le   @f
 ]]]'''#'''
 __all__ = r'''
+iter_primes_        iter_primes__new_ver_
+
+
 iter_best_interval5big_interval6args4sieve_interval_
     calc_best_begin5end6args4sieve_interval_
         iter_best_begins5end6args4sieve_interval_
@@ -773,7 +780,7 @@ OverflowError: (34, 'Math result not representable')
 =>:[sqrt(max_u) ~= 3+sqrt(min_u)]
 =>:区间边界序列:可考虑:(map (\n->n**2+3) [3,6,9..])  # 边界值:3*(3*k**2+1):是合数，避免误解
 
-TODO:区间边界序列=>迭代输出一块一块的数据
+DONE:区间边界序列=>迭代输出一块一块的数据
     chunk by chunk
     iter_sieve4prime_chunks_ge_
         iter_sieve4primes_ge_
@@ -914,6 +921,10 @@ def to_std_args4core_sieve_interval__ge_le(min_u, emay_max_u, /):
     else:
         max_u = emay_max_u
     return (min_u, max_u)
+def iter_primes__new_ver_():
+    '-> Iter prime'
+    return iter_sieve4primes_ge_(0)
+iter_primes_ = iter_primes__new_ver_
 def iter_sieve4primes_ge_(min_u, /):
     'min_u/uint -> Iter prime{>=min_u}'
     return iter_sieve4primes_ge_lt_(min_u, None, reverse=False)
@@ -1329,6 +1340,7 @@ from seed.math.prime_sieve.sieve_ge_le import calc_min_end5begin6args4sieve_inte
 from seed.math.prime_sieve.sieve_ge_le import check_args4core_sieve_interval__ge_le, check_args4sieve_interval__ge_lt
 from seed.math.prime_sieve.sieve_ge_le import to_std_args4core_sieve_interval__ge_le, to_std_args4sieve_interval__ge_lt
 
+from seed.math.prime_sieve.sieve_ge_le import iter_primes_#===iter_primes__new_ver_
 from seed.math.prime_sieve.sieve_ge_le import (
 iter_sieve4prime_chunks_ge_lt_
 ,   iter_sieve4prime_chunks_ge_
