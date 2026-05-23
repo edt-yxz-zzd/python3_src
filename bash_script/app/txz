@@ -43,7 +43,8 @@ work(){
   "$@"
 }
 main_cmd(){
-  work tar -cJvf "${opath}"   -C "${idir}"  $(realpath -m --relative-to="${idir}"  "$@")
+  work tar -cJvf "${opath}"   -C "${idir}"  --  $(realpath -m --relative-to="${idir}"  "$@")
+    # 『--』:<<==『txz $my_tmp/-0tmp.txz   $my_tmp/   -ipaths /sdcard/0my_files/tmp/-0tmp』 will product『-0tmp』
 }
 
 

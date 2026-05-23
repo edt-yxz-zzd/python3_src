@@ -14,7 +14,97 @@ e ../../python3_src/seed/math/prime_gens.py
 ]]
 
 
+
+
+
 '#'; __doc__ = r'#'
+
+list_primes__len_ge_
+list_primes__lt_    list_all_strict_sorted_primes__lt_
+    sieve4uint2is_prime__lt_
+iter_primes_        iter_all_strict_sorted_primes_
+raw_list_all_strict_sorted_primes__lt_
+    raw_iter_all_strict_sorted_primes__lt_
+        raw_iter_all_strict_sorted_primes_
+            raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_
+                raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_
+def raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(*, to_cache_only_busy_primes_plus_next, may_primes, ihead2may_itail=None, offsetted_sieve=None, lmay_offset=None, to_export_all_prime_factors=False, may_uint2all_prime_factors_=None):
+>>> kwds4raw = dict(to_cache_only_busy_primes_plus_next=True, may_primes=None)
+
+
+>>> ps = list_primes__len_ge_(40);assert len(ps) >= 40; ps
+(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229)
+>>> list_primes__lt_ is list_all_strict_sorted_primes__lt_
+True
+>>> list_primes__lt_(20)
+(2, 3, 5, 7, 11, 13, 17, 19)
+>>> sieve4uint2is_prime__lt_(20)
+(False, False, True, True, False, True, False, True, False, False, False, True, False, True, False, False, False, True, False, True)
+
+>>> iter_primes_ is iter_all_strict_sorted_primes_
+True
+>>> [*islice(iter_primes_(), 20)]
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
+>>> raw_list_all_strict_sorted_primes__lt_(20, **kwds4raw)
+[2, 3, 5, 7, 11, 13, 17, 19]
+>>> [*raw_iter_all_strict_sorted_primes__lt_(20, **kwds4raw)]
+[2, 3, 5, 7, 11, 13, 17, 19]
+>>> [*islice(raw_iter_all_strict_sorted_primes_(**kwds4raw), 20)]
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
+>>> [*islice(raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_(**kwds4raw), 20)]
+[(2, 2), (3, 3), (4, 2), (5, 5), (6, 2), (7, 7), (8, 2), (9, 3), (10, 2), (11, 11), (12, 2), (13, 13), (14, 2), (15, 3), (16, 2), (17, 17), (18, 2), (19, 19), (20, 2), (21, 3)]
+>>> raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_(20, **kwds4raw)
+[(2, 2), (3, 3), (4, 2), (5, 5), (6, 2), (7, 7), (8, 2), (9, 3), (10, 2), (11, 11), (12, 2), (13, 13), (14, 2), (15, 3), (16, 2), (17, 17), (18, 2), (19, 19), (20, 2), (21, 3)]
+
+
+
+
+tabulate_may_min_prime_factor4uint_lt_
+
+tabulate_may_all_prime_factors4uint_lt_
+    tabulate_may_all_prime_factor_lflnkls4uint_lt_
+    extract_prime_factorization5uint2may_all_prime_factor_lflnkls_
+
+tabulate_may_pairs8prime_factorization4uint_lt_
+    tabulate_may_prime_factorization4uint_lt_
+                                                tabulate_may_factorization4uint_lt_
+
+
+>>> tabulate_may_min_prime_factor4uint_lt_(20)
+(None, None, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2, 3, 2, 17, 2, 19)
+>>> tabulate_may_all_prime_factors4uint_lt_(20)
+(None, (), (2,), (3,), (2,), (5,), (2, 3), (7,), (2,), (3,), (2, 5), (11,), (2, 3), (13,), (2, 7), (3, 5), (2,), (17,), (2, 3), (19,))
+>>> u2may_lflnkls = tabulate_may_all_prime_factor_lflnkls4uint_lt_(20); u2may_lflnkls
+(None, (), (2, ()), (3, ()), (2, ()), (5, ()), (2, (3, ())), (7, ()), (2, ()), (3, ()), (2, (5, ())), (11, ()), (2, (3, ())), (13, ()), (2, (7, ())), (3, (5, ())), (2, ()), (17, ()), (2, (3, ())), (19, ()))
+>>> extract_prime_factorization5uint2may_all_prime_factor_lflnkls_(u2may_lflnkls, 12)
+{2: 2, 3: 1}
+
+>>> tabulate_may_pairs8prime_factorization4uint_lt_(20)
+(None, (), ((2, 1),), ((3, 1),), ((2, 2),), ((5, 1),), ((2, 1), (3, 1)), ((7, 1),), ((2, 3),), ((3, 2),), ((2, 1), (5, 1)), ((11, 1),), ((2, 2), (3, 1)), ((13, 1),), ((2, 1), (7, 1)), ((3, 1), (5, 1)), ((2, 4),), ((17, 1),), ((2, 1), (3, 2)), ((19, 1),))
+>>> tabulate_may_prime_factorization4uint_lt_(20) #new API
+(None, {}, {2: 1}, {3: 1}, {2: 2}, {5: 1}, {2: 1, 3: 1}, {7: 1}, {2: 3}, {3: 2}, {2: 1, 5: 1}, {11: 1}, {2: 2, 3: 1}, {13: 1}, {2: 1, 7: 1}, {3: 1, 5: 1}, {2: 4}, {17: 1}, {2: 1, 3: 2}, {19: 1})
+>>> tabulate_may_factorization4uint_lt_(20) # old API #deprecated
+(None, {}, {2: 1}, {3: 1}, {2: 2}, {5: 1}, {2: 1, 3: 1}, {7: 1}, {2: 3}, {3: 2}, {2: 1, 5: 1}, {11: 1}, {2: 2, 3: 1}, {13: 1}, {2: 1, 7: 1}, {3: 1, 5: 1}, {2: 4}, {17: 1}, {2: 1, 3: 2}, {19: 1})
+
+
+
+TODO:
+TabulateMinPrimeFactor
+    iter_find_best_wheel_paramss4sieve_lt_
+    find_best_wheel_params4sieve_lt_
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 py_adhoc_call   seed.math.prime_sieve.sieve_lt   @f
 ]]]'''#'''
@@ -22,7 +112,7 @@ __all__ = r'''
 list_primes__len_ge_
 list_primes__lt_    list_all_strict_sorted_primes__lt_
     sieve4uint2is_prime__lt_
-iter_all_strict_sorted_primes_
+iter_primes_        iter_all_strict_sorted_primes_
 raw_list_all_strict_sorted_primes__lt_
     raw_iter_all_strict_sorted_primes__lt_
         raw_iter_all_strict_sorted_primes_
@@ -65,6 +155,7 @@ tabulate_may_all_prime_factors4uint_lt_
 tabulate_may_pairs8prime_factorization4uint_lt_
     tabulate_may_prime_factorization4uint_lt_
                                                 tabulate_may_factorization4uint_lt_
+
 '''.split()#'''
     #deprecated:tabulate_may_factorization4uint_lt_
 __all__
@@ -115,6 +206,7 @@ def iter_all_strict_sorted_primes_(*, size=None, end=None, may_primes=None):
     if not None is size:
         it = islice(it, 0, size)
     return it
+iter_primes_ = iter_all_strict_sorted_primes_
 
 def raw_iter_all_strict_sorted_primes__lt_(end, /, *, to_cache_only_busy_primes_plus_next, may_primes):
     'using Eratosthenes_sieve: end -> (Iter prime){[[last prime < end][next prime >= end]]} #see:raw_iter_all_strict_sorted_primes__using_primality_test__le_pow2_81__lt_'
@@ -967,7 +1059,7 @@ from seed.math.prime_sieve.sieve_lt import list_all_strict_sorted_primes__lt_, s
 from seed.math.prime_sieve.sieve_lt import list_primes__lt_, list_primes__len_ge_
 
 #from seed.math.prime_sieve.sieve_lt import iter_all_strict_sorted_primes_, PrimeList #to_replace:prime_gen
-from seed.math.prime_sieve.sieve_lt import iter_all_strict_sorted_primes_ #to_replace:prime_gen
+from seed.math.prime_sieve.sieve_lt import iter_primes_#==iter_all_strict_sorted_primes_ #to_replace:prime_gen
 from seed.math.prime_sieve.sieve_lt import raw_list_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes__lt_, raw_iter_all_strict_sorted_primes_, raw_iter_all_strict_sorted_ints__ge2__with_min_prime_factor_, raw_list_all_strict_sorted_ints__ge2__with_min_prime_factor__sized_
 
 from seed.math.prime_sieve.sieve_lt import tabulate_may_min_prime_factor4uint_lt_
