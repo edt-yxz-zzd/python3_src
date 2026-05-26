@@ -697,6 +697,8 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
     max1_q = e4odd*k.bit_length()
     dr_ls = vprime_list = _5vprime_list(odd, vprime_list, strict=False, max1_6init=max1_q)
     ps = dr_ls.the_prime_list
+    e4e4odd = -1+e4odd.bit_length()
+    tmp = 2+e4rt//e4e4odd
     for q in ps.iter_find_primes_if_be_1addKmulX__lt_(max1_q, k):
         # [q::prime]
         # [q%k == 1]
@@ -704,6 +706,9 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
         _, r4odd = dr_ls(q) # == odd%q
         if not pow(r4odd, d, q) < 2:
             return None
+        tmp -= -1+q.bit_length()
+        if tmp <= 0:
+            break
 
     it = iter(dr_ls)
     qr_ls = []
