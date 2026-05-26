@@ -14,10 +14,10 @@ py -m nn_ns.app.doctest_cmd seed.math.primes__inductive_generated__almost_smooth
 
 [[
 DONE:允许幂方分解(因为计算量不大):
-    ++allow_pefect_power
+    ++allow_perfect_power
     欤扩展幺链素数扌()-->欤再扩展幺链素数扌()
         rigid4n-->root4rigid4n**er4rgd4n
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
 ]]
 
 
@@ -41,8 +41,8 @@ e ../../python3_src/seed/math/primes__inductive_generated__almost_smooth.py
     [欤幺链素数扌(n) =[def]= [[n >= 3][is_prime(n)][(ez4n,h4n) :=> [ez4n,h4n :: uint][2**(ez4n+1)*(h4n*2+1)+1==n]][odd4n := (h4n*2+1)][[odd4n==1]or欤幺链素数扌(odd4n)]]]
 [n :: int][ps :: {odd_prime}]:
     [欤扩展幺链素数扌(ps;n) =[def]= [[n >= 3][is_prime(n)][(ez4n,h4n) :=> [ez4n,hr4n :: uint][p2ep4n :: {uint:uint}][p2ep4n.keys()==set(ps)][ex := II__p2e_(p2ep4n)][ex*2**(ez4n+1)*(hr4n*2+1)+1==n]][rigid4n := (hr4n*2+1)][[rigid4n==1]or欤扩展幺链素数扌(rigid4n)]]]
-    #++allow_pefect_power
-    [欤再扩展幺链素数扌(ps;n) =[def]= [[n >= 3][is_prime(n)][(ez4n,h4n) :=> [ez4n,hr4n :: uint][p2ep4n :: {uint:uint}][p2ep4n.keys()==set(ps)][ex := II__p2e_(p2ep4n)][ex*2**(ez4n+1)*(hr4n*2+1)+1==n]][rigid4n := (hr4n*2+1)][[rigid4n==1]or[[(root4rigid4n,er4rgd4n) := factor_pint_as_pefect_power_(rigid4n)][欤再扩展幺链素数扌(root4rigid4n)]]]]]
+    #++allow_perfect_power
+    [欤再扩展幺链素数扌(ps;n) =[def]= [[n >= 3][is_prime(n)][(ez4n,h4n) :=> [ez4n,hr4n :: uint][p2ep4n :: {uint:uint}][p2ep4n.keys()==set(ps)][ex := II__p2e_(p2ep4n)][ex*2**(ez4n+1)*(hr4n*2+1)+1==n]][rigid4n := (hr4n*2+1)][[rigid4n==1]or[[(root4rigid4n,er4rgd4n) := factor_pint_as_perfect_power_(rigid4n)][欤再扩展幺链素数扌(root4rigid4n)]]]]]
 ]]
 
 
@@ -2512,7 +2512,7 @@ py_adhoc_call { +lineno }  seed.math.primes__inductive_generated__almost_smooth 
 47:(271, 2)
 48:(277, 4)
 
->>> print_iterable_with_lineno_(50, 枚举冫扩展幺链素数牜归纳生成扌([], allow_pefect_power=True), offset=1) #doctest: +ELLIPSIS
+>>> print_iterable_with_lineno_(50, 枚举冫扩展幺链素数牜归纳生成扌([], allow_perfect_power=True), offset=1) #doctest: +ELLIPSIS
 1:(3, 1)
 2:(5, 1)
 3:(7, 2)
@@ -2558,7 +2558,7 @@ py_adhoc_call { +lineno }  seed.math.primes__inductive_generated__almost_smooth 
 50:(269, 4)
 
 
-e ../../python3_src/seed/math/factor_pint_as_pefect_power_.py
+e ../../python3_src/seed/math/factor_pint_as_perfect_power_.py
     Exception: (517, (11, 47, 1, 3), (47, 1, 3))
         #bug-fixed:@20250104..20250105
 >>> _统计冫枚举冫扩展幺链素数牜归纳生成扌([3, 5], _max1_=2**16)
@@ -2617,7 +2617,7 @@ with mk_ctx4lazy_import4funcs_(__name__, 'count:count_'):
     from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
 
 
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
 
     #枚举冫扩展幺链素数牜归纳生成扌<<==:
     #from collections import deque
@@ -2802,9 +2802,9 @@ def 枚举冫扩展幺链素数牜小于六十四比特扌(ps, /, *, _max1_=_pow
 ######################
 ######################
 def 欤再扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
-    return 欤扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=True)
-def 欤扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False, allow_pefect_power=False):
-    return bool(求冫链长纟扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power))
+    return 欤扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=True)
+def 欤扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False, allow_perfect_power=False):
+    return bool(求冫链长纟扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=allow_perfect_power))
 def _ps2qs_(ps, /, *, _ps_is_qs_):
     if _ps_is_qs_:
         qs = ps
@@ -2818,10 +2818,10 @@ def _ps2qs_(ps, /, *, _ps_is_qs_):
             qs = tuple(sorted({2, *ps}))
         qs
     return qs
-def 求冫链长纟扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False, allow_pefect_power=False):
+def 求冫链长纟扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False, allow_perfect_power=False):
     '-> 链长/uint'
-    check_type_is(bool, allow_pefect_power)
-    if allow_pefect_power:
+    check_type_is(bool, allow_perfect_power)
+    if allow_perfect_power:
         return 求冫链长纟再扩展幺链素数扌(ps, n, _ps_is_qs_=_ps_is_qs_)
 
     check_type_is(bool, _ps_is_qs_)
@@ -2877,7 +2877,7 @@ def 求冫链长纟再扩展幺链素数扌(ps, n, /, *, _ps_is_qs_=False):
 
         rigid4n = unfactored_part4Nmm
         assert rigid4n&1
-        (root4rigid4n, er4rgd4n) = factor_pint_as_pefect_power_(rigid4n) if not rigid4n == 1 else (1, 1)
+        (root4rigid4n, er4rgd4n) = factor_pint_as_perfect_power_(rigid4n) if not rigid4n == 1 else (1, 1)
         stack.append((n, q2e4Nmm, root4rigid4n, er4rgd4n))
         if root4rigid4n == 1:
             break
@@ -2916,14 +2916,14 @@ def _is_SPRP_(n, /):
     return bool(f(n))
 
 def 枚举冫再扩展幺链素数牜加二枚举扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
-    return 枚举冫扩展幺链素数牜加二枚举扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=True)
-def 枚举冫扩展幺链素数牜加二枚举扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
+    return 枚举冫扩展幺链素数牜加二枚举扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=True)
+def 枚举冫扩展幺链素数牜加二枚举扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_perfect_power=False):
     '-> Iter (扩展幺链素数,链长) # [加二枚举==>>[扩展幺链素数:递增]] #加二枚举:太耗时 #归纳生成法能起到修剪无用分支的作用'
     qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
     ns = count_(3, 2) if _max1_ is None else range(3, _max1_, 2)
     for n in ns:
         #if not _is_SPRP_(n):continue
-        L = 求冫链长纟扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_pefect_power=allow_pefect_power)
+        L = 求冫链长纟扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_perfect_power=allow_perfect_power)
         if L:
             yield (n, L)
     if _max1_ is None:raise 000
@@ -2937,10 +2937,10 @@ def 枚举冫扩展幺链素数牜加二枚举扌(ps, /, *, _max1_=None, _ps_is_
 ######################
 ######################
 def 枚举冫再扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
-    return 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=True)
-def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
+    return 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=True)
+def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_perfect_power=False):
     '-> Iter (扩展幺链素数,链长) # [归纳生成==>>[扩展幺链素数:递增]] #加二枚举:太耗时 #归纳生成法能起到修剪无用分支的作用'
-    check_type_is(bool, allow_pefect_power)
+    check_type_is(bool, allow_perfect_power)
     check_type_is(bool, _ps_is_qs_)
 
     qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
@@ -2949,7 +2949,7 @@ def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_
     max_q = max(qs)
     # [root4rigid4n == (1|out exclude qs)]
     # [rigid4n == root4rigid4n**er4rgd4n]
-    #   [[not allow_pefect_power] -> [er4rgd4n===1]]
+    #   [[not allow_perfect_power] -> [er4rgd4n===1]]
     # [scale <- products_of(qs)]
     # [n := 1+2*scale*rigid4n]
     # [n := 1+2*scale*(1|out-{*qs})**er4rgd4n]
@@ -2981,7 +2981,7 @@ def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_
         if not is_nhrt_ok_(head):
             return
 
-        may_next_branches = None if rerh[-2] == 1 or not allow_pefect_power else (_mk_sorted_iterable_ex5rerh(_mk_next_rerh_(rerh)),)
+        may_next_branches = None if rerh[-2] == 1 or not allow_perfect_power else (_mk_sorted_iterable_ex5rerh(_mk_next_rerh_(rerh)),)
         nhrt = head
         while is_nhrt_ok_(nhrt):
             (n,h,r,rt) = nhrt
@@ -3043,10 +3043,10 @@ def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_
     return main()
 
 
-#origial version:NotImplementedError(allow_pefect_power)
-#.def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
+#origial version:NotImplementedError(allow_perfect_power)
+#.def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_perfect_power=False):
 #.    '-> Iter (扩展幺链素数,链长) # [归纳生成==>>[扩展幺链素数:递增]] #加二枚举:太耗时 #归纳生成法能起到修剪无用分支的作用'
-#.    check_type_is(bool, allow_pefect_power)
+#.    check_type_is(bool, allow_perfect_power)
 #.    check_type_is(bool, _ps_is_qs_)
 #.
 #.    qs = _ps2qs_(ps, _ps_is_qs_=_ps_is_qs_)
@@ -3065,7 +3065,7 @@ def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_
 #.    heap = []
 #.        # :: [(nhr, Iter nhr)]
 #.        # [nhr == (N,height4n,rigid4n)]
-#.        # if allow_pefect_power:[nhr == ((N,height4n,rigid4n/(1|prime))|head4nontrivial_power/(N==rigid4n==root4rigid4n**er4rgd4n,height4n,rigid4n,root4rigid4n/prime,er4rgd4n{>=2}))]
+#.        # if allow_perfect_power:[nhr == ((N,height4n,rigid4n/(1|prime))|head4nontrivial_power/(N==rigid4n==root4rigid4n**er4rgd4n,height4n,rigid4n,root4rigid4n/prime,er4rgd4n{>=2}))]
 #.
 #.    scales = LazyList(iter_sorted_products_of_strict_sorted_pairwise_coprime_uints(qs, finite_seq_vs_infinite_seq=False, turnoff__verify_factors_are_pairwise_coprime=False))
 #.        # :: [product_of_qs]
@@ -3094,12 +3094,12 @@ def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_
 #.            #(n, h4n, r4n) = head #nhr
 #.            return (head[0] < _max1_)
 #.    #end-is_head_ok_
-#.    # ++allow_pefect_power
+#.    # ++allow_perfect_power
 #.    def _put_rh__pows_(rh, /):
 #.        if rh[0] == 1:
 #.            return _put_rh_(rh)
 #.        raise 000-NotImplementedError
-#.    if allow_pefect_power:raise 000-NotImplementedError
+#.    if allow_perfect_power:raise 000-NotImplementedError
 #.    def _put_rh_(rh, /):
 #.        it__nhrs = _iter_nhrs5rh_(rh)
 #.        head = next(it__nhrs)
@@ -3139,23 +3139,23 @@ def 枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_=None, _ps_is_
 #.            if o > max_q or not o in q_set:
 #.                rh = oh
 #.                _put_rh_(rh)
-#.                    #allow_pefect_power:_put_rh__pows_:TODO
+#.                    #allow_perfect_power:_put_rh__pows_:TODO
 #.        if _max1_ is None:
 #.            raise 000
 #.        return
 #.    return _iter_ohs_()
 #.
 def 枚举冫链长纟再扩展幺链素数扌(ps, /, *, _max1_=None, _ps_is_qs_=False):
-    return 枚举冫链长纟扩展幺链素数扌(ps, _max1_=_max1_, _ps_is_qs_=_max1_, allow_pefect_power=True)
-def 枚举冫链长纟扩展幺链素数扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
+    return 枚举冫链长纟扩展幺链素数扌(ps, _max1_=_max1_, _ps_is_qs_=_max1_, allow_perfect_power=True)
+def 枚举冫链长纟扩展幺链素数扌(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_perfect_power=False):
     '-> 序列纟链长纟扩展幺链素数/Iter 链长 #归纳生成'
     #view others/数学/有递增趋势的非递增序列.txt
-    return map(snd, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power))
+    return map(snd, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=allow_perfect_power))
 
 
-def iter_odd_primes__inductive_generated__almost_smooth_based_(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_pefect_power=False):
+def iter_odd_primes__inductive_generated__almost_smooth_based_(ps, /, *, _max1_=None, _ps_is_qs_=False, allow_perfect_power=False):
     '-> Iter odd_prime'
-    return map(fst, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power))
+    return map(fst, 枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=allow_perfect_power))
 
 
 
@@ -3178,9 +3178,9 @@ def _统计冫枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_, _p
         欤素数 = is_prime(n)
 
         欤幺链素数 = 欤幺链素数牜小于六十四比特扌(n)
-        _欤幺链素数 = 欤扩展幺链素数扌((2,), n, _ps_is_qs_=True, allow_pefect_power=False)
-        欤扩展幺链素数 = 欤扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_pefect_power=False)
-        欤再扩展幺链素数 = 欤扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_pefect_power=True)
+        _欤幺链素数 = 欤扩展幺链素数扌((2,), n, _ps_is_qs_=True, allow_perfect_power=False)
+        欤扩展幺链素数 = 欤扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_perfect_power=False)
+        欤再扩展幺链素数 = 欤扩展幺链素数扌(qs, n, _ps_is_qs_=True, allow_perfect_power=True)
         assert 欤幺链素数 == _欤幺链素数 <= 欤扩展幺链素数 <= 欤再扩展幺链素数 <= 欤素数, (args, n, [欤幺链素数, _欤幺链素数, 欤扩展幺链素数, 欤再扩展幺链素数, 欤素数])
         数量纟幺链素数 += 欤幺链素数
         数量纟扩展幺链素数 += 欤扩展幺链素数
@@ -3199,10 +3199,10 @@ def _测试冫枚举冫扩展幺链素数牜归纳生成扌(ps, /, *, _max1_, _p
     ps = mk_tuple(ps)
     args = (_max1_, ps, _ps_is_qs_)
 
-    lss5ind = lsF, lsT = [[*枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power)] for allow_pefect_power in [False, True]]
+    lss5ind = lsF, lsT = [[*枚举冫扩展幺链素数牜归纳生成扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=allow_perfect_power)] for allow_perfect_power in [False, True]]
     assert not lsF == lsT, (_max1_, ps, _ps_is_qs_)
 
-    lss5add = lsF, lsT = [[*枚举冫扩展幺链素数牜加二枚举扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_pefect_power=allow_pefect_power)] for allow_pefect_power in [False, True]]
+    lss5add = lsF, lsT = [[*枚举冫扩展幺链素数牜加二枚举扌(ps, _max1_=_max1_, _ps_is_qs_=_ps_is_qs_, allow_perfect_power=allow_perfect_power)] for allow_perfect_power in [False, True]]
     assert not lsF == lsT, (_max1_, ps, _ps_is_qs_)
 
     assert lss5add == lss5ind, ([*map(list.__eq__, lss5ind, lss5add)], (_max1_, ps, _ps_is_qs_))

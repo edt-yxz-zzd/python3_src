@@ -137,9 +137,9 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 def __():
     from seed.helper.lazy_import__func import lazy_import4func_, lazy_import4funcs_, force_lazy_imported_func_
 
-    is_kth_power_ = lazy_import4func_('seed.math.factor_pint_as_pefect_power_', 'is_kth_power_', __name__)
-    if 0:from seed.math.factor_pint_as_pefect_power_ import is_kth_power_
-    ##from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    is_kth_power_ = lazy_import4func_('seed.math.factor_pint.perfect_power.detect_perfect_power', 'is_kth_power_', __name__)
+    if 0:from seed.math.factor_pint.perfect_power.detect_perfect_power import is_kth_power_
+    ##from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
 
     II__p2e_ = lazy_import4func_('seed.math.II', 'II__p2e_', __name__)
     if 0:from seed.math.II import II__p2e_
@@ -152,7 +152,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     #.from itertools import islice
     from seed.tiny_.check import check_type_is, check_int_ge
     from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_lt_
-    from seed.math.factor_pint_as_pefect_power_ import is_kth_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import is_kth_power_
     from seed.math.II import II__p2e_
 
     from seed.math.floor_ceil_tools.fc_log import floor_log2

@@ -1,5 +1,5 @@
 #__all__:goto
-#from seed.math.factor_pint_as_pefect_power_ import is_kth_power_, is_square_, is_cube_
+#from seed.math.factor_pint.perfect_power.detect_perfect_power import is_kth_power_, is_square_, is_cube_
 r'''[[[
 e ../../python3_src/seed/math/floor_ceil_tools/fc_perfect.py
 
@@ -15,7 +15,29 @@ e ../../python3_src/seed/math/floor_ceil.py
 
 
 '#'; __doc__ = r'#'
->>>
+>>> perfect_div(999, 9)
+111
+>>> perfect_div(999, 2)
+Traceback (most recent call last):
+    ...
+seed.math.floor_ceil_tools.fc_perfect.NotPerfectError__div
+
+>>> may_perfect_div(999, 9)
+111
+>>> may_perfect_div(999, 2)
+
+>>> tmay_perfect_div(999, 9)
+(111,)
+>>> tmay_perfect_div(999, 2)
+()
+
+>>> perfect_kth_root_(3, 27)
+3
+>>> perfect_kth_root_(3, 25)
+Traceback (most recent call last):
+    ...
+seed.math.floor_ceil_tools.fc_perfect.NotPerfectError__kth_root
+
 
 
 
@@ -27,32 +49,34 @@ BaseError
         NotPerfectError__div
         NotPerfectError__kth_root
 perfect_div
-perfect_kth_root_
     may_perfect_div
     tmay_perfect_div
+perfect_kth_root_
 
 
-is_kth_power_
-    is_square_
-    is_cube_
-factor_pint_as_pefect_power_
-    may_perfect_kth_root_
-    may_perfect_sqrt_
-    may_perfect_cbrt_
 '''.split()#'''
+#   is_kth_power_
+#       is_square_
+#       is_cube_
+#   factor_pint_as_perfect_power_
+#       may_perfect_kth_root_
+#       may_perfect_sqrt_
+#       may_perfect_cbrt_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_2_powers
     from seed.math.floor_ceil_tools.fc_kth_root import floor_kth_root_
-___end_mark_of_excluded_global_names__0___ = ...
 
 with mk_ctx4lazy_import4funcs_(__name__):
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
-    from seed.math.factor_pint_as_pefect_power_ import is_kth_power_, is_square_, is_cube_
-    from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_
-
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import may_perfect_kth_root_
+___end_mark_of_excluded_global_names__0___ = ...
+#if 1:
+#   from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
+#   from seed.math.factor_pint.perfect_power.detect_perfect_power import is_kth_power_, is_square_, is_cube_
+#   from seed.math.factor_pint.perfect_power.detect_perfect_power import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_
+#
 
 
 
@@ -113,8 +137,8 @@ __all__
 from seed.math.floor_ceil_tools.fc_perfect import BaseError, NotPerfectError, NotPerfectError__div, NotPerfectError__kth_root
 from seed.math.floor_ceil_tools.fc_perfect import perfect_div, perfect_kth_root_, may_perfect_div, tmay_perfect_div
 def __():
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
-    from seed.math.factor_pint_as_pefect_power_ import is_kth_power_, is_square_, is_cube_
-    from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import is_kth_power_, is_square_, is_cube_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_
 
 from seed.math.floor_ceil_tools.fc_perfect import *

@@ -40,19 +40,20 @@ __all__ = '''
 
     '''.split()
 
-from seed.math.II import II
-from seed.math.gcd import gcd
-from seed.math.lcm import lcm_many
-from seed.math.are_pairwise_coprime import are_pairwise_coprime
-from seed.math.lcm_parts_of import lcm_parts_of
-from seed.iters.unzip import unzip
-from seed.tiny import mk_tuple
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.II import II
+    from seed.math.gcd import gcd
+    from seed.math.lcm import lcm_many
+    from seed.math.are_pairwise_coprime import are_pairwise_coprime
+    from seed.math.lcm_parts_of import lcm_parts_of
+    from seed.iters.unzip import unzip
+    from seed.tiny_.containers import mk_tuple
+
+    #from nn_ns.math_nn.integer.mod import invmod
+    from seed.math.inv_mod_ import inv_mod_, ginv_mod_respectively_
+
 from seed.abc.abc__ver0 import ABC, abstractmethod, override
-
-#from nn_ns.math_nn.integer.mod import invmod
-from seed.math.inv_mod_ import inv_mod_, ginv_mod_respectively_
-
-#from itertools import islice
 import operator as opss
 
 class CRT_Error(Exception):pass

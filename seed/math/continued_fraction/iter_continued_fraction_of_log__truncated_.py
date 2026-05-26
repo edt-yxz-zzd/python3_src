@@ -993,8 +993,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
 
 
-    #from seed.math.floor_ceil_tools.fc_perfect import perfect_kth_root_, NotPerfectError__kth_root
-    from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import may_perfect_kth_root_of_
     from seed.math.floor_ceil_tools.fc_div import floor_div, ceil_div
     from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
 
@@ -1749,7 +1748,7 @@ def _detect_rational_log_(n0, d0, n1, d1, /):
         #.    gn = perfect_kth_root_(ed, n0)
         #.except NotPerfectError__kth_root:
         #.    return ...
-        m = may_perfect_kth_root_(ed, n0)
+        m = may_perfect_kth_root_of_(ed, n0)
         if m is None:
             return ...
         gn = m

@@ -1,11 +1,11 @@
 #__all__:goto
 # [:cmd4generate_data]:goto
 r'''[[[
-e ../../python3_src/seed/math/factor_pint_as_pefect_power__7prepare.py
+e ../../python3_src/seed/math/factor_pint_as_perfect_power__7prepare.py
 
-seed.math.factor_pint_as_pefect_power__7prepare
-py -m nn_ns.app.debug_cmd   seed.math.factor_pint_as_pefect_power__7prepare -x # -off_defs
-py -m nn_ns.app.doctest_cmd seed.math.factor_pint_as_pefect_power__7prepare:__doc__ -ht # -ff -df
+seed.math.factor_pint_as_perfect_power__7prepare
+py -m nn_ns.app.debug_cmd   seed.math.factor_pint_as_perfect_power__7prepare -x # -off_defs
+py -m nn_ns.app.doctest_cmd seed.math.factor_pint_as_perfect_power__7prepare:__doc__ -ht # -ff -df
 #######
 
 [[
@@ -18,7 +18,7 @@ py -m nn_ns.app.doctest_cmd seed.math.factor_pint_as_pefect_power__7prepare:__do
 
 
 [[
-py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   ,20:iter_items4k2may_q2pws_  =9 +flat
+py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   ,20:iter_items4k2may_q2pws_  =9 +flat
     (2, 1, 3, 2, [0, 1])
     (2, 2, 5, 2, [0, 1, 4])
     (2, 3, 7, 3, [0, 1, 2, 4])
@@ -41,8 +41,8 @@ py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   ,20:iter_items
     (4, 3, 13, 2, [0, 1, 3, 9])
 ]]
 [[
-py_adhoc_call { -lineno }  seed.math.factor_pint_as_pefect_power__7prepare   ,stable_repr.mk_k2may_q2pws_   =9 =2
-py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data_to_opath_ =None   =9 =2
+py_adhoc_call { -lineno }  seed.math.factor_pint_as_perfect_power__7prepare   ,stable_repr.mk_k2may_q2pws_   =9 =2
+py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   @generate_data_to_opath_ =None   =9 =2
     0:None
     1:None
     2:{3: [0, 1], 5: [0, 1, 4]}
@@ -56,8 +56,8 @@ py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data
 
 ]]
 [[
-py_adhoc_call { -lineno }  seed.math.factor_pint_as_pefect_power__7prepare   ,stable_repr.mk_k2may_q2pws_   =9 =2 +prime_only
-py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data_to_opath_ =None   =9 =2 +prime_only
+py_adhoc_call { -lineno }  seed.math.factor_pint_as_perfect_power__7prepare   ,stable_repr.mk_k2may_q2pws_   =9 =2 +prime_only
+py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   @generate_data_to_opath_ =None   =9 =2 +prime_only
     0:None
     1:None
     2:{3: [0, 1], 5: [0, 1, 4]}
@@ -71,15 +71,15 @@ py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data
 
 ]]
 [[
-#bug:py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data_to_opath_ :None   ='1+2**8' =5 +prime_only | more
+#bug:py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   @generate_data_to_opath_ :None   ='1+2**8' =5 +prime_only | more
 #   『:None』-->『=None』
-py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data_to_opath_ =None   ='1+2**8' =5 +prime_only | more
+py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   @generate_data_to_opath_ =None   ='1+2**8' =5 +prime_only | more
 ]]
 [[
 # [:cmd4generate_data]:here
-py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data_to_opath_ =None   ='1+2**16' =5 +prime_only | more
-py_adhoc_call { -lineno }  seed.math.factor_pint_as_pefect_power__7prepare   ,stable_repr.mk_k2may_q2pws_   ='1+2**16' =5 +prime_only > /sdcard/0my_files/tmp/-0tmp
-py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @generate_data_to_opath_ :/sdcard/0my_files/tmp/-0tmp   ='1+2**16' =5 +prime_only
+py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   @generate_data_to_opath_ =None   ='1+2**16' =5 +prime_only | more
+py_adhoc_call { -lineno }  seed.math.factor_pint_as_perfect_power__7prepare   ,stable_repr.mk_k2may_q2pws_   ='1+2**16' =5 +prime_only > /sdcard/0my_files/tmp/-0tmp
+py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   @generate_data_to_opath_ :/sdcard/0my_files/tmp/-0tmp   ='1+2**16' =5 +prime_only
 view /sdcard/0my_files/tmp/-0tmp
 du -bh /sdcard/0my_files/tmp/-0tmp
     11M
@@ -92,7 +92,7 @@ du -bh /sdcard/0my_files/tmp/-0tmp.txz
 ]]
 
 
-py_adhoc_call   seed.math.factor_pint_as_pefect_power__7prepare   @f
+py_adhoc_call   seed.math.factor_pint_as_perfect_power__7prepare   @f
 ]]]'''#'''
 __all__ = r'''
 iter4mk_k2may_q2pws_
@@ -188,5 +188,5 @@ def _mul_p2e_(p2e4c, p2e4k, /):
 
 
 __all__
-from seed.math.factor_pint_as_pefect_power__7prepare import mk_k2may_q2pws_, iter_items4k2may_q2pws_
-from seed.math.factor_pint_as_pefect_power__7prepare import *
+from seed.math.factor_pint_as_perfect_power__7prepare import mk_k2may_q2pws_, iter_items4k2may_q2pws_
+from seed.math.factor_pint_as_perfect_power__7prepare import *

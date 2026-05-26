@@ -23,12 +23,10 @@ view /sdcard/0my_files/tmp/-0tmp
 
 
 
-TODO:数据:perfect_kth_root_:打包
+取消:数据:perfect_kth_root_:打包
 TODO:
-doctest 分离式？prime_sieve,floor_ceil_tools
-grep ...perfect
+doctest 分离式？floor_ceil_tools
 grep ...Error
-bash_...app
 
 
 global lazy value
@@ -45,6 +43,7 @@ global lazy value
 
 
 
+DONE:grep 'pefect' ../../python3_src/seed/ -r -l -I
 DONE:grep 'seed\.tiny\>' ../../python3_src/seed/ -r -l -I
 DONE:grep 'seed\.math\.prime_gens\>' ../../python3_src/seed/ -r -l -I
 DONE:grep '\<floor_ceil\>' ../../python3_src/seed/ -r -l -I
@@ -437,6 +436,11 @@ e ../../python3_src/seed/helper/_ignore__tmp/list_format_collect_import_stmts_.2
 ===
 ]]
 
+[[
+grep 'pefect' ../../python3_src/seed/ -r -l -I
+
+
+]]
 
 
 

@@ -114,6 +114,108 @@ __iter__
 
 
 
+len7relax_
+__init__.arg:max1_prime6init
+>>> ps = PrimeList()
+>>> ps.len7relax_()
+0
+>>> ps[4]
+11
+>>> ps.len7relax_()
+5
+
+
+>>> ps = PrimeList(6)
+>>> ps.len7relax_()
+3
+>>> ps[4]
+11
+>>> ps.len7relax_()
+5
+
+
+>>> ps = PrimeList(14)
+>>> ps.len7relax_()
+6
+>>> ps[4]
+11
+>>> ps.len7relax_()
+6
+>>> ps.find7relax_(11)
+4
+>>> ps.find7relax_(13)
+5
+>>> ps.find7relax_(17)
+-1
+>>> ps.find7relax_(10)
+-1
+>>> ps.find7relax_(1)
+-1
+>>> ps.find7relax_(2)
+0
+
+
+
+>>> ps = PrimeList()
+>>> [*ps.iter__sz_(4)]
+[2, 3, 5, 7]
+>>> [*ps.iter__lt_(4)]
+[2, 3]
+
+
+>>> ps = PrimeList()
+>>> [*ps.iter_find_primes_if_be_1addKmulX__lt_(30, 7)]
+[29]
+>>> [*ps.iter_find_primes_if_be_1addKmulX__lt_(30, 1)]
+[2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+>>> [*ps.iter_find_primes_if_be_1addKmulX__lt_(30, 2)]
+[3, 5, 7, 11, 13, 17, 19, 23, 29]
+>>> [*ps.iter_find_primes_if_be_1addKmulX__lt_(30, 3)]
+[7, 13, 19]
+>>> [*ps.iter_find_primes_if_be_1addKmulX__lt_(30, 6)]
+[7, 13, 19]
+
+
+
+
+>>> dqr_ls = DivmodOverPrimeList(999, PrimeList())
+>>> dqr_ls[4]
+(11, 90, 9)
+>>> dqr_ls[2:4]
+SeqSliceView([(2, 499, 1), (3, 333, 0), (5, 199, 4), (7, 142, 5), (11, 90, 9)], range(2, 4))
+>>> [*dqr_ls[2:4]]
+[(5, 199, 4), (7, 142, 5)]
+>>> dqr_ls[2:4][-1]
+(7, 142, 5)
+>>> [*dqr_ls[2:8:2]]
+[(5, 199, 4), (11, 90, 9), (17, 58, 13)]
+>>> [*islice(dqr_ls, 5)]
+[(2, 499, 1), (3, 333, 0), (5, 199, 4), (7, 142, 5), (11, 90, 9)]
+>>> dqr_ls(11)
+(11, 90, 9)
+>>> dqr_ls(4)
+(4, 249, 3)
+
+
+
+
+>>> dr_ls = ModOverPrimeList(999, PrimeList())
+>>> dr_ls[4]
+(11, 9)
+>>> dr_ls[2:4]
+SeqSliceView([(2, 1), (3, 0), (5, 4), (7, 5), (11, 9)], range(2, 4))
+>>> [*dr_ls[2:4]]
+[(5, 4), (7, 5)]
+>>> dr_ls[2:4][-1]
+(7, 5)
+>>> [*dr_ls[2:8:2]]
+[(5, 4), (11, 9), (17, 13)]
+>>> [*islice(dr_ls, 5)]
+[(2, 1), (3, 0), (5, 4), (7, 5), (11, 9)]
+>>> dr_ls(11)
+(11, 9)
+>>> dr_ls(4)
+(4, 3)
 
 
 
@@ -124,6 +226,8 @@ py_adhoc_call   seed.math.prime_sieve.PrimeList   @f
 ]]]'''#'''
 __all__ = r'''
 PrimeList
+DivmodOverPrimeList
+ModOverPrimeList
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -133,7 +237,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from itertools import islice, count
     from bisect import bisect_left
 
-    from seed.tiny_.check import check_int_ge
+    from seed.tiny_.check import check_int_ge, check_type_is
     from seed.helper.ifNone import ifNone
 
     from seed.math.prime_pint.bounds4kth_prime import estimate_lower_bound4Kth_prime_
@@ -144,34 +248,91 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
 
 
-    #from seed.math.prime_sieve.sieve_lt import iter_all_strict_sorted_primes_
-    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_# iter_sieve4prime_chunks_ge_
-def iter_all_strict_sorted_primes_(*, may_primes):
-    for p in iter_sieve4primes_ge_(0):
-        may_primes.append(p)
+    from seed.math.prime_sieve.sieve_lt import list_primes__lt_
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_
+def _iter_primes__ge_(min_u, primes, /):
+    for p in iter_sieve4primes_ge_(min_u):
+        primes.append(p)
         yield p
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
+def _explain(emay_idx_or_slice, /):
+    '-> emay_idx_or_rng/(...|idx|range)'
+    match emay_idx_or_slice:
+        case slice(start=begin, stop=end, step=step):
+            begin = ifNone(begin, 0)
+            step = ifNone(step, 1)
+            check_int_ge(0, begin)
+            check_int_ge(0, end)
+            check_int_ge(1, step)
+            #check_type_is(int, step)
+            rng = range(begin, end, step)
+            if rng:
+                _end = 1+rng[-1]
+                if not _end == end:
+                    assert _end < end
+                    rng = range(begin, _end, step)
+            else:
+                rng = range(0, 0, 1)
+            return rng
+        case emay_j:
+            if emay_j is ...:
+                return ...
+            j = emay_j
+            check_int_ge(0, j)
+            return j
+
+    raise 000
 
 class PrimeList:
-    def __init__(sf, /):
-        sf._ps = primes = []
-        sf._it = iter_all_strict_sorted_primes_(may_primes=primes)
+    def __init__(sf, max1_prime6init=0, /):
+        check_int_ge(0, max1_prime6init)
+        sf._ps = primes = list_primes__lt_(max1_prime6init, _mk=list)
+        sf._it = _iter_primes__ge_(max1_prime6init, primes)
+    def len7relax_(sf, /):
+        return len(sf._ps)
+    def find7relax_(sf, p, /):
+        'uint -> imay idx'
+        ps = sf._ps
+        j = bisect_left(ps, p)
+        if j < len(ps) and ps[j] == p:
+            return j
+        return -1
+    def iter_find_primes_if_be_1addKmulX__lt_(sf, max1, k, /):
+        check_int_ge(1, k)
+        if k == 1:
+            yield from sf.iter__lt_(max1)
+            return
+        ps = sf._ps
+        end = len(sf(0, max1=max1))
+        if k&1:
+            k <<= 1
+        j = 0
+        for n in range(1+k, max1, k):
+            j = bisect_left(ps, n, j, end)
+            if ps[j] == n:
+                yield n
+    def iter__sz_(sf, sz, /):
+        return islice(sf, 0, sz)
+    def iter__lt_(sf, max1, /):
+        for p in sf:
+            if not p < max1:break
+            yield p
     def __iter__(sf, /):
         ps = sf._ps
+        it = sf._it
         for j in count(0):
             if j == len(ps):
-                sf._fill_ge(j)
+                next(it)
+                #sf._fill_ge(j)
             yield ps[j]
     def __getitem__(sf, emay_idx_or_slice, /):
-        match emay_idx_or_slice:
-            case slice(start=begin, stop=end, step=step):
-                begin = ifNone(begin, 0)
-                check_int_ge(0, begin)
-                check_int_ge(0, end)
+        emay_idx_or_rng = _explain(emay_idx_or_slice)
+        match emay_idx_or_rng:
+            case range(start=begin, stop=end, step=step):
                 ps_view = sf(begin, end)
-                if not (step is None or step == 1):
+                if not step == 1:
                     ps_view = ps_view[::step]
                 return ps_view
             case emay_j:
@@ -361,6 +522,91 @@ class PrimeList:
 #end-class PrimeList:
 
 
+class _OverPrimeList:
+    @classmethod
+    def _mk_result_tuple_(cls, n, d, /):
+        raise 000
+    def _gmk_result_tuple_(sf, d, /):
+        d2t = sf._d2t
+        if d in d2t:
+            tpl = d2t[d]
+        else:
+            tpl = type(sf)._mk_result_tuple_(sf._n, d)
+            d2t[d] = tpl
+        return tpl
+    def _mk_filling_iterator_(sf, /):
+        for d in sf._qs:
+            tpl = sf._gmk_result_tuple_(d)
+            sf._ts.append(tpl)
+            yield tpl
+        raise 000
+    def __init__(sf, n, prime_list, /):
+        check_int_ge(1, n)
+        check_type_is(PrimeList, prime_list)
+        sf._n = n
+        sf._qs = qs = prime_list
+        sf._ts = ts = []
+        sf._d2t = d2t = {}
+        sf._it = sf._mk_filling_iterator_()
+    @property
+    def the_numerator(sf, /):
+        return sf._n
+    @property
+    def the_prime_list(sf, /):
+        return sf._qs
+    def __iter__(sf, /):
+        ts = sf._ts
+        it = sf._it
+        for j in count(0):
+            if j == len(ts):
+                next(it)
+            tpl = ts[j]
+            yield tpl
+    def _fill_ge(sf, j, /):
+        # [j >= len(sf._ts)]
+        sz = len(sf._ts)
+        assert not j < sz
+        it = islice(sf._it, 0, j+1-sz)
+        for _ in it:pass
+
+    def __call__(sf, d, /):
+        return sf._gmk_result_tuple_(d)
+    def __getitem__(sf, emay_idx_or_slice, /):
+        ts = sf._ts
+        emay_idx_or_rng = _explain(emay_idx_or_slice)
+        match emay_idx_or_rng:
+            case range(start=begin, stop=end, step=step) as rng:
+                if len(ts) < end:
+                    sf._fill_ge(-1+end)
+                ts_view = SeqSliceView(ts, rng)
+                return ts_view
+            case emay_j:
+                if emay_j is ...:
+                    return SeqView(ts)
+                j = emay_j
+                if not j < len(ts):
+                    sf._fill_ge(j)
+                return ts[j]
+        raise 000
+
+class DivmodOverPrimeList(_OverPrimeList):
+    @classmethod
+    def _mk_result_tuple_(cls, n, d, /):
+        (q, r) = divmod(n, d)
+        dqr = (d, q, r)
+        return dqr
+class ModOverPrimeList(_OverPrimeList):
+    @classmethod
+    def _mk_result_tuple_(cls, n, d, /):
+        r = n%d
+        dr = (d, r)
+        return dr
+
+
+
+
+
+
 __all__
-from seed.math.prime_sieve.PrimeList import PrimeList
+from seed.math.prime_sieve.PrimeList import PrimeList, DivmodOverPrimeList, ModOverPrimeList
 from seed.math.prime_sieve.PrimeList import *

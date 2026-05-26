@@ -270,7 +270,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.containers import mk_tuple
 
     from seed.iters.is_sorted import is_strict_sorted
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
     from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
     from seed.math.semi_factor_pint_via_trial_division import complete_factor_pint_via_trial_division
     from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
@@ -288,7 +288,7 @@ def __():
     def is_strict_sorted(sf, /):
         from seed.iters.is_sorted import is_strict_sorted
         return is_strict_sorted
-    factor_pint_as_pefect_power_ = ImportProperty('seed.math.factor_pint_as_pefect_power_', 'factor_pint_as_pefect_power_')
+    factor_pint_as_perfect_power_ = ImportProperty('seed.math.factor_pint.perfect_power.detect_perfect_power', 'factor_pint_as_perfect_power_')
     semi_factor_pint_via_trial_division = ImportProperty('seed.math.semi_factor_pint_via_trial_division', 'semi_factor_pint_via_trial_division')
     complete_factor_pint_via_trial_division = ImportProperty('seed.math.semi_factor_pint_via_trial_division', 'complete_factor_pint_via_trial_division')
     is_prime__via_complete_factorization_Nmm_ = ImportProperty('seed.math.is_prime__via_complete_factorization_Nmm_', 'is_prime__via_complete_factorization_Nmm_')
@@ -486,8 +486,8 @@ class DetectEasyPrime__trial_division__fixed_known_primes(IDetectEasyPrime):
         #.(p2e, unfactored_part) = _imports.semi_factor_pint_via_trial_division(sf._ps, u)
         (p2e, unfactored_part) = semi_factor_pint_via_trial_division(sf._ps, u)
         if not unfactored_part == 1:
-            #.(n, e) = _imports.factor_pint_as_pefect_power_(unfactored_part)
-            (n, e) = factor_pint_as_pefect_power_(unfactored_part)
+            #.(n, e) = _imports.factor_pint_as_perfect_power_(unfactored_part)
+            (n, e) = factor_pint_as_perfect_power_(unfactored_part)
             assert not n in p2e
             p2e[n] = e
         return p2e

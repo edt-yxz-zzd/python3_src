@@ -251,8 +251,8 @@ below output before: patch001__seed_definition
 
 
 
-:[why_required__factor_pint_as_pefect_power_]:here
-required:factor_pint_as_pefect_power_()
+:[why_required__factor_pint_as_perfect_power_]:here
+required:factor_pint_as_perfect_power_()
 >>> def show_fails(N, /):
 ...  for n in range(1, N):
 ...     if _x_is_SPRP_(n):continue
@@ -741,8 +741,8 @@ def _lazy_imports():
     global _lazy_imports
     from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
     from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
-    _4lazy_imports = (factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
+    _4lazy_imports = (factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
     def f():
         return _4lazy_imports
     if f is _lazy_imports:raise 000
@@ -861,12 +861,12 @@ def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seed
         return ({}, {}, 0) if to_output_statistics else ({}, {})
     # [n >= 2]
 
-    (factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division) = _lazy_imports()
+    (factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division) = _lazy_imports()
 
     ls4sprp4succ = []
         # [sprp-factor]{pairwise-coprime}
     ls4non_sprp4todo = []
-        # [(non-sprp)-(non-pefect_power)-factor]{pairwise-coprime}
+        # [(non-sprp)-(non-perfect_power)-factor]{pairwise-coprime}
         # a todo_list
     ls4non_sprp4fail = []
     def put(factor):
@@ -874,8 +874,8 @@ def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seed
         if _is_SPRP_(factor):
             ls4sprp4succ.append(factor)
             return
-        (factor, exp) = factor_pint_as_pefect_power_(factor)
-            # :[why_required__factor_pint_as_pefect_power_]:goto
+        (factor, exp) = factor_pint_as_perfect_power_(factor)
+            # :[why_required__factor_pint_as_perfect_power_]:goto
             # try_factor1_pint__via_rho_method_ fail at: 4,8,16, 25...
         if exp > 1 and _is_SPRP_(factor):
             ls4sprp4succ.append(factor)

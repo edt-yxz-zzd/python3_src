@@ -2,7 +2,7 @@
 r'''[[[
 e ../../python3_src/seed/math/factor_pint_into_strong_probable_primes_by_quadratic_sieve_.py
 now:
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
 
 view others/数学/整数分解/Quadratic-Sieve-Method.txt
 [[
@@ -69,7 +69,7 @@ py -m nn_ns.app.doctest_cmd seed.math.factor_pint_into_strong_probable_primes_by
 
 
 
-from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import factor_pint_into_strong_probable_primes_by_quadratic_sieve_, factor_pint_as_pefect_power_, detect_pefect_kth_root_
+from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import factor_pint_into_strong_probable_primes_by_quadratic_sieve_, factor_pint_as_perfect_power_, detect_perfect_kth_root_
 
 
 
@@ -176,7 +176,7 @@ semi-factor by trial_division<max1=199>(281487861809153):duration: 0.00586215300
 factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 281487861809153
 detect strong_probable_prime(281487861809153): ... ...
 detect strong_probable_prime(281487861809153):duration: 0.0003166150000000201 *(unit: 0:00:01)
-detect pefect_power(281487861809153): ... ...
+detect perfect_power(281487861809153): ... ...
 floor_sqrt(281487861809153): ... ...
 floor_sqrt(281487861809153):duration: 0.00018300000000004424 *(unit: 0:00:01)
 floor_kth_root_(3, 281487861809153): ... ...
@@ -191,7 +191,7 @@ floor_kth_root_(11, 65537): ... ...
 floor_kth_root_(11, 65537):duration: 9.599999999998499e-05 *(unit: 0:00:01)
 floor_kth_root_(13, 65537): ... ...
 floor_kth_root_(13, 65537):duration: 9.507699999999897e-05 *(unit: 0:00:01)
-detect pefect_power(281487861809153):duration: 0.0025474620000000003 *(unit: 0:00:01)
+detect perfect_power(281487861809153):duration: 0.0025474620000000003 *(unit: 0:00:01)
 factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 65537
 detect strong_probable_prime(65537): ... ...
 detect strong_probable_prime(65537):duration: 0.00023723100000005992 *(unit: 0:00:01)
@@ -199,7 +199,7 @@ sprp-factors-of(281487861809153) = [65537]
 sprp-factorization-of(281487861809153) = {65537: 3}
 {65537: 3}
 ######################
-ok:factor_pint_as_pefect_power_ <<==:
+ok:factor_pint_as_perfect_power_ <<==:
 floor_kth_root_(3, 281487861809153): ... ...
 floor_kth_root_(3, 281487861809153):duration: 0.0002243080000000619 *(unit: 0:00:01)
 floor_kth_root_(3, 65537): ... ...
@@ -405,7 +405,7 @@ _quadratic_sieve_(18572030067003190849):duration: 17.156134272 *(unit: 0:00:01)
 _quadratic_sieve_(18572030067003190849) = (33572881, 553185473329)
 factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 553185473329
 detect strong_probable_prime(553185473329): ... ...  detect strong_probable_prime(553185473329):duration: 0.00015846199999813848 *(unit: 0:00:01)
-detect pefect_power(553185473329): ... ...
+detect perfect_power(553185473329): ... ...
 floor_sqrt(553185473329): ... ...
 floor_sqrt(553185473329):duration: 7.423099999925853e-05 *(unit: 0:00:01)
 floor_kth_root_(3, 553185473329): ... ...
@@ -420,7 +420,7 @@ floor_kth_root_(11, 8209): ... ...
 floor_kth_root_(11, 8209):duration: 6.461599999951773e-05 *(unit: 0:00:01)
 floor_kth_root_(13, 8209): ... ...
 floor_kth_root_(13, 8209):duration: 8.707699999987994e-05 *(unit: 0:00:01)
-detect pefect_power(553185473329):duration: 0.0011434620000017048 *(unit: 0:00:01)
+detect perfect_power(553185473329):duration: 0.0011434620000017048 *(unit: 0:00:01)
 factor_pint_into_strong_probable_primes_by_quadratic_sieve_ main loop body: 8209
 detect strong_probable_prime(8209): ... ...
 detect strong_probable_prime(8209):duration: 7.238400000275647e-05 *(unit: 0:00:01)
@@ -467,8 +467,8 @@ py_adhoc_call   seed.math.factor_pint_into_strong_probable_primes_by_quadratic_s
 __all__ = r'''
 factor_pint_into_strong_probable_primes_by_quadratic_sieve_
 '''.split()#'''
-    #factor_pint_as_pefect_power_
-    #detect_pefect_kth_root_
+    #factor_pint_as_perfect_power_
+    #detect_perfect_kth_root_
     #_coprimes5factors_
     #default_upperbound4prime_factor4trial_division
 __all__
@@ -487,7 +487,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt, ceil_sqrt, floor_kth_root_, ceil_kth_root_
     from seed.math.floor_ceil_tools.fc_log import floor_log_, floor_log2
     #from seed.math.floor_ceil_tools.fc_perfect import perfect_kth_root_
-    from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, factor_pint_as_pefect_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import may_perfect_kth_root_, factor_pint_as_perfect_power_
 
 
     from seed.math.sqrts_mod_ import iter_sqrts_mod_prime_power_, iter_sqrts_mod_prime_power__coprime__5one_sqrt_
@@ -934,8 +934,8 @@ def factor_pint_into_strong_probable_primes_by_quadratic_sieve_(n, /, *, verbose
         odd_composite = u
         000;    u = None
 
-        with _timer(prefix=f'detect pefect_power({odd_composite})', _show_hint_on_enter_=True, _to_show_=verbose):
-            (odd_base, exp) = factor_pint_as_pefect_power_(odd_composite, verbose=verbose)
+        with _timer(prefix=f'detect perfect_power({odd_composite})', _show_hint_on_enter_=True, _to_show_=verbose):
+            (odd_base, exp) = factor_pint_as_perfect_power_(odd_composite, verbose=verbose)
             #bug:odd_composite = odd_base
             #   odd_base may be sprp
             if exp > 1:
@@ -966,8 +966,8 @@ def factor_pint_into_strong_probable_primes_by_quadratic_sieve_(n, /, *, verbose
     return sprp2e
 
 r'''[[[
-from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
-def factor_pint_as_pefect_power_(n, /, *, verbose):
+from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
+def factor_pint_as_perfect_power_(n, /, *, verbose):
     'n/int{>=2} -> (base/int{>=2}, exp/int{>=1}){n==base**exp}'
     check_type_is(int, n)
     if not n > 1:raise ValueError(n)
@@ -985,7 +985,7 @@ def factor_pint_as_pefect_power_(n, /, *, verbose):
         # [2**p < 2**L]
         while 1:
             # [1 < n < (1<<L)]
-            may_kth_root = detect_pefect_kth_root_(p, n, verbose=verbose)
+            may_kth_root = detect_perfect_kth_root_(p, n, verbose=verbose)
             if may_kth_root is None:
                 break
             kth_root = may_kth_root
@@ -1002,7 +1002,7 @@ def factor_pint_as_pefect_power_(n, /, *, verbose):
     return (base, exp)
 #]]]'''#'''
 
-def detect_pefect_kth_root_(k, n, /, *, verbose):
+def detect_perfect_kth_root_(k, n, /, *, verbose):
     'k/int{>=1} -> n/int{>=2} -> may base/int{>=2}{n==base**k}'
     check_type_is(int, n)
     if not n > 1:raise ValueError(n)
@@ -1189,8 +1189,8 @@ def _coprimes5factors_(n, factors, /):
 ###    factors = {*factors}
 ###    return factors
 factor_pint_into_strong_probable_primes_by_quadratic_sieve_
-factor_pint_as_pefect_power_
-detect_pefect_kth_root_
+factor_pint_as_perfect_power_
+detect_perfect_kth_root_
 _quadratic_sieve_
 
 
@@ -1200,6 +1200,6 @@ _quadratic_sieve_
 __all__
 
 
-from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import factor_pint_into_strong_probable_primes_by_quadratic_sieve_, factor_pint_as_pefect_power_, detect_pefect_kth_root_
+from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import factor_pint_into_strong_probable_primes_by_quadratic_sieve_, factor_pint_as_perfect_power_, detect_perfect_kth_root_
 
 from seed.math.factor_pint_into_strong_probable_primes_by_quadratic_sieve_ import *

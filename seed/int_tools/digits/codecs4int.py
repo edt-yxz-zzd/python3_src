@@ -444,7 +444,7 @@ copy to:e others/数学/编程/设计/自定义字符编码.txt
     [码=[def]=编码方案{整数}.码元]
     [荚=[def]=具象物理单元/(存储单元|传输单元|编码方案.字母表)]
     [孢=[def]=最小的幂根{荚}]
-        #from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+        #from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
     #######
     [包==码串::[码]]
     [码.具象物理组构==荚串::[荚]]

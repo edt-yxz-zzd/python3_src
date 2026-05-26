@@ -31,9 +31,9 @@ def _lazy_imports():
     global _lazy_imports
     from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
     from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes
-    from seed.math.factor_pint_as_pefect_power_ import factor_pint_as_pefect_power_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
     from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_ as _is_SPRP_
-    _4lazy_imports = (_is_SPRP_, factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
+    _4lazy_imports = (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
         #utilities
     def f():
         return _4lazy_imports
@@ -64,7 +64,7 @@ class IFramework4sprp_factor_pint(ABC):
     #
     pint - positive integer
     #
-    utilities - (_is_SPRP_, factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
+    utilities - (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
     #
     st - (state/statistics&inner_args&inner_kwds) for whole factorazation
     #
@@ -101,7 +101,7 @@ class IFramework4sprp_factor_pint(ABC):
             # [n4whole >= 2]
             utilities = ifNonef(may_utilities, _lazy_imports)
             assert len(utilities) == 4
-                # (_is_SPRP_, factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
+                # (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
             (st, raw_output) = _raw_sprp_factor_pint_(sf, n4whole, st, utilities, *args4whole, **kwds4whole)
         st, raw_output
         assert len(raw_output) == 3
@@ -135,12 +135,12 @@ class IFramework4sprp_factor_pint(ABC):
 def _raw_sprp_factor_pint_(sf, n4whole, st, utilities, /, *args4whole, **kwds4whole):
     'n4whole/uint{>=2} -> st -> utilities -> (*args4whole) -> (**kwds4whole) -> (st, raw_output)'
     # [n4whole >= 2]
-    (_is_SPRP_, factor_pint_as_pefect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division) = utilities
+    (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division) = utilities
 
     ls4sprp4succ = []
         # [sprp-factor]{pairwise-coprime}
     ls4non_sprp4todo = []
-        # [(non-sprp)-(non-pefect_power)-factor]{pairwise-coprime}
+        # [(non-sprp)-(non-perfect_power)-factor]{pairwise-coprime}
         # a todo_list
     ls4non_sprp4fail = []
     def put(factor):
@@ -148,7 +148,7 @@ def _raw_sprp_factor_pint_(sf, n4whole, st, utilities, /, *args4whole, **kwds4wh
         if _is_SPRP_(factor):
             ls4sprp4succ.append(factor)
             return
-        (factor, exp) = factor_pint_as_pefect_power_(factor)
+        (factor, exp) = factor_pint_as_perfect_power_(factor)
         if exp > 1 and _is_SPRP_(factor):
             ls4sprp4succ.append(factor)
             return

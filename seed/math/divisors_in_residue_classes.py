@@ -633,7 +633,7 @@ from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOT
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.debug.print_err import print_err
     from seed.math.list_all_factors5factorization_ import list_all_factors5factorization_
-    from seed.math.factor_pint_as_pefect_power_ import may_perfect_kth_root_, may_perfect_sqrt_, may_perfect_cbrt_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import may_perfect_sqrt_of_
     from seed.math.perfect_div import may_perfect_div, tmay_perfect_div
     from seed.math.perfect_div import perfect_div, perfect_kth_root_
     from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
@@ -1032,9 +1032,9 @@ def _iter_divisors_in_residue_class__dup_ok_(n, s, r, with_more_info, _fixed_kX_
 
                 #perfect_kth_root_(2, DET4z6ij)
                 assert 0 == (_negB4z&1)^(DET4z6ij&1)
-                if not None is (sqrtDET:=may_perfect_sqrt_(DET4z6ij)):
+                if not None is (sqrtDET:=may_perfect_sqrt_of_(DET4z6ij)):
                     # [sqrt(ij2DET4eqn4Z[i,j]) %1.0 == 0.0]
-                    #if 0 == (_negB4z&1)^(DET4z6ij&1) and not None is (sqrtDET:=may_perfect_sqrt_(DET4z6ij)):
+                    #if 0 == (_negB4z&1)^(DET4z6ij&1) and not None is (sqrtDET:=may_perfect_sqrt_of_(DET4z6ij)):
                     assert 0 == (_negB4z&1)^(sqrtDET&1)
                     # [ij2eqn4Z[i,j] := [z**2 -(i2cs[i][j]*s + r*a[i] + r_*b[i])*z +(n*a[i]*b[i]) == 0]]
                     # [roots_of(ij2eqn4Z[i,j]) == {(x*s + r)*a[i], (y*s + r_)*b[i]}]
