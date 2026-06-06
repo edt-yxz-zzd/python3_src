@@ -102,8 +102,19 @@ def prepare_p2e4psphiM_ex_(modulus, psphiM_or_may_p2e4M_or_ps4M_or_factor_pint_f
     else:
         if not (may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func is None or callable(may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func)):raise TypeError
         may_p2e4M_or_ps4M_or_factor_pint_func = psphiM_or_may_p2e4M_or_ps4M_or_factor_pint_func
-        phiM = num_coprimes_lt_(modulus, may_p2e4M_or_ps4M_or_factor_pint_func)
+        p2e4M = prepare_p2e4N_(modulus, may_p2e4M_or_ps4M_or_factor_pint_func)
+        phiM = num_coprimes_lt_(modulus, may_p2e4M_or_ps4M_or_factor_pint_func:=p2e4M)
         psphiM = phiM
+        #xxx:777; may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func = #xxx:p2e4M
+        if may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func is None:
+            may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func = factor_pint__naive_brute_force_
+        factor_pint_ = may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func
+        assert callable(factor_pint_)
+        ex_ps4phiM = list(p2e4M.keys())
+        for p in p2e4M:
+            ex_ps4phiM.extend(factor_pint_(p-1).keys())
+        ex_ps4phiM = sorted(set(ex_ps4phiM))
+        may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func = ex_ps4phiM
     psphiM
 
     p2e4psphiM = prepare_p2e4N_(psphiM, may_p2e4psphiM_or_ps4psphiM_or_factor_pint_func)

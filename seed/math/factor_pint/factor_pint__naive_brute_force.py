@@ -9,6 +9,7 @@ py -m nn_ns.app.doctest_cmd seed.math.factor_pint.factor_pint__naive_brute_force
 [[
 for tiny uint such as < 1024
 without any fancy config...
+kwds=max1_num_bits
 ]]
 
 >>> from seed.math.II import II, II__ft_e_pairs_, II__p2e_
@@ -50,6 +51,16 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__naive_brute_force   @flatten_
 py_adhoc_call   seed.math.factor_pint.factor_pint__naive_brute_force   ,flatten_iter_factor_pint__naive_brute_force_ =3600
 
 
+py_adhoc_call   seed.math.factor_pint.factor_pint__naive_brute_force   ,iter_factor_pint__naive_brute_force_ =193707721-1  --max1_num_bits=29
+    (2, 3)
+    (3, 3)
+    (5, 1)
+    (67, 1)
+    (2677, 1)
+193707721*761838257287==-1+2**67==147573952589676412927
+193707721==1+2**3*3**3*5*67*2677
+py_adhoc_call   seed.math.max_order_mod_   @order_mod_ ='(193707721-1)>>3' =2 ='[3,5,67,2677]'
+    88308
 
 ]]]'''#'''
 __all__ = r'''
@@ -68,23 +79,23 @@ from itertools import repeat, groupby # islice
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
-def factor_pint__naive_brute_force_(n, /):
+def factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> {p:e}'
-    return dict(iter_factor_pint__naive_brute_force_(n))
-def iter_factor_pint__naive_brute_force_(n, /):
+    return dict(iter_factor_pint__naive_brute_force_(n, **kwds))
+def iter_factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> Iter (p,e)'
-    return _ver3__iter_factor_pint__naive_brute_force_(n)
-    return _ver2__iter_factor_pint__naive_brute_force_(n)
-    return _ver1__iter_factor_pint__naive_brute_force_(n)
-def flatten_list_factor_pint__naive_brute_force_(n, /):
+    return _ver3__iter_factor_pint__naive_brute_force_(n, **kwds)
+    return _ver2__iter_factor_pint__naive_brute_force_(n, **kwds)
+    return _ver1__iter_factor_pint__naive_brute_force_(n, **kwds)
+def flatten_list_factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> [p]'
-    return [*_ver3__flatten_iter_factor_pint__naive_brute_force_(n)]
-def flatten_iter_factor_pint__naive_brute_force_(n, /):
+    return [*_ver3__flatten_iter_factor_pint__naive_brute_force_(n, **kwds)]
+def flatten_iter_factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> Iter p'
-    return _ver3__flatten_iter_factor_pint__naive_brute_force_(n)
-def _ver3__flatten_iter_factor_pint__naive_brute_force_(n, /):
+    return _ver3__flatten_iter_factor_pint__naive_brute_force_(n, **kwds)
+def _ver3__flatten_iter_factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> Iter p'
-    m = _init0(n)
+    m = _init0(n, **kwds)
     if m:
         (n, ez) = m
         yield from repeat(2, ez)
@@ -94,7 +105,13 @@ def _ver3__flatten_iter_factor_pint__naive_brute_force_(n, /):
     if n == 1: return
     # [n > 1]
     # [@[d:<-[2..<3]] -> [n%d =!= 0]]
-    for p in range(3, 1+isqrt(n), 2):
+    #for p in range(3, 1+isqrt(n), 2):
+    p = 1
+    end = 1+isqrt(n)
+    step = 2
+    while 1:
+        p += step
+        if not p < end:break
         # [@[d:<-[2..<p]] -> [n%d =!= 0]]
         # [3 <= p <= isqrt(n)]
         # [p%2 == 1]
@@ -119,6 +136,7 @@ def _ver3__flatten_iter_factor_pint__naive_brute_force_(n, /):
             m, (p, ep) = yield from _body0(n, p, ep)
             if not m: return
             (n, q, r) = m
+            777;end = 1+isqrt(n)
             # [[n > 1][n == q*p+r][r>0]]
         # [[n > 1][n == q*p+r][r>0]]
         # [n%p =!= 0]
@@ -135,8 +153,8 @@ def _ver3__flatten_iter_factor_pint__naive_brute_force_(n, /):
     yield n
     return
 
-def _init(n, /):
-    m = _init0(n)
+def _init(n, /, **kwds):
+    m = _init0(n, **kwds)
     if m:
         (n, ez) = m
         yield (2, ez)
@@ -144,10 +162,12 @@ def _init(n, /):
     # [n%2 =!= 0]
     # [n >= 1]
     return n
-def _init0(n, /):
+#def _init0(n, /, **kwds):
+def _init0(n, /, *, max1_num_bits=21):
     check_int_ge(1, n)
     # [n >= 1]
-    if (n >> 21):raise ValueError(f'too big:{n}')
+    #if (n >> 21):raise ValueError(f'too big:{n}')
+    if (n >> max1_num_bits):raise ValueError(f'too big:{n}')
     if n&1 == 1:
         # [n%2 == 1]
         # [n >= 1]
@@ -193,16 +213,16 @@ def _body0(n, p, ep, /):
         return None, (p, ep)
     # [[n > 1][n == q*p+r][r>0]]
     return (n, q, r), (p, ep)
-def _ver3__iter_factor_pint__naive_brute_force_(n, /):
+def _ver3__iter_factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> Iter (p,e)'
-    ps = _ver3__flatten_iter_factor_pint__naive_brute_force_(n)
+    ps = _ver3__flatten_iter_factor_pint__naive_brute_force_(n, **kwds)
     for p, it in groupby(ps):
         ls = [*it]
         ep = len(ls)
         yield (p,ep)
-def _ver2__iter_factor_pint__naive_brute_force_(n, /):
+def _ver2__iter_factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> Iter (p,e)'
-    n = yield from _init(n)
+    n = yield from _init(n, **kwds)
     # [n%2 =!= 0]
     # [n >= 1]
     if n == 1: return
@@ -248,9 +268,9 @@ def _ver2__iter_factor_pint__naive_brute_force_(n, /):
     # [is_prime(n)]
     yield (n, 1)
     return
-def _ver1__iter_factor_pint__naive_brute_force_(n, /):
+def _ver1__iter_factor_pint__naive_brute_force_(n, /, **kwds):
     'n/int{>=1} -> Iter (p,e)'
-    n = yield from _init(n)
+    n = yield from _init(n, **kwds)
     # [n%2 =!= 0]
     # [n >= 1]
     # [@[d:<-[2..<3]] -> [n%d =!= 0]]

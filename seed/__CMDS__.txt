@@ -40,7 +40,7 @@ global lazy value
 
 
 
-
+grep 'Chinese_Remainder_Theorem' ../../python3_src/seed/ -r -l -I
 
 
 DONE:grep 'pefect' ../../python3_src/seed/ -r -l -I
@@ -442,6 +442,36 @@ grep 'pefect' ../../python3_src/seed/ -r -l -I
 
 ]]
 
+[[
+view ../../python3_src/seed/math/Chinese_Remainder_Theorem.py
+e ../../python3_src/seed/math/Chinese_Remainder_Theorem.py
+view ../../python3_src/nn_ns/math_nn/Chinese_Remainder_Theorem.py
+
+
+grep 'Chinese_Remainder_Theorem' ../../python3_src/seed/ -r -l -I
+grep 'Chinese_Remainder_Theorem' ../../python3_src/seed/math/ -r -I
+
+e ../../python3_src/seed/math/Chinese_Remainder_Theorem.py
+
+e ../../python3_src/seed/math/discrete_logarithm.py
+
+e ../../python3_src/seed/math/max_order_mod_.py
+
+e ../../python3_src/seed/math/factor_pint_as_perfect_power_.py
+e ../../python3_src/seed/math/factor_pint/perfect_power/detect_perfect_power.py
+
+
+
+../../python3_src/seed/math/factor_pint/perfect_power/detect_perfect_power.py
+  from seed.math.Chinese_Remainder_Theorem import apply_CRT__pairs
+../../python3_src/seed/math/discrete_logarithm.py
+  from seed.math.Chinese_Remainder_Theorem import apply_CRT__pairs
+
+
+view ../../python3_src/seed/math/max_order_mod_.py
+  from seed.math.Chinese_Remainder_Theorem import mk_CRT
+
+]]
 
 
 

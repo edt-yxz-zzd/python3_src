@@ -70,7 +70,22 @@ NOTE:[M==2**ez] => [xij =[%(max(2,Mj)///2)]= xj]
 
 
 
-
+>>> kth_root_of_odd_mod_zpow__k_is_odd_(3, 3, 27)
+3
+>>> kth_root_of_odd_mod_zpow__k_is_odd_(3, 10, 999**3)
+999
+>>> kth_root_of_odd_mod_zpow__k_is_odd_(101, 10, 6847801**101)
+313
+>>> 6847801%2**10
+313
+>>> 6847801 .bit_length()
+23
+>>> kth_root_of_odd_mod_zpow__k_is_odd_(101, 23, 6847801**101)
+6847801
+>>> 6847801 -2**22
+2653497
+>>> kth_root_of_odd_mod_zpow__k_is_odd_(101, 22, 6847801**101)
+2653497
 
 
 
@@ -93,7 +108,7 @@ sqrt_mod_coprime_power_
         sqrts_of_odd_mod_zpow_
 
 
-
+kth_root_of_odd_mod_zpow__k_is_odd_
 
 
 '''.split()#'''
@@ -111,23 +126,61 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 
+def kth_root_of_odd_mod_zpow__k_is_odd_(k, j, y, i=None, xi=None, /):
+    'k -> j -> y -> i -> xi -> xj/uint%2**j # [y%2 == 1][xi**k =[%2**i]= y][xj**k =[%2**j]= y][xj =[%2**i]= xi][j>=i>=3]'
+    check_int_ge(1, k)
+    check_int_ge(3, j)
+    check_type_is(int, y)
+    if i is None:
+        i = 3
+        xi = y&7
+    check_int_ge(3, i)
+    check_int_ge(i, j)
+    check_type_is(int, xi)
+
+    if not k&1 == 1:raise ValueError(k)
+    if not y&1 == 1:raise ValueError(y)
+    if i == j:
+        xj = xi
+        return xj
+    M = 2
+    777; may_max_mulorder_mod_M = None
+    vy = inv_mod_coprime_power_(M, j, y)
+    xj = _lifts__gkm_eq1_(k, M, may_max_mulorder_mod_M, j, vy, i, xi)
+    return xj
 
 
 def sqrts_of_odd_mod_zpow_(j, y, /, *, i_xi_pair=None, validate=False):
     'j -> y -> roots/[xj] # [y%2 == 1][xj**2 =[%2**j]= y][roots == {xj, 2**j-xj, (2**(j-1)+xj)%2**j, (2**(j-1)-xj)%2**j}]'
     xj = sqrt_of_odd_mod_zpow_(j, y, i_xi_pair=i_xi_pair)
-    if j >= 2:
-        Mj = 1<<j
-        ls = [xj, Mj-xj]
-        ls.sort()
-        # [ls[0] < Mj/2]
-        if j >= 3:
-            half = 1<<(j-1)
-            _xj = ls[0]
-            # [_xj == ls[0] < Mj/2 == half]
-            # [_xj < half]
-            ls += [half -_xj, half +_xj]
-            ls.sort()
+    if j >= 3:
+        half = 1 << (j-1)
+        if xj > half:
+            xj ^= half
+        # [0 < xj < half]
+        z = half -xj
+        # [0 < z < half]
+        if z < xj:
+            a, b = z, xj
+        else:
+            a, b = xj, z
+        # [0 < a < b < a+b==half]
+        c = a^half
+        d = b^half
+        # [0 < a < b < a+b==half==c-a==d-b < c < d < 2**j]
+        ls = [a, b, c, d]
+    elif j == 2:
+        ls = [1, 3]
+        assert xj in ls
+    elif j == 1:
+        assert xj == 1
+        ls = [1]
+    elif j == 0:
+        assert xj == 0
+        ls = [0]
+    else:
+        raise 000
+    assert xj in ls
     rs = (*ls,)
     if validate:
         Mj = 1<<j
@@ -212,15 +265,40 @@ def _lifts__gkm_eq1_(k, M, may_max_mulorder_mod_M, j, y, i, xi, /):
     # [gkm == 1]
     # [gcd(M,k) == 1]
     # [1 <= i <= j]
-    ij_ls = _decompose_j_as_ij_pairs_(i, j)
+    ij_ls = _3_decompose_j_as_ij_pairs_(i, j)
     saved_j = j
     xj = xi
+    Mj = Mi = M**i
+    vk6Mj = vk6gkm_eq1 = pow(k, -1, Mi)
+        # !! [gkm == 1]
     while ij_ls:
         (i, j) = ij_ls.pop()
-        r = lift_neg_kth_root_mod_coprime_power__human__ij_(k, M, may_max_mulorder_mod_M, i, j, y, xj)
+        Mj
+        if i == j:
+            Mi = Mj
+        elif i == j-1:
+            Mi = Mj//M
+        else:
+            #raise 000
+            #raise Exception(ij_ls, (i, j))
+                # Exception: ([(15, 15), (7, 8), (4, 4)], (1, 3))
+            Mi = M**i
+        Mi
+        if i == j:
+            vk6Mi = vk6Mj
+        else:
+            vk6Mi = vk6Mj%Mi
+        vk6Mi
+        (_1, vk6Mij) = lift_neg_kth_root_mod_coprime_power__human__MN_(1, Mi, Mj, may_max_mulorder_mod_MN:=None, k, vk6Mj)
+        may_max_mulorder_mod_Mij = _mk_may_max_mulorder_mod_MN(k, M, may_max_mulorder_mod_M, i, j, Mi, Mj)
+        r = lift_neg_kth_root_mod_coprime_power__human__MN_(k, Mi, Mj, may_max_mulorder_mod_Mij, y, xj, vk6gkm_eq1=vk6Mi)
+        #old:r = lift_neg_kth_root_mod_coprime_power__human__ij_(k, M, may_max_mulorder_mod_M, i, j, y, xj)
         match r:
-            case (1, int(xj)):
+            case (1, int(xij)):
                 j += i
+                xj = xij
+                Mj *= Mi
+                vk6Mj = vk6Mij
             case (_, None):
                 raise 000
             case _:
@@ -277,7 +355,9 @@ def _lifts__gkm_eq2__M_eq2_(k, M, j, y, i, xi, /):
 
 
 
-def _decompose_j_as_ij_pairs_(i0, j, /):
+def _3_decompose_j_as_ij_pairs_(i0, j, /):
+    # [j == _i+_j] # [gkm == 1]
+    #
     # [1 <= i0 <= j]
     assert 1 <= i0 <= j
     zi = i0<<1
@@ -300,6 +380,8 @@ def _decompose_j_as_ij_pairs_(i0, j, /):
     return ij_ls
 
 def _2_decompose_j_as_ij_pairs_(i0, j, /):
+    # [j == _i+_j-1] #2**j
+    #
     # [k == 2]
     # [j >= 1]
     # [2 <= i0 <= j]
@@ -354,7 +436,7 @@ def inv_mod_coprime_power_(M, j, y, /):
     return xj
 
 
-def lift_neg_kth_root_mod_coprime_power__human__ij_(k, M, may_max_mulorder_mod_M, i, j, y, xj, /):
+def lift_neg_kth_root_mod_coprime_power__human__ij_(k, M, may_max_mulorder_mod_M, i, j, y, xj, /, *, vk6gkm_eq1=None):
     'k -> M -> may max_mulorder_mod_M -> i -> j -> y -> xj -> (gkmi, may xij_g) # [[y*xj**k%M**j == 1][y*xij_g**k%M**(i+j) == 1][xij_g =[%M**j]= xj][0 <= xij_g < M**(i+j)///gcd(k,M**i)][gkmi == gcd(k,M**i)]] #see:lift_neg_kth_root_mod_coprime_power__strict__ver1_'
     check_int_ge(1, k)
     check_int_ge(2, M)
@@ -369,7 +451,7 @@ def lift_neg_kth_root_mod_coprime_power__human__ij_(k, M, may_max_mulorder_mod_M
     _xn = xj
     _may_max_mulorder_mod_MN = _mk_may_max_mulorder_mod_MN(k, M, may_max_mulorder_mod_M, i, j, Mi, Mj)
 
-    (_gkm, _may_xmn_g) = lift_neg_kth_root_mod_coprime_power__human__MN_(k, _M, _N, _may_max_mulorder_mod_MN, y, _xn)
+    (_gkm, _may_xmn_g) = lift_neg_kth_root_mod_coprime_power__human__MN_(k, _M, _N, _may_max_mulorder_mod_MN, y, _xn, vk6gkm_eq1=vk6gkm_eq1)
     may_xij_g = _may_xmn_g
     gkmi = _gkm
     return (gkmi, may_xij_g)
@@ -409,7 +491,7 @@ def _mk_may_max_mulorder_mod_MN(k, M, may_max_mulorder_mod_M, i, j, Mi, Mj, /):
     else:
         _may_max_mulorder_mod_MN = None
     return _may_max_mulorder_mod_MN
-def lift_neg_kth_root_mod_coprime_power__human__MN_(k, M, N, may_max_mulorder_mod_MN, y, xn, /):
+def lift_neg_kth_root_mod_coprime_power__human__MN_(k, M, N, may_max_mulorder_mod_MN, y, xn, /, *, vk6gkm_eq1=None):
     'k -> M -> N -> may max_mulorder_mod_MN -> y -> xn -> (gkm, may xmn_g) # [[y*xn**k%N == 1][y*xmn_g**k%(M*N) == 1][xmn_g =[%N]= xn][0 <= xmn_g < (M*N)///gcd(k,M)][gkm == gcd(k,M)]] #see:lift_neg_kth_root_mod_coprime_power__strict__ver1_'
     check_int_ge(1, k)
     check_int_ge(2, M)
@@ -418,10 +500,17 @@ def lift_neg_kth_root_mod_coprime_power__human__MN_(k, M, N, may_max_mulorder_mo
     if not N%M == 0:raise ValueError(M, N)
     check_type_is(int, y)
     check_type_is(int, xn)
-    gkm = gcd(k, M)
-    k_g = k //gkm
-    M_g = M //gkm
-    vk_g = pow(k_g, -1, M_g)
+    if not None is vk6gkm_eq1:
+        # [gkm == 1]
+        gkm = 1
+        k_g = k
+        M_g = M
+        vk_g = vk6gkm_eq1%M_g
+    else:
+        gkm = gcd(k, M)
+        k_g = k //gkm
+        M_g = M //gkm
+        vk_g = pow(k_g, -1, M_g)
     MN = M*N
     ymn = y%MN
     xn %= N
@@ -661,6 +750,6 @@ __all__
 
 from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import lift_neg_kth_root_mod_coprime_power__human__ij_, lift_neg_kth_root_mod_coprime_power__human__MN_, lift_neg_kth_root_mod_coprime_power__strict__ver1_
 
-from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import inv_mod_coprime_power_, sqrt_mod_coprime_power_, sqrt_of_odd_mod_zpow_, sqrts_of_odd_mod_zpow_
+from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import inv_mod_coprime_power_, sqrt_mod_coprime_power_, sqrt_of_odd_mod_zpow_, sqrts_of_odd_mod_zpow_, kth_root_of_odd_mod_zpow__k_is_odd_
 
 from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import *

@@ -173,9 +173,10 @@ with mk_ctx4lazy_import4funcs_(__name__):
         #def apply_CRT__pairs(u_r_pairs, /, *, extended:bool):
     from seed.math.factor_pint.factor_pint__naive_brute_force import iter_factor_pint__naive_brute_force_
     from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-    from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import sqrts_of_odd_mod_zpow_
+    from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import sqrts_of_odd_mod_zpow_, kth_root_of_odd_mod_zpow__k_is_odd_
     from seed.debug.print_err import print_err
     from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt, floor_kth_root_
+    from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
 from seed.math.prime_sieve.PrimeList import PrimeList, ModOverPrimeList #, DivmodOverPrimeList
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -247,7 +248,7 @@ def _1_detect_perfect_power_(using_floor_kth_root, arbitrary_exp_ok, vprime_list
         # [eq >= 2]
         return (q, eq)
     pes = iter_factor_pint__naive_brute_force_(eq)
-    e4odd = -1+odd.bit_length()
+    e4odd = floor_log2(odd)
     return _2_detect_perfect_power_(using_floor_kth_root, arbitrary_exp_ok, vprime_list, m, q, eq, odd, e4odd, pes)
 
 def detect_perfect_power_(m, /, *, arbitrary_exp_ok=False, vprime_list=None, using_floor_kth_root=False):
@@ -266,13 +267,17 @@ def detect_perfect_power_(m, /, *, arbitrary_exp_ok=False, vprime_list=None, usi
     # [odd == m >= 3]
     # [odd >= 3]
 
-    e4odd = -1+odd.bit_length()
+    e4odd = floor_log2(odd)
     # !! [odd >= 3]
     # [e4odd >= 1]
+    e4e4odd = floor_log2(e4odd)
+    #max1_p = e4odd
+    #max1_p = e4odd*(1+e4e4odd)
+    max1_p = e4odd+e4e4odd
     dr_ls = vprime_list = _5vprime_list(odd, vprime_list, strict=False, max1_6init=0)
     #(p2e, odd) = semi_factor_pint_via_trial_division(prime_list[:e4odd], odd)
     it = iter(dr_ls)
-    for p, r4odd in islice(it, 0, e4odd):
+    for p, r4odd in islice(it, 0, max1_p):
         # [p::prime]
         # [r4odd == odd%p]
         if r4odd == 0:
@@ -289,8 +294,10 @@ def detect_perfect_power_(m, /, *, arbitrary_exp_ok=False, vprime_list=None, usi
         # !! [odd == m]
         # [is_prime_(m)]
         return None
-    # [exp <= log_(next_p;m) == log2(m)/log2(next_p) < m.bit_length()/(-1+next_p.bit_length())]
-    max_exp = e4odd//(-1+next_p.bit_length())
+    # [exp <= log_(next_p;m) == log2(m)/log2(next_p) < m.bit_length()/floor_log2(next_p) == (1+floor_log2(odd))/floor_log2(next_p)]
+    # [exp < (1+floor_log2(odd))/floor_log2(next_p)]
+    # [exp <= (1+floor_log2(odd))//floor_log2(next_p)]
+    max_exp = (1+e4odd)//floor_log2(next_p)
         # (next_p, max_exp) => [m == next_p**max_exp]
         # trial_division => reduce max_k=max_exp from e4odd
         # [:trial_division__reduce_max_k]:here
@@ -342,7 +349,7 @@ def _2_detect_perfect_power_(using_floor_kth_root, arbitrary_exp_ok, vprime_list
             # [m == q**eq*rt**(p*exp)]
             exp *= p
             777;odd = rt
-            777;e4odd = -1+odd.bit_length()
+            777;e4odd = floor_log2(odd)
             # [m == q**eq*odd**exp]
             dr_ls = vprime_list = _5vprime_list(odd, vprime_list:=dr_ls, strict=False, max1_6init=0)
     # [m == q**eq*odd**exp]
@@ -391,7 +398,7 @@ def may_perfect_kth_root_of__factorization4k__via_CRT_(k, may_p2e4k, m, /, *, vp
     # [k >= 2]
     # [m >= 2]
     # [m**/k > 1]
-    e4m = -1+m.bit_length()
+    e4m = floor_log2(m)
     # [2**e4m <= m < 2**(e4m+1)]
     if e4m < k:
         # [2**e4m <= m < 2**(e4m+1) <= 2**k]
@@ -492,8 +499,8 @@ def may_perfect_sqrt_of__via_CRT_(m, /, *, vprime_list=None):
     ###########################
 
 
-    e4odd = -1+odd.bit_length()
-    e4e4odd = -1+e4odd.bit_length()
+    e4odd = floor_log2(odd)
+    e4e4odd = floor_log2(e4odd)
     dr_ls = vprime_list = _5vprime_list(odd, vprime_list, strict=False, max1_6init=0 and 2*e4odd*e4e4odd)
 
     pe_pairs = []
@@ -515,7 +522,7 @@ def may_perfect_sqrt_of__via_CRT_(m, /, *, vprime_list=None):
             pe_pairs.append((p, ep))
         elif -1 == Jacobi_symbol(p, r4odd):
             return None
-        tmp -= -1+p.bit_length()
+        tmp -= floor_log2(p)
         if tmp <= 0:
             break
     else:
@@ -525,7 +532,7 @@ def may_perfect_sqrt_of__via_CRT_(m, /, *, vprime_list=None):
     if not _odd == odd:
         odd = _odd
         # [odd >= 1]
-        e4odd = -1+odd.bit_length()
+        e4odd = floor_log2(odd)
         dr_ls = vprime_list = _5vprime_list(odd, dr_ls, strict=False, max1_6init=0)
         e4rt = e4odd//2
     # [odd >= 1]
@@ -583,7 +590,7 @@ def may_perfect_sqrt_of__via_CRT_(m, /, *, vprime_list=None):
     # !! [sqrt(odd) < 2**(1+e4rt) == 2**(j-2)]
     # [max(rt, sqrt(odd)) < 2**(j-2)]
     # [[is_square_(m)] <-> [rt == sqrt(odd)]]
-    if not e4rt == -1+rt.bit_length():
+    if not e4rt == floor_log2(rt):
         return None
     # [e4rt == floor_log2(rt)]
     # [2**e4rt <= rt < 2**(1+e4rt) == 2**(j-2)]
@@ -613,7 +620,7 @@ def may_perfect_sqrt_of__via_CRT_(m, /, *, vprime_list=None):
         # [r4odd == odd%p]
         if not r4odd == pow(rt, 2, p):
             return None
-        tmp -= -1+p.bit_length()
+        tmp -= floor_log2(p)
         # [M:=2**j*II(prime_list[1:sz])]
         #   [M >= 2**(e4sq -tmp)]
         #   [odd%M == rt**2 %M]
@@ -683,7 +690,7 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
     # [odd >= 2]
     # !! [k >= 3]
     # [odd**/k > 1]
-    e4odd = -1+odd.bit_length()
+    e4odd = floor_log2(odd)
     # [2**e4odd <= odd < 2**(e4odd+1)]
     if e4odd < k:
         # [2**e4odd <= odd < 2**(e4odd+1) <= 2**k]
@@ -697,7 +704,7 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
     max1_q = e4odd*k.bit_length()
     dr_ls = vprime_list = _5vprime_list(odd, vprime_list, strict=False, max1_6init=max1_q)
     ps = dr_ls.the_prime_list
-    e4e4odd = -1+e4odd.bit_length()
+    e4e4odd = floor_log2(e4odd)
     tmp = 2+e4rt//e4e4odd
     for q in ps.iter_find_primes_if_be_1addKmulX__lt_(max1_q, k):
         # [q::prime]
@@ -706,10 +713,14 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
         _, r4odd = dr_ls(q) # == odd%q
         if not pow(r4odd, d, q) < 2:
             return None
-        tmp -= -1+q.bit_length()
+        tmp -= floor_log2(q)
         if tmp <= 0:
             break
 
+    ##############################
+    # CRT or kth_root_of_odd_mod_zpow__k_is_odd_
+    ##############################
+        #
     it = iter(dr_ls)
     qr_ls = []
     p_rt_pairs = []
@@ -733,7 +744,7 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
         p_rt_pairs.append((p,rt6p))
         #IIps *= p
         #if IIps > 2**(1+e4rt): break
-        _e -= -1+p.bit_length()
+        _e -= floor_log2(p)
         if _e <= 0:break
     p_rt_pairs
     #IIps
@@ -741,10 +752,13 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
     qr_ls
     rt = apply_CRT__pairs(p_rt_pairs, extended=False)
     # [[is_kth_power_(k;m)] <-> [rt == (odd**/k)]]
-    if not e4rt == -1+rt.bit_length():
+    if not e4rt == floor_log2(rt):
         return None
     # [e4rt == floor_log2(rt)]
+    ##############################
 
+    ##############################
+    _e
     e4pw_rt = (1+e4rt)*k
     # !! [e4rt == floor_log2(rt)]
     # [2**e4rt <= rt < 2**(1+e4rt)]
@@ -767,7 +781,7 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
         # [r4odd == odd%q]
         if not r4odd == pow(rt, k%(q-1), q):
             return None
-        tmp -= -1+q.bit_length()
+        tmp -= floor_log2(q)
         # [tmp == e4pw_rt -lowb4e4IIps -lowb4e4IIqs]
         if tmp <= 0:
             # [e4M >= lowb4e4IIps +lowb4e4IIqs == e4pw_rt -tmp >= e4pw_rt]
