@@ -78,11 +78,11 @@ False
 
 
 [[
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -validate ='1+2**16'
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root -validate ='1+2**16'
     total::duration: 19.682154564999998 *(unit: 0:00:01)
         #pre-trial_division__reduce_max_k
 
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +validate ='1+2**16'
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root +validate ='1+2**16'
     total::duration: 19.536151727 *(unit: 0:00:01)
         #pre-trial_division__reduce_max_k
 
@@ -100,11 +100,11 @@ py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power
     total::duration: 0.3423573919999999 *(unit: 0:00:01)
         #post-trial_division__reduce_max_k
 
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -validate ='1+2**16'
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root -validate ='1+2**16'
     total::duration: 3.30401724 *(unit: 0:00:01)
         #post-trial_division__reduce_max_k
 
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +validate ='1+2**16'
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root +validate ='1+2**16'
     total::duration: 3.4169894010000004 *(unit: 0:00:01)
         #post-trial_division__reduce_max_k
 
@@ -113,16 +113,29 @@ py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power
 py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +using_floor_kth_root +validate ='1+2**16'
     total::duration: 2.281000315 *(unit: 0:00:01)
 CRT版更慢更花哨，大写的尴尬
+    #此后CRT采用新算法@20260608，重新测时
 
 ===以下:更新:检测提取，构根靠后
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -validate ='1+2**16'
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root -validate ='1+2**16'
     total::duration: 3.424905765 *(unit: 0:00:01)
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +validate ='1+2**16'
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root +validate ='1+2**16'
     total::duration: 3.5588912550000003 *(unit: 0:00:01)
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -validate ='1+2**16' +using_floor_kth_root
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +using_floor_kth_root -validate ='1+2**16'
     total::duration: 2.416809166 *(unit: 0:00:01)
-py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +validate ='1+2**16' +using_floor_kth_root
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +using_floor_kth_root +validate ='1+2**16'
     total::duration: 2.660633857 *(unit: 0:00:01)
+
+
+===
+@20260608CRT采用新算法，重新测时
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root -validate ='1+2**16'
+    total::duration: 2.906208317 *(unit: 0:00:01)
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ -using_floor_kth_root +validate ='1+2**16'
+    total::duration: 3.170212776 *(unit: 0:00:01)
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +using_floor_kth_root -validate ='1+2**16'
+    total::duration: 2.7720433879999997 *(unit: 0:00:01)
+py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +using_floor_kth_root +validate ='1+2**16'
+    total::duration: 2.86120063 *(unit: 0:00:01)
 ]]
 [[
 py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   ,_asc_us2iter_dqr_triples_ ='-1+2**3456' ='range(2, 2**16, 3)' +validate | more
@@ -169,8 +182,10 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.check import check_type_is, check_int_ge
     from seed.math.prime_sieve.sieve_ge_le import iter_primes_, iter_sieve4primes_ge_
     from seed.math.Jacobi_symbol import Jacobi_symbol
-    from seed.math.Chinese_Remainder_Theorem import apply_CRT__pairs
+    #from seed.math.Chinese_Remainder_Theorem import apply_CRT__pairs
         #def apply_CRT__pairs(u_r_pairs, /, *, extended:bool):
+    from seed.math.Chinese_Remainder_Theorem__ver2 import apply_CRT__pairs
+        # @20260608
     from seed.math.factor_pint.factor_pint__naive_brute_force import iter_factor_pint__naive_brute_force_
     from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
     from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import sqrts_of_odd_mod_zpow_, kth_root_of_odd_mod_zpow__k_is_odd_
@@ -180,6 +195,18 @@ with mk_ctx4lazy_import4funcs_(__name__):
 from seed.math.prime_sieve.PrimeList import PrimeList, ModOverPrimeList #, DivmodOverPrimeList
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
+
+
+
+#.#################################
+#using_floor_kth_root
+_default4using_floor_kth_root = False
+#@20260608:found CRT.precomputation slow
+_default4using_floor_kth_root = True
+#.#################################
+
+
+
 def _asc_us2iter_dqr_triples_(n, ds, /, *, validate=False):
     'n -> sorted-Iter d -> Iter (d, q, r) # [n == d*q+r]'
     ds = iter(ds)
@@ -251,7 +278,7 @@ def _1_detect_perfect_power_(using_floor_kth_root, arbitrary_exp_ok, vprime_list
     e4odd = floor_log2(odd)
     return _2_detect_perfect_power_(using_floor_kth_root, arbitrary_exp_ok, vprime_list, m, q, eq, odd, e4odd, pes)
 
-def detect_perfect_power_(m, /, *, arbitrary_exp_ok=False, vprime_list=None, using_floor_kth_root=False):
+def detect_perfect_power_(m, /, *, arbitrary_exp_ok=False, vprime_list=None, using_floor_kth_root=_default4using_floor_kth_root):
     #, **kwds4detect:vprime_list,using_floor_kth_root
     'm/uint{>1} -> may (rt/uint{>1}, exp/uint{>1}) # [rt**exp==m] # kw:arbitrary_exp_ok affect whether "exp" should be maximal'
     check_int_ge(2, m)
@@ -358,7 +385,7 @@ def _2_detect_perfect_power_(using_floor_kth_root, arbitrary_exp_ok, vprime_list
             return (odd<<(eq//exp), exp)
         return (odd*q**(eq//exp), exp)
     return None
-def may_perfect_kth_root_of__k_is_prime_(k, m, /, *, using_floor_kth_root=False, **kwds4CRT):
+def may_perfect_kth_root_of__k_is_prime_(k, m, /, *, using_floor_kth_root=_default4using_floor_kth_root, **kwds4CRT):
     'k/prime -> m/uint -> may n/uint # [n**k == m]'
     if using_floor_kth_root:
         return may_perfect_kth_root_of__via_floor_kth_root_(k, m)
@@ -383,7 +410,7 @@ def may_perfect_cbrt_of_(m, /, **kwds4pKrt):
     'm/uint -> may n/uint # [n**3 == m]'
     return may_perfect_kth_root_of__k_is_prime_(3, m, **kwds4pKrt)
 may_perfect_cbrt_ = may_perfect_cbrt_of_
-def may_perfect_kth_root_of__factorization4k_(k, may_p2e4k, m, /, *, using_floor_kth_root=False, **kwds4CRT):
+def may_perfect_kth_root_of__factorization4k_(k, may_p2e4k, m, /, *, using_floor_kth_root=_default4using_floor_kth_root, **kwds4CRT):
     #, **kwds4pKrt:using_floor_kth_root, **kwds4CRT
     'k/uint -> may factorization{k}/p2e4k/{prime:exp{>=1}} -> m/uint -> may n/uint # [n**k == m]'
     if using_floor_kth_root:
@@ -441,7 +468,7 @@ def may_perfect_sqrt_of__via_floor_kth_root_(m, /):
     if rt**2 == m:
         return rt
     return None
-def may_perfect_sqrt_of_(m, /, *, using_floor_kth_root=False, **kwds4CRT):
+def may_perfect_sqrt_of_(m, /, *, using_floor_kth_root=_default4using_floor_kth_root, **kwds4CRT):
     'm/uint -> may n/uint # [n**2 == m]'
     if using_floor_kth_root:
         return may_perfect_sqrt_of__via_floor_kth_root_(m)
@@ -804,7 +831,7 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
 
 
 
-def _run_lt_(m, /, *, validate, using_floor_kth_root=False):
+def _run_lt_(m, /, *, validate, using_floor_kth_root:'not _default4using_floor_kth_root;once be False'):
     if validate:
         from math import gcd
         from seed.math.prime_sieve.sieve_lt import tabulate_may_prime_factorization4uint_lt_

@@ -144,6 +144,9 @@ view ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_..b001918.b002233.out.
 -1
 
 
+
+
+
 def _prepare4mod_prime_(modulus, g, sz=None, /):
 >>> (modulus, g) = (17, 3)
 >>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
@@ -368,6 +371,82 @@ ValueError: 0
 
 
 
+[[
+@20260607
+# fail!!!证明:整除div_len_有用，inv_len不必存在！！
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(16, 8) # (ez4modulus, ez4sz)
+>>> xs = [*range(sz)]
+>>> rs = FFT__original__len_is_zpow(neg, add, mul, g, xs)
+>>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, div_len_, rs)
+>>> len(_xs) == len(rs) == len(xs) == 256
+True
+>>> _xs == xs
+True
+
+>>> xs = [*range(2, 2+5*sz, 5)]
+>>> len(xs) == 256
+True
+>>> rs = FFT__original__len_is_zpow(neg, add, mul, g, xs)
+>>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, div_len_, rs)
+>>> len(_xs) == len(rs) == len(xs) == 256
+True
+>>> _xs == xs # fail!!!!!!!!!!
+False
+True
+
+]]
+[[
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(0, 0)
+Traceback (most recent call last):
+    ...
+TypeError: 0
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(1, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(2, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(3, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 0)
+
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(1, 1)
+Traceback (most recent call last):
+    ...
+TypeError: 1
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(2, 1)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(3, 1)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 1)
+
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(2, 2)
+Traceback (most recent call last):
+    ...
+TypeError: 2
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(3, 2)
+Traceback (most recent call last):
+    ...
+TypeError: 3
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 2)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(5, 2)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(6, 2)
+
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 3)
+Traceback (most recent call last):
+    ...
+TypeError: 4
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(5, 3)
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(6, 3)
+
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 4)
+Traceback (most recent call last):
+    ...
+TypeError: 4
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(5, 4)
+Traceback (most recent call last):
+    ...
+TypeError: 5
+>>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(6, 4)
+
+]]
+
+
+
+
 
 
 
@@ -402,7 +481,7 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 from functools import reduce
 from seed.math.factor_pint.factor_pint__naive_brute_force import flatten_list_factor_pint__naive_brute_force_# flatten_iter_factor_pint__naive_brute_force_
-#.from seed.tiny_.check import check_type_is, check_int_ge
+from seed.tiny_.check import check_type_is, check_int_ge
 #.from itertools import islice
 #.
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -539,8 +618,8 @@ def FFT__native(neg, add, mul, g, xs, /, *, may_gs=None):
     rs = [reduce(add, map(mul, xs, mx[irow])) for irow in range(L)]
     return rs
 
-def IFFT_(FFT_, neg, add, mul, inv_g, inv_len, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
-    '[inv_g==FFT.uinty_root]'
+def IFFT_(FFT_, neg, add, mul, inv_g, inv_len_or_div_len_, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
+    '[inv_g==FFT.unity_root][inv_len_or_div_len_ == (inv_len/{==len(xs)**-1} | div_len_/callable[#eg:(///len(xs))#])]'
     if may_inv_gs is None:
         if not may_gs is None:
             gs = may_gs
@@ -552,8 +631,16 @@ def IFFT_(FFT_, neg, add, mul, inv_g, inv_len, xs, /, *, extra_args=(), may_gs=N
     rs = FFT_(neg, add, mul, *extra_args, inv_g, xs, **kwds)
     #rs = [*iter_op_1_s_(mul, inv_len, ys)]
         # cancel:since FFT_ may be inplace
+    if callable(inv_len_or_div_len_):
+        div_len_ = inv_len_or_div_len_
+    else:
+        inv_len = inv_len_or_div_len_
+        def div_len_(x, /):
+            return mul(inv_len, x)
+    div_len_
     for i in range(len(rs)):
-        rs[i] = mul(inv_len, rs[i])
+        #rs[i] = mul(inv_len, rs[i])
+        rs[i] = div_len_(rs[i])
     return rs
 def _mk_pows(mul, L, g, /, *, may_gs):
     #gs = [g**k for k in range(len(xs))]
@@ -572,7 +659,7 @@ def _mk_pows(mul, L, g, /, *, may_gs):
     return gs
 
 def FFT__original__len_is_zpow(neg, add, mul, g, xs, /, *, may_gs=None):
-    '[g==FFT.uinty_root**-1]'
+    '[g==FFT.unity_root**-1]'
     L = len(xs)
     if L == 0:raise ValueError(L)
     sz4bits = L.bit_length()-1
@@ -593,11 +680,12 @@ def FFT__original__len_is_zpow(neg, add, mul, g, xs, /, *, may_gs=None):
         _gs = (gs[i] for i in range(LLL)[::ig])
         zs = [*map(mul, _gs, zs)]
         rs = [*map(add, ys, zs), *map(add, ys, map(neg, zs))]
+            # using_neg_here
         return rs
     return FFT(1, xs)
 
 def FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs, /, *, may_gs=None):
-    '[g==FFT.uinty_root**-1]' \
+    '[g==FFT.unity_root**-1]' \
     ' # [TIME(FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul; xs)) = O(L*log2(L))*TIME(mul+add+neg)]'
     L = len(xs)
     if L == 0:raise ValueError(L)
@@ -631,10 +719,36 @@ def FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs, /, *, may_gs=N
                 z = mul(xs[j+k], gs[ig*k])
                 xs[i+k] = add(y, z)
                 xs[j+k] = add(y, neg(z))
+                    # using_neg_here
     # total:O(L*log2(L)) + L*TIME(1*mul) + L*log2(L)/2*TIME(1*mul+2*add+1*neg)
     # total:O(L*log2(L))*TIME(mul+add+neg)
     return xs
-def _prepare4mod_prime_(modulus, g, sz=None, /):
+def _prepare4mod_zpow_(ez4modulus, ez4sz, /):
+    check_int_ge(0, ez4sz)
+    check_int_ge((1 +(ez4sz >= 2) +ez4sz), ez4modulus)
+    sz = 1 << ez4sz
+    modulus = 1 << ez4modulus
+    #view others/数学/本原根.txt
+    ez4phiM = ez4modulus -1 -(ez4modulus >= 3)
+    assert ez4modulus >= ez4sz
+    g = 5 if ez4modulus >= 3 else (0,1,3)[ez4modulus]
+    assert pow(g, 1<<ez4phiM, modulus) == 1
+    assert ez4phiM == 0 or not pow(g, 1<<(-1+ez4phiM), modulus) == 1
+    assert ez4phiM == 0 or (__:=pow(g, 1<<(-1+ez4phiM), modulus)) == (1+modulus//2 if ez4modulus >= 2 else modulus-1), (ez4modulus, ez4phiM, __)
+
+
+    g = pow(3, 1<<(ez4phiM -ez4sz), modulus)
+    assert (g == 1) if ez4sz == 0 else not pow(g, 1<<(ez4sz-1), modulus) == 1 and pow(g, 1<<ez4sz, modulus) == 1
+    (neg, add, mul, inv) = _mk_neg_add_mul_inv4mod_(modulus)
+    inv_g = inv(g)
+    def div_len_(x, /):
+        y = x >> ez4sz
+        if not (y << ez4sz) == x:raise ValueError(x, ez4sz)
+        return y
+    inv_len = div_len_
+    may_radixes = (2,)*ez4modulus
+    return (neg, add, mul, g, inv_g, sz, inv_len, may_radixes)
+def _prepare4mod_prime_(modulus, g, sz=None, /, *, no_neg_one_ok=False):
     '[sz>=1][phi(modulus)%sz==0][g**sz%modulus==1][order_mod_(modulus;g)==sz]'
     #xxx:[is_prime(modulus)][modulus%2==1]
     r'''[[[
@@ -666,9 +780,17 @@ True
     inv_len = inv(sz)
     assert 1%modulus == (inv_len*sz)%modulus
     assert 1%modulus == (inv_g*g)%modulus
+    assert 1%modulus == pow(g, sz, modulus)
     assert 1%modulus == pow(inv_g, sz, modulus)
     if sz%2==0 and modulus > 1:
-        assert -1 == pow(inv_g, sz//2, modulus) -modulus
+        assert no_neg_one_ok or -1 == pow(inv_g, sz//2, modulus) -modulus
+        if no_neg_one_ok:
+            pseudo_neg_one = pow(inv_g, sz//2, modulus)
+            if not pseudo_neg_one == modulus-1:
+                # "using_neg_here":goto
+                def neg(x, /):
+                    return pseudo_neg_one*x%modulus
+    neg#overwrited
     assert inv_g == pow(g, sz-1, modulus)
     L = sz
     gs = _mk_pows(mul, L, g, may_gs=None)
@@ -695,17 +817,17 @@ def _mk_neg_add_mul_inv4mod_(m, /):
 mk_neg_add_mul_inv4mod_ = _mk_neg_add_mul_inv4mod_
 
 def FFT__bit_scramble__len_is_zpow(neg, add, mul, g, xs, /, **kwds):
-    '[g==FFT.uinty_root**-1]'
+    '[g==FFT.unity_root**-1]'
     rs = FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, [*xs], **kwds)
     return rs
 def FFT__idx_digit_reverse(neg, add, mul, g, xs, /, **kwds):
-    '[g==FFT.uinty_root**-1]'
+    '[g==FFT.unity_root**-1]'
     rs = FFT__idx_digit_reverse__inplace(neg, add, mul, g, _rs:=[*xs], **kwds)
     assert not rs is xs
     assert rs is _rs
     return rs
 def FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, /, *, may_radixes=None, scramble_=None, may_gs=None):
-    '[g==FFT.uinty_root**-1]' \
+    '[g==FFT.unity_root**-1]' \
     ' # [TIME(FFT__idx_digit_reverse__inplace(neg, add, mul; radixes; xs)) = O(L*sum(radixes))*TIME(mul+add) where [L==II(radixes)==len(xs)]]'
     L = len(xs)
     if L == 0:raise ValueError(L)
@@ -824,11 +946,11 @@ def FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, /, *, may_radixes=None
     return xs
 
 def FFT__idx_digit_reverse__inplace__mod_(modulus, g, xs, /, **kwds):
-    '[g==FFT.uinty_root**-1]'
+    '[g==FFT.unity_root**-1]'
     (neg, add, mul, inv) = _mk_neg_add_mul_inv4mod_(modulus)
     return FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, **kwds)
 def FFT__idx_digit_reverse__mod_(modulus, g, xs, /, **kwds):
-    '[g==FFT.uinty_root**-1]'
+    '[g==FFT.unity_root**-1]'
     (neg, add, mul, inv) = _mk_neg_add_mul_inv4mod_(modulus)
     return FFT__idx_digit_reverse(neg, add, mul, g, xs, **kwds)
 
@@ -841,7 +963,7 @@ from seed.algo.FFT.index_scramble4FFT import uint5bits_, uint2bits_
 
 
 from seed.algo.FFT.index_scramble4FFT import IFFT_
-    #def IFFT_(FFT_, neg, add, mul, inv_g, inv_len, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
+    #def IFFT_(FFT_, neg, add, mul, inv_g, inv_len_or_div_len_, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
 from seed.algo.FFT.index_scramble4FFT import FFT__native, FFT__original__len_is_zpow, FFT__bit_scramble__len_is_zpow, FFT__idx_digit_reverse
     #def FFT__native(neg, add, mul, g, xs, /, *, may_gs=None):
     #def FFT__original__len_is_zpow(neg, add, mul, g, xs, /, *, may_gs=None):
@@ -860,5 +982,13 @@ from seed.algo.FFT.index_scramble4FFT import FFT__idx_digit_reverse__inplace__mo
 
 from seed.algo.FFT.index_scramble4FFT import _mk_pows
 #def _mk_pows(mul, L, g, /, *, may_gs):
+
+from seed.algo.FFT.index_scramble4FFT import _prepare4mod_zpow_
+#def _prepare4mod_zpow_(ez4modulus, ez4sz, /):
+#    -> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes)
+from seed.algo.FFT.index_scramble4FFT import _prepare4mod_prime_
+#def _prepare4mod_prime_(modulus, g, sz=None, /):
+#    -> (neg, add, mul, g, inv_g, sz, inv_len, may_radixes)
+
 
 from seed.algo.FFT.index_scramble4FFT import *
