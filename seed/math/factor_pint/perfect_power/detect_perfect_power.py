@@ -137,6 +137,44 @@ py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power
 py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   @_run_lt_ +using_floor_kth_root +validate ='1+2**16'
     total::duration: 2.86120063 *(unit: 0:00:01)
 ]]
+===
+@20260608
+难道是CRT.setup耗时太多？
+    =>尝试使用timeit
+#py -m timeit -n/--number -r/--repeat -s/--setup
+py -m timeit -n 10 -r 1 -s  'from seed.math.factor_pint.perfect_power.detect_perfect_power import _run_lt_; _run_lt_(30, using_floor_kth_root=True, validate=True)'   '_run_lt_(1+2**16, using_floor_kth_root=True, validate=False)' #kth_root
+10 loops, best of 1: 2.21 sec per loop
+py -m timeit -n 10 -r 1 -s  'from seed.math.factor_pint.perfect_power.detect_perfect_power import _run_lt_; _run_lt_(30, using_floor_kth_root=False, validate=True)'   '_run_lt_(1+2**16, using_floor_kth_root=False, validate=False)' #CRT
+10 loops, best of 1: 2.65 sec per loop
+py -m timeit -n 30 -r 5 -s  'from seed.math.factor_pint.perfect_power.detect_perfect_power import _run_lt_; _run_lt_(30, using_floor_kth_root=True, validate=True)'   '_run_lt_(1+2**16, using_floor_kth_root=True, validate=False)'
+    内存耗尽，手机宕机
+py -m timeit -n 30 -r 5 -s  'from seed.math.factor_pint.perfect_power.detect_perfect_power import _run_lt_; _run_lt_(30, using_floor_kth_root=False, validate=True)'   '_run_lt_(1+2**16, using_floor_kth_root=False, validate=False)'
+    内存耗尽，手机宕机
+???哪里出病蛊？？？应当是timeit关闭了 垃圾回收机制
+def _iter_run_lt__to_seperate_setup_time_(m, /, *, repeat, validate, using_floor_kth_root):
+py_adhoc_call  { +to_show_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   ,_iter_run_lt__to_seperate_setup_time_ +using_floor_kth_root -validate --repeat=30 ='1+2**16' #kth_root
+    0: ... ...
+    666
+    0:duration: 0.06887938100000002 *(unit: 0:00:01)
+    1: ... ...
+    999
+    1:duration: 73.765090177 *(unit: 0:00:01)
+    2: ... ...
+    2:duration: 0.00018461499999489206 *(unit: 0:00:01)
+py_adhoc_call  { +to_show_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   ,_iter_run_lt__to_seperate_setup_time_ -using_floor_kth_root -validate --repeat=30 ='1+2**16' #CRT
+    0: ... ...
+    666
+    0:duration: 0.06815415200000008 *(unit: 0:00:01)
+    1: ... ...
+    999
+    1:duration: 85.49941197 *(unit: 0:00:01)
+    2: ... ...
+    2:duration: 0.00017930699999624267 *(unit: 0:00:01)
+并非是CRT.setup耗时太多
+CRT确实比kth_root慢！！
+++_default4using_floor_kth_root:=True
+
+===
 [[
 py_adhoc_call  { +to_show_total_timedelta }  seed.math.factor_pint.perfect_power.detect_perfect_power   ,_asc_us2iter_dqr_triples_ ='-1+2**3456' ='range(2, 2**16, 3)' +validate | more
 ]]
@@ -831,6 +869,12 @@ def may_perfect_kth_root_of__k_is_odd_prime__via_CRT_(k, m, /, *, vprime_list=No
 
 
 
+def _iter_run_lt__to_seperate_setup_time_(m, /, *, repeat, validate, using_floor_kth_root):
+    _run_lt_(30, validate=True, using_floor_kth_root=using_floor_kth_root)
+    yield 666
+    for _ in range(repeat):
+        _run_lt_(m, validate=validate, using_floor_kth_root=using_floor_kth_root)
+    yield 999
 def _run_lt_(m, /, *, validate, using_floor_kth_root:'not _default4using_floor_kth_root;once be False'):
     if validate:
         from math import gcd
