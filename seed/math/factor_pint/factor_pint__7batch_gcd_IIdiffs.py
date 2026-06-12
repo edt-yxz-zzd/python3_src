@@ -285,6 +285,23 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7
 fail....
 
 ]]
+[[
+sz be (-1+2**ez):
+    since [1+num_roots == degree]
+    FFT{degree:=2**ez} => [sz==num_roots==-1+2**ez]
+vs:
+    *  9 seconds@[sz:=-1+2**12]
+    * 20 seconds@[sz:=2**12]
+
+[sz:=-1+2**12]:
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='666699996666' ='-1+2**12'  --offset=6_6666_6666_9999_9999_9999_9999
+    total::duration: 8.919303248 *(unit: 0:00:01)
+
+
+[sz:=-1+2**13]:
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='6666999966669' ='-1+2**13'  --offset=66_6666_6666_9999_9999_9999_9999
+    total::duration: 21.164170992 *(unit: 0:00:01)
+]]
 
 
 
@@ -333,6 +350,8 @@ def mk_pows_mod_(N, sz, x0, e0, /):
 def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=False, fancy_vs_native=False):
     r'''[[[
     :: N/uint -> x0 -> sz -> offset -> (nontrivial_factors, ks4zero)
+
+    [best_sz == -1+2**ez]
 
     # to factor N require [sz == O(min_prime_factor{N}**/2)]
     kw:fancy_vs_native:
