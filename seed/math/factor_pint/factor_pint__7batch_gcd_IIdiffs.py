@@ -54,6 +54,17 @@ view ../../python3_src/seed/math/polynomial/eval_polynomial/eval_polynomial_on_g
 
 
 [[
+py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_   @find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_ '={2: 8}'  =257
+    3
+py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_   @find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_ '={2: 16}'  ='1+2**16'
+    3
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='257*(1+2**16)' =3 ='16'
+    ([257], [])
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='257*(1+2**16)' =3 ='15'
+    ([], [])
+
+]]
+[[
 py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_   @find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_ '={2: 13, 29: 1, 101: 1, 179: 1}'  =4294991873
     3
 py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_   @find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_ '={2: 1, 3:1}'  =7
@@ -130,6 +141,7 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7
 ]]
 [[
 M67:[x0:=3]
+_default4min_ez4M4recur=2
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' =3 ='2**8'
     ([], [])
     total::duration: 1.7228267769999999 *(unit: 0:00:01)
@@ -148,25 +160,132 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' =3 ='2**14'
     ([193707721], [])
     total::duration: 117.586852547 *(unit: 0:00:01)
+    _default4min_ez4M4recur = 2
+    _default4min_len4recur = 3
 
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' =999 ='2**9'
     ([], [])
     total::duration: 3.6981264059999996 *(unit: 0:00:01)
 
-]]
-[[
-py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_   @find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_ '={2: 8}'  =257
-    3
-py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_   @find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_ '={2: 16}'  ='1+2**16'
-    3
-py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='257*(1+2**16)' =3 ='16'
-    ([257], [])
-    total::duration: 0.570103846 *(unit: 0:00:01)
-py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='257*(1+2**16)' =3 ='15'
-    ([], [])
-    total::duration: 0.4789347030000001 *(unit: 0:00:01)
+
+=========
+_default4min_ez4M4recur=4
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' =3 ='2**10'
+    total::duration: 2.164931444 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' =3 ='2**11'
+    total::duration: 3.937559703 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' =3 ='2**12'
+    total::duration: 9.842352038 *(unit: 0:00:01)
+=========
+fix:sz=2**12
+fix:_default4min_len4recur = 3
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' =3 ='2**12'
+_default4min_ez4M4recur=4
+    total::duration: 9.842352038 *(unit: 0:00:01)
+_default4min_ez4M4recur=5
+    total::duration: 7.281013268000001 *(unit: 0:00:01)
+_default4min_ez4M4recur=6
+    total::duration: 7.281175234 *(unit: 0:00:01)
+_default4min_ez4M4recur=9
+    total::duration: 12.730962077 *(unit: 0:00:01)
+_default4min_ez4M4recur=8
+    total::duration: 12.393002973 *(unit: 0:00:01)
+_default4min_ez4M4recur=7
+    total::duration: 8.267685101 *(unit: 0:00:01)
+
+=========
+fix:sz=2**12
+fix:_default4min_ez4M4recur = 5
+    _default4min_len4recur:should match _default4min_ez4M4recur
+_default4min_len4recur = 16
+    total::duration: 7.306811389 *(unit: 0:00:01)
+_default4min_len4recur = 32
+    total::duration: 7.197319943 *(unit: 0:00:01)
+_default4min_len4recur = 64
+    total::duration: 7.362201423 *(unit: 0:00:01)
+_default4min_len4recur = 24
+    total::duration: 7.27977017 *(unit: 0:00:01)
+_default4min_len4recur = 40
+    total::duration: 7.692338782 *(unit: 0:00:01)
+=========
+fix:sz=2**14
+fix:_default4min_ez4M4recur = 5
+fix:_default4min_len4recur = 32
+    total::duration: 30.656554515 *(unit: 0:00:01)
 
 ]]
+[[
+M1207:(-1+2**1207)
+fix:_default4min_ez4M4recur = 5
+fix:_default4min_len4recur = 32
+cmp:kw:fancy_vs_native:
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='2**7'
+    total::duration: 0.7746513159999999 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='2**7' +fancy_vs_native
+    total::duration: 0.313707778 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='2**8'
+    total::duration: 1.276031086 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='2**8' +fancy_vs_native
+    total::duration: 0.7553711500000001 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='2**9'
+    ([131071, 228479], [])
+    total::duration: 2.5418582360000004 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='2**9' +fancy_vs_native
+    ([131071, 228479], [])
+    total::duration: 2.5023634599999998 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479' =3 ='2**10'
+    total::duration: 4.494771076 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479' =3 ='2**10' +fancy_vs_native
+    total::duration: 9.178510253 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479' =3 ='2**11'
+    total::duration: 8.745499635 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479' =3 ='2**11' +fancy_vs_native
+    total::duration: 36.138675844 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479' =3 ='2**12'
+    total::duration: 21.566013433000002 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479' =3 ='2**12' +fancy_vs_native
+    total::duration: 144.248593731 *(unit: 0:00:01)
+
+3-->5
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479' =5 ='2**12'
+    ([48544121], [])
+    total::duration: 21.689972340999997 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121' =7 ='2**12'
+    total::duration: 21.338051258 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121' =11 ='2**12'  --offset=6
+    total::duration: 21.366172194 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121' =13 ='2**12'  --offset=7
+    ([212885833], [])
+    total::duration: 21.547251733 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' =17 ='2**12'  --offset=8
+    total::duration: 20.076290508 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' =19 ='2**12'  --offset=80000
+    total::duration: 20.393226055 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' =23 ='2**12'  --offset=9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' =25 ='2**12'  --offset=99999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='29**30' ='2**12'  --offset=999999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='31' ='2**12'  --offset=9999999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='37' ='2**12'  --offset=9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='42' ='2**12'  --offset=9_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='48' ='2**12'  --offset=99_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='56' ='2**12'  --offset=999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='60' ='2**12'  --offset=9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='61' ='2**12'  --offset=9_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='63' ='2**12'  --offset=99_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='66' ='2**12'  --offset=999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='666' ='2**12'  --offset=9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='6666' ='2**12'  --offset=6_9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='66669' ='2**12'  --offset=66_9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='666699' ='2**12'  --offset=666_9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='6666999' ='2**12'  --offset=6666_9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='66669999' ='2**12'  --offset=6_6666_9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='666699996' ='2**12'  --offset=66_6666_9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='6666999966' ='2**12'  --offset=666_6666_9999_9999_9999_9999
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='66669999666' ='2**12'  --offset=6666_6666_9999_9999_9999_9999
+fail....
+
+]]
+
 
 
 
@@ -211,11 +330,14 @@ def mk_pows_mod_(N, sz, x0, e0, /):
         xs.append(x0*xs[-1]%N)
     assert len(xs) == sz
     return xs
-def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=False):
+def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=False, fancy_vs_native=False):
     r'''[[[
     :: N/uint -> x0 -> sz -> offset -> (nontrivial_factors, ks4zero)
 
-    O(sz*ln(sz)) # to factor N require [sz == O(min_prime_factor{N}**/2)]
+    # to factor N require [sz == O(min_prime_factor{N}**/2)]
+    kw:fancy_vs_native:
+        fancy => O(sz*ln(sz))
+        native => O(sz**2)
 
     precondition:
         [gcd(N,x0) == 1]
@@ -286,33 +408,54 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=Fal
     #]]]'''#'''
 
 
-    assert 1 < x0 < N
     x0 %= N
-    inv_x0 = pow(x0, -1, N)
-    inv_x1 = pow(inv_x0, sz, N)
-    #B = pow(x0, -offset*sz, N)
-    #B = pow(inv_x0, +offset*sz, N)
-    B = pow(inv_x1, +offset, N)
-        # bias
-    # [B == x0**(-offset*sz) %N]
-    cs0_off = mk_polynomial_coeffs5roots_on_geometric_progression_(opsN, B, x0, inv_x0, sz)
-        #优化:几何级数:II[(x-x0**(i*K+j)) | i,j...] == x0**??? * II[(x/x0**(i*Kj) -x0**j0) | i,j...]
-        # O(sz*ln(sz))
-    # [cs0_off == poly{roots:=[x0**(j-offset*sz) %N | [j:<-[0..<sz]]]}.coeffs]
-    assert -1+len(cs0_off) == sz
+    assert 1 < x0 < N
+    def _4fancy():
+        inv_x0 = pow(x0, -1, N)
+        inv_x1 = pow(inv_x0, sz, N)
+        #B = pow(x0, -offset*sz, N)
+        #B = pow(inv_x0, +offset*sz, N)
+        B = pow(inv_x1, +offset, N)
+            # bias
+        # [B == x0**(-offset*sz) %N]
+        cs0_off = mk_polynomial_coeffs5roots_on_geometric_progression_(opsN, B, x0, inv_x0, sz)
+            #优化:几何级数:II[(x-x0**(i*K+j)) | i,j...] == x0**??? * II[(x/x0**(i*Kj) -x0**j0) | i,j...]
+            # O(sz*ln(sz))
+        # [cs0_off == poly{roots:=[x0**(j-offset*sz) %N | [j:<-[0..<sz]]]}.coeffs]
+        assert -1+len(cs0_off) == sz
 
-    #x1 = pow(x0, sz, N)
-    x1 = pow(inv_x1, -1, N)
-    T, invT = x1, inv_x1
-    # [T == x0**sz %N]
-    # !! [gcd(N,x0) == 1]
-    # [gcd(N,x1) == 1]
+        #x1 = pow(x0, sz, N)
+        x1 = pow(inv_x1, -1, N)
+        T, invT = x1, inv_x1
+        # [T == x0**sz %N]
+        # !! [gcd(N,x0) == 1]
+        # [gcd(N,x1) == 1]
 
-    # [polynomial{cs0_off;X} == II[(X -x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N]
-    diffs = ev.evals_(coeffs8poly:=cs0_off, T, invT)
-        # O(sz*ln(sz))
-    assert -1+len(diffs) == sz
-    diffs.pop()
+        # [polynomial{cs0_off;X} == II[(X -x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N]
+        diffs = ev.evals_(coeffs8poly:=cs0_off, T, invT)
+            # O(sz*ln(sz))
+        assert -1+len(diffs) == sz
+        diffs.pop()
+        assert len(diffs) == sz
+        # [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] * x0**(-offset*sz**2 +sz*(sz-1)/2) %N | [k:<-[offset..<offset+sz]]]]
+        return diffs
+    def _4native():
+        # diff from _4fancy():by drop: 『x0**???』
+        x = x0
+        diffs = []
+        y = pow(x0, (offset-1)*sz, N)
+        for _ in range(sz):
+            IIdiffs = 1
+            for _ in range(sz):
+                y = y*x%N
+                IIdiffs = IIdiffs*(y-1)%N
+            diffs.append(IIdiffs)
+        assert len(diffs) == sz
+        # drop: 『x0**???』
+        # [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N | [k:<-[offset..<offset+sz]]]]
+        return diffs
+
+    diffs = _4fancy() if not fancy_vs_native else _4native()
     assert len(diffs) == sz
     # [diffs == [polynomial{cs0_off;X}(X:=T**i) | [i:<-[0..<sz]]]]
 
@@ -334,6 +477,7 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=Fal
     # !! [gcd(N,x0) == 1]
     # [@[i:<-idc4zero] -> [k:=(i+offset)] -> [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N == 0]]
     ks4zero = [i+offset for i in idc4zero]
+    if to_show_soon and ks4zero: show_(('ks4zero', ks4zero))
     # [@[k:<-ks4zero] -> [0 == II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N]]
     sz4diffs = len(diffs)
     (IIdiffs, rvheap) = _II_mod_ex_(N, diffs)
@@ -344,7 +488,7 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=Fal
     assert len(rvheap) == -1+2*sz4diffs
     #IIdiffs = II_mod(N, filter(bool, diffs))
     #m = gcd(N, IIdiffs)
-    nontrivial_gcds = _iter_nontrivial_gcds_(N, rvheap)
+    nontrivial_gcds = _iter_nontrivial_gcds_(N, rvheap, show_)
         #优化:二叉树
         # O(sz)
     nontrivial_factors = sorted(set(nontrivial_gcds))
@@ -367,7 +511,7 @@ def _II_mod_ex_(N, diffs, /):
     assert rvheap is diffs
     IIdiffs = rvheap[-1]
     return (IIdiffs, rvheap)
-def _iter_nontrivial_gcds_(N, rvheap, /):
+def _iter_nontrivial_gcds_(N, rvheap, show_, /):
     sz = len(rvheap)
     bs = [False]*sz
     bs[-1] = True
@@ -381,6 +525,7 @@ def _iter_nontrivial_gcds_(N, rvheap, /):
             # vj is leaf
             if u < N:
                 # [1 < u < N]
+                show_(('factor', u))
                 yield u
             continue
         # [1 < u <= N]

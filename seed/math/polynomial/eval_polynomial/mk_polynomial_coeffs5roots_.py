@@ -59,12 +59,13 @@ py -m nn_ns.app.doctest_cmd seed.math.polynomial.eval_polynomial.mk_polynomial_c
 
 
 
-def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /):
+def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /, *, min_len4recur=_default4min_len4recur):
+>>> kwds = dict(min_len4recur=0) #force fancy
 >>> _257_opsN = mk_ops4convolution7symbolic_FFT__5modulus_(257)
 >>> inv_2 = pow(2, -1, 257)
->>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, inv_2, 5)
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, inv_2, 5, **kwds)
 [4, -72, 45, 53, -31, 1]
->>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 2, inv_2, 5)
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 2, inv_2, 5, **kwds)
 [-56, 79, -70, -37, -93, 1]
 >>> mk_polynomial_coeffs5roots_on_geometric_progression__7native_(_257_opsN, 3, 2, 5)
 [-56, 79, -70, -37, -93, 1]
@@ -80,7 +81,7 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
 
 
 
->>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, inv_2, 20)
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, inv_2, 20, **kwds)
 [-64, 120, -70, 15, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, -120, 70, -15, 1]
 
 # (opsX, may_B, T, invT, sz):=(..., 16777216, 2, 73786976294838206464, 512)
@@ -89,7 +90,7 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
 >>> 2*73786976294838206464 %M67
 1
 
->>> mk_polynomial_coeffs5roots_on_geometric_progression_(_M67_opsN, 16777216, 2, 73786976294838206464, 512)  #doctest: +ELLIPSIS +SKIP
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_M67_opsN, 16777216, 2, 73786976294838206464, 512, **kwds)  #doctest: +ELLIPSIS +SKIP
 [576460752303423488, 1152921435887370240, 1537228535370178560, 29859294260464681740, ..., -47073627296167079618, -64529609978923588375, 45911958911335765997, 28109136652816625871, 187649967696555, 16777215, 1]
 
 
@@ -180,7 +181,9 @@ def mul7polynomial_(opsX, coeffs8lhs, coeffs8rhs, /, *, auto_vs_native_vs_fancy=
     while cs and cs[-1] == zero:
         cs.pop()
     return cs
-def mk_polynomial_coeffs5roots_(opsX, roots, /, *, min_len4recur=8):
+_default4min_len4recur = 32
+    # <<== view ../../python3_src/seed/math/factor_pint/factor_pint__7batch_gcd_IIdiffs.py
+def mk_polynomial_coeffs5roots_(opsX, roots, /, *, min_len4recur=_default4min_len4recur):
     r'''[[[
     #########
     # [opsX == (opsG|opsN)]
@@ -228,7 +231,7 @@ def mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, may_B, T
     it = iter_geometric_progression_(mul_, B, T)
     roots = islice(it, 0, sz)
     return mk_polynomial_coeffs5roots__7native_(opsX, roots)
-def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /):
+def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /, *, min_len4recur=_default4min_len4recur):
     r'''[[[
     #########
     # [opsX == (opsG|opsN)]
@@ -311,6 +314,8 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
     one = opsX.one
     neg_one = opsX.neg_one
     B = one if may_B is None else may_B
+    min_len4recur = max(2, min_len4recur)
+    # [min_len4recur >= 2]
 
     def _mk_pows_(x, sz, /, *, mul_=mul_):
         if not sz:return []
@@ -337,12 +342,15 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
         raise Exception(sz)
     if sz < 3:
         return _4sz_lt3(sz, B)
+    if sz < min_len4recur:
+        return mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, may_B, T, sz)
     # [sz >= 3]
     sz0 = sz
     j2Tj = _mk_pows_(T, 1+sz//2)
     stk = []
-    while not sz < 3:
-        # [sz >= 3]
+    # [min_len4recur >= 2]
+    while not sz < min_len4recur:
+        # [sz >= min_len4recur >= 2]
         h = sz//2
         # [h >= 1]
         odd = bool(sz&1)
@@ -359,7 +367,14 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
     # [sz >= 1]
     assert sz
     sz7halt = sz
-    csA = _4sz_lt3(sz, B)
+    if sz < 3:
+        csA = _4sz_lt3(sz, B)
+    elif sz < min_len4recur:
+        csA = mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, may_B, T, sz)
+    else:
+        raise 000
+    #csA = _4sz_lt3(sz, B)
+    csA
     e4T8LC = 0
     (e4T8LC, csA)
     # [csA[-1] == T**e4T8LC]
@@ -416,5 +431,5 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
 
 __all__
 from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import mul7polynomial_, mk_polynomial_coeffs5roots_, mk_polynomial_coeffs5roots_on_geometric_progression_
-#def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /):
+#def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /, *, min_len4recur=_default4min_len4recur):
 from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import *

@@ -50,7 +50,7 @@ def newAPI:FFT_(M, radixes, reversed_radixes, scramble_, ring_ops, as_g6IFFT, g,
 def newAPI:IFFT_(FFT_, M, radixes, reversed_radixes, scramble_, ring_ops, as_g6IFFT, g, inv_g, gs, inv_gs, ys7tmp, xs7IO, /):
 
 
-def newAPI:negacyclic_convolution__len_is_zpow__num_bits4len_eq_(ez4M2config_{ring_ops, args4IFFT}, ez4M, us, vs, /, *, min_ez4M4recur=2, validate=False, verbose=False):
+def newAPI:negacyclic_convolution__len_is_zpow__num_bits4len_eq_(ez4M2config_{ring_ops, args4IFFT}, ez4M, us, vs, /, *, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
     #_7symbolic_FFT_
 ===
 <<==:
@@ -128,7 +128,7 @@ def acyclic_convolution__lenO_eq__7FFT_(neg_, add_, mul_, zero, g, inv_g, div_M_
 def acyclic_convolution__lenO_eq__7native_(add_, mul_, zero, M, us, vs, /):
 def acyclic_convolution__len_is_zpow__num_bits4lenO_eq__7symbolic_FFT__7config__7zero_pad_(opsN, zero, ez4M, us, vs, /):
 
-def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=2, validate=False, verbose=False):
+def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
 def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_(opsN, config6ez4M, us, vs, /):
 def negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, M, us, vs, /):
 
@@ -362,7 +362,7 @@ py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_fac
 True
 
 
-def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, validate=False, min_ez4M4recur=2, kwds4FFT={}):
+def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, validate=False, min_ez4M4recur=_default4min_ez4M4recur, kwds4FFT={}):
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_odd4symbolic_DFT_(odd_modulus:=17179869209)
 
 
@@ -1111,6 +1111,10 @@ def _ez5M_(M, /):
     ez4M = -1+M.bit_length()
     if not 1<<ez4M == M:raise ValueError(M)
     return ez4M
+#min_ez4M4recur
+_default4min_ez4M4recur = 5
+    # <<== view ../../python3_src/seed/math/factor_pint/factor_pint__7batch_gcd_IIdiffs.py
+    # _3_negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_:goto
 class Ops4convolution7symbolic_FFT(_Readonly):
     'opsN # [fast.__mul__=>O(BlnBlnlnB)*bit_ops or O(DlnD)*digit_ops] # see:negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_'
     #.def __delattr__(sf, nm, /):
@@ -1155,7 +1159,7 @@ class Ops4convolution7symbolic_FFT(_Readonly):
         opsN = cls(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, **kwds)
         return opsN
     ########################
-    def __init__(sf, mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=2, validate=False, verbose=False):
+    def __init__(sf, mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
         check_int_ge(2, min_ez4M4recur)
         (FFT_, IFFT_) = _fix_FFTs(FFT_, IFFT_)
         ez2div_zpow_ = _4ez2div_zpow_(mk_div_zpow5ez_)
@@ -1246,7 +1250,7 @@ class Ops4convolution7symbolic_FFT(_Readonly):
 
 
 r'''[[[
-def mk_cached_prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, zero, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=2, validate=False, verbose=False):
+def mk_cached_prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, zero, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
     check_int_ge(2, min_ez4M4recur)
     (FFT_, IFFT_) = _fix_FFTs(FFT_, IFFT_)
     ez2div_zpow_ = _4ez2div_zpow_(mk_div_zpow5ez_)
@@ -1317,7 +1321,7 @@ def mk_cached_prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7sym
 #]]]'''#'''
 
 
-def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=2, validate=False, verbose=False):
+def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
     opsN = Ops4convolution7symbolic_FFT(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, FFT_=FFT_, kwds4FFT=kwds4FFT, IFFT_=IFFT_, kwds4IFFT=kwds4IFFT, min_ez4M4recur=min_ez4M4recur, validate=validate, verbose=verbose)
     config6ez4M = opsN.ez4M2config_(ez4M)
     return negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_(opsN, config6ez4M, us, vs)
@@ -1459,6 +1463,7 @@ def _3_negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7con
     #########
     assert ez4M < min_ez4M4recur
     # min_ez4M4recur default 2:Tune this small-negacyclic breakover length to taste.
+        #_default4min_ez4M4recur
     ws = negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, us, vs)
     if verbose:
         ttt = (ez4M, us, vs, ws)
