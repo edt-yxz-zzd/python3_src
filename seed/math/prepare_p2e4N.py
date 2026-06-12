@@ -33,6 +33,7 @@ ValueError: candidate_factors is incomplete
 py_adhoc_call   seed.math.prepare_p2e4N   @prepare_p2e4N_
 ]]]'''#'''
 __all__ = r'''
+mul7p2e_
 prepare_p2e4N_
 prepare_p2e4psphiM_ex_
 
@@ -134,9 +135,19 @@ def num_coprimes_lt_(modulus, may_p2e4M_or_ps4M_or_factor_pint_func=None, /):
 phi_ = num_coprimes_lt_
 
 
+def mul7p2e_(p2e4c, p2e4k, /):
+    #copy from:view ../../python3_src/seed/math/factor_pint_as_perfect_power__7prepare.py
+    #def _mul_p2e_(p2e4c, p2e4k, /):
+    p2e4qmm = dict(p2e4k)
+    for p, ep in p2e4c.items():
+        p2e4qmm[p] = ep +p2e4qmm.get(p, 0)
+    return p2e4qmm
+
+
 
 __all__
 from seed.math.prepare_p2e4N import prepare_p2e4N_
 from seed.math.prepare_p2e4N import prepare_p2e4psphiM_ex_
 from seed.math.prepare_p2e4N import num_coprimes_lt_, phi_
+from seed.math.prepare_p2e4N import mul7p2e_
 from seed.math.prepare_p2e4N import *

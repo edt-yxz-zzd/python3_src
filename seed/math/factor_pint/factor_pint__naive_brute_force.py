@@ -59,6 +59,8 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__naive_brute_force   ,iter_fac
     (2677, 1)
 193707721*761838257287==-1+2**67==147573952589676412927
 193707721==1+2**3*3**3*5*67*2677
+py_adhoc_call   seed.math.max_order_mod_   @order_mod_ ='(193707721)' =2 ='193707721-1' ='[2,3,5,67,2677]'
+    67
 py_adhoc_call   seed.math.max_order_mod_   @order_mod_ ='(193707721-1)>>3' =2 ='[3,5,67,2677]'
     88308
 

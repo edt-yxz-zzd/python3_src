@@ -361,7 +361,8 @@ True
 
 
 
-
+py_adhoc_call   seed.math.max_order_mod_   @order_mod_ ='(193707721)' =2 ='193707721-1' ='[2,3,5,67,2677]'
+    67
 py_adhoc_call   seed.math.max_order_mod_   @f
 
 ]]]'''#'''

@@ -171,7 +171,9 @@ py_adhoc_call  { +to_show_timedelta }  seed.math.factor_pint.perfect_power.detec
     2: ... ...
     2:duration: 0.00017930699999624267 *(unit: 0:00:01)
 并非是CRT.setup耗时太多
-CRT确实比kth_root慢！！
+CRT版确实比kth_root版慢！！
+    原因:应当是 大量的 m%p 实际上导致O(lnM**2) 直接超过 开方型
+        ，也就是说，与CRT版的慢 并非CRT造成的
 ++_default4using_floor_kth_root:=True
 
 ===

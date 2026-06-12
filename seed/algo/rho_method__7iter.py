@@ -311,6 +311,9 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.iters.iterate import iterate
     from operator import __eq__
     from seed.math.II import II_mod
+    from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import Eval_polynomial_on_geometric_progression__7modulus
+        # Eval_polynomial_on_geometric_progression__7modulus(modulus, hrem_vs_mod=hrem_vs_mod).evals_(coeffs8poly, T, invT)
+000000000 and TODO and Eval_polynomial_on_geometric_progression__7modulus
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 

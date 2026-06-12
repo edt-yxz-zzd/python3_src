@@ -16,8 +16,8 @@ py -m nn_ns.app.doctest_cmd seed.algo.FFT.FFT:__doc__ -ht # -ff -df
 
 def _prepare4mod_prime_(modulus, g, sz=None, /):
 >>> (modulus, g) = (17, 3)
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
->>> (g, inv_g, sz, inv_len, radixes)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (g, inv_g, sz, inv4sz, radixes)
 (3, 6, 16, 16, [2, 2, 2, 2])
 
 
@@ -26,24 +26,24 @@ def _prepare4mod_prime_(modulus, g, sz=None, /):
 [8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7]
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [1, 9, 2, 2, 7, 13, 6, 12, 9, 4, 12, 3, 11, 14, 16, 7]
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7]
 
 
 
 
 >>> (modulus, g) = (3, 2)
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 2]
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs)
 [0, 2]
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [1, 2]
 
 >>> xs = [1, 1]
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs)
 [2, 0]
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [1, 1]
 
 
@@ -55,11 +55,11 @@ def _prepare4mod_prime_(modulus, g, sz=None, /):
 ,[1, 3, 4, 2]
 ]
 >>> (modulus, g) = (5, 2)
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4]
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs)
 [0, 2, 1, 1]
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [1, 3, 2, 4]
 
 
@@ -67,38 +67,38 @@ def _prepare4mod_prime_(modulus, g, sz=None, /):
 >>> radixes = [2,2]
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [0, 2, 1, 1]
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [1, 3, 2, 4]
 
 
 
 
 >>> (modulus, g, radixes) = (31, 3, [2,3,5])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4, *range(26)]
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [25, 23, 25, 29, 3, 3, 0, 3, 12, 21, 3, 13, 8, 29, 2, 14, 20, 6, 20, 7, 8, 25, 11, 21, 10, 0, 23, 16, 10, 12]
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [1, 3, 2, 4, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
 
 
 
 >>> (modulus, g, radixes) = (7, 3, [2,3])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4, 6, 6]
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [1, 1, 6, 3, 1, 1]
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [1, 3, 2, 4, 6, 6]
 
 
 >>> (modulus, g, radixes) = (211, 2, [2,3,5,7])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4, 6, 6, *range(204)]
 >>> rs = FFT__native(neg, add, mul, g, xs)
 >>> rs
 [50, 32, 163, 142, 112, 55, 208, 40, 81, 53, 162, 122, 48, 38, 121, 106, 130, 137, 44, 59, 93, 88, 161, 119, 115, 156, 150, 56, 82, 87, 176, 152, 73, 54, 182, 1, 8, 52, 190, 104, 173, 3, 128, 196, 160, 157, 56, 89, 14, 20, 25, 124, 151, 201, 88, 16, 180, 106, 131, 128, 166, 72, 123, 61, 181, 206, 148, 208, 117, 91, 22, 75, 183, 86, 81, 85, 52, 201, 186, 35, 16, 97, 28, 32, 136, 15, 204, 195, 24, 102, 183, 70, 188, 59, 135, 19, 34, 94, 121, 1, 134, 176, 26, 18, 187, 105, 4, 158, 210, 89, 48, 153, 102, 205, 88, 36, 57, 108, 137, 88, 58, 47, 208, 202, 75, 47, 187, 163, 14, 134, 113, 11, 42, 188, 123, 178, 84, 172, 154, 179, 189, 172, 185, 187, 97, 200, 131, 119, 114, 145, 161, 116, 172, 55, 106, 75, 166, 3, 135, 104, 26, 104, 38, 52, 161, 173, 172, 195, 0, 75, 51, 9, 127, 94, 118, 1, 193, 194, 110, 147, 109, 70, 73, 195, 141, 181, 128, 154, 90, 157, 92, 105, 127, 140, 152, 198, 99, 123, 171, 107, 16, 84, 80, 30, 61, 152, 157, 36, 195, 115]
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs) == [1, 3, 2, 4, 6, 6, *range(204)]
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs) == [1, 3, 2, 4, 6, 6, *range(204)]
 True
 
 
@@ -107,7 +107,7 @@ True
 True
 >>> FFT__ping_pong(neg, add, mul, g, xs, may_radixes=radixes) == rs
 True
->>> IFFT_(FFT__ping_pong, neg, add, mul, inv_g, inv_len, rs, may_radixes=radixes) == xs
+>>> IFFT_(FFT__ping_pong, neg, add, mul, inv_g, inv4sz, rs, kwds4FFT=dict(may_radixes=radixes)) == xs
 True
 
 #non-inplace,without-radixes
@@ -115,14 +115,14 @@ True
 True
 >>> FFT__ping_pong(neg, add, mul, g, xs) == rs
 True
->>> IFFT_(FFT__ping_pong, neg, add, mul, inv_g, inv_len, rs) == xs
+>>> IFFT_(FFT__ping_pong, neg, add, mul, inv_g, inv4sz, rs) == xs
 True
 
 
 #inplace,with-radixes
 >>> FFT__ping_pong__inplace(neg, add, mul, g, xs, may_radixes=radixes) == rs
 True
->>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes) == [1, 3, 2, 4, 6, 6, *range(204)]
+>>> IFFT_(FFT__ping_pong__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes)) == [1, 3, 2, 4, 6, 6, *range(204)]
 True
 
 
@@ -130,12 +130,12 @@ True
 
 
 
->>> (neg, add, mul, g, xs, inv_g, inv_len, rs) = (None, None, None, None, [], None, None, [])
+>>> (neg, add, mul, g, xs, inv_g, inv4sz, rs) = (None, None, None, None, [], None, None, [])
 >>> (modulus, g) = (1, 0)
->>> (neg, add, mul, g, inv_g, sz, inv_len, may_radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, may_radixes) = _prepare4mod_prime_(modulus, g)
 >>> FFT__native(neg, add, mul, g, xs)
 []
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs)
 []
 
 >>> FFT__original__len_is_zpow(neg, add, mul, g, xs)
@@ -157,33 +157,33 @@ ValueError: 0
 
 
 >>> (modulus, g, radixes) = (2, 1, [])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = rs = [1]
 >>> FFT__native(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 
 >>> FFT__original__len_is_zpow(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 >>> FFT__bit_scramble__len_is_zpow(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__bit_scramble__len_is_zpow, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__bit_scramble__len_is_zpow, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 >>> FFT__idx_digit_reverse(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 
 >>> FFT__ping_pong(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__ping_pong, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__ping_pong, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 
@@ -207,7 +207,7 @@ from itertools import product
 from seed.math.factor_pint.factor_pint__naive_brute_force import flatten_list_factor_pint__naive_brute_force_
 
 from seed.algo.FFT.index_scramble4FFT import IFFT_
-    #def IFFT_(FFT_, neg, add, mul, inv_g, inv_len, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
+    #def IFFT_(FFT_, neg, add, mul, inv_g, inv4sz, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
 from seed.algo.FFT.index_scramble4FFT import FFT__native, FFT__original__len_is_zpow, FFT__bit_scramble__len_is_zpow, FFT__idx_digit_reverse
     #def FFT__native(neg, add, mul, g, xs, /, *, may_gs=None):
     #def FFT__original__len_is_zpow(neg, add, mul, g, xs, /, *, may_gs=None):
@@ -255,6 +255,7 @@ def FFT__ping_pong__inplace(neg, add, mul, g, xs, /, *, may_radixes=None, scramb
     ' # (FFT, “ping-pong” variant, in-order, no bit-scramble)'
     # total:O(L*sum(radixes))*TIME(mul+add)
     #
+    del neg # useless
     L = len(xs)
     (L, radixes, gs) = _init(mul, g, len(xs), may_radixes, may_gs)
         # L*TIME(mul)

@@ -149,8 +149,8 @@ view ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_..b001918.b002233.out.
 
 def _prepare4mod_prime_(modulus, g, sz=None, /):
 >>> (modulus, g) = (17, 3)
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
->>> (g, inv_g, sz, inv_len, radixes)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (g, inv_g, sz, inv4sz, radixes)
 (3, 6, 16, 16, [2, 2, 2, 2])
 
 >>> xs = [*range(sz)]
@@ -159,7 +159,7 @@ def _prepare4mod_prime_(modulus, g, sz=None, /):
 >>> rs = FFT__original__len_is_zpow(neg, add, mul, g, xs)
 >>> rs
 [1, 8, 2, 15, 7, 4, 6, 5, 9, 13, 12, 14, 11, 3, 16, 10]
->>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, inv_len, rs)
+>>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, inv4sz, rs)
 >>> _xs
 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 >>> _xs == xs
@@ -177,7 +177,7 @@ True
 [1, 8, 2, 15, 7, 4, 6, 5, 9, 13, 12, 14, 11, 3, 16, 10]
 >>> xs == rs
 True
->>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 >>> xs is _
 True
@@ -191,7 +191,7 @@ True
 [1, 9, 2, 2, 7, 13, 6, 12, 9, 4, 12, 3, 11, 14, 16, 7]
 >>> xs
 [1, 9, 2, 2, 7, 13, 6, 12, 9, 4, 12, 3, 11, 14, 16, 7]
->>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7]
 >>> xs
 [8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7]
@@ -200,24 +200,24 @@ True
 >>> radixes = [2,2,2,2]
 >>> FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [1, 9, 2, 2, 7, 13, 6, 12, 9, 4, 12, 3, 11, 14, 16, 7]
->>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7]
 
 
 
 
 >>> (modulus, g) = (3, 2)
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 2]
 >>> FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs)
 [0, 2]
->>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [1, 2]
 
 >>> xs = [1, 1]
 >>> FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs)
 [2, 0]
->>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [1, 1]
 
 
@@ -229,11 +229,11 @@ True
 ,[1, 3, 4, 2]
 ]
 >>> (modulus, g) = (5, 2)
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4]
 >>> FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs)
 [0, 2, 1, 1]
->>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv_len, xs)
+>>> IFFT_(FFT__bit_scramble__len_is_zpow__inplace, neg, add, mul, inv_g, inv4sz, xs)
 [1, 3, 2, 4]
 
 >>> xs = [1, 3, 2, 4]
@@ -242,25 +242,25 @@ True
 [0, 2, 1, 1]
 >>> xs
 [1, 3, 2, 4]
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs)
 [1, 3, 2, 4]
 
 
 >>> radixes = [2,2]
 >>> FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [0, 2, 1, 1]
->>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [1, 3, 2, 4]
 
 
 
 
 >>> (modulus, g, radixes) = (31, 3, [2,3,5])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4, *range(26)]
 >>> FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [25, 23, 25, 29, 3, 3, 0, 3, 12, 21, 3, 13, 8, 29, 2, 14, 20, 6, 20, 7, 8, 25, 11, 21, 10, 0, 23, 16, 10, 12]
->>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [1, 3, 2, 4, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
 
 
@@ -268,31 +268,31 @@ True
 >>> rs = FFT__native(neg, add, mul, g, xs)
 >>> rs
 [25, 23, 25, 29, 3, 3, 0, 3, 12, 21, 3, 13, 8, 29, 2, 14, 20, 6, 20, 7, 8, 25, 11, 21, 10, 0, 23, 16, 10, 12]
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs)
 [1, 3, 2, 4, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
 
 >>> (modulus, g, radixes) = (7, 3, [2,3])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4, 6, 6]
 >>> rs = FFT__native(neg, add, mul, g, xs)
 >>> rs
 [1, 1, 6, 3, 1, 1]
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs)
 [1, 3, 2, 4, 6, 6]
 
 >>> FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, may_radixes=radixes)
 [1, 1, 6, 3, 1, 1]
->>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes)
+>>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes))
 [1, 3, 2, 4, 6, 6]
 
 
 >>> (modulus, g, radixes) = (211, 2, [2,3,5,7])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = [1, 3, 2, 4, 6, 6, *range(204)]
 >>> rs = FFT__native(neg, add, mul, g, xs)
 >>> rs
 [50, 32, 163, 142, 112, 55, 208, 40, 81, 53, 162, 122, 48, 38, 121, 106, 130, 137, 44, 59, 93, 88, 161, 119, 115, 156, 150, 56, 82, 87, 176, 152, 73, 54, 182, 1, 8, 52, 190, 104, 173, 3, 128, 196, 160, 157, 56, 89, 14, 20, 25, 124, 151, 201, 88, 16, 180, 106, 131, 128, 166, 72, 123, 61, 181, 206, 148, 208, 117, 91, 22, 75, 183, 86, 81, 85, 52, 201, 186, 35, 16, 97, 28, 32, 136, 15, 204, 195, 24, 102, 183, 70, 188, 59, 135, 19, 34, 94, 121, 1, 134, 176, 26, 18, 187, 105, 4, 158, 210, 89, 48, 153, 102, 205, 88, 36, 57, 108, 137, 88, 58, 47, 208, 202, 75, 47, 187, 163, 14, 134, 113, 11, 42, 188, 123, 178, 84, 172, 154, 179, 189, 172, 185, 187, 97, 200, 131, 119, 114, 145, 161, 116, 172, 55, 106, 75, 166, 3, 135, 104, 26, 104, 38, 52, 161, 173, 172, 195, 0, 75, 51, 9, 127, 94, 118, 1, 193, 194, 110, 147, 109, 70, 73, 195, 141, 181, 128, 154, 90, 157, 92, 105, 127, 140, 152, 198, 99, 123, 171, 107, 16, 84, 80, 30, 61, 152, 157, 36, 195, 115]
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs) == [1, 3, 2, 4, 6, 6, *range(204)]
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs) == [1, 3, 2, 4, 6, 6, *range(204)]
 True
 
 
@@ -301,7 +301,7 @@ True
 True
 >>> FFT__idx_digit_reverse(neg, add, mul, g, xs, may_radixes=radixes) == rs
 True
->>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv_len, rs, may_radixes=radixes) == xs
+>>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv4sz, rs, kwds4FFT=dict(may_radixes=radixes)) == xs
 True
 
 #non-inplace,without-radixes
@@ -309,14 +309,14 @@ True
 True
 >>> FFT__idx_digit_reverse(neg, add, mul, g, xs) == rs
 True
->>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv_len, rs) == xs
+>>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv4sz, rs) == xs
 True
 
 
 #inplace,with-radixes
 >>> FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, may_radixes=radixes) == rs
 True
->>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv_len, xs, may_radixes=radixes) == [1, 3, 2, 4, 6, 6, *range(204)]
+>>> IFFT_(FFT__idx_digit_reverse__inplace, neg, add, mul, inv_g, inv4sz, xs, kwds4FFT=dict(may_radixes=radixes)) == [1, 3, 2, 4, 6, 6, *range(204)]
 True
 
 
@@ -324,12 +324,12 @@ True
 
 
 
->>> (neg, add, mul, g, xs, inv_g, inv_len, rs) = (None, None, None, None, [], None, None, [])
+>>> (neg, add, mul, g, xs, inv_g, inv4sz, rs) = (None, None, None, None, [], None, None, [])
 >>> (modulus, g) = (1, 0)
->>> (neg, add, mul, g, inv_g, sz, inv_len, may_radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, may_radixes) = _prepare4mod_prime_(modulus, g)
 >>> FFT__native(neg, add, mul, g, xs)
 []
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs)
 []
 
 >>> FFT__original__len_is_zpow(neg, add, mul, g, xs)
@@ -346,38 +346,38 @@ Traceback (most recent call last):
 ValueError: 0
 
 >>> (modulus, g, radixes) = (2, 1, [])
->>> (neg, add, mul, g, inv_g, sz, inv_len, radixes) = _prepare4mod_prime_(modulus, g)
+>>> (neg, add, mul, g, inv_g, sz, inv4sz, radixes) = _prepare4mod_prime_(modulus, g)
 >>> xs = rs = [1]
 >>> FFT__native(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__native, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__native, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 
 >>> FFT__original__len_is_zpow(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 >>> FFT__bit_scramble__len_is_zpow(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__bit_scramble__len_is_zpow, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__bit_scramble__len_is_zpow, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 >>> FFT__idx_digit_reverse(neg, add, mul, g, xs)
 [1]
->>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv_len, rs)
+>>> IFFT_(FFT__idx_digit_reverse, neg, add, mul, inv_g, inv4sz, rs)
 [1]
 
 
 
 [[
 @20260607
-# fail!!!证明:整除div_len_有用，inv_len不必存在！！
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(16, 8) # (ez4modulus, ez4sz)
+# fail!!!证明:整除div_sz_有用，inv4sz不必存在！！
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(16, 8, to_replace_neg=False) # (ez4modulus, ez4sz)
 >>> xs = [*range(sz)]
 >>> rs = FFT__original__len_is_zpow(neg, add, mul, g, xs)
->>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, div_len_, rs)
+>>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, div_sz_, rs)
 >>> len(_xs) == len(rs) == len(xs) == 256
 True
 >>> _xs == xs
@@ -387,60 +387,71 @@ True
 >>> len(xs) == 256
 True
 >>> rs = FFT__original__len_is_zpow(neg, add, mul, g, xs)
->>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, div_len_, rs)
+>>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, div_sz_, rs)
 >>> len(_xs) == len(rs) == len(xs) == 256
 True
->>> _xs == xs # fail!!!!!!!!!!
+>>> _xs == xs # fail!!!!!!!!!!modulus too small
 False
+
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(128, 8, to_replace_neg=False) # (ez4modulus, ez4sz)
+>>> rs = FFT__original__len_is_zpow(neg, add, mul, g, xs)
+>>> _xs = IFFT_(FFT__original__len_is_zpow, neg, add, mul, inv_g, div_sz_, rs)
+>>> len(_xs) == len(rs) == len(xs) == 256
 True
+>>> _xs == xs
+True
+
+
+
+
 
 ]]
 [[
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(0, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(0, 0)
 Traceback (most recent call last):
     ...
 TypeError: 0
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(1, 0)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(2, 0)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(3, 0)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(1, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(2, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(3, 0)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(4, 0)
 
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(1, 1)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(1, 1)
 Traceback (most recent call last):
     ...
 TypeError: 1
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(2, 1)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(3, 1)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 1)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(2, 1)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(3, 1)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(4, 1)
 
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(2, 2)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(2, 2)
 Traceback (most recent call last):
     ...
 TypeError: 2
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(3, 2)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(3, 2)
 Traceback (most recent call last):
     ...
 TypeError: 3
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 2)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(5, 2)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(6, 2)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(4, 2)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(5, 2)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(6, 2)
 
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 3)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(4, 3)
 Traceback (most recent call last):
     ...
 TypeError: 4
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(5, 3)
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(6, 3)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(5, 3)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(6, 3)
 
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(4, 4)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(4, 4)
 Traceback (most recent call last):
     ...
 TypeError: 4
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(5, 4)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(5, 4)
 Traceback (most recent call last):
     ...
 TypeError: 5
->>> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes) = _prepare4mod_zpow_(6, 4)
+>>> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes) = _prepare4mod_zpow_(6, 4)
 
 ]]
 
@@ -452,6 +463,7 @@ TypeError: 5
 
 def FFT__idx_digit_reverse__inplace__mod_(modulus, g, xs, /, **kwds):
 py_adhoc_call   seed.algo.FFT.index_scramble4FFT   @FFT__idx_digit_reverse__inplace__mod_ =7 --may_radixes='[2,3]' =3 ='[1, 3, 2, 4, 6, 6]'
+    [1, 1, 6, 3, 1, 1]
 
 
 ]]]'''#'''
@@ -463,6 +475,8 @@ reverse_digit4uint_
 bit_scramble_
     uint5bits_
     uint2bits_
+
+mk_scramble7inplace_
 
 IFFT_
 FFT__native
@@ -618,8 +632,12 @@ def FFT__native(neg, add, mul, g, xs, /, *, may_gs=None):
     rs = [reduce(add, map(mul, xs, mx[irow])) for irow in range(L)]
     return rs
 
-def IFFT_(FFT_, neg, add, mul, inv_g, inv_len_or_div_len_, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
-    '[inv_g==FFT.unity_root][inv_len_or_div_len_ == (inv_len/{==len(xs)**-1} | div_len_/callable[#eg:(///len(xs))#])]'
+#def IFFT_(FFT_, neg, add, mul, inv_g, inv4sz_or_div_sz_, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, kwds4FFT={}, **kwds):
+def IFFT_(FFT_, neg, add, mul, inv_g, inv4sz_or_div_sz_, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, kwds4FFT={}):
+    '[inv_g==FFT.unity_root][inv4sz_or_div_sz_ == (inv4sz/{==len(xs)**-1} | div_sz_/callable[#eg:(///len(xs))#])]'
+    #kwds.update(kwds4FFT)
+    kwds = dict(kwds4FFT)
+    777;del kwds4FFT
     if may_inv_gs is None:
         if not may_gs is None:
             gs = may_gs
@@ -629,18 +647,18 @@ def IFFT_(FFT_, neg, add, mul, inv_g, inv_len_or_div_len_, xs, /, *, extra_args=
     if not may_inv_gs is None:
         kwds['may_gs'] = may_inv_gs
     rs = FFT_(neg, add, mul, *extra_args, inv_g, xs, **kwds)
-    #rs = [*iter_op_1_s_(mul, inv_len, ys)]
+    #rs = [*iter_op_1_s_(mul, inv4sz, ys)]
         # cancel:since FFT_ may be inplace
-    if callable(inv_len_or_div_len_):
-        div_len_ = inv_len_or_div_len_
+    if callable(inv4sz_or_div_sz_):
+        div_sz_ = inv4sz_or_div_sz_
     else:
-        inv_len = inv_len_or_div_len_
-        def div_len_(x, /):
-            return mul(inv_len, x)
-    div_len_
+        inv4sz = inv4sz_or_div_sz_
+        def div_sz_(x, /):
+            return mul(inv4sz, x)
+    div_sz_
     for i in range(len(rs)):
-        #rs[i] = mul(inv_len, rs[i])
-        rs[i] = div_len_(rs[i])
+        #rs[i] = mul(inv4sz, rs[i])
+        rs[i] = div_sz_(rs[i])
     return rs
 def _mk_pows(mul, L, g, /, *, may_gs):
     #gs = [g**k for k in range(len(xs))]
@@ -723,7 +741,7 @@ def FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs, /, *, may_gs=N
     # total:O(L*log2(L)) + L*TIME(1*mul) + L*log2(L)/2*TIME(1*mul+2*add+1*neg)
     # total:O(L*log2(L))*TIME(mul+add+neg)
     return xs
-def _prepare4mod_zpow_(ez4modulus, ez4sz, /):
+def _prepare4mod_zpow_(ez4modulus, ez4sz, /, *, to_replace_neg=False, with_gs=False):
     check_int_ge(0, ez4sz)
     check_int_ge((1 +(ez4sz >= 2) +ez4sz), ez4modulus)
     sz = 1 << ez4sz
@@ -741,14 +759,25 @@ def _prepare4mod_zpow_(ez4modulus, ez4sz, /):
     assert (g == 1) if ez4sz == 0 else not pow(g, 1<<(ez4sz-1), modulus) == 1 and pow(g, 1<<ez4sz, modulus) == 1
     (neg, add, mul, inv) = _mk_neg_add_mul_inv4mod_(modulus)
     inv_g = inv(g)
-    def div_len_(x, /):
+    if sz%2 == 0 and to_replace_neg:
+        pseudo_neg_one = pow(inv_g, sz//2, modulus)
+        if not pseudo_neg_one == modulus-1:
+            # "using_neg_here":goto
+            def neg(x, /):
+                return pseudo_neg_one*x%modulus
+    neg#overwrited
+    assert inv_g == pow(g, sz-1, modulus)
+    def div_sz_(x, /):
         y = x >> ez4sz
         if not (y << ez4sz) == x:raise ValueError(x, ez4sz)
         return y
-    inv_len = div_len_
+    inv4sz = div_sz_
     may_radixes = (2,)*ez4modulus
-    return (neg, add, mul, g, inv_g, sz, inv_len, may_radixes)
-def _prepare4mod_prime_(modulus, g, sz=None, /, *, no_neg_one_ok=False):
+    if with_gs:
+        gs = _mk_pows(mul, L:=sz, g, may_gs=None)
+        return (neg, add, mul, g, inv_g, sz, inv4sz, may_radixes, gs)
+    return (neg, add, mul, g, inv_g, sz, inv4sz, may_radixes)
+def _prepare4mod_prime_(modulus, g, sz=None, /, *, no_neg_one_ok=False, to_replace_neg_if_no_neg_one=False):
     '[sz>=1][phi(modulus)%sz==0][g**sz%modulus==1][order_mod_(modulus;g)==sz]'
     #xxx:[is_prime(modulus)][modulus%2==1]
     r'''[[[
@@ -756,8 +785,8 @@ def _prepare4mod_prime_(modulus, g, sz=None, /, *, no_neg_one_ok=False):
 >>> sz = modulus-1
 >>> (neg, add, mul, inv) = _mk_neg_add_mul_inv4mod_(modulus)
 >>> inv_g = inv(g)
->>> inv_len = inv(sz)
->>> (inv_len*sz)%modulus
+>>> inv4sz = inv(sz)
+>>> (inv4sz*sz)%modulus
 1
 >>> (inv_g*g)%modulus
 1
@@ -777,14 +806,14 @@ True
         sz = modulus-1
     (neg, add, mul, inv) = _mk_neg_add_mul_inv4mod_(modulus)
     inv_g = inv(g)
-    inv_len = inv(sz)
-    assert 1%modulus == (inv_len*sz)%modulus
+    inv4sz = inv(sz)
+    assert 1%modulus == (inv4sz*sz)%modulus
     assert 1%modulus == (inv_g*g)%modulus
     assert 1%modulus == pow(g, sz, modulus)
     assert 1%modulus == pow(inv_g, sz, modulus)
     if sz%2==0 and modulus > 1:
         assert no_neg_one_ok or -1 == pow(inv_g, sz//2, modulus) -modulus
-        if no_neg_one_ok:
+        if no_neg_one_ok and to_replace_neg_if_no_neg_one:
             pseudo_neg_one = pow(inv_g, sz//2, modulus)
             if not pseudo_neg_one == modulus-1:
                 # "using_neg_here":goto
@@ -799,7 +828,7 @@ True
         assert gs[0] == 1
         assert gs.count(1) == 1
     may_radixes = flatten_list_factor_pint__naive_brute_force_(sz) if sz else None
-    return (neg, add, mul, g, inv_g, sz, inv_len, may_radixes)
+    return (neg, add, mul, g, inv_g, sz, inv4sz, may_radixes)
         # (gs | inv_gs)
 
 
@@ -840,35 +869,8 @@ def FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, /, *, may_radixes=None
     reversed_radixes = radixes[::-1]
     del radixes
     ######################
-    ######################
-    ######################
-    if 0:
-        # reverse_digit4uint_([2,3],1)=>[1-->2-->4-->3-->1] 并非回旋函数，导致bug@FFT__idx_digit_reverse__inplace
-        for i in range(L):
-            j = reverse_digit4uint_(reversed_radixes,i)
-            if i < j:
-                xs[i], xs[j] = xs[j], xs[i]
-    ######################
-    ######################
-    def _scramble_(xs, /):
-        j2b = [False]*L
-        Nothing = object()
-        for i in range(L):
-            if j2b[i]: continue
-            i0 = i
-            xi = xs[i]
-            xs[i] = Nothing
-            while 1:
-                j2b[i] = True
-                j = reverse_digit4uint_(reversed_radixes,i)
-                #xs[i], xs[j] = xs[j], xs[i]
-                xi, xs[j] = xs[j], xi
-                777; i = j
-                if i == i0: break
-            assert not xs[i] is Nothing
-            assert xi is Nothing, (i0, i,j, j2b)
     if scramble_ is None:
-        scramble_ = _scramble_
+        scramble_ = mk_scramble7inplace_(L, reversed_radixes)
     scramble_(xs)
         # O(L)
     ######################
@@ -944,6 +946,38 @@ def FFT__idx_digit_reverse__inplace(neg, add, mul, g, xs, /, *, may_radixes=None
     # total:O(L) + (L)*TIME(mul) + (L*sum(radixes))*TIME(mul+add)
     # total:O(L*sum(radixes))*TIME(mul+add) where [L==II(radixes)==len(xs)]
     return xs
+def mk_scramble7inplace_(L, reversed_radixes, /):
+    'L -> reversed_radixes/[uint{>1}]{II(reversed_radixes) == L} -> scramble7inplace_/([x]{len==L} -> None)'
+    if 0:
+        ######################
+        ######################
+        def scramble_(xs, /):
+            # reverse_digit4uint_([2,3],1)=>[1-->2-->4-->3-->1] 并非回旋函数，导致bug@FFT__idx_digit_reverse__inplace
+            for i in range(L):
+                j = reverse_digit4uint_(reversed_radixes,i)
+                if i < j:
+                    xs[i], xs[j] = xs[j], xs[i]
+            return xs
+    def scramble_(xs, /):
+        ######################
+        ######################
+        j2b = [False]*L
+        Nothing = object()
+        for i in range(L):
+            if j2b[i]: continue
+            i0 = i
+            xi = xs[i]
+            xs[i] = Nothing
+            while 1:
+                j2b[i] = True
+                j = reverse_digit4uint_(reversed_radixes,i)
+                #xs[i], xs[j] = xs[j], xs[i]
+                xi, xs[j] = xs[j], xi
+                777; i = j
+                if i == i0: break
+            assert not xs[i] is Nothing
+            assert xi is Nothing, (i0, i,j, j2b)
+    return scramble_
 
 def FFT__idx_digit_reverse__inplace__mod_(modulus, g, xs, /, **kwds):
     '[g==FFT.unity_root**-1]'
@@ -963,7 +997,7 @@ from seed.algo.FFT.index_scramble4FFT import uint5bits_, uint2bits_
 
 
 from seed.algo.FFT.index_scramble4FFT import IFFT_
-    #def IFFT_(FFT_, neg, add, mul, inv_g, inv_len_or_div_len_, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
+    #def IFFT_(FFT_, neg, add, mul, inv_g, inv4sz_or_div_sz_, xs, /, *, extra_args=(), may_gs=None, may_inv_gs=None, **kwds):
 from seed.algo.FFT.index_scramble4FFT import FFT__native, FFT__original__len_is_zpow, FFT__bit_scramble__len_is_zpow, FFT__idx_digit_reverse
     #def FFT__native(neg, add, mul, g, xs, /, *, may_gs=None):
     #def FFT__original__len_is_zpow(neg, add, mul, g, xs, /, *, may_gs=None):
@@ -985,10 +1019,10 @@ from seed.algo.FFT.index_scramble4FFT import _mk_pows
 
 from seed.algo.FFT.index_scramble4FFT import _prepare4mod_zpow_
 #def _prepare4mod_zpow_(ez4modulus, ez4sz, /):
-#    -> (neg, add, mul, g, inv_g, sz, div_len_, may_radixes)
+#    -> (neg, add, mul, g, inv_g, sz, div_sz_, may_radixes)
 from seed.algo.FFT.index_scramble4FFT import _prepare4mod_prime_
 #def _prepare4mod_prime_(modulus, g, sz=None, /):
-#    -> (neg, add, mul, g, inv_g, sz, inv_len, may_radixes)
+#    -> (neg, add, mul, g, inv_g, sz, inv4sz, may_radixes)
 
 
 from seed.algo.FFT.index_scramble4FFT import *

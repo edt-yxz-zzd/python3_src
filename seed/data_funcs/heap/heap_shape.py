@@ -190,6 +190,21 @@ def mk_rvheap__Nothing_(Nothing, leafs, /, *, inplace=False):
     return rvheap
 
 def mk_rvheap__fill_(parent5children_, leafs, /, *, inplace=False, with_fwd_idx=False, with_bwd_idc=False):
+    r'''[[[
+    [k%2 == 0][sz >= sz-k == vj == 1+vi > vi == 2*vparent > vparent >= 1]
+    [node6k is node6vj is rvheap8vj2node[-vj] is rvheap8vj2node[k]]
+
+    [not with_fwd_idx][not with_bwd_idc]:
+        def parent5children_(node6vj, node6vi, /):
+    [with_fwd_idx][not with_bwd_idc]:
+        def parent5children_(k, node6vj, node6vi, /):
+    [not with_fwd_idx][with_bwd_idc]:
+        def parent5children_(bwd_idc, node6vj, node6vi, /):
+    [with_fwd_idx][with_bwd_idc]:
+        def parent5children_(k, bwd_idc, node6vj, node6vi, /):
+            (vj, vi, vparent) = bwd_idc
+
+    #]]]'''#'''
     rvheap8vj2node = [*leafs] if not inplace else leafs
     num_leafs = len(rvheap8vj2node)
     (len4heap, num_layers, num_leafs6bottom) = heap_shape5num_leafs_(num_leafs)
@@ -221,6 +236,7 @@ def mk_rvheap__fill_(parent5children_, leafs, /, *, inplace=False, with_fwd_idx=
         # [0 <= k <= -3+sz]
 
         vj = sz -k
+        # [k +vj == sz]
         # !! [0 <= k <= -3+sz]
         # [sz >= vj >= 3]
         # !! [sz%2 == 1]
@@ -231,6 +247,10 @@ def mk_rvheap__fill_(parent5children_, leafs, /, *, inplace=False, with_fwd_idx=
         # [sz > vi >= 2]
         vparent = vi >> 1
         # [sz > vi > vparent >= 1]
+        # [sz >= sz-k == vj == 1+vi > vi == 2*vparent > vparent >= 1]
+        #
+        # [k%2 == 0][sz >= sz-k == vj == 1+vi > vi == 2*vparent > vparent >= 1]
+        # [node6k is node6vj is rvheap8vj2node[-vj] is rvheap8vj2node[k]]
         yield (vj, vi, vparent)
         return
 

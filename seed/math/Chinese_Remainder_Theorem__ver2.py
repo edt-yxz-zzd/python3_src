@@ -265,7 +265,6 @@ CRT_Error
     CRT_Answer_Error
 
 
-hrem_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -282,20 +281,10 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
     from seed.helper.repr_input import repr_helper
     from seed.data_funcs.finger_tree.ft23_7sized_seq import Seq
+    from seed.math.hrem_ import hrem_
 #.    from itertools import islice
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
-
-def hrem_(M, x, /):
-    H = M//2
-    if not abs(x) <= H:
-        x %= M
-        if x > H:
-            x -= M
-    assert abs(x) <= H
-    if M&1 == 0 and x == -H:
-        x = H
-    return x
 
 
 

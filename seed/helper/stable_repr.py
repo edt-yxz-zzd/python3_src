@@ -12,6 +12,15 @@ e ../../python3_src/seed/helper/stable_repr.py
     view ../../python3_src/seed/helper/repr_input.py
     view ../../python3_src/seed/types/NamedTupleBase.py
     view ../../python3_src/seed/helper/stable_repr.py
+[[
+@20260610
+register example:
+    copy_from: view ../../python3_src/seed/algo/FFT/convolution.py
+class _Rz(_Rx):
+    def ___get__funcname__args__ordered_kwdxxxs___(sf):
+        return (None, ([*sf],), [])
+    pass
+]]
 
 [[
 w_
@@ -1298,7 +1307,13 @@ class SortableIterReprableABC(ABC):
     def _make_sortable_iter_reprable_(cls, data):
         datatype = type(data)
         d = cls._get_datatype2SortableIterReprable_()
-        SortableIterReprable = d[datatype]
+        try:
+            SortableIterReprable = d[datatype]
+        except KeyError:
+            if (f:=getattr(datatype, '___get__funcname__args__ordered_kwdxxxs___', None)):
+                return SortableIterReprable__funcname_args_kwds(data)
+            raise
+            raise Exception(data)
         return SortableIterReprable._from_data_(data)
     @final
     def compare_wobject(self, other):

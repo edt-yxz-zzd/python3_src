@@ -485,7 +485,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__, 'repeat:_repeat'):
-    from itertools import repeat as _repeat
+    from itertools import repeat as _repeat, pairwise
     from seed.iters.chains import chains
 
     from seed.tiny_.check import check_int_ge_lt, check_int_ge
@@ -502,6 +502,8 @@ with mk_ctx4lazy_import4funcs_(__name__, 'repeat:_repeat'):
     from seed.math.prime_sieve.sieve_lt import tabulate_may_prime_factorization4uint_lt_#deprecated: tabulate_may_factorization4uint_lt_
     from seed.math.prime_sieve.sieve_lt import check_offsetted_uint2pairs8prime_factorization_, check_offsetted_uint2prime_factors_
 
+    #from seed.math.is_prime__via_complete_factorization_Nmm_ import is_prime__via_complete_factorization_Nmm_
+    #def is_prime__via_complete_factorization_Nmm_(p2e4Nmm_or_ps4Nmm, N, /):
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -996,16 +998,42 @@ def iter_sieve4prime_factors_chunks_ge_lt_(min_u7whole, may_max1_u7whole, /, *, 
 
 
 
-def iter_sieve4prime_factorizations_ge_(min_u, /, *, with_uint=False):
+def iter_sieve4prime_factorizations_ge_(min_u, /, *, with_uint=False, Pmm_only=False):
     'min_u/uint -> Iter prime_factorization/{prime:exp}'
-    return iter_sieve4prime_factorizations_ge_lt_(min_u, None, reverse=False, with_uint=with_uint)
-def reverse_iter_sieve4prime_factorizations_lt_(max1_u, /, *, with_uint=False):
+    return iter_sieve4prime_factorizations_ge_lt_(min_u, None, reverse=False, with_uint=with_uint, Pmm_only=Pmm_only)
+def reverse_iter_sieve4prime_factorizations_lt_(max1_u, /, *, with_uint=False, Pmm_only=False):
     'max1_u/uint -> Iter prime_factorization/{prime:exp}'
-    return iter_sieve4prime_factorizations_ge_lt_(0, max1_u, reverse=True, with_uint=with_uint)
-def iter_sieve4prime_factorizations_ge_lt_(min_u7whole, may_max1_u7whole, /, *, reverse=False, with_uint=False):
+    return iter_sieve4prime_factorizations_ge_lt_(0, max1_u, reverse=True, with_uint=with_uint, Pmm_only=Pmm_only)
+def iter_sieve4prime_factorizations_ge_lt_(min_u7whole, may_max1_u7whole, /, *, reverse=False, with_uint=False, Pmm_only=False):
     'min_u7whole/uint -> may max1_u7whole/uint -> Iter prime_factorization/{prime:exp}'
+    if Pmm_only:
+        old_with_uint = with_uint
+        with_uint = True
+        if not None is may_max1_u7whole:
+            may_max1_u7whole += 1
     it = iter_sieve4prime_factorization_chunks_ge_lt_(min_u7whole, may_max1_u7whole, reverse=reverse)
-    return _chain_chunks(it, min_u7whole, may_max1_u7whole, reverse, with_uint)
+    it = _chain_chunks(it, min_u7whole, may_max1_u7whole, reverse, with_uint)
+    if Pmm_only:
+        it = _filter4pmm_(it, old_with_uint, reverse)
+    return it
+def _filter4pmm_(it, old_with_uint, reverse, /):
+    f = reversed if reverse else iter
+
+    for ab in pairwise(it):
+        a, b = f(ab)
+        (Nmm, p2e4Nmm) = a
+        (N, p2e4N) = b
+        if len(p2e4N) == 1 and 1 in p2e4N.values():
+            yield (Nmm, p2e4Nmm) if old_with_uint else p2e4Nmm
+
+    return
+    r'''[[[
+    for (Nmm, p2e4Nmm) in it:
+        N = 1+Nmm
+        if is_prime__via_complete_factorization_Nmm_(p2e4Nmm, N):
+            yield (Nmm, p2e4Nmm) if old_with_uint else p2e4Nmm
+    #]]]'''#'''
+
 
 
 def iter_sieve4prime_factorization_chunks_ge_(min_u, /, *, with_interval=False):
