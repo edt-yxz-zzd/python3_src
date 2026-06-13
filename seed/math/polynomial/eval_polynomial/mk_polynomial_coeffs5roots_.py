@@ -59,13 +59,12 @@ py -m nn_ns.app.doctest_cmd seed.math.polynomial.eval_polynomial.mk_polynomial_c
 
 
 
-def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /, *, min_len4recur=_default4min_len4recur):
+def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, *, min_len4recur=_default4min_len4recur):
 >>> kwds = dict(min_len4recur=0) #force fancy
 >>> _257_opsN = mk_ops4convolution7symbolic_FFT__5modulus_(257)
->>> inv_2 = pow(2, -1, 257)
->>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, inv_2, 5, **kwds)
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, 5, **kwds)
 [4, -72, 45, 53, -31, 1]
->>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 2, inv_2, 5, **kwds)
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 2, 5, **kwds)
 [-56, 79, -70, -37, -93, 1]
 >>> mk_polynomial_coeffs5roots_on_geometric_progression__7native_(_257_opsN, 3, 2, 5)
 [-56, 79, -70, -37, -93, 1]
@@ -81,7 +80,7 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
 
 
 
->>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, inv_2, 20, **kwds)
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 1, 2, 20, **kwds)
 [-64, 120, -70, 15, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, -120, 70, -15, 1]
 
 # (opsX, may_B, T, invT, sz):=(..., 16777216, 2, 73786976294838206464, 512)
@@ -129,8 +128,6 @@ from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOT
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.floor_ceil_tools.fc_log import ceil_log2
     from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt
-    from seed.math.power.power_ import power_
-    #def power_(mul_, may_inv_, may_is_zero_, is_one_, one, imay_group_order, e, x0, /):
     from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import iter_geometric_progression_
     #def iter_geometric_progression_(mul_, B, T, /):
     from itertools import islice
@@ -231,82 +228,55 @@ def mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, may_B, T
     it = iter_geometric_progression_(mul_, B, T)
     roots = islice(it, 0, sz)
     return mk_polynomial_coeffs5roots__7native_(opsX, roots)
-def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /, *, min_len4recur=_default4min_len4recur):
+def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, *, min_len4recur=_default4min_len4recur):
     r'''[[[
     #########
     # [opsX == (opsG|opsN)]
     # [opsX :: (Ops4convolution7FFT|Ops4convolution7symbolic_FFT)]
     #########
-    [roots := [T**j | [j:<-[0..<sz]]]]
-    [[ver1:
-    [polynomial_geo{sz;T,X} := II[(X -T**j) | [j:<-[0..<sz]]]]
-    [polynomial_geo{1+2*h;T,X} == (X-T**(2*h))*polynomial_geo{2*h;T,X}]
+    update6odd:goto
+    update4cs6even:goto
 
-    [polynomial_geo{2*h;T,X}
-    == II[(X -T**j) | [j:<-[0..<2*h]]]
-    == II[(X -T**j) | [j:<-[0..<h]]]
-    *  II[(X -T**j) | [j:<-[h..<2*h]]]
-    == polynomial_geo{h;T,X}
-    *  II[(X -T**(h+j)) | [j:<-[0..<h]]]
-    == polynomial_geo{h;T,X}
-    *  II[T**h*(X*T**-h -T**j) | [j:<-[0..<h]]]
-    == polynomial_geo{h;T,X}
-    *  T**(h**2) * II[(X*T**-h -T**j) | [j:<-[0..<h]]]
-    == polynomial_geo{h;T,X}
-    *  T**(h**2) * polynomial_geo{h;T,X*T**-h}
-    == T**(h**2) * polynomial_geo{h;T,X*T**-h} * polynomial_geo{h;T,X}
-    ]
-    [cs0 := polynomial_geo{h;T,X}.coeffs]
-    [cs1 := polynomial_geo{h;T,X*T**-h}.coeffs]
-    [sum[cs1[j]*X**j | [j:<-[0..=h]]]
-    == polynomial_geo{h;T,X*T**-h}
-    == sum[cs0[j]*(X*T**-h)**j | [j:<-[0..=h]]]
-    == sum[cs0[j]*(T**-h)**j * X**j | [j:<-[0..=h]]]
-    ]
-    [cs1 == [cs0[j]*(T**-h)**j | [j:<-[0..=h]]]]
-
-    ]]
-    [[ver2:biased
     [roots := [B*T**j | [j:<-[0..<sz]]]]
-    [polynomial_geoB{sz;B,T,X} := II[(X -B*T**j) | [j:<-[0..<sz]]]]
+    [roots == B *. [T**j | [j:<-[0..<sz]]]]
+    [roots == B *. (T **. [0..<sz])]
 
-    [polynomial_geoB{1+d;B,T,X}
-    == II[(X -B*T**j) | [j:<-[0..<1+d]]]
-    == (X-B)*II[(X -B*T**j) | [j:<-[1..<1+d]]]
-    == (X-B)*II[(X -(B*T)*T**j) | [j:<-[0..<d]]]
-    == (X-B)*polynomial_geoB{d;B*T,T,X}
-    ]
-    [polynomial_geoB{1+d;B,T,X} == (X-B)*polynomial_geoB{d;B*T,T,X}]
-    # [d:=2*h]
-    [polynomial_geoB{1+2*h;B,T,X} == (X-B)*polynomial_geoB{2*h;B*T,T,X}]
-    [polynomial_geoB{2*h;B,T,X}
+    [[
+    [polynomial_geo{sz;B,T,X} := II[(X -B*T**j) | [j:<-[0..<sz]]]]
+    [polynomial_geo{1+2*h;B,T,X} == (X-B*T**(2*h))*polynomial_geo{2*h;B,T,X}] # not good...
+    [polynomial_geo{1+2*h;B,T,X} == (X-B)*polynomial_geo{2*h;B*T,T,X}] # update6odd:here
+
+    [polynomial_geo{2*h;B,T,X}
     == II[(X -B*T**j) | [j:<-[0..<2*h]]]
     == II[(X -B*T**j) | [j:<-[0..<h]]]
     *  II[(X -B*T**j) | [j:<-[h..<2*h]]]
-    == II[((X*T**h) -(B*T**h)*T**j)*T**-h | [j:<-[0..<h]]]
-    *  II[(X -(B*T**h)*T**j) | [j:<-[0..<h]]]
-    == invT**(h**2)*polynomial_geoB{h;(B*T**h),T,(X*T**h)}
-    *  polynomial_geoB{h;(B*T**h),T,X}
+    == polynomial_geo{h;B,T,X}
+    *  II[(X -B*T**(h+j)) | [j:<-[0..<h]]]
+    == polynomial_geo{h;B,T,X}
+    *  II[T**h*(X*T**-h -B*T**j) | [j:<-[0..<h]]]
+    == polynomial_geo{h;B,T,X}
+    *  T**(h**2) * II[(X*T**-h -B*T**j) | [j:<-[0..<h]]]
+    == polynomial_geo{h;B,T,X}
+    *  T**(h**2) * polynomial_geo{h;B,T,X*T**-h}
     ]
-    [polynomial_geoB{2*h;B,T,X} == invT**(h**2)*polynomial_geoB{h;(B*T**h),T,(X*T**h)} * polynomial_geoB{h;(B*T**h),T,X}]
-
-    [csA := polynomial_geoB{h;(B*T**h),T,X}.coeffs]
-    [csB := polynomial_geoB{h;(B*T**h),T,(X*T**h)}.coeffs]
-    [j:<-[0..=h]]:
-        [csB[j]*X**j == csA[j]*(X*T**h)**j]
-        [csB[j] == csA[j]*(T**h)**j]
-    [csB == [csA[j]*(T**h)**j | [j:<-[0..=h]]]]
-    [csB == (csA .*. ((T**h) **. [0..=h]))]
-    [polynomial_geoB{2*h;B,T,X}
-    == invT**(h**2) * poly{csA} * poly{(csA .*. ((T**h) **. [0..=h]))}
-    == Repr{(h**2), acyclic_convolution_(csA, (csA .*. ((T**h) **. [0..=h])))}
+    [cs0 := polynomial_geo{h;B,T,X}.coeffs]
+    [cs1 := T**(h**2) * polynomial_geo{h;B,T,X*T**-h}.coeffs]
+    [T**(h**2) * sum[cs1[j]*X**j | [j:<-[0..=h]]]
+    == T**(h**2) * polynomial_geo{h;B,T,X*T**-h}
+    == T**(h**2) * sum[cs0[j]*(X*T**-h)**j | [j:<-[0..=h]]]
+    == T**(h**2) * sum[cs0[j]*(T**-h)**j * X**j | [j:<-[0..=h]]]
+    == sum[cs0[j]*T**(h**2-h*j) * X**j | [j:<-[0..=h]]]
+    == sum[cs0[j]*(T**h)**(h-j) * X**j | [j:<-[0..=h]]]
     ]
-
+    [cs1 == [cs0[j]*(T**h)**(h-j) | [j:<-[0..=h]]]]
+    [cs1 == cs0 .*. [(T**h)**(h-j) | [j:<-[0..=h]]]]
+    [cs1 == cs0 .*. (reverse [(T**h)**j | [j:<-[0..=h]]])]
+    [cs1 == cs0 .*. (reverse (T**h) **. [0..=h])] # update4cs6even:here
 
     ]]
 
     #]]]'''#'''
-    _saved_args = (opsX, may_B, T, invT, sz)
+    _saved_args = (opsX, may_B, T, sz)
     check_int_ge(0, sz)
     neg_ = opsX.neg_
     add_ = opsX.add_
@@ -323,8 +293,6 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
         for _ in range(1, sz):
             ls.append(mul_(ls[-1], x))
         return ls
-    def _pow7invT_(e, /):
-        return power_(mul_, may_inv_:=None, may_is_zero_:=None, is_one_:=lambda x:False, one, imay_group_order:=-1, e, x0:=invT)
     def _4sz_lt3(sz, B, /):
         match sz:
             case 2:
@@ -357,12 +325,14 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
         frame = (odd, sz, h, B)
         stk.append(frame)
         if odd:
+            # update6odd:goto
             sz = sz-1
             B = mul_(B,T)
         else:
+            # update4cs6even:goto
             sz = h
             Th = j2Tj[h]
-            B = mul_(B,Th)
+            B;pass
         # [sz >= 1]
     # [sz >= 1]
     assert sz
@@ -370,60 +340,41 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
     if sz < 3:
         csA = _4sz_lt3(sz, B)
     elif sz < min_len4recur:
-        csA = mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, may_B, T, sz)
+        csA = mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, B, T, sz)
     else:
         raise 000
     #csA = _4sz_lt3(sz, B)
     csA
-    e4T8LC = 0
-    (e4T8LC, csA)
-    # [csA[-1] == T**e4T8LC]
     while stk:
         assert -1+len(csA) == sz
-        # Repr:(e4T8LC, csA)
-        #   == invT**e4T8LC * poly{csA}
-        # [csA[-1] == T**e4T8LC]
         frame = (odd, sz, h, B) = stk.pop()
         if odd:
             # [sz%2 == 1]
             # [-1+len(csA) == sz-1 == 2*h]
+            # update6odd:goto
             #
-            # !! [polynomial_geoB{1+2*h;B,T,X} == (X-B)*polynomial_geoB{2*h;B*T,T,X}]
+            # !! [polynomial_geo{1+2*h;B,T,X} == (X-B)*polynomial_geo{2*h;B*T,T,X}] # update6odd:here
             #
             assert -1+len(csA) == sz-1
             csA = mul7polynomial_(opsX, [neg_(B), one], csA)
                 #=> _school_book_mul
-            pass;e4T8LC
             assert -1+len(csA) == sz
         else:
             # [sz%2 == 0]
             # [len(csA) == sz/2 == h]
             #
-            # !! [csA := polynomial_geoB{h;(B*T**h),T,X}.coeffs]
-            # !! [polynomial_geoB{2*h;B,T,X} == Repr{(h**2), acyclic_convolution_(csA, (csA .*. ((T**h) **. [0..=h])))}]
+            # update4cs6even:goto
+            # !! [cs1 == cs0 .*. (reverse (T**h) **. [0..=h])] # update4cs6even:goto
             #
             Th = j2Tj[h]
             j2Thj = _mk_pows_(Th, 1+h)
             assert -1+len(csA) == h
             assert -1+len(j2Thj) == h
-            csB = [*map(mul_, csA, j2Thj)]
-            # [csB[-1] == csA[-1] * j2Thj[-1]]
-            # [csB[-1] == csA[-1] * T**(h**2)]
-            # !! [csA[-1] == T**e4T8LC]
-            # [csB[-1] == T**(h**2+e4T8LC)]
+            csB = [*map(mul_, csA, reversed(j2Thj))]
             csA = mul7polynomial_(opsX, csA, csB)
-            # [csA[-1] == T**(h+2*e4T8LC)]
-            #bug:e4T8LC += h**2
-            e4T8LC = h**2 +(e4T8LC<<1)
             assert -1+len(csA) == sz
-    (e4T8LC, csA)
-    # Repr:(e4T8LC, csA)
-    #   == invT**e4T8LC * poly{csA}
-    invLC = _pow7invT_(e4T8LC)
-    cs = [mul_(invLC, c) for c in csA]
-    assert cs[-1] == one, (_saved_args, invLC, cs, csA)
-        # (opsX, may_B, T, invT, sz):=(..., 16777216, 2, 73786976294838206464, 512)
-    return cs
+    assert csA[-1] == one, (_saved_args, csA)
+    return csA
 
 
 
@@ -431,5 +382,5 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, s
 
 __all__
 from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import mul7polynomial_, mk_polynomial_coeffs5roots_, mk_polynomial_coeffs5roots_on_geometric_progression_
-#def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /, *, min_len4recur=_default4min_len4recur):
+#def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, *, min_len4recur=_default4min_len4recur):
 from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import *

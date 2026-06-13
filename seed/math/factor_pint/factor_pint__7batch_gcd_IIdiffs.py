@@ -52,6 +52,46 @@ view ../../python3_src/seed/math/polynomial/eval_polynomial/eval_polynomial_on_g
 >>> factor_pint__7batch_gcd_IIdiffs_(257*(1+2**16), 3, 15) # <<== [15**2 < phi_(257)]
 ([], [])
 
+>>> from itertools import islice
+>>> [*islice(iter_factor_pint__7batch_gcd_IIdiffs_(N:=17*37, x0:=3, sz:=-1+2**2, fancy_vs_native=False), 0, 9)]
+[(0, [], []), (1, [], [5]), (2, [], []), (3, [17, 37], []), (4, [], []), (5, [17, 37], []), (6, [], []), (7, [17, 37], []), (8, [17], [])]
+>>> [*islice(iter_factor_pint__7batch_gcd_IIdiffs_(N:=17*37, x0:=3, sz:=-1+2**2, fancy_vs_native=True), 0, 9)]
+[(0, [], []), (1, [], [5]), (2, [], []), (3, [17, 37], []), (4, [], []), (5, [17, 37], []), (6, [], []), (7, [17, 37], []), (8, [17], [])]
+
+
+postcondition:
+    [@[k:<-ks4zero] -> [0 == II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N]]
+>>> k=5
+>>> II_mod(N, (-1+pow(x0,t,N) for t in range(1+sz*k, 1+sz*(1+k))))
+0
+
+postcondition:
+    offset => [@[n:<-nontrivial_factors] -> [0 == II[(x0**j -1) %n | [j:<-[(1+offset*szsz)..=(1+offset)*szsz]]] %n]]
+>>> offset=3
+>>> nontrivial_factors=[17, 37]
+>>> for n in nontrivial_factors:
+...     assert 0 == II_mod(N, (-1+pow(x0,j,N) for j in range(1+offset*sz**2, 1+(1+offset)*sz**2))), (n)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [[
 py_adhoc_call   seed.math.find_arbitrary_one_primitive_root_mod_prime__using_factorization_of_pmm_   @find_the_min_primitive_root_mod_prime__using_factorization_of_pmm_ '={2: 8}'  =257
@@ -286,9 +326,9 @@ fail....
 
 ]]
 [[
-sz be (-1+2**ez):
-    since [1+num_roots == degree]
-    FFT{degree:=2**ez} => [sz==num_roots==-1+2**ez]
+[best_sz == -1+2**ez]
+    since [1+num_roots == 1+degree == num_coeffs]
+    FFT{num_coeffs:=2**ez} => [sz==num_roots==-1+2**ez]
 vs:
     *  9 seconds@[sz:=-1+2**12]
     * 20 seconds@[sz:=2**12]
@@ -301,17 +341,151 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7
 [sz:=-1+2**13]:
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='6666999966669' ='-1+2**13'  --offset=66_6666_6666_9999_9999_9999_9999
     total::duration: 21.164170992 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='66669999666699' ='-1+2**13'  --offset=666_6666_6666_9999_9999_9999_9999
+    total::duration: 21.535224565 *(unit: 0:00:01)
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,iter_factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='17' ='-1+2**13'  --offset='2**607' +stop6ok
+    0:duration: 21.015465134 *(unit: 0:00:01)
+    1:duration: 10.618644633999999 *(unit: 0:00:01)
+    2:duration: 10.489319719000001 *(unit: 0:00:01)
+    3:duration: 10.475810175 *(unit: 0:00:01)
+    4:duration: 10.625674492000002 *(unit: 0:00:01)
+    ...
+    ...
+    (531137992816767098689588206552468627329593117727031923199444138200403559860852242739162502265229285668889329486246501015346579337652707239409519978766587351943831270835393219031728175, [], [])
+    47:duration: 12.456458363000024 *(unit: 0:00:01)
+    ^KeyboardInterrupt
+    total::duration: 524.346967415 *(unit: 0:00:01)
+    TODO
+]]
+[[
+[@[k:<-ks4zero] -> [0 == II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N]]
+
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,9:iter_factor_pint__7batch_gcd_IIdiffs_  ='17*37' =3 ='-1+2**2' +fancy_vs_native
+    [N:=17*37][x0:=3][sz:=3][k:=5]:
+        [II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N
+        == II[((-1+3**t) %N) | [t:<-[16..=18]]] %N
+        == (-1+3**16)*(-1+3**17)*(-1+3**18) %(17*37)
+        == 0 #ok
+        ]
+    <<==:
+    0: ... ...
+    (0, [], [])
+    0:duration: 0.04941115699999998 *(unit: 0:00:01)
+    1: ... ...
+    (1, [], [5])
+    1:duration: 0.0008639999999999759 *(unit: 0:00:01)
+    2: ... ...
+    (2, [], [])
+    2:duration: 0.000546692999999987 *(unit: 0:00:01)
+    3: ... ...
+    (3, [17, 37], [])
+    3:duration: 0.0008149239999999947 *(unit: 0:00:01)
+    4: ... ...
+    (4, [], [])
+    4:duration: 0.0007153069999999984 *(unit: 0:00:01)
+    5: ... ...
+    (5, [17, 37], [])
+    5:duration: 0.00048638400000000637 *(unit: 0:00:01)
+    6: ... ...
+    (6, [], [])
+    6:duration: 0.0003861540000000274 *(unit: 0:00:01)
+    7: ... ...
+    (7, [17, 37], [])
+    7:duration: 0.000737537999999982 *(unit: 0:00:01)
+    8: ... ...
+    (8, [17], [])
+    8:duration: 0.001306230999999991 *(unit: 0:00:01)
+    9: ... ...
+    9:duration: 0.0007379229999999737 *(unit: 0:00:01)
+    total::duration: 0.19958684799999998 *(unit: 0:00:01)
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,9:iter_factor_pint__7batch_gcd_IIdiffs_  ='17*37' =3 ='-1+2**2' -fancy_vs_native -_debug
+    同上
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,9:iter_factor_pint__7batch_gcd_IIdiffs_  ='17*37' =3 ='-1+2**2' --offset=4 -fancy_vs_native -_debug
+
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,9:iter_factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='-1+2**8' -fancy_vs_native
+    0: ... ...
+    (0, [], [])
+    0:duration: 1.003686858 *(unit: 0:00:01)
+    1: ... ...
+    (1, [228479], [])
+    1:duration: 0.2087683090000001 *(unit: 0:00:01)
+    2: ... ...
+    (2, [131071], [])
+    2:duration: 0.19771276800000015 *(unit: 0:00:01)
+    3: ... ...
+    (3, [228479], [])
+    3:duration: 0.19724830799999982 *(unit: 0:00:01)
+    4: ... ...
+    (4, [131071], [])
+    4:duration: 0.19724830800000026 *(unit: 0:00:01)
+    5: ... ...
+    (5, [228479], [])
+    5:duration: 0.1969952300000002 *(unit: 0:00:01)
+    6: ... ...
+    (6, [131071], [])
+    6:duration: 0.19703592300000006 *(unit: 0:00:01)
+    7: ... ...
+    (7, [228479], [])
+    7:duration: 0.19708477000000002 *(unit: 0:00:01)
+    8: ... ...
+    (8, [131071, 228479], [])
+    8:duration: 0.19774584800000028 *(unit: 0:00:01)
+    9: ... ...
+    9:duration: 0.00022246199999997884 *(unit: 0:00:01)
+    total::duration: 2.7438774009999998 *(unit: 0:00:01)
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,9:iter_factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='-1+2**8' +fancy_vs_native
+    同上
+
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,9:iter_factor_pint__7batch_gcd_IIdiffs_  ='-1+2**1207' =3 ='-1+2**7' -fancy_vs_native
+    [sz:=127][x0:=3][offset:=7]:
+        [?[t:<-[1+offset*sz*sz..=(1+offset)*sz*sz]] -> [(-1+x0**t)%228479 == 0]]
+        [127*127*7+1 == 112904]
+        [127*127*8 == 129032]
+        [?[t:<-[112904..=129032]] -> [(-1+3**t)%228479 == 0]]
+        [t==114239]
+    <<==:
+    0: ... ...
+    (0, [], [])
+    0:duration: 0.739905388 *(unit: 0:00:01)
+    1: ... ...
+    (1, [], [])
+    1:duration: 0.11583223099999995 *(unit: 0:00:01)
+    2: ... ...
+    (2, [], [])
+    2:duration: 0.0869560009999999 *(unit: 0:00:01)
+    3: ... ...
+    (3, [], [])
+    3:duration: 0.08675100099999988 *(unit: 0:00:01)
+    4: ... ...
+    (4, [], [])
+    4:duration: 0.08679177000000005 *(unit: 0:00:01)
+    5: ... ...
+    (5, [], [])
+    5:duration: 0.08651861500000013 *(unit: 0:00:01)
+    6: ... ...
+    (6, [], [])
+    6:duration: 0.08649684600000018 *(unit: 0:00:01)
+    7: ... ...
+    (7, [228479], [])
+    7:duration: 0.08673576999999999 *(unit: 0:00:01)
+    8: ... ...
+    (8, [131071], [])
+    8:duration: 0.08675861499999993 *(unit: 0:00:01)
+    9: ... ...
+    9:duration: 0.0001803080000000179 *(unit: 0:00:01)
+    total::duration: 1.5185997740000001 *(unit: 0:00:01)
+
 ]]
 
 
 
 
+
 py_adhoc_call   seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @f
-from seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs import *
 ]]]'''#'''
 __all__ = r'''
 factor_pint__7batch_gcd_IIdiffs_
-
+iter_factor_pint__7batch_gcd_IIdiffs_
 
 
 
@@ -328,7 +502,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import Eval_polynomial_on_geometric_progression__7modulus
         # Eval_polynomial_on_geometric_progression__7modulus(modulus, hrem_vs_mod=hrem_vs_mod).evals_(coeffs8poly, T, invT)
     from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import mul7polynomial_, mk_polynomial_coeffs5roots_, mk_polynomial_coeffs5roots_on_geometric_progression_
-    #def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, invT, sz, /):
+    #def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /):
     from seed.data_funcs.heap.heap_shape import heap_shape5num_leafs_, mk_rvheap__fill_, mk_rvheap__Nothing_
     #def mk_rvheap__fill_(parent5children_, leafs, /, *, inplace=False, with_fwd_idx=False, with_bwd_idc=False):
     from seed.types.view.SeqSliceView import SeqSliceView
@@ -347,11 +521,13 @@ def mk_pows_mod_(N, sz, x0, e0, /):
         xs.append(x0*xs[-1]%N)
     assert len(xs) == sz
     return xs
-def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=False, fancy_vs_native=False):
+def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soon=False, fancy_vs_native=False):
     r'''[[[
-    :: N/uint -> x0 -> sz -> offset -> (nontrivial_factors, ks4zero)
+    :: N/uint -> x0/int -> sz/uint -> offset/uint -> (nontrivial_factors, ks4zero)
 
     [best_sz == -1+2**ez]
+        since [1+num_roots == 1+degree == num_coeffs]
+        FFT{num_coeffs:=2**ez} => [sz==num_roots==-1+2**ez]
 
     # to factor N require [sz == O(min_prime_factor{N}**/2)]
     kw:fancy_vs_native:
@@ -361,8 +537,9 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=Fal
     precondition:
         [gcd(N,x0) == 1]
     postcondition:
+            offset => [@[n:<-nontrivial_factors] -> [0 == II[(x0**j -1) %n | [j:<-[(1+offset*szsz)..=(1+offset)*szsz]]] %n]]
         [@[n:<-nontrivial_factors] -> [[1 < n < N][N%n == 0]]]
-        [@[k:<-ks4zero] -> [0 == II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N]]
+        [@[k:<-ks4zero] -> [0 == II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N]]
 
 
     [f(X) := II[(X -x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N]
@@ -370,9 +547,19 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=Fal
     [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] * x0**(-offset*sz**2 +sz*(sz-1)/2) %N | [k:<-[offset..<offset+sz]]]]
 
     #]]]'''#'''
+    it = iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, offset, to_show_soon=to_show_soon, fancy_vs_native=fancy_vs_native)
+    (offset, nontrivial_factors, ks4zero) = next(it)
+    return (nontrivial_factors, ks4zero)
+def iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soon=False, fancy_vs_native=False, stop6ok=False, _debug=False):
+    'N/uint -> x0/int -> sz/uint -> offset/uint -> Iter (offset, nontrivial_factors, ks4zero) #see:factor_pint__7batch_gcd_IIdiffs_'
     # [gcd(N,x0) == 1]
-    check_int_ge(3, N)
-    check_int_ge(1, offset)
+    check_int_ge(4, N)
+        # !! [1 < x0 < N-1]
+    check_int_ge(0, offset)
+    check_int_ge(1, sz)
+    check_type_is(int, x0)
+    x0 %= N
+    if not 1 < x0 < N-1:raise ValueError(x0, N)
     ev = Eval_polynomial_on_geometric_progression__7modulus(N, hrem_vs_mod=True)
     opsN = ev.opsN
     if to_show_soon:
@@ -387,6 +574,356 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=Fal
         show_
     show_
     to_show_soon = bool(to_show_soon)
+
+    r'''[[[
+    版本二:jx连续，可与_4native类比
+        xs6offset__ver2
+        xs6offset_snd_form__ver2
+        ys__ver2
+        diffs6offset__ver2
+        diffs6offset_snd_form__ver2
+        IIdiffs6offset__ver2
+        data4update4csX_6offset__ver2
+        update4csX_6offset__ver2
+        update4invB_6offset__ver2
+
+    [szsz := sz**2]
+    [T := x0**sz %N]
+    # useless:[B{offset} := T**(1+offset*sz) %N]
+    [invT := x0**-sz %N]
+    [invT_9sz := invT**sz %N]
+    [invT_9sz == x0**-szsz %N]
+    [invB{offset} := invT**(1+offset*sz) %N]
+
+    [xs{offset} := [invB{offset}*x0**jx %N | [jx:<-[0..<sz]]]]
+    [ys := [(x0**sz)**jy %N | [jy:<-[0..<sz]]]]
+
+    [ys == T **. [0..<sz] %N] # ys__ver2:here
+    [xs{offset} == invB{offset} *. x0 **. [0..<sz] %N] # xs6offset__ver2:here
+
+    [xs{offset}
+    == [invT**(1+offset*sz)*x0**jx %N | [jx:<-[0..<sz]]]
+    == [(x0**-sz)**(1+offset*sz)*x0**jx %N | [jx:<-[0..<sz]]]
+    == [x0**(jx-sz*(1+offset*sz)) %N | [jx:<-[0..<sz]]]
+    == [x0**(jx-sz-offset*szsz)) %N | [jx:<-[0..<sz]]]
+    == [x0**-(sz-jx+offset*szsz)) %N | [jx:<-[0..<sz]]]
+    ]
+    [xs{offset} == [x0**-(sz-jx+offset*szsz)) %N | [jx:<-[0..<sz]]]] # xs6offset_snd_form__ver2:here
+
+
+    [csX{offset}(X) := polynomial{X;roots:=xs{offset}}.coeffs]
+    [evals_(csX{offset}; ys) == [eval_(csX{offset}; ys[jy]) | [jy:<-[0..<sz]]]]
+    [evals_(csX{offset}; ys) == [II[(ys[jy] -xs{offset}[jx]) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]]
+
+    [diffs{offset} := evals_(csX{offset}; ys)]
+
+    [diffs{offset}
+    == evals_(csX{offset}; ys)
+    == [II[(ys[jy] -xs{offset}[jx]) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    == [II[(T**jy -invB{offset} * x0**jx) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    == [II[(T**jy -invT**(1+offset*sz) * x0**jx) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    == [II[invT**(1+offset*sz) * (T**(jy+1+offset*sz) -x0**jx) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    == [II[invT**(1+offset*sz) * x0**jx * (x0**-jx * T**(jy+1+offset*sz) -1) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    == [invT**(sz*(1+offset*sz)) * II[x0**jx * (x0**-jx * (x0**sz)**(jy+1+offset*sz) -1) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    == [invT**(sz*(1+offset*sz)) * II[x0**jx * (x0**((sz-jx)+jy*sz+offset*szsz) -1) | [jx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    # [jx:=(sz-1-rjx)]
+    == [invT**(sz*(1+offset*sz)) * II[x0**jx | [jx:<-[0..<sz]]] * II[(x0**(1+rjx+jy*sz+offset*szsz) -1) | [rjx:<-[0..<sz]]] %N | [jy:<-[0..<sz]]]
+    == [invT**(sz*(1+offset*sz)) * x0**sum[jx | [jx:<-[0..<sz]]] * II[(x0**sjx -1) | [sjx:<-[base+0..<base+sz]]] %N | [jy:<-[0..<sz]][base:=(1+jy*sz+offset*szsz)]]
+    == [(x0**-sz)**(sz*(1+offset*sz)) * x0**(sz*(sz-1)///2) * II[(x0**sjx -1) | [sjx:<-[base+0..<base+sz]]] %N | [jy:<-[0..<sz]][base:=(1+jy*sz+offset*szsz)]]
+    == [x0**(-szsz-offset*szszsz +(szsz-sz)/2) * II[(x0**sjx -1) | [sjx:<-[base+0..<base+sz]]] %N | [jy:<-[0..<sz]][base:=(1+jy*sz+offset*szsz)]]
+    == [x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**sjx -1) | [sjx:<-[base+0..<base+sz]]] %N | [jy:<-[0..<sz]][base:=(1+jy*sz+offset*szsz)]]
+    ]
+
+    [diffs{offset} == [x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**sjx -1) | [sjx:<-[base+0..<base+sz]]] %N | [jy:<-[0..<sz]][base:=(1+jy*sz+offset*szsz)]]] # diffs6offset__ver2:here
+        # 内层sjx连续
+    # [jy:=k-offset*sz]
+    [diffs{offset} == [x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**sjx -1) | [sjx:<-[base+0..<base+sz]]] %N | [k:<-[offset*sz..<(1+offset)*sz]][base:=(1+sz*k)]]]
+    [diffs{offset} == [x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**sjx -1) | [sjx:<-[(1+sz*k)..=sz*(1+k)]]] %N | [k:<-[offset*sz..<(1+offset)*sz]]]]
+    # [sjx:=t]
+    [diffs{offset} == [x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**t -1) | [t:<-[(1+sz*k)..=sz*(1+k)]]] %N | [k:<-[offset*sz..<(1+offset)*sz]]]] # diffs6offset_snd_form__ver2:here
+
+    [II(diffs{offset}) %N
+    == II[x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**sjx -1) | [sjx:<-[base+0..<base+sz]]] %N | [jy:<-[0..<sz]][base:=(1+jy*sz+offset*szsz)]] %N
+    == II[x0**(-(2*offset*szsz +sz+1)*sz/2) %N | [jy:<-[0..<sz]]] * II[(x0**sjx -1) %N | [jy:<-[0..<sz]][base:=(1+jy*sz+offset*szsz)][sjx:<-[base+0..<base+sz]]] %N
+    == x0**(-(2*offset*szsz +sz+1)*szsz/2) * II[(x0**sjx -1) %N | [jy:<-[0..<sz]][jx:<-[0..<sz]][sjx:=(1+jx+jy*sz+offset*szsz)]] %N
+    == x0**(-(2*offset*szsz +sz+1)*szsz/2) * II[(x0**sjx -1) %N | [jj:<-[0..<szsz]][sjx:=(1+jj+offset*szsz)]] %N
+    == x0**(-(2*offset*szsz +sz+1)*szsz/2) * II[(x0**j -1) %N | [j:<-[(1+offset*szsz)..<(1+(1+offset)*szsz)]]] %N
+    == x0**(-(2*offset*szsz +sz+1)*szsz/2) * II[(x0**j -1) %N | [j:<-[(1+offset*szsz)..=(1+offset)*szsz]]] %N
+    ]
+
+    [II(diffs{offset}) %N == x0**(-(2*offset*szsz +sz+1)*szsz/2) * II[(x0**j -1) %N | [j:<-[(1+offset*szsz)..=(1+offset)*szsz]]] %N] # IIdiffs6offset__ver2:here
+
+
+
+    # transform:csX{offset} --> csX{1+offset}
+    !! [invB{offset} := invT**(1+offset*sz) %N]
+    [invB{1+offset} == invT**(1+(1+offset)*sz) %N]
+    [invB{1+offset} == invT**sz * invT**(1+offset*sz) %N]
+    [invB{1+offset} == (invT_9sz * invB{offset}) %N] # update4invB_6offset__ver2:here
+
+    !! [xs{offset} == invB{offset} *. x0 **. [0..<sz] %N] # xs6offset__ver2:goto
+    [xs{1+offset} == invB{1+offset} *. x0 **. [0..<sz] %N]
+    [xs{1+offset} == (invT**sz * invB{offset}) *. x0 **. [0..<sz] %N]
+    [xs{1+offset} == invT**sz *. (invB{offset} *. x0 **. [0..<sz]) %N]
+    [xs{1+offset} == invT**sz *. xs{offset} %N]
+
+
+    !! [csX{offset}(X) := polynomial{X;roots:=xs{offset}}.coeffs]
+    [csX{1+offset}(X) == polynomial{X;roots:=xs{1+offset}}.coeffs]
+    [sum[csX{1+offset}[jc] * X**jc | [jc:<-[0..=sz]]]
+    == polynomial{X;roots:=xs{1+offset}}
+    == II[(X -xs{1+offset}[jx]) | [jx:<-[0..<sz]]] %N
+    !! [xs{1+offset} == invT**sz *. xs{offset} %N]
+    == II[(X -invT**sz * xs{offset}[jx] %N) | [jx:<-[0..<sz]]] %N
+    == II[invT**sz * ((T**sz * X) -xs{offset}[jx]) | [jx:<-[0..<sz]]] %N
+    == invT**szsz * II[((T**sz * X) -xs{offset}[jx]) | [jx:<-[0..<sz]]] %N
+    == invT**szsz * polynomial{(T**sz * X);roots:=xs{offset}} %N
+    !! [csX{offset}(X) := polynomial{X;roots:=xs{offset}}.coeffs]
+    == invT**szsz * sum[csX{offset}[jc]*(T**sz * X)**jc %N | [jc:<-[0..=sz]]] %N
+    == sum[(invT**szsz * csX{offset}[jc]*(T**sz)**jc %N) * X**jc | [jc:<-[0..=sz]]] %N
+    == sum[(invT**(szsz-sz*jc) * csX{offset}[jc] %N) * X**jc | [jc:<-[0..=sz]]] %N
+    == sum[((invT**sz)**(sz-jc) * csX{offset}[jc] %N) * X**jc | [jc:<-[0..=sz]]] %N
+    ]
+
+    [sum[csX{1+offset}[jc] * X**jc | [jc:<-[0..=sz]]] %N == sum[((invT**sz)**(sz-jc) * csX{offset}[jc]) * X**jc | [jc:<-[0..=sz]]] %N]
+    [csX{1+offset} == [((invT**sz)**(sz-jc) * csX{offset}[jc] %N) | [jc:<-[0..=sz]]]]
+    [csX{1+offset} == csX{offset} .*. [(invT**sz)**(sz-jc) %N | [jc:<-[0..=sz]]]]
+    [csX{1+offset} == csX{offset} .*. reverse [(invT**sz)**jc %N | [jc:<-[0..=sz]]] %N]
+    [csX{1+offset} == csX{offset} .*. (reverse ((invT**sz) **. [0..=sz])) %N]
+    [csX{1+offset} == csX{offset} .*. (reverse (invT_9sz **. [0..=sz])) %N]
+    [ts := (reverse (invT_9sz **. [0..=sz])) %N] # data4update4csX_6offset__ver2:here
+    [csX{1+offset} == csX{offset} .*. ts %N] # update4csX_6offset__ver2:here
+
+
+
+    #]]]'''#'''
+    r'''[[[
+    版本一:jx不连续，无法与_4native类比
+    [szsz := sz**2]
+    [T := x0**sz %N]
+    [B{offset} := T**(1+offset*sz) %N]
+    [xs := [x0**j %N | [j:<-[0..<sz]]]]
+    [ys{offset} := [(x0**sz)*(x0**sz)**(j+offset*sz) %N | [j:<-[0..<sz]]]]
+    [ys{offset} == [T**(j+1+offset*sz) %N | [j:<-[0..<sz]]]]
+    [ys{offset} == T**(1+offset*sz) * [T**j %N | [j:<-[0..<sz]]]]
+
+    [ys{offset} == B{offset} * T **. [0..<sz] %N]
+    [xs == x0 **. [0..<sz] %N]
+    [csY{offset}(X) := polynomial{X;roots:=ys{offset}}.coeffs]
+    [evals_(csY{offset}; xs) == [eval_(csY{offset}; xs[jx]) | [jx:<-[0..<sz]]]]
+    [evals_(csY{offset}; xs) == [II[(xs[jx] -ys{offset}[jy]) | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]]
+    [diffs{offset} := evals_(csY{offset}; xs)]
+
+    [diffs{offset}
+    == evals_(csY{offset}; xs)
+    == [II[(xs[jx] -ys{offset}[jy]) | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]
+    == [II[(x0**jx -B{offset} * T**jy) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]
+    == [II[(x0**jx -T**(1+offset*sz) * T**jy) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]
+    == [II[x0**jx * (1 -x0**-jx * T**(jy+1+offset*sz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]
+    == [II[x0**jx %N | [jy:<-[0..<sz]]] * II[(1 -x0**-jx * T**(jy+1+offset*sz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]
+    == [((x0**jx)**sz %N) * II[(1 -x0**-jx * (x0**sz)**(jy+1+offset*sz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]
+    == [((x0**sz)**jx %N) * (-1)**sz *II[(-1+x0**((sz-jx)+jy*sz+offset*szsz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]]]
+    == [(-1)**sz * ((x0**sz)**(sz-1-rjx) %N) * II[(-1+x0**(1+rjx+jy*sz+offset*szsz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]][rjx:=(sz-1-jx)]]
+    ]
+
+    [diffs{offset} == [(-1)**sz * ((x0**sz)**(sz-1-rjx) %N) * II[(-1+x0**(1+rjx+jy*sz+offset*szsz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]][rjx:=(sz-1-jx)]]]
+        # jx在外层，即内部jx不连续
+        #   diffs{offset}[jx]
+
+    [II(diffs{offset})
+    == II[(-1)**sz * ((x0**sz)**(sz-1-rjx) %N) * II[(-1+x0**(1+rjx+jy*sz+offset*szsz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]][rjx:=(sz-1-jx)]]
+    == (-1)**szsz * II[((x0**sz)**(sz-1-rjx) %N) %N | [jx:<-[0..<sz]][rjx:=(sz-1-jx)]] * II[II[(-1+x0**(1+rjx+jy*sz+offset*szsz)) %N | [jy:<-[0..<sz]]] %N | [jx:<-[0..<sz]][rjx:=(sz-1-jx)]]
+    == (-1)**szsz * ((x0**sz)**sum[jx | [jx:<-[0..<sz]]] %N) * II[(-1+x0**(1+rjx+jy*sz+offset*szsz)) %N | [jy:<-[0..<sz]][rjx:<-[0..<sz]]]
+    == (-1)**(sz%2) * ((x0**sz)**(sz*(sz-1)///2) %N) * II[(-1+x0**(1+j+offset*szsz)) %N | [j:<-[0..<szsz]]]
+    == (-1)**(sz%2) * (x0**(szsz*(sz-1)///2) %N) * II[(-1+x0**j) %N | [base:=(1+offset*szsz)][j:<-[base+0..<base+szsz]]]
+    ]
+
+    #]]]'''#'''
+
+    def _4fancy(offset, /, *, N=N, sz=sz, x0=x0, debug=_debug):
+
+        # !! [gcd(N,x0) == 1]
+        inv_x0 = pow(x0, -1, N)
+        # [inv_x0 == x0**-1%N]
+        invT = pow(inv_x0, sz, N)
+        # [invT == x0**-sz%N]
+        invT_9sz = pow(invT, sz, N)
+        # [invT_9sz == x0**-szsz %N]
+        #invB_6offset = pow(invT, 1+offset*sz, N) # bias
+        invB_6offset = invT*pow(invT_9sz, offset, N) %N # bias
+        # [invB{offset} == invT**(1+offset*sz) %N]
+        ###########################
+        # !! [xs{offset} == invB{offset} *. x0 **. [0..<sz] %N] # xs6offset__ver2:goto
+        csX_6offset = mk_polynomial_coeffs5roots_on_geometric_progression_(opsN, invB_6offset, x0, sz)
+            #优化:几何级数:II[(x-x0**(i*K+j)) | i,j...] == x0**??? * II[(x/x0**(i*Kj) -x0**j0) | i,j...]
+            # O(sz*ln(sz))
+        if not debug:
+            invB_6offset = None
+
+        T = pow(invT, -1, N)
+        # !! [invT == x0**-sz%N]
+        # [T == x0**sz%N]
+
+        # !! [gcd(N,x0) == 1]
+        # [gcd(N,T) == 1]
+
+        to_init = True
+        while 1:
+            assert -1+len(csX_6offset) == sz
+            assert csX_6offset[-1] == 1
+            # [xs{offset} == invB{offset} *. x0 **. [0..<sz] %N]
+            # [xs{offset} == [x0**-(sz-jx+offset*szsz)) %N | [jx:<-[0..<sz]]]] # xs6offset_snd_form__ver2:goto
+            # [polynomial{csX_6offset;X} == II[(X -x0**-(sz-jx+offset*szsz) %N) | [jx:<-[0..<sz]]] %N]
+
+            ########################
+            # !! [ys == T **. [0..<sz] %N] # ys__ver2:goto
+            diffs_ = ev.evals_(coeffs8poly:=csX_6offset, T, invT)
+                # O(sz*ln(sz))
+            assert -1+len(diffs_) == sz
+            777;diffs_.pop()
+            777;diffs6offset, diffs_ = diffs_, None
+            assert len(diffs6offset) == sz
+            # diffs6offset__ver2:goto
+            # diffs6offset_snd_form__ver2:goto
+            # IIdiffs6offset__ver2:goto
+            yield (offset, diffs6offset)
+            #########
+            if to_init:
+                to_init = False
+                # !! [ts := (reverse (invT_9sz **. [0..=sz])) %N] # data4update4csX_6offset__ver2:goto
+                ts = mk_pows_mod_(N, 1+sz, invT_9sz, 0)
+                777;ts.reverse()
+            ts
+            # !! [csX{1+offset} == csX{offset} .*. ts %N] # update4csX_6offset__ver2:goto
+            csX_6offsetpp = [*map(opsN.mul_, csX_6offset, ts)]
+            if debug:
+                # !! [invB{1+offset} == (invT_9sz * invB{offset}) %N] # update4invB_6offset__ver2:goto
+                invB_6offsetpp = invB_6offset * invT_9sz %N
+
+            #########
+            if debug:
+                print('offset=', offset)
+                print('csX_6offset=', csX_6offset)
+                print('ts=', ts)
+                print('csX_6offsetpp=', csX_6offsetpp)
+                print('diffs6offset=', diffs6offset)
+            #########
+            #next round:
+            offset += 1
+            csX_6offset = csX_6offsetpp
+            if debug:
+                invB_6offset = invB_6offsetpp
+            #########
+            if debug:
+                _csX_6offset = mk_polynomial_coeffs5roots_on_geometric_progression_(opsN, invB_6offset, x0, sz)
+                print('_csX_6offset=', _csX_6offset)
+                if not csX_6offset == _csX_6offset: raise Exception(csX_6offset, _csX_6offset)
+            #########
+        #########
+    def _4native(offset, /, *, N=N, sz=sz, x0=x0):
+        # diff from _4fancy():by drop: 『x0**???』
+        # [xs{offset} == [x0**-(sz-jx+offset*szsz)) %N | [jx:<-[0..<sz]]]] # xs6offset_snd_form__ver2:goto
+        # [polynomial{csX_6offset;X} == II[(X -x0**-(sz-jx+offset*szsz) %N) | [jx:<-[0..<sz]]] %N]
+        szsz = sz**2
+        z = pow(x0, offset*szsz, N)
+        # [z == x0**(offset*szsz) %N]
+        while 1:
+            # [z == x0**(offset*szsz) %N]
+            jy = 0
+            diffs = []
+            # [diffs == [II[(-1+x0**(1+_jx +_jy*sz +offset*szsz)) %N | [_jx:<-[0..<sz]]] %N] | [_jy:<-[0..<jy]]]
+            for jy in range(sz):
+                # [z == x0**(jy*sz +offset*szsz) %N]
+                # [diffs == [II[(-1+x0**(1+_jx +_jy*sz +offset*szsz)) %N | [_jx:<-[0..<sz]]] %N] | [_jy:<-[0..<jy]]]
+                jx = 0
+                IIdiffs = 1
+                # [IIdiffs = II[(-1+x0**(1+_jx +jy*sz +offset*szsz)) %N | [_jx:<-[0..<jx]]] %N]
+                for jx in range(sz):
+                    # [z == x0**(jx +jy*sz +offset*szsz) %N]
+                    # [IIdiffs = II[(-1+x0**(1+_jx +jy*sz +offset*szsz)) %N | [_jx:<-[0..<jx]]] %N]
+                    z = z*x0%N
+                    # [z == x0**(1 +jx +jy*sz +offset*szsz) %N]
+                    IIdiffs = IIdiffs*(z-1)%N
+                    # [IIdiffs = II[(-1+x0**(1+_jx +jy*sz +offset*szsz)) %N | [_jx:<-[0..=jx]]] %N]
+                    # [z == x0**((1+jx) +jy*sz +offset*szsz) %N]
+                # [z == x0**((1+jy)*sz +offset*szsz) %N]
+                # [IIdiffs = II[(-1+x0**(1+_jx +jy*sz +offset*szsz)) %N | [_jx:<-[0..<sz]]] %N]
+                # [diffs == [II[(-1+x0**(1+_jx +_jy*sz +offset*szsz)) %N | [_jx:<-[0..<sz]]] %N] | [_jy:<-[0..<jy]]]
+                diffs.append(IIdiffs)
+                # [diffs == [II[(-1+x0**(1+_jx +_jy*sz +offset*szsz)) %N | [_jx:<-[0..<sz]]] %N] | [_jy:<-[0..=jy]]]
+            # [diffs == [II[(-1+x0**(1+_jx +_jy*sz +offset*szsz)) %N | [_jx:<-[0..<sz]]] %N] | [_jy:<-[0..<sz]]]
+            # [diffs == [II[(-1+x0**(1+jx +jy*sz +offset*szsz)) %N | [jx:<-[0..<sz]]] %N] | [jy:<-[0..<sz]]]
+            assert len(diffs) == sz
+            # drop: 『x0**???』
+            # [diffs == [II[(-1+x0**(1+jx +sz*(jy +offset*sz))) %N | [jx:<-[0..<sz]]] %N] | [jy:<-[0..<sz]]]
+            # [jy:=k-offset*sz]
+            # [diffs == [II[(-1+x0**(1+jx +sz*k)) %N | [jx:<-[0..<sz]]] %N] | [k:<-[offset*sz..<(1+offset)*sz]]]
+            # [jx:=t-1-sz*k]
+            # [diffs{offset} == [II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N | [k:<-[offset*sz..<(1+offset)*sz]]]]
+            yield (offset, diffs)
+            #########
+            #next round:
+            offset += 1
+            #########
+        #########
+
+    def main(*, offset0=offset):
+        iter_ = (_4fancy if not fancy_vs_native else _4native)
+        it = iter_(offset0)
+        for j, (_offset, diffs) in enumerate(it, offset0):
+            assert _offset == j
+            assert len(diffs) == sz
+            # [diffs == [polynomial{cs0_off;X}(X:=T**i) | [i:<-[0..<sz]]]]
+            yield (rss := _postprocess(show_, N, sz, _offset, diffs))
+            if stop6ok:
+                (offset, nontrivial_factors, ks4zero) = rss
+                if nontrivial_factors or ks4zero:
+                    break
+
+    del offset
+    return main()
+def _postprocess(show_, N, sz, offset, diffs, /):
+    assert len(diffs) == sz
+    # _4native => [diffs{offset} == [II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N | [k:<-[offset*sz..<(1+offset)*sz]]]]
+    # _4fancy => [diffs{offset} == [x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**t -1) | [t:<-[(1+sz*k)..=sz*(1+k)]]] %N | [k:<-[offset*sz..<(1+offset)*sz]]]] # diffs6offset_snd_form__ver2:goto
+
+    #idc4zero = find_indices_(diffs, 0)
+    idc4zero = [*iter_find(diffs, 0)]
+        #优化:定位所有0点，[x0**e%N==1][phi_(N)%e == 0]
+        # O(sz)
+    # [@[i:<-idc4zero] -> [diffs[i] == 0]]
+    # !! _4fancy => [diffs{offset} == [x0**(-(2*offset*szsz +sz+1)*sz/2) * II[(x0**t -1) | [t:<-[(1+sz*k)..=sz*(1+k)]]] %N | [k:<-[offset*sz..<(1+offset)*sz]]]] # diffs6offset_snd_form__ver2:goto
+    # !! [gcd(N,x0) == 1]
+    # [@[i:<-idc4zero] -> [k:=(i+offset*sz)] -> [II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N == 0]]
+    off_sz = offset*sz
+    ks4zero = [i+off_sz for i in idc4zero]
+    if ks4zero: show_(('ks4zero', ks4zero))
+    # [@[k:<-ks4zero] -> [0 == II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N]]
+    sz4diffs = len(diffs)
+    (IIdiffs, rvheap) = _II_mod_ex_(N, diffs)
+        #优化:二叉树
+        # O(sz)
+    rvheap = diffs
+    777; diffs = SeqSliceView(rvheap, range(sz4diffs))
+    assert len(rvheap) == -1+2*sz4diffs
+    #IIdiffs = II_mod(N, filter(bool, diffs))
+    #m = gcd(N, IIdiffs)
+    nontrivial_gcds = _iter_nontrivial_gcds_(N, rvheap, show_)
+        #优化:二叉树
+        # O(sz)
+    nontrivial_factors = sorted(set(nontrivial_gcds))
+    # [@[n:<-nontrivial_factors] -> [[1 < n < N][N%n == 0]]]
+    # !! _4fancy => [II(diffs{offset}) %N == x0**(-(2*offset*szsz +sz+1)*szsz/2) * II[(x0**j -1) %N | [j:<-[(1+offset*szsz)..=(1+offset)*szsz]]] %N] # IIdiffs6offset__ver2:goto
+    # offset => [@[n:<-nontrivial_factors] -> [0 == II[(x0**j -1) %n | [j:<-[(1+offset*szsz)..=(1+offset)*szsz]]] %n]]
+
+
+
+    ######################
+    # postcondition:
+    # offset => [@[n:<-nontrivial_factors] -> [0 == II[(x0**j -1) %n | [j:<-[(1+offset*szsz)..=(1+offset)*szsz]]] %n]]
+    # [@[n:<-nontrivial_factors] -> [[1 < n < N][N%n == 0]]]
+    # [@[k:<-ks4zero] -> [0 == II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N]]
+    return (offset, nontrivial_factors, ks4zero)
 
 
     r'''[[[
@@ -425,97 +962,6 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=1, *, to_show_soon=Fal
     cs0_off = mk_polynomial_coeffs5roots_(opsN, xs0_off)
 
     #]]]'''#'''
-
-
-    x0 %= N
-    assert 1 < x0 < N
-    def _4fancy():
-        inv_x0 = pow(x0, -1, N)
-        inv_x1 = pow(inv_x0, sz, N)
-        #B = pow(x0, -offset*sz, N)
-        #B = pow(inv_x0, +offset*sz, N)
-        B = pow(inv_x1, +offset, N)
-            # bias
-        # [B == x0**(-offset*sz) %N]
-        cs0_off = mk_polynomial_coeffs5roots_on_geometric_progression_(opsN, B, x0, inv_x0, sz)
-            #优化:几何级数:II[(x-x0**(i*K+j)) | i,j...] == x0**??? * II[(x/x0**(i*Kj) -x0**j0) | i,j...]
-            # O(sz*ln(sz))
-        # [cs0_off == poly{roots:=[x0**(j-offset*sz) %N | [j:<-[0..<sz]]]}.coeffs]
-        assert -1+len(cs0_off) == sz
-
-        #x1 = pow(x0, sz, N)
-        x1 = pow(inv_x1, -1, N)
-        T, invT = x1, inv_x1
-        # [T == x0**sz %N]
-        # !! [gcd(N,x0) == 1]
-        # [gcd(N,x1) == 1]
-
-        # [polynomial{cs0_off;X} == II[(X -x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N]
-        diffs = ev.evals_(coeffs8poly:=cs0_off, T, invT)
-            # O(sz*ln(sz))
-        assert -1+len(diffs) == sz
-        diffs.pop()
-        assert len(diffs) == sz
-        # [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] * x0**(-offset*sz**2 +sz*(sz-1)/2) %N | [k:<-[offset..<offset+sz]]]]
-        return diffs
-    def _4native():
-        # diff from _4fancy():by drop: 『x0**???』
-        x = x0
-        diffs = []
-        y = pow(x0, (offset-1)*sz, N)
-        for _ in range(sz):
-            IIdiffs = 1
-            for _ in range(sz):
-                y = y*x%N
-                IIdiffs = IIdiffs*(y-1)%N
-            diffs.append(IIdiffs)
-        assert len(diffs) == sz
-        # drop: 『x0**???』
-        # [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N | [k:<-[offset..<offset+sz]]]]
-        return diffs
-
-    diffs = _4fancy() if not fancy_vs_native else _4native()
-    assert len(diffs) == sz
-    # [diffs == [polynomial{cs0_off;X}(X:=T**i) | [i:<-[0..<sz]]]]
-
-    # [diffs == [II[(T**i -x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N | [i:<-[0..<sz]]]]
-    # !! [T == x1 == x0**sz]
-    # [diffs == [II[((x0**sz)**i -x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N | [i:<-[0..<sz]]]]
-    # [diffs == [II[((x0**(sz*(offset+i)-j) -1)*x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N | [i:<-[0..<sz]]]]
-    # [diffs == [II[((x0**(sz*k-j) -1)*x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N | [k:<-[offset..<offset+sz]]]]
-    # [diffs == [II[((x0**(sz*k-j) -1) %N) | [j:<-[0..<sz]]] * II[(x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N | [k:<-[offset..<offset+sz]]]]
-    # [diffs == [II[((x0**(sz*k-j) -1) %N) | [j:<-[0..<sz]]] * II[(x0**(j-offset*sz) %N) | [j:<-[0..<sz]]] %N | [k:<-[offset..<offset+sz]]]]
-    # [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] * x0**sum[(j-offset*sz) | [j:<-[0..<sz]]] %N | [k:<-[offset..<offset+sz]]]]
-
-    # [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] * x0**(-offset*sz**2 +sz*(sz-1)/2) %N | [k:<-[offset..<offset+sz]]]]
-    #idc4zero = find_indices_(diffs, 0)
-    idc4zero = [*iter_find(diffs, 0)]
-        #优化:定位所有0点，[x0**e%N==1][phi_(N)%e == 0]
-        # O(sz)
-    # [@[i:<-idc4zero] -> [diffs[i] == 0]]
-    # !! [gcd(N,x0) == 1]
-    # [@[i:<-idc4zero] -> [k:=(i+offset)] -> [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N == 0]]
-    ks4zero = [i+offset for i in idc4zero]
-    if to_show_soon and ks4zero: show_(('ks4zero', ks4zero))
-    # [@[k:<-ks4zero] -> [0 == II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N]]
-    sz4diffs = len(diffs)
-    (IIdiffs, rvheap) = _II_mod_ex_(N, diffs)
-        #优化:二叉树
-        # O(sz)
-    rvheap = diffs
-    777; diffs = SeqSliceView(rvheap, range(sz4diffs))
-    assert len(rvheap) == -1+2*sz4diffs
-    #IIdiffs = II_mod(N, filter(bool, diffs))
-    #m = gcd(N, IIdiffs)
-    nontrivial_gcds = _iter_nontrivial_gcds_(N, rvheap, show_)
-        #优化:二叉树
-        # O(sz)
-    nontrivial_factors = sorted(set(nontrivial_gcds))
-    # [@[n:<-nontrivial_factors] -> [[1 < n < N][N%n == 0]]]
-    # [@[k:<-ks4zero] -> [0 == II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] %N]]
-    return (nontrivial_factors, ks4zero)
-
-
 def _II_mod_ex_(N, diffs, /):
     def parent5children_(k, node6vj, node6vi, /):
         # [k%2 == 0][sz >= sz-k == vj == 1+vi > vi == 2*vparent > vparent >= 1]
@@ -560,4 +1006,5 @@ def _iter_nontrivial_gcds_(N, rvheap, show_, /):
 
 
 __all__
+from seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs import factor_pint__7batch_gcd_IIdiffs_, iter_factor_pint__7batch_gcd_IIdiffs_
 from seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs import *
