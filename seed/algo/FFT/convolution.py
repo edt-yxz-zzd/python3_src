@@ -180,6 +180,25 @@ def bothcyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config
 [0, 0, 0, 0]
 
 
+def acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg_, add_, mul_, zero, hg, inv_hg, div_2_, div_H_, H, us, vs, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, validate=False):
+>>> H = sz>>1
+>>> inv4H = pow(H, -1, modulus)
+>>> def div_2_(x):
+...     if x&1:
+...         x += modulus
+...     x >>= 1
+...     x = add_(0,x)
+...     return x
+>>> acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg_, add_, mul_, zero:=0, g, inv_g, div_2_, inv4H, H, xs[:0], ys[:4], validate=True)
+[0, 0, 0, 0]
+>>> acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg_, add_, mul_, zero:=0, g, inv_g, div_2_, inv4H, H, xs[:1], ys[:3], validate=True)
+[1, 5, 7, 0]
+>>> acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg_, add_, mul_, zero:=0, g, inv_g, div_2_, inv4H, H, xs[:2], ys[:2], validate=True)
+[1, 7, 10, 0]
+>>> acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg_, add_, mul_, zero:=0, g, inv_g, div_2_, inv4H, H, xs[:3], ys[:1], validate=True)
+[1, 2, 3, 0]
+>>> acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg_, add_, mul_, zero:=0, g, inv_g, div_2_, inv4H, H, xs[:4], ys[:0], validate=True)
+[0, 0, 0, 0]
 
 
 
@@ -363,6 +382,8 @@ True
 
 
 def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, validate=False, min_ez4M4recur=_default4min_ez4M4recur, kwds4FFT={}):
+>>> kwds4ng = dict(min_ez4M4recur=2)
+
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_odd4symbolic_DFT_(odd_modulus:=17179869209)
 
 
@@ -371,7 +392,7 @@ def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_
 >>> ez4M = 0
 >>> xs = [2]
 >>> ys = [5]
->>> negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True)
+>>> negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True, **kwds4ng)
 [10]
 
 >>> ez4M = 1
@@ -379,7 +400,7 @@ def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_
 >>> ys = [1, 5]
 >>> negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, xs, ys)
 [-9, 7]
->>> negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True)
+>>> negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True, **kwds4ng)
 [-9, 7]
 
 >>> ez4M = 2
@@ -387,7 +408,7 @@ def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_
 >>> ys = [1, 5, 7, 3]
 >>> _ws_n0 = negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, xs, ys)
 >>> #_ws_n1 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False, verbose=True, min_ez4M4recur=2)
->>> _ws_n1 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True)
+>>> _ws_n1 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True, **kwds4ng)
 >>> _ws_n0
 [-46, -30, 8, 36]
 >>> _ws_n1 == _ws_n0
@@ -402,7 +423,7 @@ True
 >>> xs = [1, 2, 3, 4]
 >>> ys = [1, 5, 7, 3]
 >>> _ws_n2 = negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, xs, ys)
->>> _ws_n3 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True)
+>>> _ws_n3 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True, **kwds4ng)
 >>> _ws_n2
 [-46, -30, 8, 36]
 
@@ -421,7 +442,7 @@ True
 
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4ring_ZZ4symbolic_DFT_()
 >>> _ws_n6 = negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, xs, ys)
->>> _ws_n7 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True)
+>>> _ws_n7 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True, **kwds4ng)
 >>> _ws_n6[:4]
 [-43284196, -43769846, -44251544, -44729260]
 >>> _ws_n6[-4:]
@@ -447,7 +468,7 @@ True
 
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_odd4symbolic_DFT_(odd_modulus:=17179869209)
 >>> _ws_n8 = negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, xs, ys)
->>> _ws_n9 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True)
+>>> _ws_n9 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=True, **kwds4ng)
 >>> _ws_n8[:4]
 [-43284196, -43769846, -44251544, -44729260]
 
@@ -473,7 +494,7 @@ True
 _prepare4mod_uint4symbolic_DFT_(modulus)
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_uint4symbolic_DFT_(modulus:=2**63)
 >>> _ws_n10 = negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, xs, ys)
->>> _ws_n11 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False)
+>>> _ws_n11 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False, **kwds4ng)
 >>> _ws_n10[:4]
 [-43284196, -43769846, -44251544, -44729260]
 
@@ -513,7 +534,7 @@ True
 
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_uint4symbolic_DFT_(modulus:=2**30)
 >>> _ws_n12 = negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, 1<<ez4M, xs, ys)
->>> _ws_n13 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False)
+>>> _ws_n13 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False, **kwds4ng)
 >>> _ws_n12[:4]
 [-43284196, -43769846, -44251544, -44729260]
 >>> _ws_n12[-4:]
@@ -525,11 +546,11 @@ True
 
 
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_uint4symbolic_DFT_(modulus:=2**34)
->>> _ws_n15 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False)
->>> _ws_n15 == _ws_n6
-False
+>>> _ws_n15 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False, **kwds4ng)
+>>> _ws_n15 == _ws_n6 #old_ver7zero_padding=>False #new_ver7DWT=>True
+True
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_uint4symbolic_DFT_(modulus:=2**35)
->>> _ws_n17 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False)
+>>> _ws_n17 = negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, xs, ys, validate=False, **kwds4ng)
 >>> _ws_n17 == _ws_n6
 True
 >>> max_num_bits_(_ws_n6)
@@ -563,7 +584,7 @@ def bothcyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config
 def acyclic_convolution__len_is_zpow__num_bits4lenO_eq__7symbolic_FFT__7config__7zero_pad_(opsN, zero, ez4M, us, vs, /):
 def cyclic_convolution__len_eq__7native_(add_, mul_, M, us, vs, /):
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_uint4symbolic_DFT_(modulus:=2**35)
->>> opsN = Ops4convolution7symbolic_FFT(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero)
+>>> opsN = Ops4convolution7symbolic_FFT(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, **kwds4ng)
 >>> div_2_ = mk_div_zpow5ez_(1)
 >>> ws_p61 = cyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config__7recur_(opsN, div_2_, neg_, add_, mul_, zero, ez4M, xs, ys)
 >>> ws_p60 = cyclic_convolution__len_eq__7native_(add_, mul_, 1<<ez4M, xs, ys)
@@ -577,15 +598,16 @@ True
 
 
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_uint4symbolic_DFT_(modulus:=2**36)
->>> opsN = Ops4convolution7symbolic_FFT(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero)
+>>> opsN = Ops4convolution7symbolic_FFT(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, **kwds4ng)
 >>> (ws_p65, ws_n65) = bothcyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config__7zero_pad_(opsN, neg_, add_, mul_, zero, ez4M, xs, ys)
->>> ws_p65 == ws_p60
-False
->>> ws_n65 == _ws_n6
-False
+>>> ws_p65 == ws_p60 #old_ver7zero_padding=>False #new_ver7DWT=>True
+True
+>>> ws_n65 == _ws_n6 #old_ver7zero_padding=>False #new_ver7DWT=>True
+True
+
 
 >>> (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero) = _prepare4mod_uint4symbolic_DFT_(modulus:=2**37)
->>> opsN = Ops4convolution7symbolic_FFT(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero)
+>>> opsN = Ops4convolution7symbolic_FFT(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, **kwds4ng)
 >>> (ws_p65, ws_n65) = bothcyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config__7zero_pad_(opsN, neg_, add_, mul_, zero, ez4M, xs, ys)
 >>> ws_p65 == ws_p60
 True
@@ -681,6 +703,7 @@ Ops4convolution7FFT
 cyclic_convolution__len_eq__7FFT_
     cyclic_convolution__len_eq__7native_
 
+acyclic_convolution__lenH_eq__7FFT__7even_lenO_
 acyclic_convolution__lenO_eq__7FFT_
     acyclic_convolution__lenI_eq__7FFT_
     acyclic_convolution__lenO_eq__7native_
@@ -705,7 +728,8 @@ cyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config__7zero_
 dyadic_operator_
 sum0_
 sum1_
-
+weighted__inplace_
+div5or_inv_
 '''.split()#'''
         #mk_cached_prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_
         #Ops4convolution7symbolic_FFT
@@ -727,6 +751,8 @@ with mk_ctx4lazy_import4funcs_(__name__, 'FFT__ping_pong:_default_FFT,IFFT_:_def
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
     from seed.math.hrem_ import hrem_, mk_hrem_
     from math import gcd
+    from seed.debug.print_err import print_err, print_ferr
+    from seed.types.FrozenDict import mk_FrozenDict
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -778,6 +804,7 @@ def acyclic_convolution__lenO_eq__7FFT_(neg_, add_, mul_, zero, g, inv_g, div_M_
     # eg:polynomial multiplication
     '[M == len(us) + len(vs) == mul_order_(g)][g**M == 1] # [[M%2==0] => [1+g**(M///2) == 0]] #eg:bad usage:[g:=CRT([3,5], [1,-1])][g%15 == 4][order_mod_(15;g) == 2]but[(g+1)%15 =!= 0]'
     if not M == len(us) + len(vs):raise TypeError(M, len(us) + len(vs))
+    #########old:
     #zero_padding
     us_zz = [*us, *[zero]*len(vs)]
     vs_zz = [*vs, *[zero]*len(us)]
@@ -787,6 +814,64 @@ def acyclic_convolution__lenO_eq__7FFT_(neg_, add_, mul_, zero, g, inv_g, div_M_
     if validate:
         assert ws == acyclic_convolution__lenO_eq__7native_(add_, mul_, zero, M, us, vs)
     return ws
+def weighted__inplace_(mul_, w, xs, /):
+    w1 = w
+    for j in range(1, len(xs)):
+        if j > 1:
+            w = mul_(w, w1)
+        xs[j] = mul_(w, xs[j])
+def acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg_, add_, mul_, zero, hg, inv_hg, div_2_, div_H_, H, us, vs, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, validate=False):
+    '[len(us) + len(vs) == 2**H][hg**H == -1]'
+    if not 2*H == len(us) + len(vs):raise TypeError(H, len(us), len(vs))
+    #########new:
+    #DWT:
+    def weighted_(xs, /):
+        (xsP, [*xsN]) = wrap_(xs)
+        assert len(xsP) == len(xsN) == H
+        weighted__inplace_(mul_, hg, xsN)
+        return (xsP, xsN)
+    def wrap_(xs, /):
+        dsz = len(xs) -H
+        if not dsz:
+            return (xs, xs)
+        if dsz < 0:
+            xs_zz = [*xs, *[zero]*(-dsz)]
+            return (xs_zz, xs_zz)
+        xsP = []
+        xsN = []
+        for j in range(dsz):
+            a = xs[j]
+            b = xs[H+j]
+            xsP.append(add_(a, b))
+            xsN.append(add_(a, neg_(b)))
+        for j in range(dsz, H):
+            a = xs[j]
+            xsP.append(a)
+            xsN.append(a)
+        return (xsP, xsN)
+    #########
+    (usP, usN) = weighted_(us)
+    assert len(usP) == len(usN) == H
+    (vsP, vsN) = weighted_(vs)
+    assert len(vsP) == len(vsN) == H
+
+    # [hg**H == -1]
+    g = mul_(hg,hg)
+    # [g**H == 1]
+    inv_g = mul_(inv_hg,inv_hg)
+    wsP = cyclic_convolution__len_eq__7FFT_(neg_, add_, mul_, g, inv_g, div_H_, H, usP, vsP, FFT_=FFT_, kwds4FFT=kwds4FFT, IFFT_=IFFT_, kwds4IFFT=kwds4IFFT)
+    _wsN = cyclic_convolution__len_eq__7FFT_(neg_, add_, mul_, g, inv_g, div_H_, H, usN, vsN, FFT_=FFT_, kwds4FFT=kwds4FFT, IFFT_=IFFT_, kwds4IFFT=kwds4IFFT)
+    weighted__inplace_(mul_, inv_hg, _wsN)
+    wsN = _wsN
+    wsL = [*map(div_2_, dyadic_operator_(add_, wsP, wsN))]
+    wsR = [*map(div_2_, dyadic_operator_(add_, wsP, [*map(neg_, wsN)]))]
+    ws = wsL + wsR
+    if validate:
+        assert ws == (_ws:=acyclic_convolution__lenO_eq__7native_(add_, mul_, zero, 2*H, us, vs)), ((us, vs), (usP, usN), (vsP, vsN), (zero, hg, inv_hg), (wsP, wsN), (ws, _ws))
+        # AssertionError: (([1, 65025], [1, 64257]), ([1, 65025], [1, 65025]), ([1, 64257], [1, 64257]), (0, 65281, 256), ([65528, 63745], [65528, 7]), ([65528, 31876, 0, 31869], [1, 63745, 65527, 0]))
+
+    return ws
+    return (wsL, wsR)
 
 def _fix_FFTs(FFT_, IFFT_, /):
     if IFFT_ is None:
@@ -1229,96 +1314,36 @@ class Ops4convolution7symbolic_FFT(_Readonly):
         hg = pow_g7Rz_(z, 2) if en > ew else z
         e4hg = int(hg)
         # [hg == z**e4hg]
+        e4g = int(pow_g7Rz_(hg, 2))
         _2W = W<<1
-        div_2W_7Rz_ = _mk4div_2W_7Rz_(mk_div_zpow5ez_, mul_, ew, _2W, N)
+        (div_2_7Rz_, div_W_7Rz_, div_2W_7Rz_) = _mk4div_2W_7Rz_(mk_div_zpow5ez_, mul_, ew, _2W, N)
         # [hg**W == -1]
         # [hg**(2*W) == 1]
         # [hg**(2*W-1) == hg**-1 == inv_hg]
         inv_hg = pow_g7Rz_(hg, _2W-1)
         assert mul7Rz_(hg, inv_hg) == _4z(0)
+        if 0:
+            #old_ver7zero_padding:
+            sz = _2W
+            e4the_g = e4hg
+        else:
+            #new_ver7DWT:
+            sz = W
+            e4the_g = e4g
         #bug:gs = (*map(mk_g5e_, range(_2W)),)
-        gs = (*map(mk_g5e_, map(e4hg.__mul__, range(_2W))),)
+        gs = (*map(mk_g5e_, map(e4the_g.__mul__, range(sz))),)
         inv_gs = (gs[0], *gs[:0:-1])
-        assert len(gs) == _2W
-        assert len(inv_gs) == _2W
-        new_kwds4FFT = dict(old_kwds4FFT, may_gs=gs)
+        assert len(gs) == sz
+        assert len(inv_gs) == sz
+        new_kwds4FFT = dict(old_kwds4FFT, may_gs=gs) #mk_FrozenDict
         new_kwds4IFFT = dict(old_kwds4IFFT, may_inv_gs=inv_gs)
+        #print_err('new_kwds4FFT=', new_kwds4FFT)
         assert new_kwds4FFT['may_gs'] is gs
         assert new_kwds4IFFT['may_inv_gs'] is inv_gs
-        payload1 = ((em, ew, en), (M, W, N), (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_), (z, hg, inv_hg, _2W, div_2W_7Rz_), (new_kwds4FFT, new_kwds4IFFT)) # == st2
+        payload1 = ((em, ew, en), (M, W, N), (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_), (z, hg, inv_hg, _2W, div_2_7Rz_, div_W_7Rz_, div_2W_7Rz_), (new_kwds4FFT, new_kwds4IFFT)) # == st2
         return (True, to_recur, payload0, may_payload1:=payload1)
 
 
-r'''[[[
-def mk_cached_prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, zero, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
-    check_int_ge(2, min_ez4M4recur)
-    (FFT_, IFFT_) = _fix_FFTs(FFT_, IFFT_)
-    ez2div_zpow_ = _4ez2div_zpow_(mk_div_zpow5ez_)
-    mk_div_zpow5ez_ = ez2div_zpow_
-    ez4M2config = {}
-    old_kwds4FFT = kwds4FFT
-    old_kwds4IFFT = kwds4IFFT
-    del kwds4FFT, kwds4IFFT
-    def cached_prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(ez4M, /):
-        try:
-            return ez4M2config[ez4M]
-        except KeyError:
-            pass
-        config6ez4M = _prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(ez4M)
-        ez4M2config[ez4M] = config6ez4M
-        return ez4M2config_(ez4M)
-    def _prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(ez4M, /):
-        check_int_ge(0, ez4M)
-        #if ez4M < min_ez4M4recur:
-        payload4base = (ez4M, st1)
-        if ez4M == 0:
-            # !! cyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config__7recur_
-            return (False, payload4base)
-        to_recur = not ez4M < min_ez4M4recur
-
-        em = ez4M
-        ew = em//2
-        en = em -ew
-        #assert 1 <= ew <= en <= 1+ew <= em
-        assert 0 <= ew <= en <= 1+ew <= em
-        #if ew == 0: min_ez4M4recur = max(2, min_ez4M4recur)
-                # to avoid RecursionError
-                # [min_ez4M4recur:=1] for debug
-
-        M = 1 << em # 高层规模
-        N = 1 << en # 低层规模
-        W = 1 << ew # 介层规模
-        (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_) = _prepare4symbolic_DFT_(mk_div_zpow5ez_, neg_, add_, mul_, zero, M, N, W, min_ez4M4recur, en, FFT_, old_kwds4FFT, IFFT_, old_kwds4IFFT, validate, verbose, ez4M2config_)
-
-        z = _z
-        # [z**N == -1]
-        #t = _t
-        # [t**M == -1]
-        hg = pow_g7Rz_(z, 2) if en > ew else z
-        e4hg = int(hg)
-        # [hg == z**e4hg]
-        _2W = W<<1
-        div_2W_7Rz_ = _mk4div_2W_7Rz_(mk_div_zpow5ez_, mul_, ew, _2W, N)
-        # [hg**W == -1]
-        # [hg**(2*W) == 1]
-        # [hg**(2*W-1) == hg**-1 == inv_hg]
-        inv_hg = pow_g7Rz_(hg, _2W-1)
-        assert mul7Rz_(hg, inv_hg) == _4z(0)
-        #bug:gs = (*map(mk_g5e_, range(_2W)),)
-        gs = (*map(mk_g5e_, map(e4hg.__mul__, range(_2W))),)
-        inv_gs = (gs[0], *gs[:0:-1])
-        assert len(gs) == _2W
-        assert len(inv_gs) == _2W
-        new_kwds4FFT = dict(old_kwds4FFT, may_gs=gs)
-        new_kwds4IFFT = dict(old_kwds4IFFT, may_inv_gs=inv_gs)
-        assert new_kwds4FFT['may_gs'] is gs
-        assert new_kwds4IFFT['may_inv_gs'] is inv_gs
-        st2 = ((em, ew, en), (M, W, N), (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_), (z, hg, inv_hg, _2W, div_2W_7Rz_), (new_kwds4FFT, new_kwds4IFFT))
-        return (True, payload4recur:=(to_recur, payload4base, st2))
-    ez4M2config_ = cached_prepare4negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_
-    st1 = ((validate, verbose), (min_ez4M4recur, ez4M2config, ez4M2config_), (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero), (FFT_, old_kwds4FFT, IFFT_, old_kwds4IFFT))
-    return ez4M2config_
-#]]]'''#'''
 
 
 def negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT_(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, ez4M, us, vs, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
@@ -1478,14 +1503,14 @@ def _2_negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7con
     (ez4M, st1) = payload4base
     #########
     ((validate, verbose), (min_ez4M4recur, ez4M2config, ez4M2config_), (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero), (FFT_, old_kwds4FFT, IFFT_, old_kwds4IFFT)) = st1
-    ((em, ew, en), (M, W, N), (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_), (z, hg, inv_hg, _2W, div_2W_7Rz_), (new_kwds4FFT, new_kwds4IFFT)) = st2
+    ((em, ew, en), (M, W, N), (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_), (z, hg, inv_hg, _2W, div_2_7Rz_, div_W_7Rz_, div_2W_7Rz_), (new_kwds4FFT, new_kwds4IFFT)) = st2
     #########
 #]]]'''#'''
 def _4_negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_(opsN, payload0, payload1, us, vs, /):
     #########
     (ez4M, st0) = payload0
     ((validate, verbose, min_ez4M4recur), (mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero), (FFT_, old_kwds4FFT, IFFT_, old_kwds4IFFT)) = st0
-    ((em, ew, en), (M, W, N), (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_), (z, hg, inv_hg, _2W, div_2W_7Rz_), (new_kwds4FFT, new_kwds4IFFT)) = payload1
+    ((em, ew, en), (M, W, N), (neg7Rz_, add7Rz_, mul7Rz_, pow_g7Rz_, sub7Rz_, zero7Rz, mk_g5e_), (z, hg, inv_hg, _2W, div_2_7Rz_, div_W_7Rz_, div_2W_7Rz_), (new_kwds4FFT, new_kwds4IFFT)) = payload1
     #########
     assert ez4M >= min_ez4M4recur
     if not M == len(us) == len(vs):raise TypeError
@@ -1494,7 +1519,17 @@ def _4_negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7con
     poly7Rzt4vs = _mk_poly7Rzt_(M, N, W, vs)
 
 
-    ws_ws7Rzt_ex = acyclic_convolution__lenO_eq__7FFT_(neg7Rz_, add7Rz_, mul7Rz_, zero7Rz, g:=hg, inv_g:=inv_hg, div_2W_7Rz_, _2W, poly7Rzt4us, poly7Rzt4vs, FFT_=FFT_, kwds4FFT=new_kwds4FFT, IFFT_=IFFT_, kwds4IFFT=new_kwds4IFFT, validate=False)
+    # [hg**W == -1]
+    # [hg**(2*W) == 1]
+    # TODO:using: acyclic_convolution__lenH_eq__7FFT__7even_lenO_
+    #print_err('new_kwds4FFT=', new_kwds4FFT)
+    if 1:
+        #new_ver7DWT:
+        #   fixed:new_kwds4FFT.may_gs
+        ws_ws7Rzt_ex = acyclic_convolution__lenH_eq__7FFT__7even_lenO_(neg7Rz_, add7Rz_, mul7Rz_, zero7Rz, hg, inv_hg, div_2_7Rz_, div_W_7Rz_, W, poly7Rzt4us, poly7Rzt4vs, FFT_=FFT_, kwds4FFT=new_kwds4FFT, IFFT_=IFFT_, kwds4IFFT=new_kwds4IFFT, validate=False)
+    else:
+        #old_ver7zero_padding:
+        ws_ws7Rzt_ex = acyclic_convolution__lenO_eq__7FFT_(neg7Rz_, add7Rz_, mul7Rz_, zero7Rz, g:=hg, inv_g:=inv_hg, div_2W_7Rz_, _2W, poly7Rzt4us, poly7Rzt4vs, FFT_=FFT_, kwds4FFT=new_kwds4FFT, IFFT_=IFFT_, kwds4IFFT=new_kwds4IFFT, validate=False)
     assert len(ws_ws7Rzt_ex) == _2W
     if 0:
         ######################
@@ -1529,21 +1564,34 @@ def _4_negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7con
         assert ws == negacyclic_convolution__len_eq__7native_(neg_, add_, mul_, M, us, vs)
     return ws
 
-def _mk4div_2W_7Rz_(mk_div_zpow5ez_, mul_, ew, _2W, N, /):
-    inv_2W_or_div_2W_7R_ = mk_div_zpow5ez_(1+ew)
-    if callable(inv_2W_or_div_2W_7R_):
-        div_2W_7R_ = inv_2W_or_div_2W_7R_
+def div5or_inv_(mul_, inv_sz_or_div_sz_, /):
+    if callable(inv_sz_or_div_sz_):
+        div_sz_ = inv_sz_or_div_sz_
     else:
-        inv_2W = inv_2W_or_div_2W_7R_
-        def div_2W_7R_(x, /):
-            return mul_(inv_2W, x)
-    div_2W_7R_
+        inv_sz = inv_sz_or_div_sz_
+        def div_sz_(x, /):
+            return mul_(inv_sz, x)
+    return div_sz_
+def _mk4div_2W_7Rz_(mk_div_zpow5ez_, mul_, ew, _2W, N, /):
+    inv_2_or_div_2_7R_ = mk_div_zpow5ez_(1)
+    inv_W_or_div_W_7R_ = mk_div_zpow5ez_(ew)
+    inv_2W_or_div_2W_7R_ = mk_div_zpow5ez_(1+ew)
+
+    div_2_7R_ = div5or_inv_(mul_, inv_2_or_div_2_7R_)
+    div_W_7R_ = div5or_inv_(mul_, inv_W_or_div_W_7R_)
+    div_2W_7R_ = div5or_inv_(mul_, inv_2W_or_div_2W_7R_)
+    def div_2_7Rz_(xs, /):
+        check_type_is(_Rz, xs)
+        return _Rz(map(div_2_7R_, xs))
+    def div_W_7Rz_(xs, /):
+        check_type_is(_Rz, xs)
+        return _Rz(map(div_W_7R_, xs))
     def div_2W_7Rz_(xs, /):
         check_type_is(_Rz, xs)
         #bug:assert len(xs) == _2W, (len(xs), _2W)
         assert len(xs) == N, (len(xs), N)
         return _Rz(map(div_2W_7R_, xs))
-    return div_2W_7Rz_
+    return (div_2_7Rz_, div_W_7Rz_, div_2W_7Rz_)
 def _prepare4symbolic_DFT_(mk_div_zpow5ez_, neg_, add_, mul_, zero, M, N, W, min_ez4M4recur, en, FFT_, kwds4FFT, IFFT_, kwds4IFFT, validate, verbose, opsN, /):
     _2N = N<<1
     zero7Rz = _mk_poly7Rz_(N, [zero]*N)

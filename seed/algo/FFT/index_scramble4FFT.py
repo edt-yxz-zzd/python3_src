@@ -475,6 +475,7 @@ reverse_digit4uint_
 bit_scramble_
     uint5bits_
     uint2bits_
+mk_j2bit_scramble6ez_
 
 mk_scramble7inplace_
 
@@ -482,6 +483,7 @@ IFFT_
 FFT__native
 FFT__original__len_is_zpow
 FFT__bit_scramble__len_is_zpow__inplace
+    mk_j2bit_scramble6ez_
     FFT__bit_scramble__len_is_zpow
 FFT__idx_digit_reverse__inplace
     FFT__idx_digit_reverse
@@ -548,8 +550,52 @@ def bit_scramble_(sz4bits, u, /):
     bits = uint2bits_(sz4bits, u)
     v = uint5bits_(sz4bits, bits[::-1])
     return v
+def mk_j2bit_scramble6ez_(ez, /):
+    r'''[[[
+    # O(L*log2(L))
 
+    [bit_scramble_(1+ez;k) == (bit_scramble_(ez;k%2**ez) * 2) + (k >= 2**ez)]
+    [j2bit_scramble{ez} := [bit_scramble_(ez;j) | [j:<-[0..<2**ez]]]]
+    [j:<-[0..<2**ez]]:
+        [j2bit_scramble{ez}[j] == bit_scramble_(ez;j)]
+    [j:<-[0..<2**ez]][ez >= 1]:
+        [j2bit_scramble{ez}[j]
+        == bit_scramble_(ez;j)
+        !! [bit_scramble_(1+ez;k) == (bit_scramble_(ez;k%2**ez) * 2) + (k >= 2**ez)]
+        !! [ez >= 1]
+        == bit_scramble_(-1+ez;j%2**(-1+ez)) *2 +{j >= 2**(-1+ez)}
+        ]
+        [j2bit_scramble{ez}[:2**(-1+ez)] == 2 *. j2bit_scramble{-1+ez}]
+        [j2bit_scramble{ez}[2**(-1+ez):] == 1 +. (2 *. j2bit_scramble{-1+ez})]
+        [j2bit_scramble{ez}[2**(-1+ez):] == 1 +. j2bit_scramble{ez}[:2**(-1+ez)]]
 
+    #]]]'''#'''
+    check_int_ge(0, ez)
+    _ez = 0
+    ls = [0]
+    L = 1
+    # [ls == j2bit_scramble{_ez}]
+    # [len(ls) == L == 2**(_ez)]
+    for _ez in range(1, 1+ez):
+        #########
+        # [ls == j2bit_scramble{-1+_ez}]
+        # [len(ls) == L == 2**(-1+_ez)]
+        #########
+        # !! [j2bit_scramble{ez}[:2**(-1+ez)] == 2 *. j2bit_scramble{-1+ez}]
+        for j in range(L):
+            ls[j] <<= 1
+        # !! [j2bit_scramble{ez}[2**(-1+ez):] == 1 +. j2bit_scramble{ez}[:2**(-1+ez)]]
+        for j in range(L):
+            ls.append(ls[j] ^ 1)
+        L <<= 1
+        #########
+        # [ls == j2bit_scramble{_ez}]
+        # [len(ls) == L == 2**(_ez)]
+        #########
+    # [ls == j2bit_scramble{ez}]
+    # [len(ls) == L == 2**(ez)]
+    j2bit_scramble6ez = ls
+    return j2bit_scramble6ez
 
 
 
@@ -664,7 +710,7 @@ def _mk_pows(mul, L, g, /, *, may_gs):
     #gs = [g**k for k in range(len(xs))]
     if not may_gs is None:
         gs = may_gs
-        assert len(gs) == L
+        assert len(gs) == L, (g, len(gs), L)
             # !! [g**L == one]
         return gs
 
@@ -709,12 +755,24 @@ def FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs, /, *, may_gs=N
     if L == 0:raise ValueError(L)
     sz4bits = L.bit_length()-1
     if not L == (1<<sz4bits):raise ValueError(L)
-    for i in range(L):
+    ######################
+    #.scramble:
+    #.for i in range(L):
+    #.    # O(L*log2(L))
+    #.    j = bit_scramble_(sz4bits,i)
+    #.        # O(log2(L))
+    #.    if i < j:
+    #.        xs[i], xs[j] = xs[j], xs[i]
+    ######################
+    #scramble:
+    j2bit_scramble6ez = mk_j2bit_scramble6ez_(sz4bits)
+    assert len(j2bit_scramble6ez) == L
         # O(L*log2(L))
-        j = bit_scramble_(sz4bits,i)
-            # O(log2(L))
+    for i, j in enumerate(j2bit_scramble6ez):
         if i < j:
             xs[i], xs[j] = xs[j], xs[i]
+    j2bit_scramble6ez = None
+    ######################
     #gs = [g**k for k in range(L)]
     gs = _mk_pows(mul, L, g, may_gs=may_gs)
         # L*TIME(1*mul)
@@ -731,13 +789,28 @@ def FFT__bit_scramble__len_is_zpow__inplace(neg, add, mul, g, xs, /, *, may_gs=N
             # ys = xs[i:i+sz//2]
             # zs = xs[i+sz//2:i+sz]
             j = i+h
+            k = 0
+            i_k = i # == i+k
+            j_k = j # == j+k == h+i+k
+            igk = 0 # == ig*k
             for k in range(h):
                 # total: h*TIME(1*mul+2*add+1*neg)
+                r'''[[[
                 y = xs[i+k]
                 z = mul(xs[j+k], gs[ig*k])
                 xs[i+k] = add(y, z)
                 xs[j+k] = add(y, neg(z))
+                #]]]'''#'''
+                y = xs[i_k]
+                z = mul(xs[j_k], gs[igk])
+                xs[i_k] = add(y, z)
+                xs[j_k] = add(y, neg(z))
                     # using_neg_here
+                #########next round:
+                i_k += 1 # == i+(1+k)
+                j_k += 1 # == j+(1+k) == h+i+(1+k)
+                igk += ig# == ig*(1+k)
+                #########
     # total:O(L*log2(L)) + L*TIME(1*mul) + L*log2(L)/2*TIME(1*mul+2*add+1*neg)
     # total:O(L*log2(L))*TIME(mul+add+neg)
     return xs
