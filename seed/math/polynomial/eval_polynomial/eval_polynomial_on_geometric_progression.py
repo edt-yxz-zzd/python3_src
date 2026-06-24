@@ -322,8 +322,10 @@ with mk_ctx4lazy_import4funcs_(__name__):
     #from seed.algo.FFT.convolution import cyclic_convolution__len_eq__7FFT_, cyclic_convolution__len_eq__7native_
     from seed.algo.FFT.convolution import mk_ops4convolution7symbolic_FFT__5modulus_
     from seed.algo.FFT.convolution import mk_ops4convolution7FFT__5modulus_and_ground_root_
+    from seed.algo.FFT.convolution import dyadic_operator_
 
     from itertools import islice
+    from functools import reduce
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -340,7 +342,7 @@ def tab_pows_(sz, mul_, one, T, /):
         j2Tpw.append(pw)
     assert len(j2Tpw) == sz
     return j2Tpw
-def tab_tri_pows_(sz, mul_, one, T, /):
+def tab_tri_pows_(sz, mul_, one, T, /, *, ex=False):
     j2Tpw = tab_pows_(sz, mul_, one, T)
         # j:pow_(T, j)
 
@@ -353,7 +355,7 @@ def tab_tri_pows_(sz, mul_, one, T, /):
         delta_trpw = j2Tpw[delta_exp]
         trpw = mul_(trpw, delta_trpw)
         j2Ttrpw.append(trpw)
-    return j2Ttrpw
+    return j2Ttrpw if not ex else (j2Ttrpw, j2Tpw)
 
 
 def poly_eval_(add_, mul_, zero, coeffs8poly, x, /):
@@ -410,7 +412,7 @@ class _Readonly:
             raise AttributeError(nm)
         super(__class__, sf).__setattr__(nm, x)
 class Eval_polynomial_on_geometric_progression__7modulus(_Readonly):
-    def __init__(sf, modulus, /, *, hrem_vs_mod):
+    def __init__(sf, modulus, /, *, hrem_vs_mod, optimized6zpowpp):
         check_type_is(bool, hrem_vs_mod)
         check_int_ge(1, modulus)
             # !! invT
@@ -418,14 +420,18 @@ class Eval_polynomial_on_geometric_progression__7modulus(_Readonly):
         sf.modulus = modulus
         sf.opsN = opsN
         sf.hrem_vs_mod = hrem_vs_mod
-    def evals_(sf, coeffs8poly, T, invT=None, /, *, hrem_vs_mod=None):
+        sf.optimized6zpowpp = optimized6zpowpp
+    def evals_(sf, coeffs8poly, T, invT=None, /, *, hrem_vs_mod=None, optimized6zpowpp=None):
         if hrem_vs_mod is None:
             hrem_vs_mod = sf.hrem_vs_mod
+        if optimized6zpowpp is None:
+            optimized6zpowpp = sf.optimized6zpowpp
+
         opsN = sf.opsN
         modulus = sf.modulus
         if invT is None:
             invT = pow(T, -1, modulus)
-        rs = eval_polynomial_on_geometric_progression__7opsX_(opsN, coeffs8poly, T, invT)
+        rs = eval_polynomial_on_geometric_progression__7opsX_(opsN, coeffs8poly, T, invT, optimized6zpowpp=optimized6zpowpp)
         if hrem_vs_mod and modulus:
             #rs = [u%modulus for u in rs]
             rs = [u+modulus if u < 0 else u for u in rs]
@@ -443,12 +449,26 @@ def eval_polynomial_on_geometric_progression__7modulus_(modulus, coeffs8poly, T,
     #.    #rs = [u%modulus for u in rs]
     #.    rs = [u+modulus if u < 0 else u for u in rs]
     #.return rs
-def eval_polynomial_on_geometric_progression__7opsX_(opsX, coeffs8poly, T, invT, /):
+def eval_polynomial_on_geometric_progression__7opsX_(opsX, coeffs8poly, T, invT, /, *, optimized6zpowpp=False):
     r'''[[[
     #########
     # [opsX == (opsG|opsN)]
     # [opsX :: (Ops4convolution7FFT|Ops4convolution7symbolic_FFT)]
     #########
+    [optimized6zpowpp:=True][len(cs) == 1+2**ez]:
+        [Ts := T **. [0..<1+2**ez]]
+        [this_func(cs,T)
+        == poly_evals_(cs,Ts)
+        == cs[0] +. (Ts .*. poly_evals_(cs[1:],Ts))
+        == [poly_eval_(cs,T**0)] ++ (cs[0] +. (Ts .*. poly_evals_(cs[1:],Ts)))[1:]
+        == [sum(cs)] ++ (cs[0] +. (Ts[1:] .*. poly_evals_(cs[1:],Ts[1:])))
+        == [sum(cs)] ++ (cs[0] +. (T*Ts[:-1] .*. poly_evals_(cs[1:],T*Ts[:-1])))
+        == [sum(cs)] ++ (cs[0] +. (T*Ts[:-1] .*. poly_evals_(Ts[:-1] .*. cs[1:],Ts[:-1])))
+        == [sum(cs)] ++ (cs[0] +. (Ts[:-1] .*. poly_evals_(Ts[1:] .*. cs[1:],Ts[:-1])))
+        == [sum(cs)] ++ (cs[0] +. (Ts[:-1] .*. this_func((Ts .*. cs)[1:],T)))
+        ]
+        [this_func(cs,T) == [sum(cs)] ++ (cs[0] +. (Ts[:-1] .*. this_func((Ts .*. cs)[1:],T)))]
+
     #]]]'''#'''
     mul_ = opsX.mul_
     zero = opsX.zero
@@ -456,9 +476,30 @@ def eval_polynomial_on_geometric_progression__7opsX_(opsX, coeffs8poly, T, invT,
     #########
     cs = coeffs8poly
     D = len(cs)
+    #########
+    ex = False
+    if optimized6zpowpp and D.bit_length():
+        optimized6zpowpp = False
+        lbD = floor_log2(D)
+        if D - 1 == 1 << lbD:
+            optimized6zpowpp = True
+            # [len(cs) == D == 1+2**lbD]
+            # apply:[this_func(cs,T) == [sum(cs)] ++ (cs[0] +. (Ts[:-1] .*. this_func((Ts .*. cs)[1:],T)))]
+            c0 = cs[0]
+            add_ = opsX.add_
+            sum_cs = reduce(add_, cs, zero)
+            ex=True
+            (j2Ttrpw, j2Tpw) = tab_tri_pows_(D, mul_, one, T, ex=ex)
+            Ts = j2Tpw
+            cs = dyadic_operator_(mul_, Ts, cs)[1:]
+            D = len(cs)
+            assert D == 1 << lbD
+    #########
+    ex, optimized6zpowpp, cs
     (M, H) = _mk_M_H(D)
     #########
-    j2Ttrpw = tab_tri_pows_(D, mul_, one, T)
+    if not ex:
+        j2Ttrpw = tab_tri_pows_(D, mul_, one, T)
         # j:pow_(T, triangular_number_(j))
     # [us := [(cj*T**triangular_number_(j)) | [(j,cj):<-enumerate(cs)]] ++ [0]*(M-D)]
     us = [mul_(cs[j], j2Ttrpw[j]) for j in range(D)]
@@ -486,6 +527,18 @@ def eval_polynomial_on_geometric_progression__7opsX_(opsX, coeffs8poly, T, invT,
     # [j2y[:D] := [(T**triangular_number_(-1+k) * ws[M///2+k-1]) | [k:<-[0..<D]]]]
     ys = j2y = [mul_(ws[H+kmm], j2Ttrpw[max(0,kmm)]) for kmm in range(-1, -1+D)]
     assert len(ys) == D
+    #########
+    if optimized6zpowpp:
+        # apply:[this_func(cs,T) == [sum(cs)] ++ (cs[0] +. (Ts[:-1] .*. this_func((Ts .*. cs)[1:],T)))]
+        c0
+        sum_cs
+        Ts.pop()
+        assert len(Ts) == D
+        _ys = [sum_cs]
+        _ys.extend(add_(c0, y) for y in map(mul_, Ts, ys))
+        ys = _ys
+        assert len(ys) == 1+D
+    #########
     return ys
 
 

@@ -1,4 +1,5 @@
 #__all__:goto
+#TODO:goto
 r'''[[[
 e ../../python3_src/seed/algo/rho_method__7iter.py
 view ../../python3_src/seed/algo/rho_method__7iter___py_adhoc_call.py
@@ -769,6 +770,10 @@ class _Ops8u2next_u_:
     def add_B_pow_u_2_(sf, B, u, /):
         M = sf._M
         return (B+pow(u, 2, M))%M
+    def sub_u_pow_u_3_(sf, u, /):
+        #@20260621
+        M = sf._M
+        return (u-pow(u, 3, M))%M
 def prepare_u2next_u_(M, u2next_u_, /):
     if type(u2next_u_) is str:
         nm = u2next_u_

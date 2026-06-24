@@ -630,6 +630,34 @@ py_adhoc_call   seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7g
 
 
 ]]
+[[
+@20260621
+sub_u_pow_u_3_
+py_adhoc_call   seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ +more_info  :sub_u_pow_u_3_  ='(-1+2**34)//3'  =999 ='range(20)'
+    (43691, (5726623061, 3, 2, 386))
+py_adhoc_call   seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ +more_info  :sub_u_pow_u_3_  ='(-1+2**67)'  =999 ='range(20)'
+    (None, 20)
+py_adhoc_call   seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ +more_info  :sub_u_pow_u_3_  ='(-1+2**67)'  =99 ='range(20,99)'
+    (None, 79)
+py_adhoc_call   seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ +more_info  :sub_u_pow_u_3_  ='(-1+2**67)'  =99 ='range(99,999)'
+    (None, 900)
+py_adhoc_call   seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ +more_info  :sub_u_pow_u_3_  ='(-1+2**67)'  =9999 ='range(20)'
+    (193707721, (147573952589676412927, 11, 10, 6893))
+
+py_adhoc_call { +to_show_total_timedelta }  seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ --gcd_with_more=2  +more_info  :sub_u_pow_u_3_  ='(-1+2**1207)//131071//228479//212885833//48544121'  =9999 ='range(50,61)'
+    (None, 11)
+    total::duration: 3.9390835450000004 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ --gcd_with_more=2  +more_info  :sub_u_pow_u_3_  ='(-1+2**1207)//131071//228479//212885833//48544121'  =99999 ='range(2,21)'
+    (None, 19)
+    total::duration: 63.598125725 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ --gcd_with_more=2  +more_info  :sub_u_pow_u_3_  ='(-1+2**1207)//131071//228479//212885833//48544121'  =999999 ='range(65,72)'
+    (None, 7)
+    total::duration: 234.498021303 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.algo.rho_method__7iter   @try_factor_pint7iter_rho_method7gcd_ --gcd_with_more=2  +more_info  :sub_u_pow_u_3_  ='(-1+2**1207)//131071//228479//212885833//48544121'  =9999999 ='[72]'
+    (None, 1)
+    total::duration: 340.090060702 *(unit: 0:00:01)
+
+]]
 
 
 

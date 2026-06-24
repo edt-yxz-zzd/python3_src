@@ -74,6 +74,14 @@ postcondition:
 
 
 
+>>> factor_pint__7batch_gcd_IIdiffs_(257*(1+2**16), 3, 16, optimized6zpow=True)
+([257], [])
+>>> factor_pint__7batch_gcd_IIdiffs_(257*(1+2**16), 3, 15, optimized6zpow=True)
+([], [])
+>>> factor_pint__7batch_gcd_IIdiffs_(257*(1+2**16), 3, 16, optimized6zpow=False)
+([257], [])
+>>> factor_pint__7batch_gcd_IIdiffs_(257*(1+2**16), 3, 15, optimized6zpow=False)
+([], [])
 
 
 
@@ -166,6 +174,29 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7
     []
     total::duration: 5.772766154 *(unit: 0:00:01)
 保留下列旧版输出:证明:O(sz*ln(sz)*lnln(sz)):
+
+#旧版:且[sz:=2**10]实际上是[lbM==11]
+假设:O(sz*ln(sz)*lnln(sz)):
+    13.25 x2 --> 30.0
+    13.25 x4 --> 67.0
+    13.25 x8 --> 148.5
+    :echo 13.25*(12.0/11)*2*log(12)/log(11)
+    :echo 13.25*(13.0/11)*4*log(13)/log(11)
+    :echo 13.25*(13.0/11)*8*log(13)/log(11)
+假设:O(sz*ln(sz)):
+    13.25 x2 --> 29
+    13.25 x4 --> 62.6
+    13.25 x8 --> 135.0
+    :echo 13.25*(12.0/11)*2
+    :echo 13.25*(13.0/11)*4
+    :echo 13.25*(14.0/11)*8
+假设:O(sz*ln(sz)**2):
+    13.25 x2 --> 31.5
+    13.25 x4 --> 74.0
+    13.25 x8 --> 171.7
+    :echo 13.25*pow(12.0/11.0,2)*2
+    :echo 13.25*pow(13.0/11.0,2)*4
+    :echo 13.25*pow(14.0/11.0,2)*8
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   @factor_pint__7batch_gcd_IIdiffs_  ='-1+2**67' ='(False, (2**10, 2))'
     []
     total::duration: 13.250274873 *(unit: 0:00:01)
@@ -356,6 +387,25 @@ py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_
     ^KeyboardInterrupt
     total::duration: 524.346967415 *(unit: 0:00:01)
     TODO
+
+]]
+[[
+testing:
+++kw:optimized6zpow
+#see above:py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,iter_factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='17' ='-1+2**13'  --offset='2**607' +stop6ok -optimized6zpow
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__7batch_gcd_IIdiffs   ,iter_factor_pint__7batch_gcd_IIdiffs_  ='(-1+2**1207)//131071//228479//48544121//212885833' ='17' ='2**13'  --offset='2**404' +stop6ok +optimized6zpow
+    0: ... ...
+    (41315998049390537434494706752048189989275292685267576205290549704650361952269459114074325652482205302974450751563959894016, [], [])
+    #pre:0:duration: 33.419425473000004 *(unit: 0:00:01)
+    0:duration: 21.634655211 *(unit: 0:00:01)
+        ##after:++kw:optimized6zpow@mk_polynomial_coeffs5roots_on_geometric_progression_
+    1: ... ...
+    (41315998049390537434494706752048189989275292685267576205290549704650361952269459114074325652482205302974450751563959894017, [], [])
+    1:duration: 11.160727951000005 *(unit: 0:00:01)
+    2: ... ...
+    (41315998049390537434494706752048189989275292685267576205290549704650361952269459114074325652482205302974450751563959894018, [], [])
+    2:duration: 11.129016419000003 *(unit: 0:00:01)
+
 ]]
 [[
 [@[k:<-ks4zero] -> [0 == II[((-1+x0**t) %N) | [t:<-[1+sz*k..=sz*(1+k)]]] %N]]
@@ -521,17 +571,19 @@ def mk_pows_mod_(N, sz, x0, e0, /):
         xs.append(x0*xs[-1]%N)
     assert len(xs) == sz
     return xs
-def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soon=False, fancy_vs_native=False):
+def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soon=False, fancy_vs_native=False, optimized6zpow=False):
     r'''[[[
     :: N/uint -> x0/int -> sz/uint -> offset/uint -> (nontrivial_factors, ks4zero)
 
     [best_sz == -1+2**ez]
         since [1+num_roots == 1+degree == num_coeffs]
         FFT{num_coeffs:=2**ez} => [sz==num_roots==-1+2**ez]
+        ++kw:optimized6zpow:@20260617
+            turn on optimization for [sz == 2**ez]
 
     # to factor N require [sz == O(min_prime_factor{N}**/2)]
     kw:fancy_vs_native:
-        fancy => O(sz*ln(sz))
+        fancy => O(sz*ln(sz)*lnln(sz))
         native => O(sz**2)
 
     precondition:
@@ -547,10 +599,10 @@ def factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soon=Fal
     [diffs == [II[((x0**t -1) %N) | [t:<-[1+sz*(k-1)..<=sz*k]]] * x0**(-offset*sz**2 +sz*(sz-1)/2) %N | [k:<-[offset..<offset+sz]]]]
 
     #]]]'''#'''
-    it = iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, offset, to_show_soon=to_show_soon, fancy_vs_native=fancy_vs_native)
+    it = iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, offset, to_show_soon=to_show_soon, fancy_vs_native=fancy_vs_native, optimized6zpow=optimized6zpow)
     (offset, nontrivial_factors, ks4zero) = next(it)
     return (nontrivial_factors, ks4zero)
-def iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soon=False, fancy_vs_native=False, stop6ok=False, _debug=False):
+def iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soon=False, fancy_vs_native=False, stop6ok=False, _debug=False, optimized6zpow=False):
     'N/uint -> x0/int -> sz/uint -> offset/uint -> Iter (offset, nontrivial_factors, ks4zero) #see:factor_pint__7batch_gcd_IIdiffs_'
     # [gcd(N,x0) == 1]
     check_int_ge(4, N)
@@ -560,7 +612,7 @@ def iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soo
     check_type_is(int, x0)
     x0 %= N
     if not 1 < x0 < N-1:raise ValueError(x0, N)
-    ev = Eval_polynomial_on_geometric_progression__7modulus(N, hrem_vs_mod=True)
+    ev = Eval_polynomial_on_geometric_progression__7modulus(N, hrem_vs_mod=True, optimized6zpowpp=optimized6zpow)
     opsN = ev.opsN
     if to_show_soon:
         if callable(to_show_soon):
@@ -754,9 +806,9 @@ def iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soo
         # [invB{offset} == invT**(1+offset*sz) %N]
         ###########################
         # !! [xs{offset} == invB{offset} *. x0 **. [0..<sz] %N] # xs6offset__ver2:goto
-        csX_6offset = mk_polynomial_coeffs5roots_on_geometric_progression_(opsN, invB_6offset, x0, sz)
+        csX_6offset = mk_polynomial_coeffs5roots_on_geometric_progression_(opsN, invB_6offset, x0, sz, optimized6zpow=optimized6zpow)
             #优化:几何级数:II[(x-x0**(i*K+j)) | i,j...] == x0**??? * II[(x/x0**(i*Kj) -x0**j0) | i,j...]
-            # O(sz*ln(sz))
+            # O(sz*ln(sz)*lnln(sz))
         if not debug:
             invB_6offset = None
 
@@ -778,7 +830,7 @@ def iter_factor_pint__7batch_gcd_IIdiffs_(N, x0, sz, /, offset=0, *, to_show_soo
             ########################
             # !! [ys == T **. [0..<sz] %N] # ys__ver2:goto
             diffs_ = ev.evals_(coeffs8poly:=csX_6offset, T, invT)
-                # O(sz*ln(sz))
+                # O(sz*ln(sz)*lnln(sz))
             assert -1+len(diffs_) == sz
             777;diffs_.pop()
             777;diffs6offset, diffs_ = diffs_, None

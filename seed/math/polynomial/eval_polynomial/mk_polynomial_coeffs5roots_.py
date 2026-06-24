@@ -76,7 +76,19 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, 
 
 
 
+>>> mk_polynomial_coeffs5roots_on_geometric_progression__7native_(_257_opsN, 3, 2, 16)
+[8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 2, 16, optimized6zpow=False)
+[8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 2, 16, optimized6zpow=True)
+[8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 
+>>> mk_polynomial_coeffs5roots_on_geometric_progression__7native_(_257_opsN, 3, 7, 16)
+[-30, 35, -63, -113, 94, 94, 19, -56, 58, 30, -27, 59, 51, -127, -90, 65, 1]
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 7, 16, optimized6zpow=False)
+[-30, 35, -63, -113, 94, 94, 19, -56, 58, 30, -27, 59, 51, -127, -90, 65, 1]
+>>> mk_polynomial_coeffs5roots_on_geometric_progression_(_257_opsN, 3, 7, 16, optimized6zpow=True)
+[-30, 35, -63, -113, 94, 94, 19, -56, 58, 30, -27, 59, 51, -127, -90, 65, 1]
 
 
 
@@ -126,7 +138,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
-    from seed.math.floor_ceil_tools.fc_log import ceil_log2
+    from seed.math.floor_ceil_tools.fc_log import ceil_log2, floor_log2
     from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt
     from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import iter_geometric_progression_
     #def iter_geometric_progression_(mul_, B, T, /):
@@ -228,7 +240,7 @@ def mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, may_B, T
     it = iter_geometric_progression_(mul_, B, T)
     roots = islice(it, 0, sz)
     return mk_polynomial_coeffs5roots__7native_(opsX, roots)
-def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, *, min_len4recur=_default4min_len4recur):
+def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, *, min_len4recur=_default4min_len4recur, optimized6zpow=False):
     r'''[[[
     #########
     # [opsX == (opsG|opsN)]
@@ -275,6 +287,16 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, 
 
     ]]
 
+    @20260617:++kw:optimized6zpow
+    #vs:optimized6zpowpp
+    [sz > 0]:
+        [polynomial_geo{sz;B,T,X}
+        == II[(X -B*T**j) | [j:<-[0..<sz]]]
+        == (X -B*T**0) * II[(X -B*T**j) | [j:<-[1..<sz]]]
+        == (X-B) * II[(X -(B*T)*T**j) | [j:<-[0..<-1+sz]]]
+        ]
+    [[sz > 0] -> [polynomial_geo{sz;B,T,X} == (X-B) * II[(X -(B*T)*T**j) | [j:<-[0..<-1+sz]]]]]
+
     #]]]'''#'''
     _saved_args = (opsX, may_B, T, sz)
     check_int_ge(0, sz)
@@ -282,7 +304,6 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, 
     add_ = opsX.add_
     mul_ = opsX.mul_
     one = opsX.one
-    neg_one = opsX.neg_one
     B = one if may_B is None else may_B
     min_len4recur = max(2, min_len4recur)
     # [min_len4recur >= 2]
@@ -312,6 +333,20 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, 
         return _4sz_lt3(sz, B)
     if sz < min_len4recur:
         return mk_polynomial_coeffs5roots_on_geometric_progression__7native_(opsX, may_B, T, sz)
+    # [sz >= 3]
+
+    if optimized6zpow:
+        #@20260617
+        optimized6zpow = False
+        lb_sz = floor_log2(sz)
+        if 3 < sz == 1<<lb_sz:
+            # [4 <= sz == 2**lb_sz]
+            optimized6zpow = True
+            # apply:[[sz > 0] -> [polynomial_geo{sz;B,T,X} == (X-B) * II[(X -(B*T)*T**j) | [j:<-[0..<-1+sz]]]]]
+            f0 = [neg_(B), one]
+            B = mul_(B, T)
+            sz -= 1
+            # [sz >= 3]
     # [sz >= 3]
     sz0 = sz
     j2Tj = _mk_pows_(T, 1+sz//2)
@@ -373,6 +408,10 @@ def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /, 
             csB = [*map(mul_, csA, reversed(j2Thj))]
             csA = mul7polynomial_(opsX, csA, csB)
             assert -1+len(csA) == sz
+    csA
+    if optimized6zpow:
+        sz += 1
+        csA = mul7polynomial_(opsX, f0, csA)
     assert csA[-1] == one, (_saved_args, csA)
     return csA
 

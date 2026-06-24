@@ -21,6 +21,8 @@ e ../../python3_src/seed/math/floor_ceil.py
 py_adhoc_call   seed.math.floor_ceil_tools.fc_log   @f
 ]]]'''#'''
 __all__ = r'''
+ceil_zpow_
+floor_zpow_
 
 ceil_log_
 floor_log_
@@ -51,6 +53,14 @@ from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOT
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.floor_ceil_tools.fc_div import ceil_div
 ___end_mark_of_excluded_global_names__0___ = ...
+
+
+def ceil_zpow_(pint, /):
+    'u/int{>0} -> 2**ceil_log2(u)'
+    return 1<<ceil_log2(pint)
+def floor_zpow_(pint, /):
+    'u/int{>0} -> 2**floor_log2(u)'
+    return 1<<floor_log2(pint)
 
 def ceil_log2(pint, /):
     r'''ceil_log2(p) = ceil(log2(p)) where p > 0
@@ -1041,5 +1051,6 @@ from seed.math.floor_ceil_tools.fc_log import ceil_log2_div, floor_log2_div
 from seed.math.floor_ceil_tools.fc_log import imay_floor_log2, extended_imay_floor_log2, count_num_high_same_bits_of_two_uints
 from seed.math.floor_ceil_tools.fc_log import ceil_log_, floor_log_
 from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2, floor_ceil_log_, floor_ceil_log2
+from seed.math.floor_ceil_tools.fc_log import ceil_zpow_, floor_zpow_
 from seed.math.floor_ceil_tools.fc_log import floor_log2_kth_root_, ceil_log2_kth_root_, floor_log2_sqrt, ceil_log2_sqrt
 from seed.math.floor_ceil_tools.fc_log import *

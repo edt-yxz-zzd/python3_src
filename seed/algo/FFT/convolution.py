@@ -747,12 +747,14 @@ with mk_ctx4lazy_import4funcs_(__name__, 'FFT__ping_pong:_default_FFT,IFFT_:_def
     from functools import reduce
     #reduce(function, iterable[, initializer])
     from itertools import chain
+    from operator import __eq__
     from seed.debug.show_name_value_pairs_ import errshow_name_value_pairs_, show_name_value_pairs_, parse_xnms_
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
     from seed.math.hrem_ import hrem_, mk_hrem_
     from math import gcd
     from seed.debug.print_err import print_err, print_ferr
     from seed.types.FrozenDict import mk_FrozenDict
+    from seed.tiny_.funcs import echo
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -906,11 +908,30 @@ class _Readonly:
         super(__class__, sf).__setattr__(nm, x)
     #:####################
     #:###common:opsG&&opsN
-    #:opsX.neg_,add_,mul_,mk5int_,zero,one,neg_one
+    #:opsX.neg_,add_,mul_,mk5int_,zero,one,neg_one,eq_zero_,eq_one_,eq_neg_one_, eq7ring_,sub_,mk_perfect_div_
     #:opsX.cyclic_convolution__7commonAPI_(xs, ys)
     #:opsX.acyclic_convolution__7commonAPI_(xs, ys)
     #:opsX.negacyclic_convolution__7commonAPI_(xs, ys)
     ######################
+    if 0:
+        def eq7ring_(sf, x, y, /):
+            return x == y
+    def eq_zero_(sf, x, /):
+        return sf.eq7ring_(x, sf.zero)
+    def eq_one_(sf, x, /):
+        return sf.eq7ring_(x, sf.one)
+    def eq_neg_one_(sf, x, /):
+        return sf.eq7ring_(x, sf.neg_one)
+    def sub_(sf, x, y, /):
+        return sf.add_(x, sf.neg_(y))
+    def mk_perfect_div_(sf, x, /):
+        if sf.eq_neg_one_(x):
+            return sf.neg_
+        if sf.eq_one_(x):
+            return echo
+        if not None is (mk_perfect_div_:=vars(sf).get('mk_perfect_div_')):
+            return mk_perfect_div_(x)
+        raise NotImplementedError('mk_perfect_div_', sf, x)
 def mk_ops4convolution7FFT__5modulus_and_ground_root_(modulus, ground_root, mul_order4ground_root, /, **kwds):
     opsG = Ops4convolution7FFT.mk5modulus_and_ground_root_(modulus, ground_root, mul_order4ground_root, **kwds)
     return opsG
@@ -980,7 +1001,7 @@ class Ops4convolution7FFT(_Readonly):
         pow4g_
         mk_div_sz5sz_
         return cls(neg_, add_, mul_, pow4g_, mk_div_sz5sz_, mk5int_, zero, ground_root, mul_order4ground_root)
-    def __init__(sf, neg_, add_, mul_, pow4g_, mk_div_sz5sz_, mk5int_, zero, ground_root, mul_order4ground_root, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}):
+    def __init__(sf, neg_, add_, mul_, pow4g_, mk_div_sz5sz_, mk5int_, zero, ground_root, mul_order4ground_root, /, *, eq7ring_=None, mk_perfect_div_=None, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}):
         #see:mk_div_zpow5ez_/_4ez2div_zpow_,mk__inv_M_or_div_M_
         mk_div_sz5sz_ = _4sz2div_sz_(mk_div_sz5sz_)
         sf._st = (neg_, add_, mul_, pow4g_, mk_div_sz5sz_, mk5int_, zero, ground_root, mul_order4ground_root)
@@ -989,10 +1010,12 @@ class Ops4convolution7FFT(_Readonly):
         sf.mul_ = mul_
         sf.pow4g_= pow4g_
         sf.mk_div_sz5sz_= mk_div_sz5sz_
+        if not None is mk_perfect_div_:vars(sf)['mk_perfect_div_'] = mk_perfect_div_
         sf.mk5int_ = mk5int_
         sf.zero = zero
         sf.one = mk5int_(1)
         sf.neg_one = mk5int_(-1)
+        sf.eq7ring_ = __eq__ if eq7ring_ is None else eq7ring_
         sf.ground_root = ground_root
         sf.mul_order4ground_root = mul_order4ground_root
         sf._d = sz2config = {}
@@ -1201,7 +1224,7 @@ _default4min_ez4M4recur = 5
     # <<== view ../../python3_src/seed/math/factor_pint/factor_pint__7batch_gcd_IIdiffs.py
     # _3_negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_:goto
 class Ops4convolution7symbolic_FFT(_Readonly):
-    'opsN # [fast.__mul__=>O(BlnBlnlnB)*bit_ops or O(DlnD)*digit_ops] # see:negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_'
+    'opsN # O(MlnMlnlnM) # see:negacyclic_convolution__len_is_zpow__num_bits4len_eq__7symbolic_FFT__7config_'
     #.def __delattr__(sf, nm, /):
     #.    raise AttributeError(nm)
     #.def __setattr__(sf, nm, x, /):
@@ -1244,7 +1267,7 @@ class Ops4convolution7symbolic_FFT(_Readonly):
         opsN = cls(mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, **kwds)
         return opsN
     ########################
-    def __init__(sf, mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, /, *, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
+    def __init__(sf, mk_div_zpow5ez_, neg_, add_, mul_, mk5int_, zero, /, *, eq7ring_=None, mk_perfect_div_=None, FFT_=None, kwds4FFT={}, IFFT_=None, kwds4IFFT={}, min_ez4M4recur=_default4min_ez4M4recur, validate=False, verbose=False):
         check_int_ge(2, min_ez4M4recur)
         (FFT_, IFFT_) = _fix_FFTs(FFT_, IFFT_)
         ez2div_zpow_ = _4ez2div_zpow_(mk_div_zpow5ez_)
@@ -1259,6 +1282,7 @@ class Ops4convolution7symbolic_FFT(_Readonly):
         sf.verbose = verbose
         sf.min_ez4M4recur = min_ez4M4recur
         sf.mk_div_zpow5ez_ = mk_div_zpow5ez_
+        if not None is mk_perfect_div_:vars(sf)['mk_perfect_div_'] = mk_perfect_div_
         sf.neg_ = neg_
         sf.add_ = add_
         sf.mul_ = mul_
@@ -1266,6 +1290,7 @@ class Ops4convolution7symbolic_FFT(_Readonly):
         sf.zero = zero
         sf.one = mk5int_(1)
         sf.neg_one = mk5int_(-1)
+        sf.eq7ring_ = __eq__ if eq7ring_ is None else eq7ring_
         sf.FFT_ = FFT_
         sf.old_kwds4FFT = old_kwds4FFT
         sf.IFFT_ = IFFT_
@@ -1830,6 +1855,7 @@ def _prepare4mod_uint4FFT_(modulus, ground_root, mul_order4ground_root,/):
     ground_root = hremR_(ground_root)
     @_4sz2div_sz_
     def mk_div_sz5sz_(sz, /):
+        #TODO:from seed.math.mk_perfect_div_mod_ import mk_perfect_div_mod_
         GCD = gcd(modulus, sz)
         if GCD == 1:
             inv4sz = pow(sz, -1, modulus)
@@ -1842,7 +1868,7 @@ def _prepare4mod_uint4FFT_(modulus, ground_root, mul_order4ground_root,/):
         def div_sz_(x, /):
             # [x =[%modulus]= y*sz]
             # [x =[%(H*GCD)]= y*sz]
-            # [x =[%H]= y*sz =[%H]= 0]
+            # [x =[%GCD]= y*sz =[%GCD]= 0]
             v = x //GCD
             if not x == v*GCD:raise ValueError(x, v, sz)
             # [v*GCD =[%(H*GCD)]= y*sz]

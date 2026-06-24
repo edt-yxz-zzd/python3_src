@@ -123,6 +123,19 @@ example:
     >>> SeqSliceView(ls, slice(-1, None, -1))
     SeqSliceView([1, 2, 3, 4, 5, 6, 7], range(5, -1, -2))
 
+    >>> ls = SeqSliceView([1,2,3,4], None)
+    >>> ls
+    SeqSliceView([1, 2, 3, 4], range(0, 4))
+    >>> ls[0::2]
+    SeqSliceView([1, 2, 3, 4], range(0, 4, 2))
+    >>> ls[1::2]
+    SeqSliceView([1, 2, 3, 4], range(1, 4, 2))
+    >>> range(1, 4, 2)[1::2] # ???why
+    range(3, 5, 4)
+    >>> ls[1::2][1::2]
+    SeqSliceView([1, 2, 3, 4], range(3, 5, 4))
+
+
 see: SeqTransformView
 see: mk_slice
 '''
@@ -144,7 +157,11 @@ see: mk_slice
         else:
             raise TypeError('range_or_slice must be slice or range')
 
-        if not rng.stop <= len(seq): raise ValueError
+        if 0:
+            ##################
+            # !! [range(1, 4, 2)[1::2] == range(3, 5, 4)]
+            ##################
+            if not rng.stop <= len(seq): raise ValueError(rng, len(seq))
         #rng = getitem_from_range(range(len(seq)), rng)
         check_range(rng)
 
