@@ -1,6 +1,16 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/list_all_factors5factorization_.py
+see:
+    view ../../python3_src/seed/math/all_factors_of_.py
+        flatten recur
+        fancy
+        fast
+    view ../../python3_src/seed/math/list_all_factors5factorization_.py
+        using:II__ft_e_pairs_
+        native
+        slow
+
 
 seed.math.list_all_factors5factorization_
 py -m nn_ns.app.debug_cmd   seed.math.list_all_factors5factorization_ -x # -off_defs

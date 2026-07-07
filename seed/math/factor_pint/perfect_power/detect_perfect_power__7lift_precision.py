@@ -1,4 +1,7 @@
 #__all__:goto
+#_debugging_:goto
+#buggy!!!!!!!
+#slow????????
 r'''[[[
 e ../../python3_src/seed/math/factor_pint/perfect_power/detect_perfect_power__7lift_precision.py
 
@@ -15,22 +18,287 @@ see:
 
 
 '#'; __doc__ = r'#'
+>>> factor_pint_as_perfect_power_(244)
+(244, 1)
+>>> #   fail!!(3, 5) not (244, 1)  <<== bug@detect_perfect_kth_root_()
+>>> factor_pint_as_perfect_power_(1)
+Traceback (most recent call last):
+    ...
+TypeError: 1
+>>> factor_pint_as_perfect_power_(2)
+(2, 1)
 >>> factor_pint_as_perfect_power_(4)
-fail!!(4, 1) not (2, 2)
+(2, 2)
+>>> #   fail!!(4, 1) not (2, 2)  <<== bug@trunc4pf_()
+>>> factor_pint_as_perfect_power_(8)
+(2, 3)
+>>> factor_pint_as_perfect_power_(2**4)
+(2, 4)
+>>> factor_pint_as_perfect_power_(2**5)
+(2, 5)
+>>> factor_pint_as_perfect_power_(2**6)
+(2, 6)
+>>> factor_pint_as_perfect_power_(9)
+(3, 2)
+>>> factor_pint_as_perfect_power_(3**3)
+(3, 3)
+>>> factor_pint_as_perfect_power_(3**4)
+(3, 4)
+>>> factor_pint_as_perfect_power_(3**5)
+(3, 5)
+>>> factor_pint_as_perfect_power_(3**6)
+(3, 6)
+>>> factor_pint_as_perfect_power_((-1+2**67)**2)
+(147573952589676412927, 2)
+>>> factor_pint_as_perfect_power_((-1+2**67)**3)
+(147573952589676412927, 3)
+>>> factor_pint_as_perfect_power_((-1+2**67)**4)
+(147573952589676412927, 4)
+>>> factor_pint_as_perfect_power_((-1+2**67)**5)
+(147573952589676412927, 5)
+
+
+
+
+>>> std4pf_(-3, 7)
+(-3, 7)
+>>> std4pf_(-3, 14)
+(-2, 7)
+>>> fraction5pf_((-2, 3))
+Fraction(3, 4)
+>>> fraction5pf_((0, 3))
+Fraction(3, 1)
+>>> fraction5pf_((2, 3))
+Fraction(12, 1)
+
+
+>>> pfs = [(ez,odd) for ez in [0, 4, -5] for odd in range(1,11,2)]
+
+
+>>> for pf in pfs:
+...     print(pf, ceil_log2__4pf_(pf), sep=':')
+(0, 1):0
+(0, 3):2
+(0, 5):3
+(0, 7):3
+(0, 9):4
+(4, 1):4
+(4, 3):6
+(4, 5):7
+(4, 7):7
+(4, 9):8
+(-5, 1):-5
+(-5, 3):-3
+(-5, 5):-2
+(-5, 7):-2
+(-5, 9):-1
+
+
+
+>>> for pf in pfs:
+...     print(pf, num_bits4pf_(pf), sep=':')
+(0, 1):1
+(0, 3):2
+(0, 5):3
+(0, 7):3
+(0, 9):4
+(4, 1):1
+(4, 3):2
+(4, 5):3
+(4, 7):3
+(4, 9):4
+(-5, 1):1
+(-5, 3):2
+(-5, 5):3
+(-5, 7):3
+(-5, 9):4
+
+
+
+>>> bs = range(1,5)
+>>> for b in bs:
+...     for pf in pfs:
+...         print(b, pf, trunc4pf_(b, pf), sep=':')
+1:(0, 1):(0, 1)
+1:(0, 3):(1, 1)
+1:(0, 5):(2, 1)
+1:(0, 7):(2, 1)
+1:(0, 9):(3, 1)
+1:(4, 1):(4, 1)
+1:(4, 3):(5, 1)
+1:(4, 5):(6, 1)
+1:(4, 7):(6, 1)
+1:(4, 9):(7, 1)
+1:(-5, 1):(-5, 1)
+1:(-5, 3):(-4, 1)
+1:(-5, 5):(-3, 1)
+1:(-5, 7):(-3, 1)
+1:(-5, 9):(-2, 1)
+2:(0, 1):(0, 1)
+2:(0, 3):(0, 3)
+2:(0, 5):(2, 1)
+2:(0, 7):(1, 3)
+2:(0, 9):(3, 1)
+2:(4, 1):(4, 1)
+2:(4, 3):(4, 3)
+2:(4, 5):(6, 1)
+2:(4, 7):(5, 3)
+2:(4, 9):(7, 1)
+2:(-5, 1):(-5, 1)
+2:(-5, 3):(-5, 3)
+2:(-5, 5):(-3, 1)
+2:(-5, 7):(-4, 3)
+2:(-5, 9):(-2, 1)
+3:(0, 1):(0, 1)
+3:(0, 3):(0, 3)
+3:(0, 5):(0, 5)
+3:(0, 7):(0, 7)
+3:(0, 9):(3, 1)
+3:(4, 1):(4, 1)
+3:(4, 3):(4, 3)
+3:(4, 5):(4, 5)
+3:(4, 7):(4, 7)
+3:(4, 9):(7, 1)
+3:(-5, 1):(-5, 1)
+3:(-5, 3):(-5, 3)
+3:(-5, 5):(-5, 5)
+3:(-5, 7):(-5, 7)
+3:(-5, 9):(-2, 1)
+4:(0, 1):(0, 1)
+4:(0, 3):(0, 3)
+4:(0, 5):(0, 5)
+4:(0, 7):(0, 7)
+4:(0, 9):(0, 9)
+4:(4, 1):(4, 1)
+4:(4, 3):(4, 3)
+4:(4, 5):(4, 5)
+4:(4, 7):(4, 7)
+4:(4, 9):(4, 9)
+4:(-5, 1):(-5, 1)
+4:(-5, 3):(-5, 3)
+4:(-5, 5):(-5, 5)
+4:(-5, 7):(-5, 7)
+4:(-5, 9):(-5, 9)
+
+
+
+
+>>> from math import floor
+>>> from seed.math.sign_of import sign_of
+
+fraction5pf_
+mul4pf_
+add4pf_
+unsafe_sub4pf_
+lt4pf_
+>>> for lhs in pfs:
+...     for rhs in pfs:
+...         r = mul4pf_(lhs, rhs)
+...         assert fraction5pf_(r) == fraction5pf_(lhs)*fraction5pf_(rhs)
+
+
+>>> for lhs in pfs:
+...     for rhs in pfs:
+...         r = add4pf_(lhs, rhs)
+...         assert fraction5pf_(r) == fraction5pf_(lhs)+fraction5pf_(rhs)
+
+
+>>> for lhs in pfs:
+...     for rhs in pfs:
+...         fr = fraction5pf_(lhs) -fraction5pf_(rhs)
+...         if not fr > 0:continue
+...         r = unsafe_sub4pf_(lhs, rhs)
+...         assert fraction5pf_(r) == fr
+
+>>> for lhs in pfs:
+...     for rhs in pfs:
+...         r = lt4pf_(lhs, rhs)
+...         assert r is (fraction5pf_(lhs) < fraction5pf_(rhs))
+
+
+step4pf_
+rshift4pf_k_
+lshift4pint_
+>>> for b in bs:
+...     for rhs in pfs:
+...         r = step4pf_(b, rhs)
+...         assert fraction5pf_(r) == (1+Fraction(2)**-b)*fraction5pf_(rhs)
+
+
+>>> for k in range(-5,+6):
+...     for lhs in pfs:
+...         r = rshift4pf_k_(lhs, k)
+...         assert fraction5pf_(r) == (Fraction(2)**-k)*fraction5pf_(lhs)
+
+
+>>> for k in range(-5,+6):
+...     for u in range(1, 20):
+...         r = lshift4pint_(u, k)
+...         assert r == floor(Fraction(2)**k *u)
+
+
+
+
+
+div4pf_k_
+pow4pf_k_
+    cmp_pow4pint_
+
+[1 <= (r/k) / div4pf_k_(b;r,k) < (1+2**(1-b))]
+>>> for b in range(1,9):
+...   for lhs in pfs:
+...     for k in range(1,99):
+...         r = div4pf_k_(b, lhs, k)
+...         assert  1 <= fraction5pf_(lhs)/k / fraction5pf_(r) < (1+Fraction(2)**(1-b))
+
+
+[1 <= (r**k) / pow4pf_k_(b;r,k) < (1+2**(1-b))**(-1+2*k)]
+>>> for b in range(1,9):
+...   for lhs in pfs:
+...     for k in range(1,19):
+...         r = pow4pf_k_(b, lhs, k)
+...         assert  1 <= fraction5pf_(lhs)**k / fraction5pf_(r) < (1+Fraction(2)**(1-b))**(-1+2*k)
+
+
+
+>>> for n in range(1,999):
+...   for x in range(1, 33):
+...     for k in range(1,19):
+...         r = cmp_pow4pint_(n, x, k)
+...         assert r == sign_of(n - x**k)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 [[
 { +to_show_total_timedelta }
 { +to_show_timedelta }
-py_adhoc_call  { +to_show_timedelta } seed.math.factor_pint.perfect_power.detect_perfect_power__7lift_precision   ,_iter_run_lt__to_seperate_setup_time_  -validate --repeat=30 ='1+2**16'
+py_adhoc_call  { +to_show_timedelta } seed.math.factor_pint.perfect_power.detect_perfect_power__7lift_precision   ,_iter_run_lt__to_seperate_setup_time_  +validate --repeat=1 ='1+2**16'
+    #bug-fixed:^Exception: (244, {2: 2, 61: 1}, 1, (3, 5))
+    1:duration: 34.985080014 *(unit: 0:00:01)
+        这是由于未曾优化:试除->成则锁定少量指数，败则降低指数上限
+
+py_adhoc_call  { +to_show_timedelta } seed.math.factor_pint.perfect_power.detect_perfect_power__7lift_precision   ,_iter_run_lt__to_seperate_setup_time_  -validate --repeat=1 ='1+2**16'
 ]]
 
 py_adhoc_call   seed.math.factor_pint.perfect_power.detect_perfect_power__7lift_precision   @f
-from seed.math.factor_pint.perfect_power.detect_perfect_power__7lift_precision import *
+
 ]]]'''#'''
 __all__ = r'''
 std4pf_
+fraction5pf_
 
 ceil_log2__4pf_
 num_bits4pf_
@@ -41,7 +309,7 @@ add4pf_
 unsafe_sub4pf_
 lt4pf_
 
-step7pf_
+step4pf_
 rshift4pf_k_
 lshift4pint_
 
@@ -65,6 +333,8 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
     from seed.math.prime_sieve.sieve_lt import list_primes__lt_
     from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from fractions import Fraction
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -707,6 +977,18 @@ Lemma__7_4
 #]]]'''#'''
 
 __all__
+_debugging_ = True
+def std4pf_(ez, x, /):
+    assert x > 0, (ez, x)
+    (_ez, odd) = factor_pint_out_power_of_base_(2, x)
+    ez = ez + _ez
+    return (ez, odd)
+def fraction5pf_(r, /):
+    (ez, odd) = r
+    assert odd&1
+    return Fraction(2)**ez * odd
+
+
 def ceil_log2__4pf_(r, /):
     'ceil_log2{positive_float}'
     (ez, odd) = r
@@ -719,19 +1001,23 @@ def num_bits4pf_(r, /):
     return odd.bit_length()
 def trunc4pf_(b, r, /):
     'trunc4pf_{positive_float}'
-    if not b > 0:raise ValueError('[b==0] => [result:=0] which is not positive_float')
     # [trunc4pf_(b;pf) := div4pf_k_(b;pf,1)]
+    if 0:
+        # to found bug
+        return div4pf_k_(b, r, 1)
+    if not b > 0:raise ValueError('[b==0] => [result:=0] which is not positive_float')
     B = num_bits4pf_(r)
     if B > b:
         (ezO, oddO) = r
-        xT = oddO >> (B-b)
+        d = (B-b)
+        xT = oddO >> d
         (_ez, oddT) = factor_pint_out_power_of_base_(2, xT)
-        ezT = ezO + _ez
+        #bug{4->(4,1)}:ezT = ezO + _ez
+        ezT = ezO + _ez + d
         pfT = (ezT, oddT)
     else:
         pfT = r
     return pfT
-    return div4pf_k_(b, r, 1)
 
 def mul4pf_(lhs, rhs, /):
     'mul{positive_float}'
@@ -818,7 +1104,7 @@ def lt4pf_(lhs, rhs, /):
         return xL < oddR
 
 
-def step7pf_(b, r, /):
+def step4pf_(b, r, /):
     '-> r*(1+2**-b)'
     return add4pf_(r, rshift4pf_k_(r, b))
 def rshift4pf_k_(r, k, /):
@@ -846,17 +1132,14 @@ def div4pf_k_(b, r, k, /):
     pad = (b+ce4k-nb4r)
     (ez, odd) = r
     return std4pf_(ez-pad, lshift4pint_(odd, pad)//k)
-def std4pf_(ez, x, /):
-    assert x > 0, (ez, x)
-    (_ez, odd) = factor_pint_out_power_of_base_(2, x)
-    ez = ez + _ez
-    return (ez, odd)
 
 def pow4pf_k_(b, r, k, /, *, avoid_trunc_first=False):
     assert k > 0
     assert b > 0
     if not avoid_trunc_first:
         r = trunc4pf_(b, r)
+    elif _debugging_:
+        assert r == trunc4pf_(b, r)
     # [r trunc4pf_]
     avoid_trunc_last = False
     if k == 1:
@@ -875,6 +1158,8 @@ def pow4pf_k_(b, r, k, /, *, avoid_trunc_first=False):
         # [pow_r_k not trunc4pf_]
     if not avoid_trunc_last:
         pow_r_k = trunc4pf_(b, pow_r_k)
+    elif _debugging_:
+        assert r == trunc4pf_(b, r)
     # [pow_r_k trunc4pf_]
     return pow_r_k
 
@@ -903,7 +1188,7 @@ def cmp_pow4pint_(n, x, k, /):
             # [n < pow4pf_k_(b;x7pf,k) <= x**k]
             return -1
         # [pow4pf_k_(b;x7pf,k) <= n]
-        up4pow_x_k = step7pf_(b, low4pow_x_k)
+        up4pow_x_k = step4pf_(b, low4pow_x_k)
         # [up4pow_x_k == low4pow_x_k*(1+2**-b)]
         if not lt4pf_(n7pf, up4pow_x_k):
             # [x**k < pow4pf_k_(b;x7pf,k)*(1+2**-b) <= n]
@@ -1124,10 +1409,13 @@ def _post4nroot4pf_k__7Newton_method_(b, r, k, kpp7pf, bx, B, r7B, z, /):
 
 
 
-def detect_perfect_kth_root_(k, n, b, inv4n7pf, /):
-    'k/uint{>=2} -> n/uint{>=2} -> inv4n7pf/positive_float -> (0|rt) # [rt**k == n] # [nb4zn := floor_log2(2*n)][b==3+ceil(nb4zn/k)][(1-2**-b) < (1/n)/inv4n7pf < (1+2**-b)]  #eg:[inv4n7pf:=nroot_(b;n,1)]'
+def detect_perfect_kth_root_(k, n, nb4zn, inv4n7pf, /):
+    'k/uint{>=2} -> n/uint{>=2} -> nb4zn/uint -> inv4n7pf/positive_float -> (0|rt) # [rt**k == n] # [nb4zn := floor_log2(2*n)][b==3+ceil(nb4zn/k)][(1-2**-b) < (1/n)/inv4n7pf < (1+2**-b)]  #eg:[inv4n7pf:=nroot_(b;n,1)]'
     assert k >= 2
     assert n >= 2
+    assert nb4zn >= k
+    b = 3-(nb4zn//-k)
+    # [b==3+ceil(nb4zn/k)]
     assert b >= 4
     rt7pf = nroot4pf_k_(b, inv4n7pf, k)
     # [(1-2**-b) < (inv4n7pf**/-k) / rt7pf < (1+2**-b)]
@@ -1192,23 +1480,51 @@ def detect_perfect_kth_root_(k, n, b, inv4n7pf, /):
     ]]
 
     #]]]'''#'''
+    rt7pf
     # [abs(rt7pf -(n**/k)) < 1/4]
-    # ?rt => [abs(rt7pf - rt) <= 5/8]
-    (rt, sign4diff, abs4diff) = find_arbitrary_uint_ex__nearby_le_5over8_(rt7pf)
-    # [abs(rt7pf - rt) <= 5/8]
-    if rt == 0 or not lt4pf_(abs4diff, _1over4):
-        return 0
-    # [rt > 0][abs(rt7pf - rt) < 1/4]
-    if 0 == cmp_pow4pint_(n, rt, k):
-        return rt
+    # ?rt7uint => [abs(rt7uint - rt7pf) <= 5/8]
+    (rt7uint, sign4diff, may_abs4diff) = find_arbitrary_uint_ex__nearby_le_5over8_(rt7pf)
+    # [sign4diff == sign_of(rt7uint - rt7pf)]
+    # [abs(rt7uint - rt7pf) <= 5/8]
+    if sign4diff == 0:
+        assert may_abs4diff is None
+        # [abs(rt7uint - rt7pf) == 0]
+        # [abs(rt7uint - rt7pf) < 1/4]
+        # [rt7uint == rt7pf > 0]
+        # [rt7uint > 0]
+        assert not rt7uint == 0
+        if 0:
+            #bug{244->(3,5)}:
+            #   !! rt7uint is int, but maybe not the root!!
+            return rt7uint
+        # [rt7uint > 0][abs(rt7uint - rt7pf) < 1/4]
+        pass
+    else:
+        assert not may_abs4diff is None
+        abs4diff = may_abs4diff
+        if rt7uint == 0:
+            # !! [rt7pf > 0]
+            # [rt7uint == 0 < rt7pf]
+            # !! [sign4diff == sign_of(rt7uint - rt7pf)]
+            assert sign4diff == -1
+            return 0
+        # [rt7uint > 0]
+        if not lt4pf_(abs4diff, _1over4):
+            return 0
+        # [abs(rt7uint - rt7pf) < 1/4]
+        # [rt7uint > 0][abs(rt7uint - rt7pf) < 1/4]
+    # [rt7uint > 0][abs(rt7uint - rt7pf) < 1/4]
+    if 0 == cmp_pow4pint_(n, rt7uint, k):
+        return rt7uint
     return 0
 _1over4 = std4pf_(-2, 1)
 def find_arbitrary_uint_ex__nearby_le_5over8_(r, /):
-    '-> (u/uint, sign4diff/{-1|0|+1}, abs4diff/pf) # [diff:=u-r][diff==sign4diff*abs4diff]'
+    '-> (u/uint, sign4diff/{-1|0|+1}, may abs4diff/pf) # [diff:=u-r][diff==sign4diff*abs4diff]'
     (ez, odd) = r
     if ez >= 0:
         u = odd << ez
-        return (u, 0, 0)
+        #bug:return (u, 0, 0)
+        return (u, 0, None)
     # [ez < 0]
     ux = odd >> (-1-ez)
     u = ux >> 1
@@ -1244,9 +1560,9 @@ def _init4factor_pint_as_perfect_power_(n, /):
 def factor_pint_as_perfect_power_(n, /, *, arbitrary_exp_ok=False):
     '-> ((n,1)|(rt/min_nontrival_root,exp/max_exp))'
     # [factor_pint_as_perfect_power_ :: perfect-power classification algorithm] # max exp
-    assert n >= 2
+    check_int_ge(2, n)
     (nb4zn, inv4n7pf) = _init4factor_pint_as_perfect_power_(n)
-    ps = list_primes__lt_(nb4zn)
+    ps = list_primes__lt_(nb4zn, _mk=list)
     #for k in ps:
         # !! skip:『j+=1』 to reuse k
         # for_loop --> while_loop
@@ -1254,9 +1570,7 @@ def factor_pint_as_perfect_power_(n, /, *, arbitrary_exp_ok=False):
     exp = 1
     while j < len(ps):
         k = ps[j]
-        b = 3-(nb4zn//-k)
-        # [b==3+ceil(nb4zn/k)]
-        rt = detect_perfect_kth_root_(k, n, b, inv4n7pf)
+        rt = detect_perfect_kth_root_(k, n, nb4zn, inv4n7pf)
         if not rt == 0:
             n = rt
             exp *= k
@@ -1299,4 +1613,5 @@ def _run_lt_(m, /, *, validate, **kwds):
 
 
 __all__
+from seed.math.factor_pint.perfect_power.detect_perfect_power__7lift_precision import detect_perfect_kth_root_
 from seed.math.factor_pint.perfect_power.detect_perfect_power__7lift_precision import *

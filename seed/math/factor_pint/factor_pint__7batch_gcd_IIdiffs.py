@@ -551,7 +551,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.II import II_mod
     from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import Eval_polynomial_on_geometric_progression__7modulus
         # Eval_polynomial_on_geometric_progression__7modulus(modulus, hrem_vs_mod=hrem_vs_mod).evals_(coeffs8poly, T, invT)
-    from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import mul7polynomial_, mk_polynomial_coeffs5roots_, mk_polynomial_coeffs5roots_on_geometric_progression_
+    from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import mk_polynomial_coeffs5roots_on_geometric_progression_
     #def mk_polynomial_coeffs5roots_on_geometric_progression_(opsX, may_B, T, sz, /):
     from seed.data_funcs.heap.heap_shape import heap_shape5num_leafs_, mk_rvheap__fill_, mk_rvheap__Nothing_
     #def mk_rvheap__fill_(parent5children_, leafs, /, *, inplace=False, with_fwd_idx=False, with_bwd_idc=False):

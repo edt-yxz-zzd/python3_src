@@ -9,7 +9,6 @@ view ../../python3_src/seed/algo/FFT/convolution.py
 seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression
 py -m nn_ns.app.debug_cmd   seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression -x # -off_defs
 py -m nn_ns.app.doctest_cmd seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression:__doc__ -ht # -ff -df
-py -m nn_ns.app.doctest_cmd seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression:__doc__ -ht # -ff -df
 #######
 
 [[
@@ -76,6 +75,7 @@ e ../../python3_src/seed/math/factor_pint/factor_pint__7batch_gcd_IIdiffs.py
 
 
 '#'; __doc__ = r'#'
+>>> from seed.math.polynomial.eval_polynomial.eval_polynomial7native import poly_evals__on_geometric_progression__7native_
 >>> from seed.algo.FFT.FFT import FFT__ping_pong
 
     #def FFT__ping_pong(neg_, add_, mul_, g, xs, /, *, may_radixes=None, scramble_=None, may_gs=None, may_ys=None):
@@ -268,7 +268,7 @@ TypeError: 0
 
 
 
-py_adhoc_call   seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression   ,iter_geometric_progression_ =int.__mul__ =1 =2 | more
+py_adhoc_call   seed.math.polynomial.eval_polynomial.eval_polynomial7native   ,iter_geometric_progression_ =int.__mul__ =1 =2 | more
     1
     2
     4
@@ -279,7 +279,7 @@ py_adhoc_call   seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometri
     [4, 25, -64, -5]
 py_adhoc_call   seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression   @eval_polynomial_on_geometric_progression__7modulus_ ='257' ='[1,0,0,3]' =2 +hrem_vs_mod
     [4, 25, 193, 252]
-py_adhoc_call   seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression   @poly_evals__on_geometric_progression__7native_ =int.__add__ =int.__mul__ =0 =1 ='[1,0,0,3]' =2
+py_adhoc_call   seed.math.polynomial.eval_polynomial.eval_polynomial7native   @poly_evals__on_geometric_progression__7native_ =int.__add__ =int.__mul__ =0 =1 ='[1,0,0,3]' =2
     [4, 25, 193, 1537]
     [1+0+0+3*(2**0)**3 == 4]
     [1+0+0+3*(2**1)**3 == 1+3*8 == 25]
@@ -301,14 +301,6 @@ eval_polynomial_on_geometric_progression__7modulus_
             tab_tri_pows_
 
 
-poly_eval_
-    iter_poly_evals__7native_
-    poly_evals__7native_
-iter_poly_evals__on_geometric_progression__7native_
-    iter_geometric_progression_
-    poly_evals__on_geometric_progression__7native_
-
-
 '''.split()#'''
     #eval_polynomial_on_geometric_progression__7FFT_
 __all__
@@ -324,7 +316,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.algo.FFT.convolution import mk_ops4convolution7FFT__5modulus_and_ground_root_
     from seed.algo.FFT.convolution import dyadic_operator_
 
-    from itertools import islice
+    #from itertools import islice
     from functools import reduce
 
 #.#################################
@@ -357,33 +349,6 @@ def tab_tri_pows_(sz, mul_, one, T, /, *, ex=False):
         j2Ttrpw.append(trpw)
     return j2Ttrpw if not ex else (j2Ttrpw, j2Tpw)
 
-
-def poly_eval_(add_, mul_, zero, coeffs8poly, x, /):
-    y = zero
-    for c in reversed(coeffs8poly):
-        y = add_(mul_(y, x), c)
-    return y
-def iter_poly_evals__7native_(add_, mul_, zero, coeffs8poly, xs, /):
-    for x in xs:
-        y = poly_eval_(add_, mul_, zero, coeffs8poly, x)
-        yield y
-def poly_evals__7native_(add_, mul_, zero, coeffs8poly, xs, /):
-    return [*iter_poly_evals__7native_(add_, mul_, zero, coeffs8poly, xs)]
-
-def iter_geometric_progression_(mul_, B, T, /):
-    x = B
-    while 1:
-        yield x
-        x = mul_(x, T)
-def iter_poly_evals__on_geometric_progression__7native_(add_, mul_, zero, B, coeffs8poly, T, /):
-    xs = iter_geometric_progression_(mul_, B, T)
-    return iter_poly_evals__7native_(add_, mul_, zero, coeffs8poly, xs)
-def poly_evals__on_geometric_progression__7native_(add_, mul_, zero, B, coeffs8poly, T, sz=None, /):
-    if sz is None:
-        sz = len(coeffs8poly)
-    ys = iter_poly_evals__on_geometric_progression__7native_(add_, mul_, zero, B, coeffs8poly, T)
-    ys = islice(ys, 0, sz)
-    return [*ys]
 
 #:def eval_polynomial_on_geometric_progression__7FFT_(neg_, add_, mul_, zero, one, div_gM_, gM, g, inv_g, coeffs8poly, T, invT, /):
 #:    'neg_/(x->x) -> add_/(x->x->x) -> mul_/(x->x->x) -> zero/x -> one/x -> div_gM_/(x|(x->x)) -> gM/uint -> g/x -> inv_g/x -> cs/[x] -> T/x -> invT/x -> ys/[x]{len==len(cs)}  # [mul_order_(mul_;g) == gM == 2**(1 +ceil_log2(len(cs)))][T*invT==one] # [ys[k] == poly_eval_(cs;(T**k)) == sum[cs[j]*(T**k)**j | [j :<- [0..<len(cs)]]]]'
@@ -436,8 +401,8 @@ class Eval_polynomial_on_geometric_progression__7modulus(_Readonly):
             #rs = [u%modulus for u in rs]
             rs = [u+modulus if u < 0 else u for u in rs]
         return rs
-def eval_polynomial_on_geometric_progression__7modulus_(modulus, coeffs8poly, T, invT=None, /, *, hrem_vs_mod=False):
-    return Eval_polynomial_on_geometric_progression__7modulus(modulus, hrem_vs_mod=hrem_vs_mod).evals_(coeffs8poly, T, invT)
+def eval_polynomial_on_geometric_progression__7modulus_(modulus, coeffs8poly, T, invT=None, /, *, hrem_vs_mod=False, optimized6zpowpp=True):
+    return Eval_polynomial_on_geometric_progression__7modulus(modulus, hrem_vs_mod=hrem_vs_mod, optimized6zpowpp=optimized6zpowpp).evals_(coeffs8poly, T, invT)
 
     #.check_int_ge(1, modulus)
     #.    # !! invT
@@ -545,6 +510,6 @@ def eval_polynomial_on_geometric_progression__7opsX_(opsX, coeffs8poly, T, invT,
 __all__
 from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import Eval_polynomial_on_geometric_progression__7modulus, eval_polynomial_on_geometric_progression__7modulus_, eval_polynomial_on_geometric_progression__7opsX_
     # Eval_polynomial_on_geometric_progression__7modulus(modulus, hrem_vs_mod=hrem_vs_mod).evals_(coeffs8poly, T, invT)
-from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import iter_geometric_progression_
+#from seed.math.polynomial.eval_polynomial.eval_polynomial7native import iter_geometric_progression_
     #def iter_geometric_progression_(mul_, B, T, /):
 from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import *

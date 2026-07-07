@@ -10,7 +10,7 @@ py -m nn_ns.app.doctest_cmd seed.math.mk_pows_:__doc__ -ht # -ff -df
 
 [[
 come_from:
-view ../../python3_src/seed/math/polynomial/eval_polynomial/eval_polynomial_on_geometric_progression.py
+view ../../python3_src/seed/math/polynomial/eval_polynomial/eval_polynomial7native.py
     iter_geometric_progression_
 view ../../python3_src/seed/algo/FFT/convolution__7symbolic_DFT.py
 ]]

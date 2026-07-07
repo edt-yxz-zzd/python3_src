@@ -2,6 +2,10 @@
 r'''[[[
 e ../../python3_src/seed/for_libs/for_time.py
 
+seed.for_libs.for_time
+py -m nn_ns.app.debug_cmd   seed.for_libs.for_time -x
+py -m nn_ns.app.doctest_cmd seed.for_libs.for_time:__doc__ -ht # -ff -v
+
 [[
 ===
 duration types:
@@ -51,86 +55,541 @@ time types:
 
 
 
-seed.for_libs.for_time
-py -m nn_ns.app.debug_cmd   seed.for_libs.for_time -x
-py -m nn_ns.app.doctest_cmd seed.for_libs.for_time:__doc__ -ff -v
+
+
+
+
+
+
+    time_struct8platform_epoch___tz4utc
+    time_struct8platform_epoch___tz4local
+>>> time_struct8platform_epoch___tz4utc
+time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
+>>> time_struct8platform_epoch___tz4local
+time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=8, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
+
+
+    get_now__timestamp
+>>> timestamp = get_now__timestamp()
+>>> type(timestamp) is float
+True
+
+>>> timestamp = float.fromhex('0x1.93939985bce89p+30')
+>>> timestamp
+1692722785.434481
+>>> timestamp.hex()
+'0x1.93939985bce89p+30'
+
+    time_struct5timestamp_
+    time_struct2timestamp_
+    #loss accuracy: [resolution==1 second] i.e. be int when converted back, see:timegm__int
+    #use datetime instead
+>>> local_time_struct = time_struct5timestamp_(False, timestamp)
+>>> local_time_struct
+time.struct_time(tm_year=2023, tm_mon=8, tm_mday=23, tm_hour=0, tm_min=46, tm_sec=25, tm_wday=2, tm_yday=235, tm_isdst=0)
+>>> timestamp_5local = time_struct2timestamp_(False, local_time_struct)
+>>> timestamp_5local
+1692722785.0
+
+>>> utc_time_struct = time_struct5timestamp_(True, timestamp)
+>>> utc_time_struct
+time.struct_time(tm_year=2023, tm_mon=8, tm_mday=22, tm_hour=16, tm_min=46, tm_sec=25, tm_wday=1, tm_yday=234, tm_isdst=0)
+>>> timestamp_5utc_ = timegm__int(utc_time_struct)
+>>> timestamp_5utc_
+1692722785
+>>> timestamp_5utc = time_struct2timestamp_(True, utc_time_struct)
+>>> timestamp_5utc
+1692722785.0
+>>> type(timestamp_5local) is float
+True
+>>> type(timestamp_5utc) is float
+True
+>>> type(timestamp_5utc_) is int
+True
+
+
+    TimeFormatDirective
+        time_fmt5py_str_fmt_
+        time_fmt5snippets_
+    default_time_fmt
+        time_fmt5may_
+>>> default_time_fmt == "%a %b %d %H:%M:%S %Y"
+True
+>>> __ = TimeFormatDirective
+>>> default_time_fmt == time_fmt5snippets_(__.W_abbr, ' ', __.M_abbr, ' ', __.DD, ' ', __.hh, ':', __.mm, ':', __.ss, ' ', __.YYYY)
+True
+>>> default_time_fmt == time_fmt5py_str_fmt_('{W_abbr} {M_abbr} {DD} {hh}:{mm}:{ss} {YYYY}')
+True
+>>> time_fmt5py_str_fmt_('%')
+'%%'
+
+
+    time_struct2formatted_str_
+    time_struct5formatted_str_
+>>> time_struct2formatted_str_(None, local_time_struct)
+'Wed Aug 23 00:46:25 2023'
+>>> time_struct5formatted_str_(None, _)
+time.struct_time(tm_year=2023, tm_mon=8, tm_mday=23, tm_hour=0, tm_min=46, tm_sec=25, tm_wday=2, tm_yday=235, tm_isdst=-1)
+>>> time_struct2formatted_str_(None, utc_time_struct)
+'Tue Aug 22 16:46:25 2023'
+>>> time_struct5formatted_str_(None, _)
+time.struct_time(tm_year=2023, tm_mon=8, tm_mday=22, tm_hour=16, tm_min=46, tm_sec=25, tm_wday=1, tm_yday=234, tm_isdst=-1)
+
+
+    timestamp2formatted_str__via_time_struct__
+    timestamp5formatted_str__via_time_struct__
+>>> timestamp2formatted_str__via_time_struct__(None, False, timestamp)
+'Wed Aug 23 00:46:25 2023'
+>>> timestamp5formatted_str__via_time_struct__(None, False, _)
+1692722785.0
+>>> timestamp2formatted_str__via_time_struct__(None, True, timestamp)
+'Tue Aug 22 16:46:25 2023'
+>>> timestamp5formatted_str__via_time_struct__(None, True, _)
+1692722785.0
+
+
+    get_consumed_duration__system_wide__monotonic
+    get_consumed_duration__system_wide__highest_resolution
+    get_consumed_duration__process_wide
+    get_consumed_duration__thread_wide
+
+>>> get_consumed_duration__system_wide__monotonic() #doctest: +SKIP
+13735536.812056776
+>>> get_consumed_duration__system_wide__highest_resolution() #doctest: +SKIP
+13735536.814709084
+>>> get_consumed_duration__process_wide() #doctest: +SKIP
+0.540129381
+>>> get_consumed_duration__thread_wide() #doctest: +SKIP
+0.540573765
+
+>>> get_consumed_duration__system_wide__monotonic() #doctest: +SKIP
+13735536.8161167
+>>> get_consumed_duration__system_wide__highest_resolution() #doctest: +SKIP
+13735536.816553624
+>>> get_consumed_duration__process_wide() #doctest: +SKIP
+0.541914996
+>>> get_consumed_duration__thread_wide() #doctest: +SKIP
+0.542356227
+
+
+
+
+>>> from time import sleep
+
+
+########
+########>>> with timer__thread_wide() as r:
+########...     sleep(1)
+########>>> r.get_duration_without_unit() #doctest: +SKIP
+########0.0003442300000000009
+########>>> r.get_duration_without_unit() < 0.7
+########True
+########
+########>>> timer = timer__system_wide__highest_resolution
+########>>> with timer() as r:
+########...     sleep(2)
+########>>> 2.0 <= r.get_duration_without_unit() < 4.0
+########True
+########
+########>>> with timer() as r:
+########...     sleep(4)
+########>>> r.get_duration_without_unit() > 4.0
+########True
+########
+########>>> with timer() as r:
+########...     sleep(2)
+########>>> 2.0 <= r.get_duration_without_unit() < 4.0
+########True
+########
+
+>>> timer = timer__system_wide__highest_resolution
+>>> with timer() as r:
+...     sleep(0.2)
+>>> 0.2 <= r.get_duration_without_unit() < 0.4
+True
+>>> r.get_duration_without_unit() #doctest: +SKIP
+0.20153722912073135
+>>> r.get_unit()
+datetime.timedelta(seconds=1)
+>>> r.get() #doctest: +SKIP
+(0.20153722912073135, datetime.timedelta(seconds=1))
+>>> r.get() == (r.get_duration_without_unit(), timedelta(seconds=1))
+True
+>>> r.get() == (r.get_duration_without_unit(), r.get_unit())
+True
+
+>>> with timer(print) as r: #doctest: +SKIP
+...     sleep(0.2)
+0.2015569992363453 0:00:01
+>>> print(timer.get_unit())
+0:00:01
+>>> timer.get_unit()
+datetime.timedelta(seconds=1)
+>>> timer.get_time_() #doctest: +SKIP
+13773734.696721207
+>>> timer.get_time_ is get_consumed_duration__system_wide__highest_resolution
+True
+>>> with timer(lambda duration, unit,/:print(f'{duration:.2} *({unit!s})')) as r:
+...     sleep(0.2)
+0.2 *(0:00:01)
+
+
+
+
+######################
+#datetime:
+######################
+>>> from datetime import timedelta
+>>> timedelta(seconds=0.005)
+datetime.timedelta(microseconds=5000)
+>>> from datetime import datetime
+>>> datetime.utcfromtimestamp(0.0) #naive!!! why???
+datetime.datetime(1970, 1, 1, 0, 0)
+>>> datetime.fromtimestamp(0.0)
+datetime.datetime(1970, 1, 1, 8, 0)
+>>> datetime.fromtimestamp(0.0) -datetime.utcfromtimestamp(0.0)
+datetime.timedelta(seconds=28800)
+>>> datetime.utcnow() #doctest: +SKIP
+datetime.datetime(2023, 8, 23, 0, 3, 8, 790431)
+>>> datetime.today() #doctest: +SKIP
+datetime.datetime(2023, 8, 23, 8, 3, 8, 790783)
+>>> from time import time_ns
+>>> ns4now = time_ns()
+>>> ns4now #doctest: +SKIP
+1692748988791250312
+>>> datetime.fromtimestamp(ns4now/10**9) #doctest: +SKIP
+datetime.datetime(2023, 8, 23, 8, 3, 8, 791250)
+
+
+    aware_datetime5timestamp_
+    aware_datetime2timestamp_
+>>> timestamp.hex()
+'0x1.93939985bce89p+30'
+>>> datetime__tz4local = aware_datetime5timestamp_(tz4local, timestamp)
+>>> datetime__tz4utc = aware_datetime5timestamp_(tz4utc, timestamp)
+>>> datetime__tz4utc == datetime__tz4local
+True
+>>> datetime__tz4utc.date == datetime__tz4local.date
+False
+>>> datetime__tz4local
+datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
+>>> aware_datetime5timestamp_(False, timestamp)
+datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
+>>> datetime__tz4utc
+datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
+>>> aware_datetime5timestamp_(True, timestamp)
+datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
+
+
+>>> f = lambda aware_datetime,/:(aware_datetime - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()
+>>> f(datetime__tz4local)
+1692722785.434481
+>>> f(datetime__tz4utc)
+1692722785.434481
+>>> datetime__tz4local.timestamp()
+1692722785.434481
+>>> datetime__tz4utc.timestamp()
+1692722785.434481
+>>> aware_datetime2timestamp_(datetime__tz4local)
+1692722785.434481
+>>> aware_datetime2timestamp_(datetime__tz4utc)
+1692722785.434481
+>>> datetime__tz4local.timestamp() == datetime__tz4utc.timestamp() == aware_datetime2timestamp_(datetime__tz4local) == aware_datetime2timestamp_(datetime__tz4utc)
+True
+
+>>> aware_datetime2timestamp_(datetime__tz4local).hex()
+'0x1.93939985bce89p+30'
+>>> aware_datetime2timestamp_(datetime__tz4utc).hex()
+'0x1.93939985bce89p+30'
+>>> datetime__tz4local.timestamp().hex()
+'0x1.93939985bce89p+30'
+>>> datetime__tz4utc.timestamp().hex()
+'0x1.93939985bce89p+30'
+
+
+
+    datetime2formatted_str_
+    datetime5formatted_str_
+>>> time_fmt = time_fmt5py_str_fmt_('{YYYY}{MM}{DD}-{hh}:{mm}:{ss}.{ffffff}{xhhmm_ss_ffffff}')
+>>> time_fmt
+'%Y%m%d-%H:%M:%S.%f%z'
+>>> datetime2formatted_str_(time_fmt, datetime__tz4utc)
+'20230822-16:46:25.434481+0000'
+>>> datetime5formatted_str_(time_fmt, _) # --> aware_datetime
+datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
+>>> datetime2formatted_str_(time_fmt, datetime__tz4utc.replace(tzinfo=None), mismatch_tzinfo_ok=True)
+'20230822-16:46:25.434481'
+>>> datetime5formatted_str_(time_fmt, _) #??? why strptime mismatch strftime??? %z can output empty???  # --> e ../lots/NOTE/Python/python-bug/datetime-bug.txt
+Traceback (most recent call last):
+    ...
+ValueError: time data '20230822-16:46:25.434481' does not match format '%Y%m%d-%H:%M:%S.%f%z'
+>>> datetime5formatted_str_(time_fmt[:-2], _) # --> naive_datetime
+datetime.datetime(2023, 8, 22, 16, 46, 25, 434481)
+
+>>> datetime2formatted_str_(time_fmt, datetime__tz4local)
+'20230823-00:46:25.434481+0800'
+>>> datetime5formatted_str_(time_fmt, _) # --> aware_datetime
+datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))
+
+
+
+    aware_datetime5formatted_str_
+    aware_datetime2formatted_str_
+>>> time_fmt
+'%Y%m%d-%H:%M:%S.%f%z'
+>>> aware_datetime2formatted_str_(time_fmt, datetime__tz4utc)
+'20230822-16:46:25.434481+0000'
+>>> aware_datetime5formatted_str_(time_fmt, _) # --> aware_datetime
+datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
+>>> aware_datetime2formatted_str_(time_fmt, datetime__tz4utc.replace(tzinfo=None))
+Traceback (most recent call last):
+    ...
+TypeError: not aware: datetime.datetime(2023, 8, 22, 16, 46, 25, 434481)
+>>> aware_datetime5formatted_str_(time_fmt, '20230822-16:46:25.434481')
+Traceback (most recent call last):
+    ...
+ValueError: time data '20230822-16:46:25.434481' does not match format '%Y%m%d-%H:%M:%S.%f%z'
+>>> aware_datetime5formatted_str_(time_fmt[:-2], '20230822-16:46:25.434481')
+Traceback (most recent call last):
+    ...
+seed.for_libs.for_time.Error__miss_tzinfo__strptime_mismatch_strftime
+
+>>> aware_datetime2formatted_str_(time_fmt, datetime__tz4local)
+'20230823-00:46:25.434481+0800'
+>>> aware_datetime5formatted_str_(time_fmt, _) # --> aware_datetime
+datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))
+
+
+    timestamp2formatted_str__via_datetime__
+    timestamp5formatted_str__via_datetime__
+
+
+
+>>> default_time_fmt
+'%a %b %d %H:%M:%S %Y'
+>>> time_fmt
+'%Y%m%d-%H:%M:%S.%f%z'
+>>> timestamp.hex()
+'0x1.93939985bce89p+30'
+>>> tz4utc
+datetime.timezone.utc
+>>> tz4local
+datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local')
+>>> time_struct8platform_epoch___tz4utc
+time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
+>>> time_struct8platform_epoch___tz4local
+time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=8, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
+>>> aware_datetime8platform_epoch
+datetime.datetime(1970, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)
+
+def timestamp2formatted_str__via_datetime__(may_time_fmt, local_vs_utc__or__tz, timestamp, /, *, mismatch_tzinfo_ok=False):
+>>> timestamp2formatted_str__via_datetime__(None, False, timestamp)
+'Wed Aug 23 00:46:25 2023'
+>>> formatted_str___default_time_fmt___tz4local = _
+>>> timestamp2formatted_str__via_datetime__(None, True, timestamp)
+Traceback (most recent call last):
+    ...
+seed.for_libs.for_time.Error__miss_tzinfo__strptime_mismatch_strftime
+>>> timestamp2formatted_str__via_datetime__(None, True, timestamp, mismatch_tzinfo_ok=True)
+'Tue Aug 22 16:46:25 2023'
+>>> formatted_str___default_time_fmt___tz4utc = _
+
+>>> timestamp2formatted_str__via_datetime__(time_fmt, False, timestamp)
+'20230823-00:46:25.434481+0800'
+>>> formatted_str___nondefault_time_fmt___tz4local = _
+>>> timestamp2formatted_str__via_datetime__(time_fmt, True, timestamp)
+'20230822-16:46:25.434481+0000'
+>>> formatted_str___nondefault_time_fmt___tz4utc = _
+
+def timestamp5formatted_str__via_datetime__(may_time_fmt, local_vs_utc__or__tz, formatted_str, /, ):
+>>> timestamp5formatted_str__via_datetime__(None, False, formatted_str___default_time_fmt___tz4local)
+1692722785.0
+>>> timestamp5formatted_str__via_datetime__(None, True, formatted_str___default_time_fmt___tz4local)
+1692751585.0
+>>> timestamp5formatted_str__via_datetime__(None, False, formatted_str___default_time_fmt___tz4utc)
+1692693985.0
+>>> timestamp5formatted_str__via_datetime__(None, True, formatted_str___default_time_fmt___tz4utc)
+1692722785.0
+
+#above local_vs_utc__or__tz takes effect
+#   since [not '%z' in default_time_fmt]
+#below local_vs_utc__or__tz takes no effect
+#   since ['%z' in time_fmt]
+>>> timestamp5formatted_str__via_datetime__(time_fmt, False, formatted_str___nondefault_time_fmt___tz4local)
+1692722785.434481
+>>> timestamp5formatted_str__via_datetime__(time_fmt, True, formatted_str___nondefault_time_fmt___tz4local)
+1692722785.434481
+>>> timestamp5formatted_str__via_datetime__(time_fmt, False, formatted_str___nondefault_time_fmt___tz4utc)
+1692722785.434481
+>>> timestamp5formatted_str__via_datetime__(time_fmt, True, formatted_str___nondefault_time_fmt___tz4utc)
+1692722785.434481
+
+
+
+
+
+get_now__timestamp
+get_now__time_struct_
+get_now__aware_datetime_
+
+>>> get_now__timestamp() #doctest: +SKIP
+1692850531.802958
+>>> get_now__time_struct_(False) #doctest: +SKIP
+time.struct_time(tm_year=2023, tm_mon=8, tm_mday=24, tm_hour=12, tm_min=15, tm_sec=31, tm_wday=3, tm_yday=236, tm_isdst=0)
+>>> get_now__time_struct_(True) #doctest: +SKIP
+time.struct_time(tm_year=2023, tm_mon=8, tm_mday=24, tm_hour=4, tm_min=15, tm_sec=31, tm_wday=3, tm_yday=236, tm_isdst=0)
+>>> get_now__aware_datetime_() #doctest: +SKIP
+datetime.datetime(2023, 8, 24, 12, 15, 31, 806859, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
+>>> get_now__aware_datetime_(False) #doctest: +SKIP
+datetime.datetime(2023, 8, 24, 12, 15, 31, 807456, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
+>>> get_now__aware_datetime_(True) #doctest: +SKIP
+datetime.datetime(2023, 8, 24, 4, 15, 31, 807931, tzinfo=datetime.timezone.utc)
+>>> get_now__aware_datetime_(tz4local) #doctest: +SKIP
+datetime.datetime(2023, 8, 24, 12, 15, 31, 808421, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
+>>> get_now__aware_datetime_(tz4utc) #doctest: +SKIP
+datetime.datetime(2023, 8, 24, 4, 15, 31, 808944, tzinfo=datetime.timezone.utc)
+
+
+
+
+
+
+
+
+实证:子进程耗时 只能用 system_wide
+run(*popenargs, input=None, capture_output=False, timeout=None, check=False, **kwargs)
+    Run command with arguments and return a CompletedProcess instance.
+>>> from subprocess import run as sub_run_
+>>> from os import system as system_call_
+>>> sys_sleep_1_ = lambda:system_call_('sleep 1')
+>>> sub_sleep_1_ = lambda:sub_run_('sleep 1'.split())
+>>> def timeit_(may_smay_name_or_time_kind, f, /):
+...     t0 = get_consumed_duration__6time_kind_(may_smay_name_or_time_kind)
+...     f()
+...     t1 = get_consumed_duration__6time_kind_(may_smay_name_or_time_kind)
+...     dt = t1-t0
+...     return dt
+
+>>> for time_kind in TimerKind:(time_kind, timeit_(time_kind, sys_sleep_1_)) #doctest: +SKIP
+(<TimerKind.system_wide: 'system_wide'>, 1.0400986918248236)
+(<TimerKind.process_wide: 'process_wide'>, 0.0015215380000000167)
+(<TimerKind.thread_wide: 'thread_wide'>, 0.0019393850000000157)
+
+>>> for time_kind in TimerKind:(time_kind, timeit_(time_kind, sub_sleep_1_)) #doctest: +SKIP
+(<TimerKind.system_wide: 'system_wide'>, 1.0201039230450988)
+(<TimerKind.process_wide: 'process_wide'>, 0.0008702319999999986)
+(<TimerKind.thread_wide: 'thread_wide'>, 0.0010970770000000019)
+
+
+
+
+
+
+py_adhoc_call   seed.for_libs.for_time   @sleep9KeyboardInterrupt_  =100.0 =2.0
+py_adhoc_call   seed.for_libs.for_time   @resting9KeyboardInterrupt_  =100.0 =2.0
+
+
 py_adhoc_call   seed.for_libs.for_time   @f
+#]]]'''
+__all__ = r'''
+TimerKind
+    to_TimerKind_
+    get_consumed_duration__6time_kind_
+    getget_consumed_duration__6time_kind_
+    get_timer7stdxxx__6time_kind_
 
-from seed.for_libs.for_time import (
+sleep9KeyboardInterrupt_
+    resting9KeyboardInterrupt_
+        mk_rest_func_
+
+PeriodicToilLeisureTime
+    default_mkr4seconds4leisure
+    mkr4try_resting_
+
+
 time_struct8platform_epoch___tz4utc
-,time_struct8platform_epoch___tz4local
-,aware_datetime8platform_epoch
-,tz4utc
-,tz4local
+time_struct8platform_epoch___tz4local
+
+time_struct5timestamp_
+time_struct2timestamp_
+
+TimeFormatDirective
+    time_fmt5py_str_fmt_
+    time_fmt5snippets_
+default_time_fmt
+    time_fmt5may_
+
+time_struct2formatted_str_
+time_struct5formatted_str_
+
+timestamp2formatted_str__via_time_struct__
+timestamp5formatted_str__via_time_struct__
+
+get_now__timestamp
+get_now__time_struct_
+
+get_consumed_duration__system_wide__monotonic
+get_consumed_duration__system_wide__highest_resolution
+get_consumed_duration__process_wide
+get_consumed_duration__thread_wide
+
+Timer
+    timer__thread_wide
+    timer__process_wide
+    timer__system_wide__highest_resolution
+    timer__system_wide__monotonic
+    Timer__print_err
+        timer__print_err__thread_wide
+        timer__print_err__process_wide
+        timer__print_err__system_wide__highest_resolution
+        timer__print_err__system_wide__monotonic
+
+
+aware_datetime8platform_epoch
+tz4utc
+tz4local
+    utcoffset4local
+        total_seconds4utcoffset4local
+
+tz5or__local_vs_utc_
+    check_tzinfo
 
 
 
 
 
-,Case4datetime_isoformat_timespec
-,TimeFormatDirective
-    ,time_fmt5py_str_fmt_
-    ,time_fmt5snippets_
-,default_time_fmt
-    ,time_fmt5may_
+Error
+    Error__miss_tzinfo__strptime_mismatch_strftime
+    Error__mismatch_tzinfo
+
+is_datetime_aware
+is_datetime_naive
+check_aware_datetime
+get_now__aware_datetime_
+Case4datetime_isoformat_timespec
+is_the_time_zone_offset_directive_in_time_fmt
 
 
+aware_datetime5timestamp_
+aware_datetime2timestamp_
 
-,get_now__timestamp
-,get_now__time_struct_
-,get_now__aware_datetime_
+datetime2formatted_str_
+datetime5formatted_str_
 
-,get_consumed_duration__system_wide__monotonic
-,get_consumed_duration__system_wide__highest_resolution
-,get_consumed_duration__process_wide
-,get_consumed_duration__thread_wide
+aware_datetime5formatted_str_
+aware_datetime2formatted_str_
 
-
-,Timer
-    ,timer__thread_wide
-    ,timer__process_wide
-    ,timer__system_wide__highest_resolution
-    ,timer__system_wide__monotonic
-
-    ,Timer__print_err
-        ,timer__print_err__thread_wide
-        ,timer__print_err__process_wide
-        ,timer__print_err__system_wide__highest_resolution
-        ,timer__print_err__system_wide__monotonic
+timestamp2formatted_str__via_datetime__
+timestamp5formatted_str__via_datetime__
 
 
+'''.split()#'''
+    #timegm__float
+    #Result4Timer
+    #try_resting__no_resting_
+__all__
 
-
-,aware_datetime5timestamp_
-,aware_datetime2timestamp_
-
-,aware_datetime5formatted_str_
-,aware_datetime2formatted_str_
-
-,timestamp2formatted_str__via_datetime__
-,timestamp5formatted_str__via_datetime__
-
-,datetime2formatted_str_
-,datetime5formatted_str_
-
-,time_struct5timestamp_
-,time_struct2timestamp_
-
-,time_struct2formatted_str_
-,time_struct5formatted_str_
-
-,timestamp2formatted_str__via_time_struct__
-,timestamp5formatted_str__via_time_struct__
-
-
-
-,is_datetime_aware
-,is_datetime_naive
-,check_aware_datetime
-)
-
-
-
+r'''[[[
 
 [[
 time — Time access and conversions¶
@@ -571,494 +1030,9 @@ These may not be available on all platforms when used with the strftime() method
 
 
 
-    time_struct8platform_epoch___tz4utc
-    time_struct8platform_epoch___tz4local
->>> time_struct8platform_epoch___tz4utc
-time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
->>> time_struct8platform_epoch___tz4local
-time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=8, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
+#]]]'''#'''
 
-
-    get_now__timestamp
->>> timestamp = get_now__timestamp()
->>> type(timestamp) is float
-True
-
->>> timestamp = float.fromhex('0x1.93939985bce89p+30')
->>> timestamp
-1692722785.434481
->>> timestamp.hex()
-'0x1.93939985bce89p+30'
-
-    time_struct5timestamp_
-    time_struct2timestamp_
-    #loss accuracy: [resolution==1 second] i.e. be int when converted back, see:timegm__int
-    #use datetime instead
->>> local_time_struct = time_struct5timestamp_(False, timestamp)
->>> local_time_struct
-time.struct_time(tm_year=2023, tm_mon=8, tm_mday=23, tm_hour=0, tm_min=46, tm_sec=25, tm_wday=2, tm_yday=235, tm_isdst=0)
->>> timestamp_5local = time_struct2timestamp_(False, local_time_struct)
->>> timestamp_5local
-1692722785.0
-
->>> utc_time_struct = time_struct5timestamp_(True, timestamp)
->>> utc_time_struct
-time.struct_time(tm_year=2023, tm_mon=8, tm_mday=22, tm_hour=16, tm_min=46, tm_sec=25, tm_wday=1, tm_yday=234, tm_isdst=0)
->>> timestamp_5utc_ = timegm__int(utc_time_struct)
->>> timestamp_5utc_
-1692722785
->>> timestamp_5utc = time_struct2timestamp_(True, utc_time_struct)
->>> timestamp_5utc
-1692722785.0
->>> type(timestamp_5local) is float
-True
->>> type(timestamp_5utc) is float
-True
->>> type(timestamp_5utc_) is int
-True
-
-
-    TimeFormatDirective
-        time_fmt5py_str_fmt_
-        time_fmt5snippets_
-    default_time_fmt
-        time_fmt5may_
->>> default_time_fmt == "%a %b %d %H:%M:%S %Y"
-True
->>> __ = TimeFormatDirective
->>> default_time_fmt == time_fmt5snippets_(__.W_abbr, ' ', __.M_abbr, ' ', __.DD, ' ', __.hh, ':', __.mm, ':', __.ss, ' ', __.YYYY)
-True
->>> default_time_fmt == time_fmt5py_str_fmt_('{W_abbr} {M_abbr} {DD} {hh}:{mm}:{ss} {YYYY}')
-True
->>> time_fmt5py_str_fmt_('%')
-'%%'
-
-
-    time_struct2formatted_str_
-    time_struct5formatted_str_
->>> time_struct2formatted_str_(None, local_time_struct)
-'Wed Aug 23 00:46:25 2023'
->>> time_struct5formatted_str_(None, _)
-time.struct_time(tm_year=2023, tm_mon=8, tm_mday=23, tm_hour=0, tm_min=46, tm_sec=25, tm_wday=2, tm_yday=235, tm_isdst=-1)
->>> time_struct2formatted_str_(None, utc_time_struct)
-'Tue Aug 22 16:46:25 2023'
->>> time_struct5formatted_str_(None, _)
-time.struct_time(tm_year=2023, tm_mon=8, tm_mday=22, tm_hour=16, tm_min=46, tm_sec=25, tm_wday=1, tm_yday=234, tm_isdst=-1)
-
-
-    timestamp2formatted_str__via_time_struct__
-    timestamp5formatted_str__via_time_struct__
->>> timestamp2formatted_str__via_time_struct__(None, False, timestamp)
-'Wed Aug 23 00:46:25 2023'
->>> timestamp5formatted_str__via_time_struct__(None, False, _)
-1692722785.0
->>> timestamp2formatted_str__via_time_struct__(None, True, timestamp)
-'Tue Aug 22 16:46:25 2023'
->>> timestamp5formatted_str__via_time_struct__(None, True, _)
-1692722785.0
-
-
-    get_consumed_duration__system_wide__monotonic
-    get_consumed_duration__system_wide__highest_resolution
-    get_consumed_duration__process_wide
-    get_consumed_duration__thread_wide
-
->>> get_consumed_duration__system_wide__monotonic() #doctest: +SKIP
-13735536.812056776
->>> get_consumed_duration__system_wide__highest_resolution() #doctest: +SKIP
-13735536.814709084
->>> get_consumed_duration__process_wide() #doctest: +SKIP
-0.540129381
->>> get_consumed_duration__thread_wide() #doctest: +SKIP
-0.540573765
-
->>> get_consumed_duration__system_wide__monotonic() #doctest: +SKIP
-13735536.8161167
->>> get_consumed_duration__system_wide__highest_resolution() #doctest: +SKIP
-13735536.816553624
->>> get_consumed_duration__process_wide() #doctest: +SKIP
-0.541914996
->>> get_consumed_duration__thread_wide() #doctest: +SKIP
-0.542356227
-
-
-
-
->>> from time import sleep
-
-
-########
-########>>> with timer__thread_wide() as r:
-########...     sleep(1)
-########>>> r.get_duration_without_unit() #doctest: +SKIP
-########0.0003442300000000009
-########>>> r.get_duration_without_unit() < 0.7
-########True
-########
-########>>> timer = timer__system_wide__highest_resolution
-########>>> with timer() as r:
-########...     sleep(2)
-########>>> 2.0 <= r.get_duration_without_unit() < 4.0
-########True
-########
-########>>> with timer() as r:
-########...     sleep(4)
-########>>> r.get_duration_without_unit() > 4.0
-########True
-########
-########>>> with timer() as r:
-########...     sleep(2)
-########>>> 2.0 <= r.get_duration_without_unit() < 4.0
-########True
-########
-
->>> timer = timer__system_wide__highest_resolution
->>> with timer() as r:
-...     sleep(0.2)
->>> 0.2 <= r.get_duration_without_unit() < 0.4
-True
->>> r.get_duration_without_unit() #doctest: +SKIP
-0.20153722912073135
->>> r.get_unit()
-datetime.timedelta(seconds=1)
->>> r.get() #doctest: +SKIP
-(0.20153722912073135, datetime.timedelta(seconds=1))
->>> r.get() == (r.get_duration_without_unit(), timedelta(seconds=1))
-True
->>> r.get() == (r.get_duration_without_unit(), r.get_unit())
-True
-
->>> with timer(print) as r: #doctest: +SKIP
-...     sleep(0.2)
-0.2015569992363453 0:00:01
->>> print(timer.get_unit())
-0:00:01
->>> timer.get_unit()
-datetime.timedelta(seconds=1)
->>> timer.get_time_() #doctest: +SKIP
-13773734.696721207
->>> timer.get_time_ is get_consumed_duration__system_wide__highest_resolution
-True
->>> with timer(lambda duration, unit,/:print(f'{duration:.2} *({unit!s})')) as r:
-...     sleep(0.2)
-0.2 *(0:00:01)
-
-
-
-
-######################
-#datetime:
-######################
->>> from datetime import timedelta
->>> timedelta(seconds=0.005)
-datetime.timedelta(microseconds=5000)
->>> from datetime import datetime
->>> datetime.utcfromtimestamp(0.0) #naive!!! why???
-datetime.datetime(1970, 1, 1, 0, 0)
->>> datetime.fromtimestamp(0.0)
-datetime.datetime(1970, 1, 1, 8, 0)
->>> datetime.fromtimestamp(0.0) -datetime.utcfromtimestamp(0.0)
-datetime.timedelta(seconds=28800)
->>> datetime.utcnow() #doctest: +SKIP
-datetime.datetime(2023, 8, 23, 0, 3, 8, 790431)
->>> datetime.today() #doctest: +SKIP
-datetime.datetime(2023, 8, 23, 8, 3, 8, 790783)
->>> from time import time_ns
->>> ns4now = time_ns()
->>> ns4now #doctest: +SKIP
-1692748988791250312
->>> datetime.fromtimestamp(ns4now/10**9) #doctest: +SKIP
-datetime.datetime(2023, 8, 23, 8, 3, 8, 791250)
-
-
-    aware_datetime5timestamp_
-    aware_datetime2timestamp_
->>> timestamp.hex()
-'0x1.93939985bce89p+30'
->>> datetime__tz4local = aware_datetime5timestamp_(tz4local, timestamp)
->>> datetime__tz4utc = aware_datetime5timestamp_(tz4utc, timestamp)
->>> datetime__tz4utc == datetime__tz4local
-True
->>> datetime__tz4utc.date == datetime__tz4local.date
-False
->>> datetime__tz4local
-datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
->>> aware_datetime5timestamp_(False, timestamp)
-datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
->>> datetime__tz4utc
-datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
->>> aware_datetime5timestamp_(True, timestamp)
-datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
-
-
->>> f = lambda aware_datetime,/:(aware_datetime - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()
->>> f(datetime__tz4local)
-1692722785.434481
->>> f(datetime__tz4utc)
-1692722785.434481
->>> datetime__tz4local.timestamp()
-1692722785.434481
->>> datetime__tz4utc.timestamp()
-1692722785.434481
->>> aware_datetime2timestamp_(datetime__tz4local)
-1692722785.434481
->>> aware_datetime2timestamp_(datetime__tz4utc)
-1692722785.434481
->>> datetime__tz4local.timestamp() == datetime__tz4utc.timestamp() == aware_datetime2timestamp_(datetime__tz4local) == aware_datetime2timestamp_(datetime__tz4utc)
-True
-
->>> aware_datetime2timestamp_(datetime__tz4local).hex()
-'0x1.93939985bce89p+30'
->>> aware_datetime2timestamp_(datetime__tz4utc).hex()
-'0x1.93939985bce89p+30'
->>> datetime__tz4local.timestamp().hex()
-'0x1.93939985bce89p+30'
->>> datetime__tz4utc.timestamp().hex()
-'0x1.93939985bce89p+30'
-
-
-
-    datetime2formatted_str_
-    datetime5formatted_str_
->>> time_fmt = time_fmt5py_str_fmt_('{YYYY}{MM}{DD}-{hh}:{mm}:{ss}.{ffffff}{xhhmm_ss_ffffff}')
->>> time_fmt
-'%Y%m%d-%H:%M:%S.%f%z'
->>> datetime2formatted_str_(time_fmt, datetime__tz4utc)
-'20230822-16:46:25.434481+0000'
->>> datetime5formatted_str_(time_fmt, _) # --> aware_datetime
-datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
->>> datetime2formatted_str_(time_fmt, datetime__tz4utc.replace(tzinfo=None), mismatch_tzinfo_ok=True)
-'20230822-16:46:25.434481'
->>> datetime5formatted_str_(time_fmt, _) #??? why strptime mismatch strftime??? %z can output empty???  # --> e ../lots/NOTE/Python/python-bug/datetime-bug.txt
-Traceback (most recent call last):
-    ...
-ValueError: time data '20230822-16:46:25.434481' does not match format '%Y%m%d-%H:%M:%S.%f%z'
->>> datetime5formatted_str_(time_fmt[:-2], _) # --> naive_datetime
-datetime.datetime(2023, 8, 22, 16, 46, 25, 434481)
-
->>> datetime2formatted_str_(time_fmt, datetime__tz4local)
-'20230823-00:46:25.434481+0800'
->>> datetime5formatted_str_(time_fmt, _) # --> aware_datetime
-datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))
-
-
-
-    aware_datetime5formatted_str_
-    aware_datetime2formatted_str_
->>> time_fmt
-'%Y%m%d-%H:%M:%S.%f%z'
->>> aware_datetime2formatted_str_(time_fmt, datetime__tz4utc)
-'20230822-16:46:25.434481+0000'
->>> aware_datetime5formatted_str_(time_fmt, _) # --> aware_datetime
-datetime.datetime(2023, 8, 22, 16, 46, 25, 434481, tzinfo=datetime.timezone.utc)
->>> aware_datetime2formatted_str_(time_fmt, datetime__tz4utc.replace(tzinfo=None))
-Traceback (most recent call last):
-    ...
-TypeError: not aware: datetime.datetime(2023, 8, 22, 16, 46, 25, 434481)
->>> aware_datetime5formatted_str_(time_fmt, '20230822-16:46:25.434481')
-Traceback (most recent call last):
-    ...
-ValueError: time data '20230822-16:46:25.434481' does not match format '%Y%m%d-%H:%M:%S.%f%z'
->>> aware_datetime5formatted_str_(time_fmt[:-2], '20230822-16:46:25.434481')
-Traceback (most recent call last):
-    ...
-seed.for_libs.for_time.Error__miss_tzinfo__strptime_mismatch_strftime
-
->>> aware_datetime2formatted_str_(time_fmt, datetime__tz4local)
-'20230823-00:46:25.434481+0800'
->>> aware_datetime5formatted_str_(time_fmt, _) # --> aware_datetime
-datetime.datetime(2023, 8, 23, 0, 46, 25, 434481, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))
-
-
-    timestamp2formatted_str__via_datetime__
-    timestamp5formatted_str__via_datetime__
-
-
-
->>> default_time_fmt
-'%a %b %d %H:%M:%S %Y'
->>> time_fmt
-'%Y%m%d-%H:%M:%S.%f%z'
->>> timestamp.hex()
-'0x1.93939985bce89p+30'
->>> tz4utc
-datetime.timezone.utc
->>> tz4local
-datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local')
->>> time_struct8platform_epoch___tz4utc
-time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
->>> time_struct8platform_epoch___tz4local
-time.struct_time(tm_year=1970, tm_mon=1, tm_mday=1, tm_hour=8, tm_min=0, tm_sec=0, tm_wday=3, tm_yday=1, tm_isdst=0)
->>> aware_datetime8platform_epoch
-datetime.datetime(1970, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)
-
-def timestamp2formatted_str__via_datetime__(may_time_fmt, local_vs_utc__or__tz, timestamp, /, *, mismatch_tzinfo_ok=False):
->>> timestamp2formatted_str__via_datetime__(None, False, timestamp)
-'Wed Aug 23 00:46:25 2023'
->>> formatted_str___default_time_fmt___tz4local = _
->>> timestamp2formatted_str__via_datetime__(None, True, timestamp)
-Traceback (most recent call last):
-    ...
-seed.for_libs.for_time.Error__miss_tzinfo__strptime_mismatch_strftime
->>> timestamp2formatted_str__via_datetime__(None, True, timestamp, mismatch_tzinfo_ok=True)
-'Tue Aug 22 16:46:25 2023'
->>> formatted_str___default_time_fmt___tz4utc = _
-
->>> timestamp2formatted_str__via_datetime__(time_fmt, False, timestamp)
-'20230823-00:46:25.434481+0800'
->>> formatted_str___nondefault_time_fmt___tz4local = _
->>> timestamp2formatted_str__via_datetime__(time_fmt, True, timestamp)
-'20230822-16:46:25.434481+0000'
->>> formatted_str___nondefault_time_fmt___tz4utc = _
-
-def timestamp5formatted_str__via_datetime__(may_time_fmt, local_vs_utc__or__tz, formatted_str, /, ):
->>> timestamp5formatted_str__via_datetime__(None, False, formatted_str___default_time_fmt___tz4local)
-1692722785.0
->>> timestamp5formatted_str__via_datetime__(None, True, formatted_str___default_time_fmt___tz4local)
-1692751585.0
->>> timestamp5formatted_str__via_datetime__(None, False, formatted_str___default_time_fmt___tz4utc)
-1692693985.0
->>> timestamp5formatted_str__via_datetime__(None, True, formatted_str___default_time_fmt___tz4utc)
-1692722785.0
-
-#above local_vs_utc__or__tz takes effect
-#   since [not '%z' in default_time_fmt]
-#below local_vs_utc__or__tz takes no effect
-#   since ['%z' in time_fmt]
->>> timestamp5formatted_str__via_datetime__(time_fmt, False, formatted_str___nondefault_time_fmt___tz4local)
-1692722785.434481
->>> timestamp5formatted_str__via_datetime__(time_fmt, True, formatted_str___nondefault_time_fmt___tz4local)
-1692722785.434481
->>> timestamp5formatted_str__via_datetime__(time_fmt, False, formatted_str___nondefault_time_fmt___tz4utc)
-1692722785.434481
->>> timestamp5formatted_str__via_datetime__(time_fmt, True, formatted_str___nondefault_time_fmt___tz4utc)
-1692722785.434481
-
-
-
-
-
-get_now__timestamp
-get_now__time_struct_
-get_now__aware_datetime_
-
->>> get_now__timestamp() #doctest: +SKIP
-1692850531.802958
->>> get_now__time_struct_(False) #doctest: +SKIP
-time.struct_time(tm_year=2023, tm_mon=8, tm_mday=24, tm_hour=12, tm_min=15, tm_sec=31, tm_wday=3, tm_yday=236, tm_isdst=0)
->>> get_now__time_struct_(True) #doctest: +SKIP
-time.struct_time(tm_year=2023, tm_mon=8, tm_mday=24, tm_hour=4, tm_min=15, tm_sec=31, tm_wday=3, tm_yday=236, tm_isdst=0)
->>> get_now__aware_datetime_() #doctest: +SKIP
-datetime.datetime(2023, 8, 24, 12, 15, 31, 806859, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
->>> get_now__aware_datetime_(False) #doctest: +SKIP
-datetime.datetime(2023, 8, 24, 12, 15, 31, 807456, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
->>> get_now__aware_datetime_(True) #doctest: +SKIP
-datetime.datetime(2023, 8, 24, 4, 15, 31, 807931, tzinfo=datetime.timezone.utc)
->>> get_now__aware_datetime_(tz4local) #doctest: +SKIP
-datetime.datetime(2023, 8, 24, 12, 15, 31, 808421, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800), 'seed.for_libs.for_time.tz4local'))
->>> get_now__aware_datetime_(tz4utc) #doctest: +SKIP
-datetime.datetime(2023, 8, 24, 4, 15, 31, 808944, tzinfo=datetime.timezone.utc)
-
-
-
-
-py_adhoc_call   seed.for_libs.for_time   @sleep9KeyboardInterrupt_  =100.0 =2.0
-py_adhoc_call   seed.for_libs.for_time   @resting9KeyboardInterrupt_  =100.0 =2.0
-
-
-#]]]'''
-__all__ = r'''
-sleep9KeyboardInterrupt_
-    resting9KeyboardInterrupt_
-        mk_rest_func_
-
-PeriodicToilLeisureTime
-    default_mkr4seconds4leisure
-    mkr4try_resting_
-
-
-time_struct8platform_epoch___tz4utc
-time_struct8platform_epoch___tz4local
-
-time_struct5timestamp_
-time_struct2timestamp_
-
-TimeFormatDirective
-    time_fmt5py_str_fmt_
-    time_fmt5snippets_
-default_time_fmt
-    time_fmt5may_
-
-time_struct2formatted_str_
-time_struct5formatted_str_
-
-timestamp2formatted_str__via_time_struct__
-timestamp5formatted_str__via_time_struct__
-
-get_now__timestamp
-get_now__time_struct_
-
-get_consumed_duration__system_wide__monotonic
-get_consumed_duration__system_wide__highest_resolution
-get_consumed_duration__process_wide
-get_consumed_duration__thread_wide
-
-Timer
-    timer__thread_wide
-    timer__process_wide
-    timer__system_wide__highest_resolution
-    timer__system_wide__monotonic
-    Timer__print_err
-        timer__print_err__thread_wide
-        timer__print_err__process_wide
-        timer__print_err__system_wide__highest_resolution
-        timer__print_err__system_wide__monotonic
-
-
-aware_datetime8platform_epoch
-tz4utc
-tz4local
-    utcoffset4local
-        total_seconds4utcoffset4local
-
-tz5or__local_vs_utc_
-    check_tzinfo
-
-
-
-
-
-Error
-    Error__miss_tzinfo__strptime_mismatch_strftime
-    Error__mismatch_tzinfo
-
-is_datetime_aware
-is_datetime_naive
-check_aware_datetime
-get_now__aware_datetime_
-Case4datetime_isoformat_timespec
-is_the_time_zone_offset_directive_in_time_fmt
-
-
-aware_datetime5timestamp_
-aware_datetime2timestamp_
-
-datetime2formatted_str_
-datetime5formatted_str_
-
-aware_datetime5formatted_str_
-aware_datetime2formatted_str_
-
-timestamp2formatted_str__via_datetime__
-timestamp5formatted_str__via_datetime__
-
-
-'''.split()#'''
-    #timegm__float
-    #Result4Timer
-    #try_resting__no_resting_
 __all__
-
 ___begin_mark_of_excluded_global_names__0___ = ...
 
 #import time
@@ -1083,6 +1057,8 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.debug.print_err import print_err
     from seed.helper.ifNone import ifNone
     from seed.tiny_.check import check_type_in, check_type_is, check_callable
+    from seed.for_libs.for_signal import OriginalContext4KeyboardInterrupt
+        #mk_rest_func_,sleep9KeyboardInterrupt_
 
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -1366,7 +1342,6 @@ def get_consumed_duration__thread_wide():
 
 
 
-
 ######################
 # with timer:
 ######################
@@ -1536,6 +1511,67 @@ timer__print_err__thread_wide = Timer__print_err(get_consumed_duration__thread_w
 timer__print_err__process_wide = Timer__print_err(get_consumed_duration__process_wide, unit=_unit)
 timer__print_err__system_wide__highest_resolution = Timer__print_err(get_consumed_duration__system_wide__highest_resolution, unit=_unit)
 timer__print_err__system_wide__monotonic = Timer__print_err(get_consumed_duration__system_wide__monotonic, unit=_unit)
+
+
+
+def to_TimerKind_(may_smay_name_or_time_kind, /):
+    match may_smay_name_or_time_kind:
+        case TimerKind() as time_kind:
+            pass
+        case None | '':
+            nm = 'thread_wide'
+            time_kind = TimerKind(nm)
+        case str() as nm:
+            time_kind = TimerKind(nm)
+        case _:
+            raise TypeError('not TimerKind:', may_smay_name_or_time_kind)
+    return time_kind
+def getget_consumed_duration__6time_kind_(may_smay_name_or_time_kind, /):
+    return get_consumed_duration__6time_kind_(may_smay_name_or_time_kind, no_call=True)
+def get_consumed_duration__6time_kind_(may_smay_name_or_time_kind, /, no_call=False):
+    time_kind = to_TimerKind_(may_smay_name_or_time_kind)
+    f = time_kind.get_consumed_duration_
+    return f() if not no_call else f
+def get_timer7stdxxx__6time_kind_(may_smay_name_or_time_kind, /, stdout_vs_stderr:bool):
+    time_kind = to_TimerKind_(may_smay_name_or_time_kind)
+    return time_kind.get_timer7stdxxx_(stdout_vs_stderr)
+class TimerKind(Enum):
+    'time_kind'
+    system_wide = 'system_wide'
+    process_wide = 'process_wide'
+    thread_wide = 'thread_wide'
+    @property
+    def get_consumed_duration_(sf, /):
+        return sf._get_consumed_duration_
+    def get_timer7stdxxx_(sf, stdout_vs_stderr:bool, /):
+        return sf.timer7stdout if not stdout_vs_stderr else sf.timer7stderr
+    @property
+    def timer7stdout(sf, /):
+        return sf._timer
+    @property
+    def timer7stderr(sf, /):
+        return sf._timer7err
+if 1:
+    TimerKind.system_wide._get_consumed_duration_ = get_consumed_duration__system_wide__monotonic
+    TimerKind.process_wide._get_consumed_duration_ = get_consumed_duration__process_wide
+    TimerKind.thread_wide._get_consumed_duration_ = get_consumed_duration__thread_wide
+if 1:
+    TimerKind.system_wide._timer = timer__system_wide__monotonic
+    TimerKind.process_wide._timer = timer__process_wide
+    TimerKind.thread_wide._timer = timer__thread_wide
+if 1:
+    TimerKind.system_wide._timer7err = timer__print_err__system_wide__monotonic
+    TimerKind.process_wide._timer7err = timer__print_err__process_wide
+    TimerKind.thread_wide._timer7err = timer__print_err__thread_wide
+if 1:
+    assert type(TimerKind.system_wide) is TimerKind
+    assert TimerKind(TimerKind.system_wide) is TimerKind.system_wide
+    assert TimerKind('system_wide') is TimerKind.system_wide
+    assert TimerKind.system_wide.get_consumed_duration_ is get_consumed_duration__system_wide__monotonic
+    assert TimerKind.system_wide.timer7stdout is timer__system_wide__monotonic
+    assert TimerKind.system_wide.timer7stderr is timer__print_err__system_wide__monotonic
+#end-class TimerKind(Enum):
+
 
 ######################
 # datetime ...
@@ -1968,7 +2004,14 @@ class PeriodicToilLeisureTime:
     # used in:view script/搜索冫最短加链长度.py
     # see also:view ../../python3_src/seed/for_libs/for_signal.py
     #       PostponeKeyboardInterrupt
-    def __init__(sf, seconds4toil:float, seconds4leisure:float, may_mkr4seconds4leisure=None, /, *, may_prompt_string6resting=None):
+    r'''[[[
+    发现病蛊: @20260702
+        view ../../python3_src/seed/math/factor_pint/database4factors4cyclotomic_numbers.py
+        !! 计时器 固定为 get_consumed_duration__thread_wide()
+        => 子进程耗时 被忽略
+    见上面:子进程耗时 只能用 system_wide
+    #]]]'''#'''
+    def __init__(sf, seconds4toil:float, seconds4leisure:float, may_mkr4seconds4leisure=None, /, *, may_prompt_string6resting=None, may_smay_name_or_time_kind=None):
         '[may_mkr4seconds4leisure :: may (seconds4toil/float -> seconds4leisure/float -> actual_seconds4toil/float -> actual_seconds4leisure/float)]'
         mkr4seconds4leisure = ifNone(may_mkr4seconds4leisure, default_mkr4seconds4leisure)
         check_callable(mkr4seconds4leisure)
@@ -1985,7 +2028,9 @@ class PeriodicToilLeisureTime:
         sf.mkr4seconds4leisure = mkr4seconds4leisure
         sf.may_mkr4seconds4leisure = may_mkr4seconds4leisure
         sf.may_prompt_string6resting = may_prompt_string6resting
-        sf._g = get_consumed_duration__thread_wide
+        #old:sf._g = get_consumed_duration__thread_wide
+        #sf._g = get_consumed_duration__6time_kind_(may_smay_name_or_time_kind, no_call=True)
+        sf._g = getget_consumed_duration__6time_kind_(may_smay_name_or_time_kind)
         sf.reset()
     def reset(sf, /):
         sf._t0 = sf._g()
@@ -2012,7 +2057,7 @@ class PeriodicToilLeisureTime:
 def try_resting__no_resting_():
     'no_rest#default:try_resting_#default_try_resting_'
     pass
-def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)], may_smay_name_or_time_kind:[None, str, TimerKind]=None):
     '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
     if not may_args4PeriodicToilLeisureTime is None:
         args4PeriodicToilLeisureTime = may_args4PeriodicToilLeisureTime
@@ -2025,7 +2070,7 @@ def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureT
                 pass
             case _:
                 raise 000
-        try_resting_ = PeriodicToilLeisureTime(seconds4toil, seconds4leisure, may_mkr4seconds4leisure, may_prompt_string6resting=may_prompt_string6resting) # .sleep_if_work_too_long_enough_
+        try_resting_ = PeriodicToilLeisureTime(seconds4toil, seconds4leisure, may_mkr4seconds4leisure, may_prompt_string6resting=may_prompt_string6resting, may_smay_name_or_time_kind=may_smay_name_or_time_kind) # .sleep_if_work_too_long_enough_
     else:
         #def try_resting_():pass
         try_resting_ = try_resting__no_resting_
@@ -2040,8 +2085,14 @@ def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureT
 ######################
 ######################
 #@20260207
-def sleep9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, /, *, smay_fmt4prompt7sleep='', smay_fmt4prompt7waking='', smay_prompt7wake=''):
-    'num_seconds7sleep/float{unit:second} -> None #ask if KeyboardInterrupt'
+_NaN = float('NaN')
+def sleep9KeyboardInterrupt_(emay_num_seconds7sleep, num_seconds7waking, /, *, smay_fmt4prompt7sleep='', smay_fmt4prompt7waking='', smay_prompt7wake=''):
+    'emay num_seconds7sleep/float{unit:second} -> num_seconds7waking/float{unit:second} -> None|^KeyboardInterrupt #ask if KeyboardInterrupt'
+    #########
+    to_ask_first = emay_num_seconds7sleep is ...
+    num_seconds7sleep = _NaN if to_ask_first else emay_num_seconds7sleep
+    #########
+    check_type_is(bool, to_ask_first)
     check_type_is(float, num_seconds7sleep)
     check_type_is(float, num_seconds7waking)
     check_type_is(str, smay_fmt4prompt7sleep)
@@ -2051,7 +2102,13 @@ def sleep9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, /, *, smay_f
     smay_fmt4prompt7waking.format(1.0)
     #xxx:smay_prompt7wake.format()
 
-    b_ask = False
+    #@20260703:++OriginalContext4KeyboardInterrupt
+    with OriginalContext4KeyboardInterrupt():
+        return _sleep9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, smay_fmt4prompt7sleep, smay_fmt4prompt7waking, smay_prompt7wake, to_ask_first)
+
+def _sleep9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, smay_fmt4prompt7sleep, smay_fmt4prompt7waking, smay_prompt7wake, to_ask_first):
+    #b_ask = False
+    b_ask = to_ask_first
     b_raise = False
     while 1:
         try:
@@ -2134,8 +2191,8 @@ def _sleep9K(num_seconds7sleep, smay_fmt4prompt7sleep, num_seconds7waking, smay_
             return False
         else:
             return True
-def resting9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, /):
-    sleep9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, smay_prompt7wake='working...', smay_fmt4prompt7sleep='resting...: {} seconds', smay_fmt4prompt7waking='waking...: {} seconds')
+def resting9KeyboardInterrupt_(emay_num_seconds7sleep, num_seconds7waking, /):
+    sleep9KeyboardInterrupt_(emay_num_seconds7sleep, num_seconds7waking, smay_prompt7wake='working...', smay_fmt4prompt7sleep='resting...: {} seconds', smay_fmt4prompt7waking='waking...: {} seconds')
     return
 ######################
 ######################
@@ -2144,7 +2201,6 @@ def resting9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, /):
 
 
 ##################
-#move_from: view script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py
 ##################
 #.def _resting_(t, wt, /):
 #.    print_err(f'resting...: {t} seconds')
@@ -2157,7 +2213,7 @@ def resting9KeyboardInterrupt_(num_seconds7sleep, num_seconds7waking, /):
 #.    print_err(f'working...')
 def _resting_(t, wt, /):
     resting9KeyboardInterrupt_(t, wt)
-def mk_rest_func_(休眠期, 苏醒期, /):
+def mk_rest_func_(休眠期, 苏醒期, /, *, time_kind='process_wide'):
     check_type_in([float, str], 休眠期)
     check_type_is(float, 苏醒期)
     欤记录耗时 = False
@@ -2187,8 +2243,9 @@ def mk_rest_func_(休眠期, 苏醒期, /):
     _rest
     #if 欤记录耗时:
     if 1 or 欤记录耗时:
-        process_time()# thread_time()
-        get_time_ = process_time
+        #process_time()# thread_time()
+        #get_time_ = process_time
+        get_time_ = getget_consumed_duration__6time_kind_(time_kind)
         def _耗时扌():
             nonlocal t0, 作业耗时
             t1 = get_time_()
@@ -2198,6 +2255,22 @@ def mk_rest_func_(休眠期, 苏醒期, /):
         t0 = get_time_()
         作业耗时 = 0
     return _rest
+r'''[[[
+===
+mk_rest_func_()
+===
+move_from:
+    #view script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain.py
+    view script/min_add_ver5__mixed_recursive_greedy_zpow_addition_chain-20260216.py
+===
+usage:
+    def f(..., 休眠期=0.0, 苏醒期=2.0, ...):
+        _rest = mk_rest_func_(休眠期, 苏醒期)
+        while ...:
+            777;_rest()
+===
+
+#]]]'''#'''
 ##################
 
 __all__
@@ -2235,6 +2308,12 @@ time_struct8platform_epoch___tz4utc
 
 
 
+
+,TimerKind
+    ,to_TimerKind_
+    ,get_consumed_duration__6time_kind_
+    ,getget_consumed_duration__6time_kind_
+    ,get_timer7stdxxx__6time_kind_
 
 
 
@@ -2300,11 +2379,21 @@ time_struct8platform_epoch___tz4utc
 
 
 from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
-#def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+#def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)], may_smay_name_or_time_kind:[None, str, TimerKind]=None):
 #    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
-#try_resting_ = mkr4try_resting_(may_prompt_string6resting=may_prompt_string6resting, may_args4PeriodicToilLeisureTime=may_args4PeriodicToilLeisureTime):
+#try_resting_ = mkr4try_resting_(may_prompt_string6resting=may_prompt_string6resting, may_args4PeriodicToilLeisureTime=may_args4PeriodicToilLeisureTime, may_smay_name_or_time_kind=may_smay_name_or_time_kind)
+
+##################
+#old:
+##################
 #from seed.for_libs.for_time import timer__print_err__thread_wide as timer
 #   with postpone, timer(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
+#
+##################
+#new:
+##################
+#from seed.for_libs.for_time import get_timer7stdxxx__6time_kind_ as get_timer_
+#   with postpone, get_timer_('thread_wide', True)(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
 
 
 
@@ -2313,7 +2402,14 @@ from seed.for_libs.for_time import PeriodicToilLeisureTime, mkr4try_resting_
 
 
 from seed.for_libs.for_time import sleep9KeyboardInterrupt_, resting9KeyboardInterrupt_, mk_rest_func_
+#def mk_rest_func_(休眠期, 苏醒期, /, *, time_kind='process_wide'):
+#usage:
+#   def f(..., 休眠期=0.0, 苏醒期=2.0, ...):
+#       _rest = mk_rest_func_(休眠期, 苏醒期)
+#       while ...:
+#           777;_rest()
 
 
+from seed.for_libs.for_time import TimerKind, to_TimerKind_, get_consumed_duration__6time_kind_, getget_consumed_duration__6time_kind_, get_timer7stdxxx__6time_kind_
 
 from seed.for_libs.for_time import *

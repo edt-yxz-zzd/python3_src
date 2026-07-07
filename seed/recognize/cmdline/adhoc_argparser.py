@@ -20,11 +20,19 @@ view ../../python3_src/seed/helper/safe_eval.py
     @20250118: ++kw:using_extended_globals
 @20250118: ++kw:flush4print
 @20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
+    @20260703:see also:
+        from seed.for_libs.for_time import mk_rest_func_
+        #def mk_rest_func_(休眠期, 苏醒期, /, *, time_kind='process_wide'):
+        fixed:bug:两者冲突:postpone导致mk_rest_func_无效 <<== mk_rest_func_ catch KeyError
+            ++OriginalContext4KeyboardInterrupt
+    @20260703:++kw:to_ask6postpone_KeyboardInterrupt_until_yield
 
 @20250201
     ++kw:to_show_timedelta
     ++kw:may_prompt_string6resting
     ++kw:may_args4PeriodicToilLeisureTime
+        @20260702
+        ++kw:may_time_kind
 
 @20250202:++to_show_StopIteration_value
 
@@ -46,6 +54,7 @@ view ../../python3_src/seed/helper/safe_eval.py
 
 @20260405: ++kw:also_stderr
 @20260521: ++kw:to_reraise_BrokenPipeError
+@20260703: ++kw:to_show_time_now,may_time_fmt
 
 [[
 TODO:
@@ -203,6 +212,12 @@ xxx.yyy 模块全名
     py_adhoc_call { +flush4print +to_show_timedelta  --may_args4PeriodicToilLeisureTime='(60,60)' --may_prompt_string6resting:$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  script.辅助冫有限域本原根判定牜泛化梅森指数   ,枚举冫拟泛化梅森指数纟素基灬牜输出指定数量每基扌  --case4trial_division:bit_length --bases4SPRP=[2,3,5,7]  +verbose --num_exps_per_radix=1  --radix2begin4exp='{269:3167+1}'  >> /sdcard/0my_files/tmp/0tmp
     if try_resting_ is None:
         def try_resting_():pass
+    发现病蛊: @20260702
+        view ../../python3_src/seed/math/factor_pint/database4factors4cyclotomic_numbers.py
+        !! 计时器 固定为 get_consumed_duration__thread_wide()
+        => 子进程耗时 被忽略
+    子进程耗时 只能用 system_wide
+    mkr4try_resting_
 
 新增:++to_show_StopIteration_value
     py_adhoc_call  { +to_show_StopIteration_value } seed.math.factor_pint.sprp_factor_pint__via_Lehman_method__O_cube_root   ,iter_try_factor1_pint__via_Lehman_method__layered__easy_   ='(2**17-1)*(2**31-1)'
@@ -546,7 +561,7 @@ with mk_ctx4lazy_import8lazy_objs__ver2_(nonexistent_prefix4qnm4mdl8src='__.', p
 
 
 
-with mk_ctx4lazy_import4funcs_(__name__):
+with mk_ctx4lazy_import4funcs_(__name__, 'get_timer7stdxxx__6time_kind_:get_timer_,timer__print_err__thread_wide:timer'):
     from seed.for_libs.for_signal import PostponeKeyboardInterrupt
         # ++kw:to_postpone_KeyboardInterrupt_until_yield => flush4print
 
@@ -555,13 +570,23 @@ with mk_ctx4lazy_import4funcs_(__name__):
     # ++kw:to_show_timedelta
     # ++kw:may_prompt_string6resting
     # ++kw:may_args4PeriodicToilLeisureTime
-    from seed.for_libs.for_time import timer__print_err__thread_wide as timer
+    #   ++kw:may_time_kind
+    ###################
+    #old:
+    #from seed.for_libs.for_time import timer__print_err__thread_wide as timer
     #   with postpone, timer(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
+    ###################
+    #new:
+    from seed.for_libs.for_time import get_timer7stdxxx__6time_kind_ as get_timer_, to_TimerKind_#TimerKind
+    #   with postpone, get_timer_('thread_wide', True)(prefix=f'{n}', _to_show_=_to_show_, _show_hint_on_enter_=True):
+    ###################
     from seed.for_libs.for_time import mkr4try_resting_ #PeriodicToilLeisureTime
-    #def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)]):
+    #def mkr4try_resting_(*, may_prompt_string6resting, may_args4PeriodicToilLeisureTime:[None,(float,float)], may_smay_name_or_time_kind:[None, str, TimerKind]=None):
     #    '-> try_resting_/(()->None) # [may sleep_if_work_too_long_enough_]'
 
 
+    # ++kw:to_show_time_now,may_time_fmt
+    from seed.for_libs.for_time import get_now__aware_datetime_, aware_datetime2formatted_str_
 
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.lang.call_ import call_
@@ -580,7 +605,7 @@ with mk_ctx4lazy_import4funcs_(__name__, 'safe_eval_ex:safe_eval, safe_exec_ex:s
     from seed.helper.safe_eval import safe_eval_ex as safe_eval, safe_exec_ex as safe_exec
         #@20250118: ++kw:using_extended_globals
 with mk_ctx4lazy_import4funcs_(__name__):
-    from seed.tiny_.check import check_smay_pseudo_identifier, check_type_in, check_type_is, check_type_le, check_callable
+    from seed.tiny_.check import check_smay_pseudo_identifier, check_type_in, check_type_is, check_type_le, check_callable, check_may_, check_str
     from seed.tiny_.funcs import echo
     from seed.helper.ifNone import ifNone
     from seed.tiny_.containers import mk_tuple
@@ -770,7 +795,7 @@ def adhoc_argparser__main__call8module(may_argv, /):
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
-    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting='', also_stderr=False, to_reraise_BrokenPipeError=False):
+    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, to_ask6postpone_KeyboardInterrupt_until_yield=False, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, may_time_kind:[None, str, 'TimerKind']=None, may_time_fmt:[None,str]=None, to_show_time_now=False, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting='', also_stderr=False, to_reraise_BrokenPipeError=False):
         ######################
         check_type_is(bool, to_reraise_BrokenPipeError)
         check_type_is(bool, also_stderr)
@@ -790,9 +815,16 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         ######################
         check_type_is(bool, to_show_StopIteration_value)
         ######################
+        check_type_is(bool, to_show_time_now)
+        check_may_(check_str, may_time_fmt)
+        time_fmt = may_time_fmt if not may_time_fmt is None else '%Y%m%d-%H:%M:%S.%f%z'
+        time_fmt, to_show_time_now
+        ######################
         check_type_is(bool, to_show_timedelta)
-        try_resting_ = mkr4try_resting_(may_prompt_string6resting=may_prompt_string6resting, may_args4PeriodicToilLeisureTime=may_args4PeriodicToilLeisureTime)
-        try_resting_, to_show_timedelta
+        to_show_timedelta
+        time_kind = to_TimerKind_(may_time_kind)
+        try_resting_ = mkr4try_resting_(may_prompt_string6resting=may_prompt_string6resting, may_args4PeriodicToilLeisureTime=may_args4PeriodicToilLeisureTime, may_smay_name_or_time_kind=time_kind)
+        time_kind, try_resting_, to_show_timedelta
         ######################
         check_type_is(bool, flush4print)
         check_type_is(bool, to_postpone_KeyboardInterrupt_until_yield)
@@ -806,7 +838,7 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
             flush4print = True
         # ++kw:to_postpone_KeyboardInterrupt_until_yield => flush4print
         ######################
-        postpone = PostponeKeyboardInterrupt(whether_turnoff:=not to_postpone_KeyboardInterrupt_until_yield, may_prompt_string=prompt_string4postpone_KeyboardInterrupt_until_yield)
+        postpone = PostponeKeyboardInterrupt(whether_turnoff:=not to_postpone_KeyboardInterrupt_until_yield, may_prompt_string=prompt_string4postpone_KeyboardInterrupt_until_yield, to_ask=to_ask6postpone_KeyboardInterrupt_until_yield)
         ######################
         if end4print is None:
             may_end4print = None
@@ -834,10 +866,10 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 pass
         #取消:@20260121:++kw:P
         #@20250404:++kw:smay_kwd4supply_func4resting
-        arg_tpl = (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError)
+        arg_tpl = (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError, time_fmt, to_show_time_now)
         return arg_tpl
         #@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
-        return (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta)
+        return (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, time_fmt, to_show_time_now)
         #@20250118: ++kw:flush4print
         return (_postprocess, may_end4print, flush4print)
         return (_postprocess, may_end4print)
@@ -868,18 +900,26 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
         show_help();exit(0);
 
     (arg_tpl, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
-    (_postprocess, may_end4print, flush4print, postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError) = arg_tpl
+    (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError, time_fmt, to_show_time_now) = arg_tpl
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
     setting4prefix = _parse_payload4prefix(prefix, payload4prefix, may_end4print=may_end4print, flush4print=flush4print, also_stderr=also_stderr, to_reraise_BrokenPipeError=to_reraise_BrokenPipeError)
-    777;postpone, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta
+    777;postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, time_fmt, to_show_time_now
+    timer = get_timer_(time_kind, stdout_vs_stderr=True)
     to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
     kwds4extra = {smay_kwd4supply_func4resting:try_resting_} if smay_kwd4supply_func4resting else {}
 
     main_func = options4argparser_func_name_to_main_func(options4argparser, func_name)
     if not callable(main_func): raise AdhocArgParserError(func_name)
+    if to_show_time_now:
+        def show_time_now_():
+            print_err(aware_datetime2formatted_str_(time_fmt, get_now__aware_datetime_()))
+    else:
+        def show_time_now_():
+            pass
+    show_time_now_
   #end-if 1:
   with timer(prefix=f'total:', _to_show_=to_show_total_timedelta, _show_hint_on_enter_=False):
 
@@ -893,13 +933,21 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
         r = iter(r)
 
 
+        #######
+        #######
         #.Nothing = object()
         b_stop = False
         lineno = -1
         while not b_stop:
             lineno += 1
-            try_resting_()
+            if 0:
+                try_resting_()
+                    #old version:outside postpone
+                show_time_now_()
             with postpone, timer(prefix=f'{lineno}', _to_show_=to_show_timedelta, _show_hint_on_enter_=True):
+                try_resting_()
+                    #new version:inside postpone
+                show_time_now_()
                 #.x = next(r, Nothing)
                 #.if x is Nothing:break
                 try:
@@ -918,8 +966,13 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
                     if to_reraise_BrokenPipeError:
                         raise
                     b_stop = True
+                show_time_now_()
             #end-with postpone:
                 # ^KeyboardInterrupt@__exit__ if any && not whether_turnoff
+        #end-while not b_stop:
+        show_time_now_()
+        #######
+        #######
         #######
         #.with postpone:
         #.    for lineno, x in enumerate(r):

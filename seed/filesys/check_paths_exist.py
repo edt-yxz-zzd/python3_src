@@ -1,4 +1,5 @@
 
+#view ../../python3_src/seed/tiny_/check_path.py
 
 __all__ = ['check_paths_exist']
 

@@ -12,7 +12,7 @@ py -m nn_ns.app.doctest_cmd seed.math.polynomial.eval_polynomial.mk_polynomial_c
 
 
 '#'; __doc__ = r'#'
->>> from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import poly_evals__7native_
+>>> from seed.math.polynomial.eval_polynomial.eval_polynomial7native import poly_evals__7native_
 >>> from seed.algo.FFT.convolution import mk_ops4convolution7symbolic_FFT__5modulus_
 
 >>> modulus = 0
@@ -125,7 +125,6 @@ py_adhoc_call   seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_
 
 ]]]'''#'''
 __all__ = r'''
-mul7polynomial_
 mk_polynomial_coeffs5roots_
 mk_polynomial_coeffs5roots_on_geometric_progression_
 
@@ -138,58 +137,16 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
-    from seed.math.floor_ceil_tools.fc_log import ceil_log2, floor_log2
-    from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt
-    from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import iter_geometric_progression_
+    from seed.math.polynomial.eval_polynomial.mul7polynomial import mul7polynomial_
+    from seed.math.floor_ceil_tools.fc_log import floor_log2
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.math.polynomial.eval_polynomial.eval_polynomial7native import iter_geometric_progression_
     #def iter_geometric_progression_(mul_, B, T, /):
     from itertools import islice
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
-def _school_book_mul(opsX, coeffs8lhs, coeffs8rhs, /):
-    cs = opsX.acyclic_convolution__lenO_eq__7native_(len(coeffs8lhs) + len(coeffs8rhs), coeffs8lhs, coeffs8rhs)
-    cs.pop()
-    return cs
 
-def mul7polynomial_(opsX, coeffs8lhs, coeffs8rhs, /, *, auto_vs_native_vs_fancy=0):
-    r'''[[[
-    #########
-    # [opsX == (opsG|opsN)]
-    # [opsX :: (Ops4convolution7FFT|Ops4convolution7symbolic_FFT)]
-    #########
-    #]]]'''#'''
-    if not (coeffs8lhs and coeffs8rhs):
-        return []
-    check_uint_lt(3, auto_vs_native_vs_fancy)
-    zero = opsX.zero
-    if len(coeffs8lhs) > len(coeffs8rhs):
-        coeffs8lhs, coeffs8rhs = coeffs8rhs, coeffs8lhs
-    # [len(coeffs8lhs) <= len(coeffs8rhs)]
-    if auto_vs_native_vs_fancy == 0:
-        #auto:
-        native_vs_fancy = not len(coeffs8lhs) <= 2+len(coeffs8rhs).bit_length()
-    else:
-        # [auto_vs_native_vs_fancy <- {1,2}]
-        native_vs_fancy = not auto_vs_native_vs_fancy == 1
-
-    if not native_vs_fancy:
-        #native:
-        cs = _school_book_mul(opsX, coeffs8lhs, coeffs8rhs)
-    else:
-        # FFT:
-        sz = len(coeffs8lhs) + len(coeffs8rhs)
-        sz7zpow = 1<<ceil_log2(sz)
-        d = sz7zpow -sz
-        if d:
-            coeffs8rhs = [*coeffs8rhs, *[zero]*d]
-        assert sz7zpow == len(coeffs8lhs) + len(coeffs8rhs)
-        cs = opsX.acyclic_convolution__7commonAPI_(coeffs8lhs, coeffs8rhs)
-        del cs[sz-1:]
-    cs
-    return cs
-    while cs and cs[-1] == zero:
-        cs.pop()
-    return cs
 _default4min_len4recur = 32
     # <<== view ../../python3_src/seed/math/factor_pint/factor_pint__7batch_gcd_IIdiffs.py
 def mk_polynomial_coeffs5roots_(opsX, roots, /, *, min_len4recur=_default4min_len4recur):

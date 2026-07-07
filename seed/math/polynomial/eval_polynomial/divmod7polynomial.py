@@ -278,7 +278,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.check import check_type_is, check_int_ge
-    from seed.math.polynomial.eval_polynomial.mk_polynomial_coeffs5roots_ import mul7polynomial_
+    from seed.math.polynomial.eval_polynomial.mul7polynomial import mul7polynomial_
     #def mul7polynomial_(opsX, coeffs8lhs, coeffs8rhs, /, *, auto_vs_native_vs_fancy=0):
     from seed.debug.show_name_value_pairs_ import errshow_name_value_pairs_, show_name_value_pairs_, iter_name_value_pairs_, parse_xnms_
     from functools import reduce

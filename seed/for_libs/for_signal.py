@@ -100,9 +100,19 @@ Note on SIGPIPE
 ===
 ]]]
 
+[[
+test:mk_rest_func_ X to_postpone_KeyboardInterrupt_until_yield
+py_adhoc_call { +to_postpone_KeyboardInterrupt_until_yield +to_ask6postpone_KeyboardInterrupt_until_yield --prompt_string4postpone_KeyboardInterrupt_until_yield:$'\n\n...postpone...\n\n' --may_time_kind:system_wide  --may_args4PeriodicToilLeisureTime='(2,2)' --may_prompt_string6resting:$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  seed.for_libs.for_signal   ,_test__mk_rest_func_    --休眠期=2.0 --苏醒期=2.0 --time_kind:system_wide
+    #ok
+]]
+
+
+
+
 py_adhoc_call   seed.for_libs.for_signal   @f
 ]]]'''#'''
 __all__ = r'''
+OriginalContext4KeyboardInterrupt
 PostponeKeyboardInterrupt
 
 check_xhandler_or_whether_turnoff
@@ -110,11 +120,43 @@ check_xhandler
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.helper.repr_input import repr_helper
-from seed.debug.print_err import print_err
-from contextlib import AbstractContextManager
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.helper.repr_input import repr_helper
+    from seed.debug.print_err import print_err
+    from seed.helper.ask4bool import ask4bool_
+    from seed.for_libs.for_time import sleep9KeyboardInterrupt_, resting9KeyboardInterrupt_
+    #def sleep9KeyboardInterrupt_(emay_num_seconds7sleep, num_seconds7waking, /, *, smay_fmt4prompt7sleep='', smay_fmt4prompt7waking='', smay_prompt7wake=''):
+    #def resting9KeyboardInterrupt_(emay_num_seconds7sleep, num_seconds7waking, /):
+    from time import sleep #for:_test__mk_rest_func_
+    from seed.for_libs.for_time import mk_rest_func_
+    #def mk_rest_func_(休眠期, 苏醒期, /, *, time_kind='process_wide'):
+    #usage:
+    #   def f(..., 休眠期=0.0, 苏醒期=2.0, ...):
+    #       _rest = mk_rest_func_(休眠期, 苏醒期)
+    #       while ...:
+    #           777;_rest()
+
+    from seed.tiny_.check import check_type_is, check_callable, check_may_, check_bool, check_str
 import signal
+from contextlib import AbstractContextManager
 ___end_mark_of_excluded_global_names__0___ = ...
+
+def _test__mk_rest_func_(*, try_resting_=None, 休眠期=0.0, 苏醒期=2.0, time_kind='system_wide'):
+    if try_resting_ is None:
+        def try_resting_():pass
+    check_callable(try_resting_)
+    _rest = mk_rest_func_(休眠期, 苏醒期, time_kind=time_kind)
+    j = 0
+    while 1:
+        try_resting_()
+        777;_rest()
+        print('sleep(3):begin')
+        sleep(3)
+        print('sleep(3):end')
+        yield j
+        j += 1
+
 
 def check_xhandler(xhandler, /):
     if not (callable(xhandler) or xhandler is signal.SIG_IGN or xhandler is signal.SIG_DFL): raise TypeError
@@ -127,9 +169,24 @@ class PostponeKeyboardInterrupt(AbstractContextManager):
     # used in:view script/搜索冫某进制表达数乊多种进制解读皆为素数.py
     # used in:view script/搜索冫最短加链长度.py
     __slots__ = ()
-    def __init__(sf, xhandler_or_whether_turnoff=False, /, may_prompt_string=None):
-        args = (xhandler_or_whether_turnoff, may_prompt_string)
-        if not (may_prompt_string is None or type(may_prompt_string) is str):raise TypeError(type(may_prompt_string))
+    def __init__(sf, xhandler_or_whether_turnoff=False, /, may_prompt_string=None, to_ask=False):
+        # [to_ask :: (bool | ()->None|^KeyboardInterrupt/abort)]
+        args = (xhandler_or_whether_turnoff, may_prompt_string, to_ask)
+        if callable(to_ask):
+            ask_ = to_ask
+            to_ask = True
+        else:
+            ask_ = lambda:resting9KeyboardInterrupt_(..., 2.0)
+        ask_
+        check_callable(ask_)
+        check_bool(to_ask)
+        check_may_(check_str, may_prompt_string)
+        #if not (may_prompt_string is None or type(may_prompt_string) is str):raise TypeError(type(may_prompt_string))
+        if not to_ask:
+            args = args[:-1]
+            if None is may_prompt_string:
+                args = args[:-1]
+
         check_xhandler_or_whether_turnoff(xhandler_or_whether_turnoff)
         if xhandler_or_whether_turnoff is False:
             # [xhandler==SIG_IGN] <==> whether_turnoff==False]
@@ -138,6 +195,8 @@ class PostponeKeyboardInterrupt(AbstractContextManager):
         sf._tmay_prev = ()
         sf._b_interrupt = False
         sf._m_prompt = may_prompt_string
+        sf._to_ask = to_ask
+        sf._ask_ = ask_
         sf._args = args
     def __repr__(sf, /):
         return repr_helper(sf, *sf._args)
@@ -158,6 +217,19 @@ class PostponeKeyboardInterrupt(AbstractContextManager):
     def handler(sf, signum, frame, /):
         assert signum == signal.SIGINT
         #signame = signal.Signals(signum).name
+        ##################
+        ask_ = sf._ask_
+        while 1:
+            if ask4bool_('postpone?'):
+                break
+            elif ask4bool_('reset postpone state?'):
+                sf._b_interrupt = False
+            if ask4bool_('ignore KeyboardInterrupt?'):
+                return
+            if ask4bool_('extra_ask?'):
+                ask_()
+                    # ^KeyboardInterrupt
+        ##################
         off_or_xhdlr = sf._off_or_xhdlr
         if off_or_xhdlr is True: raise 000
         assert not off_or_xhdlr is False
@@ -229,6 +301,51 @@ PostponeKeyboardInterrupt()
 PostponeKeyboardInterrupt(False)
 PostponeKeyboardInterrupt(True)
 
+
+
+
+
+
+
+
+
+class OriginalContext4KeyboardInterrupt(AbstractContextManager):
+    'see: seed.for_libs.for_time.mk_rest_func_ #to avoid ignore{KeyboardInterrupt} caused by PostponeKeyboardInterrupt'
+    #used in ../../python3_src/seed/math/factor_pint/database4factors4cyclotomic_numbers.py
+    #testing:see:_test__mk_rest_func_
+    __slots__ = ()
+    def __init__(sf, handler=None, /):
+        sf._tmay_prev = ()
+        sf._args = () if handler is None else (handler,)
+        if handler is None:
+            #abort()?? :handler = signal.SIG_DFL
+            handler = signal.default_int_handler
+        sf._handler = handler
+    def __repr__(sf, /):
+        return repr_helper(sf, *sf._args)
+
+    #@override
+    def __enter__(sf, /):
+        '-> (prev_may_xhandler if not turnoff else False)'
+        if sf._tmay_prev:raise Exception('re-enter')
+        prev_may_xhandler = signal.signal(signal.SIGINT, sf._handler)
+        sf._tmay_prev = (prev_may_xhandler,)
+        return prev_may_xhandler
+
+    #@override
+    def __exit__(sf, exc_type, exc_value, traceback, /):
+        [prev_may_xhandler] = sf._tmay_prev
+        sf._tmay_prev = ()
+        _handler = signal.signal(signal.SIGINT, prev_may_xhandler)
+        if not sf._handler == _handler: raise 000
+
+        return None#reraise
+
+
+
+
+
 __all__
 from seed.for_libs.for_signal import PostponeKeyboardInterrupt
+from seed.for_libs.for_signal import OriginalContext4KeyboardInterrupt
 from seed.for_libs.for_signal import *

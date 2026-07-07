@@ -42,6 +42,8 @@ global lazy value
 
 grep 'Chinese_Remainder_Theorem' ../../python3_src/seed/ -r -l -I
 
+grep 'factor_Mersenne_number_into_prime2exp.py.cached.txt' ../../python3_src/seed/ -r -l -I
+DONE:grep 'eval_polynomial' ../../python3_src/seed/ -r -l -I
 
 DONE:grep 'pefect' ../../python3_src/seed/ -r -l -I
 DONE:grep 'seed\.tiny\>' ../../python3_src/seed/ -r -l -I
@@ -472,6 +474,43 @@ view ../../python3_src/seed/math/max_order_mod_.py
   from seed.math.Chinese_Remainder_Theorem import mk_CRT
 
 ]]
+[[
+DONE:
+grep 'eval_polynomial' ../../python3_src/seed/ -r -l -I
+view ../../python3_src/seed/algo/FFT/convolution.py
+view ../../python3_src/seed/algo/FFT/convolution__7CRT.py
+view ../../python3_src/seed/algo/rho_method__7iter.py
+
+
+view ../../python3_src/seed/math/factor_pint/factor_pint__7batch_gcd_IIdiffs.py
+view ../../python3_src/seed/math/mk_pows_.py
+
+view ../../python3_src/seed/math/polynomial/eval_polynomial/cyclotomic_polynomial.py
+view ../../python3_src/seed/math/polynomial/eval_polynomial/divmod7polynomial.py
+view ../../python3_src/seed/math/polynomial/eval_polynomial/mk_polynomial_coeffs5roots_.py
+view ../../python3_src/seed/math/polynomial/eval_polynomial/mul7polynomial.py
+    from seed.math.polynomial.eval_polynomial.mul7polynomial import mul7polynomial_
+
+view ../../python3_src/seed/math/polynomial/eval_polynomial/eval_polynomial_on_geometric_progression.py
+view ../../python3_src/seed/math/polynomial/eval_polynomial/eval_polynomial7native.py
+from seed.math.polynomial.eval_polynomial.eval_polynomial7native import poly_eval_, iter_poly_evals__7native_, poly_evals__7native_
+from seed.math.polynomial.eval_polynomial.eval_polynomial7native import iter_poly_evals__on_geometric_progression__7native_, iter_geometric_progression_, poly_evals__on_geometric_progression__7native_
+from seed.math.polynomial.eval_polynomial.eval_polynomial7native import iter_geometric_progression_
+]]
+[[
+grep 'factor_Mersenne_number_into_prime2exp.py.cached.txt' ../../python3_src/seed/ -r -l -I
+grep 'factor_Mersenne_number_into_prime2exp.py.cached.txt' ../../python3_src/nn_ns/math_nn/ -r -l -I
+grep 'factor_Mersenne_number_into_prime2exp.py.cached.txt' ./script/ -r -l -I
+
+view ./script/parse_html_of_integer_factor_result_at_factordb_com.py
+view ./script/辅助冫有限域本原根判定.py
+view ./script/辅助冫有限域本原根判定牜数据收集.py
+  _primes5p2e6doc
+    #九千四百多行
+
+]]
+
+
 
 
 

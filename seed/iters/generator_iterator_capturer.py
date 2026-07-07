@@ -72,6 +72,8 @@ class GeneratorIteratorCapturer:
             either = (True, result)
 
             sf._may_either = either
+            #bug:miss:re-raise
+            raise
         except Exception as exc:
             either = (False, exc)
             sf._may_either = either

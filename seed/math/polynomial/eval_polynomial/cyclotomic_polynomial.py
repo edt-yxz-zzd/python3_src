@@ -13,6 +13,11 @@ view others/数学/polynomial/polynomial_evaluation.txt
 view ../../python3_src/seed/algo/FFT/convolution__7CRT.py
 ]]
 [[
+[p::prime][k::uint{>0}][x :<- FF(p**k)]:
+    [x**(p**k) == x]
+    [x*(-1+x**(-1+p**k)) == 0]
+]]
+[[
 @20260620
 [n>=1]:
   cyclotomic polynomial
@@ -98,7 +103,7 @@ iter_cyclotomic_polynomials__sorted_by_degree_
 
 view ../../python3_src/seed/math/factor_pint/factor_pint__7batch_gcd_IIdiffs.py
 >>> from math import gcd
->>> from seed.math.polynomial.eval_polynomial.eval_polynomial_on_geometric_progression import poly_eval_
+>>> from seed.math.polynomial.eval_polynomial.eval_polynomial7native import poly_eval_
 >>> #def poly_eval_(add_, mul_, zero, coeffs8poly, x, /):
 
 factor 1207
@@ -113,8 +118,107 @@ True
 True
 
 
+[[
+>>> repr_polynomial6ZZ_8PARI_GP_([])
+'0'
+>>> repr_polynomial6ZZ_8PARI_GP_([1])
+'1'
+>>> repr_polynomial6ZZ_8PARI_GP_([2])
+'2'
+>>> repr_polynomial6ZZ_8PARI_GP_([-1])
+'-1'
+>>> repr_polynomial6ZZ_8PARI_GP_([-2])
+'-2'
+
+>>> repr_polynomial6ZZ_8PARI_GP_([1,1])
+'x + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,2])
+'2*x + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,-1])
+'-x + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,-2])
+'-2*x + 1'
+
+>>> repr_polynomial6ZZ_8PARI_GP_([0,1])
+'x'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,1])
+'x + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([2,1])
+'x + 2'
+>>> repr_polynomial6ZZ_8PARI_GP_([-1,1])
+'x - 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([-2,1])
+'x - 2'
+
+>>> repr_polynomial6ZZ_8PARI_GP_([1,0,1])
+'x^2 + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,1,1])
+'x^2 + x + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,2,1])
+'x^2 + 2*x + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,-1,1])
+'x^2 - x + 1'
+>>> repr_polynomial6ZZ_8PARI_GP_([1,-2,1])
+'x^2 - 2*x + 1'
 
 
+
+
+
+]]
+
+[[
+view others/app/termux/help/gp-example.txt
+分圆多项式:
+pari-gp:
+? ?polcyclo
+polcyclo(n,{a = 'x}): n-th cyclotomic polynomial evaluated at a.
+
+? polcyclo(2^4*3^3*5^2*7)
+%1 = x^17280 - x^16920 + x^16560 + x^15480 - x^15120 + 2*x^14760 - x^14400 + x^14040 + x^12960 - x^12600 + x^12240 - x^11880 + x^11520 - x^11160 - x^10080 - x^9360 - x^8640 - x^7920 - x^7200 - x^6120 + x^5760 - x^5400 + x^5040 - x^4680 + x^4320 + x^3240 - x^2880 + 2*x^2520 - x^2160 + x^1800 + x^720 - x^360 + 1
+>>> from seed.math.polynomial.eval_polynomial.repr_polynomial8dict import exp2coeff_to_exp2nonzero_coeff_
+>>> cs = cyclotomic_polynomial5order_({}, 2**4 *3**3 *5**2 *7, [2,3,5,7])
+>>> exp2coeff_to_exp2nonzero_coeff_(None, cs)
+{0: 1, 360: -1, 720: 1, 1800: 1, 2160: -1, 2520: 2, 2880: -1, 3240: 1, 4320: 1, 4680: -1, 5040: 1, 5400: -1, 5760: 1, 6120: -1, 7200: -1, 7920: -1, 8640: -1, 9360: -1, 10080: -1, 11160: -1, 11520: 1, 11880: -1, 12240: 1, 12600: -1, 12960: 1, 14040: 1, 14400: -1, 14760: 2, 15120: -1, 15480: 1, 16560: 1, 16920: -1, 17280: 1}
+>>> repr_polynomial6ZZ_8PARI_GP_(cs)
+'x^17280 - x^16920 + x^16560 + x^15480 - x^15120 + 2*x^14760 - x^14400 + x^14040 + x^12960 - x^12600 + x^12240 - x^11880 + x^11520 - x^11160 - x^10080 - x^9360 - x^8640 - x^7920 - x^7200 - x^6120 + x^5760 - x^5400 + x^5040 - x^4680 + x^4320 + x^3240 - x^2880 + 2*x^2520 - x^2160 + x^1800 + x^720 - x^360 + 1'
+
+
+view ../../python3_src/seed/math/factor_pint/database4factors4cyclotomic_numbers.py.default.db
+2:3:[7]
+2:21:[7, 337]
+2:147:[7, 2741672362528725535068727]
+2:1029:[7, 6896727944023, 2714819157586383751, 3274162442129276091367, 5878920553871871291270984955318098156844648537, 401566612311195594802501193435220042560698926924429408065263999053481174119481]
+
+? polcyclo(21)
+%1 = x^12 - x^11 + x^9 - x^8 + x^6 - x^4 + x^3 - x + 1
+? polcyclo(21*7)
+%2 = x^84 - x^77 + x^63 - x^56 + x^42 - x^28 + x^21 - x^7 + 1
+? polcyclo(21*7*7)
+%3 = x^588 - x^539 + x^441 - x^392 + x^294 - x^196 + x^147 - x^49 + 1
+? polcyclo(3)
+%4 = x^2 + x + 1
+? divrem(polcyclo(21), polcyclo(3))
+%6 = [x^10 - 2*x^9 + x^8 + 2*x^7 - 4*x^6 + 2*x^5 + 3*x^4 - 5*x^3 + x^2 + 5*x - 6, 7]~
+    # => [gcd==7]仅限于[x==2]
+    #   3:3:[13]
+    #   3:21:[368089]
+
+>>> exp2coeff_to_exp2nonzero_coeff_(None, cs:=cyclotomic_polynomial5order_({}, 21, [3,7]))
+{0: 1, 1: -1, 3: 1, 4: -1, 6: 1, 8: -1, 9: 1, 11: -1, 12: 1}
+>>> repr_polynomial6ZZ_8PARI_GP_(cs)
+'x^12 - x^11 + x^9 - x^8 + x^6 - x^4 + x^3 - x + 1'
+>>> exp2coeff_to_exp2nonzero_coeff_(None, cs:=cyclotomic_polynomial5order_({}, 147, [3,7]))
+{0: 1, 7: -1, 21: 1, 28: -1, 42: 1, 56: -1, 63: 1, 77: -1, 84: 1}
+>>> repr_polynomial6ZZ_8PARI_GP_(cs)
+'x^84 - x^77 + x^63 - x^56 + x^42 - x^28 + x^21 - x^7 + 1'
+>>> exp2coeff_to_exp2nonzero_coeff_(None, cs:=cyclotomic_polynomial5order_({}, 1029, [3,7]))
+{0: 1, 49: -1, 147: 1, 196: -1, 294: 1, 392: -1, 441: 1, 539: -1, 588: 1}
+>>> repr_polynomial6ZZ_8PARI_GP_(cs)
+'x^588 - x^539 + x^441 - x^392 + x^294 - x^196 + x^147 - x^49 + 1'
+
+
+]]
 
 
 
@@ -265,6 +369,9 @@ iter_exceptional_cyclotomic_polynomials__sorted_by_
     iter_cyclotomic_polynomials__sorted_by_
         iter_cyclotomic_polynomials__sorted_by_degree_
         iter_cyclotomic_polynomials__sorted_by_order_
+
+
+repr_polynomial6ZZ_8PARI_GP_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -284,9 +391,56 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.prime_sieve.sieve_ge_le import iter_sieve4prime_factorizations_ge_lt_
     from seed.math.valence_of_Euler_function import list_inv_phi_
     from seed.debug.print_err import print_err
+    from seed.math.polynomial.eval_polynomial.repr_polynomial8dict import exp2coeff_to_exp2nonzero_coeff_
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
+
+def repr_polynomial6ZZ_8PARI_GP_(cs, /, *, str8op4pow='^', nm8var='x'):
+    eq_zero_ = None
+    def __():
+        j2c = exp2coeff_to_exp2nonzero_coeff_(eq_zero_, cs)
+        if not j2c:
+            yield '0'
+            return
+        j_c_pairs = sorted(j2c.items(), reverse=True)
+        b_fst = True
+        for j, c in j_c_pairs:
+            sign = '-+'[c > 0]
+            u = abs(c)
+            if u == 1:
+                s4u = ''
+            else:
+                s4u = str(u)
+            s4u
+            if j == 0:
+                s4xs = ''
+            elif j == 1:
+                s4xs = nm8var
+            else:
+                s4xs = f'{nm8var}{str8op4pow}{j}'
+            s4xs
+            match (s4u, s4xs):
+                case ('', ''):
+                    s4uxs = '1'
+                case ('', _):
+                    s4uxs = s4xs
+                case (_, ''):
+                    s4uxs = s4u
+                case _:
+                    s4uxs = f'{s4u}*{s4xs}'
+            s4uxs
+            if not b_fst:
+                yield sign
+                yield s4uxs
+            else:
+                b_fst = False
+                if sign == '-':
+                    yield sign+s4uxs
+                else:
+                    yield s4uxs
+    return ' '.join(__())
+
 
 if 0:
     _0_opsN = ...
@@ -466,6 +620,7 @@ def _mul_order4var77polynomial7native_(cs, /, *, expected=0):
 
 __all__
 from seed.math.polynomial.eval_polynomial.cyclotomic_polynomial import cyclotomic_polynomial5order_
+#def cyclotomic_polynomial5order_(cache, N, may_p2e4N_or_ps4N_or_factor_pint_func, /):
 
 from seed.math.polynomial.eval_polynomial.cyclotomic_polynomial import iter_exceptional_cyclotomic_polynomials__sorted_by_
 
