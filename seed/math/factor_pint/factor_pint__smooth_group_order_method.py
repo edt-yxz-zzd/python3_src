@@ -122,6 +122,60 @@ page248[259/604]
 
 
 
+>>> factor_pint__smooth_group_order_method7Qpp_(2, 0,  2,2, more_info=True)
+(-99002, None, '[n==2]')
+>>> factor_pint__smooth_group_order_method7Qpp_(4, 0,  2,2, more_info=True)
+(99002, 2, '[n>2][n%2==0]')
+>>> factor_pint__smooth_group_order_method7Qpp_(6, 0,  2,2, more_info=True)
+(99002, 2, '[n>2][n%2==0]')
+>>> factor_pint__smooth_group_order_method7Qpp_(3, 0,  2,2, more_info=True)
+(-99003, None, '[2 <= n < 9][n%2==1]')
+>>> factor_pint__smooth_group_order_method7Qpp_(5, 0,  2,2, more_info=True)
+(-99003, None, '[2 <= n < 9][n%2==1]')
+>>> factor_pint__smooth_group_order_method7Qpp_(7, 0,  2,2, more_info=True)
+(-99003, None, '[2 <= n < 9][n%2==1]')
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 0,  2,2)
+0
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 1,  2,2)
+3
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 2,  2,2)
+-1
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 3,  2,2)
+3
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 4,  2,2)
+3
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 5,  2,2)
+3
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 6,  2,2)
+3
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 7,  2,2)
+-1
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 8,  2,2)
+3
+
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 1,  2,2, more_info=True)
+(99001, 3, 'from:gcd(D,n) or gcd(B-2,n)')
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 2,  2,2, more_info=True)
+(-99001, None, '[D%n == 0]')
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 3,  2,2, more_info=True) #doctest: +ELLIPSIS
+(10, 3, (((1, (-1, -3)), ('stage1', (0, (0, 1)), (0, (0, Reproduceable7tmay_prev_oresult(((0, 1),), ...), -1), (1, Reproduceable7tmay_prev_oresult(((-1, -3),), ...), 0)))),))
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 4,  2,2, more_info=True)
+(99001, 3, 'from:gcd(D,n) or gcd(B-2,n)')
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 5,  2,2, more_info=True)
+(99001, 3, 'from:gcd(D,n) or gcd(B-2,n)')
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 6,  2,2, more_info=True) #doctest: +ELLIPSIS
+(10, 3, (((1, (-1, 3)), ('stage1', (0, (0, 1)), (0, (0, Reproduceable7tmay_prev_oresult(((0, 1),), ...), -1), (1, Reproduceable7tmay_prev_oresult(((-1, 3),), ...), 0)))),))
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 7,  2,2, more_info=True)
+(-99001, None, '[D%n == 0]')
+>>> factor_pint__smooth_group_order_method7Qpp_(9, 8,  2,2, more_info=True)
+(99001, 3, 'from:gcd(D,n) or gcd(B-2,n)')
+
+
+
+
+
+
+
 >>> #factor_pint__smooth_group_order_method7Qpp_(7*31, 9,  2,2, bound4pow4stage1=16) #old:31
 >>> #factor_pint__smooth_group_order_method7Qpp_(7*31, 9,  2,2, bound4pow4stage1=15) #old:0
 >>> factor_pint__smooth_group_order_method7Qpp_(7*31, 9,  2,2, more_info=True)
@@ -157,9 +211,9 @@ page248[259/604]
 
 >>> factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  4,4) # !! [2,2,3]
 (3,)
->>> factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  3,3) # !! [2,3] #old: (2,)  #why???
+>>> factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  3,3) # !! [2,3] #old: (2,)  #why???  #bug_fixed_1:goto
 0
->>> factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  2,3) # !! [2]++[3] #old: (1, 2)  #why???
+>>> factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  2,3) # !! [2]++[3] #old: (1, 2)  #why???  #bug_fixed_1:goto
 0
 
 >>> factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  3,3, more_info=True, _debug7list_all=True) # !! [2,3] #doctest: +ELLIPSIS
@@ -375,9 +429,11 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='11*23' =16   =3 =3
     0
     #???old:(2,) # <<== [2,3]
+    #bug_fixed_1:goto
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='11*23' =16   =2 =3
     0
     #???old:(1, 2) # <<== [2]++[3]
+    #bug_fixed_1:goto
 
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,_iter_search4factor_pint__smooth_group_order_method7Qpp_  ='11*23' ='range(11*23)'   =4 =4
     (0, (2,))
@@ -778,7 +834,15 @@ def _iter_search(f, n, u0s, /, *args, **kwds):
 def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage2=None, /, *, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537, _debug7list_all=False, **kwds):
     '-> ((offset1, offset2)/{#found-factor-of-(P-1|P+1) at stage2#}|(offset1,)/{#found-factor-of-(P-1|P+1) at stage1#}|-1/{#[(u0**2-4)%n==0]#}||0/{#fail#}|nontrivial_factor/uint{>0}) # (P+1) method'
     check_int_ge(2, n)
+    if n&1 == 0:
+        if n == 2:
+            return 0 if not more_info else (-99002, None, '[n==2]')
+        return 2 if not more_info else (+99002, 2, '[n>2][n%2==0]')
+    if n < 9:
+        return 0 if not more_info else (-99003, None, '[2 <= n < 9][n%2==1]')
+    check_int_ge(9, n)
     if not n&1 == 1:raise ValueError
+    # [n >= 9][n%2==1] # n_is_odd_ge9
     check_type_is(int, u0)
     check_int_ge(1, bound4stage1)
     check_int_ge(1, bound4pow4stage1)
@@ -792,6 +856,7 @@ def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage
     hrem4N_ = mk_hrem_(n)
     one = (1, 0)
     pt0 = (0, 1)
+    # [norm(pt0) == 1]
     B = hrem4N_(u0)
     ######################
     D = hrem4N_(B**2-4)
@@ -831,6 +896,17 @@ def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage
         (a, b) = ab
         return (hrem4N_(a-1), b)
     def detect_(ab, /):
+        # !! [norm(pt0) == 1]
+        # !! [ab == (-one+pt0**exp)]
+        # [norm(one+ab) == 1]
+        # [(a, b) := ab]
+        # [a1 := 1+a]
+        # [1 == norm(a1+b*X) == (a1**2-B*a1*b+1*b**2)]
+        # [[b==0] -> [abs(1+a) == 1]]
+        # [[b==0] -> [(1+a) <- {-1,+1}]]
+        # [[b==0] -> [a <- {-2,0}]]
+        # [[a==0] -> [b <- {-1,+1}]]
+
         #(a, b) = ab
         us = tuple(filter(bool, ab))
         match us:
@@ -854,8 +930,14 @@ def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage
                 return (+1, None)
             case [u]:
                 #[u] = filter(bool, ab)
+                # !! [[b==0] -> [a <- {-2,0}]]
+                # !! [[a==0] -> [b <- {-1,+1}]]
+                # !! [n >= 9][n%2==1] # n_is_odd_ge9
+                # [ab <- {(-2,0), (0,-1), (0,+1)}]
                 v = gcd(u, n)
                 if v == 1: return (-1, None)
+                assert ab in [(-2,0), (0,-1), (0,+1)], (n, ab, u, v)
+                raise 000
                 if 1 < v < n: return (0, v)
                 assert -n < u < n, (n, u)
                 assert not 0 == u, (n, u)
@@ -864,6 +946,20 @@ def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage
             case _:
                 raise 000
         raise 000
+        r'''[[[
+        factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  3,3) # !! [2,3] #old: (2,)  #why???
+        factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  2,3) # !! [2]++[3] #old: (1, 2)  #why???
+        #bug_fixed_1:here
+        why?
+            since:
+                ... ...
+                for x in ab:
+                    _v = gcd(x, n)
+                    ...
+                    if _v == 1:
+                        v == 1 #bug!!!
+                if v == n: return (+1, None)
+        #]]]'''#'''
     detect_
     def mul_(ab, cd, /):
         #环乘冫二维剩余环扌
