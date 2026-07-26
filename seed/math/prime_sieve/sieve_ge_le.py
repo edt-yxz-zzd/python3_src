@@ -77,6 +77,10 @@ TypeError: 100
 Traceback (most recent call last):
     ...
 TypeError: 9
+>>> check_args4core_sieve_interval__ge_le(2, 3) # [2 < 10]
+Traceback (most recent call last):
+    ...
+TypeError: 2
 
 >>> check_args4sieve_interval__ge_lt(10, 14)
 >>> check_args4sieve_interval__ge_lt(10, 10000)
@@ -95,6 +99,11 @@ Traceback (most recent call last):
     ...
 TypeError: (1, 1)
 >>> check_args4sieve_interval__ge_lt(1, 2)
+>>> check_args4sieve_interval__ge_lt(2, 4)
+>>> check_args4sieve_interval__ge_lt(2, 3) # !!!!!!!not assume prime ...!!!!!!!
+Traceback (most recent call last):
+    ...
+TypeError: (2, 3)
 
 
 calc_min_end5begin6args4sieve_interval_
@@ -301,6 +310,12 @@ TypeError: reverse and None is may_max1_u7whole
 >>> [*reverse_iter_sieve4primes_lt_(42)]
 [41, 37, 31, 29, 23, 19, 17, 13, 11, 7, 5, 3, 2]
 
+>>> [*iter_sieve4primes_ge_lt_(2, 3)]
+[2]
+
+Traceback (most recent call last):
+    ...
+TypeError: (2, 3)
 
 
 
@@ -923,6 +938,7 @@ def to_std_args4core_sieve_interval__ge_le(min_u, emay_max_u, /):
     else:
         max_u = emay_max_u
     return (min_u, max_u)
+#def iter_primes__old_ver_=iter_all_strict_sorted_primes_(*, size=None, end=None, may_primes=None):
 def iter_primes__new_ver_():
     '-> Iter prime'
     return iter_sieve4primes_ge_(0)
@@ -949,6 +965,11 @@ def reverse_iter_sieve4prime_chunks_lt_(max1_u, /, *, with_interval=False):
     return iter_sieve4prime_chunks_ge_lt_(0, max1_u, with_interval=with_interval, reverse=True)
 def iter_sieve4prime_chunks_ge_lt_(min_u7whole, may_max1_u7whole, /, *, with_interval=False, reverse=False):
     'min_u7whole/uint -> may max1_u7whole/uint -> Iter [prime{>=min_u}]'
+    check_int_ge(0, min_u7whole)
+    if 1:
+        # !! [fail:check_args4sieve_interval__ge_lt(2,3)]
+        if min_u7whole <= 2:
+            min_u7whole = 0
     for begin, end in iter_best_interval5big_interval6args4sieve_interval_(min_u7whole, may_max1_u7whole, reverse=reverse):
         chunk = sieve_interval4primes__ge_lt(begin, end)
         yield chunk if not with_interval else ((begin, end), chunk)
@@ -1055,7 +1076,10 @@ def iter_sieve4prime_factorization_chunks_ge_lt_(min_u7whole, may_max1_u7whole, 
 def sieve_interval4primes__ge_lt(min_u, emay_max1_u, /):
     'min_u -> emay max1_u -> primes/[uint]{len<=max1_u-min_u} # [[0 == min_u <= max1_u] or [[1 <= min_u < max1_u][(max1_u-min_u)**2 >= -1+max1_u]]]'
     (min_u, max1_u) = to_std_args4sieve_interval__ge_lt(min_u, emay_max1_u)
-    check_args4sieve_interval__ge_lt(min_u, max1_u)
+    if 1:
+        # !! [fail:check_args4sieve_interval__ge_lt(2,3)]
+        min_u = 0 if min_u <= 2 else min_u
+        777;check_args4sieve_interval__ge_lt(min_u, max1_u)
     if min_u >= 10 and max1_u <= 10*min_u:
         ps = core_sieve4primes__ge_le(min_u, max_u:=-1+max1_u, _mk=list)
     else:

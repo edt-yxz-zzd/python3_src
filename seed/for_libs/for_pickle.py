@@ -9,6 +9,22 @@ py -m nn_ns.app.debug_cmd   seed.for_libs.for_pickle -x
 py -m nn_ns.app.doctest_cmd seed.for_libs.for_pickle:__doc__ -ht
 
 
+
+
+py_adhoc_call   seed.for_libs.for_pickle   @f
+from seed.for_libs.for_pickle import *
+#]]]'''
+__all__ = r'''
+SafeUnpickler
+    safe_unpickle_loads
+    safe_unpickle_load
+
+'''.split()#'''
+
+
+r'''[[[
+[[[[[[[
+===
 [[
 "pickle" module **is not secure**.
     <<==:
@@ -1449,16 +1465,10 @@ See also:
 
 
 ]]]
+===
+]]]]]]]
 
-py_adhoc_call   seed.for_libs.for_pickle   @f
-from seed.for_libs.for_pickle import *
-#]]]'''
-__all__ = r'''
-SafeUnpickler
-    safe_unpickle_loads
-    safe_unpickle_load
-
-'''.split()#'''
+#]]]'''#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 import builtins

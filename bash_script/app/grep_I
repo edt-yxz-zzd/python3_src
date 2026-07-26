@@ -1,0 +1,5 @@
+grep -I "$@"
+
+#   -I     Process a binary file as if it did not contain matching data; this is equivalent to the --binary-files=without-match option.
+#eg:grep -F 'FreeLocalBatchRouter4py' ../../python3_src/seed/ -r -I -l
+

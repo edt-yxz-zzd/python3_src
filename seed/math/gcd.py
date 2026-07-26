@@ -49,6 +49,9 @@ from math import gcd as py_std_gcd
 #import functools # reduce
 
 def are_coprime__using_py_std_gcd_(a, b, /):
+    if a&1 == 0 == b&1:
+        # (even, even) # (0, 0)
+        return False
     return 1 == py_std_gcd(a, b)
 gcd = py_std_gcd or gcd_via_halve_
 are_coprime = are_coprime__using_py_std_gcd_ or are_coprime__detect_via_halve_

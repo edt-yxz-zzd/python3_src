@@ -4,27 +4,42 @@ e ../../python3_src/seed/math/prime_sieve/README.txt
 main_exports:
 
 PrimeList
+PrimeList7ge_lt
 
 iter_primes_
 iter_sieve4primes_ge_lt_
 iter_sieve4prime_factorizations_ge_lt_
+iter_primes__ge_lt_
 
 list_primes__len_ge_
 list_primes__lt_
 tabulate_may_prime_factorization4uint_lt_
+list_primes__ge_lt_
 
 ]]
-from seed.math.prime_sieve.PrimeList import PrimeList
+from seed.math.prime_sieve.PrimeList import PrimeList, PrimeList7ge_lt
 from seed.math.prime_sieve.sieve_ge_le import iter_primes_, iter_sieve4primes_ge_lt_, iter_sieve4prime_factorizations_ge_lt_
 from seed.math.prime_sieve.sieve_lt import list_primes__lt_, list_primes__len_ge_, tabulate_may_prime_factorization4uint_lt_
+from seed.math.prime_sieve.primes_ge_lt import list_primes__ge_lt_, iter_primes__ge_lt_, iter_filter4primes_ge_lt_
 
+
+[[
+view ../../python3_src/seed/math/prime_sieve/primes_ge_lt.py
+切换使用:
+    iter_sieve4primes_ge_lt_
+    iter_filter4primes_ge_lt_
+]]
 
 [[
 view ../../python3_src/seed/math/prime_sieve/PrimeList.py
 ===
-#筛多次:使用:iter_sieve4primes_ge_lt_
-#数组式用法:缓存结果，但不同于此前prime_gen，不再保存全局对象，若要需要则传递局部变量
 PrimeList
+  #筛多次:使用:iter_sieve4primes_ge_lt_
+  #数组式用法:缓存结果，但不同于此前prime_gen，不再保存全局对象，若要需要则传递局部变量
+===
+PrimeList7ge_lt
+  #immutable
+  #init via list_primes__ge_lt_()
 ===
 ]]
 [[

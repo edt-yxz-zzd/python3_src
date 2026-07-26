@@ -1,6 +1,8 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/polynomial/eval_polynomial/cyclotomic_polynomial.py
+see:
+    pari-gp: polcyclo
 
 seed.math.polynomial.eval_polynomial.cyclotomic_polynomial
 py -m nn_ns.app.debug_cmd   seed.math.polynomial.eval_polynomial.cyclotomic_polynomial -x # -off_defs
@@ -349,6 +351,47 @@ py_adhoc_call { +lineno }  seed.math.polynomial.eval_polynomial.cyclotomic_polyn
 19:(18, 19, {19: 1}, (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
 20:(18, 38, {2: 1, 19: 1}, (1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1))
 ===
+py_adhoc_call { +lineno }  seed.math.polynomial.eval_polynomial.cyclotomic_polynomial   ,stable_repr.20:iter_cyclotomic_polynomials__sorted_by_ ='{}' -degree_vs_order +with_degree +with_order +with_factorization4order -squarefree_order_only
+1:(1, 1, {}, (-1, 1))
+2:(1, 2, {2: 1}, (1, 1))
+3:(2, 3, {3: 1}, (1, 1, 1))
+4:(2, 4, {2: 2}, (1, 0, 1))
+5:(2, 6, {2: 1, 3: 1}, (1, -1, 1))
+6:(4, 5, {5: 1}, (1, 1, 1, 1, 1))
+7:(4, 8, {2: 3}, (1, 0, 0, 0, 1))
+8:(4, 10, {2: 1, 5: 1}, (1, -1, 1, -1, 1))
+9:(4, 12, {2: 2, 3: 1}, (1, 0, -1, 0, 1))
+10:(6, 7, {7: 1}, (1, 1, 1, 1, 1, 1, 1))
+11:(6, 9, {3: 2}, (1, 0, 0, 1, 0, 0, 1))
+12:(6, 14, {2: 1, 7: 1}, (1, -1, 1, -1, 1, -1, 1))
+13:(6, 18, {2: 1, 3: 2}, (1, 0, 0, -1, 0, 0, 1))
+14:(8, 15, {3: 1, 5: 1}, (1, -1, 0, 1, -1, 1, 0, -1, 1))
+15:(8, 16, {2: 4}, (1, 0, 0, 0, 0, 0, 0, 0, 1))
+16:(8, 20, {2: 2, 5: 1}, (1, 0, -1, 0, 1, 0, -1, 0, 1))
+17:(8, 24, {2: 3, 3: 1}, (1, 0, 0, 0, -1, 0, 0, 0, 1))
+18:(8, 30, {2: 1, 3: 1, 5: 1}, (1, 1, 0, -1, -1, -1, 0, 1, 1))
+19:(10, 11, {11: 1}, (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+20:(10, 22, {2: 1, 11: 1}, (1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1))
+===
+PARI-GP:
+? polcyclo(4,'p)
+p^2 + 1
+? polcyclo(3,'p)
+p^2 + p + 1
+? polcyclo(6,'p)
+p^2 - p + 1
+? polcyclo(5,'p)
+p^4 + p^3 + p^2 + p + 1
+? polcyclo(12,'p)
+p^4 - p^2 + 1
+? polcyclo(9,'p)
+p^6 + p^3 + 1
+? polcyclo(8,'p)
+p^4 + 1
+? polcyclo(10,'p)
+p^4 - p^3 + p^2 - p + 1
+===
+
 ]]
 [[
 ===

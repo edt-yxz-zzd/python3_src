@@ -221,6 +221,90 @@ SeqSliceView([(2, 1), (3, 0), (5, 4), (7, 5), (11, 9)], range(2, 4))
 
 
 
+>>> ps = PrimeList7ge_lt(3, 3)
+>>> ps
+PrimeList7ge_lt(3, 3)
+>>> len(ps)
+0
+>>> [*iter(ps)]
+[]
+>>> ps = PrimeList7ge_lt(3, 4)
+>>> ps
+PrimeList7ge_lt(3, 4)
+>>> len(ps)
+1
+>>> [*iter(ps)]
+[3]
+
+>>> ps = PrimeList7ge_lt(0, 10)
+>>> ps
+PrimeList7ge_lt(0, 10)
+>>> len(ps)
+4
+>>> [*iter(ps)]
+[2, 3, 5, 7]
+>>> [*reversed(ps)]
+[7, 5, 3, 2]
+>>> ps[:]
+(2, 3, 5, 7)
+>>> ps[2]
+5
+>>> ps[1:3]
+(3, 5)
+
+
+
+>>> ps.interval
+(0, 10)
+>>> ps == ps
+True
+>>> ps == PrimeList7ge_lt(0, 10)
+True
+>>> ps == PrimeList7ge_lt(1, 10)
+False
+>>> ps == PrimeList7ge_lt(0, 9)
+False
+>>> {ps}
+{PrimeList7ge_lt(0, 10)}
+
+
+
+>>> import pickle
+>>> pickle.dumps((0xFFff_FFff, 0xFEfe_FEfe))
+b'\x80\x04\x95\x11\x00\x00\x00\x00\x00\x00\x00\x8a\x05\xff\xff\xff\xff\x00\x8a\x05\xfe\xfe\xfe\xfe\x00\x86\x94.'
+>>> pickle.dumps(ps.interval)
+b'\x80\x04\x95\x07\x00\x00\x00\x00\x00\x00\x00K\x00K\n\x86\x94.'
+>>> bs = pickle.dumps(ps)
+>>> bs
+b'\x80\x04\x95?\x00\x00\x00\x00\x00\x00\x00\x8c\x1fseed.math.prime_sieve.PrimeList\x94\x8c\x0fPrimeList7ge_lt\x94\x93\x94K\x00K\n\x86\x94\x81\x94.'
+>>> _ps = pickle.loads(bs)
+>>> _ps
+PrimeList7ge_lt(0, 10)
+>>> _ps == ps
+True
+>>> _ps is ps
+True
+
+
+>>> ps7big = PrimeList7ge_lt(2, 1000)
+>>> bs7big = pickle.dumps(ps7big)
+>>> bs7big # proof:[not save ps7big.primes]
+b'\x80\x04\x95@\x00\x00\x00\x00\x00\x00\x00\x8c\x1fseed.math.prime_sieve.PrimeList\x94\x8c\x0fPrimeList7ge_lt\x94\x93\x94K\x02M\xe8\x03\x86\x94\x81\x94.'
+>>> _ps7big = pickle.loads(bs7big)
+>>> _ps7big
+PrimeList7ge_lt(2, 1000)
+>>> _ps7big == ps7big
+True
+>>> _ps7big is ps7big
+True
+
+
+
+
+
+
+
+
 
 py_adhoc_call   seed.math.prime_sieve.PrimeList   @f
 ]]]'''#'''
@@ -228,9 +312,12 @@ __all__ = r'''
 PrimeList
 DivmodOverPrimeList
 ModOverPrimeList
+PrimeList7ge_lt
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+#.#################################
+from collections.abc import Sequence
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
@@ -245,6 +332,8 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.types.view.SeqSliceView import SeqSliceView
     from seed.types.view.View import SeqView
 
+    from seed.math.prime_sieve.primes_ge_lt import list_primes__ge_lt_
+    from weakref import WeakValueDictionary
 
 
 
@@ -607,6 +696,79 @@ class ModOverPrimeList(_OverPrimeList):
 
 
 
+
+class PrimeList7ge_lt(Sequence):
+    r''
+    r'''[[[
+    used in:
+        view ../../python3_src/seed/math/primality_test/reproduceable7probable_primes.py
+            view ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_method.py
+    #]]]'''#'''
+    #_wk2st = WeakKeyDictionary()
+    _rng2sf = WeakValueDictionary()
+    def __setstate__(sf, st, /):
+        raise 000
+    def __getstate__(sf, /):
+        return None
+    def __getnewargs__(sf, /):
+        return sf.interval
+    def __new__(cls, min_u, max1_u, /):
+        check_type_is(int, min_u)
+        check_type_is(int, max1_u)
+        rng = (min_u, max1_u)
+        try:
+            ot = cls._rng2sf[rng]
+        except KeyError:
+            existed = False
+        else:
+            existed = True
+            if type(ot) is cls:
+                sf = ot
+                return sf
+            existed
+        existed
+        ps = ot.primes if existed else list_primes__ge_lt_(min_u, max1_u)
+        ps
+        sf = super(__class__, cls).__new__(cls)
+        sf._rng = rng
+        sf._ps = ps
+        if not existed:
+            cls._rng2sf[rng] = sf
+        return sf
+    def __repr__(sf, /):
+        rng = sf.interval
+        return f'PrimeList7ge_lt{rng!r}'
+    @property
+    def primes(sf, /):
+        return sf._ps
+    @property
+    def interval(sf, /):
+        return sf._rng
+    def __hash__(sf, /):
+        return hash((type(sf), sf.interval))
+    def __eq__(sf, ot, /):
+        #if not isinstance(ot, type(sf)):return NotImplemented
+        if sf is ot: return True
+        if not type(ot) is type(sf):return NotImplemented
+        return sf.interval == ot.interval
+    def __iter__(sf, /):
+        return iter(sf.primes)
+    def __reversed__(sf, /):
+        return reversed(sf.primes)
+    def __len__(sf, /):
+        return len(sf.primes)
+    def __getitem__(sf, j_or_sl, /):
+        return sf.primes[j_or_sl]
+
+
+
+
+
+
+
+
+
 __all__
-from seed.math.prime_sieve.PrimeList import PrimeList, DivmodOverPrimeList, ModOverPrimeList
+from seed.math.prime_sieve.PrimeList import PrimeList, PrimeList7ge_lt
+from seed.math.prime_sieve.PrimeList import DivmodOverPrimeList, ModOverPrimeList
 from seed.math.prime_sieve.PrimeList import *
