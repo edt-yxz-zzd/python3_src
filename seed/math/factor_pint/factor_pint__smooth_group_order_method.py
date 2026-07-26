@@ -265,14 +265,42 @@ as_pts6stage1:[(-1, -16), (-1, 0)]
 
 
 
+
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @f
+]]]'''#'''
+__all__ = r'''
+factor_pint__smooth_group_order_method7Pmm_
+factor_pint__smooth_group_order_method7Qpp_
+
+
+
+
+待定系数冫幺正点乊二维剩余环扌
+环范冫二维剩余环扌
+环乘冫二维剩余环扌
+环幂冫二维剩余环扌
+环乘阶纟幺正点乊二维剩余环扌
+Jacobi_symbol4discriminant5MAB_
+discriminant5MAB_
+考察冫环乘阶纟幺正点乊随机二维剩余环扌
+'''.split()#'''
+__all__
+r'''[[[
+
+[[[
+===
+
 [[
 def factor_pint__smooth_group_order_method7Pmm_(n, u0, bound4stage1, bound4stage2=None, /, *, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537):
+===
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='17*31' =5  =2 =2 --bound4pow4stage1=16
     17
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='17*31' =5  =2 =2 --bound4pow4stage1=8
     0
 
 
+===
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='7*5' =2  =2 =3 --bound4pow4stage1=2 # +more_info +_debug7list_all
     7
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='7*5' =2  =2 =2 --bound4pow4stage1=2
@@ -280,6 +308,7 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
 
 
 
+===
 [M67 == -1+2**67 == 193707721*761838257287]
 [193707721 == 1+2**3 * 3**3 *5 *67 *2677]
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='-1+2**67' =5  =67 =2677 --bound4pow4stage1=1
@@ -289,6 +318,9 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='-1+2**67' =5  =-1+67 =2677 --bound4pow4stage1=1
     0
 
+
+
+===
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='13*37' =2  =4 =4
     13
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='13*37' =6  =4 =4
@@ -298,7 +330,8 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Pmm_   ='13*37' =10  =2 =4
     (1, 2) # <<== [2]++[3]
 
-py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,_iter_search4factor_pint__smooth_group_order_method7Pmm_  ='13*37' ='range(13*37)'   =4 =4
+===
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,_iter_search_exceptional4factor_pint__smooth_group_order_method7Pmm_  ='13*37' ='range(13*37)'   =4 =4
     (1, (0,))
     (10, (3,))
     (11, (3,))
@@ -370,8 +403,10 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,
     (471, (3,))
     (480, (1,))
 
+===
 ]]
 [[
+===
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='7*31' =3   =2 =2 --bound4pow4stage1=4
     7
     # [D==B**2-4==5]
@@ -420,6 +455,7 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
 
 
 
+===
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='11*23' =3   =4 =4
     23
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='11*23' =6   =4 =4
@@ -435,7 +471,8 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
     #???old:(1, 2) # <<== [2]++[3]
     #bug_fixed_1:goto
 
-py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,_iter_search4factor_pint__smooth_group_order_method7Qpp_  ='11*23' ='range(11*23)'   =4 =4
+===
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,_iter_search_exceptional4factor_pint__smooth_group_order_method7Qpp_  ='11*23' ='range(11*23)'   =4 =4
     (0, (2,))
     (1, (3,))
     (2, -1)
@@ -456,6 +493,7 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,
     (251, -1)
     (252, (3,))
 
+===
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='11*23' =45   =4 =4
     (3,) # <<== [2,2,3]
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='11*23' =45   =3 =3
@@ -467,6 +505,7 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
 
 
 
+===
 [M67 == -1+2**67 == 193707721*761838257287]
 [193707721 == -1+2*13*7450297]
     #7450297:23bit
@@ -559,34 +598,440 @@ iter_next_probable_primes ='2**54' | more
 ? factorint(-1+18014398509482839)~
 [2,3,17,19,293,36591421;1,2,3,1,1,1]
 
+===
 324518553658451118278737859609237
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='18014398509482483*18014398509482839' =3  =10429 =47119
     18014398509482483
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='18014398509482483*18014398509482839' =4  =10429 =47119
     18014398509482839
 
+===
+]]
+[[
+===
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,stable_repr._iter_search_mul_order4X_4factor_pint__smooth_group_order_method7Qpp_  ='11*23' ='range(11*23)'
+    (0, 4, {2: 2})
+    (1, 3, {3: 1})
+    (2, 506, {2: 1, 11: 1, 23: 1})
+    (3, 120, {2: 3, 3: 1, 5: 1})
+    (4, 110, {2: 1, 5: 1, 11: 1})
+    (5, 24, {2: 3, 3: 1})
+    (6, 132, {2: 2, 3: 1, 11: 1})
+    (7, 60, {2: 2, 3: 1, 5: 1})
+    (8, 120, {2: 3, 3: 1, 5: 1})
+    (9, 11, {11: 1})
+    (10, 66, {2: 1, 3: 1, 11: 1})
+    (11, 44, {2: 2, 11: 1})
+    (12, 33, {3: 1, 11: 1})
+    (13, 22, {2: 1, 11: 1})
+    (14, 110, {2: 1, 5: 1, 11: 1})
+    (15, 120, {2: 3, 3: 1, 5: 1})
+    (16, 12, {2: 2, 3: 1})
+    (17, 132, {2: 2, 3: 1, 11: 1})
+    (18, 40, {2: 3, 5: 1})
+    (19, 55, {5: 1, 11: 1})
+    (20, 264, {2: 3, 3: 1, 11: 1})
+    (21, 138, {2: 1, 3: 1, 23: 1})
+    (22, 12, {2: 2, 3: 1})
+    (23, 12, {2: 2, 3: 1})
+    (24, 66, {2: 1, 3: 1, 11: 1})
+    (25, 230, {2: 1, 5: 1, 23: 1})
+    (26, 120, {2: 3, 3: 1, 5: 1})
+    (27, 132, {2: 2, 3: 1, 11: 1})
+    (28, 24, {2: 3, 3: 1})
+    (29, 110, {2: 1, 5: 1, 11: 1})
+    (30, 60, {2: 2, 3: 1, 5: 1})
+    (31, 264, {2: 3, 3: 1, 11: 1})
+    (32, 66, {2: 1, 3: 1, 11: 1})
+    (33, 44, {2: 2, 11: 1})
+    (34, 66, {2: 1, 3: 1, 11: 1})
+    (35, 22, {2: 1, 11: 1})
+    (36, 110, {2: 1, 5: 1, 11: 1})
+    (37, 110, {2: 1, 5: 1, 11: 1})
+    (38, 24, {2: 3, 3: 1})
+    (39, 12, {2: 2, 3: 1})
+    (40, 110, {2: 1, 5: 1, 11: 1})
+    (41, 40, {2: 3, 5: 1})
+    (42, 11, {11: 1})
+    (43, 24, {2: 3, 3: 1})
+    (44, 92, {2: 2, 23: 1})
+    (45, 6, {2: 1, 3: 1})
+    (46, 44, {2: 2, 11: 1})
+    (47, 30, {2: 1, 3: 1, 5: 1})
+    (48, 230, {2: 1, 5: 1, 23: 1})
+    (49, 24, {2: 3, 3: 1})
+    (50, 132, {2: 2, 3: 1, 11: 1})
+    (51, 40, {2: 3, 5: 1})
+    (52, 110, {2: 1, 5: 1, 11: 1})
+    (53, 132, {2: 2, 3: 1, 11: 1})
+    (54, 24, {2: 3, 3: 1})
+    (55, 44, {2: 2, 11: 1})
+    (56, 66, {2: 1, 3: 1, 11: 1})
+    (57, 22, {2: 1, 11: 1})
+    (58, 110, {2: 1, 5: 1, 11: 1})
+    (59, 55, {5: 1, 11: 1})
+    (60, 132, {2: 2, 3: 1, 11: 1})
+    (61, 24, {2: 3, 3: 1})
+    (62, 60, {2: 2, 3: 1, 5: 1})
+    (63, 55, {5: 1, 11: 1})
+    (64, 88, {2: 3, 11: 1})
+    (65, 66, {2: 1, 3: 1, 11: 1})
+    (66, 24, {2: 3, 3: 1})
+    (67, 69, {3: 1, 23: 1})
+    (68, 66, {2: 1, 3: 1, 11: 1})
+    (69, 20, {2: 2, 5: 1})
+    (70, 15, {3: 1, 5: 1})
+    (71, 276, {2: 2, 3: 1, 23: 1})
+    (72, 24, {2: 3, 3: 1})
+    (73, 110, {2: 1, 5: 1, 11: 1})
+    (74, 40, {2: 3, 5: 1})
+    (75, 22, {2: 1, 11: 1})
+    (76, 12, {2: 2, 3: 1})
+    (77, 24, {2: 3, 3: 1})
+    (78, 33, {3: 1, 11: 1})
+    (79, 22, {2: 1, 11: 1})
+    (80, 110, {2: 1, 5: 1, 11: 1})
+    (81, 55, {5: 1, 11: 1})
+    (82, 132, {2: 2, 3: 1, 11: 1})
+    (83, 132, {2: 2, 3: 1, 11: 1})
+    (84, 120, {2: 3, 3: 1, 5: 1})
+    (85, 60, {2: 2, 3: 1, 5: 1})
+    (86, 11, {11: 1})
+    (87, 24, {2: 3, 3: 1})
+    (88, 44, {2: 2, 11: 1})
+    (89, 24, {2: 3, 3: 1})
+    (90, 506, {2: 1, 11: 1, 23: 1})
+    (91, 30, {2: 1, 3: 1, 5: 1})
+    (92, 20, {2: 2, 5: 1})
+    (93, 12, {2: 2, 3: 1})
+    (94, 276, {2: 2, 3: 1, 23: 1})
+    (95, 120, {2: 3, 3: 1, 5: 1})
+    (96, 110, {2: 1, 5: 1, 11: 1})
+    (97, 88, {2: 3, 11: 1})
+    (98, 66, {2: 1, 3: 1, 11: 1})
+    (99, 12, {2: 2, 3: 1})
+    (100, 24, {2: 3, 3: 1})
+    (101, 22, {2: 1, 11: 1})
+    (102, 110, {2: 1, 5: 1, 11: 1})
+    (103, 110, {2: 1, 5: 1, 11: 1})
+    (104, 132, {2: 2, 3: 1, 11: 1})
+    (105, 132, {2: 2, 3: 1, 11: 1})
+    (106, 110, {2: 1, 5: 1, 11: 1})
+    (107, 120, {2: 3, 3: 1, 5: 1})
+    (108, 132, {2: 2, 3: 1, 11: 1})
+    (109, 66, {2: 1, 3: 1, 11: 1})
+    (110, 8, {2: 3})
+    (111, 33, {3: 1, 11: 1})
+    (112, 264, {2: 3, 3: 1, 11: 1})
+    (113, 230, {2: 1, 5: 1, 23: 1})
+    (114, 30, {2: 1, 3: 1, 5: 1})
+    (115, 12, {2: 2, 3: 1})
+    (116, 12, {2: 2, 3: 1})
+    (117, 230, {2: 1, 5: 1, 23: 1})
+    (118, 120, {2: 3, 3: 1, 5: 1})
+    (119, 22, {2: 1, 11: 1})
+    (120, 24, {2: 3, 3: 1})
+    (121, 44, {2: 2, 11: 1})
+    (122, 12, {2: 2, 3: 1})
+    (123, 264, {2: 3, 3: 1, 11: 1})
+    (124, 110, {2: 1, 5: 1, 11: 1})
+    (125, 110, {2: 1, 5: 1, 11: 1})
+    (126, 132, {2: 2, 3: 1, 11: 1})
+    (127, 132, {2: 2, 3: 1, 11: 1})
+    (128, 110, {2: 1, 5: 1, 11: 1})
+    (129, 110, {2: 1, 5: 1, 11: 1})
+    (130, 264, {2: 3, 3: 1, 11: 1})
+    (131, 12, {2: 2, 3: 1})
+    (132, 44, {2: 2, 11: 1})
+    (133, 24, {2: 3, 3: 1})
+    (134, 22, {2: 1, 11: 1})
+    (135, 120, {2: 3, 3: 1, 5: 1})
+    (136, 115, {5: 1, 23: 1})
+    (137, 12, {2: 2, 3: 1})
+    (138, 12, {2: 2, 3: 1})
+    (139, 30, {2: 1, 3: 1, 5: 1})
+    (140, 230, {2: 1, 5: 1, 23: 1})
+    (141, 264, {2: 3, 3: 1, 11: 1})
+    (142, 66, {2: 1, 3: 1, 11: 1})
+    (143, 8, {2: 3})
+    (144, 66, {2: 1, 3: 1, 11: 1})
+    (145, 132, {2: 2, 3: 1, 11: 1})
+    (146, 120, {2: 3, 3: 1, 5: 1})
+    (147, 55, {5: 1, 11: 1})
+    (148, 132, {2: 2, 3: 1, 11: 1})
+    (149, 132, {2: 2, 3: 1, 11: 1})
+    (150, 110, {2: 1, 5: 1, 11: 1})
+    (151, 55, {5: 1, 11: 1})
+    (152, 22, {2: 1, 11: 1})
+    (153, 24, {2: 3, 3: 1})
+    (154, 12, {2: 2, 3: 1})
+    (155, 33, {3: 1, 11: 1})
+    (156, 88, {2: 3, 11: 1})
+    (157, 110, {2: 1, 5: 1, 11: 1})
+    (158, 120, {2: 3, 3: 1, 5: 1})
+    (159, 276, {2: 2, 3: 1, 23: 1})
+    (160, 12, {2: 2, 3: 1})
+    (161, 20, {2: 2, 5: 1})
+    (162, 15, {3: 1, 5: 1})
+    (163, 506, {2: 1, 11: 1, 23: 1})
+    (164, 24, {2: 3, 3: 1})
+    (165, 44, {2: 2, 11: 1})
+    (166, 24, {2: 3, 3: 1})
+    (167, 22, {2: 1, 11: 1})
+    (168, 60, {2: 2, 3: 1, 5: 1})
+    (169, 120, {2: 3, 3: 1, 5: 1})
+    (170, 132, {2: 2, 3: 1, 11: 1})
+    (171, 132, {2: 2, 3: 1, 11: 1})
+    (172, 110, {2: 1, 5: 1, 11: 1})
+    (173, 55, {5: 1, 11: 1})
+    (174, 11, {11: 1})
+    (175, 66, {2: 1, 3: 1, 11: 1})
+    (176, 24, {2: 3, 3: 1})
+    (177, 12, {2: 2, 3: 1})
+    (178, 22, {2: 1, 11: 1})
+    (179, 40, {2: 3, 5: 1})
+    (180, 55, {5: 1, 11: 1})
+    (181, 24, {2: 3, 3: 1})
+    (182, 276, {2: 2, 3: 1, 23: 1})
+    (183, 30, {2: 1, 3: 1, 5: 1})
+    (184, 20, {2: 2, 5: 1})
+    (185, 33, {3: 1, 11: 1})
+    (186, 138, {2: 1, 3: 1, 23: 1})
+    (187, 24, {2: 3, 3: 1})
+    (188, 66, {2: 1, 3: 1, 11: 1})
+    (189, 88, {2: 3, 11: 1})
+    (190, 110, {2: 1, 5: 1, 11: 1})
+    (191, 60, {2: 2, 3: 1, 5: 1})
+    (192, 24, {2: 3, 3: 1})
+    (193, 132, {2: 2, 3: 1, 11: 1})
+    (194, 110, {2: 1, 5: 1, 11: 1})
+    (195, 110, {2: 1, 5: 1, 11: 1})
+    (196, 11, {11: 1})
+    (197, 66, {2: 1, 3: 1, 11: 1})
+    (198, 44, {2: 2, 11: 1})
+    (199, 24, {2: 3, 3: 1})
+    (200, 132, {2: 2, 3: 1, 11: 1})
+    (201, 110, {2: 1, 5: 1, 11: 1})
+    (202, 40, {2: 3, 5: 1})
+    (203, 132, {2: 2, 3: 1, 11: 1})
+    (204, 24, {2: 3, 3: 1})
+    (205, 230, {2: 1, 5: 1, 23: 1})
+    (206, 30, {2: 1, 3: 1, 5: 1})
+    (207, 44, {2: 2, 11: 1})
+    (208, 6, {2: 1, 3: 1})
+    (209, 92, {2: 2, 23: 1})
+    (210, 24, {2: 3, 3: 1})
+    (211, 22, {2: 1, 11: 1})
+    (212, 40, {2: 3, 5: 1})
+    (213, 110, {2: 1, 5: 1, 11: 1})
+    (214, 12, {2: 2, 3: 1})
+    (215, 24, {2: 3, 3: 1})
+    (216, 110, {2: 1, 5: 1, 11: 1})
+    (217, 110, {2: 1, 5: 1, 11: 1})
+    (218, 22, {2: 1, 11: 1})
+    (219, 66, {2: 1, 3: 1, 11: 1})
+    (220, 44, {2: 2, 11: 1})
+    (221, 66, {2: 1, 3: 1, 11: 1})
+    (222, 264, {2: 3, 3: 1, 11: 1})
+    (223, 60, {2: 2, 3: 1, 5: 1})
+    (224, 55, {5: 1, 11: 1})
+    (225, 24, {2: 3, 3: 1})
+    (226, 132, {2: 2, 3: 1, 11: 1})
+    (227, 120, {2: 3, 3: 1, 5: 1})
+    (228, 115, {5: 1, 23: 1})
+    (229, 66, {2: 1, 3: 1, 11: 1})
+    (230, 12, {2: 2, 3: 1})
+    (231, 12, {2: 2, 3: 1})
+    (232, 138, {2: 1, 3: 1, 23: 1})
+    (233, 264, {2: 3, 3: 1, 11: 1})
+    (234, 110, {2: 1, 5: 1, 11: 1})
+    (235, 40, {2: 3, 5: 1})
+    (236, 132, {2: 2, 3: 1, 11: 1})
+    (237, 12, {2: 2, 3: 1})
+    (238, 120, {2: 3, 3: 1, 5: 1})
+    (239, 55, {5: 1, 11: 1})
+    (240, 22, {2: 1, 11: 1})
+    (241, 66, {2: 1, 3: 1, 11: 1})
+    (242, 44, {2: 2, 11: 1})
+    (243, 33, {3: 1, 11: 1})
+    (244, 22, {2: 1, 11: 1})
+    (245, 120, {2: 3, 3: 1, 5: 1})
+    (246, 60, {2: 2, 3: 1, 5: 1})
+    (247, 132, {2: 2, 3: 1, 11: 1})
+    (248, 24, {2: 3, 3: 1})
+    (249, 110, {2: 1, 5: 1, 11: 1})
+    (250, 120, {2: 3, 3: 1, 5: 1})
+    (251, 253, {11: 1, 23: 1})
+    (252, 6, {2: 1, 3: 1})
+
+===
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,stable_repr._iter_search_mul_order4X_4factor_pint__smooth_group_order_method7Qpp_  ='11*23' ='range(11*23)' | grep '[0-9][0-9]:' -v | lineno1
+    1:(0, 4, {2: 2})
+    2:(1, 3, {3: 1})
+    3:(3, 120, {2: 3, 3: 1, 5: 1})
+    4:(5, 24, {2: 3, 3: 1})
+    5:(7, 60, {2: 2, 3: 1, 5: 1})
+    6:(8, 120, {2: 3, 3: 1, 5: 1})
+    7:(15, 120, {2: 3, 3: 1, 5: 1})
+    8:(16, 12, {2: 2, 3: 1})
+    9:(18, 40, {2: 3, 5: 1})
+    10:(22, 12, {2: 2, 3: 1})
+    11:(23, 12, {2: 2, 3: 1})
+    12:(26, 120, {2: 3, 3: 1, 5: 1})
+    13:(28, 24, {2: 3, 3: 1})
+    14:(30, 60, {2: 2, 3: 1, 5: 1})
+    15:(38, 24, {2: 3, 3: 1})
+    16:(39, 12, {2: 2, 3: 1})
+    17:(41, 40, {2: 3, 5: 1})
+    18:(43, 24, {2: 3, 3: 1})
+    19:(45, 6, {2: 1, 3: 1})
+    20:(47, 30, {2: 1, 3: 1, 5: 1})
+    21:(49, 24, {2: 3, 3: 1})
+    22:(51, 40, {2: 3, 5: 1})
+    23:(54, 24, {2: 3, 3: 1})
+    24:(61, 24, {2: 3, 3: 1})
+    25:(62, 60, {2: 2, 3: 1, 5: 1})
+    26:(66, 24, {2: 3, 3: 1})
+    27:(69, 20, {2: 2, 5: 1})
+    28:(70, 15, {3: 1, 5: 1})
+    29:(72, 24, {2: 3, 3: 1})
+    30:(74, 40, {2: 3, 5: 1})
+    31:(76, 12, {2: 2, 3: 1})
+    32:(77, 24, {2: 3, 3: 1})
+    33:(84, 120, {2: 3, 3: 1, 5: 1})
+    34:(85, 60, {2: 2, 3: 1, 5: 1})
+    35:(87, 24, {2: 3, 3: 1})
+    36:(89, 24, {2: 3, 3: 1})
+    37:(91, 30, {2: 1, 3: 1, 5: 1})
+    38:(92, 20, {2: 2, 5: 1})
+    39:(93, 12, {2: 2, 3: 1})
+    40:(95, 120, {2: 3, 3: 1, 5: 1})
+    41:(99, 12, {2: 2, 3: 1})
+    42:(100, 24, {2: 3, 3: 1})
+    43:(107, 120, {2: 3, 3: 1, 5: 1})
+    44:(110, 8, {2: 3})
+    45:(114, 30, {2: 1, 3: 1, 5: 1})
+    46:(115, 12, {2: 2, 3: 1})
+    47:(116, 12, {2: 2, 3: 1})
+    48:(118, 120, {2: 3, 3: 1, 5: 1})
+    49:(120, 24, {2: 3, 3: 1})
+    50:(122, 12, {2: 2, 3: 1})
+    51:(131, 12, {2: 2, 3: 1})
+    52:(133, 24, {2: 3, 3: 1})
+    53:(135, 120, {2: 3, 3: 1, 5: 1})
+    54:(137, 12, {2: 2, 3: 1})
+    55:(138, 12, {2: 2, 3: 1})
+    56:(139, 30, {2: 1, 3: 1, 5: 1})
+    57:(143, 8, {2: 3})
+    58:(146, 120, {2: 3, 3: 1, 5: 1})
+    59:(153, 24, {2: 3, 3: 1})
+    60:(154, 12, {2: 2, 3: 1})
+    61:(158, 120, {2: 3, 3: 1, 5: 1})
+    62:(160, 12, {2: 2, 3: 1})
+    63:(161, 20, {2: 2, 5: 1})
+    64:(162, 15, {3: 1, 5: 1})
+    65:(164, 24, {2: 3, 3: 1})
+    66:(166, 24, {2: 3, 3: 1})
+    67:(168, 60, {2: 2, 3: 1, 5: 1})
+    68:(169, 120, {2: 3, 3: 1, 5: 1})
+    69:(176, 24, {2: 3, 3: 1})
+    70:(177, 12, {2: 2, 3: 1})
+    71:(179, 40, {2: 3, 5: 1})
+    72:(181, 24, {2: 3, 3: 1})
+    73:(183, 30, {2: 1, 3: 1, 5: 1})
+    74:(184, 20, {2: 2, 5: 1})
+    75:(187, 24, {2: 3, 3: 1})
+    76:(191, 60, {2: 2, 3: 1, 5: 1})
+    77:(192, 24, {2: 3, 3: 1})
+    78:(199, 24, {2: 3, 3: 1})
+    79:(202, 40, {2: 3, 5: 1})
+    80:(204, 24, {2: 3, 3: 1})
+    81:(206, 30, {2: 1, 3: 1, 5: 1})
+    82:(208, 6, {2: 1, 3: 1})
+    83:(210, 24, {2: 3, 3: 1})
+    84:(212, 40, {2: 3, 5: 1})
+    85:(214, 12, {2: 2, 3: 1})
+    86:(215, 24, {2: 3, 3: 1})
+    87:(223, 60, {2: 2, 3: 1, 5: 1})
+    88:(225, 24, {2: 3, 3: 1})
+    89:(227, 120, {2: 3, 3: 1, 5: 1})
+    90:(230, 12, {2: 2, 3: 1})
+    91:(231, 12, {2: 2, 3: 1})
+    92:(235, 40, {2: 3, 5: 1})
+    93:(237, 12, {2: 2, 3: 1})
+    94:(238, 120, {2: 3, 3: 1, 5: 1})
+    95:(245, 120, {2: 3, 3: 1, 5: 1})
+    96:(246, 60, {2: 2, 3: 1, 5: 1})
+    97:(248, 24, {2: 3, 3: 1})
+    98:(250, 120, {2: 3, 3: 1, 5: 1})
+    99:(252, 6, {2: 1, 3: 1})
+
+===
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,stable_repr._iter_search_mul_order4X_4factor_pint__smooth_group_order_method7Qpp_  ='11*23' ='range(11*23)' | grep '[0-9][0-9]:\|[4-9]:' -v | lineno1
+    # [55 == 253/4.6]
+    1:(0, 4, {2: 2})
+    2:(1, 3, {3: 1})
+    3:(5, 24, {2: 3, 3: 1})
+    4:(16, 12, {2: 2, 3: 1})
+    5:(22, 12, {2: 2, 3: 1})
+    6:(23, 12, {2: 2, 3: 1})
+    7:(28, 24, {2: 3, 3: 1})
+    8:(38, 24, {2: 3, 3: 1})
+    9:(39, 12, {2: 2, 3: 1})
+    10:(43, 24, {2: 3, 3: 1})
+    11:(45, 6, {2: 1, 3: 1})
+    12:(49, 24, {2: 3, 3: 1})
+    13:(54, 24, {2: 3, 3: 1})
+    14:(61, 24, {2: 3, 3: 1})
+    15:(66, 24, {2: 3, 3: 1})
+    16:(72, 24, {2: 3, 3: 1})
+    17:(76, 12, {2: 2, 3: 1})
+    18:(77, 24, {2: 3, 3: 1})
+    19:(87, 24, {2: 3, 3: 1})
+    20:(89, 24, {2: 3, 3: 1})
+    21:(93, 12, {2: 2, 3: 1})
+    22:(99, 12, {2: 2, 3: 1})
+    23:(100, 24, {2: 3, 3: 1})
+    24:(110, 8, {2: 3})
+    25:(115, 12, {2: 2, 3: 1})
+    26:(116, 12, {2: 2, 3: 1})
+    27:(120, 24, {2: 3, 3: 1})
+    28:(122, 12, {2: 2, 3: 1})
+    29:(131, 12, {2: 2, 3: 1})
+    30:(133, 24, {2: 3, 3: 1})
+    31:(137, 12, {2: 2, 3: 1})
+    32:(138, 12, {2: 2, 3: 1})
+    33:(143, 8, {2: 3})
+    34:(153, 24, {2: 3, 3: 1})
+    35:(154, 12, {2: 2, 3: 1})
+    36:(160, 12, {2: 2, 3: 1})
+    37:(164, 24, {2: 3, 3: 1})
+    38:(166, 24, {2: 3, 3: 1})
+    39:(176, 24, {2: 3, 3: 1})
+    40:(177, 12, {2: 2, 3: 1})
+    41:(181, 24, {2: 3, 3: 1})
+    42:(187, 24, {2: 3, 3: 1})
+    43:(192, 24, {2: 3, 3: 1})
+    44:(199, 24, {2: 3, 3: 1})
+    45:(204, 24, {2: 3, 3: 1})
+    46:(208, 6, {2: 1, 3: 1})
+    47:(210, 24, {2: 3, 3: 1})
+    48:(214, 12, {2: 2, 3: 1})
+    49:(215, 24, {2: 3, 3: 1})
+    50:(225, 24, {2: 3, 3: 1})
+    51:(230, 12, {2: 2, 3: 1})
+    52:(231, 12, {2: 2, 3: 1})
+    53:(237, 12, {2: 2, 3: 1})
+    54:(248, 24, {2: 3, 3: 1})
+    55:(252, 6, {2: 1, 3: 1})
+
+===
 ]]
 
+===
+]]]
 
-
-py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @f
-]]]'''#'''
-__all__ = r'''
-factor_pint__smooth_group_order_method7Pmm_
-factor_pint__smooth_group_order_method7Qpp_
-
-
-
-
-待定系数冫幺正点乊二维剩余环扌
-环范冫二维剩余环扌
-环乘冫二维剩余环扌
-环幂冫二维剩余环扌
-环乘阶纟幺正点乊二维剩余环扌
-Jacobi_symbol4discriminant5MAB_
-discriminant5MAB_
-考察冫环乘阶纟幺正点乊随机二维剩余环扌
-'''.split()#'''
+#]]]'''#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
@@ -607,6 +1052,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
+__all__
 #'''[[[
 ######################
 #copy_from:
@@ -748,21 +1194,26 @@ def 考察冫环乘阶纟幺正点乊随机二维剩余环扌(M, abA_ls, /, *, o
 
 
 
+__all__
 #################################
-def factor_pint__smooth_group_order_method7Pmm_(n, u0, bound4stage1, bound4stage2=None, /, *, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537, _debug7list_all=False, **kwds):
+def factor_pint__smooth_group_order_method7Pmm_(n, u0, bound4stage1, bound4stage2=None, /, *, scale4bound4stage2=100, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537, _debug7list_all=False, **kwds):
     '-> ((offset1, offset2)/{#found-factor-of-(P-1) at stage2#}|(offset1,)/{#found-factor-of-(P-1) at stage1#}|0/{#fail#}|nontrivial_factor/uint{>0}) # (P-1) method'
+    ######################
     check_int_ge(2, n)
     check_type_is(int, u0)
     check_int_ge(1, bound4stage1)
     check_int_ge(1, bound4pow4stage1)
+    check_int_ge(1, scale4bound4stage2)
     if bound4stage2 is None:
-        bound4stage2 = 100*bound4stage1
+        bound4stage2 = scale4bound4stage2*bound4stage1
     check_int_ge(1, bound4stage2)
 
+    ######################
     num_muls_per_detect = 10*n.bit_length()
     imay_detect_period = -1 if detect_once6stage1 else 0
     one = 1
     pt0 = u0%n
+    ######################
     def diff_one_(u, /):
         return (u-1)%n
     def detect_(u, /):
@@ -781,6 +1232,7 @@ def factor_pint__smooth_group_order_method7Pmm_(n, u0, bound4stage1, bound4stage
         return pow(a, 2, n)
     def pow_(a, e, /):
         return pow(a, e, n)
+    ######################
     r = smooth_group_order_method_(bound4stage1, bound4pow4stage1, bound4stage2, diff_one_, detect_, mul_, square_, pow_, one, pt0, num_muls_per_detect=num_muls_per_detect, imay_detect_period=imay_detect_period, case4xprimes=case4xprimes, max_size7dense=max_size7dense, max_size7physical=max_size7physical, _debug7list_all=_debug7list_all, **kwds)
     return _postprocess(n, r, more_info)
 #end-def factor_pint__smooth_group_order_method7Pmm_(n, u0, bound4stage1, bound4stage2=None, /, *, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537, _debug7list_all=False, **kwds):
@@ -815,11 +1267,11 @@ def _postprocess(n, r, more_info, /):
 
 
 #################################
-def _iter_search4factor_pint__smooth_group_order_method7Pmm_(n, u0s, /, *args, **kwds):
-    return _iter_search(factor_pint__smooth_group_order_method7Pmm_, n, u0s, *args, **kwds)
-def _iter_search4factor_pint__smooth_group_order_method7Qpp_(n, u0s, /, *args, **kwds):
-    return _iter_search(factor_pint__smooth_group_order_method7Qpp_, n, u0s, *args, **kwds)
-def _iter_search(f, n, u0s, /, *args, **kwds):
+def _iter_search_exceptional4factor_pint__smooth_group_order_method7Pmm_(n, u0s, /, *args, **kwds):
+    return _iter_search_exceptional(factor_pint__smooth_group_order_method7Pmm_, n, u0s, *args, **kwds)
+def _iter_search_exceptional4factor_pint__smooth_group_order_method7Qpp_(n, u0s, /, *args, **kwds):
+    return _iter_search_exceptional(factor_pint__smooth_group_order_method7Qpp_, n, u0s, *args, **kwds)
+def _iter_search_exceptional(f, n, u0s, /, *args, **kwds):
     for u0 in u0s:
         r = f(n, u0, *args, **kwds)
         match r:
@@ -827,64 +1279,86 @@ def _iter_search(f, n, u0s, /, *args, **kwds):
                 pass
             case _:
                 yield (u0, r)
+def _iter_search_mul_order4X_4factor_pint__smooth_group_order_method7Qpp_(n, u0s, /):
+    from seed.math.factor_pint.factor_pint__naive_brute_force import factor_pint__naive_brute_force_, iter_factor_pint__naive_brute_force_
+    hrem4N_ = mk_hrem_(n)
+    one = (1, 0) # == 1+0*X == 1
+    pt0 = (0, 1) # == 0+1*X == X
+    # [norm(pt0) == 1]
+    for u0 in u0s:
+        B = hrem4N_(u0)
+        #D = hrem4N_(B**2-4)
+        mul_order4pt0 = mul_order4X = 环乘阶纟幺正点乊二维剩余环扌(MAx:=(n,B,1), pt0, 欤待定系数=False)
+        p2e = factor_pint__naive_brute_force_(mul_order4pt0)
+        yield (u0, mul_order4pt0, p2e)
+    ######################
+
 #################################
 
 
+__all__
 #################################
-def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage2=None, /, *, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537, _debug7list_all=False, **kwds):
-    '-> ((offset1, offset2)/{#found-factor-of-(P-1|P+1) at stage2#}|(offset1,)/{#found-factor-of-(P-1|P+1) at stage1#}|-1/{#[(u0**2-4)%n==0]#}||0/{#fail#}|nontrivial_factor/uint{>0}) # (P+1) method'
+def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage2=None, /, *, scale4bound4stage2=100, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537, _debug7list_all=False, **kwds):
+    '-> ((offset1, offset2)/{#found-factor-of-(P-1|P+1) at stage2#}|(offset1,)/{#found-factor-of-(P-1|P+1) at stage1#}|-1/{#[(u0**2-4)%n==0]#}||0/{#fail#}|nontrivial_factor/uint{>0}) # (P+1) method # NOTE:[MAYBE RETURN -1]'
+    ######################
+    r'''[[[
+    证明:只需B，无需C:
+    #see:待定系数冫幺正点乊二维剩余环扌
+    [gcd(b,n)==1][norm((c+b*X)%{n,(X**2+B*X+C)}) == 1]:
+        !! [gcd(b,n)==1]
+        [b=!=0] # [c==0]:ok
+        !! [norm((c+b*X)%{n,(X**2+B*X+C)}) == 1]
+        [1 == norm(c+b*X) == (c**2-B*c*b+C*b**2)]
+
+        [Y:=(c+b*X)]
+        [X==(Y-c)/b]
+        # --> Y%(((Y-c)/b)**2+B*(Y-c)/b+C)
+        # pt0:(c+b*X) --> (0+1*Y)
+        [(((Y-c)/b)**2+B*(Y-c)/b+C)
+        == ((Y-c)**2+B*(Y-c)*b+C*b**2)/b**2
+        == ((Y**2-2*c*Y+c**2)+(B*b*Y-B*c*b)+C*b**2)/b**2
+        == ((Y**2+(B*b-2*c)*Y)+(c**2-B*c*b+C*b**2))/b**2
+        == ((Y**2+(B*b-2*c)*Y)+1)/b**2
+            # C --> 1
+        ]
+        ==>> fixed:[C{Y}:=1][pt0{Y}:=(0,1)]
+        ==>> the only parameter:B{Y}
+    #]]]'''#'''
+    ######################
     check_int_ge(2, n)
+    # [n >= 2]
+    check_type_is(int, u0)
+    check_int_ge(1, bound4stage1)
+    check_int_ge(1, bound4pow4stage1)
+    check_int_ge(1, scale4bound4stage2)
+    if bound4stage2 is None:
+        bound4stage2 = scale4bound4stage2*bound4stage1
+    check_int_ge(1, bound4stage2)
+    ######################
+    # [n >= 2]
     if n&1 == 0:
+        # [n%2==0]
         if n == 2:
             return 0 if not more_info else (-99002, None, '[n==2]')
+        # [n > 2]
         return 2 if not more_info else (+99002, 2, '[n>2][n%2==0]')
     if n < 9:
         return 0 if not more_info else (-99003, None, '[2 <= n < 9][n%2==1]')
     check_int_ge(9, n)
     if not n&1 == 1:raise ValueError
     # [n >= 9][n%2==1] # n_is_odd_ge9
-    check_type_is(int, u0)
-    check_int_ge(1, bound4stage1)
-    check_int_ge(1, bound4pow4stage1)
-    if bound4stage2 is None:
-        bound4stage2 = 100*bound4stage1
-    check_int_ge(1, bound4stage2)
-
+    ######################
     num_muls_per_detect = 10*n.bit_length()
     imay_detect_period = -1 if detect_once6stage1 else 0
     # [pt == (a,b) === (a+b*X)%{n,1+B*X+X**2}]
     hrem4N_ = mk_hrem_(n)
-    one = (1, 0)
-    pt0 = (0, 1)
+    one = (1, 0) # == 1+0*X == 1
+    pt0 = (0, 1) # == 0+1*X == X
     # [norm(pt0) == 1]
     B = hrem4N_(u0)
     ######################
     D = hrem4N_(B**2-4)
-    def _f0(D, /):
-        if abs(B) == 2:
-            return -1
-        if D == 0:
-            v = gcd(B-2, n)
-            if 1 < v < n: return v
-            return -1
-        v = gcd(D, n)
-        if v == 1:return 0
-        if 1 < v < n: return v
-        raise 000
-    def _f1(D, /):
-        v = _f0(D)
-        if v == 0:return
-        if v == -1:
-            # [D%n == 0]
-            assert D == 0, (n, u0, B, D)
-            yield -1 if not more_info else (-99001, None, '[D%n == 0]')
-            return
-        if 1 < v < n:
-            yield v if not more_info else (+99001, v, 'from:gcd(D,n) or gcd(B-2,n)')
-            return
-        raise 000
-
-    tm = [*_f1(D)]
+    tm = _4D_01(n, u0, B, D, more_info)
     if tm:
         [result] = tm
         return result
@@ -892,75 +1366,12 @@ def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage
 
 
 
+    ######################
     def diff_one_(ab, /):
         (a, b) = ab
         return (hrem4N_(a-1), b)
     def detect_(ab, /):
-        # !! [norm(pt0) == 1]
-        # !! [ab == (-one+pt0**exp)]
-        # [norm(one+ab) == 1]
-        # [(a, b) := ab]
-        # [a1 := 1+a]
-        # [1 == norm(a1+b*X) == (a1**2-B*a1*b+1*b**2)]
-        # [[b==0] -> [abs(1+a) == 1]]
-        # [[b==0] -> [(1+a) <- {-1,+1}]]
-        # [[b==0] -> [a <- {-2,0}]]
-        # [[a==0] -> [b <- {-1,+1}]]
-
-        #(a, b) = ab
-        us = tuple(filter(bool, ab))
-        match us:
-            case (a,b):
-                #if all(a,b):
-                v = gcd(a*b, n)
-                if v == 1: return (-1, None)
-                if 1 < v < n: return (0, v)
-                assert v == n, (n, ab, v)
-                v = gcd(a, n)
-                if 1 < v < n: return (0, v)
-                assert -n < a < n, (n, ab, v)
-                assert -n < b < n, (n, ab, v)
-                assert not 0 == a, (n, ab, v)
-                assert not 0 == b, (n, ab, v)
-                assert 1 < v < n, (n, ab, v)
-                raise 000
-            case ():
-                #if not any(a,b):
-                assert ab == (0,0), (n, ab)
-                return (+1, None)
-            case [u]:
-                #[u] = filter(bool, ab)
-                # !! [[b==0] -> [a <- {-2,0}]]
-                # !! [[a==0] -> [b <- {-1,+1}]]
-                # !! [n >= 9][n%2==1] # n_is_odd_ge9
-                # [ab <- {(-2,0), (0,-1), (0,+1)}]
-                v = gcd(u, n)
-                if v == 1: return (-1, None)
-                assert ab in [(-2,0), (0,-1), (0,+1)], (n, ab, u, v)
-                raise 000
-                if 1 < v < n: return (0, v)
-                assert -n < u < n, (n, u)
-                assert not 0 == u, (n, u)
-                #if v == n:
-                raise 000
-            case _:
-                raise 000
-        raise 000
-        r'''[[[
-        factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  3,3) # !! [2,3] #old: (2,)  #why???
-        factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  2,3) # !! [2]++[3] #old: (1, 2)  #why???
-        #bug_fixed_1:here
-        why?
-            since:
-                ... ...
-                for x in ab:
-                    _v = gcd(x, n)
-                    ...
-                    if _v == 1:
-                        v == 1 #bug!!!
-                if v == n: return (+1, None)
-        #]]]'''#'''
-    detect_
+        return _detect4Qpp_(n, ab)
     def mul_(ab, cd, /):
         #环乘冫二维剩余环扌
         (a,b) = ab
@@ -975,8 +1386,102 @@ def factor_pint__smooth_group_order_method7Qpp_(n, u0, bound4stage1, bound4stage
         ac_bd1 = hrem4N_(a**2-bd*1)
         ad_bc_bdB = hrem4N_(a*b*2-bd*B)
         return (ac_bd1, ad_bc_bdB)
+    ######################
     r = smooth_group_order_method_(bound4stage1, bound4pow4stage1, bound4stage2, diff_one_, detect_, mul_, square_, may_pow_:=None, one, pt0, num_muls_per_detect=num_muls_per_detect, imay_detect_period=imay_detect_period, case4xprimes=case4xprimes, max_size7dense=max_size7dense, max_size7physical=max_size7physical, _debug7list_all=_debug7list_all, **kwds)
     return _postprocess(n, r, more_info)
+def _4D_01(n, u0, B, D, more_info, /):
+    def _4D_0(D, /):
+        if abs(B) == 2:
+            return -1
+        if D == 0:
+            v = gcd(B-2, n)
+            if 1 < v < n: return v
+            return -1
+        v = gcd(D, n)
+        if v == 1:return 0
+        if 1 < v < n: return v
+        raise 000
+    def _4D_1(D, /):
+        v = _4D_0(D)
+        if v == 0:return
+        if v == -1:
+            # [D%n == 0]
+            assert D == 0, (n, u0, B, D)
+            yield -1 if not more_info else (-99001, None, '[D%n == 0]')
+            return
+        if 1 < v < n:
+            yield v if not more_info else (+99001, v, 'from:gcd(D,n) or gcd(B-2,n)')
+            return
+        raise 000
+
+    tm = [*_4D_1(D)]
+    return tm
+def _detect4Qpp_(n, ab, /):
+    # !! [norm(pt0) == 1]
+    # !! [ab == (-one+pt0**exp)]
+    # [norm(one+ab) == 1]
+    # [(a, b) := ab]
+    # [a1 := 1+a]
+    # [1 == norm(a1+b*X) == (a1**2-B*a1*b+1*b**2)]
+    # [[b==0] -> [abs(1+a) == 1]]
+    # [[b==0] -> [(1+a) <- {-1,+1}]]
+    # [[b==0] -> [a <- {-2,0}]]
+    # [[a==0] -> [b <- {-1,+1}]]
+
+    #(a, b) = ab
+    us = tuple(filter(bool, ab))
+    match us:
+        case (a,b):
+            #if all(a,b):
+            v = gcd(a*b, n)
+            if v == 1: return (-1, None)
+            if 1 < v < n: return (0, v)
+            assert v == n, (n, ab, v)
+            v = gcd(a, n)
+            if 1 < v < n: return (0, v)
+            assert -n < a < n, (n, ab, v)
+            assert -n < b < n, (n, ab, v)
+            assert not 0 == a, (n, ab, v)
+            assert not 0 == b, (n, ab, v)
+            assert 1 < v < n, (n, ab, v)
+            raise 000
+        case ():
+            #if not any(a,b):
+            assert ab == (0,0), (n, ab)
+            return (+1, None)
+        case [u]:
+            #[u] = filter(bool, ab)
+            # !! [[b==0] -> [a <- {-2,0}]]
+            # !! [[a==0] -> [b <- {-1,+1}]]
+            # !! [n >= 9][n%2==1] # n_is_odd_ge9
+            # [ab <- {(-2,0), (0,-1), (0,+1)}]
+            v = gcd(u, n)
+            if v == 1: return (-1, None)
+            assert ab in [(-2,0), (0,-1), (0,+1)], (n, ab, u, v)
+            raise 000
+            if 1 < v < n: return (0, v)
+            assert -n < u < n, (n, u)
+            assert not 0 == u, (n, u)
+            #if v == n:
+            raise 000
+        case _:
+            raise 000
+    raise 000
+    r'''[[[
+    factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  3,3) # !! [2,3] #old: (2,)  #why???
+    factor_pint__smooth_group_order_method7Qpp_(11*23, 16,  2,3) # !! [2]++[3] #old: (1, 2)  #why???
+    #bug_fixed_1:here
+    why?
+        since:
+            ... ...
+            for x in ab:
+                _v = gcd(x, n)
+                ...
+                if _v == 1:
+                    v == 1 #bug!!!
+            if v == n: return (+1, None)
+    #]]]'''#'''
+_detect4Qpp_
 #end-def factor_pint__smooth_group_order_method7Qpp_
 #################################
 
