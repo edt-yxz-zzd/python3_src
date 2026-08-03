@@ -33,9 +33,23 @@ return5it = yield from it
 
 __all__ = 'GeneratorIteratorCapturer'.split()
 
+
+def _to_generator_iterator(it, /):
+    it = iter(it)
+    try:
+        it.send
+        it.throw
+    except AttributeError:
+        it = _to_generator_iterator7impl(it)
+    return it
+def _to_generator_iterator7impl(it, /):
+    it = iter(it)
+    r = yield from it
+    return r
+
 class GeneratorIteratorCapturer:
     def __init__(sf, generator_iterator, /):
-        sf._g = generator_iterator
+        sf._g = _to_generator_iterator(generator_iterator)
         sf._may_either = None # (is_result, exc_or_result)
     def get_tmay_result(sf, /):
         if sf._may_either:

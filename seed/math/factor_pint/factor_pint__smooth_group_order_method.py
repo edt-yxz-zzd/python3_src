@@ -1,7 +1,9 @@
 #__all__:goto
+#TODO:goto
 r'''[[[
 e ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_method.py
 view ../../python3_src/seed/math/factor_pint/smooth_group_order_method.py
+view ../../python3_src/seed/math/BinaryQuadraticForm.py
 
 
 seed.math.factor_pint.factor_pint__smooth_group_order_method
@@ -34,6 +36,16 @@ DONE:factor_pint__smooth_group_order_method7Qpp_#(P+1) method
     [D := [n%4==3]*-n + [n%4==1]*-4*n]
     [B**2-4*A*C == D]
     [-B**2+4*A*C == -D]
+    [p::prime][p%2==1][A%p==0]:
+        [D%p == (B**2-4*A*C)%p == B**2%p]
+        [Jacobi_symbol(p;D)==+1]
+        [B%p <- sqrts_mod_(p;D)]
+        [B%2 == B**2%2 == (D+4*A*C)%2 == D%2]
+        [B%2 == D%2]
+    [p::prime][p%2==1][Jacobi_symbol(p;D)==+1][A:=p]:
+        [xB6p := sqrts_mod_(p;D)[0]]
+        [B := B6p if B6p%2 == D%2 else (p-B6p)]
+        [C:=(B**2-D)///(4*A)]
     [n%4==3]:
         [-B**2+4*A*C == -D == n]
         [4*A*C == n+B**2]
@@ -78,10 +90,49 @@ page248[259/604]
         # [{u,v}%4 == {1,3}]
 
 
+view ../../python3_src/seed/math/BinaryQuadraticForm.py
 
+TODO:
+binary quadratic form
+  [D == [n%4==3]*-n + [n%4==1]*-4*n]
+  [h(D) < sqrt(-D)*ln(-D)]
+  [bqf**odd then **2 to found ambiguous forms maybe yield nontrivial factorizations]
+  [[bqf**2 == 1] <-> [bqf is ambiguous form]]
+
+
+view ../../python3_src/seed/math/BinaryQuadraticForm.py
+    Qfb__x__smooth_group_order_method:goto
 ]]
 [[
+view ../../python3_src/seed/math/factor_pint/factor_pint__elliptic_curve_method.py
+TODO: Montgomery coordinates:(X,Z)
 ]]
+[[
+view ../../python3_src/seed/algo/rho_method__7iter.py
+view ../../python3_src/seed/types/HistorySaver.py
+view ../../python3_src/seed/abc/IReproduceable.py
+view ../../python3_src/seed/types/Reproduceable.py
+TODO: rho_method+Reproduceable+HistorySaver
+]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -121,6 +172,10 @@ M67
 (2,)
 >>> factor_pint__smooth_group_order_method7Pmm_(13*37, 10,  2,3) # !! [2]++[3]
 (1, 2)
+>>> search_the_last_used_prime_6stage2_6smooth_group_order_method_(2,2,3,  1,2)
+3
+>>> raw_search_the_last_used_prime_6stage2_6smooth_group_order_method_(2,3,  2-1)
+3
 
 
 
@@ -283,12 +338,78 @@ as_pts6stage1:[(-1, -16), (-1, 0)]
 
 
 
+>>> factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(77, 35, 1,    1,1)
+(901001, 35, None, None, 7)
+
+
+[n:=M67*35][群规模==61536569536][群规模.最大素因子==1993<11953]
+>>> used_As7reduced = set()
+>>> kwds = dict(used_As7reduced=used_As7reduced)
+
+>>> from seed.types.Reproduceable import Reproduceable5seq
+>>> reproduceable4exps6stage1 = Reproduceable5seq((2, 2, 2, 13, 17, 37, 59, 1993), 0)
+
+>>> factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_((-1+2**67), 35, 3,    1993,1993, **kwds)  #doctest: +SKIP
+>>> factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_((-1+2**67), 35, 3,    1993,1993, reproduceable4exps6stage1, **kwds)
+(701110, 35, (3, 3), (2, 2, 13, 17, 37, 59, 1993))
+>>> #used_As7reduced.add(_[1][1])
+>>> factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_((-1+2**67), 35, 4,    1993,1993, reproduceable4exps6stage1, **kwds)
+(701110, 35, (13, 13), (2, 2, 2, 13, 17, 37, 59, 1993))
+>>> #used_As7reduced.add(_[1][1])
+>>> factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_((-1+2**67), 35, 400,    1993,1993, reproduceable4exps6stage1, **kwds)
+(701110, 35, (419, 419), (2, 2, 2, 13, 17, 37, 59, 1993))
+>>> #used_As7reduced.add(_[1][1])
+>>> sorted(used_As7reduced)
+[3, 13, 419]
+
+
+>>> factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_((-1+2**67), 35, 40099,    1993,1993, reproduceable4exps6stage1, **kwds)
+(701110, 35, (40111, 40111), (2, 2, 2, 13, 37, 59, 1993))
+>>> #used_As7reduced.add(_[1][1])
+
+
+_iter_test4factor7bqf
+>>> factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_((-1+2**67), 35, 83,    1993,1993, reproduceable4exps6stage1, **kwds)
+(901111, 35, (83, 83), (2, 13, 17, 37, 59, 1993), 193707721)
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[[
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,_iter_test4factor7bqf
+    1
+    4
+    14
+    20
+    32
+    44
+    60
+    72
+    (901111, 35, (83, 83), (2, 13, 17, 37, 59, 1993), 193707721)
+
+]]
 
 
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @f
@@ -297,6 +418,9 @@ __all__ = r'''
 factor_pint__smooth_group_order_method7Pmm_
 factor_pint__smooth_group_order_method7Qpp_
 
+factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_
+    IOps6stage12_4smooth_group_order_method__7BinaryQuadraticForm
+        Ops6stage12_4smooth_group_order_method__7BinaryQuadraticForm
 
 
 
@@ -314,6 +438,7 @@ r'''[[[
 
 [[[
 ===
+
 
 [[
 def factor_pint__smooth_group_order_method7Pmm_(n, u0, bound4stage1, bound4stage2=None, /, *, more_info=False, detect_once6stage1=False, bound4pow4stage1=1, case4xprimes=2, max_size7dense=2049, max_size7physical=65537):
@@ -730,6 +855,10 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @
     18014398509482483
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @factor_pint__smooth_group_order_method7Qpp_  ='18014398509482483*18446744073709552901' =4  =17713 =99173
     18446744073709552901
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,_iter_search_exceptional4factor_pint__smooth_group_order_method7Qpp_  ='18014398509482483*18446744073709552901' ='range(7,21)'  =17713 =99173
+    <NONE>
+    #十分稀罕，必须 mul_order4pt0{@p},mul_order4pt0{@q} 的 最大素因子 恰好相同
 
 ===
 ]]
@@ -1161,19 +1290,32 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   ,
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
+from seed.math.factor_pint.smooth_group_order_method import IOps6stage12_4smooth_group_order_method__7default_mixin
+#.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.dict__add_fmap_filter import fmap4dict_value
     from seed.mapping_tools.dict_op import inv__k2v_to_v2ks
     from seed.math.Jacobi_symbol import Jacobi_symbol
 
-    from seed.tiny_.check import check_type_is, check_int_ge, check_callable, check_may_
+    from seed.tiny_.check import check_type_is, check_int_ge, check_callable, check_may_, check_ABC
     from math import gcd
 
     from seed.math.factor_pint.smooth_group_order_method import smooth_group_order_method_
     #def smooth_group_order_method_(bound4stage1, bound4pow4stage1, bound4stage2, diff_one_, detect_, mul_, may_square_, may_pow_, one, pt0, /, *, num_muls_per_detect, imay_detect_period=0, case4xprimes=None, max_size7dense=2049, max_size7physical=65537):
+    from seed.math.factor_pint.smooth_group_order_method import search_the_last_used_prime_6stage2_6smooth_group_order_method_, raw_search_the_last_used_prime_6stage2_6smooth_group_order_method_
+    #def search_the_last_used_prime_6stage2_6smooth_group_order_method_(bound4stage1, bound4pow4stage1, bound4stage2, offset1, offset2, /):
+    #def raw_search_the_last_used_prime_6stage2_6smooth_group_order_method_(bound4stage1, bound4stage2, delta4offset, /):
 
     from seed.math.hrem_ import hrem_, mk_hrem_
+
+    from seed.helper.repr_input import repr_helper
+    from seed.types.CachedProperty import CachedProperty
+    from seed.math.BinaryQuadraticForm import mk_one6Qfb_class_group5D_#BinaryQuadraticForm, EqvCls4BinaryQuadraticForm, mk4Qfb_class_group5ABC_, , D5ABC_, C5DAB_
+    from seed.math.BinaryQuadraticForm import nk2D_, D2Qfb7A_ge_# n2D_, D2A_ge_, D2QfbPow7A_ge_, n2QfbPow7A_ge_
+    #from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)
+    from seed.math.II import II
 #.    from itertools import islice
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -1398,6 +1540,7 @@ def _iter_search_exceptional4factor_pint__smooth_group_order_method7Pmm_(n, u0s,
 def _iter_search_exceptional4factor_pint__smooth_group_order_method7Qpp_(n, u0s, /, *args, **kwds):
     return _iter_search_exceptional(factor_pint__smooth_group_order_method7Qpp_, n, u0s, *args, **kwds)
 def _iter_search_exceptional(f, n, u0s, /, *args, **kwds):
+    #十分稀罕，必须 mul_order4pt0{@p},mul_order4pt0{@q} 的 最大素因子 恰好相同
     for u0 in u0s:
         r = f(n, u0, *args, **kwds)
         match r:
@@ -1610,6 +1753,257 @@ def _detect4Qpp_(n, ab, /):
 _detect4Qpp_
 #end-def factor_pint__smooth_group_order_method7Qpp_
 #################################
+
+
+
+
+
+#################################
+__all__
+#################################
+def factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, used_As7reduced=None):
+    'n/uint{>0}{%2==1} -> k4D/uint{>0}{%2==1} -> min_A -> bound4stage1 -> may bound4stage2 -> (k4D, may A_A, ?may exps7key?, ?may nontrivial_factor4n?)/((k4D, None, None, nontrivial_factor4n)|(k4D, A_A)|(k4D, A_A, exps7key)|(k4D, A_A, exps7key, nontrivial_factor4n)) # [A_A := (A7repr, A7reduced)]'
+    #TODO
+    r'''[[[
+    for k4D in iter_unsorted_squarefree_uints_():
+        D = ...
+    #]]]'''#'''
+    ######################
+    # factor (n*k4D)
+    ######################
+    # [n > 0][n%2==1]
+    # [k4D > 0][k4D%2==1]
+    # [1==gcd(k4D,n)]
+    # !! [平方因子基本不影响 群规模耂最大素因子]
+    # => 最好有:[is_squarefree_(k4D)] # see:iter_unsorted_squarefree_uints_()
+    # [D := -k4D*n if k4D*n%4==3 else -4*k4D*n]
+    # [min_A >= 3]
+    # [A :: prime][A >= min_A >= 3][Jacobi_symbol(A;D) == +1]
+    # !! [(1+8*_)型素数 开平方更难:需要 平方非剩余]
+    # => 最好避免:[A%8 == 1] # ++kw:avoid_A_mod8_eq1
+    # => 或者:[gde_(2;A-1) <= max_ez4Amm]
+    #       # O((log2(p)+log2(p///odd4p)**(3/2))*log2(p)**2)
+    # [B**2 =[%A]= D][B%2 == D%2]
+    # !! [A%2 == 1]
+    # => [%A范围内B只有一个解]
+    # !! [B%2 == D%2]
+    # => [%(2*A)范围内B只有一个解]
+    # !! 调整冫二二型中部牜保持等价类
+    # => [等效步长:(2*A)]
+    # => [只有一个不等效B]
+    # => [B{A}唯一]
+    ######################
+    check_int_ge(1, bound4stage1)
+    check_int_ge(1, scale4bound4stage2)
+    if bound4stage2 is None:
+        bound4stage2 = scale4bound4stage2*bound4stage1
+    check_int_ge(1, bound4stage2)
+
+    max4exp6stage1 = bound4stage1
+    max4exp6stage2 = bound4stage2
+    ######################
+    try:
+        ops6stage12 = Ops6stage12_4smooth_group_order_method__7BinaryQuadraticForm(n, k4D)
+        D = ops6stage12.D
+    except ValueError as exc:
+        match exc.args:
+            case (_n, _k4D, ft4n):
+                assert _n == n
+                assert _k4D == k4D
+                if 1 < ft4n < n:
+                    assert n%ft4n == 0
+                    return (901001, k4D, None, None, ft4n)
+                if 1 == ft4n:raise 000
+                assert n == ft4n
+                raise
+        raise
+    ops6stage12
+    D
+    ######################
+    k4D = ops6stage12.k4D
+    (A7repr, bqf7reduced) = D2Qfb7A_ge_(D, min_A, avoid_A_mod8_eq1=True, with_A7repr=True)
+    #bug:A7repr = bqf7reduced.binary_quadratic_form7repr.A
+    A7reduced = bqf7reduced.binary_quadratic_form7reduced.A
+    A_A = (A7repr, A7reduced)
+    k4D, A_A
+    bqf7reduced
+    if not None is used_As7reduced:
+        if A7reduced in used_As7reduced:
+            return (401100, k4D, A_A)
+        used_As7reduced.add(A7reduced)
+    ######################
+    #输出A7repr，以便外部步进
+    #输出A7reduced，以便考察重复性
+    ######################
+    pt0 = bqf7reduced
+    r12 = ops6stage12.search6stage12_(to_search_exps8factors4order6found:=True, detect_period:=1, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0)
+    match r12:
+        case (202, -1, r1, r2):
+            return (201100, k4D, A_A)
+        case ((107|207), 1, _pt7found, (exps7key, (1, pt7found) as patch0001) as exps7key_patch):
+            # !! to_search_exps8factors4order6found
+            assert pt7found.eq_one_()
+            assert _pt7found.eq_one_()
+            exps7key
+            pass
+        case _:
+            raise Exception((n, k4D, A_A), r12)
+    exps7key
+    ######################
+    num_twos = exps7key.count(2)
+    if 0 == num_twos:
+        return (301110, k4D, A_A, exps7key)
+    exps7key7odd = exps7key[num_twos:]
+    exps7key7even = exps7key[:num_twos]
+    if not 0 == exps7key7odd.count(2):raise Exception((n, k4D, A_A), exps7key)
+    if not (2,)*num_twos == exps7key7even:raise Exception((n, k4D, A_A), exps7key)
+    pt = pt0**II(exps7key7odd)
+    for _ in range(-1+num_twos):
+        pt = pt**2
+    pt7ambiguous = pt
+    if not pt7ambiguous.is_ambiguous_form_():raise Exception((n, k4D, A_A), exps7key, pt0, pt7ambiguous)
+    zmay_nontrivial_odd_factor4D = pt7ambiguous.try_factor_D6ambiguous_form_()
+    match zmay_nontrivial_odd_factor4D:
+        case 0:
+            return (501110, k4D, A_A, exps7key)
+        case nontrivial_odd_factor4D:
+            pass
+    ft6k = gcd(k4D, nontrivial_odd_factor4D)
+    ft6n = nontrivial_odd_factor4D//ft6k
+    if 1 == ft6n or n == ft6n:
+        return (701110, k4D, A_A, exps7key)
+    if 1 < ft6n < n:
+        assert n%ft6n == 0, (n, k4D, A_A, exps7key, nontrivial_odd_factor4D, ft6k, ft6n)
+        return (901111, k4D, A_A, exps7key, ft6n)
+    raise Exception(n, k4D, A_A, exps7key, nontrivial_odd_factor4D, ft6k, ft6n)
+
+
+    ######################
+    ######################
+    ######################
+
+
+    #.######################
+    #.check_int_ge(1, n)
+    #.check_int_ge(1, k4D)
+    #.if not n&1:raise ValueError(n)
+    #.if not k4D&1:raise ValueError(k4D)
+    #.if 1 < (g:=gcd(n,k4D)):
+    #.    if g < n:
+    #.        return g
+    #.    if g == n:raise ValueError(k4D)
+    #.    raise 000
+    #.#nk = n*k4D
+    #.#D = n2D_(nk)
+    #.D = nk2D_(n, k4D)
+
+
+
+    ######################
+#################################
+
+class IOps6stage12_4smooth_group_order_method__7BinaryQuadraticForm(IOps6stage12_4smooth_group_order_method__7default_mixin):
+    '[pt :: EqvCls4BinaryQuadraticForm]'
+    __slots__ = ()
+    @property
+    @abstractmethod
+    def n(sf, /):
+        '-> n/int{>=1}{%2==1}'
+    @property
+    @abstractmethod
+    def k4D(sf, /):
+        '-> k4D/int{>=1}{%2==1}{[gcd(n,k4D) == 1]}'
+    @CachedProperty
+    def D(sf, /):
+        '-> D/int{<0}{%4<2}'
+        n = sf.n
+        k4D = sf.k4D
+        return nk2D_(n, k4D)
+    @CachedProperty
+    @override
+    def one(sf, /):
+        return mk_one6Qfb_class_group5D_(sf.D)
+    @override
+    def eq_one_(sf, pt, /):
+        return pt.eq_one_()
+    @override
+    def pow_(sf, pt, exp, /):
+        return (pt**exp)
+    @override
+    def square_(sf, pt, exp, /):
+        return (pt**2)
+    @override
+    def mul_(sf, pt8lhs, pt8rhs, /):
+        return pt8lhs * pt8rhs
+    @override
+    def detect_partial_one_(sf, pt, /):
+        return +1 if pt.eq_one_() else -1
+    #search6stage12_
+check_ABC(IOps6stage12_4smooth_group_order_method__7BinaryQuadraticForm, 'n k4D'.split())
+class Ops6stage12_4smooth_group_order_method__7BinaryQuadraticForm(IOps6stage12_4smooth_group_order_method__7BinaryQuadraticForm):
+    ___no_slots_ok___ = True
+    def __init__(sf, n, k4D, /):
+        check_int_ge(1, n)
+        check_int_ge(1, k4D)
+        sf._n = n
+        sf._k4D = k4D
+        777;sf.D # check
+    @property
+    @override
+    def n(sf, /):
+        return sf._n
+    @property
+    @override
+    def k4D(sf, /):
+        return sf._k4D
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.n, sf.k4D)
+#################################
+
+def _iter_test4factor7bqf():
+    from seed.types.Reproduceable import Reproduceable5seq
+    reproduceable4exps6stage1 = Reproduceable5seq((2, 2, 2, 13, 17, 37, 59, 1993), 0)
+
+    used_As7reduced = set()
+    kwds = dict(used_As7reduced=used_As7reduced)
+    min_A = 1
+    while 1:
+        yield (min_A)
+        t = factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_((-1+2**67), 35, min_A,    1993,1993, reproduceable4exps6stage1, **kwds)
+        match t:
+            case (_, k4D, _, _, ft4n):
+                yield (t)
+                break
+            case (_, k4D, A_A, exps7key):
+                (A7repr, A7reduced) = A_A
+                min_A = 1+A7repr
+                continue
+            case (401100, k4D, A_A):
+                (A7repr, A7reduced) = A_A
+                min_A = 1+A7repr
+                continue
+
+            case (201100, k4D, A_A):
+                raise Exception('reproduceable4exps6stage1 not catch all prime factor of order of class group', t)
+            case _:
+                raise Exception(t)
+        raise 000
+
+
+
+
+
+__all__
+
+
+
+
+
+
+
+
+
+
 
 
 

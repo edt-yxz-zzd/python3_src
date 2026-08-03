@@ -14,25 +14,25 @@ py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   %seed.math.po
 
 '#'; __doc__ = r'#'
 
-def power_(mul_, may_inv_, may_is_zero_, is_one_, one, imay_group_order, e, x0, /):
+def power_(mul_, may_inv_, may_eq_zero_, eq_one_, one, imay_group_order, e, x0, /):
 >>> mul_ = int.__mul__
 >>> may_inv_ = None
->>> may_is_zero_ = (0).__eq__
->>> is_one_ = (1).__eq__
+>>> may_eq_zero_ = (0).__eq__
+>>> eq_one_ = (1).__eq__
 >>> one = 1
 >>> imay_group_order = -1
->>> args = (mul_, may_inv_, may_is_zero_, is_one_, one, imay_group_order)
+>>> args = (mul_, may_inv_, may_eq_zero_, eq_one_, one, imay_group_order)
 >>> power_(*args, 3001, 3) == 3**3001
 True
 
 >>> modulus = 1+2**16
 >>> mul_ = lambda x,y:x*y%modulus
 >>> may_inv_ = lambda x:pow(x,-1,modulus)
->>> may_is_zero_ = lambda x:0 == x%modulus
->>> is_one_ = lambda x:1 == x%modulus
+>>> may_eq_zero_ = lambda x:0 == x%modulus
+>>> eq_one_ = lambda x:1 == x%modulus
 >>> one = 1
 >>> imay_group_order = -1+modulus
->>> args = (mul_, may_inv_, may_is_zero_, is_one_, one, imay_group_order)
+>>> args = (mul_, may_inv_, may_eq_zero_, eq_one_, one, imay_group_order)
 >>> power_(*args, 3001, 3) == pow(3,3001,modulus)
 True
 >>> power_(*args, -1+2**61, 3) == pow(3,-1+2**61,modulus)
@@ -95,20 +95,20 @@ def std_exp_(imay_group_order, e, /):
 
 
 
-def power_(mul_, may_inv_, may_is_zero_, is_one_, one, imay_group_order, e, x0, /):
-    'mul_/(x->x->x) -> may inv_/(x->x) -> may is_zero_/(x->bool) -> is_one_/(x->bool) -> one/x -> imay_group_order/imay uint{>=1} -> e/int -> x0/x -> y/x # [y==x**e] # [zero**0 == 1] # [[e<0][imay_group_order==-1] => [zero**e --> ^ZeroDivisionError]]'
+def power_(mul_, may_inv_, may_eq_zero_, eq_one_, one, imay_group_order, e, x0, /):
+    'mul_/(x->x->x) -> may inv_/(x->x) -> may eq_zero_/(x->bool) -> eq_one_/(x->bool) -> one/x -> imay_group_order/imay uint{>=1} -> e/int -> x0/x -> y/x # [y==x**e] # [zero**0 == 1] # [[e<0][imay_group_order==-1] => [zero**e --> ^ZeroDivisionError]]'
 
     e = std_exp_(imay_group_order, e)
     # [[imay_group_order == -1]or[-group_order/2 < e <= group_order/2]]
 
-    if e == 0 or is_one_(x0):
+    if e == 0 or eq_one_(x0):
         # assume:[zero**0 == 1]
         return one
     # [e =!= 0]
     # [x0 =!= one]
 
-    if not None is (is_zero_:=may_is_zero_):
-        if is_zero_(x0):
+    if not None is (eq_zero_:=may_eq_zero_):
+        if eq_zero_(x0):
             if e < 0 and imay_group_order == -1:raise ZeroDivisionError
             return x0
         # [x0 =!= zero]
@@ -177,4 +177,7 @@ def _power_(mul_, e, x0, /):
 
 __all__
 from seed.math.power.power_ import power_, std_exp_
+#def power_(mul_, may_inv_, may_eq_zero_, eq_one_, one, imay_group_order, e, x0, /):
+#   e = std_exp_(imay_group_order, e)
+#   # [[imay_group_order == -1]or[-group_order/2 < e <= group_order/2]]
 from seed.math.power.power_ import *

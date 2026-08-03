@@ -1,4 +1,5 @@
 #__all__:goto
+#函数的参数数目:arity()@PARI-GP
 r'''[[[
 e ../../python3_src/seed/for_libs/for_inspect__isolated.py
 moved from:

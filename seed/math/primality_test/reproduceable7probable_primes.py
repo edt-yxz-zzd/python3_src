@@ -375,10 +375,10 @@ __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.abc.IReproduceable import IReproduceable
-from seed.abc.IReproduceable import NextEx, StopEx, ResultTypes4xnext
-from seed.abc.IReproduceable import iter_pairs4reproduceable_, iter_fsts4reproduceable_, iter_snds4reproduceable_
-from seed.abc.IReproduceable import Reproduceable5seq, Reproduceable7chain5reproduceable, Reproduceable7fmap, Reproduceable7repeat, Reproduceable7customized_repr#, Reproduceable7chain5iterable, Reproduceable7transform, Reproduceable7rdiff, Reproduceable7foldl
+from seed.types.Reproduceable import IReproduceable
+from seed.types.Reproduceable import NextEx, StopEx, ResultTypes4xnext
+from seed.types.Reproduceable import iter_pairs4reproduceable_, iter_fsts4reproduceable_, iter_snds4reproduceable_
+from seed.types.Reproduceable import Reproduceable5seq, Reproduceable7chain5reproduceable, Reproduceable7fmap, Reproduceable7repeat, Reproduceable7customized_repr#, Reproduceable7chain5iterable, Reproduceable7transform, Reproduceable7rdiff, Reproduceable7foldl
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
