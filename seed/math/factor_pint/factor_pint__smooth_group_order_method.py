@@ -429,7 +429,7 @@ py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.f
     ((901111, 35, (83, 83), (), 193707721), (7692071192, 3, 961508899, (2, 2, 2, 13, 17, 37, 59, 1993)))
 
 ===
-def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0):
+def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_prev_k4D__or__k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0):
 
 py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**67)'  =... =1024 ='2**16'
     1:((301110, 1, (11, 11), (5, 5, 5, 13, 149, 11953)), (1, 0, 1, []))
@@ -446,6 +446,57 @@ py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.f
     1:((901111, 1, (47, 47), (2,), 193707721), (5788240250, 1, 2894120125, (2, 5, 5, 5, 13, 149, 11953)))
 
 ===
+prev_k4D:
+py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**67)'  =1 =1024 ='2**16'
+    1:((201100, 3, (5, 5)), (1, 0, 1, []))
+    2:((201100, 3, (5, 5)), (1, 0, 1, ()))
+    3:((201100, 15, (11, 11)), (1, 0, 1, []))
+    4:((201100, 15, (11, 11)), (1, 0, 1, ()))
+    5:((201100, 5, (3, 3)), (1, 0, 1, []))
+    6:((201100, 5, (3, 3)), (1, 0, 1, ()))
+    7:((701110, 35, (3, 3), (2, 2, 13, 17, 37, 59, 1993)), (1, 0, 1, []))
+    8:((701110, 35, (13, 13), (2,)), (3846035596, 2, 961508899, [2, 2, 13, 17, 37, 59, 1993]))
+    9:((701110, 35, (19, 19), ()), (7692071192, 3, 961508899, [2, 2, 13, 17, 37, 59, 1993, 2]))
+    10:((701110, 35, (31, 31), ()), (7692071192, 3, 961508899, [2, 2, 13, 17, 37, 59, 1993, 2]))
+    11:((701110, 35, (43, 43), ()), (7692071192, 3, 961508899, [2, 2, 13, 17, 37, 59, 1993, 2]))
+    12:((701110, 35, (59, 59), ()), (7692071192, 3, 961508899, [2, 2, 13, 17, 37, 59, 1993, 2]))
+    13:((701110, 35, (71, 71), ()), (7692071192, 3, 961508899, [2, 2, 13, 17, 37, 59, 1993, 2]))
+    14:((901111, 35, (83, 83), (), 193707721), (7692071192, 3, 961508899, [2, 2, 13, 17, 37, 59, 1993, 2]))
+    15:((901111, 35, (83, 83), (), 193707721), (7692071192, 3, 961508899, (2, 2, 2, 13, 17, 37, 59, 1993)))
+    16:((901111, 35, (83, 83), (), 193707721), (7692071192, 3, 961508899, (2, 2, 2, 13, 17, 37, 59, 1993)))
+
+===
+prev_k4D:
+py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**67)'  =35 =1024 ='2**16'
+    1:((201100, 105, (13, 13)), (1, 0, 1, []))
+    2:((201100, 105, (13, 13)), (1, 0, 1, ()))
+    3:((201100, 21, (23, 23)), (1, 0, 1, []))
+    4:((201100, 21, (23, 23)), (1, 0, 1, ()))
+    5:((201100, 7, (5, 5)), (1, 0, 1, []))
+    6:((201100, 7, (5, 5)), (1, 0, 1, ()))
+    7:((201100, 77, (3, 3)), (1, 0, 1, []))
+    8:((201100, 77, (3, 3)), (1, 0, 1, ()))
+    9:((701110, 231, (13, 13), (2, 2, 3, 353, 35753)), (1, 0, 1, []))
+    10:((301110, 231, (31, 31), (13,)), (151449708, 2, 37862427, [2, 2, 3, 353, 35753]))
+    11:((701110, 231, (37, 37), ()), (1968846204, 2, 492211551, [2, 2, 3, 353, 35753, 13]))
+    12:((701110, 231, (43, 43), ()), (1968846204, 2, 492211551, [2, 2, 3, 353, 35753, 13]))
+    13:((701110, 231, (61, 61), ()), (1968846204, 2, 492211551, [2, 2, 3, 353, 35753, 13]))
+    14:((701110, 231, (67, 67), ()), (1968846204, 2, 492211551, [2, 2, 3, 353, 35753, 13]))
+    15:((901111, 231, (79, 79), (), 193707721), (1968846204, 2, 492211551, [2, 2, 3, 353, 35753, 13]))
+    16:((901111, 231, (79, 79), (), 193707721), (1968846204, 2, 492211551, (2, 2, 3, 13, 353, 35753)))
+    17:((901111, 231, (79, 79), (), 193707721), (1968846204, 2, 492211551, (2, 2, 3, 13, 353, 35753)))
+
+
+
+
+
+
+
+
+
+
+===
+M67-->M1207:
 py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**1207)'  =... =1024 ='2**16'
     1:((201100, 1, (11, 11)), (1, 0, 1, []))
     2:((201100, 1, (11, 11)), (1, 0, 1, ()))
@@ -1400,6 +1451,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)
     from seed.math.II import II
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.tiny_.verify import is_iterable# is_iterator
 #.    from itertools import islice
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -1847,12 +1899,21 @@ __all__
 #################################
 class _FoundNontrivialFactor(BaseException):pass
 class _IsPrime(BaseException):pass
-def _iter__k4D__min_A__pairs_(n, emay_k4D__min_A__pairs, /):
-    if not ... is emay_k4D__min_A__pairs:
-        k4D__min_A__pairs = emay_k4D__min_A__pairs
+def _iter__k4D__min_A__pairs_(n, emay_prev_k4D__or__k4D__min_A__pairs, /):
+    if is_iterable(emay_prev_k4D__or__k4D__min_A__pairs):
+        k4D__min_A__pairs = emay_prev_k4D__or__k4D__min_A__pairs
         return (yield from k4D__min_A__pairs)
+    emay_prev_k4D = emay_prev_k4D__or__k4D__min_A__pairs
+    if ... is emay_prev_k4D:
+        more_kwds = {}
+    elif isinstance(emay_prev_k4D, int):
+        prev_k4D = emay_prev_k4D
+        more_kwds = dict(may_squarefree7resume=prev_k4D, new_resume=False)
+    else:
+        raise TypeError(emay_prev_k4D__or__k4D__min_A__pairs)
+    more_kwds
     min_A = 3
-    for (k4D, vw4rv_js, vw4rv_ps, imay_new_prime) in iter_unsorted_squarefree_uints_(to_view_primes=True, may_prime2ok_=lambda p:p>2):
+    for (k4D, vw4rv_js, vw4rv_ps, imay_new_prime) in iter_unsorted_squarefree_uints_(to_view_primes=True, may_prime2ok_=lambda p:p>2, **more_kwds):
         ##################
         match imay_new_prime:
             case -1:
@@ -1865,7 +1926,7 @@ def _iter__k4D__min_A__pairs_(n, emay_k4D__min_A__pairs, /):
         ##################
         yield (k4D, min_A)
 
-def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0, case4xprimes=None):
+def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_prev_k4D__or__k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0, case4xprimes=None):
     #TODO
     r'''[[[
     #]]]'''#'''
@@ -1880,7 +1941,7 @@ def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n
     if 1:
         (bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2) = (max4exp6stage1, max4exp6stage2, reproduceable4exps6stage1, reproduceable4exps6stage2)
 
-    for (k4D, min_A) in _iter__k4D__min_A__pairs_(n, emay_k4D__min_A__pairs):
+    for (k4D, min_A) in _iter__k4D__min_A__pairs_(n, emay_prev_k4D__or__k4D__min_A__pairs):
         it = iter_trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2=scale4bound4stage2, used_As7reduced=None, quiet=bool(quiet_level))
         ######################
         result4trials = yield from it

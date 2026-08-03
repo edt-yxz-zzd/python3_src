@@ -18,8 +18,10 @@ view ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_met
 '#'; __doc__ = r'#'
 >>> [*islice(iter_unsorted_squarefree_uints_(), 0, 18)]
 [1, 2, 6, 3, 15, 30, 10, 5, 35, 70, 210, 105, 21, 42, 14, 7, 77, 154]
->>> for (u, rv_js, rv_ps, imay_new_prime) in islice(iter_unsorted_squarefree_uints_(to_view_primes=True), 0, 18):
-...     print((u, tuple(reversed(rv_js)), tuple(reversed(rv_ps)), imay_new_prime))
+>>> def show_(sz, /, **kwds):
+...     for (u, rv_js, rv_ps, imay_new_prime) in islice(iter_unsorted_squarefree_uints_(to_view_primes=True, **kwds), 0, sz):
+...         print((u, tuple(reversed(rv_js)), tuple(reversed(rv_ps)), imay_new_prime))
+>>> show_(18)
 (1, (), (), -1)
 (2, (0,), (2,), 2)
 (6, (0, 1), (2, 3), 3)
@@ -43,6 +45,61 @@ view ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_met
 [1, 3, 15, 5, 35, 105, 21, 7, 77, 231, 1155, 385, 55, 165, 33, 11, 143, 429]
 >>> [*islice(iter_unsorted_squarefree_uints_([2,3,5]), 0, 18)]
 [1, 2, 6, 3, 15, 30, 10, 5]
+>>> [*islice(iter_unsorted_squarefree_uints_([5,3,2]), 0, 18)] #disorder
+[1, 5, 15, 3, 6, 30, 10, 2]
+>>> [*islice(iter_unsorted_squarefree_uints_([5,7,3,2]), 0, 18)] #disorder
+[1, 5, 35, 7, 21, 105, 15, 3, 6, 30, 210, 42, 14, 70, 10, 2]
+
+>>> [*islice(iter_unsorted_squarefree_uints_(may_squarefree7resume=1), 0, 18-1)]
+[2, 6, 3, 15, 30, 10, 5, 35, 70, 210, 105, 21, 42, 14, 7, 77, 154]
+>>> [*islice(iter_unsorted_squarefree_uints_(may_squarefree7resume=2), 0, 18-2)]
+[6, 3, 15, 30, 10, 5, 35, 70, 210, 105, 21, 42, 14, 7, 77, 154]
+>>> [*islice(iter_unsorted_squarefree_uints_(may_squarefree7resume=6), 0, 18-3)]
+[3, 15, 30, 10, 5, 35, 70, 210, 105, 21, 42, 14, 7, 77, 154]
+>>> [*islice(iter_unsorted_squarefree_uints_(may_squarefree7resume=3), 0, 18-4)]
+[15, 30, 10, 5, 35, 70, 210, 105, 21, 42, 14, 7, 77, 154]
+>>> [*islice(iter_unsorted_squarefree_uints_(may_squarefree7resume=15), 0, 18-5)]
+[30, 10, 5, 35, 70, 210, 105, 21, 42, 14, 7, 77, 154]
+
+>>> show_(18-11, may_squarefree7resume=210)
+(105, (1, 2, 3), (3, 5, 7), -1)
+(21, (1, 3), (3, 7), -1)
+(42, (0, 1, 3), (2, 3, 7), -1)
+(14, (0, 3), (2, 7), -1)
+(7, (3,), (7,), -1)
+(77, (3, 4), (7, 11), 11)
+(154, (0, 3, 4), (2, 7, 11), -1)
+
+>>> show_(1, new_resume=True, may_squarefree7resume=1)
+(1, (), (), -1)
+>>> show_(1, new_resume=True, may_squarefree7resume=2)
+(2, (0,), (2,), 2)
+>>> show_(1, new_resume=True, may_squarefree7resume=6)
+(6, (0, 1), (2, 3), 3)
+>>> show_(1, new_resume=True, may_squarefree7resume=3)
+(3, (1,), (3,), -1)
+>>> show_(1, new_resume=True, may_squarefree7resume=15)
+(15, (1, 2), (3, 5), 5)
+>>> show_(1, new_resume=True, may_squarefree7resume=30)
+(30, (0, 1, 2), (2, 3, 5), -1)
+>>> show_(1, new_resume=True, may_squarefree7resume=10)
+(10, (0, 2), (2, 5), -1)
+>>> show_(1, new_resume=True, may_squarefree7resume=5)
+(5, (2,), (5,), -1)
+>>> show_(1, new_resume=True, may_squarefree7resume=35)
+(35, (2, 3), (5, 7), 7)
+>>> show_(1, new_resume=True, may_squarefree7resume=70)
+(70, (0, 2, 3), (2, 5, 7), -1)
+>>> show_(1, new_resume=True, may_squarefree7resume=210)
+(210, (0, 1, 2, 3), (2, 3, 5, 7), -1)
+
+
+
+
+
+
+
+
 
 
 
@@ -63,7 +120,37 @@ with mk_ctx4lazy_import4funcs_(__name__):
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
-def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False, may_prime2ok_=None):
+def _resume(it8ps, squarefree7resume, /):
+    assert squarefree7resume > 0
+    u = squarefree7resume
+    # [u > 0]
+    _j2using = []
+    j2p = []
+    stk = [] # reversed js
+    if not u == 1:
+        # [u > 1]
+        for j, p in enumerate(it8ps):
+            # [u > 1]
+            assert u >= p
+            # [u >= p]
+            j2p.append(p)
+            b = u%p == 0
+            _j2using.append(b)
+            if b:
+                stk.append(j)
+                u //= p
+                # [u >= 1]
+                if u == 1:break
+                # [u > 1]
+                if u%p == 0:raise Exception('non-squarefree', squarefree7resume, p)
+                # [u > 1]
+            # [u > 1]
+            #MAYBE disorder:assert u > p # [u > p]
+    assert u == 1
+    stk.reverse() # reversed js
+    return (_j2using, j2p, stk)
+#resume,restore,snapshot,breakpoint,setup
+def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False, may_prime2ok_=None, may_squarefree7resume=None, new_resume=False):
     '-> (unsorted-Iter u/uint{>=1}{squarefree}) if not to_view_primes else (unsorted-Iter (u/uint{>=1}{squarefree}, rv_js/[uint]{reversed}{[u==II(PRIMES[j] for j in rv_js)]}, rv_ps/[prime]{reversed}{[u==II(rv_ps)]}, imay prime{new}))'
     def j2using_(j, /):
         nonlocal imay_new_prime
@@ -78,6 +165,9 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
             # ^StopIteration
         if to_view_primes:
             imay_new_prime = j2p[-1]
+        assert 1 <= len(stk) <= 2
+        assert stk[0] == j
+        assert len(stk) == 1 or stk[1] == j-1
         return _j2using[j]
 
     it8ps = iter(may_primes) if not None is may_primes else iter_filter4primes_ge_lt_(0, 1<<81)
@@ -85,18 +175,30 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
         prime2ok_ = may_prime2ok_
         it8ps = filter(prime2ok_, it8ps)
     it8ps
-    _j2using = []
-    j2p = []
-    stk = [] # reversed js
+    if not None is (squarefree7resume:=may_squarefree7resume):
+        (_j2using, j2p, stk) = _resume(it8ps, squarefree7resume)
+        u = squarefree7resume
+        777;u0_is_new = bool(new_resume)
+    else:
+        _j2using = []
+        j2p = []
+        stk = [] # reversed js
+        u = 1
+        777;u0_is_new = True
+
     if to_view_primes:
         rv_js = stk # reversed js
-        rv_ps = [] # reversed primes
+        rv_ps = [j2p[j] for j in rv_js] # reversed primes
         vw4rv_js = SeqView(rv_js)
         vw4rv_ps = SeqView(rv_ps)
-        imay_new_prime = -1
+        # !! u0_is_new <= [u==1]
+        if u0_is_new and stk and 1+stk[0] == len(j2p) and (stk == [0] or len(stk) == 2 and stk[0] == 1+stk[1]):
+            imay_new_prime = j2p[-1]
+        else:
+            imay_new_prime = -1
 
-    u = 1
-    777; yield u if not to_view_primes else (u, vw4rv_js, vw4rv_ps, imay_new_prime)
+    if u0_is_new:
+        777; yield u if not to_view_primes else (u, vw4rv_js, vw4rv_ps, imay_new_prime)
     for j in 趃步进冫爻位栈冃孤变码扌(stk):
         try:
             b = j2using_(j) #update imay_new_prime
@@ -120,10 +222,13 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
                 else:
                     raise Exception(stk, rv_ps, p6j)
             else:
-                if not rv_ps or rv_ps[-1] > p6j:
+                if rv_js[-1] == j:
+                    #MAYBE disorder:if not rv_ps or rv_ps[-1] > p6j:
                     rv_ps.append(p6j)
-                else:
+                elif rv_js[-2] == j:
                     rv_ps.insert(-1, p6j)
+                else:
+                    raise Exception(stk, rv_ps, p6j)
             #rv_ps
         #########
         yield u if not to_view_primes else (u, vw4rv_js, vw4rv_ps, imay_new_prime)
@@ -134,5 +239,5 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
 
 
 __all__
-from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # ++kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)  # ++kw:may_prime2ok_{filter} # ++arg:may_primes
+from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # ++kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)  # ++kw:may_prime2ok_{filter} # ++arg:may_primes # ++kw:may_squarefree7resume,kw:new_resume
 from seed.math.iter_unsorted_squarefree_uints import *
