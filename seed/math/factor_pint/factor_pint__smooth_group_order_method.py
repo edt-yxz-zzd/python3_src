@@ -464,7 +464,15 @@ py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.f
     ^C KeyboardInterrupt
         ?why so slow?
 ===
-py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**1207)'  =... ='2**16'
+py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**1207)'  =... ='2**12'  --case4xprimes=2
+    ... ...
+    ... ...
+    50:((201100, 91, (11, 11)), (1, 0, 1, ()))
+    51:((201100, 273, (5, 5)), (1, 0, 1, []))
+    52:((201100, 273, (5, 5)), (1, 0, 1, ()))
+    53:((201100, 1365, (11, 11)), (1, 0, 1, []))
+    54:((201100, 1365, (11, 11)), (1, 0, 1, ()))
+    ^C KeyboardInterrupt
 ===
 ]]
 
@@ -1366,6 +1374,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
 from seed.math.factor_pint.smooth_group_order_method import IOps6stage12_4smooth_group_order_method__7default_mixin
+from seed.math.factor_pint.smooth_group_order_method import default_prepare_exps4search6stage1_, default_prepare_exps4search6stage2_
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
@@ -1386,8 +1395,8 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
     from seed.helper.repr_input import repr_helper
     from seed.types.CachedProperty import CachedProperty
-    from seed.math.BinaryQuadraticForm import mk_one6Qfb_class_group5D_#BinaryQuadraticForm, EqvCls4BinaryQuadraticForm, mk4Qfb_class_group5ABC_, , D5ABC_, C5DAB_
-    from seed.math.BinaryQuadraticForm import nk2D_, D2Qfb7A_ge_# n2D_, D2A_ge_, D2QfbPow7A_ge_, n2QfbPow7A_ge_
+    from seed.math.BinaryQuadraticForm import mk_one6Qfb_class_group5D_
+    from seed.math.BinaryQuadraticForm import nk2D_, D2Qfb7A_ge_
     from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)
     from seed.math.II import II
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
@@ -1856,12 +1865,12 @@ def _iter__k4D__min_A__pairs_(n, emay_k4D__min_A__pairs, /):
         ##################
         yield (k4D, min_A)
 
-def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0):
+def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0, case4xprimes=None):
     #TODO
     r'''[[[
     #]]]'''#'''
     check_uint_lt(4, quiet_level)
-    t = _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, _k4D:=1, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2)
+    t = _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, _k4D:=1, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2, case4xprimes)
     match t:
         case (-101111, _k4D, _ops6stage12, _D, max4exp6stage1, max4exp6stage2, reproduceable4exps6stage1, reproduceable4exps6stage2):
             pass
@@ -1908,7 +1917,7 @@ def trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_
     else:
         # !! [quiet:=True]
         raise Exception(r)
-def iter_trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, used_As7reduced=None, quiet=False):
+def iter_trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, used_As7reduced=None, quiet=False, case4xprimes=None):
     '-> (result4one_trial, info4group_order)/(result{one_trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_()}, (group_order7guess, ez4group_order7guess, odd4group_order7guess, known_exps7key))'
     if used_As7reduced is None:
         used_As7reduced = set()
@@ -1935,7 +1944,7 @@ def iter_trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadratic
         777;known_exps7key.extend(more_exps7key)
         pass
     ######################
-    t = _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2)
+    t = _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2, case4xprimes)
     match t:
         case (-101111, k4D, ops6stage12, D, max4exp6stage1, max4exp6stage2, reproduceable4exps6stage1, reproduceable4exps6stage2):
             pass
@@ -1998,7 +2007,7 @@ def iter_trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadratic
                 raise Exception(t)
         ######################
 
-def one_trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, used_As7reduced=None):
+def one_trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, used_As7reduced=None, case4xprimes=None):
     #case : regex"[1-9]0[01]\{4}"
     'n/uint{>0}{%2==1} -> k4D/uint{>0}{%2==1} -> min_A -> bound4stage1 -> may bound4stage2 -> (case, k4D, may A_A, ?may exps7key?, ?may nontrivial_factor4n?)/((901001, k4D, None, None, nontrivial_factor4n)|(201100|401100, k4D, A_A)|(301110|501110|701110, k4D, A_A, exps7key)|(901111, k4D, A_A, exps7key, nontrivial_factor4n)) # [A_A := (A7repr, A7reduced)]'
 
@@ -2027,7 +2036,7 @@ def one_trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticFo
     # => [只有一个不等效B]
     # => [B{A}唯一]
     ######################
-    t = _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2)
+    t = _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2, case4xprimes)
     match t:
         case (-101111, k4D, ops6stage12, D, max4exp6stage1, max4exp6stage2, reproduceable4exps6stage1, reproduceable4exps6stage2):
             pass
@@ -2038,7 +2047,7 @@ def one_trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticFo
     (A_A, pt0) = _neck4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(D, min_A)
     t = _body4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, A_A, ops6stage12, D, max4exp6stage1, max4exp6stage2, reproduceable4exps6stage1, reproduceable4exps6stage2, pt0, used_As7reduced)
     return t
-def _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2, /):
+def _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2, case4xprimes, /):
     check_int_ge(1, bound4stage1)
     check_int_ge(1, scale4bound4stage2)
     if bound4stage2 is None:
@@ -2067,8 +2076,10 @@ def _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadratic
     D
     assert k4D == ops6stage12.k4D
     ######################
-    reproduceable4exps6stage1 = ops6stage12.prepare_exps4search6stage1_(max4exp6stage1, may_reproduceable4exps6stage1)
-    reproduceable4exps6stage2 = ops6stage12.prepare_exps4search6stage2_(max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage2)
+    #.reproduceable4exps6stage1 = ops6stage12.prepare_exps4search6stage1_(max4exp6stage1, may_reproduceable4exps6stage1)
+    #.reproduceable4exps6stage2 = ops6stage12.prepare_exps4search6stage2_(max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage2)
+    reproduceable4exps6stage1 = default_prepare_exps4search6stage1_(ops6stage12, max4exp6stage1, case4xprimes=case4xprimes) if None is may_reproduceable4exps6stage1 else may_reproduceable4exps6stage1
+    reproduceable4exps6stage2 = default_prepare_exps4search6stage2_(ops6stage12, max4exp6stage1, max4exp6stage2, case4xprimes=case4xprimes) if None is may_reproduceable4exps6stage2 else may_reproduceable4exps6stage2
     return (-101111, k4D, ops6stage12, D, max4exp6stage1, max4exp6stage2, reproduceable4exps6stage1, reproduceable4exps6stage2)
 def _neck4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(D, min_A, /):
     ######################

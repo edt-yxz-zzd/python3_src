@@ -992,13 +992,13 @@ class IOps6stage12_4smooth_group_order_method7ring(IOps6stage2_4smooth_group_ord
         'see:default_search6stage12__7ring_'
         return default_search6stage12__7ring_(sf, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0)
 
-def default_prepare_exps4search6stage1_(_, max4exp6stage1, /):
+def default_prepare_exps4search6stage1_(_, max4exp6stage1, /, *, case4xprimes=None):
     'max4exp6stage1/uint{>0} -> IReproduceable{exp/uint{>=2}{<=max4exp6stage1}}'
-    rp8dup_ps = mk_Reproduceable7dup_xprimes__ver2_(max4exp6stage1, max4exp6stage1, case=None)
+    rp8dup_ps = mk_Reproduceable7dup_xprimes__ver2_(max4exp6stage1, max4exp6stage1, case=case4xprimes)
     return rp8dup_ps
-def default_prepare_exps4search6stage2_(_, max4exp6stage1, max4exp6stage2, /):
+def default_prepare_exps4search6stage2_(_, max4exp6stage1, max4exp6stage2, /, *, case4xprimes=None):
     'max4exp6stage1/uint{>0} -> max4exp6stage2/uint{>0} -> IReproduceable{exp/uint{>=2}{<=max4exp6stage2}}'
-    rp8ps = mk_Reproduceable7xprimes_(max4exp6stage2, min4xprime=1+max4exp6stage1, case=None)
+    rp8ps = mk_Reproduceable7xprimes_(max4exp6stage2, min4xprime=1+max4exp6stage1, case=case4xprimes)
     return rp8ps
 def default_search6stage12__7ring_(ops7stage12_7ring, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0, /, *, ver=1):
     'see:default_search6stage12_'
