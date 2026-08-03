@@ -95,6 +95,20 @@ view ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_met
 
 
 
+test:reset imay_new_prime
+>>> show_(2, new_resume=True, may_squarefree7resume=1)
+(1, (), (), -1)
+(2, (0,), (2,), 2)
+>>> show_(2, new_resume=True, may_squarefree7resume=2)
+(2, (0,), (2,), 2)
+(6, (0, 1), (2, 3), 3)
+>>> show_(2, new_resume=True, may_squarefree7resume=6)
+(6, (0, 1), (2, 3), 3)
+(3, (1,), (3,), -1)
+
+
+
+
 >>> show_(1, may_squarefree7resume=1)
 (2, (0,), (2,), 2)
 >>> show_(1, new_resume=True, may_squarefree7resume=1)
@@ -227,6 +241,10 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
     if u0_is_new:
         777; yield u if not to_view_primes else (u, vw4rv_js, vw4rv_ps, imay_new_prime)
     for j in 趃步进冫爻位栈冃孤变码扌(stk):
+        #########
+        if to_view_primes and not imay_new_prime == -1:
+            imay_new_prime = -1
+        #########
         try:
             b = j2using_(j) #update imay_new_prime
         except StopIteration:
@@ -259,9 +277,6 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
             #rv_ps
         #########
         yield u if not to_view_primes else (u, vw4rv_js, vw4rv_ps, imay_new_prime)
-        #########
-        if to_view_primes and not imay_new_prime == -1:
-            imay_new_prime = -1
         #########
 
 
