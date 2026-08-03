@@ -39,6 +39,11 @@ view ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_met
 (77, (3, 4), (7, 11), 11)
 (154, (0, 3, 4), (2, 7, 11), -1)
 
+>>> [*islice(iter_unsorted_squarefree_uints_(may_prime2ok_=lambda p:p>2), 0, 18)]
+[1, 3, 15, 5, 35, 105, 21, 7, 77, 231, 1155, 385, 55, 165, 33, 11, 143, 429]
+>>> [*islice(iter_unsorted_squarefree_uints_([2,3,5]), 0, 18)]
+[1, 2, 6, 3, 15, 30, 10, 5]
+
 
 
 py_adhoc_call   seed.math.iter_unsorted_squarefree_uints   @f
@@ -58,7 +63,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
-def iter_unsorted_squarefree_uints_(*, to_view_primes=False):
+def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False, may_prime2ok_=None):
     '-> (unsorted-Iter u/uint{>=1}{squarefree}) if not to_view_primes else (unsorted-Iter (u/uint{>=1}{squarefree}, rv_js/[uint]{reversed}{[u==II(PRIMES[j] for j in rv_js)]}, rv_ps/[prime]{reversed}{[u==II(rv_ps)]}, imay prime{new}))'
     def j2using_(j, /):
         nonlocal imay_new_prime
@@ -70,11 +75,16 @@ def iter_unsorted_squarefree_uints_(*, to_view_primes=False):
         assert j == len(j2p)
         _j2using.append(False)
         777;j2p.append(next(it8ps))
+            # ^StopIteration
         if to_view_primes:
             imay_new_prime = j2p[-1]
         return _j2using[j]
 
-    it8ps = iter_filter4primes_ge_lt_(0, 1<<81)
+    it8ps = iter(may_primes) if not None is may_primes else iter_filter4primes_ge_lt_(0, 1<<81)
+    if not None is may_prime2ok_:
+        prime2ok_ = may_prime2ok_
+        it8ps = filter(prime2ok_, it8ps)
+    it8ps
     _j2using = []
     j2p = []
     stk = [] # reversed js
@@ -88,7 +98,10 @@ def iter_unsorted_squarefree_uints_(*, to_view_primes=False):
     u = 1
     777; yield u if not to_view_primes else (u, vw4rv_js, vw4rv_ps, imay_new_prime)
     for j in 趃步进冫爻位栈冃孤变码扌(stk):
-        b = j2using_(j) #update imay_new_prime
+        try:
+            b = j2using_(j) #update imay_new_prime
+        except StopIteration:
+            return
         777;_j2using[j] = not b
         777;p6j = j2p[j]
         #########
@@ -121,5 +134,5 @@ def iter_unsorted_squarefree_uints_(*, to_view_primes=False):
 
 
 __all__
-from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)
+from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # ++kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)  # ++kw:may_prime2ok_{filter} # ++arg:may_primes
 from seed.math.iter_unsorted_squarefree_uints import *
