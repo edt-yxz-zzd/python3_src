@@ -95,7 +95,22 @@ view ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_met
 
 
 
-
+>>> show_(1, may_squarefree7resume=1)
+(2, (0,), (2,), 2)
+>>> show_(1, new_resume=True, may_squarefree7resume=1)
+(1, (), (), -1)
+>>> show_(1, neg_resume_ok=True, may_squarefree7resume=-1)
+(1, (), (), -1)
+>>> show_(1, neg_resume_ok=True, new_resume=True, may_squarefree7resume=-1)
+(2, (0,), (2,), 2)
+>>> show_(1, may_squarefree7resume=-1)
+Traceback (most recent call last):
+    ...
+ValueError: -1
+>>> show_(1, new_resume=True, may_squarefree7resume=-1)
+Traceback (most recent call last):
+    ...
+ValueError: -1
 
 
 
@@ -113,6 +128,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_int_ge
     from seed.math.prime_sieve.primes_ge_lt import iter_filter4primes_ge_lt_
     from seed.math.Gray_code import 步退冫爻位栈冃孤变码扌, 步进冫爻位栈冃孤变码扌, 趃步退冫爻位栈冃孤变码扌, 趃步进冫爻位栈冃孤变码扌
     from itertools import islice
@@ -149,8 +165,17 @@ def _resume(it8ps, squarefree7resume, /):
     assert u == 1
     stk.reverse() # reversed js
     return (_j2using, j2p, stk)
+def _std(squarefree7resume, new_resume, neg_resume_ok, /):
+    new_resume = bool(new_resume)
+    check_type_is(int, squarefree7resume)
+    if squarefree7resume == 0:raise ValueError(squarefree7resume)
+    if squarefree7resume < 0:
+        if not neg_resume_ok:raise ValueError(squarefree7resume)
+        squarefree7resume = -squarefree7resume
+        new_resume = not new_resume
+    return (squarefree7resume, new_resume)
 #resume,restore,snapshot,breakpoint,setup
-def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False, may_prime2ok_=None, may_squarefree7resume=None, new_resume=False):
+def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False, may_prime2ok_=None, may_squarefree7resume=None, new_resume=False, neg_resume_ok=False):
     '-> (unsorted-Iter u/uint{>=1}{squarefree}) if not to_view_primes else (unsorted-Iter (u/uint{>=1}{squarefree}, rv_js/[uint]{reversed}{[u==II(PRIMES[j] for j in rv_js)]}, rv_ps/[prime]{reversed}{[u==II(rv_ps)]}, imay prime{new}))'
     def j2using_(j, /):
         nonlocal imay_new_prime
@@ -175,10 +200,12 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
         prime2ok_ = may_prime2ok_
         it8ps = filter(prime2ok_, it8ps)
     it8ps
+
     if not None is (squarefree7resume:=may_squarefree7resume):
+        (squarefree7resume, new_resume) = _std(squarefree7resume, new_resume, neg_resume_ok)
         (_j2using, j2p, stk) = _resume(it8ps, squarefree7resume)
         u = squarefree7resume
-        777;u0_is_new = bool(new_resume)
+        777;u0_is_new = new_resume
     else:
         _j2using = []
         j2p = []
@@ -239,5 +266,5 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
 
 
 __all__
-from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # ++kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)  # ++kw:may_prime2ok_{filter} # ++arg:may_primes # ++kw:may_squarefree7resume,kw:new_resume
+from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # ++kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)  # ++kw:may_prime2ok_{filter} # ++arg:may_primes # ++kw:may_squarefree7resume,kw:new_resume,kw:neg_resume_ok
 from seed.math.iter_unsorted_squarefree_uints import *
