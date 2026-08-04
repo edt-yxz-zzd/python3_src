@@ -1,0 +1,40 @@
+##
+#
+#e ../../python3_src/bash_script/app/cyclotomic_number
+
+#cyclotomic_number nm4var order # --> polynomial
+#cyclotomic_number u8base order # --> uint
+
+USAGE='USAGE:
+  cyclotomic_number (nm4var|u8base) order
+
+$ cyclotomic_number x 7
+  x^6 + x^5 + x^4 + x^3 + x^2 + x + 1
+
+$ cyclotomic_number 3 227
+  1012732682774617818194689795139806022588388002941405805166033661866962725148373553742636400886744464424956493
+
+[1207 == 17*71]
+[(-1+2^1207) == polcyclo(1207,2) *polcyclo(71,2) *polcyclo(17,2)]
+[M1207 == CYC2_1207 *CYC2_71 *CYC2_17]
+
+'
+
+if [[ $# -ne 2 ]] ; then
+  echo >&2 "${USAGE}"
+  exit 1
+fi
+base="$1"
+order="$2"
+shift 2
+
+x1="(${order})"
+if [[ "${base}" =~ ^[a-zA-Z][a-zA-Z0-9_]*$ ]] ; then
+  #nm4var
+  x2="('${base})"
+else
+  #u8base
+  x2="(${base})"
+fi
+
+gp -q -f <<< "polcyclo(${x1}, ${x2})"
