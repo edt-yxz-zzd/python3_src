@@ -504,7 +504,11 @@ py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.f
 
 
 
-
+++kw:stop_if_found_exps7key
+py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**67)'  =-35 =1024 ='2**16'  +stop_if_found_exps7key
+    1:((701110, 35, (3, 3), (2, 2, 13, 17, 37, 59, 1993)), (1, 0, 1, []))
+    2:((701110, 35, (13, 13), (2,)), (3846035596, 2, 961508899, [2, 2, 13, 17, 37, 59, 1993]))
+    3:((701110, 35, (13, 13), (2,)), (3846035596, 2, 961508899, (2, 2, 13, 17, 37, 59, 1993)))
 
 
 
@@ -537,8 +541,40 @@ py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.f
     53:((201100, 1365, (11, 11)), (1, 0, 1, []))
     54:((201100, 1365, (11, 11)), (1, 0, 1, ()))
     ^C KeyboardInterrupt
+py_adhoc_call { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+2**1207)'  =1365 ='2**12'  --case4xprimes=2
+    TODO
 ===
 ]]
+[[
+view ../../python3_src/seed/math/factor_pint/database4factors4cyclotomic_numbers__7py_adhoc_call.py
+    iter_collect_missing_orders7flatten_
+    (3, 227, {227: 1}, 1012732682774617818194689795139806022588388002941405805166033661866962725148373553742636400886744464424956493)
+CYC3_227=(-1+3**227)//2
+===
+py_adhoc_call7rest { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+3**227)//2'  =... ='2**12' ='2**16'  --case4xprimes=2
+    ... ...
+    540:((201100, 110055, (13, 13)), (1, 0, 1, ()))
+    ^C KeyboardInterrupt
+
+py_adhoc_call7rest { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+3**227)//2'  =110055 ='2**12' ='2**16'  --case4xprimes=2
+    # 三秒每试
+    ... ...
+    250:((201100, 636405, (13, 13)), (1, 0, 1, ()))
+    ... ...
+    440:((201100, 87087, (5, 5)), (1, 0, 1, ()))
+    ^C KeyboardInterrupt
+
+++kw:stop_if_found_exps7key
+py_adhoc_call7rest { +lineno +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__smooth_group_order_method   ,iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_ ='(-1+3**227)//2'  =87087 ='2**12' ='2**16'  --case4xprimes=2  +stop_if_found_exps7key
+    ... ...
+    392:((201100, 14325749295, (37, 37)), (1, 0, 1, ()))
+    ... ...
+    400:((201100, 220396143, (5, 5)), (1, 0, 1, ()))
+    ^C KeyboardInterrupt
+
+===
+]]
+
 
 
 py_adhoc_call   seed.math.factor_pint.factor_pint__smooth_group_order_method   @f
@@ -1465,6 +1501,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.II import II
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
     from seed.tiny_.verify import is_iterable# is_iterator
+    from seed.iters.generator_iterator_capturer import GeneratorIteratorCapturer
 #.    from itertools import islice
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -1940,10 +1977,11 @@ def _iter__k4D__min_A__pairs_(n, emay_signed_prev_k4D__or__k4D__min_A__pairs, /)
         ##################
         yield (k4D, min_A)
 
-def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_signed_prev_k4D__or__k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0, case4xprimes=None):
+def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, emay_signed_prev_k4D__or__k4D__min_A__pairs, bound4stage1, bound4stage2=None, may_reproduceable4exps6stage1=None, may_reproduceable4exps6stage2=None, /, *, scale4bound4stage2=100, quiet_level=0, case4xprimes=None, stop_if_found_exps7key=False, try_resting_=None):
     #TODO
     r'''[[[
     #]]]'''#'''
+    try_resting_ = try_resting_ if not None is try_resting_ else lambda:None
     check_uint_lt(4, quiet_level)
     t = _head4trial4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, _k4D:=1, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2, case4xprimes)
     match t:
@@ -1955,10 +1993,35 @@ def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n
     if 1:
         (bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2) = (max4exp6stage1, max4exp6stage2, reproduceable4exps6stage1, reproduceable4exps6stage2)
 
+    quiet7outside = bool(quiet_level)
+    quiet7inside = quiet7outside and not stop_if_found_exps7key
     for (k4D, min_A) in _iter__k4D__min_A__pairs_(n, emay_signed_prev_k4D__or__k4D__min_A__pairs):
-        it = iter_trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2=scale4bound4stage2, used_As7reduced=None, quiet=bool(quiet_level))
+        try_resting_()
+        it = iter_trials4factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n, k4D, min_A, bound4stage1, bound4stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, scale4bound4stage2=scale4bound4stage2, used_As7reduced=None, quiet=quiet7inside)
         ######################
-        result4trials = yield from it
+        if not stop_if_found_exps7key:
+            # [[quiet7inside] <-> [quiet_level > 0]]
+            result4trials = yield from it
+        else:
+            # ++kw:stop_if_found_exps7key
+            # [not quiet7inside]
+            assert not quiet7inside
+            gnr = GeneratorIteratorCapturer(it)
+            for tmp in gnr:
+                if not quiet7outside:yield tmp
+                match tmp:
+                    case (result4one_trial, (group_order7guess, ez4group_order7guess, odd4group_order7guess, [])):
+                        pass
+                    case (result4one_trial, (group_order7guess, ez4group_order7guess, odd4group_order7guess, tmp__known_exps7key)):
+                        known_exps7key = tuple(sorted(tmp__known_exps7key))
+                        assert len(known_exps7key) > 0
+                        # !! stop_if_found_exps7key
+                        return (result4one_trial, (group_order7guess, ez4group_order7guess, odd4group_order7guess, known_exps7key))
+                    case _:
+                        raise Exception(tmp)
+            gnr
+            [result4trials] = gnr.get_tmay_result()
+        result4trials
         ######################
         if quiet_level < 2:
             yield result4trials
@@ -1974,11 +2037,17 @@ def iter_factor_pint__smooth_group_order_method7ambiguous_BinaryQuadraticForm_(n
                     yield result4trials
         ######################
         match result4one_trial:
+            case (201100|401100, *_):
+                # fail or handled
+                pass#continue
             case (901001|901111, *_):
+                # ok
                 return result4trials
-            case (201100|401100|301110|501110|701110, *_):
-                #continue
-                pass
+            case (301110|501110|701110, *_):
+                # found more_exps7key
+                if stop_if_found_exps7key:
+                    return result4trials
+                pass#continue
             case _:
                 raise Exception(result4one_trial)
         ######################

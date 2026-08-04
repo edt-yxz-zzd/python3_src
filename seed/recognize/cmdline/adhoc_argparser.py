@@ -4,6 +4,10 @@ e ../../python3_src/seed/recognize/cmdline/adhoc_argparser.py
 
 ad hoc fashion
 
+py -m nn_ns.app.debug_cmd   seed.recognize.cmdline.adhoc_argparser -x
+py -m nn_ns.app.doctest_cmd   seed.recognize.cmdline.adhoc_argparser:__doc__
+
+
 see:py_all@bash_script
     py_adhoc_call ''  ,str.list '%difflib:__all__@all' =all
     py_adhoc_call ''  ,str.list %%:@_  =_._.difflib.__all__
@@ -13,8 +17,22 @@ see:py_all@bash_script
     py_evalP ='[P().hex(P().ord(ch)) for ch in "一龥"]'
         => "['0x4e00', '0x9fa5']"
 
-py -m nn_ns.app.debug_cmd   seed.recognize.cmdline.adhoc_argparser -x
-py -m nn_ns.app.doctest_cmd   seed.recognize.cmdline.adhoc_argparser:__doc__
+
+[[
+example@20260804
+
+living_example:
+    view ../../python3_src/seed/math/factor_pint/database4factors4cyclotomic_numbers__7py_adhoc_call.py
+    alias _iter_fill7fixed_base_="py_adhoc_call { +to_postpone_KeyboardInterrupt_until_yield +to_ask6postpone_KeyboardInterrupt_until_yield --prompt_string4postpone_KeyboardInterrupt_until_yield:\$'\n\n...postpone...\n\n' +to_show_time_now +to_show_timedelta --may_time_kind:system_wide  --may_args4PeriodicToilLeisureTime='(60,120)' --may_prompt_string6resting:\$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  seed.math.factor_pint.database4factors4cyclotomic_numbers   ,_iter_fill7fixed_base_ =None +verbose +hold_file6default_db  --time4sleep6ok=1  --timeout6default_db='60*10'     "
+
+
+==>>:
+@20260804: ++_join_args4postprocess()
+    overwriteable for bash.alias@living_example
+    # ++kw:pass_as_kwarg &_fill_kwds4extra() to test _join_args4postprocess()
+alias py_adhoc_call7rest="py_adhoc_call { +to_postpone_KeyboardInterrupt_until_yield +to_ask6postpone_KeyboardInterrupt_until_yield --prompt_string4postpone_KeyboardInterrupt_until_yield:\$'\n\n...postpone...\n\n' +to_show_time_now +to_show_timedelta --may_time_kind:system_wide  --may_args4PeriodicToilLeisureTime='(60,120)' --may_prompt_string6resting:\$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  "
+e ../../python3_src/bash_script/app/py_adhoc_call7rest
+]]
 
 view ../../python3_src/seed/helper/safe_eval.py
     @20250118: ++kw:using_extended_globals
@@ -408,6 +426,44 @@ py_adhoc_call   '' @str   %%:P  ='P.nn_ns.math_nn.numbers.shortest_addition_chai
     =>『'P.nn_ns.math_nn.numbers.shortest_addition_chain_length__ver3().取冫靶值讠最小显链长扌()'』
 
 
+
+
+
+[[
+++_join_args4postprocess()
+===
+py_adhoc_call { +lineno }  { -lineno } seed.tiny_.funcs  ,echo_args_kwargs
+    0:()
+    1:{}
+===
+py_adhoc_call { -lineno }  { +lineno } seed.tiny_.funcs  ,echo_args_kwargs
+    1:()
+    2:{}
+===
+_fill_kwds4extra()
+py_adhoc_call { ++pass_as_kwarg:a:111  ++pass_as_kwarg:b:222 } { ++pass_as_kwarg:c:333  ++pass_as_kwarg:b:444 } seed.tiny_.funcs  ,echo_args_kwargs
+    ()
+    {'a': 111, 'b': 444, 'c': 333}
+===
+py_adhoc_call7rest seed.tiny_.funcs  ,echo_args_kwargs
+    0: ... ...
+    20260804-10:59:41.790962+0800
+    ()
+    20260804-10:59:41.791394+0800
+    0:duration: 0.0011095385998487473 *(unit: 0:00:01)
+    1: ... ...
+    20260804-10:59:41.792070+0800
+    {'try_resting_': <seed.for_libs.for_time.PeriodicToilLeisureTime object at 0x738f45b850>}
+    20260804-10:59:41.792282+0800
+    1:duration: 0.0006151534616947174 *(unit: 0:00:01)
+    2: ... ...
+    20260804-10:59:41.792845+0800
+    2:duration: 0.00040361564606428146 *(unit: 0:00:01)
+    20260804-10:59:41.793132+0800
+===
+]]
+
+
 #]]]'''
 __all__ = '''
     adhoc_argparse__args
@@ -488,8 +544,9 @@ arg_pattern
 arg_regex
 import_regex
 AdhocArgParserError
-AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag
-AdhocArgParserError__show_help_then_exit_with_err
+    AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag
+    AdhocArgParserError__show_help_then_exit_with_err
+    AdhocArgParserError__bad_format__pass_as_kwarg
 eval_single_arg_payload
 adhoc_argparser__main__subcmds
 adhoc_argparser__main
@@ -606,10 +663,11 @@ with mk_ctx4lazy_import4funcs_(__name__, 'safe_eval_ex:safe_eval, safe_exec_ex:s
         #@20250118: ++kw:using_extended_globals
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.check import check_smay_pseudo_identifier, check_type_in, check_type_is, check_type_le, check_callable, check_may_, check_str
-    from seed.tiny_.funcs import echo
+    from seed.tiny_.funcs import echo# echo_args_kwargs
     from seed.helper.ifNone import ifNone
     from seed.tiny_.containers import mk_tuple
     from seed.debug.print_err import print_err
+    #from seed.types.Rope import Rope, mk_Rope
 
 
 from seed.text.useful_regex_patterns import nm__pattern, qnm__pattern
@@ -707,6 +765,8 @@ def pprint__pformat_d(depth, /):
 class AdhocArgParserError(Exception):pass
 class AdhocArgParserError__show_help_then_exit_with_ok__found_help_flag(AdhocArgParserError):pass
 class AdhocArgParserError__show_help_then_exit_with_err(AdhocArgParserError):pass
+class AdhocArgParserError__bad_format__pass_as_kwarg(AdhocArgParserError):pass
+    #pass_as_kwarg
 def eval_single_arg_payload(may_locals, s, /):
     if s.startswith(':'):
         v = s[1:]
@@ -795,7 +855,7 @@ def adhoc_argparser__main__call8module(may_argv, /):
     return _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv)
 
 def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
-    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, to_ask6postpone_KeyboardInterrupt_until_yield=False, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, may_time_kind:[None, str, 'TimerKind']=None, may_time_fmt:[None,str]=None, to_show_time_now=False, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting='', also_stderr=False, to_reraise_BrokenPipeError=False):
+    def _mk_postprocess_ex(*, lineno=None, end4print=None, flush4print=False, to_postpone_KeyboardInterrupt_until_yield=False, prompt_string4postpone_KeyboardInterrupt_until_yield=None, to_ask6postpone_KeyboardInterrupt_until_yield=False, may_prompt_string6resting=None, may_args4PeriodicToilLeisureTime:[None,(float,float)]=None, may_time_kind:[None, str, 'TimerKind']=None, may_time_fmt:[None,str]=None, to_show_time_now=False, to_show_timedelta=False, to_show_StopIteration_value=False, to_show_total_timedelta=False, smay_kwd4supply_func4resting='', also_stderr=False, to_reraise_BrokenPipeError=False, pass_as_kwarg=()):
         ######################
         check_type_is(bool, to_reraise_BrokenPipeError)
         check_type_is(bool, also_stderr)
@@ -809,7 +869,8 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         #.dict(**{P:1})
         ######################
         check_type_is(str, smay_kwd4supply_func4resting)
-        if smay_kwd4supply_func4resting:dict(**{smay_kwd4supply_func4resting:1})
+        if smay_kwd4supply_func4resting:dict(**{smay_kwd4supply_func4resting:1}) #check identifier
+        len(pass_as_kwarg)
         ######################
         check_type_is(bool, to_show_total_timedelta)
         ######################
@@ -866,7 +927,7 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
                 pass
         #取消:@20260121:++kw:P
         #@20250404:++kw:smay_kwd4supply_func4resting
-        arg_tpl = (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError, time_fmt, to_show_time_now)
+        arg_tpl = (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError, time_fmt, to_show_time_now, pass_as_kwarg)
         return arg_tpl
         #@20250129: ++kw:to_postpone_KeyboardInterrupt_until_yield ++kw:prompt_string4postpone_KeyboardInterrupt_until_yield => to_postpone_KeyboardInterrupt_until_yield
         return (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, time_fmt, to_show_time_now)
@@ -876,18 +937,85 @@ def _postprocess4framework4adhoc_argparser__main__call(options4argparser, /):
         return _postprocess
 
     #raise Exception(options4argparser)
-    #if options4argparser[0] == '{':
-    if options4argparser and options4argparser[0] == '{':
-        j = options4argparser.index('}')
-        args4postprocess = options4argparser[1:j]
-        options4argparser = options4argparser[j+1:]
-    else:
-        args4postprocess = []
-        options4argparser
-    (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
+    ((positional_args, flag2bool, keyword2arg, keyword2args), options4argparser) = _parse_args4postprocess(options4argparser)
     _mk_postprocess_ex
     arg_tpl = decorator4show_py_help(_mk_postprocess_ex)(*positional_args, **flag2bool, **keyword2arg, **keyword2args)
     return (arg_tpl, options4argparser)
+def _parse_args4postprocess(options4argparser, /):
+    #########new:overwriteable for bash.alias@living_example
+    ls = []
+    end = len(options4argparser)
+    begin = 0
+    while begin < end and options4argparser[begin] == '{':
+        j = options4argparser.index('}', begin, end)
+        args4postprocess = options4argparser[1+begin:j]
+        777;begin = 1+j
+        ls.append(args4postprocess)
+    (positional_args, flag2bool, keyword2arg, keyword2args) = _join_args4postprocess(ls)
+    options4argparser = options4argparser[begin:]
+    return ((positional_args, flag2bool, keyword2arg, keyword2args), options4argparser)
+    #########old:
+    #.if options4argparser and options4argparser[0] == '{':
+    #.    j = options4argparser.index('}')
+    #.    args4postprocess = options4argparser[1:j]
+    #.    options4argparser = options4argparser[j+1:]
+    #.else:
+    #.    args4postprocess = []
+    #.    options4argparser
+    #.(positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
+    #.return ((positional_args, flag2bool, keyword2arg, keyword2args), options4argparser)
+    #########
+def _join_args4postprocess(ls4args4postprocess, /):
+    args = []
+    nm2cv = {}
+        # :: {name:(case, value)}
+        # (2, [[value]])
+    for args4postprocess in ls4args4postprocess:
+        (positional_args, flag2bool, keyword2arg, keyword2args) = adhoc_argparse__args(args4postprocess)
+        args.extend(positional_args)
+        for nm, v in flag2bool.items():
+            nm2cv[nm] = (0, v)
+        for nm, v in keyword2arg.items():
+            nm2cv[nm] = (1, v)
+        for nm, vs in keyword2args.items():
+            if nm in nm2cv:
+                match nm2cv[nm]:
+                    case (2, vss):
+                        vss.append(vs)
+                    case (c, v):
+                        vss = [v, vs]
+                vss
+            else:
+                vss = [vs]
+            vss
+            nm2cv[nm] = (2, vss)
+    positional_args = args
+    flag2bool = {nm:v for nm, (c,v) in nm2cv.items() if c==0}
+    keyword2arg = {nm:v for nm, (c,v) in nm2cv.items() if c==1}
+    keyword2args = {nm:_vs5vss_(vss) for nm, (c,vss) in nm2cv.items() if c==2}
+    return (positional_args, flag2bool, keyword2arg, keyword2args)
+def _vs5vss_(vss, /):
+    assert vss
+    match vss:
+        case [vs]:
+            return vs
+    vss = [*filter(len, vss)]
+    match vss:
+        case [vs]:
+            return vs
+    vs = [v for vs in vss for v in vs]
+    return vs
+def _fill_kwds4extra(kwds4extra, pass_as_kwarg, /):
+    # ++kw:pass_as_kwarg to test _join_args4postprocess()
+    for s8kwarg in pass_as_kwarg:
+        match s8kwarg.partition(':'):
+            case (nm, ':', s8arg):
+                v = safe_eval(s8arg)
+                #bug:kwds4extra.update(nm=v)
+                kwds4extra.update(**{nm:v})
+            case _:
+                raise AdhocArgParserError__bad_format__pass_as_kwarg(s8arg)
+    return
 
 def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_func, may_argv, /):
   if 1:
@@ -900,7 +1028,7 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
         show_help();exit(0);
 
     (arg_tpl, options4argparser) = _postprocess4framework4adhoc_argparser__main__call(options4argparser)
-    (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError, time_fmt, to_show_time_now) = arg_tpl
+    (_postprocess, may_end4print, flush4print, postpone, time_kind, try_resting_, to_show_timedelta, to_show_StopIteration_value, to_show_total_timedelta, smay_kwd4supply_func4resting, also_stderr, to_reraise_BrokenPipeError, time_fmt, to_show_time_now, pass_as_kwarg) = arg_tpl
         # cut prefix of options4argparser
         # prefix === '{' ... '}'
 
@@ -910,6 +1038,8 @@ def _framework4adhoc_argparser__main__call(options4argparser_func_name_to_main_f
     to_show, islice_ = setting4prefix
     if not callable(to_show):raise AdhocArgParserError
     kwds4extra = {smay_kwd4supply_func4resting:try_resting_} if smay_kwd4supply_func4resting else {}
+    if pass_as_kwarg:
+        _fill_kwds4extra(kwds4extra, pass_as_kwarg)
 
     main_func = options4argparser_func_name_to_main_func(options4argparser, func_name)
     if not callable(main_func): raise AdhocArgParserError(func_name)
