@@ -1019,25 +1019,43 @@ def iter_sieve4prime_factors_chunks_ge_lt_(min_u7whole, may_max1_u7whole, /, *, 
 
 
 
-def iter_sieve4prime_factorizations_ge_(min_u, /, *, with_uint=False, Pmm_only=False):
+def iter_sieve4prime_factorizations_ge_(min_u, /, *, with_uint=False, Pmm_only=False, squarefree_only=False):
     'min_u/uint -> Iter prime_factorization/{prime:exp}'
-    return iter_sieve4prime_factorizations_ge_lt_(min_u, None, reverse=False, with_uint=with_uint, Pmm_only=Pmm_only)
-def reverse_iter_sieve4prime_factorizations_lt_(max1_u, /, *, with_uint=False, Pmm_only=False):
+    return iter_sieve4prime_factorizations_ge_lt_(min_u, None, reverse=False, with_uint=with_uint, Pmm_only=Pmm_only, squarefree_only=squarefree_only)
+def reverse_iter_sieve4prime_factorizations_lt_(max1_u, /, *, with_uint=False, Pmm_only=False, squarefree_only=False):
     'max1_u/uint -> Iter prime_factorization/{prime:exp}'
-    return iter_sieve4prime_factorizations_ge_lt_(0, max1_u, reverse=True, with_uint=with_uint, Pmm_only=Pmm_only)
-def iter_sieve4prime_factorizations_ge_lt_(min_u7whole, may_max1_u7whole, /, *, reverse=False, with_uint=False, Pmm_only=False):
+    return iter_sieve4prime_factorizations_ge_lt_(0, max1_u, reverse=True, with_uint=with_uint, Pmm_only=Pmm_only, squarefree_only=squarefree_only)
+def iter_sieve4prime_factorizations_ge_lt_(min_u7whole, may_max1_u7whole, /, *, reverse=False, with_uint=False, Pmm_only=False, squarefree_only=False):
     'min_u7whole/uint -> may max1_u7whole/uint -> Iter prime_factorization/{prime:exp}'
+    old_with_uint = with_uint
+    if squarefree_only:
+        with_uint = True
+        #view ../../python3_src/seed/math/prime_sieve/sieve_ge_le.py
+        #   kw:squarefree_only@iter_sieve4prime_factorizations_ge_lt_()
+        #vs:
+        #view ../../python3_src/seed/math/iter_sorted_squarefree_uints.py
+        #view ../../python3_src/seed/math/iter_unsorted_squarefree_uints.py
+        #view ../../python3_src/seed/math/iter_sorted_products_of_uints.py
     if Pmm_only:
-        old_with_uint = with_uint
         with_uint = True
         if not None is may_max1_u7whole:
             may_max1_u7whole += 1
     it = iter_sieve4prime_factorization_chunks_ge_lt_(min_u7whole, may_max1_u7whole, reverse=reverse)
     it = _chain_chunks(it, min_u7whole, may_max1_u7whole, reverse, with_uint)
     if Pmm_only:
-        it = _filter4pmm_(it, old_with_uint, reverse)
+        it = _filter4pmm_(it, reverse)
+    if squarefree_only:
+        it = _filter4squarefree_(it)
+    if with_uint and not old_with_uint:
+        it = (p2e4N for N, p2e4N in it)
     return it
-def _filter4pmm_(it, old_with_uint, reverse, /):
+def _is_squarefree(N, p2e4N, /):
+    return max(p2e4N.values(), default=1) == 1
+def _filter4squarefree_(it, /):
+    for N, p2e4N in it:
+        if _is_squarefree(N, p2e4N):
+            yield (N, p2e4N)
+def _filter4pmm_(it, reverse, /):
     f = reversed if reverse else iter
 
     for ab in pairwise(it):
@@ -1045,7 +1063,8 @@ def _filter4pmm_(it, old_with_uint, reverse, /):
         (Nmm, p2e4Nmm) = a
         (N, p2e4N) = b
         if len(p2e4N) == 1 and 1 in p2e4N.values():
-            yield (Nmm, p2e4Nmm) if old_with_uint else p2e4Nmm
+            # [N :: prime]
+            yield a #(Nmm, p2e4Nmm) if old_with_uint else p2e4Nmm
 
     return
     r'''[[[

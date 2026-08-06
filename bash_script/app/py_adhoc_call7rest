@@ -1,5 +1,6 @@
 
 
-py_adhoc_call { +to_postpone_KeyboardInterrupt_until_yield +to_ask6postpone_KeyboardInterrupt_until_yield --prompt_string4postpone_KeyboardInterrupt_until_yield:$'\n\n...postpone...\n\n' +to_show_time_now +to_show_timedelta --may_time_kind:system_wide  --may_args4PeriodicToilLeisureTime='(60,120)' --may_prompt_string6resting:$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  "$@"
+py_adhoc_call { +to_show_total_timedelta +to_postpone_KeyboardInterrupt_until_yield +to_ask6postpone_KeyboardInterrupt_until_yield --prompt_string4postpone_KeyboardInterrupt_until_yield:$'\n\n...postpone...\n\n' +to_show_time_now +to_show_timedelta --may_time_kind:system_wide  --may_args4PeriodicToilLeisureTime='(60,120)' --may_prompt_string6resting:$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  "$@"
   #resting
+  # +to_show_total_timedelta
 #alias py_adhoc_call7rest="py_adhoc_call { +to_postpone_KeyboardInterrupt_until_yield +to_ask6postpone_KeyboardInterrupt_until_yield --prompt_string4postpone_KeyboardInterrupt_until_yield:\$'\n\n...postpone...\n\n' +to_show_time_now +to_show_timedelta --may_time_kind:system_wide  --may_args4PeriodicToilLeisureTime='(60,120)' --may_prompt_string6resting:\$'\n\n    resting...\n\n'  --smay_kwd4supply_func4resting:try_resting_ }  "

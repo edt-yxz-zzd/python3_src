@@ -14,10 +14,16 @@ e ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_method
 
 
 '#'; __doc__ = r'#'
+>>> Reproduceable7SPRP_2357(-999, 17)
+Reproduceable7SPRP_2357(2, 17)
+>>> [*iter_pairs4reproduceable_(Reproduceable7SPRP_2357(-999, 17))]
+[(2, Reproduceable7SPRP_2357(3, 17)), (3, Reproduceable7SPRP_2357(5, 17)), (5, Reproduceable7SPRP_2357(7, 17)), (7, Reproduceable7SPRP_2357(9, 17)), (11, Reproduceable7SPRP_2357(13, 17)), (13, Reproduceable7SPRP_2357(15, 17)), (17, Reproduceable7SPRP_2357(19, 17))]
+
 >>> Reproduceable7probable_primes(-999, 17)
 Reproduceable7probable_primes(2, 17)
 >>> [*iter_pairs4reproduceable_(Reproduceable7probable_primes(-999, 17))]
 [(2, Reproduceable7probable_primes(3, 17)), (3, Reproduceable7probable_primes(5, 17)), (5, Reproduceable7probable_primes(7, 17)), (7, Reproduceable7probable_primes(9, 17)), (11, Reproduceable7probable_primes(13, 17)), (13, Reproduceable7probable_primes(15, 17)), (17, Reproduceable7probable_primes(19, 17))]
+
 >>> Reproduceable7primes(-999, 17)
 Reproduceable7primes(2, 17)
 >>> [*iter_pairs4reproduceable_(Reproduceable7primes(-999, 17))]
@@ -82,6 +88,8 @@ Reproduceable7primes(2, 10)
 Reproduceable7primes(2, 10)
 >>> mk_Reproduceable7xprimes_(10, case=1)
 Reproduceable7primes(2, 10)
+>>> mk_Reproduceable7xprimes_(10, case=2357)
+Reproduceable7SPRP_2357(2, 10)
 >>> mk_Reproduceable7xprimes_(10, case=0)
 Reproduceable7probable_primes(2, 10)
 >>> mk_Reproduceable7xprimes_(10, case=2)
@@ -115,6 +123,8 @@ Reproduceable5seq(PrimeList7ge_lt(43, 11), 0)
 >>> mk_Reproduceable7xprimes_(44, case=2, min4xprime=43)
 Reproduceable5seq(PrimeList7ge_lt(43, 45), 0)
 
+>>> mk_Reproduceable7xprimes_(10, case=2357, min4xprime=4)
+Reproduceable7SPRP_2357(5, 10)
 
 >>> sm99_0 = mk_Reproduceable7dup_xprimes_(9, 9, case=0)
 >>> sm99_1 = mk_Reproduceable7dup_xprimes_(9, 9, case=1)
@@ -356,6 +366,7 @@ py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list._
 py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @f
 ]]]'''#'''
 __all__ = r'''
+Reproduceable7SPRP_2357
 Reproduceable7probable_primes
 Reproduceable7primes
 
@@ -384,6 +395,7 @@ from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOT
 with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
     from seed.math.primality_test.strong_probable_prime import is_prime__le_pow2_81_#.upperbound
 with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.primality_test.SPRP_2357 import next_SPRP_2357__ge_
     from seed.math.primality_test.strong_probable_prime import next_probable_prime__ge_, next_may_prime__le_pow2_81__ge_
     from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_int_ge_lt, check_int_ge_le, check_uint_lt, check_may_
     from seed.helper.repr_input import repr_helper, repr_helper__str
@@ -629,6 +641,14 @@ class _IReproduceable7xprimes(IReproduceable):
         imay_max_u = sf.imay_max_u
         return StopEx(imay_max_u)
 #end-class _IReproduceable7xprimes(IReproduceable):
+class Reproduceable7SPRP_2357(_IReproduceable7xprimes):
+    #@override
+    _imay_upperbound_ = -1
+    @override
+    def _next_may_xprime_(sf, min_u, /):
+        'uint -> may xprime'
+        return next_SPRP_2357__ge_(min_u)
+
 class Reproduceable7probable_primes(_IReproduceable7xprimes):
     #@override
     _imay_upperbound_ = -1
@@ -753,7 +773,7 @@ class Reproduceable7dup_xprimes(IReproduceable):
 def mk_Reproduceable7xprimes_(max4xprime, /, *, case=None, min4xprime=0):
     'max4xprime/uint -> *(kw:case/may uint%3/(0/probable_prime|1/prime|2/prime_seq)) -> IReproduceable{xprime}'
     #check_type_is(bool, probable_prime_vs_prime)
-    check_may_([check_uint_lt, 3], case)
+    if not case in [2357]:check_may_([check_uint_lt, 3], case)
     check_int_ge(2, max4xprime)
     check_int_ge(0, min4xprime)
     #T = Reproduceable7probable_primes if not probable_prime_vs_prime else Reproduceable7primes
@@ -768,6 +788,9 @@ def mk_Reproduceable7xprimes_(max4xprime, /, *, case=None, min4xprime=0):
         case 2:
             seq = PrimeList7ge_lt(min4xprime, 1+max4xprime)
             as_ps = Reproduceable5seq(seq, 0)
+        case 2357:
+            T = Reproduceable7SPRP_2357
+            as_ps = T(min4xprime, max4xprime)
         case _:
             raise 000
     as_ps
@@ -862,7 +885,7 @@ _repr7ver2
 
 
 __all__
-from seed.math.primality_test.reproduceable7probable_primes import Reproduceable7primes, Reproduceable7probable_primes
+from seed.math.primality_test.reproduceable7probable_primes import Reproduceable7primes, Reproduceable7probable_primes, Reproduceable7SPRP_2357
 from seed.math.primality_test.reproduceable7probable_primes import mk_Reproduceable7dup_xprimes_, mk_Reproduceable7xprimes_, Reproduceable7dup_xprimes
 from seed.math.primality_test.reproduceable7probable_primes import mk_Reproduceable7dup_xprimes__ver2_
 from seed.math.primality_test.reproduceable7probable_primes import *

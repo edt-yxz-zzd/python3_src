@@ -70,9 +70,9 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.floor_ceil_tools.fc_log import floor_log2, ceil_log2
     from seed.math.power.addition_chain.common.properties import 显链长纟, 阳爻数纟, 首爻位纟
 
+    from math import ceil
     #from seed.debug.print_err import print_err
     #from math import log2, nextafter
-    #from math import ceil
     #from bisect import bisect_right
 
 #.#################################
@@ -135,7 +135,8 @@ def 估计冫下界纟最小显链长巛靶值牜一九七四扌(靶值, /):
     check_int_ge(1, 靶值)
     #下界牜一九七四:[ℓ(n) >= log2(n)+log2(v(n))-2.123164629...]
     #   => [ℓ(n) >= ceil(log2(n)+log2(v(n))-2.123164629...) >= ceil(log2(n*v(n))-2.13) == ceil_log2(n*v(n)/2**2.13) >= ceil_log2(n*v(n)*_fr)]
-    return ceil_log2(靶值*阳爻数纟(靶值)*_fr)
+    #bug:return ceil_log2(靶值*阳爻数纟(靶值)*_fr)
+    return ceil_log2(ceil(靶值*阳爻数纟(靶值)*_fr))
 
 
 

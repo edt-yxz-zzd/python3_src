@@ -2,6 +2,7 @@
 r'''[[[
 e ../../python3_src/seed/math/iter_unsorted_squarefree_uints.py
 view ../../python3_src/seed/math/Gray_code.py
+view ../../python3_src/seed/math/iter_sorted_squarefree_uints.py
 
 seed.math.iter_unsorted_squarefree_uints
 py -m nn_ns.app.debug_cmd   seed.math.iter_unsorted_squarefree_uints -x # -off_defs
@@ -188,6 +189,14 @@ def _std(squarefree7resume, new_resume, neg_resume_ok, /):
         squarefree7resume = -squarefree7resume
         new_resume = not new_resume
     return (squarefree7resume, new_resume)
+
+def _iter_primes(may_primes, may_prime2ok_, /):
+    it8ps = iter(may_primes) if not None is may_primes else iter_filter4primes_ge_lt_(0, 1<<81)
+    if not None is may_prime2ok_:
+        prime2ok_ = may_prime2ok_
+        it8ps = filter(prime2ok_, it8ps)
+    return it8ps
+
 #resume,restore,snapshot,breakpoint,setup
 def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False, may_prime2ok_=None, may_squarefree7resume=None, new_resume=False, neg_resume_ok=False):
     '-> (unsorted-Iter u/uint{>=1}{squarefree}) if not to_view_primes else (unsorted-Iter (u/uint{>=1}{squarefree}, rv_js/[uint]{reversed}{[u==II(PRIMES[j] for j in rv_js)]}, rv_ps/[prime]{reversed}{[u==II(rv_ps)]}, imay prime{new}))'
@@ -209,11 +218,7 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
         assert len(stk) == 1 or stk[1] == j-1
         return _j2using[j]
 
-    it8ps = iter(may_primes) if not None is may_primes else iter_filter4primes_ge_lt_(0, 1<<81)
-    if not None is may_prime2ok_:
-        prime2ok_ = may_prime2ok_
-        it8ps = filter(prime2ok_, it8ps)
-    it8ps
+    it8ps = _iter_primes(may_primes, may_prime2ok_)
 
     if not None is (squarefree7resume:=may_squarefree7resume):
         (squarefree7resume, new_resume) = _std(squarefree7resume, new_resume, neg_resume_ok)
@@ -281,5 +286,7 @@ def iter_unsorted_squarefree_uints_(may_primes=None, /, *, to_view_primes=False,
 
 
 __all__
+if 1:from seed.math.iter_unsorted_squarefree_uints import _iter_primes, _std
+    #view ../../python3_src/seed/math/iter_sorted_squarefree_uints.py
 from seed.math.iter_unsorted_squarefree_uints import iter_unsorted_squarefree_uints_ # ++kw:to_view_primes => Iter (u, vw4rv_js, vw4rv_ps, imay_new_prime)  # ++kw:may_prime2ok_{filter} # ++arg:may_primes # ++kw:may_squarefree7resume,kw:new_resume,kw:neg_resume_ok
 from seed.math.iter_unsorted_squarefree_uints import *
