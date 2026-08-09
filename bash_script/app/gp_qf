@@ -1,1 +1,2 @@
-gp -q -f "$@"
+gp -q -f -D output=0 "$@"
+# 『-D output=0』 <==> 『default('output,0)』
