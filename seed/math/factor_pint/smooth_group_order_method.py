@@ -44,9 +44,9 @@ ValueError: (7, 17, 4)
     def search6stage12__7ring_(sf, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0, /):
 >>> from seed.types.Reproduceable import Reproduceable5seq
 >>> M = 5*43
->>> ops = Ops6stage12_4smooth_group_order_method7ring__7uint_mod(M)
+>>> ops = Ops6stage123_4smooth_group_order_method7ring__7uint_mod(M)
 >>> ops
-Ops6stage12_4smooth_group_order_method7ring__7uint_mod(215)
+Ops6stage123_4smooth_group_order_method7ring__7uint_mod(215)
 >>> #default_search6stage1_(ops, True, 1, 7, Reproduceable5seq([2,3,5,7], 0), 3, _verbose=True)
 >>> ops.search6stage1_(False, 1, 7, Reproduceable5seq([2,3,5,7], 0), 3)
 (0, (0, 54, 7), (1, 44), None)
@@ -70,9 +70,9 @@ Ops6stage12_4smooth_group_order_method7ring__7uint_mod(215)
 >>> [-1+193707721 == 2**3 * 3**3 *5 *67 *2677]
 [True]
 >>> M67 = (-1+2**67)
->>> ops = Ops6stage12_4smooth_group_order_method7ring__7uint_mod(M67)
+>>> ops = Ops6stage123_4smooth_group_order_method7ring__7uint_mod(M67)
 >>> ops
-Ops6stage12_4smooth_group_order_method7ring__7uint_mod(147573952589676412927)
+Ops6stage123_4smooth_group_order_method7ring__7uint_mod(147573952589676412927)
 >>> ops.search6stage1_(True, 1, 7, Reproduceable5seq([2,2,2,3,3,3,5,67,2677], 0), 5)
 (0, (8, 40340592636112533364, 2677), (9, 75891667378750673489), ((3, 3, 5, 67, 2677), (0, 22318898449504561380)))
 >>> pow(5, II((3, 3, 5, 67, 2677)), M67)
@@ -126,7 +126,7 @@ Ops6stage12_4smooth_group_order_method7ring__7uint_mod(147573952589676412927)
 >>> pow(219,7,1247)
 1
 >>> pt0 = 3
->>> ops = Ops6stage12_4smooth_group_order_method7ring__7uint_mod(M)
+>>> ops = Ops6stage123_4smooth_group_order_method7ring__7uint_mod(M)
 
 >>> rp8exps6stage1 = Reproduceable5seq([2,2,3,7], 0)
 >>> rp8exps6stage2 = Reproduceable5seq([], 0)
@@ -153,6 +153,46 @@ Ops6stage12_4smooth_group_order_method7ring__7uint_mod(147573952589676412927)
 
 
 
+search_mul_order_
+search_multiple_of_mul_order_
+search6stage13_
+
+    def search_mul_order_(sf, max4sqrt4mul_order4pt, pt, /):
+>>> pt0 = 3
+>>> M = 29*43
+>>> 84 == 2*2*3*7
+True
+>>> pow(pt0, 2*2*3*7, M)
+1
+>>> pow(pt0, 2*2*3*7//2, M)
+173
+>>> pow(pt0, 2*2*3*7//3, M)
+436
+>>> pow(pt0, 2*2*3*7//7, M)
+219
+
+>>> M = 29*43
+>>> ops = Ops6stage123_4smooth_group_order_method7ring__7uint_mod(M)
+>>> ops.search_mul_order_(8, pt0)
+>>> ops.search_mul_order_(9, pt0)
+84
+
+# [84 == lcm(28,42)]
+>>> M = 29
+>>> ops = Ops6stage123_4smooth_group_order_method7ring__7uint_mod(M)
+>>> ops.search_mul_order_(4, pt0)
+>>> ops.search_mul_order_(5, pt0)
+28
+>>> 84 == 28*3
+True
+
+>>> M = 43
+>>> ops = Ops6stage123_4smooth_group_order_method7ring__7uint_mod(M)
+>>> ops.search_mul_order_(6, pt0)
+>>> ops.search_mul_order_(7, pt0)
+42
+>>> 84 == 42*2
+True
 
 
 
@@ -160,9 +200,32 @@ Ops6stage12_4smooth_group_order_method7ring__7uint_mod(147573952589676412927)
 
 
 
+    def search_multiple_of_mul_order_(sf, offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, pt, /):
+>>> M = 29*43
+>>> ops = Ops6stage123_4smooth_group_order_method7ring__7uint_mod(M)
+>>> ops.search_multiple_of_mul_order_(84, 0, 0, 1, pt0)
+84
+>>> ops.search_multiple_of_mul_order_(85, -1, 0, 1, pt0)
+84
+>>> ops.search_multiple_of_mul_order_(88, -2, 0, 2, pt0)
+84
+>>> ops.search_multiple_of_mul_order_(89, -2, 0, 2, pt0)
+>>> ops.search_multiple_of_mul_order_(85, 0, 9, 9, pt0)
+168
+>>> ops.search_multiple_of_mul_order_(96, 0, 8, 8, pt0)
+>>> ops.search_multiple_of_mul_order_(97, 0, 8, 8, pt0)
+168
 
 
 
+
+    def search6stage13_(sf, offset4exp4pt7final6stage1, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0, /):
+>>> ops.search6stage13_(0, 0, 3, 3, 1, 4, None, pt0)
+(307, 1, 1, ((2, 2, 7), (0, 436)))
+>>> pow(pt0, 2*2*7, M)
+436
+>>> pow(pt0, 2*2*7*3, M) # 『3』be dropped
+1
 
 
 
@@ -181,19 +244,29 @@ ICommonOps4smooth_group_order_method
         default_prepare_exps4search6stage2_
         IOps6stage2_4smooth_group_order_method7ring
             default_search6stage2__7ring_
+    IOps6stage3_4smooth_group_order_method
+        default_search_mul_order_
+        default_search_multiple_of_mul_order_
+
 
     IOps6stage12_4smooth_group_order_method
         default_search6stage12_
     IOps6stage12_4smooth_group_order_method7ring
         default_search6stage12__7ring_
+    IOps6stage13_4smooth_group_order_method
+        default_search6stage13_
 
 
 ICommonOps4smooth_group_order_method__7default_mixin
     IOps6stage1_4smooth_group_order_method__7default_mixin
+        IOps6stage13_4smooth_group_order_method__7default_mixin
         IOps6stage12_4smooth_group_order_method__7default_mixin
             IOps6stage12_4smooth_group_order_method7ring__7default_mixin
-                IOps6stage12_4smooth_group_order_method7ring__7uint_mod
-                    Ops6stage12_4smooth_group_order_method7ring__7uint_mod
+            IOps6stage123_4smooth_group_order_method__7default_mixin
+                IOps6stage123_4smooth_group_order_method7ring__7default_mixin
+                    IOps6stage123_4smooth_group_order_method7ring__7uint_mod
+                        Ops6stage123_4smooth_group_order_method7ring__7uint_mod
+
 
 
 
@@ -241,6 +314,12 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from math import gcd
     from seed.helper.repr_input import repr_helper
     from seed.debug.print_err import print_err
+
+
+    from seed.algo.baby_steps_giant_steps_method import search_mul_order__7baby_steps_giant_steps_method_, search_multiple_of_mul_order__7baby_steps_giant_steps_method_
+    #def search_mul_order__7baby_steps_giant_steps_method_(sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, _debug=False):
+    #def search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False):
+
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -937,6 +1016,21 @@ class IOps6stage1_4smooth_group_order_method(ICommonOps4smooth_group_order_metho
         return default_search6stage1_(sf, to_search_exps8factors4order6found, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0, max_size7dense=2049, max_size7physical=65537)
 
 
+class IOps6stage3_4smooth_group_order_method(ICommonOps4smooth_group_order_method):
+    'stage3:alternative-stage2:using baby_steps_giant_steps_method #vs:[detect_partial_one_=>stage2:search partial_mul_order][eq_one_=>stage3:search mul_order][partial_mul_order <= mul_order]'
+    __slots__ = ()
+    @abstractmethod
+    def may_key7hash_(sf, pt, /):
+        'may (pt -> key4pt/Hashable)'
+    @abstractmethod
+    def search_mul_order_(sf, max4sqrt4mul_order4pt, pt, /):
+        'max4sqrt4mul_order4pt/uint{>0} -> pt -> may mul_order4pt/uint{>0} # [0 < mul_order4pt < max4sqrt4mul_order4pt*(1+max4sqrt4mul_order4pt)][pt**mul_order4pt == one][@[e:<-[1..<mul_order4pt]] -> [pt**e =!= one]]'
+        return default_search_mul_order_(sf, max4sqrt4mul_order4pt, pt)
+    @abstractmethod
+    def search_multiple_of_mul_order_(sf, offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, pt, /):
+        'offset4exp/int -> min_num_fwd_giant_steps/int -> max_num_fwd_giant_steps/int -> sz4giant_step/uint{>0} -> pt -> may exp/int{=!=0} # [pt**exp == one][0 =!= exp][min_num_fwd_giant_steps <= (exp-offset4exp)/sz4giant_step < 1+max_num_fwd_giant_steps]'
+        return default_search_multiple_of_mul_order_(sf, offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, pt)
+
 class IOps6stage2_4smooth_group_order_method(ICommonOps4smooth_group_order_method):
     __slots__ = ()
     def prepare_exps4search6stage2_(sf, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage2, /):
@@ -992,26 +1086,130 @@ class IOps6stage12_4smooth_group_order_method7ring(IOps6stage2_4smooth_group_ord
         'see:default_search6stage12__7ring_'
         return default_search6stage12__7ring_(sf, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0)
 
+
+#################################
+class IOps6stage13_4smooth_group_order_method(IOps6stage3_4smooth_group_order_method, IOps6stage1_4smooth_group_order_method):
+    __slots__ = ()
+    @abstractmethod
+    def search6stage13_(sf, offset4exp4pt7final6stage1, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0, /):
+        'see:default_search6stage13_'
+        return default_search6stage13_(sf, offset4exp4pt7final6stage1, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0)
+
+
+def default_search_mul_order_(ops7stage3, max4sqrt4mul_order4pt, pt, /):
+    'IOps6stage3_4smooth_group_order_method -> max4sqrt4mul_order4pt/uint{>0} -> pt -> may mul_order4pt/uint{>0} # [0 < mul_order4pt < max4sqrt4mul_order4pt*(1+max4sqrt4mul_order4pt)][pt**mul_order4pt == one][@[e:<-[1..<mul_order4pt]] -> [pt**e =!= one]]'
+    return search_mul_order__7baby_steps_giant_steps_method_(max4sqrt4mul_order4pt, ops7stage3.mul_, ops7stage3.pow_, pt, key=ops7stage3.may_key7hash_, hash_vs_sort=False)
+def default_search_multiple_of_mul_order_(ops7stage3, offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, pt, /):
+    'IOps6stage3_4smooth_group_order_method -> offset4exp/int -> min_num_fwd_giant_steps/int -> max_num_fwd_giant_steps/int -> sz4giant_step/uint{>0} -> pt -> may exp/int{=!=0} # [pt**exp == one][0 =!= exp][min_num_fwd_giant_steps <= (exp-offset4exp)/sz4giant_step < 1+max_num_fwd_giant_steps]'
+    return search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, ops7stage3.mul_, ops7stage3.pow_, pt, key=ops7stage3.may_key7hash_, hash_vs_sort=False)
+
+
+def default_search6stage13_(ops7stage13, offset4exp4pt7final6stage1, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0, /):
+    #see:below:default_search6stage13_.__doc__
+    to_search_exps8factors4order6found = True
+    #to_search_exps8factors4order6found = bool(to_search_exps8factors4order6found)
+    max4exp6stage2 = max4exp6stage1
+    may_reproduceable4exps6stage2 = None
+    r12 = default_search6stage12_(ops7stage13, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0, no_stage2=True, ver=1, to_output_history_saver=to_search_exps8factors4order6found)
+    match r12:
+        #case (202, -1, r1, r2):
+        #    assert not to_search_exps8factors4order6found
+        case (204, (-1, r1, r2), (history_saver7oo, offset7first7oo, offset7last7oo)):
+            assert to_search_exps8factors4order6found
+            pass
+        case (107 as case6ok6stage1, *_):
+            return r12
+        case ((101|103) as case6ok6stage1, *_):
+            # !! to_search_exps8factors4order6found
+            assert to_search_exps8factors4order6found
+            raise Exception(to_search_exps8factors4order6found, r12)
+        case _:
+            raise Exception(r12)
+    match r1:
+        case (-1, (offset1, pt1)):
+            pass
+        case _:
+            raise Exception(r1)
+    assert r2 == (-1, (1, offset1, pt1))
+    (offset1, pt1)
+    (history_saver7oo, offset7first7oo, offset7last7oo)
+    pt7final6stage1 = pt1
+    may_exp = ops7stage13.search_multiple_of_mul_order_(offset4exp4pt7final6stage1, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, pt7final6stage1)
+    match may_exp:
+        case None:
+            return (304, -1, r1, (history_saver7oo, offset7first7oo, offset7last7oo))
+        case int(multiple_of_mul_order4pt7final6stage1):
+            pass
+        case _:
+            raise Exception(may_exp)
+    multiple_of_mul_order4pt7final6stage1
+
+    if 1:
+        # !! baby_steps_giant_steps_method using may_key7hash_(<=> eq_one_)
+        _01 = 1
+        pt7found6stage3 = ops7stage13.one
+        exp7key7last = multiple_of_mul_order4pt7final6stage1
+
+    match _ops12__7ver17tail(ops7stage13, pt0, history_saver7oo, offset7first7oo, _01, exp7key7last, pt7found6stage3):
+        case (207, _01, pt7found6stage3, exps7key_patch):
+            pass
+        case bad:
+            raise Exception(bad)
+    return (307, _01, pt7found6stage3, exps7key_patch)
+
+default_search6stage13_.__doc__ = \
+r'''[[[
+* -> (case6fail/304, detect_result6fail/-1, (detect_result6fail/-1, search_result6stage1, search_result6stage2), (history_saver7oo, offset7first7oo, offset7last7oo))
+* -> (case6ok, detect_result6ok, pt, exps7key_patch)
+    * -> (107, (0|+1), pt7found6stage1, exps7key_patch)
+    * -> (307, +1, , pt7found6stage3{==one}, exps7key_patch)
+[exps7key_patch == (exps7key/[exp7key], patch0001/((0|+1),pt7found6stage1_5exps7key))]
+
+#]]]'''#'''
+
+
+
 def default_prepare_exps4search6stage1_(_, max4exp6stage1, /, *, case4xprimes=None):
     'max4exp6stage1/uint{>0} -> IReproduceable{exp/uint{>=2}{<=max4exp6stage1}}'
     rp8dup_ps = mk_Reproduceable7dup_xprimes__ver2_(max4exp6stage1, max4exp6stage1, case=case4xprimes)
     return rp8dup_ps
 def default_prepare_exps4search6stage2_(_, max4exp6stage1, max4exp6stage2, /, *, case4xprimes=None):
-    'max4exp6stage1/uint{>0} -> max4exp6stage2/uint{>0} -> IReproduceable{exp/uint{>=2}{<=max4exp6stage2}}'
+    '_ -> max4exp6stage1/uint{>0} -> max4exp6stage2/uint{>0} -> IReproduceable{exp/uint{>=2}{<=max4exp6stage2}}'
     rp8ps = mk_Reproduceable7xprimes_(max4exp6stage2, min4xprime=1+max4exp6stage1, case=case4xprimes)
     return rp8ps
 def default_search6stage12__7ring_(ops7stage12_7ring, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0, /, *, ver=1):
     'see:default_search6stage12_'
     return default_search6stage12_(ops7stage12_7ring, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0, _is_ring=True, ver=ver)
-def default_search6stage12_(ops7stage12, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0, /, *, _is_ring=False, ver=1):
+def default_search6stage12_(ops7stage12, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0, /, *, _is_ring=False, ver=1, no_stage2=False, to_output_history_saver=False):
     assert ver in (0, 1)
-    search6stage2__7XXX_ = ops7stage12.search6stage2__7ring_ if _is_ring else ops7stage12.search6stage2__7detect_per_step_
-    extra_args6stage2 = (detect_period,) if _is_ring else ()
+    r'''[[[
+    see:below:default_search6stage12_.__doc__
+
+    [ver==1]:new version:[using extra history_saver7oo@stage1 to later search@stage2]
+    [ver==0]:old version:[restart stage1 using pt0 **= exp7key7last]
+    #]]]'''#'''
+    to_search_exps8factors4order6found = bool(to_search_exps8factors4order6found)
+    to_output_history_saver = bool(to_output_history_saver)
+    if to_output_history_saver:
+        assert ver == 1
+        assert to_search_exps8factors4order6found
+    if max4exp6stage2 <= max4exp6stage1 and None is may_reproduceable4exps6stage2:
+        no_stage2 = True
+
+    if no_stage2:
+        assert max4exp6stage2 <= max4exp6stage1
+        assert None is may_reproduceable4exps6stage2
+        pass
+    else:
+        search6stage2__7XXX_ = ops7stage12.search6stage2__7ring_ if _is_ring else ops7stage12.search6stage2__7detect_per_step_
+        extra_args6stage2 = (detect_period,) if _is_ring else ()
 
     reproduceable4exps6stage1 = ops7stage12.prepare_exps4search6stage1_(max4exp6stage1, may_reproduceable4exps6stage1)
-    reproduceable4exps6stage2 = ops7stage12.prepare_exps4search6stage2_(max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage2)
+    if no_stage2:
+        pass
+    else:
+        reproduceable4exps6stage2 = ops7stage12.prepare_exps4search6stage2_(max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage2)
 
-    to_search_exps8factors4order6found = bool(to_search_exps8factors4order6found)
     if ver == 0 or not to_search_exps8factors4order6found:
         r1 = ops7stage12.search6stage1_(to_search_exps8factors4order6found, detect_period, max4exp6stage1, reproduceable4exps6stage1, pt0)
     else:
@@ -1034,11 +1232,18 @@ def default_search6stage12_(ops7stage12, to_search_exps8factors4order6found, det
         case _:
             raise TypeError(r1)
     (offset1, pt1)
-    #r2 = ops7stage12.search6stage2__7detect_per_step_(max4exp6stage1, max4exp6stage2, reproduceable4exps6stage2, pt1)
-    r2 = search6stage2__7XXX_(*extra_args6stage2, max4exp6stage1, max4exp6stage2, reproduceable4exps6stage2, pt1)
+    if no_stage2:
+        r2 = (-1, (1, offset1, pt1))
+        pass
+    else:
+        #r2 = ops7stage12.search6stage2__7detect_per_step_(max4exp6stage1, max4exp6stage2, reproduceable4exps6stage2, pt1)
+        r2 = search6stage2__7XXX_(*extra_args6stage2, max4exp6stage1, max4exp6stage2, reproduceable4exps6stage2, pt1)
+    r2
     match (to_search_exps8factors4order6found, r2):
         #case ((-1|0,1) as _n101, (exp_or1, offset2, pt2)):
         case (_, (-1, (exp_or1, offset7final6stage2, pt7final6stage2))):
+            if ver==1 and to_search_exps8factors4order6found and to_output_history_saver:
+                return (204, (-1, r1, r2), (history_saver7oo, offset7first7oo, offset7last7oo))
             return (202, -1, r1, r2)
         case (False, ((0|1) as _01, (exp7key7last, offset7found6stage2, pt7found6stage2))):
             return (203, _01, pt7found6stage2, exp7key7last)
@@ -1049,30 +1254,25 @@ def default_search6stage12_(ops7stage12, to_search_exps8factors4order6found, det
     # (_n101, (exp_or1, offset2, pt2))
     assert to_search_exps8factors4order6found
     _01, (exp7key7last, offset7found6stage2, pt7found6stage2)
+    # !! [to_search_exps8factors4order6found==True]
     if not ver == 0:
         ######################
         #new version:
+        ######################
+        #new version:[using extra history_saver7oo@stage1 to later search@stage2]
+        ######################
         assert ver == 1
         assert to_search_exps8factors4order6found
         (history_saver7oo, offset7first7oo, offset7last7oo)
-        stZhistory2rank_ = _mk_stZhistory2rank_(ops7stage12.detect_partial_one_, ops7stage12.pow_)
-        op4fold_ = _op4fold
-        st7fold = (exp7key7last, (exp7key7last, ()))
-        # [st7fold :: (II(exps7key), lflnkls{exps7key})]
-        (st7fold, ls4record_pair) = history_saver7oo.reversed_search_key_points_(stZhistory2rank_, op4fold_, st7fold, offset=offset7first7oo)
-        (IIexps7key, lflnkls8exps7key) = st7fold
-        exps7key = tuple(lflnkls2iterable(lflnkls8exps7key))
-        assert II(exps7key) == IIexps7key
-        assert exps7key[-1] == exp7key7last
-        _exps7key = exps7key
-        patch0001 = _mk_patch0001_(ops7stage12.detect_partial_one_, ops7stage12.pow_, pt0, IIexps7key)
-        _exps7key_patch = (_exps7key, patch0001)
-        return (207, _01, pt7found6stage2, _exps7key_patch)
-
+        _01, (exp7key7last, offset7found6stage2, pt7found6stage2)
+        return _ops12__7ver17tail(ops7stage12, pt0, history_saver7oo, offset7first7oo, _01, exp7key7last, pt7found6stage2)
 
     else:
         ######################
         #old version:
+        ######################
+        #old version:[restart stage1 using pt0 **= exp7key7last]
+        ######################
         assert ver == 0
         assert to_search_exps8factors4order6found
         pt0_6stage2 = ops7stage12.pow_(pt0, exp7key7last)
@@ -1088,15 +1288,31 @@ def default_search6stage12_(ops7stage12, to_search_exps8factors4order6found, det
                 raise TypeError(r1_6stage2)
         raise 000
     raise 000
+def _ops12__7ver17tail(ops7stage12, pt0, history_saver7oo, offset7first7oo, _01, exp7key7last, pt7found6stage2, /):
+    stZhistory2rank_ = _mk_stZhistory2rank_(ops7stage12.detect_partial_one_, ops7stage12.pow_)
+    op4fold_ = _op4fold
+    st7fold = (exp7key7last, (exp7key7last, ()))
+    # [st7fold :: (II(exps7key), lflnkls{exps7key})]
+    (st7fold, ls4record_pair) = history_saver7oo.reversed_search_key_points_(stZhistory2rank_, op4fold_, st7fold, offset=offset7first7oo)
+    (IIexps7key, lflnkls8exps7key) = st7fold
+    exps7key = tuple(lflnkls2iterable(lflnkls8exps7key))
+    assert II(exps7key) == IIexps7key
+    assert exps7key[-1] == exp7key7last
+    _exps7key = exps7key
+    patch0001 = _mk_patch0001_(ops7stage12.detect_partial_one_, ops7stage12.pow_, pt0, IIexps7key)
+    _exps7key_patch = (_exps7key, patch0001)
+    return (207, _01, pt7found6stage2, _exps7key_patch)
+
 default_search6stage12_.__doc__ = \
 r'''[[[
 * -> (case6fail/202, detect_result6fail/-1, search_result6stage1, search_result6stage2)
+* -> (case6fail/204, (detect_result6fail/-1, search_result6stage1, search_result6stage2), (history_saver7oo, offset7first7oo, offset7last7oo)) # [ver==1][to_search_exps8factors4order6found][to_output_history_saver]:
 * -> (case6ok, detect_result6ok, pt, may (exp7key7last|exps7key_patch))
     * -> (107, (0|+1), pt7found6stage1, exps7key_patch) #@to_search_exps8factors4order6found
     * -> (103, (0|+1), pt7found6stage1, exp7key7last)
     * -> (101, (0|+1), pt7found6stage1, None)
-    * -> (203, (0|+1), pt7found6stage1, exp7key7last)
-    * -> (207, (0|+1), pt7found6stage1, exps7key_patch) #@to_search_exps8factors4order6found
+    * -> (203, (0|+1), pt7found6stage2, exp7key7last)
+    * -> (207, (0|+1), pt7found6stage1_6stage2, exps7key_patch) #@to_search_exps8factors4order6found
 [exps7key_patch == (exps7key/[exp7key], patch0001/((0|+1),pt7found6stage1_5exps7key))]
 
 #]]]'''#'''
@@ -1438,6 +1654,8 @@ class IOps6stage1_4smooth_group_order_method__7default_mixin(ICommonOps4smooth_g
     @override
     def search6stage1_(sf, to_search_exps8factors4order6found, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0, /):
         return default_search6stage1_(sf, to_search_exps8factors4order6found, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0, max_size7dense=2049, max_size7physical=65537)
+
+
 class IOps6stage12_4smooth_group_order_method__7default_mixin(IOps6stage1_4smooth_group_order_method__7default_mixin, IOps6stage12_4smooth_group_order_method):
     __slots__ = ()
     @override
@@ -1465,8 +1683,28 @@ class IOps6stage12_4smooth_group_order_method7ring__7default_mixin(IOps6stage12_
         'see:default_search6stage12_'
         return default_search6stage12__7ring_(sf, to_search_exps8factors4order6found, detect_period, max4exp6stage1, max4exp6stage2, may_reproduceable4exps6stage1, may_reproduceable4exps6stage2, pt0)
 #################################
+class IOps6stage13_4smooth_group_order_method__7default_mixin(IOps6stage1_4smooth_group_order_method__7default_mixin, IOps6stage13_4smooth_group_order_method):
+    __slots__ = ()
+    @override
+    def search_mul_order_(sf, max4sqrt4mul_order4pt, pt, /):
+        '-> may mul_order4pt/uint{>0} # see:default_search_mul_order_'
+        return default_search_mul_order_(sf, max4sqrt4mul_order4pt, pt)
+    @override
+    def search_multiple_of_mul_order_(sf, offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, pt, /):
+        '-> may exp/int{=!=0} # see:default_search_multiple_of_mul_order_'
+        return default_search_multiple_of_mul_order_(sf, offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, pt)
+    @override
+    def search6stage13_(sf, offset4exp4pt7final6stage1, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0, /):
+        'see:default_search6stage13_'
+        return default_search6stage13_(sf, offset4exp4pt7final6stage1, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, detect_period, max4exp6stage1, may_reproduceable4exps6stage1, pt0)
 
-class IOps6stage12_4smooth_group_order_method7ring__7uint_mod(IOps6stage12_4smooth_group_order_method7ring__7default_mixin):
+#################################
+class IOps6stage123_4smooth_group_order_method__7default_mixin(IOps6stage13_4smooth_group_order_method__7default_mixin, IOps6stage12_4smooth_group_order_method__7default_mixin):
+    __slots__ = ()
+class IOps6stage123_4smooth_group_order_method7ring__7default_mixin(IOps6stage123_4smooth_group_order_method__7default_mixin, IOps6stage12_4smooth_group_order_method7ring__7default_mixin):
+    __slots__ = ()
+#################################
+class IOps6stage123_4smooth_group_order_method7ring__7uint_mod(IOps6stage123_4smooth_group_order_method7ring__7default_mixin):
     '[pt :: uint%modulus]'
     __slots__ = ()
     @property
@@ -1475,7 +1713,10 @@ class IOps6stage12_4smooth_group_order_method7ring__7uint_mod(IOps6stage12_4smoo
         '-> uint{>=2}'
     #@override
     zero = 0
+    #@override
     one = 1
+    #@override
+    may_key7hash_ = None
     @override
     def pow_(sf, pt, exp, /):
         return pow(pt, exp, sf.modulus)
@@ -1492,8 +1733,8 @@ class IOps6stage12_4smooth_group_order_method7ring__7uint_mod(IOps6stage12_4smoo
     def detect_partial_zero_(sf, pt, /):
         g = gcd(pt, sf.modulus)
         return -1 if g == 1 else (+1 if g == sf.modulus else 0)
-check_ABC(IOps6stage12_4smooth_group_order_method7ring__7uint_mod, 'modulus'.split())
-class Ops6stage12_4smooth_group_order_method7ring__7uint_mod(IOps6stage12_4smooth_group_order_method7ring__7uint_mod):
+check_ABC(IOps6stage123_4smooth_group_order_method7ring__7uint_mod, 'modulus'.split())
+class Ops6stage123_4smooth_group_order_method7ring__7uint_mod(IOps6stage123_4smooth_group_order_method7ring__7uint_mod):
     ___no_slots_ok___ = True
     def __init__(sf, modulus, /):
         check_int_ge(2, modulus)
@@ -1521,9 +1762,11 @@ from seed.math.factor_pint.smooth_group_order_method import search_the_last_used
 
 
 from seed.math.factor_pint.smooth_group_order_method import ICommonOps4smooth_group_order_method
-from seed.math.factor_pint.smooth_group_order_method import IOps6stage1_4smooth_group_order_method, IOps6stage2_4smooth_group_order_method, IOps6stage2_4smooth_group_order_method7ring, IOps6stage12_4smooth_group_order_method, IOps6stage12_4smooth_group_order_method7ring
-from seed.math.factor_pint.smooth_group_order_method import default_search6stage1_, default_search6stage2__7detect_per_step_, default_search6stage2__7ring_, default_search6stage12_, default_search6stage12__7ring_, default_prepare_exps4search6stage1_, default_prepare_exps4search6stage2_
+from seed.math.factor_pint.smooth_group_order_method import IOps6stage1_4smooth_group_order_method, IOps6stage3_4smooth_group_order_method, IOps6stage2_4smooth_group_order_method, IOps6stage2_4smooth_group_order_method7ring, IOps6stage12_4smooth_group_order_method, IOps6stage12_4smooth_group_order_method7ring, IOps6stage13_4smooth_group_order_method
 
-from seed.math.factor_pint.smooth_group_order_method import ICommonOps4smooth_group_order_method__7default_mixin, IOps6stage1_4smooth_group_order_method__7default_mixin, IOps6stage12_4smooth_group_order_method__7default_mixin, IOps6stage12_4smooth_group_order_method7ring__7default_mixin
-from seed.math.factor_pint.smooth_group_order_method import IOps6stage12_4smooth_group_order_method7ring__7uint_mod, Ops6stage12_4smooth_group_order_method7ring__7uint_mod
+from seed.math.factor_pint.smooth_group_order_method import default_search6stage1_, default_search6stage2__7detect_per_step_, default_search6stage2__7ring_, default_search6stage12_, default_search6stage12__7ring_, default_prepare_exps4search6stage1_, default_prepare_exps4search6stage2_, default_search_mul_order_, default_search_multiple_of_mul_order_, default_search6stage13_
+
+from seed.math.factor_pint.smooth_group_order_method import ICommonOps4smooth_group_order_method__7default_mixin, IOps6stage1_4smooth_group_order_method__7default_mixin, IOps6stage12_4smooth_group_order_method__7default_mixin, IOps6stage12_4smooth_group_order_method7ring__7default_mixin, IOps6stage13_4smooth_group_order_method__7default_mixin, IOps6stage123_4smooth_group_order_method__7default_mixin, IOps6stage123_4smooth_group_order_method7ring__7default_mixin
+from seed.math.factor_pint.smooth_group_order_method import IOps6stage123_4smooth_group_order_method7ring__7uint_mod, Ops6stage123_4smooth_group_order_method7ring__7uint_mod
+
 from seed.math.factor_pint.smooth_group_order_method import *

@@ -112,7 +112,11 @@ import hashlib
 from seed.text.mk_char_pt_ranges5predicator import printable_ascii_char_pt_ranges, printable_ascii_sorted_chars, alnum_ascii_sorted_chars
 from seed.text.mk_char_pt_ranges5predicator import is_printable_ascii_char, is_printable_ascii_str
 from seed.mapping_tools.dict_op import inv__k2v_to_v2k#, inv__k2v_to_v2ks, inv__k2vs_to_v2k, inv__k2vs_to_v2ks
-from seed.tiny import MapView, mk_tuple, check_type_is
+#from seed.tiny import MapView, mk_tuple, check_type_is
+if 1:
+    from seed.tiny_.types5py import MapView
+    from seed.tiny_.containers import mk_tuple
+    from seed.tiny_.check import check_type_is
 from ._4register_xor import printable_ascii_gb2312_char_pt_ranges, printable_ascii_gb2312_sorted_chars
 ___end_mark_of_excluded_global_names__0___ = ...
 

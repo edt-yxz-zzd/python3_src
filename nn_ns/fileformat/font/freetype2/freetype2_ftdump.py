@@ -451,7 +451,7 @@ from seed.exec.text_of_stdout_of_call import text_of_stdout_of_call
 from subprocess import Popen, PIPE, DEVNULL
 import subprocess
 
-from seed.tiny import check_type_is
+from seed.tiny_.check import check_type_is
 from io import StringIO
 from pathlib import Path
 

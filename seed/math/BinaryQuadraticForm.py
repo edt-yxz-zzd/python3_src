@@ -6,6 +6,12 @@
 #调整冫二二型中部牜保持等价类:goto
 #整数分解牜二二型歧型:goto
 #数据实验冫群规模规律:goto
+#群规模公式:goto
+#   群规模公式牜无限求和牜负判别值:goto
+#   群规模公式牜有限求和牜基础负判别值:goto
+#   群规模计算牜蛮力枚举:goto
+#   群规模计算牜大小步碰撞:goto
+
 #无法分解素幂分量乊整数分解牜二二型歧型:goto
 #   ???好像不能证明 => 『此方案无效:[D:=n2D_(k * n**2)]』
 #   #view ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_method__7py_adhoc_call.py
@@ -981,6 +987,8 @@ Moves of type (2) leave the initial coordinate A unchanged, while a move of type
 
 
 5.6.3 Composition and the class group
+__mul__:
+    TODO:考虑: Qfb:乘法 通过 (norm(u0+v0*sqrt(D))/(4*A0)) * (norm(u1+v1*sqrt(D))/(4*A1))
 
 [D::int7nonsquare][bqf1:=Qfb(A1,B0,C1)][bqf2:=Qfb(A2,B0,C2)][bqf1.D == D][bqf2.D == D][A1*A2 =!= 0]:
     # ???这里不要求 [D < 0]
@@ -1104,7 +1112,7 @@ fn==fc-fd
 eval4bqf7DCA_(D,CA,A,x,y) = eval4bqf_(A,-sqrt(D+4*CA),CA/A,x,y)
 n4T5duwm_(det,u,w,m) = ((det+w*m)/u)
 applyTpTn4bqf_(det,u,w,m,D,CA,A) = {
-    ;local(n,Ax,Cx,CAx)
+    ;my(n,Ax,Cx,CAx)
     ;n=n4T5duwm_(det,u,w,m)
     ;Ax=eval4bqf7DCA_(D,CA,A,n,m)
     ;Cx=eval4bqf7DCA_(D,CA,A,w,u)
@@ -1444,6 +1452,139 @@ TODO:如何证明算法正确性？感觉跟前面证明存在性时的算法大
     [??? == Qfb(A,B,C) <*> Qfb(A,A-B,Cy)]:
 
 ]]
+[[
+Qfb:蛮力枚举列出class_group{D}所有等价类
+CRT_le(max;moduli,remainders)
+[C >= A >= max(1,abs(B))][gcd(A,B,C) == 1]:
+    [D==B**2-4*A*C <= A**2-4*A**2 == -3*A**2]
+    [-D >= 3*A**2]
+    [1 <= A <= sqrt(-D/3)]
+
+    !! [gcd(A,B,C) == 1]
+    [(-D + [D==-3]) > 3*A**2]
+
+    [1 <= A < sqrt((-D + [D==-3])/3)]
+    [1 <= A < max(2,sqrt((-D)/3))]
+    蛮力枚举 素因子{A{D}}
+        [D =[%(4*A*C)]= B**2]
+        [D =[%(4*A)]= B**2]
+        [Jacobi_symbol(素因子{4*A{D}};D) == +1|0]
+
+    [B**2 == D+4*A*C >= D+4*A**2]
+    [abs(B) >= sqrt(max(0,D+4*A**2))]
+    [A >= abs(B) >= sqrt(max(0,D+4*A**2))]
+    蛮力枚举 B{D,A{D}}
+        sqrts_mod_(2*A; D)
+        howto:CRT_le(max;moduli,remainders)
+
+page40[54/604]
+[D :: int{>0}]:
+    # χ is a Dirichlet character modulo D
+    [[is_Dirichlet_character_mod_(D;X)] =[def]= [[X :: int -> complex][@[a,b::int] -> [X(a*b) == X(a)*X(b)]][@[a,b::int] -> [X(a+b*D) == X(a)]][@[a::int] -> [[0 == X(a)] <-> [1 < gcd(D,a)]]]]]
+    [is_Dirichlet_character_mod_(D;X)]:
+        [X(1) =!= 0]
+        [X(1) == X(1)**2]
+        [X(1) == 1]
+    [is_Dirichlet_character_mod_(D;X)][1 == gcd(D,n)]:
+        [X(n)**phi_(D) == 1]
+            #χ(n) is a root of unity.
+    [is_Dirichlet_character_mod_(D1;X1)][is_Dirichlet_character_mod_(D2;X2)]:
+        [(X1*X2) =[def]= (\a::int -> X1(a)*X2(a))]
+        [is_Dirichlet_character_mod_(lcm(D1,D2);(X1*X2))]
+        [(X1**-1) =[def]= (\a::int -> conj(X1(a)))]
+        [is_Dirichlet_character_mod_(D1;(X1**-1))]
+        # X 分解 ~ D 分解 到 素幂分量
+        # X 总数 == phi_(D)
+        [D :: odd_prime_power]:
+            [g::本原根%D] => [X(g) ~ (1**/phi_(D))**e for e :: uint%phi_(D)]
+            唯一生成元:X{g%D}
+        [D :: zpow]:
+            [D == 2**ez][ez>=3]:
+                [order_mod_(D;3) == D///4]
+                [order_mod_(D;1+D///2) == 2]
+                [X(3) ~ (1**/(D///4))**e for e :: uint%(D///4)]
+                [X(1+D///4) ~ (-1)**e for e :: uint%2]
+                唯二生成元:X{3%D},X{(1+D///2)%D}
+    # X 总数 == phi_(D)
+    # 正交:
+    [[i::int] -> [sum[X(i) | [is_Dirichlet_character_mod_(D;X)]] == [1==i%D]*phi_(D)]]
+    [[is_Dirichlet_character_mod_(D;X)] -> [sum[X(u) | [u::uint%D]] == [is_the_principal_Dirichlet_character_mod_(D;X)]*phi_(D)]]
+        # ??? [[is_the_principal_Dirichlet_character_mod_(D;X)] =[def]= [[i::int] -> [X(i) == 1]]]
+
+    [is_Dirichlet_character_mod_(D;X)][s::complex]:
+        [Dirichlet_L_function(s,X) =[def]= sum[X(u)/u**s | [u:<-[1..=+oo]]]]
+            #[the sum converges in the region Re(s) > [is_the_principal_Dirichlet_character_mod_(D;X)]]
+            #<<==:
+            #[the sum converges in the region Re(s) > 1]
+            #[not$is_the_principal_Dirichlet_character_mod_(D;X)] => [the sum converges in the region Re(s) > 0]
+        [Dirichlet_L_function(s,X) == II[(1-X(p)/p**s)**-1 | [p::prime]]]
+
+%s/\<Kronecker_symbol\>(\([^;]*\);\([^()]*\))/Kronecker_symbol(\2;\1)/g
+群规模公式:here
+page248[259/604]
+[D < 0][D%4 < 2]:
+    #Dirichlet class number formula
+    #   negative discriminant
+    [h(D) == 1/Pi * w5D_(D) * Dirichlet_L_function(1,Kronecker_symbol{D}) * sqrt(-D)]
+        群规模公式牜无限求和牜负判别值:here
+        ==>>:
+        [h(D) < ln_(-D) * sqrt(-D)]
+    [w5D_(D) := max(1,6+D)] # ([D==-3]*3 + [D==-4]*2 + [D < -4]*1)
+    [Dirichlet_L_function(1,Kronecker_symbol{D}) == sum[Kronecker_symbol(u;Df)/u | [u:<-[1..=+oo]]]]
+
+    #Kronecker_symbol(int;D)
+    #Kronecker_symbol{i;D} # X{D}
+    [is_Dirichlet_character_mod_(D;(\i->Kronecker_symbol(i;D)))]
+    [Kronecker_symbol(2;D) := (D&1)*(-1)**(D&4)] # ([D%2==0]*0 + [D%8==1]*1 + [D%8==5]*-1)
+    [Kronecker_symbol(p:odd_prime;D) := Legendre_symbol(p;D)]
+    [Kronecker_symbol(a*b;D) := Kronecker_symbol(a;D)*Kronecker_symbol(b;D)]
+        ==>>:
+        [Kronecker_symbol(0;D) == Kronecker_symbol(0;D)**2]
+        [Kronecker_symbol(1;D) == Kronecker_symbol(1;D)**2]
+        [Kronecker_symbol(1;D) == Kronecker_symbol(-1;D)**2]
+        [Kronecker_symbol(0;D) == 0]
+        [Kronecker_symbol(1;D) == 1]
+        [Kronecker_symbol(-1;D) == -1]
+[x::int]:
+    [k5D_or_m_(x) := 4 - [x%4==1]*3]
+[m::squarefree]:
+    [m%4 =!= 0]
+    [m =!= 0]
+    [Df5m_(m) := m*k5D_or_m_(m)]
+[Df < 0][?[m::squarefree] -> [Df==Df5m_(m)]]:
+    [m5Df_(Df) := Df///k5D_or_m_(Df)]
+    [is_squarefree_(m5Df_(Df))]
+    [[[Df%4==1][is_squarefree_(Df)]]or[[Df%16 <- {8,12}][is_squarefree_(Df///4)]]]
+    #Dirichlet class number formula
+    #   negative fundamental discriminant
+    [h(Df) == 1/Df * w5D_(Df) * sum[Kronecker_symbol(u;Df)*u | [u:<-[1..=-Df]]]]
+        群规模公式牜有限求和牜基础负判别值:here
+        #原文:『*u』而非类似上面『/u』
+        #   可能是因为『/Df * u』==『/(-(-Df)**(3/2)/u) * sqrt(-Df)』
+    [h(-3) == 1/-3 * 3 * (Kronecker_symbol(1;-3)*1 + Kronecker_symbol(2;-3)*2 + Kronecker_symbol(3;-3)*3) == -1*(1+-1*2+0*3) == +1]
+    [h(-4) == 1/-4 * 2 * (Kronecker_symbol(1;-4)*1 + Kronecker_symbol(2;-4)*2 + Kronecker_symbol(3;-4)*3 + Kronecker_symbol(4;-4)*4) == -1/2*(1+0*2+-1*3+0*4) == +1]
+
+Though an appealing formula, such a summation with its |D| terms is suitable for the exact computation of h(D) only for small |D|, say |D| < 10**8.
+    There are various ways to accelerate such a series;
+        for example, in [Cohen 2000] one can find error-function summations of only O(|D|**/2) summands, and such formulae allow one easily to handle |D| ≈ 10**16.
+        Moreover, it can be shown that directly counting the primitive reduced forms (a,b,c) of negative discriminant D computes h(D) in O(|D|**(1/2+err)) operations.
+            群规模计算牜蛮力枚举:here
+        And the Shanks baby-steps, giant-steps method reduces the exponent from 1/2 to 1/4.
+            群规模计算牜大小步碰撞:here
+            猜:随机bqf/Qfb，求mul_order_(bqf)
+                碰撞:
+                !! [h(D) < ln_(-D) * sqrt(-D)]
+                [sz:=ceil_sqrt(ln_(-D) * sqrt(-D))]
+                [offset >= 0]
+                [(bqf**-1)**j | [j:<-[0..<sz]]]
+                    自碰撞
+                [(bqf**offset)*(bqf**sz)**k | [k:<-[1..=sz]]]
+                    互碰撞
+                [[(bqf**-1)**j == (bqf**offset)*(bqf**sz)**k] -> [bqf**(offset+sz*k+j) == one{D}]]
+                [(offset+sz*k+j)%mul_order_(bqf) == 0]
+                [bqf:=bqf0**big_smooth{p<=ps[n-1]}][sz:=IIps[:n]]:...无用
+
+]]
 
 
 [[
@@ -1772,11 +1913,13 @@ x=qfbpow(Qfb(A,B,C),5788240250/2)
 
 
 ===
+local() --> my()
+===
 assert(b, msg="000")={
     if(b,,error(msg))
 }
 n2D_(n)={
-    ;local(D)
+    ;my(D)
     ;assert(n>0)
     ;assert(n%2==1)
     ;D=if(n%4==3,-n,-n*4)
@@ -1784,7 +1927,7 @@ n2D_(n)={
 }
 
 D2Qfb7A_ge_(D,min4A)={
-    ;local(A,rt,B,AC,C,bqf)
+    ;my(A,rt,B,AC,C,bqf)
     ;A=D2A_ge_(D,min4A)
     ;assert(issquare(Mod(D,A)))
     ;rt=sqrt(Mod(D,A))
@@ -1800,13 +1943,13 @@ D2Qfb7A_ge_(D,min4A)={
     ;return(bqf)
 }
 D2QfbPow7A_ge_(D,exp,min4A)={
-    ;local(bqf)
+    ;my(bqf)
     ;bqf=D2Qfb7A_ge_(D,min4A)
     ;return(qfbpow(bqf,exp))
 }
 
 n2QfbPow7A_ge_(n,exp,min4A)={
-    ;local(D,bqf)
+    ;my(D,bqf)
     ;D=n2D_(n)
     ;bqf=D2Qfb7A_ge_(D,min4A)
     ;return(qfbpow(bqf,exp))
@@ -1859,7 +2002,7 @@ view ../../python3_src/seed/math/factor_pint/DATA4TESTING.py
 ===
 default('output,0)
 search_p_mod8_eq_(r, min4p, max4p, threshold)={
-    ;local(pes4Pmm,pes4Ppp)
+    ;my(pes4Pmm,pes4Ppp)
     ;forprime(p=min4p,max4p
         ,if(p%8==r
         ,pes4Pmm=factorint(p-1)~
@@ -2404,7 +2547,7 @@ factorint(854193492231156747779681711750)~
 
 ===
 n2Qfb_group_order_ex_(n)={
-    ;local(D,sz,max_p4sz,p2e4sz)
+    ;my(D,sz,max_p4sz,p2e4sz)
     ;D=n2D_(n)
     ;sz=qfbclassno(D)
     ;p2e4sz=factorint(sz)~
@@ -2486,7 +2629,7 @@ view ../../python3_src/seed/math/iter_unsorted_squarefree_uints.py
 更多因子如何？群规模 有增有减，看不出趋势
 
 nIIps2Qfb_group_order_ex_(n,min_p,num_ps)={
-    ;local(ls,j,m=n)
+    ;my(ls,j,m=n)
     ;ls=vector(num_ps)
     ;j=1
     ;if(j>num_ps,return())

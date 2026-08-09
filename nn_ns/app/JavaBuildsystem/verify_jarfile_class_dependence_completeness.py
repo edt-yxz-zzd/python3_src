@@ -12,14 +12,17 @@ from .common import (
     ,java_pseudo_iqname2iqname
     ,is_java_pseudo_iqname
     )
-from seed.tiny import print_err
-from seed.filesys.to_absolute_posix_path import to_absolute_posix_path
-from seed.helper.make_print_on import make_print_on
-from seed.algo.search_prefixes.get_may_longest_prefix_idx_in_sorted_prefixes import contains_any_prefix_in_sorted_prefixes
 from .import_CharTrie import CharTrie
 import re
 
 from zipfile import ZipFile
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
+    from seed.filesys.to_absolute_posix_path import to_absolute_posix_path
+    from seed.helper.make_print_on import make_print_on
+    from seed.algo.search_prefixes.get_may_longest_prefix_idx_in_sorted_prefixes import contains_any_prefix_in_sorted_prefixes
+
 
 
 def verify_jarfile_class_dependence_completeness(

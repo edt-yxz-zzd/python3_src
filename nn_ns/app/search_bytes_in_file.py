@@ -133,7 +133,7 @@ from seed.iters.find import iter_search_subseq_on_seq, iter_search_subseq_on_str
 from seed.tiny_.mk_fdefault import eliminate_tmay__mix
 from seed.helper.safe_eval import safe_eval, safe_exec, data_eval
     #   :: istream -> subseq -> Iter location
-from seed.tiny import check_uint, check_type_is
+from seed.tiny_.check import check_uint, check_type_is
 from seed.io.may_open import open4w, open4w_err, open4r
 import os
 def _():

@@ -38,6 +38,7 @@ global lazy value
 
 
 
+grep 'seed\.tiny\>' ../../python3_src/nn_ns/ -r -l -I
 
 
 grep 'Chinese_Remainder_Theorem' ../../python3_src/seed/ -r -l -I
@@ -507,6 +508,193 @@ view ./script/辅助冫有限域本原根判定.py
 view ./script/辅助冫有限域本原根判定牜数据收集.py
   _primes5p2e6doc
     #九千四百多行
+
+]]
+[[
+.,$s/\.py\zs *\ze\S/\r/g
+$ grep 'seed\.tiny\>' ../../python3_src/nn_ns/ -r -l -I
+  130
+
+from seed.tiny import MapView, mk_tuple, check_type_is
+from seed.helper.lazy_import__func7context7register import mk_context4lazy_import_registered_names_, name7importZqnm4mdl_7tiny
+with mk_context4lazy_import_registered_names_(__name__, 'seed._lazy_', name7importZqnm4mdl_7tiny):
+    from seed._lazy_ import print_err, check_type_is, mk_frozenset, null_frozenset
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.types5py import MapView
+    from seed.tiny_.containers import mk_tuple
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import echo, fst, snd, mk_fprint
+    from seed.tiny_.check import check_type_is, check_int_ge, check_uint_lt, check_int_ge_lt, check_callable
++++++++
+e ../../python3_src/nn_ns/app/count_identifiers.py
+e ../../python3_src/nn_ns/app/mk_py_template.py
+e ../../python3_src/nn_ns/app/register_xor.py
+e ../../python3_src/nn_ns/app/show_factor_uint.py
+e ../../python3_src/nn_ns/app/JavaBuildsystem/verify_jarfile_class_dependence_completeness.py
+e ../../python3_src/nn_ns/app/crypt/involution/InvolutoryCipher.py
+e ../../python3_src/nn_ns/app/zip_lines.py
+e ../../python3_src/nn_ns/app/search_bytes_in_file.py
+e ../../python3_src/nn_ns/app/line_selector.py
+e ../../python3_src/nn_ns/app/sort_lines.py
+e ../../python3_src/nn_ns/app/find_forward_calls6haskell_src.py
+above:DONE
+
+
++++++++
+e ../../python3_src/nn_ns/fileformat/font/freetype2/freetype2_ftdump.py
+e ../../python3_src/nn_ns/fileformat/sqlite3_dump_cmd.py
+e ../../python3_src/nn_ns/txt/encoding_cmd.py
+above:DONE
+
+
+
++++++++
+../../python3_src/nn_ns/CFG/CFG_in_str/rough_complete_concrete_syntax_datatype.py
+../../python3_src/nn_ns/CFG/Parser/BasicEarleyParser.py
+../../python3_src/nn_ns/CFG/Parser/CFG_Parser__Earley.py
+../../python3_src/nn_ns/CFG/Parser/_ParserMessageClosureExecutor.py
+../../python3_src/nn_ns/CFG/calc_CFG_info/Calc_CFG_Info.py
+
+
++++++++
+../../python3_src/nn_ns/CJK/CJK_common/化繁为简.py
+../../python3_src/nn_ns/CJK/CJK_common/is_hz.py
+../../python3_src/nn_ns/CJK/CJK_common/save_load_hanzi2pinyins.py
+../../python3_src/nn_ns/CJK/CJK_data/汉字繁简.py
+../../python3_src/nn_ns/CJK/CJK_data/现代常用字部件及 部件名称规范_GF0014_2009.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/parse_繁简.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/unicode_cjk_ 部件_笔画.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/汉字相关字符 范围.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/汉字笔顺.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/汉字繁简.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/汉字笔顺表[20200913]/stroke-seq_MB-master[汉字笔顺表][20200827]/my_patch.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/用汉字表达二 进制/repr_binary_by_hz_stroke_kind.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/简繁字信息对 比/简繁字信息对比.py
+../../python3_src/nn_ns/CJK/CJK_data/raw/姓氏.py
+../../python3_src/nn_ns/CJK/CJK_pinyin__cedict/read_cedict_1_0_ts.py
+../../python3_src/nn_ns/CJK/CJK_struct/CHISE_IDS_67b94ff_20191211/load_parse_result___CHISE_IDS.py
+../../python3_src/nn_ns/CJK/CJK_struct/CHISE_IDS_67b94ff_20191211/parse_CHISE_IDS.py
+../../python3_src/nn_ns/CJK/CJK_struct/cjk_decomp_0_4_0/read_cjk_decomp.py
+../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集字形拆分树.py
+../../python3_src/nn_ns/CJK/cjk_subsets/共享汉字集笔顺码.py
+../../python3_src/nn_ns/CJK/cjk_subsets/囗共享汉字集单字信息.py
+../../python3_src/nn_ns/CJK/cjk_subsets/iconv_output.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/_main4dump_load___parsed_result__of__xxx_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__Blocks_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__CJKRadicals_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__PropList_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parsed_result__of__CJKRadicals_txt__of_ver13_0.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/ucd/parse__DerivedEastAsianWidth_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/dump_load___parsed_result__of__Unihan_Variants_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kCompatibilityVariant8Unihan_IRGSources_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kIICore8Unihan_IRGSources_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/parse__kUnihanCore20208Unihan_DictionaryLikeData_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/unihan/reformat__Unihan_Variants_txt.py
+../../python3_src/nn_ns/CJK/unicode/ucd_unihan/xml/resource_loader.py
+
++++++++
+../../python3_src/nn_ns/Domain/def - domain.txt
+
++++++++
+../../python3_src/nn_ns/LALR/calc_CFG_inits/Ops/BoxUnbox.py
+../../python3_src/nn_ns/MessageClosureExecutor/_debug_.py
+../../python3_src/nn_ns/MessageClosureExecutor/make_namedtuples.py
+
++++++++
+../../python3_src/nn_ns/RMQ/suffix_array/make_array_idx2group_idx_definition.py
+
++++++++
+../../python3_src/nn_ns/bin/extract_bytes5file.py
+../../python3_src/nn_ns/bin/find_zlib_objs_in_file.py
++++++++
+../../python3_src/nn_ns/codec/DecodeUtils.py
++++++++
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDict/IBlockDict.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDictOps/IBlockDictOps.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDictOps/IBlockDictOps__blind_iupdate.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDictOps/IBlockDictOps__constructor.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDictOps/IBlockDictOps__imodify.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDictOps/bd_helper.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDictOps__concrete/BlockDictOps__for_KeyOrderedRedBlackTreeNodeOps__sized_immutable.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDictOps__concrete/BlockDictOps__for_sorted_block_items.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDict__concrete/BlockDict - 20180531.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDict__concrete/BlockDict - 20180561.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDict__concrete/BlockDict.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockDict__concrete/BlockDict__for_sorted_block_items.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockSet/IBlockSet.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockSet/IBlockSet__mutable.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/BlockSet__concrete/BlockSet.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/RedBlackTreeNodeOps__concrete/KeyOrderedRedBlackTreeNodeOps__sized_immutable.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/app/KeyOrderedMap.py
+../../python3_src/nn_ns/data_structure/TreeNodeOps/app/KeyOrderedSet.py
+../../python3_src/nn_ns/data_structure/Trie/Trie.py
+
++++++++
+../../python3_src/nn_ns/filedir/dir_cmp.py
+../../python3_src/nn_ns/filedir/file_cmp--backup-1.py
+../../python3_src/nn_ns/filedir/file_cmp.py
+../../python3_src/nn_ns/filedir/filedir_ops.py
+../../python3_src/nn_ns/filedir/rename_under_same_folder.py
+../../python3_src/nn_ns/filedir/reorder_src_dst_pairs.py
+../../python3_src/nn_ns/filedir/backup_tools/FileSystem4update.py
+../../python3_src/nn_ns/filedir/backup_tools/IRepositorySetting.py
+../../python3_src/nn_ns/filedir/backup_tools/[20210415]backup_util.py
+../../python3_src/nn_ns/filedir/backup_tools/_test_main.py
+../../python3_src/nn_ns/filedir/backup_tools/fsys_mapping_ex.py
+../../python3_src/nn_ns/filedir/backup_tools/fsys_mapping_ex_diff__tmay__slow.py
+../../python3_src/nn_ns/filedir/backup_tools/fsys_mapping_patch.py
+../../python3_src/nn_ns/filedir/backup_tools/imports.py
+../../python3_src/nn_ns/filedir/backup_tools/main.py
+
+
+
++++++++
+../../python3_src/nn_ns/functional/_try_CombinatoryLogic.py
+
++++++++
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/IMaker4UTree.py
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/UGraph.py
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/calc_UGraphFakeEmbedding_info/detect_ABAB.py
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/calc_UGraphFakeEmbedding_info/dfs__ugraph_fake_embedding.py
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/calc_UGraphFakeEmbedding_info/is_relax_biconnected_ugraph_fake_embedding_relax_planar_ex[ver3].py
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/calc_UGraphFakeEmbedding_info/is_ugraph_fake_embedding_relax_planar[ver2][bug].py
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/calc_UGraphFakeEmbedding_info/is_ugraph_fake_embedding_relax_planar_ex[ver3].py
+../../python3_src/nn_ns/graph2/concrete_graph/ugraph__uint/calc_UGraphFakeEmbedding_info/ugraph_fake_embedding2maybe_nonplanar_condition.py
+../../python3_src/nn_ns/graph2/dfs/-DAG_as_tree_dfs.py
+../../python3_src/nn_ns/graph2/dfs/dfs__finite_explicit_ugraph__two_color.py
+
+
++++++++
+../../python3_src/nn_ns/internet/webpage/download.py
+../../python3_src/nn_ns/internet/webpage/extract_ctext_org.py
+../../python3_src/nn_ns/internet/webpage/extract_ctext_org__ver1.py
+
+
++++++++
+../../python3_src/nn_ns/math_nn/convolution.py
+../../python3_src/nn_ns/math_nn/continued_fraction/approach_proportion.py
+../../python3_src/nn_ns/math_nn/group/FinitePermutation.py
+../../python3_src/nn_ns/math_nn/group/group_order_cmd.py
+../../python3_src/nn_ns/math_nn/mk_coprimes.py
+../../python3_src/nn_ns/math_nn/DFT/NTT.py
+../../python3_src/nn_ns/math_nn/factor_Mersenne_number_into_prime2exp.py
+../../python3_src/nn_ns/math_nn/factor_pint__via_cached_certificated_pint2prime2exp.py
+
+
+
++++++++
+../../python3_src/nn_ns/mimic_Haskell/Data.py
+../../python3_src/nn_ns/ops/IHeapOps/INamedHeapOps_ABC__from_iterable.py
+
++++++++
+../../python3_src/nn_ns/ply_yacc_tools/LexPostprocessors/LexPostprocessor.py
+../../python3_src/nn_ns/ply_yacc_tools/make_rule_actions/make_rule_action_for_all_tuples.py
+../../python3_src/nn_ns/ply_yacc_tools/make_rule_actions/make_rule_action_for_all_units.py
+../../python3_src/nn_ns/ply_yacc_tools/parses/to_python_code_str__grammar_units.py
+../../python3_src/nn_ns/regex/INFAOps__with_astate_dict.py
+../../python3_src/nn_ns/regex/Simple/SimpleRE.py
+
 
 ]]
 

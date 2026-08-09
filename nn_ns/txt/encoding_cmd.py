@@ -2,7 +2,7 @@
 #import locale
 import codecs
 from seed.text.encodings import sys_encoding, text_encoding
-from seed.tiny import print_err
+from seed.debug.print_err import print_err
 
 gb18030 = 'gb18030'
 big5 = 'big5'

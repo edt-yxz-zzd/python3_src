@@ -345,6 +345,12 @@ may
 5:
   #image of "2/two/to"
   from
+7:
+  tag:
+    mark/comment
+    version/distinction/subheading/specificity
+    feature/trait/characteristic
+      "using","via"
 6/9:69
   『(』/『)』
   down/up

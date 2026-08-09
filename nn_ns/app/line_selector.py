@@ -425,7 +425,11 @@ from seed.for_libs.for_heapq import Heap
 from seed.iters.PeekableIterator import PeekableIterator
 
 from seed.tiny_.check import check_int_ge
-from seed.tiny import check_type_is, echo, mk_fprint, print_err
+#from seed.tiny import check_type_is, echo, mk_fprint, print_err
+if 1:
+    from seed.debug.print_err import print_err
+    from seed.tiny_.funcs import echo, mk_fprint
+    from seed.tiny_.check import check_type_is
 from seed.helper.safe_eval import safe_eval
 from seed.text.useful_regex_patterns import py_str__pattern, py_str__regex
 

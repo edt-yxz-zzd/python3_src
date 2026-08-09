@@ -139,6 +139,45 @@ OverflowError: Python int too large to convert to C ssize_t
 
 
 
+
+
+
+>>> float(2**1023)
+8.98846567431158e+307
+>>> float(2**1024)
+Traceback (most recent call last):
+    ...
+OverflowError: int too large to convert to float
+
+>>> def is_too_big4float_(u, /):
+...     try:
+...         float(u)
+...     except OverflowError:
+...         return True
+...     return False
+>>> min_u7OverflowError = bisearch(0, range(2**1024), key=is_too_big4float_, result_case=1)
+>>> #bin(min_u7OverflowError)
+>>> is_too_big4float_(min_u7OverflowError)
+True
+>>> is_too_big4float_(min_u7OverflowError-1)
+False
+>>> min_u7OverflowError == (-1+2**54)*2**970
+True
+
+
+>>> float(-2**1023)
+-8.98846567431158e+307
+>>> float(-2**1024)
+Traceback (most recent call last):
+    ...
+OverflowError: int too large to convert to float
+>>> is_too_big4float_(-min_u7OverflowError)
+True
+>>> is_too_big4float_(-min_u7OverflowError+1)
+False
+
+
+
 '''#'''
     try:
         len_array = len(array)

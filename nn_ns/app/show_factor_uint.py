@@ -94,7 +94,7 @@ grep:
 from nn_ns.math_nn.numbers.min_factor import min_factor
 from nn_ns.math_nn.numbers.prime_number import PRIMES
 from seed.iters.product import product
-from seed.tiny import mk_fprint
+from seed.tiny_.funcs import mk_fprint
 
 def iter_factor_uint(*, uint_lt, coprime_lt):
     assert coprime_lt >= 1

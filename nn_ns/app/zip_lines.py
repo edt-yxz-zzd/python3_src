@@ -44,7 +44,7 @@ mk_seps_
 '''.split()#'''
 __all__
 
-from seed.tiny import mk_fprint
+from seed.tiny_.funcs import mk_fprint
 from seed.io.may_open import open4w, open4w_err, open4r
 #def open4w(may_opath, /, *, force, xencoding):
 #def open4r(may_ipath, /, *, xencoding):

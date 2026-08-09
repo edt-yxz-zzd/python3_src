@@ -580,7 +580,8 @@ from seed.text.mk_char_pt_ranges5predicator import printable_ascii_char_pt_range
 from seed.text.mk_char_pt_ranges5predicator import is_printable_ascii_char, is_printable_ascii_str
 from nn_ns.app.register_xor import printable_ascii_gb2312_char_pt_ranges, printable_ascii_gb2312_sorted_chars
 from seed.mapping_tools.dict_op import inv__k2v_to_v2k#, inv__k2v_to_v2ks, inv__k2vs_to_v2k, inv__k2vs_to_v2ks
-from seed.tiny import MapView#, mk_tuple, check_type_is
+from seed.tiny_.types5py import MapView
+from seed.tiny_.containers import mk_tuple
 
 assert printable_ascii_sorted_chars in printable_ascii_gb2312_sorted_chars
 assert printable_ascii_char_pt_ranges < printable_ascii_gb2312_char_pt_ranges
@@ -620,7 +621,6 @@ from fractions import gcd
 #from seed.tiny_.check import check_str, check_char, check_uint, check_type_is
 from seed.tiny_.check import check_uint_lt#, check_int_ge_lt, check_int_ge, check_int_ge_le
 #from seed.tiny_.verify import type_is, is_str, is_char
-from seed.tiny import mk_tuple
 
 from seed.seq_tools.seq_as_mapping import SeqAsMapping
 from seed.seq_tools.seq_as_mapping import pseudo_seq2idc, pseudo_seq2iter_idc, pseudo_seq2iter_values, pseudo_seq2iter_items, pseudo_seq__enumerate

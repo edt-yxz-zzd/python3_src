@@ -246,7 +246,18 @@ iter_sorted_squarefree_uints7mimic_oldAPI__7builtin_data6zpow64_
 
 
 
-
+iter_sorted_squarefree_uints__7chunk_sieve_
+iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_
+>>> [*islice(iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_(), 0, 18)]
+[1, 3, 5, 7, 11, 13, 15, 17, 19, 21, 23, 29, 31, 33, 35, 37, 39, 41]
+>>> [*islice(iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_(may_squarefree7resume=17), 0, 18)]
+[19, 21, 23, 29, 31, 33, 35, 37, 39, 41, 43, 47, 51, 53, 55, 57, 59, 61]
+>>> [*islice(iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_(may_squarefree7resume=17, new_resume=True), 0, 18)]
+[17, 19, 21, 23, 29, 31, 33, 35, 37, 39, 41, 43, 47, 51, 53, 55, 57, 59]
+>>> [*islice(iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_(may_squarefree7resume=-17, neg_resume_ok=True), 0, 18)]
+[17, 19, 21, 23, 29, 31, 33, 35, 37, 39, 41, 43, 47, 51, 53, 55, 57, 59]
+>>> [*islice(iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_(may_squarefree7resume=17, more=True), 0, 18)]
+[(19, None, (19,), 19), (21, None, (3, 7), -1), (23, None, (23,), 23), (29, None, (29,), 29), (31, None, (31,), 31), (33, None, (3, 11), -1), (35, None, (5, 7), -1), (37, None, (37,), 37), (39, None, (3, 13), -1), (41, None, (41,), 41), (43, None, (43,), 43), (47, None, (47,), 47), (51, None, (3, 17), -1), (53, None, (53,), 53), (55, None, (5, 11), -1), (57, None, (3, 19), -1), (59, None, (59,), 59), (61, None, (61,), 61)]
 
 
 
@@ -267,6 +278,7 @@ __all__ = r'''
 iter_sorted_squarefree_uints_
 iter_sorted_partial_squarefree_uints7mimic_oldAPI__7odd_only__7basis_eq_fst_16_odd_primes_
 iter_sorted_squarefree_uints7mimic_oldAPI__7builtin_data6zpow64_
+iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_
 
 
 
@@ -277,6 +289,11 @@ mk__iter_sorted_partial_squarefree_uints7mimic_oldAPI_
     IterSortedIndivisible6finite_divisors
         IterSortedPartialSquarefree6finite_basis
             is_partial_squarefree6finite_basis_
+
+
+
+iter_sorted_squarefree_uints__7chunk_sieve_
+    iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_
 '''.split()#'''
 __all__
 r'''[[[
@@ -333,7 +350,7 @@ prev_squarefree_lt_(u,odd_only=0)={
 
 
 list_squarefree_ge_pow_(min4base, max4base, max4pow,odd_only=0)={
-    ;local(ls,nx,u)
+    ;my(ls,nx,u)
     ;ls=List()
     ;for(base=min4base,min(max4base,max4pow)
     ,if(base < 2 || ispower(base)
@@ -870,6 +887,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.funcs import echo, fst
     from seed.tiny_.containers import mk_tuple,mk_immutable_seq
     from seed.helper.repr_input import repr_helper
+    from seed.math.prime_sieve.sieve_ge_le import iter_sieve4prime_factorizations_ge_lt_
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -1047,6 +1065,31 @@ def _leading_record2following_sorted_iterable_ex_(j2p_, record, /):
     for record in sorted_records:
         yield _record2term6sorted_iterable_ex_(j2p_, record)
 
+
+
+
+
+
+
+
+
+
+def iter_sorted_squarefree_uints__7chunk_sieve_(*, odd_only=False, more=False, may_squarefree7resume=None, new_resume=False, neg_resume_ok=False):
+    if not None is (squarefree7resume:=may_squarefree7resume):
+        (squarefree7resume, new_resume) = _std(squarefree7resume, new_resume, neg_resume_ok)
+        min_u = squarefree7resume + (not new_resume)
+    else:
+        min_u = 1
+
+    for u, p2e4u in iter_sieve4prime_factorizations_ge_lt_(min_u, None, with_uint=True, squarefree_only=True):
+        if odd_only:
+            if u&1 == 0:continue
+        yield u if not more else (u, None, ps4u:=tuple(sorted(p2e4u)), ps4u[0] if 1 == len(ps4u) else -1)
+
+def iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_(may_primes=None, /, *, may_prime2ok_=None, more=False, to_seq6more=False, may_squarefree7resume=None, new_resume=False, neg_resume_ok=False):
+    #if not None is may_primes: raise NotImplementedError('finite squarefree', may_primes)
+    del may_primes, may_prime2ok_, to_seq6more
+    return iter_sorted_squarefree_uints__7chunk_sieve_(odd_only=True, more=more, may_squarefree7resume=may_squarefree7resume, new_resume=new_resume, neg_resume_ok=neg_resume_ok)
 
 
 
@@ -1534,7 +1577,8 @@ __all__
 from seed.math.iter_sorted_squarefree_uints import iter_sorted_squarefree_uints_
 #def iter_sorted_squarefree_uints_(may_primes=None, /, *, may_prime2ok_=None, more=False, to_seq6more=False, may_squarefree7resume=None, new_resume=False, neg_resume_ok=False):
 #old:def iter_sorted_squarefree_uints_(may_primes=None, /, *, may_prime2ok_=None, more=False, to_seq6more=False):
-from seed.math.iter_sorted_squarefree_uints import mk__iter_sorted_partial_squarefree_uints7mimic_oldAPI_, iter_sorted_partial_squarefree_uints7mimic_oldAPI__7odd_only__7basis_eq_fst_16_odd_primes_, iter_sorted_partial_squarefree_uints_, iter_sorted_squarefree_uints7mimic_oldAPI__7builtin_data6zpow64_
+from seed.math.iter_sorted_squarefree_uints import mk__iter_sorted_partial_squarefree_uints7mimic_oldAPI_, iter_sorted_partial_squarefree_uints7mimic_oldAPI__7odd_only__7basis_eq_fst_16_odd_primes_, iter_sorted_partial_squarefree_uints_, iter_sorted_squarefree_uints7mimic_oldAPI__7builtin_data6zpow64_, iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_
 from seed.math.iter_sorted_squarefree_uints import IterSortedIndivisible6finite_divisors, IterSortedPartialSquarefree6finite_basis
 from seed.math.iter_sorted_squarefree_uints import is_partial_squarefree6finite_basis_
+from seed.math.iter_sorted_squarefree_uints import iter_sorted_squarefree_uints__7chunk_sieve_
 from seed.math.iter_sorted_squarefree_uints import *

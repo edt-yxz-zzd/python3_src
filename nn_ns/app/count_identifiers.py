@@ -9,7 +9,7 @@ $ py -m nn_ns.app.count_identifiers -i /sdcard/0my_files/unzip/py_doc/python-3.8
 
 import re
 import pathlib
-from seed.tiny import print_err
+from seed.debug.print_err import print_err
 
 word_rex = re.compile(r"\w+")
 

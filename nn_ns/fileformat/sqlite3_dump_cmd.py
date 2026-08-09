@@ -125,7 +125,13 @@ __all__
 from seed.for_libs.for_sqlite3 import sqlite3_iter_dump_
 from seed.for_libs.for_builtins.py_help import py_help_, py_help
 from seed.io.may_open import open4w, open4w_err, open4r
-from seed.tiny import check_type_is, echo, print_err, mk_fprint, mk_assert_eq_f, expectError
+#from seed.tiny import check_type_is, echo, print_err, mk_fprint, mk_assert_eq_f, expectError
+if 1:
+    from seed.tiny_.check import check_type_is
+    from seed.tiny_.funcs import echo, mk_fprint
+    from seed.debug.print_err import print_err
+    from seed.debug.assert_eq import mk_assert_eq_f
+    from seed.debug.expectError import expectError
 import re
 from ast import literal_eval
 from itertools import islice
