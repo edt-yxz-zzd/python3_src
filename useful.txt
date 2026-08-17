@@ -355,11 +355,14 @@ may
   『(』/『)』
   down/up
   阴/阳 #六/九
-  6:sit/under-context/bind
+  6:at/sit/under-context/bind
+    modulo: 『6pw』==『%x**e』
+    『@』
   9:per
     sep9element
     sep9row
     mx = [[x sep9element x] sep9row [x sep9element x]]
+    on/run over
 #unused yet: 0/1/3/7 #view  others/数学/编程/永恒代码/操作符-数字前缀编码.txt
 int:
   uint: unsigned_int, int_ge_0

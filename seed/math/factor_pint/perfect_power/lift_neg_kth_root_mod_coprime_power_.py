@@ -91,7 +91,16 @@ NOTE:[M==2**ez] => [xij =[%(max(2,Mj)///2)]= xj]
 
 
 
+come_from:
+    view ../../python3_src/seed/math/BinaryQuadraticForm__7class_number.py
+@20260817:fix bug@doc: max(2,Mj) --> max(2,M)
+    [21 > 2**(5-1)]
+>>> sqrt_mod_coprime_power_(2,5,-199,1)
+21
 
+
+py_adhoc_call   seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_   @sqrt_mod_coprime_power_  =2 =2+3 =-199 =1
+    21
 py_adhoc_call   seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_   @f
 from seed.math.factor_pint.perfect_power.lift_neg_kth_root_mod_coprime_power_ import *
 ]]]'''#'''
@@ -236,7 +245,9 @@ def sqrt_of_odd_mod_zpow_(j, y, /, *, i_xi_pair=None):
     return xj
 
 def sqrt_mod_coprime_power_(M, j, y, x1, /):
-    '[[M%2==1]or[log2(M)%1 == 0]] => M -> j -> y -> x1 -> xj # [gcd(M,y) == 1][x1**2 =[%M**1]= y][xj**2 =[%M**j]= y][[M%2==1] -> [xj =[%M]= x1]][[log2(M)%1 == 0] -> [xj =[%(max(2,Mj)///2)]= x1]]!!!!!!NOTE!!!!!!'
+    '[[M%2==1]or[log2(M)%1 == 0]] => M -> j -> y -> x1 -> xj # [gcd(M,y) == 1][x1**2 =[%M**1]= y][xj**2 =[%M**j]= y][[M%2==1] -> [xj =[%M]= x1]][[log2(M)%1 == 0] -> [xj =[%(max(2,M)///2)]= x1]]!!!!!!NOTE!!!!!!'
+        #@20260817:fix bug@doc: max(2,Mj) --> max(2,M)
+        #   old:'[[M%2==1]or[log2(M)%1 == 0]] => M -> j -> y -> x1 -> xj # [gcd(M,y) == 1][x1**2 =[%M**1]= y][xj**2 =[%M**j]= y][[M%2==1] -> [xj =[%M]= x1]][[log2(M)%1 == 0] -> [xj =[%(max(2,Mj)///2)]= x1]]!!!!!!NOTE!!!!!!'
     check_int_ge(1, M)
     check_int_ge(0, j)
     check_type_is(int, y)

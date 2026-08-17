@@ -14,6 +14,9 @@ see:
     view ../../python3_src/seed/types/LazyList.py
         LazyList
 
+    view ../../python3_src/seed/abc/IReproduceable.py
+        view ../../python3_src/seed/types/Reproduceable.py
+
 
 
 
@@ -502,6 +505,28 @@ LazyList([(1, LazyList([2, 3])), (2, LazyList([3])), (3, LazyList())])
 []
 
 
+
+
+
+
+
+>>> from seed.abc.IReproduceable import IStatedTransformOps, IReproduceable, is_reproduceable_, check_reproduceable_ # typing
+>>> from seed.abc.IReproduceable import xnext4reproduceable_, xnext4reproduceable7check_, check_result5xnext4reproduceable_, ResultTypes4xnext, NextEx, StopEx # basic tools
+>>> from seed.abc.IReproduceable import Iter4IReproduceable, iter_pairs4reproduceable_, iter_fsts4reproduceable_, iter_snds4reproduceable_, list_pairs4reproduceable_, list_fsts4reproduceable_, list_snds4reproduceable_ # debug tools
+>>> ls1 = to_LazyList([1,2,3])
+>>> ls1
+LazyList([<...>])
+>>> xnext4reproduceable7check_(ls1)
+NextEx(1, LazyList([<...>]))
+>>> ls1
+LazyList([1, <...>])
+>>> list_pairs4reproduceable_(ls1)
+[(1, LazyList([2, 3])), (2, LazyList([3])), (3, LazyList())]
+>>> ls1
+LazyList([1, 2, 3])
+
+
+
 #]]]'''
 __all__ = r'''
 to_LazyList
@@ -520,12 +545,20 @@ ToConcatLazyList
     concat4protocol4ToConcatLazyList_
     decorator4protocol4ToConcatLazyList_
 
+
+
+
+
+
+
 '''.split()#'''
-    #repr_as_lt_3dot_gt
+    #_repr_as_lt_3dot_gt
     #_LazyListRelaxIter
     #_LazyListIter
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
+from seed.abc.IReproduceable import IReproduceable, NextEx, StopEx
+
 from seed.types.IForkable import IForkable, IForkable__stamp
 from seed.abc.abc__ver1 import abstractmethod, override, ABC, ABC__no_slots
 from seed.helper.ConstantRepr import ConstantRepr, repr_as_3dot
@@ -572,7 +605,7 @@ def _get(f, /):
 def _dummy_log(*args, **kwds):pass
 _log = _dummy_log
 
-repr_as_lt_3dot_gt = ConstantRepr('<...>')
+_repr_as_lt_3dot_gt = ConstantRepr('<...>')
 class _LazyListRelaxIter:
     def __init__(sf, lazylist, /, *, with_end_state, with_tail, to_iter_pairs):
         check_type_is(LazyList, lazylist)
@@ -768,7 +801,7 @@ def decorator4protocol4ToConcatLazyList_(iter_xs_, /):
 class LazyListError(Exception):pass
 class LazyListError__unpack_empty_lazylist(LazyListError):pass
 
-class LazyList:
+class LazyList(IReproduceable):
     r'''[[[
     'vivi Haskell.List'
         'see:to_LazyList():NON_UNIFORM_TREATMENT_ABOUT_ITERATOR'
@@ -783,6 +816,20 @@ class LazyList:
             unknown yet
 
     #]]]'''#'''
+    ___no_slots_ok___ = True
+    ######################
+    # @20260811:++IReproduceable
+    @override
+    def ___xnext4reproduceable___(sf, /):
+        'IReproduceable{x} -> (NextEx(x, IReproduceable{x}) | StopEx(exit_status))'
+        match sf.may_unpack():
+            case (oresult, tail):
+                return NextEx(oresult, tail)
+            case None as exit_status:
+                return StopEx(exit_status)
+        raise 000
+    ######################
+
     @classmethod
     def concat_head_(cls, head, tail_lazylist, /):
         check_type_le(LazyList, tail_lazylist)
@@ -995,7 +1042,7 @@ class LazyList:
             #bug:xs_.append(xs_) #to show '...'
             #   fail: LazyList([[...]])
             #xs_.append(repr_as_3dot) #to show '...'
-            xs_.append(repr_as_lt_3dot_gt) #to show '...'
+            xs_.append(_repr_as_lt_3dot_gt) #to show '...'
         elif not xs_:
             assert end_state is None
             return repr_helper(sf)

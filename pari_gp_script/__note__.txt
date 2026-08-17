@@ -1,0 +1,8 @@
+
+e ../../python3_src/pari_gp_script/__note__.txt
+
+ls ~/../usr/share/pari/examples/
+more ~/../usr/share/pari/examples/EXPLAIN
+  load script: 『\r {path}』
+more ~/../usr/share/pari/examples/squfof.gp
+  algo{factorint}:Qfb{D>0}

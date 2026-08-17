@@ -777,5 +777,9 @@ from seed.math.Chinese_Remainder_Theorem__ver2 import crt_precomputation7coprime
 from seed.math.Chinese_Remainder_Theorem__ver2 import CRT7coprime7blockwise
 from seed.math.Chinese_Remainder_Theorem__ver2 import apply_CRT, apply_CRT__pairs
 
+
 from seed.math.Chinese_Remainder_Theorem__ver2 import check_CRT_ans
+from seed.math.Chinese_Remainder_Theorem__ver2 import get_CRT_type_
+    #CRT = get_CRT_type_(extended=False, ver='long_term')
+    #u = CRT(us)(rs)
 from seed.math.Chinese_Remainder_Theorem__ver2 import *

@@ -1,4 +1,5 @@
 #__all__:goto
+#doing:goto
 #TODO:goto
 #Qfb__x__smooth_group_order_method:goto
 #证明冫二二型倒数公式:goto
@@ -8,9 +9,15 @@
 #数据实验冫群规模规律:goto
 #群规模公式:goto
 #   群规模公式牜无限求和牜负判别值:goto
+#       群规模公式牜负判别值牜不完全去平方因子化牜须留底:goto
+#           群规模公式牜负判别值牜完全去平方因子化牜无须留底:goto
+#               扩伪群规模公式牜负判别值牜完全去平方因子化牜无须留底:goto
+#                   定理牜扩伪群规模倍率:goto
+#                       已校验@(-4 .* range(1,1+20000))
 #   群规模公式牜有限求和牜基础负判别值:goto
 #   群规模计算牜蛮力枚举:goto
 #   群规模计算牜大小步碰撞:goto
+
 
 #无法分解素幂分量乊整数分解牜二二型歧型:goto
 #   ???好像不能证明 => 『此方案无效:[D:=n2D_(k * n**2)]』
@@ -23,6 +30,7 @@
 #goto:乘四影响不大，乘二影响很大
 r'''[[[
 e ../../python3_src/seed/math/BinaryQuadraticForm.py
+view ../../python3_src/seed/math/BinaryQuadraticForm__7class_number.py
 
 seed.math.BinaryQuadraticForm
 py -m nn_ns.app.debug_cmd   seed.math.BinaryQuadraticForm -x # -off_defs
@@ -1453,41 +1461,35 @@ TODO:如何证明算法正确性？感觉跟前面证明存在性时的算法大
 
 ]]
 [[
-Qfb:蛮力枚举列出class_group{D}所有等价类
-CRT_le(max;moduli,remainders)
-[C >= A >= max(1,abs(B))][gcd(A,B,C) == 1]:
-    [D==B**2-4*A*C <= A**2-4*A**2 == -3*A**2]
-    [-D >= 3*A**2]
-    [1 <= A <= sqrt(-D/3)]
-
-    !! [gcd(A,B,C) == 1]
-    [(-D + [D==-3]) > 3*A**2]
-
-    [1 <= A < sqrt((-D + [D==-3])/3)]
-    [1 <= A < max(2,sqrt((-D)/3))]
-    蛮力枚举 素因子{A{D}}
-        [D =[%(4*A*C)]= B**2]
-        [D =[%(4*A)]= B**2]
-        [Jacobi_symbol(素因子{4*A{D}};D) == +1|0]
-
-    [B**2 == D+4*A*C >= D+4*A**2]
-    [abs(B) >= sqrt(max(0,D+4*A**2))]
-    [A >= abs(B) >= sqrt(max(0,D+4*A**2))]
-    蛮力枚举 B{D,A{D}}
-        sqrts_mod_(2*A; D)
-        howto:CRT_le(max;moduli,remainders)
 
 page40[54/604]
-[D :: int{>0}]:
+[D :: int{=!=0}]:
     # χ is a Dirichlet character modulo D
     [[is_Dirichlet_character_mod_(D;X)] =[def]= [[X :: int -> complex][@[a,b::int] -> [X(a*b) == X(a)*X(b)]][@[a,b::int] -> [X(a+b*D) == X(a)]][@[a::int] -> [[0 == X(a)] <-> [1 < gcd(D,a)]]]]]
     [is_Dirichlet_character_mod_(D;X)]:
         [X(1) =!= 0]
         [X(1) == X(1)**2]
         [X(1) == 1]
-    [is_Dirichlet_character_mod_(D;X)][1 == gcd(D,n)]:
-        [X(n)**phi_(D) == 1]
+    [is_Dirichlet_character_mod_(D;X)]:
+        [[1 == gcd(D,n)] -> [X(n)**phi_(D) == 1]]
             #χ(n) is a root of unity.
+    !! [X(a+b*D) == X(a)]
+    !! [X(1) == 1]
+    => [[abs(D) == 1] -> [a::int] -> [X(a) == 1]]
+    !! [[0 == X(a)] <-> [1 < gcd(D,a)]]
+    => [[abs(D) == 1] <-> [[a::int] -> [X(a) == 1]]]
+    !! [X(a*b) == X(a)*X(b)]
+    => [[b::int] -> [X(0) == X(0)*X(b)]]
+    => [X(0) == X(0)**2]
+    => [X(0) <- {0,1}]
+    => [[X(0) == 1] <-> [[b::int] -> [X(b) == 1]] <-> [abs(D) == 1]]
+    => [X(0) == [abs(D) == 1]]
+    !! [X(a*b) == X(a)*X(b)]
+    => [1 == X(1) == X(-1)**2]
+    => [X(-1) <- {-1,+1}]
+    !! [X(a+b*D) == X(a)]
+    => [X(-1) == X(D-1)]
+
     [is_Dirichlet_character_mod_(D1;X1)][is_Dirichlet_character_mod_(D2;X2)]:
         [(X1*X2) =[def]= (\a::int -> X1(a)*X2(a))]
         [is_Dirichlet_character_mod_(lcm(D1,D2);(X1*X2))]
@@ -1503,8 +1505,10 @@ page40[54/604]
                 [order_mod_(D;3) == D///4]
                 [order_mod_(D;1+D///2) == 2]
                 [X(3) ~ (1**/(D///4))**e for e :: uint%(D///4)]
-                [X(1+D///4) ~ (-1)**e for e :: uint%2]
+                [X(1+D///2) ~ (-1)**e for e :: uint%2]
                 唯二生成元:X{3%D},X{(1+D///2)%D}
+                [3*(1+D///2)%D == (3+D///2)%D]
+                [(1+2*k)*(1+D///2)%D == ((1+2*k)+D///2)%D]
     # X 总数 == phi_(D)
     # 正交:
     [[i::int] -> [sum[X(i) | [is_Dirichlet_character_mod_(D;X)]] == [1==i%D]*phi_(D)]]
@@ -1512,12 +1516,17 @@ page40[54/604]
         # ??? [[is_the_principal_Dirichlet_character_mod_(D;X)] =[def]= [[i::int] -> [X(i) == 1]]]
 
     [is_Dirichlet_character_mod_(D;X)][s::complex]:
+        [Dirichlet_L_function :: complex -> (int -> complex) -> complex]
         [Dirichlet_L_function(s,X) =[def]= sum[X(u)/u**s | [u:<-[1..=+oo]]]]
             #[the sum converges in the region Re(s) > [is_the_principal_Dirichlet_character_mod_(D;X)]]
             #<<==:
             #[the sum converges in the region Re(s) > 1]
             #[not$is_the_principal_Dirichlet_character_mod_(D;X)] => [the sum converges in the region Re(s) > 0]
         [Dirichlet_L_function(s,X) == II[(1-X(p)/p**s)**-1 | [p::prime]]]
+Dirichlet_L_function vs Riemann_zeta_function
+    [[s.real > [is_the_principal_Dirichlet_character_mod_(D;X)]] -> [Dirichlet_L_function(s,X) =[def]= sum[X(u)/u**s | [u:<-[1..=+oo]]]]]
+    [[s.real>0] -> [(-1+2**(1-s)) *Riemann_zeta_function(s) == sum[(-1)**n/n**s | [n:<-[1..]]]]]
+
 
 %s/\<Kronecker_symbol\>(\([^;]*\);\([^()]*\))/Kronecker_symbol(\2;\1)/g
 群规模公式:here
@@ -1527,30 +1536,163 @@ page248[259/604]
     #   negative discriminant
     [h(D) == 1/Pi * w5D_(D) * Dirichlet_L_function(1,Kronecker_symbol{D}) * sqrt(-D)]
         群规模公式牜无限求和牜负判别值:here
+        #Dirichlet_class_number_formula{negative_discriminant}:here
         ==>>:
         [h(D) < ln_(-D) * sqrt(-D)]
-    [w5D_(D) := max(1,6+D)] # ([D==-3]*3 + [D==-4]*2 + [D < -4]*1)
+    [w5D_(D) := ([D==-3]*3 + [D==-4]*2 + [D < -4]*1)]
+    [w5D_(D) == max(1,6+D)]
+    [w5D_(D) == (6+max(-5,D))]
     [Dirichlet_L_function(1,Kronecker_symbol{D}) == sum[Kronecker_symbol(u;Df)/u | [u:<-[1..=+oo]]]]
 
     #Kronecker_symbol(int;D)
     #Kronecker_symbol{i;D} # X{D}
-    [is_Dirichlet_character_mod_(D;(\i->Kronecker_symbol(i;D)))]
+    [Kronecker_symbol{D} := (\i->Kronecker_symbol(i;D))]
+    !! [is_Dirichlet_character_mod_(D;(\i->Kronecker_symbol(i;D)))]
+    [Kronecker_symbol :: int -> int{=!=0} -> complex]
     [Kronecker_symbol(2;D) := (D&1)*(-1)**(D&4)] # ([D%2==0]*0 + [D%8==1]*1 + [D%8==5]*-1)
-    [Kronecker_symbol(p:odd_prime;D) := Legendre_symbol(p;D)]
+    [Kronecker_symbol(p{odd_prime};D) := Legendre_symbol(p;D)]
     [Kronecker_symbol(a*b;D) := Kronecker_symbol(a;D)*Kronecker_symbol(b;D)]
         ==>>:
-        [Kronecker_symbol(0;D) == Kronecker_symbol(0;D)**2]
-        [Kronecker_symbol(1;D) == Kronecker_symbol(1;D)**2]
-        [Kronecker_symbol(1;D) == Kronecker_symbol(-1;D)**2]
-        [Kronecker_symbol(0;D) == 0]
+        !! [X(1) == 1]
         [Kronecker_symbol(1;D) == 1]
-        [Kronecker_symbol(-1;D) == -1]
+
+        !! [X(0) == [abs(D) == 1]]
+        [Kronecker_symbol(0;D) == [abs(D) == 1]]
+        !! [D <= -3]
+        [Kronecker_symbol(0;D) == 0]
+
+        !! [X(-1) <- {-1,+1}]
+        ???xxx:[Kronecker_symbol(-1;D) == -1]
+        !! [X(-1) == X(D-1)]
+        [Kronecker_symbol(-1;D) == D-1]
+    *1: ==>>:
+        # [D%p =!= 0] => D*p**2 --> D
+        [p::prime][D%p =!= 0]:
+            !! [Dirichlet_L_function(s,X) == II[(1-X(p)/p**s)**-1 | [p::prime]]]
+            [Dirichlet_L_function(1,Kronecker_symbol{D}) == II[(1-Kronecker_symbol(q;D)/q)**-1 | [q::prime]]]
+            [Dirichlet_L_function(1,Kronecker_symbol{D*p**2}) == II[(1-Kronecker_symbol(q;D*p**2)/q)**-1 | [q::prime]]]
+            !! [D%p =!= 0]
+            [[q::prime] -> [Kronecker_symbol(q;D*p**2) == [p==q]*0 + [p=!=q]*Kronecker_symbol(q;D)]]
+            [Dirichlet_L_function(1,Kronecker_symbol{D}) == (1-Kronecker_symbol(p;D)/p)**-1 * Dirichlet_L_function(1,Kronecker_symbol{D*p**2})]
+            !! [h(D) == 1/Pi * w5D_(D) * Dirichlet_L_function(1,Kronecker_symbol{D}) * sqrt(-D)] # 群规模公式牜无限求和牜负判别值:goto
+            [h(D*p**2)/h(D)
+            == w5D_(D*p**2) / w5D_(D)
+                *Dirichlet_L_function(1,Kronecker_symbol{D*p**2}) / Dirichlet_L_function(1,Kronecker_symbol{D})
+                *sqrt(-D*p**2) / sqrt(-D)
+            !! [w5D_(D*p**2) == 1]
+            == 1/w5D_(D) *1/(1-Kronecker_symbol(p;D)/p)**-1 *p
+            == (p-Kronecker_symbol(p;D)) /w5D_(D)
+            ]
+            [h(D*p**2)/h(D) == (p-Kronecker_symbol(p;D)) /w5D_(D)]
+        [[p::prime][D%p =!= 0] -> [h(D*p**2)/h(D) == (p-Kronecker_symbol(p;D)) /w5D_(D)]]
+        !! [[v>=2] -> [w5D_(D*v**2) == 1]]
+        [[v::squarefree][gcd(D,v) == 1][v>=2] -> [h(D*v**2)/h(D) == II[(p-Kronecker_symbol(p;D)) | [p::prime][v%p == 0]] /w5D_(D)]]
+            #群规模公式牜负判别值牜完全去平方因子化牜无须留底牜最后一跃:here
+
+    *2: ==>>:
+        # [D%u == 0] => D*u**2 --> D
+        [[p::prime] -> [D%p == 0] -> [Kronecker_symbol(i;D*p**2) == Kronecker_symbol(i;D)]]
+        [[u::int{=!=0}] -> [D%u == 0] -> [Kronecker_symbol(i;D*u**2) == Kronecker_symbol(i;D)]]
+    [u::uint{>=2}]:
+        !! [D < 0][D%4 < 2]
+        [D <= -3]
+        [(D*u**2) <= -3*2**2 == -12 < -4]
+        [w5D_(D*u**2) == 1]
+    [[u::uint{>=2}] -> [w5D_(D*u**2) == 1]]
+
+    [u::uint{>=2}][D%u == 0]:
+        !! [[u::uint{>=2}] -> [w5D_(D*u**2) == 1]]
+        [w5D_(D*u**2) == 1]
+
+        !! [[u::int{=!=0}] -> [D%u == 0] -> [Kronecker_symbol(i;D*u**2) == Kronecker_symbol(i;D)]]
+        [Kronecker_symbol(i;D*u**2) == Kronecker_symbol(i;D)]
+
+        [h(D*u**2)
+        == 1/Pi * w5D_(D*u**2) * Dirichlet_L_function(1,Kronecker_symbol{D*u**2}) * sqrt(-D*u**2)
+        !! [w5D_(D*u**2) == 1]
+        !! [Kronecker_symbol(i;D*u**2) == Kronecker_symbol(i;D)]
+        == 1/Pi * 1 * Dirichlet_L_function(1,Kronecker_symbol{D}) * sqrt(-D)*u
+        == h(D)*u/w5D_(D)
+        ]
+        [h(D*u**2) == h(D)*u/w5D_(D)]
+    [[u::uint{>=2}][D%u == 0] -> [h(D*u**2) == h(D)*u/w5D_(D)]]
+    [[u::uint{>=2}][D%u == 0] -> [u%w5D_(D) == 0]]
+    [[D%u == 0] -> [([u>=2]*u+[u==1]*D)%w5D_(D) == 0]]
+    [[u::uint{>=2}][D%u == 0] -> [[u%w5D_(D) == 0][h(D*u**2) == h(D)*(u///w5D_(D))]]]
+==>>:
+[[D::int{<0}][D%4 < 2][w5D_(D) := (6+max(-5,D))][h(D) := neg_discriminant2class_number4primitive_binary_quadratic_form_(D)] -> [u::uint{>=2}][D%u == 0] -> [[u%w5D_(D) == 0][h(D*u**2) == h(D)*(u///w5D_(D))]]]
+    # NOTE:[D%u == 0]   # Kronecker_symbol 去平方因子化 的 前提
+    # NOTE:[u>=2]        # [u%w5D_(D) == 0] 的 前提
+    # 群规模公式牜负判别值牜不完全去平方因子化牜须留底:here
+    # D**u --> D
+    # D --> Df/negative fundamental discriminant (<==>m/negative squarefree radicand)
+    # 简化:[[u>=2][D%u == 0] -> [h(D*u**2) == h(D)*(u///w5D_(D))]]
+    #
+from seed.math.Kronecker_symbol import Kronecker_symbol
+[D<0][D%4<2][u>0]:
+    [hratio4class_number7Duu_(D,u) =[def]= (II[p**(-1+gde_(p;u))*(p-Kronecker_symbol(p;D)) | [p::prime][u%p==0]])]
+    [ratio4class_number7Duu_(D,u) =[def]= (hratio4class_number7Duu_(D,u)///(1 if u == 1 else w5D_(D)))]
+已证明:猜想:[[u::uint{>0}] -> [h(D*u**2) == h(D)*ratio4class_number7Duu_(D,u)]]
+    # 已证明:猜想冫群规模公式牜负判别值牜完全去平方因子化牜无须留底:here
+    # 已证明:群规模公式牜负判别值牜完全去平方因子化牜无须留底:here
+    <<==:
+!! [[v::squarefree][gcd(D,v) == 1][v>=2] -> [h(D*v**2)/h(D) == II[(p-Kronecker_symbol(p;D)) | [p::prime][v%p == 0]] /w5D_(D)]] #群规模公式牜负判别值牜完全去平方因子化牜无须留底牜最后一跃:goto
+已证明:猜想:[[p::prime] -> [h(D*p**2) == h(D)*((p-Kronecker_symbol(p;D))///w5D_(D))]]
+    <<==:
+? qfbclassno(-4*3*5*7*2^2)
+    16
+        == (2-0)*qfbclassno(-4*3*5*7)
+? qfbclassno(-4*3*5*7)
+    8
+? qfbclassno(-4*3*5*7*7^2)
+    56
+        == (7-0)*qfbclassno(-4*3*5*7)
+? issquare(Mod((-4*3*5),11))
+    0
+? issquare(Mod((-4*3*5*7),11))
+    1
+? qfbclassno(-4*3*5*7*11^2)
+    80
+        == (11-(+1))*qfbclassno(-4*3*5*7)
+? qfbclassno(-4*3*5*11^2)
+    24
+        == (11-(-1))*qfbclassno(-4*3*5)
+? qfbclassno(-4*3*5)
+    2
+        == (2-(+1))*qfbclassno(-3*5)
+            # [(-3*5)%8 == 1]
+? qfbclassno(-3*5)
+    2
+? qfbclassno(-3)
+    1
+? qfbclassno(-3*5^2)
+    2
+        == (5-(-1))///3*qfbclassno(-3)
+? qfbclassno(-4*3)
+    1
+        == (2-(-1))///3*qfbclassno(-3)
+            # [(-3)%8 == 5]
+? qfbclassno(-4)
+    1
+? qfbclassno(-4*5^2)
+    2
+        == (5-(+1))///2*qfbclassno(-4)
+
+
 [x::int]:
     [k5D_or_m_(x) := 4 - [x%4==1]*3]
 [m::squarefree]:
     [m%4 =!= 0]
     [m =!= 0]
     [Df5m_(m) := m*k5D_or_m_(m)]
+[D::int]:
+    [is_negative_discriminant_(D) =[def]= [[D < 0][D%4 < 2]]]
+        # negative discriminant
+    [is_negative_fundamental_discriminant_(D) =[def]= [[is_negative_discriminant_(D)][[D%4==1] -> [is_squarefree_(D)]][[D%4==0] -> [[not$is_negative_discriminant_(D///4)][is_squarefree_(D///4)]]]]]
+        # negative fundamental discriminant
+    ==>>:
+    [is_negative_fundamental_discriminant_(D) =[def]= [[D < 0][(ez4D, odd4nD) := factor_pint_out_power_of_base_(2;-D)][is_squarefree_(odd4nD)][ez4D <- {0,2,3}][[ez4D == 0][odd4nD%4 == 3]or[ez4D == 2][odd4nD%4 == 1]or[ez4D == 3]]]]
+
 [Df < 0][?[m::squarefree] -> [Df==Df5m_(m)]]:
     [m5Df_(Df) := Df///k5D_or_m_(Df)]
     [is_squarefree_(m5Df_(Df))]
@@ -1568,7 +1710,7 @@ Though an appealing formula, such a summation with its |D| terms is suitable for
     There are various ways to accelerate such a series;
         for example, in [Cohen 2000] one can find error-function summations of only O(|D|**/2) summands, and such formulae allow one easily to handle |D| ≈ 10**16.
         Moreover, it can be shown that directly counting the primitive reduced forms (a,b,c) of negative discriminant D computes h(D) in O(|D|**(1/2+err)) operations.
-            群规模计算牜蛮力枚举:here
+            群规模计算牜蛮力枚举:goto
         And the Shanks baby-steps, giant-steps method reduces the exponent from 1/2 to 1/4.
             群规模计算牜大小步碰撞:here
             猜:随机bqf/Qfb，求mul_order_(bqf)
@@ -1680,6 +1822,7 @@ m <-> D:
     [fundamental_unit{m} == O(exp(m))]
     [unit{m} =[def]= ...[1==abs(norm(this))]]
     [fundamental_unit{m} =[def]= ...[1==abs(norm(this))][@[x::unit{m}] -> ?[e::uint] -> [x == (+/-1)*this**e]]]
+    #算法零:搜索:
     [fundamental_unit{m} == ((a+b*sqrt(m))/k)
         where
             k := 2 if m%4 == 1 else 2
@@ -1695,6 +1838,7 @@ m <-> D:
                 # min y
     ]
 
+    #算法一:连分数耂偏分数乊周期末:
     let (A[j]/B[j]) be the j-th convergent of sqrt(m)
         [A[0] == floor_sqrt(m)]
         [B[0] == 1]
@@ -1705,6 +1849,43 @@ m <-> D:
             ???难道不是:[m%8 == 1]:[k==2]
         [[m%8 == 5] -> [((A[L-1]+B[L-1]*sqrt(m))/1) <- {fundamental_unit{m}, fundamental_unit{m}**3}]]
             ???难道不是:[m%4 == 1]:[k==2]
+
+
+    #算法二:连分数耂尾分数乘积乊一周期:
+    [fundamental_unit{m} == II[ru[j] | [j:<-[1..=sz]]] where
+        [ru := ((1+sqrt(m))/2) if m%4==1 else sqrt(m)]
+        [cf4ru := continued_fraction_expansion_(ru)]
+        [sz := period_length_(cf4ru)]
+        [(P[0],Q[0]) :=> [ru == ((P[0]+sqrt(m))/Q[0])]]
+        [P[0] == [m%4==1]]
+        [Q[0] == 1+[m%4==1]]
+        [cf4ru[0] == floor(ru)]
+        [j::uint]:
+            [P[1+j] := cf4ru[j]*Q[j] -P[j]]
+            [Q[1+j] := (m -P[1+j]**2)/Q[j]]
+            [ru[j] := ((P[j]+sqrt(m))/Q[j])]
+            ##################
+            [Q[j]*Q[1+j] == (m -P[1+j]**2)]
+            ##################
+            [ru[0] == ru]
+            [ru[j] == cf2Real_(cf4ru[j:])]
+            [ru[j] == cf4ru[j] + 1/ru[1+j]]
+            [ru[1+j] == 1/(ru[j] -cf4ru[j])]
+            [ru[1+j]
+            == 1/(ru[j] -cf4ru[j])
+            == 1/((P[j]+sqrt(m))/Q[j] -cf4ru[j])
+            == Q[j]/(P[j]+sqrt(m) -cf4ru[j]*Q[j])
+            == Q[j]/(sqrt(m) -P[1+j])
+            == Q[j]*(sqrt(m) +P[1+j])/(m -P[1+j]**2)
+            == (P[1+j] +sqrt(m))/((m -P[1+j]**2)/Q[j])
+            == (P[1+j] +sqrt(m))/Q[1+j]
+            == ru[1+j]
+            ]
+
+            ##################
+    ]
+
+
 ]]
 
 [[
@@ -3195,6 +3376,8 @@ def D2QfbPow7A_ge_(D, exp, min4A, /, *, avoid_A_mod8_eq1=False):
 def n2QfbPow7A_ge_(n, exp, min4A, /, *, avoid_A_mod8_eq1=False):
     D = n2D_(n)
     return D2QfbPow7A_ge_(D, exp, min4A, avoid_A_mod8_eq1=avoid_A_mod8_eq1)
+
+
 
 
 

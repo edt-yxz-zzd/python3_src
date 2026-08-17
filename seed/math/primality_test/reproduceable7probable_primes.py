@@ -234,132 +234,6 @@ mk_Reproduceable7dup_xprimes__ver2_(9, 9, case = 2)
 
 
 
->>> list_all_floor_kth_root_until_diff_lt_(0, 2**16)
-[(1, 65536), (2, 256), (3, 40), (4, 16), (5, 9), (6, 6), (7, 4), (8, 4), (9, 3), (10, 3), (11, 2), (12, 2), (13, 2), (14, 2), (15, 2), (16, 2), (17, 1)]
-
->>> list_all_floor_kth_root_until_diff_lt_(1, 2**16)
-[(1, 65536), (2, 256), (3, 40), (4, 16), (5, 9), (6, 6), (7, 4)]
-
->>> list_all_floor_kth_root_until_diff_lt_(1, 2**256)   #doctest: +ELLIPSIS
-[..., (40, 84), (41, 75), (42, 68), (43, 61), (44, 56), (45, 51), (46, 47), (47, 43), (48, 40), (49, 37), (50, 34), (51, 32), (52, 30), (53, 28), (54, 26), (55, 25), (56, 23), (57, 22), (58, 21), (59, 20), (60, 19), (61, 18), (62, 17), (63, 16)]
-
->>> #see:_ns2ks_(): [n:=2**256]->[估值:k==25] 实际k应当是26
->>> list_all_floor_kth_root_until_diff_lt_(4, 2**256)   #doctest: +ELLIPSIS
-[..., (19, 11375), (20, 7131), (21, 4674), (22, 3183), (23, 2241), (24, 1625), (25, 1209), (26, 920), (27, 714), ..., (40, 84), (41, 75), (42, 68), (43, 61), (44, 56), (45, 51), (46, 47), (47, 43)]
->>> list_all_floor_kth_root_until_diff_lt_(..., 2**256)   #doctest: +ELLIPSIS
-[..., (43, 61), (44, 56), (45, 51)]
-
-
-
-
-
->>> KthRoots4N(200)
-KthRoots4N(200)
->>> KthRoots4N(200).validate()
->>> u = 1<<120
->>> for n in [-1+u, u, 1+u]:KthRoots4N(n).validate()
-
-
-
-
-[[
-[n>=1][k>=1][diff>=1][n**/k -n**/(1+k) < diff]:
-    [x:=n**/(1+k)]
-    [x**(1+k) == n]
-    [(x+diff)**k > n]
-    [(x+diff)**k > x**(1+k)]
-    [(1+diff/x)**k > x]
-    [k*ln_(1+diff/x) > ln_(x)]
-    [z:=diff/x]
-    [k*ln_(1+z) > ln_(diff/z)]
-    [k*ln_(1+z) > ln_(diff) -ln_(z)]
-    [k*(z -z**2/2 +z**3/3 ...) > ln_(diff) -ln_(z)]
-    [k*sum[-(-z)**j/j | [j:<-[1..]]] > ln_(diff) -ln_(z)]
-    ~~=>:
-        [k*z ~>~ ln_(diff) -ln_(z)]
-        [k*z +ln_(z) ~>~ ln_(diff)]
-        [k*z ~>~ ln_(diff)]
-        [z ~>~ ln_(diff)/k]
-        [diff/x ~>~ ln_(diff)/k]
-        [k*diff/ln_(diff) ~>~ x]
-        [x ~<~ k*diff/ln_(diff)]
-
-    [k*ln_(1+diff/x) > ln_(x)]
-    ~~=>:
-        [k*(diff/x) ~>~ ln_(x)]
-        [k*diff ~>~ x*ln_(x)]
-        [x*ln_(x) ~<~ k*diff]
-
-        [n**/(1+k)*ln_(n**/(1+k)) ~<~ k*diff]
-        [n**/(1+k)/(1+k)/k ~<~ diff/ln_(n)]
-        [diff:=floor_log2(n)]:
-            [n**/(1+k)/(1+k)/k ~<~ 1/ln2]
-            [n**/(1+k)/(1+k)/k ~<~ 1]
-                [n**/k ~<~ k**2]
-                [n**/2 ~<~ k**k]
-            [n**/(1+k) ~<~ (1+k)**2]
-            [log2(n) ~<~ 2*(1+k)*log2(1+k)]
-                _n2k_:goto
-
-        [n:=2**256][diff:=4][k:=47][x~=43-4=39]:
-            !! [x ~<~ k*diff/ln_(diff)]
-            [39 ~= x ~<~ k*diff/ln_(diff) ~= 135.61333384356257] #bad
-            !! [x*ln_(x) ~<~ k*diff]
-            [142.8789041990562 ~= x*ln_(x) ~<~ k*diff == 188]
-
-        [n:=2**2048][diff:=4][k:=269][x~=195-4=191]:
-            !! [x*ln_(x) ~<~ k*diff]
-            [1003.1842247569064 ~= x*ln_(x) ~<~ k*diff == 1076]
-
-
-]]
-[[
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =0 ='2**16'
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =1 ='2**16'
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =1 ='2**256'
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =4 ='2**256'
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =... ='2**256'
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =4 ='2**2048'
-[..., (256, 256), (257, 250), (258, 245), (259, 240), (260, 235), (261, 230), (262, 225), (263, 220), (264, 216), (265, 212), (266, 207), (267, 203), (268, 199), (269, 195)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =... ='2**2048'
-[..., (244, 336), (245, 328), (246, 320)]
-
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =4 ='(2**10)**(2**10)'
-[..., (1024, 1024), (1025, 1017), (1026, 1010), (1027, 1003), (1028, 996), (1029, 990), (1030, 983), (1031, 976), (1032, 970), (1033, 963), (1034, 957), (1035, 951), (1036, 944), (1037, 938), (1038, 932), (1039, 926), (1040, 920), (1041, 914), (1042, 908), (1043, 902), (1044, 896), (1045, 890), (1046, 885), (1047, 879), (1048, 873), (1049, 868), (1050, 862), (1051, 856), (1052, 851), (1053, 846), (1054, 840), (1055, 835), (1056, 830), (1057, 824), (1058, 819), (1059, 814), (1060, 809), (1061, 804), (1062, 799), (1063, 794), (1064, 789), (1065, 784), (1066, 779), (1067, 774), (1068, 769), (1069, 764), (1070, 760), (1071, 755), (1072, 750), (1073, 746), (1074, 741), (1075, 737), (1076, 732), (1077, 728), (1078, 723), (1079, 719), (1080, 714), (1081, 710), (1082, 706), (1083, 701), (1084, 697), (1085, 693), (1086, 689), (1087, 685), (1088, 681), (1089, 677), (1090, 673), (1091, 669), (1092, 665), (1093, 661), (1094, 657), (1095, 653), (1096, 649), (1097, 645), (1098, 641)]
-
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =4 ='(2**12)**(2**12)'
-    ^ValueError: Exceeds the limit (4300 digits) for integer string conversion; use sys.set_int_max_str_digits() to increase the limit
-
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =4 ='2**2048' --min_k='2**8'
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =4 ='(2**12)**(2**12)' --min_k='2**12'
-[(4096, 4096), (4097, 4087), (4098, 4079), (4099, 4071), (4100, 4062), (4101, 4054), ..., (4400, 2305), (4401, 2301), (4402, 2297), (4403, 2293), (4404, 2289), (4405, 2285), (4406, 2281), (4407, 2277), (4408, 2273), (4409, 2269), (4410, 2265), (4411, 2261), (4412, 2257), (4413, 2253), (4414, 2249), (4415, 2245), (4416, 2241), (4417, 2237), (4418, 2233)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =12 ='(2**12)**(2**12)' --min_k='2**12'
-[(4096, 4096)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =12 ='(2**12)**(2**12)' --min_k='2**11'
-[(2048, 16777216), (2049, 16641555), (2050, 16507123), (2051, 16373905), (2052, 16241892), ..., (3947, 5606), (3948, 5594), (3949, 5582), (3950, 5570), (3951, 5558), (3952, 5546), (3953, 5533), (3954, 5521), (3955, 5509), (3956, 5497), (3957, 5485)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ ='2**12' ='(2**12)**(2**12)' --min_k='2**11'
-[(2048, 16777216), (2049, 16641555), (2050, 16507123), (2051, 16373905), (2052, 16241892), ..., (2499, 833410), (2500, 828877), (2501, 824373), (2502, 819897), (2503, 815449), (2504, 811028), (2505, 806635), (2506, 802269), (2507, 797930), (2508, 793618), (2509, 789333), (2510, 785074), (2511, 780842), (2512, 776635), (2513, 772455), (2514, 768301), (2515, 764172), (2516, 760069)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ ='12*2**12' ='(2**12)**(2**12)' --min_k='2**11'
-[(2048, 16777216), (2049, 16641555), (2050, 16507123), (2051, 16373905), (2052, 16241892), ..., (2150, 7620188), (2151, 7564257), (2152, 7508788), (2153, 7453776), (2154, 7399218), (2155, 7345110), (2156, 7291446), (2157, 7238224), (2158, 7185439), (2159, 7133088), (2160, 7081166), (2161, 7029669), (2162, 6978594), (2163, 6927937), (2164, 6877694), (2165, 6827861), (2166, 6778434)]
-
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =16 ='(2**16)**(2**16)' --min_k='2**16'
-[(65536, 65536)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =16 ='(2**16)**(2**16)' --min_k='2**16-1024'
-[(64512, 78150)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =16 ='(2**16)**(2**16)' --min_k='2**16-1024-512'
-[(64000, 85521)]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list_all_floor_kth_root_until_diff_lt_ =16 ='(2**16)**(2**16)' --min_k='2**16-1024-512-64'
-[(63936, 86499), (63937, 86483)]
-
-]]
-[[
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list._ns2ks_ '=[31,32,33, 63,64,65, 127,128,129]'
-    [1, 2, 2, 2, 2, 2, 2, 2, 2]
-py_adhoc_call   seed.math.primality_test.reproduceable7probable_primes   @list._ns2ks_ '=[n for e in range(5,257) for u in [1<<e] for n in [u-1,u]]'
-    # 256 => 25
-    [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25]
-
-]]
 
 
 
@@ -378,8 +252,6 @@ mk_Reproduceable7dup_xprimes_
 
 
 
-list_all_floor_kth_root_until_diff_lt_
-KthRoots4N
 '''.split()#'''
     #Reproduceable7bounded_smooth7xprimes-->Reproduceable7dup_xprimes
 __all__
@@ -400,177 +272,19 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.check import check_type_is, check_type_le, check_int_ge, check_int_ge_lt, check_int_ge_le, check_uint_lt, check_may_
     from seed.helper.repr_input import repr_helper, repr_helper__str
     from seed.types.CachedProperty import CachedProperty
-    from seed.math.floor_ceil_tools.fc_log import floor_log_, floor_log2, ceil_log2
-    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt, ceil_sqrt, floor_kth_root_, ceil_kth_root_
+    from seed.math.floor_ceil_tools.fc_log import floor_log_
     from seed.math.prime_sieve.PrimeList import PrimeList7ge_lt
         #PrimeList7ge_lt+Reproduceable5seq
-    from bisect import bisect_right, bisect_left
-    from itertools import pairwise
-from weakref import WeakValueDictionary
+    from seed.math.floor_ceil_tools.fc_kth_root__7KthRoots4N import KthRoots4N
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
-
-class KthRoots4N:
-    _n2sf = WeakValueDictionary()
-    def __new__(cls, n, /):
-        assert cls is __class__
-        try:
-            return cls._n2sf[n]
-        except KeyError:
-            pass
-        check_int_ge(1, n)
-        sf = super(__class__, cls).__new__(cls)
-        sf._n = n
-        rs = _n2rs_(n)
-        # [rs:has no dup]
-        sf._rs = tuple(rs)
-        return sf
-    @property
-    def the_N(sf, /):
-        return sf._n
-    @property
-    def _kth_roots4N_(sf, /):
-        return sf._rs
-    def __repr__(sf, /):
-        return repr_helper(sf, sf.the_N)
-    def __call__(sf, u, /):
-        'u -> max_exp/floor_log_(u; n)'
-        assert u >= 2
-        n = sf.the_N
-        # [u**max_exp <= n]
-        # [u <= n**/max_exp]
-        # [u <= floor_kth_root_(max_exp;n)]
-        if u > n:
-            return 0
-        # [u <= n]
-        rs = sf._kth_roots4N_
-        if not (rs and u >= rs[-1][1]):
-            return floor_log_(u, n)
-        # [rs[-1][-1] <= u <= n]
-        if 0:
-            # !! [rs:has no dup]
-            j = bisect_right(rs, -u, key=lambda k_rt:-k_rt[1])
-            assert 0 < j <= len(rs)
-            assert j == len(rs) or u > rs[j][1]
-            assert u <= rs[j-1][1]
-            max_exp = rs[j-1][0]
-        else:
-            # allow [rs:has dup]
-            j = bisect_left(rs, -u, key=lambda k_rt:-k_rt[1])
-            assert 0 <= j < len(rs)
-            assert u >= rs[j][1]
-            assert not j == 0 or u == rs[j][1]
-            assert j == 0 or u < rs[j-1][1]
-            max_exp = rs[j][0] if u == rs[j][1] else rs[j-1][0]
-        return max_exp
-    def validate(sf, /):
-        rs = sf._kth_roots4N_
-        n = sf.the_N
-        assert sf(1+n) == 0
-        assert sf(n) == 1
-        prev_rt = 1+n
-        for k, rt in rs:
-            if rt >= 1:
-                assert sf(rt+1) < k
-                assert sf(rt+1) == floor_log_(rt+1, n)
-            if rt >= 2:
-                assert sf(rt) == k
-                assert sf(rt) == floor_log_(rt, n)
-            if rt >= 3:
-                assert sf(rt-1) >= k
-                assert sf(rt-1) == floor_log_(rt-1, n)
-
-
-
-
-def _n2rs_(n):
-    rs = list_all_floor_kth_root_until_diff_lt_(..., n, one_more=True)
-    #if len(rs) > 1 and rs[-2][-1] == rs[-1][-1]:
-    for (k, rt6k), (k1, rt6k1) in pairwise(rs):
-        if rt6k == rt6k1:
-            del rs[k-1:]
-            # [rs:has no dup]
-            assert not rs or rs[-1][0] == k-1
-            break
-    else:
-        # [rs:has no dup]
-        if len(rs) > 2:
-            rs.pop() # one_more
-    # [rs:has no dup]
-    return rs
-def _ns2ks_(ns, /):
-    for n in ns:
-        yield _n2k_(n)
-def _n2k_(n, /):
-    # min k :=> [floor_log2(n) <= 2*(1+k)*ceil_log2(1+k)]
-        # min k :=> [log2(n) <= 2*(1+k)*log2(1+k)]
-        #   see:list_all_floor_kth_root_until_diff_lt_
-    assert n >= 1
-    if n < 31:
-        k = 1
-        return k
-    lb_n = floor_log2(n)
-    u = 2*(1+lb_n)
-    assert u >= 2
-    k1 = max(1,-(u//-floor_log2(u)))
-    lb_k1 = ceil_log2(k1)
-    assert lb_n <= 2*k1*lb_k1, (n, k1, lb_n, 2*k1*lb_k1)
-    for e in reversed(range(1+lb_k1)):
-        if lb_n > (e << (1+e)):
-            break
-    else:
-        raise
-    assert lb_n > (e << (1+e))
-    assert lb_n <= ((1+e) << (2+e))
-    x0 = k1 = lb_n // (1+e)
-    lb_k1 = ceil_log2(k1)
-    while not lb_n <= 2*k1*lb_k1:
-        k1 += 1
-        lb_k1 = ceil_log2(k1)
-    assert k1 -x0 < 3, (n, lb_n, e, k1, x0)
-    y0 = k = k1-1
-    lb_k = ceil_log2(k)
-    while not lb_n > 2*k*lb_k:
-        k -= 1
-        lb_k = ceil_log2(k)
-    assert k -y0 < 3, (n, lb_n, e, k, y0)
-    k1 = 1+k
-    assert lb_n <= 2*k1*ceil_log2(k1)
-    assert lb_n > 2*k*ceil_log2(k)
-    return k
-
-
-def list_all_floor_kth_root_until_diff_lt_(emay_min_diff, n, /, *, min_k=1, one_more=False):
-    if not (b_auto:=emay_min_diff is ...):
-        min_diff = emay_min_diff
-        assert min_diff >= 0
-    assert n >= 1
-    assert min_k >= 1
-    if min_k == 1:
-        k = 1
-        777;rt = n
-    else:
-        assert min_k >= 2
-        k = min_k
-        777;rt = floor_kth_root_(k, n)
-    ls = [(k, rt)]
-    b_stop = False
-    for k in range(1+k, 2+floor_log2(n)):
-        rt = floor_kth_root_(k, n)
-        diff = ls[-1][-1] -rt
-        if b_auto:
-            if diff < floor_log2(rt):
-                b_stop = True
-        elif diff < min_diff:
-            b_stop = True
-        if b_stop:break
-        ls.append((k, rt))
-    ls
-    if b_stop and one_more:
-        ls.append((k, rt))
-    ls
-    return ls
-
+r'''[[[
+[[
+KthRoots4N
+move_to:
+view ../../python3_src/seed/math/floor_ceil_tools/fc_kth_root__7KthRoots4N.py
+]]
+#]]]'''#'''
 class _IReproduceable7xprimes(IReproduceable):
     ___no_slots_ok___ = True
     @property

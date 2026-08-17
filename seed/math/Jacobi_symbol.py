@@ -1,7 +1,15 @@
+#__all__:goto
+#TODO:goto
 r'''[[[
 e ../../python3_src/seed/math/Jacobi_symbol.py
+vs:
+    view ../../python3_src/seed/math/Kronecker_symbol.py
+view others/数学/Jacobi_symbol.txt
+
+
 py -m seed.math.Jacobi_symbol
 from seed.math.Jacobi_symbol import Jacobi_symbol
+from seed.math.Kronecker_symbol import Kronecker_symbol
 
 注意:
     [[Jacobi_symbol(M;x)==-1] -> [is_square_nonresidual_mod_(M;x)]]
@@ -92,15 +100,18 @@ The Jacobi symbol is a generalization of the Legendre symbol, which can be used 
 
 [is_prime p]:
   [Legendre_symbol(p,a) =[def]= if [a%p==0] then 0 else if [@[x<-[1..<p]] -> [(x**2 -a)%p =!= 0]] then -1 else +1]
-[m::int][m%2==1]
-  #[m > 0][m%2==1]:  #??? [a::int][a=!=0]:
+[m,a::int][m%2==1][m>0]:
   [Jacobi_symbol(m,a) =[def]= II Legendre_symbol(p, a)**max_power_of_base_as_factor_of_(p,m) {p <- all_prime_factors_of(m)}]
   ###
   [Jacobi_symbol(m,a) ==
     if [gcd(a,m) =!= 1] then 0 else
-    if [m < 0] then Jacobi_symbol(-m,a) else
+    ???:if [m < 0] then Jacobi_symbol(-m,a) else
+        #xxx:见下面:推广:[Jacobi_symbol(-1;a) == 1]
+        # !! gp:[Kronecker_symbol(-1;a) == (-1)**[a<0]]
+        # !! mine:[Kronecker_symbol(-1;a) == +1]
     if [m==1] then +1 else
     if [not$ 0 < a < m] then Jacobi_symbol(m,a%m) else
+        # [Jacobi_symbol(m,a) == Jacobi_symbol(m,a%m)]
     #if [a==1] then +1 else
     if [a==2] then (-1)**((m**2-1)/8) else
       # Jacobi_symbol(m,2) = [m%8 <- {1,7}](+1) + [m%8 <- {3,5}](-1)
@@ -109,6 +120,7 @@ The Jacobi symbol is a generalization of the Legendre symbol, which can be used 
     (-1)**((a-1)*(m-1)/4) * Jacobi_symbol(a,m)
       # 此时 可能有[a==1]: [Jacobi_symbol(1,m)==1]
   ]
+
 
 ###
 The Legendre symbol measures whether a is a square mod p. Unfortunately, the Jacobi symbol does not retain this property:
@@ -150,6 +162,131 @@ gives a criterion for primality:
 ]]]]]
 
 #]]]'''
+r'''[[[
+[[
+
+???推广:[m<0]:
+    [Jacobi_symbol(-m;a) == Jacobi_symbol(m;a)*Jacobi_symbol(-1;a)]
+    ??? [Jacobi_symbol(-1;a)
+    == ??? Jacobi_symbol(-1;a%(-1))
+    == Jacobi_symbol(-1;1)
+    == (-1)**((1-1)*(-1-1)/4) * Jacobi_symbol(1,-1)
+    == Jacobi_symbol(1,(-1)%1)
+    == Jacobi_symbol(1,1)
+    == 1
+    ]
+    ??? [Jacobi_symbol(-1;a) == 1]
+
+    @20260815:改为:^NotImplementedError
+        !! [Kronecker_symbol(-1;a) == (-1)**[a<0]]
+
+[[m,a::int][m%2==1] -> [Jacobi_symbol(m;a) == Jacobi_symbol(m;a%m)]]
+???二次互反律牜雅可比符号:
+    [[m,a::int][m%2==1][a%2==1][gcd(a,m)==1] -> [Jacobi_symbol(m;a) == (-1)**((a-1)*(m-1)///4) * Jacobi_symbol(a;m)]]
+
+    ==>>:
+    [m,a::int][m%2==1][a%2==1][gcd(a,m)==1]:
+        [Jacobi_symbol(m;a)
+        == (-1)**((a-1)*(m-1)///4) * Jacobi_symbol(a;m)
+        !! [[m,a::int][m%2==1] -> [Jacobi_symbol(m;a) == Jacobi_symbol(m;a%m)]]
+        == (-1)**((a-1)*(m-1)///4) * Jacobi_symbol(a;m%(2*a))
+        !! [m%2==1]
+        => [m%(2*a) %2 == m%2 == 1]
+        !! [gcd(a,m)==1]
+        => [gcd(a,m%(2*a))==1]
+        == (-1)**((a-1)*(m-1)///4) * (-1)**((m%(2*a)-1)*(a-1)///4) * Jacobi_symbol(m%(2*a);a)
+        == (-1)**((a-1)*((m-1)+(m%(2*a)-1))///4) * Jacobi_symbol(m%(2*a);a)
+        == (-1)**((a-1)///2*((m//(2*a) *(2*a))///2 +m%(2*a) -1)) * Jacobi_symbol(m%(2*a);a)
+        == (-1)**((a-1)///2*((m//(2*a))*a +m%(2*a) -1)) * Jacobi_symbol(m%(2*a);a)
+        !! [m%(2*a) %2 == m%2 == 1]
+        == (-1)**((a-1)///2*((m//(2*a))*a)) * Jacobi_symbol(m%(2*a);a)
+        !! [a%2==1]
+        == (-1)**((a-1)///2*(m//(2*a))) * Jacobi_symbol(m%(2*a);a)
+        ]
+        [Jacobi_symbol(m;a) == (-1)**((a-1)///2*(m//(2*a))) * Jacobi_symbol(m%(2*a);a)]
+        [[a%4 == 1] -> [Jacobi_symbol(m;a) == Jacobi_symbol(m%(2*a);a)]]
+        [[a%4 == 1] -> [i::int] -> [Jacobi_symbol(m+a*2*i;a) == Jacobi_symbol(m%(2*a);a) == Jacobi_symbol(m;a)]]
+        [[a%4 == 1] -> [i::int] -> [Jacobi_symbol(m+a*2*i;a) == Jacobi_symbol(m;a)]]
+
+
+
+        [Jacobi_symbol(m;a)
+        == (-1)**((a-1)*(m-1)///4) * Jacobi_symbol(a;m)
+        == (-1)**((a-1)*(m-1)///4) * Jacobi_symbol(a;m+a*4)
+        !! [m%2 == 1]
+        => [(m+4*a)%2 == 1]
+        !! [gcd(a,m)==1]
+        => [gcd(a,m+4*a)==1]
+        == (-1)**((a-1)*(m-1)///4) * (-1)**((a-1)*(m+a*4-1)///4) * Jacobi_symbol(m+a*4;a)
+        == (-1)**((a-1)*(2*(m-1)+a*4)///4) * Jacobi_symbol(m+a*4;a)
+        == (-1)**(2 * ((a-1)///2) * ((m-1)///2 +a)) * Jacobi_symbol(m+a*4;a)
+        == Jacobi_symbol(m+a*4;a)
+        ]
+        [Jacobi_symbol(m;a) == Jacobi_symbol(m+a*4;a)]
+        [[i::int] -> [Jacobi_symbol(m;a) == Jacobi_symbol(m+a*4*i;a)]]
+        [Jacobi_symbol(m;a) == Jacobi_symbol(m%(a*4);a)]
+
+        [Jacobi_symbol(m;a*4)
+        == Jacobi_symbol(m;a) * Jacobi_symbol(m;2)**2
+        == Jacobi_symbol(m;a)
+        ]
+        [Jacobi_symbol(m;a*4) == Jacobi_symbol(m;a)]
+        !! [Jacobi_symbol(m;a) == Jacobi_symbol(m+a*4;a)]
+        [[k::uint] -> [Jacobi_symbol(m;a*4**k) == Jacobi_symbol(m+a*4;a*4**k)]]
+        [[k::uint] -> [Jacobi_symbol(m;a*4**k) == Jacobi_symbol(m%(a*4**max(1,k));a*4**k)]]
+        [[k::uint] -> [Jacobi_symbol(m;a*4*4**k) == Jacobi_symbol(m%(a*4*4**k);a*4*4**k)]]
+
+
+
+        [Jacobi_symbol(m;a*2)
+        == Jacobi_symbol(m;a) * Jacobi_symbol(m;2)
+        !! [[i::int] -> [Jacobi_symbol(m;a) == Jacobi_symbol(m+a*4*i;a)]]
+        == Jacobi_symbol(m%(8*a);a) * Jacobi_symbol(m;2)
+        !! [Jacobi_symbol(m;2) == Jacobi_symbol(m%8;2) == Jacobi_symbol(m%(8*a);2)]
+        == Jacobi_symbol(m%(8*a);a) * Jacobi_symbol(m%(8*a);2)
+        == Jacobi_symbol(m%(8*a);a*2)
+        ]
+        [Jacobi_symbol(m;a*2) == Jacobi_symbol(m%(8*a);a*2)]
+
+        [[k::uint] -> [Jacobi_symbol(m;a*2*4**k) == Jacobi_symbol(m%(8*a);a*2*4**k)]]
+        [[k::uint] -> [Jacobi_symbol(m%(8*a*4**max(0,k-1));a*2*4**k) == Jacobi_symbol(m%(8*a*4**max(0,k-1))%(8*a);a*2*4**k) == Jacobi_symbol(m%(8*a);a*2*4**k) == Jacobi_symbol(m;a*2*4**k)]]
+        [[k::uint] -> [Jacobi_symbol(m;a*2*4**k) == Jacobi_symbol(m%(8*a*4**max(0,k-1));a*2*4**k)]]
+        [[k::uint] -> [Jacobi_symbol(m;a*8*4**k) == Jacobi_symbol(m%(8*a*4**k);a*8*4**k)]]
+        !! [[k::uint] -> [Jacobi_symbol(m;a*4*4**k) == Jacobi_symbol(m%(a*4*4**k);a*4*4**k)]]
+        [[k::uint] -> [Jacobi_symbol(m;a*4*2**k) == Jacobi_symbol(m%(a*4*2**k);a*4*2**k)]]
+    ==>>:
+    [m,a::int][m%2==1][a%2==1][gcd(a,m)==1]:
+        [[k::uint] -> [Jacobi_symbol(m;a*4*2**k) == Jacobi_symbol(m%(a*4*2**k);a*4*2**k)]]
+        [[a%4 == 1] -> [Jacobi_symbol(m;a) == Jacobi_symbol(m%(2*a);a)]]
+            # 注意:『%(2*a)』而非『%a』
+        [a%4 == 1][i::int]:
+            [Kronecker_symbol(m;a)
+            !! [m%2==1]
+            == Jacobi_symbol(m;a)
+            !! [[a%4 == 1] -> [i::int] -> [Jacobi_symbol(m+a*2*i;a) == Jacobi_symbol(m;a)]]
+            == Jacobi_symbol(m+i*(2*a);a)
+            !! [(m+i*(2*a))%2==1]
+            == Kronecker_symbol(m+i*(2*a);a)
+            ]
+            [Kronecker_symbol(m;a) == Kronecker_symbol(m+i*(2*a);a)]
+            [Kronecker_symbol(2*m;a)
+            =?= Kronecker_symbol(2*m+2*a;a)
+            TODO:...看来还是得从零开始,Jacobi_symbol指望不上
+            ]
+
+    [[m,D::int][m%2==1][gcd(D,m)==1][D%4 < 2] -> [Jacobi_symbol(m;D) == Jacobi_symbol(m%(2**(D%2)*D);D)]]
+    [[m,D::int][m%2==1][gcd(D,m)==1][D%4 < 2] -> [Jacobi_symbol(m;D) == Jacobi_symbol(m%(2*D);D)]]
+    TODO:bug:[[m,D::int][m%2==1][gcd(D,m)==1][D%4 < 2] -> [Jacobi_symbol(m;D) == Jacobi_symbol(m%D;D)]]
+        # 只需:[D%4 < 2][gcd(D,m)==1]
+        # 无需:[D < 0]
+        # Kronecker_symbol周期性前提:[D%4 < 2]
+        # view ../../python3_src/seed/math/Kronecker_symbol.py
+
+]]
+
+
+
+#]]]'''#'''
 __all__ = '''
     Jacobi_symbol
 
@@ -158,12 +295,22 @@ from seed.math.gcd import gcd
 from seed.math.divmod__half import mod__half
 from seed.math.max_power_of_base_as_factor_of_ import factor_nonzero_int_out_sign_and_2_powers
 
-def _():
+
+
+def __():
     def Jacobi_symbol(M, x, /):
         'M/int{%2==1} -> x/int -> Jacobi_symbol(x::/M)/(-1|0|+1)'
         if not type(M) is int: raise TypeError
         if not type(x) is int: raise TypeError
         if not M%2==1: raise ValueError
+        if M < 0: raise NotImplementedError('bug:[1 == Kronecker_symbol(0;-1) == Kronecker_symbol(0*j;-1) == Kronecker_symbol(0;-1)*Kronecker_symbol(j;-1) == 1*Kronecker_symbol(j;-1)][Kronecker_symbol(j;-1) == +1] vs [Kronecker_symbol(3;-1) == -1]')
+
+        if 0b000:
+            if M < 0: raise NotImplementedError('pari-gp:[Kronecker_symbol(-1;k) == (-1)**[k<0]] vs mine:[Kronecker_symbol(-1;k) == +1]')
+
+
+
+        # !! mine:[Kronecker_symbol(-1;k) == +1]
         M = abs(M)
         if not gcd(M, x) == 1: return 0
         x = mod__half(x, M)
@@ -213,13 +360,13 @@ def _():
         return +r
     return Jacobi_symbol
 
-Jacobi_symbol = _()
+Jacobi_symbol = __()
 assert Jacobi_symbol(1, 0) == +1
 
 assert Jacobi_symbol(3, 2) == -1
 assert Jacobi_symbol(5, 2) == -1
 assert Jacobi_symbol(7, 2) == +1
-assert Jacobi_symbol(9, 2) == +1
+assert Jacobi_symbol(9, 2) == +1 ### Jacobi_symbol(3, 2)**2
 assert Jacobi_symbol(11, 2) == -1
 
 assert Jacobi_symbol(3, -1) == -1
@@ -259,7 +406,12 @@ def _t(N, /):
         assert len(r2ls[+1]) == len(r2ls[-1])
 
 if __name__ == "__main__":
+    from seed.math.Jacobi_symbol import Jacobi_symbol
+    from seed.math.Jacobi_symbol import *
     _t(100)
     pass
 
 
+
+from seed.math.Jacobi_symbol import Jacobi_symbol
+from seed.math.Jacobi_symbol import *
