@@ -1,4 +1,7 @@
 #g_add
-	export cmd='git add --all'
+#-v, --verbose
+#-i, --interactive
+	export cmd='git add --all --verbose --interactive'
 	echo ======= $cmd
-	echo $cmd | bash
+	#echo $cmd | bash
+	$cmd

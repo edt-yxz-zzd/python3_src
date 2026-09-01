@@ -1,4 +1,6 @@
 #g_add
-	echo ======= git add --all
-	git add --all
+#-v, --verbose
+#-i, --interactive
+	echo ======= git add --all -v -i
+	git add --all -v -i
 

@@ -206,6 +206,53 @@ Shanks-Tonelli Algorithm
 (41, 14, [])
 
 
+
+# @20260901: ++detect: [1 == order_mod_(p;xx)%2]
+23 89 3 3
+>>> p = 89 # 8k1
+>>> p-1 == 2**3 * 11
+True
+>>> ez, odd = 3, 11
+
+>>> gp = 3
+>>> x = pow(gp, 2**(ez-1), p)
+>>> xx = pow(gp, 2**ez, p)
+>>> xx > 1 == pow(xx, odd, p)
+True
+>>> xx
+64
+>>> x
+81
+>>> list_sqrts_mod_prime_(p, xx)
+[8, 81]
+
+>>> gp = pow(gp, 7, p)
+>>> x = pow(gp, 2**(ez-1), p)
+>>> xx = pow(gp, 2**ez, p)
+>>> xx > 1 == pow(xx, odd, p)
+True
+>>> gp
+51
+>>> xx
+67
+>>> x
+44
+>>> list_sqrts_mod_prime_(p, xx)
+[44, 45]
+>>> [*iter_sqrts_mod_prime_(p, xx, _may_output4debug_=print)]
+('{{{begin:', ('iter_sqrts_mod_prime_', (89, 67)))
+('[[[p=!=2][xx%p =!= 0][p%8 == 1][p-1==2**ez*odd][1==odd%2][1==xx**odd%p][1 == order_mod_(p;xx)%2][x_p := xx**((1+odd)///2) %p]] -> [sqrts_mod__prime_(p;xx) == {x_p, p-x_p}]]', ('iter_sqrts_mod_prime_', (89, 67)))
+('}}}end:', ('iter_sqrts_mod_prime_', (89, 67)))
+[44, 45]
+
+
+
+
+
+
+
+
+
 >>> list_sqrts_mod_prime_power_(3, 1, 991)
 [1, 2]
 >>> list_sqrts_mod_prime_power_(3, 2, 991)
@@ -1113,7 +1160,7 @@ def _iter_sqrts_mod_odd_prime_(fnm_params, output4debug_, p, xx, upperbound4appl
         x_p = c_xx_p*(b-1) %p
         assert xx_p == pow(x_p, 2, p)
 
-        999;    output4debug_(('[[[p=!=2][xx%p =!= 0][p%8 == 5][c := (2*xx)**((p-5)///8) %p][b := 2*xx*c**2 %p][x := xx*c*(b-1) %p]] -> [sqrts_mod__prime_(p;xx) == {x_p, p-x_p}]]', fnm_params))
+        999;    output4debug_(('[[[p=!=2][xx%p =!= 0][p%8 == 5][c := (2*xx)**((p-5)///8) %p][b := 2*xx*c**2 %p][x_p := xx*c*(b-1) %p]] -> [sqrts_mod__prime_(p;xx) == {x_p, p-x_p}]]', fnm_params))
         w_p = p -x_p
         if w_p < x_p:
             x_p, w_p = w_p, x_p
@@ -1122,6 +1169,31 @@ def _iter_sqrts_mod_odd_prime_(fnm_params, output4debug_, p, xx, upperbound4appl
         return
     # [e >= 3]
     # [p%8 == 1]
+
+    # @20260901: ++detect: [1 == order_mod_(p;xx)%2]
+    if 1 == pow(xx_p, odd, p):
+        # [0 == odd%order_mod_(p;xx)]
+        # [1 == order_mod_(p;xx)%2]
+        # [(xx**(2**-1%odd) %p)**2 %p == xx%p]
+        # [(xx**(2**-1%odd) %p) <- sqrts_mod_(p;xx)]
+        inv_two6odd = (1+odd)//2
+        # [2*inv_two6odd == 1+odd]
+        # [2*inv_two6odd =[%odd]= 1]
+        # [inv_two6odd =[%odd]= 2**-1%odd]
+        x_p = pow(xx_p, inv_two6odd, p)
+        assert xx_p == pow(x_p, 2, p)
+
+        999;    output4debug_(('[[[p=!=2][xx%p =!= 0][p%8 == 1][p-1==2**ez*odd][1==odd%2][1==xx**odd%p][1 == order_mod_(p;xx)%2][x_p := xx**((1+odd)///2) %p]] -> [sqrts_mod__prime_(p;xx) == {x_p, p-x_p}]]', fnm_params))
+        w_p = p -x_p
+        if w_p < x_p:
+            x_p, w_p = w_p, x_p
+        yield x_p
+        yield w_p
+        return
+    # [e >= 3]
+    # [p%8 == 1]
+    # [0 == order_mod_(p;xx)%2]
+
 
     # [((2*xx)**t) **2 %p == -1] ==>> [b == (2*xx)**t %p][c == (2*xx)**e %p][x := xx *c*(b-1) %p]
     #
