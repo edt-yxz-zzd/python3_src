@@ -439,6 +439,7 @@ IGroupOps7discrete_logarithm7kth_root
     repr_kth_roots7cyclic_group__7low_level_
 
 
+DiscreteLogarithmFail
 NoKthRootError
 PowsRepr
 
@@ -876,6 +877,7 @@ def coprime_part_(u7mask, u7whole, /):
     return coprime_part_of_to_(u7whole, u7mask)
 
 class NoKthRootError(Exception):pass
+class DiscreteLogarithmFail(Exception):pass
 
 
 
@@ -1079,11 +1081,12 @@ def mul_order_of__7cyclic_group7factorization4slack_order4base_(sf, factorizatio
 
 @_method_
 def mul_order_of__7cyclic_group7baby_steps_giant_steps_method_(sf, max4tight_order4base, pt7base, /):
-    '[?[e:<-[1..=max4tight_order4base]] -> [G.one == pt7base**e]] => max4tight_order4base/int{>0} -> pt7base/G -> tight_order4base/int{>0} # [G.one == pt7base**tight_order4base][@[e:<-[1..<tight_order4base]] -> [G.one =!= pt7base**e]]'
+    'max4tight_order4base/int{>0} -> pt7base/G -> (tight_order4base/int{>0} if [?[e:<-[1..=max4tight_order4base]] -> [G.one == pt7base**e]] else ^DiscreteLogarithmFail) # [G.one == pt7base**tight_order4base][@[e:<-[1..<tight_order4base]] -> [G.one =!= pt7base**e]]'
     return sf.discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(max4exp:=max4tight_order4base, pt7base, pt7tgt:=sf.one, max4exp__vs__tight_order4base=False)
+        # ^DiscreteLogarithmFail
 @_method_
 def discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(sf, max4exp, pt7base, pt7tgt, /, *, max4exp__vs__tight_order4base:bool):
-    '[[max4exp__vs__tight_order4base is True] -> [max4exp==mul_order_of_(pt7base)]][?[e:<-[1..=max4exp]] -> [pt7tgt == pt7base**e]] => max4exp/int{>0} -> pt7base/G -> pt7tgt/G -> exp/int{>0} # [pt7tgt == pt7base**exp][@[e:<-[1..<exp]] -> [pt7tgt =!= pt7base**e]]'
+    '[[max4exp__vs__tight_order4base is True] -> [max4exp==mul_order_of_(pt7base)]] => max4exp/int{>0} -> pt7base/G -> pt7tgt/G -> (exp/int{>0} if [?[e:<-[1..=max4exp]] -> [pt7tgt == pt7base**e]] else ^DiscreteLogarithmFail) # [pt7tgt == pt7base**exp][@[e:<-[1..<exp]] -> [pt7tgt =!= pt7base**e]]'
     eq_one_ = sf.eq_one_
     eq_ = sf.eq_
     if max4exp__vs__tight_order4base:
@@ -1097,15 +1100,93 @@ def discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(sf, max4exp
     pow_ = sf.pow_
     key = sf.key_func
     hash_vs_sort = sf.hash_vs_sort
-    return search_mul_order__7baby_steps_giant_steps_method_(sz4giant_step, mul_, pow_, pt7base, key=key, hash_vs_sort=hash_vs_sort, tmay_target=[pt7tgt])
+    may_exp = search_mul_order__7baby_steps_giant_steps_method_(sz4giant_step, mul_, pow_, pt7base, key=key, hash_vs_sort=hash_vs_sort, tmay_target=[pt7tgt])
+    match may_exp:
+        case None:
+            raise DiscreteLogarithmFail(max4exp, pt7base, pt7tgt)
+        case exp:
+            assert 1 <= exp <= max4exp
+            return exp
+    raise 000
 
 @_method_
-def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_(sf, tight_order4base, pt7base, pt7tgt, /):
+def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_(sf, tight_order4base, pt7base, pt7tgt, /, *, nibble_vs_gobble=False):
     '[tight_order4base == mul_order_of_(pt7base)][?[e:<-[1..=tight_order4base]] -> [pt7tgt == pt7base**e]] => tight_order4base/prime -> pt7base/G -> pt7tgt/G -> exp/int{>0} # [pt7tgt == pt7base**exp][@[e:<-[1..<exp]] -> [pt7tgt =!= pt7base**e]]'
+    # [is_prime_(tight_order4base)]
+    check_int_ge(2, tight_order4base)
+    # [pt7base =!= G.one]
     eq_one_ = sf.eq_one_
+    eq_ = sf.eq_
     if eq_one_(pt7tgt):
         return tight_order4base
-    return sf.discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(max4exp:=tight_order4base, pt7base, pt7tgt, max4exp__vs__tight_order4base=True)
+    if eq_(pt7tgt, pt7base):
+        return 1
+    # [pt7tgt =!= G.one]
+    # [pt7tgt =!= pt7base]
+
+    #.return sf.discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(max4exp:=tight_order4base, pt7base, pt7tgt, max4exp__vs__tight_order4base=True)
+
+    pow_ = sf.pow_
+    # !! [is_prime_(tight_order4base)]
+    p = tight_order4base
+    # [is_prime_(p)]
+
+    # !! [?[e:<-[1..=tight_order4base]] -> [pt7tgt == pt7base**e]]
+    # ?exp :=> [exp:<-[1..=tight_order4base]][pt7tgt == pt7base**exp]
+    # !! [pt7tgt =!= G.one]
+    # [exp =!= tight_order4base]
+    # !! [pt7tgt =!= pt7base]
+    # [exp =!= 1]
+    # [2 <= exp < tight_order4base]
+    # !! [p == tight_order4base]
+    # [2 <= exp < p]
+    # !! [is_prime_(p)]
+    # [1==gcd(exp,p)]
+    # [pt7tgt == pt7base**(exp%p)]
+    # [pt7tgt**(exp**-1%p) == pt7base]
+    # [@[c:<-[1..<p]] -> [1==gcd(c,p)][pt7tgt**(c%p) == pt7base**(c*exp%p)][pt7tgt**(c*exp**-1%p) == pt7base**(c%p)]]
+    # [c :<- random{1..<p}] => assume one of {c*exp%p, c*exp**-1%p} is small
+    # [c :<- random{1..<p}] => [len{e | [e:<-[1..<p]][min{c*e%p, c*e**-1%p} < p**/2]} <= 2*len{e | [e:<-[1..<p]][(c*e%p) < p**/2]} == 2*len{ec | [ec:<-[1..<p]][ec < p**/2]} == 2*floor_sqrt(p)]
+    # [c :<- random{1..<p}] => [len{e | [e:<-[1..<p]][min{c*e%p, c*e**-1%p} < p**/2]} <= 2*floor_sqrt(p)] # to few...
+    #
+
+
+    def DL_(max4exp, to_flip, /):
+        (_pt7base, _pt7tgt) = (pt7base, pt7tgt) if not to_flip else (pt7tgt, pt7base)
+            # TODO:(**-1)
+        e = sf.discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(max4exp, _pt7base, _pt7tgt, max4exp__vs__tight_order4base=(max4exp==tight_order4base))
+            # ^DiscreteLogarithmFail
+        exp = e if not to_flip else pow(e, -1, p)
+        assert eq_(pt7tgt, pow_(pt7base, exp))
+        return exp
+
+    if not nibble_vs_gobble:
+        #nibble
+        # [TIME{DL_{max4exp}} == O(max4exp**/2)]
+        # [TIME{DL_{max4exp}} ~= 2*TIME{DL_{max4exp/4}}]
+        # [TIME{DL_{max4exp}} ~= 2*(2*TIME{DL_{max4exp/16}})]
+        # [TIME{DL_{max4exp}} ~= 2*(TIME{DL_{max4exp/16, both-to_flip}})]
+        ls4max4exp = [tight_order4base//16]
+        while 0 < ls4max4exp[-1]:
+            ls4max4exp.append(ls4max4exp[-1]//4)
+        assert 0 == ls4max4exp[-1]
+        777;ls4max4exp.pop()
+        while ls4max4exp:
+            max4exp = ls4max4exp.pop()
+            for to_flip in (False, True):
+                try:
+                    return DL_(max4exp, to_flip)
+                        # ^DiscreteLogarithmFail
+                except DiscreteLogarithmFail:
+                    continue
+        return DL_(max4exp:=tight_order4base, to_flip:=False)
+            # not ^DiscreteLogarithmFail
+    else:
+        #gobble
+        return DL_(max4exp:=tight_order4base, to_flip:=False)
+            # not ^DiscreteLogarithmFail
+    #return sf.discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(max4exp:=tight_order4base, pt7base, pt7tgt, max4exp__vs__tight_order4base=True)
+    raise 000
 
 @_method_
 def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_power_(sf, p, ep, tight_order4base, pt7base, pt7tgt, /):
@@ -1209,7 +1290,7 @@ def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_power_(sf, p, ep
         # [_pw == e2pw7b[L-2]**((exp///exp0) //p**(L-2-e) %p)]
         digit = sf.discrete_logarithm__7cyclic_group7tight_order4base_is_prime_(p, B2, _pw)
         assert 1 <= digit <= p
-        digit %= p # fixed bug
+        digit %= p # fixed_bug00001:here
         assert 0 <= digit < p
         # [digit == ((exp///exp0) //p**(L-2-e) %p)]
         ##################
@@ -1234,7 +1315,7 @@ def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_power_(sf, p, ep
         # [patch == B**-_exp]
         ##################
         assert 0 <= _exp < e2pw7p[(L-1-e)]
-            # fixed bug: 『digit %= p』
+            # => "digit %= p" # fixed_bug00001:goto
     if 1:
         ##################
         # [_exp == (exp///exp0)%p**(L-1-e)]
@@ -1253,7 +1334,7 @@ def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_power_(sf, p, ep
         # !! [patch == B**-_exp]
         # [patch == (pt7base**exp0)**-_exp == pt7base**-exp == pt7tgt**-1]
         # [patch*pt7tgt == G.one]
-        assert eq_one_(mul_(patch, pt7tgt))
+        assert eq_one_(mul_(patch, pt7tgt)), (p, ep, tight_order4base, pt7base, pt7tgt)
         assert eq_(pt7tgt, pow_(pt7base, exp))
     exp
     ########################
@@ -1436,6 +1517,7 @@ def repr_kth_roots4unity7cyclic_group_(sf, k, tight_order4base, pt7base, /, *, v
         assert eq_one_(pow_(pt7root, k))
         assert eq_one_(pow_(pt7root, g))
         assert sz == (_sz:=sf.mul_order_of__7cyclic_group7baby_steps_giant_steps_method_(max4tight_order4pt7root:=g, pt7root)), (sz, _sz)
+            # not ^DiscreteLogarithmFail
     pows_repr = PowsRepr(pt7base, tight_order4base, modulus, residue:=0)
     return (pt7root, sz, pows_repr)
 
@@ -1734,7 +1816,7 @@ def repr_kth_roots7cyclic_group__7low_level_(sf, factorization4t, gcd_k_t, u2, v
 __all__
 from seed.math.discrete_logarithm__7cyclic_group7kth_roots import IGroupOps7discrete_logarithm7kth_root, IGroupOps7discrete_logarithm7kth_root__7uint_mod, GroupOps7discrete_logarithm7kth_root__7uint_mod
 
-from seed.math.discrete_logarithm__7cyclic_group7kth_roots import NoKthRootError, PowsRepr
+from seed.math.discrete_logarithm__7cyclic_group7kth_roots import DiscreteLogarithmFail, NoKthRootError, PowsRepr
 
 from seed.math.discrete_logarithm__7cyclic_group7kth_roots import decompose_coprime_part_, noncoprime_part_, coprime_part_
 
