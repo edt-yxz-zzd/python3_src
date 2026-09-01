@@ -8,6 +8,14 @@
 # [formula__calc_mul_order7cyclic_group_]:goto
 r'''[[[
 e ../../python3_src/seed/math/discrete_logarithm__7cyclic_group7kth_roots.py
+see also:
+    view ../../python3_src/seed/math/discrete_logarithm.py
+    view ../../python3_src/seed/math/sqrts_mod_.py
+    view ../../python3_src/seed/math/factor_pint/perfect_power/lift_neg_kth_root_mod_coprime_power_.py
+    view ../../python3_src/seed/math/factor_pint/perfect_power/detect_perfect_power.py
+    view ../../python3_src/seed/math/floor_ceil_tools/fc_perfect.py
+
+
 
 seed.math.discrete_logarithm__7cyclic_group7kth_roots
 py -m nn_ns.app.debug_cmd   seed.math.discrete_logarithm__7cyclic_group7kth_roots -x # -off_defs
@@ -850,7 +858,10 @@ r'''[[[
 #]]]'''#'''
 __all__
 
+# \(def \)\@<!\<\w*(sf,.*)
+#   to avoid: call f(sf, ...) instead of sf.f(...)
 # \(^@_method_\)\@<!\ndef
+#   to avoid: method lossing
 def decompose_coprime_part_(u7mask, u7whole, /):
     # [decompose_coprime_part_(a; b) =[def]= (coprime_part_(a; b), noncoprime_part_(a; b))]
     t = noncoprime_part_(u7mask, u7whole)

@@ -9,13 +9,20 @@ py -m nn_ns.app.doctest_cmd seed.types.attr.class2method_decorator:__doc__ -ht #
 
 [[
 usage:
-class C:pass
-@mk_instance_method_decorator_(C)
-def f(sf, /, *args, **kwds):pass
-@mk_class_method_decorator_(C)
-def g(cls, /, *args, **kwds):pass
-@mk_static_method_decorator_(C)
-def h(*args, **kwds):pass
+    class C:pass
+    @mk_instance_method_decorator_(C)
+    def f(sf, /, *args, **kwds):pass
+    @mk_class_method_decorator_(C)
+    def g(cls, /, *args, **kwds):pass
+    @mk_static_method_decorator_(C)
+    def h(*args, **kwds):pass
+
+disadvantage:
+    no:__class__#super()
+
+advantage:
+    allow call as function instead as method to avoid overridden
+        sf.f(...) vs f(sf, ...)
 
 ]]
 
