@@ -296,6 +296,59 @@ kronecker(umod_t a, umod_t b)
 //// -------------------------
 ========================
 ]]
+[[[[[[
+view others/数学/class_number/Kronecker_symbol/Kronecker_symbol.txt
+[[[
+===
+https://mathworld.wolfram.com/KroneckerSymbol.html
+  (0/-1)未定义
+  The Kronecker symbol is an extension of the Jacobi symbol (n/m) to all integers.
+===
+https://handwiki.org/wiki/Kronecker_symbol
+  (a/n):
+    严格版:[n>0][a%4<2]
+      只多定义:({0,4,1,5}%8/2)
+    [[
+#并非无条件地支持双分量乘性:here
+Properties
+The Kronecker symbol shares many basic properties of the Jacobi symbol, under certain restrictions:
+
+(a/n)=±1 if gcd⁡(a,n)=1, otherwise(a/n)=0.
+(a*b/n)=(a/n)*(b/n) unless n=−1, one of a,b is zero and the other one is negative.
+(a/m*n)=(a/m)*(a/n) unless a=−1, one of m,n is zero and the other one has odd part (definition below) congruent to 3mod4.
+For n>0, we have (a/n)=(b/n) whenever a≡bmod{4n,n≡2(mod4),n otherwise}. If additionally a,b have the same sign, the same also holds for n<0.
+For a≢3(mod4), a≠0, we have (a/m)=(a/n) whenever m≡nmod{4|a|,a≡2(mod4),|a|otherwise}.
+On the other hand, the Kronecker symbol does not have the same connection to quadratic residues as the Jacobi symbol. In particular, the Kronecker symbol (a/n) for n≡2(mod4) can take values independently on whether a is a quadratic residue or nonresidue modulo n.
+
+Quadratic reciprocity
+The Kronecker symbol also satisfies the following versions of quadratic reciprocity law.
+
+For any nonzero integer n, let n′ denote its odd part: n=2^e*n′ where n′ is odd (for n=0, we put 0′=1). Then the following symmetric version of quadratic reciprocity holds for every pair of integers m,n such that gcd⁡(m,n)=1:
+
+(m/n)*(n/m)=±(−1)^((m′−1)/2*(n′−1)/2),
+where the ± sign is equal to + if m≥0 or n≥0 and is equal to − if m<0 and n<0.
+
+There is also equivalent non-symmetric version of quadratic reciprocity that holds for every pair of relatively prime integers m,n:
+
+(m/n)(n/|m|)=(−1)^((m′−1)/2*(n′−1)/2).
+For any integer n let n*=(−1)^((n′−1)/2)*n. Then we have another equivalent non-symmetric version that states
+
+(m*/n)=(n/|m|)
+for every pair of integers m,n (not necessarily relatively prime).
+
+The supplementary laws generalize to the Kronecker symbol as well. These laws follow easily from each version of quadratic reciprocity law stated above (unlike with Legendre and Jacobi symbol where both the main law and the supplementary laws are needed to fully describe the quadratic reciprocity).
+
+For any integer n we have
+
+(−1/n)=(−1)^((n′−1)/2)
+and for any odd integer n it's
+
+(2/n)=(−1)^((n^2−1)/8).
+    ]]
+===
+]]]
+]]]]]]
+
 
 
 

@@ -176,6 +176,9 @@ r'''[[[
     == 1
     ]
     ??? [Jacobi_symbol(-1;a) == 1]
+    !! [[a%2==1==m%2] -> [Jacobi_symbol(m,a) == (-1)**((a-1)*(m-1)/4) * Jacobi_symbol(a,m)]]
+    [[a%2==1] -> [Jacobi_symbol(-1,a) == (-1)**((a-1)*(-1-1)/4) * Jacobi_symbol(a,-1) == (-1)**((a-1)/2) * (-1)**[a%4 == 1] == 1]]
+    ??? [Jacobi_symbol(-1;a) == 1]
 
     @20260815:改为:^NotImplementedError
         !! [Kronecker_symbol(-1;a) == (-1)**[a<0]]

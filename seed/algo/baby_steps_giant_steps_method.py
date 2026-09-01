@@ -135,9 +135,15 @@ _debug
 
 
 search_mul_order__7baby_steps_giant_steps_method_
+>>> M
+104729
 >>> sz = 1+isqrt(M)
 >>> search_mul_order__7baby_steps_giant_steps_method_(sz, mul_, pow_, base)
 104728
+
+++kw:tmay_target
+>>> search_mul_order__7baby_steps_giant_steps_method_(sz, mul_, pow_, base, tmay_target=[pow_(base, M-1-28)], _debug=True)
+104700
 
 
 
@@ -176,6 +182,9 @@ True
 
 
 
+>>> [calc_min4sz4giant_step5max4order4base_(u) for u in range(1, 1+12*13)]
+[1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13]
+
 
 
 
@@ -184,6 +193,7 @@ True
 py_adhoc_call   seed.algo.baby_steps_giant_steps_method   @f
 ]]]'''#'''
 __all__ = r'''
+calc_min4sz4giant_step5max4order4base_
 search_mul_order__7baby_steps_giant_steps_method_
     search_multiple_of_mul_order__7baby_steps_giant_steps_method_
         baby_steps_giant_steps_method_
@@ -201,6 +211,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.check import check_type_is, check_int_ge
     from itertools import pairwise#islice
     from bisect import bisect_left
+    from seed.math.floor_ceil_tools.fc_kth_root import floor_sqrt
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -217,13 +228,20 @@ class SmallMulOrderException(Exception):
 def _eq_(key, lhs, rhs, /):
     key = ifNone(key, echo)
     return key(lhs) in [key(rhs)]
-def search_mul_order__7baby_steps_giant_steps_method_(sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, _debug=False):
-    'sz4giant_step/uint{>0} -> mul_/(R->R->R) -> pow_/(R->int->R) -> base/R -> may mul_order4base/int{=!=0} # [base**mul_order4base == one][0 =!= mul_order4base][mul_order4base == mul_order_(base)][0 < mul_order4base < sz4giant_step*(1+sz4giant_step)] # DL:discrete_logarithm'
-    return search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp:=0, min_num_fwd_giant_steps:=0, max_num_fwd_giant_steps:=sz4giant_step, sz4giant_step, mul_, pow_, base, key=key, hash_vs_sort=hash_vs_sort, _debug=_debug)
-def search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, _debug=False):
-    'offset4exp/int -> min_num_fwd_giant_steps/int -> max_num_fwd_giant_steps/int -> sz4giant_step/uint{>0} -> mul_/(R->R->R) -> pow_/(R->int->R) -> base/R -> may exp/int{=!=0} # [base**exp == one][exp%mul_order_(base) == 0][0 =!= exp][min_num_fwd_giant_steps <= (exp-offset4exp)/sz4giant_step < 1+max_num_fwd_giant_steps] # DL:discrete_logarithm'
+def search_mul_order__7baby_steps_giant_steps_method_(sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, _debug=False, tmay_target=()):
+    'sz4giant_step/uint{>0} -> mul_/(R->R->R) -> pow_/(R->int->R) -> base/R -> may mul_order4base/int{=!=0} # [base**mul_order4base == (one if not tmay_target else tmay_target[0])][0 =!= mul_order4base][mul_order4base == mul_order_(base)][0 < mul_order4base < sz4giant_step*(1+sz4giant_step)] # DL:discrete_logarithm'
+    return search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp:=0, min_num_fwd_giant_steps:=0, max_num_fwd_giant_steps:=sz4giant_step, sz4giant_step, mul_, pow_, base, key=key, hash_vs_sort=hash_vs_sort, _debug=_debug, tmay_target=tmay_target)
+def search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, _debug=False, tmay_target=()):
+    'offset4exp/int -> min_num_fwd_giant_steps/int -> max_num_fwd_giant_steps/int -> sz4giant_step/uint{>0} -> mul_/(R->R->R) -> pow_/(R->int->R) -> base/R -> may exp/int{=!=0} # [base**exp == (one if not tmay_target else tmay_target[0])][exp%mul_order_(base) == 0][0 =!= exp][min_num_fwd_giant_steps <= (exp-offset4exp)/sz4giant_step < 1+max_num_fwd_giant_steps] # DL:discrete_logarithm'
     # no: ^SmallMulOrderException(sz4giant_step, mul_order4base, base)
-    target = one = pow_(base, 0)
+    match tmay_target:
+        case []:
+            target = one = pow_(base, 0)
+        case [target]:
+            pass
+        case _:
+            raise TypeError(tmay_target)
+    target
     m = baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, target, key=key, hash_vs_sort=hash_vs_sort, _debug=_debug, to_raise_vs_return_mul_order4base=True)
     match m:
         case None:
@@ -237,10 +255,9 @@ def search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp, mi
     multiple4mul_order4base
     if _debug:
         assert min_num_fwd_giant_steps*sz4giant_step <= (multiple4mul_order4base -offset4exp) < (1+max_num_fwd_giant_steps)*sz4giant_step
-        #assert one == pow_(base, multiple4mul_order4base)
-        assert _eq_(key, one, pow_(base, multiple4mul_order4base))
+        assert _eq_(key, target, pow_(base, multiple4mul_order4base))
     # [min_num_fwd_giant_steps <= (multiple4mul_order4base -offset4exp)/sz4giant_step < (1+max_num_fwd_giant_steps)]
-    # [one == base**multiple4mul_order4base]
+    # [target == base**multiple4mul_order4base]
     return multiple4mul_order4base
 
 def baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, target, /, *, key=None, hash_vs_sort=False, to_raise_vs_return_mul_order4base=False, _debug=False):
@@ -482,7 +499,19 @@ def baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_
 
 
 
-
+def calc_min4sz4giant_step5max4order4base_(max4order4base, /):
+    'max4order4base/uint{>0} -> min4sz4giant_step/uint{>0} # [0 < mul_order4base < sz4giant_step*(1+sz4giant_step)]'
+    check_int_ge(1, max4order4base)
+    # [0 < mul_order4base < sz4giant_step*(1+sz4giant_step)]
+    # [0 < max4order4base < sz4giant_step*(1+sz4giant_step)]
+    # [0 < m < x*(1+x)]
+    # [x**2 +x -m > 0]
+    # [x > (-1+sqrt(1+4*m))/2]
+    # [x > (-1+floor_sqrt(1+4*m))//2]
+    min4sz4giant_step = 1+(-1+floor_sqrt(1+4*max4order4base))//2
+    assert max4order4base < min4sz4giant_step*(1+min4sz4giant_step)
+    assert not max4order4base < min4sz4giant_step*(-1+min4sz4giant_step)
+    return min4sz4giant_step
 
 
 
@@ -490,10 +519,14 @@ def baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_
 
 
 __all__
+from seed.algo.baby_steps_giant_steps_method import calc_min4sz4giant_step5max4order4base_
+#def calc_min4sz4giant_step5max4order4base_(max4order4base, /):
+#   'max4order4base/uint{>0} -> min4sz4giant_step/uint{>0} # [0 < mul_order4base < sz4giant_step*(1+sz4giant_step)]'
 from seed.algo.baby_steps_giant_steps_method import search_mul_order__7baby_steps_giant_steps_method_, search_multiple_of_mul_order__7baby_steps_giant_steps_method_, baby_steps_giant_steps_method_, SmallMulOrderException
-#def search_mul_order__7baby_steps_giant_steps_method_(sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, _debug=False):
-#def search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False):
+#def search_mul_order__7baby_steps_giant_steps_method_(sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, _debug=False, tmay_target=()):
+#def search_multiple_of_mul_order__7baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, /, *, key=None, hash_vs_sort=False, tmay_target=()):
 #def baby_steps_giant_steps_method_(offset4exp, min_num_fwd_giant_steps, max_num_fwd_giant_steps, sz4giant_step, mul_, pow_, base, target, /, *, key=None, hash_vs_sort=False, to_raise_vs_return_mul_order4base=False, _debug=False):
 #SmallMulOrderException{.mul_order4base,.base,.sz4giant_step}
+
 
 from seed.algo.baby_steps_giant_steps_method import *

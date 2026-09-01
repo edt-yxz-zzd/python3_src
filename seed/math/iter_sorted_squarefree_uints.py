@@ -269,6 +269,8 @@ iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_
 
 
 
+>>> [*islice(iter_reversed_sorted_negative_fundamental_discriminants_(), 0, 100)]
+[-3, -4, -7, -8, -11, -15, -19, -20, -23, -24, -31, -35, -39, -40, -43, -47, -51, -52, -55, -56, -59, -67, -68, -71, -79, -83, -84, -87, -88, -91, -95, -103, -104, -107, -111, -115, -116, -119, -120, -123, -127, -131, -132, -136, -139, -143, -148, -151, -152, -155, -159, -163, -164, -167, -168, -179, -183, -184, -187, -191, -195, -199, -203, -211, -212, -215, -219, -223, -227, -228, -231, -232, -235, -239, -244, -247, -248, -251, -255, -259, -260, -263, -264, -267, -271, -276, -280, -283, -287, -291, -292, -295, -296, -299, -303, -307, -308, -311, -312, -319]
 
 
 
@@ -276,6 +278,7 @@ py_adhoc_call   seed.math.iter_sorted_squarefree_uints   @f
 ]]]'''#'''
 __all__ = r'''
 iter_sorted_squarefree_uints_
+    iter_reversed_sorted_negative_fundamental_discriminants_
 iter_sorted_partial_squarefree_uints7mimic_oldAPI__7odd_only__7basis_eq_fst_16_odd_primes_
 iter_sorted_squarefree_uints7mimic_oldAPI__7builtin_data6zpow64_
 iter_sorted_squarefree_uints__7chunk_sieve__7mimic_oldAPI__7odd_only_
@@ -888,6 +891,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.containers import mk_tuple,mk_immutable_seq
     from seed.helper.repr_input import repr_helper
     from seed.math.prime_sieve.sieve_ge_le import iter_sieve4prime_factorizations_ge_lt_
+    from collections import deque
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -1066,6 +1070,22 @@ def _leading_record2following_sorted_iterable_ex_(j2p_, record, /):
         yield _record2term6sorted_iterable_ex_(j2p_, record)
 
 
+def iter_reversed_sorted_negative_fundamental_discriminants_():
+    '-> descending-Iter Df/int{<0} # [is_negative_fundamental_discriminant_(Df)]'
+    #view ../../python3_src/seed/math/BinaryQuadraticForm__7class_number.py
+    #   is_negative_fundamental_discriminant_
+    dq = deque()
+    it = iter_sorted_squarefree_uints_()
+    for u in it:
+        n = -u
+        while dq and dq[0] > n:
+            yield dq.popleft()
+        Df = n
+        if not Df&3 == 1:
+            Df *= 4
+            dq.append(Df)
+        else:
+            yield Df
 
 
 
@@ -1574,6 +1594,7 @@ _us6data6zpow64 = (
 
 
 __all__
+from seed.math.iter_sorted_squarefree_uints import iter_reversed_sorted_negative_fundamental_discriminants_
 from seed.math.iter_sorted_squarefree_uints import iter_sorted_squarefree_uints_
 #def iter_sorted_squarefree_uints_(may_primes=None, /, *, may_prime2ok_=None, more=False, to_seq6more=False, may_squarefree7resume=None, new_resume=False, neg_resume_ok=False):
 #old:def iter_sorted_squarefree_uints_(may_primes=None, /, *, may_prime2ok_=None, more=False, to_seq6more=False):

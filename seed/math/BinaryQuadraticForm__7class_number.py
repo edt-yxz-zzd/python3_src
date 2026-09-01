@@ -20,6 +20,11 @@
 r'''[[[
 e ../../python3_src/seed/math/BinaryQuadraticForm__7class_number.py
 view ../../python3_src/seed/math/BinaryQuadraticForm.py
+    [h(D) == 1/Pi * w5D_(D) * Dirichlet_L_function(1,Kronecker_symbol{D}) * sqrt(-D)] # 群规模公式牜无限求和牜负判别值:goto
+
+    [h(Df) == 1/Df * w5D_(Df) * sum[Kronecker_symbol(u;Df)*u | [u:<-[1..=-Df]]]] # 群规模公式牜有限求和牜基础负判别值:goto
+TODO:
+    nonprimitive --> imprimitive
 
 seed.math.BinaryQuadraticForm__7class_number
 py -m nn_ns.app.debug_cmd   seed.math.BinaryQuadraticForm__7class_number -x # -off_defs
@@ -54,6 +59,9 @@ py_adhoc_call{校验}
 [[
 view ../../python3_src/nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_th_neg_squarefree))__fst_10000.txt
 view ../../python3_src/nn_ns/math_nn/numbers/b000003-class_number_of_the_quadratic_order_of_discriminant_(-4n)__fst_20000.txt
+
+view ../../python3_src/nn_ns/math_nn/numbers/_patch__neg_squarefree__Df_..b000924.out.txt
+view ../../python3_src/nn_ns/math_nn/numbers/_patch_D_..b000003.out.txt
 ===
 py_adhoc_call { +lineno }  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_ =100 | grep ':[^0]' | sed 's/.*/-\0/'
 ===
@@ -258,7 +266,7 @@ py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_number
 
 ===
 #主要命令牜数据校验牜群规模纟平方根纟负数纟无平方因子牜前一万个牜天然版:here
-py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_ =10000 +with_D +both7nonprimitive  +squarefree_radicand_only6num_Ds -to_mul_four --_path4validate:'../../python3_src/nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_th_neg_squarefree))__fst_10000.txt' --_regex8selector4line4path:'\d+ (?P<num_BQFs7primitive>\d+)'
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_ =10000 +with_D +both7nonprimitive  --case6num_Ds:squarefree_radicand_only -to_mul_four --_path4validate:'../../python3_src/nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_th_neg_squarefree))__fst_10000.txt' --_regex8selector4line4path:'\d+ (?P<num_BQFs7primitive>\d+)'
     ... ...
     (-65748, (60, 60))
     (-65752, (38, 38))
@@ -379,7 +387,7 @@ view ../../python3_src/nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_t
     10000 100
 
 #主要命令牜数据校验牜群规模纟平方根纟负数纟无平方因子牜前一万个牜花哨版:here
-py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_ =10000 +with_D +both7nonprimitive  +squarefree_radicand_only6num_Ds -to_mul_four --_path4validate:'../../python3_src/nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_th_neg_squarefree))__fst_10000.txt' --_regex8selector4line4path:'\d+ (?P<num_BQFs7primitive>\d+)'
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_ =10000 +with_D +both7nonprimitive  --case6num_Ds:squarefree_radicand_only -to_mul_four --_path4validate:'../../python3_src/nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_th_neg_squarefree))__fst_10000.txt' --_regex8selector4line4path:'\d+ (?P<num_BQFs7primitive>\d+)'
     ... ...
     (-65720, (104, 104))
     (-16431, (114, 114))
@@ -396,6 +404,69 @@ py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_number
         # 1th..=10000th squarefree radicand
 ===
 ]]
+[[
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   @class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_ =-12
+    ValueError: (-12, {2: 2, 3: 1})
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   @class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_ =-12 +_not_fundamental_ok
+    seed.math.floor_ceil_tools.fc_perfect.NotPerfectError__div
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   @class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_ =-3
+    1
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   @class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_ =-199
+    9
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_ =10000 +with_D +both7nonprimitive  --case6num_Ds:squarefree_radicand_only -to_mul_four --_path4validate:'../../python3_src/nn_ns/math_nn/numbers/b000924-class_number_of_QQ(sqrt(n_th_neg_squarefree))__fst_10000.txt' --_regex8selector4line4path:'\d+ (?P<num_BQFs7primitive>\d+)'
+    ... ...
+    (-6159, (80, 80))
+    ... ...
+    (-34212, (76, 76))
+    (-34216, (64, 64))
+    (-8555, (32, 32))
+    (-34228, (40, 40))
+    ... ...
+    (-42820, (48, 48))
+    (-42824, (140, 140))
+    (-10707, (12, 12))
+    (-42836, (190, 190))
+    (-10711, (65, 65))
+    (-42852, (60, 60))
+    ^C KeyboardInterrupt
+        #slow...
+        @6514 -10713 -42852 60
+]]
+[[
++squarefree_radicand_only6num_Ds --> --case6num_Ds:squarefree_radicand_only
+++case6num_Ds:negative_fundamental_discriminant
+++case6num_Ds:negative_discriminant
+
+===
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_ =1000 +with_D  --case6num_Ds:negative_fundamental_discriminant | head
+    (-3, 1)
+    (-4, 1)
+    (-7, 1)
+    (-8, 1)
+    (-11, 1)
+    (-15, 2)
+    (-19, 1)
+    (-20, 2)
+    (-23, 3)
+    (-24, 2)
+    Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+    BrokenPipeError: [Errno 32] Broken pipe
+===
+py_adhoc_call  seed.math.BinaryQuadraticForm__7class_number   ,iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_ =10 +with_D  --case6num_Ds:negative_discriminant
+    (-3, 1)
+    (-4, 1)
+    (-7, 1)
+    (-8, 1)
+    (-11, 1)
+    (-12, 1)
+    (-15, 2)
+    (-16, 1)
+    (-19, 1)
+    (-20, 2)
+
+]]
+
+
 
 end__py_adhoc_call:here
 ]]]'''#'''
@@ -1280,6 +1351,7 @@ __all__ = r'''
 iter_class_numbers5neg_discriminants_
     iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_
     iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
+    iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_
 
 
 
@@ -1292,13 +1364,16 @@ class_number5neg_discriminant__7brute_force7enumerate_primitive_binary_quadratic
 
 
 
-class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
-    iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
-    class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7CRT_
 
 
 
-
+class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio_
+    class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
+        iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
+        class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7CRT_
+    class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_
+        iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_
+        class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_
 
 
 
@@ -1338,7 +1413,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.prime_sieve.sieve_lt import list_primes__lt_
     from seed.math.sqrts_mod_ import list_sqrts_mod_prime_
     from seed.math.floor_ceil_tools.fc_kth_root__7KthRoots4N import KthRoots4N
-    from itertools import product, chain, islice
+    from itertools import product, chain, islice, count
     from seed.math.Chinese_Remainder_Theorem__ver2 import get_CRT_type_
     #CRT = get_CRT_type_(extended=False, ver='long_term')
     #u = CRT(us)(rs)
@@ -1357,6 +1432,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
     from seed.math.iter_sorted_squarefree_uints import iter_sorted_squarefree_uints_
     #def iter_sorted_squarefree_uints_(may_primes=None, /, *, may_prime2ok_=None, more=False, to_seq6more=False, may_squarefree7resume=None, new_resume=False, neg_resume_ok=False):
+    from seed.math.iter_sorted_squarefree_uints import iter_reversed_sorted_negative_fundamental_discriminants_
 
 
 
@@ -1365,27 +1441,45 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 
 __all__
-def iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_(Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, squarefree_radicand_only6num_Ds=False, with_D=False, to_mul_four=False, nonprimitive_ok=False, both7nonprimitive=False, _path4validate=None, _regex8selector4line4path=None):
+def iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_(Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, case6num_Ds='', with_D=False, to_mul_four=False, nonprimitive_ok=False, both7nonprimitive=False, _path4validate=None, _regex8selector4line4path=None):
+    '(Ds/Iter D/int{<0} | num_Ds/uint{>=0}) -> Iter class_number{D}/uint{>=0} # [TIME:O(Df*ln(Df)**3)]'
+    class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_
+    tag = '_7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_'
+    kwds = {}
+    return iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func, case6num_Ds=case6num_Ds, with_D=with_D, to_mul_four=to_mul_four, nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive, _path4validate=_path4validate, _regex8selector4line4path=_regex8selector4line4path, **kwds)
+def iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_(Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, case6num_Ds='', with_D=False, to_mul_four=False, nonprimitive_ok=False, both7nonprimitive=False, _path4validate=None, _regex8selector4line4path=None):
     '(Ds/Iter D/int{<0} | num_Ds/uint{>=0}) -> Iter class_number{D}/uint{>=0} # [TIME:O(Df**(1/2+err))*len(Ds)]'
+    class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
     tag = '_7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_'
     kwds = {}
-    return iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func, squarefree_radicand_only6num_Ds=squarefree_radicand_only6num_Ds, with_D=with_D, to_mul_four=to_mul_four, nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive, _path4validate=_path4validate, _regex8selector4line4path=_regex8selector4line4path, **kwds)
-def iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_(Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, squarefree_radicand_only6num_Ds=False, with_D=False, to_mul_four=False, nonprimitive_ok=False, both7nonprimitive=False, validate6both=False, _path4validate=None, _regex8selector4line4path=None):
+    return iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func, case6num_Ds=case6num_Ds, with_D=with_D, to_mul_four=to_mul_four, nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive, _path4validate=_path4validate, _regex8selector4line4path=_regex8selector4line4path, **kwds)
+def iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_(Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, case6num_Ds='', with_D=False, to_mul_four=False, nonprimitive_ok=False, both7nonprimitive=False, validate6both=False, _path4validate=None, _regex8selector4line4path=None):
     '(Ds/Iter D/int{<0} | num_Ds/uint{>=0}) -> Iter class_number{D}/uint{>=0} # [TIME:O(D)*len(Ds)]'
+    class_number5neg_discriminant__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_
     tag = '_7brute_force7enumerate_primitive_binary_quadratic_forms7naive_'
     kwds = dict(validate6both=validate6both)
-    return iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func, squarefree_radicand_only6num_Ds=squarefree_radicand_only6num_Ds, with_D=with_D, to_mul_four=to_mul_four, nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive, _path4validate=_path4validate, _regex8selector4line4path=_regex8selector4line4path, **kwds)
-def iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, squarefree_radicand_only6num_Ds=False, with_D=False, to_mul_four=False, nonprimitive_ok=False, both7nonprimitive=False, _path4validate=None, _regex8selector4line4path=None, **kwds):
+    return iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func, case6num_Ds=case6num_Ds, with_D=with_D, to_mul_four=to_mul_four, nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive, _path4validate=_path4validate, _regex8selector4line4path=_regex8selector4line4path, **kwds)
+def iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, case6num_Ds='', with_D=False, to_mul_four=False, nonprimitive_ok=False, both7nonprimitive=False, _path4validate=None, _regex8selector4line4path=None, **kwds):
     'tag/str -> (Ds/Iter D/int{<0} | num_Ds/uint{>=0}) -> Iter class_number{D}/uint{>=0} # [[tag:="_7brute_force7enumerate_primitive_binary_quadratic_forms7naive_"] => [TIME:O(D)*len(Ds)]]   # [[tag:="_7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_"] => [TIME:O(Df**(1/2+err))*len(Ds)]]'
     match Ds__or__num_Ds:
         case int() as num_Ds:
             check_int_ge(0, num_Ds)
-            if squarefree_radicand_only6num_Ds:
-                us = iter_sorted_squarefree_uints_()
-                Ds = (-u*4 if not (-u)&3 < 2 else -u for u in us)
-                Ds = islice(Ds, 0, num_Ds)
-            else:
-                Ds = (-neg4D for neg4D in range(1, 1+num_Ds))
+            match case6num_Ds:
+                case '' | 'negative_even_discriminant':
+                    Ds = (-neg4D for neg4D in range(1, 1+num_Ds))
+                case 'squarefree_radicand_only':
+                    us = iter_sorted_squarefree_uints_()
+                    Ds = (-u*4 if not (-u)&3 < 2 else -u for u in us)
+                    Ds = islice(Ds, 0, num_Ds)
+                case 'negative_fundamental_discriminant':
+                    Ds = iter_reversed_sorted_negative_fundamental_discriminants_()
+                    Ds = islice(Ds, 0, num_Ds)
+                case 'negative_discriminant':
+                    Ds = (-u for u in count(1))
+                    Ds = filter(is_negative_discriminant_, Ds)
+                    Ds = islice(Ds, 0, num_Ds)
+                case _:
+                    raise Exception('unknown:', case6num_Ds)
             Ds
         case Ds:
             Ds = iter(Ds)
@@ -1395,6 +1489,7 @@ def iter_class_numbers5neg_discriminants_(tag, Ds__or__num_Ds, may_p2e4neg4D_or_
     Ds
     #f = class_number5neg_discriminant__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_
     #f = class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
+    #f = class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_
     nm = f'class_number5neg_discriminant_{tag!s}'
     f = globals()[nm]
     777;kwds = dict(nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive, **kwds)
@@ -1627,8 +1722,21 @@ def is_negative_fundamental_discriminant_(Df, p2e4neg4Df, /):
     #bug:return is_negative_discriminant_(Df) and all(e4p in (2, 3) if p==2 else e4p == 1 for p, e4p in p2e4neg4Df.items())
     return is_negative_discriminant_(Df) and (Df&3 == 1 or Df&15 in (8,12)) and all(e4p in (2, 3) if p==2 else e4p == 1 for p, e4p in p2e4neg4Df.items())
     return is_negative_discriminant_(Df) and not (Df&3 == 0 and is_negative_discriminant_(Df>>2)) and all(e4p in (2, 3) if p==2 else e4p == 1 for p, e4p in p2e4neg4Df.items())
+
+
 def class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_(D, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, nonprimitive_ok=False, both7nonprimitive=False):
     'D/int{<0} -> class_number{D}/uint{>=0} # [Df==D///rtm**2][TIME:O(Df**(1/2+err))]'
+    class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7CRT_
+    return class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio_(tag:='CRT', D, may_p2e4neg4D_or_ps4D_or_factor_pint_func, nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive)
+def class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_(D, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, nonprimitive_ok=False, both7nonprimitive=False):
+    'D/int{<0} -> class_number{D}/uint{>=0} # [Df==D///rtm**2][TIME:O(Df*ln(Df)**3)]'
+    class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_
+    return class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio_(tag:='sum_over_Df', D, may_p2e4neg4D_or_ps4D_or_factor_pint_func, nonprimitive_ok=nonprimitive_ok, both7nonprimitive=both7nonprimitive)
+
+def class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio_(tag, D, may_p2e4neg4D_or_ps4D_or_factor_pint_func=None, /, *, nonprimitive_ok=False, both7nonprimitive=False):
+    'tag/str -> D/int{<0} -> class_number{D}/uint{>=0} # [Df==D///rtm**2]'
+    nm = f'class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7{tag!s}_'
+    f = globals()[nm]
     both7nonprimitive = bool(both7nonprimitive)
     nonprimitive_ok = both7nonprimitive or bool(nonprimitive_ok)
     check_type_is(int, D)
@@ -1642,17 +1750,28 @@ def class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic
     ((rtm, p2e4rtm), (Df, p2e4neg4Df)) = _decompose_squarefree_part_ex7except_four6Df_(D, p2e4neg4D)
     r4h = ratio4class_number7Duu_(Df,rtm, p2e4rtm)
     r4psh = ratio4pseudo_class_number7Duu_(Df,rtm, p2e4rtm)
-    num_BQFs7Df = class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7CRT_(Df, p2e4neg4Df)
+    num_BQFs7Df = f(Df, p2e4neg4Df)
     num_BQFs7include_nonprimitive = num_BQFs7Df*r4psh
     num_BQFs7primitive = num_BQFs7Df*r4h
     num_BQFs7total = num_BQFs7primitive if not nonprimitive_ok else num_BQFs7include_nonprimitive
     return num_BQFs7total if not both7nonprimitive else (num_BQFs7primitive, num_BQFs7include_nonprimitive)
 
 
+def class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_(Df, may_p2e4neg4Df_or_ps4Df_or_factor_pint_func=None, /, *, _not_fundamental_ok=False):
+    'Df/int{<0}/is_negative_fundamental_discriminant_(Df) -> class_number{Df}/uint{>0} # [TIME:O(Df*ln(Df)**3)]'
+    ''
+    check_discriminant7Qfb_(Df)
+    p2e4neg4Df = prepare_p2e4N_(-Df, may_p2e4neg4Df_or_ps4Df_or_factor_pint_func)
+    p2e4neg4Df
+    if not _not_fundamental_ok:
+        if not is_negative_fundamental_discriminant_(Df, p2e4neg4Df):raise ValueError(Df, p2e4neg4Df)
+    ##############################
+    # [h(Df) == 1/Df * w5D_(Df) * sum[Kronecker_symbol(u;Df)*u | [u:<-[1..=-Df]]]] # 群规模公式牜有限求和牜基础负判别值:goto
+    return perfect_div(w5D_(Df) * sum(Kronecker_symbol(u, Df) * u for u in range(1, 1-Df)), Df)
+
 def class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7CRT_(Df, may_p2e4neg4Df_or_ps4Df_or_factor_pint_func=None, /, *, verbose=False):
     'Df/int{<0}/is_negative_fundamental_discriminant_(Df) -> class_number{Df}/uint{>0} # [TIME:O(Df**(1/2+err))]'
     check_discriminant7Qfb_(Df)
-    #if not Df < 0:raise ValueError(Df)
     p2e4neg4Df = prepare_p2e4N_(-Df, may_p2e4neg4Df_or_ps4Df_or_factor_pint_func)
     p2e4neg4Df
     if not is_negative_fundamental_discriminant_(Df, p2e4neg4Df):raise ValueError(Df, p2e4neg4Df)
@@ -2330,7 +2449,7 @@ if 1:from seed.math.BinaryQuadraticForm__7class_number import is_negative_discri
     #internal
 
 
-if 1:from seed.math.BinaryQuadraticForm__7class_number import iter_class_numbers5neg_discriminants_, iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_, iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_
+if 1:from seed.math.BinaryQuadraticForm__7class_number import iter_class_numbers5neg_discriminants_, iter_class_numbers5neg_discriminants__7brute_force7enumerate_primitive_binary_quadratic_forms7naive_, iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_, iter_class_numbers5neg_discriminants__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_
     #mainly for py_adhoc_call
 
 
@@ -2345,6 +2464,7 @@ from seed.math.BinaryQuadraticForm__7class_number import class_number5neg_discri
 from seed.math.BinaryQuadraticForm__7class_number import class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7CRT_, class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7CRT_
 
 
+from seed.math.BinaryQuadraticForm__7class_number import class_number5neg_discriminant__7brute_force7count_primitive_binary_quadratic_forms7ratio7sum_over_Df_, class_number5neg_fundamental_discriminant__7brute_force7count_primitive_binary_quadratic_forms7sum_over_Df_
 
 
 
