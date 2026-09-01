@@ -355,16 +355,16 @@ def repr_kth_roots7cyclic_group__7slack_order4base_pow_(sf, factorization4gcd_k_
 >>> ds = 101*569
 >>> p2e4ds = {101:1, 569:1}
 >>> de = 379*29663
+>>> slack_order4base_pow = ds*tight_order4base**2
 >>> pt7base_pow = ops.pow_(pt7base, de)
 >>> for (part4exp, p2e4part4exp, _0_pt7tgt) in ts:
 ...     a = perfect_div(tight_order4base, part4exp)
 ...     k = part0_4exp*a
-...     gcd_k_tight_order4base = a
-...     factorization4gcd_k_tight_order4base = complete_factor_pint_via_trial_division(factorization4tight_order4base, gcd_k_tight_order4base)
+...     #gcd_k_tight_order4base = a
+...     #factorization4gcd_k_tight_order4base = complete_factor_pint_via_trial_division(factorization4tight_order4base, gcd_k_tight_order4base)
 ...     #(factorization4gcd_k_tight_order4base, gcd_k_tight_order4base, k, tight_order4base, pt7base)
-...     gcd_k_slack_order4base_pow = gcd_k_tight_order4base
-...     if 777:factorization4gcd_k_slack_order4base_pow = factorization4gcd_k_tight_order4base
-...     slack_order4base_pow = ds*tight_order4base
+...     gcd_k_slack_order4base_pow = gcd(k, slack_order4base_pow)
+...     factorization4gcd_k_slack_order4base_pow = complete_factor_pint_via_trial_division(factorization4tight_order4base, gcd_k_slack_order4base_pow)
 ...     if 0b001:
 ...         #_1_pt7tgt = ops.pow_(pt7base, k)
 ...         _1_pt7tgt = ops.pow_(pt7radix, a)
