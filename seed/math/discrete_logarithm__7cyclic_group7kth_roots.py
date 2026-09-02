@@ -27,6 +27,9 @@ to impl kth_roots_of() @cyclic_group
 
 view ../../python3_src/seed/math/discrete_logarithm.py
 view ../../python3_src/seed/algo/baby_steps_giant_steps_method.py
+
+[HARDEST_CORE_PART{discrete_logarithm} is discrete_logarithm__7cyclic_group7tight_order4base_is_prime_]:
+    using:baby_steps_giant_steps_method
 ]]
 
 
@@ -1111,7 +1114,7 @@ def discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(sf, max4exp
 
 @_method_
 def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_(sf, tight_order4base, pt7base, pt7tgt, /, *, nibble_vs_gobble=False):
-    '[tight_order4base == mul_order_of_(pt7base)][?[e:<-[1..=tight_order4base]] -> [pt7tgt == pt7base**e]] => tight_order4base/prime -> pt7base/G -> pt7tgt/G -> exp/int{>0} # [pt7tgt == pt7base**exp][@[e:<-[1..<exp]] -> [pt7tgt =!= pt7base**e]]'
+    '[tight_order4base == mul_order_of_(pt7base)][?[e:<-[1..=tight_order4base]] -> [pt7tgt == pt7base**e]][is_prime_(tight_order4base)] => tight_order4base/prime -> pt7base/G -> pt7tgt/G -> exp/int{>0} # [pt7tgt == pt7base**exp][@[e:<-[1..<exp]] -> [pt7tgt =!= pt7base**e]]  # HARDEST_CORE_PART{discrete_logarithm}'
     # [is_prime_(tight_order4base)]
     check_int_ge(2, tight_order4base)
     # [pt7base =!= G.one]

@@ -1,6 +1,9 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/primality_test/SPRP_2357.py
+see also:
+    view ../../python3_src/seed/math/factor_pint/perfect_power/detect_perfect_power.py
+        detect_nonperfect_square__via_II8357_()
 
 seed.math.primality_test.SPRP_2357
 py -m nn_ns.app.debug_cmd   seed.math.primality_test.SPRP_2357 -x # -off_defs

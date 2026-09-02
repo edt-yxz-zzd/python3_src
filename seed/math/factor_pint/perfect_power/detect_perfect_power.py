@@ -198,6 +198,7 @@ is_square_      is_perfect_square_
     may_perfect_sqrt_of_    may_perfect_sqrt_
         may_perfect_sqrt_of__via_CRT_
         may_perfect_sqrt_of__via_floor_kth_root_
+            detect_nonperfect_square__via_II8357_
 
 is_kth_power_   is_perfect_kth_power_
     may_perfect_kth_root_of_    may_perfect_kth_root_
@@ -437,6 +438,18 @@ def may_perfect_kth_root_of__via_floor_kth_root_(k, m, /):
         return m
     # [k >= 2]
     # [m >= 2]
+    if m < 4:
+        return None
+    # [k >= 2]
+    # [m >= 4]
+    if k == 2:
+        return may_perfect_sqrt_of__via_floor_kth_root_(m)
+    # [k >= 3]
+    # [m >= 4]
+    if m < 8:
+        return None
+    # [k >= 3]
+    # [m >= 8]
     rt = floor_kth_root_(k, m)
     if rt**k == m:
         return rt
@@ -502,8 +515,95 @@ def is_perfect_cube_(m, /, **kwds4pKrt):
     return not None is may_perfect_kth_root_of__k_is_prime_(3, m, **kwds4pKrt)
 is_cube_ = is_perfect_cube_
 
+
+r'''[[[
+@20260902
+? logint(4*vecprod(primes(10)),2)
+34
+? logint(4*vecprod(primes(9)),2)
+29
+? primes(10)
+[2,3,5,7,11,13,17,19,23,29]
+? 4*vecprod(primes(9))
+892371480
+
+==>>:
+detect_nonperfect_square__via_II8357_()
+see also:
+    view ../../python3_src/seed/math/primality_test/SPRP_2357.py
+        is_SPRP_2357_()
+
+#]]]'''#'''
+_ls357 = (3, 5, 7)
+_II8357 = 840 # == 8*3*5*7
+_ls357to23 = (3,5,7,11,13,17,19,23)
+_II8357to23 = 892371480
+def _std_params6detect_nonperfect_square__via_II8357_(params, /):
+    match params:
+        case (_ls4odd_prime, _8_mul_II_ls4odd_prime):
+            pass
+        case 4:
+            (_ls4odd_prime, _8_mul_II_ls4odd_prime) = (_ls357, _II8357)
+        case 9:
+            (_ls4odd_prime, _8_mul_II_ls4odd_prime) = (_ls357to23, _II8357to23)
+        case _:
+            raise Exception('unknown:kw:params@detect_nonperfect_square__via_II8357_():', params)
+    return (_ls4odd_prime, _8_mul_II_ls4odd_prime)
+_ls4odd_square = (1,9,25,49,81)
+def detect_nonperfect_square__via_II8357_(m, /, *, params=4):
+    'm/uint{>0} -> bool{True => [m is not perfect_square]}{False => nothing} # [kw:params == (_ls4odd_prime, _8_mul_II_ls4odd_prime)] where [_ls4odd_prime :: [odd_prime]][_8_mul_II_ls4odd_prime == 8*II(_ls4odd_prime)] or [kw:params <- {4, 9}]'
+    check_int_ge(1, m)
+    # [m >= 1]
+    (ez, odd) = factor_pint_out_power_of_base_(2, m)
+    if 1 == ez&1:
+        return True#nonperfect_square
+    if odd in _ls4odd_square:
+        return False#unknown
+
+    (_ls4odd_prime, _8_mul_II_ls4odd_prime) = _std_params6detect_nonperfect_square__via_II8357_(params)
+    om1 = odd%_8_mul_II_ls4odd_prime
+    if not 1 == om1&7:
+        return True#nonperfect_square
+    for p in _ls4odd_prime:
+        if _test6_(p, m, om1):
+            return True#nonperfect_square
+    return False#unknown
+def _test6_(p, m, om1, /):
+    # [p <- _ls4odd_prime]
+    #   # <==> [p::prime][1==p%2][0==_8_mul_II_ls4odd_prime%p]
+    # [om1 == odd{m}%_8_mul_II_ls4odd_prime]
+    # [om1 =[%p]= odd{m}]
+    match om1%p:
+        case 0:
+            (ep, _) = factor_pint_out_power_of_base_(p, m)
+            if 1 == ep&1:
+                return True#nonperfect_square
+            return False#unknown
+        case 1:
+            return False#unknown
+        case om6p:
+            # [om6p == odd{m}%p =!= 0]
+            match Jacobi_symbol(p, om6p):
+                case -1:
+                    return True#nonperfect_square
+                case 1:
+                    return False#unknown
+                case 0:
+                    raise 000
+                case _:
+                    raise 000
+            raise 000
+    raise 000
 def may_perfect_sqrt_of__via_floor_kth_root_(m, /):
     check_int_ge(0, m)
+    if m < 2:
+        return m
+    # [m >= 2]
+    if m < 4:
+        return None
+    # [m >= 4]
+    if detect_nonperfect_square__via_II8357_(m):
+        return None
     rt = floor_sqrt(m)
     if rt**2 == m:
         return rt
