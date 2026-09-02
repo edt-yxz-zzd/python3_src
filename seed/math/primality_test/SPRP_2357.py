@@ -181,6 +181,77 @@ prev_may_SPRP_2357__lt_
 
 
 
+prepare4iter_xprimes7SPRP_2357__ge_lt_
+    iter_2357_
+    iter_coprimes7SPRP_2357__ge_lt_
+
+>>> [*iter_2357_(-20, 20)]
+[2, 3, 5, 7]
+>>> [*iter_2357_(10, 20)]
+[]
+>>> [*iter_2357_(3, 3)]
+[]
+>>> [*iter_2357_(3, 5)]
+[3]
+>>> [*iter_2357_(6, 12)]
+[7]
+
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(-20, 20)]
+[-19, -17, -13, -11, -1, 1, 11, 13, 17, 19]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(10, 20)]
+[11, 13, 17, 19]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(3, 3)]
+[]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(3, 5)]
+[]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(6, 12)]
+[11]
+
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(-20, 20)]
+[2, 3, 5, 7, 11, 13, 17, 19]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(10, 20)]
+[11, 13, 17, 19]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(3, 3)]
+[]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(3, 5)]
+[3]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(6, 12)]
+[7, 11]
+
+
+.+1,.+22s/..$/, reverse=True\0
+>>> [*iter_2357_(-20, 20, reverse=True)]
+[7, 5, 3, 2]
+>>> [*iter_2357_(10, 20, reverse=True)]
+[]
+>>> [*iter_2357_(3, 3, reverse=True)]
+[]
+>>> [*iter_2357_(3, 5, reverse=True)]
+[3]
+>>> [*iter_2357_(6, 12, reverse=True)]
+[7]
+
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(-20, 20, reverse=True)]
+[19, 17, 13, 11, 1, -1, -11, -13, -17, -19]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(10, 20, reverse=True)]
+[19, 17, 13, 11]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(3, 3, reverse=True)]
+[]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(3, 5, reverse=True)]
+[]
+>>> [*iter_coprimes7SPRP_2357__ge_lt_(6, 12, reverse=True)]
+[11]
+
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(-20, 20, reverse=True)]
+[19, 17, 13, 11, 7, 5, 3, 2]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(10, 20, reverse=True)]
+[19, 17, 13, 11]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(3, 3, reverse=True)]
+[]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(3, 5, reverse=True)]
+[3]
+>>> [*prepare4iter_xprimes7SPRP_2357__ge_lt_(6, 12, reverse=True)]
+[11, 7]
 
 
 
@@ -188,6 +259,176 @@ prev_may_SPRP_2357__lt_
 
 
 
+
+
+
+
+>>> [*iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_(2, 1000)]
+[2, 3, 5, 11, 23, 29, 41, 53, 83, 89, 113, 131, 173, 179, 191, 233, 239, 251, 281, 293, 359, 419, 431, 443, 491, 509, 593, 641, 653, 659, 683, 719, 743, 761, 809, 911, 953]
+
+
+>>> [*iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_(-1000, 2)]
+[]
+
+>>> [*iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_(2, 100, reverse=True)]
+[89, 83, 53, 41, 29, 23, 11, 5, 3, 2]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[[
+py_adhoc_call   seed.math.primality_test.SPRP_2357   @bytes.filter4coprimes_to_2357_ '=range(210)' -in_2357_ok
+py_adhoc_call   seed.math.primality_test.SPRP_2357   @_mk_coprimes6wheel_2357
+    b'\x01\x0b\r\x11\x13\x17\x1d\x1f%)+/5;=CGIOSYaegkmqy\x7f\x83\x89\x8b\x8f\x95\x97\x9d\xa3\xa7\xa9\xad\xb3\xb5\xbb\xbf\xc1\xc5\xc7\xd1'
+]]
+[[
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_xprimes7SPRP_2357__ge_lt_ ='2**32' | more
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_xprimes7SPRP_2357__ge_lt_ ='2**32' | head -n 50
+4294967311
+4294967357
+4294967371
+4294967377
+4294967387
+4294967389
+4294967459
+4294967477
+4294967497
+4294967513
+4294967539
+4294967543
+4294967549
+4294967561
+4294967563
+4294967569
+4294967597
+4294967627
+4294967639
+4294967653
+4294967681
+4294967687
+4294967701
+4294967723
+4294967759
+4294967779
+4294967783
+4294967791
+4294967797
+4294967821
+4294967857
+4294967861
+4294967867
+4294967891
+4294967969
+4294967977
+4294967983
+4294968001
+4294968017
+4294968019
+4294968023
+4294968059
+4294968101
+4294968127
+4294968143
+4294968149
+4294968173
+4294968187
+4294968199
+4294968211
+
+
+[(4294968211-2**32)/50 == 18.3]
+]]
+[[
+Sophie_Germain_prime:hard modulus for discrete_logarithm
+    view ../../python3_src/seed/math/discrete_logarithm__7cyclic_group7kth_roots.py
+==>>:
+Sophie_Germain_SPRP_2357
+
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_ ='2**32' | more
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_ ='2**32' | head -n 50
+4294967681
+4294967861
+4294968101
+4294968239
+4294968329
+4294968371
+4294968521
+4294968869
+4294968929
+4294971221
+4294971269
+4294971431
+4294971491
+4294971563
+4294972151
+4294972481
+4294972613
+4294972859
+4294973069
+4294973549
+4294973603
+4294973999
+4294974083
+4294974581
+4294974641
+4294974731
+4294974923
+4294975043
+4294975673
+4294976051
+4294976069
+4294976321
+4294976519
+4294976579
+4294976981
+4294977023
+4294977083
+4294977161
+4294977233
+4294977311
+4294978283
+4294978553
+4294978679
+4294979009
+4294979081
+4294979159
+4294979471
+4294979519
+4294979693
+4294979891
+
+
+[(4294979891-2**32)/50 == 251.9]
+    vs:[(4294968211-2**32)/50 == 18.3]
+    [18**2 == 324 ~= 251]
+]]
 
 py_adhoc_call   seed.math.primality_test.SPRP_2357   @f
 ]]]'''#'''
@@ -202,6 +443,14 @@ detect_noncoprime_to_2357_
 
 
 
+iter_xprimes7SPRP_2357__ge_lt_
+    prepare4iter_xprimes7SPRP_2357__ge_lt_
+        iter_2357_
+        iter_coprimes7SPRP_2357__ge_lt_
+iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_
+
+
+
 
 
 
@@ -209,6 +458,16 @@ II_2357
 bs_2357
 II_357
 bs_357
+
+
+coprimes6wheel_2357
+    fwd_gaps6wheel_2357
+    u2whether_coprime6wheel_2357
+    u2idx4coprime6wheel_2357
+    u2fwd_gap6wheel_2357
+    u2bwd_gap6wheel_2357
+
+
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -216,8 +475,10 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.primality_test.strong_probable_prime import is_strong_probable_prime__basis_
-    from seed.tiny_.check import check_type_is, check_int_ge
-    from itertools import count, islice
+    from seed.tiny_.check import check_type_is, check_int_ge, check_may_
+    from itertools import count, islice, pairwise, chain, cycle, accumulate
+    from seed.seq_tools.iter_seq_range import seq_islice
+    #def seq_islice(seq, begin ,end, step=None, *, reverse=False):
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -231,6 +492,16 @@ def detect_noncoprime_to_2357_(n, /):
     #assert n >= 0
     if n&1 == 0:
         return -1 if n == 2 else +1
+    # [1 == n%2]
+    #new:
+    if 8 > n > 2:
+        # !! [1 == n%2]
+        # [n <- {3,5,7}]
+        return -1
+    u = n % II_2357
+    return 0 if u2whether_coprime6wheel_2357[u] else +1
+
+    #old:
     u = n % II_357
     if u in bs_357:
         return -1 if n == u else +1
@@ -241,7 +512,7 @@ def detect_noncoprime_to_2357_(n, /):
     #.    return -1 if n == u else +1
     #.return +1 if any(u%d == 0 for d in bs_2357) else 0
 
-def filter4coprimes_to_2357_(ns, /, in_2357_ok=False, neg_ok=True):
+def filter4coprimes_to_2357_(ns, /, *, in_2357_ok=False, neg_ok=True):
     for n in ns:
         match detect_noncoprime_to_2357_(n):
             case 0:
@@ -328,7 +599,213 @@ def is_SPRP_2357_(n, /):
     return is_strong_probable_prime__basis_(basis, n)
     ######################
 
+#wheel_2357
+def _mk_coprimes6wheel_2357():
+    return bytes(filter4coprimes_to_2357_(range(II_2357), in_2357_ok=False))
+def _mk_fwd_gaps6wheel_2357(coprimes6wheel_2357, /):
+    return bytes(chain((b-a for a, b in pairwise(coprimes6wheel_2357)), [2]))
+def _mk_bwd_gaps6wheel_2357(fwd_gaps6wheel_2357, /):
+    return fwd_gaps6wheel_2357[-1:] + fwd_gaps6wheel_2357[:-1]
+def _mk_u2whether_coprime6wheel_2357(coprimes6wheel_2357, /):
+    ls = [False]*II_2357
+    for u in coprimes6wheel_2357:
+        ls[u] = True
+    return bytes(ls)
+def _mk_u2idx4coprime6wheel_2357(coprimes6wheel_2357, /):
+    #xxx:accumulate(u2whether_coprime6wheel_2357)
+    ls = [255]*II_2357
+    for j, u in enumerate(coprimes6wheel_2357):
+        ls[u] = j
+    return bytes(ls)
+def _mk_u2fwd_gap6wheel_2357(coprimes6wheel_2357, /):
+    ls = [None]*II_2357
+    for a, b in pairwise(coprimes6wheel_2357):
+        for u in range(a, b):
+            ls[u] = b-u
+    ls[-1] = 2
+    ls[0] = 1
+    return bytes(ls)
+def _mk_u2bwd_gap6wheel_2357(coprimes6wheel_2357, /):
+    ls = [None]*II_2357
+    for a, b in pairwise(coprimes6wheel_2357):
+        for u in range(1+a, 1+b):
+            ls[u] = u-a
+    ls[1] = 2
+    ls[0] = 1
+    return bytes(ls)
+def _mk_u2next_coprime6wheel_2357(coprimes6wheel_2357, /):
+    ls = [None]*II_2357
+    for a, b in pairwise(coprimes6wheel_2357):
+        for u in range(a, b):
+            ls[u] = b
+    ls[-1] = ls[0] = 1
+    return bytes(ls)
+def _mk_u2prev_coprime6wheel_2357(coprimes6wheel_2357, /):
+    ls = [None]*II_2357
+    for a, b in pairwise(coprimes6wheel_2357):
+        for u in range(1+a, 1+b):
+            ls[u] = a
+    ls[1] = ls[0] = II_2357-1
+    return bytes(ls)
+
+if 0b0000:
+    coprimes6wheel_2357 = _mk_coprimes6wheel_2357()
+    assert len(coprimes6wheel_2357) == 1*2*4*6 == 48
+    fwd_gaps6wheel_2357 = _mk_fwd_gaps6wheel_2357(coprimes6wheel_2357)
+    #bwd_gaps6wheel_2357 = _mk_bwd_gaps6wheel_2357(fwd_gaps6wheel_2357)
+    u2whether_coprime6wheel_2357 = _mk_u2whether_coprime6wheel_2357(coprimes6wheel_2357)
+    u2idx4coprime6wheel_2357 = _mk_u2idx4coprime6wheel_2357(coprimes6wheel_2357)
+    u2fwd_gap6wheel_2357 = _mk_u2fwd_gap6wheel_2357(coprimes6wheel_2357)
+    u2bwd_gap6wheel_2357 = _mk_u2bwd_gap6wheel_2357(coprimes6wheel_2357)
+    #u2next_coprime6wheel_2357 = _mk_u2next_coprime6wheel_2357(coprimes6wheel_2357)
+    #u2prev_coprime6wheel_2357 = _mk_u2prev_coprime6wheel_2357(coprimes6wheel_2357)
+if 0b0000:
+    # .,.+6s/\w\+/print('\0 = ', \0)
+    print('coprimes6wheel_2357 = ', coprimes6wheel_2357)
+    print('fwd_gaps6wheel_2357 = ', fwd_gaps6wheel_2357)
+    print('u2whether_coprime6wheel_2357 = ', u2whether_coprime6wheel_2357)
+    print('u2idx4coprime6wheel_2357 = ', u2idx4coprime6wheel_2357)
+    print('u2fwd_gap6wheel_2357 = ', u2fwd_gap6wheel_2357)
+    print('u2bwd_gap6wheel_2357 = ', u2bwd_gap6wheel_2357)
+
+if 0b0001:
+    coprimes6wheel_2357 =  b'\x01\x0b\r\x11\x13\x17\x1d\x1f%)+/5;=CGIOSYaegkmqy\x7f\x83\x89\x8b\x8f\x95\x97\x9d\xa3\xa7\xa9\xad\xb3\xb5\xbb\xbf\xc1\xc5\xc7\xd1'
+    fwd_gaps6wheel_2357 =  b'\n\x02\x04\x02\x04\x06\x02\x06\x04\x02\x04\x06\x06\x02\x06\x04\x02\x06\x04\x06\x08\x04\x02\x04\x02\x04\x08\x06\x04\x06\x02\x04\x06\x02\x06\x06\x04\x02\x04\x06\x02\x06\x04\x02\x04\x02\n\x02'
+    u2whether_coprime6wheel_2357 =  b'\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01'
+    u2idx4coprime6wheel_2357 =  b'\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01\xff\x02\xff\xff\xff\x03\xff\x04\xff\xff\xff\x05\xff\xff\xff\xff\xff\x06\xff\x07\xff\xff\xff\xff\xff\x08\xff\xff\xff\t\xff\n\xff\xff\xff\x0b\xff\xff\xff\xff\xff\x0c\xff\xff\xff\xff\xff\r\xff\x0e\xff\xff\xff\xff\xff\x0f\xff\xff\xff\x10\xff\x11\xff\xff\xff\xff\xff\x12\xff\xff\xff\x13\xff\xff\xff\xff\xff\x14\xff\xff\xff\xff\xff\xff\xff\x15\xff\xff\xff\x16\xff\x17\xff\xff\xff\x18\xff\x19\xff\xff\xff\x1a\xff\xff\xff\xff\xff\xff\xff\x1b\xff\xff\xff\xff\xff\x1c\xff\xff\xff\x1d\xff\xff\xff\xff\xff\x1e\xff\x1f\xff\xff\xff \xff\xff\xff\xff\xff!\xff"\xff\xff\xff\xff\xff#\xff\xff\xff\xff\xff$\xff\xff\xff%\xff&\xff\xff\xff\'\xff\xff\xff\xff\xff(\xff)\xff\xff\xff\xff\xff*\xff\xff\xff+\xff,\xff\xff\xff-\xff.\xff\xff\xff\xff\xff\xff\xff\xff\xff/'
+    u2fwd_gap6wheel_2357 =  b'\x01\n\t\x08\x07\x06\x05\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x08\x07\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x08\x07\x06\x05\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x02\x01\n\t\x08\x07\x06\x05\x04\x03\x02\x01\x02'
+    u2bwd_gap6wheel_2357 =  b'\x01\x02\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x01\x02\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x05\x06\x07\x08\t\n'
+
+def iter_coprimes7SPRP_2357__ge_lt_(may_min_u, may_max1_u, /, *, reverse=False):
+    '-> Iter i/coprime_2357/int{[1==gcd(i,2*3*5*7)]}'
+    #see:filter4coprimes_to_2357_
+    #see:prepare4iter_xprimes7SPRP_2357__ge_lt_
+    check_may_([check_type_is, int], may_min_u)
+    check_may_([check_type_is, int], may_max1_u)
+
+    if reverse:
+        #if may_max1_u is None:raise TypeError('reverse and may_max1_u is None')
+        if may_max1_u is None:raise TypeError('[reverse:=True][may_max1_u:=None]')
+        min_n = 1-may_max1_u
+        may_max1_n = None if may_min_u is None else 1-may_min_u
+        it = _iter_coprimes7SPRP_2357__ge_lt_(min_n, may_max1_n)
+        it = map(int.__neg__, it)
+    else:
+        #if may_min_u is None:raise TypeError('not reverse and may_min_u is None')
+        if may_min_u is None:raise TypeError('[reverse:=False][may_min_u:=None]')
+        min_u = may_min_u
+        it = _iter_coprimes7SPRP_2357__ge_lt_(min_u, may_max1_u)
+    it
+    return it
+def _iter_coprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, /):
+    if not may_max1_u is None:
+        max1_u = may_max1_u
+        if not min_u < max1_u:
+            return
+
+    min_u6wheel = min_u%II_2357
+    if not u2whether_coprime6wheel_2357[min_u6wheel]:
+        min_u += u2fwd_gap6wheel_2357[min_u6wheel]
+        min_u6wheel += u2fwd_gap6wheel_2357[min_u6wheel]
+        min_u6wheel %= II_2357
+    min_u6wheel
+    min_u
+    #777;min_u6wheel = None
+    # [1==gcd(min_u, II_2357)]
+
+    if not may_max1_u is None:
+        max_u6wheel = (max1_u-1)%II_2357
+        if not u2whether_coprime6wheel_2357[max_u6wheel]:
+            max1_u -= u2bwd_gap6wheel_2357[max_u6wheel]
+            #max_u6wheel -= u2bwd_gap6wheel_2357[max_u6wheel]
+            #max_u6wheel %= II_2357
+        max1_u
+        777;max_u6wheel = None
+        # [1==gcd(-1+max1_u, II_2357)]
+
+        if not min_u < max1_u:
+            return
+        # [min_u < max1_u]
+
+        max_u = -1+max1_u
+        # [1==gcd(max_u, II_2357)]
+        # [min_u <= max_u]
+        may_max_u = max_u
+    else:
+        may_max_u = None
+    may_max_u
+
+    # [not may_max_u is None] => [min_u <= max_u]
+    # [not may_max_u is None] => [1==gcd(max_u, II_2357)]
+    # [1==gcd(min_u, II_2357)]
+
+    min_u6wheel
+    min_u
+    j4min_u = u2idx4coprime6wheel_2357[min_u6wheel]
+    gaps = seq_islice(fwd_gaps6wheel_2357, j4min_u, None)
+    777;gaps = chain(gaps, cycle(fwd_gaps6wheel_2357))
+
+    u = min_u
+    # [1==gcd(u, II_2357)]
+    # [not may_max_u is None] => [u <= max_u]
+    for gap in gaps:
+        # [1==gcd(u, II_2357)]
+        # [not may_max_u is None] => [u <= max_u]
+        yield u
+        if may_max_u == u:
+            break
+        # [not may_max_u is None] => [u < max_u]
+        u += gap
+        # [not may_max_u is None] => [u <= max_u]
+    return
+_null_iter = iter('')
+def iter_2357_(min_u=2, may_max1_u=None, /, *, reverse=False):
+    '-> Iter u/uint{[u <- {2,3,5,7}]}'
+    check_may_([check_type_is, int], may_max1_u)
+    check_type_is(int, min_u)
+    min_u = max(2, min_u)
+    # [min_u >= 2]
+    max1_u = may_max1_u if not may_max1_u is None else 8
+    max1_u = min(8, max1_u)
+    # [max1_u <= 8]
+    if not min_u < max1_u:
+        return
+    # [2 <= min_u < max1_u <= 8]
+    us = bs_2357
+    if reverse:
+        us = reversed(us)
+    us
+    for u in us:
+        if min_u <= u < max1_u:
+            yield u
+    return
+
+def prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
+    '-> Iter u/uint{[u >= 2][[u <- {2,3,5,7}]or[1==gcd(u,2*3*5*7)]]}' \
+    '  # vs:iter_coprimes7SPRP_2357__ge_lt_():this func include 2357'
+    check_type_is(int, min_u)
+    min_u = max(2, min_u)
+    # [min_u >= 2]
+    us7in2357 = iter_2357_(min_u, may_max1_u, reverse=reverse)
+
+    # !! [min_u >= 2]
+    us7gt2357 = iter_coprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
+        # required:[min_u >= 2]
+
+    uss = [us7in2357, us7gt2357]
+    if reverse:
+        uss = reversed(uss)
+    uss
+    return chain(*uss)
+
 def iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
+    '-> Iter SPRP_2357'
+    #new:
+    us = prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
+    return filter_SPRP_2357_(us)
+def __():
+    #old:
+  def iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
     check_type_is(int, min_u)
     min_u = max(2, min_u)
     #bug:odd_min_u = max(3, min_u)
@@ -384,6 +861,68 @@ def prev_may_SPRP_2357__lt_(max1_u, /):
     odd_us = range(3, max1_u, 2)[::-1]
     return next(filter_SPRP_2357_(odd_us))
 
+
+
+
+
+
+r'''[[[
+Sophie_Germain_prime:
+https://oeis.org/A005384
+A005384 Sophie Germain primes p: 2p+1 is also prime.
+==>>:
+    Sophie_Germain_SPRP_2357
+    Sophie_Germain_xprimes7SPRP_2357
+
+is there infinite long Sophie_Germain_prime_chain???
+[p::odd_prime][0 == ((a+1)*2**k -1) %p]:
+    [1 =[%p]= (a+1)*2**k]
+    [a+1 =[%p]= 2**-k]
+[p::odd_prime][is_primitive_root_mod_(p;2)]:
+    [@[a::int][a%p =!= p-1] -> ?[k:<-[0..=p-2]] -> [0 == ((a+1)*2**k -1) %p]]
+==>>:
+[Sophie_Germain_prime_chain must be finite long]
+
+??? [Sophie_Germain_prime_chain can be arbitrary long] ???
+
+#]]]'''#'''
+def iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
+    '-> Iter u/Sophie_Germain_SPRP_2357/uint{>=2}{[is_SPRP_2357_(u)][is_SPRP_2357_(1+2*u)]}'
+    if 0:
+        it = iter_xprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
+    else:
+        us = prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
+        def is_ok_(u, /):
+            # [u >= 2]
+            w = (1^(u<<1))
+            # [w >= 5]
+            # [1 == w%2]
+            if w < 9:
+                # [9 > w >= 5]
+                # !! [1 == w%2]
+                # [w <- {5,7}]
+                return True
+            # [w >= 9]
+            return not +1 == detect_noncoprime_to_2357_(w)
+        us = filter(is_ok_, us)
+        it = filter_SPRP_2357_(us)
+    it# :: Iter SPRP_2357
+    #new:
+    it = filter(lambda u:is_SPRP_2357_(1^(u<<1)), it)
+    return it
+    #old:
+    it = (1^(u<<1) for u in it)
+    it = filter_SPRP_2357_(it)
+    it = ((u>>1) for u in it)
+    return it
+
+
 __all__
 from seed.math.primality_test.SPRP_2357 import is_SPRP_2357_, filter_SPRP_2357_, iter_xprimes7SPRP_2357__ge_lt_, next_SPRP_2357__ge_, prev_may_SPRP_2357__lt_, detect_noncoprime_to_2357_, filter4coprimes_to_2357_
+from seed.math.primality_test.SPRP_2357 import iter_xprimes7SPRP_2357__ge_lt_, prepare4iter_xprimes7SPRP_2357__ge_lt_, iter_2357_, iter_coprimes7SPRP_2357__ge_lt_
+
+from seed.math.primality_test.SPRP_2357 import iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_
+
+
+
 from seed.math.primality_test.SPRP_2357 import *
