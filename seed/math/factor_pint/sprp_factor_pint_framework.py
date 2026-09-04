@@ -12,28 +12,34 @@ view ../../python3_src/seed/algo/rho_method.py
     #view ../../python3_src/seed/math/sprp_factor_pint__via_rho_method_.py
 ]]
 
+
+
+py_adhoc_call   seed.helper.print_methods   @print_methods  %%:P  ='P.seed.math.factor_pint.sprp_factor_pint_framework().IFramework4sprp_factor_pint'
 py_adhoc_call   seed.math.factor_pint.sprp_factor_pint_framework   @f
-from seed.math.factor_pint.sprp_factor_pint_framework import *
 ]]]'''#'''
 __all__ = r'''
 IFramework4sprp_factor_pint
+    IFramework4sprp_factor_pint__7mixins7utilities
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
-from seed.tiny_.check import check_type_is, check_int_ge
-from seed.helper.ifNone import ifNonef
-
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
+
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.tiny_.check import check_type_is, check_int_ge
+    from seed.helper.ifNone import ifNonef
+
 
 
 def _lazy_imports():
     'lazy_import:see:_prepare4whole_.may_utilities'
     global _lazy_imports
-    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division
-    from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes
-    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
+    from seed.math.semi_factor_pint_via_trial_division import semi_factor_pint_via_trial_division as _semi_factor_pint_via_trial_division_
+    from seed.math.merge_coprimess_into_smaller_coprimes import merge_coprimess_into_smaller_coprimes as _merge_coprimess_into_smaller_coprimes_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_ as _factor_pint_as_perfect_power_
     from seed.math.primality_test.strong_probable_prime import detect_strong_probable_prime__not_waste_too_much_time_ as _is_SPRP_
-    _4lazy_imports = (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
+    _4lazy_imports = (_is_SPRP_, _factor_pint_as_perfect_power_, _merge_coprimess_into_smaller_coprimes_, _semi_factor_pint_via_trial_division_)
         #utilities
     def f():
         return _4lazy_imports
@@ -53,7 +59,6 @@ ___end_mark_of_excluded_global_names__0___ = ...
 #.    _is_SPRP_ = f
 #.    if not f is _is_SPRP_:raise 000
 #.    return _is_SPRP_(n)
-
 class IFramework4sprp_factor_pint(ABC):
     r'''[[[
     IFramework4sprp_factor_pint - interface of framework for sprp_factor_pint_
@@ -64,7 +69,7 @@ class IFramework4sprp_factor_pint(ABC):
     #
     pint - positive integer
     #
-    utilities - (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
+    utilities - (_is_SPRP_, _factor_pint_as_perfect_power_, _merge_coprimess_into_smaller_coprimes_, _semi_factor_pint_via_trial_division_)
     #
     st - (state/statistics&inner_args&inner_kwds) for whole factorazation
     #
@@ -73,6 +78,15 @@ class IFramework4sprp_factor_pint(ABC):
     some_proper_factors - [factor{n4part}]{neednot_complete,neednot_coprime})
         # eg. [some_proper_factors := tmay_proper_factor~imay_proper_factor@seed.algo.rho_method.try_factor1_pint__via_rho_method_]
     #
+
+py_adhoc_call   seed.helper.print_methods   @print_methods  %%:P  ='P.seed.math.factor_pint.sprp_factor_pint_framework().IFramework4sprp_factor_pint'
+new_abstract_methods:
+    `_core_factor_algo_
+    `_prepare4whole_
+    `_stop4whole_
+    `_format_output4whole_
+new_concrete_methods:
+    sprp_factor_pint_
 
     #]]]'''#'''
     __slots__ = ()
@@ -101,7 +115,7 @@ class IFramework4sprp_factor_pint(ABC):
             # [n4whole >= 2]
             utilities = ifNonef(may_utilities, _lazy_imports)
             assert len(utilities) == 4
-                # (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division)
+                # (_is_SPRP_, _factor_pint_as_perfect_power_, _merge_coprimess_into_smaller_coprimes_, _semi_factor_pint_via_trial_division_)
             (st, raw_output) = _raw_sprp_factor_pint_(sf, n4whole, st, utilities, *args4whole, **kwds4whole)
         st, raw_output
         assert len(raw_output) == 3
@@ -130,12 +144,43 @@ class IFramework4sprp_factor_pint(ABC):
 
 
 
+class IFramework4sprp_factor_pint__7mixins7utilities(IFramework4sprp_factor_pint):
+    __slots__ = ()
+    @abstractmethod
+    def _prepare_initial_state4whole_(sf, n4whole, /, *args4whole, **kwds4whole):
+        'n4whole/uint{>=1} -> (*args4whole) -> (**kwds4whole) -> st'
+    @override
+    def _prepare4whole_(sf, n4whole, /, *args4whole, **kwds4whole):
+        st0 = sf._prepare_initial_state4whole_(n4whole, *args4whole, **kwds4whole)
+        utilities = sf._utilities_
+        return (st0, utilities)
+    @property
+    def _utilities_(sf, /):
+        utilities = (sf._is_SPRP_, sf._factor_pint_as_perfect_power_, sf._merge_coprimess_into_smaller_coprimes_, sf._semi_factor_pint_via_trial_division_)
+        return utilities
+    # (_is_SPRP_, _factor_pint_as_perfect_power_, _merge_coprimess_into_smaller_coprimes_, _semi_factor_pint_via_trial_division_) = utilities = _lazy_imports()
+    @property
+    def _is_SPRP_(sf, /):
+        '-> (pint -> bool)'
+        return _lazy_imports()[0]
+    @property
+    def _factor_pint_as_perfect_power_(sf, /):
+        '-> (pint -> (base/pint, exp/pint))'
+        return _lazy_imports()[1]
+    @property
+    def _merge_coprimess_into_smaller_coprimes_(sf, /):
+        '-> ([coprimes/[pint]]{intra:maybe noncoprime} -> coprimes/[pint])'
+        return _lazy_imports()[2]
+    @property
+    def _semi_factor_pint_via_trial_division_(sf, /):
+        '-> ([factor7candidate/pint] -> target/pint -> ({factor/pint:exp/pint}, unfactored_part/pint))'
+        return _lazy_imports()[3]
 
 
 def _raw_sprp_factor_pint_(sf, n4whole, st, utilities, /, *args4whole, **kwds4whole):
     'n4whole/uint{>=2} -> st -> utilities -> (*args4whole) -> (**kwds4whole) -> (st, raw_output)'
     # [n4whole >= 2]
-    (_is_SPRP_, factor_pint_as_perfect_power_, merge_coprimess_into_smaller_coprimes, semi_factor_pint_via_trial_division) = utilities
+    (_is_SPRP_, _factor_pint_as_perfect_power_, _merge_coprimess_into_smaller_coprimes_, _semi_factor_pint_via_trial_division_) = utilities
 
     ls4sprp4succ = []
         # [sprp-factor]{pairwise-coprime}
@@ -148,7 +193,7 @@ def _raw_sprp_factor_pint_(sf, n4whole, st, utilities, /, *args4whole, **kwds4wh
         if _is_SPRP_(factor):
             ls4sprp4succ.append(factor)
             return
-        (factor, exp) = factor_pint_as_perfect_power_(factor)
+        (factor, exp) = _factor_pint_as_perfect_power_(factor)
         if exp > 1 and _is_SPRP_(factor):
             ls4sprp4succ.append(factor)
             return
@@ -168,7 +213,7 @@ def _raw_sprp_factor_pint_(sf, n4whole, st, utilities, /, *args4whole, **kwds4wh
             ls4non_sprp4fail.append(n4part)
             continue
         ft_lsls.append([n4part//ft_lsls[0][0]])
-        factors = merge_coprimess_into_smaller_coprimes(ft_lsls)
+        factors = _merge_coprimess_into_smaller_coprimes_(ft_lsls)
         for _ in map(put, factors):pass
     assert not ls4non_sprp4todo or b_stop
     777; st
@@ -176,11 +221,11 @@ def _raw_sprp_factor_pint_(sf, n4whole, st, utilities, /, *args4whole, **kwds4wh
     777; ls4non_sprp4fail
     777; ls4sprp4succ
     unfactored_part = n4whole
-    (sprp2exp, unfactored_part) = semi_factor_pint_via_trial_division(ls4sprp4succ, unfactored_part)
+    (sprp2exp, unfactored_part) = _semi_factor_pint_via_trial_division_(ls4sprp4succ, unfactored_part)
         #success_part
-    (non_sprp2exp, unfactored_part) = semi_factor_pint_via_trial_division(ls4non_sprp4fail, unfactored_part)
+    (non_sprp2exp, unfactored_part) = _semi_factor_pint_via_trial_division_(ls4non_sprp4fail, unfactored_part)
         #failure_part
-    (non_sprp2exp4todo, unfactored_part) = semi_factor_pint_via_trial_division(ls4non_sprp4todo, unfactored_part)
+    (non_sprp2exp4todo, unfactored_part) = _semi_factor_pint_via_trial_division_(ls4non_sprp4todo, unfactored_part)
         #todo_part
     if not unfactored_part==1:raise Exception(n4whole, sprp2exp, non_sprp2exp, unfactored_part, st, utilities)
     raw_output = (sprp2exp, non_sprp2exp, non_sprp2exp4todo)
@@ -190,4 +235,5 @@ def _raw_sprp_factor_pint_(sf, n4whole, st, utilities, /, *args4whole, **kwds4wh
 
 
 __all__
+from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_factor_pint, IFramework4sprp_factor_pint__7mixins7utilities
 from seed.math.factor_pint.sprp_factor_pint_framework import *
