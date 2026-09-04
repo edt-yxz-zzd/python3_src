@@ -1,4 +1,5 @@
 #__all__:goto
+#TODO:goto
 # [formula__kth_roots4unity7cyclic_group_]:goto
 # [criterion__has_kth_roots7cyclic_group_]:goto
 # [formula__kth_roots7cyclic_group7convert_to_strict_]:goto
@@ -31,6 +32,83 @@ view ../../python3_src/seed/algo/baby_steps_giant_steps_method.py
 [HARDEST_CORE_PART{discrete_logarithm} is discrete_logarithm__7cyclic_group7tight_order4base_is_prime_]:
     using:baby_steps_giant_steps_method
 ]]
+[[
+@20260903:
+    rho_method vs baby_steps_giant_steps_method
+    index_calculus_method@(ZZ%N)
+
+TODO:
+'/sdcard/0my_files/book/cryptography/Cryptography. Theory and practice by Paterson, Maura B. Stinson, Douglas Robert (z-lib.org).pdf'
+
+DLP - discrete logarithm problem
+    ===
+    index_calculus_method:
+        #only for ZZ%N  #not generic
+        [known:tight_order4base]
+        #precomputation phase:factor base
+        preprocessing_step:prime_basis -> prime2dlog_B_P
+            # O(exp((1+O(1))*sqrt(lnNlnlnN)))
+            [is_smooth_(prime_basis;pt7base**k)] -> one congruence%tight_order4base
+            solve:(C+len(prime_basis)) congruences%tight_order4base
+                => prime2dlog_B_P
+        #to find a particular discrete logarithm:
+        dlog_B_T:
+            # O(exp((1/2+O(1))*sqrt(lnNlnlnN)))
+            [is_smooth_(prime_basis;pt7tgt*pt7base**k)] -> one congruence%tight_order4base
+            solve:one congruence%tight_order4base
+                => dlog_B_T
+
+    ===
+    rho_method:
+        #generic: O(sqrt(tight_order4base))
+        [known:tight_order4base]
+        [classify :: G -> uint%3]
+        [st0 := (x0:=G.one,0,0)][classify(G.one) =!= 2]
+            #???maybe: [x0 =!= G.one][stop if G.one occur] # eg: [st0 := (x0:=pt7base*pt7tgt,1,1)]
+
+        f (x, e4base, e4tgt) = case classify(x) of
+            # [x == pt7base**e4base * pt7tgt**e4tgt]
+            0 -> (x*pt7base, (1+e4base)%tight_order4base, e4tgt)
+            1 -> (x*pt7tgt, e4base, (1+e4tgt)%tight_order4base)
+            2 -> (x**2, (2*e4base)%tight_order4base, (2*e4tgt)%tight_order4base)
+            ##################
+            # ???maybe neednot classify into 3 cases:
+            ##################
+            0 -> (x**2*pt7base**3*pt7tgt**5, (2*e4base+3)%tight_order4base, (2*e4tgt+5)%tight_order4base)
+            1 -> (x**2*pt7base**29*pt7tgt**59, (2*e4base+29)%tight_order4base, (2*e4tgt+59)%tight_order4base)
+            2 -> (x**2*pt7base**41*pt7tgt**83, (2*e4base+41)%tight_order4base, (2*e4tgt+83)%tight_order4base)
+
+        [x == pt7base**e4base * pt7tgt**e4tgt == pt7base**_e4base * pt7tgt**_e4tgt]:
+            [pt7tgt**(_e4tgt-e4tgt) == pt7base**(_e4base-e4base)]
+            [pt7base**(dlog_B_T*(_e4tgt-e4tgt)) == pt7base**(_e4base-e4base)]
+            [dlog_B_T*(_e4tgt-e4tgt) =[%tight_order4base]= (_e4base-e4base)]
+            [g:=gcd(tight_order4base, (_e4tgt-e4tgt))]
+            [dlog_B_T =[%(tight_order4base///g)]= (_e4base-e4base)*((_e4tgt-e4tgt)///g)**-1%(tight_order4base///g)]
+                # if g small enough ... search directly
+
+    ===
+===
+view ../../python3_src/seed/math/search_smooth_around_interval.py
+    ===
+    [is_smooth_(ps;u) =[def]= [@[p::prime][0==u%p] -> [p <- ps]]]
+    [num_smooth_le_(n;m) =[def]= len{u | [u:<-[1..=n]][is_smooth_([1..=m];u)]}]
+    [n,m :: int{>0}][n>>m][#???[n/m > 100]???#]:
+        [num_smooth_le_(n;m)/n ~= let [x:=log_(m;n)] in (x**-x)]
+            # [x > 1]
+            # [x**-x < 1]
+            # [m := ceil_sqrt(n)] => [x ~= 2][num_smooth_le_(n;m) ~= 1/4]
+            # [m := ceil(n**/4)] => [x ~= 4][num_smooth_le_(n;m) ~= 1/256]
+            # [m ~= 2**20][n ~= 2**1024] => [x ~= 51][num_smooth_le_(n;m) ~= 1/51**51 ~= 8e-88]
+    to optimize the running time@QS:
+        [max4prime_basis{N} ~= 2**sqrt(lbN*lblbN)]
+            # lb=log2_()
+            =>:quadratic sieve:O(exp((1+O(1))*sqrt(lnNlnlnN)))
+    ???index_calculus_method use same max4prime_basis{N}???
+
+    ===
+
+]]
+
 
 
 '#'; __doc__ = r'#'

@@ -1,6 +1,7 @@
 #__all__:goto
 #DONE:min/max:缩减范围
 #   new_version:prune using best_n
+# [:important_property__ratio4smooth_number]:goto
 r'''[[[
 e ../../python3_src/seed/math/search_smooth_around_interval.py
 see:
@@ -12,7 +13,34 @@ py -m nn_ns.app.doctest_cmd seed.math.search_smooth_around_interval:__doc__ -ht 
 #######
 
 [[
+come_from:
+    view ../../python3_src/seed/math/discrete_logarithm__7cyclic_group7kth_roots.py
+
+===
+important_property4smooth_number:
+
+'/sdcard/0my_files/book/cryptography/Cryptography. Theory and practice by Paterson, Maura B. Stinson, Douglas Robert (z-lib.org).pdf'
+
+[u::int{>0}][ps::{int}]:
+    [is_smooth_(ps;u) =[def]= [@[p::prime][0==u%p] -> [p <- ps]]]
+[n,m :: int{>0}]:
+    [num_smooth_le_(n;m) =[def]= len{u | [u:<-[1..=n]][is_smooth_([1..=m];u)]}]
+[n,m :: int{>0}][n>>m][#???[n/m > 100]???#]:
+    [num_smooth_le_(n;m)/n ~= let [x:=log_(m;n)] in (x**-x)]
+        # [:important_property__ratio4smooth_number]:here
+        # [x > 1]
+        # [x**-x < 1]
+        # [m := ceil_sqrt(n)] => [x ~= 2][num_smooth_le_(n;m) ~= 1/4]
+        # [m := ceil(n**/4)] => [x ~= 4][num_smooth_le_(n;m) ~= 1/256]
+        # [m ~= 2**20][n ~= 2**1024] => [x ~= 51][num_smooth_le_(n;m) ~= 1/51**51 ~= 8e-88]
+
+to optimize the running time@QS:
+    [max4prime_basis{N} ~= 2**sqrt(lbN*lblbN)]
+        # lb=log2_()
+        =>:quadratic sieve:O(exp((1+O(1))*sqrt(lnNlnlnN)))
+
 ]]
+
 
 
 '#'; __doc__ = r'#'

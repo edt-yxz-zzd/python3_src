@@ -1,4 +1,5 @@
 #__all__:goto
+#doctest_end:goto
 r'''[[[
 e ../../python3_src/seed/math/primality_test/SPRP_2357.py
 see also:
@@ -181,19 +182,25 @@ prev_may_SPRP_2357__lt_
 
 
 
+
+
+
+
+
+
 prepare4iter_xprimes7SPRP_2357__ge_lt_
-    iter_2357_
+    iter_2357__ge_lt_
     iter_coprimes7SPRP_2357__ge_lt_
 
->>> [*iter_2357_(-20, 20)]
+>>> [*iter_2357__ge_lt_(-20, 20)]
 [2, 3, 5, 7]
->>> [*iter_2357_(10, 20)]
+>>> [*iter_2357__ge_lt_(10, 20)]
 []
->>> [*iter_2357_(3, 3)]
+>>> [*iter_2357__ge_lt_(3, 3)]
 []
->>> [*iter_2357_(3, 5)]
+>>> [*iter_2357__ge_lt_(3, 5)]
 [3]
->>> [*iter_2357_(6, 12)]
+>>> [*iter_2357__ge_lt_(6, 12)]
 [7]
 
 >>> [*iter_coprimes7SPRP_2357__ge_lt_(-20, 20)]
@@ -220,15 +227,15 @@ prepare4iter_xprimes7SPRP_2357__ge_lt_
 
 
 .+1,.+22s/..$/, reverse=True\0
->>> [*iter_2357_(-20, 20, reverse=True)]
+>>> [*iter_2357__ge_lt_(-20, 20, reverse=True)]
 [7, 5, 3, 2]
->>> [*iter_2357_(10, 20, reverse=True)]
+>>> [*iter_2357__ge_lt_(10, 20, reverse=True)]
 []
->>> [*iter_2357_(3, 3, reverse=True)]
+>>> [*iter_2357__ge_lt_(3, 3, reverse=True)]
 []
->>> [*iter_2357_(3, 5, reverse=True)]
+>>> [*iter_2357__ge_lt_(3, 5, reverse=True)]
 [3]
->>> [*iter_2357_(6, 12, reverse=True)]
+>>> [*iter_2357__ge_lt_(6, 12, reverse=True)]
 [7]
 
 >>> [*iter_coprimes7SPRP_2357__ge_lt_(-20, 20, reverse=True)]
@@ -282,6 +289,66 @@ prepare4iter_xprimes7SPRP_2357__ge_lt_
 
 
 
+iter_Sophie_Germain_xprime_chains7SPRP_2357__len_eq__head_ge_lt_
+    iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_
+        iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_
+        mk_Sophie_Germain_xprime_chain5head7SPRP_2357_
+            iter_Sophie_Germain_xprime_chain5head7SPRP_2357_
+
+
+
+>>> [*iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(2, 2, 100, reverse=True)]
+[89, 83, 53, 41, 29, 23, 11, 5, 3, 2]
+
+>>> [*iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(3, 2, 1000)]
+[2, 5, 11, 41, 89, 179, 359, 509, 719]
+
+>>> [*iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(4, 2, 1000)]
+[2, 5, 89, 179, 359, 509]
+
+>>> [*iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(5, 2, 1000)]
+[2, 89, 179]
+
+>>> [*iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(6, 2, 1000)]
+[89]
+
+
+>>> [*islice(iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(6, 2, None, num_primes4neg_one6IIprimes_only=16, num_primes4trial_division=32), 0, 3)]  #doctest: +SKIP
+[8612271732450058740707639, 10145102801424692494583189, 11572344996933230503533539]
+
+
+>>> [*islice(iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(6, 2, None, num_primes4neg_one6IIprimes_only=8, num_primes4trial_division=32), 0, 3)]  #doctest: +SKIP
+[41485574129, 83252439269, 366725879519]
+
+>>> [*islice(iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(6, 2, None, num_primes4neg_one6IIprimes_only=4, num_primes4trial_division=16), 0, 3)]  #doctest: +SKIP
+[63419, 810809, 1122659]
+
+>>> [*islice(iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(4, 2, None, num_primes4neg_one6IIprimes_only=4, num_primes4trial_division=16), 0, 3)]
+[11549, 55229, 63419]
+
+
+
+>>> mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(-1)
+()
+>>> mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(7)
+(7,)
+>>> mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(7, min4len4chain=2)
+Traceback (most recent call last):
+    ...
+seed.math.primality_test.SPRP_2357.Error__Sophie_Germain_xprime_chain__too_short: (7, 2, 1)
+>>> mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(2)
+(2, 5, 11, 23, 47)
+>>> mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(89)
+(89, 179, 359, 719, 1439, 2879)
+>>> mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(11549)
+(11549, 23099, 46199, 92399)
+
+
+>>> [*iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(2, 2, 100, reverse=True)]
+[(89, 179, 359, 719, 1439, 2879), (83, 167), (53, 107), (41, 83, 167), (29, 59), (23, 47), (11, 23, 47), (5, 11, 23, 47), (3, 7), (2, 5, 11, 23, 47)]
+
+>>> [*iter_Sophie_Germain_xprime_chains7SPRP_2357__len_eq__head_ge_lt_(2, 2, 100)]
+[(2, 5), (3, 7), (5, 11), (11, 23), (23, 47), (29, 59), (41, 83), (53, 107), (83, 167), (89, 179)]
 
 
 
@@ -293,21 +360,101 @@ prepare4iter_xprimes7SPRP_2357__ge_lt_
 
 
 
-
-
-
-
-
-
-
-
-
+#doctest_end:here
 
 [[
 py_adhoc_call   seed.math.primality_test.SPRP_2357   @bytes.filter4coprimes_to_2357_ '=range(210)' -in_2357_ok
 py_adhoc_call   seed.math.primality_test.SPRP_2357   @_mk_coprimes6wheel_2357
     b'\x01\x0b\r\x11\x13\x17\x1d\x1f%)+/5;=CGIOSYaegkmqy\x7f\x83\x89\x8b\x8f\x95\x97\x9d\xa3\xa7\xa9\xad\xb3\xb5\xbb\xbf\xc1\xc5\xc7\xd1'
 ]]
+
+[[
+py_adhoc_call   seed.math.primality_test.SPRP_2357   @test4iter_coprimes7SPRP_2357__ge_lt_
+    ok!
+]]
+
+
+
+py_adhoc_call   seed.math.primality_test.SPRP_2357   @f
+]]]'''#'''
+__all__ = r'''
+is_SPRP_2357_
+    filter_SPRP_2357_
+        iter_xprimes7SPRP_2357__ge_lt_
+            next_SPRP_2357__ge_
+            prev_may_SPRP_2357__lt_
+detect_noncoprime_to_2357_
+    filter4coprimes_to_2357_
+
+
+
+iter_xprimes7SPRP_2357__ge_lt_
+    prepare4iter_xprimes7SPRP_2357__ge_lt_
+        iter_2357__ge_lt_
+        iter_coprimes7SPRP_2357__ge_lt_
+iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_
+
+iter_Sophie_Germain_xprime_chains7SPRP_2357__len_eq__head_ge_lt_
+    iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_
+        iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_
+        mk_Sophie_Germain_xprime_chain5head7SPRP_2357_
+            iter_Sophie_Germain_xprime_chain5head7SPRP_2357_
+                Error__Sophie_Germain_xprime_chain__too_short
+
+
+
+
+
+
+
+II_2357
+bs_2357
+II_357
+bs_357
+
+
+coprimes6wheel_2357
+    fwd_gaps6wheel_2357
+    u2whether_coprime6wheel_2357
+    u2idx4coprime6wheel_2357
+    u2fwd_gap6wheel_2357
+    u2bwd_gap6wheel_2357
+
+test4iter_coprimes7SPRP_2357__ge_lt_
+'''.split()#'''
+__all__
+___begin_mark_of_excluded_global_names__0___ = ...
+#.#################################
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.primality_test.strong_probable_prime import is_strong_probable_prime__basis_
+    from seed.tiny_.check import check_type_is, check_int_ge, check_may_
+    from itertools import count, islice, pairwise, chain, cycle, product#accumulate
+    from seed.seq_tools.iter_seq_range import seq_islice
+    #def seq_islice(seq, begin ,end, step=None, *, reverse=False):
+    from seed.tiny_.count_ import iter_ints__ge_lt_ # count_, iter_ints__from_to_
+
+
+
+####################################
+###iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_
+####################################
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.math.prime_sieve.PrimeList import PrimeList
+    from seed.math.II import II
+    from bisect import bisect_left, bisect_right
+    from seed.math.primality_test.strong_probable_prime import is_strong_probable_prime_
+    from seed.tiny_.types5py import curry1
+    from seed.debug.print_err import print_err
+with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
+    from seed.math.primality_test.strong_probable_prime import A014233
+####################################
+
+#.#################################
+___end_mark_of_excluded_global_names__0___ = ...
+
+r'''[[[
 [[
 py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_xprimes7SPRP_2357__ge_lt_ ='2**32' | more
 py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_xprimes7SPRP_2357__ge_lt_ ='2**32' | head -n 50
@@ -366,7 +513,7 @@ py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_xprimes7SPRP_2357__ge
 [(4294968211-2**32)/50 == 18.3]
 ]]
 [[
-Sophie_Germain_prime:hard modulus for discrete_logarithm
+(1+2*Sophie_Germain_prime):hard modulus for discrete_logarithm
     view ../../python3_src/seed/math/discrete_logarithm__7cyclic_group7kth_roots.py
 ==>>:
 Sophie_Germain_SPRP_2357
@@ -429,59 +576,57 @@ py_adhoc_call   seed.math.primality_test.SPRP_2357   ,iter_Sophie_Germain_xprime
     vs:[(4294968211-2**32)/50 == 18.3]
     [18**2 == 324 ~= 251]
 ]]
+[[
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_  =4 --num_primes4neg_one6IIprimes_only=16
+    (37803423833540451886799, 75606847667080903773599, 151213695334161807547199, 302427390668323615094399)
+    (139090528380647110907639, 278181056761294221815279, 556362113522588443630559, 1112724227045176887261119)
+    (166758723927781458883409, 333517447855562917766819, 667034895711125835533639, 1334069791422251671067279)
+    (257454351969801353366999, 514908703939602706733999, 1029817407879205413467999, 2059634815758410826935999)
+    (343457141191105881409469, 686914282382211762818939, 1373828564764423525637879, 2747657129528847051275759)
+    (363564651971532139007879, 727129303943064278015759, 1454258607886128556031519, 2908517215772257112063039)
+    (392992662076434749399069, 785985324152869498798139, 1571970648305738997596279, 3143941296611477995192559)
+    (499819923564663716024009, 999639847129327432048019, 1999279694258654864096039, 3998559388517309728192079)
+    (610623062387109868106009, 1221246124774219736212019, 2442492249548439472424039, 4884984499096878944848079)
 
-py_adhoc_call   seed.math.primality_test.SPRP_2357   @f
-]]]'''#'''
-__all__ = r'''
-is_SPRP_2357_
-    filter_SPRP_2357_
-        iter_xprimes7SPRP_2357__ge_lt_
-            next_SPRP_2357__ge_
-            prev_may_SPRP_2357__lt_
-detect_noncoprime_to_2357_
-    filter4coprimes_to_2357_
+]]
+[[
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_  =9 --num_primes4neg_one6IIprimes_only=16
+    ^KeyboardInterrupt
+    ++print_err
+
+]]
+[[
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_  =9 --num_primes4neg_one6IIprimes_only=8
+    ^KeyboardInterrupt: ('iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_()@', 7618379018249, KeyboardInterrupt())
+]]
+[[
+py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_  =7 --num_primes4neg_one6IIprimes_only=8
+    (2503218397679, 5006436795359, 10012873590719, 20025747181439, 40051494362879, 80102988725759, 160205977451519)
+    (4248299325269, 8496598650539, 16993197301079, 33986394602159, 67972789204319, 135945578408639, 271891156817279)
+    (5449741727429, 10899483454859, 21798966909719, 43597933819439, 87195867638879, 174391735277759, 348783470555519, 697566941111039)
+    (7370988424799, 14741976849599, 29483953699199, 58967907398399, 117935814796799, 235871629593599, 471743259187199)
+    (7688304083459, 15376608166919, 30753216333839, 61506432667679, 123012865335359, 246025730670719, 492051461341439)
+    (10899483454859, 21798966909719, 43597933819439, 87195867638879, 174391735277759, 348783470555519, 697566941111039)
+    (11047044838829, 22094089677659, 44188179355319, 88376358710639, 176752717421279, 353505434842559, 707010869685119)
+    (13442189290529, 26884378581059, 53768757162119, 107537514324239, 215075028648479, 430150057296959, 860300114593919)
+    (17825993285099, 35651986570199, 71303973140399, 142607946280799, 285215892561599, 570431785123199, 1140863570246399)
+==>>:
+    [sz==8]:(5449741727429, 10899483454859, 21798966909719, 43597933819439, 87195867638879, 174391735277759, 348783470555519, 697566941111039)
+]]
 
 
 
-iter_xprimes7SPRP_2357__ge_lt_
-    prepare4iter_xprimes7SPRP_2357__ge_lt_
-        iter_2357_
-        iter_coprimes7SPRP_2357__ge_lt_
-iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_
+#]]]'''#'''
 
 
 
 
 
 
-II_2357
-bs_2357
-II_357
-bs_357
 
 
-coprimes6wheel_2357
-    fwd_gaps6wheel_2357
-    u2whether_coprime6wheel_2357
-    u2idx4coprime6wheel_2357
-    u2fwd_gap6wheel_2357
-    u2bwd_gap6wheel_2357
 
-
-'''.split()#'''
 __all__
-___begin_mark_of_excluded_global_names__0___ = ...
-#.#################################
-from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
-with mk_ctx4lazy_import4funcs_(__name__):
-    from seed.math.primality_test.strong_probable_prime import is_strong_probable_prime__basis_
-    from seed.tiny_.check import check_type_is, check_int_ge, check_may_
-    from itertools import count, islice, pairwise, chain, cycle, accumulate
-    from seed.seq_tools.iter_seq_range import seq_islice
-    #def seq_islice(seq, begin ,end, step=None, *, reverse=False):
-#.#################################
-___end_mark_of_excluded_global_names__0___ = ...
-
 #A014233_7fst_four = (2047, 1373653, 25326001, 3215031751)
 II_2357 = 210 # == 2*3*5*7
 bs_2357 = b'\2\3\5\7'
@@ -599,6 +744,28 @@ def is_SPRP_2357_(n, /):
     return is_strong_probable_prime__basis_(basis, n)
     ######################
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+__all__
+####################################
+#prepare_data:begin
+####################################
 #wheel_2357
 def _mk_coprimes6wheel_2357():
     return bytes(filter4coprimes_to_2357_(range(II_2357), in_2357_ok=False))
@@ -676,10 +843,29 @@ if 0b0001:
     u2fwd_gap6wheel_2357 =  b'\x01\n\t\x08\x07\x06\x05\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x08\x07\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x08\x07\x06\x05\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x06\x05\x04\x03\x02\x01\x02\x01\x06\x05\x04\x03\x02\x01\x04\x03\x02\x01\x02\x01\x04\x03\x02\x01\x02\x01\n\t\x08\x07\x06\x05\x04\x03\x02\x01\x02'
     u2bwd_gap6wheel_2357 =  b'\x01\x02\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x01\x02\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x03\x04\x05\x06\x01\x02\x01\x02\x03\x04\x05\x06\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x01\x02\x01\x02\x03\x04\x05\x06\x07\x08\t\n'
 
-def iter_coprimes7SPRP_2357__ge_lt_(may_min_u, may_max1_u, /, *, reverse=False):
+####################################
+#prepare_data:end
+####################################
+__all__
+
+
+
+def test4iter_coprimes7SPRP_2357__ge_lt_():
+    ns = range(-1-II_2357, +2+II_2357)
+    for reverse, min_u, max1_u in product([False, True], ns, ns):
+        ns0 = [*iter_coprimes7SPRP_2357__ge_lt_(min_u, max1_u, reverse=reverse, native=False)]
+        ns1 = [*iter_coprimes7SPRP_2357__ge_lt_(min_u, max1_u, reverse=reverse, native=True)]
+        assert ns0 == ns1, (reverse, min_u, max1_u)
+
+def iter_coprimes7SPRP_2357__ge_lt_(may_min_u, may_max1_u, /, *, reverse=False, native=False):
     '-> Iter i/coprime_2357/int{[1==gcd(i,2*3*5*7)]}'
     #see:filter4coprimes_to_2357_
     #see:prepare4iter_xprimes7SPRP_2357__ge_lt_
+    ###########################
+    if native:
+        ws = iter_ints__ge_lt_(may_min_u, may_max1_u, reverse=reverse)
+        return filter4coprimes_to_2357_(ws, in_2357_ok=False, neg_ok=True)
+    ###########################
     check_may_([check_type_is, int], may_min_u)
     check_may_([check_type_is, int], may_max1_u)
 
@@ -758,8 +944,8 @@ def _iter_coprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, /):
         u += gap
         # [not may_max_u is None] => [u <= max_u]
     return
-_null_iter = iter('')
-def iter_2357_(min_u=2, may_max1_u=None, /, *, reverse=False):
+#_null_iter = iter('')
+def iter_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
     '-> Iter u/uint{[u <- {2,3,5,7}]}'
     check_may_([check_type_is, int], may_max1_u)
     check_type_is(int, min_u)
@@ -780,16 +966,16 @@ def iter_2357_(min_u=2, may_max1_u=None, /, *, reverse=False):
             yield u
     return
 
-def prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
+def prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False, native=False):
     '-> Iter u/uint{[u >= 2][[u <- {2,3,5,7}]or[1==gcd(u,2*3*5*7)]]}' \
     '  # vs:iter_coprimes7SPRP_2357__ge_lt_():this func include 2357'
     check_type_is(int, min_u)
     min_u = max(2, min_u)
     # [min_u >= 2]
-    us7in2357 = iter_2357_(min_u, may_max1_u, reverse=reverse)
+    us7in2357 = iter_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
 
     # !! [min_u >= 2]
-    us7gt2357 = iter_coprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
+    us7gt2357 = iter_coprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse, native=native)
         # required:[min_u >= 2]
 
     uss = [us7in2357, us7gt2357]
@@ -798,10 +984,10 @@ def prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, rever
     uss
     return chain(*uss)
 
-def iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
+def iter_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False, native=False):
     '-> Iter SPRP_2357'
     #new:
-    us = prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
+    us = prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse, native=native)
     return filter_SPRP_2357_(us)
 def __():
     #old:
@@ -885,6 +1071,93 @@ is there infinite long Sophie_Germain_prime_chain???
 
 ??? [Sophie_Germain_prime_chain can be arbitrary long] ???
 
+
+
+view ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_..b001918.b002233.out.txt
+0 2 1 1
+1 3 2 2
+2 5 2 2
+3 7 3 3
+4 11 2 2
+5 13 2 2
+6 17 3 3
+7 19 2 2
+8 23 5 5
+9 29 2 2
+10 31 3 3
+11 37 2 2
+12 41 6 7
+13 43 3 3
+14 47 5 5
+15 53 2 2
+16 59 2 2
+17 61 2 2
+18 67 2 2
+19 71 7 7
+20 73 5 5
+21 79 3 3
+22 83 2 2
+23 89 3 3
+24 97 5 5
+25 101 2 2
+26 103 5 5
+27 107 2 2
+28 109 6 11
+29 113 3 3
+30 127 3 3
+31 131 2 2
+32 137 3 3
+33 139 2 2
+34 149 2 2
+35 151 6 7
+36 157 5 5
+37 163 2 2
+38 167 5 5
+39 173 2 2
+40 179 2 2
+41 181 2 2
+42 191 19 19
+43 193 5 5
+44 197 2 2
+45 199 3 3
+46 211 2 2
+47 223 3 3
+48 227 2 2
+49 229 6 7
+50 233 3 3
+51 239 7 7
+52 241 7 7
+53 251 6 11
+54 257 3 3
+
+grep -e ' 2 2' ../../python3_src/nn_ns/math_nn/numbers/_patch_prime_..b001918.b002233.out.txt | head -n 25
+1 3 2 2
+2 5 2 2
+4 11 2 2
+5 13 2 2
+7 19 2 2
+9 29 2 2
+11 37 2 2
+15 53 2 2
+16 59 2 2
+17 61 2 2
+18 67 2 2
+22 83 2 2
+25 101 2 2
+27 107 2 2
+31 131 2 2
+33 139 2 2
+34 149 2 2
+37 163 2 2
+39 173 2 2
+40 179 2 2
+41 181 2 2
+44 197 2 2
+46 211 2 2
+48 227 2 2
+56 269 2 2
+
+
 #]]]'''#'''
 def iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *, reverse=False):
     '-> Iter u/Sophie_Germain_SPRP_2357/uint{>=2}{[is_SPRP_2357_(u)][is_SPRP_2357_(1+2*u)]}'
@@ -916,12 +1189,236 @@ def iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_(min_u=2, may_max1_u=None, /, *
     it = ((u>>1) for u in it)
     return it
 
+def iter_Sophie_Germain_xprime_chains7SPRP_2357__len_eq__head_ge_lt_(len4chain, min_u=2, may_max1_u=None, /, *, reverse=False, num_primes4neg_one6IIprimes_only=0, num_primes4trial_division=0, to_trunc=True):
+    return iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(len4chain, min_u, may_max1_u, reverse=reverse, num_primes4neg_one6IIprimes_only=num_primes4neg_one6IIprimes_only, num_primes4trial_division=num_primes4trial_division, to_trunc=to_trunc)
+def iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(min4len4chain, min_u=2, may_max1_u=None, /, *, reverse=False, num_primes4neg_one6IIprimes_only=0, num_primes4trial_division=0, to_trunc=False):
+    heads = iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(min4len4chain, min_u, may_max1_u, reverse=reverse, num_primes4neg_one6IIprimes_only=num_primes4neg_one6IIprimes_only, num_primes4trial_division=num_primes4trial_division)
+    for head_u in heads:
+        yield mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(head_u, to_trunc=to_trunc, min4len4chain=min4len4chain, _neednot_check6min4len4chain=True)
+    return
+def iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(min4len4chain, min_u=2, may_max1_u=None, /, *, reverse=False, num_primes4neg_one6IIprimes_only=0, num_primes4trial_division=0):
+    'min4len4chain{>=2} -> Iter u/Sophie_Germain_SPRP_2357/uint{>=2}{[@[k:<-[0..<min4len4chain]] -> [is_SPRP_2357_(-1+2**k*(1+u))]]}'
+    # [PRIMES[:20] == [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]]
+    check_int_ge(2, min4len4chain)
+    check_int_ge(0, num_primes4neg_one6IIprimes_only)
+    check_int_ge(0, num_primes4trial_division)
+    len4chain = min4len4chain
+
+    check_may_([check_type_is, int], may_max1_u)
+    check_type_is(int, min_u)
+    min_u = max(2, min_u)
+    # [min_u >= 2]
+
+    #.if may_max1_u is None:
+    #.else:
+    #.    max1_u = may_max1_u
+
+    ps = PrimeList()
+    if 0 < num_primes4neg_one6IIprimes_only:
+        ps7step = ps[:num_primes4neg_one6IIprimes_only]
+        IIps7step = II(ps7step)
+        min_u = -1+(1 +min_u//IIps7step)*IIps7step
+        # [min_u{new} =[%IIps7step]= -1]
+        # [min_u{new} >= min_u{old}]
+        if reverse and not None is may_max1_u:
+            max1_u = may_max1_u
+            max1_u = max1_u//IIps7step *IIps7step
+            may_max1_u = max1_u
+        may_max1_u
+        us = iter_ints__ge_lt_(min_u, may_max1_u, step=IIps7step, reverse=reverse)
+        # [[u :<- us] -> [u =[%IIps7step]= -1]]
+    else:
+        ps7step = ()
+        us = prepare4iter_xprimes7SPRP_2357__ge_lt_(min_u, may_max1_u, reverse=reverse)
+    ps7step
+    us
+
+    if num_primes4neg_one6IIprimes_only < num_primes4trial_division:
+        ps7td = ps[num_primes4neg_one6IIprimes_only:num_primes4trial_division]
+    else:
+        ps7td = ()
+    ps7td
+    #IIps7td = II(ps7td)
+    j2bad_residues6p7td = [*map(curry1(_list_bad_residues6p__7len4chain_, len4chain), ps7td)]
+
+    #ps7using = ps7step + ps7td
+        # ^TypeError: unsupported operand type(s) for +: 'SeqSliceView' and 'SeqSliceView'
+    ps7using = ps[:max(num_primes4neg_one6IIprimes_only, num_primes4trial_division)]
+    IIps7using = II(ps7using)
+    u = None
+    try:
+     for u in us:
+        if u <= 7:
+            match u:
+                case 2:
+                    # [longest_uchain{2} == [2,5,11,23,47]] # 95
+                    max4len4chain = 5
+                case 5:
+                    max4len4chain = 4
+                case 3:
+                    # [longest_uchain{3} == [3,7]] # 15
+                    max4len4chain = 2
+                case 7:
+                    max4len4chain = 1
+                case _:
+                    raise 000
+            max4len4chain
+            if len4chain <= max4len4chain:
+                yield u
+            continue
+        if not u >= 8: raise 000
+
+        if not 1 == u&1: raise 000
+        if not u >= 9: raise 000
+        # [1 == u%2]
+        # [u >= 9]
+        j2u6p = []
+        u6wheel = u%IIps7using
+        bad = False
+        for p, bad_residues6p in zip(ps7td, j2bad_residues6p7td):
+            u6p = u6wheel%p
+            if _in_sorted_list_(bad_residues6p, u6p) and u > p:
+                bad = True
+                break
+        bad
+        if bad:continue
+        # [[u>max(ps7td, default=0)] -> [1 == gcd(IIps7td, II(uchain))]]
+
+        # !! [[num_primes4neg_one6IIprimes_only>0] -> [u =[%IIps7step]= -1]]
+        # [[num_primes4neg_one6IIprimes_only>0] -> @[v:<-uchain] -> [v =[%IIps7step]= -1]]
+        # [1 == gcd(IIps7step, II(uchain))]
+        # !! [[u>max(ps7td, default=0)] -> [1 == gcd(IIps7td, II(uchain))]]
+        # [[u>max(ps7using, default=0)] -> [1 == gcd(IIps7using, II(uchain))]]
+        #   almost pass trial_division
+
+        uchain = [u]
+        for _ in range(-1+len4chain):
+            uchain.append(1^(uchain[-1]<<1))
+        assert len(uchain) == len4chain
+        # !! [1 == u%2]
+        # !! [u >= 5]
+        # [@[v:<-uchain] -> [[1 == v%2][v >= 5]]]
+        bad = False
+        for j4p, p in enumerate(bs_2357):
+            # [@[v:<-uchain] -> [is_SPRP_(bs_2357[:bs_2357.index(p)];v)]]
+            min_SPSP6prev_ps = 0 if 0==j4p else A014233[-1+j4p]
+            xidx = bisect_left(uchain, min_SPSP6prev_ps)
+            if xidx == len4chain:
+                # [uchain[-1] < min_SPSP6prev_ps]
+                break
+            # [uchain[xidx] >= min_SPSP6prev_ps]
+            # [min(uchain[:xidx], default=-1) < min_SPSP6prev_ps <= uchain[xidx]]
+            for v in seq_islice(uchain, xidx, None):
+                #if v < min_SPSP6prev_ps:continue
+                assert v >= min_SPSP6prev_ps
+                # [v >= min_SPSP6prev_ps]
+                # !! [[j2p>0] -> [min_SPSP6prev_ps >= 2+p]]
+                # [[j2p>0] -> [v >= min_SPSP6prev_ps >= 2+p]]
+                # !! [v >= 5]
+                # [[j2p==0] -> [v >= 5 > 2+p==4]]
+                # [v >= 2+p]
+                assert v > 1+p
+                # [1 < p < v-1]
+
+                # !! [[1 == v%2][v >= 5]]
+                # !! [1 < p < v-1]
+                if not is_strong_probable_prime_(p, v):
+                    bad = True
+                    break
+            bad
+            if bad:break
+            # [@[v:<-uchain] -> [is_SPRP_([p];v)]]
+            # [@[v:<-uchain] -> [is_SPRP_(bs_2357[:1+bs_2357.index(p)];v)]]
+        bad
+        if bad:continue
+        # [@[v:<-uchain] -> [is_SPRP_2357_(v)]]
+        yield u
+    except BaseException as exc:
+        #KeyboardInterrupt
+        #?ExceptionGroup?
+        args = ('iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_()@', u, exc)
+        try:
+            _exc = type(exc)(args)
+        except:
+            ok = False
+        else:
+            ok = True
+        ok
+        if ok:
+            raise _exc
+        else:
+            print_err(args)
+            raise
+        raise 000
+    return
+
+
+def _in_sorted_list_(ls, x, /):
+    j = bisect_right(ls, x)
+    return 0 < j and ls[-1+j] == x
+def _list_bad_residues6p__7len4chain_(len4chain, p, /):
+    # [@[k:<-[0..<len4chain]] -> [0 =!= (-1+2**k*(1+u))%p]]
+    # [@[k:<-[0..<len4chain]] -> [1 =!= (2**k*(1+u))%p]]
+    # [@[k:<-[0..<len4chain]] -> [2**-k%p =!= (1+u)%p]]
+    # [@[k:<-[0..<len4chain]] -> [u%p =!= (-1+2**-k%p)]]
+    if p == 2:
+        return [0]
+    assert p&1
+    # [1 == p%2]
+    inv2 = pow(2,-1,p)
+    inv_zpow6p = 1
+    bad_residues6p = []
+    for k in range(len4chain):
+        # [inv_zpow6p == 2**-k%p]
+        # [0 < inv_zpow6p < p]
+        # [0 <= -1+inv_zpow6p < p-1]
+        bad_residues6p.append(-1+inv_zpow6p)
+        inv_zpow6p = inv_zpow6p*inv2 %p
+        # [inv_zpow6p == 2**-(1+k)%p]
+        if inv_zpow6p == 1:
+            # [1 == 2**-(1+k)%p]
+            # [1+k == order_mod_(p;2)]
+            assert (-1+p)%(1+k) == 0
+            break
+    bad_residues6p.sort()
+    assert bad_residues6p[0] == 0
+    assert bad_residues6p[1] > 0
+    assert bad_residues6p[-1] < p-1
+    return bad_residues6p
+#quadratic_nonresidue
+
+
+class Error__Sophie_Germain_xprime_chain__too_short(Exception):pass
+def mk_Sophie_Germain_xprime_chain5head7SPRP_2357_(head_u, /, *, min4len4chain=0, to_trunc=False, _neednot_check6min4len4chain=False):
+    '-> ([Sophie_Germain_SPRP_2357]|^Error__Sophie_Germain_xprime_chain__too_short) # [next{Sophie_Germain_SPRP_2357} == 1+2*prev{Sophie_Germain_SPRP_2357}]'
+    return tuple(iter_Sophie_Germain_xprime_chain5head7SPRP_2357_(head_u, min4len4chain=min4len4chain, to_trunc=to_trunc, _neednot_check6min4len4chain=_neednot_check6min4len4chain))
+def iter_Sophie_Germain_xprime_chain5head7SPRP_2357_(head_u, /, *, min4len4chain=0, to_trunc=False, _neednot_check6min4len4chain=False):
+    '-> Iter (Sophie_Germain_SPRP_2357|^Error__Sophie_Germain_xprime_chain__too_short) # [next{Sophie_Germain_SPRP_2357} == 1+2*prev{Sophie_Germain_SPRP_2357}]'
+    check_int_ge(0, min4len4chain)
+    check_type_is(int, head_u)
+    u = head_u
+    js = range(min4len4chain) if to_trunc else count()
+    777;js = iter(js)
+    if _neednot_check6min4len4chain:
+        for j in islice(js, 0, min4len4chain):
+            yield u
+            u = 1^(u<<1)
+        js, u
+    js, u
+    for j in js:
+        if not is_SPRP_2357_(u):
+            if not min4len4chain <= j:raise Error__Sophie_Germain_xprime_chain__too_short(head_u, min4len4chain, j)
+            break
+        yield u
+        u = 1^(u<<1)
+    return
 
 __all__
 from seed.math.primality_test.SPRP_2357 import is_SPRP_2357_, filter_SPRP_2357_, iter_xprimes7SPRP_2357__ge_lt_, next_SPRP_2357__ge_, prev_may_SPRP_2357__lt_, detect_noncoprime_to_2357_, filter4coprimes_to_2357_
-from seed.math.primality_test.SPRP_2357 import iter_xprimes7SPRP_2357__ge_lt_, prepare4iter_xprimes7SPRP_2357__ge_lt_, iter_2357_, iter_coprimes7SPRP_2357__ge_lt_
+from seed.math.primality_test.SPRP_2357 import iter_xprimes7SPRP_2357__ge_lt_, prepare4iter_xprimes7SPRP_2357__ge_lt_, iter_2357__ge_lt_, iter_coprimes7SPRP_2357__ge_lt_
 
 from seed.math.primality_test.SPRP_2357 import iter_Sophie_Germain_xprimes7SPRP_2357__ge_lt_
+from seed.math.primality_test.SPRP_2357 import iter_Sophie_Germain_xprime_chains7SPRP_2357__len_eq__head_ge_lt_, iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_, iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_, mk_Sophie_Germain_xprime_chain5head7SPRP_2357_, iter_Sophie_Germain_xprime_chain5head7SPRP_2357_, Error__Sophie_Germain_xprime_chain__too_short
 
 
 
