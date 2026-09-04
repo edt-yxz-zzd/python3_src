@@ -447,6 +447,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.primality_test.strong_probable_prime import is_strong_probable_prime_
     from seed.tiny_.types5py import curry1
     from seed.debug.print_err import print_err
+    from seed.excepts.repack_exception_ import repack_exception_, repack_exception7new_subclass_
 with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
     from seed.math.primality_test.strong_probable_prime import A014233
 ####################################
@@ -593,11 +594,12 @@ py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xpri
 py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_  =9 --num_primes4neg_one6IIprimes_only=16
     ^KeyboardInterrupt
     ++print_err
+    ++repack_exception_
 
 ]]
 [[
 py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_  =9 --num_primes4neg_one6IIprimes_only=8
-    ^KeyboardInterrupt: ('iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_()@', 7618379018249, KeyboardInterrupt())
+    ^KeyboardInterrupt: (KeyboardInterrupt(), ('iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_()@', 7618379018249))
 ]]
 [[
 py_adhoc_call   seed.math.primality_test.SPRP_2357   ,9:iter_Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_  =7 --num_primes4neg_one6IIprimes_only=8
@@ -1336,7 +1338,8 @@ def iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_(min4l
     except BaseException as exc:
         #KeyboardInterrupt
         #?ExceptionGroup?
-        args = ('iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_()@', u, exc)
+        args = (exc, 'iter_heads4Sophie_Germain_xprime_chains7SPRP_2357__len_ge__head_ge_lt_()@', u)
+        raise repack_exception_(*args)
         try:
             _exc = type(exc)(args)
         except:
