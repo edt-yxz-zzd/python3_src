@@ -101,6 +101,28 @@ ___end_mark_of_excluded_global_names__0___ = ...
 
 r'''[[[
 
+? nextprime(2^40)
+1099511627791
+? nextprime(2^39)
+549755813911
+
+? factor(549755813911*1099511627791)
+time = 2 ms.
+[549755813911,1;1099511627791,1]
+? ##
+  ***   last result computed in 2 ms.
+
+? ??factorint
+factorint(x,{flag = 0}):
+   Factors the integer n into a product of pseudoprimes (see ispseudoprime),
+        using a combination of
+            the Shanks SQUFOF and
+            Pollard Rho method (with modifications due to Brent),
+            Lenstra's ECM (with modifications by Montgomery), and
+            MPQS (the latter adapted from the LiDIA code with the kind permission of the LiDIA maintainers), as well as
+            a search for pure powers.
+
+why 2ms vs 4s ???
 [[
 rho_vs_ECM:here
 ===
