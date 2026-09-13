@@ -1243,15 +1243,11 @@ def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_(sf, tight_order
 
     if not nibble_vs_gobble:
         #nibble
-        # [TIME{DL_{max4exp}} == O(max4exp**/2)]
-        # [TIME{DL_{max4exp}} ~= 2*TIME{DL_{max4exp/4}}]
-        # [TIME{DL_{max4exp}} ~= 2*(2*TIME{DL_{max4exp/16}})]
-        # [TIME{DL_{max4exp}} ~= 2*(TIME{DL_{max4exp/16, both-to_flip}})]
-        ls4max4exp = [tight_order4base//16]
-        while 0 < ls4max4exp[-1]:
-            ls4max4exp.append(ls4max4exp[-1]//4)
-        assert 0 == ls4max4exp[-1]
-        777;ls4max4exp.pop()
+        if 0b0000:
+            ls4max4exp = _mk_ls4max4exp_6nibble__ver1_(tight_order4base)
+        else:
+            ls4max4exp = _mk_ls4max4exp_6nibble__ver2_(tight_order4base)
+        ls4max4exp
         while ls4max4exp:
             max4exp = ls4max4exp.pop()
             for to_flip in (False, True):
@@ -1268,6 +1264,33 @@ def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_(sf, tight_order
             # not ^DiscreteLogarithmFail
     #return sf.discrete_logarithm__7cyclic_group7baby_steps_giant_steps_method_(max4exp:=tight_order4base, pt7base, pt7tgt, max4exp__vs__tight_order4base=True)
     raise 000
+def _mk_ls4max4exp_6nibble__ver2_(tight_order4base, /):
+    assert tight_order4base > 0
+    ls = [tight_order4base]
+    ez = tight_order4base.bit_length()
+    ez -= 2 # compensate: flip
+    while ez >= 6:
+        # [ez >= 6]
+        # [ez -ez*3//4 >= ceil(ez/4) >= ceil(6/4) >= 2]
+        #   ok:dec at least 2
+        ez = (ez*3)>>2
+        # [ez >= 6*3//4 == 4]
+        max4exp = 1<<ez
+        # [max4exp >= 16]
+        ls.append(max4exp)
+    return ls
+
+def _mk_ls4max4exp_6nibble__ver1_(tight_order4base, /):
+    # [TIME{DL_{max4exp}} == O(max4exp**/2)]
+    # [TIME{DL_{max4exp}} ~= 2*TIME{DL_{max4exp/4}}]
+    # [TIME{DL_{max4exp}} ~= 2*(2*TIME{DL_{max4exp/16}})]
+    # [TIME{DL_{max4exp}} ~= 2*(TIME{DL_{max4exp/16, both-to_flip}})]
+    ls4max4exp = [tight_order4base//16]
+    while 0 < ls4max4exp[-1]:
+        ls4max4exp.append(ls4max4exp[-1]//4)
+    assert 0 == ls4max4exp[-1]
+    777;ls4max4exp.pop()
+    return ls4max4exp
 
 @_method_
 def discrete_logarithm__7cyclic_group7tight_order4base_is_prime_power_(sf, p, ep, tight_order4base, pt7base, pt7tgt, /):

@@ -9,10 +9,17 @@ py -m nn_ns.app.doctest_cmd seed.math.factor_pint.factor_pint__le_pow2_81:__doc_
 #######
 
 [[
+DONE::
+@20260905
+view ../../python3_src/seed/algo/rho_method__7iter7batch.py
+    gcd only once per batch when fail
 ]]
 
 
 '#'; __doc__ = r'#'
+>>> from seed.helper.stable_repr import stable_repr, stable_repr_print
+>>> stable_print = lambda x, /:stable_repr_print(None, x)
+
 >>> factor_pint__le_pow2_81_(-1)
 Traceback (most recent call last):
     ...
@@ -31,16 +38,17 @@ Traceback (most recent call last):
 TypeError: 2417851639229258349412353
 >>> factor_pint__le_pow2_81_(2**81)
 {2: 81}
->>> factor_pint__le_pow2_81_(-1+2**81)
-{73: 1, 2593: 1, 7: 1, 262657: 1, 71119: 1, 97685839: 1}
->>> factor_pint__le_pow2_81_(549755813911*1099511627791, known_factor4Pmm=2*47846459)
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81))
+{7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}
+>>> #stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, known_factor4Pmm=2*47846459))
+>>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, even_exp=2*47846459))
 {549755813911: 1, 1099511627791: 1}
 
 
 
 ++kw:using_ECM
->>> factor_pint__le_pow2_81_(549755813911*1099511627791, using_ECM=True) == {549755813911: 1, 1099511627791: 1}
-True
+>>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, using_ECM=True))
+{549755813911: 1, 1099511627791: 1}
 
 
 
@@ -52,32 +60,38 @@ True
 #rho_vs_ECM:goto
 [[
 py_adhoc_call   seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ =456777897
-    {401: 1, 379699: 1, 3: 1}
+    {3: 1, 401: 1, 379699: 1}
 
 py_adhoc_call   seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ =-1+549755813911
-    {3: 1, 5: 1, 383: 1, 47846459: 1, 2: 1}
+    {2: 1, 3: 1, 5: 1, 383: 1, 47846459: 1}
 ]]
 
 
 ]]]'''#'''
 __all__ = r'''
 factor_pint__le_pow2_81_
+    factor_pint__le_pow2_81__7rho_
+    factor_pint__le_pow2_81__7ECM_
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 from seed.abc.abc__ver1 import abstractmethod, override, ABC
-from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_factor_pint, IFramework4sprp_factor_pint__7mixins7utilities
+from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_factor_pint
+#   def sprp_factor_pint_(sf, n, max4prime7trial_division, /, *args7init, **kwds7init):
 #.#################################
 from seed.helper.lazy_import__func import force_lazy_imported_func_
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
+    from itertools import repeat
+    from math import isqrt
     #from random import Random
         # .seed(self, a=None, version=2)
         # .getstate(self) # [625 == len(st4Random[1])] #too huge
         # .setstate(self, state)
         # .randrange(self, start, stop=None, step=1)
 
+    from seed.types.SinglyLinkedList import mk_rglnkls_, oo_push_, list7up_, top6_
     from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_le
     from seed.math.II import II__ft2e_
     from seed.math.hrem_ import mk_hrem_
@@ -92,21 +106,65 @@ with mk_ctx4lazy_import4funcs_(__name__):
     #def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seeds=None, max_num_tries_per_seed=None, to_output_statistics=False):
     #   'n/int{>=1} -> may (n -> (*params) -> uint%n -> uint%n) -> (kw:seeds/may (Iter params_x0/(*params, x0))) -> (success_part, failure_part)/(sprp2exp, non_sprp2exp)/({sprp:exp}, {non_sprp:exp}) if not to_output_statistics else (sprp2exp, non_sprp2exp, total_steps) # [SPRP == strong probable-prime]'
 
+    from seed.algo.rho_method__7iter7batch import Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant, try_factor_pint7rho_, try_factor_pint7rho__7resume_
+    #.Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus, even_exp, addend)
+    #.def try_factor_pint7rho_(ops, imay_max4end6rho, u0_or_scale, may_empty_saver7immutable, /, *, u0_be_floor_sqrt_scale_modulus=False):
+    #.def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
+    #.  '-> (final, some_proper_factors, record7old)'
+
     from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_pint__elliptic_curve_method_
     #def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_=None, /, *, random_uint_mod_=None, with_ctx=False, result6fail=None):
     #   'n/uint{>=1} -> Iter (B/uint{>=2}|ks/(Iter k/uint{>=2})) -> may (n -> (B|ks) -> ks) -> may non_trivial_factor{n} # [ks are multiplier => II(ks)*pt] # [B is smooth bound => ks:=chains(repeat(p,floor_log_(p,B)) for p in primes_lt(1+B))] # [[p::prime][n%p==0][1==gcd(n,[1..<p])] -> [best:B1:=exp((1/sqrt2+o(1))*sqrt(ln(p)*lnln(p)))]]'
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
+r'''[[[
+@20260914
+[[
+rho_vs_ECM:here.2
+===
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM
+    # Random
+    total::duration: 5.77967163 *(unit: 0:00:01)
+
+===
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791'
+    #no Random
+    {549755813911: 1, 1099511627791: 1}
+    total::duration: 12.830700333 *(unit: 0:00:01)
+
+===
++partial_ok
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +partial_ok
+    ({549755813911: 1, 1099511627791: 1}, {}, {})
+    total::duration: 12.480942045 *(unit: 0:00:01)
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +partial_ok --max4num_steps='2**18'
+    ({}, {604462909840849692000601: 1}, {})
+    total::duration: 3.6437982339999997 *(unit: 0:00:01)
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +partial_ok --max4num_steps='2**20' +u0_be_floor_sqrt_scale_modulus
+    ({549755813911: 1, 1099511627791: 1}, {}, {})
+    total::duration: 13.205335966 *(unit: 0:00:01)
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +partial_ok --max4num_steps='2**20' +u0_be_floor_sqrt_scale_modulus --u0_or_scale=2
+    ({549755813911: 1, 1099511627791: 1}, {}, {})
+    total::duration: 12.641410258999999 *(unit: 0:00:01)
+
+===
+]]
+
+#]]]'''#'''
 
 r'''[[[
+before:@20260914
 
 ? nextprime(2^40)
 1099511627791
 ? nextprime(2^39)
 549755813911
 
-? factor(549755813911*1099511627791)
+? factorint(549755813911*1099511627791)
 time = 2 ms.
 [549755813911,1;1099511627791,1]
 ? ##
@@ -123,8 +181,22 @@ factorint(x,{flag = 0}):
             a search for pure powers.
 
 why 2ms vs 4s ???
+not caused by "near 2 power" <<==:
+    nextprime(sqrtint(2^79*5))
+        1738480528859
+    nextprime(sqrtint(2^77*3))
+        673310613653
+    logint(673310613653*1738480528859, 2)
+        79
+    factorint(673310613653*1738480528859)
+        [673310613653,1;1738480528859,1]
+    ? ##
+      ***   last result computed in 4 ms.
+
+
+
 [[
-rho_vs_ECM:here
+rho_vs_ECM:here.1
 ===
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM
     {549755813911: 1, 1099511627791: 1}
@@ -153,7 +225,8 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
         @[(_addend,_u0) += (+1@num_repeat-reset, -1)][num_repeat:=3][max_num_tries_per_seed:=_zpow22]#初始即巅峰
     total::duration: 2.167334395 *(unit: 0:00:01)
         @[(_addend,_u0) += (+1@num_repeat-reset, -1)][num_repeat:=3][max_num_tries_per_seed:=_zpow23]#初始即更高峰
-
+    total::duration: 2.1269970120000004 *(unit: 0:00:01)
+        @[_addend += (+1@num_repeat-reset)][_u0 := isqrt(_u0*n4part)][num_repeat:=3][max_num_tries_per_seed:=_zpow23]#初始即更高峰
 
 ===
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791'  --known_factor4Pmm='2*47846459'
@@ -176,6 +249,10 @@ _zpow12 = 1<<12
 _zpow16 = 1<<16
 _zpow22 = 1<<22
 _zpow23 = 1<<23
+r'''[[[
+before:@20260914
+
+from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_factor_pint, IFramework4sprp_factor_pint__7mixins7utilities
 class _Framework4factor_pint__le_pow2_81(IFramework4sprp_factor_pint__7mixins7utilities):
     ___no_slots_ok___ = True
     #@override
@@ -273,6 +350,8 @@ class _Framework4factor_pint__le_pow2_81(IFramework4sprp_factor_pint__7mixins7ut
                 if max_num_tries_per_seed < _zpow22:
                     max_num_tries_per_seed <<= 2
                 _addend += 1
+            _u0 = isqrt(_u0*n4part)
+            continue
             _u0 -= 1
             continue
             _addend += 1
@@ -289,12 +368,205 @@ class _Framework4factor_pint__le_pow2_81(IFramework4sprp_factor_pint__7mixins7ut
 def _step4rho_(n4part, _known_factor4Pmm, _addend, u, /):
     return (_addend +pow(u, _known_factor4Pmm, n4part))%n4part
 _ops = _Framework4factor_pint__le_pow2_81()
-
-
 def factor_pint__le_pow2_81_(n4whole, /, *, upperbound4prime_factor4trial_division=_zpow12, known_factor4Pmm=2, addend=1, u0=0, using_ECM=False):
     sf = _ops
     return sf.sprp_factor_pint_(n4whole, upperbound4prime_factor4trial_division=upperbound4prime_factor4trial_division, known_factor4Pmm=known_factor4Pmm, addend=addend, u0=u0, using_ECM=using_ECM)
+#]]]'''#'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def factor_pint__le_pow2_81_(n, /, *, using_ECM=False, **kwds):
+    if using_ECM:
+        return factor_pint__le_pow2_81__7ECM_(n, **kwds)
+    return factor_pint__le_pow2_81__7rho_(n, **kwds)
+def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
+    _ops7rho = _Framework4factor_pint__le_pow2_81__7rho(partial_ok=partial_ok)
+    return _ops7rho.sprp_factor_pint_(n, max4prime7trial_division, max4num_steps=max4num_steps, even_exp=even_exp, addend=addend, u0_or_scale=u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus, may_empty_saver7immutable=may_empty_saver7immutable)
+
+def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16):
+    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok)
+    return _ops7ECM.sprp_factor_pint_(n, max4prime7trial_division, max4num_trials=max4num_trials, max4num_trials4part=max4num_trials4part)
+
+
+
+
+class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
+    ___no_slots_ok___ = True
+    def __init__(sf, /, *, partial_ok):
+        sf.partial_ok = partial_ok
+
+    @override
+    def _format_output_(sf, n, max4prime7trial_division, p2e7trial_division, n7unfactored_part, st, raw_output, /):
+        check_int_ge_le(1, _zpow81, n)
+        (sprp2exp, non_sprp2exp, non_sprp2exp4todo) = raw_output
+        # !! [n <= 2**81]
+        # !! _is_SPRP_:using:is_prime__le_pow2_81
+        # [sprp indeed be prime]
+        p2e = {**p2e7trial_division, **sprp2exp}
+        if sf.partial_ok:
+            return (p2e, non_sprp2exp, non_sprp2exp4todo)
+        if non_sprp2exp or non_sprp2exp4todo:raise Exception
+        return p2e
+    @property
+    @override
+    def _is_SPRP_(sf, /):
+        '-> (pint -> bool)'
+        return force_lazy_imported_func_(is_prime__le_pow2_81)
+#end-class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
+
+
+class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_81__7common):
+
+    @override
+    def _core_factor_algo_(sf, st, n7part, /):
+        (num_trials, max4num_trials, max4num_trials4part) = st
+        sz = 0
+        szs = range(1, 1+min(max4num_trials4part, max4num_trials4part-num_trials)) if sf.partial_ok else repeat(0)
+        for sz in szs:
+            match try_factor_pint__elliptic_curve_method_(n7part):
+                case None:
+                    continue
+                case proper_factor:
+                    some_proper_factors = (proper_factor,)
+                    break
+        else:
+            some_proper_factors = ()
+        some_proper_factors
+        new_st = st if sz == 0 else (num_trials+sz, max4num_trials, max4num_trials4part)
+        assert some_proper_factors or sf.partial_ok
+        return (new_st, some_proper_factors)
+
+
+
+
+    @override
+    def _mk_state7root_(sf, n, ns, max4prime7trial_division, p2e7trial_division, n7unfactored_part, /, *, max4num_trials, max4num_trials4part):
+        check_int_ge_le(1, _zpow81, n)
+        args7common = ()
+        kwds7common = {}
+        check_int_ge(1, max4num_trials4part)
+        check_int_ge(max4num_trials4part, max4num_trials)
+        st = (num_trials:=0, max4num_trials, max4num_trials4part)
+        return (st, args7common, kwds7common)
+    @override
+    def _mk_state7enter_(sf, ns, st7parent, /):
+        st7child = st7parent
+        return st7child
+
+    @override
+    def _mk_state7exit_(sf, ns, st7parent, st, /):
+        st7parent7new = st
+        return st7parent7new
+
+    @override
+    def _stop_(sf, ns, st, /):
+        if not sf.partial_ok:return False
+        # => nonempty non_sprp2exp4todo
+        (num_trials, max4num_trials, max4num_trials4part) = st
+        return num_trials >= max4num_trials
+#end-class _Framework4factor_pint__le_pow2_81__7rho(IFramework4sprp_factor_pint):
+
+class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_81__7common):
+    ___no_slots_ok___ = True
+
+    @override
+    def _core_factor_algo_(sf, st, n7part, /):
+        (record7old, max4num_steps, even_exp, addend) = st
+        ops = Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus:=n7part, even_exp, addend)
+        imay_max4end6rho = 1+max4num_steps if sf.partial_ok else -1
+        (final, some_proper_factors, record7old) = ops.try_factor_pint7rho__7resume_(imay_max4end6rho, record7old)
+        st = (record7old, max4num_steps, even_exp, addend)
+        if not (some_proper_factors or sf.partial_ok):raise Exception(n7part, st)
+        return (st, some_proper_factors)
+
+
+
+    @override
+    def _mk_state7root_(sf, n, ns, max4prime7trial_division, p2e7trial_division, n7unfactored_part, /, *, max4num_steps, even_exp, addend, u0_or_scale, u0_be_floor_sqrt_scale_modulus, may_empty_saver7immutable):
+        check_int_ge_le(1, _zpow81, n)
+        args7common = ()
+        kwds7common = {}
+        check_int_ge(1, max4num_steps)
+        check_int_ge(2, even_exp)
+        check_type_is(int, addend)
+
+        if n == 1:
+            st = None
+        else:
+            ops = Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus:=n, even_exp, addend)
+            pt_0 = ops.prepare4try_factor_pint7rho_(u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus)
+            record7new_round = ops.prepare4iter7rho_(pt_0, may_empty_saver7immutable)
+            st = (record7new_round, max4num_steps, even_exp, addend)
+        return (st, args7common, kwds7common)
+
+    @override
+    def _mk_state7enter_(sf, ns, st7parent, /, *args7common, **kwds7common):
+        n7part = top6_(ns)
+        (record7old, max4num_steps, even_exp, addend) = st7parent
+        (jround, jbatch, end6i, i, pt_i, saver_i_jpp_kpp) = record7old
+        (k, pt_k, st_i_jpp_kpp) = saver_i_jpp_kpp.last
+        st_i_kpp_kpp = 1
+        saver_i_kpp_kpp = saver_i_jpp_kpp.oo_clear().oo_append((k, pt_k, st_i_kpp_kpp), non_reproduceable_ok=True)
+        record7old = (jround, jbatch, end6i, i, pt_i, saver_i_kpp_kpp)
+        st = (record7old, max4num_steps, even_exp, addend)
+        return st
+
+    @override
+    def _mk_state7exit_(sf, ns, st7parent, st, /, *args7common, **kwds7common):
+        #(record7old, max4num_steps, even_exp, addend) = st7parent
+        st7parent7new = st7parent
+        return st7parent7new
+
+    @override
+    def _stop_(sf, ns, st, /):
+        return st is None
+        return False
+        if not sf.partial_ok:return False
+
+
+#end-class _Framework4factor_pint__le_pow2_81__7rho(IFramework4sprp_factor_pint):
+
+
+
 
 __all__
-from seed.math.factor_pint.factor_pint__le_pow2_81 import factor_pint__le_pow2_81_
+from seed.math.factor_pint.factor_pint__le_pow2_81 import factor_pint__le_pow2_81_, factor_pint__le_pow2_81__7rho_, factor_pint__le_pow2_81__7ECM_
+#def factor_pint__le_pow2_81_(n, /, *, using_ECM=False, **kwds):
+#def factor_pint__le_pow2_81__7rho_(n, /, *, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
+#def factor_pint__le_pow2_81__7ECM_(n, /, *, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16):
 from seed.math.factor_pint.factor_pint__le_pow2_81 import *

@@ -19,6 +19,7 @@ grep '\<empty_lflnkls\|\<empty_rglnkls' ../../python3_src/seed/ -r -l -I
 e ../../python3_src/seed/data_funcs/lnkls.py
 see:
     view ../../python3_src/seed/types/pair_based_leftward_list.py
+    view ../../python3_src/seed/types/SinglyLinkedList.py
 
 lnkls = singly-linked-list
 

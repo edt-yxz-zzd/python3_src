@@ -1293,7 +1293,7 @@ def _ops12__7ver17tail(ops7stage12, pt0, history_saver7oo, offset7first7oo, _01,
     op4fold_ = _op4fold
     st7fold = (exp7key7last, (exp7key7last, ()))
     # [st7fold :: (II(exps7key), lflnkls{exps7key})]
-    (st7fold, ls4record_pair) = history_saver7oo.reversed_search_key_points_(stZhistory2rank_, op4fold_, st7fold, offset=offset7first7oo)
+    (st7fold, ls4record_pair) = history_saver7oo.backward_search_key_points_(stZhistory2rank_, op4fold_, st7fold, offset=offset7first7oo)
     (IIexps7key, lflnkls8exps7key) = st7fold
     exps7key = tuple(lflnkls2iterable(lflnkls8exps7key))
     assert II(exps7key) == IIexps7key
@@ -1473,7 +1473,7 @@ def default_search6stage1_(ops7stage1, to_search_exps8factors4order6found, detec
         #st7fold = (1, ())
         st7fold = (1, get_empty_lflnkls())
         # [st7fold :: (II(exps7key), lflnkls{exps7key})]
-        (st7fold, ls4record_pair) = history_saver.reversed_search_key_points_(stZhistory2rank_, op4fold_, st7fold, offset=offset7first)
+        (st7fold, ls4record_pair) = history_saver.backward_search_key_points_(stZhistory2rank_, op4fold_, st7fold, offset=offset7first)
 
         if _verbose:
             print_err('st7fold', st7fold)
@@ -1488,7 +1488,8 @@ def default_search6stage1_(ops7stage1, to_search_exps8factors4order6found, detec
                 (j, rp6j, _01) = (offset0, rp8exp_pow_pairs6stage1, detect_result)
                 pair = (None, (j, rp6j, _01))
             case [((jmm, rp6jmm, -1), (j, rp6j, _01)), *_]:
-                # !! 『reversed』@『reversed_search_key_points_()』
+                # old: !! 『reversed』@『reversed_search_key_points_()』
+                # !! 『backward』@『backward_search_key_points_()』
                 pair = ((jmm, rp6jmm, -1), (j, rp6j, _01))
                 if 'patch0001':
                     # !! ops{%1247}.search6stage12__7ring_(True, 999, 7, 7, rp8exps6stage1{==[2,2,3,7]}, rp8exps6stage2{==[]}, pt0:=3)->(107, 1, 1, (2, 2, 7)) # ==>>:patch0001

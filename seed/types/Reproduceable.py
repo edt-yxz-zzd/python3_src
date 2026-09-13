@@ -1,4 +1,5 @@
 #__all__:goto
+#TODO:goto
 r'''[[[
 e ../../python3_src/seed/types/Reproduceable.py
 view ../../python3_src/seed/types/HistorySaver.py
@@ -493,25 +494,76 @@ True
 
 
 
+Reproduceable7step_via_ops
+StatedStepOps
+StatedStepOps__7prev_oresult6curr_state
+StatedStepOps__7prev_oresult_is_curr_state
+StatedStepOps__7bare_iterate7exclude_initial_state
+StatedStepOps__7bare_iterate7include_initial_state
+
+>>> rp = Reproduceable7step_via_ops(StatedStepOps(lambda u:mk_Left(('end', u)) if u== 1 else mk_Right((str(u), (u+2)%7))), 3)
+>>> rp  #doctest: +ELLIPSIS
+Reproduceable7step_via_ops(StatedStepOps(<function <lambda> at 0x...>), 3)
+>>> list_fsts4reproduceable_(rp)
+['3', '5', '0', '2', '4', '6']
+>>> list_fsts4reproduceable_(rp, with_exit_status=True)
+(['3', '5', '0', '2', '4', '6'], ('end', 1))
+
+>>> rp = Reproduceable7step_via_ops(StatedStepOps__7prev_oresult6curr_state(lambda u:mk_Left(('end', u)) if u== 1 else mk_Right((u+2)%7), lambda st:str(st)), 3)
+>>> rp  #doctest: +ELLIPSIS
+Reproduceable7step_via_ops(StatedStepOps__7prev_oresult6curr_state(<function <lambda> at 0x...>, <function <lambda> at 0x...>), 3)
+>>> list_fsts4reproduceable_(rp)
+['5', '0', '2', '4', '6', '1']
+>>> list_fsts4reproduceable_(rp, with_exit_status=True)
+(['5', '0', '2', '4', '6', '1'], ('end', 1))
+
+
+>>> rp = Reproduceable7step_via_ops(StatedStepOps__7prev_oresult_is_curr_state(lambda u:mk_Left(('end', u)) if u== 1 else mk_Right((u+2)%7)), 3)
+>>> rp  #doctest: +ELLIPSIS
+Reproduceable7step_via_ops(StatedStepOps__7prev_oresult_is_curr_state(<function <lambda> at 0x...>), 3)
+>>> list_fsts4reproduceable_(rp)
+[5, 0, 2, 4, 6, 1]
+>>> list_fsts4reproduceable_(rp, with_exit_status=True)
+([5, 0, 2, 4, 6, 1], ('end', 1))
+
+>>> rp = Reproduceable7step_via_ops(StatedStepOps__7bare_iterate7exclude_initial_state(lambda u:(u+2)%7), 3)
+>>> rp  #doctest: +ELLIPSIS
+Reproduceable7step_via_ops(StatedStepOps__7bare_iterate7exclude_initial_state(<function <lambda> at 0x...>), 3)
+>>> [*islice(iter_fsts4reproduceable_(rp), 0, 9)]
+[5, 0, 2, 4, 6, 1, 3, 5, 0]
+
+
+>>> rp = Reproduceable7step_via_ops(StatedStepOps__7bare_iterate7include_initial_state(lambda u:(u+2)%7), 3)
+>>> rp  #doctest: +ELLIPSIS
+Reproduceable7step_via_ops(StatedStepOps__7bare_iterate7include_initial_state(<function <lambda> at 0x...>), 3)
+>>> [*islice(iter_fsts4reproduceable_(rp), 0, 9)]
+[3, 5, 0, 2, 4, 6, 1, 3, 5]
 
 
 
 
+@20260905
+TODO:fmap to change internal st:eg: [0==M%N][HistorySaver{rp}%M --> HistorySaver{rp}%N][]
+@20260907
+TODO:++__eq__,__hash__ since IHistorySaver7immutable
+    Reproduceable5seq
 
 
 
 py_adhoc_call   seed.types.Reproduceable   @f
 ]]]'''#'''
 __all__ = r'''
+IStatedStepOps
+    IReproduceable7step
+
 IStatedTransformOps
     IStatedTransformOps7fork
         IStatedTransformOps7fork7default_mixin
     IStatedTransformOps7flow
         IStatedTransformOps7flow7default_mixin
-    IReproduceable
-        IReproduceable7transform
-            IReproduceable7fmap
-            IReproduceable7transform_via_ops
+    IReproduceable7transform
+        IReproduceable7fmap
+        IReproduceable7transform_via_ops
 
 
 
@@ -541,6 +593,9 @@ IReproduceable
 
     Reproduceable7chain5iterable
     Reproduceable7chain5reproduceable
+    IReproduceable7step
+        IReproduceable7step_via_ops
+            Reproduceable7step_via_ops
     IReproduceable7transform
         IReproduceable7fmap
             Reproduceable7fmap
@@ -587,7 +642,7 @@ IReproduceable
 
 
 IStatedTransformOps
-    IReproduceable
+    IReproduceable7transform
     IStatedTransformOps7fork
         IReproduceable7transform7fork
         IStatedTransformOps7fork7default_mixin
@@ -620,6 +675,31 @@ IStatedTransformOps
         the_ops4transform7stated7echo
             get_ops4transform7stated7echo_
 
+IStatedStepOps
+    StatedStepOps
+
+    IStatedStepOps__7oresult6both_states
+        IStatedStepOps__7prev_oresult6curr_state
+            StatedStepOps__7prev_oresult6curr_state
+            IStatedStepOps__7prev_oresult_is_curr_state
+                StatedStepOps__7prev_oresult_is_curr_state
+
+    IStatedStepOps__7endless
+        IStatedStepOps__7endless__7oresult6both_states
+            IStatedStepOps__7endless__7oresult6both_states__7init_mstep7stated_
+            IStatedStepOps__7endless__7curr_oresult6curr_state
+                IStatedStepOps__7bare_iterate7include_initial_state         IStatedStepOps__7endless__7curr_oresult_is_curr_state
+                    StatedStepOps__7bare_iterate7include_initial_state
+            IStatedStepOps__7endless__7prev_oresult6curr_state
+                IStatedStepOps__7bare_iterate7exclude_initial_state       IStatedStepOps__7endless__7prev_oresult_is_curr_state
+                    StatedStepOps__7bare_iterate7exclude_initial_state
+
+
+
+    IReproduceable7step
+        IReproduceable7step_via_ops
+            Reproduceable7step_via_ops
+
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -647,6 +727,10 @@ with mk_ctx4lazy_import4funcs_(__name__):
 #.    from seed.for_libs.for_collections.namedtuple__nontuple4cached_property import mk_named_pseudo_tuple_
 #.    #def mk_named_pseudo_tuple_(__module__,typename, field_names, /):
 #.    #    def _check6make_(sf, /):
+
+    from seed.types.Either import Cased, Either
+    from seed.types.Either import mk_Left, mk_Right
+
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
@@ -826,6 +910,11 @@ class Reproduceable5seq(IReproduceable):
     @property
     def xidx(sf, /):
         return sf._j
+    def __hash__(sf, /):
+        cls = type(sf)
+        return hash((cls, sf.seq, sf.xidx))
+    def __eq__(sf, ot, /):
+        return type(sf) is type(ot) and sf.xidx == ot.xidx and sf.seq == ot.seq
     @override
     def ___xnext4reproduceable___(sf, /):
         ls = sf.seq
@@ -1607,11 +1696,13 @@ class Reproduceable7cached_oresult(IReproduceable7wrapper):
         raise 000
     @property
     def exit_status(sf, /):
+        '-> exit_status|^ValueError # <<== .tmay_exit_status'
         for exit_status in sf.tmay_exit_status:
             return exit_status
         raise ValueError
     @property
     def oresult(sf, /):
+        '-> oresult|^ValueError # <<== .tmay_oresult'
         for oresult in sf.tmay_oresult:
             return oresult
         raise ValueError
@@ -1656,6 +1747,7 @@ class Reproduceable7tmay_prev_oresult(IReproduceable):
         return sf._tm_pv
     @property
     def prev_oresult(sf, /):
+        '-> prev_oresult|^ValueError # <<== .tmay_prev_oresult'
         for prev_oresult in sf.tmay_prev_oresult:
             return prev_oresult
         raise ValueError
@@ -1942,6 +2034,286 @@ def _eq_neg_one(L, x, /):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#@20260905
+class IStatedStepOps(ABC):
+    'ops4step7stated # [wstep7stated_ :: (st -> eost)][eost :: (Either exit_status (oresult, st))]'
+    #vs:IStatedTransformOps
+    #vivi: iterate()
+    __slots__ = ()
+    #used by:IReproduceable7step_via_ops
+    @abstractmethod
+    def wstep7stated_(sf, st_j, /):
+        'st{j} -> eost/(Either exit_status (oresult{j}, st{1+j})) # wide'
+class IStatedStepOps__7endless(ABC):
+    __slots__ = ()
+    @abstractmethod
+    def ostep7stated_(sf, st_j, /):
+        'st{j} -> ost/(oresult{j}, st{1+j}) # output'
+    @override
+    def wstep7stated_(sf, st_j, /):
+        'st{j} -> eost/(Either exit_status (oresult{j}, st{1+j})) # wide'
+        return mk_Right(sf.ostep7stated_(st_j))
+
+class IStatedStepOps__7oresult6both_states(IStatedStepOps):
+    '[nstep7stated_ :: (st -> est)][est :: (Either exit_status st)][extract_oresult6both_states_ :: (st{j} -> st{1+j} -> oresult{j})]'
+    __slots__ = ()
+    @abstractmethod
+    def nstep7stated_(sf, st_j, /):
+        'st{j} -> est/(Either exit_status st{1+j}) # narrow'
+    @abstractmethod
+    def extract_oresult5both_states_(sf, st_j, st_jpp, /):
+        'st{j} -> st{1+j} -> prev_oresult{1+j}/oresult{j} | maybe ^ValueError@[j==0]'
+    @override
+    def wstep7stated_(sf, st_j, /):
+        'st{j} -> eost/(Either exit_status (oresult{j}, st{1+j})) # wide'
+        est_jpp = sf.nstep7stated_(st_j)
+        match est_jpp:
+            #case Either
+            case (True, st_jpp):
+                oresult_j = sf.extract_oresult5both_states_(st_j, st_jpp)
+                eost_jpp = mk_Right((oresult_j, st_jpp))
+            case (False, exit_status) as eost_jpp:
+                pass
+            case _:
+                raise TypeError(est_jpp)
+        return eost_jpp
+
+class IStatedStepOps__7endless__7oresult6both_states(IStatedStepOps__7oresult6both_states, IStatedStepOps__7endless):
+    '[mstep7stated_ :: st{j} -> st{1+j}] # move'
+    __slots__ = ()
+    @abstractmethod
+    def mstep7stated_(sf, st_j, /):
+        'st{j} -> st{1+j} # move'
+        #iterate()
+    #@override
+    wstep7stated_ = IStatedStepOps__7endless.wstep7stated_
+    @override
+    def nstep7stated_(sf, st_j, /):
+        'st{j} -> est/(Either exit_status st{1+j}) # narrow'
+        return mk_Right(sf.mstep7stated_(st_j))
+    @override
+    def ostep7stated_(sf, st_j, /):
+        'st{j} -> ost/(oresult{j}, st{1+j}) # output'
+        st_jpp = sf.mstep7stated_(st_j)
+        oresult_j = sf.extract_oresult5both_states_(st_j, st_jpp)
+        return (oresult_j, st_jpp)
+
+
+
+class IStatedStepOps__7endless__7curr_oresult6curr_state(IStatedStepOps__7endless__7oresult6both_states):
+    # !! curr_oresult6curr_state => endless
+    # => no:IStatedStepOps__7curr_oresult6curr_state #vs:IStatedStepOps__7prev_oresult6curr_state
+    '[extract_oresult5curr_state_ :: (st{j} -> oresult{j})]'
+    __slots__ = ()
+    @abstractmethod
+    def extract_oresult5curr_state_(sf, st_j, /):
+        'st{j} -> oresult{j}'
+    @override
+    def extract_oresult5both_states_(sf, st_j, st_jpp, /):
+        return sf.extract_oresult5curr_state_(st_j)
+
+
+
+class IStatedStepOps__7prev_oresult6curr_state(IStatedStepOps__7oresult6both_states):
+    '[extract_oresult5next_state_ :: (st{1+j} -> oresult{j})]'
+    __slots__ = ()
+    @abstractmethod
+    def extract_oresult5next_state_(sf, st_jpp, /):
+        'st{1+j} -> prev_oresult{1+j}/oresult{j} | maybe ^ValueError@[j==0]'
+    @override
+    def extract_oresult5both_states_(sf, st_j, st_jpp, /):
+        return sf.extract_oresult5next_state_(st_jpp)
+
+
+
+
+class IStatedStepOps__7endless__7prev_oresult6curr_state(IStatedStepOps__7prev_oresult6curr_state, IStatedStepOps__7endless__7oresult6both_states):
+    __slots__ = ()
+
+
+
+
+class IStatedStepOps__7endless__7curr_oresult_is_curr_state(IStatedStepOps__7endless__7curr_oresult6curr_state):
+    __slots__ = ()
+    @override
+    def extract_oresult5curr_state_(sf, st_j, /):
+        'st{j} -> oresult{j}'
+        oresult_j = st_j
+        return oresult_j
+class IStatedStepOps__7prev_oresult_is_curr_state(IStatedStepOps__7prev_oresult6curr_state):
+    __slots__ = ()
+    @override
+    def extract_oresult5next_state_(sf, st_jpp, /):
+        'st{1+j} -> prev_oresult{1+j}/oresult{j} | maybe ^ValueError@[j==0]'
+        oresult_j = st_jpp
+        return oresult_j
+class IStatedStepOps__7endless__7prev_oresult_is_curr_state(IStatedStepOps__7prev_oresult_is_curr_state, IStatedStepOps__7endless__7prev_oresult6curr_state):
+    __slots__ = ()
+IStatedStepOps__7bare_iterate7exclude_initial_state = IStatedStepOps__7endless__7prev_oresult_is_curr_state
+IStatedStepOps__7bare_iterate7include_initial_state = IStatedStepOps__7endless__7curr_oresult_is_curr_state
+
+
+class StatedStepOps(IStatedStepOps):
+    ___no_slots_ok___ = True
+    def __init__(sf, wstep7stated_, /):
+        check_callable(wstep7stated_)
+        sf._f7ws = wstep7stated_
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.wstep7stated_)
+    @property
+    @override
+    def wstep7stated_(sf, /):
+        return sf._f7ws
+
+check_non_ABC(StatedStepOps)
+
+class IStatedStepOps__7endless__7oresult6both_states__7init_mstep7stated_(IStatedStepOps__7endless__7oresult6both_states):
+    ___no_slots_ok___ = True
+    def __init__(sf, mstep7stated_, /):
+        check_callable(mstep7stated_)
+        sf._f7ms = mstep7stated_
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.mstep7stated_)
+    @property
+    @override
+    def mstep7stated_(sf, /):
+        return sf._f7ms
+
+class StatedStepOps__7bare_iterate7exclude_initial_state(IStatedStepOps__7endless__7oresult6both_states__7init_mstep7stated_, IStatedStepOps__7bare_iterate7exclude_initial_state):
+    pass
+check_non_ABC(StatedStepOps__7bare_iterate7exclude_initial_state)
+
+class StatedStepOps__7bare_iterate7include_initial_state(IStatedStepOps__7endless__7oresult6both_states__7init_mstep7stated_, IStatedStepOps__7bare_iterate7include_initial_state):
+    pass
+check_non_ABC(StatedStepOps__7bare_iterate7include_initial_state)
+
+
+class StatedStepOps__7prev_oresult6curr_state(IStatedStepOps__7prev_oresult6curr_state):
+    ___no_slots_ok___ = True
+    def __init__(sf, nstep7stated_, extract_oresult5next_state_, /):
+        check_callable(nstep7stated_)
+        check_callable(extract_oresult5next_state_)
+        sf._f7ns = nstep7stated_
+        sf._ex_po = extract_oresult5next_state_
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.nstep7stated_, sf.extract_oresult5next_state_)
+    @property
+    @override
+    def nstep7stated_(sf, /):
+        return sf._f7ns
+    @property
+    @override
+    def extract_oresult5next_state_(sf, /):
+        return sf._ex_po
+
+check_non_ABC(StatedStepOps__7prev_oresult6curr_state)
+
+class StatedStepOps__7prev_oresult_is_curr_state(IStatedStepOps__7prev_oresult_is_curr_state):
+    ___no_slots_ok___ = True
+    def __init__(sf, nstep7stated_, /):
+        check_callable(nstep7stated_)
+        sf._f7ns = nstep7stated_
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.nstep7stated_)
+    @property
+    @override
+    def nstep7stated_(sf, /):
+        return sf._f7ns
+
+check_non_ABC(StatedStepOps__7prev_oresult_is_curr_state)
+
+
+
+
+class IReproduceable7step(IReproduceable, IStatedStepOps):
+    'reproduceable7step'
+    __slots__ = ()
+    @property
+    @abstractmethod
+    def initial_state(sf, /):
+        '-> st{0}'
+    @abstractmethod
+    def mk5next_state_(sf, next_state, /):
+        'st{j} -> IReproduceable{as OUT[j:]}'
+    @override
+    def ___xnext4reproduceable___(sf, /):
+        'IReproduceable{x} -> (NextEx(x, IReproduceable{x}) | StopEx(exit_status))'
+        st_j = sf.initial_state
+        eost_jpp = sf.wstep7stated_(st_j)
+        match eost_jpp:
+            #case Either
+            case (True, (oresult_j, st_jpp)):
+                ot = sf.mk5next_state_(st_jpp)
+                return NextEx(oresult_j, ot)
+            case (False, exit_status):
+                return StopEx(exit_status)
+            case _:
+                raise TypeError(eost_jpp)
+        raise 000
+
+class IReproduceable7step_via_ops(IReproduceable7step):
+    #vs:IReproduceable7transform_via_ops
+    __slots__ = ()
+    @property
+    @abstractmethod
+    def ops4step7stated(sf, /):
+        '-> IStatedStepOps{as st[0] -> OUT[0:]} # vs: [sf :: IReproduceable{as OUT[0:]}]'
+    @override
+    def wstep7stated_(sf, st_j, /):
+        'st{j} -> eost/(Either exit_status (oresult{j}, st{1+j}))'
+        return sf.ops4step7stated.wstep7stated_(st_j)
+ 
+class Reproduceable7step_via_ops(IReproduceable7step_via_ops):
+    #vs:Reproduceable7transform_via_ops
+    ___no_slots_ok___ = True
+    def __init__(sf, ops4step7stated, initial_state, /):
+        check_type_le(IStatedStepOps, ops4step7stated)
+        sf._ops = ops4step7stated
+        sf._st = initial_state
+    def __repr__(sf, /):
+        return repr_helper(sf, sf.ops4step7stated, sf.initial_state)
+    @property
+    @override
+    def ops4step7stated(sf, /):
+        return sf._ops
+    @property
+    @override
+    def initial_state(sf, /):
+        return sf._st
+    @override
+    def mk5next_state_(sf, next_state, /):
+        cls = type(sf)
+        return cls(sf.ops4step7stated, next_state)
+
+check_non_ABC(Reproduceable7step_via_ops)
+
+
+
 __all__
 from seed.types.Reproduceable import is_reproduceable_, check_reproduceable_
 from seed.types.Reproduceable import xnext4reproduceable_, xnext4reproduceable7check_, check_result5xnext4reproduceable_
@@ -1955,6 +2327,35 @@ from seed.types.Reproduceable import Reproduceable5seq, Reproduceable7chain5iter
 
 from seed.types.Reproduceable import IStatedTransformOps, IStatedTransformOps7fork, IStatedTransformOps7fork7default_mixin, IStatedTransformOps7flow, IStatedTransformOps7flow7default_mixin
 from seed.types.Reproduceable import StatedTransformOps7fork, StatedTransformOps7flow, StatedTransformOps, StatedTransformOps7rdiff, StatedTransformOps7foldl, StatedTransformOps7fmap, StatedTransformOps7echo, the_ops4transform7stated7echo, get_ops4transform7stated7echo_
+
+
+from seed.types.Reproduceable import \
+(IStatedStepOps
+,   StatedStepOps
+#
+,   IStatedStepOps__7oresult6both_states
+,       IStatedStepOps__7prev_oresult6curr_state
+,           StatedStepOps__7prev_oresult6curr_state
+,           IStatedStepOps__7prev_oresult_is_curr_state
+,               StatedStepOps__7prev_oresult_is_curr_state
+#
+,   IStatedStepOps__7endless
+,       IStatedStepOps__7endless__7oresult6both_states
+,           IStatedStepOps__7endless__7oresult6both_states__7init_mstep7stated_
+,           IStatedStepOps__7endless__7curr_oresult6curr_state
+,               IStatedStepOps__7bare_iterate7include_initial_state,IStatedStepOps__7endless__7curr_oresult_is_curr_state
+,                   StatedStepOps__7bare_iterate7include_initial_state
+,           IStatedStepOps__7endless__7prev_oresult6curr_state
+,               IStatedStepOps__7bare_iterate7exclude_initial_state,IStatedStepOps__7endless__7prev_oresult_is_curr_state
+,                   StatedStepOps__7bare_iterate7exclude_initial_state
+#
+#
+#
+,   IReproduceable7step
+,       IReproduceable7step_via_ops
+,           Reproduceable7step_via_ops
+)
+
 
 
 from seed.types.Reproduceable import *

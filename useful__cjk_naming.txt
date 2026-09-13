@@ -82,9 +82,12 @@ unicode 统合码
   : 'CJK Unified Ideographs'
 
 
-sink沉/荒/墟/渊？:vs:source源
-  dst/destination目标/的/靶/芜/菂？:vs:src/source源
+sink:汇 #沉/荒/墟/渊？:vs:source源
+  dst/destination:靶 #目标/的/靶/芜/菂？:vs:src/source源
   见:渊薮/渊源，归墟
+  源source
+  汇sink
+  靶destination/target
 
 preview - 预览
 review - 回顾,复审,检阅,复核

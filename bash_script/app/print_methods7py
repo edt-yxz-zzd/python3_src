@@ -1,0 +1,32 @@
+#
+
+#e ../../python3_src/bash_script/app/print_methods7py
+USAGE='USAGE: print_methods7py module.qual.name TypeName'
+if ! [[ "$#" == 2 ]] then
+    printf >&2 $'%s\n' "$USAGE"
+    exit 1
+fi
+
+qnm4module="$1"
+qnm4class="$2"
+
+bad=0
+#bug:if ! [[ "${qnm4module}" =~ [._[:alnum:]]+ ]] then
+if ! [[ "${qnm4module}" =~ ^[._[:alnum:]]+$ ]] then
+    printf >&2 $'%s\n' "bad qnm4module: ${qnm4module@Q}"
+    bad=1
+fi
+
+if ! [[ "${qnm4class}" =~ ^[._[:alnum:]]+$ ]] then
+    printf >&2 $'%s\n' "bad qnm4class: ${qnm4class@Q}"
+    bad=1
+fi
+
+if ! [[ "${bad}" == 0 ]] then
+    printf >&2 $'%s\n' "$USAGE"
+    exit 1
+fi
+
+#usage: py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   %seed.types.linked_list:DoublyLinkedList@T    =T
+#usage: print_methods7py seed.types.linked_list  DoublyLinkedList
+py_adhoc_call  seed.helper.print_methods  @wrapped_print_methods   "%${qnm4module}:${qnm4class}@T"    =T

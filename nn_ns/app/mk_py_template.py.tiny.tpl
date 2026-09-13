@@ -49,6 +49,14 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
+#.class __(ABC):
+#.    __slots__ = ()
+#.    ___no_slots_ok___ = True
+#.    def __repr__(sf, /):
+#.        return repr_helper(sf, *args, **kwargs)
+#.if __name__ == "__main__":
+#.    raise NotImplementedError(Exception, StopIteration)
+
 
 
 __all__

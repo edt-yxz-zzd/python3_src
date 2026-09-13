@@ -125,6 +125,8 @@ from seed.tiny_.check import icheck_str, icheck_char, icheck_bool, icheck_triboo
 ]]]'''#'''
 
 __all__ = '''
+    check_danger_mark_
+
     check_non_ABC
     check_ABC
 
@@ -574,6 +576,10 @@ def __():
 __()
 
 
+def check_danger_mark_(danger_mark, /):
+    check_type_is(str, danger_mark)
+    if not '!' == danger_mark:raise TypeError('danger_mark warns "raw data will be used directly". it always be "!" :', danger_mark)
+    # used by: view ../../python3_src/seed/types/HistorySaver.py
 
 from seed.tiny_.check import check_subscriptable, icheck_subscriptable
     #from seed.tiny_.check import check_getitemable, icheck_getitemable
@@ -585,5 +591,7 @@ from seed.tiny_.check import check_uint_lt, check_int_ge_lt, check_int_ge, check
 from seed.tiny_.check import check_str, check_char, check_bool, check_tribool
 from seed.tiny_.check import icheck_str, icheck_char, icheck_bool, icheck_tribool
 
+
+from seed.tiny_.check import check_danger_mark_
 
 from seed.tiny_.check import *
