@@ -204,6 +204,7 @@ try_factor_pint__elliptic_curve_method_
 try1_factor_pint__elliptic_curve_method_
     default__dup_exps_from_B1_
     default__delta_exps_from_B1_B2_
+    prepare4factor_pint__elliptic_curve_method_
 
 
 
@@ -924,9 +925,9 @@ def default__delta_exps_from_B1_B2_(B1, B2, /):
     for p in ps:
         yield p - _p
         _p = p
-def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, B2_or_delta_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None):
-    '-> (result6fail | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
 
+def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_uint_mod_=None, result6fail=None):
+    '-> ((True, (result6fail|non_trivial_factor))|(False, (n, settings4EPC, (ops4EPC, pt))))'
     match n_or_settings4EPC:
         case int() as n:
             settings4EPC = None
@@ -938,11 +939,11 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4s
     n
     check_int_ge(1, n)
     if n < 4:
-        return result6fail#None
+        return (True, result6fail)
     if n&1 == 0:
-        return 2
+        return (True, 2)
     if n%3 == 0:
-        return 3
+        return (True, 3)
     # [1 == gcd(n, 6)]
 
     if not None is settings4EPC:
@@ -951,11 +952,27 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4s
         g_pt6EPC = g_ops4EPC.mk_point_(*xy6EPC)
 
     (ops4EPC, pt) = Ops4EllipticPseudocurve.mk_ex5n__7random_(n, random_uint_mod_) if None is settings4EPC else (g_ops4EPC, g_pt6EPC)
+
     if None is settings4EPC:
         (args4EPC, xy6EPC) = (ops4EPC.params4elliptic_pseudocurve, tuple(pt))
         settings4EPC = (args4EPC, xy6EPC)
     settings4EPC
 
+    return (False, (n, settings4EPC, (ops4EPC, pt)))
+
+
+def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, B2_or_delta_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None):
+    '-> (result6fail | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
+    ###########################
+    match prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, random_uint_mod_=random_uint_mod_, result6fail=result6fail):
+        case (True, _result):
+            return _result
+        case (False, (n, settings4EPC, (ops4EPC, pt))):
+            pass
+        case _:
+            raise 000
+    (n, settings4EPC, (ops4EPC, pt))
+    ###########################
 
     B1 = None
     pt0 = pt
