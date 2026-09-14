@@ -147,7 +147,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     #def sprp_factor_pint__via_rho_method_(n, f_=None, /, *, seeds=None, max_num_seeds=None, max_num_tries_per_seed=None, to_output_statistics=False):
     #   'n/int{>=1} -> may (n -> (*params) -> uint%n -> uint%n) -> (kw:seeds/may (Iter params_x0/(*params, x0))) -> (success_part, failure_part)/(sprp2exp, non_sprp2exp)/({sprp:exp}, {non_sprp:exp}) if not to_output_statistics else (sprp2exp, non_sprp2exp, total_steps) # [SPRP == strong probable-prime]'
 
-    from seed.algo.rho_method__7iter7batch import Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant, try_factor_pint7rho_, try_factor_pint7rho__7resume_
+    from seed.algo.rho_method__7iter7batch import Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant, try_factor_pint7rho_, try_factor_pint7rho__7resume_, reset4new_modulus7factor_pint7rho__7resume_
     #.Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus, even_exp, addend)
     #.def try_factor_pint7rho_(ops, imay_max4end6rho, u0_or_scale, may_empty_saver7immutable, /, *, u0_be_floor_sqrt_scale_modulus=False):
     #.def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
@@ -173,6 +173,11 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
     #no Random
     {549755813911: 1, 1099511627791: 1}
     total::duration: 12.830700333 *(unit: 0:00:01)
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +with_idc
+    ({549755813911: 1, 1099511627791: 1}, (887005,))
+    total::duration: 12.574937949 *(unit: 0:00:01)
+    # [2**19 < 887005 < 2**20]
 
 ===
 +partial_ok
@@ -599,6 +604,10 @@ class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_
     def _mk_state7enter_(sf, ns, st7parent, /, *args7common, **kwds7common):
         n7part = top6_(ns)
         (rope8idc, record7old, max4num_steps, even_exp, addend) = st7parent
+        ops = Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus:=n7part, even_exp, addend)
+        record7new = ops.reset4new_modulus7factor_pint7rho__7resume_(record7old, modulus7new:=n7part)
+        st = (rope8idc, record7new, max4num_steps, even_exp, addend)
+        return st
         (jround, jbatch, end6i, i, pt_i, saver_i_jpp_kpp) = record7old
         (k, pt_k, st_i_jpp_kpp) = saver_i_jpp_kpp.last
         st_i_kpp_kpp = 1

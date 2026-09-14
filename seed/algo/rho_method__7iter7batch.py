@@ -73,6 +73,7 @@ IOps4RhoMethod7batch
     try_search_oresult7rho_
 
     IOps4RhoMethod7batch__7factor_pint
+        reset4new_modulus7factor_pint7rho__7resume_
         try_factor_pint7rho_
             prepare4try_factor_pint7rho_
         try_factor_pint7rho__7resume_
@@ -721,6 +722,20 @@ IOps4RhoMethod7batch__7factor_pint
 _method6IOps4RhoMethod7batch__7factor_pint_ = mk_instance_method_decorator_(IOps4RhoMethod7batch__7factor_pint)
 
 @_method6IOps4RhoMethod7batch__7factor_pint_
+def reset4new_modulus7factor_pint7rho__7resume_(ops, record7old, modulus7new, /):
+    'ops -> record7old{%ops.modulus} -> modulus7new/uint{>=1}{[0 == ops.modulus %modulus7new]} -> record7new{%modulus7new}'
+    check_int_ge(1, modulus7new)
+    if not 0 == ops.modulus %modulus7new:raise ValueError(ops.modulus, modulus7new)
+    (jround, jbatch, end6i, i, pt_i, saver_i_jpp_kpp) = record7old
+    (k, pt_k, st_i_jpp_kpp) = saver_i_jpp_kpp.last
+    st_i_kpp_kpp = 1 # <<== setup7rho_()
+    pt_i7new = pt_i %modulus7new
+    pt_k7new = pt_k %modulus7new
+    saver_i_kpp_kpp7new = saver_i_jpp_kpp.oo_clear().oo_append((k, pt_k7new, st_i_kpp_kpp), non_reproduceable_ok=True)
+    record7new = (jround, jbatch, end6i, i, pt_i7new, saver_i_kpp_kpp7new)
+    return record7new
+
+@_method6IOps4RhoMethod7batch__7factor_pint_
 def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
     'ops -> imay_max4end6rho -> record7old -> (final, some_proper_factors, idc, record7old)'
     (final, tmay_oresult, record7old) = ops.try_search_oresult7rho__7resume_(imay_max4end6rho, record7old)
@@ -870,6 +885,7 @@ from seed.algo.rho_method__7iter7batch import \
 ,   try_search_oresult7rho_
 #
 ,   IOps4RhoMethod7batch__7factor_pint
+,       reset4new_modulus7factor_pint7rho__7resume_
 ,       try_factor_pint7rho_
 ,           prepare4try_factor_pint7rho_
 ,       try_factor_pint7rho__7resume_
