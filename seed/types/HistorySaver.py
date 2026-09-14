@@ -1150,6 +1150,10 @@ with mk_ctx4lazy_import4funcs_(__name__):
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 
+__all__
+#_debug = True
+_debug = False
+
 class FullError(Exception):pass
 class EmptyError(Exception):pass
 class IHistorySaverBase(ABC):
@@ -2409,8 +2413,6 @@ class DenseHistorySaver(IHistorySaver__bisect7single_array_view):
         return physical_idx
 
 
-_debug = True
-_debug = False
 class SparseHistorySaver(IHistorySaver__bisect7single_array_view):
     ___no_slots_ok___ = True
     #def __init__(sf, max_size7dense, max_size7physical, imay_max_size7apparent, /):
@@ -2555,7 +2557,7 @@ class SparseHistorySaver(IHistorySaver__bisect7single_array_view):
         sf._msz = curr_max_size7physical
         sf._step = curr_step
         sf._cn = last_step
-        sf.validate()
+        if _debug:sf.validate()
     @override
     def fmap_(sf, transform4reproduceable, /):
         if not sf:
