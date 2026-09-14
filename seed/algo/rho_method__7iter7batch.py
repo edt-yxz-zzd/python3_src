@@ -733,6 +733,11 @@ def reset4new_modulus7factor_pint7rho__7resume_(ops, record7old, modulus7new, /)
     pt_i7new = pt_i %modulus7new
     pt_k7new = pt_k %modulus7new
     st_i_kpp_kpp7new = st_i_kpp_kpp %modulus7new
+    if 0 == st_i_kpp_kpp7new:
+        assert 1 == modulus7new
+        st_i_kpp_kpp7new = 1
+    st_i_kpp_kpp7new
+
     saver_i_kpp_kpp7new = saver_i_jpp_kpp.oo_clear().oo_append((k, pt_k7new, st_i_kpp_kpp7new), non_reproduceable_ok=True)
     record7new = (jround, jbatch, end6i, i, pt_i7new, saver_i_kpp_kpp7new)
     return record7new
