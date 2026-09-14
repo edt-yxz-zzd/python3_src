@@ -40,15 +40,55 @@ TypeError: 2417851639229258349412353
 {2: 81}
 >>> stable_print(factor_pint__le_pow2_81_(-1+2**81))
 {7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True))
+({7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}, (479, 545))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2))
+({7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}, (4, 13, 59, 479, 545))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=545))
+(({7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}, {}, {}), (4, 13, 59, 479, 545))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=544))
+(({7: 1, 73: 1, 2593: 1, 262657: 1}, {6947319183841: 1}, {}), (4, 13, 59, 479))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=479))
+(({7: 1, 73: 1, 2593: 1, 262657: 1}, {6947319183841: 1}, {}), (4, 13, 59, 479))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=478))
+(({7: 1, 73: 1, 2593: 1}, {1824762014870125537: 1}, {}), (4, 13, 59))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=59))
+(({7: 1, 73: 1, 2593: 1}, {1824762014870125537: 1}, {}), (4, 13, 59))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=58))
+(({7: 1, 73: 1}, {4731607904558235517441: 1}, {}), (4, 13))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=13))
+(({7: 1, 73: 1}, {4731607904558235517441: 1}, {}), (4, 13))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=12))
+(({7: 1}, {345407377032751192773193: 1}, {}), (4,))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=4))
+(({7: 1}, {345407377032751192773193: 1}, {}), (4,))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=3))
+(({}, {2417851639229258349412351: 1}, {}), ())
+
 >>> #stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, known_factor4Pmm=2*47846459))
 >>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, even_exp=2*47846459))
 {549755813911: 1, 1099511627791: 1}
+>>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, even_exp=2*47846459, with_idc=True))
+({549755813911: 1, 1099511627791: 1}, (21,))
+>>> factor_pint__le_pow2_81_(1, with_idc=True)
+({}, ())
+>>> factor_pint__le_pow2_81_(2, with_idc=True)
+({2: 1}, ())
 
 
 
 ++kw:using_ECM
 >>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, using_ECM=True))
 {549755813911: 1, 1099511627791: 1}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -83,6 +123,7 @@ from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_fac
 from seed.helper.lazy_import__func import force_lazy_imported_func_
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.types.Rope import Rope, mk_Rope
     from itertools import repeat
     from math import isqrt
     #from random import Random
@@ -110,7 +151,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     #.Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus, even_exp, addend)
     #.def try_factor_pint7rho_(ops, imay_max4end6rho, u0_or_scale, may_empty_saver7immutable, /, *, u0_be_floor_sqrt_scale_modulus=False):
     #.def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
-    #.  '-> (final, some_proper_factors, record7old)'
+    #.  '-> (final, some_proper_factors, idc, record7old)'
 
     from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_pint__elliptic_curve_method_
     #def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_=None, /, *, random_uint_mod_=None, with_ctx=False, result6fail=None):
@@ -414,12 +455,12 @@ def factor_pint__le_pow2_81_(n, /, *, using_ECM=False, **kwds):
     if using_ECM:
         return factor_pint__le_pow2_81__7ECM_(n, **kwds)
     return factor_pint__le_pow2_81__7rho_(n, **kwds)
-def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
-    _ops7rho = _Framework4factor_pint__le_pow2_81__7rho(partial_ok=partial_ok)
+def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
+    _ops7rho = _Framework4factor_pint__le_pow2_81__7rho(partial_ok=partial_ok, with_idc=with_idc)
     return _ops7rho.sprp_factor_pint_(n, max4prime7trial_division, max4num_steps=max4num_steps, even_exp=even_exp, addend=addend, u0_or_scale=u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus, may_empty_saver7immutable=may_empty_saver7immutable)
 
 def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16):
-    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok)
+    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, with_idc=False)
     return _ops7ECM.sprp_factor_pint_(n, max4prime7trial_division, max4num_trials=max4num_trials, max4num_trials4part=max4num_trials4part)
 
 
@@ -427,8 +468,13 @@ def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, max4prime7trial_di
 
 class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
     ___no_slots_ok___ = True
-    def __init__(sf, /, *, partial_ok):
+    def __init__(sf, /, *, partial_ok, with_idc):
         sf.partial_ok = partial_ok
+        sf.with_idc = with_idc
+
+    def _st2may_idc_(sf, st, /):
+        return None
+
 
     @override
     def _format_output_(sf, n, max4prime7trial_division, p2e7trial_division, n7unfactored_part, st, raw_output, /):
@@ -439,9 +485,13 @@ class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
         # [sprp indeed be prime]
         p2e = {**p2e7trial_division, **sprp2exp}
         if sf.partial_ok:
-            return (p2e, non_sprp2exp, non_sprp2exp4todo)
-        if non_sprp2exp or non_sprp2exp4todo:raise Exception
-        return p2e
+            out = (p2e, non_sprp2exp, non_sprp2exp4todo)
+        else:
+            if non_sprp2exp or non_sprp2exp4todo:raise Exception
+            out = p2e
+        out
+        may_idc = sf._st2may_idc_(st)
+        return out if not sf.with_idc else (out, may_idc)
     @property
     @override
     def _is_SPRP_(sf, /):
@@ -505,12 +555,22 @@ class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_
     ___no_slots_ok___ = True
 
     @override
+    def _st2may_idc_(sf, st, /):
+        if st is None:
+            idc = ()
+        else:
+            (rope8idc, record7old, max4num_steps, even_exp, addend) = st
+            idc = tuple(sorted(iter(rope8idc)))
+        return idc
+    @override
     def _core_factor_algo_(sf, st, n7part, /):
-        (record7old, max4num_steps, even_exp, addend) = st
+        (rope8idc, record7old, max4num_steps, even_exp, addend) = st
         ops = Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus:=n7part, even_exp, addend)
         imay_max4end6rho = 1+max4num_steps if sf.partial_ok else -1
-        (final, some_proper_factors, record7old) = ops.try_factor_pint7rho__7resume_(imay_max4end6rho, record7old)
-        st = (record7old, max4num_steps, even_exp, addend)
+        (final, some_proper_factors, idc, record7old) = ops.try_factor_pint7rho__7resume_(imay_max4end6rho, record7old)
+        rope8idc = Rope(rope8idc, idc)
+        #print(idc)
+        st = (rope8idc, record7old, max4num_steps, even_exp, addend)
         if not (some_proper_factors or sf.partial_ok):raise Exception(n7part, st)
         return (st, some_proper_factors)
 
@@ -531,25 +591,27 @@ class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_
             ops = Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus:=n, even_exp, addend)
             pt_0 = ops.prepare4try_factor_pint7rho_(u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus)
             record7new_round = ops.prepare4iter7rho_(pt_0, may_empty_saver7immutable)
-            st = (record7new_round, max4num_steps, even_exp, addend)
+            rope8idc = Rope()
+            st = (rope8idc, record7new_round, max4num_steps, even_exp, addend)
         return (st, args7common, kwds7common)
 
     @override
     def _mk_state7enter_(sf, ns, st7parent, /, *args7common, **kwds7common):
         n7part = top6_(ns)
-        (record7old, max4num_steps, even_exp, addend) = st7parent
+        (rope8idc, record7old, max4num_steps, even_exp, addend) = st7parent
         (jround, jbatch, end6i, i, pt_i, saver_i_jpp_kpp) = record7old
         (k, pt_k, st_i_jpp_kpp) = saver_i_jpp_kpp.last
         st_i_kpp_kpp = 1
         saver_i_kpp_kpp = saver_i_jpp_kpp.oo_clear().oo_append((k, pt_k, st_i_kpp_kpp), non_reproduceable_ok=True)
         record7old = (jround, jbatch, end6i, i, pt_i, saver_i_kpp_kpp)
-        st = (record7old, max4num_steps, even_exp, addend)
+        st = (rope8idc, record7old, max4num_steps, even_exp, addend)
         return st
 
     @override
     def _mk_state7exit_(sf, ns, st7parent, st, /, *args7common, **kwds7common):
-        #(record7old, max4num_steps, even_exp, addend) = st7parent
-        st7parent7new = st7parent
+        (_rope8idc, record7old, max4num_steps, even_exp, addend) = st7parent
+        rope8idc = st[0]
+        st7parent7new = (rope8idc, record7old, max4num_steps, even_exp, addend)
         return st7parent7new
 
     @override
@@ -567,6 +629,6 @@ class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_
 __all__
 from seed.math.factor_pint.factor_pint__le_pow2_81 import factor_pint__le_pow2_81_, factor_pint__le_pow2_81__7rho_, factor_pint__le_pow2_81__7ECM_
 #def factor_pint__le_pow2_81_(n, /, *, using_ECM=False, **kwds):
-#def factor_pint__le_pow2_81__7rho_(n, /, *, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
-#def factor_pint__le_pow2_81__7ECM_(n, /, *, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16):
+#def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
+#def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16):
 from seed.math.factor_pint.factor_pint__le_pow2_81 import *
