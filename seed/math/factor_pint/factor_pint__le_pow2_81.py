@@ -82,7 +82,7 @@ TypeError: 2417851639229258349412353
 factor_pint__le_pow2_81_
     ++kw:using_ECM
     factor_pint__le_pow2_81__7ECM_
-        ++kw:with_settingss
+        ++kw:with_settingss,_n2settings4EPC
 >>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True)) #doctest: +SKIP
 {549755813911: 1, 1099511627791: 1}
 >>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, _n2settings4EPC={n:((604462909840849692000601, 113612373689681093668799, -35105676510727254637001), (-13323696834883514051457, 107231846234603392551700))}))
@@ -164,12 +164,18 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
 
 
-    from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_pint__elliptic_curve_method_, ex1_try_factor_pint__elliptic_curve_method_
+    from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_pint__elliptic_curve_method_
     #def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_=None, /, *, random_uint_mod_=None, with_ctx=False, result6fail=None):
     #   'n/uint{>=1} -> Iter (B/uint{>=2}|ks/(Iter k/uint{>=2})) -> may (n -> (B|ks) -> ks) -> may non_trivial_factor{n} # [ks are multiplier => II(ks)*pt] # [B is smooth bound => ks:=chains(repeat(p,floor_log_(p,B)) for p in primes_lt(1+B))] # [[p::prime][n%p==0][1==gcd(n,[1..<p])] -> [best:B1:=exp((1/sqrt2+o(1))*sqrt(ln(p)*lnln(p)))]]'
     #
+    from seed.math.factor_pint.factor_pint__elliptic_curve_method import ex1_try_factor_pint__elliptic_curve_method_
     #def ex1_try_factor_pint__elliptic_curve_method_(n, B1, /, *, random_uint_mod_=None, settings4EPC=None):
     #   'n/uint{>=1} -> B1/uint{>=2} -> may (ft/non_trivial_factor{n}, settings4EPC{n}, B1) # [B1 is smooth bound] # [settings4EPC == (args4EPC, xy6EPC) :: ((n,a,b),(x,y))]'
+
+
+    from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method_
+    #def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, B2_or_delta_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None):
+    #   '-> (result6fail | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -191,6 +197,23 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
 
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 113612373689681093668799, -35105676510727254637001), (-13323696834883514051457, 107231846234603392551700)),))
     total::duration: 0.8044147070000001 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 18426764286133623819458, 201502428517262863668966), (105524329500195629724647, -176413129203945517834447)),))
+    total::duration: 1.8505403080000002 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -145285473388244114487881, 184802563999449591581844), (-66409063353429872777492, 242169134493245460633533)),))
+    total::duration: 3.964906317 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -52839341178021735480612, 277844712784484400075759), (-92650030823243892396760, -270500905887093727942890)),))
+    total::duration: 1.7508722479999999 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -76434491821837347931671, 49058017485055316816124), (114442361590495381402379, -297843683799628017356922)),))
+    total::duration: 2.592038168 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 165551835224444326975068, -40432400309918487748668), (293972846397678063079016, -55280335966848148551201)),))
+    total::duration: 4.844703626 *(unit: 0:00:01)
+
+
 
 ===
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791'
@@ -547,6 +570,32 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
         sz = 0
         szs = range(1, 1+min(max4num_trials4part, max4num_trials4part-num_trials)) if sf.partial_ok else repeat(0)
         for sz in szs:
+            ##################
+            n7part_or_settings4EPC = sf.n2settings4EPC.get(n7part, n7part)
+            for sz7retry, B1 in ((16, 100), (4, 1000), (1, 10000)):
+                B2 = 100*B1
+                for _ in range(sz7retry):
+                    match try1_factor_pint__elliptic_curve_method_(n7part_or_settings4EPC, B1, B2):
+                        case None:
+                            continue
+                        case (proper_factor, settings4EPC, stage, details):
+
+                            some_proper_factors = (proper_factor,)
+                            break
+                    #match
+                    raise 000
+                else:
+                    continue
+                #end-for _ in range(sz7retry):
+                some_proper_factors
+                break
+            else:
+                continue
+            #end-for sz7retry, B1 in ...:
+            some_proper_factors
+            break
+            raise 000
+            ##################
             match ex1_try_factor_pint__elliptic_curve_method_(n7part, B1:=1_00_00, settings4EPC=sf.n2settings4EPC.get(n7part, None)):
                 case None:
                     continue
@@ -554,12 +603,15 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
                     some_proper_factors = (proper_factor,)
                     break
             raise 000
+            ##################
             match try_factor_pint__elliptic_curve_method_(n7part):
                 case None:
                     continue
                 case proper_factor:
                     some_proper_factors = (proper_factor,)
                     break
+            raise 000
+            ##################
         else:
             some_proper_factors = ()
         some_proper_factors

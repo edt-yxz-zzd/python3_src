@@ -122,7 +122,19 @@ def ex1_try_factor_pint__elliptic_curve_method_(n, B1, /, *, random_uint_mod_=No
 
 
 
+try1_factor_pint__elliptic_curve_method_
+#ft@stage2
+>>> try1_factor_pint__elliptic_curve_method_(n:=(-1+2**67), B1:=1_00, B2:=1_00_00) #doctest: +SKIP
+(193707721, ((147573952589676412927, 31894543639004476236, 49298064024460420879), (-32188269198793461178, 38620417464689350048)), 2, (97, 218, 1549))
+>>> try1_factor_pint__elliptic_curve_method_(settings4EPC:=((147573952589676412927, 31894543639004476236, 49298064024460420879), (-32188269198793461178, 38620417464689350048)), B1:=1_00, B2:=1_00_00)
+(193707721, ((147573952589676412927, 31894543639004476236, 49298064024460420879), (-32188269198793461178, 38620417464689350048)), 2, (97, 218, 1549))
 
+
+#ft@stage1
+>>> try1_factor_pint__elliptic_curve_method_(n:=(-1+2**67), B1:=1_00_00, B2:=0) #doctest: +SKIP
+(193707721, ((147573952589676412927, -17560380949213629436, 23162115318173030126), (71001320234957843534, 24622508313107188569)), 1, (1196, 9241))
+>>> try1_factor_pint__elliptic_curve_method_(settings4EPC:=((147573952589676412927, -17560380949213629436, 23162115318173030126), (71001320234957843534, 24622508313107188569)), B1:=1_00_00, B2:=0)
+(193707721, ((147573952589676412927, -17560380949213629436, 23162115318173030126), (71001320234957843534, 24622508313107188569)), 1, (1196, 9241))
 
 
 
@@ -187,7 +199,13 @@ __all__ = r'''
 try_factor_pint__elliptic_curve_method_
     default__ks5n_and_B_or_ks_
         default__ks5n_and_B_
-ex1_try_factor_pint__elliptic_curve_method_
+    ex1_try_factor_pint__elliptic_curve_method_
+
+try1_factor_pint__elliptic_curve_method_
+    default__dup_exps_from_B1_
+    default__delta_exps_from_B1_B2_
+
+
 
 
 Ops4EllipticPseudocurve
@@ -771,7 +789,8 @@ class Ops4EllipticPseudocurve:
 #end-class Ops4EllipticPseudocurve:
 
 def default__ks5n_and_B_(n, B, /):
-    for p in iter_sieve4primes_ge_lt_(2, 1+B):
+    ps = iter_sieve4primes_ge_lt_(2, 1+B)
+    for p in ps:
         ep = floor_log_(p, B)
         yield from repeat(p, ep)
 def default__ks5n_and_B_or_ks_(n, B_or_ks, /):
@@ -860,17 +879,178 @@ def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_
             (ops4EPC, pt) = (None, pt_O)
             #########
     except FoundNonTrivialFactor as exc:
-        if exc.N == n:
-            ft = exc.factor
-            ctx = ((j4ks, B_or_ks), (j4k, k), (ops4EPC, pt), exc.ctx)
-            return ft if not with_ctx else (ft, ctx)
-        raise
+        if not exc.N == n:
+            raise
+        ft = exc.factor
+        ctx = ((j4ks, B_or_ks), (j4k, k), (ops4EPC, pt), exc.ctx)
+        return ft if not with_ctx else (ft, ctx)
     return result6fail#None
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def _xs5or_B_(xs_or_B, may__xs5B_, default__xs5B_, /, *extra_args):
+    match xs_or_B:
+        case int() as B:
+            xs5B_ = ifNone(may__xs5B_, default__xs5B_)
+            xs = xs5B_(*extra_args, B)
+        case xs:
+            pass
+    iter(xs)#check iterable
+    return xs
+def default__dup_exps_from_B1_(B1, /):
+    ps = iter_sieve4primes_ge_lt_(2, 1+B1)
+    for p in ps:
+        ep = floor_log_(p, B1)
+        yield from repeat(p, ep)
+def default__delta_exps_from_B1_B2_(B1, B2, /):
+    ps = iter_sieve4primes_ge_lt_(1+B1, 1+B2)
+    _p = 0
+    for p in ps:
+        yield p - _p
+        _p = p
+def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, B2_or_delta_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None):
+    '-> (result6fail | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
+
+    match n_or_settings4EPC:
+        case int() as n:
+            settings4EPC = None
+            pass
+        case ((n,a,b) as args4EPC, (x,y) as xy4EPC) as settings4EPC:
+            pass
+        case _:
+            raise TypeError(n_or_settings4EPC)
+    n
+    check_int_ge(1, n)
+    if n < 4:
+        return result6fail#None
+    if n&1 == 0:
+        return 2
+    if n%3 == 0:
+        return 3
+    # [1 == gcd(n, 6)]
+
+    if not None is settings4EPC:
+        (args4EPC, xy6EPC) = settings4EPC
+        g_ops4EPC = Ops4EllipticPseudocurve(*args4EPC)
+        g_pt6EPC = g_ops4EPC.mk_point_(*xy6EPC)
+
+    (ops4EPC, pt) = Ops4EllipticPseudocurve.mk_ex5n__7random_(n, random_uint_mod_) if None is settings4EPC else (g_ops4EPC, g_pt6EPC)
+    if None is settings4EPC:
+        (args4EPC, xy6EPC) = (ops4EPC.params4elliptic_pseudocurve, tuple(pt))
+        settings4EPC = (args4EPC, xy6EPC)
+    settings4EPC
+
+
+    B1 = None
+    pt0 = pt
+    zmay_q1 = 0
+    zmay_q2 = 0
+    try:
+        #########
+        mul_ = ops4EPC.mul_
+        dup_exps4stage1 = _xs5or_B_(B1_or_dup_exps4stage1, dup_exps_from_B1_, default__dup_exps_from_B1_)
+        stage = 1
+        max_exp6stage1 = 0 # zmay_q1
+        j4exp = -1
+        _pt = pt0
+        for (j4exp, exp) in enumerate(dup_exps4stage1, 1+j4exp):
+            assert exp > 0
+            max_exp6stage1 = max(max_exp6stage1, abs(exp))
+            _pt = mul_(exp, _pt)
+                # ^FoundTrivialFactor
+                # ^FoundNonTrivialFactor
+        j4exp
+        max_exp6stage1
+        _pt
+        #########
+        zmay_q1 = max_exp6stage1
+        imay_j4exp6stage1 = j4exp
+        B1 = max_exp6stage1
+        pt1 = _pt
+        cache = {}
+        max4delta6cache = 10+3*n.bit_length()
+
+        add_ = ops4EPC.add_
+        delta_exps4stage2 = _xs5or_B_(B2_or_delta_exps4stage2, delta_exps_from_B1_B2_, default__delta_exps_from_B1_B2_, B1)
+        stage = 2
+        max_exp6stage2 = 0 # zmay_q2
+        _pt = pt1
+        #for (j4exp, delta) in enumerate(delta_exps4stage2, 1+j4exp):
+        j4delta = -1
+        for (j4delta, delta) in enumerate(delta_exps4stage2, 1+j4delta):
+            assert delta > 0
+            max_exp6stage2 += delta
+            _pt = add_(_pt, _cached_mul_(max4delta6cache, cache, mul_, delta, pt1))
+                # ^FoundTrivialFactor
+                # ^FoundNonTrivialFactor
+        j4delta
+        max_exp6stage2
+        _pt
+        #########
+        zmay_q2 = max_exp6stage2
+        imay_j4exp6stage2 = j4delta
+        B2 = max_exp6stage2
+        pt2 = _pt
+    except FoundTrivialFactor:
+        if not exc.N == n:
+            raise
+        'from:inv6N_()'
+        stage
+        j4exp
+        return result6fail#None
+    except FoundNonTrivialFactor as exc:
+        if not exc.N == n:
+            raise
+        ft = exc.factor
+        stage
+        if stage == 1:
+            zmay_q1 = max_exp6stage1
+            _ctx = (stage, n, settings4EPC, (_pt, j4exp, exp, max_exp6stage1))
+        else:
+            zmay_q2 = max_exp6stage2
+            _ctx = (stage, n, settings4EPC, (j4exp, exp, max_exp6stage1, pt1), (_pt, j4delta, delta, max_exp6stage2))
+        _ctx
+        ctx = (_ctx, exc.ctx)
+        #return ft if not with_ctx else (ft, ctx)
+        return (ft, settings4EPC, stage, ((j4exp, zmay_q1) if stage==1 else (max_exp6stage1, j4delta, zmay_q2)))
+
+    imay_j4exp6stage1
+    imay_j4exp6stage2
+    B1, B2
+    pt1, pt2
+    return result6fail#None
+def _cached_mul_(max4delta6cache, cache, mul_, delta, pt1, /):
+    if not delta in cache:
+        pt7mul = mul_(delta, pt1)
+        if delta <= max4delta6cache:
+            cache[delta] = pt7mul
+    else:
+        pt7mul = cache[delta]
+    pt7mul
+    return pt7mul
 
 __all__
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_pint__elliptic_curve_method_, ex1_try_factor_pint__elliptic_curve_method_
 #def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_=None, /, *, random_uint_mod_=None, with_ctx=False, result6fail=None):
 #def ex1_try_factor_pint__elliptic_curve_method_(n, B1, /, *, random_uint_mod_=None, settings4EPC=None):
 #   'n/uint{>=1} -> B1/uint{>=2} -> may (ft/non_trivial_factor{n}, settings4EPC{n}, B1) # [B1 is smooth bound] # [settings4EPC == (args4EPC, xy6EPC) :: ((n,a,b),(x,y))]'
+from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method_
+#def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, B2_or_delta_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None):
+#   '-> (result6fail | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import *
