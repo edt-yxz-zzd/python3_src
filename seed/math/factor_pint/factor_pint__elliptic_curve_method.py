@@ -16,6 +16,8 @@ py -m nn_ns.app.doctest_cmd seed.math.factor_pint.factor_pint__elliptic_curve_me
 #######
 
 [[
+TODO:
+e ../../python3_src/seed/math/factor_pint/factor_pint__smooth_group_order_method.py
 ]]
 
 
@@ -106,7 +108,11 @@ False
 
 
 
-
+def ex1_try_factor_pint__elliptic_curve_method_(n, B1, /, *, random_uint_mod_=None):
+>>> ex1_try_factor_pint__elliptic_curve_method_(n:=(-1+2**67), B1:=1_00_00, random_uint_mod_=None)   #doctest: +SKIP
+(193707721, ((147573952589676412927, 8977067194192764477, 45441361906832129093), (-48615346920337614352, 38730586238887869137)), 10000)
+>>> ex1_try_factor_pint__elliptic_curve_method_(n:=(-1+2**67), B1:=1_00_00, settings4EPC=((147573952589676412927, 8977067194192764477, 45441361906832129093), (-48615346920337614352, 38730586238887869137)))
+(193707721, ((147573952589676412927, 8977067194192764477, 45441361906832129093), (-48615346920337614352, 38730586238887869137)), 10000)
 
 
 
@@ -181,6 +187,7 @@ __all__ = r'''
 try_factor_pint__elliptic_curve_method_
     default__ks5n_and_B_or_ks_
         default__ks5n_and_B_
+ex1_try_factor_pint__elliptic_curve_method_
 
 
 Ops4EllipticPseudocurve
@@ -777,7 +784,27 @@ def default__ks5n_and_B_or_ks_(n, B_or_ks, /):
             ks = iter(ks)
         #case _: raise TypeError(type(B_or_ks))
     return ks
-def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_=None, /, *, random_uint_mod_=None, with_ctx=False, result6fail=None):
+def ex1_try_factor_pint__elliptic_curve_method_(n, B1, /, *, random_uint_mod_=None, settings4EPC=None):
+    'n/uint{>=1} -> B1/uint{>=2} -> may (ft/non_trivial_factor{n}, settings4EPC{n}, B1) # [B1 is smooth bound] # [settings4EPC == (args4EPC, xy6EPC) :: ((n,a,b),(x,y))]'
+    check_int_ge(1, n)
+    check_int_ge(2, B1)
+    m = try_factor_pint__elliptic_curve_method_(n, Bs_or_kss:=[B1], random_uint_mod_=random_uint_mod_, with_ctx=True, settings4EPC=settings4EPC)
+    match m:
+        case None:
+            return None
+        case (ft, ((j4ks, B_or_ks), (j4k, k), (ops4EPC, pt), ctx6exc) as ctx):
+            assert j4ks == 0
+            assert B_or_ks is B1
+            (_n, a, b) = ops4EPC.params4elliptic_pseudocurve
+            assert _n == n
+            args4EPC = (n, a, b)
+            (x, y) = pt # Pt4EC
+            xy6EPC = (x, y)
+            settings4EPC = (args4EPC, xy6EPC)
+            return (ft, settings4EPC, B1)
+
+def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_=None, /, *, random_uint_mod_=None, with_ctx=False, result6fail=None, settings4EPC=None):
+    #TODO:B2 # only B1
     'n/uint{>=1} -> Iter (B/uint{>=2}|ks/(Iter k/uint{>=2})) -> may (n -> (B|ks) -> ks) -> may non_trivial_factor{n} # [ks are multiplier => II(ks)*pt] # [B is smooth bound => ks:=chains(repeat(p,floor_log_(p,B)) for p in primes_lt(1+B))] # [[p::prime][n%p==0][1==gcd(n,[1..<p])] -> [best:B1:=exp((1/sqrt2+o(1))*sqrt(ln(p)*lnln(p)))]]'
     check_int_ge(1, n)
     if n < 4:
@@ -804,6 +831,11 @@ def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_
     random_uint_mod_ = ifNone(random_uint_mod_, randrange)
     check_callable(random_uint_mod_)
 
+    if not None is settings4EPC:
+        (args4EPC, xy6EPC) = settings4EPC
+        g_ops4EPC = Ops4EllipticPseudocurve(*args4EPC)
+        g_pt6EPC = g_ops4EPC.mk_point_(*xy6EPC)
+
     try:
         #########
         #for:ctx:
@@ -813,7 +845,7 @@ def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_
         #########
         for (j4ks, B_or_ks) in enumerate(Bs_or_kss):
             ks = ks5n_and_B_or_ks_(n, B_or_ks)
-            (ops4EPC, pt) = Ops4EllipticPseudocurve.mk_ex5n__7random_(n, random_uint_mod_)
+            (ops4EPC, pt) = Ops4EllipticPseudocurve.mk_ex5n__7random_(n, random_uint_mod_) if None is settings4EPC else (g_ops4EPC, g_pt6EPC)
             _pt = pt
             mul_ = ops4EPC.mul_
             for (j4k, k) in enumerate(ks):
@@ -837,6 +869,8 @@ def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_
 
 
 __all__
-from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_pint__elliptic_curve_method_
+from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_pint__elliptic_curve_method_, ex1_try_factor_pint__elliptic_curve_method_
 #def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_=None, /, *, random_uint_mod_=None, with_ctx=False, result6fail=None):
+#def ex1_try_factor_pint__elliptic_curve_method_(n, B1, /, *, random_uint_mod_=None, settings4EPC=None):
+#   'n/uint{>=1} -> B1/uint{>=2} -> may (ft/non_trivial_factor{n}, settings4EPC{n}, B1) # [B1 is smooth bound] # [settings4EPC == (args4EPC, xy6EPC) :: ((n,a,b),(x,y))]'
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import *
