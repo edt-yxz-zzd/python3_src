@@ -728,10 +728,12 @@ def reset4new_modulus7factor_pint7rho__7resume_(ops, record7old, modulus7new, /)
     if not 0 == ops.modulus %modulus7new:raise ValueError(ops.modulus, modulus7new)
     (jround, jbatch, end6i, i, pt_i, saver_i_jpp_kpp) = record7old
     (k, pt_k, st_i_jpp_kpp) = saver_i_jpp_kpp.last
-    st_i_kpp_kpp = 1 # <<== setup7rho_()
+    #st_i_kpp_kpp = 1 # <<== setup7rho_()
+    st_i_kpp_kpp = ops.setup7rho_(pt_i)
     pt_i7new = pt_i %modulus7new
     pt_k7new = pt_k %modulus7new
-    saver_i_kpp_kpp7new = saver_i_jpp_kpp.oo_clear().oo_append((k, pt_k7new, st_i_kpp_kpp), non_reproduceable_ok=True)
+    st_i_kpp_kpp7new = st_i_kpp_kpp %modulus7new
+    saver_i_kpp_kpp7new = saver_i_jpp_kpp.oo_clear().oo_append((k, pt_k7new, st_i_kpp_kpp7new), non_reproduceable_ok=True)
     record7new = (jround, jbatch, end6i, i, pt_i7new, saver_i_kpp_kpp7new)
     return record7new
 
