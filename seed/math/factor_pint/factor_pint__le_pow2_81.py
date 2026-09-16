@@ -83,11 +83,15 @@ factor_pint__le_pow2_81_
     ++kw:using_ECM
     factor_pint__le_pow2_81__7ECM_
         ++kw:with_settingss,_n2settings4EPC
->>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True)) #doctest: +SKIP
-{549755813911: 1, 1099511627791: 1}
->>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, _n2settings4EPC={n:((604462909840849692000601, 113612373689681093668799, -35105676510727254637001), (-13323696834883514051457, 107231846234603392551700))}))
+>>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=False)) #doctest: +SKIP
 {549755813911: 1, 1099511627791: 1}
 
+>>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=False, _n2settings4EPC={n:((604462909840849692000601, 113612373689681093668799, -35105676510727254637001), (-13323696834883514051457, 107231846234603392551700))}))
+{549755813911: 1, 1099511627791: 1}
+
+
+>>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=True, _n2settings4EPC={n:((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1))}))
+{549755813911: 1, 1099511627791: 1}
 
 
 
@@ -175,7 +179,11 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
     from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method_
     #def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, B2_or_delta_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None):
-    #   '-> (result6fail | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
+    #   '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
+
+    from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method7inversionless_
+    #def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None, default_B1=10000, default_scale4B2=100, default_max4big_step=1<<16):
+    #   '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -187,11 +195,31 @@ r'''[[[
 [[
 rho_vs_ECM:here.2
 ===
-py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM +inversionless
+    # Random
+    {549755813911: 1, 1099511627791: 1}
+    total::duration: 0.7501875430000001 *(unit: 0:00:01)
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM +inversionless +with_settingss
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 14923775115358469412605, 1), (10541229878755366100832, 1)),))
+    total::duration: 1.880881079 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1)),))
+    total::duration: 0.35082293600000003 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -289818814942228560223796, 1), (-102630186370812554545569, 1)),))
+    total::duration: 1.635154302 *(unit: 0:00:01)
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM --_n2settings4EPC='{604462909840849692000601:((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1))}'
+    {549755813911: 1, 1099511627791: 1}
+    total::duration: 0.723129167 *(unit: 0:00:01)
+
+===
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM -inversionless
     # Random
     total::duration: 5.77967163 *(unit: 0:00:01)
 
-py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM +with_settingss
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM -inversionless +with_settingss
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -238844943539410519780725, -144177954435258709866479), (74364165618371020917331, 216514399612423748830434)),))
     total::duration: 1.8384451609999999 *(unit: 0:00:01)
 
@@ -514,8 +542,8 @@ def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, ma
     return _ops7rho.sprp_factor_pint_(n, max4prime7trial_division, max4num_steps=max4num_steps, even_exp=even_exp, addend=addend, u0_or_scale=u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus, may_empty_saver7immutable=may_empty_saver7immutable)
 
 
-def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}):
-    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, n2settings4EPC=_n2settings4EPC)
+def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True):
+    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, n2settings4EPC=_n2settings4EPC, inversionless=inversionless)
     return _ops7ECM.sprp_factor_pint_(n, max4prime7trial_division, max4num_trials=max4num_trials, max4num_trials4part=max4num_trials4part)
 
 
@@ -523,10 +551,11 @@ def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=Fal
 
 class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
     ___no_slots_ok___ = True
-    def __init__(sf, /, *, partial_ok, more, n2settings4EPC={}):
+    def __init__(sf, /, *, partial_ok, more, n2settings4EPC={}, inversionless=True):
         sf.partial_ok = partial_ok
         sf.more = more
         sf.n2settings4EPC = n2settings4EPC
+        sf.inversionless = inversionless
 
     @abstractmethod
     def _st2may_more_info_(sf, st, /):
@@ -566,6 +595,7 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
         return ls4settings4EPC
     @override
     def _core_factor_algo_(sf, st, n7part, /):
+        try1_ = try1_factor_pint__elliptic_curve_method_ if not sf.inversionless else try1_factor_pint__elliptic_curve_method7inversionless_
         (num_trials, max4num_trials, max4num_trials4part, rglnkls4settings4EPC) = st
         sz = 0
         szs = range(1, 1+min(max4num_trials4part, max4num_trials4part-num_trials)) if sf.partial_ok else repeat(0)
@@ -575,12 +605,16 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
             for sz7retry, B1 in ((16, 100), (4, 1000), (1, 10000)):
                 B2 = 100*B1
                 for _ in range(sz7retry):
-                    match try1_factor_pint__elliptic_curve_method_(n7part_or_settings4EPC, B1, B2):
-                        case None:
+                    match try1_(n7part_or_settings4EPC, B1, B2):
+                        case (None, may_exc_or_ctx):
                             continue
-                        case (proper_factor, settings4EPC, stage, details):
-
+                        case (proper_factor, may_exc_or_ctx):
                             some_proper_factors = (proper_factor,)
+                            x_settings4EPC = may_exc_or_ctx
+                            break
+                        case (proper_factor, settings4EPC, stage, details):
+                            some_proper_factors = (proper_factor,)
+                            x_settings4EPC = settings4EPC
                             break
                     #match
                     raise 000
@@ -601,6 +635,7 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
                     continue
                 case (proper_factor, (args4EPC, xy6EPC) as settings4EPC, B1):
                     some_proper_factors = (proper_factor,)
+                    x_settings4EPC = settings4EPC
                     break
             raise 000
             ##################
@@ -616,7 +651,7 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
             some_proper_factors = ()
         some_proper_factors
         if some_proper_factors:
-            rglnkls4settings4EPC = oo_push_(rglnkls4settings4EPC, settings4EPC)
+            rglnkls4settings4EPC = oo_push_(rglnkls4settings4EPC, x_settings4EPC)
             #print(rglnkls4settings4EPC)
         new_st = st if sz == 0 and not some_proper_factors else (num_trials+sz, max4num_trials, max4num_trials4part, rglnkls4settings4EPC)
         assert some_proper_factors or sf.partial_ok
