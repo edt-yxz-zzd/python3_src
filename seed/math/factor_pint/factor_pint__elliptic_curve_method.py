@@ -377,6 +377,22 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 
 
 
+++kw:imay_period4detect
+>>> [*islice(_4imay_period4detect(9, -1)(), 0, 17)]
+[False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+>>> [*islice(_4imay_period4detect(9, 0)(), 0, 17)] # auto # 9=>16
+[False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False]
+>>> [*islice(_4imay_period4detect(9, 1)(), 0, 17)]
+[True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
+>>> [*islice(_4imay_period4detect(9, 2)(), 0, 17)]
+[False, True, False, True, False, True, False, True, False, True, False, True, False, True, False, True, False]
+>>> [*islice(_4imay_period4detect(9, 3)(), 0, 17)]
+[False, False, True, False, False, True, False, False, True, False, False, True, False, False, True, False, False]
+
+
+
+
+
 
 
 >>> (ops, pt_0) = (Ops4EllipticPseudocurve7DropY(4087, 724, -1984, detect6Incapable=True), Pt4EC7h(-694, -156))
@@ -389,6 +405,10 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 >>> settings4EPC = ((4087, 724, -1984), (-694, -156))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(settings4EPC)
 (67, ((4087, 724, -1984), (-694, -156)), 1, (21, 5))
+>>> try1_factor_pint__elliptic_curve_method7inversionless_(settings4EPC, 9, imay_period4detect=1)
+(67, ((4087, 724, -1984), (-694, -156)), 1, (5, 5))
+>>> try1_factor_pint__elliptic_curve_method7inversionless_(settings4EPC, 8, imay_period4detect=1)
+(61, ((4087, 724, -1984), (-694, -156)), 1, (5, 7))
 
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(settings4EPC, 10, 20)
 (67, ((4087, 724, -1984), (-694, -156)), 1, (5, 5))
@@ -575,8 +595,8 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
 
     from math import isqrt
-    from itertools import repeat, cycle
-#.    from functools import cached_property
+    from itertools import repeat, cycle, islice
+
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 #e script/整数分解牜凑平方牜凑整除幂.py
