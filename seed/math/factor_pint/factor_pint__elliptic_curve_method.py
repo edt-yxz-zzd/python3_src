@@ -4,8 +4,8 @@
 #       1. ctx{FoundTrivialFactor} verbose print_err;
 #       2. stage1结束，stage2起始ctx 即使还未实现stage2，方便未来断点重启
 #
-#   实现: [X:Z] 省略Y，且齐次无需inv6N_()
-#   实现:第二阶段:额外一个大素数
+#   DONE:实现: [X:Z] 省略Y，且齐次无需inv6N_()
+#   DONE:实现:第二阶段:额外一个大素数
 
 # formula4edgecase4addh_:goto
 # formula4main4addh_:goto
@@ -426,6 +426,54 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 
 
 
+>>> M677 = -1+2**677
+>>> M677 == (1943118631 * 531132717139346021081 * 978146583988637765536217 * 53625112691923843508117942311516428173021903300344567 * 11583306121194302925666610180475654822154587629577979400456857120235319057709961541850271218784399)
+True
+>>> n = M677
+>>> d = 8689346476060549
+>>> p53_6M677 = 53625112691923843508117942311516428173021903300344567
+>>> order4EC_6d_6p53_6M677 = (2**4 * 3**9 * 3079 * 152077 * 172259 * 1067063 * 3682177 * 3815423 * 8867563 * 15880351)
+>>> B1 = 11000000 # = 11*10**6
+>>> B2 = 100*B1
+
+>>> (ops, pt_0) = Ops4EllipticPseudocurve7DropY.mk_ex5n__7random_(n, strict=True, _d6strict=d)
+>>> (ops, pt_0)
+(Ops4EllipticPseudocurve7DropY(627057063764139831929324851379409869378845668175598843037877190478889006888518431438644711527536922839520331484815861906173161536477065546885468336421475511783984145060592245840032548652210559519683510271, -97503043140353293616716817776289974619720666565578128279768174236064446902549981253020389277636140137436330940980987543036725248, 59845263566661426996686823339816783683161195519714360280201674769083690967660287554949519535161429195284222362624), Pt4EC7h(430449974945880598783931876255267955898481599517755304563988950914481375606025154356242953187136, 41989559385379681935948478478770327184783721545536))
+
+>>> pt7expected_partial_O = ops.mul7h_(order4EC_6d_6p53_6M677, pt_0)
+>>> pt7expected_partial_O.eq_partial_zero_mod_(n)
+True
+>>> p53_6M677 == gcd(n, pt7expected_partial_O.Z)
+True
+
+>>> ops.mul7h_(order4EC_6d_6p53_6M677, Pt4EC7h(1, 1)).eq_partial_zero_mod_(n)
+True
+>>> ops.mul7h_(order4EC_6d_6p53_6M677, Pt4EC7h(3, 1)).eq_partial_zero_mod_(n)
+True
+
+>>> ops.mul7h_(order4EC_6d_6p53_6M677, Pt4EC7h(2, 1)).eq_partial_zero_mod_(n) # pt @twist_EC
+False
+>>> ops.mul7h_(order4EC_6d_6p53_6M677, Pt4EC7h(4, 1)).eq_partial_zero_mod_(n) # pt @twist_EC
+False
+
+# EC or twist_EC: [g? *y**2 == rhs{x}]
+# [Jacobi_symbol(p;rhs{x}) -> (0|-1|+1)]
+# %p => [len(EC)+len(twist_EC) == 2+2*p] # 『2+』for two pt7h_O
+>>> ops.mul7h_(2+2*p53_6M677-order4EC_6d_6p53_6M677, Pt4EC7h(2, 1)).eq_partial_zero_mod_(n) # pt @twist_EC
+True
+>>> ops.mul7h_(2+2*p53_6M677-order4EC_6d_6p53_6M677, Pt4EC7h(4, 1)).eq_partial_zero_mod_(n) # pt @twist_EC
+True
+
+
+
+
+
+
+
+
+
+
+
 
 
 [[
@@ -527,13 +575,14 @@ with mk_ctx4lazy_import4funcs_(__name__):
 
 
     from math import isqrt
-    from itertools import repeat
+    from itertools import repeat, cycle
 #.    from functools import cached_property
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
 #e script/整数分解牜凑平方牜凑整除幂.py
 
 
+__all__
 #class NotImplementedError__add7h__X6diff_eq0(NotImplementedError):pass
 class Incapable__add7h__X6diff_eq0(BaseException):pass
 class ParamError__ops4EPC7DropY(BaseException):pass
@@ -910,7 +959,6 @@ stage1:第一阶段:
         default__ks5n_and_B_()
         default__dup_exps_from_B1_
 stage2:第二阶段:
-    TODO
     前提:P1幸存，没有^FoundNonTrivialFactor
     经验:占比{第二阶段耗时/总耗时} <- [1/4 ~ 1/2]
         [B2 := 100*B1]
@@ -1200,14 +1248,15 @@ end-def ECM7inversionless_(n, B1, B2, D):
 
 # [examples__ECM]:here
 实例一:
-    [n := M667 = -1+2**667]
+    # 原文bug: M667-->M677
+    [n := M677 = -1+2**677]
     [d := 8689346476060549]
     [B1 := 11000000 = 11*10**6]
     [B2 := 100*B1]
-    [M667 == (1943118631 * 531132717139346021081 * 978146583988637765536217 * 53625112691923843508117942311516428173021903300344567 * some_a_PRIME)]
-    [p53{M667} := 53625112691923843508117942311516428173021903300344567]
-    [len(EC{d;ZZ%p53{M667}}) == (2**4 * 3**9 * 3079 * 152077 * 172259 * 1067063 * 3682177 * 3815423 * 8867563 * 15880351)]
-    [[8867563 < B1 < 15880351 < B2] -> [p53{M667} 发现于 第二阶段]]
+    [M677 == (1943118631 * 531132717139346021081 * 978146583988637765536217 * 53625112691923843508117942311516428173021903300344567 * 11583306121194302925666610180475654822154587629577979400456857120235319057709961541850271218784399)]
+    [p53{M677} := 53625112691923843508117942311516428173021903300344567]
+    [len(EC{d;ZZ%p53{M677}}) == (2**4 * 3**9 * 3079 * 152077 * 172259 * 1067063 * 3682177 * 3815423 * 8867563 * 15880351)]
+    [[8867563 < B1 < 15880351 < B2] -> [p53{M677} 发现于 第二阶段]]
 实例二:
     [n := F15 = 1+2**2**15]
     [d := 253301772]
@@ -1492,7 +1541,7 @@ class Ops4EllipticPseudocurve7DropY:
         sf._C = C
         sf._args = (n, C)
     @classmethod
-    def mk_ex5n__7random_(cls, n, may_random_uint_mod_=None, /, *, strict=True, detect6Incapable=False):
+    def mk_ex5n__7random_(cls, n, may_random_uint_mod_=None, /, *, strict=True, detect6Incapable=False, _d6strict=None):
         '-> (ops4EPC, pt6EPC)|^FoundNonTrivialFactor'
         strict = bool(strict)
         detect6Incapable = bool(detect6Incapable)
@@ -1506,8 +1555,17 @@ class Ops4EllipticPseudocurve7DropY:
         random_uint_mod_ = ifNone(may_random_uint_mod_, randrange)
         check_callable(random_uint_mod_)
         hrem6N_ = mk_hrem_(n)
+        b_init = True
         while strict:
-            d = 6+random_uint_mod_(-6+n) # randrange(6, n)
+            if not _d6strict is None:
+                if b_init:
+                    b_init = False
+                else:
+                    raise Exception(n, _d6strict)
+                d = hrem6N_(_d6strict)
+            else:
+                d = 6+random_uint_mod_(-6+n) # randrange(6, n)
+            d
             u = hrem6N_(d**2-5)
             v = hrem6N_(4*d)
 
@@ -2298,10 +2356,30 @@ def prepare4criteria4ECM7inversionless_(n, may_B1, may_B2, may_max4big_step, /, 
     # [0 == big_step%2]
     return (B1, B2, big_step)
 
+def _4imay_period4detect(n, imay_period4detect, /):
+    check_int_ge(-1, imay_period4detect)
+    match imay_period4detect:
+        case -1:
+            mk_iter4detect_ = lambda:repeat(False)
+            return mk_iter4detect_
+        case 1:
+            mk_iter4detect_ = lambda:repeat(True)
+            return mk_iter4detect_
+        case 0:
+            # auto
+            period4detect = 4*n.bit_length()
+        case period4detect:
+            pass
+
+    period4detect
+    js = range(period4detect)[::-1]
+    mk_iter4detect_ = lambda:(not j for j in cycle(js))
+    return mk_iter4detect_
+
 #baby_steps_giant_steps
 #max4giant_step-->max4big_step
 #big_step
-def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None, default_B1=10000, default_scale4B2=100, default_max4big_step=1<<16):
+def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, dup_exps_from_B1_=None, delta_exps_from_B1_B2_=None, default_B1=10000, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0):
     '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
     #TODO:++kw:drop_Y/inversionless#Ops4EllipticPseudocurve7DropY
     #vs:try1_factor_pint__elliptic_curve_method_
@@ -2350,6 +2428,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                 raise FoundNonTrivialFactor(n, ft)
 
     ###########################
+    mk_iter4detect_ = _4imay_period4detect(n, imay_period4detect)
     pt0 = pt6EPC
     zmay_q1 = 0
     zmay_q2 = 0
@@ -2361,6 +2440,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
         zmay_q1 = 0
         j4exp = -1
         _pt = pt0
+        iter4detect = mk_iter4detect_()
         for (j4exp, exp) in enumerate(dup_exps4stage1, 1+j4exp):
             assert exp > 0
             zmay_q1 = max(zmay_q1, exp)
@@ -2372,6 +2452,9 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                 _detect_pt_(_pt7pre)
                     # ^FoundNonTrivialFactor
                 return (result6fail, ctx)
+            if next(iter4detect):
+                _detect_pt_(_pt7pre)
+                    # ^FoundNonTrivialFactor
         j4exp
         zmay_q1
         _pt
@@ -2393,6 +2476,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
         zmay_q2 = 0
         #_pt = pt1
         j4delta = -1
+        iter4detect = mk_iter4detect_()
         it = enumerate(delta_exps4stage2, 1+j4delta)
         for (j4delta, delta) in it:
             assert delta >= 3
@@ -2477,6 +2561,9 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                     # ^FoundNonTrivialFactor
                 return (result6fail, ctx)
             # [0 =!= IIdiffs %n]
+            if next(iter4detect):
+                _detect_u_(IIdiffs)
+                    # ^FoundNonTrivialFactor
         j4delta
         zmay_q2
         _pt
