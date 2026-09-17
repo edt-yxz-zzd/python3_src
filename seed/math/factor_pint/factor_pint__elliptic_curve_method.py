@@ -917,6 +917,7 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @max_
     4096
 py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='44444444444444461**2' =10000
     (20, 19, 1)
+    (20, 17, 3)
 
 ]]
 [[
@@ -1078,6 +1079,9 @@ class Pt4EC7h(_Pt4EC7h):
         return 0 == sf.Z
     def eq_partial_zero_mod_(sf, n, /):
         return not 1 == gcd(n, sf.Z)
+    def mul_X_Z_mod_(sf, n, /):
+        return (sf.X * sf.Z)%n
+
 pt7h_O = Pt4EC7h(0, 0)
 
 
@@ -3141,7 +3145,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             # ^FoundNonTrivialFactor
         # [not pt1.eq_partial_zero_mod_()]
         #########
-        max4delta6cache = D
+        #max4delta6cache = D
 
         add7h_ = ops4EPC.add7h_
         #old:delta_exps4stage2 = _xs5or_B_(B2, delta_exps_from_B1_B2_, default__delta_exps_from_B1_B2_, B1)
@@ -3187,8 +3191,11 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             cache
             # [[j:<-[0..=D]] -> [cache[j] == 2*j<*>pt1]]
             # [[j:<-[1..=D]] -> [O =!= cache[j] == 2*j<*>pt1]]
-            777;cache[0] = None
             #end-detect6cache
+            ##################
+            j2XZ6cache = [pt.mul_X_Z_mod_(n) for pt in cache]
+            777;cache[0] = None
+            777;j2XZ6cache[0] = None
             ##################
 
             pt8big_step = cache[D]
@@ -3202,10 +3209,15 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
 
             pt7ref = mul7h_(k4ref, pt1)
             pt7ref7pre = mul7h_(k4ref-big_step, pt1)
+            777;XZ4ref = pt7ref.mul_X_Z_mod_(n)
             # [pt7ref == k4ref<*>pt1]
             # [pt7ref7pre == (k4ref-big_step)<*>pt1]
             # [0 == (q-k4ref)%2][2 <= (q-k4ref) <= big_step]
-            diff = pt7ref.diff7h7mod_(n, pt8small_step:=cache[(q-k4ref)>>1])
+            j4small_step = (q-k4ref)>>1
+            pt8small_step = cache[j4small_step]
+            777;XZ4small_step = j2XZ6cache[j4small_step]
+            diff = _diff7h7mod_(n, pt7ref, pt8small_step, XZ4ref, XZ4small_step)
+            #diff = pt7ref.diff7h7mod_(n, pt8small_step)
             IIdiffs = diff
             if 0 == IIdiffs:
                 assert diff == 0, ctx
@@ -3245,6 +3257,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                 (pt7ref, pt7ref7pre) = (add7h_(pt7ref, pt8big_step, pt7ref7pre), pt7ref)
                     # ^Incapable__add7h__X6diff_eq0
                     # ^FoundNonTrivialFactor
+                777;XZ4ref = pt7ref.mul_X_Z_mod_(n)
                 # [pt7ref == k4ref<*>pt1]
                 # [pt7ref7pre == (k4ref-big_step)<*>pt1]
                 # [(new_q-k4ref) > 0]
@@ -3257,7 +3270,11 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             # [pt7ref == k4ref<*>pt1]
             # [pt7ref7pre == (k4ref-big_step)<*>pt1]
             # [0 == (q-k4ref)%2][2 <= (q-k4ref) <= big_step]
-            diff = pt7ref.diff7h7mod_(n, pt8small_step:=cache[(q-k4ref)>>1])
+            j4small_step = (q-k4ref)>>1
+            pt8small_step = cache[j4small_step]
+            777;XZ4small_step = j2XZ6cache[j4small_step]
+            diff = _diff7h7mod_(n, pt7ref, pt8small_step, XZ4ref, XZ4small_step)
+            #diff = pt7ref.diff7h7mod_(n, pt8small_step)
             IIdiffs7pre = IIdiffs
             # !! [0 =!= IIdiffs %n]
             # [0 =!= IIdiffs7pre %n]
@@ -3322,6 +3339,13 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
     return (result6fail, (ctx, (B1, B2, pt1, pt2)))
     return (result6fail, ctx)
 #end-def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, default_B1=10000, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0):
+def _diff7h7mod_(n, pt7ref, pt8small_step, XZ4ref, XZ4small_step, /):
+    '-> (pt7ref.X*pt8small_step.Z -pt8small_step.X*pt7ref.Z)%n'
+    #diff = pt7ref.diff7h7mod_(n, pt8small_step)
+    (Xr, Zr) = pt7ref
+    (Xm, Zm) = pt8small_step
+    diff = ((Xr-Xm)*(Zr+Zm) -XZ4ref +XZ4small_step) %n
+    return diff
 
 
 
