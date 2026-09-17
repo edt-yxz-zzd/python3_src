@@ -585,10 +585,12 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.FoundNonTrivialFactor: 
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, -16, 1), (-3, 1)), default_B1)
 (5, ((35, -16, 1), (-3, 1)), 1, (13, 3))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, 5, 1), (15, 1)))
-(7, ((35, 5, 1), (15, 1)), 1, (0, 2))
+(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 1), 2)))
+>>> #before{patch0003__deprecate1}:after_patch_123:(7, ((35, 5, 1), (15, 1)), 1, (0, 2))
 >>> #before_patch_123:(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 1), 2)))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, 5, 1), (15, 1)), default_B1)
-(7, ((35, 5, 1), (15, 1)), 1, (0, 2))
+(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (10000, 1000000, 996)), '@stage1...', (Pt4EC7h(15, 1), 2)))
+>>> #before{patch0003__deprecate1}:after_patch_123:(7, ((35, 5, 1), (15, 1)), 1, (0, 2))
 >>> #before_patch_123:(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (10000, 1000000, 996)), '@stage1...', (Pt4EC7h(15, 1), 2)))
 
 
@@ -645,14 +647,18 @@ True
 
 
 
-
+###################################
+#########################
+# before_patch_123:begin:
+#########################
 # [:???is_perfect_power_ok__6ECM???]:goto
 # [:inspect_why_almost_fail6prime_square6nonstrict]:goto
     ok:try1_factor_pint__elliptic_curve_method_
     ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**e{>2})
     ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{+strict}
-    half_ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_big_enough}
-    fail:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small} #but sometime succ rarely
+    half_ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_big_enough}@{before_patch_123}
+    fail:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small}@{before_patch_123} #but sometime succ rarely
+    ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small}@{after_patch_123}
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(257**2, detect_square_at_first=False) # all fails #doctest: +SKIP
 (None, (66049, ((66049, -25786, 1), (-17962, 1)), (Ops4EllipticPseudocurve7DropY(66049, -25786, 1, detect6Incapable = True, strict = False), Pt4EC7h(-17962, 1)), (10000, 1000000, 996)))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(257**3, detect_square_at_first=False) #doctest: +SKIP
@@ -689,6 +695,13 @@ p_big_enough
 (11, ((121, -38, 19), (5, -14)), 2, (3, 0, 5))
 >>> try1_factor_pint__elliptic_curve_method_(((121, -38, 19), (5, -14)), detect_square_at_first=False)
 (11, ((121, -38, 19), (5, -14)), 2, (3, 0, 5))
+
+
+#########################
+# before_patch_123:end:
+#########################
+###################################
+
 
 
 
@@ -1015,6 +1028,23 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_cou
     (20, 3, 17)
 py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='11**2'
     (20, 12, 8)
+#########################
+#below:after_patch_123&&patch0003__deprecate1:
+#########################
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='11**2'
+    Exception: (Ops4EllipticPseudocurve7DropY(121, 4, 1, detect6Incapable = True, strict = False), Pt4EC7h(-35, 2))
+    bug__0001:goto
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first -strict ='((121, 4, 1), (-35, 2))'
+    (11, ((121, 4, 1), (-35, 2)), 1, (0, 2))
+    #fixed:bug__0001:goto
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='11**2'
+    (100, 15, 85)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='257**2'
+    (100, 6, 94)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='7**2'
+    (100, 16, 84)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='67**2'
+    (100, 4, 96)
 ]]
 [[
 # [choose_B1__6ECM]:goto
@@ -2083,6 +2113,7 @@ class Ops4EllipticPseudocurve7DropY:
         # strict => [gcd(n,D4C*(4*D4C**2-N4C**2)) == 1]
         # strict => [gcd(n,(4-C**2)) == 1]
         # [0 =!= D4C*(4*D4C**2-N4C**2) %n]
+        # __class__.invariant:[0 =!= D4C*(4*D4C**2-N4C**2) %n]
 
 
         sf._hrem6N_ = hrem6N_
@@ -2264,8 +2295,16 @@ class Ops4EllipticPseudocurve7DropY:
         while not strict:
             # !! [g? can be square_nonresidual]
             # => [x0 can be arbitrary nonzero]
-            x0 = 1+random_uint_mod_(-1+n) # randrange(1, n)
-            # [1 <= x0 < n] # to avoid Incapable__add7h__X6diff_eq0
+            # avoid Incapable__add7h__X6diff_eq0 => [x0 =!= 0]
+            # see:patch0003:[Xp == 0] <==> [[Zp == 0]or[X1 == +/-Z1]]
+            #   => avoid:[x0 == X0/Z0 == +/-1]
+            # required:[2 <= x0 <= n-2 < n-1]
+            # !! [n >= 10]
+            # [n-3 >= 7 > 0]
+            x0 = 2+random_uint_mod_(-3+n) # randrange(2, n-1)
+            # [0 <= x0-2 < n-3]
+            # [2 <= x0 < n-1]
+            # [2 <= x0 <= n-2 < n-1]
             if 0:
                 # !! [n >= 10]
                 # [n-5 >= 5 > 0]
@@ -2348,14 +2387,14 @@ class Ops4EllipticPseudocurve7DropY:
             case (Pt4EC7h(), Pt4EC7h()):
                 return pt6lhs == pt6rhs
         raise TypeError(type(pt6lhs), type(pt6rhs))
-    def neg_(sf, pt, /):
+    def neg7h_(sf, pt, /):
         # !! 7DropY
         # [pt =[repr]= -pt]
         return pt
     def sub7h_(sf, pt6lhs, pt6rhs, pt7sum, /):
         '[pt7sum == pt6lhs <+> pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7sum/Pt4EC7h -> (pt6lhs<+>-pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor'
         #old:'[pt7sum == pt6lhs <+> pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7sum/Pt4EC7h -> (pt6lhs<+>-pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
-        return sf.add7h_(pt6lhs, sf.neg_(pt6rhs), pt7sum)
+        return sf.add7h_(pt6lhs, sf.neg7h_(pt6rhs), pt7sum)
     def add7h_(sf, pt6lhs, pt6rhs, pt7diff, /):
         '[pt7diff == pt6lhs <+> -pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7diff/Pt4EC7h -> (pt6lhs<+>pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor'
         #old:'[pt7diff == pt6lhs <+> -pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7diff/Pt4EC7h -> (pt6lhs<+>pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
@@ -2507,6 +2546,7 @@ class Ops4EllipticPseudocurve7DropY:
         Zp = D4C_part4Zp*Z1*4 %n if D4C_part4Zp else 0
         Xp = D4C*pow(X1X1 -Z1Z1, 2, n) %n if Zp else 0
         ##################
+        Zp, Xp
         if 1:
             # patch0003:here
             # [B:=0] ==>> [X1=!=0]
@@ -2519,11 +2559,61 @@ class Ops4EllipticPseudocurve7DropY:
                     # ^FoundNonTrivialFactor
                 raise Exception(sf, pt)
             # [Zp =?= 0]
-            # [Zp == 0] <==> [0 == D4C_part4Zp]
-            if Xp == 0:
-                _detect_u_(n, ctx, X1-Z1)
-                    # ^FoundNonTrivialFactor
+            # [Zp == 0] <==> [0 == D4C_part4Zp][P1.y == 0]
+            if 0:
+                # patch0003__deprecate1:here
+                if Xp == 0:
+                    _detect_u_(n, ctx, X1-Z1)
+                        # ^FoundNonTrivialFactor
+                    pass
+            if Xp == 0 != Zp:
+                # [Zp =!= 0]
+                # [Xp == 0]
+                # [0 == Xp == D4C*pow(X1X1 -Z1Z1, 2, n) %n]
+                # [0 == D4C*(X1X1 -Z1Z1)**2 %n]
+                if not X1X1 == Z1Z1:
+                    # [0 =!= (X1X1 -Z1Z1)]
+                    # !! __class__.invariant:[0 =!= D4C*(4*D4C**2-N4C**2) %n]
+                    # [0 =!= D4C %n]
+                    # !! [0 =!= (X1X1 -Z1Z1)]
+                    # !! [0 == D4C*(X1X1 -Z1Z1)**2 %n]
+                    # [1 < gcd(n, (X1X1 -Z1Z1)) < n]
+                    # bug:[1 < gcd(n, D4C) < n] # NOTE:『**2』
+                    #bug:_detect_u_(n, ctx, D4C)
+                    #   ^Exception: (Ops4EllipticPseudocurve7DropY(121, 4, 1, detect6Incapable = True, strict = False), Pt4EC7h(-35, 2))
+                    #   bug__0001:here
+                    _detect_u_(n, ctx, (X1X1 -Z1Z1))
+                        # ^FoundNonTrivialFactor
+                    raise Exception(sf, pt, X1X1,Z1Z1, (X1X1 -Z1Z1), D4C)
+                else:
+                    # [0 == (X1X1 -Z1Z1)]
+                    # [0 == (X1X1 -Z1Z1)%n]
+                    # [0 == (X1-Z1)*(X1+Z1)%n]
+                    if not abs(X1) == abs(Z1):
+                        # [X1%n =!= (+/-Z1)%n]
+                        # [0 =!= (X1+/-Z1)%n]
+                        # !! [0 == (X1-Z1)*(X1+Z1)%n]
+                        # [1 < gcd(n, X1-Z1) < n]
+                        _detect_u_(n, ctx, X1-Z1)
+                            # ^FoundNonTrivialFactor
+                        raise Exception(sf, pt)
+                    else:
+                        # [X1 == +/-Z1]
+                        pass
+                    # [X1 == +/-Z1]
+                # [X1 == +/-Z1]
                 pass
+            else:
+                # [Zp == 0]or[Xp =!= 0]
+                pass
+            # [X1 == +/-Z1]or[Zp == 0]or[Xp =!= 0]
+            # [Xp == 0] => [[Zp == 0]or[X1 == +/-Z1]]
+            # [Xp == 0] <==> [[Zp == 0]or[X1 == +/-Z1]]
+            # end-patch0003
+        # [Zp == 0] <==> [0 == D4C_part4Zp][P1.y == 0]
+        # [Xp == 0] <==> [[Zp == 0]or[X1 == +/-Z1]]
+        ##################
+        Zp, Xp
         return sf.mk_point_(Xp, Zp)
 
     def mul7h_(sf, k, pt, /, *, _old_ver=False):
