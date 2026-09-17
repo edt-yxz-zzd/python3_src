@@ -880,6 +880,38 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1
     (None, ((100140049, ((100140049, 20881417, 1), (-35257327, 1)), (Ops4EllipticPseudocurve7DropY(100140049, 20881417, 1, detect6Incapable = True, strict = False), Pt4EC7h(-35257327, 1)), (32, 3200, 58)), '@stage1...', (Pt4EC7h(18938411, -24529588), 31)))
     (10007, ((100140049, 19640702, 1), (37248481, 1)), 2, (31, 108, 659))
     half_ok
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first -strict ='55555559**2'
+    (None, ((3086420135802481, ((3086420135802481, 6679540342757, 1), (575078109688372, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 6679540342757, 1, detect6Incapable = True, strict = False), Pt4EC7h(575078109688372, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(1386745087006760, 321760178702510), Pt4EC7h(1386745087006760, 321760178702510))))
+    (55555559, ((3086420135802481, -781829452349751, 1), (88854043241671, 1)), 2, (251, 1040, 8783))
+    (None, ((3086420135802481, ((3086420135802481, 1314248336871218, 1), (871949769330518, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 1314248336871218, 1, detect6Incapable = True, strict = False), Pt4EC7h(871949769330518, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(924553739202990, 576598827605744), Pt4EC7h(924553739202990, 576598827605744))))
+    (None, ((3086420135802481, ((3086420135802481, 1098765936218349, 1), (-524732384086169, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 1098765936218349, 1, detect6Incapable = True, strict = False), Pt4EC7h(-524732384086169, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(-930800569541153, -924913444529554), Pt4EC7h(-930800569541153, -924913444529554))))
+    (55555559, ((3086420135802481, 305146434596480, 1), (1037237117303743, 1)), 2, (251, 86, 811))
+    (None, ((3086420135802481, ((3086420135802481, 1076358357128684, 1), (-1441767787492636, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 1076358357128684, 1, detect6Incapable = True, strict = False), Pt4EC7h(-1441767787492636, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(-1165141384675086, 794824401768530), Pt4EC7h(-1165141384675086, 794824401768530))))
+    (None, ((3086420135802481, ((3086420135802481, 914545166712481, 1), (-1286084457219141, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 914545166712481, 1, detect6Incapable = True, strict = False), Pt4EC7h(-1286084457219141, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(1367475516347820, 176489216910736), Pt4EC7h(1367475516347820, 176489216910736))))
+    (None, ((3086420135802481, ((3086420135802481, -1192174267143316, 1), (160462262489171, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, -1192174267143316, 1, detect6Incapable = True, strict = False), Pt4EC7h(160462262489171, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(730852734770698, -1478343191605623), Pt4EC7h(730852734770698, -1478343191605623))))
+    (55555559, ((3086420135802481, 957409698687769, 1), (1161290665971497, 1)), 2, (251, 2704, 24971))
+    (None, ((3086420135802481, ((3086420135802481, 269862868064953, 1), (-1189137358966096, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 269862868064953, 1, detect6Incapable = True, strict = False), Pt4EC7h(-1189137358966096, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(909430932820371, 563923072786449), Pt4EC7h(909430932820371, 563923072786449))))
+    (None, ((3086420135802481, ((3086420135802481, 1202423080168366, 1), (-1088847347504767, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 1202423080168366, 1, detect6Incapable = True, strict = False), Pt4EC7h(-1088847347504767, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(-354953312193422, 661795627729877), Pt4EC7h(-354953312193422, 661795627729877))))
+    (None, ((3086420135802481, ((3086420135802481, -542732720085494, 1), (-293675450238730, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, -542732720085494, 1, detect6Incapable = True, strict = False), Pt4EC7h(-293675450238730, 1)), (256, 25600, 160)), '@stage1...', (Pt4EC7h(-1098866084984775, -606147096852929), 229)))
+    (55555559, ((3086420135802481, 1119471487987115, 1), (-1385011322393185, 1)), 2, (251, 416, 3343))
+    (None, ((3086420135802481, ((3086420135802481, 166270660776580, 1), (619103611537477, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, 166270660776580, 1, detect6Incapable = True, strict = False), Pt4EC7h(619103611537477, 1)), (256, 25600, 160)), '@stage1...', (Pt4EC7h(328946463770891, 947120775579169), 79)))
+    (None, ((3086420135802481, ((3086420135802481, -1349609412034606, 1), (-361683877800516, 1)), (Ops4EllipticPseudocurve7DropY(3086420135802481, -1349609412034606, 1, detect6Incapable = True, strict = False), Pt4EC7h(-361683877800516, 1)), (256, 25600, 160)), (256, 25600, Pt4EC7h(583378581498287, 641875017414280), Pt4EC7h(583378581498287, 641875017414280))))
+    (55555559, ((3086420135802481, 736616997974826, 1), (574005424832666, 1)), 2, (251, 416, 3343))
+    # succ ratio:5/16
+
+_count_succ_ratio_
+    -> (total, c7fail, c7ok)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='10007**2'
+    (100, 22, 78)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='55555559**2'
+    (100, 66, 34)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='44444444444444461**2'
+    (100, 100, 0)
+    # too big
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @max_B1_from_n_ ='44444444444444461**2'
+    4096
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='44444444444444461**2' =10000
+    (20, 19, 1)
 
 ]]
 [[
@@ -3281,9 +3313,31 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
 
 
 
+def _count_succ_ratio_(total, tag:'7inversionless', /, *args, **kwds):
+    match tag:
+        case '7inversionless':
+            f = try1_factor_pint__elliptic_curve_method7inversionless_
+        case 'no:7inversionless':
+            f = try1_factor_pint__elliptic_curve_method_
+        case _:
+            raise TypeError('should be: "7inversionless","no:7inversionless"', tag)
+    f
+    g = lambda:f(*args, **kwds)
 
+    c7fail = c7ok = 0
+    for j in range(total):
+        r = g()
+        match r:
+            case (None, *_):
+                c7fail += 1
+            case (int() as ft, *_):
+                c7ok += 1
+            case bad:
+                raise Exception(bad)
 
-
+    c7fail, c7ok
+    assert c7fail+c7ok == total
+    return (total, c7fail, c7ok)
 
 
 
