@@ -9,7 +9,7 @@
 #   DONE:实现: [X:Z] 省略Y，且齐次无需inv6N_()
 #   DONE:实现:第二阶段:额外一个大素数
 
-# [choose_B1__ECM]:goto
+# [choose_B1__6ECM]:goto
 # [:???is_perfect_power_ok__6ECM???]:goto
 # [:inspect_why_almost_fail6prime_square6nonstrict]:goto
 #   fail:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small} #but sometime succ rarely
@@ -71,7 +71,12 @@ page338 [347/604]
     ##################
     # [[p-->+oo] -> [small_o(1) --> 0]]
     [TIME{ECM7stage1_only(n)} == O(exp((1+small_o(1))*sqrt(2*lnPlnlnP)))] where [B1 := (exp((1+small_o(1))*sqrt(1/2*lnPlnlnP)))]
-        # [choose_B1__ECM]:here
+        # [choose_B1__6ECM]:here
+        # best via min (B1/prob(succ|B1))
+        [TIME7per_trial{ECM7stage1_only(n)} ~= B]
+        [num_trials7heuristic_expected{n} == 1/prob(succ|B1) == TIME{ECM7stage1_only(n)}/B1 == O(L_(p)**(sqrt2-1/sqrt2+small_o(1))) == O(L_(p)**(1/sqrt2+small_o(1)))]
+        [num_trials7heuristic_expected{n} ~= B1]
+        [TIME{ECM7stage1_only(n)} ~= B1**2]
     ##################
     [L_(p) =[def]= (exp(sqrt(lnPlnlnP)))]
     [TIME{ECM7stage1_only(n)} == O(L_(p)**(sqrt2+small_o(1)))] where [B1 := (L_(p)**(1/sqrt2+small_o(1)))]
@@ -655,7 +660,7 @@ try1_factor_pint__elliptic_curve_method7inversionless_
 try1_factor_pint__elliptic_curve_method_
     prepare4factor_pint__elliptic_curve_method_
     default__B1_from_n_
-    default__dup_exps_from_B1_
+    default__dup_exps_from_B1_may_B1pw_
     default__delta_exps_from_B1_B2_
     default__asc_exps_from_B1_B2_          iter_deltas5asc_ints_
 
@@ -915,7 +920,7 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_cou
 
 ]]
 [[
-# [choose_B1__ECM]:goto
+# [choose_B1__6ECM]:goto
 py_adhoc_call { --lineno=2 }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,batch_iter__7B1_from_p_ ='[1+(1<<ez) for ez in range(2,1+100)]'
 2:(5, 2)
 3:(9, 4)
@@ -1382,7 +1387,7 @@ Theorem 7.4.3 (ECM curve construction)
 stage1:第一阶段:
     [P1:=II(ks{B1})*P0]
         default__ks5n_and_B_()
-        default__dup_exps_from_B1_
+        default__dup_exps_from_B1_may_B1pw_
 stage2:第二阶段:
     前提:P1幸存，没有^FoundNonTrivialFactor
     经验:占比{第二阶段耗时/总耗时} <- [1/4 ~ 1/2]
@@ -2678,21 +2683,28 @@ def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_
 
 
 
-def _xs5or_B_(xs_or_B, may__xs5B_, default__xs5B_, /, *extra_args):
+def _xs5or_B_(xs_or_B, may__xs5B_, default__xs5B_, extra_args7pre, extra_args7post, /):
     match xs_or_B:
         case int() as B:
             xs5B_ = ifNone(may__xs5B_, default__xs5B_)
-            xs = xs5B_(*extra_args, B)
+            xs = xs5B_(*extra_args7pre, B, *extra_args7post)
         case xs:
             pass
     iter(xs)#check iterable
     return xs
-def default__dup_exps_from_B1_(B1, /):
+def default__dup_exps_from_B1_may_B1pw_(B1, may_B1pw, /):
+    # may_max4exp_pow6stage1 --> may_B1pw
+    B1pw = ifNone(may_B1pw, B1) # eg: (p+1+floor_sqrt(4*p)) or (floor_sqrt(n)+1+floor_sqrt(4*floor_sqrt(n)))
+        # [p is B1-smooth] => [max4exp_pow:=(p+1+floor_sqrt(4*p))]
+        # but ... but in practice the cost of doing so is too high for the meager benefit it may provide.
+    assert 2 <= B1 <= B1pw
     ps = iter_primes__ge_lt_(2, 1+B1)
     for p in ps:
-        ep = floor_log_(p, B1)
+        ep = floor_log_(p, B1pw)
         yield from repeat(p, ep)
 def default__delta_exps_from_B1_B2_(B1, B2, /):
+    # B1 --> (B1|B1_at_stage2)
+    #   eg: using prev (pt0, B1, pt1, B2) to resume stage2 begin at bigger position: [pt0{curr}:=pt1{prev}][B1{curr}:=2][B1_at_stage2{curr}:=B2{prev}]
     ps = iter_primes__ge_lt_(1+B1, 1+B2)
     _p = 0
     for p in ps:
@@ -2792,7 +2804,7 @@ def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_
     return (0, (n, settings4EPC, (ops4EPC, pt6EPC)))
 
 
-# [choose_B1__ECM]:goto
+# [choose_B1__6ECM]:goto
 def batch_iter__7B1_from_p_(ps, /, only_B1=False):
     for p in ps:
         B1 = B1_from_p_(p)
@@ -2825,7 +2837,7 @@ def max_B1_from_n_(n, /):
 #       B1_from_n_ --> max_B1_from_n_,iter_B1s_from_n_
 #DONE:delta_exps_from_B1_B2_ --> asc_exps_from_B1_B2_
 #   B2_or_delta_exps4stage2-->B2_or_asc_exps4stage2
-def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1=None, may_B2_or_asc_exps4stage2=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=False, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, B1_from_n_=None, default_scale4B2=100):
+def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1=None, may_B2_or_asc_exps4stage2=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=False, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, may_B1pw_at_stage1=None, B1_from_n_=None, default_scale4B2=100):
     # detect_square_at_first=True-->False
     '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
     #TODO:++kw:drop_Y/inversionless#Ops4EllipticPseudocurve7DropY
@@ -2855,7 +2867,8 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_ex
         #########
         mul_ = ops4EPC.mul_
         B1_or_dup_exps4stage1 = ifNonef(may_B1_or_dup_exps4stage1, lambda:ifNone(B1_from_n_, default__B1_from_n_)(n))
-        dup_exps4stage1 = _xs5or_B_(B1_or_dup_exps4stage1, dup_exps_from_B1_, default__dup_exps_from_B1_)
+        may_B1pw = may_B1pw_at_stage1
+        dup_exps4stage1 = _xs5or_B_(B1_or_dup_exps4stage1, dup_exps_from_B1_may_B1pw_, default__dup_exps_from_B1_may_B1pw_, [], [may_B1pw])
         stage = 1
         max_exp6stage1 = 0 # zmay_q1
         j4exp = -1
@@ -2881,7 +2894,7 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_ex
         #old:delta_exps4stage2 = _xs5or_B_(B2_or_delta_exps4stage2, delta_exps_from_B1_B2_, default__delta_exps_from_B1_B2_, B1)
         B2_or_asc_exps4stage2 = ifNonef(may_B2_or_asc_exps4stage2, lambda:B1*default_scale4B2)
         B1_at_stage2 = ifNone(may_B1_at_stage2, B1)
-        asc_exps4stage2 = _xs5or_B_(B2_or_asc_exps4stage2, asc_exps_from_B1_B2_, default__asc_exps_from_B1_B2_, B1_at_stage2)
+        asc_exps4stage2 = _xs5or_B_(B2_or_asc_exps4stage2, asc_exps_from_B1_B2_, default__asc_exps_from_B1_B2_, [B1_at_stage2], [])
         delta_exps4stage2 = iter_deltas5asc_ints_(0, asc_exps4stage2)
         stage = 2
         max_exp6stage2 = 0 # zmay_q2
@@ -2931,7 +2944,7 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_ex
     pt1, pt2
     return (result6fail, (ctx, (B1, B2, pt1, pt2)))
     return (result6fail, ctx)
-#end-def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, may_B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None):
+#end-def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, may_B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None):
 def _cached_mul_(max4delta6cache, cache, mul_, delta, pt1, /):
     if not delta in cache:
         pt7mul = mul_(delta, pt1)
@@ -3026,7 +3039,7 @@ def _4imay_period4detect(n, imay_period4detect, /):
 #baby_steps_giant_steps
 #max4giant_step-->max4big_step
 #big_step
-def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0, may_B1_at_stage2=None, B1_from_n_=None, strict=False):
+def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0, may_B1_at_stage2=None, may_B1pw_at_stage1=None, B1_from_n_=None, strict=False):
     # default_B1=10000 --> B1_from_n_=None
     # default:strict=False instead True
     '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
@@ -3085,7 +3098,8 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
     try:
         #########
         mul7h_ = ops4EPC.mul7h_
-        dup_exps4stage1 = _xs5or_B_(B1, dup_exps_from_B1_, default__dup_exps_from_B1_)
+        may_B1pw = may_B1pw_at_stage1
+        dup_exps4stage1 = _xs5or_B_(B1, dup_exps_from_B1_may_B1pw_, default__dup_exps_from_B1_may_B1pw_, [], [may_B1pw])
         stage = 1
         zmay_q1 = 0
         j4exp = -1
@@ -3132,7 +3146,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
         add7h_ = ops4EPC.add7h_
         #old:delta_exps4stage2 = _xs5or_B_(B2, delta_exps_from_B1_B2_, default__delta_exps_from_B1_B2_, B1)
         B1_at_stage2 = ifNone(may_B1_at_stage2, B1)
-        asc_exps4stage2 = _xs5or_B_(B2, asc_exps_from_B1_B2_, default__asc_exps_from_B1_B2_, B1_at_stage2)
+        asc_exps4stage2 = _xs5or_B_(B2, asc_exps_from_B1_B2_, default__asc_exps_from_B1_B2_, [B1_at_stage2], [])
         delta_exps4stage2 = iter_deltas5asc_ints_(0, asc_exps4stage2)
         stage = 2
         zmay_q2 = 0
@@ -3307,7 +3321,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
     pt1, pt2
     return (result6fail, (ctx, (B1, B2, pt1, pt2)))
     return (result6fail, ctx)
-#end-def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, default_B1=10000, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0):
+#end-def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, default_B1=10000, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0):
 
 
 
@@ -3370,9 +3384,9 @@ from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_
 #new_version:both B1,B2
 ####################################
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method_
-#def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1, may_B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, B1_from_n_=None, default_scale4B2=100):
+#def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1=None, may_B2_or_asc_exps4stage2=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=False, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, may_B1pw_at_stage1=None, B1_from_n_=None, default_scale4B2=100):
 #   '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
-#def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, drop_Y=False):
+#def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_uint_mod_=None, result6fail=None, drop_Y=False, to_raise=False, detect_square_at_first=True, **kwds4mk):
 #   '-> ((-1, result6fail, may_exc)|(+1, non_trivial_factor, may_exc)|(0, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^FoundFactor if to_raise | ^ParamError__ops4EPC7DropY if to_raise and drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
 #   not$drop_Y => [settings4EPC == (args4EPC, xy6EPC) :: ((n,a,b),(x,y))]
 #   drop_Y => [settings4EPC == (args4EPC, XZ6EPC) :: ((n,N4C,D4C),(X,Z))]
@@ -3380,7 +3394,7 @@ from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor
 
 
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method7inversionless_
-#def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0, may_B1_at_stage2=None, B1_from_n_=None):
+#def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0, may_B1_at_stage2=None, may_B1pw_at_stage1=None, B1_from_n_=None, strict=False):
 #   '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
 #   [settings4EPC == (args4EPC, XZ6EPC) :: ((n,N4C,D4C),(X,Z))]
 
