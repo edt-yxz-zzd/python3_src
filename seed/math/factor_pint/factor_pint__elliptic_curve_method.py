@@ -11,6 +11,8 @@
 
 # [choose_B1__ECM]:goto
 # [:???is_perfect_power_ok__6ECM???]:goto
+# [:inspect_why_almost_fail6prime_square6nonstrict]:goto
+#   fail:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small} #but sometime succ rarely
 
 # formula4edgecase4addh_:goto
 # formula4main4addh_:goto
@@ -496,15 +498,13 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, -3, 1), (-8, 1)), default_B1)
 (7, ((35, -3, 1), (-8, 1)), 1, (13, 3))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, -16, 1), (-3, 1)))
-(None, (35, ((35, -16, 1), (-3, 1)), (Ops4EllipticPseudocurve7DropY(35, -16, 1, detect6Incapable = True, strict = False), Pt4EC7h(-3, 1)), (4, 400, 20)))
+(None, ((35, ((35, -16, 1), (-3, 1)), (Ops4EllipticPseudocurve7DropY(35, -16, 1, detect6Incapable = True, strict = False), Pt4EC7h(-3, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 4), 3)))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, -16, 1), (-3, 1)), default_B1)
 (5, ((35, -16, 1), (-3, 1)), 1, (13, 3))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, 5, 1), (15, 1)))
-(None, (35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (4, 400, 20)))
+(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 1), 2)))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, 5, 1), (15, 1)), default_B1)
-(None, (35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (10000, 1000000, 996)))
-
-
+(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (10000, 1000000, 996)), '@stage1...', (Pt4EC7h(15, 1), 2)))
 
 
 
@@ -562,6 +562,12 @@ True
 
 
 # [:???is_perfect_power_ok__6ECM???]:goto
+# [:inspect_why_almost_fail6prime_square6nonstrict]:goto
+    ok:try1_factor_pint__elliptic_curve_method_
+    ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**e{>2})
+    ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{+strict}
+    half_ok:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_big_enough}
+    fail:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small} #but sometime succ rarely
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(257**2, detect_square_at_first=False) # all fails #doctest: +SKIP
 (None, (66049, ((66049, -25786, 1), (-17962, 1)), (Ops4EllipticPseudocurve7DropY(66049, -25786, 1, detect6Incapable = True, strict = False), Pt4EC7h(-17962, 1)), (10000, 1000000, 996)))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(257**3, detect_square_at_first=False) #doctest: +SKIP
@@ -580,9 +586,24 @@ True
 (66049, ((16974593, 1817534, 1), (6329146, 1)), 1, (13, 3))
 
 
++strict
+>>> try1_factor_pint__elliptic_curve_method7inversionless_(11**2, detect_square_at_first=False, strict=True) #doctest: +SKIP
+(11, FoundNonTrivialFactor(121, 11, (121, -49, -14)))
+>>> try1_factor_pint__elliptic_curve_method7inversionless_(257**2, detect_square_at_first=False, strict=True) #doctest: +SKIP
+(257, ((66049, -25936, -6915), (-15962, -26192)), 2, (13, 9, 53))
+>>> try1_factor_pint__elliptic_curve_method7inversionless_(10007**2, detect_square_at_first=False, strict=True) #doctest: +SKIP
+(10007, ((100140049, 47924418, 37626515), (38054523, 12458095)), 2, (31, 108, 659))
+
+p_big_enough
+>>> try1_factor_pint__elliptic_curve_method7inversionless_(10007**2, detect_square_at_first=False, strict=False) #doctest: +SKIP
+(10007, ((100140049, 19640702, 1), (37248481, 1)), 2, (31, 108, 659))
 
 
-
+-7inversionless
+>>> try1_factor_pint__elliptic_curve_method_(11**2, detect_square_at_first=False) #doctest: +SKIP
+(11, ((121, -38, 19), (5, -14)), 2, (3, 0, 5))
+>>> try1_factor_pint__elliptic_curve_method_(((121, -38, 19), (5, -14)), detect_square_at_first=False)
+(11, ((121, -38, 19), (5, -14)), 2, (3, 0, 5))
 
 
 
@@ -615,6 +636,102 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   ,iter
     (Ops4EllipticPseudocurve7DropY(4087, 724, -1984), Pt4EC7h(-694, -156))
 
 ]]
+
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @f
+
+]]]'''#'''
+__all__ = r'''
+B1_from_p_
+    batch_iter__7B1_from_p_
+    max_B1_from_n_
+        batch_iter__7max_B1_from_n_
+
+try1_factor_pint__elliptic_curve_method7inversionless_
+    prepare4criteria4ECM7inversionless_
+
+
+
+try1_factor_pint__elliptic_curve_method_
+    prepare4factor_pint__elliptic_curve_method_
+    default__B1_from_n_
+    default__dup_exps_from_B1_
+    default__delta_exps_from_B1_B2_
+    default__asc_exps_from_B1_B2_          iter_deltas5asc_ints_
+
+
+
+try_factor_pint__elliptic_curve_method_
+    default__ks5n_and_B_or_ks_
+        default__ks5n_and_B_
+    ex1_try_factor_pint__elliptic_curve_method_
+
+
+
+Ops4EllipticPseudocurve
+    Pt4EC
+    ZeroPt4EC
+        pt_O
+
+
+Ops4EllipticPseudocurve7DropY
+    Pt4EC7h
+        pt7h_O
+    iter_prepare4Ops4EllipticPseudocurve7DropY_
+
+
+FoundFactor
+    FoundNonTrivialFactor
+    FoundTrivialFactor
+Incapable__add7h__X6diff_eq0
+ParamError__ops4EPC7DropY
+
+
+iter_error_pairs4add_table4EPC6square_modulus_
+to_even_ge_
+'''.split()#'''
+__all__
+___begin_mark_of_excluded_global_names__0___ = ...
+#.#################################
+from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
+with mk_ctx4lazy_import4funcs_(__name__):
+    #low_level_API:iter_sieve4primes_ge_lt_ --> high_level_API:iter_primes__ge_lt_
+    from seed.math.prime_sieve.primes_ge_lt import iter_primes__ge_lt_# iter_filter4primes_ge_lt_
+    #from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_lt_
+    from seed.math.floor_ceil_tools.fc_log import ceil_log_, floor_log_
+    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
+        # [:???is_perfect_power_ok__6ECM???]:goto
+    from seed.math.inv_mod__py_ import inv_mod__py_
+    from seed.math.hrem_ import hrem_, mk_hrem_
+    from seed.math.gcd import gcd, are_coprime
+    from seed.math.II import II_mod
+    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
+    from seed.tiny_.check import check_type_is, check_int_ge, check_callable
+    from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
+    #def mk_namedtuple_(__module__, nm, nms_or_str, /, *args, **kwds):
+    #def mk_namedtuple__check6make_(__module__, nm, nms_or_str, /, *args, **kwds):
+    #    def _check6make_(sf, /):
+
+    #from seed.tiny_.singleton import mk_SingletonClass
+    #def mk_SingletonClass(module_qname, type_qname, /, *bases, **kw):
+
+    from random import randrange
+    from seed.helper.ifNone import ifNone, ifNonef
+    from seed.helper.repr_input import repr_helper
+
+
+    from math import isqrt
+    from itertools import repeat, cycle, islice, product
+
+#.#################################
+___end_mark_of_excluded_global_names__0___ = ...
+#e script/整数分解牜凑平方牜凑整除幂.py
+
+
+__all__
+r'''[[[[[[[[[
+[[[
+===
 [[
 # [:???is_perfect_power_ok__6ECM???]:goto
 is_prime_square_ <: is_prime_power_ <: is_perfect_power_
@@ -653,6 +770,116 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1
     (4489, None)
 py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ +detect_square_at_first ='67**3'
     (4489, ((300763, 126846, 1), (92612, 1)), 1, (75, 97))
+
+]]
+[[
+# [:???is_perfect_power_ok__6ECM???]:goto
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   ,iter_error_pairs4add_table4EPC6square_modulus_ =5
+    (Ops4EllipticPseudocurve(25, 6, -9), Pt4EC(-1, -3))
+    ...320 行
+py_adhoc_call { +lineno +to_show_StopIteration_value }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,iter_error_pairs4add_table4EPC6square_modulus_ ='((25, 6, -9), (-1, -3))'
+    320:(True, (Pt4EC(-1, -3), Pt4EC(-6, -8)))
+    321:(Ops4EllipticPseudocurve(25, 6, -9), Pt4EC(-1, -3))
+
+py_adhoc_call { +lineno +to_show_StopIteration_value }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,iter_error_pairs4add_table4EPC6square_modulus_ =7
+    #########
+    ...
+    336:(True, (Pt4EC(-5, -19), Pt4EC(-12, -5)))
+    337:(Ops4EllipticPseudocurve(49, -6, 15), Pt4EC(?, ?))
+    #########
+    ...
+    714:(True, (Pt4EC(-2, -16), Pt4EC(-9, -2)))
+    715:(Ops4EllipticPseudocurve(49, 17, 4), Pt4EC(-5, 23))
+    #########
+    ...
+    672:(True, (Pt4EC(-2, -3), Pt4EC(-9, -10)))
+    673:((Ops4EllipticPseudocurve(49, 10, -12), Pt4EC(7, -3)), (2577, 672, 0))
+    #########
+    ...
+    462:(True, (Pt4EC(-2, -6), Pt4EC(-9, -20)))
+    463:((Ops4EllipticPseudocurve(49, 13, 21), Pt4EC(-23, 1)), (50, 2500), (2038, 462, 0))
+    #########
+    ...
+    336:(True, (Pt4EC(-5, -2), Pt4EC(-12, -16)))
+    337:((Ops4EllipticPseudocurve(49, -13, 15), Pt4EC(-5, 2)), (29, 841), (505, 336, 0))
+    #########
+    ...
+    336:(True, (Pt4EC(-3, -2), Pt4EC(-10, -9)))
+    337:((Ops4EllipticPseudocurve(49, 11, 15), Pt4EC(11, -12)), (29, 841), (505, 336, 0))
+    #########
+py_adhoc_call { +lineno +to_show_StopIteration_value }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,iter_error_pairs4add_table4EPC6square_modulus_ =11
+    #########
+    ...
+    1870:(True, (Pt4EC(-4, -19), Pt4EC(-15, -3)))
+    1871:((Ops4EllipticPseudocurve(121, -49, -13), Pt4EC(-54, -7)), (100, 10000), (8130, 1870, 0))
+    #########
+    ...
+    2750:(True, (Pt4EC(-2, -57), Pt4EC(-13, -57)))
+    2751:((Ops4EllipticPseudocurve(121, -23, -56), Pt4EC(47, -21)), (144, 20736), (17986, 2750, 0))
+    #########
+
+
+xy6EPC
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method_ -detect_square_at_first ='11**2'
+    (11, ((121, -38, 19), (5, -14)), 2, (3, 0, 5))
+    (11, ((121, -24, 54), (38, 13)), 1, (2, 3))
+
+# [:inspect_why_almost_fail6prime_square6nonstrict]:here
+XZ6EPC
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first ='((121, -24, 54), (38, 13))'
+    (11, ((121, -24, 54), (38, 13)), 2, (3, 2, 11))
+    ???why???
+    竟然可能成功=>mk_ex5n__7random_() : try_fix__bug__almost_fail6prime_square_7turnoff_detect_square_at_first:goto#fail...
+
+XZ6EPC
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first ='11**2'
+    (None, (121, ((121, 18, 1), (-40, 1)), (Ops4EllipticPseudocurve7DropY(121, 18, 1, detect6Incapable = True, strict = False), Pt4EC7h(-40, 1)), (4, 400, 20)))
+    (None, ((121, ((121, -45, 1), (-21, 1)), (Ops4EllipticPseudocurve7DropY(121, -45, 1, detect6Incapable = True, strict = False), Pt4EC7h(-21, 1)), (4, 400, 20)), '@stage1...'))
+    (None, ((121, ((121, -55, 1), (-36, 1)), (Ops4EllipticPseudocurve7DropY(121, -55, 1, detect6Incapable = True, strict = False), Pt4EC7h(-36, 1)), (4, 400, 20)), '@stage1...'))
+    (None, ((121, ((121, -5, 1), (-48, 1)), (Ops4EllipticPseudocurve7DropY(121, -5, 1, detect6Incapable = True, strict = False), Pt4EC7h(-48, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(-10, -4), 3)))
+    #########
+    # try_fix__bug__almost_fail6prime_square_7turnoff_detect_square_at_first:  .1:之后, .2:之前:
+    #竟然成功一次:
+    (11, ((121, -32, 1), (-44, 1)), 1, (2, 3))
+    #########
+    # try_fix__bug__almost_fail6prime_square_7turnoff_detect_square_at_first:  .1:之后, .2:之后:
+    (11, ((121, 19, 1), (-11, 1)), 1, (2, 3))
+    (None, ((121, ((121, 1, 1), (58, 1)), (Ops4EllipticPseudocurve7DropY(121, 1, 1, detect6Incapable = True, strict = False), Pt4EC7h(58, 1)), (4, 400, 20)), '@stage2.begin...', (3, 5, Pt4EC7h(0, 35), Pt4EC7h(0, 0))))
+    (None, ((121, ((121, -57, 1), (2, 1)), (Ops4EllipticPseudocurve7DropY(121, -57, 1, detect6Incapable = True, strict = False), Pt4EC7h(2, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(-30, 24), 3)))
+    # after:++『if cache[-1].eq_zero_()...』#detect6cache:goto
+    (None, ((121, ((121, -55, 1), (34, 1)), (Ops4EllipticPseudocurve7DropY(121, -55, 1, detect6Incapable = True, strict = False), Pt4EC7h(34, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(0, -47), 2)))
+    (None, ((121, ((121, 56, 1), (-27, 1)), (Ops4EllipticPseudocurve7DropY(121, 56, 1, detect6Incapable = True, strict = False), Pt4EC7h(-27, 1)), (4, 400, 20)), '@stage2.begin:@init-cache...:[2*j<*>pt1 == O]', (4, Pt4EC7h(-21, -21), Pt4EC7h(0, 23))))
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first ='((121, 1, 1), (58, 1))'
+    # after:++『if pt8small_step.eq_zero_()...』
+    # after:++『if cache[-1].eq_zero_()...』#detect6cache:goto
+    (None, ((121, ((121, 1, 1), (58, 1)), (Ops4EllipticPseudocurve7DropY(121, 1, 1, detect6Incapable = True, strict = False), Pt4EC7h(58, 1)), (4, 400, 20)), '@stage2.begin:@init-cache.begin...:[2<*>pt1 == O]', (2, Pt4EC7h(0, 35))))
+    # after:++『if _pt.X == 0:...』#detect_X6stage1:goto
+    (None, ((121, ((121, 1, 1), (58, 1)), (Ops4EllipticPseudocurve7DropY(121, 1, 1, detect6Incapable = True, strict = False), Pt4EC7h(58, 1)), (4, 400, 20)), '@stage1:...[X==0]', (Pt4EC7h(20, 13), 2, Pt4EC7h(0, 35))))
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first ='((121, 56, 1), (-27, 1))'
+    # after:++『if cache[-1].eq_zero_()...』#detect6cache:goto
+    (None, ((121, ((121, 56, 1), (-27, 1)), (Ops4EllipticPseudocurve7DropY(121, 56, 1, detect6Incapable = True, strict = False), Pt4EC7h(-27, 1)), (4, 400, 20)), '@stage2.begin:@init-cache...:[2*j<*>pt1 == O]', (4, Pt4EC7h(-21, -21), Pt4EC7h(0, 23))))
+
+XZ6EPC,+strict
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first +strict ='11**2'
+    (11, FoundNonTrivialFactor(121, 11, (121, -49, -14)))
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first +strict ='257**2'
+    (257, ((66049, -25936, -6915), (-15962, -26192)), 2, (13, 9, 53))
+
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first +strict ='10007**2'
+(10007, ((100140049, 47924418, 37626515), (38054523, 12458095)), 2, (31, 108, 659))
+
+
+
+XZ6EPC,-strict,p_big_enough
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ -detect_square_at_first -strict ='10007**2'
+    (10007, ((100140049, 44102985, 1), (26001311, 1)), 2, (31, 194, 1277))
+    (None, ((100140049, ((100140049, 44887264, 1), (-46589411, 1)), (Ops4EllipticPseudocurve7DropY(100140049, 44887264, 1, detect6Incapable = True, strict = False), Pt4EC7h(-46589411, 1)), (32, 3200, 58)), '@stage2.begin:@init-cache...:[2*j<*>pt1 == O]', (50, Pt4EC7h(30794043, -7332337), Pt4EC7h(34634457, -19479392))))
+    (10007, ((100140049, 23804839, 1), (15222891, 1)), 2, (31, 42, 251))
+    (None, ((100140049, ((100140049, 20881417, 1), (-35257327, 1)), (Ops4EllipticPseudocurve7DropY(100140049, 20881417, 1, detect6Incapable = True, strict = False), Pt4EC7h(-35257327, 1)), (32, 3200, 58)), '@stage1...', (Pt4EC7h(18938411, -24529588), 31)))
+    (10007, ((100140049, 19640702, 1), (37248481, 1)), 2, (31, 108, 659))
+    half_ok
 
 ]]
 [[
@@ -745,98 +972,9 @@ py_adhoc_call { --lineno=3 }  seed.math.factor_pint.factor_pint__elliptic_curve_
 100:4096
 
 ]]
-
-
-py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @f
-
-]]]'''#'''
-__all__ = r'''
-B1_from_p_
-    batch_iter__7B1_from_p_
-    max_B1_from_n_
-        batch_iter__7max_B1_from_n_
-
-try1_factor_pint__elliptic_curve_method7inversionless_
-    prepare4criteria4ECM7inversionless_
-
-
-
-try1_factor_pint__elliptic_curve_method_
-    prepare4factor_pint__elliptic_curve_method_
-    default__B1_from_n_
-    default__dup_exps_from_B1_
-    default__delta_exps_from_B1_B2_
-    default__asc_exps_from_B1_B2_          iter_deltas5asc_ints_
-
-
-
-try_factor_pint__elliptic_curve_method_
-    default__ks5n_and_B_or_ks_
-        default__ks5n_and_B_
-    ex1_try_factor_pint__elliptic_curve_method_
-
-
-
-Ops4EllipticPseudocurve
-    Pt4EC
-    ZeroPt4EC
-        pt_O
-
-
-Ops4EllipticPseudocurve7DropY
-    Pt4EC7h
-        pt7h_O
-    iter_prepare4Ops4EllipticPseudocurve7DropY_
-
-
-FoundFactor
-    FoundNonTrivialFactor
-    FoundTrivialFactor
-Incapable__add7h__X6diff_eq0
-ParamError__ops4EPC7DropY
-
-
-
-to_even_ge_
-'''.split()#'''
-__all__
-___begin_mark_of_excluded_global_names__0___ = ...
-#.#################################
-from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
-with mk_ctx4lazy_import4funcs_(__name__):
-    #low_level_API:iter_sieve4primes_ge_lt_ --> high_level_API:iter_primes__ge_lt_
-    from seed.math.prime_sieve.primes_ge_lt import iter_primes__ge_lt_# iter_filter4primes_ge_lt_
-    #from seed.math.prime_sieve.sieve_ge_le import iter_sieve4primes_ge_lt_
-    from seed.math.floor_ceil_tools.fc_log import ceil_log_, floor_log_
-    from seed.math.factor_pint.perfect_power.detect_perfect_power import factor_pint_as_perfect_power_
-        # [:???is_perfect_power_ok__6ECM???]:goto
-    from seed.math.inv_mod__py_ import inv_mod__py_
-    from seed.math.hrem_ import hrem_, mk_hrem_
-    from seed.math.gcd import gcd, are_coprime
-    from seed.math.II import II_mod
-    from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-    from seed.tiny_.check import check_type_is, check_int_ge, check_callable
-    from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
-    #def mk_namedtuple_(__module__, nm, nms_or_str, /, *args, **kwds):
-    #def mk_namedtuple__check6make_(__module__, nm, nms_or_str, /, *args, **kwds):
-    #    def _check6make_(sf, /):
-
-    #from seed.tiny_.singleton import mk_SingletonClass
-    #def mk_SingletonClass(module_qname, type_qname, /, *bases, **kw):
-
-    from random import randrange
-    from seed.helper.ifNone import ifNone, ifNonef
-    from seed.helper.repr_input import repr_helper
-
-
-    from math import isqrt
-    from itertools import repeat, cycle, islice
-
-#.#################################
-___end_mark_of_excluded_global_names__0___ = ...
-#e script/整数分解牜凑平方牜凑整除幂.py
-
-
+===
+]]]
+#]]]]]]]]]'''#'''
 __all__
 #class NotImplementedError__add7h__X6diff_eq0(NotImplementedError):pass
 class Incapable__add7h__X6diff_eq0(BaseException):pass
@@ -1606,6 +1744,16 @@ class Ops4EllipticPseudocurve:
         y = hrem6N_(y)
         pt = Pt4EC(x, y)
         return pt
+    def __contains__(sf, pt, /):
+        match pt:
+            case sf.zero:
+                return True
+            case Pt4EC(x=x, y=y):
+                (n, a, b) = sf.params4elliptic_pseudocurve
+                return 0 == (pow(y, 2, n) -(pow(x, 3, n) +a*x +b)) %n
+            case _:
+                raise TypeError(pt)
+        raise 000
 
     @property
     def zero(sf, /):
@@ -1628,10 +1776,13 @@ class Ops4EllipticPseudocurve:
                 return Pt4EC(x, -y)
         raise TypeError(type(pt))
     def double_(sf, pt, /):
+        'Pt4EC -> Pt4EC -> Pt4EC | ^FoundNonTrivialFactor | ^FoundTrivialFactor'
         return sf.add_(pt, pt)
     def sub_(sf, pt6lhs, pt6rhs, /):
+        'Pt4EC -> Pt4EC -> Pt4EC | ^FoundNonTrivialFactor | ^FoundTrivialFactor'
         return sf.add_(pt6lhs, sf.neg_(pt6rhs))
     def add_(sf, pt6lhs, pt6rhs, /):
+        'Pt4EC -> Pt4EC -> Pt4EC | ^FoundNonTrivialFactor | ^FoundTrivialFactor'
         match (pt6lhs, pt6rhs):
             case (sf.zero, pt):
                 return pt
@@ -1659,8 +1810,12 @@ class Ops4EllipticPseudocurve:
                     # double_()
                     # !! [C==0]
                     slope = hrem6N_(hrem6N_(3*xL**2 +a) *sf.inv6N_(yL<<1))
+                        # ^FoundNonTrivialFactor
+                        # ^FoundTrivialFactor
                 else:
                     slope = hrem6N_((yL-yR)*sf.inv6N_(xL-xR))
+                        # ^FoundNonTrivialFactor
+                        # ^FoundTrivialFactor
                 slope
                 # !! [C==0]
                 _x = hrem6N_(slope**2 -(xL+xR))
@@ -1669,6 +1824,7 @@ class Ops4EllipticPseudocurve:
                 return pt
         raise TypeError(type(pt6lhs), type(pt6rhs))
     def inv6N_(sf, x, /):
+        'x -> x**-1%n | ^FoundNonTrivialFactor | ^FoundTrivialFactor'
         n = sf._n
         try:
             r = inv_mod__py_(n, x)
@@ -1797,7 +1953,7 @@ class Ops4EllipticPseudocurve7DropY:
         sf._args = (n, C)
     @classmethod
     def mk_ex5n__7random_(cls, n, may_random_uint_mod_=None, /, *, strict=True, detect6Incapable=False, _d6strict=None):
-        '-> (ops4EPC, pt6EPC)|^FoundNonTrivialFactor'
+        '-> (ops4EPC, pt6EPC)|^FoundNonTrivialFactor|TypeError'
         strict = bool(strict)
         detect6Incapable = bool(detect6Incapable)
         check_int_ge(10, n)
@@ -1817,10 +1973,45 @@ class Ops4EllipticPseudocurve7DropY:
                     b_init = False
                 else:
                     raise Exception(n, _d6strict)
-                d = hrem6N_(_d6strict)
-            else:
+                d = _d6strict%n
+                # [0 <= d < n]
+                #bug:if d in b'\0\1\5':raise TypeError(d)#ParamError__ops4EPC7DropY
+                #   ^ValueError: byte must be in range(0, 256)
+                if d < 6 and d in b'\0\1\5':raise TypeError(d)#ParamError__ops4EPC7DropY
+                # [d !<- {0,1,5}]
+                # !! [0 <= d < n]
+                # [d%n !<- {0,1,5}%n]
+            elif 0:
+                # !! [n >= 10]
+                # [n-6 >= 4 > 0]
                 d = 6+random_uint_mod_(-6+n) # randrange(6, n)
+                # [0 <= d-6 < n-6]
+                # [6 <= d < n]
+                # [d !<- {0,1,5}]
+                # [d%n !<- {0,1,5}%n]
+            else:
+                ############
+                #since found succ at [detect_square_at_first:=False][n:=11**2]
+                #   why:(11, ((121, -24, 54), (38, 13)), 2, (3, 2, 11))
+                # try_fix__bug__almost_fail6prime_square_7turnoff_detect_square_at_first:here.1
+                ############
+                # !! [n >= 10]
+                # [n-3 >= 7 > 0]
+                d = 2+random_uint_mod_(-3+n) # randrange(2, n-1)
+                # [0 <= d-2 < n-3]
+                # [2 <= d < n-1]
+                if d >= 5:
+                    # [5 <= d < n-1]
+                    d += 1
+                    # [6 <= d < n]
+                else:
+                    # [2 <= d < 5]
+                    pass
+                # [d =!= 5][2 <= d < n]
+                # [d%n !<- {0,1,5}%n]
+            # [d%n !<- {0,1,5}%n]
             d
+            d = hrem6N_(d)
             u = hrem6N_(d**2-5)
             v = hrem6N_(4*d)
 
@@ -1911,10 +2102,42 @@ class Ops4EllipticPseudocurve7DropY:
             # !! [g? can be square_nonresidual]
             # => [x0 can be arbitrary nonzero]
             x0 = 1+random_uint_mod_(-1+n) # randrange(1, n)
-            # !! [(4-C**2)%n =!= 0]
-            C = 3+random_uint_mod_(-5+n) # randrange(3, -2+n)
+            # [1 <= x0 < n] # to avoid Incapable__add7h__X6diff_eq0
+            if 0:
+                # !! [n >= 10]
+                # [n-5 >= 5 > 0]
+                C = 3+random_uint_mod_(-5+n) # randrange(3, -2+n)
+                # [0 <= C-3 < -5+n]
+                # [3 <= C < -2+n]
+                # [3 <= C <= -3+n]
+                # [C%n !<- {-2,+2}%n]
+            else:
+                ############
+                #since found succ at [detect_square_at_first:=False][n:=11**2]
+                #   why:(11, ((121, -24, 54), (38, 13)), 2, (3, 2, 11))
+                # try_fix__bug__almost_fail6prime_square_7turnoff_detect_square_at_first:here.2
+                ############
+                # !! [n >= 10]
+                # [n-2 >= 8 > 0]
+                C = 0+random_uint_mod_(-2+n) # randrange(0, -2+n)
+                # [0 <= C < -2+n]
+                if C >= 2:
+                    # [2 <= C < -2+n]
+                    C += 1
+                    # [3 <= C < -1+n]
+                # [C=!=2][0 <= C < -1+n]
+                if C >= n-2:
+                    # [n-2 <= C < -1+n]
+                    C += 1
+                    # [n-1 <= C < n]
+                # [C=!=2][C=!=n-2][0 <= C < n]
+                # [C%n !<- {-2,+2}%n]
+            # [C%n !<- {-2,+2}%n]
+            # [(4-C**2)%n =!= 0]or[1 < gcd(n,C+2) < n] # => "not strict"
             N4C, D4C = C, 1
             X0, Z0 = x0, 1
+            # [1 <= X0 < n] # to avoid Incapable__add7h__X6diff_eq0
+            # (X0,Z0) maybe on EC or twist_EC # => "not strict"
             break
         n, N4C, D4C, X0, Z0
         sf = cls(n, N4C, D4C, strict=strict, detect6Incapable=detect6Incapable)
@@ -2231,6 +2454,79 @@ def iter_prepare4Ops4EllipticPseudocurve7DropY_(n, /, *args, **kwds):
 
 
 
+
+
+
+
+def _mk_ops7force_(M, /):
+    j = 0
+    while 1:
+        j += 1
+        try:
+            (ops, pt0) = Ops4EllipticPseudocurve.mk_ex5n__7random_(M)
+        except FoundNonTrivialFactor as exc:
+            print('!!!', j, repr(exc), sep=':')
+            continue
+        else:
+            break
+        pass
+    return (ops, pt0)
+
+def _setup7force_(p_or_settings4EPC, /):
+    match p_or_settings4EPC:
+        case ((n, a, b) as args4EPC, xy6EPC):
+            M = pp = n
+            check_int_ge(5, pp)
+            ops = Ops4EllipticPseudocurve(*args4EPC)
+            pt0 = ops.mk_point_(*xy6EPC)
+            pass
+        case p:
+            check_int_ge(5, p)
+            M = pp = p**2
+            (ops, pt0) = _mk_ops7force_(M)
+            pass
+    M
+    r = (M, ops, pt0)
+    assert pt0 in ops, r
+    return r
+def iter_error_pairs4add_table4EPC6square_modulus_(p_or_settings4EPC, /):
+    # [:???is_perfect_power_ok__6ECM???]:goto
+    (M, ops, pt0) = _setup7force_(p_or_settings4EPC)
+    print((ops, pt0))
+    pts = [ops.zero]
+    for x, y in product(range(M), repeat=2):
+        pt = ops.mk_point_(x, y)
+        if pt in ops:
+            pts.append(pt)
+    pts
+    sz = len(pts)
+    #xxx:assert ops.mul_(len(pts), pts[1]).eq_zero_()
+    c0 = c1 = c2 = 0
+    for ptA, ptB in product(pts, repeat=2):
+        try:
+            ptC = ops.add_(ptA, ptB)
+        except FoundNonTrivialFactor:
+            yield (True, (ptA, ptB))
+            c1 += 1
+            pass
+        except FoundTrivialFactor:
+            yield (False, (ptA, ptB))
+            c2 += 1
+            pass
+        else:
+            c0 += 1
+            pass
+        pass
+    szsz = sz**2
+    r = ((ops, pt0), (sz, szsz), (c0, c1, c2))
+    assert szsz == c0+c1+c2, r
+    return r
+
+
+
+
+
+
 def default__ks5n_and_B_(n, B, /):
     ps = iter_primes__ge_lt_(2, 1+B)
     for p in ps:
@@ -2481,6 +2777,7 @@ def B1_from_p_(p, /):
     B1 = 1 << isqrt(approx_lnP*approx_lnlnP//2)
     return B1
 def max_B1_from_n_(n, /):
+    n = max(8, n)
     check_int_ge(8, n)
     # [n >= 8]
     # [n.bit_length() >= 4]
@@ -2496,7 +2793,8 @@ def max_B1_from_n_(n, /):
 #       B1_from_n_ --> max_B1_from_n_,iter_B1s_from_n_
 #DONE:delta_exps_from_B1_B2_ --> asc_exps_from_B1_B2_
 #   B2_or_delta_exps4stage2-->B2_or_asc_exps4stage2
-def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1, B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, B1_from_n_=None):
+def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1=None, may_B2_or_asc_exps4stage2=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=False, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, B1_from_n_=None, default_scale4B2=100):
+    # detect_square_at_first=True-->False
     '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
     #TODO:++kw:drop_Y/inversionless#Ops4EllipticPseudocurve7DropY
     #vs:try1_factor_pint__elliptic_curve_method7inversionless_
@@ -2549,6 +2847,7 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_ex
 
         add_ = ops4EPC.add_
         #old:delta_exps4stage2 = _xs5or_B_(B2_or_delta_exps4stage2, delta_exps_from_B1_B2_, default__delta_exps_from_B1_B2_, B1)
+        B2_or_asc_exps4stage2 = ifNonef(may_B2_or_asc_exps4stage2, lambda:B1*default_scale4B2)
         B1_at_stage2 = ifNone(may_B1_at_stage2, B1)
         asc_exps4stage2 = _xs5or_B_(B2_or_asc_exps4stage2, asc_exps_from_B1_B2_, default__asc_exps_from_B1_B2_, B1_at_stage2)
         delta_exps4stage2 = iter_deltas5asc_ints_(0, asc_exps4stage2)
@@ -2600,7 +2899,7 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_ex
     pt1, pt2
     return (result6fail, (ctx, (B1, B2, pt1, pt2)))
     return (result6fail, ctx)
-#end-def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None):
+#end-def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, B1_or_dup_exps4stage1, may_B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None):
 def _cached_mul_(max4delta6cache, cache, mul_, delta, pt1, /):
     if not delta in cache:
         pt7mul = mul_(delta, pt1)
@@ -2695,13 +2994,15 @@ def _4imay_period4detect(n, imay_period4detect, /):
 #baby_steps_giant_steps
 #max4giant_step-->max4big_step
 #big_step
-def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0, may_B1_at_stage2=None, B1_from_n_=None):
+def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0, may_B1_at_stage2=None, B1_from_n_=None, strict=False):
     # default_B1=10000 --> B1_from_n_=None
+    # default:strict=False instead True
     '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
     #TODO:++kw:drop_Y/inversionless#Ops4EllipticPseudocurve7DropY
     #vs:try1_factor_pint__elliptic_curve_method_
     ###########################
-    match prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, random_uint_mod_=random_uint_mod_, result6fail=result6fail, detect_square_at_first=detect_square_at_first, drop_Y=True, strict=False, detect6Incapable=True):
+    match prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, random_uint_mod_=random_uint_mod_, result6fail=result6fail, detect_square_at_first=detect_square_at_first, drop_Y=True, strict=strict, detect6Incapable=True):
+        # default:strict=False instead True
         case (-1, _, may_exc):
             return (result6fail, may_exc)
         #case (+1, ft):
@@ -2768,7 +3069,16 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             if _pt.eq_zero_():
                 _detect_pt_(_pt7pre)
                     # ^FoundNonTrivialFactor
-                return (result6fail, ctx)
+                return (result6fail, (ctx, '@stage1...', (_pt7pre, exp)))
+            if _pt.X == 0:
+                # detect_X6stage1:here
+                # [_pt.x == 0]
+                # !! [B:=0]
+                # [g? * _pt.y**2 == (...)*_pt.x == 0]
+                # [_pt.y == 0]
+                _detect_pt_(_pt7pre)
+                    # ^FoundNonTrivialFactor
+                return (result6fail, (ctx, '@stage1:...[X==0]', (_pt7pre, exp, _pt)))
             if next(iter4detect):
                 _detect_pt_(_pt7pre)
                     # ^FoundNonTrivialFactor
@@ -2804,11 +3114,36 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             zmay_q2 += delta
 
             q = zmay_q2
-            cache = [pt7h_O, ops4EPC.double7h_(pt1)]
-            for _ in range(2, 1+D):
-                cache.append(add7h_(cache[-1], cache[1], cache[-2]))
+            ##################
+            #detect6cache:here
+            z_pt1 = ops4EPC.double7h_(pt1)
+            if z_pt1.eq_zero_():
+                # [2<*>pt1 == O]
+                # !! [pt1 =!= O]
+                # [2 == order_(EC;pt1)]
+                # [pt1.?y? == 0]
+                return (result6fail, (ctx, '@stage2.begin:@init-cache.begin...:[2<*>pt1 == O]', (2, pt1)))
+            # [z_pt1 =!= O]
+            cache = [pt7h_O, z_pt1]
+            for j in range(2, 1+D):
+                # [cache[-1] is cache[j-1] =!= O]
+                cache.append(add7h_(cache[-1], z_pt1, cache[-2]))
+                    # ^Incapable__add7h__X6diff_eq0
+                    # ^FoundNonTrivialFactor
+                # [cache[-1] is cache[j] == 2*j<*>pt1]
+                if cache[-1].eq_zero_():
+                    # [O == 2*j<*>pt1]
+                    # [0 == 2*j%order_(EC;pt1)]
+                    _detect_pt_(cache[-2])
+                        # ^FoundNonTrivialFactor
+                    return (result6fail, (ctx, '@stage2.begin:@init-cache...:[2*j<*>pt1 == O]', (2*j, pt1, cache[-2])))
+                # [cache[-1] is cache[j] == O]
             cache
             # [[j:<-[0..=D]] -> [cache[j] == 2*j<*>pt1]]
+            # [[j:<-[1..=D]] -> [O =!= cache[j] == 2*j<*>pt1]]
+            777;cache[0] = None
+            #end-detect6cache
+            ##################
 
             pt8big_step = cache[D]
             # !! [2*D == big_step]
@@ -2824,8 +3159,17 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             # [pt7ref == k4ref<*>pt1]
             # [pt7ref7pre == (k4ref-big_step)<*>pt1]
             # [0 == (q-k4ref)%2][2 <= (q-k4ref) <= big_step]
-            IIdiffs = pt7ref.diff7h7mod_(n, cache[(q-k4ref)>>1])
-            if 0 == IIdiffs: return (result6fail, ctx)
+            diff = pt7ref.diff7h7mod_(n, pt8small_step:=cache[(q-k4ref)>>1])
+            IIdiffs = diff
+            if 0 == IIdiffs:
+                assert diff == 0, ctx
+                if 0 and not detect_square_at_first:
+                    _detect_pt_(pt7ref)
+                        # ^FoundNonTrivialFactor
+                if 0 and pt8small_step.eq_zero_() and not detect_square_at_first:
+                    _detect_pt_(pt7ref)
+                        # ^FoundNonTrivialFactor
+                return (result6fail, (ctx, '@stage2.begin...', (k4ref, q, pt7ref, pt8small_step)))
             # [0 =!= IIdiffs %n]
             break
         else:
@@ -2867,7 +3211,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             # [pt7ref == k4ref<*>pt1]
             # [pt7ref7pre == (k4ref-big_step)<*>pt1]
             # [0 == (q-k4ref)%2][2 <= (q-k4ref) <= big_step]
-            diff = pt7ref.diff7h7mod_(n, cache[(q-k4ref)>>1])
+            diff = pt7ref.diff7h7mod_(n, pt8small_step:=cache[(q-k4ref)>>1])
             IIdiffs7pre = IIdiffs
             # !! [0 =!= IIdiffs %n]
             # [0 =!= IIdiffs7pre %n]
@@ -2879,7 +3223,11 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                 # !! [0 =!= IIdiffs7pre %n]
                 _detect_u_(IIdiffs7pre)
                     # ^FoundNonTrivialFactor
-                return (result6fail, ctx)
+                assert diff == 0, ctx
+                if 0 and not detect_square_at_first:
+                    _detect_pt_(pt7ref)
+                        # ^FoundNonTrivialFactor
+                return (result6fail, (ctx, '@stage2...', (k4ref, q, pt7ref, pt8small_step)))
             # [0 =!= IIdiffs %n]
             if next(iter4detect):
                 _detect_u_(IIdiffs)
@@ -2968,7 +3316,7 @@ from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_
 #new_version:both B1,B2
 ####################################
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method_
-#def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1, B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, B1_from_n_=None):
+#def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1, may_B2_or_asc_exps4stage2, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, B1_from_n_=None, default_scale4B2=100):
 #   '-> (((result6fail|ft), may_exc_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
 #def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, drop_Y=False):
 #   '-> ((-1, result6fail, may_exc)|(+1, non_trivial_factor, may_exc)|(0, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^FoundFactor if to_raise | ^ParamError__ops4EPC7DropY if to_raise and drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
