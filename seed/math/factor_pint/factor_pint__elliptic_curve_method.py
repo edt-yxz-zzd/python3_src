@@ -13,6 +13,11 @@
 # [:???is_perfect_power_ok__6ECM???]:goto
 # [:inspect_why_almost_fail6prime_square6nonstrict]:goto
 #   fail:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small} #but sometime succ rarely
+#   fixed by:
+#   #   # patch0001:goto
+#   #   # patch0002:goto
+#   #   # patch0003:goto
+
 
 # formula4edgecase4addh_:goto
 # formula4main4addh_:goto
@@ -226,7 +231,11 @@ try1_factor_pint__elliptic_curve_method_
 
 >>> def show_muls_(ops, pt_0, end4k, /):
 ...     for k in range(end4k):
+...       try:
 ...         k_pt = ops.mul7h_(k, pt_0)
+...       except (Incapable__add7h__X6diff_eq0,FoundNonTrivialFactor) as exc:
+...         print(k, repr(exc), sep=':')
+...       else:
 ...         print(k, k_pt, sep=':')
 
 >>> def show_diffs_(ops, pt_0, end4k, /, *, same_also=False):
@@ -282,11 +291,13 @@ Pt4EC7h(-7, 14)
 >>> _6_0 = ops.add7h_(_5_0, pt_0, _4_0);_6_0
 Traceback (most recent call last):
     ...
-seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6diff_eq0: ((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14)))
+seed.math.factor_pint.factor_pint__elliptic_curve_method.FoundNonTrivialFactor: (35, 7, ((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14))))
+>>> #before_patch_123: seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6diff_eq0: ((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14)))
 
 >>> n = 35
 >>> show_diffs_(ops, pt_0, 60)
-6:Incapable__add7h__X6diff_eq0((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14)))
+6:FoundNonTrivialFactor(35, 7, ((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14))))
+>>> #before_patch_123: 6:Incapable__add7h__X6diff_eq0((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14)))
 
 >>> show_diffs_(ops, pt_0, 60, same_also=True)
 0:True:Pt4EC7h(0, 0):Pt4EC7h(0, 0)
@@ -295,10 +306,73 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 3:True:Pt4EC7h(11, -17):Pt4EC7h(11, -17)
 4:True:Pt4EC7h(-5, -14):Pt4EC7h(0, -14)
 5:True:Pt4EC7h(1, 8):Pt4EC7h(-7, 14)
-6:Incapable__add7h__X6diff_eq0((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14)))
+6:FoundNonTrivialFactor(35, 7, ((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14))))
+>>> #before_patch_123: 6:Incapable__add7h__X6diff_eq0((35, 16, 1), (Pt4EC7h(-7, 14), Pt4EC7h(8, 1), Pt4EC7h(0, -14)))
 
 
 >>> show_muls_(ops, pt_0, 60)
+0:Pt4EC7h(0, 0)
+1:Pt4EC7h(8, 1)
+2:Pt4EC7h(14, 16)
+3:Pt4EC7h(11, -17)
+4:Pt4EC7h(-5, -14)
+5:Pt4EC7h(1, 8)
+6:Pt4EC7h(14, 1)
+7:Pt4EC7h(-6, 8)
+8:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+9:Pt4EC7h(4, -17)
+10:Pt4EC7h(14, 16)
+11:Pt4EC7h(1, 8)
+12:Pt4EC7h(15, -14)
+13:Pt4EC7h(-6, -13)
+14:Pt4EC7h(14, 16)
+15:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+16:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+17:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+18:Pt4EC7h(14, 1)
+19:Pt4EC7h(-6, -13)
+20:Pt4EC7h(-5, -14)
+21:Pt4EC7h(11, -17)
+22:Pt4EC7h(14, 16)
+23:Pt4EC7h(-6, 8)
+24:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(15, -14)))
+25:Pt4EC7h(-6, 8)
+26:Pt4EC7h(14, 16)
+27:Pt4EC7h(11, -17)
+28:Pt4EC7h(-5, -14)
+29:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+30:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+31:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+32:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+33:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+34:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+35:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+36:Pt4EC7h(15, -14)
+37:Pt4EC7h(1, 8)
+38:Pt4EC7h(14, 16)
+39:Pt4EC7h(4, -17)
+40:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+41:Pt4EC7h(-6, 8)
+42:Pt4EC7h(14, 1)
+43:Pt4EC7h(1, 8)
+44:Pt4EC7h(-5, -14)
+45:Pt4EC7h(4, -3)
+46:Pt4EC7h(14, 16)
+47:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(15, -14)))
+48:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(15, -14)))
+49:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(15, -14)))
+50:Pt4EC7h(14, 16)
+51:Pt4EC7h(4, -3)
+52:Pt4EC7h(-5, -14)
+53:Pt4EC7h(1, 8)
+54:Pt4EC7h(14, 1)
+55:Pt4EC7h(-6, 8)
+56:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+57:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+58:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+59:FoundNonTrivialFactor(35, 7, ((35, 16, 1), Pt4EC7h(-5, -14)))
+
+#before_patch_123:
 0:Pt4EC7h(0, 0)
 1:Pt4EC7h(8, 1)
 2:Pt4EC7h(14, 16)
@@ -371,7 +445,8 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 (Ops4EllipticPseudocurve7DropY(4087, 724, -1984), Pt4EC7h(-694, -156))
 >>> n = 4087
 >>> show_diffs_(ops, pt_0, 60)
-20:Incapable__add7h__X6diff_eq0((4087, 724, -1984), (Pt4EC7h(2013, -1891), Pt4EC7h(-694, -156), Pt4EC7h(0, -1159)))
+20:FoundNonTrivialFactor(4087, 61, ((4087, 724, -1984), (Pt4EC7h(2013, -1891), Pt4EC7h(-694, -156), Pt4EC7h(0, -1159))))
+>>> #before_patch_123: 20:Incapable__add7h__X6diff_eq0((4087, 724, -1984), (Pt4EC7h(2013, -1891), Pt4EC7h(-694, -156), Pt4EC7h(0, -1159)))
 
 >>> show_diffs_(ops, pt_0, 60, same_also=True)
 0:True:Pt4EC7h(0, 0):Pt4EC7h(0, 0)
@@ -394,7 +469,8 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 17:True:Pt4EC7h(615, 275):Pt4EC7h(1403, 1159)
 18:True:Pt4EC7h(67, -1638):Pt4EC7h(0, -1159)
 19:True:Pt4EC7h(-1245, -1413):Pt4EC7h(2013, -1891)
-20:Incapable__add7h__X6diff_eq0((4087, 724, -1984), (Pt4EC7h(2013, -1891), Pt4EC7h(-694, -156), Pt4EC7h(0, -1159)))
+20:FoundNonTrivialFactor(4087, 61, ((4087, 724, -1984), (Pt4EC7h(2013, -1891), Pt4EC7h(-694, -156), Pt4EC7h(0, -1159))))
+>>> #before_patch_123: 20:Incapable__add7h__X6diff_eq0((4087, 724, -1984), (Pt4EC7h(2013, -1891), Pt4EC7h(-694, -156), Pt4EC7h(0, -1159)))
 >>> gcd(n, 1159)
 61
 
@@ -458,7 +534,8 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 
 >>> (ops, pt_0) = (Ops4EllipticPseudocurve7DropY(4087, 724, -1984, detect6Incapable=True), Pt4EC7h(-694, -156))
 >>> show_diffs_(ops, pt_0, 60)
-20:FoundNonTrivialFactor(4087, 61, (4087, 724, -1984))
+20:FoundNonTrivialFactor(4087, 61, ((4087, 724, -1984), (Pt4EC7h(2013, -1891), Pt4EC7h(-694, -156), Pt4EC7h(0, -1159))))
+>>> #before_patch_123:20:FoundNonTrivialFactor(4087, 61, (4087, 724, -1984))
 
 
 
@@ -503,13 +580,16 @@ seed.math.factor_pint.factor_pint__elliptic_curve_method.Incapable__add7h__X6dif
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, -3, 1), (-8, 1)), default_B1)
 (7, ((35, -3, 1), (-8, 1)), 1, (13, 3))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, -16, 1), (-3, 1)))
-(None, ((35, ((35, -16, 1), (-3, 1)), (Ops4EllipticPseudocurve7DropY(35, -16, 1, detect6Incapable = True, strict = False), Pt4EC7h(-3, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 4), 3)))
+(7, ((35, -16, 1), (-3, 1)), 1, (2, 3))
+>>> #before_patch_123:(None, ((35, ((35, -16, 1), (-3, 1)), (Ops4EllipticPseudocurve7DropY(35, -16, 1, detect6Incapable = True, strict = False), Pt4EC7h(-3, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 4), 3)))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, -16, 1), (-3, 1)), default_B1)
 (5, ((35, -16, 1), (-3, 1)), 1, (13, 3))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, 5, 1), (15, 1)))
-(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 1), 2)))
+(7, ((35, 5, 1), (15, 1)), 1, (0, 2))
+>>> #before_patch_123:(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (4, 400, 20)), '@stage1...', (Pt4EC7h(15, 1), 2)))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(((35, 5, 1), (15, 1)), default_B1)
-(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (10000, 1000000, 996)), '@stage1...', (Pt4EC7h(15, 1), 2)))
+(7, ((35, 5, 1), (15, 1)), 1, (0, 2))
+>>> #before_patch_123:(None, ((35, ((35, 5, 1), (15, 1)), (Ops4EllipticPseudocurve7DropY(35, 5, 1, detect6Incapable = True, strict = False), Pt4EC7h(15, 1)), (10000, 1000000, 996)), '@stage1...', (Pt4EC7h(15, 1), 2)))
 
 
 
@@ -918,7 +998,23 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @max_
 py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='44444444444444461**2' =10000
     (20, 19, 1)
     (20, 17, 3)
-
+#########################
+#above:before_patch_123:
+#########################
+#below:after_patch_123:
+#########################
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='44444444444444461**2' =10000
+    (20, 20, 0)
+    fail
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='44444444444444461**2'
+    (20, 20, 0)
+    fail
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='55555559**2'
+    (20, 12, 8)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='257**2'
+    (20, 3, 17)
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =20 :7inversionless -detect_square_at_first -strict ='11**2'
+    (20, 12, 8)
 ]]
 [[
 # [choose_B1__6ECM]:goto
@@ -1460,15 +1556,25 @@ Theorem 7.2.6 (Generalized Montgomery identities).
         [P1.y == (-P1).y == -(P1.y)]
         [P1.y == 0]
         [0 == (X1**3 +C*X1**2*Z1 +A*X1*Z1**2 +B*Z1**3)]
-        [_addh((X1:Z1),(X2:Z2),(Xn:Zn)) =[def]= (0:0)]
+            # <<== [B:=0][X1==0]
+        [_addh((X1:Z1),(X2:Z2),(Xn:Zn)) =[def]= _doubleh((X1:Z1)) =[def]= (0:0)]
 
     [P1=!=O][P2=!=O][P1=!=-P2][P1==+P2]:
         [Zn == 0]
         [X1*Z2 == X2*Z1]
         [P1=!=-P1]
         [0 =!= (X1**3 +C*X1**2*Z1 +A*X1*Z1**2 +B*Z1**3)]
+            # [B:=0] ==>> [X1=!=0]
         [Xp := ((X1**2 -A*Z1**2)**2 -4*B*(2*X1 +C*Z1)*Z1**3)]
+            # [B:=0][A:=1][Xp==0] ==>> [0 == (X1**2 -Z1**2)**2 %n][1 < gcd(n, X1-Z1) <= n]
+            # fix: [:inspect_why_almost_fail6prime_square6nonstrict]:goto
+            # patch0003:goto
         [Zp := 4*Z1*(X1**3 +C*X1**2*Z1 +A*X1*Z1**2 +B*Z1**3)]
+            # [Zp =?= 0]
+            # !! [Z1 =!= 0]
+            # [Zp == 0] => [1 <= gcd(n, Z1) < n]
+            # fix: [:inspect_why_almost_fail6prime_square6nonstrict]:goto
+            # patch0003:goto
         [_addh((X1:Z1),(X1:Z1),(0:0)) =[def]= _doubleh((X1:Z1)) =[def]= (Xp:Zp)]
 
     above=>[P1=!=O][P2=!=O][P1=?=-P2][P1==+P2]:
@@ -1492,17 +1598,33 @@ Theorem 7.2.6 (Generalized Montgomery identities).
     [P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2][Xn == 0]:
         [Zn =!= 0]
         [X1*Z2 =!= X2*Z1]
-        raise Incapable__add7h__X6diff_eq0#[Xp:=???/Xn]
+        #old:raise Incapable__add7h__X6diff_eq0#[Xp:=???/Xn]
+        !! [Xn == 0]
+        [xn == Xn/Zn == 0]
+        [0 == xp*xn == ((X1*X2 -A*Z1*Z2)**2 -4*B*(X1*Z2 +X2*Z1 +C*Z1*Z2)*Z1*Z2)/(X1*Z2 -X2*Z1)**2]
+            # [B:=0][A:=1][Xn==0] ==>> [0 == (X1*X2 -Z1*Z2)**2 %n][1 < gcd(n, (X1*X2 -Z1*Z2)) <= n] # ??what about:(X1*Z2 -X2*Z1)
+            # fix: [:inspect_why_almost_fail6prime_square6nonstrict]:goto
+            # patch0001:goto
+
 
     [P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2][Xn =!= 0]:
         [Zn =!= 0]
         [X1*Z2 =!= X2*Z1]
         [Xp := Zn * ((X1*X2 -A*Z1*Z2)**2 -4*B*(X1*Z2 +X2*Z1 +C*Z1*Z2)*Z1*Z2)]
+            # [B:=0][A:=1][Xp==0] ==>> [0 == Zn*(X1*X2 -Z1*Z2)**2 %n][1 < gcd(n, (X1*X2 -Z1*Z2)) <= n]
+            # fix: [:inspect_why_almost_fail6prime_square6nonstrict]:goto
+            # patch0002:goto
         [Zp := Xn * (X1*Z2 -X2*Z1)**2]
+            # !! [X1*Z2 =!= X2*Z1]
+            # [B:=0][A:=1][Zp==0] ==>> [0 == Xn*(X1*Z2 -X2*Z1)**2 %n][1 < gcd(n, (X1*Z2 -X2*Z1)) < n]
+            # fix: [:inspect_why_almost_fail6prime_square6nonstrict]:goto
+            # patch0002:goto
         [_addh((X1:Z1),(X2:Z2),(Xn:Zn)) =[def]= (Xp:Zp)]
+
         !! [P1-P2 =[repr]= (Xn:Zn) =[repr]= P2-P1]
         [_addh((X2:Z2),(X1:Z1),(Xn:Zn)) == (Xp:Zp)]
 
+    #add7h_:goto
     def _addh(P1,P2,P1-P2):
     def _doubleh(P1)
     # formula4edgecase4addh_:goto
@@ -2231,13 +2353,15 @@ class Ops4EllipticPseudocurve7DropY:
         # [pt =[repr]= -pt]
         return pt
     def sub7h_(sf, pt6lhs, pt6rhs, pt7sum, /):
-        '[pt7sum == pt6lhs <+> pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7sum/Pt4EC7h -> (pt6lhs<+>-pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
-        # [pt7sum == pt6lhs - (-pt6rhs)] => pt6lhs -> pt6rhs -> pt7sum -> (pt6lhs+(-pt6rhs))|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable
+        '[pt7sum == pt6lhs <+> pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7sum/Pt4EC7h -> (pt6lhs<+>-pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor'
+        #old:'[pt7sum == pt6lhs <+> pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7sum/Pt4EC7h -> (pt6lhs<+>-pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
         return sf.add7h_(pt6lhs, sf.neg_(pt6rhs), pt7sum)
     def add7h_(sf, pt6lhs, pt6rhs, pt7diff, /):
-        '[pt7diff == pt6lhs <+> -pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7diff/Pt4EC7h -> (pt6lhs<+>pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
+        '[pt7diff == pt6lhs <+> -pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7diff/Pt4EC7h -> (pt6lhs<+>pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor'
+        #old:'[pt7diff == pt6lhs <+> -pt6rhs] => pt6lhs/Pt4EC7h -> pt6rhs/Pt4EC7h -> pt7diff/Pt4EC7h -> (pt6lhs<+>pt6rhs)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
         # precondition:[pt7diff == pt6lhs - pt6rhs]
-        ctx = (n, N4C, D4C) = sf._args
+        args4EPC = (n, N4C, D4C) = sf._args
+        ctx = (args4EPC, (pt6lhs, pt6rhs, pt7diff))
         if pt7diff.eq_zero_():
             # [0 == pt7diff.Z]
             #assert pt6lhs.eq7h7mod_(n, pt6rhs)
@@ -2266,6 +2390,7 @@ class Ops4EllipticPseudocurve7DropY:
             # [pt6lhs +pt6rhs == O]
             return pt7h_O
         # [pt6lhs =!= +/-pt6rhs]
+        # [X1*Z2 =!= X2*Z1]
 
         # [0 =!= pt7diff.Z]
         # [pt7diff =!= O]
@@ -2276,12 +2401,24 @@ class Ops4EllipticPseudocurve7DropY:
         if 0 == pt7diff.X:
             # [0 == pt7diff.X]
             # [0 =!= pt7diff.Z]
+            ##################
+            if 1:
+                # patch0001:here
+                # [B:=0][A:=1][Xn==0] ==>> [0 == (X1*X2 -Z1*Z2)**2 %n][1 < gcd(n, (X1*X2 -Z1*Z2)) <= n] # ??what about:(X1*Z2 -X2*Z1)
+                (X1, Z1) = pt6lhs
+                (X2, Z2) = pt6rhs
+                _detect_u_(n, ctx, (X1*X2 -Z1*Z2))
+                    # ^FoundNonTrivialFactor
+                _detect_u_(n, ctx, (X1*Z2 -X2*Z1))
+                    # ^FoundNonTrivialFactor
+            ##################
             if sf._detect6Incapable:
                 ft = gcd(n, pt7diff.Z)
                 if 1 < ft < n:
                     raise FoundNonTrivialFactor(n, ft, ctx)
-            if 0 == pt7diff.X: raise Incapable__add7h__X6diff_eq0(ctx, (pt6lhs, pt6rhs, pt7diff))
+            if 0 == pt7diff.X: raise Incapable__add7h__X6diff_eq0(ctx)
             raise 000
+            ##################
         # [0 =!= pt7diff.X]
 
         # [:define__addh]:goto
@@ -2302,18 +2439,54 @@ class Ops4EllipticPseudocurve7DropY:
             xzxz = ((X1-Z1)*(X2+Z2) -xxzz) %n
             Xp = (Zn * pow(xxzz, 2, n)) %n
             Zp = (Xn * pow(xzxz, 2, n)) %n
+            # [Xp =?= 0]
+            # [Zp =?= 0]
+            ##################
+            if 1:
+                # patch0002:here
+                # [B:=0][A:=1][Xp==0] ==>> [0 == Zn*(X1*X2 -Z1*Z2)**2 %n][1 < gcd(n, (X1*X2 -Z1*Z2)) <= n]
+                # [B:=0][A:=1][Zp==0] ==>> [0 == Xn*(X1*Z2 -X2*Z1)**2 %n][1 < gcd(n, (X1*Z2 -X2*Z1)) < n]
+                if Zp == 0:
+                    #_detect_u_(n, ctx, (X1*Z2 -X2*Z1))
+                    _detect_u_(n, ctx, xzxz)
+                        # ^FoundNonTrivialFactor
+                    # !! [X1*Z2 =!= X2*Z1]
+                    raise Exception(sf, ctx)
+                # [Zp =!= 0]
+                if Xp == 0:
+                    #_detect_u_(n, ctx, (X1*X2 -Z1*Z2))
+                    _detect_u_(n, ctx, xxzz)
+                        # ^FoundNonTrivialFactor
+                    pass
+                # [Xp =?= 0]
+                # [Zp =!= 0]
+            ##################
+            # [Xp =?= 0]
+            # [Zp =!= 0]
+            ##################
         return sf.mk_point_(Xp, Zp)
     def double7h_(sf, pt, /):
-        'pt/Pt4EC7h -> (pt<+>pt)/Pt4EC7h'
+        'pt/Pt4EC7h -> (pt<+>pt)/Pt4EC7h|^FoundNonTrivialFactor'
+        #old:'pt/Pt4EC7h -> (pt<+>pt)/Pt4EC7h'
         if pt.eq_zero_():
             return pt7h_O
         # [pt =!= O]
-        ctx = (n, N4C, D4C) = sf._args
+        args4EPC = (n, N4C, D4C) = sf._args
+        ctx = (args4EPC, pt)
 
         # [:define__doubleh]:goto
         # setup:precondition:[P1=!=O][P2=!=O][P1=?=-P2][P1==+P2]:
         (X1, Z1) = P1 = P2 = pt
         # [P1 =!= O]
+        # [Z1 =!= 0]
+        if X1 == 0:
+            # [x1 == X1/Z1 == 0]
+            # !! [B:=0]
+            # [y1 == 0]
+            # [P1 == -P1]
+            # [2*P1 == O]
+            return pt7h_O
+        # [X1 =!= 0]
         # [Z1 =!= 0]
         X1X1 = pow(X1, 2, n)
         Z1Z1 = pow(Z1, 2, n)
@@ -2324,16 +2497,40 @@ class Ops4EllipticPseudocurve7DropY:
         # part4Zp = ((X1 +C*Z1)%n *X1X1 +X1*Z1Z1) %n
         # Zp = part4Zp*Z1*4 %n if part4Zp else 0
         # Xp = pow(X1X1 -Z1Z1, 2, n) if Zp else 0
-        D4C_X1= D4C*X1 %n
-        D4C_part4Zp = ((D4C_X1 +N4C*Z1)%n *X1X1 +D4C_X1*Z1Z1) %n
+        if X1 == 0:
+            D4C_X1 = 0
+            D4C_part4Zp = 0
+        else:
+            D4C_X1 = D4C*X1 %n
+            D4C_part4Zp = ((D4C_X1 +N4C*Z1)%n *X1X1 +D4C_X1*Z1Z1) %n
+
         Zp = D4C_part4Zp*Z1*4 %n if D4C_part4Zp else 0
         Xp = D4C*pow(X1X1 -Z1Z1, 2, n) %n if Zp else 0
+        ##################
+        if 1:
+            # patch0003:here
+            # [B:=0] ==>> [X1=!=0]
+            # [B:=0][A:=1][Xp==0] ==>> [0 == (X1**2 -Z1**2)**2 %n][1 < gcd(n, X1-Z1) <= n]
+            # [Zp =?= 0]
+            # !! [Z1 =!= 0]
+            # [Zp == 0] => [1 <= gcd(n, Z1) < n]
+            if Zp == 0 != D4C_part4Zp:
+                _detect_u_(n, ctx, Z1)
+                    # ^FoundNonTrivialFactor
+                raise Exception(sf, pt)
+            # [Zp =?= 0]
+            # [Zp == 0] <==> [0 == D4C_part4Zp]
+            if Xp == 0:
+                _detect_u_(n, ctx, X1-Z1)
+                    # ^FoundNonTrivialFactor
+                pass
         return sf.mk_point_(Xp, Zp)
 
     def mul7h_(sf, k, pt, /, *, _old_ver=False):
         # vs:_old_ver__mul7h_
         # vs:bi_mul7h_
-        'k/int -> pt/Pt4EC7h -> (k<*>pt)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
+        'k/int -> pt/Pt4EC7h -> (k<*>pt)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor'
+        #old:'k/int -> pt/Pt4EC7h -> (k<*>pt)/Pt4EC7h|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
         if _old_ver:
             return sf._old_ver__mul7h_(k, pt)
 
@@ -2353,15 +2550,19 @@ class Ops4EllipticPseudocurve7DropY:
         else:
             # (pt7O, pt7OaddI) = sf.bi_mul7h_(odd4k, pt)
             pt7O = sf.bi_mul7h_(odd4k, pt, only1=True)
+                # ^FoundNonTrivialFactor
+                # ^Incapable__add7h__X6diff_eq0
         pt7O
         for _ in range(ez4k):
             pt7O = sf.double7h_(pt7O)
+                # ^FoundNonTrivialFactor
         return pt7O
 
     def bi_mul7h_(sf, k, pt, /, *, only1=False):
         # vs:_old_ver__mul7h_
         # vs:mul7h_
-        'k/int -> pt/Pt4EC7h -> (k<*>pt, (k+1)<*>pt)/(Pt4EC7h,Pt4EC7h)|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
+        'k/int -> pt/Pt4EC7h -> (k<*>pt, (k+1)<*>pt)/(Pt4EC7h,Pt4EC7h)|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor'
+        #old:'k/int -> pt/Pt4EC7h -> (k<*>pt, (k+1)<*>pt)/(Pt4EC7h,Pt4EC7h)|^Incapable__add7h__X6diff_eq0|^FoundNonTrivialFactor if detect6Incapable'
         # [:define__mulh]:goto
         only1 = bool(only1)
         check_type_is(int, k)
@@ -3075,26 +3276,6 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
     ###########################
     ctx = (n, settings4EPC, (ops4EPC, pt6EPC), (B1, B2, big_step))
     ###########################
-    if 1:
-        #########
-        def _detect_pt_(pt1, /):
-            '-> None|^FoundNonTrivialFactor'
-            # [pt1 =!= O]
-            ft = gcd(n, pt1.Z)
-            if 1 < ft < n:
-                raise FoundNonTrivialFactor(n, ft)
-            # !! [pt1 =!= O]
-            # [ft =!= n]
-            assert ft == 1, settings4EPC
-            # [not pt1.eq_partial_zero_mod_()]
-        #########
-        def _detect_u_(u, /):
-            '-> None|^FoundNonTrivialFactor'
-            ft = gcd(n, u)
-            if 1 < ft < n:
-                raise FoundNonTrivialFactor(n, ft)
-
-    ###########################
     mk_iter4detect_ = _4imay_period4detect(n, imay_period4detect)
     pt0 = pt6EPC
     zmay_q1 = 0
@@ -3117,7 +3298,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                 # ^Incapable__add7h__X6diff_eq0
                 # ^FoundNonTrivialFactor
             if _pt.eq_zero_():
-                _detect_pt_(_pt7pre)
+                _detect_pt_(n, ctx, _pt7pre)
                     # ^FoundNonTrivialFactor
                 return (result6fail, (ctx, '@stage1...', (_pt7pre, exp)))
             if _pt.X == 0:
@@ -3126,11 +3307,11 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                 # !! [B:=0]
                 # [g? * _pt.y**2 == (...)*_pt.x == 0]
                 # [_pt.y == 0]
-                _detect_pt_(_pt7pre)
+                _detect_pt_(n, ctx, _pt7pre)
                     # ^FoundNonTrivialFactor
                 return (result6fail, (ctx, '@stage1:...[X==0]', (_pt7pre, exp, _pt)))
             if next(iter4detect):
-                _detect_pt_(_pt7pre)
+                _detect_pt_(n, ctx, _pt7pre)
                     # ^FoundNonTrivialFactor
         j4exp
         zmay_q1
@@ -3141,7 +3322,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
         pt1 = _pt
         assert not pt1.eq_zero_()
         # [pt1 =!= O]
-        _detect_pt_(pt1)
+        _detect_pt_(n, ctx, pt1)
             # ^FoundNonTrivialFactor
         # [not pt1.eq_partial_zero_mod_()]
         #########
@@ -3167,6 +3348,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             ##################
             #detect6cache:here
             z_pt1 = ops4EPC.double7h_(pt1)
+                # ^FoundNonTrivialFactor
             if z_pt1.eq_zero_():
                 # [2<*>pt1 == O]
                 # !! [pt1 =!= O]
@@ -3184,7 +3366,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
                 if cache[-1].eq_zero_():
                     # [O == 2*j<*>pt1]
                     # [0 == 2*j%order_(EC;pt1)]
-                    _detect_pt_(cache[-2])
+                    _detect_pt_(n, ctx, cache[-2])
                         # ^FoundNonTrivialFactor
                     return (result6fail, (ctx, '@stage2.begin:@init-cache...:[2*j<*>pt1 == O]', (2*j, pt1, cache[-2])))
                 # [cache[-1] is cache[j] == O]
@@ -3208,7 +3390,9 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             # [0 == (q-k4ref)%2][2 <= (q-k4ref) <= big_step]
 
             pt7ref = mul7h_(k4ref, pt1)
+                # ^FoundNonTrivialFactor
             pt7ref7pre = mul7h_(k4ref-big_step, pt1)
+                # ^FoundNonTrivialFactor
             777;XZ4ref = pt7ref.mul_X_Z_mod_(n)
             # [pt7ref == k4ref<*>pt1]
             # [pt7ref7pre == (k4ref-big_step)<*>pt1]
@@ -3222,10 +3406,10 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             if 0 == IIdiffs:
                 assert diff == 0, ctx
                 if 0 and not detect_square_at_first:
-                    _detect_pt_(pt7ref)
+                    _detect_pt_(n, ctx, pt7ref)
                         # ^FoundNonTrivialFactor
                 if 0 and pt8small_step.eq_zero_() and not detect_square_at_first:
-                    _detect_pt_(pt7ref)
+                    _detect_pt_(n, ctx, pt7ref)
                         # ^FoundNonTrivialFactor
                 return (result6fail, (ctx, '@stage2.begin...', (k4ref, q, pt7ref, pt8small_step)))
             # [0 =!= IIdiffs %n]
@@ -3281,19 +3465,19 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
             IIdiffs = diff*IIdiffs %n
             if 0 == IIdiffs:
                 # !! MAYBE:[0 == diff%n]
-                #_detect_u_(diff)
+                #_detect_u_(n, ctx, diff)
                     # ^FoundNonTrivialFactor
                 # !! [0 =!= IIdiffs7pre %n]
-                _detect_u_(IIdiffs7pre)
+                _detect_u_(n, ctx, IIdiffs7pre)
                     # ^FoundNonTrivialFactor
                 assert diff == 0, ctx
                 if 0 and not detect_square_at_first:
-                    _detect_pt_(pt7ref)
+                    _detect_pt_(n, ctx, pt7ref)
                         # ^FoundNonTrivialFactor
                 return (result6fail, (ctx, '@stage2...', (k4ref, q, pt7ref, pt8small_step)))
             # [0 =!= IIdiffs %n]
             if next(iter4detect):
-                _detect_u_(IIdiffs)
+                _detect_u_(n, ctx, IIdiffs)
                     # ^FoundNonTrivialFactor
         j4delta
         zmay_q2
@@ -3308,7 +3492,7 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
         IIdiffs
         # [0 =!= IIdiffs %n]
         #########
-        _detect_u_(IIdiffs)
+        _detect_u_(n, ctx, IIdiffs)
             # ^FoundNonTrivialFactor
         #########
     except Incapable__add7h__X6diff_eq0:
@@ -3347,6 +3531,27 @@ def _diff7h7mod_(n, pt7ref, pt8small_step, XZ4ref, XZ4small_step, /):
     diff = ((Xr-Xm)*(Zr+Zm) -XZ4ref +XZ4small_step) %n
     return diff
 
+###########################
+#########
+def _detect_pt_(n, ctx, pt1, /):
+    '-> None|^FoundNonTrivialFactor'
+    # [pt1 =!= O]
+    ft = gcd(n, pt1.Z)
+    if 1 < ft < n:
+        raise FoundNonTrivialFactor(n, ft, ctx)
+    # !! [pt1 =!= O]
+    # [ft =!= n]
+    assert ft == 1, ctx# settings4EPC
+    # [not pt1.eq_partial_zero_mod_()]
+#########
+def _detect_u_(n, ctx, u, /):
+    '-> None|^FoundNonTrivialFactor'
+    ft = gcd(n, u)
+    if 1 < ft < n:
+        raise FoundNonTrivialFactor(n, ft, ctx)
+#########
+
+###########################
 
 
 
