@@ -183,13 +183,13 @@ with mk_ctx4lazy_import4funcs_(__name__):
     ####################################
     from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method_
     #def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_exps4stage1=None, may_B2_or_asc_exps4stage2=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=False, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, may_B1_at_stage2=None, may_B1pw_at_stage1=None, B1_from_n_=None, default_scale4B2=100):
-    #   '-> (((result6fail|ft), n_or_settings4EPC, may_exc_or_msg_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
+    #   '-> (((-9|-2|-1|+1), (result6fail|ft), n_or_settings4EPC, may_exc_or_msg_or_ctx) | (-3, result6fail, settings4EPC, ((ops4EPC, pt6EPC), (B1, B2, pt1, pt2))) | (+2, ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))
 
 
 
     from seed.math.factor_pint.factor_pint__elliptic_curve_method import try1_factor_pint__elliptic_curve_method7inversionless_
     #def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, may_B1=None, may_B2=None, may_max4big_step=None, /, *, random_uint_mod_=None, result6fail=None, detect_square_at_first=True, dup_exps_from_B1_may_B1pw_=None, asc_exps_from_B1_B2_=None, default_scale4B2=100, default_max4big_step=1<<16, imay_period4detect=0, may_B1_at_stage2=None, may_B1pw_at_stage1=None, B1_from_n_=None, strict=False):
-    #   '-> (((result6fail|ft), n_or_settings4EPC, may_exc_or_msg_or_ctx) | (ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))'
+    #   '-> (((-9|-2|-1|+1), (result6fail|ft), n_or_settings4EPC, may_exc_or_msg_or_ctx) | (-3, result6fail, settings4EPC, ((ops4EPC, pt6EPC), (B1, B2, pt1, pt2))) | (+2, ft, settings4EPC, stage, ((j4exp, zmay_q1{==max_exp6stage1}) if stage==1 else (max_exp6stage1, j4delta, zmay_q2{==max_exp6stage2}))))
     #   [settings4EPC == (args4EPC, XZ6EPC) :: ((n,N4C,D4C),(X,Z))]
 
 #.#################################
@@ -613,13 +613,13 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
                 B2 = 100*B1
                 for _ in range(sz7retry):
                     match try1_(n7part_or_settings4EPC, B1, B2):
-                        case (None, _n7part_or_settings4EPC, may_exc_or_msg_or_ctx):
+                        case (_, None, _n7part_or_settings4EPC, may_exc_or_msg_or_ctx):
                             continue
-                        case (proper_factor, _n7part_or_settings4EPC, may_exc_or_msg_or_ctx):
+                        case (_, proper_factor, _n7part_or_settings4EPC, may_exc_or_msg_or_ctx):
                             some_proper_factors = (proper_factor,)
                             x_settings4EPC = _n7part_or_settings4EPC
                             break
-                        case (proper_factor, _settings4EPC, stage, details):
+                        case (_, proper_factor, _settings4EPC, stage, details):
                             some_proper_factors = (proper_factor,)
                             x_settings4EPC = _settings4EPC
                             break
