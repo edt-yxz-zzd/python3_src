@@ -1758,9 +1758,18 @@ Theorem 7.2.6 (Generalized Montgomery identities).
 
     below:[P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2]:
         [Zn =!= 0]
+        #bug__0002:[X1*Z2 =!= X2*Z1]
+        !! [Z1=!=0]
+        !! [Z2=!=0]
+        [X1*Z2 =!= X2*Z1]or[0 == Z1Z2%n][1 < gcd(n, Z1) < n]or[0 =!= Z1Z2%n][1 < gcd(n, Z1Z2) < n]
+        [X1*Z2 =!= X2*Z1]or[1 < gcd(n, Z1Z2) <= n]
+        [X1*Z2 =!= X2*Z1]or[1 =!= gcd(n, Z1Z2)]
+
+    below:[P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2][1 == gcd(n, Z1Z2)]:
+        [Zn =!= 0]
         [X1*Z2 =!= X2*Z1]
 
-    [P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2][Xn == 0]:
+    [P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2][1 == gcd(n, Z1Z2)][Xn == 0]:
         [Zn =!= 0]
         [X1*Z2 =!= X2*Z1]
         old:default:raise Incapable__add7h__X6diff_eq0#[Xp:=???/Xn]
@@ -1829,7 +1838,7 @@ Theorem 7.2.6 (Generalized Montgomery identities).
                 #patch0004:here
 
 
-    [P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2][Xn =!= 0]:
+    [P1=!=O][P2=!=O][P1=!=-P2][P1=!=+P2][1 == gcd(n, Z1Z2)][Xn =!= 0]:
         [Zn =!= 0]
         [X1*Z2 =!= X2*Z1]
         [Xp := Zn * ((X1*X2 -A*Z1*Z2)**2 -4*B*(X1*Z2 +X2*Z1 +C*Z1*Z2)*Z1*Z2)]
