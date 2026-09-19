@@ -6,10 +6,18 @@
 # [:???is_perfect_power_ok__6ECM???]:goto
 # [:inspect_why_almost_fail6prime_square6nonstrict]:goto
 #   fail:try1_factor_pint__elliptic_curve_method7inversionless_@(**2)@{-strict}@{p_small} #but sometime succ rarely
-#   fixed by:
+#   fix:almost_fail6prime_square6nonstrict:
 #   #   # patch0001:goto
 #   #   # patch0002:goto
 #   #   # patch0003:goto
+###########################
+# eliminate:Incapable__add7h__X6diff_eq0:
+#   #   # patch0004:goto
+#   #   # patch0004__part1:goto
+###########################
+# fix:bug__0002:eq7h7mod_.force_detect6pseudo_abs_eq:
+#   #   # patch0005:goto
+###########################
 
 
 # formula4edgecase4addh_:goto
@@ -253,7 +261,7 @@ try1_factor_pint__elliptic_curve_method_
 ...             print(f'-{k}', repr(exc), sep=':')
 ...             break
 ...         #if not _k_pt.eq7h7mod_(n, k_pt):print(k, False, k_pt, _k_pt, sep=':')
-...         if not _k_pt.eq7h7mod_(n, k_pt, force_detect6pseudo_neg=False, ctx=None):print(k, False, f'[{k}<*>{pt_0} == {k_pt} =!= {_k_pt} == add7h_({_kmm_pt}, {pt_0}, {_km2_pt})]', sep=':')
+...         if not _k_pt.eq7h7mod_(n, k_pt, force_detect6pseudo_abs_eq=False, ctx=None):print(k, False, f'[{k}<*>{pt_0} == {k_pt} =!= {_k_pt} == add7h_({_kmm_pt}, {pt_0}, {_km2_pt})]', sep=':')
 ...         elif same_also:print(k, True, k_pt, _k_pt, sep=':') # diff-repr by ratio
 ...         try:
 ...             (_k_pt, _kmm_pt, _km2_pt) = (ops.add7h_(_k_pt, pt_0, _kmm_pt, force_detect6pseudo_neg=force_detect6pseudo_neg), _k_pt, _kmm_pt)
@@ -584,9 +592,9 @@ Pt4EC7h(-122, -793)
 Pt4EC7h(793, -61)
 >>> _36_0a = ops.add7h_(_35_0a, pt_0, _34_0a, **kwds4add7h); _36_0a
 Pt4EC7h(0, 0)
->>> _35_0.eq7h7mod_(n, _35_0a, ctx=None, **kwds4add7h)
+>>> _35_0.eq7h7mod_(n, _35_0a, ctx=None, force_detect6pseudo_abs_eq=False)
 True
->>> _34_0.eq7h7mod_(n, _34_0a, ctx=None, **kwds4add7h)
+>>> _34_0.eq7h7mod_(n, _34_0a, ctx=None, force_detect6pseudo_abs_eq=False)
 True
 >>> _36_0a = ops.add7h_(_35_0a, pt_0, _34_0a, _debug=True, **kwds4add7h); _36_0a #doctest: +SKIP
 P1<+>-P1 --> O
@@ -1283,7 +1291,7 @@ class Pt4EC7h(_Pt4EC7h):
     def diff7h7mod_(sf, n, ot, /):
         '-> sf.Z*ot.Z*(sf.X/sf.Z - ot.X/ot.Z) %n'
         return sf.diff7h_(ot) %n
-    def eq7h7mod_(sf, n, ot, /, *, force_detect6pseudo_neg:bool, ctx):
+    def eq7h7mod_(sf, n, ot, /, *, force_detect6pseudo_abs_eq:bool, ctx):
         #bug:return sf == ot or 0 == sf.diff7h7mod_(n, ot)
         #   !! diff7h7mod_()->0 @pt7h_O
         if sf == ot:return True
@@ -1296,14 +1304,16 @@ class Pt4EC7h(_Pt4EC7h):
         #   [0 == Pt4EC7h(-122, -793).diff7h7mod_(4087, Pt4EC7h(-694, -156))]
         #   bug__0002:here
         #   [sf =[%p]= O =![%p]!= ot][sf =[%q]= ot]
-        #   ==>> ++kw:force_detect6pseudo_neg
+        #   ==>> ++kw:force_detect6pseudo_abs_eq
         if not 0 == sf.diff7h7mod_(n, ot):
             return False
         # [0 == (X1Z2-X2Z1) %n]
-        # [pt6lhs =[%p:repr:ratio]= pt6rhs]or[pt6lhs =[%q]= O]or[pt6rhs =[%q]= O]
-        # !! [pt6lhs =!= +pt6rhs]
-        # [is_pseudo_neg_(pt6lhs, pt6rhs)]
-        if force_detect6pseudo_neg:
+        # [[pt6lhs =[%p:repr:ratio]= +/-pt6rhs][[pt6lhs =[%q]= O]or[pt6rhs =[%q]= O]]]or[[pt6lhs =[%p]= O][pt6rhs =[%q]= O]]
+        # [[pt6lhs =!= +pt6rhs] -> [is_pseudo_neg_(pt6lhs, pt6rhs)]]
+        if force_detect6pseudo_abs_eq:
+            ##################
+            # patch0005:here
+            ##################
             (X1, Z1) = sf#pt6lhs
             (X2, Z2) = ot#pt6rhs
             Z1Z2 = Z1*Z2 %n
@@ -1316,12 +1326,15 @@ class Pt4EC7h(_Pt4EC7h):
             else:
                 _detect_u_(n, ctx, Z1)
                     # ^FoundNonTrivialFactor
-                # [pt6lhs == -pt6rhs]
+                # [pt6lhs == +/-pt6rhs]
                 pass
-            # [pt6lhs == -pt6rhs]
+            # [pt6lhs == +/-pt6rhs]
             pass
-        # [is_pseudo_neg_(pt6lhs, pt6rhs)]
-        # force_detect6pseudo_neg => [pt6lhs == -pt6rhs]
+            ##################
+            # end-patch0005
+            ##################
+        # [[pt6lhs =!= +pt6rhs] -> [is_pseudo_neg_(pt6lhs, pt6rhs)]]
+        # force_detect6pseudo_abs_eq => [[pt6lhs =!= +pt6rhs] -> [is_pseudo_neg_(pt6lhs, pt6rhs)]]
         return True
     def partial_eq7h7mod_(sf, n, ot, /):
         #bug:return not 1 == gcd(n, sf.diff7h7mod_(n, ot))
@@ -1762,6 +1775,7 @@ Theorem 7.2.6 (Generalized Montgomery identities).
         !! [Z1=!=0]
         !! [Z2=!=0]
         [X1*Z2 =!= X2*Z1]or[0 == Z1Z2%n][1 < gcd(n, Z1) < n]or[0 =!= Z1Z2%n][1 < gcd(n, Z1Z2) < n]
+            # patch0005:goto
         [X1*Z2 =!= X2*Z1]or[1 < gcd(n, Z1Z2) <= n]
         [X1*Z2 =!= X2*Z1]or[1 =!= gcd(n, Z1Z2)]
 
@@ -2647,15 +2661,25 @@ class Ops4EllipticPseudocurve7DropY:
         # [Z2 =!= 0]
 
         # [pt6lhs =!= +pt6rhs]
-        if pt6lhs.eq7h7mod_(n, pt6rhs, force_detect6pseudo_neg=force_detect6pseudo_neg, ctx=ctx):
+        if pt6lhs.eq7h7mod_(n, pt6rhs, force_detect6pseudo_abs_eq=force_detect6pseudo_neg, ctx=ctx):
+            ################
             if _debug:print_err('P1<+>-P1 --> O')
             ################
-            #new:
+            #new:after{eq7h7mod_.kw:force_detect6pseudo_abs_eq}
             ################
-            # [pt6lhs =[%p:repr:ratio]= pt6rhs]or[pt6lhs =[%q]= O]or[pt6rhs =[%q]= O]
+            # [[pt6lhs =!= +pt6rhs] -> [is_pseudo_neg_(pt6lhs, pt6rhs)]]
+            # force_detect6pseudo_abs_eq => [[pt6lhs =!= +pt6rhs] -> [is_pseudo_neg_(pt6lhs, pt6rhs)]]
             # !! [pt6lhs =!= +pt6rhs]
             # [is_pseudo_neg_(pt6lhs, pt6rhs)]
-            if 0 and force_detect6pseudo_neg:
+            # force_detect6pseudo_neg => [pt6lhs == -pt6rhs]
+            return pt7h_O
+            ################
+            #new:before{eq7h7mod_.kw:force_detect6pseudo_abs_eq}
+            ################
+            # [[pt6lhs =[%p:repr:ratio]= +/-pt6rhs][[pt6lhs =[%q]= O]or[pt6rhs =[%q]= O]]]or[[pt6lhs =[%p]= O][pt6rhs =[%q]= O]]
+            # !! [pt6lhs =!= +pt6rhs]
+            # [is_pseudo_neg_(pt6lhs, pt6rhs)]
+            if force_detect6pseudo_neg:
                 (X1, Z1) = pt6lhs
                 (X2, Z2) = pt6rhs
                 Z1Z2 = Z1*Z2 %n
