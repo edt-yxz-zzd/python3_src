@@ -15,7 +15,7 @@ py -m nn_ns.app.doctest_cmd seed.algo.rho_method__7iter7batch:__doc__ -ht # -ff 
 
 def try_factor_pint7rho_(ops, imay_max4end6rho, u0_or_scale, may_empty_saver7immutable, /, *, u0_be_floor_sqrt_scale_modulus=False):
 def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
-#.  '-> (final, some_proper_factors, idc, record7old)'
+#.  '-> (final, some_factors, idc, record7old) # !!!NOTE:[1 < ft <= N]!!!'
 #.  (jround, jbatch, end6i, i, pt_i, saver_i_jpp_kpp) = record7old
 
 >>> ops = Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(97*79, 2, 1)
@@ -734,12 +734,12 @@ def reset4new_modulus7factor_pint7rho__7resume_(ops, record7old, modulus7new, /)
 
 @_method6IOps4RhoMethod7batch__7factor_pint_
 def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
-    'ops -> imay_max4end6rho -> record7old -> (final, some_proper_factors, idc, record7old)'
+    'ops -> imay_max4end6rho -> record7old -> (final, some_factors, idc, record7old) # !!!NOTE:[1 < ft <= N]!!!'
     (final, tmay_oresult, record7old) = ops.try_search_oresult7rho__7resume_(imay_max4end6rho, record7old)
     return _2_finalize4try_factor_pint7rho_(ops, final, tmay_oresult, record7old)
 @_method6IOps4RhoMethod7batch__7factor_pint_
 def try_factor_pint7rho_(ops, imay_max4end6rho, u0_or_scale, may_empty_saver7immutable, /, *, u0_be_floor_sqrt_scale_modulus=False):
-    'ops -> imay_max4end6rho -> (u0/int|scale/uint{>0}) -> may IHistorySaver7immutable{len==0} -> (final, some_proper_factors, idc, record7old)'
+    'ops -> imay_max4end6rho -> (u0/int|scale/uint{>0}) -> may IHistorySaver7immutable{len==0} -> (final, some_factors, idc, record7old) # !!!NOTE:[1 < ft <= N]!!!'
     pt_0 = ops.prepare4try_factor_pint7rho_(u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus)
     (final, tmay_oresult, record7old) = ops.try_search_oresult7rho_(imay_max4end6rho, pt_0, may_empty_saver7immutable)
     return _2_finalize4try_factor_pint7rho_(ops, final, tmay_oresult, record7old)
@@ -757,29 +757,32 @@ def prepare4try_factor_pint7rho_(ops, u0_or_scale, /, *, u0_be_floor_sqrt_scale_
     return pt_0
 def _finalize4try_factor_pint7rho_(ops, imay_max4end6rho, m, /):
     #def _finalize4try_factor_pint7rho_(ops, imay_max4end6rho, u0, may_empty_saver7immutable, pt_0, m, /):
-    '-> (final, some_proper_factors, idc, record7old)'
+    '-> (final, some_factors, idc, record7old) # !!!NOTE:[1 < ft <= N]!!!'
     (final, tmay_oresult, record7old) = _finalize4try_search_oresult7rho_(ops, imay_max4end6rho, m)
     return _2_finalize4try_factor_pint7rho_(ops, final, tmay_oresult, record7old)
 def _2_finalize4try_factor_pint7rho_(ops, final, tmay_oresult, record7old, /):
-    '-> (final, some_proper_factors, idc, record7old)'
+    '-> (final, some_factors, idc, record7old) # !!!NOTE:[1 < ft <= N]!!!'
     if not final:
         record7old
         assert not tmay_oresult
-        some_proper_factors = ()
+        some_factors = ()
         js = ()
     else:
         record7old
         tmay_oresult
-        (js, some_proper_factors) = ops.postprocess7factor_pint7rho_(record7old, tmay_oresult)
-        assert some_proper_factors or tmay_oresult is None
-    return (final, some_proper_factors, js, record7old)
-    return (final, some_proper_factors, record7old)
+        #bug:(js, some_proper_factors) = ops.postprocess7factor_pint7rho_(record7old, tmay_oresult)
+        (js, some_factors) = ops.postprocess7factor_pint7rho_(record7old, tmay_oresult)
+            # !!!NOTE:[1 < ft <= N]!!!
+        assert some_factors or tmay_oresult is None
+    return (final, some_factors, js, record7old)
+    return (final, some_factors, record7old)
 
 
 
 @_method6IOps4RhoMethod7batch__7factor_pint_
 def postprocess7factor_pint7rho_(ops, record7old, tmay_oresult, /):
-    '[case<-{10002,10009}] => ... -> ([idx], [proper_factor{modulus}])'
+    '[case<-{10002,10009}] => ... -> ([idx], [factor{modulus}{>1}{<=modulus}]) # !!!NOTE:[1 < ft <= N]!!!'
+    #bug:'[case<-{10002,10009}] => ... -> ([idx], [proper_factor{modulus}])'
     def iter_subsequents_(history, /):
         (k, pt_k, st_i_jpp_kpp) = history
         return ops.iter_subsequents7rho7unlimit_(i, pt_i, k, pt_k, st_i_jpp_kpp)
@@ -802,14 +805,19 @@ def postprocess7factor_pint7rho_(ops, record7old, tmay_oresult, /):
         js.append(j)
     js = tuple(js)
     (N, div_M_N, fts) = st7fold7fwd
+        # !!!NOTE:[1 < ft <= N]!!!
     assert N*div_M_N == ops.modulus
     fts = tuple(sorted(set(list7up_(fts))))
     #xxx:assert fts[0] == oresult
     assert fts or not tmay_oresult
     return (js, fts)
+        # !!!NOTE:[1 < ft <= N]!!!
     return fts
 class _Ops4postprocess7factor_pint_:
     r'''[[[
+    !!!NOTE:[1 < ft <= N]!!!
+
+
     # !! IHistorySaver::forward_search_key_points_(sf, stZhistory2rank7fwd_, op4fold7fwd_, st7fold7fwd, /, *, offset=0, _max_size7dense_6SparseHistorySaver=2049, _max_size7physical_6SparseHistorySaver=65537, may_iter_subsequents_=None):
         '[sf.size7apparent > 0][stZhistory2rank_(st7fold)(sf.head) == -1] => ... -> (st7fold, [((-1+offset4key_point, history{-1+offset4key_point}, -1), (offset4key_point, history{offset4key_point}, (0|+1)))]) | ^EmptyError@{not$[sf.size7apparent > 0]} | ^ValueError@{not$[stZhistory2rank_(st7fold)(sf.head) == -1]} # typing{args}:see above:IHistorySaverBase.__doc__ # [op4fold7fwd_::op4fold_{forward_search}]'
 
@@ -899,9 +907,9 @@ from seed.algo.rho_method__7iter7batch import \
 from seed.algo.rho_method__7iter7batch import Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant, try_factor_pint7rho_, try_factor_pint7rho__7resume_
 #.Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus, even_exp, addend)
 #.def try_factor_pint7rho_(ops, imay_max4end6rho, u0_or_scale, may_empty_saver7immutable, /, *, u0_be_floor_sqrt_scale_modulus=False):
-#.  '-> (final, some_proper_factors, idc, record7old)'
+#.  '-> (final, some_factors, idc, record7old) # !!!NOTE:[1 < ft <= N]!!!'
 #.def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
-#.  '-> (final, some_proper_factors, idc, record7old)'
+#.  '-> (final, some_factors, idc, record7old) # !!!NOTE:[1 < ft <= N]!!!'
 #.  (jround, jbatch, end6i, i, pt_i, saver_i_jpp_kpp) = record7old
 #.  (k, pt_k, st_i_jpp_kpp) = saver_i_jpp_kpp.last
 

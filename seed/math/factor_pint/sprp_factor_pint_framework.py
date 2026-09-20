@@ -270,11 +270,12 @@ def _raw_sprp_factor_pint_(sf, n, ns, n7unfactored_part, st, args7common, kwds7c
         777;st = _mk_state7enter_(ns, st7parent, *args7common, **kwds7common)
         777;stk7st7parent.append(st7parent)
         777;put_exit_mark_()
-        (st, some_proper_factors) = _core_factor_algo_(st, n7part)
-        some_proper_factors = tuple(some_proper_factors)
+        (st, some_proper_factors) = _core_factor_algo_(st7old:=st, n7part)
+        777;some_proper_factors = tuple(some_proper_factors)
+        777;ctx = (ns, n7part, stk7st7parent, st7old, st, some_proper_factors)
         for ft in some_proper_factors:
-            if not 1 < ft < n7part:raise Exception(n7part, ft, some_proper_factors)
-            if not 0 == n7part %ft:raise Exception(n7part, ft, some_proper_factors)
+            if not 1 < ft < n7part:raise Exception(n7part, ft, some_proper_factors, ctx)
+            if not 0 == n7part %ft:raise Exception(n7part, ft, some_proper_factors, ctx)
         some_proper_factors
         ft_lsls = [[ft] for ft in some_proper_factors]
         if not ft_lsls:

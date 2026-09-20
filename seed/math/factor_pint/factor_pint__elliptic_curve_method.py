@@ -973,7 +973,7 @@ Ops4EllipticPseudocurve7DropY
     iter_prepare4Ops4EllipticPseudocurve7DropY_
 
 
-FoundFactor
+IFoundFactor
     FoundNonTrivialFactor
     FoundTrivialFactor
 Incapable__add7h__X6diff_eq0
@@ -986,6 +986,9 @@ to_even_ge_
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
 #.#################################
+from seed.abc.abc__ver1 import abstractmethod, override, ABC
+
+
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
     #low_level_API:iter_sieve4primes_ge_lt_ --> high_level_API:iter_primes__ge_lt_
@@ -1519,11 +1522,24 @@ __all__
 class Incapable__add7h__X6diff_eq0(BaseException):pass
 class ParamError__ops4EPC7DropY(BaseException):pass
 
-class FoundFactor(BaseException):
+class IFoundFactor(ABC, BaseException):
+    #__slots__ = ()
+    ___no_slots_ok___ = True
+    @property
+    @abstractmethod
+    def _is_trivial_factor_(sf, /):
+        '-> bool'
     def __init__(sf, n, ft, ctx=None, /):
-        check_int_ge(1, ft)
-        check_int_ge(ft, n)
-        if not n%ft == 0:raise ValueError(n, ft, ctx)
+        if not int is type(n):raise TypeError(n, ft, ctx)
+        if not int is type(ft):raise TypeError(n, ft, ctx)
+        if sf._is_trivial_factor_:
+            if not 1 <= ft <= n:raise ValueError(n, ft, ctx)
+            if not 1 == ft <= n or 1 <= ft == n:raise ValueError(n, ft, ctx)
+        else:
+            if not 1 < ft < n:raise ValueError(n, ft, ctx)
+        if not 0 == n%ft:raise ValueError(n, ft, ctx)
+        #check_int_ge(1, ft)
+        #check_int_ge(ft, n)
         sf._n = n
         sf._ft = ft
         sf._ctx = ctx
@@ -1540,8 +1556,12 @@ class FoundFactor(BaseException):
     def ctx(sf, /):
         return sf._ctx
 
-class FoundNonTrivialFactor(FoundFactor):pass
-class FoundTrivialFactor(FoundFactor):pass
+class FoundNonTrivialFactor(IFoundFactor):
+    #@override
+    _is_trivial_factor_ = False
+class FoundTrivialFactor(IFoundFactor):
+    #@override
+    _is_trivial_factor_ = True
 
 _Pt4EC7h = mk_namedtuple_(__name__, '_Pt4EC7h', 'X Z')
 class Pt4EC7h(_Pt4EC7h):
@@ -2503,7 +2523,7 @@ class Ops4EllipticPseudocurve:
                 continue
             break
         sf = cls(n, a, b)
-            # no: ^FoundFactor
+            # no: ^IFoundFactor
         pt = sf.mk_point_(x, y)
         return (sf, pt)
     def reset_ops6proper_factor4modulus_(sf, proper_factor4n, /):
@@ -3570,7 +3590,7 @@ def iter_prepare4Ops4EllipticPseudocurve7DropY_(n, /, *args, **kwds):
     while 1:
         try:
             r = f()
-        except FoundFactor as exc:
+        except IFoundFactor as exc:
             yield exc
             continue
         else:
@@ -3757,6 +3777,7 @@ def try_factor_pint__elliptic_curve_method_(n, Bs_or_kss=None, ks5n_and_B_or_ks_
             raise
         ft = exc.factor
         ctx = ((j4ks, B_or_ks), (j4k, k), (ops4EPC, pt), exc.ctx)
+        assert 1 < ft < n, (n, ft, ctx)
         return ft if not with_ctx else (ft, ctx)
     return result6fail#None
 
@@ -3816,8 +3837,8 @@ def iter_deltas5asc_ints_(j0, asc_js, /):
         j0 = j
 
 def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_uint_mod_=None, result6fail=None, drop_Y=False, to_raise=False, detect_square_at_first=True, **kwds4mk):
-    '-> ((-1, result6fail, may_exc_or_msg)|(+1, non_trivial_factor, may_exc_or_msg)|(0, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^FoundFactor if to_raise | ^ParamError__ops4EPC7DropY if to_raise and drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
-    #'-> ((True, (result6fail|non_trivial_factor))|(False, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^FoundFactor | ^ParamError__ops4EPC7DropY if drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
+    '-> ((-1, result6fail, n, may_exc_or_msg)|(+1, non_trivial_factor, n, may_exc_or_msg)|(0, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^IFoundFactor if to_raise | ^ParamError__ops4EPC7DropY if to_raise and drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
+    #'-> ((True, (result6fail|non_trivial_factor))|(False, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^IFoundFactor | ^ParamError__ops4EPC7DropY if drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
     match n_or_settings4EPC:
         case int() as n:
             may_settings4EPC = None
@@ -3837,15 +3858,15 @@ def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_
     if n < 4:
         # [n :: prime]or[n==1]
         # [n :: non_composite]
-        return (-1, result6fail, 'non_composite')
+        return (-1, result6fail, n, 'non_composite')
     if n&1 == 0:
-        return (+1, 2, 'trial_division')
+        return (+1, 2, n, 'trial_division')
     if n%3 == 0:
-        return (+1, 3, 'trial_division')
+        return (+1, 3, n, 'trial_division')
     # [1 == gcd(n, 6)]
     if n < 25:
         # [n :: prime]
-        return (-1, result6fail, 'non_composite')
+        return (-1, result6fail, n, 'non_composite')
     if detect_square_at_first:
         # [:???is_perfect_power_ok__6ECM???]:goto
         #(rt, e) = factor_pint_as_perfect_power_(n)
@@ -3853,7 +3874,7 @@ def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_
         if rt**2 == n:
             assert 1 < rt < n
             assert 0 == n%rt
-            return (+1, rt, 'perfect_square')
+            return (+1, rt, n, 'perfect_square')
         # [not#is_perfect_square_(n)]
 
     # [n >= 25]
@@ -3884,13 +3905,14 @@ def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_
         if not exc.N == n:
             raise Exception('MUST BE BUG@prepare4factor_pint__elliptic_curve_method_():', n_or_settings4EPC, exc)
             if to_raise: raise
-            return (-1, result6fail, exc)
+            return (-1, result6fail, n, exc)
             raise
         ft = exc.factor
-        return (+1, ft, exc)
+        assert 1 < ft < n, (n, ft, n_or_settings4EPC)
+        return (+1, ft, n, exc)
     except (FoundTrivialFactor, ParamError__ops4EPC7DropY) as exc:
         if to_raise: raise
-        return (-1, result6fail, exc)
+        return (-1, result6fail, n, exc)
     (args4EPC, xx6EPC)
     settings4EPC
     (ops4EPC, pt6EPC)
@@ -3985,10 +4007,11 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_ex
     #vs:try1_factor_pint__elliptic_curve_method7inversionless_
     ###########################
     match prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, random_uint_mod_=random_uint_mod_, result6fail=result6fail, detect_square_at_first=detect_square_at_first, drop_Y=False):
-        case (-1, _, may_exc_or_msg):
+        case (-1, _, n, may_exc_or_msg):
             return (-1, result6fail, n_or_settings4EPC, may_exc_or_msg)
         #case (+1, ft):
-        case (1, ft, may_exc_or_msg):
+        case (1, ft, n, may_exc_or_msg):
+            FoundNonTrivialFactor(n, ft, (n_or_settings4EPC, may_exc_or_msg))#check
             return (+1, ft, n_or_settings4EPC, may_exc_or_msg)
         case (0, (n, settings4EPC, (ops4EPC, pt6EPC))):
             pass
@@ -4069,6 +4092,7 @@ def try1_factor_pint__elliptic_curve_method_(n_or_settings4EPC, may_B1_or_dup_ex
             raise Exception('MUST BE BUG@try1_factor_pint__elliptic_curve_method_():', settings4EPC, exc)
             raise
         ft = exc.factor
+        assert 1 < ft < n, (n, ft, ctx)
         stage
         if stage == 1:
             zmay_q1 = max_exp6stage1
@@ -4193,10 +4217,11 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
     ###########################
     match prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, random_uint_mod_=random_uint_mod_, result6fail=result6fail, detect_square_at_first=detect_square_at_first, drop_Y=True, strict=strict, detect6Incapable=True):
         # default:strict=False instead True
-        case (-1, _, may_exc_or_msg):
+        case (-1, _, n, may_exc_or_msg):
             return (-1, result6fail, n_or_settings4EPC, may_exc_or_msg)
         #case (+1, ft):
-        case (1, ft, may_exc_or_msg):
+        case (1, ft, n, may_exc_or_msg):
+            FoundNonTrivialFactor(n, ft, (n_or_settings4EPC, may_exc_or_msg))#check
             return (+1, ft, n_or_settings4EPC, may_exc_or_msg)
         case (0, (n, settings4EPC, (ops4EPC, pt6EPC))):
             pass
@@ -4440,11 +4465,19 @@ def try1_factor_pint__elliptic_curve_method7inversionless_(n_or_settings4EPC, ma
         stage
         j4exp
         return (-9, result6fail, settings4EPC, exc)
+    except FoundTrivialFactor as exc:
+        if not exc.N == n:
+            raise Exception('MUST BE BUG@try1_factor_pint__elliptic_curve_method7inversionless_():', settings4EPC, exc)
+            raise
+        stage
+        j4exp
+        return (-9, result6fail, settings4EPC, exc)
     except FoundNonTrivialFactor as exc:
         if not exc.N == n:
             raise Exception('MUST BE BUG@try1_factor_pint__elliptic_curve_method7inversionless_():', settings4EPC, exc)
             raise
         ft = exc.factor
+        assert 1 < ft < n, (n, ft, ctx)
         stage
         if stage == 1:
             zmay_q1
@@ -4548,7 +4581,7 @@ def _iter_count_succ_ratio_(total, tag:'7inversionless', n, /, *args, **kwds):
 
 
 __all__
-from seed.math.factor_pint.factor_pint__elliptic_curve_method import FoundFactor, FoundNonTrivialFactor, FoundTrivialFactor
+from seed.math.factor_pint.factor_pint__elliptic_curve_method import IFoundFactor, FoundNonTrivialFactor, FoundTrivialFactor
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import Incapable__add7h__X6diff_eq0, ParamError__ops4EPC7DropY
 
 
@@ -4563,7 +4596,7 @@ from seed.math.factor_pint.factor_pint__elliptic_curve_method import try_factor_
 
 from seed.math.factor_pint.factor_pint__elliptic_curve_method import prepare4factor_pint__elliptic_curve_method_
 #def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_uint_mod_=None, result6fail=None, drop_Y=False, to_raise=False, detect_square_at_first=True, **kwds4mk):
-#   '-> ((-1, result6fail, may_exc_or_msg)|(+1, non_trivial_factor, may_exc_or_msg)|(0, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^FoundFactor if to_raise | ^ParamError__ops4EPC7DropY if to_raise and drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
+#   '-> ((-1, result6fail, n, may_exc_or_msg)|(+1, non_trivial_factor, n, may_exc_or_msg)|(0, (n{[1 == gcd(n, 6)][n >= 25]}, settings4EPC, (ops4EPC/T, pt)))) | ^IFoundFactor if to_raise | ^ParamError__ops4EPC7DropY if to_raise and drop_Y # [T := Ops4EllipticPseudocurve if not drop_Y else Ops4EllipticPseudocurve7DropY]'
 #   not$drop_Y => [settings4EPC == (args4EPC, xy6EPC) :: ((n,a,b),(x,y))]
 #   drop_Y => [settings4EPC == (args4EPC, XZ6EPC) :: ((n,N4C,D4C),(X,Z))]
 

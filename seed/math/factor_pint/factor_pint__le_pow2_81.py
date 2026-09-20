@@ -142,7 +142,7 @@ factor_pint__le_pow2_81_
     factor_pint__le_pow2_81__7ECM_7rho_first_
 
 iter_random_tests_
-
+iter_random_tests__7ECM_7rho_first_
 
 default__using_rho_first
 '''.split()#'''
@@ -186,7 +186,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     #.Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus, even_exp, addend)
     #.def try_factor_pint7rho_(ops, imay_max4end6rho, u0_or_scale, may_empty_saver7immutable, /, *, u0_be_floor_sqrt_scale_modulus=False):
     #.def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
-    #.  '-> (final, some_proper_factors, idc, record7old)'
+    #.  '-> (final, some_factors, idc, record7old)'
 
 
 
@@ -857,6 +857,52 @@ total::duration: 8.889295402 *(unit: 0:00:01)
 
 ===
 ]]
+[[
+#iter_random_tests__7ECM_7rho_first_:here
+    -> (sz, sz7rho, sz7ECM)
+===
+py_adhoc_call { +lineno +to_show_timedelta  +to_show_total_timedelta +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__le_pow2_81   ,iter_random_tests__7ECM_7rho_first_   +inversionless +_verbose  =10
+    11:(10, 3, 3)
+    total::duration: 0.7881896180000001 *(unit: 0:00:01)
+
+py_adhoc_call { +lineno +to_show_timedelta  +to_show_total_timedelta +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__le_pow2_81   ,iter_random_tests__7ECM_7rho_first_   +inversionless +_verbose  =100
+    101:(100, 50, 24)
+    total::duration: 7.662638938000001 *(unit: 0:00:01)
+
+py_adhoc_call { +lineno +to_show_timedelta  +to_show_total_timedelta +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__le_pow2_81   ,iter_random_tests__7ECM_7rho_first_   +inversionless +_verbose  =1000
+    1001:(1000, 486, 282)
+    total::duration: 69.776057143 *(unit: 0:00:01)
+
+py_adhoc_call { +lineno +to_show_timedelta  +to_show_total_timedelta +to_show_StopIteration_value  }  seed.math.factor_pint.factor_pint__le_pow2_81   ,iter_random_tests__7ECM_7rho_first_   +inversionless +_verbose  =10000
+    5018:((5018, 2351, 1458), (2386480851408344309006279, ({2386480851408344309006279: 1}, ((), []))))
+    total::duration: 370.887233172 *(unit: 0:00:01)
+    ^Exception: (173840879, 173840879, (173840879,))
+        #line 276, in _raw_sprp_factor_pint_
+        if not 1 < ft < n7part:raise Exception(n7part, ft, some_proper_factors)
+            ###how??? see:bug__ft_eq_n7part
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='173840879' +using_ECM +inversionless +with_settingss +_verbose +using_rho_first +with_idc
+    ({5431: 1, 32009: 1}, ((39,), []))
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='173840879' +using_ECM +inversionless +with_settingss +_verbose -using_rho_first
+    ({5431: 1, 32009: 1}, [])
+
+
+again:
+py_adhoc_call { +lineno +to_show_timedelta  +to_show_total_timedelta +to_show_StopIteration_value  --may_args4PeriodicToilLeisureTime='(1,3)' --may_prompt_string6resting:$'\n\n    resting...\n\n' }  seed.math.factor_pint.factor_pint__le_pow2_81   ,iter_random_tests__7ECM_7rho_first_   +inversionless +_verbose  =10000
+    10001:(10000, 4604, 2811)
+    total::duration: 666.9295390699999 *(unit: 0:00:01)
+
+    10001:(10000, 4711, 2738)
+    total::duration: 647.418383681 *(unit: 0:00:01)
+
+    10001:(10000, 4703, 2756)
+    total::duration: 664.391561322 *(unit: 0:00:01)
+
+    耗时:0.07秒/数
+    尸方法起作用的概率是47%
+    椭圆曲线法起作用的概率是28%
+===
+]]
 
 
 #]]]'''#'''
@@ -1339,7 +1385,14 @@ class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_
         (rope8idc, record7old, max4num_steps, even_exp, addend) = st
         ops = Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(modulus:=n7part, even_exp, addend)
         imay_max4end6rho = 1+max4num_steps if sf.partial_ok else -1
-        (final, some_proper_factors, idc, record7old) = ops.try_factor_pint7rho__7resume_(imay_max4end6rho, record7old)
+        #bug:bug__ft_eq_n7part:(final, some_proper_factors, idc, record7old) = ops.try_factor_pint7rho__7resume_(imay_max4end6rho, record7old)
+        if 1:
+            (final, some_factors, idc, record7old) = ops.try_factor_pint7rho__7resume_(imay_max4end6rho, record7old)
+            777;some_proper_factors = some_factors[:-1] if some_factors and some_factors[-1] == n7part else some_factors
+            assert len(idc) == len(some_factors)
+            assert 0 <= len(idc) -len(some_proper_factors) <= 1
+        some_proper_factors
+        idc
         rope8idc = Rope(rope8idc, idc)
         #print(idc)
         st = (rope8idc, record7old, max4num_steps, even_exp, addend)
@@ -1407,6 +1460,21 @@ def iter_random_tests_(may_max_sz, /, *args, **kwds):
         n = randrange(1, _zpow81)
         yield (n, factor_pint__le_pow2_81_(n, *args, **kwds))
 
+def iter_random_tests__7ECM_7rho_first_(may_max_sz, /, *args, **kwds):
+    it = iter_random_tests_(may_max_sz, *args, using_ECM=True, using_rho_first=True, with_settingss=True, with_idc=True, **kwds)
+    sz = sz7rho = sz7ECM = 0
+    try:
+        for sz, r in enumerate(it, 1):
+            (n, (out, (idc7rho, x_settingss))) = r
+            sz7rho += bool(idc7rho)
+            sz7ECM += bool(x_settingss)
+            yield ((sz, sz7rho, sz7ECM), r)
+            check_type_is(int, n)
+            check_type_is(tuple, idc7rho)
+            check_type_is(list, x_settingss)
+    except KeyboardInterrupt as exc:
+        raise KeyboardInterrupt((sz, sz7rho, sz7ECM), exc)
+    return (sz, sz7rho, sz7ECM)
 
 __all__
 from seed.math.factor_pint.factor_pint__le_pow2_81 import factor_pint__le_pow2_81_, factor_pint__le_pow2_81__7rho_, factor_pint__le_pow2_81__7ECM_, factor_pint__le_pow2_81__7ECM_7rho_first_
