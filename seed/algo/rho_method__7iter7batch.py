@@ -22,19 +22,24 @@ def try_factor_pint7rho__7resume_(ops, imay_max4end6rho, record7old, /):
 >>> ops
 Ops4RhoMethod7batch__7factor_pint__7even_exp_add_constant(7663, 2, 1)
 >>> output = ops.try_factor_pint7rho_(-1, 1, None, u0_be_floor_sqrt_scale_modulus=True); output
-(True, (79, 97), (10, 11), (3, 0, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((7, 6109, 1), mk_rglnkls_([(8, 1072, 2626), (9, 7398, 5531), (10, 1259, 2813), (11, 6504, 0)]), 5, 5, 1, 0))))
+(True, (79, 97), (10, 11), (3, 0, 16, 7, 6109, SparseHistorySaver7immutable(42, 42, '!', ((7, 6109, 1), mk_rglnkls_([(8, 1072, 2626), (9, 7398, 5531), (10, 1259, 2813), (11, 6504, 0)]), 5, 5, 1, 0))))
+>>> #before{override:gmk_default_empty_saver7immutable_}: (True, (79, 97), (10, 11), (3, 0, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((7, 6109, 1), mk_rglnkls_([(8, 1072, 2626), (9, 7398, 5531), (10, 1259, 2813), (11, 6504, 0)]), 5, 5, 1, 0))))
 >>> ops.beyond7rho_(output[-1][-1].last[-1])
 True
 >>> ops.try_factor_pint7rho_(11, 1, None, u0_be_floor_sqrt_scale_modulus=True)
-(True, (97,), (10,), (3, 0, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((7, 6109, 1), mk_rglnkls_([(8, 1072, 2626), (9, 7398, 5531), (10, 1259, 2813)]), 4, 4, 1, 0))))
+(True, (97,), (10,), (3, 0, 16, 7, 6109, SparseHistorySaver7immutable(42, 42, '!', ((7, 6109, 1), mk_rglnkls_([(8, 1072, 2626), (9, 7398, 5531), (10, 1259, 2813)]), 4, 4, 1, 0))))
+>>> #before{override:gmk_default_empty_saver7immutable_}: (True, (97,), (10,), (3, 0, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((7, 6109, 1), mk_rglnkls_([(8, 1072, 2626), (9, 7398, 5531), (10, 1259, 2813)]), 4, 4, 1, 0))))
 
 >>> output = ops.try_factor_pint7rho_(10, 1, None, u0_be_floor_sqrt_scale_modulus=True); output
-(False, (), (), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((9, 7398, 5531), mk_rglnkls_(), 1, 1, 1, 0))))
+(False, (), (), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(42, 42, '!', ((9, 7398, 5531), mk_rglnkls_(), 1, 1, 1, 0))))
+>>> #before{override:gmk_default_empty_saver7immutable_}: (False, (), (), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((9, 7398, 5531), mk_rglnkls_(), 1, 1, 1, 0))))
 
 >>> ops.try_factor_pint7rho__7resume_(11, output[-1])
-(True, (97,), (10,), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((9, 7398, 5531), mk_rglnkls_([(10, 1259, 2813)]), 2, 2, 1, 0))))
+(True, (97,), (10,), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(42, 42, '!', ((9, 7398, 5531), mk_rglnkls_([(10, 1259, 2813)]), 2, 2, 1, 0))))
+>>> #before{override:gmk_default_empty_saver7immutable_}: (True, (97,), (10,), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((9, 7398, 5531), mk_rglnkls_([(10, 1259, 2813)]), 2, 2, 1, 0))))
 >>> ops.try_factor_pint7rho__7resume_(12, output[-1])
-(True, (79, 97), (10, 11), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((9, 7398, 5531), mk_rglnkls_([(10, 1259, 2813), (11, 6504, 0)]), 3, 3, 1, 0))))
+(True, (79, 97), (10, 11), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(42, 42, '!', ((9, 7398, 5531), mk_rglnkls_([(10, 1259, 2813), (11, 6504, 0)]), 3, 3, 1, 0))))
+>>> #before{override:gmk_default_empty_saver7immutable_}: (True, (79, 97), (10, 11), (3, 1, 16, 7, 6109, SparseHistorySaver7immutable(2049, -1, '!', ((9, 7398, 5531), mk_rglnkls_([(10, 1259, 2813), (11, 6504, 0)]), 3, 3, 1, 0))))
 
 
 
@@ -323,8 +328,8 @@ def setup7rho7new_round_(ops, jround7new, sz7new_round, k, pt_k, empty_saver7imm
     return record7new_round
 
 
-default_args4history_saver7immutable = (2049, 2049) #(max_size7physical, imay_max_size7apparent)
 default_args4history_saver7immutable = (2049, -1) #(max_size7physical, imay_max_size7apparent)
+default_args4history_saver7immutable = (2049, 2049) #(max_size7physical, imay_max_size7apparent)
 @_method6IOps4RhoMethod7batch_
 def gmk_default_empty_saver7immutable_(sf, may_empty_saver7immutable=None, /):
     '-> empty_saver7immutable/IHistorySaver7immutable{len==0}'
@@ -626,6 +631,17 @@ class IOps4RhoMethod7batch__7factor_pint(IOps4RhoMethod7batch):
     @override
     def size4next_round_(sf, jround, size4curr_round, /):
         return 2*size4curr_round
+
+    @override
+    def gmk_default_empty_saver7immutable_(sf, may_empty_saver7immutable=None, /):
+        '-> empty_saver7immutable/IHistorySaver7immutable{len==0}'
+        if not None is may_empty_saver7immutable:
+            empty_saver7immutable = may_empty_saver7immutable
+            return empty_saver7immutable
+        #default_empty_saver7immutable = SparseHistorySaver7immutable(*default_args4history_saver7immutable)
+        default_empty_saver7immutable = SparseHistorySaver7immutable(2049, 3+3*sf.modulus.bit_length())
+        return default_empty_saver7immutable
+
 
 
 class IOps4RhoMethod7batch__7factor_pint__7even_exp_add_constant(IOps4RhoMethod7batch__7factor_pint):

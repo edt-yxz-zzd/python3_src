@@ -22,59 +22,59 @@ view ../../python3_src/seed/algo/rho_method__7iter7batch.py
 
 factor_pint__le_pow2_81_
     factor_pint__le_pow2_81__7rho_
->>> factor_pint__le_pow2_81_(-1)
+>>> factor_pint__le_pow2_81_(-1, using_rho=True)
 Traceback (most recent call last):
     ...
 TypeError: -1
->>> factor_pint__le_pow2_81_(0)
+>>> factor_pint__le_pow2_81_(0, using_rho=True)
 Traceback (most recent call last):
     ...
 TypeError: 0
->>> factor_pint__le_pow2_81_(1)
+>>> factor_pint__le_pow2_81_(1, using_rho=True)
 {}
->>> factor_pint__le_pow2_81_(2)
+>>> factor_pint__le_pow2_81_(2, using_rho=True)
 {2: 1}
->>> factor_pint__le_pow2_81_(1+2**81)
+>>> factor_pint__le_pow2_81_(1+2**81, using_rho=True)
 Traceback (most recent call last):
     ...
 TypeError: 2417851639229258349412353
->>> factor_pint__le_pow2_81_(2**81)
+>>> factor_pint__le_pow2_81_(2**81, using_rho=True)
 {2: 81}
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True))
 {7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True))
 ({7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}, (479, 545))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2))
 ({7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}, (4, 13, 59, 479, 545))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=545))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=545))
 (({7: 1, 73: 1, 2593: 1, 71119: 1, 262657: 1, 97685839: 1}, {}, {}), (4, 13, 59, 479, 545))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=544))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=544))
 (({7: 1, 73: 1, 2593: 1, 262657: 1}, {6947319183841: 1}, {}), (4, 13, 59, 479))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=479))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=479))
 (({7: 1, 73: 1, 2593: 1, 262657: 1}, {6947319183841: 1}, {}), (4, 13, 59, 479))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=478))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=478))
 (({7: 1, 73: 1, 2593: 1}, {1824762014870125537: 1}, {}), (4, 13, 59))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=59))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=59))
 (({7: 1, 73: 1, 2593: 1}, {1824762014870125537: 1}, {}), (4, 13, 59))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=58))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=58))
 (({7: 1, 73: 1}, {4731607904558235517441: 1}, {}), (4, 13))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=13))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=13))
 (({7: 1, 73: 1}, {4731607904558235517441: 1}, {}), (4, 13))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=12))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=12))
 (({7: 1}, {345407377032751192773193: 1}, {}), (4,))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=4))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=4))
 (({7: 1}, {345407377032751192773193: 1}, {}), (4,))
->>> stable_print(factor_pint__le_pow2_81_(-1+2**81, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=3))
+>>> stable_print(factor_pint__le_pow2_81_(-1+2**81, using_rho=True, with_idc=True, max4prime7trial_division=2, partial_ok=True, max4num_steps=3))
 (({}, {2417851639229258349412351: 1}, {}), ())
 
->>> #stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, known_factor4Pmm=2*47846459))
->>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, even_exp=2*47846459))
+>>> #stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, using_rho=True, known_factor4Pmm=2*47846459))
+>>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, using_rho=True, even_exp=2*47846459))
 {549755813911: 1, 1099511627791: 1}
->>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, even_exp=2*47846459, with_idc=True))
+>>> stable_print(factor_pint__le_pow2_81_(549755813911*1099511627791, using_rho=True, even_exp=2*47846459, with_idc=True))
 ({549755813911: 1, 1099511627791: 1}, (21,))
->>> factor_pint__le_pow2_81_(1, with_idc=True)
+>>> factor_pint__le_pow2_81_(1, using_rho=True, with_idc=True)
 ({}, ())
->>> factor_pint__le_pow2_81_(2, with_idc=True)
+>>> factor_pint__le_pow2_81_(2, using_rho=True, with_idc=True)
 ({2: 1}, ())
 
 
@@ -86,15 +86,21 @@ factor_pint__le_pow2_81_
 >>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=False)) #doctest: +SKIP
 {549755813911: 1, 1099511627791: 1}
 
->>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=False, _n2settings4EPC={n:((604462909840849692000601, 113612373689681093668799, -35105676510727254637001), (-13323696834883514051457, 107231846234603392551700))}))
+>>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=False, _n2settings4EPC={n:((604462909840849692000601, 113612373689681093668799, -35105676510727254637001), (-13323696834883514051457, 107231846234603392551700))})) #doctest: +SKIP
 {549755813911: 1, 1099511627791: 1}
 
 
->>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=True, _n2settings4EPC={n:((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1))}))
+>>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=True, _n2settings4EPC={n:((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1))})) #doctest: +SKIP
 {549755813911: 1, 1099511627791: 1}
 
 
 
+
+
+>>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=False, _n2settings4EPC={n:((604462909840849692000601, 73644595543270219858538, 6138896876984739143010), (-67935367150762130457386, -193852553264515344442992))}))
+{549755813911: 1, 1099511627791: 1}
+>>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=True, _n2settings4EPC={n:((604462909840849692000601, 15683270651875612453329, 1), (236180207207973089586995, 1))}))
+{549755813911: 1, 1099511627791: 1}
 
 
 
@@ -280,6 +286,28 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
     total::duration: 4.844703626 *(unit: 0:00:01)
 
 
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM -inversionless +with_settingss +_verbose
+    ####after{减少[B1:=10000]占比}
+    ((604462909840849692000601, -145927939101466966415185, -207331627340976357209259), (225734422857491182087429, 175365583910717056631860)) :B1= 500 :B2= 50000 :stage= 2 :details= (499, 313, 2803)
+    total::duration: 3.902407942 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -178651056718642821719303, 16493299631234729111811), (-279159455949762114510237, 160665169464467290947774)) :B1= 700 :B2= 70000 :stage= 2 :details= (691, 4441, 43889)
+    total::duration: 5.407358632 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -155578207209523011352606, 206858468046227805922953), (-138510145011335141860410, -10194678741154736673608)) :B1= 700 :B2= 70000 :stage= 2 :details= (691, 2201, 20641)
+    total::duration: 5.623004166 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -163640507962505728281236, 11663539682889584853683), (-224454576385950871979597, -190621435137217082701479)) :B1= 500 :B2= 50000 :stage= 2 :details= (499, 275, 2539)
+    total::duration: 3.8105307799999997 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -129567861906399790556302, 148641073760833883650740), (-206411590607534455173966, 204270963997790393586442)) :B1= 500 :B2= 50000 :stage= 2 :details= (499, 2370, 22013)
+    total::duration: 4.158184626 *(unit: 0:00:01)
+
+    ((604462909840849692000601, 73644595543270219858538, 6138896876984739143010), (-67935367150762130457386, -193852553264515344442992)) :B1= 300 :B2= 30000 :stage= 1 :details= (71, 257)
+    total::duration: 8.886406702999999 *(unit: 0:00:01)
+
+    ((604462909840849692000601, 69853860208966862541890, 38820166569943002826376), (-22126137906579189868646, 121700105574596399723787)) :B1= 200 :B2= 20000 :stage= 2 :details= (199, 1681, 14753)
+    total::duration: 7.694208688999999 *(unit: 0:00:01)
 
 ===
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791'
@@ -569,10 +597,34 @@ def factor_pint__le_pow2_81_(n4whole, /, *, upperbound4prime_factor4trial_divisi
 
 
 
-def factor_pint__le_pow2_81_(n, /, *, using_ECM=False, **kwds):
+#def factor_pint__le_pow2_81_(n, /, *, using_ECM=False, **kwds):
+def factor_pint__le_pow2_81_(n, /, *, using_rho:bool=None, using_ECM:bool=None, **kwds):
+    if not None is using_ECM:
+        check_type_is(bool, using_ECM)
+    if not None is using_rho:
+        check_type_is(bool, using_rho)
+    match sum(map(bool, [using_rho, using_ECM])):
+        case 0:
+            if not False is using_ECM:
+                using_ECM = True
+            elif not False is using_rho:
+                using_rho = True
+            else:
+                raise TypeError('[using_ECM:=False][using_rho:=False]')
+        case 1:
+            pass
+        case 2:
+            raise TypeError('[using_ECM:=True][using_rho:=True]')
+        case _:
+            raise 000
+
+    assert bool(using_rho) ^ bool(using_ECM)
+
     if using_ECM:
         return factor_pint__le_pow2_81__7ECM_(n, **kwds)
-    return factor_pint__le_pow2_81__7rho_(n, **kwds)
+    if using_rho:
+        return factor_pint__le_pow2_81__7rho_(n, **kwds)
+
 
 
 def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
@@ -818,7 +870,7 @@ class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_
 
 __all__
 from seed.math.factor_pint.factor_pint__le_pow2_81 import factor_pint__le_pow2_81_, factor_pint__le_pow2_81__7rho_, factor_pint__le_pow2_81__7ECM_
-#def factor_pint__le_pow2_81_(n, /, *, using_ECM=False, **kwds):
+#def factor_pint__le_pow2_81_(n, /, *, using_ECM:bool, **kwds):
 #def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
 #def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16):
 from seed.math.factor_pint.factor_pint__le_pow2_81 import *
