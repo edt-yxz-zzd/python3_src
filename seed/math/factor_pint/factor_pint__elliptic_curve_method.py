@@ -619,7 +619,8 @@ True
 >>> default_B1=10000
 >>> settings4EPC = ((4087, 724, -1984), (-694, -156))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(settings4EPC)
-(2, 61, ((4087, 724, -1984), (-694, -156)), 1, (5, 7))
+(2, 61, ((4087, 724, -1984), (-694, -156)), 1, (3, 5))
+>>> #before{B1_from_p_:ver1-->ver3}: (2, 61, ((4087, 724, -1984), (-694, -156)), 1, (5, 7))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(settings4EPC, default_B1)
 (2, 67, ((4087, 724, -1984), (-694, -156)), 1, (21, 5))
 >>> try1_factor_pint__elliptic_curve_method7inversionless_(settings4EPC, 9, imay_period4detect=1)
@@ -690,10 +691,29 @@ True
 >>> M677 = -1+2**677
 >>> M677 == (1943118631 * 531132717139346021081 * 978146583988637765536217 * 53625112691923843508117942311516428173021903300344567 * 11583306121194302925666610180475654822154587629577979400456857120235319057709961541850271218784399)
 True
->>> n = M677
->>> d = 8689346476060549
 >>> p53_6M677 = 53625112691923843508117942311516428173021903300344567
 >>> order4EC_6d_6p53_6M677 = (2**4 * 3**9 * 3079 * 152077 * 172259 * 1067063 * 3682177 * 3815423 * 8867563 * 15880351)
+>>> max_B1_from_n_(M677, ver=1)
+549755813888
+>>> max_B1_from_n_(M677, ver=3)
+95479502650
+>>> B1_from_p_(p53_6M677, ver=1)
+67108864
+>>> B1_from_p_(p53_6M677, ver=3)
+25876122
+
+vs:
+    # [choose_B1__6ECM]:goto
+    549755813888#B1{ver1;sqrt(n)}
+    95479502650#B1{ver3;sqrt(n)}
+    67108864#B1{ver1;p53{M677}}
+    25876122#B1{ver3;p53{M677}}
+    11000000#B1{using}
+    8867563#snd_max_prime{len(EC%p53{M677})}
+    15880351#max_prime{len(EC%p53{M677})}
+    1100000000#B2=100*B1{using}
+>>> n = M677
+>>> d = 8689346476060549
 >>> B1 = 11000000 # = 11*10**6
 >>> B2 = 100*B1
 
@@ -952,7 +972,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.math.gcd import gcd, are_coprime
     from seed.math.II import II_mod
     from seed.math.max_power_of_base_as_factor_of_ import factor_pint_out_power_of_base_
-    from seed.tiny_.check import check_type_is, check_int_ge, check_callable
+    from seed.tiny_.check import check_type_is, check_int_ge, check_int_ge_le, check_callable
     from seed.for_libs.for_collections.override_repr4namedtuple import mk_namedtuple_, mk_namedtuple__check6make_
     #def mk_namedtuple_(__module__, nm, nms_or_str, /, *args, **kwds):
     #def mk_namedtuple__check6make_(__module__, nm, nms_or_str, /, *args, **kwds):
@@ -966,7 +986,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.helper.repr_input import repr_helper
 
 
-    from math import isqrt
+    from math import isqrt, sqrt, ceil, log, exp
     from itertools import repeat, cycle, islice, product
     from seed.debug.print_err import print_err
 
@@ -1208,11 +1228,16 @@ py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_cou
     (100, 62, 38)
 py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =100 :7inversionless -detect_square_at_first -strict ='44444444444444461**2'
     (100, 99, 1)
+#########################
+#above:before{B1_from_p_:ver1-->ver3}
+#########################
 
 ]]
 [[
 # [choose_B1__6ECM]:goto
-py_adhoc_call { --lineno=2 }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,batch_iter__7B1_from_p_ ='[1+(1<<ez) for ez in range(2,1+100)]'
+===
+old version:ver1
+py_adhoc_call { --lineno=2 }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,batch_iter__7B1_from_p_ --ver=1 ='[1+(1<<ez) for ez in range(2,1+100)]'
 2:(5, 2)
 3:(9, 4)
 4:(17, 4)
@@ -1262,7 +1287,9 @@ py_adhoc_call { --lineno=2 }  seed.math.factor_pint.factor_pint__elliptic_curve_
 ...
 100:(1267650600228229401496703205377, 262144)
 
-py_adhoc_call { --lineno=3 }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,batch_iter__7max_B1_from_n_ +only_B1 ='[1+(1<<ez) for ez in range(3,1+100)]'
+===
+old version:ver1
+py_adhoc_call { --lineno=3 }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,batch_iter__7max_B1_from_n_ +only_B1 --ver=1 ='[1+(1<<ez) for ez in range(3,1+100)]'
 3:2
 4:2
 5:4
@@ -1299,6 +1326,163 @@ py_adhoc_call { --lineno=3 }  seed.math.factor_pint.factor_pint__elliptic_curve_
 ...
 100:4096
 
+===
+new version:ver3
+py_adhoc_call { --lineno=3 }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,batch_iter__7max_B1_from_n_ +only_B1 --ver=3 ='[1+(1<<ez) for ez in range(3,1+100)]'
+3:2
+4:2
+5:3
+6:3
+7:4
+8:4
+9:5
+10:5
+11:6
+12:6
+13:8
+14:8
+15:9
+16:9
+17:11
+18:11
+19:14
+20:14
+21:17
+22:17
+23:20
+24:20
+25:24
+26:24
+27:28
+28:28
+29:33
+30:33
+31:39
+32:39
+33:46
+34:46
+35:53
+36:53
+37:62
+38:62
+39:72
+40:72
+41:83
+42:83
+43:96
+44:96
+45:110
+46:110
+47:126
+48:126
+49:145
+50:145
+51:165
+52:165
+53:188
+54:188
+55:214
+56:214
+57:243
+58:243
+59:276
+60:276
+61:312
+62:312
+63:352
+64:352
+65:397
+66:397
+67:447
+68:447
+69:503
+70:503
+71:565
+72:565
+73:633
+74:633
+75:709
+76:709
+77:793
+78:793
+79:886
+80:886
+81:989
+82:989
+83:1103
+84:1103
+85:1228
+86:1228
+87:1366
+88:1366
+89:1518
+90:1518
+91:1685
+92:1685
+93:1869
+94:1869
+95:2071
+96:2071
+97:2293
+98:2293
+99:2536
+100:2536
+==>>:
+81:989@ver3
+100:2536:ver3
+# [choose_B1__6ECM]:goto
+===
+===
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   ,_iter_cmp__version4B1_from_p_ -result7noshow =1 =3 ='range(3,1+200)'
+    #output.True <==> [B1{ver1} < B1{ver3}]
+    #   ==>> almost:[B1{ver1} > B1{ver3}]
+(3, -1, True, 2, 3)
+(5, -1, True, 4, 5)
+(11, -1, True, 16, 17)
+(11, 1, True, 16, 17)
+(12, -1, True, 16, 20)
+(15, -1, True, 32, 33)
+(25, -1, True, 128, 145)
+(30, -1, True, 256, 276)
+(30, 1, True, 256, 276)
+(31, -1, True, 256, 312)
+(55, -1, True, 4096, 4150)
+(55, 1, True, 4096, 4150)
+(56, -1, True, 4096, 4568)
+(63, -1, True, 8192, 8785)
+(125, -1, True, 1048576, 1091407)
+
+===
+]]
+[[
+# [choose_B1__6ECM]:goto
+81:989@ver3 --> 1000
+    549755813911*1099511627791 #view ../../python3_src/seed/math/factor_pint/factor_pint__le_pow2_81.py
+100:2536:ver3 --> 2500
+    844424930132057*985162418487371
+
+===
+nextprime(2^50-2^48)
+    844424930132057
+nextprime(2^50-2^47)
+    985162418487371
+===
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @try1_factor_pint__elliptic_curve_method7inversionless_ ='549755813911*1099511627791' =1000
+    (-3, None, ((604462909840849692000601, 104695159216696528118731, 1), (121574342802162208004332, 1)), ((Ops4EllipticPseudocurve7DropY(604462909840849692000601, 104695159216696528118731, 1, detect6Incapable = True, strict = False), Pt4EC7h(121574342802162208004332, 1)), (1000, 100000, Pt4EC7h(-210120735461360557786670, -19201676639359876355711), Pt4EC7h(-210120735461360557786670, -19201676639359876355711))))
+
+
+#########################
+#below:after{B1_from_p_:ver1-->ver3}
+#########################
+py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ =1000 :7inversionless  ='549755813911*1099511627791' =1000
+    (1000, 842, 158)
+
+###{half-hour}###py_adhoc_call   seed.math.factor_pint.factor_pint__elliptic_curve_method   @_count_succ_ratio_ ='4*2500' :7inversionless  ='844424930132057*985162418487371' =2500
+
+py_adhoc_call { +to_show_timedelta +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__elliptic_curve_method   ,_iter_count_succ_ratio_ ='4*2500' :7inversionless  ='844424930132057*985162418487371' =2500
+    KeyboardInterrupt:
+        (100, 94, 6)
+        total::duration: 15.15132158 *(unit: 0:00:01)
 ]]
 ===
 ]]]
@@ -3651,22 +3835,66 @@ def prepare4factor_pint__elliptic_curve_method_(n_or_settings4EPC, /, *, random_
 
 
 # [choose_B1__6ECM]:goto
-def batch_iter__7B1_from_p_(ps, /, only_B1=False):
+_default__version4B1_from_p_ = 3
+def batch_iter__7B1_from_p_(ps, /, *, ver, only_B1=False):
     for p in ps:
-        B1 = B1_from_p_(p)
+        B1 = B1_from_p_(p, ver=ver)
         yield (p, B1) if not only_B1 else B1
-def batch_iter__7max_B1_from_n_(ns, /, only_B1=False):
+def batch_iter__7max_B1_from_n_(ns, /, *, ver, only_B1=False):
     for n in ns:
-        B1 = max_B1_from_n_(n)
+        B1 = max_B1_from_n_(n, ver=ver)
         yield (n, B1) if not only_B1 else B1
-def B1_from_p_(p, /):
-    'p/prime{>3}{#min prime factor for some "n"#} -> B1{#ECM#} # assume [B2:=B1] i.e. ECM7stage1_only'
+def _iter_cmp__version4B1_from_p_(verL, verR, ezs, /, *, result7noshow=None):
+    assert 1 <= verL < verR <= 3
+    for ez in ezs:
+        if ez < 3:continue
+        zpow = 1<<ez
+        p0 = zpow-1
+        p1 = zpow+1
+        for s,p in [(-1,p0),(+1,p1)]:
+            rL = B1_from_p_(p, ver=verL)
+            rR = B1_from_p_(p, ver=verR)
+            b = rL < rR
+            if b is result7noshow:continue
+            yield (ez, s, b, rL, rR)
+def B1_from_p_(p, /, *, ver):
+    'p/prime{>3}{#min prime factor for some "n"#} -> B1{#ECM#} # assume [B2:=B1] i.e. ECM7stage1_only # [num_trials7heuristic_expected{n} ~= B1]'
+    # [B1 := (exp((1+small_o(1))*sqrt(1/2*lnPlnlnP)))] => [num_trials7heuristic_expected{n} ~= B1]
+    # [B1 := (exp(sqrt(1/2*lnPlnlnP)))]
+    # [B1 == (exp(sqrt(1/2*lbPlblnP*ln2**2)))]
+    # [B1 == (exp(ln2*sqrt(1/2*lbPlblnP)))]
+    # [B1 == (2**(sqrt(1/2*lbPlblnP)))]
+    # [B1 <= (2**(sqrt(1/2*lbPlblbP)))]
+    # [B1 <?> (2**(floor_sqrt(1/2*lbPlblbP)))]
+    #   => _iter_cmp__version4B1_from_p_()
+    #   => ++kw:ver
+    #   => ++_default__version4B1_from_p_
+    #
     check_int_ge(5, p)
-    approx_lnP = p.bit_length()
-    approx_lnlnP = approx_lnP.bit_length()
-    B1 = 1 << isqrt(approx_lnP*approx_lnlnP//2)
+    check_int_ge_le(1,3, ver)
+    #ver = 3
+    if ver < 3:
+        approx_lnP = p.bit_length()
+        approx_lnlnP = approx_lnP.bit_length()
+    else:
+        lnP = log(p)
+        lnlnP = log(lnP)
+
+    match ver:
+        case 1:
+            #old:ver1:
+            B1 = 1 << isqrt(approx_lnP*approx_lnlnP//2)
+        case 2:
+            #new:ver2:
+            B1 = 1 << (1+isqrt(approx_lnP*approx_lnlnP//2))
+        case 3:
+            #new:ver3:
+            B1 = ceil(exp(sqrt(lnP*lnlnP/2)))
+        case _:
+            raise 000
+    B1
     return B1
-def max_B1_from_n_(n, /):
+def max_B1_from_n_(n, /, *, ver):
     n = max(8, n)
     check_int_ge(8, n)
     # [n >= 8]
@@ -3676,7 +3904,7 @@ def max_B1_from_n_(n, /):
     # [approx_sqrtN >= 4]
     max4min_p4n = 1+approx_sqrtN
     # [max4min_p4n >= 5]
-    return B1_from_p_(max4min_p4n)
+    return B1_from_p_(max4min_p4n, ver=ver)
 
 #DONE:B1_or_dup_exps4stage1 --> (B1_or_dup_exps4stage1|B1_from_n_)
 #   howto impl B1_from_n_ # vs B1_from_p_
@@ -3831,8 +4059,8 @@ def to_even_ge_(low, u, /):
     assert 0 == u&1
     assert low <= u
     return u
-def default__B1_from_n_(n, /):
-    return min(10000, max_B1_from_n_(n))
+def default__B1_from_n_(n, /, *, ver=_default__version4B1_from_p_):
+    return min(10000, max_B1_from_n_(n, ver=ver))
 def prepare4criteria4ECM7inversionless_(n, may_B1, may_B2, may_max4big_step, /, *, B1_from_n_=None, default_scale4B2=100, default_max4big_step=1<<16):
     # default_B1=10000 --> B1_from_n_=None
     #B1 = ifNone(may_B1, default_B1)
@@ -4206,6 +4434,11 @@ def _detect_u_(n, ctx, u, /):
 
 
 def _count_succ_ratio_(total, tag:'7inversionless', n, /, *args, **kwds):
+    _total = c7fail = c7ok = 0
+    for (_total, c7fail, c7ok) in _iter_count_succ_ratio_(total, tag, n, *args, **kwds):pass
+    assert c7fail+c7ok == total == _total
+    return (total, c7fail, c7ok)
+def _iter_count_succ_ratio_(total, tag:'7inversionless', n, /, *args, **kwds):
     match tag:
         case '7inversionless':
             f = try1_factor_pint__elliptic_curve_method7inversionless_
@@ -4216,8 +4449,8 @@ def _count_succ_ratio_(total, tag:'7inversionless', n, /, *args, **kwds):
     f
     g = lambda:f(n, *args, **kwds)
 
-    c7fail = c7ok = 0
-    for j in range(total):
+    _total = c7fail = c7ok = 0
+    for _total in range(1, 1+total):
         r = g()
         match r:
             case (_, None, *_):
@@ -4228,9 +4461,10 @@ def _count_succ_ratio_(total, tag:'7inversionless', n, /, *args, **kwds):
                 c7ok += 1
             case bad:
                 raise Exception(bad)
+        yield (_total, c7fail, c7ok)
 
     c7fail, c7ok
-    assert c7fail+c7ok == total
+    assert c7fail+c7ok == total == _total
     return (total, c7fail, c7ok)
 
 
