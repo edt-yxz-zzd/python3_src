@@ -1,5 +1,6 @@
 #__all__:goto
 #rho_vs_ECM:goto
+#DONE: insert rho between trial_division and ECM @factor_pint__le_pow2_81_&factor_pint__le_pow2_81__7ECM_
 r'''[[[
 e ../../python3_src/seed/math/factor_pint/factor_pint__le_pow2_81.py
 
@@ -83,6 +84,7 @@ factor_pint__le_pow2_81_
     ++kw:using_ECM
     factor_pint__le_pow2_81__7ECM_
         ++kw:with_settingss,_n2settings4EPC
+    factor_pint__le_pow2_81__7ECM_7rho_first_
 >>> stable_print(factor_pint__le_pow2_81_(n:=549755813911*1099511627791, using_ECM=True, inversionless=False)) #doctest: +SKIP
 {549755813911: 1, 1099511627791: 1}
 
@@ -105,7 +107,14 @@ factor_pint__le_pow2_81_
 
 
 
-
+>>> stable_print(factor_pint__le_pow2_81__7ECM_7rho_first_(12289*14341*15361, with_settingss=True, with_idc=True))
+({12289: 1, 14341: 1, 15361: 1}, ((94, 246), []))
+>>> stable_print(factor_pint__le_pow2_81__7ECM_7rho_first_(12289*14341*15361, with_settingss=True))
+({12289: 1, 14341: 1, 15361: 1}, [])
+>>> stable_print(factor_pint__le_pow2_81__7ECM_7rho_first_(12289*14341*15361, with_idc=True))
+({12289: 1, 14341: 1, 15361: 1}, (94, 246))
+>>> stable_print(factor_pint__le_pow2_81__7ECM_7rho_first_(12289*14341*15361))
+{12289: 1, 14341: 1, 15361: 1}
 
 
 
@@ -129,6 +138,10 @@ __all__ = r'''
 factor_pint__le_pow2_81_
     factor_pint__le_pow2_81__7rho_
     factor_pint__le_pow2_81__7ECM_
+    factor_pint__le_pow2_81__7ECM_7rho_first_
+
+
+default__using_rho_first
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -220,18 +233,23 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
 
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1)),))
     total::duration: 0.35082293600000003 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM --_n2settings4EPC='{604462909840849692000601:((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1))}'
+    {549755813911: 1, 1099511627791: 1}
+    total::duration: 0.723129167 *(unit: 0:00:01)
 
+
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM +inversionless +with_settingss
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -289818814942228560223796, 1), (-102630186370812554545569, 1)),))
     total::duration: 1.635154302 *(unit: 0:00:01)
 
-    ####after{减少[B1:=10000]占比}
+    ####after{减少占比{[B1:=10000]}}
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -20364909009155365515380, 1), (118484407149852971221277, 1)),))
     total::duration: 0.40510562799999994 *(unit: 0:00:01)
 
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 20131030825862550320953, 1), (31678502696936596719446, 1)),))
     total::duration: 1.602889846 *(unit: 0:00:01)
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM +inversionless +with_settingss +_verbose
-    ####after{减少[B1:=10000]占比}
+    ####after{减少占比{[B1:=10000]}}
     ((604462909840849692000601, 59115648778082293158384, 1), (-76113690075940026331671, 1)) :B1= 200 :B2= 20000 :stage= 2 :details= (199, 640, 5153)
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 59115648778082293158384, 1), (-76113690075940026331671, 1)),))
     total::duration: 0.8691863799999999 *(unit: 0:00:01)
@@ -254,9 +272,20 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
     ((604462909840849692000601, -263387916863968589748399, 1), (115347125251065563024224, 1)) :B1= 100 :B2= 10000 :stage= 2 :details= (97, 320, 2339)
     total::duration: 0.696998463 *(unit: 0:00:01)
 
-py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM --_n2settings4EPC='{604462909840849692000601:((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1))}'
-    {549755813911: 1, 1099511627791: 1}
-    total::duration: 0.723129167 *(unit: 0:00:01)
+    [< (js4round=(0, 3, 14), x_settings4EPC=((604462909840849692000601, 197097742550640764932434, 1), (195552093599058745647493, 1)), B1=300, B2=30000, stage=2, details=(293, 3182, 29989)) >]
+    total::duration: 1.1046086860000002 *(unit: 0:00:01)
+
+    [< (js4round=(0, 5, 1), x_settings4EPC=((604462909840849692000601, 92454234126377069514722, 1), (133864637128032526501896, 1)), B1=700, B2=70000, stage=2, details=(691, 4160, 40933)) >]
+    total::duration: 1.8880445460000002 *(unit: 0:00:01)
+
+    [< (js4round=(0, 3, 10), x_settings4EPC=((604462909840849692000601, -128692737290142111877748, 1), (-50079923289705892056223, 1)), B1=300, B2=30000, stage=2, details=(293, 320, 2647)) >]
+    total::duration: 1.0313364710000001 *(unit: 0:00:01)
+
+    [< (js4round=(0, 3, 8), proper_factor=1099511627791, x_settings4EPC=((604462909840849692000601, -284234283382121199913585, 1), (-165896858867726468756590, 1)), B1=300, B2=30000, stage=2, details=(293, 960, 8147)) >]
+    total::duration: 0.9559972280000001 *(unit: 0:00:01)
+
+    [< (js4round=(0, 3, 6), proper_factor=549755813911, x_settings4EPC=((604462909840849692000601, -39828808042386927468310, 1), (57529426462881938925329, 1)), B1=300, B2=30000, stage=2, details=(293, 960, 8147)) >]
+    total::duration: 0.8486718580000001 *(unit: 0:00:01)
 
 ===
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM -inversionless
@@ -287,7 +316,7 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
 
 
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM -inversionless +with_settingss +_verbose
-    ####after{减少[B1:=10000]占比}
+    ####after{减少占比{[B1:=10000]}}
     ((604462909840849692000601, -145927939101466966415185, -207331627340976357209259), (225734422857491182087429, 175365583910717056631860)) :B1= 500 :B2= 50000 :stage= 2 :details= (499, 313, 2803)
     total::duration: 3.902407942 *(unit: 0:00:01)
 
@@ -308,6 +337,24 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
 
     ((604462909840849692000601, 69853860208966862541890, 38820166569943002826376), (-22126137906579189868646, 121700105574596399723787)) :B1= 200 :B2= 20000 :stage= 2 :details= (199, 1681, 14753)
     total::duration: 7.694208688999999 *(unit: 0:00:01)
+
+    [< :js4round= (0, 6, 0) :x_settings4EPC= ((604462909840849692000601, -233516287980666902930443, 278380035818721938499413), (-54177317125889783500966, -167356467310629287574757)) :B1= 1000 :B2= 100000 :stage= 2 :details= (997, 2235, 21407) >]
+    total::duration: 5.771197783 *(unit: 0:00:01)
+
+    [< , :js4round=, (0, 5, 6), :x_settings4EPC=, ((604462909840849692000601, 52579247858561495718961, -24847718755492241288022), (30913156755396657520540, 283588168323666183493171)), :B1=, 700, :B2=, 70000, :stage=, 2, :details=, (691, 4737, 47137),  >]
+    total::duration: 5.668010083 *(unit: 0:00:01)
+
+    [< (js4round=(0, 3, 0), x_settings4EPC=((604462909840849692000601, 259382781613772196677709, 127863603143205158860610), (48327143848491558959090, 278839066431823856955534)), B1=300, B2=30000, stage=2, details=(293, 1419, 12413)) >]
+    total::duration: 2.271613088 *(unit: 0:00:01)
+
+    [< (js4round=(0, 3, 13), x_settings4EPC=((604462909840849692000601, -20000002574251473318708, -247302947425328233462747), (72540310452760530824520, -248142857885576353317823)), B1=300, B2=30000, stage=2, details=(293, 346, 2803)) >]
+    total::duration: 2.958946166 *(unit: 0:00:01)
+
+    [< (js4round=(0, 11, 6), proper_factor=549755813911, x_settings4EPC=((604462909840849692000601, -231783102773132076289179, -50816269902896888436873), (-114386999512805666035365, -192685935760697701124326)), B1=500, B2=50000, stage=2, details=(499, 2402, 22291)) >]
+    total::duration: 10.493244111000001 *(unit: 0:00:01)
+
+    [< (js4round=(0, 3, 19), proper_factor=1099511627791, x_settings4EPC=((604462909840849692000601, -140860555816628965197650, -133975171045394889477152), (-87429062194307661116785, -265845716270506455712819)), B1=300, B2=30000, stage=2, details=(293, 3068, 28751)) >]
+    total::duration: 3.361340317 *(unit: 0:00:01)
 
 ===
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791'
@@ -621,20 +668,109 @@ def factor_pint__le_pow2_81_(n, /, *, using_rho:bool=None, using_ECM:bool=None, 
     assert bool(using_rho) ^ bool(using_ECM)
 
     if using_ECM:
+        if kwds.pop('using_rho_first', default__using_rho_first):
+            return factor_pint__le_pow2_81__7ECM_7rho_first_(n, **kwds)
         return factor_pint__le_pow2_81__7ECM_(n, **kwds)
     if using_rho:
         return factor_pint__le_pow2_81__7rho_(n, **kwds)
 
-
+default__using_rho_first = True
 
 def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
     _ops7rho = _Framework4factor_pint__le_pow2_81__7rho(partial_ok=partial_ok, more=with_idc)
     return _ops7rho.sprp_factor_pint_(n, max4prime7trial_division, max4num_steps=max4num_steps, even_exp=even_exp, addend=addend, u0_or_scale=u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus, may_empty_saver7immutable=may_empty_saver7immutable)
 
 
-def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True, _verbose=False):
-    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, n2settings4EPC=_n2settings4EPC, inversionless=inversionless, verbose=_verbose)
-    return _ops7ECM.sprp_factor_pint_(n, max4prime7trial_division, max4num_trials=max4num_trials, max4num_trials4part=max4num_trials4part)
+
+
+
+
+
+
+
+
+def _valitate_out_(n, out, /, *, partial_ok, more):
+    if more:
+        (out, _) = out
+    if not partial_ok:
+        p2e = out
+        assert n == II__ft2e_(p2e)
+    else:
+        (p2e, non_sprp2exp, non_sprp2exp4todo) = out
+        assert not (p2e.keys() & non_sprp2exp.keys())
+        assert not (p2e.keys() & non_sprp2exp4todo.keys())
+        assert not (non_sprp2exp.keys() & non_sprp2exp4todo.keys())
+        assert n == II__ft2e_(p2e)*II__ft2e_(non_sprp2exp)*II__ft2e_(non_sprp2exp4todo)
+
+def _pow_ft2e_(ft2e, k, /):
+    return {ft:e*k for ft, e in ft2e.items()}
+
+def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True, _verbose=False, using_rho_first=default__using_rho_first):
+    if using_rho_first:
+        kwds = dict(locals())
+        777;del kwds['n']
+        777;del kwds['using_rho_first']
+        return factor_pint__le_pow2_81__7ECM_7rho_first_(n, **kwds)
+    else:
+        _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, n2settings4EPC=_n2settings4EPC, inversionless=inversionless, verbose=_verbose)
+        return _ops7ECM.sprp_factor_pint_(n, max4prime7trial_division, max4num_trials=max4num_trials, max4num_trials4part=max4num_trials4part)
+
+def factor_pint__le_pow2_81__7ECM_7rho_first_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True, _verbose=False, with_idc=False, max4num_steps7rho=None):
+    with_settingss = bool(with_settingss)
+    with_idc = bool(with_idc)
+    max4num_steps7rho = max4num_steps7rho if not None is max4num_steps7rho else max(_zpow12, max4prime7trial_division)
+    r = factor_pint__le_pow2_81__7rho_(n, partial_ok=True, with_idc=True, max4prime7trial_division=max4prime7trial_division, max4num_steps=max4num_steps7rho, even_exp=2, addend=1, u0_or_scale=7, u0_be_floor_sqrt_scale_modulus=True, may_empty_saver7immutable=None)
+    777;max4prime7trial_division = 2
+    777;using_rho_first = False
+    kwds = dict(locals())
+    777;del kwds['n']
+    777;del kwds['r']
+    777;del kwds['with_idc']
+    777;del kwds['max4num_steps7rho']
+    ((pre__p2e, pre__non_sprp2exp, pre__non_sprp2exp4todo), pre__idc) = r
+
+    g__xsettingss = []
+    (g__p2e, g__non_sprp2exp, g__non_sprp2exp4todo) = ({}, {}, {})
+    777;g__p2e.update(pre__p2e)
+    for n7part, e in sorted([*pre__non_sprp2exp.items(), *pre__non_sprp2exp4todo.items()]):
+        r = factor_pint__le_pow2_81__7ECM_(n7part, **kwds)
+        if with_settingss:
+            (r, _xsettingss) = r
+            g__xsettingss.extend(_xsettingss)
+        r
+        if partial_ok:
+            (_p2e, _non_sprp2exp, _non_sprp2exp4todo) = r
+            777;g__non_sprp2exp.update(_pow_ft2e_(_non_sprp2exp, e))
+            777;g__non_sprp2exp4todo.update(_pow_ft2e_(_non_sprp2exp4todo, e))
+        else:
+            _p2e = r
+        _p2e
+        777;g__p2e.update(_pow_ft2e_(_p2e, e))
+    g__xsettingss
+    out = (g__p2e, g__non_sprp2exp, g__non_sprp2exp4todo) if partial_ok else g__p2e
+    _valitate_out_(n, out, partial_ok=partial_ok, more=False)
+    match (with_idc, with_settingss):
+        case (False, False):
+            may_info = None
+        case (False, True):
+            may_info = g__xsettingss
+        case (True, False):
+            may_info = pre__idc
+        case (True, True):
+            may_info = (pre__idc, g__xsettingss)
+        case _:
+            raise 000
+    may_info
+    return out if None is may_info else (out, may_info)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -690,32 +826,33 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
         (num_trials, max4num_trials, max4num_trials4part, rglnkls4settings4EPC) = st
         sz = 0
         szs = range(1, 1+min(max4num_trials4part, max4num_trials4part-num_trials)) if sf.partial_ok else repeat(0)
-        for sz in szs:
+        ls = ((16, 100), (4, 1000), (1, 10000))
+        # !! [B1{sqrt(2**81)} ~= 1000][num_trials ~= B1]
+        # => 减少占比{[B1:=10000]}
+        ls1 = [(50, 10), (30, 100), (20, 200), (20, 300), (10, 500), (7, 700), (5, 1000)]
+        #ls2 = [(20, 10), (20, 100), (10, 200), (10, 300), (5, 500), (5, 700), (30, 1000)]
+        #ls = (*ls1*4, *ls2*10, (1, 10000))
+        #ls = (*ls1*4, (100, 1000), (1, 10000))
+        ls2 = [(10, 200), (30, 300), (5, 500), (5, 700), (5, 1000)]
+        ls = (*ls1*4, *ls2*4, (50, 300), (100, 1000), (1, 10000))
+        for j4round7outer, sz in enumerate(szs):
             ##################
             n7part_or_settings4EPC = sf.n2settings4EPC.get(n7part, n7part)
-            #for sz7retry, B1 in ((16, 100), (4, 1000), (1, 10000)):
-            # !! [B1{sqrt(2**81)} ~= 1000][num_trials ~= B1]
-            # => 减少[B1:=10000]占比
-            ls1 = [(50, 10), (30, 100), (20, 200), (20, 300), (10, 500), (7, 700), (5, 1000)]
-            #ls2 = [(20, 10), (20, 100), (10, 200), (10, 300), (5, 500), (5, 700), (30, 1000)]
-            #for sz7retry, B1 in (*ls1*4, *ls2*10, (1, 10000)):
-            #for sz7retry, B1 in (*ls1*4, (100, 1000), (1, 10000)):
-            ls2 = [(10, 200), (30, 300), (5, 500), (5, 700), (5, 1000)]
-            for sz7retry, B1 in (*ls1*4, *ls2*4, (50, 300), (100, 1000), (1, 10000)):
+            for j4round7intermediate, (sz7retry, B1) in enumerate(ls):
                 B2 = 100*B1
-                for _ in range(sz7retry):
+                for j4round7inner in range(sz7retry):
                     match try1_(n7part_or_settings4EPC, B1, B2):
                         case (_, None, _n7part_or_settings4EPC, may_exc_or_msg_or_ctx):
                             continue
                         case (_, proper_factor, _n7part_or_settings4EPC, may_exc_or_msg_or_ctx):
                             some_proper_factors = (proper_factor,)
                             x_settings4EPC = _n7part_or_settings4EPC
-                            if sf.verbose:print_err(x_settings4EPC, ':B1=', B1, ':B2=', B2, ':may_exc_or_msg_or_ctx=', may_exc_or_msg_or_ctx)
+                            if sf.verbose:print_err('[< (', 'js4round=', (j4round7outer, j4round7intermediate, j4round7inner), ', proper_factor=', proper_factor, ', x_settings4EPC=', x_settings4EPC, ', B1=', B1, ', B2=', B2, ', may_exc_or_msg_or_ctx=', may_exc_or_msg_or_ctx, ') >]', sep='')
                             break
                         case (_, proper_factor, _settings4EPC, stage, details):
                             some_proper_factors = (proper_factor,)
                             x_settings4EPC = _settings4EPC
-                            if sf.verbose:print_err(x_settings4EPC, ':B1=', B1, ':B2=', B2, ':stage=', stage, ':details=', details)
+                            if sf.verbose:print_err('[< (', 'js4round=', (j4round7outer, j4round7intermediate, j4round7inner), ', proper_factor=', proper_factor, ', x_settings4EPC=', x_settings4EPC, ', B1=', B1, ', B2=', B2, ', stage=', stage, ', details=', details, ') >]', sep='')
                             break
                     #match
                     raise 000
@@ -869,8 +1006,9 @@ class _Framework4factor_pint__le_pow2_81__7rho(_IFramework4factor_pint__le_pow2_
 
 
 __all__
-from seed.math.factor_pint.factor_pint__le_pow2_81 import factor_pint__le_pow2_81_, factor_pint__le_pow2_81__7rho_, factor_pint__le_pow2_81__7ECM_
+from seed.math.factor_pint.factor_pint__le_pow2_81 import factor_pint__le_pow2_81_, factor_pint__le_pow2_81__7rho_, factor_pint__le_pow2_81__7ECM_, factor_pint__le_pow2_81__7ECM_7rho_first_
 #def factor_pint__le_pow2_81_(n, /, *, using_ECM:bool, **kwds):
 #def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, max4prime7trial_division=_zpow12, max4num_steps=_zpow23, even_exp=2, addend=1, u0_or_scale=1, u0_be_floor_sqrt_scale_modulus=False, may_empty_saver7immutable=None):
-#def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16):
+#def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True, _verbose=False, using_rho_first=default__using_rho_first):
+#def factor_pint__le_pow2_81__7ECM_7rho_first_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True, _verbose=False, with_idc=False, max4num_steps7rho=None):
 from seed.math.factor_pint.factor_pint__le_pow2_81 import *
