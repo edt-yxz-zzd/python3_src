@@ -134,6 +134,7 @@ from seed.math.factor_pint.sprp_factor_pint_framework import IFramework4sprp_fac
 from seed.helper.lazy_import__func import force_lazy_imported_func_
 from seed.helper.lazy_import__func7context import mk_ctx4lazy_import4funcs_ #NOTE:not support "as"
 with mk_ctx4lazy_import4funcs_(__name__):
+    from seed.debug.print_err import print_err
     from seed.types.Rope import Rope, mk_Rope
     from itertools import repeat
     from math import isqrt
@@ -216,6 +217,36 @@ py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__l
 
     ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -289818814942228560223796, 1), (-102630186370812554545569, 1)),))
     total::duration: 1.635154302 *(unit: 0:00:01)
+
+    ####after{减少[B1:=10000]占比}
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, -20364909009155365515380, 1), (118484407149852971221277, 1)),))
+    total::duration: 0.40510562799999994 *(unit: 0:00:01)
+
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 20131030825862550320953, 1), (31678502696936596719446, 1)),))
+    total::duration: 1.602889846 *(unit: 0:00:01)
+py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM +inversionless +with_settingss +_verbose
+    ####after{减少[B1:=10000]占比}
+    ((604462909840849692000601, 59115648778082293158384, 1), (-76113690075940026331671, 1)) :B1= 200 :B2= 20000 :stage= 2 :details= (199, 640, 5153)
+    ({549755813911: 1, 1099511627791: 1}, (((604462909840849692000601, 59115648778082293158384, 1), (-76113690075940026331671, 1)),))
+    total::duration: 0.8691863799999999 *(unit: 0:00:01)
+
+    ((604462909840849692000601, 168945804587651519881980, 1), (-95636410015988658685686, 1)) :B1= 300 :B2= 30000 :stage= 2 :details= (293, 640, 5303)
+    total::duration: 1.395414527 *(unit: 0:00:01)
+
+    ((604462909840849692000601, 15683270651875612453329, 1), (236180207207973089586995, 1)) :B1= 300 :B2= 30000 :stage= 1 :details= (78, 293)
+    total::duration: 1.320948306 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -55754116084215197023007, 1), (-24495813232660716974342, 1)) :B1= 300 :B2= 30000 :stage= 2 :details= (293, 2560, 23581)
+    total::duration: 1.434689921 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -20081519723206691902334, 1), (160627151869183643372871, 1)) :B1= 200 :B2= 20000 :stage= 2 :details= (199, 640, 5153)
+    total::duration: 1.0531767079999999 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -7577513468616644692987, 1), (79567480232854775951558, 1)) :B1= 300 :B2= 30000 :stage= 2 :details= (293, 320, 2647)
+    total::duration: 3.1835336990000003 *(unit: 0:00:01)
+
+    ((604462909840849692000601, -263387916863968589748399, 1), (115347125251065563024224, 1)) :B1= 100 :B2= 10000 :stage= 2 :details= (97, 320, 2339)
+    total::duration: 0.696998463 *(unit: 0:00:01)
 
 py_adhoc_call { +to_show_total_timedelta }  seed.math.factor_pint.factor_pint__le_pow2_81   @factor_pint__le_pow2_81_ ='549755813911*1099511627791' +using_ECM --_n2settings4EPC='{604462909840849692000601:((604462909840849692000601, -202034900548755701729777, 1), (-139840703184852864221651, 1))}'
     {549755813911: 1, 1099511627791: 1}
@@ -549,8 +580,8 @@ def factor_pint__le_pow2_81__7rho_(n, /, *, partial_ok=False, with_idc=False, ma
     return _ops7rho.sprp_factor_pint_(n, max4prime7trial_division, max4num_steps=max4num_steps, even_exp=even_exp, addend=addend, u0_or_scale=u0_or_scale, u0_be_floor_sqrt_scale_modulus=u0_be_floor_sqrt_scale_modulus, may_empty_saver7immutable=may_empty_saver7immutable)
 
 
-def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True):
-    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, n2settings4EPC=_n2settings4EPC, inversionless=inversionless)
+def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=_zpow12, max4num_trials=_zpow12, max4num_trials4part=16, _n2settings4EPC={}, inversionless=True, _verbose=False):
+    _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, n2settings4EPC=_n2settings4EPC, inversionless=inversionless, verbose=_verbose)
     return _ops7ECM.sprp_factor_pint_(n, max4prime7trial_division, max4num_trials=max4num_trials, max4num_trials4part=max4num_trials4part)
 
 
@@ -558,11 +589,12 @@ def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=Fal
 
 class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
     ___no_slots_ok___ = True
-    def __init__(sf, /, *, partial_ok, more, n2settings4EPC={}, inversionless=True):
+    def __init__(sf, /, *, partial_ok, more, n2settings4EPC={}, inversionless=True, verbose=False):
         sf.partial_ok = partial_ok
         sf.more = more
         sf.n2settings4EPC = n2settings4EPC
         sf.inversionless = inversionless
+        sf.verbose = verbose
 
     @abstractmethod
     def _st2may_more_info_(sf, st, /):
@@ -609,7 +641,15 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
         for sz in szs:
             ##################
             n7part_or_settings4EPC = sf.n2settings4EPC.get(n7part, n7part)
-            for sz7retry, B1 in ((16, 100), (4, 1000), (1, 10000)):
+            #for sz7retry, B1 in ((16, 100), (4, 1000), (1, 10000)):
+            # !! [B1{sqrt(2**81)} ~= 1000][num_trials ~= B1]
+            # => 减少[B1:=10000]占比
+            ls1 = [(50, 10), (30, 100), (20, 200), (20, 300), (10, 500), (7, 700), (5, 1000)]
+            #ls2 = [(20, 10), (20, 100), (10, 200), (10, 300), (5, 500), (5, 700), (30, 1000)]
+            #for sz7retry, B1 in (*ls1*4, *ls2*10, (1, 10000)):
+            #for sz7retry, B1 in (*ls1*4, (100, 1000), (1, 10000)):
+            ls2 = [(10, 200), (30, 300), (5, 500), (5, 700), (5, 1000)]
+            for sz7retry, B1 in (*ls1*4, *ls2*4, (50, 300), (100, 1000), (1, 10000)):
                 B2 = 100*B1
                 for _ in range(sz7retry):
                     match try1_(n7part_or_settings4EPC, B1, B2):
@@ -618,10 +658,12 @@ class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_
                         case (_, proper_factor, _n7part_or_settings4EPC, may_exc_or_msg_or_ctx):
                             some_proper_factors = (proper_factor,)
                             x_settings4EPC = _n7part_or_settings4EPC
+                            if sf.verbose:print_err(x_settings4EPC, ':B1=', B1, ':B2=', B2, ':may_exc_or_msg_or_ctx=', may_exc_or_msg_or_ctx)
                             break
                         case (_, proper_factor, _settings4EPC, stage, details):
                             some_proper_factors = (proper_factor,)
                             x_settings4EPC = _settings4EPC
+                            if sf.verbose:print_err(x_settings4EPC, ':B1=', B1, ':B2=', B2, ':stage=', stage, ':details=', details)
                             break
                     #match
                     raise 000
