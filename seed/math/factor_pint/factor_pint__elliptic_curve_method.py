@@ -745,6 +745,32 @@ True
 >>> ops.mul7h_(2+2*p53_6M677-order4EC_6d_6p53_6M677, Pt4EC7h(4, 1), **kwds4add7h).eq_partial_zero_mod_(n) # pt @twist_EC
 True
 
+++reset_ops6proper_factor4modulus_
+++reset_point6multiple4modulus_
+>>> ops6p53 = ops.reset_ops6proper_factor4modulus_(p53_6M677); ops6p53
+Ops4EllipticPseudocurve7DropY(53625112691923843508117942311516428173021903300344567, 25719943091116960874789350937187483286308219288936730, -18564004742404371283840272177402986176513743001777359)
+>>> pt6p53 = ops6p53.reset_point6multiple4modulus_(ops, pt_0); pt6p53
+Pt4EC7h(9833782314728255052568425014688104765958290998257750, 41989559385379681935948478478770327184783721545536)
+
+>>> ops6p53.mul7h_(order4EC_6d_6p53_6M677, pt6p53, **kwds4add7h)
+Pt4EC7h(0, 0)
+>>> ops6p53.mul7h_(order4EC_6d_6p53_6M677, Pt4EC7h(3, 1), **kwds4add7h)
+Pt4EC7h(0, 0)
+>>> ops6p53.mul7h_(4, Pt4EC7h(+1, 1), **kwds4add7h)
+Pt4EC7h(0, 0)
+>>> ops6p53.mul7h_(4, Pt4EC7h(-1, 1), **kwds4add7h)
+Pt4EC7h(0, 0)
+>>> ops6p53.mul7h_(2, Pt4EC7h(+1, 1), **kwds4add7h)
+Pt4EC7h(0, 7992847117156716736553168641042471906144836441872615)
+>>> ops6p53.mul7h_(2, Pt4EC7h(-1, 1), **kwds4add7h)
+Pt4EC7h(0, -16733753155916403770710130389608318307766695331757043)
+
+>>> ops6p53.mul7h_(2+2*p53_6M677-order4EC_6d_6p53_6M677, Pt4EC7h(2, 1), **kwds4add7h)
+Pt4EC7h(0, 0)
+>>> ops6p53.mul7h_(2+2*p53_6M677-order4EC_6d_6p53_6M677, Pt4EC7h(4, 1), **kwds4add7h)
+Pt4EC7h(0, 0)
+
+
 
 def convert__XZ__to__xy_(ops7XZ, pt7XZ, Y0=1, /):
     # [:convert__XZ__to__xy]:goto
@@ -869,6 +895,7 @@ p_big_enough
 # before_patch_123:end:
 #########################
 ###################################
+
 
 
 
@@ -2479,12 +2506,32 @@ class Ops4EllipticPseudocurve:
             # no: ^FoundFactor
         pt = sf.mk_point_(x, y)
         return (sf, pt)
+    def reset_ops6proper_factor4modulus_(sf, proper_factor4n, /):
+        (n, a, b) = sf.params4elliptic_pseudocurve
+        if not 1 < proper_factor4n < n and 0 == n%proper_factor4n:raise ValueError(n, proper_factor4n)
+        cls = type(sf)
+        return cls(proper_factor4n, a, b)
+    def reset_point6multiple4modulus_(sf, multiple4n, pt, /):
+        (n, a, b) = sf.params4elliptic_pseudocurve
+        if isinstance(multiple4n, Ops4EllipticPseudocurve):
+            ops = multiple4n
+            multiple4n = ops.modulus
+        if not 1 < n < multiple4n and 0 == multiple4n%n:raise ValueError(n, multiple4n)
+        match pt:
+            case Pt4EC(x=x, y=y):
+                return sf.mk_point_(x, y)
+        raise TypeError(pt)
+    @property
+    def modulus(sf, /):
+        '-> n'
+        return sf._n
+        return sf._args[0]
     @property
     def params4elliptic_pseudocurve(sf, /):
         '-> (n, a, b)'
         return sf._args
     def __repr__(sf, /):
-        nab = (n, a, b) = sf._args
+        nab = (n, a, b) = sf.params4elliptic_pseudocurve
         return f'Ops4EllipticPseudocurve{nab}'
     def __eq__(sf, ot, /):
         if not isinstance(ot, __class__):return NotImplemented
@@ -2920,12 +2967,32 @@ class Ops4EllipticPseudocurve7DropY:
             # n
         pt_0 = sf.mk_point_(X0, Z0)
         return (sf, pt_0)
+    def reset_ops6proper_factor4modulus_(sf, proper_factor4n, /):
+        (n, N4C, D4C) = sf.params4elliptic_pseudocurve7drop_Y
+        if not 1 < proper_factor4n < n and 0 == n%proper_factor4n:raise ValueError(n, proper_factor4n)
+        cls = type(sf)
+        return cls(proper_factor4n, N4C, D4C)
+    def reset_point6multiple4modulus_(sf, multiple4n, pt, /):
+        (n, N4C, D4C) = sf.params4elliptic_pseudocurve7drop_Y
+        if isinstance(multiple4n, Ops4EllipticPseudocurve7DropY):
+            ops = multiple4n
+            multiple4n = ops.modulus
+        if not 1 < n < multiple4n and 0 == multiple4n%n:raise ValueError(n, multiple4n)
+        match pt:
+            case Pt4EC7h(X=X, Z=Z):
+                return sf.mk_point_(X, Z)
+        raise TypeError(pt)
+    @property
+    def modulus(sf, /):
+        '-> n'
+        return sf._n
+        return sf._args[0]
     @property
     def params4elliptic_pseudocurve7drop_Y(sf, /):
         '-> (n, N4C, D4C)'
         return sf._args
     def __repr__(sf, /):
-        args = (n, N4C, D4C) = sf._args
+        args = (n, N4C, D4C) = sf.params4elliptic_pseudocurve7drop_Y
         strict = sf._strict
         detect6Incapable = sf._detect6Incapable
         _d6strict = sf._d6strict
