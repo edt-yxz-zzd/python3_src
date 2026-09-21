@@ -1,9 +1,12 @@
 #__all__:goto
 #rho_vs_ECM:goto
-#DONE: insert rho between trial_division and ECM @factor_pint__le_pow2_81_&factor_pint__le_pow2_81__7ECM_
 #iter_random_tests_:goto
 #iter_random_tests__7ECM_7rho_first_:goto
-#bug__ft_eq_n7part:goto
+#   bug__ft_eq_n7part:goto
+#   [:性能统计{factor_pint__le_pow2_81__7ECM_7rho_first_}]:goto
+#
+#DONE: insert rho between trial_division and ECM @factor_pint__le_pow2_81_&factor_pint__le_pow2_81__7ECM_
+#
 r'''[[[
 e ../../python3_src/seed/math/factor_pint/factor_pint__le_pow2_81.py
 
@@ -939,6 +942,8 @@ py_adhoc_call { +lineno +to_show_timedelta  +to_show_total_timedelta +to_show_St
 
 ==>>:
     ##################
+    # [:性能统计{factor_pint__le_pow2_81__7ECM_7rho_first_}]:here
+    ##################
     耗时:0.07秒/数
     尸方法起作用的概率是47%
     椭圆曲线法起作用的概率是28%
@@ -946,6 +951,11 @@ py_adhoc_call { +lineno +to_show_timedelta  +to_show_total_timedelta +to_show_St
     仅试除法起作用的概率是32%
     仅试除法尸方法共同起作用的概率是40%
     仅试除法椭圆曲线法共同起作用的概率是21%
+    where:
+        partial_ok = False
+        default__max4prime7trial_division = _zpow12
+            && max4num_steps7rho = max4num_steps7rho if not None is max4num_steps7rho else max(default__max4prime7trial_division, max4prime7trial_division)
+        using:_pairs7sz7retry_B1__20260920
     ##################
 ===
 ]]
@@ -962,11 +972,13 @@ _zpow81 = 1<<81
 _zpow12 = 1<<12
 _zpow23 = 1<<23
 
-default__max4prime7trial_division = _zpow12
-    #max4prime7trial_division
 default__max4num_steps7rho = _zpow23
     #max4num_steps7rho
-default__max4num_trials7ECM = default__max4prime7trial_division#_zpow12
+default__max4prime7trial_division = _zpow12
+    #max4prime7trial_division
+#old:default__max4num_trials7ECM = _zpow12# ~=1000 ~= max_B1{sqrt(2**81)} ~= default__max4prime7trial_division
+# !! _pairs7sz7retry_B1 => inner loop: (30,1000)
+default__max4num_trials7ECM = 32 # [32*30 ~= 1000 ~= max_B1{sqrt(2**81)} ~= _zpow12 ~= default__max4prime7trial_division]
     #max4num_trials7ECM
 default__max4num_trials7ECM7part = 16
     #max4num_trials7ECM7part
@@ -1214,7 +1226,7 @@ def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=Fal
 def factor_pint__le_pow2_81__7ECM_7rho_first_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=default__max4prime7trial_division, max4num_trials7ECM=default__max4num_trials7ECM, max4num_trials7ECM7part=default__max4num_trials7ECM7part, _n2settings4EPC={}, inversionless=True, _verbose=False, with_idc=False, max4num_steps7rho=None):
     with_settingss = bool(with_settingss)
     with_idc = bool(with_idc)
-    max4num_steps7rho = max4num_steps7rho if not None is max4num_steps7rho else max(default__max4num_trials7ECM, max4prime7trial_division)
+    max4num_steps7rho = max4num_steps7rho if not None is max4num_steps7rho else max(default__max4prime7trial_division, max4prime7trial_division)
     r = factor_pint__le_pow2_81__7rho_(n, partial_ok=True, with_idc=True, max4prime7trial_division=max4prime7trial_division, max4num_steps7rho=max4num_steps7rho, even_exp=2, addend=1, u0_or_scale=7, u0_be_floor_sqrt_scale_modulus=True, may_empty_saver7immutable=None, _verbose=_verbose)
     777;max4prime7trial_division = 2
     777;using_rho_first = False
@@ -1309,7 +1321,12 @@ class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
 #end-class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
 
 
-_pairs7sz7retry_B1 = ((10, 10), (30, 50), (50, 100), (100, 300), (30, 500), (20, 700), (30, 1000))
+_pairs7sz7retry_B1__20260920 = ((10, 10), (30, 50), (50, 100), (100, 300), (30, 500), (20, 700), (30, 1000))
+_pairs7sz7retry_B1__20260921 = ((10, 10), (20, 30), (20, 100), (100, 300), (20, 600), (30, 1000))
+    # (30, 1000) => default__max4num_trials7ECM
+_pairs7sz7retry_B1 = _pairs7sz7retry_B1__20260920
+_pairs7sz7retry_B1 = _pairs7sz7retry_B1__20260921
+
 def _mk_pairs7sz7retry_B1__7n_le_zpow81_():
     # !! [B1{sqrt(2**81)} ~= 1000][num_trials ~= B1]
     # => 去掉{[B1:=10000]}
