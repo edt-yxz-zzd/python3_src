@@ -32,9 +32,9 @@ view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.out.t
 >>> bin(PseudoRandom7linear__M127__mid001.feedback_mask4binary_primitive_polynomial)
 '0b1100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
 
->>> rn = PseudoRandom7linear__M127(1, assumption7independent=False)
+>>> rn = PseudoRandom7linear__M127(False, 1)
 >>> rn
-PseudoRandom7linear__M127__mid126(1, assumption7independent = False)
+PseudoRandom7linear__M127__mid126(False, 1)
 >>> bin(rn.getrandbits(32))
 '0b11111111111111111111111111111111'
 >>> rn.random()
@@ -47,15 +47,15 @@ PseudoRandom7linear__M127__mid126(1, assumption7independent = False)
 0.5999999999999999
 >>> rn.random()
 0.6000651041666665
->>> f(PseudoRandom7linear__M127(1, assumption7independent=False), 67)
+>>> f(PseudoRandom7linear__M127(False, 1), 67)
 '1111111111111111111111111111111111111111111111111111111111111111111'
->>> f(PseudoRandom7linear__M127(1, assumption7independent=False), 130)
+>>> f(PseudoRandom7linear__M127(False, 1), 130)
 '1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111010'
 
 
->>> rn = PseudoRandom7linear__M127(1, assumption7independent=True)
+>>> rn = PseudoRandom7linear__M127(True, 1)
 >>> rn
-PseudoRandom7linear__M127__mid126(1, assumption7independent = True)
+PseudoRandom7linear__M127__mid126(True, 1)
 >>> bin(rn.getrandbits(32))
 '0b0'
 >>> rn.random()
@@ -70,17 +70,17 @@ PseudoRandom7linear__M127__mid126(1, assumption7independent = True)
 0.9332682291666665
 
 
->>> bin(PseudoRandom7linear__M127(1, assumption7independent=True).getrandbits(64))
+>>> bin(PseudoRandom7linear__M127(True, 1).getrandbits(64))
 '0b0'
->>> bin(PseudoRandom7linear__M127(1, assumption7independent=True).getrandbits(67))
+>>> bin(PseudoRandom7linear__M127(True, 1).getrandbits(67))
 '0b101'
->>> bin(PseudoRandom7linear__M127(1, assumption7independent=True).getrandbits(128))
+>>> bin(PseudoRandom7linear__M127(True, 1).getrandbits(128))
 '0b1010101010101010101010101010101010101010101010101010101010101011'
->>> f(PseudoRandom7linear__M127(1, assumption7independent=True), 67)
+>>> f(PseudoRandom7linear__M127(True, 1), 67)
 '0000000000000000000000000000000000000000000000000000000000000000101'
->>> f(PseudoRandom7linear__M127(1, assumption7independent=True), 128)
+>>> f(PseudoRandom7linear__M127(True, 1), 128)
 '00000000000000000000000000000000000000000000000000000000000000001010101010101010101010101010101010101010101010101010101010101011'
->>> f(PseudoRandom7linear__M127(1, assumption7independent=True), 512)
+>>> f(PseudoRandom7linear__M127(True, 1), 512)
 '00000000000000000000000000000000000000000000000000000000000000001010101010101010101010101010101010101010101010101010101010101011111111111111111111111111111111101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010010010010010010010010010010010010010010010010010101010101010101010101010101010101010101010101011101110111011101110111011101110101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010001010001010001010001010001010001010'
 
 
@@ -90,9 +90,9 @@ PseudoRandom7linear__M127__mid126(1, assumption7independent = True)
 ###################################
 !!!!!!!!!!!!!!!!bug!!!!!!!!!!!!!!!!
 ###################################
->>> f(PseudoRandom7linear__M127__mid001(1, assumption7independent=True), 512)
+>>> f(PseudoRandom7linear__M127__mid001(True, 1), 512)
 '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
->>> f(PseudoRandom7linear__M127__mid001(1, assumption7independent=False), 512)
+>>> f(PseudoRandom7linear__M127__mid001(False, 1), 512)
 '10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010001000'
 
 
@@ -103,25 +103,25 @@ PseudoRandom7linear__M127__mid126(1, assumption7independent = True)
 ###########################
 _uniform_next_b_u_() => M5.period only 16! # [2 ~= (-1+2**5)/16]
     0110110000100
->>> f(PseudoRandom7linear__M5(1, assumption7independent=True), 128)
+>>> f(PseudoRandom7linear__M5(True, 1), 128)
 '01101100001001110110110000100111011011000010011101101100001001110110110000100111011011000010011101101100001001110110110000100111'
 
 _uniform_next_b_u_() => M6.period only 32! # [2 ~= (-1+2**6)/32]
     11111
->>> f(_PseudoRandom7linear__M6(1, assumption7independent=True), 128)
+>>> f(_PseudoRandom7linear__M6(True, 1), 128)
 '01000100010110100011111011001110010001000101101000111110110011100100010001011010001111101100111001000100010110100011111011001110'
 
 
 _uniform_next_b_u_() => M7.period only 64! # [2 ~= (-1+2**7)/64]
     11111111
->>> f(PseudoRandom7linear__M7(1, assumption7independent=True), 128)
+>>> f(PseudoRandom7linear__M7(True, 1), 128)
 '00001011101010010100110001000100010011110001101011001100111111110000101110101001010011000100010001001111000110101100110011111111'
 
 
 ###########################
 _raw_next_b_u_() => M5.period == 31 == (-1+2**5)
     0000
->>> f(PseudoRandom7linear__M5(1, assumption7independent=False), 128)
+>>> f(PseudoRandom7linear__M5(False, 1), 128)
 '10010110011111000110111010100001001011001111100011011101010000100101100111110001101110101000010010110011111000110111010100001001'
 >>> PseudoRandom7linear__M5.exps4binary_primitive_polynomial
 (5, 2, 0)
@@ -135,49 +135,63 @@ _raw_next_b_u_() => M5.period == 31 == (-1+2**5)
 
 ###########################
 
->>> _count_period_(+5, assumption7independent=False)
+>>> _count_period_(+5, False, 1)
 31
->>> _count_period_(+7, assumption7independent=False)
+>>> _count_period_(+7, False, 1)
 127
->>> _count_period_(13, assumption7independent=False)
+>>> _count_period_(13, False, 1)
 8191
->>> _count_period_(17, assumption7independent=False) #doctest: +SKIP
+>>> _count_period_(17, False, 1) #doctest: +SKIP
 131071
->>> _count_period_(19, assumption7independent=False) #doctest: +SKIP
+>>> _count_period_(19, False, 1) #doctest: +SKIP
 524287
 
 
 ###########################
 
->>> _count_period_(+5, assumption7independent=True)
+>>> _count_period_(+5, True, 1)
 16
->>> _count_period_(+7, assumption7independent=True)
+>>> _count_period_(+7, True, 1)
 64
->>> _count_period_(13, assumption7independent=True)
+>>> _count_period_(13, True, 1)
 4096
->>> _count_period_(17, assumption7independent=True) #doctest: +SKIP
+>>> _count_period_(17, True, 1) #doctest: +SKIP
 65536
->>> _count_period_(19, assumption7independent=True) #doctest: +SKIP
+>>> _count_period_(19, True, 1) #doctest: +SKIP
 262144
 
 
 ###########################
->>> PseudoRandom7linear(8, 1, assumption7independent=False)
-PseudoRandom7linear((8, 4, 3, 2, 0), 1, assumption7independent = False)
->>> f(PseudoRandom7linear(8, 1, assumption7independent=False), 512)
+>>> PseudoRandom7linear(False, 8, 1)
+PseudoRandom7linear(False, (8, 4, 3, 2, 0), 1)
+>>> f(PseudoRandom7linear(False, 8, 1), 512)
 '10001110001001011100000011001001001101110010000010101101101011001011000011111011011110101110100010000110110001111001110011000101101001000101001010100111011101100111101111110100110011010100011000001110101010111110010100001001111111100001011110001101000000010001110001001011100000011001001001101110010000010101101101011001011000011111011011110101110100010000110110001111001110011000101101001000101001010100111011101100111101111110100110011010100011000001110101010111110010100001001111111100001011110001101000000010'
 
->>> PseudoRandom7linear(8, 1, assumption7independent=True)
-PseudoRandom7linear((8, 4, 3, 2, 0), 1, assumption7independent = True)
->>> f(PseudoRandom7linear(8, 1, assumption7independent=True), 512)
+>>> PseudoRandom7linear(True, 8, 1)
+PseudoRandom7linear(True, (8, 4, 3, 2, 0), 1)
+>>> f(PseudoRandom7linear(True, 8, 1), 512)
 '00011011000100001000001010111001110001110101111000000110101101111001010100111101101101101111100100100011100100101000111110010100000110110001000010000010101110011100011101011110000001101011011110010101001111011011011011111001001000111001001010001111100101000001101100010000100000101011100111000111010111100000011010110111100101010011110110110110111110010010001110010010100011111001010000011011000100001000001010111001110001110101111000000110101101111001010100111101101101101111100100100011100100101000111110010100'
 
 
 
 
+>>> import pickle
+>>> bs = pickle.dumps(PseudoRandom7linear(False, 8, 1))
+>>> pickle.loads(bs)
+PseudoRandom7linear(False, (8, 4, 3, 2, 0), 1)
+
+>>> bs = pickle.dumps(PseudoRandom7linear(True, 8, 1))
+>>> pickle.loads(bs)
+PseudoRandom7linear(True, (8, 4, 3, 2, 0), 1)
 
 
+>>> bs = pickle.dumps(PseudoRandom7linear__M7(False, 1))
+>>> pickle.loads(bs)
+PseudoRandom7linear__M7(False, 1)
 
+>>> bs = pickle.dumps(PseudoRandom7linear__M7(True, 1))
+>>> pickle.loads(bs)
+PseudoRandom7linear__M7(True, 1)
 
 
 
@@ -203,43 +217,42 @@ PseudoRandom7linear((8, 4, 3, 2, 0), 1, assumption7independent = True)
 
 
 [[
-py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ +assumption7independent =256
-py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ +assumption7independent =2
-    000'
-py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ +assumption7independent =2 =5
-    000'
-py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ +assumption7independent =2 =127605887595351923798765477786913079298
+py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ =256 =True =1
+py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ =2 =True =1
+    '00'
+py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ =2 =True =5
+    '00'
+py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ =2 =True =127605887595351923798765477786913079298
     '11'
         # "5"后继，错位1，
-py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ +assumption7independent =130 =127605887595351923798765477786913079298
+py_adhoc_call   seed.math.pseudo_random   @_test_M127__mid001_ =130 =True =127605887595351923798765477786913079298
     '1101110101111101110101111101011111010101011111111101110101111101011111010101011111111101011111010101011111111101010101111111110101'
         # 所以是 初始状态 非法？大概有一半非法？
         #   但M5版并无此现象
 ]]
 
 [[
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ +assumption7independent =5 =2
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ +assumption7independent =5
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =5 =True =1
     16
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ +assumption7independent =7
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =7 =True =1
     64
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ +assumption7independent =13
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =13 =True =1
     4096
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ +assumption7independent =17
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =17 =True =1
     65536
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ +assumption7independent =19
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =19 =True =1
     262144
 
 
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ -assumption7independent =5
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =5 =False =1
     31
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ -assumption7independent =7
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =7 =False =1
     127
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ -assumption7independent =13
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =13 =False =1
     8191
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ -assumption7independent =17
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =17 =False =1
     131071
-py_adhoc_call   seed.math.pseudo_random   @_count_period_ -assumption7independent =19
+py_adhoc_call   seed.math.pseudo_random   @_count_period_ =19 =False =1
     524287
 
 ]]
@@ -269,7 +282,7 @@ IPseudoRandom7linear
     PseudoRandom7linear__M2281
 
 
-
+exps4binary_primitive_polynomial5or_deg_
 uint5bits_
 uint2sized_binstr_
 '''.split()#'''
@@ -327,26 +340,36 @@ def _uniform_next_b_u_(mask, u, /):
         if not b0 == b1:
             return (b1, u)
 class IPseudoRandom7linear(Random):
-    '[st :: 1+uint%mul_order][period{assumption7independent;deg} == (2**(-1+deg) if assumption7independent else (-1+2**deg))]'
+    '[ust :: 1+uint%mul_order][period{assumption7independent;deg} == (2**(-1+deg) if assumption7independent else (-1+2**deg))]'
 
 
     #def __new__(cls, may_int_or_state=None, /):
     #    self = super(__class__, cls).__new__(cls)
-    def __init__(self, may_int_or_state=None, /, *, assumption7independent:bool):
-        self.seed(may_int_or_state)
-        self._assumption7independent = bool(assumption7independent)
+    def __init__(self, assumption7independent:bool=None, may_int_or_state=1, /, *extra_settings):
+        #def __init__(self, may_int_or_state=None, /, *, assumption7independent:bool):
+        #self._assumption7independent = bool(assumption7independent)
+        if not None is assumption7independent:
+            check_type_is(bool, assumption7independent)
+            self._set_settings_((assumption7independent, *extra_settings))
+            self.seed(may_int_or_state)
+        else:
+            pass
+            #leave undefined...
     @property
     def assumption7independent(self, /):
-        return self._assumption7independent
+        #return self._assumption7independent
+        return self._get_settings_()[0]
     def __repr__(self, /):
-        return repr_helper(self, self.getstate(), assumption7independent=self.assumption7independent)
-        if self.assumption7independent:
-            return repr_helper(self, self.getstate(), assumption7independent=True)
-        return repr_helper(self, self.getstate())
+        return repr_helper(self, *self._get_settings_(), self._get_uint_state_())
+        #.return repr_helper(self, self._get_uint_state_(), assumption7independent=self.assumption7independent)
+        #.if self.assumption7independent:
+        #.    return repr_helper(self, self._get_uint_state_(), assumption7independent=True)
+        #.return repr_helper(self, self._get_uint_state_())
     def __init_subclass__(cls, /, **kwargs):
         super().__init_subclass__(**kwargs)
         es = cls.exps4binary_primitive_polynomial
-        if hasattr(type(es), '__len__'):
+        _b_static7exps = hasattr(type(es), '__len__')
+        if _b_static7exps:
             deg = es[0]
             check_int_ge(2, deg)
             mul_order = -1+(1<<deg)
@@ -354,6 +377,8 @@ class IPseudoRandom7linear(Random):
             cls.deg4binary_primitive_polynomial = deg
             cls.mul_order4binary_primitive_polynomial = mul_order
             cls.feedback_mask4binary_primitive_polynomial = mask
+        cls._b_static7exps = _b_static7exps
+
     @property
     @abstractmethod
     def exps4binary_primitive_polynomial(self, /):
@@ -384,13 +409,13 @@ class IPseudoRandom7linear(Random):
         'getrandbits(k) -> x.  Generates an int with k random bits.'
         mask = self.feedback_mask4binary_primitive_polynomial
         _next_b_u_ = _uniform_next_b_u_ if self.assumption7independent else _raw_next_b_u_
-        u = self.getstate()
+        u = self._get_uint_state_()
         bits = []
         for _ in range(k):
             (b, u) = _next_b_u_(mask, u)
             bits.append(b)
         u, bits
-        self.setstate(u)
+        self._set_uint_state_(u)
         return uint5bits_(bits)
     #@override
     def random(self, /):
@@ -466,7 +491,7 @@ class IPseudoRandom7linear(Random):
     #@override
     def seed(self, may_int_or_state=None, /):
         #seed(self, a=None, version=2)
-        'may (int|st) -> None'
+        'may (int|ust) -> None'
         match may_int_or_state:
             case None:
                 rn = Random()
@@ -488,17 +513,58 @@ class IPseudoRandom7linear(Random):
                 raise TypeError(bad_seed)
         # [1 <= u < 2**deg4binary_primitive_polynomial]
         u
-        self.setstate(u)
+        self._set_uint_state_(u)
     #@override
-    def setstate(self, state, /):
-        'st -> None'
-        check_int_ge_le(1, self.mul_order4binary_primitive_polynomial, state)
-        self._st = state
+    def _set_uint_state_(self, u, /):
+        'ust -> None'
+        check_int_ge_le(1, self.mul_order4binary_primitive_polynomial, u)
+        self._ust = u
         # [1 <= u < 2**deg4binary_primitive_polynomial]
     #@override
+    def _get_uint_state_(self, /):
+        '-> ust'
+        return self._ust
+    def _get_settings_(self, /):
+        '-> settings'
+        return self._settings
+    def _set_settings_(self, settings, /):
+        if not None is (_settings:=getattr(self, '_settings', None)):
+            if not _settings == settings:raise TypeError('incompatible settings:', _settings, settings)
+        else:
+            assumption7independent = settings[0]
+            check_type_is(bool, assumption7independent)
+            self._settings = settings
+    def setstate(self, state, /):
+        'st -> None'
+        r'''[[[
+        self.__setstate__(state)
+    def __setstate__(self, state, /):
+        #]]]'''#'''
+        #pickle
+        settings = state[:-1]
+        ust = state[-1]
+        self._set_settings_(settings)
+        self._set_uint_state_(ust)
     def getstate(self, /):
-        '-> st'
-        return self._st
+        '-> st/(*settings, ust)'
+        r'''[[[
+        return self.__getstate__()
+    def __getstate__(self, /):
+        #]]]'''#'''
+        #pickle
+        settings = self._get_settings_()
+        ust = self._get_uint_state_()
+        state = (*settings, ust)
+        return state
+        r'''[[[
+    def __getnewargs__(self, /):
+        #pickle
+        #__repr__
+        return (self, *self._get_settings_(), self._get_uint_state_())
+    def __reduce__(self, /):
+        raise AttributeError
+    __reduce__ = None
+        #]]]'''#'''
 
 r'''[[[
 view ../../python3_src/nn_ns/math_nn/numbers/Mersenne_exponents.py
@@ -558,15 +624,23 @@ def exps4binary_primitive_polynomial5or_deg_(deg_or_exps4binary_primitive_polyno
     es = mk_immutable_seq(es)
     return es
 class PseudoRandom7linear(IPseudoRandom7linear):
-    def __init__(self, deg_or_exps4binary_primitive_polynomial, may_int_or_state=None, /, *, assumption7independent:bool):
-        self._es = exps4binary_primitive_polynomial5or_deg_(deg_or_exps4binary_primitive_polynomial)
-        super().__init__(may_int_or_state, assumption7independent=assumption7independent)
+    def __init__(self, assumption7independent:bool=None, deg_or_exps4binary_primitive_polynomial=None, may_int_or_state=1, /):
+        #def __init__(self, deg_or_exps4binary_primitive_polynomial, may_int_or_state=None, /, *, assumption7independent:bool):
+        if not None is assumption7independent:
+            check_type_is(bool, assumption7independent)
+            es = exps4binary_primitive_polynomial5or_deg_(deg_or_exps4binary_primitive_polynomial)
+            super().__init__(assumption7independent, may_int_or_state, es)
+            #super().__init__(may_int_or_state, assumption7independent=assumption7independent)
+        else:
+            pass
+            #leave undefined...
     @property
     #@override
     def exps4binary_primitive_polynomial(self, /):
-        return self._es
-    def __repr__(self, /):
-        return repr_helper(self, self.exps4binary_primitive_polynomial, self.getstate(), assumption7independent=self.assumption7independent)
+        #return self._es
+        return self._get_settings_()[1]
+    #def __repr__(self, /):
+    #   return repr_helper(self, self.exps4binary_primitive_polynomial, self._get_uint_state_(), assumption7independent=self.assumption7independent)
 
 class PseudoRandom7linear__M5(IPseudoRandom7linear):
     #@override
@@ -645,11 +719,11 @@ class PseudoRandom7linear__M2281(IPseudoRandom7linear):
 
 
 
-def _test_M127__mid001_(sz=256, m=1, /, *args, **kwds):
+def _test_M127__mid001_(sz, /, *args, **kwds):
     global _debug
     _debug = True
     try:
-        rn = PseudoRandom7linear__M127__mid001(m, *args, **kwds)
+        rn = PseudoRandom7linear__M127__mid001(*args, **kwds)
         u = rn.getrandbits(sz)
         return uint2sized_binstr_(sz, u)
     finally:
@@ -661,11 +735,11 @@ def _count_period_(deg, /, *args, **kwds):
     T = globals()[f'PseudoRandom7linear__M{deg}']
     rn = T(*args, **kwds)
     rn.getrandbits(1)
-    u0 = rn.getstate()
+    u0 = rn._get_uint_state_()
     sz = 0
     for sz in range(1, 1+2**deg):
         rn.getrandbits(1)
-        u1 = rn.getstate()
+        u1 = rn._get_uint_state_()
         if u1 == u0:break
     else:
         raise 000
