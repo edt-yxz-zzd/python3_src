@@ -1,6 +1,7 @@
 #__all__:goto
 r'''[[[
 e ../../python3_src/seed/math/factor_pint/factorint6PARI_GP_.py
+view others/app/termux/help/gp-help-interesting.txt
 
 seed.math.factor_pint.factorint6PARI_GP_
 py -m nn_ns.app.debug_cmd   seed.math.factor_pint.factorint6PARI_GP_ -x # -off_defs
@@ -11,8 +12,108 @@ py -m nn_ns.app.doctest_cmd seed.math.factor_pint.factorint6PARI_GP_:__doc__ -ht
 come_from:
 view ../../python3_src/seed/math/factor_pint/database4factors4cyclotomic_numbers.py
 
-echo 'factorint(???)' | gp -q
+echo 'factorint(???)' | gp -q -f
 ]]
+[[
+@20260923
+TODO:
+    ??alarm
+        Time-bounded partial factorization
+        alarm(10, factor(N));   \\ enough time
+DONE:
+    view ../../python3_src/pari_gp_script/factorint7timeout.gp
+
+
+echo 'alarm(6, factorint(-1+2^257))' | gp -q -f
+    error("alarm interrupt after 5,993 ms.")
+
+alarm(6, factorint(-1+2^257))
+    time = 5,996 ms.
+    error("alarm interrupt after 5,996 ms.")
+alarm(6, factorint(-1+2^256))
+    time = 934 ms.
+    [3,1;5,1;17,1;257,1;641,1;65537,1;274177,1;6700417,1;67280421310721,1;59649589127497217,1;5704689200685129054721,1]
+
+]]
+[[
+??alarm
+Here is a more involved example:
+    the function timefact(N,sec) below tries to factor N and gives up after sec seconds, returning a partial factorization.
+
+    \\ Time-bounded partial factorization
+    default(factor_add_primes,1);
+    timefact(N,sec)=
+    {
+        F = alarm(sec, factor(N));
+        if (type(F) == "t_ERROR", factor(N, 2^24), F);
+    }
+
+We either return the factorization directly, or replace the t_ERROR result by a simple bounded factorization factor(N, 2^24).
+    Note the factor_add_primes trick:
+        any prime larger than 2^24 discovered while attempting the initial factorization is stored and remembered.
+        When the alarm rings, the subsequent bounded factorization finds it right away.
+
+===
+??default
+?? "GP defaults"
+
+not found:
+    ?? "se:defaults"
+    ?? "se:gp_defaults"
+    ?? "se:meta"
+    ?? "defaults"
+    ?? "gp_defaults"
+    ?? "meta"
+
+===
+view /sdcard/0my_files/book/lang/pari-gp/doc/users.pdf
+3.4 GP defaults.
+3.4.10 factor_add_primes.
+
+?factor_add_primes
+    factor_add_primes: default
+
+??factor_add_primes
+factor_add_primes:
+    This toggle is either 1 (on) or 0 (off).
+    If on, the integer factorization machinery calls addprimes() on prime factors that were difficult to find (larger than 2^24), so they are automatically tried first in other factorizations.
+    If a routine is performing (or has performed) a factorization and is interrupted by an error or via Control-C, this lets you recover the prime factors already found.
+    The downside is that a huge addprimes table unrelated to the current computations will slow down arithmetic functions relying on integer factorization; one should then empty the table using removeprimes().
+    The default value is 0.
+
+===
+??path
+path:
+    This is a list of directories, separated by colons ':' (semicolons ';' in the DOS world, since colons are preempted for drive names).
+    When asked to read a file whose name is not given by an absolute path (does not start with "/", "./" or "../"), gp will look for it in these directories, in the order they were written in path.
+    Here, as usual, "." means the current directory, and ".." its immediate parent.
+    Environment expansion is performed.
+
+    The default value is
+        ".:~:~/gp" on UNIX systems,
+        ".;C:\;C:\GP" on DOS, OS/2 and Windows, and
+        "." otherwise.
+
+===
+??recover
+recover:
+    This toggle is either 1 (on) or 0 (off).
+    If you change this to 0, any error becomes fatal and causes the gp interpreter to exit immediately.
+    Can be useful in batch job scripts.
+    The default value is 1.
+
+===
+??secure
+secure:
+    This toggle is either 1 (on) or 0 (off).
+    If on, the system() and extern() command are disabled. These two commands are potentially dangerous when you execute foreign scripts since they let gp execute arbitrary UNIX commands.
+    gp will ask for confirmation before letting you (or a script) unset this toggle.
+    The default value is 0.
+
+===
+e others/app/termux/help/gp-help-interesting.txt
+]]
+
 
 
 

@@ -1,0 +1,45 @@
+
+e ../../python3_src/pari_gp_script/__TODO__.txt
+
+[[
+@20260923
+TODO:
+* func_name endswith "_"
+    print_methods6my_fmt7gp ...
+* addhelp
+
+]]
+
+[[
+@20260923
+DONE:
+view ../../python3_src/bash_script/app/gp7my
+<<==:
+* load via basename@kw:"path"
+    ??path
+
+]]
+[[
+@20260923
+DONE:
+view ../../python3_src/pari_gp_script/factorint7timeout.gp
+
+<<==:
+* Time-bounded partial factorization
+    ??alarm
+      howto reraise t_ERROR???
+          <<== required by finally reset addprimes()
+          answer: error()
+            <<== ??iferr
+
+
+view ../../python3_src/seed/math/factor_pint/factorint6PARI_GP_.py
+  ??alarm
+      \\ Time-bounded partial factorization
+  ??factor_add_primes
+  ??path
+view others/app/termux/help/gp-help-interesting.txt
+
+]]
+
+

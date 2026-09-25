@@ -1,0 +1,13 @@
+
+
+#e ../../python3_src/bash_script/app/print_methods6my_fmt7gp
+#view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp
+#grep -o -e "^[{][a-zA-Z][_0-9a-zA-Z]*" ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp | grep -n -o -e "[a-zA-Z][_0-9a-zA-Z]*"  # [}]
+
+if [[ ! $# -eq 1 ]] then
+    printf >&2 "%s\n" 'USAGE: print_methods6my_fmt7gp <path4gp_src>'
+    exit 1
+fi
+
+grep -o -e "^[{][a-zA-Z][_0-9a-zA-Z]*" "$1" | grep -n -o -e "[a-zA-Z][_0-9a-zA-Z]*"  # [}]
+

@@ -1220,7 +1220,7 @@ def factor_pint__le_pow2_81__7ECM_(n, /, *, partial_ok=False, with_settingss=Fal
         777;del kwds['using_rho_first']
         return factor_pint__le_pow2_81__7ECM_7rho_first_(n, **kwds)
     else:
-        _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, n2settings4EPC=_n2settings4EPC, inversionless=inversionless, verbose=_verbose)
+        _ops7ECM = _Framework4factor_pint__le_pow2_81__7ECM(partial_ok=partial_ok, more=with_settingss, verbose=_verbose, inversionless=inversionless, n2settings4EPC=_n2settings4EPC)
         return _ops7ECM.sprp_factor_pint_(n, max4prime7trial_division, max4num_trials7ECM=max4num_trials7ECM, max4num_trials7ECM7part=max4num_trials7ECM7part)
 
 def factor_pint__le_pow2_81__7ECM_7rho_first_(n, /, *, partial_ok=False, with_settingss=False, max4prime7trial_division=default__max4prime7trial_division, max4num_trials7ECM=default__max4num_trials7ECM, max4num_trials7ECM7part=default__max4num_trials7ECM7part, _n2settings4EPC={}, inversionless=True, _verbose=False, with_idc=False, max4num_steps7rho=None):
@@ -1285,11 +1285,9 @@ def factor_pint__le_pow2_81__7ECM_7rho_first_(n, /, *, partial_ok=False, with_se
 
 class _IFramework4factor_pint__le_pow2_81__7common(IFramework4sprp_factor_pint):
     ___no_slots_ok___ = True
-    def __init__(sf, /, *, partial_ok, more, n2settings4EPC={}, inversionless=True, verbose=False):
+    def __init__(sf, /, *, partial_ok, more, verbose=False):
         sf.partial_ok = partial_ok
         sf.more = more
-        sf.n2settings4EPC = n2settings4EPC
-        sf.inversionless = inversionless
         sf.verbose = verbose
 
     @abstractmethod
@@ -1345,6 +1343,12 @@ def _mk_pairs7sz7retry_B1__7n_le_zpow81_():
         ls2 = [(10, 200), (30, 300), (5, 500), (5, 700), (5, 1000)]
         ls = (*ls1*4, *ls2*4, (50, 300), (100, 1000), (1, 10000))
 class _Framework4factor_pint__le_pow2_81__7ECM(_IFramework4factor_pint__le_pow2_81__7common):
+
+    @override
+    def __init__(sf, /, *, partial_ok, more, verbose=False, inversionless=True, n2settings4EPC={}):
+        super().__init__(partial_ok=partial_ok, more=more, verbose=verbose)
+        sf.n2settings4EPC = n2settings4EPC
+        sf.inversionless = inversionless
 
     @override
     def _st2may_more_info_(sf, st, /):

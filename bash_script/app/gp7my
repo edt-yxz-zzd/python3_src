@@ -1,0 +1,6 @@
+
+
+#e ../../python3_src/bash_script/app/gp7my
+#view others/app/termux/help/gp-help-interesting.txt
+
+gp -q -f -D parisizemax=256000000 -D output=0 -D secure=1 -D timer=1 -D 'path=".:~:~/gp:../../python3_src/pari_gp_script"' -D breakloop=0 "$@"
