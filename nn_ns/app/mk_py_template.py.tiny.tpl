@@ -42,6 +42,7 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 #.    from seed.types.CachedProperty import CachedProperty, mk_cached_propertyT_
 #.    from seed.func_tools.dot2 import dot
 #.    from seed.tiny_.check import check_type_is, check_int_ge
+#.    from seed.helper.repr_input import repr_helper
 #.with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
 #.    from seed.data_funcs.lnkls import rglnkls_ops# empty_rglnkls, mk_empty_rglnkls, rglnkls_ipush_right, rglnkls_ipop_right, rglnkls2reversed_iterable, rglnkls5iterable
 #.with mk_ctx4lazy_import4funcs_(__name__, 'ifNone:_ifNone, ifNonef:_ifNonef'):

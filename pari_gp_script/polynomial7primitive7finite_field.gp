@@ -82,6 +82,14 @@ TODO:
   * window limit lowbits in byte #=>mode
   * addhelp
 
+DONE:
+  * Mersenne_prime
+    [[deg :: exponent{Mersenne_prime}][f :: polynomial{deg}]-> [[is_irreducible_polynomial_mod_(2;f)] <-> [[is_primitive_polynomial_mod_(2;f)]]]]
+    view ../../python3_src/nn_ns/math_nn/numbers/Mersenne_exponents.py
+    ==>>:
+    ++kw:known_be_mulorder
+
+
 
 
 
@@ -182,14 +190,14 @@ list_accumulate_L2R_((r,x)->r+x, 0, [1,2,3,4])
 */
 
 
-{is_primitive_root_(factorization4order,x,not_mulorder_ok=0)=
+{is_primitive_root_(factorization4order,x,not_mulorder_ok=0,known_be_mulorder=0)=
   \\;my(L=matsize(factorization4order)[1])
   ;my([L,num_cols]=matsize(factorization4order))
   ;if(2 <> num_cols, error("bad factorization4order"))
   ;my(base=x^prod(j=1,L, factorization4order[j,1]^(-1+factorization4order[j,2])))
   \\ ;my(ps=factorization4order~[1], exp=prod(j=1,L, ps[j]))
   ;my(ps=factorization4order[,1]~, exp=vecprod(ps))
-  ;if(1 <> base^exp, if(not_mulorder_ok, return(0), error("bad order")))
+  ;if(!known_be_mulorder && 1 <> base^exp, if(not_mulorder_ok, return(0), error("bad order")))
   \\ [1 == base^II(ps)]
   \\ [1 =?= base]
   ;if(0 == #ps, return(1))
@@ -328,9 +336,13 @@ is_primitive_root_(factorint(-1+2^4), (ffgen(Mod(1,2)*('x^4+'x+1)))^15)
   \\ ;return(polisirreducible(fp) && fforder(ffgen(fp)) == -1+p^poldegree(fp))
   \\ neednot: ;if(!polisirreducible(fp), return(0))
   \\    {but fforder(),ffgen() required}
+  ;if(!ispseudoprime(p), error("[not ispseudoprime(p)] : ", p))
+  ;my(known_be_mulorder=0)
+  ;my(not_mulorder_ok=1)
   ;my(mulorder4ff=-1+p^poldegree(fp))
   ;if(-1==factorization4mulorder4ff,
     ;if(!polisirreducible(fp), return(0))
+    ;known_be_mulorder=1
     ;my(x=ffgen(fp))
       \\ *** ffgen: not an irreducible polynomial in ffgen: x^1798+x^2+1.
     ;return(mulorder4ff == fforder(x)
@@ -340,6 +352,7 @@ is_primitive_root_(factorint(-1+2^4), (ffgen(Mod(1,2)*('x^4+'x+1)))^15)
   ;if(using_ff_only,
   \\ then:
       ;if(!polisirreducible(fp), return(0))
+      ;known_be_mulorder=1
       ;x=ffgen(fp)
         \\ DONE: addprimes(),removeprimes() to use fforder() directly
       ;if(using_fforder_only,
@@ -354,8 +367,9 @@ is_primitive_root_(factorint(-1+2^4), (ffgen(Mod(1,2)*('x^4+'x+1)))^15)
   , \\ else:
       ;x=Mod(variable(fp),fp)
         \\ slow if without:polisirreducible()
+      ;known_be_mulorder=0
     )
-  ;return(is_primitive_root_(factorization4mulorder4ff,x,1)) \\ [not_mulorder_ok := True]
+  ;return(is_primitive_root_(factorization4mulorder4ff,x,not_mulorder_ok,known_be_mulorder)) \\ [not_mulorder_ok := True]
 }
 /*
 
