@@ -330,12 +330,12 @@ _raw_next_b_u_() => M5.period == 31 == (-1+2**5)
 
 ###########################
 >>> PseudoRandom7linear(False, 8, 1)
-PseudoRandom7linear(False, (8, 4, 3, 2, 0), 1)
+PseudoRandom7linear(False, 8, 1)
 >>> f(PseudoRandom7linear(False, 8, 1), 512)
 '10001110001001011100000011001001001101110010000010101101101011001011000011111011011110101110100010000110110001111001110011000101101001000101001010100111011101100111101111110100110011010100011000001110101010111110010100001001111111100001011110001101000000010001110001001011100000011001001001101110010000010101101101011001011000011111011011110101110100010000110110001111001110011000101101001000101001010100111011101100111101111110100110011010100011000001110101010111110010100001001111111100001011110001101000000010'
 
 >>> PseudoRandom7linear(True, 8, 1)
-PseudoRandom7linear(True, (8, 4, 3, 2, 0), 1)
+PseudoRandom7linear(True, 8, 1)
 >>> f(PseudoRandom7linear(True, 8, 1), 512)
 '00011011000100001000001010111001110001110101111000000110101101111001010100111101101101101111100100100011100100101000111110010100000110110001000010000010101110011100011101011110000001101011011110010101001111011011011011111001001000111001001010001111100101000001101100010000100000101011100111000111010111100000011010110111100101010011110110110110111110010010001110010010100011111001010000011011000100001000001010111001110001110101111000000110101101111001010100111101101101101111100100100011100100101000111110010100'
 
@@ -357,14 +357,14 @@ PseudoRandom7linear(True, (8, 4, 3, 2, 0), 1)
 1000111000100101110000001
 >>> bs = pickle.dumps(PseudoRandom7linear(False, 8, 1))
 >>> rn = pickle.loads(bs); rn
-PseudoRandom7linear(False, (8, 4, 3, 2, 0), 1)
+PseudoRandom7linear(False, 8, 1)
 >>> f(rn, 512)
 '10001110001001011100000011001001001101110010000010101101101011001011000011111011011110101110100010000110110001111001110011000101101001000101001010100111011101100111101111110100110011010100011000001110101010111110010100001001111111100001011110001101000000010001110001001011100000011001001001101110010000010101101101011001011000011111011011110101110100010000110110001111001110011000101101001000101001010100111011101100111101111110100110011010100011000001110101010111110010100001001111111100001011110001101000000010'
 
 00011011000100001000001
 >>> bs = pickle.dumps(PseudoRandom7linear(True, 8, 1))
 >>> rn = pickle.loads(bs); rn
-PseudoRandom7linear(True, (8, 4, 3, 2, 0), 1)
+PseudoRandom7linear(True, 8, 1)
 >>> f(rn, 512)
 '00011011000100001000001010111001110001110101111000000110101101111001010100111101101101101111100100100011100100101000111110010100000110110001000010000010101110011100011101011110000001101011011110010101001111011011011011111001001000111001001010001111100101000001101100010000100000101011100111000111010111100000011010110111100101010011110110110110111110010010001110010010100011111001010000011011000100001000001010111001110001110101111000000110101101111001010100111101101101101111100100100011100100101000111110010100'
 
@@ -396,8 +396,13 @@ PseudoRandom7linear__M7(True, 1)
 
 
 
+>>> bs = pickle.dumps(PseudoRandom7linear__M127__mid001(True, 1))
+>>> rn = pickle.loads(bs); rn
+PseudoRandom7linear__M127__mid001(True, 1)
 
-
+>>> bs = pickle.dumps(PseudoRandom7linear__M127__mid126(False, 1))
+>>> rn = pickle.loads(bs); rn
+PseudoRandom7linear__M127__mid126(False, 1)
 
 
 ####################################
@@ -439,7 +444,7 @@ True
 
 ####################################
 >>> rn = PseudoRandom7linear(False, (127,1,0), b''); rn
-PseudoRandom7linear(False, (127, 1, 0), 35199964725636440966184698525911177504)
+PseudoRandom7linear(False, 127, 35199964725636440966184698525911177504)
 >>> st0 = rn.getstate(); st0
 (False, (127, 1, 0), 35199964725636440966184698525911177504)
 >>> for _ in range(7):rn.random()
@@ -454,7 +459,7 @@ PseudoRandom7linear(False, (127, 1, 0), 35199964725636440966184698525911177504)
 (False, (127, 1, 0), 112626106645686747929903848387755394785)
 >>> rn.setstate(st0);
 >>> rn
-PseudoRandom7linear(False, (127, 1, 0), 35199964725636440966184698525911177504)
+PseudoRandom7linear(False, 127, 35199964725636440966184698525911177504)
 >>> rn.getstate() == st0
 True
 >>> for _ in range(7):rn.random()
@@ -713,7 +718,8 @@ IPseudoRandom7linear
     PseudoRandom7linear__M127__mid126
     PseudoRandom7linear__M127__mid001
 
-exps4binary_primitive_polynomial5or_deg_
+deg_or5exps4binary_primitive_polynomial_
+deg_or2exps4binary_primitive_polynomial_
 uint5bits_
 uint2sized_binstr_
 '''.split()#'''
@@ -903,7 +909,7 @@ def _test__7DeprecationWarning_():
     #warn('[assumption7independent:=True]', DeprecationWarning)
 class IPseudoRandom7linear(Random):
     '[ust :: 1+uint%mul_order][period{assumption7independent;deg} == (2**(-1+deg) if assumption7independent else (-1+2**deg))]'
-    __slots__ = ('_ust', '_settings')
+    #Random => useless:__slots__ = ('_ust', '_settings')
 
 
     #@override
@@ -918,6 +924,9 @@ class IPseudoRandom7linear(Random):
     def _get_settings_(self, /):
         '-> settings'
         return self._settings
+    def _get_settings4repr_(self, /):
+        '-> settings4repr'
+        return self._get_settings_()
     def _set_settings_(self, settings, /):
         if not None is (_settings:=getattr(self, '_settings', None)):
             if not _settings == settings:raise TypeError('incompatible settings:', _settings, settings)
@@ -952,34 +961,25 @@ class IPseudoRandom7linear(Random):
         return (type(self), self._args4repr)
     @property
     def _args4repr(self, /):
-        _args4repr = (*self._get_settings_(), self._get_uint_state_())
+        _args4repr = (*self._get_settings4repr_(), self._get_uint_state_())
         return _args4repr
 
 
 
-    #def __new__(cls, may_int_or_state=None, /):
-    #    self = super(__class__, cls).__new__(cls)
-    def __init__(self, assumption7independent:bool=None, int_or_may_seed=1, /, *extra_settings, version=-1):
-        #def __init__(self, int_or_may_seed=None, /, *, assumption7independent:bool):
-        #self._assumption7independent = bool(assumption7independent)
-        if not None is assumption7independent:
-            check_type_is(bool, assumption7independent)
-            if assumption7independent:
-                warn('[assumption7independent:=True]', UserWarning)
-                #warn('[assumption7independent:=True]', DeprecationWarning)
-            self._set_settings_((assumption7independent, *extra_settings))
-            self.seed(int_or_may_seed, version=version)
-        else:
-            pass
-            #pickle
-            #leave undefined...
+    def __init__(self, assumption7independent:bool, int_or_may_seed, /, *extra_settings, version=-1):
+        check_type_is(bool, assumption7independent)
+        if assumption7independent:
+            warn('[assumption7independent:=True]', UserWarning)
+            #warn('[assumption7independent:=True]', DeprecationWarning)
+        self._set_settings_((assumption7independent, *extra_settings))
+        self.seed(int_or_may_seed, version=version)
     @property
     def assumption7independent(self, /):
         #return self._assumption7independent
         return self._get_settings_()[0]
     def __repr__(self, /):
         return repr_helper(self, *self._args4repr)
-        return repr_helper(self, *self._get_settings_(), self._get_uint_state_())
+        return repr_helper(self, *self._get_settings4repr_(), self._get_uint_state_())
         #.return repr_helper(self, self._get_uint_state_(), assumption7independent=self.assumption7independent)
         #.if self.assumption7independent:
         #.    return repr_helper(self, self._get_uint_state_(), assumption7independent=True)
@@ -1141,7 +1141,11 @@ view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.out.t
 #]]]'''#'''
 
 
-def exps4binary_primitive_polynomial5or_deg_(deg_or_exps4binary_primitive_polynomial, /):
+def deg_or5exps4binary_primitive_polynomial_(exps, /):
+    deg = exps[0]
+    deg_or_exps = deg if exps == deg_or2exps4binary_primitive_polynomial_(deg) else exps
+    return deg_or_exps
+def deg_or2exps4binary_primitive_polynomial_(deg_or_exps4binary_primitive_polynomial, /):
     zmay_deg = 0
     match deg_or_exps4binary_primitive_polynomial:
         case int() as deg:
@@ -1176,22 +1180,21 @@ def exps4binary_primitive_polynomial5or_deg_(deg_or_exps4binary_primitive_polyno
     assert len(es)&1 == 1
     return es
 class PseudoRandom7linear(IPseudoRandom7linear):
-    def __init__(self, assumption7independent:bool=None, deg_or_exps4binary_primitive_polynomial=None, int_or_may_seed=1, /):
-        #def __init__(self, deg_or_exps4binary_primitive_polynomial, may_int_or_state=None, /, *, assumption7independent:bool):
-        if not None is assumption7independent:
-            check_type_is(bool, assumption7independent)
-            es = exps4binary_primitive_polynomial5or_deg_(deg_or_exps4binary_primitive_polynomial)
-            super().__init__(assumption7independent, int_or_may_seed, es)
-            #super().__init__(int_or_may_seed, assumption7independent=assumption7independent)
-        else:
-            pass
-            #pickle
-            #leave undefined...
+    def __init__(self, assumption7independent:bool, deg_or_exps4binary_primitive_polynomial, int_or_may_seed, /):
+        check_type_is(bool, assumption7independent)
+        exps = deg_or2exps4binary_primitive_polynomial_(deg_or_exps4binary_primitive_polynomial)
+        super().__init__(assumption7independent, int_or_may_seed, exps)
+        deg = exps[0]
+        self._may_settings4repr = (assumption7independent, deg) if deg == deg_or5exps4binary_primitive_polynomial_(exps) else None
     @property
     #@override
     def exps4binary_primitive_polynomial(self, /):
         #return self._es
         return self._get_settings_()[1]
+    def _get_settings4repr_(self, /):
+        '-> settings4repr'
+        m = self._may_settings4repr
+        return self._get_settings_() if m is None else m
 
 class PseudoRandom7linear__M127__mid126(IPseudoRandom7linear):
     #@override
@@ -1339,7 +1342,7 @@ def __():
         deg = int(nm[len(prefix):])
         yield (deg, T)
 _deg2T = dict(__())
-exps4binary_primitive_polynomial5or_deg_
+deg_or2exps4binary_primitive_polynomial_
 
 _exps2T = WeakValueDictionary()
 def mk_pseudo_random7linear_(deg_or_exps, imay_version, int_or_may_seed, /, assumption7independent=False):
@@ -1349,7 +1352,7 @@ def mk_pseudo_random7linear_(deg_or_exps, imay_version, int_or_may_seed, /, assu
     #rn.seed(int_or_may_seed, version=imay_version)
     return rn
 def gmk_type4pseudo_random7linear_(deg_or_exps, /):
-    exps = exps4binary_primitive_polynomial5or_deg_(deg_or_exps)
+    exps = deg_or2exps4binary_primitive_polynomial_(deg_or_exps)
     deg = exps[0]
     if not None is (T:=_deg2T.get(deg)) and exps == T.exps4binary_primitive_polynomial:
         return T
@@ -1386,9 +1389,7 @@ def gmk_type4pseudo_random7linear_(deg_or_exps, /):
 class _IPseudoRandom7linear__7repr4mk(IPseudoRandom7linear):
     @property
     def _args4mk(self, /):
-        exps = self.exps4binary_primitive_polynomial
-        deg = exps[0]
-        deg_or_exps = deg if exps == exps4binary_primitive_polynomial5or_deg_(deg) else exps
+        deg_or_exps = deg_or5exps4binary_primitive_polynomial_(self.exps4binary_primitive_polynomial)
         tm = (True,) if self.assumption7independent else ()
         return (deg_or_exps, -2, self._get_uint_state_(), *tm)
     def __repr__(self, /):
