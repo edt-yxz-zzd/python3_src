@@ -301,7 +301,7 @@ with mk_ctx4lazy_import4funcs_(__name__):
     from seed.tiny_.containers import mk_immutable_seq
 #.    from itertools import islice
 with mk_ctx4lazy_import4funcs_(__name__, arbitrary_ok=True):
-    from seed.math.polynomial.binary_primitive_polynomial import deg2neg_or_list4exps4binary_primitive_polynomial
+    from seed.math.polynomial.binary_primitive_polynomial import sparse_deg2list4exps4binary_primitive_polynomial
 
 #.#################################
 ___end_mark_of_excluded_global_names__0___ = ...
@@ -611,12 +611,18 @@ def exps4binary_primitive_polynomial5or_deg_(deg_or_exps4binary_primitive_polyno
     match deg_or_exps4binary_primitive_polynomial:
         case int() as deg:
             check_int_ge(2, deg)
+            if not deg in sparse_deg2list4exps4binary_primitive_polynomial:
+                raise NotImplementedError('unknown factorization of (-1+2**deg) : ', deg)
+            ess = sparse_deg2list4exps4binary_primitive_polynomial[deg]
+            es = ess[0]
+            r'''[[[
             match deg2neg_or_list4exps4binary_primitive_polynomial[deg]:
                 case int() as neg_deg:
                     assert neg_deg == -deg
                     raise NotImplementedError('unknown factorization of (-1+2**deg) : ', deg)
                 case ess:
                     es = ess[0]
+            #]]]'''#'''
             es
         case es:
             pass

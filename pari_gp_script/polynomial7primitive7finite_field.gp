@@ -26,6 +26,8 @@ show_one_binary_primitive_polynomial_per_deg_ge_le_
     zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_
       inplace_inc_exp_vec_
 
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_
+  show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_
 
 
 ===
@@ -38,9 +40,11 @@ print_methods6my_fmt7gp ../../python3_src/pari_gp_script/polynomial7primitive7fi
   show_all_trinomial_binary_primitive_polynomial__7deg_ge_le_
   list_all_binary_primitive_polynomial__7deg_eq_
   list_all_monic_primitive_polynomial_mod__7deg_eq_
+  show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_
   show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_
   show_one_binary_primitive_polynomial_per_deg_ge_le_
   find_one_binary_primitive_polynomial__7deg_eq_
+  show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_
   zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_
   inplace_inc_exp_vec_
   inplace_inc_exp_vec__7mode_eq0_
@@ -546,7 +550,11 @@ list_all_trinomial_binary_primitive_polynomial__7deg_eq_(127, , ,63)
   ;my(t0=0)
   ;if(auto_sleep, t0=getabstime())
   ;
-  ;for(deg=min4deg,max4deg,
+  ;my(j0=min4deg,j1=max4deg,degs=0,deg=-1)
+  ;if(min4deg==-1, degs=max4deg;j0=1;j1=#degs)
+  \\ ;for(deg=min4deg,max4deg, ...)
+  ;for(j=j0,j1,
+    ;deg=if(min4deg==-1, degs[j], j)
     ;my(factorization4mulorder4ff=if(-1==deg2factorization4mulorder4ff, -1, deg2factorization4mulorder4ff[deg]))
     ;if(-1 == factorization4mulorder4ff && -1 <> deg2factorization4mulorder4ff, print("skip deg:", deg); next())
     ;my(ls=list_all_trinomial_binary_primitive_polynomial__7deg_eq_(deg, factorization4mulorder4ff,max4sz4output,min4mid_deg))
@@ -692,8 +700,16 @@ list_all_monic_primitive_polynomial_mod__7deg_eq_(2, 3,,1)
 
 
 \\ pentanomial
+{show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0)=
+  \\ [min4deg==-1] => [max4deg be degs :: [deg]]
+  \\ new_version:
+  ;return(show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(5, min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep))
+}
+\\ pentanomial
 {show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0)=
   \\ [min4deg==-1] => [max4deg be degs :: [deg]]
+  ;warning("show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_() is deprecated by show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_()")
+  \\ old_version:
   ;if(min4deg==-1,
     ;my(degs=max4deg)
     ;if(vecmin(degs) < 4, error("[min4deg < 4]"))
@@ -712,16 +728,23 @@ show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(4,5,-1)
     view ../../fxt/_ignore__unzip/fxt/data/all-primpoly.txt
       [deg:=4] => only trinomial
 
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(3,4,-1)
+  null@(bit_count,deg)::5:3
+  null@(bit_count,deg)::5:4
+
 show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(5,6,-1)
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(5,6,-1)
   [5,3,2,1,0]
   [6,4,3,1,0]
 
 show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(7,9,-1)
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(7,9,-1)
   [7,3,2,1,0]
   [8,4,3,2,0]
   [9,4,3,1,0]
 
 show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,[5,8,30],-1,-1)
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,[5,8,30],-1,-1)
   [5,3,2,1,0]
   cmd: sleep 1
   [8,4,3,2,0]
@@ -913,6 +936,59 @@ for(deg=2,200,
 
 */
 
+\\ show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_
+{show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(bit_count, min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0)=
+  \\ [min4deg==-1] => [max4deg be degs :: [deg]]
+  \\ [deg2factorization4mulorder4ff :: (-1 | [(-1 | Mat{?,2})])]
+  ;if(bit_count < 1, error("[bit_count < 1] : ", bit_count)) \\ avoid to be mode
+
+  ;my(t0=0)
+  ;if(auto_sleep, t0=getabstime())
+  ;
+  ;my(j0=min4deg,j1=max4deg,degs=0,deg=-1)
+  ;if(min4deg==-1, degs=max4deg;j0=1;j1=#degs)
+  \\ ;for(deg=min4deg,max4deg, ...)
+  ;for(j=j0,j1,
+    ;deg=if(min4deg==-1, degs[j], j)
+    ;if(deg < 2, error("[deg < 2]"))
+    ;my(factorization4mulorder4ff=if(-1==deg2factorization4mulorder4ff, -1, deg2factorization4mulorder4ff[deg]))
+    ;if(-1 == factorization4mulorder4ff && -1 <> deg2factorization4mulorder4ff, print("skip deg:"  deg); next())
+    ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff))
+    ;if(0 <> zm, print(zm),
+      ;printsep(":", "null@(bit_count,deg):", bit_count,deg)
+      )
+    ;if(auto_sleep, t0=auto_sleep_(auto_sleep, t0))
+  )
+}
+/*
+show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(3, 7,9, -1,-1)
+  [7,1,0]
+  cmd: sleep 1
+  null@(bit_count,deg)::3:8
+  cmd: sleep 1
+  [9,4,0]
+  cmd: sleep 1
+
+show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(5, 2,9, -1,-1)
+  null@(bit_count,deg)::5:2
+  cmd: sleep 1
+  null@(bit_count,deg)::5:3
+  cmd: sleep 1
+  null@(bit_count,deg)::5:4
+  cmd: sleep 1
+  [5,3,2,1,0]
+  cmd: sleep 1
+  [6,4,3,1,0]
+  cmd: sleep 1
+  [7,3,2,1,0]
+  cmd: sleep 1
+  [8,4,3,2,0]
+  cmd: sleep 1
+  [9,4,3,1,0]
+  cmd: sleep 1
+  time = 6 ms.
+
+*/
 
 {zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff=-1,min4weight=3)=
   \\ -> (0 | [exp]{len==bit_count})
@@ -1283,6 +1359,7 @@ for(deg=7,9,print(zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count
     ;my(cmd=strprintf("sleep %d", dt))
     ;if(auto_sleep < 0, print("cmd: ", cmd)) \\ verbose6neg
     ;system(cmd)
+    ;if(auto_sleep < 0, print("!wake!")) \\ verbose6neg
     ;return(t1)
     )
   ;return(t0)

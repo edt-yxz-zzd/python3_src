@@ -3,4 +3,18 @@
 #e ../../python3_src/bash_script/app/gp7my
 #view others/app/termux/help/gp-help-interesting.txt
 
-gp -q -f -D parisizemax=256000000 -D output=0 -D secure=1 -D timer=1 -D 'path=".:~:~/gp:../../python3_src/pari_gp_script"' -D breakloop=0 "$@"
+#gp [-s stacksize] [-p primelimit] [--emacs] [-f|--fast] [-q|--quiet] [-D|--default key=val] [--help] [--test] [--texmacs] [--version] [--version-short] [ file1 file2 ...]
+#
+#gp -q -f -D parisizemax=256000000 -D output=0 -D secure=1 -D timer=1 -D 'path=".:~:~/gp:../../python3_src/pari_gp_script"' -D breakloop=0 "$@"
+  # => "gp7my -D secure=0" fail:
+  # ***   Can't ask for confirmation. Please define cb_pari_ask_confirm().
+  # ### Errors on startup, exiting...
+
+if [[ $1 == +insecure ]] then
+  shift 1
+  gp -q -f -D parisizemax=256000000 -D output=0 -D timer=1 -D 'path=".:~:~/gp:../../python3_src/pari_gp_script"' -D breakloop=0 -D secure=0 "$@"
+else
+  gp -q -f -D parisizemax=256000000 -D output=0 -D timer=1 -D 'path=".:~:~/gp:../../python3_src/pari_gp_script"' -D breakloop=0 -D secure=1 "$@"
+fi
+
+

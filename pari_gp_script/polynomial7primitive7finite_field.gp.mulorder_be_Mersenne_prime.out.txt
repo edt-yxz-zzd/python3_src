@@ -1,0 +1,221 @@
+
+[[
+e ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.mulorder_be_Mersenne_prime.out.txt
+TODO:goto
+]]
+[[
+view ../../python3_src/nn_ns/math_nn/numbers/Mersenne_exponents.py
+[
+1:2
+2:3
+3:5
+4:7
+5:13
+6:17
+7:19
+8:31
+9:61
+10:89
+11:107
+12:127
+13:521
+14:607
+15:1279
+16:2203
+17:2281
+18:3217
+19:4253
+20:4423
+21:9689
+22:9941
+23:11213
+24:19937
+25:21701
+26:23209
+27:44497
+28:86243
+29:110503
+30:132049
+31:216091
+32:756839
+33:859433
+34:1257787
+35:1398269
+36:2976221
+37:3021377
+38:6972593
+39:13466917
+40:20996011
+41:24036583
+42:25964951
+43:30402457
+44:32582657
+45:37156667
+46:42643801
+47:43112609
+48:57885161
+* Provisional ranking, not all candidates between M[57885161] and M[82589933] have been eliminated
+-49*:74207281
+-50*:77232917
+-51*:82589933
+]
+]]
+[[
+[is_prime_(-1+2^deg)][2<=deg<=3000]:
+    #copy_from:view ../../python3_src/seed/math/pseudo_random.py
+    [2,1,0]
+    [3,1,0]
+    [5,2,0]%=%[5,3,2,1,0]
+    [7,1,0]%=%[7,3,2,1,0]
+    [13,4,3,1,0]%=%%empty@deg:13
+    [17,3,0]%=%[17,3,2,1,0]
+    [19,5,2,1,0]%=%%empty@deg:19
+    [31,3,0]%=%[31,3,2,1,0]
+    [61,5,2,1,0]%=%%empty@deg:61
+    [89,6,5,3,0]%=%%[89,38,0]
+    [107,7,5,3,2,1,0]%<[107,9,7,4,0]%%empty@deg:107
+    [127,1,0]%=%[127,7,3,1,0]
+    [521,9,6,5,3,1,0]%<[521,9,7,2,0]%%[521,32,0]
+    [607,9,7,6,3,1,0]%<[607,12,9,7,0]%%[607,105,0]
+    [1279,11,9,8,5,3,2,1,0]%<[1279,16,8,3,0]%%[1279,216,0]
+    [2203,11,10,6,4,1,0]%<[2203,14,6,5,0]%%empty@deg:2203
+    [2281,9,8,7,6,2,0]%<[2281,20,18,4,0]%%[2281,715,0]
+
+]]
+[[
+[is_prime_(-1+2^deg)][3000<deg<10000]:
+    [3217,11,10,9,8,6,5,4,3,2,0]%<[3217,21,9,7,0]%%[3217,67,0]
+    [4253,12,10,7,5,4,0]%<[4253,21,12,11,0]%%empty@deg:4253
+    [4423,14,12,10,9,6,5,1,0]%<[4423,24,5,2,0]%%[4423,271,0]
+    [9689,13,11,10,8,3,2,1,0]%<[9689,21,19,16,0]%%[9689,84,0]
+    [9941,9,6,5,4,1,0]%<[9941,29,12,10,0]%%empty@deg:9941
+    DONE
+    <<==:
+
+18:3217
+19:4253
+20:4423
+21:9689
+22:9941
+
+API:show_all_trinomial_binary_primitive_polynomial__7deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,max4sz4output=+oo,auto_sleep=0,min4mid_deg=1)
+API:show_one_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff, mode=0,auto_sleep=0,min4weight=3)
+API:zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff=-1,min4weight=3)
+API:show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0)
+
+gp7my -D secure=0
+  ***   Can't ask for confirmation. Please define cb_pari_ask_confirm().
+  ### Errors on startup, exiting...
+
+gp7my
+  default('secure,0) \\ for system.sleep
+or:
+gp7my +insecure
+
+read("polynomial7primitive7finite_field.gp");
+
+\\ test:
+show_all_trinomial_binary_primitive_polynomial__7deg_ge_le_(-1,[6,8], -1,1,-1)
+  [6,1,0]
+  cmd: sleep 1
+  empty@deg:8
+  cmd: sleep 1
+  time = 1 ms.
+show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,[6,8], -1, 1,-1)
+  [6,1,0]
+  cmd: sleep 1
+  [8,4,3,2,0]
+  cmd: sleep 1
+  time = 2 ms.
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,[6,8], -1,-1)
+  [6,4,3,1,0]
+  cmd: sleep 1
+  [8,4,3,2,0]
+  cmd: sleep 1
+  time = 2 ms.
+
+
+\\ work:
+degs=[3217,4253,4423,9689,9941]
+show_all_trinomial_binary_primitive_polynomial__7deg_ge_le_(-1,degs, -1,1,-1)
+  \\ trinomial
+  [3217,67,0]
+  empty@deg:4253
+  [4423,271,0]
+    *** polisirreducible: Warning: increasing stack size to 16000000.
+    *** polisirreducible: Warning: increasing stack size to 32000000.
+  [9689,84,0]
+  empty@deg:9941
+  time = 57min, 2,175 ms.
+
+show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,degs, -1, 1,-1)
+  \\ lowbit
+  [3217,11,10,9,8,6,5,4,3,2,0]
+  cmd: sleep 52
+  [4253,12,10,7,5,4,0]
+  cmd: sleep 152
+  [4423,14,12,10,9,6,5,1,0]
+  cmd: sleep 526
+    *** polisirreducible: Warning: increasing stack size to 16000000.
+    *** polisirreducible: Warning: increasing stack size to 32000000.
+  [9689,13,11,10,8,3,2,1,0]
+  cmd: sleep 3156
+  [9941,9,6,5,4,1,0]
+  cmd: sleep 190
+  time = 22min, 37,967 ms.
+
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,degs, -1,-1)
+  \\ pentanomial
+  <==>:
+  [1..3]
+  [4..4]
+  [5..5]
+
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,degs[1..3], -1,-1)
+  [3217,21,9,7,0]
+  cmd: sleep 62
+  [4253,21,12,11,0]
+  cmd: sleep 139
+  [4423,24,5,2,0]
+  cmd: sleep 166
+  time = 2min, 1,966 ms.
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,degs[4..4], -1,-1)
+    *** polisirreducible: Warning: increasing stack size to 16000000.
+    *** polisirreducible: Warning: increasing stack size to 32000000.
+  [9689,21,19,16,0]
+  cmd: sleep 1425
+  time = 7min, 54,963 ms.
+show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,degs[5..5], -1,-1)
+    *** polisirreducible: Warning: increasing stack size to 16000000.
+    *** polisirreducible: Warning: increasing stack size to 32000000.
+  [9941,29,12,10,0]
+  cmd: sleep 4211
+  !wake!
+  time = 23min, 23,375 ms.
+]]
+[[
+[is_prime_(-1+2^deg)][10000<deg<100000]:
+    TODO
+
+23:11213
+24:19937
+25:21701
+26:23209
+27:44497
+28:86243
+
+[11213,19937,21701,23209,44497,86243]
+
+view ../../fxt/_ignore__unzip/fxt/data/minweight-primpoly-large.txt
+  11213,19,11,10,0
+  19937,881,0
+  21701,33,26,2,0
+  23209,1530,0
+]]
+[[
+TODO
+e ../../python3_src/seed/math/polynomial/binary_primitive_polynomial.py
+e ../../python3_src/seed/math/pseudo_random.py
+]]
+
+

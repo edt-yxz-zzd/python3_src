@@ -38,6 +38,13 @@ examle:
     ,((103,7,5,4,3,2,0), (103,9,0), (103,9,4,1,0),)
 
 ]]
+[[
+data_from:
+view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.out.txt
+view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.mulorder_be_Mersenne_prime.out.txt
+view ../../fxt/_ignore__unzip/fxt/data/minweight-primpoly-large.txt
+]]
+
 
 
 '#'; __doc__ = r'#'
@@ -66,10 +73,41 @@ examle:
 
 
 
+2189+53 == 2242
+>>> len(sparse_deg2list4exps4binary_primitive_polynomial)
+2242
+
+>>> sparse_deg2list4exps4binary_primitive_polynomial[2]
+((2, 1, 0),)
+>>> sparse_deg2list4exps4binary_primitive_polynomial[3000]
+((3000, 13, 10, 9, 8, 7, 6, 5, 0), (3000, 30, 11, 5, 0))
+>>> sparse_deg2list4exps4binary_primitive_polynomial[3217]
+((3217, 11, 10, 9, 8, 6, 5, 4, 3, 2, 0), (3217, 21, 9, 7, 0), (3217, 67, 0))
+>>> sparse_deg2list4exps4binary_primitive_polynomial[9941]
+((9941, 9, 6, 5, 4, 1, 0), (9941, 29, 12, 10, 0))
+>>> sparse_deg2list4exps4binary_primitive_polynomial[10007]
+((10007, 2891, 0),)
+>>> sparse_deg2list4exps4binary_primitive_polynomial[29473]
+((29473, 1879, 0),)
+
+>>> sparse_deg2list4exps4binary_primitive_polynomial[1206]
+((1206, 8, 6, 3, 2, 1, 0), (1206, 22, 13, 12, 0))
+>>> sparse_deg2list4exps4binary_primitive_polynomial[1207]
+Traceback (most recent call last):
+    ...
+KeyError: 1207
+
+
+
+
 py_adhoc_call   seed.math.polynomial.binary_primitive_polynomial   @f
 ]]]'''#'''
 __all__ = r'''
-deg2neg_or_list4exps4binary_primitive_polynomial
+sparse_deg2list4exps4binary_primitive_polynomial
+    deg2neg_or_list4exps4binary_primitive_polynomial
+    list4list4exps4binary_primitive_polynomial__7Mersenne_exponent8deg
+    list4exps4binary_primitive_polynomial__7large5fxtbook
+
 '''.split()#'''
 __all__
 ___begin_mark_of_excluded_global_names__0___ = ...
@@ -77,6 +115,8 @@ ___begin_mark_of_excluded_global_names__0___ = ...
 ___end_mark_of_excluded_global_names__0___ = ...
 
 
+#data_from: view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.out.txt
+#   some deg <- [2..=3000]
 deg2neg_or_list4exps4binary_primitive_polynomial = (
 (0
 ,-1
@@ -3082,6 +3122,101 @@ deg2neg_or_list4exps4binary_primitive_polynomial = (
 ))
 deg2neg_or_list4exps4binary_primitive_polynomial
 
+#data_from: view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.mulorder_be_Mersenne_prime.out.txt
+#   Mersenne_exponent@deg <- [3001..9999]
+list4list4exps4binary_primitive_polynomial__7Mersenne_exponent8deg = (
+(((3217,11,10,9,8,6,5,4,3,2,0), (3217,21,9,7,0), (3217,67,0),)
+,((4253,12,10,7,5,4,0), (4253,21,12,11,0),)
+,((4423,14,12,10,9,6,5,1,0), (4423,24,5,2,0), (4423,271,0),)
+,((9689,13,11,10,8,3,2,1,0), (9689,21,19,16,0), (9689,84,0),)
+,((9941,9,6,5,4,1,0), (9941,29,12,10,0),)
+))
+list4list4exps4binary_primitive_polynomial__7Mersenne_exponent8deg
+#   [11213,19937,21701,23209,44497,86243]
+
+
+
+#data_from:view ../../fxt/_ignore__unzip/fxt/data/minweight-primpoly-large.txt
+#   some deg <- [10000..30000]
+list4exps4binary_primitive_polynomial__7large5fxtbook = (
+((10007,2891,0)
+,(10097,816,0)
+,(10169,1448,0)
+,(10211,34,24,4,0)
+,(10351,58,0)
+,(10433,45,0)
+,(10751,1148,0)
+,(10967,2081,0)
+,(11018,503,0)
+,(11117,25,18,1,0)
+,(11213,19,11,10,0)
+,(11581,29,22,5,0)
+,(11813,33,28,10,0)
+,(12407,2952,0)
+,(12451,29,15,10,0)
+,(12569,743,0)
+,(13489,240,0)
+,(14093,51,42,35,0)
+,(14209,757,0)
+,(14263,5985,0)
+,(14377,841,0)
+,(14561,713,0)
+,(14621,10,9,8,0)
+,(14834,1667,0)
+,(14971,33,18,7,0)
+,(15359,13,12,8,0)
+,(15409,5259,0)
+,(16129,79,0)
+,(17029,36,10,4,0)
+,(17587,37,35,24,0)
+,(17603,42,20,4,0)
+,(17683,38,33,14,0)
+,(17698,511,0)
+,(17917,36,34,20,0)
+,(18527,2103,0)
+,(19121,2493,0)
+,(19937,881,0)
+,(20521,1185,0)
+,(20591,5400,0)
+,(20887,322,0)
+,(21701,33,26,2,0)
+,(22193,1509,0)
+,(22327,2445,0)
+,(23209,1530,0)
+,(23479,7552,0)
+,(24853,28,15,5,0)
+,(25243,46,29,21,0)
+,(25933,23,3,2,0)
+,(26903,7044,0)
+,(28381,32,28,23,0)
+,(28759,8526,0)
+,(28771,48,13,9,0)
+,(29473,1879,0)
+))
+
+def _iter4list4exps4binary_primitive_polynomial_(lsls4neg_or_ess, lsls4es, /):
+    ###########################
+    for ls4neg_or_ess in lsls4neg_or_ess:
+        for neg_or_ess in ls4neg_or_ess:
+            match neg_or_ess:
+                case int() as neg_deg:
+                    assert neg_deg <= 0
+                case tuple() as ess:
+                    yield ess
+                case _:
+                    raise 000
+
+    ###########################
+    for ls4es in lsls4es:
+        for es in ls4es:
+            ess = (es,)
+            yield ess
+    ###########################
+
+
+sparse_deg2list4exps4binary_primitive_polynomial = {ess[0][0]:ess for ess in _iter4list4exps4binary_primitive_polynomial_([deg2neg_or_list4exps4binary_primitive_polynomial, list4list4exps4binary_primitive_polynomial__7Mersenne_exponent8deg], [list4exps4binary_primitive_polynomial__7large5fxtbook])}
+
 __all__
-from seed.math.polynomial.binary_primitive_polynomial import deg2neg_or_list4exps4binary_primitive_polynomial
+from seed.math.polynomial.binary_primitive_polynomial import sparse_deg2list4exps4binary_primitive_polynomial
+from seed.math.polynomial.binary_primitive_polynomial import deg2neg_or_list4exps4binary_primitive_polynomial, list4list4exps4binary_primitive_polynomial__7Mersenne_exponent8deg, list4exps4binary_primitive_polynomial__7large5fxtbook
 from seed.math.polynomial.binary_primitive_polynomial import *
