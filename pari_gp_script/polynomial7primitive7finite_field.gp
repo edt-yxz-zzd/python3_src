@@ -29,9 +29,13 @@ show_one_binary_primitive_polynomial_per_deg_ge_le_
 show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_
   show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_
 
+mk_one_random_irreducible_binary_polynomial_mod_
+  exps5binary_polynomial__7descend_
+  coeffs5polynomial__7little_endian_
 
 ===
 print_methods6my_fmt7gp ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp
+  \\ total:25
   list_accumulate_L2R_
   is_primitive_root_
   impl4is_primitive_root__7recur_
@@ -46,13 +50,17 @@ print_methods6my_fmt7gp ../../python3_src/pari_gp_script/polynomial7primitive7fi
   find_one_binary_primitive_polynomial__7deg_eq_
   show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_
   zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_
+  advance_exp_vec_
   inplace_inc_exp_vec_
   inplace_inc_exp_vec__7mode_eq0_
   inplace_inc_exp_vec__7mode_eq1_
   inplace_inc_exp_vec__7mode_eq2_
   listassign_
   auto_sleep_
-\\ total:18
+  auto_sleep7finer_
+  mk_one_random_irreducible_binary_polynomial_mod_
+  exps5binary_polynomial__7descend_
+  coeffs5polynomial__7little_endian_
 
 */
 
@@ -153,6 +161,25 @@ f2=ffgen(ff)
   \\未必是乘法群生成元
 fforder(f2) == -1+2^127
   1
+
+
+ffinit(2,5)
+  Mod(1,2)*x^5+Mod(1,2)*x^4+Mod(1,2)*x^2+Mod(1,2)*x+Mod(1,2)
+ffgen(ffinit(2,5))
+  x
+ffgen(ffinit(2,5)).mod
+  x^5+x^4+x^2+x+1
+ffgen([2,5]).mod
+  x^5+x^4+x^2+x+1
+ffgen(2^5).mod
+  x^5+x^4+x^2+x+1
+
+ffgen('x^2*Mod(1,2))
+  *** ffgen: not an irreducible polynomial in ffgen: x^2.
+iferr(ffgen('x^2*Mod(1,2)), E, print([type(E),Str(E),E]))
+  ["t_ERROR","error(\"not an irreducible polynomial in ffgen: x^2.\")",error("not an irreducible polynomial in ffgen: x^2.")]
+
+
 
 
 
@@ -700,13 +727,13 @@ list_all_monic_primitive_polynomial_mod__7deg_eq_(2, 3,,1)
 
 
 \\ pentanomial
-{show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0)=
+{show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0,auto_sleep7deeper=0)=
   \\ [min4deg==-1] => [max4deg be degs :: [deg]]
   \\ new_version:
-  ;return(show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(5, min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep))
+  ;return(show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(5, min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep,auto_sleep7deeper))
 }
 \\ pentanomial
-{show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0)=
+{show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0,auto_sleep7deeper=0)=
   \\ [min4deg==-1] => [max4deg be degs :: [deg]]
   ;warning("show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_() is deprecated by show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_()")
   \\ old_version:
@@ -717,7 +744,7 @@ list_all_monic_primitive_polynomial_mod__7deg_eq_(2, 3,,1)
     ;if(min4deg < 4, error("[min4deg < 4]"))
     )
   \\ {#let it fail#}: ;if(min4deg < 5, error("[min4deg < 5]"))
-  ;show_one_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,2,auto_sleep,5)
+  ;show_one_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff,2,auto_sleep,5,auto_sleep7deeper)
   \\ [mode:=2][min4weight:=5]
 }
 /*
@@ -755,7 +782,7 @@ show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,[5,8,30],-1,-
 
 */
 
-{show_one_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff, mode=0,auto_sleep=0,min4weight=3)=
+{show_one_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff, mode=0,auto_sleep=0,min4weight=3,auto_sleep7deeper=0)=
   \\ [min4deg==-1] => [max4deg be degs :: [deg]]
   \\ [deg2factorization4mulorder4ff :: (-1 | [(-1 | Mat{?,2})])]
   \\ ++kw:min4weight:mainly for pentanomial[#weight==5#] by skip trinomial[#weight==3#]
@@ -769,7 +796,7 @@ show_may_pentanomial_binary_primitive_polynomial_per_deg_ge_le_(-1,[5,8,30],-1,-
     ;deg=if(min4deg==-1, degs[j], j)
     ;my(factorization4mulorder4ff=if(-1==deg2factorization4mulorder4ff, -1, deg2factorization4mulorder4ff[deg]))
     ;if(-1 == factorization4mulorder4ff && -1 <> deg2factorization4mulorder4ff, print("skip deg:"  deg); next())
-    ;my(es4f2=find_one_binary_primitive_polynomial__7deg_eq_(deg, factorization4mulorder4ff, mode,min4weight))
+    ;my(es4f2=find_one_binary_primitive_polynomial__7deg_eq_(deg, factorization4mulorder4ff, mode,min4weight,auto_sleep7deeper))
     ;print(es4f2)
     ;if(auto_sleep, t0=auto_sleep_(auto_sleep, t0))
   )
@@ -846,11 +873,20 @@ show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,[2,8,30],-1,,-1)
     time = 7 ms.
 
 ===
+++kw:auto_sleep7deeper
+show_one_binary_primitive_polynomial_per_deg_ge_le_(min4deg,max4deg, ~deg2factorization4mulorder4ff, mode=0,auto_sleep=0,min4weight=3,auto_sleep7deeper=0)=
+show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,[255],-1,,,,-1)
+  [255,52,0]
+  time = 56 ms.
+show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,[1798],vector(1798, j, if(j==1798,factorization4mulorder4ff_7deg_eq_1798,-1)),,,,-1)
+  !:!.!:!.!:!.
+  [1798,685,0]
+  time = 3,303 ms.
 
 */
 
 
-{find_one_binary_primitive_polynomial__7deg_eq_(deg, factorization4mulorder4ff=-1, mode=0,min4weight=3)=
+{find_one_binary_primitive_polynomial__7deg_eq_(deg, factorization4mulorder4ff=-1, mode=0,min4weight=3,auto_sleep7deeper=0)=
   \\ -> [exp]
   \\ ++kw:min4weight:mainly for pentanomial[#weight==5#] by skip trinomial[#weight==3#]
   ;if(mode < 0, error("[mode < 0]"))
@@ -864,7 +900,7 @@ show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,[2,8,30],-1,,-1)
   ;if(0==mode,
     \\ ;forstep(bit_count=3,1+deg,2, ...)
     ;forstep(bit_count=min4weight,1+deg,2,
-      ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff))
+      ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff,  ,auto_sleep7deeper))
       ;if(0 <> zm, return(zm))
       )
     \\ ;error("bug:[impossible:no primitive polynomial]", [deg,mode])
@@ -874,7 +910,7 @@ show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,[2,8,30],-1,,-1)
     )
   ;if(1==mode,
       ;my(bit_count=-1)
-      ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff,min4weight))
+      ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff,min4weight,auto_sleep7deeper))
       ;if(0 <> zm, return(zm),
         \\ ;error("bug:[impossible:no primitive polynomial]", [deg,mode])
         ;if(3==min4weight, error("bug:[impossible:no primitive polynomial]", [deg,mode]))
@@ -884,7 +920,7 @@ show_one_binary_primitive_polynomial_per_deg_ge_le_(-1,[2,8,30],-1,,-1)
   ;if(2==mode,
       ;if(5 < min4weight, error("[mode:=2][min4weight > 5]", [deg,mode,min4weight]))
       ;my(bit_count=-2)
-      ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff,min4weight))
+      ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff,min4weight,auto_sleep7deeper))
       ;if(0 <> zm, return(zm),
         ;if(4==deg, error("fail:[deg:=4][bit_count:=5] : there are no pentanomial binary primitive polynomial of degree 4"))
         ;error("bug:[fail:hypothesis:[always succ@[bit_count:=5]]]", [deg,mode])
@@ -937,7 +973,7 @@ for(deg=2,200,
 */
 
 \\ show_one_pentanomial_binary_primitive_polynomial_per_deg_ge_le_
-{show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(bit_count, min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0)=
+{show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(bit_count, min4deg,max4deg, ~deg2factorization4mulorder4ff,auto_sleep=0,auto_sleep7deeper=0)=
   \\ [min4deg==-1] => [max4deg be degs :: [deg]]
   \\ [deg2factorization4mulorder4ff :: (-1 | [(-1 | Mat{?,2})])]
   ;if(bit_count < 1, error("[bit_count < 1] : ", bit_count)) \\ avoid to be mode
@@ -953,7 +989,7 @@ for(deg=2,200,
     ;if(deg < 2, error("[deg < 2]"))
     ;my(factorization4mulorder4ff=if(-1==deg2factorization4mulorder4ff, -1, deg2factorization4mulorder4ff[deg]))
     ;if(-1 == factorization4mulorder4ff && -1 <> deg2factorization4mulorder4ff, print("skip deg:"  deg); next())
-    ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff))
+    ;my(zm=zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff,  ,auto_sleep7deeper))
     ;if(0 <> zm, print(zm),
       ;printsep(":", "null@(bit_count,deg):", bit_count,deg)
       )
@@ -990,7 +1026,7 @@ show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(5, 2,9, -1,-1
 
 */
 
-{zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff=-1,min4weight=3)=
+{zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(bit_count, deg, factorization4mulorder4ff=-1,min4weight=3,auto_sleep=0,verbose=0,resume=0)=
   \\ -> (0 | [exp]{len==bit_count})
   ;my(old__bit_count=bit_count)
   ;if(deg < 2, error("[deg < 2]"))
@@ -1025,14 +1061,31 @@ show_may_binary_primitive_polynomial_per_deg_ge_le__7bit_count_eq_(5, 2,9, -1,-1
   ;my(es=vector(bit_count-2, j, j))
   \\ [es :: ascending]
   \\ [es excludes {0,deg}]
+  ;if(0 <> resume,
+    ;if(1 <> #resume%2, error("bad resume:", [deg, resume]))
+    ;if(!(resume[#resume] < deg), error("bad resume:", [deg, resume]))
+    \\bug: ;if(resume[1] < 2, error("bad resume:", [deg, resume]))
+    ;if(!(0 < resume[1]), error("bad resume:", [deg, resume]))
+    ;for(j=1,-1+#resume, if(!(resume[j] < resume[1+j]), error("bad resume:", [deg, resume])))
+  \\ [resume :: ascending]
+    ;if(-1 == lex(Vecrev(resume),Vecrev(es)), error("bad resume:", [deg, resume]))
+    ;es=Vec(resume)
+    )
   ;if(mode==1, es=List(es))
   ;if(mode==2, es=List(es))
+  ;my(t0=0)
+  ;if(auto_sleep, t0=getabstime())
+  ;my(t07old=t0)
   ;while(1,
+    ;if(verbose, print("testing:", [deg, es]))
     ;my(f2=sum(j=1,#es, x^es[j], g2))
     ;if(is_primitive_polynomial_mod_(2,f2, factorization4mulorder4ff),
         \\ bug@[mode:=1];return(vector(bit_count, j, if(j==1, deg, if(j==bit_count, 0, es[#es+2-j])))) \\ descending
+        \\bug: ;if(auto_sleep, if(t07old < t0, print()))
+        ;if(auto_sleep < 0 && !verbose, if(t07old < t0, print()))
         ;return(vector(2+#es, j, if(j==1, deg, if(j==2+#es, 0, es[#es+2-j])))) \\ descending
         )
+    ;if(auto_sleep, t0=auto_sleep7finer_(auto_sleep, t0, verbose))
     ;while(1,
       ;if(!inplace_inc_exp_vec_(deg, ~es, mode), break(2)) \\ return(0)
       ;if(m2b5 && 1 == #es, next()) \\ lock 5-2 <==> skip 3-2
@@ -1179,9 +1232,119 @@ for(deg=7,9,print(zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count
 
 
 
+===
+++kw:auto_sleep
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(3, 3000, ~deg2factorization4mulorder4ff, ,-1)
+    CTRL+C
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(3, 1798, factorization4mulorder4ff_7deg_eq_1798, ,-1)
+  !:!.!:!.
+  time = 2,852 ms.
+  [1798,685,0]
+
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 32, -1, ,1)
+  time = 7 ms.
+  [32,7,5,3,2,1,0]
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 252, -1, ,1)
+  time = 148 ms.
+  [252,9,8,6,5,4,0]
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 360, -1, ,1)
+  time = 814 ms.
+  [360,12,9,8,6,4,3,1,0]
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 510, -1, ,1)
+  time = 264 ms.
+  [510,8,6,5,4,3,0]
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 1200, -1, ,+1)
+  time = 2,252 ms.
+  [1200,10,7,6,3,2,0]
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 1200, -1, ,-1)
+  !:!.
+  time = 1,953 ms.
+  [1200,10,7,6,3,2,0]
+
+++kw:verbose,resume
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 1200, -1, ,-1,1)
+  testing:[1200,List([1])]
+  testing:[1200,List([2])]
+  testing:[1200,List([3])]
+  testing:[1200,List([1,2,3])]
+  testing:[1200,List([4])]
+  ... ...
+  testing:[1200,List([2,3,5,6,10])]
+  !:!.testing:[1200,List([1,4,5,6,10])]
+  testing:[1200,List([2,4,5,6,10])]
+  ... ...
+  testing:[1200,List([2,3,6,7,10])]
+
+  time = 2,246 ms.
+  [1200,10,7,6,3,2,0]
+    \\ {before:++kw:verbose@auto_sleep7finer_}NOTE: tiny bug:"!:!.",final "\n" are seperated by verbose/resume info...
+
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 1200, -1, ,-1,1,[2,3,6,7,10])
+  testing:[1200,List([2,3,6,7,10])]
+  time = 772 ms.
+  [1200,10,7,6,3,2,0]
+
+++kw:verbose@auto_sleep7finer_()
+zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count_eq_(-1, 1200, -1, ,-1,1)
+  testing:[1200,List([1])]
+  ... ...
+  testing:[1200,List([2,3,5,6,10])]
+  finer-cmd: sleep 3 #### \\ ... !:!.
+  testing:[1200,List([1,4,5,6,10])]
+  ... ...
+  testing:[1200,List([2,3,6,7,10])]
+  time = 1,894 ms.
+  [1200,10,7,6,3,2,0]
+
 */
 
 
+{advance_exp_vec_(mode, deg, sz, es7src=[1],es7dst=0)=
+  ;my(es=List(es7src))
+  ;if(0 <> es7dst, es7dst=List(es7dst))
+  ;if(es==es7dst, return(0))
+  ;for(j=1,sz,
+    ;if(!inplace_inc_exp_vec_(deg, ~es, mode), return([-j,j-1,Vec(es)]))
+    ;if(es==es7dst, return(j))
+    )
+  ;return(Vec(es))
+}
+/*
+advance_exp_vec_(0, 7, 4)
+  [5]
+advance_exp_vec_(0, 7, 0)
+  [1]
+advance_exp_vec_(0, 7, 4, ,[1])
+  0
+advance_exp_vec_(0, 7, 4, ,[3])
+  2
+advance_exp_vec_(0, 7, 4, ,[5])
+  4
+advance_exp_vec_(0, 7, 4, ,[6])
+  [5]
+advance_exp_vec_(0, 7, 4, [5],[6])
+  1
+
+advance_exp_vec_(1, 7, 8)
+  [5]
+advance_exp_vec_(1, 7, 16)
+  [6]
+advance_exp_vec_(1, 7, 32)
+  [-32,31,[2,3,4,5,6]]
+advance_exp_vec_(1, 7, 128, ,[7])
+  [-32,31,[2,3,4,5,6]]
+advance_exp_vec_(1, 7, 128, [2,3,4,5,6])
+  [-1,0,[2,3,4,5,6]]
+
+
+advance_exp_vec_(2, 7, 8)
+  [5]
+advance_exp_vec_(2, 7, 16)
+  [1,2,6]
+advance_exp_vec_(2, 7, 32)
+  [-26,25,[4,5,6]]
+
+*/
 {inplace_inc_exp_vec_(deg, ~es, mode)=
   \\ -> ok/whether_changed
   \\ [es :: ascending [exp]]
@@ -1194,6 +1357,7 @@ for(deg=7,9,print(zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count
   ;error("bug: unknown mode:", mode)
 }
 {inplace_inc_exp_vec__7mode_eq0_(deg, ~es)=
+  \\ [fixed bit_count{==#es}]
   ;my(i=0)
   ;for(j=1,-1+#es,
     ;if(1+es[j] < es[1+j], i=j;break())
@@ -1364,6 +1528,65 @@ for(deg=7,9,print(zmay_find_one_binary_primitive_polynomial__7deg_eq__7bit_count
     )
   ;return(t0)
 }
+{auto_sleep7finer_(auto_sleep, t0, verbose=0)=
+  ;if(auto_sleep,
+    ;my(t1=getabstime()) \\ milliseconds
+    ;my(dt=floor((t1-t0)/1000)) \\ seconds
+    ;t1 = t0+1000*dt
+    ;if(dt > 0,
+      ;my(cmd=strprintf("sleep %d", 3*dt))
+      \\ ;if(verbose, print1("finer-cmd: ", cmd, " #### \\\\ ... ")) \\ verbose6finer
+      \\ ;if(verbose || auto_sleep < 0, print1("!:")) \\ verbose6neg
+      ;if(verbose, print1("finer-cmd: ", cmd)) \\ verbose6finer
+      ;if(!verbose && auto_sleep < 0, print1("!:")) \\ verbose6neg
+      ;system(cmd)
+      \\ ;if(verbose || auto_sleep < 0, print1("!.")) \\ verbose6neg
+      \\ ;if(verbose, print()) \\ verbose6finer
+      ;if(!verbose && auto_sleep < 0, print1("!.")) \\ verbose6neg
+      ;if(verbose, print(" # !wake!")) \\ verbose6finer
+      )
+    ;return(t1)
+    )
+  ;return(t0)
+}
+
+
+
+\\ for Mersenne_prime
+\\      [[deg :: exponent{Mersenne_prime}][f :: polynomial{deg}]-> [[is_irreducible_polynomial_mod_(2;f)] <-> [[is_primitive_polynomial_mod_(2;f)]]]]
+{mk_one_random_irreducible_binary_polynomial_mod_(deg)=
+  ;if(deg < 2, error("[deg < 2]"))
+  ;my(x=ffgen([2,deg]), f2=x.mod)
+  ;return(exps5binary_polynomial__7descend_(f2))
+}
+/*
+mk_one_random_irreducible_binary_polynomial_mod_(5)
+  [5,4,2,1,0]
+ffinit(2,5)
+  Mod(1,2)*x^5+Mod(1,2)*x^4+Mod(1,2)*x^2+Mod(1,2)*x+Mod(1,2)
+ffgen(ffinit(2,5))
+  x
+ffgen(ffinit(2,5)).mod
+  x^5+x^4+x^2+x+1
+
+*/
+{exps5binary_polynomial__7descend_(f2)=
+  ;my(es=List(),deg=poldegree(f2))
+  ;for(e=0,deg, if(polcoef(f2,deg-e), listput(~es,deg-e)))
+  ;return(Vec(es))
+}
+/*
+exps5binary_polynomial__7descend_('x^2+3)
+  [2,0]
+*/
+{coeffs5polynomial__7little_endian_(f)=
+  ;return(vector(1+poldegree(f), j, polcoef(f,-1+j)))
+}
+/*
+coeffs5polynomial__7little_endian_('x^2+3)
+  [3,0,1]
+*/
+
 
 00000 \\ for:read();
 

@@ -1,4 +1,5 @@
 #__all__:goto
+# [:def__imay_version]:goto
 r'''[[[
 e ../../python3_src/seed/math/pseudo_random.py
 pseudo-random number generator
@@ -13,6 +14,70 @@ come_from:
 view ../../python3_src/seed/math/factor_pint/factor_pint__elliptic_curve_method.py
 view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.out.txt
 ]]
+[[
+===
+fxtbook:
+    shift register sequence (SRS)
+    41.1 Linear feedback shift registers (LFSR)
+        [fp::primitive_polynomial{2;deg;X}]:
+            [SRS{LFSR{fp}} := [polcoef(X^j%fp, 0) | [j:<-[1..=-1+2^deg]]]]
+    41.7 Feedback carry shift registers (FCSR)
+        [p::prime][order_mod_(p;2) == -1+p]:
+            [SRS{FCSR{p}} := [1&(2^j%p) | [j:<-[1..=-1+p]]]]
+            # A001122:primes with primitive root 2
+    41.8 Linear hybrid cellular automata (LHCA)
+        ???
+
+===
+18.1.2 Binary Lyndon words with length a Mersenne exponent
+The length-n binary Lyndon words for n an exponent of a Mersenne prime Mn= 2^n-1 can be generated efficiently as binary expansions of the powers of a primitive root rn of Mn until the second word with just one bit is reached.
+        # until [rn^k%Mn==2^ez]
+    With n = 7, M7= 127 and the primitive root rn = 3 we get the sequence shown in figure 18.1-B.
+        # [3^18%127 == 2^2]
+    The sequence of minimal primitive roots rn of the first Mersenne primes Mn= 2^n-1 is entry A096393 in [312]:
+
+
+2: 2
+3: 3
+5: 3
+7: 3
+13: 17
+17: 3
+19: 3
+31: 7
+61: 37
+89: 3
+107: 3
+127: 43
+521: 3
+607: 5
+1279: 5
+
+===
+view ../../python3_src/seed/math/prime_pint/primes_with_specified_primitive_roots.py
+>>> 18446744073709551629-2**64
+13
+>>> 18446744073709551709-2**64
+93
+>>> 18446744073709551757-2**64
+141
+
+>>> 18446744073709551557-2**64
+-59
+>>> 18446744073709551533-2**64
+-83
+>>> 18446744073709551437-2**64
+-179
+
+===
+view ../../python3_src/pari_gp_script/primes_with_specified_primitive_roots.gp
+    for more data:__output__
+view ../../python3_src/pari_gp_script/primes_with_specified_primitive_roots.gp.out.txt
+view ../../python3_src/pari_gp_script/primes_with_specified_primitive_roots.gp.out.1-addprimes.txt
+
+===
+]]
+
 
 
 '#'; __doc__ = r'#'
@@ -966,13 +1031,13 @@ class IPseudoRandom7linear(Random):
 
 
 
-    def __init__(self, assumption7independent:bool, int_or_may_seed, /, *extra_settings, version=-1):
+    def __init__(self, assumption7independent:bool, int_or_may_seed_or_versioned, /, *extra_settings, version=-1):
         check_type_is(bool, assumption7independent)
         if assumption7independent:
             warn('[assumption7independent:=True]', UserWarning)
             #warn('[assumption7independent:=True]', DeprecationWarning)
         self._set_settings_((assumption7independent, *extra_settings))
-        self.seed(int_or_may_seed, version=version)
+        self.seed(int_or_may_seed_or_versioned, version=version)
     @property
     def assumption7independent(self, /):
         #return self._assumption7independent
@@ -1027,19 +1092,41 @@ class IPseudoRandom7linear(Random):
     #@override
     #def seed(self, may_int_or_state=None, /):
     #   'may (int|ust) -> None'
-    def seed(self, int_or_may_seed=None, /, version=2):
-        #see:imay_version
+    #def seed(self, int_or_may_seed_or_versioned=None, /, version=2):
+    def seed(self, int_or_may_seed_or_versioned=None, /, version=-1):
+        'version:see:imay_version@mk_pseudo_random7linear_()'
+        # [:def__imay_version]:goto
+        match int_or_may_seed_or_versioned:
+            case tuple([version, xseed]):
+                pass
+            case xseed:
+                pass
+        version, xseed
+        match xseed:
+            case (None|int()|float()|str()|bytes()|bytearray()) as int_or_may_seed:
+                pass
+            case bad_seed:
+                raise TypeError(bad_seed)
+        version, int_or_may_seed
         match version:
             case '' | 'auto':
                 version = -1
-            case 'obj8seed':
+            case 'obj8seed' | 'obj8seed7new':
+                version = +2
+            case 'obj8seed7old':
                 version = +2
             case 'int8state':
                 version = -2
-            case 0:
-                raise ValueError('[version:=0]')
+            case (-1|-2|2|1):
+                pass
+            case int() as bad_version:
+                # (0|3|...)
+                raise ValueError('[version:={bad_version}]')
+            case bad_version:
+                raise TypeError('version{random()}', bad_version)
         version
         check_int_ge_le(-2, 2, version)
+        assert version in (-1,-2,+1,+2)
         match (version, int_or_may_seed):
             case (-1, int() as j8st):
                 version = -2
@@ -1047,6 +1134,7 @@ class IPseudoRandom7linear(Random):
             case (-1, may_seed):
                 version = +2
         version
+        assert version in (-2,+1,+2)
         match (version, int_or_may_seed):
             #case (int(), may_seed) if version >= 0:
             case (int(1|2), may_seed) if version > 0:
@@ -1054,7 +1142,7 @@ class IPseudoRandom7linear(Random):
                 if version == +2 and isinstance(may_seed, str):
                     #patch__7ver2_str_without_explicit_encoding:here
                     may_seed = may_seed.encode('u8')
-                if not (version in (1,2) or (may_seed is None or isinstance(may_seed, int))):raise Exception('unintended unstable/non-reproductable random')
+                if not (version in (1,2) or (may_seed is None or isinstance(may_seed, int))):raise Exception('unintended unstable/non_reproducible random')
                 rn = Random(0)
                 rn.seed(may_seed, version=version)
                 while not (u := rn.getrandbits(self.deg4binary_primitive_polynomial)):pass
@@ -1078,7 +1166,7 @@ class IPseudoRandom7linear(Random):
                 # [1 <= u <= mul_order4binary_primitive_polynomial]
                 # [1 <= u < 2**deg4binary_primitive_polynomial]
             case bad_seed:
-                raise TypeError(bad_seed)
+                raise TypeError('seed{random()}', bad_seed)
         # [1 <= u < 2**deg4binary_primitive_polynomial]
         u
         self._set_uint_state_(u)
@@ -1141,9 +1229,22 @@ view ../../python3_src/pari_gp_script/polynomial7primitive7finite_field.gp.out.t
 #]]]'''#'''
 
 
-def deg_or5exps4binary_primitive_polynomial_(exps, /):
+_stable__max4deg6out = 1206
+    # !! [deg==1207].curr_state is -1
+    #   later maybe found its factorization
+def deg_or5exps4binary_primitive_polynomial_(exps, /, *, stable=False, max4deg6out=None):
     deg = exps[0]
-    deg_or_exps = deg if exps == deg_or2exps4binary_primitive_polynomial_(deg) else exps
+    if None is max4deg6out:
+        max4deg6out = deg
+    max4deg6out
+    if stable:
+        max4deg6out = min(_stable__max4deg6out, max4deg6out)
+    max4deg6out
+    if deg > max4deg6out:
+        deg_or_exps = exps
+    else:
+        deg_or_exps = deg if exps == deg_or2exps4binary_primitive_polynomial_(deg) else exps
+    deg_or_exps
     return deg_or_exps
 def deg_or2exps4binary_primitive_polynomial_(deg_or_exps4binary_primitive_polynomial, /):
     zmay_deg = 0
@@ -1180,12 +1281,12 @@ def deg_or2exps4binary_primitive_polynomial_(deg_or_exps4binary_primitive_polyno
     assert len(es)&1 == 1
     return es
 class PseudoRandom7linear(IPseudoRandom7linear):
-    def __init__(self, assumption7independent:bool, deg_or_exps4binary_primitive_polynomial, int_or_may_seed, /):
+    def __init__(self, assumption7independent:bool, deg_or_exps4binary_primitive_polynomial, int_or_may_seed_or_versioned, /):
         check_type_is(bool, assumption7independent)
         exps = deg_or2exps4binary_primitive_polynomial_(deg_or_exps4binary_primitive_polynomial)
-        super().__init__(assumption7independent, int_or_may_seed, exps)
+        super().__init__(assumption7independent, int_or_may_seed_or_versioned, exps)
         deg = exps[0]
-        self._may_settings4repr = (assumption7independent, deg) if deg == deg_or5exps4binary_primitive_polynomial_(exps) else None
+        self._may_settings4repr = (assumption7independent, deg) if deg == deg_or5exps4binary_primitive_polynomial_(exps, stable=True) else None
     @property
     #@override
     def exps4binary_primitive_polynomial(self, /):
@@ -1345,11 +1446,23 @@ _deg2T = dict(__())
 deg_or2exps4binary_primitive_polynomial_
 
 _exps2T = WeakValueDictionary()
-def mk_pseudo_random7linear_(deg_or_exps, imay_version, int_or_may_seed, /, assumption7independent=False):
-    '[imay_version == (-2|-1|1|2|"obj8seed"|"int8state"|""|"auto")]'
+def mk_pseudo_random7linear_(deg_or_exps, imay_version, int_or_may_seed_or_versioned, /, assumption7independent=False):
+    r'''[[[
+    normally usage{(imay_version, int_or_may_seed_or_versioned):}:
+        (-2, int)   # directly internal state
+        (+2, bytes) # via py.random.Random(){.seed(), .getrandbits()}
+    # [:def__imay_version]:here
+    [imay_version == (-2|-1|+1|+2|""/-1|"auto"/-1|"int8state"/-2|"obj8seed"/+2|"obj8seed7new"/+2|"obj8seed7old"/+1)]
+        * [imay_version==-1][int_or_may_seed :: int]:
+            [version:=-2]
+        * [imay_version==-1][int_or_may_seed :: not-int]:
+            [version:=+2]
+    [int_or_may_seed_or_versioned :: (int_or_may_seed|(imay_version,int_or_may_seed))]
+    [int_or_may_seed :: (int|None|float|str|bytes|bytearray)]
+    #]]]'''#'''
     T = gmk_type4pseudo_random7linear_(deg_or_exps)
-    rn = T(assumption7independent, int_or_may_seed, version=imay_version)
-    #rn.seed(int_or_may_seed, version=imay_version)
+    rn = T(assumption7independent, int_or_may_seed_or_versioned, version=imay_version)
+    #rn.seed(int_or_may_seed_or_versioned, version=imay_version)
     return rn
 def gmk_type4pseudo_random7linear_(deg_or_exps, /):
     exps = deg_or2exps4binary_primitive_polynomial_(deg_or_exps)
@@ -1389,7 +1502,7 @@ def gmk_type4pseudo_random7linear_(deg_or_exps, /):
 class _IPseudoRandom7linear__7repr4mk(IPseudoRandom7linear):
     @property
     def _args4mk(self, /):
-        deg_or_exps = deg_or5exps4binary_primitive_polynomial_(self.exps4binary_primitive_polynomial)
+        deg_or_exps = deg_or5exps4binary_primitive_polynomial_(self.exps4binary_primitive_polynomial, stable=True)
         tm = (True,) if self.assumption7independent else ()
         return (deg_or_exps, -2, self._get_uint_state_(), *tm)
     def __repr__(self, /):
